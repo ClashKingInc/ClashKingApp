@@ -6,8 +6,13 @@ import 'package:clash_king_app/pages/dashboard_page.dart';
 import 'package:clash_king_app/pages/clan_page.dart';
 import 'package:clash_king_app/pages/war_league_page.dart';
 import 'package:clash_king_app/pages/management_page.dart';
+import 'package:clash_king_app/api/player_stats.dart';
+import 'package:clash_king_app/api/player_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:io';
 
-void main() {
+
+Future main() async {
   runApp(MyApp());
 }
 
@@ -47,10 +52,27 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
+  PlayerStats? playerStats; // Add this line
+
+  MyAppState() {
+    fetchPlayerStats();
+  }
 
   void getNext() {
     current = WordPair.random();
     notifyListeners();
+  }
+
+  // Assume this method exists and fetches player stats correctly
+  Future<void> fetchPlayerStats() async {
+    try {
+      playerStats = await PlayerService().fetchPlayerStats();
+      notifyListeners(); // Notify listeners to rebuild widgets that depend on playerStats.
+    } catch (e, s) {
+      // Handle the error, maybe log it or show a user-friendly message
+      print("Error fetching player stats: $e");
+      print("Stack trace: $s");
+    }
   }
 }
 
@@ -62,13 +84,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
-  static final List<Widget> _widgetOptions = <Widget>[
-    DashboardPage(), // Replace with your Dashboard page widget
-    ClanPage(), // Replace with your Clans page widget
-    WarLeaguePage(), // Replace with your War/League page widget
-    ManagementPage(), // Replace with your Management page widget
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -77,14 +92,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // No need for appState and pair in this context since they were for the example content
+    var appState = Provider.of<MyAppState>(context);
+
+    List<Widget> widgetOptions = [
+      appState.playerStats != null
+    ? DashboardPage(playerStats: appState.playerStats!)
+    : CircularProgressIndicator(), // Show a loading spinner when playerStats is null
+      ClanPage(),
+      WarLeaguePage(),
+      ManagementPage(),
+    ];
 
     return Scaffold(
       body: Center(
-        // IndexedStack keeps the state of the off-screen pages; if you don't want to keep the state, you could just use _widgetOptions[_selectedIndex]
         child: IndexedStack(
           index: _selectedIndex,
-          children: _widgetOptions,
+          children:
+              widgetOptions, // Use widgetOptions here instead of _widgetOptions
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
