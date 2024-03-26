@@ -8,8 +8,6 @@ import 'package:clashkingapp/pages/war_league_page.dart';
 import 'package:clashkingapp/pages/management_page.dart';
 import 'package:clashkingapp/api/player_stats.dart';
 import 'package:clashkingapp/api/player_service.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'dart:io';
 
 
 Future main() async {

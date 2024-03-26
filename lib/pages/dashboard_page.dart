@@ -54,40 +54,56 @@ class DashboardPage extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => StatsScreen(playerStats: playerStats)),
               );
             },
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('Name: ${playerStats.name}',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold)),
-                    SizedBox(height: 8),
-                    Text('Tag: ${playerStats.tag}',
-                        style: TextStyle(fontSize: 18)),
-                    SizedBox(height: 8),
-                    Text('Townhall: ${playerStats.townHallLevel}',
-                        style: TextStyle(fontSize: 18)),
-                    SizedBox(height: 8),
-                    Text('Trophies: ${playerStats.trophies}',
-                        style: TextStyle(fontSize: 18)),
-                    SizedBox(height: 8),
-                    Text('Builder Hall: ${playerStats.builderHallLevel}',
-                        style: TextStyle(fontSize: 18)),
-                    SizedBox(height: 8),
-                    Text('Donations: ${playerStats.donations}',
-                        style: TextStyle(fontSize: 18)),
-                    SizedBox(height: 8),
-                    Text('Donations Received: ${playerStats.donationsReceived}',
-                        style: TextStyle(fontSize: 18)),
-                  ],
-                ),
-              ),
-            ),
+            child: PlayerStatsCard(playerStats: playerStats),
           ),
           // Add more cards as needed
         ],
+      ),
+    );
+  }
+}
+
+
+
+class PlayerStatsCard extends StatelessWidget {
+  const PlayerStatsCard({
+    super.key,
+    required this.playerStats,
+  });
+
+  final PlayerStats playerStats;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('Name: ${playerStats.name}',
+                style: TextStyle(
+                    fontSize: 18, fontWeight: FontWeight.bold)),
+            SizedBox(height: 8),
+            Text('Tag: ${playerStats.tag}',
+                style: TextStyle(fontSize: 18)),
+            SizedBox(height: 8),
+            Text('Townhall: ${playerStats.townHallLevel}',
+                style: TextStyle(fontSize: 18)),
+            SizedBox(height: 8),
+            Text('Trophies: ${playerStats.trophies}',
+                style: TextStyle(fontSize: 18)),
+            SizedBox(height: 8),
+            Text('Builder Hall: ${playerStats.builderHallLevel}',
+                style: TextStyle(fontSize: 18)),
+            SizedBox(height: 8),
+            Text('Donations: ${playerStats.donations}',
+                style: TextStyle(fontSize: 18)),
+            SizedBox(height: 8),
+            Text('Donations Received: ${playerStats.donationsReceived}',
+                style: TextStyle(fontSize: 18)),
+          ],
+        ),
       ),
     );
   }
