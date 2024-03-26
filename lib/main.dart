@@ -1,13 +1,14 @@
 import 'package:clashkingapp/custom_icons_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:english_words/english_words.dart';
-import 'package:clashkingapp/pages/dashboard_page.dart';
-import 'package:clashkingapp/pages/clan_page.dart';
-import 'package:clashkingapp/pages/war_league_page.dart';
-import 'package:clashkingapp/pages/management_page.dart';
+import 'package:clashkingapp/main_pages/dashboard_page.dart';
+import 'package:clashkingapp/main_pages/clan_page.dart';
+import 'package:clashkingapp/main_pages/war_league_page.dart';
+import 'package:clashkingapp/main_pages/management_page.dart';
 import 'package:clashkingapp/api/player_stats.dart';
 import 'package:clashkingapp/api/player_service.dart';
+import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/api/clan_service.dart';
 
 
 Future main() async {
@@ -49,16 +50,12 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
   PlayerStats? playerStats; // Add this line
+  ClanInfo? clanInfo; // Add this line 
 
   MyAppState() {
     fetchPlayerStats();
-  }
-
-  void getNext() {
-    current = WordPair.random();
-    notifyListeners();
+    fetchClanInfo();
   }
 
   // Assume this method exists and fetches player stats correctly
@@ -72,6 +69,20 @@ class MyAppState extends ChangeNotifier {
       print("Stack trace: $s");
     }
   }
+
+    // Assume this method exists and fetches clan correctly
+  Future<void> fetchClanInfo() async {
+    try {
+      clanInfo = await ClanService().fetchClanInfo();
+      notifyListeners(); // Notify listeners to rebuild widgets that depend on playerStats.
+    } catch (e, s) {
+      // Handle the error, maybe log it or show a user-friendly message
+      print("Error fetching clan info: $e");
+      print("Stack trace: $s");
+    }
+  }
+
+
 }
 
 class MyHomePage extends StatefulWidget {
@@ -95,9 +106,12 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> widgetOptions = [
       appState.playerStats != null
     ? DashboardPage(playerStats: appState.playerStats!)
-    : CircularProgressIndicator(), // Show a loading spinner when playerStats is null
-      ClanPage(),
+    : CircularProgressIndicator(), // Show a loading spinner when playerStats is nul
+      appState.clanInfo != null
+    ?  ClanInfoPage(clanInfo: appState.clanInfo!)
+    : CircularProgressIndicator(),
       WarLeaguePage(),
+      //WarLeaguePage(currentWarInfo: appState.currentWarInfo,),
       ManagementPage(),
     ];
 
