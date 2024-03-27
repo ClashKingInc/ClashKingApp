@@ -1,3 +1,4 @@
+import 'package:clashkingapp/api/user_data.dart';
 import 'package:clashkingapp/custom_icons_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,20 +12,26 @@ import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/api/clan_service.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/api/current_war_service.dart';
-
+import 'package:clashkingapp/main_pages/login_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future main() async {
+  await dotenv.load(); // Load the .env file
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   MyApp({Key? key}) : super(key: key);
+  final navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         title: 'ClashKing',
         theme: ThemeData(
           useMaterial3: true,
@@ -45,21 +52,24 @@ class MyApp extends StatelessWidget {
             onError: Color(0xFFFFFFFF), // White text on top of error color
           ),
         ),
-        home: MyHomePage(),
+        home: LoginPage(navigatorKey: navigatorKey),
       ),
     );
   }
 }
 
-class MyAppState extends ChangeNotifier {
+class MyAppState extends ChangeNotifier 
+{
   PlayerStats? playerStats; // Add this line
   ClanInfo? clanInfo; // Add this line 
   CurrentWarInfo? currentWarInfo; // Add this line
+  DiscordUser? user; // Add this line
 
   MyAppState() {
     fetchPlayerStats();
     fetchClanInfo();
     fetchCurrentWarInfo();
+    initializeUser();
   }
 
   // Assume this method exists and fetches player stats correctly
@@ -74,7 +84,7 @@ class MyAppState extends ChangeNotifier {
     }
   }
 
-    // Assume this method exists and fetches clan correctly
+  // Assume this method exists and fetches clan correctly
   Future<void> fetchClanInfo() async {
     try {
       clanInfo = await ClanService().fetchClanInfo();
@@ -97,12 +107,28 @@ class MyAppState extends ChangeNotifier {
       print("Stack trace: $s");
     }
   }
+  Future<void> initializeUser() async {
+    final accessToken = await getAccessToken();
+    if (accessToken != null) {
+      print("Access token : $accessToken");
+      user = await fetchDiscordUser(accessToken);
+      print("User: $user");
+      notifyListeners(); // Notify listeners to update the UI
+    }
+  }
 }
 
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
+
+Future<String?> getAccessToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('access_token');
+}
+
+
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
@@ -119,10 +145,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
     List<Widget> widgetOptions = [
       appState.playerStats != null
-    ? DashboardPage(playerStats: appState.playerStats!)
-    : CircularProgressIndicator(), // Show a loading spinner when playerStats is nul
+          ? DashboardPage(playerStats: appState.playerStats!, user: appState.user!)
+          : CircularProgressIndicator(), // Show a loading spinner when playerStats is nul
       appState.clanInfo != null
-    ?  ClanInfoPage(clanInfo: appState.clanInfo!)
+    ?  ClanInfoPage(clanInfo: appState.clanInfo!, user: appState.user!)
     : CircularProgressIndicator(),
       appState.currentWarInfo != null
     ? CurrentWarInfoPage(currentWarInfo: appState.currentWarInfo!)
