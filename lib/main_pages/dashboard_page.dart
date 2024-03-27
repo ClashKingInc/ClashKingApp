@@ -1,19 +1,20 @@
 import 'package:clashkingapp/api/player_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/subpages/player_dashboard/player_stats_page.dart';
+import 'package:clashkingapp/api/user_data.dart';
+import 'package:clashkingapp/components/app_bar.dart';
 
 class DashboardPage extends StatelessWidget {
   final PlayerStats playerStats;
+  final DiscordUser user;
 
-  DashboardPage({required this.playerStats});
+  DashboardPage({required this.playerStats, required this.user});
 
   @override
   Widget build(BuildContext context) {
     // Your dashboard page implementation
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Dashboard'),
-      ),
+      appBar: CustomAppBar(user: user),
       body: ListView(
         children: <Widget>[
           Padding(
