@@ -68,8 +68,6 @@ class MyAppState extends ChangeNotifier
   MyAppState() {
     fetchPlayerStats();
     fetchClanInfo();
-    fetchCurrentWarInfo();
-    initializeUser();
   }
 
   // Assume this method exists and fetches player stats correctly
