@@ -1,4 +1,4 @@
-import 'package:clashkingapp/api/player_stats.dart';
+import 'package:clashkingapp/api/player_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/subpages/player_dashboard/player_stats_page.dart';
 

@@ -1,28 +1,11 @@
 import 'package:flutter/material.dart';
-
-class WarLeaguePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('War & League'),
-      ),
-      body: Center(
-        child: Text('Welcome to the War & League Page!'),
-      ),
-    );
-  }
-}
-
-/*
-import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/war_info.dart';
+import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/subpages/war_league/current_war_info_page.dart';
 
-class WarLeaguePage extends StatelessWidget {
+class CurrentWarInfoPage extends StatelessWidget {
   final CurrentWarInfo currentWarInfo;
 
-  WarLeaguePage({required this.currentWarInfo});
+  CurrentWarInfoPage({required this.currentWarInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +31,7 @@ class WarLeaguePage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => CurrentWarInfoScreen(currentWarInfo: currentWarInfo)),
                 );
               },
-              child: CurrentWarCard(currentWarInfo: currentWarInfo),
+              child: CurrentWarInfoCard(currentWarInfo: currentWarInfo),
               ),
             Expanded(
               child: TabBarView(
@@ -65,8 +48,8 @@ class WarLeaguePage extends StatelessWidget {
   }
 }
 
-class CurrentWarCard extends StatelessWidget {
-  const CurrentWarCard({
+class CurrentWarInfoCard extends StatelessWidget {
+  const CurrentWarInfoCard({
     super.key,
     required this.currentWarInfo,
   });
@@ -81,20 +64,21 @@ class CurrentWarCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Image.network(currentWarInfo.clan.badgeUrls.small),
-                Text(' VS '),
-                Image.network(currentWarInfo.opponent.badgeUrls.small),
-              ],
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.network(currentWarInfo.clan.badgeUrls.small),
+                  Text(' VS '),
+                  Image.network(currentWarInfo.opponent.badgeUrls.small),
+                ],
+              ),
             ),
             Center(child: Text('${currentWarInfo.clan.name} VS ${currentWarInfo.opponent.name}',
                 style: TextStyle(fontSize: 18))),
-            SizedBox(height: 8),
           ],
         ),
       ),
     );
   }
 }
-*/

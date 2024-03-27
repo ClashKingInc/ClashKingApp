@@ -1,7 +1,7 @@
 // player_service.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'player_stats.dart';
+import 'player_info.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PlayerService {
@@ -19,7 +19,8 @@ class PlayerService {
     print('Response body: ${response.body}'); // Print response body
 
     if (response.statusCode == 200) {
-      return PlayerStats.fromJson(jsonDecode(response.body));
+      String responseBody = utf8.decode(response.bodyBytes);
+      return PlayerStats.fromJson(jsonDecode(responseBody));
     } else {
       throw Exception('Failed to load player stats');
     }

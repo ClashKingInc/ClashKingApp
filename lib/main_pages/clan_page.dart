@@ -48,8 +48,7 @@ class ClanInfoCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text('Name: ${clanInfo.name}',
-                style: TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             SizedBox(height: 8),
             Text('Tag: ${clanInfo.tag}',
                 style: TextStyle(fontSize: 18)),

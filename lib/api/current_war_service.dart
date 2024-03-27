@@ -1,18 +1,18 @@
-// clan_service.dart
+// current_war_service.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'clan_info.dart';
+import 'current_war_info.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class ClanService {
+class CurrentWarService {
 
     Future<void> initEnv() async {
     await dotenv.load(fileName: ".env");
   }
 
-  Future<ClanInfo> fetchClanInfo() async {
+  Future<CurrentWarInfo> fetchCurrentWarInfo() async {
     final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clans/!VY2J0LL'),
+      Uri.parse('https://api.clashking.xyz/v1/clans/!VY2J0LL/currentwar'),
     );
 
     print('Response status: ${response.statusCode}'); // Print response status
@@ -20,9 +20,9 @@ class ClanService {
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
-      return ClanInfo.fromJson(jsonDecode(responseBody));
+      return CurrentWarInfo.fromJson(jsonDecode(responseBody));
     } else {
-      throw Exception('Failed to load clan stats');
+      throw Exception('Failed to load current war info');
     }
   }
 }

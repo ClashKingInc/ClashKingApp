@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/main_pages/dashboard_page.dart';
 import 'package:clashkingapp/main_pages/clan_page.dart';
-import 'package:clashkingapp/main_pages/war_league_page.dart';
+import 'package:clashkingapp/main_pages/current_war_page.dart';
 import 'package:clashkingapp/main_pages/management_page.dart';
-import 'package:clashkingapp/api/player_stats.dart';
+import 'package:clashkingapp/api/player_info.dart';
 import 'package:clashkingapp/api/player_service.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/api/clan_service.dart';
+import 'package:clashkingapp/api/current_war_info.dart';
+import 'package:clashkingapp/api/current_war_service.dart';
 
 
 Future main() async {
@@ -52,10 +54,12 @@ class MyApp extends StatelessWidget {
 class MyAppState extends ChangeNotifier {
   PlayerStats? playerStats; // Add this line
   ClanInfo? clanInfo; // Add this line 
+  CurrentWarInfo? currentWarInfo; // Add this line
 
   MyAppState() {
     fetchPlayerStats();
     fetchClanInfo();
+    fetchCurrentWarInfo();
   }
 
   // Assume this method exists and fetches player stats correctly
@@ -74,7 +78,7 @@ class MyAppState extends ChangeNotifier {
   Future<void> fetchClanInfo() async {
     try {
       clanInfo = await ClanService().fetchClanInfo();
-      notifyListeners(); // Notify listeners to rebuild widgets that depend on playerStats.
+      notifyListeners(); // Notify listeners to rebuild widgets that depend on clanInfo.
     } catch (e, s) {
       // Handle the error, maybe log it or show a user-friendly message
       print("Error fetching clan info: $e");
@@ -82,7 +86,17 @@ class MyAppState extends ChangeNotifier {
     }
   }
 
-
+    // Assume this method exists and fetches current war correctly
+  Future<void> fetchCurrentWarInfo() async {
+    try {
+      currentWarInfo = await CurrentWarService().fetchCurrentWarInfo();
+      notifyListeners(); // Notify listeners to rebuild widgets that depend on currentWarInfo.
+    } catch (e, s) {
+      // Handle the error, maybe log it or show a user-friendly message
+      print("Error fetching current war info: $e");
+      print("Stack trace: $s");
+    }
+  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -110,7 +124,9 @@ class _MyHomePageState extends State<MyHomePage> {
       appState.clanInfo != null
     ?  ClanInfoPage(clanInfo: appState.clanInfo!)
     : CircularProgressIndicator(),
-      WarLeaguePage(),
+      appState.currentWarInfo != null
+    ? CurrentWarInfoPage(currentWarInfo: appState.currentWarInfo!)
+    : CircularProgressIndicator(),
       //WarLeaguePage(currentWarInfo: appState.currentWarInfo,),
       ManagementPage(),
     ];

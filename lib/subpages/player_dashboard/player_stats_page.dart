@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/player_stats.dart';
+import 'package:clashkingapp/api/player_info.dart';
 
 
 class StatsScreen extends StatelessWidget {

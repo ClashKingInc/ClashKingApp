@@ -10,7 +10,7 @@ class ClanInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clan Info'),
+        title: Center(child: Text('Clan Info')),
       ),
       body: ListView(
         children: [
