@@ -24,6 +24,7 @@ class PlayerStats {
   final List<Achievement> achievements;
   final List<Hero> heroes;
   final List<Troop> troops;
+  final List<Spell> spells;
 
 
   PlayerStats({
@@ -50,6 +51,7 @@ class PlayerStats {
     required this.achievements,
     required this.heroes,
     required this.troops,
+    required this.spells,
   });
 
   factory PlayerStats.fromJson(Map<String, dynamic> json) {
@@ -76,7 +78,8 @@ class PlayerStats {
       league: League.fromJson(json['league']),
       achievements: List<Achievement>.from(json['achievements'].map((x) => Achievement.fromJson(x))),
       heroes: List<Hero>.from(json['heroes'].map((x) => Hero.fromJson(x))),
-      troops: List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x))),     
+      troops: List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x))),
+      spells: List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x))),     
     );
   }
 }
@@ -166,6 +169,24 @@ class Troop {
 
   factory Troop.fromJson(Map<String, dynamic> json) {
     return Troop(
+      name: json['name'],
+      level: json['level'],
+      maxLevel: json['maxLevel'],
+      village: json['village'],
+    );
+  }
+}
+
+class Spell {
+  final String name;
+  final int level;
+  final int maxLevel;
+  final String village; // "home" or "builderBase"
+
+  Spell({required this.name, required this.level, required this.maxLevel, required this.village});
+
+  factory Spell.fromJson(Map<String, dynamic> json) {
+    return Spell(
       name: json['name'],
       level: json['level'],
       maxLevel: json['maxLevel'],

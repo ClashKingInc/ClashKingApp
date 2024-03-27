@@ -59,9 +59,16 @@ class _StatsScreenState extends State<StatsScreen> {
             ),
             ExpansionTile(
               title: Text('Troops'),
-              children: widget.playerStats.troops.where((troop) => troop.village == 'home').map((troop) => ListTile(
+              children: widget.playerStats.troops.where((troop) => troop.village == 'home' && !troop.name.startsWith('Super')).map((troop) => ListTile(
                 title: Text(troop.name),
                 subtitle: Text('Level: ${troop.level} / ${troop.maxLevel} - ${troop.village}'),
+              )).toList(),
+            ),
+            ExpansionTile(
+              title: Text('Spells'),
+              children: widget.playerStats.spells.map((spell) => ListTile(
+                title: Text(spell.name),
+                subtitle: Text('Level: ${spell.level} / ${spell.maxLevel} - ${spell.village}'),
               )).toList(),
             ),
           ]
