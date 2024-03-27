@@ -12,7 +12,7 @@ class DashboardPage extends StatelessWidget {
     // Your dashboard page implementation
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
+        title: Center(child: Text('Dashboard')),
       ),
       body: ListView(
         children: <Widget>[
@@ -92,11 +92,11 @@ class PlayerStatsCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Name: ${playerStats.name}',
+            Center(child: Text('Welcome ${playerStats.name} !',
                 style: TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.bold)),
+                    fontSize: 18, fontWeight: FontWeight.bold))),
             SizedBox(height: 8),
-            Text('Tag: ${playerStats.tag}',
+            Text('${playerStats.tag}',
                 style: TextStyle(fontSize: 18)),
             SizedBox(height: 8),
             Text('Townhall: ${playerStats.townHallLevel}',
@@ -113,6 +113,10 @@ class PlayerStatsCard extends StatelessWidget {
             SizedBox(height: 8),
             Text('Donations Received: ${playerStats.donationsReceived}',
                 style: TextStyle(fontSize: 18)),
+            SizedBox(height: 8),
+            Text('Donations ratio: ${(playerStats.donations / playerStats.donationsReceived).toStringAsFixed(2)}',
+                style: TextStyle(fontSize: 18)),
+            SizedBox(height: 8),
           ],
         ),
       ),

@@ -11,7 +11,7 @@ class ClanInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clan'),
+        title: Center(child: Text('Clan')),
       ),
       body: ListView(
         children: <Widget>[

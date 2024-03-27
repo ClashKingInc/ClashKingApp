@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class PlayerStats {
   final String name;
   final String tag;
@@ -137,15 +139,17 @@ class Hero {
   final String name;
   final int level;
   final int maxLevel;
+  final String village;
   // You can add more attributes like equipment here
 
-  Hero({required this.name, required this.level, required this.maxLevel});
+  Hero({required this.name, required this.level, required this.maxLevel, required this.village});
 
   factory Hero.fromJson(Map<String, dynamic> json) {
     return Hero(
       name: json['name'],
       level: json['level'],
       maxLevel: json['maxLevel'],
+      village: json['village'],
       // Initialize other attributes from JSON if needed
     );
   }

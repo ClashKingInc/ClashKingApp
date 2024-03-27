@@ -5,7 +5,7 @@ class ManagementPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Managment'),
+        title: Center(child: Text('Managment')),
       ),
       body: Center(
         child: Text('Welcome to the Managment Page!'),
