@@ -48,7 +48,7 @@ class LoginPage extends StatelessWidget {
     final url = Uri.https('discord.com', '/api/oauth2/authorize', {
       'response_type': 'code',
       'client_id': clientId,
-      'scope': 'identify',
+      'scope': 'identify email',
       'redirect_uri': redirectUri,
       'code_challenge': _codeChallenge,
       'code_challenge_method': 'S256',
