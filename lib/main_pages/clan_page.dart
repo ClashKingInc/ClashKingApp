@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/subpages/clan/clan_info_page.dart';
+import 'package:clashkingapp/components/app_bar.dart';
+import 'package:clashkingapp/api/user_data.dart';
 
 class ClanInfoPage extends StatelessWidget {
   final ClanInfo clanInfo;
+  final DiscordUser user;
 
-  ClanInfoPage({required this.clanInfo});
+  ClanInfoPage({required this.clanInfo, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text('Clan')),
-      ),
+      appBar: CustomAppBar(user: user),
       body: ListView(
         children: <Widget>[
           GestureDetector(

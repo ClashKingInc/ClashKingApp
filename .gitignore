@@ -89,7 +89,11 @@ lib/generated_plugin_registrant.dart
 .env
 
 #Linux
-linux/flutter/generated_plugin_registrant.cc
-linux/flutter/generated_plugin_registrant.h
-linux/flutter/generated_plugin.cmake
+**/flutter/generated_plugin_registrant.cc
+**/flutter/generated_plugin_registrant.h
+**/flutter/generated_plugin.cmake
+**/Flutter/GeneratedPluginRegistrant.swift
+
+**/flutter/generated_plugins.cmake
+
 
