@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
@@ -15,7 +14,6 @@ class PlayerAccounts {
     List<PlayerAccountInfo> playerAccounts = [];
     List<ClanInfo> clanInfo = [];
     List<CurrentWarInfo> warInfo = [];
-    PlayerAccountInfo playerInfo;
 
     for (var item in json) {
       playerAccounts.add(PlayerAccountInfo.fromJson(item));

@@ -9,11 +9,11 @@ import 'package:clashkingapp/core/my_app.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Clans',
           ),
           BottomNavigationBarItem(
-            icon: Icon(CustomIcons.sword_cross), // Example icon for War/League
+            icon: Icon(CustomIcons.swordCross), // Example icon for War/League
             label: 'War/League',
           ),
           BottomNavigationBarItem(

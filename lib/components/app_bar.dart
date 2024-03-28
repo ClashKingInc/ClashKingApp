@@ -12,13 +12,13 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   CustomAppBar({required this.user});
 
   @override
-  _CustomAppBarState createState() => _CustomAppBarState();
+  CustomAppBarState createState() => CustomAppBarState();
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
-class _CustomAppBarState extends State<CustomAppBar> {
+class CustomAppBarState extends State<CustomAppBar> {
   String? selectedTag;
 
   @override

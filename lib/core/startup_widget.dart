@@ -6,10 +6,10 @@ import 'package:clashkingapp/core/my_home_page.dart';
 
 class StartupWidget extends StatefulWidget {
   @override
-  _StartupWidgetState createState() => _StartupWidgetState();
+  StartupWidgetState createState() => StartupWidgetState();
 }
 
-class _StartupWidgetState extends State<StartupWidget> {
+class StartupWidgetState extends State<StartupWidget> {
   @override
   void initState() {
     super.initState();
@@ -18,17 +18,18 @@ class _StartupWidgetState extends State<StartupWidget> {
 
   Future<void> _checkTokenValidity() async {
     final isValid = await isTokenValid();
+    if (!mounted) return;
+
     if (isValid) {
-      // Si le token est valide, naviguez vers MyHomePage
+      // If the token is valid, navigate to MyHomePage
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (_) => MyHomePage()));
     } else {
-      // Si le token n'est pas valide, naviguez vers LoginPage
+      // If the token is not valid, navigate to LoginPage
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
     }
   }
-
   @override
   Widget build(BuildContext context) {
     // Affichez un indicateur de chargement pendant la vérification

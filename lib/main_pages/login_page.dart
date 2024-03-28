@@ -16,18 +16,18 @@ class LoginPage extends StatelessWidget {
   final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
   final String clientSecret = dotenv.env['DISCORD_CLIENT_SECRET']!;
   final String callbackUrlScheme = dotenv.env['DISCORD_CALLBACK_URL_SCHEME']!;
-  late String _codeVerifier;
-  late String _codeChallenge;
   // Discord n'utilise pas clientSecret dans le flux d'authentification côté client, donc il pourrait ne pas être nécessaire ici
 
   // Fonction pour lancer le processus d'authentification
   Future<void> signInWithDiscord(BuildContext context) async {
-// Construct the URL
+    String codeVerifier;
+    String codeChallenge;
+    // Construct the URL
     String generateCodeVerifier() {
-      const String _charset =
+      const String charset =
           'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
       return List.generate(
-              128, (i) => _charset[Random.secure().nextInt(_charset.length)])
+              128, (i) => charset[Random.secure().nextInt(charset.length)])
           .join();
     }
 
@@ -42,14 +42,14 @@ class LoginPage extends StatelessWidget {
       return codeChallenge;
     }
 
-    _codeVerifier = generateCodeVerifier();
-    _codeChallenge = generateCodeChallenge(_codeVerifier);
+    codeVerifier = generateCodeVerifier();
+    codeChallenge = generateCodeChallenge(codeVerifier);
     final url = Uri.https('discord.com', '/api/oauth2/authorize', {
       'response_type': 'code',
       'client_id': clientId,
       'scope': 'identify email',
       'redirect_uri': redirectUri,
-      'code_challenge': _codeChallenge,
+      'code_challenge': codeChallenge,
       'code_challenge_method': 'S256',
     });
 
@@ -72,7 +72,7 @@ class LoginPage extends StatelessWidget {
         'grant_type': 'authorization_code',
         'code': code,
         'redirect_uri': redirectUri,
-        'code_verifier': _codeVerifier
+        'code_verifier': codeVerifier
       });
 
       // Get the access token from the response
@@ -82,7 +82,7 @@ class LoginPage extends StatelessWidget {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('access_token', accessToken);
 
-      // Save the expiration date of the access token 
+      // Save the expiration date of the access token
       int expiresIn = jsonDecode(response.body)['expires_in'];
       DateTime expirationDate =
           DateTime.now().add(Duration(seconds: expiresIn));

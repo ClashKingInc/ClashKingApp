@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'current_war_info.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CurrentWarInfo {

@@ -7,10 +7,10 @@ class StatsScreen extends StatefulWidget {
   StatsScreen({Key? key, required this.playerStats}) : super(key: key);
 
   @override
-  _StatsScreenState createState() => _StatsScreenState();
+  StatsScreenState createState() => StatsScreenState();
 }
 
-class _StatsScreenState extends State<StatsScreen> {
+class StatsScreenState extends State<StatsScreen> {
   String dropdownValue = 'Home Base';
 
   @override

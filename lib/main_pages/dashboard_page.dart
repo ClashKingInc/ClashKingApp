@@ -104,7 +104,7 @@ class PlayerStatsCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('${playerStats.tag}'),
+                      Text(playerStats.tag),
                       Text('Townhall: ${playerStats.townHallLevel}'),
                       Text('Trophies: ${playerStats.trophies}'),
                       Text('Builder Hall: ${playerStats.builderHallLevel}'),
