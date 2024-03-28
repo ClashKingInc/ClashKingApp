@@ -1,0 +1,87 @@
+import 'package:clashkingapp/custom_icons_icons.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:clashkingapp/main_pages/dashboard_page.dart';
+import 'package:clashkingapp/main_pages/clan_page.dart';
+import 'package:clashkingapp/main_pages/current_war_page.dart';
+import 'package:clashkingapp/main_pages/management_page.dart';
+import 'package:clashkingapp/core/my_app.dart';
+
+class MyHomePage extends StatefulWidget {
+  @override
+  MyHomePageState createState() => MyHomePageState();
+}
+
+
+class MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var appState = Provider.of<MyAppState>(context);
+
+    List<Widget> widgetOptions = [
+      appState.playerAccounts != null
+          ? DashboardPage(
+              playerStats: appState.playerStats!, user: appState.user!)
+          : Center(
+              child:
+                  CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
+      appState.clanInfo != null
+          ? ClanInfoPage(clanInfo: appState.clanInfo!, user: appState.user!)
+          : Center(
+              child:
+                  CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
+      appState.currentWarInfo != null
+          ? CurrentWarInfoPage(currentWarInfo: appState.currentWarInfo!)
+          : Center(
+              child:
+                  CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
+      //WarLeaguePage(currentWarInfo: appState.currentWarInfo,),
+      ManagementPage(),
+    ];
+
+    return Scaffold(
+      body: Center(
+        child: IndexedStack(
+          index: _selectedIndex,
+          children:
+              widgetOptions, // Use widgetOptions here instead of _widgetOptions
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shield),
+            label: 'Clans',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CustomIcons.swordCross), // Example icon for War/League
+            label: 'War/League',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Management',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Color(
+            0xFFC98910), // Using the primary color we picked from the logo
+        unselectedItemColor:
+            Color(0xFF9B1F28), // A color that complements the primary color
+        showUnselectedLabels: true,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+}

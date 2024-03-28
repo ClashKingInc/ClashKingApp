@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/global_keys.dart'; // Make sure to import global_keys.dart
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/main_pages/login_page.dart';
-import 'package:clashkingapp/api/user_data.dart';
-import 'package:clashkingapp/main.dart';
+import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:provider/provider.dart';
+import 'package:clashkingapp/core/my_app.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final DiscordUser user;
@@ -12,13 +12,13 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   CustomAppBar({required this.user});
 
   @override
-  _CustomAppBarState createState() => _CustomAppBarState();
+  CustomAppBarState createState() => CustomAppBarState();
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
-class _CustomAppBarState extends State<CustomAppBar> {
+class CustomAppBarState extends State<CustomAppBar> {
   String? selectedTag;
 
   @override
