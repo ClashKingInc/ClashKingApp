@@ -38,6 +38,9 @@ class ClanWarDetails {
   final String name;
   final BadgeUrls badgeUrls;
   final int clanLevel;
+  final int attacks;
+  final int stars;
+  final double destructionPercentage;
   final List<WarMember> members;
 
   ClanWarDetails({
@@ -45,6 +48,9 @@ class ClanWarDetails {
     required this.name,
     required this.badgeUrls,
     required this.clanLevel,
+    required this.attacks,
+    required this.stars,
+    required this.destructionPercentage,
     required this.members,
   });
 
@@ -54,6 +60,9 @@ class ClanWarDetails {
       name: json['name'],
       badgeUrls: BadgeUrls.fromJson(json['badgeUrls']),
       clanLevel: json['clanLevel'],
+      attacks: json['attacks'],
+      stars: json['stars'],
+      destructionPercentage: json['destructionPercentage'],
       members: List<WarMember>.from(json['members'].map((x) => WarMember.fromJson(x))),
     );
   }
@@ -84,12 +93,18 @@ class WarMember {
   final String name;
   final int townhallLevel;
   final int mapPosition;
+  final List<Attack>? attacks;
+  final int opponentAttacks;
+  final Attack? bestOpponentAttack;
 
   WarMember({
     required this.tag,
     required this.name,
     required this.townhallLevel,
     required this.mapPosition,
+    this.attacks,
+    required this.opponentAttacks,
+    this.bestOpponentAttack,
   });
 
   factory WarMember.fromJson(Map<String, dynamic> json) {
@@ -98,6 +113,44 @@ class WarMember {
       name: json['name'],
       townhallLevel: json['townhallLevel'],
       mapPosition: json['mapPosition'],
+      attacks: json['attacks'] != null
+          ? List<Attack>.from(json['attacks'].map((x) => Attack.fromJson(x)))
+          : null,
+      opponentAttacks: json['opponentAttacks'],
+      bestOpponentAttack: json['bestOpponentAttack'] != null
+          ? Attack.fromJson(json['bestOpponentAttack'])
+          : null,
     );
   }
 }
+
+class Attack {
+  final String attackerTag;
+  final String defenderTag;
+  final int stars;
+  final int destructionPercentage;
+  final int order;
+  final int duration;
+
+  Attack({
+    required this.attackerTag,
+    required this.defenderTag,
+    required this.stars,
+    required this.destructionPercentage,
+    required this.order,
+    required this.duration,
+  });
+
+  factory Attack.fromJson(Map<String, dynamic> json) {
+    return Attack(
+      attackerTag: json['attackerTag'],
+      defenderTag: json['defenderTag'],
+      stars: json['stars'],
+      destructionPercentage: json['destructionPercentage'],
+      order: json['order'],
+      duration: json['duration'],
+    );
+  }
+}
+
+

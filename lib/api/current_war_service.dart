@@ -12,7 +12,7 @@ class CurrentWarService {
 
   Future<CurrentWarInfo> fetchCurrentWarInfo() async {
     final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clans/!VY2J0LL/currentwar'),
+      Uri.parse('https://api.clashking.xyz/v1/clans/!2QPCJQQ2U/currentwar'),
     );
 
     print('Response status: ${response.statusCode}'); // Print response status
@@ -26,3 +26,8 @@ class CurrentWarService {
     }
   }
 }
+/*
+Gros chêne : VY2J0LL
+Le petit chêne : 2QPCJQQ2U
+Gland Esport : 2GRCROPUG 
+*/
