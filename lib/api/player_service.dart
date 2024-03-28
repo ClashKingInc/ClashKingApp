@@ -38,61 +38,12 @@ class PlayerService {
   }
 
   Future<String> fetchPlayerTownHallByTownHallLevel(int townHallLevel) async {
-    String townHallPic = '';
-
-    switch (townHallLevel) {
-      case 1:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-1.png';
-        break;
-      case 2:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-2.png';
-        break;
-      case 3:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-3.png';
-        break;
-      case 4:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-4.png';
-        break;
-      case 5:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-5.png';
-        break;
-      case 6:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-6.png';
-        break;
-      case 7:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-7.png';
-        break;
-      case 8:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-8.png';
-        break;
-      case 9:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-9.png';
-        break;
-      case 10:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-10.png';
-        break;
-      case 11:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-11.png';
-        break;
-      case 12:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-12.png';
-        break;
-      case 13:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-13.png';
-        break;
-      case 14:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-14.png';
-        break;
-      case 15:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-15.png';
-        break;
-      case 16:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-16.png';
-        break;
-      default:
-        townHallPic = 'https://clashkingfiles.b-cdn.net/town-hall-pics/town-hall-16.png';
+    String townHallPic;
+    if (townHallLevel >= 1 && townHallLevel <= 16) {
+      townHallPic = 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-$townHallLevel.png';
+    } else {
+      townHallPic = 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-16.png';
     }
-
     return townHallPic;
   }
 }

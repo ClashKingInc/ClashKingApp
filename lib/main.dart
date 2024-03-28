@@ -118,19 +118,31 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  PlayerStats? playerStats; // Add this line
-  ClanInfo? clanInfo; // Add this line
-  CurrentWarInfo? currentWarInfo; // Add this line
-  DiscordUser? user; // Add this line
+  PlayerStats? playerStats;
+  ClanInfo? clanInfo; 
+  CurrentWarInfo? currentWarInfo; 
+  DiscordUser? user; 
   Future<void>? initializeUserFuture;
+  ValueNotifier<String?> selectedTag = ValueNotifier<String?>(null);
 
   MyAppState() {
-    initializeUserFuture = initializeUser().then((_) {
-    fetchPlayerStats();
-    fetchClanInfo();
-    fetchCurrentWarInfo();
+    initializeUserFuture = initializeUser().then((_) async {
+    await fetchPlayerStats();
+    selectedTag.value = user!.tags.first;
+    fetchClanInfo(playerStats!.clan.tag);
+    fetchCurrentWarInfo(playerStats!.clan.tag);
+    selectedTag.addListener(_reloadData);
   });
+
 }
+
+  void _reloadData() async {
+    if (selectedTag.value != null) {
+      await fetchPlayerStats();
+      await fetchClanInfo(playerStats!.clan.tag);
+      await fetchCurrentWarInfo(playerStats!.clan.tag);
+    }
+  }
 
   // Assume this method exists and fetches player stats correctly
   Future<void> fetchPlayerStats() async {
@@ -145,9 +157,9 @@ class MyAppState extends ChangeNotifier {
   }
 
   // Assume this method exists and fetches clan correctly
-  Future<void> fetchClanInfo() async {
+  Future<void> fetchClanInfo(String tag) async {
     try {
-      clanInfo = await ClanService().fetchClanInfo();
+      clanInfo = await ClanService().fetchClanInfo(tag);
       notifyListeners(); // Notify listeners to rebuild widgets that depend on clanInfo.
     } catch (e, s) {
       // Handle the error, maybe log it or show a user-friendly message
@@ -157,9 +169,9 @@ class MyAppState extends ChangeNotifier {
   }
 
   // Assume this method exists and fetches current war correctly
-  Future<void> fetchCurrentWarInfo() async {
+  Future<void> fetchCurrentWarInfo(String tag) async {
     try {
-      currentWarInfo = await CurrentWarService().fetchCurrentWarInfo();
+      currentWarInfo = await CurrentWarService().fetchCurrentWarInfo(tag);
       notifyListeners(); // Notify listeners to rebuild widgets that depend on currentWarInfo.
     } catch (e, s) {
       // Handle the error, maybe log it or show a user-friendly message
