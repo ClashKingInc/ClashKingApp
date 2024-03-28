@@ -56,30 +56,30 @@ class PlayerStats {
 
   factory PlayerStats.fromJson(Map<String, dynamic> json) {
     return PlayerStats(
-      name: json['name'],
-      tag: json['tag'],
-      townHallLevel: json['townHallLevel'],
-      townHallWeaponLevel: json['townHallWeaponLevel'],
-      expLevel: json['expLevel'],
-      trophies: json['trophies'],
-      bestTrophies: json['bestTrophies'],
-      warStars: json['warStars'],
-      attackWins: json['attackWins'],
-      defenseWins: json['defenseWins'],
-      builderHallLevel: json['builderHallLevel'],
-      builderBaseTrophies: json['builderBaseTrophies'],
-      bestBuilderBaseTrophies: json['bestBuilderBaseTrophies'],
-      role: json['role'],
-      warPreference: json['warPreference'],
-      donations: json['donations'],
-      donationsReceived: json['donationsReceived'],
-      clanCapitalContributions: json['clanCapitalContributions'],
-      clan: Clan.fromJson(json['clan']),
-      league: League.fromJson(json['league']),
-      achievements: List<Achievement>.from(json['achievements'].map((x) => Achievement.fromJson(x))),
-      heroes: List<Hero>.from(json['heroes'].map((x) => Hero.fromJson(x))),
-      troops: List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x))),
-      spells: List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x))),     
+      name: json['name'] ?? 'No name',
+      tag: json['tag'] ?? 'No tag',
+      townHallLevel: json['townHallLevel'] ?? 0,
+      townHallWeaponLevel: json['townHallWeaponLevel'] ?? 0,
+      expLevel: json['expLevel'] ?? 0,
+      trophies: json['trophies'] ?? 0,
+      bestTrophies: json['bestTrophies'] ?? 0,
+      warStars: json['warStars'] ?? 0,
+      attackWins: json['attackWins'] ?? 0,
+      defenseWins: json['defenseWins'] ?? 0,
+      builderHallLevel: json['builderHallLevel'] ?? 0,
+      builderBaseTrophies: json['builderBaseTrophies'] ?? 0,
+      bestBuilderBaseTrophies: json['bestBuilderBaseTrophies'] ?? 0,
+      role: json['role'] ?? 'No role',
+      warPreference: json['warPreference'] ?? 'No preference',
+      donations: json['donations'] ?? 0,
+      donationsReceived: json['donationsReceived'] ?? 0,
+      clanCapitalContributions: json['clanCapitalContributions'] ?? 0,
+      clan: Clan.fromJson(json['clan'] ?? {}),
+      league: League.fromJson(json['league'] ?? {}),
+      achievements: List<Achievement>.from(json['achievements'].map((x) => Achievement.fromJson(x ?? {}))),
+      heroes: List<Hero>.from(json['heroes'].map((x) => Hero.fromJson(x)) ?? []),
+      troops: List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x)) ?? []),
+      spells: List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x)) ?? []),     
     );
   }
 }
@@ -112,7 +112,7 @@ class League {
 
   factory League.fromJson(Map<String, dynamic> json) {
     return League(
-      name: json['name'],
+      name: json['name'] ?? 'No name',
       // Initialize URLs for icons from JSON if needed
     );
   }
@@ -129,10 +129,10 @@ class Achievement {
 
   factory Achievement.fromJson(Map<String, dynamic> json) {
     return Achievement(
-      name: json['name'],
-      stars: json['stars'],
-      value: json['value'],
-      target: json['target'],
+      name: json['name'] ?? 'No name',
+      stars: json['stars'] ?? 0,
+      value: json['value'] ?? 0,
+      target: json['target'] ?? 0,
       // Initialize other fields from JSON if needed
     );
   }
@@ -149,10 +149,10 @@ class Hero {
 
   factory Hero.fromJson(Map<String, dynamic> json) {
     return Hero(
-      name: json['name'],
-      level: json['level'],
-      maxLevel: json['maxLevel'],
-      village: json['village'],
+      name: json['name'] ?? 'No name',
+      level: json['level'] ?? 0,
+      maxLevel: json['maxLevel'] ?? 0,
+      village: json['village'] ?? 'home',
       // Initialize other attributes from JSON if needed
     );
   }
@@ -169,10 +169,10 @@ class Troop {
 
   factory Troop.fromJson(Map<String, dynamic> json) {
     return Troop(
-      name: json['name'],
-      level: json['level'],
-      maxLevel: json['maxLevel'],
-      village: json['village'],
+      name: json['name'] ?? 'No name',
+      level: json['level'] ?? 0,
+      maxLevel: json['maxLevel'] ?? 0,
+      village: json['village'] ?? 'home',
     );
   }
 }
@@ -187,10 +187,10 @@ class Spell {
 
   factory Spell.fromJson(Map<String, dynamic> json) {
     return Spell(
-      name: json['name'],
-      level: json['level'],
-      maxLevel: json['maxLevel'],
-      village: json['village'],
+      name: json['name'] ?? 'No name',
+      level: json['level'] ?? 0,
+      maxLevel: json['maxLevel'] ?? 0,
+      village: json['village']  ?? 'home',
     );
   }
 }
