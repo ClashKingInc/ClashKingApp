@@ -25,6 +25,7 @@ class PlayerStats {
   final List<Hero> heroes;
   final List<Troop> troops;
   final List<Spell> spells;
+  String townHallPic = '';
 
 
   PlayerStats({
@@ -83,8 +84,6 @@ class PlayerStats {
     );
   }
 }
-
-
 
 class Clan {
   final String tag;
