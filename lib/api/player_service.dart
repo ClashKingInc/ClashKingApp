@@ -21,13 +21,18 @@ class PlayerService {
     CurrentWarInfo warInfo;
     
     for (int i = 0; i < tags.length; i++) {
-      print('Fetching player stats for tag: ${tags[i]}');
       playerStats = await fetchPlayerStats(tags[i]);
       playerAccounts.items.add(playerStats);
-      print("clan: ${playerStats.clan.tag}");
-      clanInfo = await fetchClanInfo(playerStats.clan.tag);
+
+      var results = await Future.wait<dynamic>([
+        fetchClanInfo(playerStats.clan.tag),
+        fetchCurrentWarInfo(playerStats.clan.tag),
+      ]);
+
+      clanInfo = results[0] as ClanInfo;
       playerAccounts.clanInfo.add(clanInfo);
-      warInfo = await fetchCurrentWarInfo(playerStats.clan.tag);
+
+      warInfo = results[1] as CurrentWarInfo;
       playerAccounts.warInfo.add(warInfo);
     }
     return playerAccounts;
