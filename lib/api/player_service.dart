@@ -29,9 +29,21 @@ class PlayerService {
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
-      return PlayerStats.fromJson(jsonDecode(responseBody));
+      PlayerStats playerStats = PlayerStats.fromJson(jsonDecode(responseBody));
+      playerStats.townHallPic = await fetchPlayerTownHallByTownHallLevel(playerStats.townHallLevel);
+      return playerStats;
     } else {
       throw Exception('Failed to load player stats');
     }
+  }
+
+  Future<String> fetchPlayerTownHallByTownHallLevel(int townHallLevel) async {
+    String townHallPic;
+    if (townHallLevel >= 1 && townHallLevel <= 16) {
+      townHallPic = 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-$townHallLevel.png';
+    } else {
+      townHallPic = 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-16.png';
+    }
+    return townHallPic;
   }
 }

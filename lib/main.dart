@@ -88,16 +88,22 @@ class MyApp extends StatelessWidget {
                       background: Color(0xFFFFFFFF),
                       surface: Color(0xFFFFF8E1),
                       error: Color(0xFFB00020),
-                      onPrimary: Color(
-                          0xFFFFFFFF), // Text color on top of primary color
-                      onSecondary: Color(
-                          0xFFFFFFFF), // Text color on top of secondary color
-                      onBackground: Color(
-                          0xFF000000), // Typically black text for readibility
-                      onSurface: Color(
-                          0xFF000000), // Typically black text for readibility
-                      onError:
-                          Color(0xFFFFFFFF), // White text on top of error color
+                      onPrimary: Color(0xFFFFFFFF), // Text color on top of primary color
+                      onSecondary: Color(0xFFFFFFFF), // Text color on top of secondary color
+                      onBackground: Color(0xFF000000), // Typically black text for readibility
+                      onSurface: Color(0xFF000000), // Typically black text for readibility
+                      onError: Color(0xFFFFFFFF), // White text on top of error color
+                    ),
+                    textTheme: TextTheme(
+                      bodyLarge: TextStyle(color: Colors.black, fontSize: 16, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                      bodyMedium: TextStyle(color: Colors.black, fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                      bodySmall: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                      titleLarge: TextStyle(color: Colors.black, fontSize: 24, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                      titleMedium: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                      titleSmall: TextStyle(color: Colors.black, fontSize: 18, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                      labelLarge: TextStyle(color: Colors.black, fontSize: 16, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                      labelMedium: TextStyle(color: Colors.black, fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+                      labelSmall: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
                     ),
                   ),
                   home: StartupWidget(),
@@ -112,19 +118,31 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  PlayerStats? playerStats; // Add this line
-  ClanInfo? clanInfo; // Add this line
-  CurrentWarInfo? currentWarInfo; // Add this line
-  DiscordUser? user; // Add this line
+  PlayerStats? playerStats;
+  ClanInfo? clanInfo; 
+  CurrentWarInfo? currentWarInfo; 
+  DiscordUser? user; 
   Future<void>? initializeUserFuture;
+  ValueNotifier<String?> selectedTag = ValueNotifier<String?>(null);
 
   MyAppState() {
-    initializeUserFuture = initializeUser().then((_) {
-    fetchPlayerStats();
-    fetchClanInfo();
-    fetchCurrentWarInfo();
+    initializeUserFuture = initializeUser().then((_) async {
+    await fetchPlayerStats();
+    selectedTag.value = user!.tags.first;
+    fetchClanInfo(playerStats!.clan.tag);
+    fetchCurrentWarInfo(playerStats!.clan.tag);
+    selectedTag.addListener(_reloadData);
   });
+
 }
+
+  void _reloadData() async {
+    if (selectedTag.value != null) {
+      await fetchPlayerStats();
+      await fetchClanInfo(playerStats!.clan.tag);
+      await fetchCurrentWarInfo(playerStats!.clan.tag);
+    }
+  }
 
   // Assume this method exists and fetches player stats correctly
   Future<void> fetchPlayerStats() async {
@@ -139,9 +157,9 @@ class MyAppState extends ChangeNotifier {
   }
 
   // Assume this method exists and fetches clan correctly
-  Future<void> fetchClanInfo() async {
+  Future<void> fetchClanInfo(String tag) async {
     try {
-      clanInfo = await ClanService().fetchClanInfo();
+      clanInfo = await ClanService().fetchClanInfo(tag);
       notifyListeners(); // Notify listeners to rebuild widgets that depend on clanInfo.
     } catch (e, s) {
       // Handle the error, maybe log it or show a user-friendly message
@@ -151,9 +169,9 @@ class MyAppState extends ChangeNotifier {
   }
 
   // Assume this method exists and fetches current war correctly
-  Future<void> fetchCurrentWarInfo() async {
+  Future<void> fetchCurrentWarInfo(String tag) async {
     try {
-      currentWarInfo = await CurrentWarService().fetchCurrentWarInfo();
+      currentWarInfo = await CurrentWarService().fetchCurrentWarInfo(tag);
       notifyListeners(); // Notify listeners to rebuild widgets that depend on currentWarInfo.
     } catch (e, s) {
       // Handle the error, maybe log it or show a user-friendly message

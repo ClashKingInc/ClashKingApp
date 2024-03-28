@@ -10,9 +10,11 @@ class ClanService {
     await dotenv.load(fileName: ".env");
   }
 
-  Future<ClanInfo> fetchClanInfo() async {
+  Future<ClanInfo> fetchClanInfo(String tag) async {
+    tag = tag.replaceAll('#', '!');
+
     final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clans/!VY2J0LL'),
+      Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
     );
 
     print('Response status: ${response.statusCode}'); // Print response status

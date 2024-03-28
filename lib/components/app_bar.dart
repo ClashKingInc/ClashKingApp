@@ -3,6 +3,8 @@ import 'package:clashkingapp/global_keys.dart'; // Make sure to import global_ke
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/main_pages/login_page.dart';
 import 'package:clashkingapp/api/user_data.dart';
+import 'package:clashkingapp/main.dart';
+import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final DiscordUser user;
@@ -22,10 +24,15 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   void initState() {
     super.initState();
-    _loadSelectedTag();
-    if (widget.user.tags.isNotEmpty) {
-      selectedTag = widget.user.tags.first;
-    }
+    _loadSelectedTag().then((_) {
+      print('Selected tag: $selectedTag');
+      if (selectedTag == null && widget.user.tags.isNotEmpty) {
+        setState(() {
+          selectedTag = widget.user.tags.first;
+          _saveSelectedTag(selectedTag!);
+        });
+      }
+    });
   }
 
   Future<void> _loadSelectedTag() async {
@@ -33,36 +40,42 @@ class _CustomAppBarState extends State<CustomAppBar> {
     selectedTag = prefs.getString('selectedTag');
   }
 
-  Future<void> _saveSelectedTag() async {
+  Future<void> _saveSelectedTag(String tag) async {
+    print('Saving selected tag: $tag');
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('selectedTag', selectedTag!);
+    prefs.setString('selectedTag', tag);
   }
 
   @override
   Widget build(BuildContext context) {
+    var appState = Provider.of<MyAppState>(context, listen: false);
     return AppBar(
-      title: DropdownButton<String>(
-        value: selectedTag,
-        icon: Icon(Icons.arrow_downward),
-        iconSize: 24,
-        elevation: 16,
-        style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-        underline: Container(
-          height: 2,
-          color: Theme.of(context).colorScheme.secondary,
-        ),
-        onChanged: (String? newValue) {
-          setState(() {
-            selectedTag = newValue;
-            _saveSelectedTag();
-          });
-        },
-        items: widget.user.tags.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
+      title: ValueListenableBuilder<String?>(
+        valueListenable: appState.selectedTag,
+        builder: (context, selectedTag, child) {
+          return DropdownButton<String>(
+            value: selectedTag,
+            icon: Icon(Icons.arrow_downward),
+            iconSize: 24,
+            elevation: 16,
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            underline: Container(
+              height: 2,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            onChanged: (String? newValue) async {
+              await _saveSelectedTag(newValue!);
+              appState.selectedTag.value = newValue;
+            },
+            items:
+                widget.user.tags.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
           );
-        }).toList(),
+        },
       ),
       actions: <Widget>[
         Row(

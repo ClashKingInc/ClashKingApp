@@ -25,7 +25,9 @@ class DashboardPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => StatsScreen(playerStats: playerStats)),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        StatsScreen(playerStats: playerStats)),
               );
             },
             child: PlayerStatsCard(playerStats: playerStats),
@@ -47,15 +49,13 @@ class CreatorCodeCard extends StatelessWidget {
     return Card(
       child: Padding(
         // Padding right and left
-        padding:
-            const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment
-              .center, // Adjust vertical alignment here
+          crossAxisAlignment:
+              CrossAxisAlignment.center, // Adjust vertical alignment here
           children: <Widget>[
             Image.asset('assets/icons/Crown.png',
-                width: 80,
-                height: 80), // Specify your desired width and height
+                width: 80, height: 80), // Specify your desired width and height
             SizedBox(width: 16), // Add space between the image and text
             Expanded(
               // Use Expanded to ensure text takes up the remaining space
@@ -75,8 +75,6 @@ class CreatorCodeCard extends StatelessWidget {
   }
 }
 
-
-
 class PlayerStatsCard extends StatelessWidget {
   const PlayerStatsCard({
     super.key,
@@ -87,38 +85,43 @@ class PlayerStatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Center(child: Text('Welcome ${playerStats.name} !',
-                style: TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.bold))),
-            SizedBox(height: 8),
-            Text('${playerStats.tag}',
-                style: TextStyle(fontSize: 18)),
-            SizedBox(height: 8),
-            Text('Townhall: ${playerStats.townHallLevel}',
-                style: TextStyle(fontSize: 18)),
-            SizedBox(height: 8),
-            Text('Trophies: ${playerStats.trophies}',
-                style: TextStyle(fontSize: 18)),
-            SizedBox(height: 8),
-            Text('Builder Hall: ${playerStats.builderHallLevel}',
-                style: TextStyle(fontSize: 18)),
-            SizedBox(height: 8),
-            Text('Donations: ${playerStats.donations}',
-                style: TextStyle(fontSize: 18)),
-            SizedBox(height: 8),
-            Text('Donations Received: ${playerStats.donationsReceived}',
-                style: TextStyle(fontSize: 18)),
-            SizedBox(height: 8),
-            Text('Donations ratio: ${(playerStats.donations / playerStats.donationsReceived).toStringAsFixed(2)}',
-                style: TextStyle(fontSize: 18)),
-            SizedBox(height: 8),
-          ],
+    return DefaultTextStyle(
+      style: Theme.of(context).textTheme.labelSmall ?? TextStyle(),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: <Widget>[
+              SizedBox(
+                height: 100,
+                width: 100,
+                child: Image.network(playerStats.townHallPic),
+              ),
+              SizedBox(width: 8), // Add some spacing between the image and the text
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('${playerStats.tag}'),
+                    Text('Townhall: ${playerStats.townHallLevel}'),
+                    Text('Trophies: ${playerStats.trophies}'),
+                    Text('Builder Hall: ${playerStats.builderHallLevel}'),
+                    Text('Donations: ${playerStats.donations}'),
+                  ],
+                ),
+              ),
+              SizedBox(width: 8), // Add some spacing between the columns
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Donations Received: ${playerStats.donationsReceived}'),
+                    Text('Donations ratio: ${(playerStats.donations / playerStats.donationsReceived).toStringAsFixed(2)}'),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
