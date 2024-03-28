@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'player_info.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PlayerService {
 
@@ -11,8 +12,16 @@ class PlayerService {
   }
 
   Future<PlayerStats> fetchPlayerStats() async {
+    print('Fetching player stats');
+    final prefs = await SharedPreferences.getInstance();
+    String? selectedTag = prefs.getString('selectedTag');
+    print('Selected tag: $selectedTag');
+    if (selectedTag != null) {
+      selectedTag = selectedTag.replaceAll('#', '!');
+    }
+
     final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/players/!8GLYGGJQ'),
+      Uri.parse('https://api.clashking.xyz/v1/players/$selectedTag'),
     );
 
     print('Response status: ${response.statusCode}'); // Print response status

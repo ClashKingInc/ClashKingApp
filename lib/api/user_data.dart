@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DiscordUser {
   final String id;
@@ -62,6 +63,9 @@ Future<DiscordUser> fetchUserTags(DiscordUser user) async {
     Map<String, dynamic> responseBodyJson = jsonDecode(responseBody);
     responseBodyJson.removeWhere((key, value) => value == null); // Remove entries with null value
     user.tags = responseBodyJson.keys.toList(); // Update 'tags' in 'user'
+
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('selectedTag', user.tags.first);
     return user;
   } else {
     throw Exception('Failed to load user tags');

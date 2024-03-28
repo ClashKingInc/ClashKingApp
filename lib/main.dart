@@ -119,11 +119,12 @@ class MyAppState extends ChangeNotifier {
   Future<void>? initializeUserFuture;
 
   MyAppState() {
-    initializeUserFuture = initializeUser();
+    initializeUserFuture = initializeUser().then((_) {
     fetchPlayerStats();
     fetchClanInfo();
     fetchCurrentWarInfo();
-  }
+  });
+}
 
   // Assume this method exists and fetches player stats correctly
   Future<void> fetchPlayerStats() async {
