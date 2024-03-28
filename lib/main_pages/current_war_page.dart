@@ -65,20 +65,67 @@ class CurrentWarInfoCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.network(currentWarInfo.clan.badgeUrls.small),
-                  Text(' VS '),
-                  Image.network(currentWarInfo.opponent.badgeUrls.small),
-                ],
-              ),
+              child: Text(currentWarInfo.state),
             ),
-            Center(child: Text('${currentWarInfo.clan.name} VS ${currentWarInfo.opponent.name}',
-                style: TextStyle(fontSize: 18))),
+            Center(
+              child: () {
+              switch (currentWarInfo.state) {
+                case 'accessDenied':
+                  return _buildState1();
+                case 'notInWar':
+                  return _buildState2();
+                case 'preparation':
+                  return _buildState3();
+                case 'inWar':
+                  return _buildState4();
+                default:
+                  return Text('Clan state unknown');
+              }
+            }(),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildState1() {
+    return Center(child: Text('Access denied'));
+  }
+  
+  Widget _buildState2() {
+    return Center(child: Text('Not in war'));
+  }
+  
+  Widget _buildState3() {
+    return Center(child: Text('Preparation'));
+  }
+  
+  Widget _buildState4() {
+    return 
+    Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+      
+        Column (
+          children: <Widget>[
+            Image.network(currentWarInfo.clan.badgeUrls.small),
+            Center(child: Text(currentWarInfo.clan.name)),
+          ],
+        ),
+        Column(
+          children: <Widget>[
+            Center(child: Text('${currentWarInfo.clan.stars} - ${currentWarInfo.opponent.stars} ')),
+            Center(child: Text('${currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)} % - ${currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)} %')),
+          ],
+        ),
+        Column(
+          children: <Widget>[
+            Image.network(currentWarInfo.opponent.badgeUrls.small),
+            Center(child: Text(currentWarInfo.opponent.name)),
+          ],
+        ),
+      ],
     );
   }
 }
