@@ -8,10 +8,10 @@ import 'dart:convert'; // Pour ascii
 import 'package:crypto/crypto.dart'; // Pour sha256
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/main.dart';
+import 'package:clashkingapp/global_keys.dart';
 
 class LoginPage extends StatelessWidget {
-  final GlobalKey<NavigatorState> navigatorKey;
-  LoginPage({required this.navigatorKey});
+  LoginPage();
   // Assurez-vous d'avoir initialisé dotenv avant de l'utiliser pour charger les variables d'environnement
   final String clientId = dotenv.env['DISCORD_CLIENT_ID']!;
   final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
@@ -78,13 +78,20 @@ class LoginPage extends StatelessWidget {
 
       // Get the access token from the response
       final accessToken = jsonDecode(response.body)['access_token'] as String;
-      
+
       // Save the access token using shared_preferences
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('access_token', accessToken);
 
+      // Save the expiration date of the access token 
+      int expiresIn = jsonDecode(response.body)['expires_in'];
+      DateTime expirationDate =
+          DateTime.now().add(Duration(seconds: expiresIn));
+      await prefs.setString(
+          'expiration_date', expirationDate.toIso8601String());
+
       // Navigate to MyHomePage
-      navigatorKey.currentState!.pushReplacement(
+      globalNavigatorKey.currentState!.pushReplacement(
         MaterialPageRoute(builder: (context) => MyHomePage()),
       );
     } catch (e) {

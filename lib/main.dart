@@ -15,23 +15,56 @@ import 'package:clashkingapp/api/current_war_service.dart';
 import 'package:clashkingapp/main_pages/login_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:clashkingapp/global_keys.dart';
 
 Future main() async {
-  await dotenv.load(); // Load the .env file
-
+  await dotenv.load(); // Charge le fichier .env
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
+
+class StartupWidget extends StatefulWidget {
+  @override
+  _StartupWidgetState createState() => _StartupWidgetState();
+}
+
+class _StartupWidgetState extends State<StartupWidget> {
+  @override
+  void initState() {
+    super.initState();
+    _checkTokenValidity();
+  }
+
+  Future<void> _checkTokenValidity() async {
+    final isValid = await isTokenValid();
+    if (isValid) {
+      // Si le token est valide, naviguez vers MyHomePage
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => MyHomePage()));
+    } else {
+      // Si le token n'est pas valide, naviguez vers LoginPage
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Affichez un indicateur de chargement pendant la vérification
+    return Scaffold(body: Center(child: CircularProgressIndicator()));
+  }
+}
+
+
+
 class MyApp extends StatelessWidget {
-   MyApp({Key? key}) : super(key: key);
-  final navigatorKey = GlobalKey<NavigatorState>();
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        navigatorKey: navigatorKey,
+        navigatorKey: globalNavigatorKey,
         title: 'ClashKing',
         theme: ThemeData(
           useMaterial3: true,
@@ -52,16 +85,15 @@ class MyApp extends StatelessWidget {
             onError: Color(0xFFFFFFFF), // White text on top of error color
           ),
         ),
-        home: LoginPage(navigatorKey: navigatorKey),
+        home: StartupWidget(), // Utilisez StartupWidget ici
       ),
     );
   }
 }
 
-class MyAppState extends ChangeNotifier 
-{
+class MyAppState extends ChangeNotifier {
   PlayerStats? playerStats; // Add this line
-  ClanInfo? clanInfo; // Add this line 
+  ClanInfo? clanInfo; // Add this line
   CurrentWarInfo? currentWarInfo; // Add this line
   DiscordUser? user; // Add this line
 
@@ -96,7 +128,7 @@ class MyAppState extends ChangeNotifier
     }
   }
 
-    // Assume this method exists and fetches current war correctly
+  // Assume this method exists and fetches current war correctly
   Future<void> fetchCurrentWarInfo() async {
     try {
       currentWarInfo = await CurrentWarService().fetchCurrentWarInfo();
@@ -107,13 +139,20 @@ class MyAppState extends ChangeNotifier
       print("Stack trace: $s");
     }
   }
+
   Future<void> initializeUser() async {
-    final accessToken = await getAccessToken();
-    if (accessToken != null) {
-      print("Access token : $accessToken");
-      user = await fetchDiscordUser(accessToken);
-      print("User: $user");
-      notifyListeners(); // Notify listeners to update the UI
+    bool validToken = await isTokenValid();
+    if (validToken) {
+      print("Token valide.");
+      final accessToken = await getAccessToken();
+      if (accessToken != null) {
+        print("Access token : $accessToken");
+        user = await fetchDiscordUser(accessToken);
+        print("User: $user");
+        notifyListeners();
+      }
+    } else {
+      print("Token non valide ou absent.");
     }
   }
 }
@@ -123,12 +162,22 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+Future<bool> isTokenValid() async {
+  final prefs = await SharedPreferences.getInstance();
+  String? expirationDateString = prefs.getString('expiration_date');
+
+  if (expirationDateString != null) {
+    DateTime expirationDate = DateTime.parse(expirationDateString);
+    return DateTime.now().isBefore(expirationDate);
+  }
+
+  return false;
+}
+
 Future<String?> getAccessToken() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getString('access_token');
 }
-
-
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
@@ -145,14 +194,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
     List<Widget> widgetOptions = [
       appState.playerStats != null
-          ? DashboardPage(playerStats: appState.playerStats!, user: appState.user!)
-          : CircularProgressIndicator(), // Show a loading spinner when playerStats is nul
+        ? DashboardPage(
+            playerStats: appState.playerStats!, user: appState.user!)
+        : Center(child: CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
       appState.clanInfo != null
-    ?  ClanInfoPage(clanInfo: appState.clanInfo!, user: appState.user!)
-    : CircularProgressIndicator(),
+        ? ClanInfoPage(clanInfo: appState.clanInfo!, user: appState.user!)
+        : Center(child: CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
       appState.currentWarInfo != null
-    ? CurrentWarInfoPage(currentWarInfo: appState.currentWarInfo!)
-    : CircularProgressIndicator(),
+        ? CurrentWarInfoPage(currentWarInfo: appState.currentWarInfo!)
+        : Center(child: CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
       //WarLeaguePage(currentWarInfo: appState.currentWarInfo,),
       ManagementPage(),
     ];
