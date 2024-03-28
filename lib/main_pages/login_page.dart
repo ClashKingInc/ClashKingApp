@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
-import 'dart:convert' show jsonDecode;
 import 'package:http/http.dart' as http;
 import 'dart:math'; // Pour Random
 import 'dart:convert'; // Pour ascii
 import 'package:crypto/crypto.dart'; // Pour sha256
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:clashkingapp/main.dart';
 import 'package:clashkingapp/global_keys.dart';
+import 'package:clashkingapp/core/my_home_page.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage();

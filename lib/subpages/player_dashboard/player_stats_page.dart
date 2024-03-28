@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/player_info.dart';
+import 'package:clashkingapp/api/player_account_info.dart';
 
 class StatsScreen extends StatefulWidget {
-  final PlayerStats playerStats;
+  final PlayerAccountInfo playerStats;
 
   StatsScreen({Key? key, required this.playerStats}) : super(key: key);
 
