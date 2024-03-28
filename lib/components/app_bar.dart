@@ -4,25 +4,79 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/main_pages/login_page.dart';
 import 'package:clashkingapp/api/user_data.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final DiscordUser user;
 
   CustomAppBar({required this.user});
 
   @override
+  _CustomAppBarState createState() => _CustomAppBarState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  String? selectedTag;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedTag();
+    if (widget.user.tags.isNotEmpty) {
+      selectedTag = widget.user.tags.first;
+    }
+  }
+
+  Future<void> _loadSelectedTag() async {
+    final prefs = await SharedPreferences.getInstance();
+    selectedTag = prefs.getString('selectedTag');
+  }
+
+  Future<void> _saveSelectedTag() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('selectedTag', selectedTag!);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AppBar(
+      title: DropdownButton<String>(
+        value: selectedTag,
+        icon: Icon(Icons.arrow_downward),
+        iconSize: 24,
+        elevation: 16,
+        style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+        underline: Container(
+          height: 2,
+          color: Theme.of(context).colorScheme.secondary,
+        ),
+        onChanged: (String? newValue) {
+          setState(() {
+            selectedTag = newValue;
+            _saveSelectedTag();
+          });
+        },
+        items: widget.user.tags.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
       actions: <Widget>[
         Row(
           children: <Widget>[
-            Text(user.globalName),
             SizedBox(width: 8), // Add some spacing
+            Text(widget.user.globalName),
+            Padding(padding: EdgeInsets.all(5)),
             GestureDetector(
               onTap: () async {
                 await _logOut();
               },
               child: CircleAvatar(
-                backgroundImage: NetworkImage('https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png'),
+                backgroundImage: NetworkImage(
+                    'https://cdn.discordapp.com/avatars/${widget.user.id}/${widget.user.avatar}.png'),
               ),
             ),
           ],
@@ -42,7 +96,4 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       MaterialPageRoute(builder: (context) => LoginPage()),
     );
   }
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

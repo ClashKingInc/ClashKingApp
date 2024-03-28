@@ -1,4 +1,4 @@
-import 'dart:convert' show jsonDecode;
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class DiscordUser {
@@ -8,6 +8,7 @@ class DiscordUser {
   final String email;
   final String globalName;
   final String language;
+  List<String> tags = [];
 
   DiscordUser({
     required this.id,
@@ -27,23 +28,46 @@ class DiscordUser {
       globalName: json['global_name'],
       language: json['locale'],
     );
-  }
-
-  
+  }  
 }
 
 Future<DiscordUser> fetchDiscordUser(String accessToken) async {
-    final response = await http.get(
-      Uri.https('discord.com', '/api/users/@me'),
-      headers: {
-        'Authorization': 'Bearer $accessToken',
-      },
-    );
+  final response = await http.get(
+    Uri.https('discord.com', '/api/users/@me'),
+    headers: {
+      'Authorization': 'Bearer $accessToken',
+    },
+  );
 
-    if (response.statusCode == 200) {
-      print("Response user body: ${response.body}");
-      return DiscordUser.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to fetch user');
-    }
+  if (response.statusCode == 200) {
+    print("Response user body: ${response.body}");
+    DiscordUser user = DiscordUser.fromJson(jsonDecode(response.body));
+    user = await fetchUserTags(user); // Fetch user tags
+    return user;
+  } else {
+    throw Exception('Failed to fetch user');
   }
+}
+
+Future<DiscordUser> fetchUserTags(DiscordUser user) async {
+  final response = await http.post(
+    Uri.parse('https://api.clashking.xyz/discord_links'),
+    headers: {"Content-Type": "application/json"},
+    body: jsonEncode([user.id]),
+  );
+
+  if (response.statusCode == 200) {
+    String responseBody = utf8.decode(response.bodyBytes);
+    print("Response tags body: $responseBody");
+    Map<String, dynamic> responseBodyJson = jsonDecode(responseBody);
+    responseBodyJson.removeWhere((key, value) => value == null); // Remove entries with null value
+    user.tags = responseBodyJson.keys.toList(); // Update 'tags' in 'user'
+    return user;
+  } else {
+    throw Exception('Failed to load user tags');
+  }
+}
+
+
+
+  

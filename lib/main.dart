@@ -23,7 +23,6 @@ Future main() async {
   runApp(MyApp());
 }
 
-
 class StartupWidget extends StatefulWidget {
   @override
   _StartupWidgetState createState() => _StartupWidgetState();
@@ -40,10 +39,12 @@ class _StartupWidgetState extends State<StartupWidget> {
     final isValid = await isTokenValid();
     if (isValid) {
       // Si le token est valide, naviguez vers MyHomePage
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => MyHomePage()));
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (_) => MyHomePage()));
     } else {
       // Si le token n'est pas valide, naviguez vers LoginPage
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
     }
   }
 
@@ -54,8 +55,6 @@ class _StartupWidgetState extends State<StartupWidget> {
   }
 }
 
-
-
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
@@ -63,29 +62,50 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
-      child: MaterialApp(
-        navigatorKey: globalNavigatorKey,
-        title: 'ClashKing',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Color(0xFFC98910), // primary color as the seed
-            primary: Color(0xFFC98910),
-            secondary: Color(0xFF9B1F28),
-            background: Color(0xFFFFFFFF),
-            surface: Color(0xFFFFF8E1),
-            error: Color(0xFFB00020),
-            onPrimary: Color(0xFFFFFFFF), // Text color on top of primary color
-            onSecondary:
-                Color(0xFFFFFFFF), // Text color on top of secondary color
-            onBackground:
-                Color(0xFF000000), // Typically black text for readibility
-            onSurface:
-                Color(0xFF000000), // Typically black text for readibility
-            onError: Color(0xFFFFFFFF), // White text on top of error color
-          ),
-        ),
-        home: StartupWidget(), // Utilisez StartupWidget ici
+      child: Consumer<MyAppState>(
+        builder: (context, appState, child) {
+          return FutureBuilder(
+            future: appState.initializeUserFuture, // Use the stored Future here
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return MaterialApp(
+                    home: Scaffold(
+                        body: Center(child: CircularProgressIndicator())));
+              } else if (snapshot.hasError) {
+                return MaterialApp(
+                    home: Scaffold(
+                        body: Center(child: Text('Error initializing user'))));
+              } else {
+                return MaterialApp(
+                  navigatorKey: globalNavigatorKey,
+                  title: 'ClashKing',
+                  theme: ThemeData(
+                    useMaterial3: true,
+                    colorScheme: ColorScheme.fromSeed(
+                      seedColor: Color(0xFFC98910), // primary color as the seed
+                      primary: Color(0xFFC98910),
+                      secondary: Color(0xFF9B1F28),
+                      background: Color(0xFFFFFFFF),
+                      surface: Color(0xFFFFF8E1),
+                      error: Color(0xFFB00020),
+                      onPrimary: Color(
+                          0xFFFFFFFF), // Text color on top of primary color
+                      onSecondary: Color(
+                          0xFFFFFFFF), // Text color on top of secondary color
+                      onBackground: Color(
+                          0xFF000000), // Typically black text for readibility
+                      onSurface: Color(
+                          0xFF000000), // Typically black text for readibility
+                      onError:
+                          Color(0xFFFFFFFF), // White text on top of error color
+                    ),
+                  ),
+                  home: StartupWidget(),
+                );
+              }
+            },
+          );
+        },
       ),
     );
   }
@@ -96,12 +116,13 @@ class MyAppState extends ChangeNotifier {
   ClanInfo? clanInfo; // Add this line
   CurrentWarInfo? currentWarInfo; // Add this line
   DiscordUser? user; // Add this line
+  Future<void>? initializeUserFuture;
 
   MyAppState() {
+    initializeUserFuture = initializeUser();
     fetchPlayerStats();
     fetchClanInfo();
     fetchCurrentWarInfo();
-    initializeUser();
   }
 
   // Assume this method exists and fetches player stats correctly
@@ -194,15 +215,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
     List<Widget> widgetOptions = [
       appState.playerStats != null
-        ? DashboardPage(
-            playerStats: appState.playerStats!, user: appState.user!)
-        : Center(child: CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
+          ? DashboardPage(
+              playerStats: appState.playerStats!, user: appState.user!)
+          : Center(
+              child:
+                  CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
       appState.clanInfo != null
-        ? ClanInfoPage(clanInfo: appState.clanInfo!, user: appState.user!)
-        : Center(child: CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
+          ? ClanInfoPage(clanInfo: appState.clanInfo!, user: appState.user!)
+          : Center(
+              child:
+                  CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
       appState.currentWarInfo != null
-        ? CurrentWarInfoPage(currentWarInfo: appState.currentWarInfo!)
-        : Center(child: CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
+          ? CurrentWarInfoPage(currentWarInfo: appState.currentWarInfo!)
+          : Center(
+              child:
+                  CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
       //WarLeaguePage(currentWarInfo: appState.currentWarInfo,),
       ManagementPage(),
     ];
