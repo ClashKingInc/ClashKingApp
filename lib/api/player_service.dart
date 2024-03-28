@@ -19,22 +19,30 @@ class PlayerService {
     PlayerStats playerStats;
     ClanInfo clanInfo;
     CurrentWarInfo warInfo;
-    
+    List<Future> futures = [];
+
+
+    // Fetch all player stats, clan info and current war info for each player at the same time
     for (int i = 0; i < tags.length; i++) {
-      playerStats = await fetchPlayerStats(tags[i]);
-      playerAccounts.items.add(playerStats);
+      futures.add(
+        fetchPlayerStats(tags[i]).then((playerStats) async {
+          playerAccounts.items.add(playerStats);
 
-      var results = await Future.wait<dynamic>([
-        fetchClanInfo(playerStats.clan.tag),
-        fetchCurrentWarInfo(playerStats.clan.tag),
-      ]);
+          var results = await Future.wait<dynamic>([
+            fetchClanInfo(playerStats.clan.tag),
+            fetchCurrentWarInfo(playerStats.clan.tag),
+          ]);
 
-      clanInfo = results[0] as ClanInfo;
-      playerAccounts.clanInfo.add(clanInfo);
+          clanInfo = results[0] as ClanInfo;
+          playerAccounts.clanInfo.add(clanInfo);
 
-      warInfo = results[1] as CurrentWarInfo;
-      playerAccounts.warInfo.add(warInfo);
+          warInfo = results[1] as CurrentWarInfo;
+          playerAccounts.warInfo.add(warInfo);
+        }),
+      );
     }
+
+    await Future.wait(futures);
     return playerAccounts;
   }
 
