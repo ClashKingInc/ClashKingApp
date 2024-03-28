@@ -130,6 +130,8 @@ class MyAppState extends ChangeNotifier {
     initializeUserFuture = initializeUser().then((_) async {
     await fetchPlayerAccounts(user!.tags);
     playerStats = playerAccounts!.items.first;
+    clanInfo = playerAccounts!.clanInfo.first;
+    currentWarInfo = playerAccounts!.warInfo.first;
     print("playerAccounts: $playerAccounts");
     selectedTag.value = user!.tags.first;
     selectedTag.addListener(_reloadData);
@@ -140,6 +142,8 @@ class MyAppState extends ChangeNotifier {
   void _reloadData() async {
     if (selectedTag.value != null) {
       playerStats = playerAccounts!.items.firstWhere((element) => element.tag == selectedTag.value);
+      clanInfo = playerAccounts!.clanInfo.firstWhere((element) => element.tag == playerStats!.clan.tag);
+      currentWarInfo = playerAccounts!.warInfo.firstWhere((element) => element.clan.tag == playerStats!.clan.tag);
       notifyListeners();
     }
   }
