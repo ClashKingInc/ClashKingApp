@@ -55,7 +55,7 @@ class ClanInfo {
 
   factory ClanInfo.fromJson(Map<String, dynamic> json) {
     return ClanInfo(
-      tag: json['tag'],
+      tag: json['tag'] ,
       name: json['name'],
       type: json['type'],
       description: json['description'],

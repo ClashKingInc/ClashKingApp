@@ -3,6 +3,8 @@ import 'package:clashkingapp/global_keys.dart'; // Make sure to import global_ke
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/main_pages/login_page.dart';
 import 'package:clashkingapp/api/user_data.dart';
+import 'package:clashkingapp/main.dart';
+import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final DiscordUser user;
@@ -51,11 +53,16 @@ class _CustomAppBarState extends State<CustomAppBar> {
           height: 2,
           color: Theme.of(context).colorScheme.secondary,
         ),
-        onChanged: (String? newValue) {
+        onChanged: (String? newValue) async {
           setState(() {
             selectedTag = newValue;
             _saveSelectedTag();
           });
+          // Call the functions that fetch the data
+          var appState = Provider.of<MyAppState>(context, listen: false);
+          await appState.fetchPlayerStats();
+          await appState.fetchClanInfo();
+          await appState.fetchCurrentWarInfo();
         },
         items: widget.user.tags.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(

@@ -25,6 +25,7 @@ class PlayerStats {
   final List<Hero> heroes;
   final List<Troop> troops;
   final List<Spell> spells;
+  String townHallPic = '';
 
 
   PlayerStats({
@@ -79,12 +80,10 @@ class PlayerStats {
       achievements: List<Achievement>.from(json['achievements'].map((x) => Achievement.fromJson(x))),
       heroes: List<Hero>.from(json['heroes'].map((x) => Hero.fromJson(x))),
       troops: List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x))),
-      spells: List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x))),     
+      spells: List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x))),
     );
   }
 }
-
-
 
 class Clan {
   final String tag;
