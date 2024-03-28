@@ -109,7 +109,11 @@ class CurrentWarInfoCard extends StatelessWidget {
       
         Column (
           children: <Widget>[
-            Image.network(currentWarInfo.clan.badgeUrls.small),
+            SizedBox(
+              width: 80, // Maximum width
+              height: 80, // Maximum height
+              child: Image.network(currentWarInfo.clan.badgeUrls.large, fit: BoxFit.cover),
+            ),
             Center(child: Text(currentWarInfo.clan.name)),
           ],
         ),
@@ -119,9 +123,13 @@ class CurrentWarInfoCard extends StatelessWidget {
             Center(child: Text('${currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)} % - ${currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)} %')),
           ],
         ),
-        Column(
+        Column (
           children: <Widget>[
-            Image.network(currentWarInfo.opponent.badgeUrls.small),
+         SizedBox(
+              width: 80, // Maximum width
+              height: 80, // Maximum height
+              child: Image.network(currentWarInfo.opponent.badgeUrls.large, fit: BoxFit.cover),
+            ),
             Center(child: Text(currentWarInfo.opponent.name)),
           ],
         ),
