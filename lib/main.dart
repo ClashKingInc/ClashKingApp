@@ -118,6 +118,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
+  PlayerAccounts? playerAccounts;
   PlayerStats? playerStats;
   ClanInfo? clanInfo; 
   CurrentWarInfo? currentWarInfo; 
@@ -127,10 +128,10 @@ class MyAppState extends ChangeNotifier {
 
   MyAppState() {
     initializeUserFuture = initializeUser().then((_) async {
-    await fetchPlayerStats();
+    await fetchPlayerAccounts(user!.tags);
+    playerStats = playerAccounts!.items.first;
+    print("playerAccounts: $playerAccounts");
     selectedTag.value = user!.tags.first;
-    fetchClanInfo(playerStats!.clan.tag);
-    fetchCurrentWarInfo(playerStats!.clan.tag);
     selectedTag.addListener(_reloadData);
   });
 
@@ -138,16 +139,15 @@ class MyAppState extends ChangeNotifier {
 
   void _reloadData() async {
     if (selectedTag.value != null) {
-      await fetchPlayerStats();
-      await fetchClanInfo(playerStats!.clan.tag);
-      await fetchCurrentWarInfo(playerStats!.clan.tag);
+      playerStats = playerAccounts!.items.firstWhere((element) => element.tag == selectedTag.value);
+      notifyListeners();
     }
   }
 
   // Assume this method exists and fetches player stats correctly
-  Future<void> fetchPlayerStats() async {
+  Future<void> fetchPlayerAccounts(List<String> tags) async {
     try {
-      playerStats = await PlayerService().fetchPlayerStats();
+      playerAccounts = await PlayerService().fetchPlayerAccounts(tags);
       notifyListeners(); // Notify listeners to rebuild widgets that depend on playerStats.
     } catch (e, s) {
       // Handle the error, maybe log it or show a user-friendly message
@@ -233,7 +233,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var appState = Provider.of<MyAppState>(context);
 
     List<Widget> widgetOptions = [
-      appState.playerStats != null
+      appState.playerAccounts != null
           ? DashboardPage(
               playerStats: appState.playerStats!, user: appState.user!)
           : Center(
