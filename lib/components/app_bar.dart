@@ -49,20 +49,18 @@ class CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     var appState = Provider.of<MyAppState>(context, listen: false);
-    widget.user.selectedTagDetails.sort((a, b) => b['townHallLevel'].compareTo(a['townHallLevel']));
+    widget.user.selectedTagDetails
+        .sort((a, b) => b['townHallLevel'].compareTo(a['townHallLevel']));
     return AppBar(
       title: ValueListenableBuilder<String?>(
         valueListenable: appState.selectedTag,
         builder: (context, selectedTag, child) {
           return DropdownButton<String>(
             value: selectedTag,
-            icon: Icon(Icons.arrow_downward),
-            iconSize: 24,
             elevation: 16,
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            dropdownColor: Theme.of(context).colorScheme.surface,
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             underline: Container(
-              height: 2,
-              color: Theme.of(context).colorScheme.secondary,
             ),
             onChanged: (String? newValue) async {
               await _saveSelectedTag(newValue!);
@@ -74,8 +72,7 @@ class CustomAppBarState extends State<CustomAppBar> {
               String imageUrl = details['imageUrl'];
               String name = details['name'];
               return DropdownMenuItem<String>(
-                value:
-                    tag,
+                value: tag,
                 child: Row(
                   children: <Widget>[
                     SizedBox(
@@ -84,7 +81,9 @@ class CustomAppBarState extends State<CustomAppBar> {
                       child: Image.network(imageUrl),
                     ),
                     SizedBox(width: 4),
-                    Text(name),
+                    Text(name,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface)),
                   ],
                 ),
               );

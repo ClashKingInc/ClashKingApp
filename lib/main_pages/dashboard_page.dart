@@ -1,6 +1,6 @@
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/subpages/player_dashboard/player_stats_page.dart';
+import 'package:clashkingapp/subpages/player_dashboard/player_info_page.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:clashkingapp/components/app_bar.dart';
 
