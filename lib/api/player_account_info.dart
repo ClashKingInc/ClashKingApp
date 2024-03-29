@@ -250,7 +250,6 @@ class PlayerService {
             fetchClanInfo(playerStats.clan.tag),
             fetchCurrentWarInfo(playerStats.clan.tag),
           ]);
-          print("tagDetails: ${user.selectedTagDetails}");
           clanInfo = results[0] as ClanInfo;
           playerAccounts.clanInfo.add(clanInfo);
 
