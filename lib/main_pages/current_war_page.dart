@@ -173,7 +173,7 @@ class CurrentWarInfoCard extends StatelessWidget {
             Center(child: Text(currentWarInfo.clan.name)),
           ],
         ),
-        Column(
+        Column (
           children: <Widget>[
             Center(child: Text('$hours:$minutes', style: TextStyle(fontWeight: FontWeight.bold))),
             Center(child: Text('${currentWarInfo.clan.stars.toString().padRight(2, ' ')} - ${currentWarInfo.opponent.stars.toString().padRight(2, ' ')} ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))),
