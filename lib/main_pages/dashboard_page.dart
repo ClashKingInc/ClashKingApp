@@ -93,7 +93,8 @@ class PlayerStatsCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height: 8), 
+                Center(child: Text(playerStats.name)),
+                Center(child: Text(playerStats.tag)),
                 Row(
                   children: <Widget>[
                     Column(
@@ -110,18 +111,16 @@ class PlayerStatsCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Center(child: Text(playerStats.name)),
                           Row(
                             children: <Widget>[
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(playerStats.tag),
-                                    Text('Townhall: ${playerStats.townHallLevel}'),
-                                    Text('Trophies: ${playerStats.trophies}'),
-                                    Text('Builder Hall: ${playerStats.builderHallLevel}'),
-                                    Text('Donations: ${playerStats.donations}'),
+                                    Text('TH : ${playerStats.townHallLevel}'),
+                                    Text('TR : ${playerStats.trophies}'),
+                                    Text(
+                                        'BH : ${playerStats.builderHallLevel}'),
                                   ],
                                 ),
                               ),
@@ -129,8 +128,11 @@ class PlayerStatsCard extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text('Donations Received: ${playerStats.donationsReceived}'),
-                                    Text('Donations ratio: ${(playerStats.donations / playerStats.donationsReceived).toStringAsFixed(2)}'),
+                                    Text('D : ${playerStats.donations}'),
+                                    Text(
+                                        'DR : ${playerStats.donationsReceived}'),
+                                    Text(
+                                        'R : ${(playerStats.donations / playerStats.donationsReceived).toStringAsFixed(2)}'),
                                   ],
                                 ),
                               ),
