@@ -8,17 +8,48 @@ class CurrentWarInfoScreen extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Current War Info'),
-      ),
-      body: ListView(
-        children: [
-          ListTile(
-            title: Text('Tag1: ${currentWarInfo.clan.tag}'),
-            subtitle: Text('Tag2: ${currentWarInfo.opponent.tag}'),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Current War Info'),
+          bottom: TabBar(
+            tabs: [
+              Tab(text: 'Statistics'),
+              Tab(text: 'Events'),
+              Tab(text: 'Roster'),
+            ],
           ),
-        ],
+        ),
+        body: TabBarView(
+          children: [
+            // Remplacez les widgets Text par le contenu de chaque onglet
+            ListView(
+              children: [
+                Text('First line of content for Statistics'),
+                Text('Second line of content for Statistics'),
+                Text('Third line of content for Statistics'),
+                // Ajoutez autant de widgets Text que vous le souhaitez
+              ],
+            ),
+            ListView(
+              children: [
+                Text('First line of content for Statistics'),
+                Text('Second line of content for Statistics'),
+                Text('Third line of content for Statistics'),
+                // Ajoutez autant de widgets Text que vous le souhaitez
+              ],
+            ),
+            ListView(
+              children: [
+                Text('First line of content for Statistics'),
+                Text('Second line of content for Statistics'),
+                Text('Third line of content for Statistics'),
+                // Ajoutez autant de widgets Text que vous le souhaitez
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
