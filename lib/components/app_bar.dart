@@ -49,6 +49,7 @@ class CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     var appState = Provider.of<MyAppState>(context, listen: false);
+    widget.user.selectedTagDetails.sort((a, b) => b['townHallLevel'].compareTo(a['townHallLevel']));
     return AppBar(
       title: ValueListenableBuilder<String?>(
         valueListenable: appState.selectedTag,
@@ -67,11 +68,25 @@ class CustomAppBarState extends State<CustomAppBar> {
               await _saveSelectedTag(newValue!);
               appState.selectedTag.value = newValue;
             },
-            items:
-                widget.user.tags.map<DropdownMenuItem<String>>((String value) {
+            items: widget.user.selectedTagDetails
+                .map<DropdownMenuItem<String>>((details) {
+              String tag = details['tag'];
+              String imageUrl = details['imageUrl'];
+              String name = details['name'];
               return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
+                value:
+                    tag,
+                child: Row(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: Image.network(imageUrl),
+                    ),
+                    SizedBox(width: 4),
+                    Text(name),
+                  ],
+                ),
               );
             }).toList(),
           );

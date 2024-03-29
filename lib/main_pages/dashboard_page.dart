@@ -90,39 +90,56 @@ class PlayerStatsCard extends StatelessWidget {
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Image.network(playerStats.townHallPic),
-                ),
-                SizedBox(
-                    width:
-                        8), // Add some spacing between the image and the text
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(playerStats.tag),
-                      Text('Townhall: ${playerStats.townHallLevel}'),
-                      Text('Trophies: ${playerStats.trophies}'),
-                      Text('Builder Hall: ${playerStats.builderHallLevel}'),
-                      Text('Donations: ${playerStats.donations}'),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 8), // Add some spacing between the columns
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                          'Donations Received: ${playerStats.donationsReceived}'),
-                      Text(
-                          'Donations ratio: ${(playerStats.donations / playerStats.donationsReceived).toStringAsFixed(2)}'),
-                    ],
-                  ),
+                SizedBox(height: 8), 
+                Row(
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 100,
+                          width: 100,
+                          child: Image.network(playerStats.townHallPic),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Center(child: Text(playerStats.name)),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(playerStats.tag),
+                                    Text('Townhall: ${playerStats.townHallLevel}'),
+                                    Text('Trophies: ${playerStats.trophies}'),
+                                    Text('Builder Hall: ${playerStats.builderHallLevel}'),
+                                    Text('Donations: ${playerStats.donations}'),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text('Donations Received: ${playerStats.donationsReceived}'),
+                                    Text('Donations ratio: ${(playerStats.donations / playerStats.donationsReceived).toStringAsFixed(2)}'),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

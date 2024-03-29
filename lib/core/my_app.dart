@@ -82,8 +82,8 @@ class MyAppState extends ChangeNotifier {
 
   MyAppState() {
     initializeUserFuture = initializeUser().then((_) async {
-    await fetchPlayerAccounts(user!.tags);
-    playerStats = playerAccounts!.items.first;
+    await fetchPlayerAccounts(user!);
+    playerStats = playerAccounts!.playerAccountInfo.first;
     clanInfo = playerAccounts!.clanInfo.first;
     currentWarInfo = playerAccounts!.warInfo.first;
     print("playerAccounts: $playerAccounts");
@@ -95,7 +95,7 @@ class MyAppState extends ChangeNotifier {
 
   void _reloadData() async {
     if (selectedTag.value != null) {
-      playerStats = playerAccounts!.items.firstWhere((element) => element.tag == selectedTag.value);
+      playerStats = playerAccounts!.playerAccountInfo.firstWhere((element) => element.tag == selectedTag.value);
       clanInfo = playerAccounts!.clanInfo.firstWhere((element) => element.tag == playerStats!.clan.tag);
       currentWarInfo = playerAccounts!.warInfo.firstWhere((element) => element.clan.tag == playerStats!.clan.tag);
       notifyListeners();
@@ -103,9 +103,9 @@ class MyAppState extends ChangeNotifier {
   }
 
   // Assume this method exists and fetches player stats correctly
-  Future<void> fetchPlayerAccounts(List<String> tags) async {
+  Future<void> fetchPlayerAccounts(DiscordUser user) async {
     try {
-      playerAccounts = await PlayerService().fetchPlayerAccounts(tags);
+      playerAccounts = await PlayerService().fetchPlayerAccounts(user);
       notifyListeners(); // Notify listeners to rebuild widgets that depend on playerStats.
     } catch (e, s) {
       // Handle the error, maybe log it or show a user-friendly message
