@@ -8,6 +8,8 @@ import 'package:clashkingapp/global_keys.dart';
 import 'package:clashkingapp/api/player_accounts_list.dart';
 import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:clashkingapp/core/functions.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
@@ -18,16 +20,30 @@ class MyApp extends StatelessWidget {
         create: (context) => MyAppState(),
         child: Consumer<MyAppState>(builder: (context, appState, child) {
           return MaterialApp(
+            locale: appState.locale,
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
             navigatorKey: globalNavigatorKey,
             title: 'ClashKing',
             theme: ThemeData(
               useMaterial3: true,
+              cardTheme: CardTheme(
+                surfaceTintColor: Colors.transparent,
+                color: Color(0xFFFFFFFF)
+                    .withOpacity(1.0), // 1.0 means 100% opacity
+                elevation: 2.0,
+              ),
               colorScheme: ColorScheme.fromSeed(
-                seedColor: Color(0xFFC98910), // primary color as the seed
+                seedColor: Color(0xFFFFFFFF), // primary color as the seed
                 primary: Color(0xFFC98910),
                 secondary: Color(0xFF9B1F28),
                 background: Color(0xFFFFFFFF),
-                surface: Color(0xFFFFF8E1),
+                surface: Color(0xFFFFFFFF),
                 error: Color(0xFFB00020),
                 onPrimary:
                     Color(0xFFFFFFFF), // Text color on top of primary color
@@ -108,6 +124,15 @@ class MyAppState extends ChangeNotifier {
       selectedTag.value = user!.tags.first;
       selectedTag.addListener(reloadData);
     }
+  }
+
+  Locale _locale = Locale('en');
+
+  Locale get locale => _locale;
+
+  void changeLanguage(String languageCode) {
+    _locale = Locale(languageCode);
+    notifyListeners();
   }
 
   void reloadData() async {

@@ -1,6 +1,6 @@
 import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+//import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
@@ -9,6 +9,7 @@ import 'dart:convert'; // Pour ascii
 import 'package:crypto/crypto.dart'; // Pour sha256
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //import 'dart:html' as html;
 
 class LoginPage extends StatelessWidget {
@@ -17,7 +18,7 @@ class LoginPage extends StatelessWidget {
   final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
   final String clientSecret = dotenv.env['DISCORD_CLIENT_SECRET']!;
   final String callbackUrlScheme = dotenv.env['DISCORD_CALLBACK_URL_SCHEME']!;
-  final String redirectWebUri = dotenv.env['DISCORD_REDIRECT_URI_WEB']!;
+  // final String redirectWebUri = dotenv.env['DISCORD_REDIRECT_URI_WEB']!;
   // Discord n'utilise pas clientSecret dans le flux d'authentification côté client, donc il pourrait ne pas être nécessaire ici
 
   // Fonction pour lancer le processus d'authentification
@@ -127,10 +128,9 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          child: Text('Se connecter avec Discord'),
+          child: Text(AppLocalizations.of(context)!.signInWithDiscord),
           onPressed: () async {
               await signInWithDiscordFromMobile(context);
-
             /*if (kIsWeb) {
               await signInWithDiscordFromWeb(context);
             } else {

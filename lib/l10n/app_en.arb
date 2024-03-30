@@ -1,0 +1,15 @@
+{
+    "creatorCode" : "Creator Code : ClashKing",
+    "logout" : "Log out",
+    "language" : "Language",
+    "settings" : "Settings",
+    "selectLanguage": "Select a language",
+    "homeBase" : "Home Base",
+    "builderBase" : "Builder Base",
+    "copiedToClipboard" : "Copied to clipboard",
+    "dashboard" : "Dashboard",
+    "clan" : "Clan",
+    "warLeague" : "War/League",
+    "management" : "Management",
+    "signInWithDiscord" : "Sign In with Discord"
+}

@@ -2,22 +2,27 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/subpages/war_league/current_war_info_page.dart';
-import 'package:clashkingapp/components/app_bar.dart';
-import 'package:clashkingapp/api/discord_user_info.dart';
 
 class CurrentWarInfoPage extends StatelessWidget {
   final CurrentWarInfo currentWarInfo;
-  final DiscordUser user;
 
-  CurrentWarInfoPage({required this.currentWarInfo, required this.user});
+  CurrentWarInfoPage({required this.currentWarInfo});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFFFF8E1),
-      appBar: CustomAppBar(user: user),
-      body: ListView(
-        children: <Widget>[
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Center(child: Text('War & League')),
+          bottom: TabBar(
+            tabs: [
+              Tab(text: 'War'),
+              Tab(text: 'CWL'),
+            ],
+          ),
+        ),
+        body: 
         Column(
           children: <Widget>[
             GestureDetector(
@@ -29,9 +34,16 @@ class CurrentWarInfoPage extends StatelessWidget {
               },
               child: CurrentWarInfoCard(currentWarInfo: currentWarInfo),
               ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  Center(child: Text('No war currently')),
+                  Center(child: Text('No CWL currently')),
+                ],
+              ),
+            ),
           ],
         ),
-        ],
       ),
     );
   }
@@ -87,6 +99,7 @@ class CurrentWarInfoCard extends StatelessWidget {
         Column (
           children: <Widget>[
             SizedBox(
+<<<<<<< HEAD
               width: 90, // Maximum width
               height: 90, // Maximum height
               child: Image.network(currentWarInfo.clan.badgeUrls.large, fit: BoxFit.cover),
@@ -115,6 +128,10 @@ class CurrentWarInfoCard extends StatelessWidget {
             SizedBox(
               width: 85, // Maximum width
               height: 85, // Maximum height
+=======
+              width: 80, // Maximum width
+              height: 80, // Maximum height
+>>>>>>> 115c713 (FIX blured image)
               child: Image.network(currentWarInfo.clan.badgeUrls.large, fit: BoxFit.cover),
             ),
             Center(child: Text(currentWarInfo.clan.name)),
@@ -163,6 +180,7 @@ class CurrentWarInfoCard extends StatelessWidget {
         ),
         Column (
           children: <Widget>[
+<<<<<<< HEAD
             Center(child: Text('$hours:$minutes', style: TextStyle(fontWeight: FontWeight.bold))),
             Center(child: Text('${currentWarInfo.clan.stars.toString().padRight(2, ' ')} - ${currentWarInfo.opponent.stars.toString().padRight(2, ' ')} ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))),
             Center(child: Text('${currentWarInfo.clan.destructionPercentage.toStringAsFixed(2).padLeft(5, '0')}%    ${currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2).padLeft(5, ' ')}%')),
@@ -174,6 +192,11 @@ class CurrentWarInfoCard extends StatelessWidget {
          SizedBox(
               width: 85, // Maximum width
               height: 85, // Maximum height
+=======
+         SizedBox(
+              width: 80, // Maximum width
+              height: 80, // Maximum height
+>>>>>>> 115c713 (FIX blured image)
               child: Image.network(currentWarInfo.opponent.badgeUrls.large, fit: BoxFit.cover),
             ),
             Center(child: Text(currentWarInfo.opponent.name)),

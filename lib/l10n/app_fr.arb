@@ -1,0 +1,15 @@
+{
+    "creatorCode" : "Code créateur : ClashKing",
+    "logout" : "Deconnexion",
+    "language" : "Langue",
+    "settings" : "Paramètres",
+    "selectLanguage": "Sélectionnez une langue",
+    "HomeBase" : "Village principal",
+    "BuilderBase" : "Village ouvrier",
+    "copiedToClipboard" : "Copié dans le presse-papiers",
+    "dashboard" : "Tableau de bord",
+    "clan" : "Clan",
+    "warLeague" : "Guerre/Ligue",
+    "management" : "Gestion",
+    "signInWithDiscord" : "Connexion avec Discord"
+}

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/subpages/player_dashboard/player_info_page.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:clashkingapp/components/app_bar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class DashboardPage extends StatelessWidget {
   final PlayerAccountInfo playerStats;
@@ -13,6 +15,7 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFFFF8E1),
       appBar: CustomAppBar(user: user),
       body: ListView(
         children: <Widget>[
@@ -51,7 +54,8 @@ class CreatorCodeCard extends StatelessWidget {
             Expanded(
               // Use Expanded to ensure text takes up the remaining space
               child: Text(
-                'Use creator Code ClashKing',
+                AppLocalizations.of(context)?.creatorCode ??
+                    'Creator Code : ClashKing',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
@@ -111,30 +115,59 @@ class PlayerStatsCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Row(
+                          Wrap(
+                            spacing: 4.0, // gap between adjacent chips
+                            runSpacing: 0.0, // gap between lines
                             children: <Widget>[
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text('TH : ${playerStats.townHallLevel}'),
-                                    Text('TR : ${playerStats.trophies}'),
-                                    Text(
-                                        'BH : ${playerStats.builderHallLevel}'),
-                                  ],
-                                ),
+                              Chip(
+                                avatar: Icon(LucideIcons.home, size: 16),
+                                label: Text('${playerStats.townHallLevel}',
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall),
+                                labelPadding:
+                                    EdgeInsets.only(left: 2.0, right: 2.0),
                               ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text('D : ${playerStats.donations}'),
-                                    Text(
-                                        'DR : ${playerStats.donationsReceived}'),
-                                    Text(
-                                        'R : ${(playerStats.donations / playerStats.donationsReceived).toStringAsFixed(2)}'),
-                                  ],
-                                ),
+                              Chip(
+                                avatar: Icon(LucideIcons.hammer),
+                                label: Text('${playerStats.builderHallLevel}',
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall),
+                                labelPadding:
+                                    EdgeInsets.only(left: 2.0, right: 2.0),
+                              ),
+                              Chip(
+                                avatar: Icon(LucideIcons.trophy),
+                                label: Text('${playerStats.trophies}',
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall),
+                                labelPadding:
+                                    EdgeInsets.only(left: 2.0, right: 2.0),
+                              ),
+                              
+                              Chip(
+                                avatar: Icon(LucideIcons.chevronUp),
+                                label: Text('${playerStats.donations}',
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall),
+                                labelPadding:
+                                    EdgeInsets.only(left: 2.0, right: 2.0),
+                              ),
+                              Chip(
+                                avatar: Icon(LucideIcons.chevronDown),
+                                label: Text('${playerStats.donationsReceived}',
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall),
+                                labelPadding:
+                                    EdgeInsets.only(left: 2.0, right: 2.0),
+                              ),
+                              Chip(
+                                avatar: Icon(LucideIcons.chevronsUpDown),
+                                label: Text(
+                                    '${(playerStats.donations / (playerStats.donationsReceived == 0 ? 1 : playerStats.donationsReceived)).toStringAsFixed(2)}',
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall),
+                                labelPadding:
+                                    EdgeInsets.only(left: 2.0, right: 2.0),
                               ),
                             ],
                           ),
