@@ -15,97 +15,118 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: Consumer<MyAppState>(
-        builder: (context, appState, child) {
-          return FutureBuilder(
-            future: appState.initializeUserFuture, // Use the stored Future here
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return MaterialApp(
-                    home: Scaffold(
-                        body: Center(child: CircularProgressIndicator())));
-              } else if (snapshot.hasError) {
-                return MaterialApp(
-                    home: Scaffold(
-                        body: Center(child: Text('Error initializing user'))));
-              } else {
-                return MaterialApp(
-                  navigatorKey: globalNavigatorKey,
-                  title: 'ClashKing',
-                  theme: ThemeData(
-                    useMaterial3: true,
-                    colorScheme: ColorScheme.fromSeed(
-                      seedColor: Color(0xFFC98910), // primary color as the seed
-                      primary: Color(0xFFC98910),
-                      secondary: Color(0xFF9B1F28),
-                      background: Color(0xFFFFFFFF),
-                      surface: Color(0xFFFFF8E1),
-                      error: Color(0xFFB00020),
-                      onPrimary: Color(0xFFFFFFFF), // Text color on top of primary color
-                      onSecondary: Color(0xFFFFFFFF), // Text color on top of secondary color
-                      onBackground: Color(0xFF000000), // Typically black text for readibility
-                      onSurface: Color(0xFF000000), // Typically black text for readibility
-                      onError: Color(0xFFFFFFFF), // White text on top of error color
-                    ),
-                    textTheme: TextTheme(
-                      bodyLarge: TextStyle(color: Colors.black, fontSize: 16, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-                      bodyMedium: TextStyle(color: Colors.black, fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-                      bodySmall: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-                      titleLarge: TextStyle(color: Colors.black, fontSize: 24, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-                      titleMedium: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-                      titleSmall: TextStyle(color: Colors.black, fontSize: 18, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-                      labelLarge: TextStyle(color: Colors.black, fontSize: 16, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-                      labelMedium: TextStyle(color: Colors.black, fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-                      labelSmall: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  home: StartupWidget(),
-                );
-              }
-            },
+        create: (context) => MyAppState(),
+        child: Consumer<MyAppState>(builder: (context, appState, child) {
+          return MaterialApp(
+            navigatorKey: globalNavigatorKey,
+            title: 'ClashKing',
+            theme: ThemeData(
+              useMaterial3: true,
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Color(0xFFC98910), // primary color as the seed
+                primary: Color(0xFFC98910),
+                secondary: Color(0xFF9B1F28),
+                background: Color(0xFFFFFFFF),
+                surface: Color(0xFFFFF8E1),
+                error: Color(0xFFB00020),
+                onPrimary:
+                    Color(0xFFFFFFFF), // Text color on top of primary color
+                onSecondary:
+                    Color(0xFFFFFFFF), // Text color on top of secondary color
+                onBackground:
+                    Color(0xFF000000), // Typically black text for readibility
+                onSurface:
+                    Color(0xFF000000), // Typically black text for readibility
+                onError: Color(0xFFFFFFFF), // White text on top of error color
+              ),
+              textTheme: TextTheme(
+                bodyLarge: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500),
+                bodyMedium: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500),
+                bodySmall: TextStyle(
+                    color: Colors.black,
+                    fontSize: 12,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500),
+                titleLarge: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500),
+                titleMedium: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500),
+                titleSmall: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500),
+                labelLarge: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500),
+                labelMedium: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500),
+                labelSmall: TextStyle(
+                    color: Colors.black,
+                    fontSize: 12,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+            home: StartupWidget(),
           );
-        },
-      ),
-    );
+        }));
   }
 }
 
 class MyAppState extends ChangeNotifier {
   PlayerAccounts? playerAccounts;
   PlayerAccountInfo? playerStats;
-  ClanInfo? clanInfo; 
-  CurrentWarInfo? currentWarInfo; 
-  DiscordUser? user; 
+  ClanInfo? clanInfo;
+  CurrentWarInfo? currentWarInfo;
+  DiscordUser? user;
   Future<void>? initializeUserFuture;
   ValueNotifier<String?> selectedTag = ValueNotifier<String?>(null);
 
   MyAppState() {
-    initializeUserFuture = initializeUser().then((_) async {
-    await fetchPlayerAccounts(user!.tags);
-    playerStats = playerAccounts!.items.first;
-    clanInfo = playerAccounts!.clanInfo.first;
-    currentWarInfo = playerAccounts!.warInfo.first;
-    print("playerAccounts: $playerAccounts");
-    selectedTag.value = user!.tags.first;
-    selectedTag.addListener(_reloadData);
-  });
-
-}
-
-  void _reloadData() async {
     if (selectedTag.value != null) {
-      playerStats = playerAccounts!.items.firstWhere((element) => element.tag == selectedTag.value);
-      clanInfo = playerAccounts!.clanInfo.firstWhere((element) => element.tag == playerStats!.clan.tag);
-      currentWarInfo = playerAccounts!.warInfo.firstWhere((element) => element.clan.tag == playerStats!.clan.tag);
+      print("playerAccounts: $playerAccounts");
+      selectedTag.value = user!.tags.first;
+      selectedTag.addListener(reloadData);
+    }
+  }
+
+  void reloadData() async {
+    if (selectedTag.value != null) {
+      playerStats = playerAccounts!.playerAccountInfo
+          .firstWhere((element) => element.tag == selectedTag.value);
+      clanInfo = playerAccounts!.clanInfo
+          .firstWhere((element) => element.tag == playerStats!.clan.tag);
+      currentWarInfo = playerAccounts!.warInfo
+          .firstWhere((element) => element.clan.tag == playerStats!.clan.tag);
       notifyListeners();
     }
   }
 
   // Assume this method exists and fetches player stats correctly
-  Future<void> fetchPlayerAccounts(List<String> tags) async {
+  Future<void> fetchPlayerAccounts(DiscordUser user) async {
     try {
-      playerAccounts = await PlayerService().fetchPlayerAccounts(tags);
+      playerAccounts = await PlayerService().fetchPlayerAccounts(user);
+      reloadData();
       notifyListeners(); // Notify listeners to rebuild widgets that depend on playerStats.
     } catch (e, s) {
       // Handle the error, maybe log it or show a user-friendly message

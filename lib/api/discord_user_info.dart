@@ -10,6 +10,8 @@ class DiscordUser {
   final String globalName;
   final String language;
   List<String> tags = [];
+  List<Map<String, dynamic>> selectedTagDetails = [];
+
 
   DiscordUser({
     required this.id,

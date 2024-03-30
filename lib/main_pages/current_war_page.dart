@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/subpages/war_league/current_war_info_page.dart';
@@ -65,19 +66,16 @@ class CurrentWarInfoCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Center(
-              child: Text(currentWarInfo.state),
-            ),
-            Center(
               child: () {
               switch (currentWarInfo.state) {
                 case 'accessDenied':
-                  return _buildState1();
+                  return _privateWarLog();
                 case 'notInWar':
-                  return _buildState2();
+                  return _notInWarState();
                 case 'preparation':
-                  return _buildState3();
+                  return _preparationState();
                 case 'inWar':
-                  return _buildState4();
+                  return _inWarState();
                 default:
                   return Text('Clan state unknown');
               }
@@ -89,39 +87,107 @@ class CurrentWarInfoCard extends StatelessWidget {
     );
   }
 
-  Widget _buildState1() {
+  Widget _privateWarLog() {
     return Center(child: Text('Access denied'));
   }
   
-  Widget _buildState2() {
-    return Center(child: Text('Not in war'));
-  }
-  
-  Widget _buildState3() {
-    return Center(child: Text('Preparation'));
-  }
-  
-  Widget _buildState4() {
+  Widget _notInWarState() {
     return 
     Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-      
         Column (
           children: <Widget>[
-            Image.network(currentWarInfo.clan.badgeUrls.small),
+            SizedBox(
+              width: 90, // Maximum width
+              height: 90, // Maximum height
+              child: Image.network(currentWarInfo.clan.badgeUrls.large, fit: BoxFit.cover),
+            ),
+            Center(child: Text('${currentWarInfo.clan.name} is not inWar.')),
+            Center(child: Text('Contact leader or co-leader to start a war.')),
+          ],
+        ),
+      ],
+    );
+  }
+  
+  Widget _preparationState() {
+    DateTime now = DateTime.now();
+    Duration difference = currentWarInfo.startTime.difference(now);
+
+    String hours = difference.inHours.toString().padLeft(2, '0');
+    String minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
+
+    return
+    Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Column (
+          children: <Widget>[
+            SizedBox(
+              width: 85, // Maximum width
+              height: 85, // Maximum height
+              child: Image.network(currentWarInfo.clan.badgeUrls.large, fit: BoxFit.cover),
+            ),
             Center(child: Text(currentWarInfo.clan.name)),
           ],
         ),
         Column(
           children: <Widget>[
-            Center(child: Text('${currentWarInfo.clan.stars} - ${currentWarInfo.opponent.stars} ')),
-            Center(child: Text('${currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)} % - ${currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)} %')),
+            Center(child: Text('Preparation phase')),
+            Center(child: Text('Starting in $hours:$minutes')),
           ],
         ),
-        Column(
+        Column (
           children: <Widget>[
-            Image.network(currentWarInfo.opponent.badgeUrls.small),
+         SizedBox(
+              width: 85, // Maximum width
+              height: 85, // Maximum height
+              child: Image.network(currentWarInfo.opponent.badgeUrls.large, fit: BoxFit.cover),
+            ),
+            Center(child: Text(currentWarInfo.opponent.name)),
+          ],
+        ),
+      ],
+    );
+  }
+  
+  Widget _inWarState() {
+    DateTime now = DateTime.now();
+    Duration difference = currentWarInfo.endTime.difference(now);
+
+    String hours = difference.inHours.toString().padLeft(2, '0');
+    String minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
+
+    return 
+    Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Column (
+          children: <Widget>[
+            SizedBox(
+              width: 85, // Maximum width
+              height: 85, // Maximum height
+              child: Image.network(currentWarInfo.clan.badgeUrls.large, fit: BoxFit.cover),
+            ),
+            Center(child: Text(currentWarInfo.clan.name)),
+          ],
+        ),
+        Column (
+          children: <Widget>[
+            Center(child: Text('$hours:$minutes', style: TextStyle(fontWeight: FontWeight.bold))),
+            Center(child: Text('${currentWarInfo.clan.stars.toString().padRight(2, ' ')} - ${currentWarInfo.opponent.stars.toString().padRight(2, ' ')} ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))),
+            Center(child: Text('${currentWarInfo.clan.destructionPercentage.toStringAsFixed(2).padLeft(5, '0')}%    ${currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2).padLeft(5, ' ')}%')),
+            Center(child: Text(' ')),
+          ],
+        ),
+        Column (
+          children: <Widget>[
+         SizedBox(
+              width: 85, // Maximum width
+              height: 85, // Maximum height
+              child: Image.network(currentWarInfo.opponent.badgeUrls.large, fit: BoxFit.cover),
+            ),
             Center(child: Text(currentWarInfo.opponent.name)),
           ],
         ),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
+import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/api/player_accounts_list.dart';
@@ -31,7 +32,6 @@ class PlayerAccountInfo {
   final List<Troop> troops;
   final List<Spell> spells;
   String townHallPic = '';
-
 
   PlayerAccountInfo({
     required this.name,
@@ -82,10 +82,14 @@ class PlayerAccountInfo {
       clanCapitalContributions: json['clanCapitalContributions'] ?? 0,
       clan: Clan.fromJson(json['clan'] ?? {}),
       league: League.fromJson(json['league'] ?? {}),
-      achievements: List<Achievement>.from(json['achievements'].map((x) => Achievement.fromJson(x ?? {}))),
-      heroes: List<Hero>.from(json['heroes'].map((x) => Hero.fromJson(x)) ?? []),
-      troops: List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x)) ?? []),
-      spells: List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x)) ?? []),     
+      achievements: List<Achievement>.from(
+          json['achievements'].map((x) => Achievement.fromJson(x ?? {}))),
+      heroes:
+          List<Hero>.from(json['heroes'].map((x) => Hero.fromJson(x)) ?? []),
+      troops:
+          List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x)) ?? []),
+      spells:
+          List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x)) ?? []),
     );
   }
 }
@@ -129,7 +133,11 @@ class Achievement {
   final int target;
   // Include other fields if needed
 
-  Achievement({required this.name, required this.stars, required this.value, required this.target});
+  Achievement(
+      {required this.name,
+      required this.stars,
+      required this.value,
+      required this.target});
 
   factory Achievement.fromJson(Map<String, dynamic> json) {
     return Achievement(
@@ -149,7 +157,11 @@ class Hero {
   final String village;
   // You can add more attributes like equipment here
 
-  Hero({required this.name, required this.level, required this.maxLevel, required this.village});
+  Hero(
+      {required this.name,
+      required this.level,
+      required this.maxLevel,
+      required this.village});
 
   factory Hero.fromJson(Map<String, dynamic> json) {
     return Hero(
@@ -162,14 +174,17 @@ class Hero {
   }
 }
 
-
 class Troop {
   final String name;
   final int level;
   final int maxLevel;
   final String village; // "home" or "builderBase"
 
-  Troop({required this.name, required this.level, required this.maxLevel, required this.village});
+  Troop(
+      {required this.name,
+      required this.level,
+      required this.maxLevel,
+      required this.village});
 
   factory Troop.fromJson(Map<String, dynamic> json) {
     return Troop(
@@ -187,46 +202,54 @@ class Spell {
   final int maxLevel;
   final String village; // "home" or "builderBase"
 
-  Spell({required this.name, required this.level, required this.maxLevel, required this.village});
+  Spell(
+      {required this.name,
+      required this.level,
+      required this.maxLevel,
+      required this.village});
 
   factory Spell.fromJson(Map<String, dynamic> json) {
     return Spell(
       name: json['name'] ?? 'No name',
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
-      village: json['village']  ?? 'home',
+      village: json['village'] ?? 'home',
     );
   }
 }
 
-
 // Service
 
-
 class PlayerService {
-
-    Future<void> initEnv() async {
+  Future<void> initEnv() async {
     await dotenv.load(fileName: ".env");
   }
-  
-  Future<PlayerAccounts> fetchPlayerAccounts(List<String> tags) async {
-    PlayerAccounts playerAccounts = PlayerAccounts(items: [], clanInfo: [], warInfo: []);
+
+  Future<PlayerAccounts> fetchPlayerAccounts(DiscordUser user) async {
+    PlayerAccounts playerAccounts =
+    PlayerAccounts(playerAccountInfo: [], clanInfo: [], warInfo: []);
     ClanInfo clanInfo;
     CurrentWarInfo warInfo;
     List<Future> futures = [];
-
+    final tags = user.tags;
 
     // Fetch all player stats, clan info and current war info for each player at the same time
     for (int i = 0; i < tags.length; i++) {
       futures.add(
         fetchPlayerStats(tags[i]).then((playerStats) async {
-          playerAccounts.items.add(playerStats);
+          user.selectedTagDetails.add({
+            'tag': playerStats.tag,
+            'imageUrl': playerStats.townHallPic,
+            'name': playerStats.name,
+            'townHallLevel':
+                playerStats.townHallLevel, // Stockez comme int pour le tri
+          });
+          playerAccounts.playerAccountInfo.add(playerStats);
 
           var results = await Future.wait<dynamic>([
             fetchClanInfo(playerStats.clan.tag),
             fetchCurrentWarInfo(playerStats.clan.tag),
           ]);
-
           clanInfo = results[0] as ClanInfo;
           playerAccounts.clanInfo.add(clanInfo);
 
@@ -235,6 +258,7 @@ class PlayerService {
         }),
       );
     }
+
 
     await Future.wait(futures);
     return playerAccounts;
@@ -253,8 +277,10 @@ class PlayerService {
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
-      PlayerAccountInfo playerStats = PlayerAccountInfo.fromJson(jsonDecode(responseBody));
-      playerStats.townHallPic = await fetchPlayerTownHallByTownHallLevel(playerStats.townHallLevel);
+      PlayerAccountInfo playerStats =
+          PlayerAccountInfo.fromJson(jsonDecode(responseBody));
+      playerStats.townHallPic =
+          await fetchPlayerTownHallByTownHallLevel(playerStats.townHallLevel);
       return playerStats;
     } else {
       throw Exception('Failed to load player stats');
@@ -264,9 +290,11 @@ class PlayerService {
   Future<String> fetchPlayerTownHallByTownHallLevel(int townHallLevel) async {
     String townHallPic;
     if (townHallLevel >= 1 && townHallLevel <= 16) {
-      townHallPic = 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-$townHallLevel.png';
+      townHallPic =
+          'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-$townHallLevel.png';
     } else {
-      townHallPic = 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-16.png';
+      townHallPic =
+          'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-16.png';
     }
     return townHallPic;
   }
@@ -291,7 +319,7 @@ class PlayerService {
   }
 
   Future<CurrentWarInfo> fetchCurrentWarInfo(String clanTag) async {
-    print('Fetching current war info');    
+    print('Fetching current war info');
     clanTag = clanTag.replaceAll('#', '!');
     final response = await http.get(
       Uri.parse('https://api.clashking.xyz/v1/clans/$clanTag/currentwar'),
@@ -302,11 +330,11 @@ class PlayerService {
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
-      CurrentWarInfo warInfo = CurrentWarInfo.fromJson(jsonDecode(responseBody));
+      CurrentWarInfo warInfo =
+          CurrentWarInfo.fromJson(jsonDecode(responseBody));
       return warInfo;
     } else {
       throw Exception('Failed to load current war info');
     }
   }
-  
 }

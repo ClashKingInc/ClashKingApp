@@ -1,6 +1,6 @@
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/subpages/player_dashboard/player_stats_page.dart';
+import 'package:clashkingapp/subpages/player_dashboard/player_info_page.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:clashkingapp/components/app_bar.dart';
 
@@ -90,39 +90,58 @@ class PlayerStatsCard extends StatelessWidget {
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Image.network(playerStats.townHallPic),
-                ),
-                SizedBox(
-                    width:
-                        8), // Add some spacing between the image and the text
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(playerStats.tag),
-                      Text('Townhall: ${playerStats.townHallLevel}'),
-                      Text('Trophies: ${playerStats.trophies}'),
-                      Text('Builder Hall: ${playerStats.builderHallLevel}'),
-                      Text('Donations: ${playerStats.donations}'),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 8), // Add some spacing between the columns
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                          'Donations Received: ${playerStats.donationsReceived}'),
-                      Text(
-                          'Donations ratio: ${(playerStats.donations / playerStats.donationsReceived).toStringAsFixed(2)}'),
-                    ],
-                  ),
+                Center(child: Text(playerStats.name)),
+                Center(child: Text(playerStats.tag)),
+                Row(
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 100,
+                          width: 100,
+                          child: Image.network(playerStats.townHallPic),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text('TH : ${playerStats.townHallLevel}'),
+                                    Text('TR : ${playerStats.trophies}'),
+                                    Text(
+                                        'BH : ${playerStats.builderHallLevel}'),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text('D : ${playerStats.donations}'),
+                                    Text(
+                                        'DR : ${playerStats.donationsReceived}'),
+                                    Text(
+                                        'R : ${(playerStats.donations / playerStats.donationsReceived).toStringAsFixed(2)}'),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

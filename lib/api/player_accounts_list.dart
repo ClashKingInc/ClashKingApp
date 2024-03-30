@@ -4,11 +4,11 @@ import 'package:clashkingapp/api/player_account_info.dart';
 
 
 class PlayerAccounts {
-  final List<PlayerAccountInfo> items;
+  final List<PlayerAccountInfo> playerAccountInfo;
   final List<ClanInfo> clanInfo;
   final List<CurrentWarInfo> warInfo;
 
-  PlayerAccounts({required this.items, required this.clanInfo, required this.warInfo});
+  PlayerAccounts({required this.playerAccountInfo, required this.clanInfo, required this.warInfo});
 
   factory PlayerAccounts.fromJson(List<dynamic> json) {
     List<PlayerAccountInfo> playerAccounts = [];
@@ -25,6 +25,6 @@ class PlayerAccounts {
       print('Player name: ${item['name']}');
     }
 
-    return PlayerAccounts(items: playerAccounts, clanInfo: clanInfo, warInfo: warInfo);
+    return PlayerAccounts(playerAccountInfo: playerAccounts, clanInfo: clanInfo, warInfo: warInfo);
   }
 }
