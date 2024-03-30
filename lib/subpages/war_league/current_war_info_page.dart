@@ -39,7 +39,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
             child: Column(children: [
       Stack(
         clipBehavior: Clip.none,
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.center,
         children: <Widget>[
           SizedBox(
             height: 230,
@@ -62,6 +62,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                timeLeft(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -114,7 +115,6 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                     ),
                   ],
                 ),
-                timeLeft(),
               ],
             ),
           ),
