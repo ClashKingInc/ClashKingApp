@@ -89,7 +89,7 @@ class LoginPage extends StatelessWidget {
           DateTime.now().add(Duration(seconds: expiresIn));
       await prefs.setString(
           'expiration_date', expirationDate.toIso8601String());
-
+          
       // Navigate to MyHomePage
       globalNavigatorKey.currentState!.pushReplacement(
         MaterialPageRoute(builder: (context) => StartupWidget()),
