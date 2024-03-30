@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/global_keys.dart'; // Make sure to import global_keys.dart
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:clashkingapp/main_pages/login_page.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/my_app.dart';
+import 'package:clashkingapp/main_pages/settings_page.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final DiscordUser user;
@@ -60,8 +59,7 @@ class CustomAppBarState extends State<CustomAppBar> {
             elevation: 16,
             dropdownColor: Theme.of(context).colorScheme.surface,
             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-            underline: Container(
-            ),
+            underline: Container(),
             onChanged: (String? newValue) async {
               await _saveSelectedTag(newValue!);
               appState.selectedTag.value = newValue;
@@ -99,7 +97,10 @@ class CustomAppBarState extends State<CustomAppBar> {
             Padding(padding: EdgeInsets.all(5)),
             GestureDetector(
               onTap: () async {
-                await _logOut();
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingsInfoScreen(user: widget.user)),
+              );
               },
               child: CircleAvatar(
                 backgroundImage: NetworkImage(
@@ -113,14 +114,5 @@ class CustomAppBarState extends State<CustomAppBar> {
     );
   }
 
-  Future<void> _logOut() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('access_token');
-    await prefs.remove('expiration_date');
-
-    // Use the globalNavigatorKey to navigate
-    globalNavigatorKey.currentState?.pushReplacement(
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
-  }
+  
 }
