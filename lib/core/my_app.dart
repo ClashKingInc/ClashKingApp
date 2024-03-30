@@ -14,7 +14,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -33,12 +32,18 @@ class MyApp extends StatelessWidget {
             title: 'ClashKing',
             theme: ThemeData(
               useMaterial3: true,
+              cardTheme: CardTheme(
+                surfaceTintColor: Colors.transparent,
+                color: Color(0xFFFFFFFF)
+                    .withOpacity(1.0), // 1.0 means 100% opacity
+                elevation: 2.0,
+              ),
               colorScheme: ColorScheme.fromSeed(
-                seedColor: Color(0xFFC98910), // primary color as the seed
+                seedColor: Color(0xFFFFFFFF), // primary color as the seed
                 primary: Color(0xFFC98910),
                 secondary: Color(0xFF9B1F28),
                 background: Color(0xFFFFFFFF),
-                surface: Color(0xFFFFF8E1),
+                surface: Color(0xFFFFFFFF),
                 error: Color(0xFFB00020),
                 onPrimary:
                     Color(0xFFFFFFFF), // Text color on top of primary color
