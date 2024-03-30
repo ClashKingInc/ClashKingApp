@@ -1,5 +1,6 @@
 import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
@@ -8,22 +9,19 @@ import 'dart:convert'; // Pour ascii
 import 'package:crypto/crypto.dart'; // Pour sha256
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
-import 'package:clashkingapp/core/my_home_page.dart';
-import 'package:clashkingapp/core/my_app.dart';
-import 'package:provider/provider.dart';
-
+//import 'dart:html' as html;
 
 class LoginPage extends StatelessWidget {
-  LoginPage();
   // Assurez-vous d'avoir initialisé dotenv avant de l'utiliser pour charger les variables d'environnement
   final String clientId = dotenv.env['DISCORD_CLIENT_ID']!;
   final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
   final String clientSecret = dotenv.env['DISCORD_CLIENT_SECRET']!;
   final String callbackUrlScheme = dotenv.env['DISCORD_CALLBACK_URL_SCHEME']!;
+  final String redirectWebUri = dotenv.env['DISCORD_REDIRECT_URI_WEB']!;
   // Discord n'utilise pas clientSecret dans le flux d'authentification côté client, donc il pourrait ne pas être nécessaire ici
 
   // Fonction pour lancer le processus d'authentification
-  Future<void> signInWithDiscord(BuildContext context) async {
+  Future<void> signInWithDiscordFromMobile(BuildContext context) async {
     String codeVerifier;
     String codeChallenge;
     // Construct the URL
@@ -31,8 +29,7 @@ class LoginPage extends StatelessWidget {
       const String charset =
           'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
       return List.generate(
-              128, (i) => charset[Random.secure().nextInt(charset.length)])
-          .join();
+          128, (i) => charset[Random.secure().nextInt(charset.length)]).join();
     }
 
     String generateCodeChallenge(String codeVerifier) {
@@ -92,7 +89,7 @@ class LoginPage extends StatelessWidget {
           DateTime.now().add(Duration(seconds: expiresIn));
       await prefs.setString(
           'expiration_date', expirationDate.toIso8601String());
-          
+
       // Navigate to MyHomePage
       globalNavigatorKey.currentState!.pushReplacement(
         MaterialPageRoute(builder: (context) => StartupWidget()),
@@ -102,6 +99,29 @@ class LoginPage extends StatelessWidget {
     }
   }
 
+/*
+  Future<void> signInWithDiscordFromWeb(BuildContext context) async {
+    final url = Uri.https('discord.com', '/api/oauth2/authorize', {
+      'response_type': 'code',
+      'client_id': clientId,
+      'scope': 'identify email',
+      'redirect_uri': redirectWebUri,
+      'prompt': 'consent',
+    });
+
+
+    html.window.console.log(url.toString());
+
+    // Redirigez l'utilisateur vers l'URL d'authentification
+    html.window.location.href = url.toString();
+
+    if (globalNavigatorKey.currentState != null) {
+      globalNavigatorKey.currentState!.pushReplacement(
+        MaterialPageRoute(builder: (context) => StartupWidget()),
+      );
+    }
+  }*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,7 +129,13 @@ class LoginPage extends StatelessWidget {
         child: ElevatedButton(
           child: Text('Se connecter avec Discord'),
           onPressed: () async {
-            await signInWithDiscord(context);
+              await signInWithDiscordFromMobile(context);
+
+            /*if (kIsWeb) {
+              await signInWithDiscordFromWeb(context);
+            } else {
+              await signInWithDiscordFromMobile(context);
+            }*/
           },
         ),
       ),
