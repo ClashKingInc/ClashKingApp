@@ -87,6 +87,7 @@ lib/generated_plugin_registrant.dart
 # End of https://www.toptal.com/developers/gitignore/api/flutter,visualstudiocode
 
 .env
+.idea/
 
 #Linux
 **/flutter/generated_plugin_registrant.cc
