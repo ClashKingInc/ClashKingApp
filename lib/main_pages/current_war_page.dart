@@ -2,27 +2,21 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/subpages/war_league/current_war_info_page.dart';
+import 'package:clashkingapp/components/app_bar.dart';
+import 'package:clashkingapp/api/discord_user_info.dart';
 
 class CurrentWarInfoPage extends StatelessWidget {
   final CurrentWarInfo currentWarInfo;
+  final DiscordUser user;
 
-  CurrentWarInfoPage({required this.currentWarInfo});
+  CurrentWarInfoPage({required this.currentWarInfo, required this.user});
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text('War & League')),
-          bottom: TabBar(
-            tabs: [
-              Tab(text: 'War'),
-              Tab(text: 'CWL'),
-            ],
-          ),
-        ),
-        body: 
+    return Scaffold(
+      appBar: CustomAppBar(user: user),
+      body: ListView(
+        children: <Widget>[
         Column(
           children: <Widget>[
             GestureDetector(
@@ -34,16 +28,9 @@ class CurrentWarInfoPage extends StatelessWidget {
               },
               child: CurrentWarInfoCard(currentWarInfo: currentWarInfo),
               ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  Center(child: Text('No war currently')),
-                  Center(child: Text('No CWL currently')),
-                ],
-              ),
-            ),
           ],
         ),
+        ],
       ),
     );
   }

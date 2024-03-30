@@ -1,50 +1,187 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
-import 'package:flutter/widgets.dart'; // Assure-toi que ce chemin d'importation est correct
+import 'dart:ui';
+import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 
-class CurrentWarInfoScreen extends StatelessWidget {
+class CurrentWarInfoScreen extends StatefulWidget {
   final CurrentWarInfo currentWarInfo;
 
-  CurrentWarInfoScreen({Key? key, required this.currentWarInfo}) : super(key: key);
+  CurrentWarInfoScreen({Key? key, required this.currentWarInfo})
+      : super(key: key);
+
+  @override
+  CurrentWarInfoScreenState createState() => CurrentWarInfoScreenState();
+}
+
+class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
+    with TickerProviderStateMixin {
+  late TabController tabController;
+  late TabController subTabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 3, vsync: this);
+    subTabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    subTabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Current War Info'),
-          bottom: TabBar(
-            tabs: [
-              Tab(text: 'Statistics'),
-              Tab(text: 'Events'),
-              Tab(text: 'Roster'),
-            ],
+    return Scaffold(
+        body: SingleChildScrollView(
+            child: Column(children: [
+      Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: <Widget>[
+          SizedBox(
+            height: 230,
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+              child: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.5),
+                  BlendMode.darken,
+                ),
+                child: Image.network(
+                  "https://clashkingfiles.b-cdn.net/landscape/war-landscape.jpg",
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
           ),
-        ),
-        body: TabBarView(
-          children: [
-            buildStatisticsTab(context),
-            buildEventsTab(context),
-            buildRosterTab(context),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                timeLeft(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.network(
+                              widget.currentWarInfo.clan.badgeUrls.large,
+                              width: 100),
+                          Text(
+                            widget.currentWarInfo.clan.name,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      "VS",
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary),
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.network(
+                              widget.currentWarInfo.opponent.badgeUrls.large,
+                              width: 100),
+                          Text(
+                            widget.currentWarInfo.opponent.name,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 10,
+            left: 10,
+            child: IconButton(
+              icon: Icon(Icons.arrow_back,
+                  color: Theme.of(context).colorScheme.onPrimary, size: 32),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ],
+      ),
+      ScrollableTab(
+          labelColor: Colors.black,
+          onTap: (value) {
+            print('Tab $value selected');
+          },
+          tabs: [
+            Tab(text: 'Statistics'),
+            Tab(text: 'Events'),
+            Tab(text: 'Rosters')
           ],
+          children: [
+            ListTile(
+              title: buildStatisticsTab(context),
+            ),
+            ListTile(title: buildEventsTab(context)),
+            ListTile(title: buildRosterTab(context)),
+          ])
+    ])));
+  }
+
+  Widget timeLeft() {
+    DateTime now = DateTime.now();
+    Duration difference = widget.currentWarInfo.endTime.difference(now);
+
+    String hours = difference.inHours.toString().padLeft(2, '0');
+    String minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Center(
+        child: Text(
+          'Ending in $hours:$minutes',
+          style: Theme.of(context)
+              .textTheme
+              .titleSmall
+              ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
         ),
       ),
     );
   }
 
   Widget buildStatisticsTab(BuildContext context) {
-    DateTime now = DateTime.now();
-    Duration difference = currentWarInfo.endTime.difference(now);
-
-    String hours = difference.inHours.toString().padLeft(2, '0');
-    String minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
-
     // Calculs pour les pourcentages des barres de progression
-    final double clanStarsPercentage = currentWarInfo.clan.stars / (currentWarInfo.teamSize * 3);
-    final double opponentStarsPercentage = currentWarInfo.opponent.stars / (currentWarInfo.teamSize * 3);
-    final double clanAttacksPercentage = currentWarInfo.clan.attacks / (currentWarInfo.teamSize * 2);
-    final double opponentAttacksPercentage = currentWarInfo.opponent.attacks / (currentWarInfo.teamSize * 2);
+    final double clanStarsPercentage =
+        widget.currentWarInfo.clan.stars / (widget.currentWarInfo.teamSize * 3);
+    final double opponentStarsPercentage =
+        widget.currentWarInfo.opponent.stars /
+            (widget.currentWarInfo.teamSize * 3);
+    final double clanAttacksPercentage = widget.currentWarInfo.clan.attacks /
+        (widget.currentWarInfo.teamSize * 2);
+    final double opponentAttacksPercentage =
+        widget.currentWarInfo.opponent.attacks /
+            (widget.currentWarInfo.teamSize * 2);
 
     /*Map<String, int> countStars(List<WarMember> members) {
       int threeStars = 0, twoStars = 0, oneStar = 0, noStars = 0;
@@ -76,43 +213,13 @@ class CurrentWarInfoScreen extends StatelessWidget {
       };
     }*/
 
-    return ListView(
-      padding: EdgeInsets.all(16),
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  Image.network(currentWarInfo.clan.badgeUrls.large, fit: BoxFit.cover, width: 90, height: 90),
-                  Text(currentWarInfo.clan.name, textAlign: TextAlign.center),
-                ],
-              ),
-            ),
-            Text("VS", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
-            Expanded(
-              child: Column(
-                children: [
-                  Image.network(currentWarInfo.opponent.badgeUrls.large, fit: BoxFit.cover, width: 90, height: 90),
-                  Text(currentWarInfo.opponent.name, textAlign: TextAlign.center),
-                ],
-              ),
-            ),
-          ],
-        ),
-        // Temps restant avant la fin de la guerre
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Center(
-            child: Text(
-              'Ending in $hours:$minutes',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
         // Pourcentage de destruction pour chaque clan
-        Center(child: Text('${currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)}% - ${currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)}%')),
+        Center(
+            child: Text(
+                '${widget.currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)}% - ${widget.currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)}%')),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: Column(
@@ -132,7 +239,7 @@ class CurrentWarInfoScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 5),
                           child: Center(
                             child: Text(
-                              '${currentWarInfo.clan.attacks}/${currentWarInfo.teamSize * 2}',
+                              '${widget.currentWarInfo.clan.attacks}/${widget.currentWarInfo.teamSize * 2}',
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
@@ -150,10 +257,12 @@ class CurrentWarInfoScreen extends StatelessWidget {
                           color: Colors.red,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 5), // Ajoute de l'espace vertical au-dessus du texte
+                          padding: const EdgeInsets.only(
+                              top:
+                                  5), // Ajoute de l'espace vertical au-dessus du texte
                           child: Center(
                             child: Text(
-                              '${currentWarInfo.opponent.attacks}/${currentWarInfo.teamSize * 2}',
+                              '${widget.currentWarInfo.opponent.attacks}/${widget.currentWarInfo.teamSize * 2}',
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
@@ -176,10 +285,12 @@ class CurrentWarInfoScreen extends StatelessWidget {
                           color: Colors.blue,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 5), // Ajoute de l'espace vertical au-dessus du texte
+                          padding: const EdgeInsets.only(
+                              top:
+                                  5), // Ajoute de l'espace vertical au-dessus du texte
                           child: Center(
                             child: Text(
-                              '${currentWarInfo.clan.stars}/${currentWarInfo.teamSize * 3}',
+                              '${widget.currentWarInfo.clan.stars}/${widget.currentWarInfo.teamSize * 3}',
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
@@ -200,7 +311,7 @@ class CurrentWarInfoScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 5),
                           child: Center(
                             child: Text(
-                              '${currentWarInfo.opponent.stars}/${currentWarInfo.teamSize * 3}',
+                              '${widget.currentWarInfo.opponent.stars}/${widget.currentWarInfo.teamSize * 3}',
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
@@ -213,9 +324,10 @@ class CurrentWarInfoScreen extends StatelessWidget {
             ],
           ),
         ),
+      ],
 
-        // Statistiques d'étoiles pour chaque clan
-        /*Padding(
+      // Statistiques d'étoiles pour chaque clan
+      /*Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(
             children: [
@@ -230,158 +342,141 @@ class CurrentWarInfoScreen extends StatelessWidget {
             ],
           ),
         ),*/
-        // Ajout d'autres statistiques si nécessaire
-      ],
+      // Ajout d'autres statistiques si nécessaire
     );
   }
 
-
   Widget buildEventsTab(BuildContext context) {
     // Placeholder pour les événements, ajoute ta propre logique ici
-    return ListView(
-      children: [
-        Text('First line of content for Events'),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        // Pourcentage de destruction pour chaque clan
+        Center(
+          child: Text('First line of content for Events'),
+        )
       ],
     );
   }
 
   Widget buildRosterTab(BuildContext context) {
-    return DefaultTabController(
-      length: 2, // Nombre d'onglets pour Clan et Opponent
-      child: Column(
-        children: [
-          TabBar(
-            tabs: [
-              Tab(
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 30, // Maximum width
-                        height: 30, // Maximum height
-                        child: Image.network(currentWarInfo.clan.badgeUrls.large, fit: BoxFit.cover),
-                      ),
-                      Text('  ${currentWarInfo.clan.name}', style: TextStyle(fontSize: 12)),
-                    ],
-                  ),
-                ),
-              ),
-              Tab(
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 30, // Maximum width
-                        height: 30, // Maximum height
-                        child: Image.network(currentWarInfo.opponent.badgeUrls.large, fit: BoxFit.cover),
-                      ),
-                      Text('  ${currentWarInfo.opponent.name}', style: TextStyle(fontSize: 12)),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
-              children: [
-                buildMemberListView(currentWarInfo.clan.members, context),
-                buildMemberListView(currentWarInfo.opponent.members, context),
-              ],
-            ),
-          ),
+    // Placeholder pour les rosters, ajoute ta propre logique ici
+    return ScrollableTab(
+        labelColor: Colors.black,
+        onTap: (value) {
+          print('Tab $value selected');
+        },
+        tabs: [
+          Tab(text: 'Membres'),
+          Tab(text: 'Ennemis'),
         ],
-      ),
-    );
+        children: [
+          ListTile(
+            title: buildMemberListView(
+                widget.currentWarInfo.clan.members, context),
+          ),
+          ListTile(
+            title: buildMemberListView(
+                widget.currentWarInfo.opponent.members, context),
+          )
+        ]);
   }
 
   Widget buildMemberListView(List<WarMember> members, BuildContext context) {
     members.sort((a, b) => a.mapPosition.compareTo(b.mapPosition));
 
-    return ListView.builder(
-      itemCount: members.length,
-      itemBuilder: (context, index) {
-        var member = members[index];
-        List<Widget> details = []; // Utilisé pour stocker les détails des attaques et de la meilleure attaque
+    List<Widget> memberWidgets = members.map((member) {
+      List<Widget> details = [];
 
-        // Générer les détails des attaques
-        if (member.attacks != null) {
-          for (var attack in member.attacks!) {
-            details.add(
-              Row(
-                children: <Widget>[
-                  Expanded(child: Text(attack.defenderTag)),
-                  Text('${attack.destructionPercentage}% - '),
-                  ...generateStars(attack.stars),
-                ],
-              ),
-            );
-          }
-          // Assurez-vous d'avoir deux messages d'attaque si nécessaire
-          for (int i = details.length; i < currentWarInfo.attacksPerMember; i++) {
-            details.add(Text('Attack ${i + 1} not done yet'));
-          }
-        } else {
-          // Aucune attaque n'a été réalisée
-          for (int i = 0; i < currentWarInfo.attacksPerMember; i++) {
-            details.add(Text('Attack ${i + 1} not done yet'));
-          }
-        }
-
-        details.add(Text('Defense(s) : ${member.opponentAttacks}'));
-
-        // Ajouter les détails de la meilleure attaque de l'opposant, si disponible
-        if (member.bestOpponentAttack != null) {
-          var bestAttack = member.bestOpponentAttack!;
+      // Générer les détails des attaques
+      if (member.attacks != null) {
+        for (var attack in member.attacks!) {
           details.add(
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Étend les éléments sur l'axe horizontal
               children: <Widget>[
-                // Informations de la meilleure attaque à gauche
-                Expanded(
-                  child: Text(
-                    'Best : ${bestAttack.order}- ${bestAttack.defenderTag}',
-                    style: TextStyle(fontSize: 14),
-                    overflow: TextOverflow.ellipsis, // Gère le débordement de texte
-                  ),
-                ),
-                // Étoiles alignées à droite
-                Row(
-                  children: <Widget>[
-                    Text(
-                      '${bestAttack.destructionPercentage}% - ',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    ...generateStars(bestAttack.stars), // Générer les étoiles pour la meilleure défense
-                  ],
-                ),
+                Expanded(child: Text(attack.defenderTag)),
+                Text('${attack.destructionPercentage}% - '),
+                ...generateStars(attack.stars), 
               ],
             ),
           );
         }
+        // Assurez-vous d'avoir deux messages d'attaque si nécessaire
+        for (int i = details.length;
+            i < widget.currentWarInfo.attacksPerMember;
+            i++) {
+          details.add(Text('Attack ${i + 1} not done yet'));
+        }
+      } else {
+        // Aucune attaque n'a été réalisée
+        for (int i = 0; i < widget.currentWarInfo.attacksPerMember; i++) {
+          details.add(Text('Attack ${i + 1} not done yet'));
+        }
+      }
 
-        return ListTile(
-          title: Text(
-            '${member.mapPosition}- ${member.name}',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ...details,
+      details.add(Text('Defense(s) : ${member.opponentAttacks}'));
+
+      // Ajouter les détails de la meilleure attaque de l'opposant, si disponible
+      if (member.bestOpponentAttack != null) {
+        var bestAttack = member.bestOpponentAttack!;
+        details.add(
+          Row(
+            mainAxisAlignment: MainAxisAlignment
+                .spaceBetween, // Étend les éléments sur l'axe horizontal
+            children: <Widget>[
+              // Informations de la meilleure attaque à gauche
+              Expanded(
+                child: Text(
+                  'Best : ${bestAttack.order}- ${bestAttack.defenderTag}',
+                  style: TextStyle(fontSize: 14),
+                  overflow:
+                      TextOverflow.ellipsis, // Gère le débordement de texte
+                ),
+              ),
+              // Étoiles alignées à droite
+              Row(
+                children: <Widget>[
+                  Text(
+                    '${bestAttack.destructionPercentage}% - ',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  ...generateStars(bestAttack.stars),
+                ],
+              ),
             ],
           ),
-          trailing: Icon(
-            (member.attacks?.length ?? 0) == currentWarInfo.attacksPerMember ? Icons.check : Icons.close,
-            color: (member.attacks?.length ?? 0) == currentWarInfo.attacksPerMember ? Colors.green : Colors.red,
-          ),
-          onTap: () {
-            // Action sur le tap
-          },
         );
-      },
+      }
+
+      return ListTile(
+        title: Text(
+          '${member.mapPosition}- ${member.name}',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ...details,
+          ],
+        ),
+        trailing: Icon(
+          (member.attacks?.length ?? 0) ==
+                  widget.currentWarInfo.attacksPerMember
+              ? Icons.check
+              : Icons.close,
+          color: (member.attacks?.length ?? 0) ==
+                  widget.currentWarInfo.attacksPerMember
+              ? Colors.green
+              : Colors.red,
+        ),
+        onTap: () {
+          // Action sur le tap
+        },
+      );
+    }).toList();
+
+    return Column(
+      children: memberWidgets,
     );
   }
 

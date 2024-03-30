@@ -25,7 +25,6 @@ Future<void> _initializeUser() async {
   if (appState.user != null) {
     appState.selectedTag.value = appState.user!.tags.first;
     appState.selectedTag.addListener(appState.reloadData);
-    print("User1: ${appState.user}");
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => MyHomePage()));
   } else {
     Navigator.of(context)

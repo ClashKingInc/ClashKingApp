@@ -8,9 +8,12 @@ import 'package:clashkingapp/global_keys.dart';
 import 'package:clashkingapp/api/player_accounts_list.dart';
 import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:clashkingapp/core/functions.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +21,14 @@ class MyApp extends StatelessWidget {
         create: (context) => MyAppState(),
         child: Consumer<MyAppState>(builder: (context, appState, child) {
           return MaterialApp(
+            locale: appState.locale,
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
             navigatorKey: globalNavigatorKey,
             title: 'ClashKing',
             theme: ThemeData(
@@ -108,6 +119,15 @@ class MyAppState extends ChangeNotifier {
       selectedTag.value = user!.tags.first;
       selectedTag.addListener(reloadData);
     }
+  }
+
+  Locale _locale = Locale('en');
+
+  Locale get locale => _locale;
+
+  void changeLanguage(String languageCode) {
+    _locale = Locale(languageCode);
+    notifyListeners();
   }
 
   void reloadData() async {

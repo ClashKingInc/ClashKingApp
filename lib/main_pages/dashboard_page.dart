@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/subpages/player_dashboard/player_info_page.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:clashkingapp/components/app_bar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardPage extends StatelessWidget {
   final PlayerAccountInfo playerStats;
@@ -51,7 +52,7 @@ class CreatorCodeCard extends StatelessWidget {
             Expanded(
               // Use Expanded to ensure text takes up the remaining space
               child: Text(
-                'Use creator Code ClashKing',
+                AppLocalizations.of(context)?.creatorCode ?? 'Creator Code : ClashKing',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
