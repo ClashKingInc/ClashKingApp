@@ -227,7 +227,7 @@ class PlayerService {
 
   Future<PlayerAccounts> fetchPlayerAccounts(DiscordUser user) async {
     PlayerAccounts playerAccounts =
-        PlayerAccounts(playerAccountInfo: [], clanInfo: [], warInfo: []);
+    PlayerAccounts(playerAccountInfo: [], clanInfo: [], warInfo: []);
     ClanInfo clanInfo;
     CurrentWarInfo warInfo;
     List<Future> futures = [];

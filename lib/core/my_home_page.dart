@@ -12,9 +12,21 @@ class MyHomePage extends StatefulWidget {
   MyHomePageState createState() => MyHomePageState();
 }
 
-
 class MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+  Future<void>? _initializeAccountsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeAccountsFuture = _initializeAccounts();
+  }
+
+  Future<void> _initializeAccounts() async {
+    print("User2: ${context.read<MyAppState>().user}");
+    final appState = Provider.of<MyAppState>(context, listen: false);
+    await appState.fetchPlayerAccounts(appState.user!);
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -26,62 +38,76 @@ class MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var appState = Provider.of<MyAppState>(context);
 
-    List<Widget> widgetOptions = [
-      appState.playerAccounts != null
-          ? DashboardPage(
-              playerStats: appState.playerStats!, user: appState.user!)
-          : Center(
-              child:
-                  CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
-      appState.clanInfo != null
-          ? ClanInfoPage(clanInfo: appState.clanInfo!, user: appState.user!)
-          : Center(
-              child:
-                  CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
-      appState.currentWarInfo != null
-          ? CurrentWarInfoPage(currentWarInfo: appState.currentWarInfo!)
-          : Center(
-              child:
-                  CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
-      //WarLeaguePage(currentWarInfo: appState.currentWarInfo,),
-      ManagementPage(),
-    ];
+    return FutureBuilder(
+        future: _initializeAccountsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            List<Widget> widgetOptions = [
+              appState.playerAccounts != null && appState.playerStats != null
+                  ? DashboardPage(
+                      playerStats: appState.playerStats!, user: appState.user!)
+                  : Center(
+                      child:
+                          CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
+              appState.clanInfo != null && appState.user != null
+                  ? ClanInfoPage(
+                      clanInfo: appState.clanInfo!, user: appState.user!)
+                  : Center(
+                      child:
+                          CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
+              appState.currentWarInfo != null && appState.user != null
+                  ? CurrentWarInfoPage(currentWarInfo: appState.currentWarInfo!)
+                  : Center(
+                      child:
+                          CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
+              //WarLeaguePage(currentWarInfo: appState.currentWarInfo,),
+              ManagementPage(),
+            ];
 
-    return Scaffold(
-      body: Center(
-        child: IndexedStack(
-          index: _selectedIndex,
-          children:
-              widgetOptions, // Use widgetOptions here instead of _widgetOptions
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shield),
-            label: 'Clans',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CustomIcons.swordCross), // Example icon for War/League
-            label: 'War/League',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Management',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Color(
-            0xFFC98910), // Using the primary color we picked from the logo
-        unselectedItemColor:
-            Color(0xFF9B1F28), // A color that complements the primary color
-        showUnselectedLabels: true,
-        onTap: _onItemTapped,
-      ),
-    );
+            return Scaffold(
+              body: Center(
+                child: IndexedStack(
+                  index: _selectedIndex,
+                  children:
+                      widgetOptions, // Use widgetOptions here instead of _widgetOptions
+                ),
+              ),
+              bottomNavigationBar: BottomNavigationBar(
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.dashboard),
+                    label: 'Dashboard',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.shield),
+                    label: 'Clans',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(
+                        CustomIcons.swordCross), // Example icon for War/League
+                    label: 'War/League',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.settings),
+                    label: 'Management',
+                  ),
+                ],
+                currentIndex: _selectedIndex,
+                selectedItemColor: Color(
+                    0xFFC98910), // Using the primary color we picked from the logo
+                unselectedItemColor: Color(
+                    0xFF9B1F28), // A color that complements the primary color
+                showUnselectedLabels: true,
+                onTap: _onItemTapped,
+              ),
+            );
+          }
+        });
   }
 }
