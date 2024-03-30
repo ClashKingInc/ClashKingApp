@@ -9,6 +9,7 @@ import 'dart:convert'; // Pour ascii
 import 'package:crypto/crypto.dart'; // Pour sha256
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //import 'dart:html' as html;
 
 class LoginPage extends StatelessWidget {
@@ -127,7 +128,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          child: Text('Se connecter avec Discord'),
+          child: Text(AppLocalizations.of(context)!.signInWithDiscord),
           onPressed: () async {
               await signInWithDiscordFromMobile(context);
             /*if (kIsWeb) {

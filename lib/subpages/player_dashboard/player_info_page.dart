@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:clipboard/clipboard.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StatsScreen extends StatefulWidget {
   final PlayerAccountInfo playerStats;
@@ -41,7 +42,7 @@ class StatsScreenState extends State<StatsScreen>
               alignment: Alignment.bottomCenter,
               children: <Widget>[
                 SizedBox(
-                  height: 180,
+                  height: 190,
                   child: ImageFiltered(
                     imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                     child: ColorFiltered(
@@ -60,11 +61,14 @@ class StatsScreenState extends State<StatsScreen>
                 ),
                 Positioned(
                   bottom: -70,
-                  child:
-                      Image.network(widget.playerStats.townHallPic, width: 170),
+                  child: Column(children: [
+                    Row(children: [
+                    ..._buildStars(widget.playerStats.townHallWeaponLevel),],),
+                    Image.network(widget.playerStats.townHallPic, width: 170),
+                  ]),
                 ),
                 Positioned(
-                  top: 10,
+                  top: 20,
                   left: 10,
                   child: IconButton(
                     icon: Icon(Icons.arrow_back,
@@ -88,7 +92,8 @@ class StatsScreenState extends State<StatsScreen>
                   onTap: () {
                     FlutterClipboard.copy(widget.playerStats.tag).then((value) {
                       final snackBar = SnackBar(
-                        content: Text('Copied to Clipboard'),
+                        content: Text(
+                            '${AppLocalizations.of(context)!.copiedToClipboard}'),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     });
@@ -156,10 +161,10 @@ class StatsScreenState extends State<StatsScreen>
                     ),
                   ),
                   Chip(
-                    avatar: Icon(LucideIcons.percent),
+                    avatar: Icon(LucideIcons.chevronsUpDown),
                     labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
                     label: Text(
-                      '${(widget.playerStats.donations / widget.playerStats.donationsReceived * 100).toStringAsFixed(2)}',
+                      '${(widget.playerStats.donations / (widget.playerStats.donationsReceived == 0 ? 1 : widget.playerStats.donationsReceived))}',
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
                   ),
@@ -172,8 +177,8 @@ class StatsScreenState extends State<StatsScreen>
                 print('Tab $value selected');
               },
               tabs: [
-                Tab(text: 'Home Base'),
-                Tab(text: 'Builder Base'),
+                Tab(text: AppLocalizations.of(context)!.homeBase),
+                Tab(text: AppLocalizations.of(context)!.builderBase),
               ],
               children: [
                 ListTile(
@@ -194,15 +199,6 @@ class StatsScreenState extends State<StatsScreen>
                                     EdgeInsets.only(left: 2.0, right: 2.0),
                                 label: Text(
                                   "TH ${widget.playerStats.townHallLevel}",
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                ),
-                              ),
-                              Chip(
-                                avatar: Icon(LucideIcons.flame),
-                                labelPadding:
-                                    EdgeInsets.only(left: 2.0, right: 2.0),
-                                label: Text(
-                                  "${widget.playerStats.townHallWeaponLevel}",
                                   style: Theme.of(context).textTheme.labelSmall,
                                 ),
                               ),
@@ -343,4 +339,11 @@ class StatsScreenState extends State<StatsScreen>
       ),
     );
   }
+
+  List<Widget> _buildStars(int count) {
+  return List<Widget>.generate(
+    count,
+    (index) => Icon(Icons.star, color: Colors.yellow),
+  );
+}
 }

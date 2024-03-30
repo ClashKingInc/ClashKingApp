@@ -13,6 +13,7 @@ class ClanInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFFFF8E1),
       appBar: CustomAppBar(user: user),
       body: ListView(
         children: <Widget>[
