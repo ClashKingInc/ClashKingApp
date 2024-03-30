@@ -5,6 +5,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/data/troop_data.dart';
 
 class StatsScreen extends StatefulWidget {
   final PlayerAccountInfo playerStats;
@@ -60,11 +61,14 @@ class StatsScreenState extends State<StatsScreen>
                   ),
                 ),
                 Positioned(
-                  bottom: -70,
+                  bottom: -90,
                   child: Column(children: [
-                    Row(children: [
-                    ..._buildStars(widget.playerStats.townHallWeaponLevel),],),
                     Image.network(widget.playerStats.townHallPic, width: 170),
+                    Row(
+                      children: [
+                        ..._buildStars(widget.playerStats.townHallWeaponLevel),
+                      ],
+                    ),
                   ]),
                 ),
                 Positioned(
@@ -79,7 +83,7 @@ class StatsScreenState extends State<StatsScreen>
                 ),
               ],
             ),
-            SizedBox(height: 64),
+            SizedBox(height: 90),
             ListTile(
               title: Center(
                 child: Text(
@@ -164,7 +168,7 @@ class StatsScreenState extends State<StatsScreen>
                     avatar: Icon(LucideIcons.chevronsUpDown),
                     labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
                     label: Text(
-                      '${(widget.playerStats.donations / (widget.playerStats.donationsReceived == 0 ? 1 : widget.playerStats.donationsReceived))}',
+                      '${(widget.playerStats.donations / (widget.playerStats.donationsReceived == 0 ? 1 : widget.playerStats.donationsReceived)).toStringAsFixed(2)}',
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
                   ),
@@ -271,18 +275,13 @@ class StatsScreenState extends State<StatsScreen>
                                 ))
                             .toList(),
                       ),
-                      ExpansionTile(
-                        title: Text('Troops'),
-                        children: widget.playerStats.troops
-                            .where((troop) =>
-                                troop.village == 'home' &&
-                                !troop.name.startsWith('Super'))
-                            .map((troop) => ListTile(
-                                  title: Text(troop.name),
-                                  subtitle: Text(
-                                      'Level: ${troop.level} / ${troop.maxLevel} - ${troop.village}'),
-                                ))
-                            .toList(),
+                      Column(
+                        children: [
+                          buildTroopSection('troop', 'Troops'),
+                          buildTroopSection('super-troop', 'Super Troops'),
+                          buildTroopSection('pet', 'Pets'),
+                          buildTroopSection('siege-machine', 'Machine Siege'),
+                        ],
                       ),
                       ExpansionTile(
                         title: Text('Spells'),
@@ -341,9 +340,117 @@ class StatsScreenState extends State<StatsScreen>
   }
 
   List<Widget> _buildStars(int count) {
-  return List<Widget>.generate(
-    count,
-    (index) => Icon(Icons.star, color: Colors.yellow),
-  );
-}
+    return List<Widget>.generate(
+        count,
+        (index) => Stack(
+              children: <Widget>[
+                Icon(
+                  Icons.star,
+                  color: Theme.of(context).colorScheme.primary, // Outline color
+                  size: 22.0, 
+                ),
+                Icon(
+                  Icons.star,
+                  color: Colors.yellow, // Fill color
+                  size: 20.0, 
+                ),
+              ],
+            ));
+  }
+
+  Widget buildTroopSection(String troopType, String title) {
+    List<String> troopNames =
+        widget.playerStats.troops.map((troop) => troop.name).toList();
+
+    List<Widget> missingTroops = [];
+    troopUrlsAndTypes.forEach((name, data) {
+      if (!troopNames.contains(name) && data['type'] == troopType) {
+        missingTroops.add(
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey, 
+                width: 2,
+              ),
+              
+              color: Colors.transparent, 
+              borderRadius:
+                  BorderRadius.circular(4), 
+            ),
+            clipBehavior:
+                Clip.antiAlias,
+            child: ColorFiltered(
+              colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
+              child: Image.network(data['url'] ?? "", height: 45, width: 45, fit : BoxFit.cover),
+            ),
+          ),
+        );
+      }
+    });
+
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(title, style: Theme.of(context).textTheme.titleMedium),
+        ),
+        SizedBox(height: 10),
+        Center(
+          child: Wrap(
+            spacing: 5,
+            runSpacing: 5,
+            children: [
+              ...widget.playerStats.troops
+                  .where((troop) =>
+                      troop.village == 'home' && troop.type == troopType)
+                  .map(
+                    (troop) => Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: troop.level == troop.maxLevel
+                              ? Color(0xFFD4AF37) // Or
+                              : Colors.black, // Noir
+                          width: 2,
+                        ),
+                      ),
+                      child: Stack(
+                        children: <Widget>[
+                          Image.network(troop.imageUrl,
+                              width: 45, height : 45,
+                              fit : BoxFit.cover), // Display the troop image
+                          Positioned(
+                            right: 1,
+                            bottom: 1,
+                            child: Container(
+                              padding: EdgeInsets.all(1),
+                              decoration: BoxDecoration(
+                                color: troop.level == troop.maxLevel
+                                    ? Color(0xFFD4AF37) // Or
+                                    : Colors.black, // Noir
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                troop.level.toString(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+              ...missingTroops,
+            ],
+          ),
+        ),
+        SizedBox(height: 30),
+      ],
+    );
+  }
 }
