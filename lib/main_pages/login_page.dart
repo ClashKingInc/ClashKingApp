@@ -1,3 +1,4 @@
+import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
@@ -8,6 +9,9 @@ import 'package:crypto/crypto.dart'; // Pour sha256
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:clashkingapp/core/my_home_page.dart';
+import 'package:clashkingapp/core/my_app.dart';
+import 'package:provider/provider.dart';
+
 
 class LoginPage extends StatelessWidget {
   LoginPage();
@@ -88,10 +92,10 @@ class LoginPage extends StatelessWidget {
           DateTime.now().add(Duration(seconds: expiresIn));
       await prefs.setString(
           'expiration_date', expirationDate.toIso8601String());
-
+          
       // Navigate to MyHomePage
       globalNavigatorKey.currentState!.pushReplacement(
-        MaterialPageRoute(builder: (context) => MyHomePage()),
+        MaterialPageRoute(builder: (context) => StartupWidget()),
       );
     } catch (e) {
       print("Error: $e");
