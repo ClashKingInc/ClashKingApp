@@ -62,7 +62,9 @@ class MyHomePageState extends State<MyHomePage> {
                       child:
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
               appState.currentWarInfo != null && appState.user != null
-                  ? CurrentWarInfoPage(currentWarInfo: appState.currentWarInfo!, user: appState.user!)
+                  ? CurrentWarInfoPage(
+                      currentWarInfo: appState.currentWarInfo!,
+                      user: appState.user!)
                   : Center(
                       child:
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
@@ -79,6 +81,8 @@ class MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               bottomNavigationBar: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed, 
+                backgroundColor: Colors.white, 
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                     icon: Icon(Icons.dashboard),
