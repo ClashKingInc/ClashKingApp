@@ -1,4 +1,5 @@
 {
+    "@@locale": "en",
     "creatorCode" : "Creator Code : ClashKing",
     "logout" : "Log out",
     "language" : "Language",
@@ -9,7 +10,28 @@
     "copiedToClipboard" : "Copied to clipboard",
     "dashboard" : "Dashboard",
     "clan" : "Clan",
-    "warLeague" : "War/League",
     "management" : "Management",
-    "signInWithDiscord" : "Sign In with Discord"
+    "signInWithDiscord" : "Sign In with Discord",
+
+    "warLeague" : "War/League",
+    "startsIn" : "Starts in",
+    "endsIn" : "Ends in",
+    "statistics" : "Statistics",
+    "attacks" : "Attacks",
+    "stars" : "Stars",
+    "events" : "Events",
+    "team" : "Teams",
+    "myTeam" : "My team",
+    "enemiesTeam" : "Enemies",
+    "defense" : "Defense",
+    "attack" : "Attack",
+    "notUsed" : "not used",
+    "victory" : "Victory",
+    "defeat" : "Defeat",
+    "draw" : "Draw",
+    "warEnded" : "War ended",
+    "preparation" : "Preparation",
+    "isNotInWar" : "is not in war",
+    "askForWar" : "Contact a leader or a co-leader to start a war",
+    "warLogClosed" : "War log closed"
 }
