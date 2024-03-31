@@ -163,7 +163,7 @@ class PlayerStatsCard extends StatelessWidget {
                               Chip(
                                 avatar: Icon(LucideIcons.chevronsUpDown),
                                 label: Text(
-                                    '${(playerStats.donations / (playerStats.donationsReceived == 0 ? 1 : playerStats.donationsReceived))}',
+                                    '${(playerStats.donations / (playerStats.donationsReceived == 0 ? 1 : playerStats.donationsReceived)).toStringAsFixed(2)}',
                                     style:
                                         Theme.of(context).textTheme.labelSmall),
                                 labelPadding:

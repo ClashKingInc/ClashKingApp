@@ -5,6 +5,7 @@ import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/api/player_accounts_list.dart';
+import 'package:clashkingapp/data/troop_data.dart';
 
 class PlayerAccountInfo {
   final String name;
@@ -178,7 +179,9 @@ class Troop {
   final String name;
   final int level;
   final int maxLevel;
-  final String village; // "home" or "builderBase"
+  final String village;
+  late String imageUrl;
+  late String type;
 
   Troop(
       {required this.name,
@@ -227,7 +230,7 @@ class PlayerService {
 
   Future<PlayerAccounts> fetchPlayerAccounts(DiscordUser user) async {
     PlayerAccounts playerAccounts =
-    PlayerAccounts(playerAccountInfo: [], clanInfo: [], warInfo: []);
+        PlayerAccounts(playerAccountInfo: [], clanInfo: [], warInfo: []);
     ClanInfo clanInfo;
     CurrentWarInfo warInfo;
     List<Future> futures = [];
@@ -259,7 +262,6 @@ class PlayerService {
       );
     }
 
-
     await Future.wait(futures);
     return playerAccounts;
   }
@@ -281,6 +283,14 @@ class PlayerService {
           PlayerAccountInfo.fromJson(jsonDecode(responseBody));
       playerStats.townHallPic =
           await fetchPlayerTownHallByTownHallLevel(playerStats.townHallLevel);
+
+
+      for (var troop in playerStats.troops) {
+        Map<String, String> urlAndType = await fetchTroopImageUrl(troop.name);
+        troop.imageUrl = urlAndType['url'] ?? 'default_image_url';
+        troop.type = urlAndType['type'] ?? 'unknown';
+      }
+
       return playerStats;
     } else {
       throw Exception('Failed to load player stats');
@@ -335,6 +345,20 @@ class PlayerService {
       return warInfo;
     } else {
       throw Exception('Failed to load current war info');
+    }
+  }
+
+  Future<Map<String, String>> fetchTroopImageUrl(String name) async {
+    print("troop name: $name");
+    if (troopUrlsAndTypes.containsKey(name)) {
+      // If the troop name is in the map, return the corresponding URL and type
+      return troopUrlsAndTypes[name]!;
+    } else {
+      // If the troop name is not in the map, return default image URL and type
+      return {
+        'url': 'https://clashkingfiles.b-cdn.net/clashkinglogo.png',
+        'type': 'unknown',
+      };
     }
   }
 }
