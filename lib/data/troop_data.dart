@@ -1,4 +1,5 @@
 final Map<String, Map<String, String>> troopUrlsAndTypes = {
+  // Troops
   'Barbarian': {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Barbarian.png',
@@ -9,14 +10,14 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
         'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Archer.png',
     'type': 'troop',
   },
-  'Goblin': {
-    'url':
-        'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Goblin.png',
-    'type': 'troop',
-  },
   'Giant': {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Giant.png',
+    'type': 'troop',
+  },
+  'Goblin': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Goblin.png',
     'type': 'troop',
   },
   'Wall Breaker': {
@@ -69,6 +70,21 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
         'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Yeti.png',
     'type': 'troop',
   },
+  'Dragon Rider': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Dragon_Rider.png',
+    'type': 'troop',
+  },
+  'Electro Titan': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Electro_Titan.png',
+    'type': 'troop',
+  },
+  'Root Rider' : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Root_Rider.png',
+    'type': 'troop',
+  },
   'Minion': {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Minion.png',
@@ -114,26 +130,13 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
         'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Headhunter.png',
     'type': 'troop',
   },
-  'Electro Titan': {
-    'url':
-        'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Electro_Titan.png',
-    'type': 'troop',
-  },
   'Apprentice Warden' : {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Apprentice_Warden.png',
     'type': 'troop',
   },
-  'Root Rider' : {
-    'url':
-        'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Root_Rider.png',
-    'type': 'troop',
-  },
-  'Dragon Rider': {
-    'url':
-        'https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Dragon_Rider.png',
-    'type': 'troop',
-  },
+
+  // Battle Machines
   'Battle Blimp': {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/siege-machine-pics/Icon_HV_Siege_Machine_Battle_Blimp.png',
@@ -142,7 +145,7 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
   'Wall Wrecker': {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/siege-machine-pics/Icon_HV_Siege_Machine_Wall_Wrecker.png',
-    'type': 'troop',
+    'type': 'siege-machine',
   },
   'Flame Flinger' : {
     'url':
@@ -169,6 +172,8 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
         'https://clashkingfiles.b-cdn.net/home-base/siege-machine-pics/Icon_HV_Siege_Machine_Battle_Drill.png',
     'type': 'siege-machine',
   },
+
+  // Super Troops
   'Super Barbarian': {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Barbarian.png',
@@ -222,13 +227,15 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
   'Ice Hound': {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Ice_Hound.png',
-    'type': 'troop',
+    'type': 'super-troop',
   },
   'Rocket Balloon': {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Rocket_Balloon.png',
     'type': 'super-troop',
   },
+
+  // Pets
   'L.A.S.S.I': {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/pet-pics/Icon_HV_Hero_Pets_L.A.S.S.I.png',
@@ -273,6 +280,176 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/pet-pics/Icon_HV_Hero_Pets_Spirit_Fox.png',
     'type': 'pet',
+  },
+
+  // Heroes
+  'Barbarian King': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/hero-pics/Icon_HV_Hero_Barbarian_King.png',
+    'type': 'hero',
+  },
+  'Archer Queen': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/hero-pics/Icon_HV_Hero_Archer_Queen.png',
+    'type': 'hero',
+  },
+  'Grand Warden': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/hero-pics/Icon_HV_Hero_Grand_Warden.png',
+    'type': 'hero',
+  },
+  'Royal Champion': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/hero-pics/Icon_HV_Hero_Royal_Champion.png',
+    'type': 'hero',
+  },
+
+  // Spells
+  'Lightning Spell': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Spell_Lightning.png',
+    'type': 'spell',
+  },
+  'Healing Spell': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Spell_Heal.png',
+    'type': 'spell',
+  },
+  'Rage Spell': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Spell_Rage.png',
+    'type': 'spell',
+  },
+  'Jump Spell': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Spell_Jump.png',
+    'type': 'spell',
+  },
+  'Freeze Spell': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Spell_Freeze.png',
+    'type': 'spell',
+  },
+  'Clone Spell': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Spell_Clone.png',
+    'type': 'spell',
+  },
+  'Invisibility Spell': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Spell_Invisibility.png',
+    'type': 'spell',
+  },
+  'Recall Spell': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Spell_Recall.png',
+    'type': 'spell',
+  },
+  'Poison Spell': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Dark_Spell_Poison.png',
+    'type': 'spell',
+  },
+  'Earthquake Spell': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Dark_Spell_Earthquake.png',
+    'type': 'spell',
+  },
+  'Haste Spell': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Dark_Spell_Haste.png',
+    'type': 'spell',
+  },
+  'Skeleton Spell': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Dark_Spell_Skeleton.png',
+    'type': 'spell',
+  },
+  'Bat Spell': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Dark_Spell_Bat.png',
+    'type': 'spell',
+  },
+  'Overgrowth Spell' : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/spell-pics/Icon_HV_Dark_Spell_Overgrowth.png',
+    'type': 'spell',
+  },
+
+  // BUILDER BASE
+
+  //Siege Machines
+  'Battle Machine': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/hero-pics/Icon_BB_Hero_Battle_Machine.png',
+    'type': 'bb-hero',
+  },
+  'Battle Copter' : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/hero-pics/Icon_BB_Hero_Battle_Copter.png',
+    'type': 'bb-hero',
+  },
+
+  // Troops
+  'Raged Barbarian': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/troop-pics/Icon_BB_Raged_Barbarian.png',
+    'type': 'bb-troop',
+  },
+  'Sneaky Archer': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/troop-pics/Icon_BB_Sneaky_Archer.png',
+    'type': 'bb-troop',
+  },
+  'Beta Minion': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/troop-pics/Icon_BB_Beta_Minion.png',
+    'type': 'bb-troop',
+  },
+  'Boxer Giant': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/troop-pics/Icon_BB_Boxer_Giant.png',
+    'type': 'bb-troop',
+  },
+  'Bomber': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/troop-pics/Icon_BB_Bomber.png',
+    'type': 'bb-troop',
+  },
+  'Power P.E.K.K.A': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/troop-pics/Icon_BB_Power_P.E.K.K.A.png',
+    'type': 'bb-troop',
+  },
+  'Cannon Cart': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/troop-pics/Icon_BB_Cannon_Cart.png',
+    'type': 'bb-troop',
+  },
+  'Drop Ship': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/troop-pics/Icon_BB_Drop_Ship.png',
+    'type': 'bb-troop',
+  },
+  'Baby Dragon 2': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/troop-pics/Icon_BB_Baby_Dragon.png',
+    'type': 'bb-troop',
+  },
+  'Night Witch': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/troop-pics/Icon_BB_Night_Witch.png',
+    'type': 'bb-troop',
+  },
+  'Hog Glider': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/troop-pics/Icon_BB_Hog_Glider.png',
+    'type': 'bb-troop',
+  },
+  'Electrofire Wizard': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/builder-base/troop-pics/Icon_BB_Electrofire_Wizard.png',
+    'type': 'bb-troop',
   },
 
 };
