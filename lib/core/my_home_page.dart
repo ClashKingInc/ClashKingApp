@@ -61,13 +61,11 @@ class MyHomePageState extends State<MyHomePage> {
                   : Center(
                       child:
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
-              appState.currentWarInfo != null && appState.user != null
-                  ? CurrentWarInfoPage(
-                      currentWarInfo: appState.currentWarInfo!,
-                      user: appState.user!)
-                  : Center(
-                      child:
-                          CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
+              appState.user != null && appState.playerStats != null
+                ? CurrentWarInfoPage(user: appState.user!, playerStats: appState.playerStats!)
+                : Center(
+                    child: CircularProgressIndicator(),
+                  ), // Wrap CircularProgressIndicator with Center
               //WarLeaguePage(currentWarInfo: appState.currentWarInfo,),
               ManagementPage(),
             ];

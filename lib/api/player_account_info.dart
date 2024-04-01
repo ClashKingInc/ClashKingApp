@@ -242,7 +242,7 @@ class PlayerService {
     PlayerAccounts playerAccounts =
         PlayerAccounts(playerAccountInfo: [], clanInfo: [], warInfo: []);
     ClanInfo clanInfo;
-    CurrentWarInfo warInfo;
+    CurrentWarInfo ? warInfo;
     List<Future> futures = [];
     final tags = user.tags;
 
@@ -260,13 +260,13 @@ class PlayerService {
 
           var results = await Future.wait<dynamic>([
             fetchClanInfo(playerStats.clan.tag),
-            fetchCurrentWarInfo(playerStats.clan.tag),
+            //fetchCurrentWarInfo(playerStats.clan.tag),
           ]);
           clanInfo = results[0] as ClanInfo;
           playerAccounts.clanInfo.add(clanInfo);
 
-          warInfo = results[1] as CurrentWarInfo;
-          playerAccounts.warInfo.add(warInfo);
+          /*warInfo = results[1] as CurrentWarInfo;
+          playerAccounts.warInfo.add(warInfo);*/
         }),
       );
     }

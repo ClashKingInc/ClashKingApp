@@ -10,6 +10,9 @@ import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
@@ -99,7 +102,7 @@ class MyApp extends StatelessWidget {
                     fontWeight: FontWeight.w500),
                 labelSmall: TextStyle(
                     color: Colors.black,
-                    fontSize: 12,
+                    fontSize: 8,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.w500),
               ),
@@ -137,16 +140,25 @@ class MyAppState extends ChangeNotifier {
   }
 
   void reloadData() async {
-    if (selectedTag.value != null) {
-      playerStats = playerAccounts!.playerAccountInfo
-          .firstWhere((element) => element.tag == selectedTag.value);
-      clanInfo = playerAccounts!.clanInfo
-          .firstWhere((element) => element.tag == playerStats!.clan.tag);
-      currentWarInfo = playerAccounts!.warInfo
-          .firstWhere((element) => element.clan.tag == playerStats!.clan.tag);
-      notifyListeners();
+  if (selectedTag.value != null) {
+    playerStats = playerAccounts?.playerAccountInfo.firstWhere((element) => element.tag == selectedTag.value);
+    clanInfo = playerAccounts?.clanInfo.firstWhere((element) => element.tag == playerStats?.clan?.tag);
+
+    final response = await http.get(
+      Uri.parse('https://api.clashofclans.com/v1/clans/${playerStats?.tag.replaceAll('#', '%23')}/currentwar'),
+      headers: {'Authorization': 'Bearer ${dotenv.env['API_KEY']}'},
+    );
+
+    if (response.statusCode == 200) {
+      var decodedResponse = jsonDecode(response.body);
+      if (decodedResponse["state"] != "notInWar") { // Correctly check the "state" field as a string
+        currentWarInfo = playerAccounts?.warInfo?.firstWhere((element) => element.clan?.tag == playerStats?.clan?.tag);
+      }
     }
+    notifyListeners();
   }
+}
+
 
   // Assume this method exists and fetches player stats correctly
   Future<void> fetchPlayerAccounts(DiscordUser user) async {
