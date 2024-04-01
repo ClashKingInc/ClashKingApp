@@ -278,30 +278,35 @@ class StatsScreenState extends State<StatsScreen>
                               child: Stack(
                                 children: <Widget>[
                                   Image.network(item.imageUrl,
-                                      width: 40,
-                                      height: 40,
-                                      fit: BoxFit
-                                          .cover), // Display the item image
+                                    width: 40,
+                                    height: 40,
+                                    fit: BoxFit.cover), // Display the item image
                                   (item.level != 1)
                                       ? Positioned(
                                           right: 1,
                                           bottom: 1,
                                           child: Container(
+                                            height: 16, // Hauteur fixe
+                                            width: 16, // Largeur fixe
                                             padding: EdgeInsets.all(1),
                                             decoration: BoxDecoration(
                                               color: item.level == item.maxLevel
                                                   ? Color(0xFFD4AF37) // Or
                                                   : Colors.black, // Noir
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
+                                              borderRadius: BorderRadius.circular(4),
                                             ),
-                                            child: Text(
-                                              item.level.toString(),
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 11,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center, // Centrer verticalement
+                                              children: [
+                                                Text(
+                                                  item.level.toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         )
