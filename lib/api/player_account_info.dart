@@ -33,6 +33,7 @@ class PlayerAccountInfo {
   final List<Troop> troops;
   final List<Spell> spells;
   String townHallPic = '';
+  String builderHallPic = '';
 
   PlayerAccountInfo({
     required this.name,
@@ -156,7 +157,8 @@ class Hero {
   final int level;
   final int maxLevel;
   final String village;
-  // You can add more attributes like equipment here
+  late String imageUrl;
+  late String type;
 
   Hero(
       {required this.name,
@@ -170,7 +172,6 @@ class Hero {
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
       village: json['village'] ?? 'home',
-      // Initialize other attributes from JSON if needed
     );
   }
 }
@@ -190,8 +191,15 @@ class Troop {
       required this.village});
 
   factory Troop.fromJson(Map<String, dynamic> json) {
+    String name = json['name'] ?? 'No name';
+    print(json['name']);
+    print(json['village']);
+    if (name == 'Baby Dragon' && json['village'] == 'builderBase') {
+      name = 'Baby Dragon 2';
+    }
+
     return Troop(
-      name: json['name'] ?? 'No name',
+      name: name,
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
       village: json['village'] ?? 'home',
@@ -204,6 +212,8 @@ class Spell {
   final int level;
   final int maxLevel;
   final String village; // "home" or "builderBase"
+  late String imageUrl;
+  late String type;
 
   Spell(
       {required this.name,
@@ -244,8 +254,7 @@ class PlayerService {
             'tag': playerStats.tag,
             'imageUrl': playerStats.townHallPic,
             'name': playerStats.name,
-            'townHallLevel':
-                playerStats.townHallLevel, // Stockez comme int pour le tri
+            'townHallLevel': playerStats.townHallLevel,
           });
           playerAccounts.playerAccountInfo.add(playerStats);
 
@@ -284,13 +293,11 @@ class PlayerService {
       playerStats.townHallPic =
           await fetchPlayerTownHallByTownHallLevel(playerStats.townHallLevel);
 
-
-      for (var troop in playerStats.troops) {
-        Map<String, String> urlAndType = await fetchTroopImageUrl(troop.name);
-        troop.imageUrl = urlAndType['url'] ?? 'default_image_url';
-        troop.type = urlAndType['type'] ?? 'unknown';
-      }
-
+      playerStats.builderHallPic = await fetchPlayerBuilderHallByTownHallLevel(
+          playerStats.builderHallLevel);
+      await fetchImagesAndTypes(playerStats.troops);
+      await fetchImagesAndTypes(playerStats.heroes);
+      await fetchImagesAndTypes(playerStats.spells);
       return playerStats;
     } else {
       throw Exception('Failed to load player stats');
@@ -307,6 +314,20 @@ class PlayerService {
           'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-16.png';
     }
     return townHallPic;
+  }
+
+  Future<String> fetchPlayerBuilderHallByTownHallLevel(
+      int builderHallLevel) async {
+    String builderHallPic;
+    if (builderHallLevel >= 1 && builderHallLevel <= 10) {
+      builderHallPic =
+          'https://clashkingfiles.b-cdn.net/builder-base/builder-hall-pics/Building_BB_Builder_Hall_level_$builderHallLevel.png';
+    } else {
+      builderHallPic =
+          'https://clashkingfiles.b-cdn.net/builder-base/builder-hall-pics/Building_BB_Builder_Hall_level_8.png';
+    }
+
+    return builderHallPic;
   }
 
   Future<ClanInfo> fetchClanInfo(String clanTag) async {
@@ -348,8 +369,16 @@ class PlayerService {
     }
   }
 
+  Future<void> fetchImagesAndTypes(List<dynamic> items) async {
+    for (var item in items) {
+      Map<String, String> urlAndType = await fetchTroopImageUrl(item.name);
+      item.imageUrl = urlAndType['url'] ??
+          'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
+      item.type = urlAndType['type'] ?? 'unknown';
+    }
+  }
+
   Future<Map<String, String>> fetchTroopImageUrl(String name) async {
-    print("troop name: $name");
     if (troopUrlsAndTypes.containsKey(name)) {
       // If the troop name is in the map, return the corresponding URL and type
       return troopUrlsAndTypes[name]!;
