@@ -5,6 +5,7 @@ import 'package:clashkingapp/main_pages/dashboard_page.dart';
 import 'package:clashkingapp/main_pages/clan_page.dart';
 import 'package:clashkingapp/main_pages/current_war_page.dart';
 import 'package:clashkingapp/main_pages/management_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/core/my_app.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -86,20 +87,20 @@ class MyHomePageState extends State<MyHomePage> {
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                     icon: Icon(Icons.dashboard),
-                    label: 'Dashboard',
+                    label: AppLocalizations.of(context)?.dashboard ?? 'Dashboard',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.shield),
-                    label: 'Clans',
+                    label: AppLocalizations.of(context)?.clan ?? 'Clan',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(
                         CustomIcons.swordCross), // Example icon for War/League
-                    label: 'War/League',
+                    label: AppLocalizations.of(context)?.warLeague ?? 'War/League',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.settings),
-                    label: 'Management',
+                    label: AppLocalizations.of(context)?.management ?? 'Management',
                   ),
                 ],
                 currentIndex: _selectedIndex,

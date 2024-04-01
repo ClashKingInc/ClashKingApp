@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
+import 'package:intl/intl.dart';
 import 'dart:ui';
+import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
@@ -161,18 +162,12 @@ class StatsScreenState extends State<StatsScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 10),
-                        buildItemSection(
-                            widget.playerStats.heroes, 'hero', 'Heroes'),
-                        buildItemSection(
-                            widget.playerStats.troops, 'troop', 'Troops'),
-                        buildItemSection(widget.playerStats.troops,
-                            'super-troop', 'Super Troops'),
-                        buildItemSection(
-                            widget.playerStats.troops, 'pet', 'Pets'),
-                        buildItemSection(widget.playerStats.troops,
-                            'siege-machine', 'Machine Siege'),
-                        buildItemSection(
-                            widget.playerStats.spells, 'spell', 'Spells')
+                        buildItemSection(widget.playerStats.heroes, 'hero', AppLocalizations.of(context)?.heroes ?? 'Heroes'),
+                        buildItemSection(widget.playerStats.troops, 'troop', AppLocalizations.of(context)?.troops ?? 'Troops'),
+                        buildItemSection(widget.playerStats.troops, 'super-troop', AppLocalizations.of(context)?.superTroops ?? 'Super Troops'),
+                        buildItemSection(widget.playerStats.troops, 'pet', AppLocalizations.of(context)?.pets ?? 'Pets'),
+                        buildItemSection(widget.playerStats.troops, 'siege-machine', AppLocalizations.of(context)?.siegeMachines ?? 'Siege Machine'),
+                        buildItemSection(widget.playerStats.spells, 'spell', AppLocalizations.of(context)?.spells ?? 'Spells')
                       ],
                     ),
                   ),
@@ -186,10 +181,8 @@ class StatsScreenState extends State<StatsScreen>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 10),
-                          buildItemSection(
-                              widget.playerStats.heroes, 'bb-hero', 'Heroes'),
-                          buildItemSection(
-                              widget.playerStats.troops, 'bb-troop', 'Troops'),
+                          buildItemSection(widget.playerStats.heroes, 'bb-hero', AppLocalizations.of(context)?.heroes ?? 'Heroes'),
+                          buildItemSection(widget.playerStats.troops, 'bb-troop', AppLocalizations.of(context)?.troops ?? 'Troops'),
                         ]),
                   ),
                 ),
@@ -233,11 +226,11 @@ class StatsScreenState extends State<StatsScreen>
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
               child: Image.network(
-                  data['url'] ??
-                      "https://clashkingfiles.b-cdn.net/clashkinglogo.png",
-                  height: 40,
-                  width: 40,
-                  fit: BoxFit.cover),
+                data['url'] ?? "https://clashkingfiles.b-cdn.net/clashkinglogo.png",
+                height: 40,
+                width: 40,
+                fit: BoxFit.cover
+              ),
             ),
           ),
         );
@@ -286,8 +279,8 @@ class StatsScreenState extends State<StatsScreen>
                                           right: 1,
                                           bottom: 1,
                                           child: Container(
-                                            height: 16, // Hauteur fixe
-                                            width: 16, // Largeur fixe
+                                            height: 16,
+                                            width: 16,
                                             padding: EdgeInsets.all(1),
                                             decoration: BoxDecoration(
                                               color: item.level == item.maxLevel
@@ -325,13 +318,28 @@ class StatsScreenState extends State<StatsScreen>
   }
 
   List<Widget> buildAllHallChips() {
+
+    String getRoleText(String role) {
+      switch (role) {
+        case 'leader':
+          return AppLocalizations.of(context)?.leader ?? 'Leader';
+        case 'coLeader':
+          return AppLocalizations.of(context)?.coLeader ?? 'Co-Leader';
+        case 'admin':
+          return AppLocalizations.of(context)?.elder ?? 'Elder';
+        case 'member':
+          return AppLocalizations.of(context)?.member ?? 'Member';
+        default:
+          return 'No clan';
+      }
+    }
+
     return [
       Chip(
         avatar: CircleAvatar(
           backgroundColor:
               Colors.transparent, // Set to a suitable color for your design.
-          child: Image.network(
-              "https://clashkingfiles.b-cdn.net/icons/Clan_Badge_Border_2.png"),
+          child: Image.network(widget.playerStats.clan.badgeUrls.small),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -348,7 +356,7 @@ class StatsScreenState extends State<StatsScreen>
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          widget.playerStats.role,
+          getRoleText(widget.playerStats.role),
           style: Theme.of(context).textTheme.labelSmall,
         ),
       ),
@@ -360,7 +368,7 @@ class StatsScreenState extends State<StatsScreen>
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          "TH${widget.playerStats.townHallLevel}",
+          "${AppLocalizations.of(context)?.th ?? 'TH'}${widget.playerStats.townHallLevel}",
           style: Theme.of(context).textTheme.labelSmall,
         ),
       ),
@@ -413,7 +421,7 @@ class StatsScreenState extends State<StatsScreen>
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          widget.playerStats.clanCapitalContributions.toString(),
+          NumberFormat('#,###', 'fr_FR').format(widget.playerStats.clanCapitalContributions).replaceAll(',', ' '),
           style: Theme.of(context).textTheme.labelSmall,
         ),
       ),
@@ -457,6 +465,25 @@ class StatsScreenState extends State<StatsScreen>
           avatar: CircleAvatar(
             backgroundColor:
                 Colors.transparent, // Set to a suitable color for your design.
+            child: widget.playerStats.warPreference == 'in'
+                ? SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: Image.network(
+                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png"))
+                    : Image.network(
+                    'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png'),
+          ),
+          labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+          label: Text(
+            widget.playerStats.warPreference.toString(),
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
+        ),
+        Chip(
+          avatar: CircleAvatar(
+            backgroundColor:
+                Colors.transparent, // Set to a suitable color for your design.
             child: Image.network(
                 "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attacks_No_Shield.png"),
           ),
@@ -476,22 +503,6 @@ class StatsScreenState extends State<StatsScreen>
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
             widget.playerStats.defenseWins.toString(),
-            style: Theme.of(context).textTheme.labelSmall,
-          ),
-        ),
-        Chip(
-          avatar: CircleAvatar(
-            backgroundColor:
-                Colors.transparent, // Set to a suitable color for your design.
-            child: widget.playerStats.warPreference == 'in'
-                ? Image.network(
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png")
-                : Image.network(
-                    'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png'),
-          ),
-          labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-          label: Text(
-            widget.playerStats.warPreference.toString(),
             style: Theme.of(context).textTheme.labelSmall,
           ),
         ),
@@ -527,7 +538,7 @@ class StatsScreenState extends State<StatsScreen>
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
-            "BH ${widget.playerStats.builderHallLevel}",
+            "${AppLocalizations.of(context)?.bh ?? 'BH'}${widget.playerStats.builderHallLevel}",
             style: Theme.of(context).textTheme.labelSmall,
           ),
         ),
