@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'dart:ui';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+class PlayerTab {
+  String tag;
+  String name;
+  int townhallLevel;
+  int mapPosition;
+
+  PlayerTab(this.tag, this.name,this.townhallLevel, this.mapPosition);
+}
 
 class CurrentWarInfoScreen extends StatefulWidget {
   final CurrentWarInfo currentWarInfo;
@@ -17,12 +27,21 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
     with TickerProviderStateMixin {
   late TabController tabController;
   late TabController subTabController;
+  List<PlayerTab> playerTab = [];
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 3, vsync: this);
     subTabController = TabController(length: 2, vsync: this);
+
+    for (var member in widget.currentWarInfo.clan.members) { 
+      playerTab.add(PlayerTab(member.tag, member.name, member.townhallLevel, member.mapPosition));
+    }
+
+    for (var member in widget.currentWarInfo.opponent.members) { 
+      playerTab.add(PlayerTab(member.tag, member.name, member.townhallLevel, member.mapPosition));
+    }
   }
 
   @override
@@ -30,6 +49,21 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
     tabController.dispose();
     subTabController.dispose();
     super.dispose();
+  }
+
+  String getPlayerNameByTag(String defenderTag) {
+    PlayerTab? player = playerTab.firstWhere((p) => p.tag == defenderTag, orElse: () => PlayerTab('', 'Inconnu', 0, 0));
+    return player.name;
+  }
+
+  String getPlayerTownhallByTag(String defenderTag) {
+    PlayerTab? player = playerTab.firstWhere((p) => p.tag == defenderTag, orElse: () => PlayerTab('', 'Inconnu', 0, 0));
+    return player.townhallLevel.toString();
+  }
+
+  String getPlayerMapPositionByTag(String defenderTag) {
+    PlayerTab? player = playerTab.firstWhere((p) => p.tag == defenderTag, orElse: () => PlayerTab('', 'Inconnu', 0, 0));
+    return player.mapPosition.toString();
   }
 
   @override
@@ -76,13 +110,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                           Text(
                             widget.currentWarInfo.clan.name,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary),
+                            style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
                           ),
                         ],
                       ),
@@ -97,18 +125,13 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.network(
-                              widget.currentWarInfo.opponent.badgeUrls.large,
-                              width: 100),
+                            widget.currentWarInfo.opponent.badgeUrls.large,
+                            width: 100
+                          ),
                           Text(
                             widget.currentWarInfo.opponent.name,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary),
+                            style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
                           )
                         ],
                       ),
@@ -135,23 +158,32 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
             print('Tab $value selected');
           },
           tabs: [
-            Tab(text: 'Statistics'),
-            Tab(text: 'Events'),
-            Tab(text: 'Rosters')
+            Tab(text: AppLocalizations.of(context)?.statistics ?? 'Statistics'),
+            Tab(text: AppLocalizations.of(context)?.events ?? 'Events'),
+            Tab(text: AppLocalizations.of(context)?.team ?? 'Teams')
           ],
           children: [
             ListTile(
               title: buildStatisticsTab(context),
             ),
             ListTile(title: buildEventsTab(context)),
-            ListTile(title: buildRosterTab(context)),
+            ListTile(title: buildTeamsTab(context)),
           ])
     ])));
   }
 
   Widget timeLeft() {
     DateTime now = DateTime.now();
-    Duration difference = widget.currentWarInfo.endTime.difference(now);
+    Duration difference = Duration.zero;
+    String state = '';
+
+    if (widget.currentWarInfo.state == 'preparation') {
+      difference = widget.currentWarInfo.startTime.difference(now);
+      state = AppLocalizations.of(context)?.startsIn ?? 'Starting in';
+    } else if (widget.currentWarInfo.state == 'inWar') {
+      difference = widget.currentWarInfo.endTime.difference(now);
+      state = AppLocalizations.of(context)?.endsIn ?? 'Ends in';
+    }
 
     String hours = difference.inHours.toString().padLeft(2, '0');
     String minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
@@ -160,11 +192,8 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Center(
         child: Text(
-          'Ending in $hours:$minutes',
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          '$state $hours:$minutes',
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
         ),
       ),
     );
@@ -183,36 +212,6 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
         widget.currentWarInfo.opponent.attacks /
             (widget.currentWarInfo.teamSize * 2);
 
-    /*Map<String, int> countStars(List<WarMember> members) {
-      int threeStars = 0, twoStars = 0, oneStar = 0, noStars = 0;
-
-      for (final member in members) {
-        for (final attack in member.attacks ?? []) {
-          switch (attack.stars) {
-            case 3:
-              threeStars++;
-              break;
-            case 2:
-              twoStars++;
-              break;
-            case 1:
-              oneStar++;
-              break;
-            case 0:
-              noStars++;
-              break;
-          }
-        }
-      }
-
-      return {
-        'threeStars': threeStars,
-        'twoStars': twoStars,
-        'oneStar': oneStar,
-        'noStars': noStars,
-      };
-    }*/
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -224,7 +223,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: Column(
             children: [
-              Text('Attacks'),
+              Text(AppLocalizations.of(context)?.attacks ?? 'Attacks'),
               Row(
                 children: [
                   Expanded(
@@ -273,7 +272,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                 ],
               ),
               SizedBox(height: 10),
-              Text('Stars'),
+              Text(AppLocalizations.of(context)?.stars ?? 'Stars'),
               Row(
                 children: [
                   Expanded(
@@ -325,61 +324,83 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
           ),
         ),
       ],
-
-      // Statistiques d'étoiles pour chaque clan
-      /*Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Column(
-            children: [
-              Text('Clan 3 Stars: ${clanStarCounts['threeStars']}'),
-              Text('Clan 2 Stars: ${clanStarCounts['twoStars']}'),
-              Text('Clan 1 Star: ${clanStarCounts['oneStar']}'),
-              Text('Clan 0 Stars: ${clanStarCounts['noStars']}'),
-              Text('Opponent 3 Stars: ${opponentStarCounts['threeStars']}'),
-              Text('Opponent 2 Stars: ${opponentStarCounts['twoStars']}'),
-              Text('Opponent 1 Star: ${opponentStarCounts['oneStar']}'),
-              Text('Opponent 0 Stars: ${opponentStarCounts['noStars']}'),
-            ],
-          ),
-        ),*/
-      // Ajout d'autres statistiques si nécessaire
     );
   }
 
   Widget buildEventsTab(BuildContext context) {
-    // Placeholder pour les événements, ajoute ta propre logique ici
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        // Pourcentage de destruction pour chaque clan
-        Center(
-          child: Text('First line of content for Events'),
-        )
-      ],
+    // Étape 1: Rassembler toutes les attaques en une seule liste.
+    List<Map<String, dynamic>> allAttacks = [];
+    widget.currentWarInfo.clan.members.forEach((member) {
+      member.attacks?.forEach((attack) {
+        allAttacks.add({
+          "attackerName": member.name,
+          "attackerTag": member.tag,
+          "defenderTag": attack.defenderTag,
+          "stars": attack.stars,
+          "destructionPercentage": attack.destructionPercentage,
+          "order": attack.order,
+        });
+      });
+    });
+    widget.currentWarInfo.opponent.members.forEach((member) {
+      member.attacks?.forEach((attack) {
+        allAttacks.add({
+          "attackerName": member.name,
+          "attackerTag": member.tag,
+          "defenderTag": attack.defenderTag,
+          "stars": attack.stars,
+          "destructionPercentage": attack.destructionPercentage,
+          "order": attack.order,
+        });
+      });
+    });
+
+    // Étape 2: Trier les attaques par ordre décroissant basé sur "order".
+    allAttacks.sort((a, b) => b["order"].compareTo(a["order"]));
+
+    // Étape 3: Utiliser ListView.builder pour afficher les attaques.
+    return ListView.builder(
+      shrinkWrap: true, // Important pour des widgets déroulables imbriqués.
+      physics: ClampingScrollPhysics(), // Fournit un meilleur comportement de défilement.
+      itemCount: allAttacks.length,
+      itemBuilder: (context, index) {
+        var attack = allAttacks[index];
+        return ListTile(
+          title: Text("${getPlayerMapPositionByTag(attack["attackerTag"])}- ${attack["attackerName"]} - ${attack["destructionPercentage"]}%", style: TextStyle(fontSize: 16), maxLines: 1, overflow: TextOverflow.ellipsis),
+          subtitle: Text("On ${getPlayerMapPositionByTag(attack["defenderTag"])}- ${getPlayerNameByTag(attack["defenderTag"])}, #${attack["order"]}", maxLines: 1, overflow: TextOverflow.ellipsis),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: generateStars(attack["stars"]),
+          ),
+        );
+      },
     );
   }
 
-  Widget buildRosterTab(BuildContext context) {
-    // Placeholder pour les rosters, ajoute ta propre logique ici
+  Widget buildTeamsTab(BuildContext context) {
     return ScrollableTab(
-        labelColor: Colors.black,
-        onTap: (value) {
-          print('Tab $value selected');
-        },
-        tabs: [
-          Tab(text: 'Membres'),
-          Tab(text: 'Ennemis'),
-        ],
-        children: [
-          ListTile(
-            title: buildMemberListView(
-                widget.currentWarInfo.clan.members, context),
-          ),
-          ListTile(
-            title: buildMemberListView(
-                widget.currentWarInfo.opponent.members, context),
-          )
-        ]);
+      padding: EdgeInsets.zero,
+      labelColor: Colors.black,
+      onTap: (value) {
+        print('Tab $value selected');
+      },
+      tabs: [
+        Tab(text: AppLocalizations.of(context)?.myTeam ?? 'My team'),
+        Tab(text: AppLocalizations.of(context)?.enemiesTeam ?? 'Enemies'),
+      ],
+      children: [
+        Padding(
+          padding: EdgeInsets.zero,
+          child: buildMemberListView(
+              widget.currentWarInfo.clan.members, context),
+        ),
+        Padding(
+          padding: EdgeInsets.zero,
+          child: buildMemberListView(
+              widget.currentWarInfo.opponent.members, context),
+        )
+      ]
+    );
   }
 
   Widget buildMemberListView(List<WarMember> members, BuildContext context) {
@@ -394,43 +415,43 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
           details.add(
             Row(
               children: <Widget>[
-                Expanded(child: Text(attack.defenderTag)),
+                Expanded(
+                  child: Text('${getPlayerTownhallByTag(attack.defenderTag)}- ${getPlayerNameByTag(attack.defenderTag)}', 
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis)
+                ),
                 Text('${attack.destructionPercentage}% - '),
                 ...generateStars(attack.stars), 
               ],
             ),
           );
         }
-        // Assurez-vous d'avoir deux messages d'attaque si nécessaire
         for (int i = details.length;
             i < widget.currentWarInfo.attacksPerMember;
             i++) {
-          details.add(Text('Attack ${i + 1} not done yet'));
+          details.add(Text('${AppLocalizations.of(context)?.attack ?? 'Attack'} ${i + 1} ${AppLocalizations.of(context)?.notUsed ?? 'not used'}', maxLines: 1, overflow: TextOverflow.ellipsis));
         }
       } else {
-        // Aucune attaque n'a été réalisée
+        // No attacks done
         for (int i = 0; i < widget.currentWarInfo.attacksPerMember; i++) {
-          details.add(Text('Attack ${i + 1} not done yet'));
+          details.add(Text('${AppLocalizations.of(context)?.attack ?? 'Attack'} ${i + 1} ${AppLocalizations.of(context)?.notUsed ?? 'not used'}', maxLines: 1, overflow: TextOverflow.ellipsis));
         }
       }
 
-      details.add(Text('Defense(s) : ${member.opponentAttacks}'));
+      details.add(Text('${AppLocalizations.of(context)?.defense ?? 'Defense'}(s) : ${member.opponentAttacks}', maxLines: 1, overflow: TextOverflow.ellipsis));
 
-      // Ajouter les détails de la meilleure attaque de l'opposant, si disponible
       if (member.bestOpponentAttack != null) {
         var bestAttack = member.bestOpponentAttack!;
         details.add(
           Row(
-            mainAxisAlignment: MainAxisAlignment
-                .spaceBetween, // Étend les éléments sur l'axe horizontal
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              // Informations de la meilleure attaque à gauche
               Expanded(
                 child: Text(
-                  'Best : ${bestAttack.order}- ${bestAttack.defenderTag}',
+                  '${getPlayerTownhallByTag(bestAttack.defenderTag)}- ${getPlayerMapPositionByTag(bestAttack.defenderTag)}- ${getPlayerNameByTag(bestAttack.attackerTag)}',
                   style: TextStyle(fontSize: 14),
-                  overflow:
-                      TextOverflow.ellipsis, // Gère le débordement de texte
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis
                 ),
               ),
               // Étoiles alignées à droite
@@ -452,6 +473,8 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
         title: Text(
           '${member.mapPosition}- ${member.name}',
           style: TextStyle(fontWeight: FontWeight.bold),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -459,15 +482,16 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
             ...details,
           ],
         ),
-        trailing: Icon(
-          (member.attacks?.length ?? 0) ==
-                  widget.currentWarInfo.attacksPerMember
-              ? Icons.check
-              : Icons.close,
-          color: (member.attacks?.length ?? 0) ==
-                  widget.currentWarInfo.attacksPerMember
-              ? Colors.green
-              : Colors.red,
+        trailing: Padding(
+          padding: EdgeInsets.only(left: 6), // Ajoute un padding à gauche de 10 pixels
+          child: Icon(
+            (member.attacks?.length ?? 0) == widget.currentWarInfo.attacksPerMember
+                ? Icons.check
+                : Icons.close,
+            color: (member.attacks?.length ?? 0) == widget.currentWarInfo.attacksPerMember
+                ? Colors.green
+                : Colors.red,
+          ),
         ),
         onTap: () {
           // Action sur le tap
