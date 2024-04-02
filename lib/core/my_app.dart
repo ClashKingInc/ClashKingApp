@@ -92,12 +92,12 @@ class MyApp extends StatelessWidget {
                     fontWeight: FontWeight.w500),
                 labelLarge: TextStyle(
                     color: Colors.black,
-                    fontSize: 16,
+                    fontSize: 12,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.w500),
                 labelMedium: TextStyle(
                     color: Colors.black,
-                    fontSize: 14,
+                    fontSize: 10,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.w500),
                 labelSmall: TextStyle(

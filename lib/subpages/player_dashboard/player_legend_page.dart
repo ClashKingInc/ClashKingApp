@@ -115,44 +115,56 @@ class LegendScreenState extends State<LegendScreen>
                                       Wrap(
                                         spacing:
                                             4, // gap between adjacent chips
-                                        runSpacing: 4, // gap between lines
+                                        runSpacing: 0, // gap between lines
                                         children: <Widget>[
                                           Chip(
                                             label: Text(
                                                 '${snapshot.data!['tag']}',
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .bodySmall),
+                                                    .labelMedium),
+                                            labelPadding: EdgeInsets.zero,
                                             backgroundColor: Colors.transparent,
                                           ),
                                           Chip(
                                             avatar: CircleAvatar(
-                                              backgroundColor: Colors
-                                                  .transparent, // Set to a suitable color for your design.
-                                              child: Image.network(
-                                                      "https://clashkingfiles.b-cdn.net/country-flags/${snapshot.data?['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")
-                                             // Using Container() as a fallback
-                                            ),
+                                                backgroundColor: Colors
+                                                    .transparent, // Set to a suitable color for your design.
+                                                child: Image.network(
+                                                    "https://clashkingfiles.b-cdn.net/country-flags/${snapshot.data?['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")
+                                                // Using Container() as a fallback
+                                                ),
                                             label: Text(
                                                 '${snapshot.data!['rankings']['country_name'] ?? 'Unknown Country'}',
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .bodySmall),
+                                                    .labelMedium),
+                                            labelPadding: EdgeInsets.zero,
                                             backgroundColor: Colors.transparent,
                                           ),
                                           Chip(
                                             label: Text(
                                                 '${snapshot.data!['rankings']['local_rank']}',
-                                                style: Theme.of(context)
+                                               style: Theme.of(context)
                                                     .textTheme
-                                                    .bodySmall),
+                                                    .labelMedium),
+                                            labelPadding: EdgeInsets.zero,
                                             backgroundColor: Colors.transparent,
                                           ),
                                           Chip(
+                                            avatar: CircleAvatar(
+                                                backgroundColor: Colors
+                                                    .transparent, // Set to a suitable color for your design.
+                                                child: Image.network(
+                                                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png")
+                                                // Using Container() as a fallback
+                                                ),
                                             label: Text(
                                                 '${snapshot.data!['rankings']['global_rank']}',
-                                                style: TextStyle(
-                                                    color: Colors.black)),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelMedium),
+                                            labelPadding: EdgeInsets.zero,
                                             backgroundColor:
                                                 Colors.white.withOpacity(0.5),
                                           ),

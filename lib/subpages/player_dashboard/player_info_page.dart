@@ -331,7 +331,7 @@ class StatsScreenState extends State<StatsScreen>
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
           widget.playerStats.clan.name,
-          style: Theme.of(context).textTheme.labelSmall,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
       Chip(
@@ -344,7 +344,7 @@ class StatsScreenState extends State<StatsScreen>
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
           widget.playerStats.role,
-          style: Theme.of(context).textTheme.labelSmall,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
       Chip(
@@ -356,7 +356,7 @@ class StatsScreenState extends State<StatsScreen>
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
           "TH${widget.playerStats.townHallLevel}",
-          style: Theme.of(context).textTheme.labelSmall,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
       Chip(
@@ -369,7 +369,7 @@ class StatsScreenState extends State<StatsScreen>
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
           '${widget.playerStats.expLevel}',
-          style: Theme.of(context).textTheme.labelSmall,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
       Chip(
@@ -378,7 +378,7 @@ class StatsScreenState extends State<StatsScreen>
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
           '${widget.playerStats.donations}',
-          style: Theme.of(context).textTheme.labelSmall,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
       Chip(
@@ -387,7 +387,7 @@ class StatsScreenState extends State<StatsScreen>
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
           '${widget.playerStats.donationsReceived}',
-          style: Theme.of(context).textTheme.labelSmall,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
       Chip(
@@ -396,7 +396,7 @@ class StatsScreenState extends State<StatsScreen>
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
           '${(widget.playerStats.donations / (widget.playerStats.donationsReceived == 0 ? 1 : widget.playerStats.donationsReceived)).toStringAsFixed(2)}',
-          style: Theme.of(context).textTheme.labelSmall,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
       Chip(
@@ -409,7 +409,7 @@ class StatsScreenState extends State<StatsScreen>
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
           widget.playerStats.clanCapitalContributions.toString(),
-          style: Theme.of(context).textTheme.labelSmall,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
     ];
@@ -432,7 +432,7 @@ class StatsScreenState extends State<StatsScreen>
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
             widget.playerStats.trophies.toString(),
-            style: Theme.of(context).textTheme.labelSmall,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
         Chip(
@@ -445,7 +445,7 @@ class StatsScreenState extends State<StatsScreen>
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
             widget.playerStats.bestTrophies.toString(),
-            style: Theme.of(context).textTheme.labelSmall,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
         Chip(
@@ -458,7 +458,7 @@ class StatsScreenState extends State<StatsScreen>
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
             widget.playerStats.attackWins.toString(),
-            style: Theme.of(context).textTheme.labelSmall,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
         Chip(
@@ -471,7 +471,7 @@ class StatsScreenState extends State<StatsScreen>
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
             widget.playerStats.defenseWins.toString(),
-            style: Theme.of(context).textTheme.labelSmall,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
         Chip(
@@ -487,7 +487,7 @@ class StatsScreenState extends State<StatsScreen>
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
             widget.playerStats.warPreference.toString(),
-            style: Theme.of(context).textTheme.labelSmall,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
         Chip(
@@ -500,7 +500,7 @@ class StatsScreenState extends State<StatsScreen>
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
             '${widget.playerStats.warStars}',
-            style: Theme.of(context).textTheme.labelSmall,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
       ],
@@ -523,7 +523,7 @@ class StatsScreenState extends State<StatsScreen>
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
             "BH ${widget.playerStats.builderHallLevel}",
-            style: Theme.of(context).textTheme.labelSmall,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
         Chip(
@@ -536,7 +536,7 @@ class StatsScreenState extends State<StatsScreen>
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
             widget.playerStats.builderBaseTrophies.toString(),
-            style: Theme.of(context).textTheme.labelSmall,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
         Chip(
@@ -549,7 +549,7 @@ class StatsScreenState extends State<StatsScreen>
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
             widget.playerStats.bestBuilderBaseTrophies.toString(),
-            style: Theme.of(context).textTheme.labelSmall,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
       ],

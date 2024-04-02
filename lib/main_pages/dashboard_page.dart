@@ -95,7 +95,7 @@ class PlayerStatsCard extends StatelessWidget {
         );
       },
       child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.labelSmall ?? TextStyle(),
+        style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -108,7 +108,7 @@ class PlayerStatsCard extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           playerStats.name,
-                          style: Theme.of(context).textTheme.labelSmall,
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
                         SizedBox(
                           height: 100,
@@ -117,7 +117,7 @@ class PlayerStatsCard extends StatelessWidget {
                         ),
                         Text(
                           '${playerStats.tag}',
-                          style: Theme.of(context).textTheme.labelSmall,
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
                       ],
                     ),
@@ -142,7 +142,7 @@ class PlayerStatsCard extends StatelessWidget {
                                     EdgeInsets.only(left: 2.0, right: 2.0),
                                 label: Text(
                                   playerStats.clan.name,
-                                  style: Theme.of(context).textTheme.labelSmall,
+                                  style: Theme.of(context).textTheme.labelLarge,
                                 ),
                               ),
                               Chip(
@@ -159,7 +159,7 @@ class PlayerStatsCard extends StatelessWidget {
                                     EdgeInsets.only(left: 2.0, right: 2.0),
                                 label: Text(
                                   playerStats.warPreference.toString(),
-                                  style: Theme.of(context).textTheme.labelSmall,
+                                  style: Theme.of(context).textTheme.labelLarge,
                                 ),
                               ),
                               Chip(
@@ -170,7 +170,7 @@ class PlayerStatsCard extends StatelessWidget {
                                 ),
                                 label: Text('${playerStats.townHallLevel}',
                                     style:
-                                        Theme.of(context).textTheme.labelSmall),
+                                        Theme.of(context).textTheme.labelLarge),
                                 labelPadding: EdgeInsets.zero,
                               ),
                               Chip(
@@ -182,7 +182,7 @@ class PlayerStatsCard extends StatelessWidget {
                                 ),
                                 label: Text('${playerStats.trophies}',
                                     style:
-                                        Theme.of(context).textTheme.labelSmall),
+                                        Theme.of(context).textTheme.labelLarge),
                                 labelPadding: EdgeInsets.zero,
                               ),
                               Chip(
@@ -191,7 +191,7 @@ class PlayerStatsCard extends StatelessWidget {
                                 labelPadding: EdgeInsets.zero,
                                 label: Text(
                                   '${(playerStats.donations / (playerStats.donationsReceived == 0 ? 1 : playerStats.donationsReceived)).toStringAsFixed(2)}',
-                                  style: Theme.of(context).textTheme.labelSmall,
+                                  style: Theme.of(context).textTheme.labelLarge,
                                 ),
                               ),
                               Chip(
@@ -203,7 +203,7 @@ class PlayerStatsCard extends StatelessWidget {
                                 ),
                                 label: Text('${playerStats.builderHallLevel}',
                                     style:
-                                        Theme.of(context).textTheme.labelSmall),
+                                        Theme.of(context).textTheme.labelLarge),
                                 labelPadding: EdgeInsets.zero,
                               ),
                               Chip(
@@ -216,7 +216,7 @@ class PlayerStatsCard extends StatelessWidget {
                                 label: Text(
                                     '${playerStats.builderBaseTrophies}',
                                     style:
-                                        Theme.of(context).textTheme.labelSmall),
+                                        Theme.of(context).textTheme.labelLarge),
                                 labelPadding: EdgeInsets.zero,
                               ),
                               Chip(
@@ -230,7 +230,7 @@ class PlayerStatsCard extends StatelessWidget {
                                     EdgeInsets.only(left: 2.0, right: 2.0),
                                 label: Text(
                                   '${playerStats.warStars}',
-                                  style: Theme.of(context).textTheme.labelSmall,
+                                  style: Theme.of(context).textTheme.labelLarge,
                                 ),
                               ),
                             ],
@@ -271,7 +271,7 @@ class PlayerLegendCard extends StatelessWidget {
         );
       },
       child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.labelSmall ?? TextStyle(),
+        style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -284,7 +284,7 @@ class PlayerLegendCard extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           "Legend League",
-                          style: Theme.of(context).textTheme.labelSmall,
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
                         SizedBox(
                           height: 100,
