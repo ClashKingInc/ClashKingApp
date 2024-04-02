@@ -116,6 +116,10 @@ class PlayerStatsCard extends StatelessWidget {
                           child: Image.network(playerStats.townHallPic),
                         ),
                         Text(
+                          playerStats.name,
+                          style: (Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold)) ?? TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
                           '${playerStats.tag}',
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
@@ -135,8 +139,7 @@ class PlayerStatsCard extends StatelessWidget {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
-                                  child: Image.network(
-                                      "https://clashkingfiles.b-cdn.net/icons/Clan_Badge_Border_2.png"),
+                                  child: Image.network(playerStats.clan.badgeUrls.small),
                                 ),
                                 labelPadding:
                                     EdgeInsets.only(left: 2.0, right: 2.0),

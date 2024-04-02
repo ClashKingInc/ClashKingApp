@@ -100,16 +100,36 @@ class Clan {
   final String tag;
   final String name;
   final int clanLevel;
-  // Include URLs for badges if needed
+  final BadgeUrls badgeUrls;
 
-  Clan({required this.tag, required this.name, required this.clanLevel});
+  Clan({required this.tag, required this.name, required this.clanLevel, required this.badgeUrls});
 
   factory Clan.fromJson(Map<String, dynamic> json) {
     return Clan(
       tag: json['tag'],
       name: json['name'],
       clanLevel: json['clanLevel'],
-      // Initialize URLs for badges from JSON if needed
+      badgeUrls: BadgeUrls.fromJson(json['badgeUrls']),
+    );
+  }
+}
+
+class BadgeUrls {
+  final String small;
+  final String large;
+  final String medium;
+
+  BadgeUrls({
+    required this.small,
+    required this.large,
+    required this.medium,
+  });
+
+  factory BadgeUrls.fromJson(Map<String, dynamic> json) {
+    return BadgeUrls(
+      small: json['small'],
+      large: json['large'],
+      medium: json['medium'],
     );
   }
 }
