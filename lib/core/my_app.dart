@@ -15,7 +15,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
                     .withOpacity(1.0), // 1.0 means 100% opacity
                 elevation: 2.0,
               ),
+              canvasColor: Colors.transparent,
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Color(0xFFFFFFFF), // primary color as the seed
                 primary: Color(0xFFC98910),
@@ -142,7 +143,7 @@ class MyAppState extends ChangeNotifier {
   void reloadData() async {
   if (selectedTag.value != null) {
     playerStats = playerAccounts?.playerAccountInfo.firstWhere((element) => element.tag == selectedTag.value);
-    clanInfo = playerAccounts?.clanInfo.firstWhere((element) => element.tag == playerStats?.clan?.tag);
+    clanInfo = playerAccounts?.clanInfo.firstWhere((element) => element.tag == playerStats?.clan.tag);
 
     final response = await http.get(
       Uri.parse('https://api.clashofclans.com/v1/clans/${playerStats?.tag.replaceAll('#', '%23')}/currentwar'),
@@ -152,7 +153,7 @@ class MyAppState extends ChangeNotifier {
     if (response.statusCode == 200) {
       var decodedResponse = jsonDecode(response.body);
       if (decodedResponse["state"] != "notInWar") { // Correctly check the "state" field as a string
-        currentWarInfo = playerAccounts?.warInfo?.firstWhere((element) => element.clan?.tag == playerStats?.clan?.tag);
+        currentWarInfo = playerAccounts?.warInfo.firstWhere((element) => element.clan.tag == playerStats?.clan.tag);
       }
     }
     notifyListeners();

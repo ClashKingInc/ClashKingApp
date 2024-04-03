@@ -106,10 +106,6 @@ class PlayerStatsCard extends StatelessWidget {
                   children: <Widget>[
                     Column(
                       children: <Widget>[
-                        Text(
-                          playerStats.name,
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
                         SizedBox(
                           height: 100,
                           width: 100,
@@ -117,10 +113,10 @@ class PlayerStatsCard extends StatelessWidget {
                         ),
                         Text(
                           playerStats.name,
-                          style: (Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold)) ?? TextStyle(fontWeight: FontWeight.bold),
+                          style: (Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold)) ?? TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          '${playerStats.tag}',
+                          playerStats.tag,
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
                       ],
@@ -193,7 +189,7 @@ class PlayerStatsCard extends StatelessWidget {
                                     color: Color.fromARGB(255, 0, 136, 255)),
                                 labelPadding: EdgeInsets.zero,
                                 label: Text(
-                                  '${(playerStats.donations / (playerStats.donationsReceived == 0 ? 1 : playerStats.donationsReceived)).toStringAsFixed(2)}',
+                                    (playerStats.donations / (playerStats.donationsReceived == 0 ? 1 : playerStats.donationsReceived)).toStringAsFixed(2),
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
                               ),

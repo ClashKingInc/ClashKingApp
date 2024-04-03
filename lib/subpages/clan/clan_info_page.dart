@@ -4,7 +4,7 @@ import 'package:clashkingapp/api/clan_info.dart';
 class ClanInfoScreen extends StatelessWidget {
   final ClanInfo clanInfo;
 
-  ClanInfoScreen({Key? key, required this.clanInfo}) : super(key: key);
+  ClanInfoScreen({super.key, required this.clanInfo});
 
   @override
   Widget build(BuildContext context) {

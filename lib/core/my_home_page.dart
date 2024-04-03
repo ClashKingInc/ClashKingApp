@@ -24,7 +24,6 @@ class MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _initializeAccounts() async {
-    print("User2: ${context.read<MyAppState>().user}");
     final appState = Provider.of<MyAppState>(context, listen: false);
     await appState.fetchPlayerAccounts(appState.user!);
   }

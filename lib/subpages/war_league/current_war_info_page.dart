@@ -16,7 +16,7 @@ class PlayerTab {
 class CurrentWarInfoScreen extends StatefulWidget {
   final CurrentWarInfo currentWarInfo;
 
-  CurrentWarInfoScreen({Key? key, required this.currentWarInfo}) : super(key: key);
+  CurrentWarInfoScreen({super.key, required this.currentWarInfo});
 
   @override
   CurrentWarInfoScreenState createState() => CurrentWarInfoScreenState();
@@ -314,7 +314,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
   Widget buildEventsTab(BuildContext context) {
     // Rassemblez toutes les attaques en une seule liste.
     List<Map<String, dynamic>> allAttacks = [];
-    widget.currentWarInfo.clan.members.forEach((member) {
+    for (var member in widget.currentWarInfo.clan.members) {
       member.attacks?.forEach((attack) {
         allAttacks.add({
           "attackerName": member.name,
@@ -326,8 +326,8 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
           "clan": 0
         });
       });
-    });
-    widget.currentWarInfo.opponent.members.forEach((member) {
+    }
+    for (var member in widget.currentWarInfo.opponent.members) {
       member.attacks?.forEach((attack) {
         allAttacks.add({
           "attackerName": member.name,
@@ -339,7 +339,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
           "clan": 1
         });
       });
-    });
+    }
 
     // Étape 2: Trier les attaques par ordre décroissant basé sur "order".
     allAttacks.sort((a, b) => b["order"].compareTo(a["order"]));

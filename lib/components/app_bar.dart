@@ -24,7 +24,6 @@ class CustomAppBarState extends State<CustomAppBar> {
   void initState() {
     super.initState();
     _loadSelectedTag().then((_) {
-      print('Selected tag: $selectedTag');
       if (selectedTag == null && widget.user.tags.isNotEmpty) {
         setState(() {
           selectedTag = widget.user.tags.first;
@@ -40,7 +39,6 @@ class CustomAppBarState extends State<CustomAppBar> {
   }
 
   Future<void> _saveSelectedTag(String tag) async {
-    print('Saving selected tag: $tag');
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('selectedTag', tag);
   }
@@ -51,6 +49,7 @@ class CustomAppBarState extends State<CustomAppBar> {
     widget.user.selectedTagDetails
         .sort((a, b) => b['townHallLevel'].compareTo(a['townHallLevel']));
     return AppBar(
+      automaticallyImplyLeading: false,
       title: ValueListenableBuilder<String?>(
         valueListenable: appState.selectedTag,
         builder: (context, selectedTag, child) {
@@ -98,9 +97,11 @@ class CustomAppBarState extends State<CustomAppBar> {
             GestureDetector(
               onTap: () async {
                 Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingsInfoScreen(user: widget.user)),
-              );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          SettingsInfoScreen(user: widget.user)),
+                );
               },
               child: CircleAvatar(
                 backgroundImage: NetworkImage(
@@ -113,6 +114,4 @@ class CustomAppBarState extends State<CustomAppBar> {
       ],
     );
   }
-
-  
 }

@@ -56,9 +56,8 @@ class CurrentWarInfoPage extends StatelessWidget {
     );
   }
   Future<bool> checkCurrentWar(PlayerAccountInfo playerStats) async {
-    print('${playerStats?.clan.tag.replaceAll('#', '%23')}');
     final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clans/${playerStats?.clan.tag.replaceAll('#', '%23')}/currentwar'),
+      Uri.parse('https://api.clashking.xyz/v1/clans/${playerStats.clan.tag.replaceAll('#', '%23')}/currentwar'),
       headers: {'Authorization': 'Bearer ${dotenv.env['API_KEY']}'},
     );
 
