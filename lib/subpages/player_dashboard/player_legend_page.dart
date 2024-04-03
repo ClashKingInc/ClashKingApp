@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import 'dart:ui';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/data/troop_data.dart';
+import 'package:clashkingapp/api/player_legend.dart';
 
 class LegendScreen extends StatefulWidget {
   final PlayerAccountInfo playerStats;
@@ -14,7 +14,6 @@ class LegendScreen extends StatefulWidget {
   final String firstTrophies;
   final List<dynamic> attacksList;
   final List<dynamic> defensesList;
-
 
   LegendScreen(
       {super.key,
@@ -34,12 +33,17 @@ class LegendScreenState extends State<LegendScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   DateTime selectedDate = DateTime.now();
+  Map<String, dynamic> dynamicLegendData = {};
+  late Future<List<dynamic>> seasonLegendData;
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
     selectedDate = DateTime.now();
+    dynamicLegendData = widget.legendData;
+    seasonLegendData =
+        PlayerLegendSeasonsService.fetchSeasonsData(widget.playerStats.tag);
   }
 
   @override
@@ -51,39 +55,51 @@ class LegendScreenState extends State<LegendScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-            child: Column(children: [
-      buildHeader(context),
-      ScrollableTab(
-        labelColor: Colors.black,
-        onTap: (value) {
-          print('Tab $value selected');
-          setState(() {});
-        },
-        tabs: [
-          Tab(text: "Today"),
-          Tab(text: "History"),
-        ],
-        children: [
-          Container(
-            color: Theme.of(context).colorScheme.tertiary,
-            child: ListTile(
-              title: widget.legendData["legends"].isNotEmpty
-                  ? buildLegendStats(widget.legendData)
-                  : Center(child: Text('No data available')),
-            ),
-          ),
-          Container(
-            color: Theme.of(context).colorScheme.tertiary,
-            constraints: BoxConstraints.expand(
-                width: double.infinity, height: double.infinity),
-            child: ListTile(title: buildLegendStats(widget.legendData)),
-          )
-        ],
-      )
-    ])));
+        body: RefreshIndicator(
+            onRefresh: () {
+              return PlayerLegendService.fetchLegendData(widget.playerStats.tag)
+                  .then((data) {
+                setState(() {
+                  dynamicLegendData = data;
+                });
+              });
+            },
+            child: SingleChildScrollView(
+                child: Column(children: [
+              buildHeader(context),
+              ScrollableTab(
+                labelColor: Colors.black,
+                onTap: (value) {
+                  print('Tab $value selected');
+                  setState(() {});
+                },
+                tabs: [
+                  Tab(text: "Today"),
+                  Tab(text: "History"),
+                ],
+                children: [
+                  Container(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    child: ListTile(
+                      title: dynamicLegendData["legends"].isNotEmpty
+                          ? buildLegendStats(dynamicLegendData)
+                          : Center(child: Text('No data available')),
+                    ),
+                  ),
+                  Container(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    child: ListTile(
+                      title: dynamicLegendData["legends"].isNotEmpty
+                          ? buildLegendHistoryStats(seasonLegendData)
+                          : Center(child: Text('No data available')),
+                    ),
+                  )
+                ],
+              )
+            ]))));
   }
 
+  // Header of the page
   Stack buildHeader(BuildContext context) {
     return Stack(
       clipBehavior: Clip.none,
@@ -120,13 +136,13 @@ class LegendScreenState extends State<LegendScreen>
                     child: Column(
                       children: [
                         Text(
-                          "${widget.legendData['name']}",
+                          "${dynamicLegendData['name']}",
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     color: Colors.white,
                                   ),
                         ),
-                        Text("${widget.legendData['tag']}",
+                        Text("${dynamicLegendData['tag']}",
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge
@@ -179,13 +195,13 @@ class LegendScreenState extends State<LegendScreen>
                                         avatar: CircleAvatar(
                                             backgroundColor: Colors.transparent,
                                             child: Image.network(
-                                                "https://clashkingfiles.b-cdn.net/country-flags/${widget.legendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
+                                                "https://clashkingfiles.b-cdn.net/country-flags/${dynamicLegendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
                                         label: Text(
-                                          widget.legendData['rankings']
+                                          dynamicLegendData['rankings']
                                                       ['country_name'] ==
                                                   null
                                               ? 'No Country'
-                                              : '${widget.legendData['rankings']['country_name']}',
+                                              : '${dynamicLegendData['rankings']['country_name']}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .labelMedium
@@ -204,13 +220,13 @@ class LegendScreenState extends State<LegendScreen>
                                         avatar: CircleAvatar(
                                             backgroundColor: Colors.transparent,
                                             child: Image.network(
-                                                "https://clashkingfiles.b-cdn.net/country-flags/${widget.legendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
+                                                "https://clashkingfiles.b-cdn.net/country-flags/${dynamicLegendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
                                         label: Text(
-                                          widget.legendData['rankings']
+                                          dynamicLegendData['rankings']
                                                       ['local_rank'] ==
                                                   null
                                               ? 'No rank'
-                                              : '${widget.legendData['rankings']['local_rank']}',
+                                              : '${dynamicLegendData['rankings']['local_rank']}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .labelMedium
@@ -234,11 +250,11 @@ class LegendScreenState extends State<LegendScreen>
                                             // Using Container() as a fallback
                                             ),
                                         label: Text(
-                                            widget.legendData['rankings']
+                                            dynamicLegendData['rankings']
                                                         ['local_rank'] ==
                                                     null
                                                 ? 'No rank'
-                                                : '${widget.legendData['rankings']['local_rank']}',
+                                                : '${dynamicLegendData['rankings']['local_rank']}',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .labelMedium
@@ -372,7 +388,8 @@ class LegendScreenState extends State<LegendScreen>
         .whereType<Map>()
         .map((item) => item['change'])
         .reduce((value, element) => value + element);
-    int count = list.whereType<Map>().length;
+    int count = list.whereType<Map>().length +
+        list.whereType<Map>().where((item) => item['change'] > 40).length;
     double average = sum / count;
     int remaining = 320 - count * 40;
     int bestPossibleTrophies = remaining + sum;
@@ -430,7 +447,7 @@ class LegendScreenState extends State<LegendScreen>
           SizedBox(height: 8),
           Text("Statistics", style: Theme.of(context).textTheme.bodyLarge),
           Text("Total: $count/8", style: Theme.of(context).textTheme.bodySmall),
-          Text('Average: $average',
+          Text('Average: ${average.toStringAsFixed(2)}',
               style: Theme.of(context).textTheme.bodySmall),
           Text('Remaining: +$remaining',
               style: Theme.of(context).textTheme.bodySmall),
@@ -447,7 +464,8 @@ class LegendScreenState extends State<LegendScreen>
         .whereType<Map>()
         .map((item) => item['change'])
         .reduce((value, element) => value + element);
-    int count = list.whereType<Map>().length;
+    int count = list.whereType<Map>().length +
+        list.whereType<Map>().where((item) => item['change'] > 40).length;
     double average = sum / count;
     int remaining = 320 - count * 40;
     int bestPossibleTrophies = remaining + sum;
@@ -505,7 +523,7 @@ class LegendScreenState extends State<LegendScreen>
           SizedBox(height: 8),
           Text("Statistics", style: Theme.of(context).textTheme.bodyLarge),
           Text("Total: $count/8", style: Theme.of(context).textTheme.bodySmall),
-          Text('Average: $average',
+          Text('Average: ${average.toStringAsFixed(2)}',
               style: Theme.of(context).textTheme.bodySmall),
           Text('Remaining: -$remaining',
               style: Theme.of(context).textTheme.bodySmall),
@@ -591,67 +609,153 @@ class LegendScreenState extends State<LegendScreen>
     }
   }
 
-  Widget buildLegendHistoryStats(Map<String, dynamic> data) {
-    List<Widget> cards = [];
-
-    data.forEach((date, details) {
-      List<Widget> attacks = details['attacks'] != null
-          ? (details['attacks'] as List)
-              .map((attack) => ListTile(
-                    leading: Icon(LucideIcons.sword,
-                        color: Colors.red), // Replace with appropriate icon
-                    title: Text('+${attack.toString()}'),
-                    subtitle: Text('unknown'), // Replace with actual time
-                  ))
-              .toList()
-          : [Text('No attacks')];
-
-      List<Widget> defenses = details['defenses'] != null
-          ? (details['defenses'] as List)
-              .map((defense) => ListTile(
-                    leading: Icon(Icons.shield,
-                        color: Colors.green), // Replace with appropriate icon
-                    title: Text(defense.toString()),
-                    subtitle: Text('unknown'), // Replace with actual time
-                  ))
-              .toList()
-          : [Text('No defenses')];
-
-      cards.add(
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
+  Widget buildLegendHistoryStats(Future<List<dynamic>> data) {
+    return FutureBuilder<List<dynamic>>(
+      future: data,
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          List<dynamic> data = snapshot.data!;
+          return Column(
+            children: data.map((item) {
+              return Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Offense',
-                          style: Theme.of(context).textTheme.titleMedium),
-                      ...attacks,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              SizedBox(
+                                height: 90,
+                                width: 80,
+                                child: Stack(
+                                  children: <Widget>[
+                                    Center(child :
+                                    Image.network(
+                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_No_Padding.png",
+                                      height: 80,
+                                    ),),
+                                    Align(
+                                      alignment: Alignment(0, -0.1),
+                                      child: Text(
+                                        DateFormat('MMMM\nyyyy').format(
+                                          DateTime(
+                                            int.parse(
+                                                item['season'].split('-')[0]),
+                                            int.parse(
+                                                item['season'].split('-')[1]),
+                                          ),
+                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium!
+                                            .copyWith(color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text("${item['clan']['name']}", style: Theme.of(context).textTheme.labelMedium),
+                            ],
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Wrap(
+                                  alignment: WrapAlignment.center,
+                                  spacing: 4.0,
+                                  runSpacing: 0.0, 
+                                  children: <Widget>[
+                                    Chip(
+                                        avatar: CircleAvatar(
+                                            backgroundColor: Colors.transparent,
+                                            child: Image.network(
+                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png")),
+                                        label: Text('${item['trophies']}')),
+                                    Chip(
+                                        avatar: CircleAvatar(
+                                            backgroundColor: Colors.transparent,
+                                            child: Image.network(
+                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
+                                        label: Text('${item['rank']}')),
+                                    Chip(
+                                        avatar: CircleAvatar(
+                                            backgroundColor: Colors.transparent,
+                                            child: Image.network(
+                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png")),
+                                        label: Text('${item['attackWins']}')),
+                                    Chip(
+                                        avatar: CircleAvatar(
+                                            backgroundColor: Colors.transparent,
+                                            child: Image.network(
+                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png")),
+                                        label: Text('${item['defenseWins']}')),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Defense',
-                          style: Theme.of(context).textTheme.titleMedium),
-                      ...defenses,
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    });
-
-    return ListView(
-      children: cards,
+              );
+            }).toList(),
+          );
+        }
+      },
     );
   }
 }
+
+/*
+return Card(
+                child: ListTile(
+                  leading: SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: Stack(
+                              children: <Widget>[
+                                Image.network(
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png",
+                                ),
+                                Positioned(
+                                  right: 30,
+                                  top: 32,
+                                  child: Text(
+                                    "${item['season']}",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Season: ${item['season']}'),
+                      Text('Trophies: ${item['trophies']}'),
+                      Text('Attack Wins: ${item['attackWins']}'),
+                      Text('Defense Wins: ${item['defenseWins']}'),
+                      Text('Rank: ${item['rank']}'),
+                      Text('Clan: ${item['clan']['name']}'),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          );*/

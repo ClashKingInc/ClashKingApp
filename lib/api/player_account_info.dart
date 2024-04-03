@@ -212,8 +212,6 @@ class Troop {
 
   factory Troop.fromJson(Map<String, dynamic> json) {
     String name = json['name'] ?? 'No name';
-    print(json['name']);
-    print(json['village']);
     if (name == 'Baby Dragon' && json['village'] == 'builderBase') {
       name = 'Baby Dragon 2';
     }

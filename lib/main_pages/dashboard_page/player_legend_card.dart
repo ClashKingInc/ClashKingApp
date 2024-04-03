@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/subpages/player_dashboard/player_legend_page.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class PlayerLegendCard extends StatelessWidget {
   const PlayerLegendCard({
@@ -114,14 +115,31 @@ class PlayerLegendCard extends StatelessWidget {
                           SizedBox(
                             height: 100,
                             width: 100,
-                            child: Image.network(
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png"),
+                            child: Stack(
+                              children: <Widget>[
+                                Image.network(
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png",
+                                ),
+                                Positioned(
+                                  right: 30,
+                                  top: 32,
+                                  child: Text(
+                                    currentTrophies,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                       SizedBox(width: 8),
                       Expanded(
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Wrap(
@@ -129,12 +147,27 @@ class PlayerLegendCard extends StatelessWidget {
                               spacing: 4.0, // gap between adjacent chips
                               runSpacing: 0.0, // gap between lines
                               children: <Widget>[
-                                Text(currentTrophies,
-                                    style:
-                                        Theme.of(context).textTheme.titleLarge),
-                                Column(children: [
-                                  Text(
-                                    "(${diffTrophies >= 0 ? '+' : ''}${diffTrophies.toString()})",
+                                Chip(
+                                    avatar:CircleAvatar(
+                                      backgroundColor: Colors.transparent,
+                                      child: Image.network(
+                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Start_Flag.png")),
+                                 
+                                    label: Text(firstTrophies,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium)),
+                                Chip(
+                                  avatar: Icon(
+                                    diffTrophies > 0
+                                        ? LucideIcons.chevronUp
+                                        : LucideIcons.chevronDown,
+                                    color: diffTrophies > 0
+                                        ? Colors.green
+                                        : Colors.red,
+                                  ),
+                                  label: Text(
+                                    "${diffTrophies >= 0 ? '+' : ''}${diffTrophies.toString()}",
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelMedium
@@ -143,8 +176,7 @@ class PlayerLegendCard extends StatelessWidget {
                                                 ? Colors.green
                                                 : Colors.red),
                                   ),
-                                  SizedBox(height: 32),
-                                ]),
+                                ),
                                 Chip(
                                   avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
