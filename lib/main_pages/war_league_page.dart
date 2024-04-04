@@ -106,7 +106,7 @@ class CurrentWarInfoCard extends StatelessWidget {
                 case 'warEnded':
                   return _warEnded(context);
                 default:
-                  return Text('Clan state unknown'); //Reste que ce cas à gérer
+                  return Text('Clan state unknown');
               }
             }(),
             ),
@@ -272,6 +272,4 @@ class CurrentWarInfoCard extends StatelessWidget {
       ],
     );
   }
-
-  
 }

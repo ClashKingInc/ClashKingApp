@@ -2,20 +2,18 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class CurrentWarInfo {
+class WarLeagueInfo {
   final String state;
   final int teamSize;
-  final int attacksPerMember;
   final DateTime preparationStartTime;
   final DateTime startTime;
   final DateTime endTime;
   final ClanWarDetails clan;
   final ClanWarDetails opponent;
 
-  CurrentWarInfo({
+  WarLeagueInfo({
     required this.state,
     required this.teamSize,
-    required this.attacksPerMember,
     required this.preparationStartTime,
     required this.startTime,
     required this.endTime,
@@ -23,11 +21,10 @@ class CurrentWarInfo {
     required this.opponent,
   });
 
-  factory CurrentWarInfo.fromJson(Map<String, dynamic> json) {
-    return CurrentWarInfo(
+  factory WarLeagueInfo.fromJson(Map<String, dynamic> json) {
+    return WarLeagueInfo(
       state: json['state'] ?? 'No state',
       teamSize: json['teamSize'] ?? 0,
-      attacksPerMember: json['attacksPerMember'] ?? 0,
       preparationStartTime: DateTime.parse(json['preparationStartTime']),
       startTime: DateTime.parse(json['startTime']),
       endTime: DateTime.parse(json['endTime']),
@@ -183,29 +180,24 @@ class BestOpponentAttack {
 }
 
 // Service
-class CurrentWarService {
+class WarLeagueService {
   Future<void> initEnv() async {
     await dotenv.load(fileName: ".env");
   }
 
-  Future<CurrentWarInfo> fetchCurrentWarInfo(String tag) async {
-    tag = tag.replaceAll('#', '%23'); // URL encode the '#' character
+  Future<WarLeagueInfo> fetchWarLeagueInfo(String warTag) async {
+    warTag = warTag.replaceAll('#', '%23');
     final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clans/$tag/currentwar'),
+      Uri.parse('https://api.clashking.xyz/v1/clanwarleagues/wars/$warTag'),
       headers: {
         'Authorization': 'Bearer ${dotenv.env['API_KEY']}'
       },
     );
 
     if (response.statusCode == 200) {
-      return CurrentWarInfo.fromJson(jsonDecode(response.body));
+      return WarLeagueInfo.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to load current war info with status code: ${response.statusCode}');
     }
   }
 }
-/*
-Gros chêne : VY2J0LL
-Le petit chêne : 2QPCJQQ2U
-Gland Esport : 2GRCROPUG 
-*/
