@@ -5,6 +5,7 @@ import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/data/troop_data.dart';
 import 'package:clashkingapp/api/player_legend.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class LegendScreen extends StatefulWidget {
   final PlayerAccountInfo playerStats;
@@ -33,14 +34,16 @@ class LegendScreenState extends State<LegendScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   DateTime selectedDate = DateTime.now();
+  DateTime selectedMonth = DateTime.now();
   Map<String, dynamic> dynamicLegendData = {};
   late Future<List<dynamic>> seasonLegendData;
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
     selectedDate = DateTime.now();
+    selectedMonth = DateTime.now();
     dynamicLegendData = widget.legendData;
     seasonLegendData =
         PlayerLegendSeasonsService.fetchSeasonsData(widget.playerStats.tag);
@@ -61,6 +64,28 @@ class LegendScreenState extends State<LegendScreen>
   void decrementDate() {
     setState(() {
       selectedDate = selectedDate.subtract(Duration(days: 1));
+    });
+  }
+
+  void incrementMonth() {
+    setState(() {
+      if (selectedMonth.month == 12) {
+        selectedMonth = DateTime(selectedMonth.year + 1, 1, selectedMonth.day);
+      } else {
+        selectedMonth = DateTime(
+            selectedMonth.year, selectedMonth.month + 1, selectedMonth.day);
+      }
+    });
+  }
+
+  void decrementMonth() {
+    setState(() {
+      if (selectedMonth.month == 1) {
+        selectedMonth = DateTime(selectedMonth.year - 1, 12, selectedMonth.day);
+      } else {
+        selectedMonth = DateTime(
+            selectedMonth.year, selectedMonth.month - 1, selectedMonth.day);
+      }
     });
   }
 
@@ -87,6 +112,7 @@ class LegendScreenState extends State<LegendScreen>
                 },
                 tabs: [
                   Tab(text: "Today"),
+                  Tab(text: "Charts"),
                   Tab(text: "History"),
                 ],
                 children: [
@@ -95,6 +121,15 @@ class LegendScreenState extends State<LegendScreen>
                     child: ListTile(
                       title: dynamicLegendData["legends"].isNotEmpty
                           ? buildLegendStats(dynamicLegendData)
+                          : Center(child: Text('No data available')),
+                    ),
+                  ),
+                  Container(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    child: ListTile(
+                      title: dynamicLegendData["legends"].isNotEmpty
+                          ? buildChartsStats(
+                              dynamicLegendData, seasonLegendData)
                           : Center(child: Text('No data available')),
                     ),
                   ),
@@ -112,7 +147,8 @@ class LegendScreenState extends State<LegendScreen>
   }
 
   // Header of the page
-  Stack buildHeader(BuildContext context, Map<String, dynamic> dynamicLegendData) {
+  Stack buildHeader(
+      BuildContext context, Map<String, dynamic> dynamicLegendData) {
     return Stack(
       clipBehavior: Clip.none,
       alignment: Alignment.center,
@@ -339,20 +375,18 @@ class LegendScreenState extends State<LegendScreen>
                 ? (firstAttack['trophies'] - firstAttack['change'])
                 : (firstDefense['trophies']) + firstDefense['change'])
             .toString();
-      }
-      else if (attacksList.isNotEmpty) {
+      } else if (attacksList.isNotEmpty) {
         Map<String, dynamic> lastAttack = attacksList.last;
         currentTrophies = lastAttack['trophies'].toString();
         Map<String, dynamic> firstAttack = attacksList.first;
-        firstTrophies = (firstAttack['trophies'] - firstAttack['change'])
-            .toString();
-      }
-      else if (defensesList.isNotEmpty) {
+        firstTrophies =
+            (firstAttack['trophies'] - firstAttack['change']).toString();
+      } else if (defensesList.isNotEmpty) {
         Map<String, dynamic> lastDefense = defensesList.last;
         currentTrophies = lastDefense['trophies'].toString();
         Map<String, dynamic> firstDefense = defensesList.first;
-        firstTrophies = (firstDefense['trophies'] + firstDefense['change'])
-            .toString();
+        firstTrophies =
+            (firstDefense['trophies'] + firstDefense['change']).toString();
       }
 
       legendEntries.add(
@@ -411,10 +445,10 @@ class LegendScreenState extends State<LegendScreen>
         children: [
           SizedBox(
             width: 30,
-            height : 30,
+            height: 30,
             child: IconButton(
               icon: Icon(Icons.arrow_back,
-                  color: Theme.of(context).colorScheme.onBackground, size : 16),
+                  color: Theme.of(context).colorScheme.onBackground, size: 16),
               onPressed: decrementDate,
             ),
           ),
@@ -424,26 +458,29 @@ class LegendScreenState extends State<LegendScreen>
           ),
           SizedBox(
             width: 30,
-            height : 30,
+            height: 30,
             child: IconButton(
               icon: Icon(Icons.arrow_forward,
-                  color: Theme.of(context).colorScheme.onBackground, size : 16),
+                  color: Theme.of(context).colorScheme.onBackground, size: 16),
               onPressed: incrementDate,
             ),
           ),
         ],
       ),
       if (legendEntries.isEmpty)
-      Column(children: [
-        SizedBox(height: 16),
-        Card(child:Padding(padding: EdgeInsets.all(16), child:
-        Text('Nothing to see here !'))),
-        SizedBox(height: 16),
-        Image.network(
-          'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
-          height: 350,
-          width: 200,
-        )])
+        Column(children: [
+          SizedBox(height: 16),
+          Card(
+              child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text('Nothing to see here !'))),
+          SizedBox(height: 16),
+          Image.network(
+            'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
+            height: 350,
+            width: 200,
+          )
+        ])
       else
         ...legendEntries
     ]);
@@ -451,10 +488,13 @@ class LegendScreenState extends State<LegendScreen>
 
   Widget _buildOffenseSection(
       String title, List<dynamic> list, BuildContext context) {
-    int sum = list
-        .whereType<Map>()
-        .map((item) => item['change'])
-        .reduce((value, element) => value + element);
+    int sum = 0;
+    if (list.isNotEmpty) {
+      sum = list
+          .whereType<Map>()
+          .map((item) => item['change'])
+          .reduce((value, element) => value + element);
+    }
     int count = list.whereType<Map>().length +
         list.whereType<Map>().where((item) => item['change'] > 40).length;
     double average = sum / count;
@@ -790,45 +830,466 @@ class LegendScreenState extends State<LegendScreen>
       },
     );
   }
-}
 
-/*
-return Card(
-                child: ListTile(
-                  leading: SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: Stack(
-                              children: <Widget>[
-                                Image.network(
-                                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png",
-                                ),
-                                Positioned(
-                                  right: 30,
-                                  top: 32,
-                                  child: Text(
-                                    "${item['season']}",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall!
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                ),
-                              ],
+  Widget buildChartsStats(
+      Map<String, dynamic> legendData, Future<List<dynamic>> seasonLegendData) {
+    return Column(children: [
+      buildTrophiesByMonthChart(legendData),
+      buildLegendHistoryChart(seasonLegendData)
+    ]);
+  }
+
+  Widget buildTrophiesByMonthChart(Map<String, dynamic> legendData) {
+    Map<String, Map<String, String>> monthlyTrophies = {};
+    Map<String, dynamic> legends = legendData['legends'];
+
+    legends.forEach((date, details) {
+      String currentTrophies = "0";
+      List<dynamic> attacksList = details['new_attacks'] ?? [];
+      List<dynamic> defensesList = details['new_defenses'] ?? [];
+
+      if (attacksList.isNotEmpty && defensesList.isNotEmpty) {
+        var lastAttack = attacksList.last;
+        var lastDefense = defensesList.last;
+        currentTrophies = (lastAttack['time'] > lastDefense['time']
+                ? lastAttack['trophies']
+                : lastDefense['trophies'])
+            .toString();
+      } else if (attacksList.isNotEmpty) {
+        var lastAttack = attacksList.last;
+        currentTrophies = lastAttack['trophies'].toString();
+      } else if (defensesList.isNotEmpty) {
+        var lastDefense = defensesList.last;
+        currentTrophies = lastDefense['trophies'].toString();
+      }
+
+      String month = DateFormat('yyyy-MM').format(DateTime.parse(date));
+      String day = DateFormat('dd').format(DateTime.parse(date));
+
+      if (!monthlyTrophies.containsKey(month)) {
+        monthlyTrophies[month] = {};
+      }
+      monthlyTrophies[month]![day] = currentTrophies;
+    });
+
+    // Extract the data for the given month
+    String month = DateFormat('yyyy-MM').format(selectedMonth);
+    Map<String, String> monthData = monthlyTrophies[month] ?? {};
+
+    // Convert the data to a format that the chart can use
+    List<FlSpot> spots = monthData.entries.map((entry) {
+      return FlSpot(double.parse(entry.key), double.parse(entry.value));
+    }).toList();
+
+    // Sort the spots based on the day to ensure the graph is in order
+    spots.sort((a, b) => a.x.compareTo(b.x));
+
+    if (spots.isNotEmpty) {
+      // Calculate minY and maxY for dynamic scaling
+      double minY = spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b);
+      double maxY = spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b);
+      minY = (minY / 10).floorToDouble() * 10;
+      maxY = (maxY / 10).ceilToDouble() * 10;
+      double minX = spots.map((spot) => spot.x).reduce((a, b) => a < b ? a : b);
+      double maxX = spots.map((spot) => spot.x).reduce((a, b) => a > b ? a : b);
+
+      double rangeY = (maxY - minY) / 10;
+      if (rangeY == 0) rangeY = 1;
+
+      return SizedBox(
+        width: double.infinity,
+        height: 500,
+        child: Card(
+          elevation: 4,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.only(
+                left: 10.0, right: 20.0, top: 10.0, bottom: 10.0),
+            child: Column(children: [
+              Text("Trophies by month",
+                  style: Theme.of(context).textTheme.bodyMedium),
+              SizedBox(height: 16),
+              Expanded(
+                child: LineChart(
+                  LineChartData(
+                    gridData: FlGridData(
+                      show: true,
+                      drawHorizontalLine: true,
+                      horizontalInterval: 20,
+                    ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 30,
+                          interval: 5,
+                          getTitlesWidget: (double value, TitleMeta meta) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Text('${value.toInt()}'),
+                            );
+                          },
+                        ),
+                      ),
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 40,
+                          interval: rangeY + 1,
+                          getTitlesWidget: (double value, TitleMeta meta) {
+                            return Text('${value.toInt()}');
+                          },
+                        ),
+                      ),
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                      topTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                    ),
+                    borderData: FlBorderData(
+                      show: true,
+                      border: Border.all(
+                          color: Theme.of(context).colorScheme.secondary,
+                          width: 1),
+                    ),
+                    lineBarsData: [
+                      LineChartBarData(
+                        spots: spots,
+                        color: Theme.of(context).colorScheme.secondary,
+                        isCurved: true,
+                        barWidth: 2,
+                        isStrokeCapRound: true,
+                        dotData: FlDotData(
+                          show: true,
+                        ),
+                        belowBarData: BarAreaData(
+                          show: true,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.2),
+                        ),
+                      ),
+                    ],
+                    minX: minX,
+                    maxX: maxX,
+                    minY: minY,
+                    maxY: maxY,
+                    lineTouchData: LineTouchData(
+                      touchTooltipData: LineTouchTooltipData(
+                        getTooltipColor: (spot) => Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(0.8),
+                      ),
+                      touchCallback: (FlTouchEvent touchEvent,
+                          LineTouchResponse? touchResponse) {},
+                      handleBuiltInTouches: true,
+                    ),
+                  ),
+                  duration: Duration(milliseconds: 250),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back,
+                          color: Theme.of(context).colorScheme.onBackground,
+                          size: 16),
+                      onPressed: decrementMonth,
+                    ),
+                  ),
+                  Text(
+                    DateFormat('MMMM yyyy').format(selectedMonth),
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_forward,
+                          color: Theme.of(context).colorScheme.onBackground,
+                          size: 16),
+                      onPressed: incrementMonth,
+                    ),
+                  ),
+                ],
+              ),
+            ]),
+          ),
+        ),
+      );
+    } else {
+      return SizedBox(
+        width: double.infinity,
+        height: 500,
+        child: Card(
+          elevation: 4,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.only(
+                left: 10.0, right: 20.0, top: 20.0, bottom: 10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("No data for this Month",
+                    style: Theme.of(context).textTheme.bodyMedium),
+                Image.network(
+                  'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
+                  height: 300,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back,
+                            color: Theme.of(context).colorScheme.onBackground,
+                            size: 16),
+                        onPressed: decrementMonth,
+                      ),
+                    ),
+                    Text(
+                      DateFormat('MMMM yyyy').format(selectedMonth),
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_forward,
+                            color: Theme.of(context).colorScheme.onBackground,
+                            size: 16),
+                        onPressed: incrementMonth,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget buildLegendHistoryChart(Future<List<dynamic>> seasonLegendData) {
+    return FutureBuilder<List<dynamic>>(
+      future: seasonLegendData,
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          List<dynamic> data = snapshot.data ?? [];
+          List<FlSpot> spots = data.map((item) {
+            double y = item['trophies'].toDouble();
+            double x = DateTime.parse(item['season'] + '-01')
+                .millisecondsSinceEpoch
+                .toDouble();
+            return FlSpot(x, y); // Use the timestamp as x value
+          }).toList();
+
+// Sort by the timestamp in ascending order (from the earliest date to the latest)
+          spots.sort((a, b) => a.x.compareTo(b.x));
+
+          if (spots.isNotEmpty) {
+            // Calculate minY and maxY for dynamic scaling
+            double minY =
+                spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b);
+            double maxY =
+                spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b);
+            minY = (minY / 10).floorToDouble() * 10;
+            maxY = (maxY / 10).ceilToDouble() * 10;
+
+            double minX = spots.first.x;
+            double maxX = spots.last.x;
+            double rangeY = (maxY - minY) / 10;
+            if (rangeY == 0) rangeY = 1;
+
+            return SizedBox(
+              width: double.infinity,
+              height: 500,
+              child: Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 10.0, right: 20.0, top: 10.0, bottom: 10.0),
+                  child: Column(children: [
+                    Text("EOS Trophies",
+                        style: Theme.of(context).textTheme.bodyMedium),
+                    SizedBox(height: 16),
+                    Expanded(
+                      child: LineChart(
+                        LineChartData(
+                          gridData: FlGridData(
+                            show: true,
+                            drawHorizontalLine: true,
+                            horizontalInterval: 30,
+                          ),
+                          titlesData: FlTitlesData(
+                            show: true,
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 30,
+                                getTitlesWidget: (value, meta) {
+                                  DateTime date =
+                                      DateTime.fromMillisecondsSinceEpoch(
+                                          value.toInt());
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: Text(
+                                      DateFormat('M/yy').format(date),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 40,
+                                interval: rangeY + 1,
+                                getTitlesWidget:
+                                    (double value, TitleMeta meta) {
+                                  return Text('${value.toInt()}');
+                                },
+                              ),
+                            ),
+                            rightTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            topTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
                             ),
                           ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                          borderData: FlBorderData(
+                            show: true,
+                            border: Border.all(
+                                color: Theme.of(context).colorScheme.secondary,
+                                width: 1),
+                          ),
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: spots,
+                              color: Theme.of(context).colorScheme.secondary,
+                              isCurved: true,
+                              barWidth: 2,
+                              isStrokeCapRound: true,
+                              dotData: FlDotData(
+                                show: true,
+                              ),
+                              belowBarData: BarAreaData(
+                                show: true,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withOpacity(0.2),
+                              ),
+                            ),
+                          ],
+                          minX: minX,
+                          maxX: maxX,
+                          minY: minY,
+                          maxY: maxY,
+                          lineTouchData: LineTouchData(
+                            touchTooltipData: LineTouchTooltipData(
+                              getTooltipColor: (spot) => Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.8),
+                            ),
+                            touchCallback: (FlTouchEvent touchEvent,
+                                LineTouchResponse? touchResponse) {},
+                            handleBuiltInTouches: true,
+                          ),
+                        ),
+                        duration: Duration(milliseconds: 250),
+                      ),
+                    ),
+                  ]),
+                ),
+              ),
+            );
+          } else {
+            return SizedBox(
+              width: double.infinity,
+              height: 500,
+              child: Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 10.0, right: 20.0, top: 20.0, bottom: 10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Season: ${item['season']}'),
-                      Text('Trophies: ${item['trophies']}'),
-                      Text('Attack Wins: ${item['attackWins']}'),
-                      Text('Defense Wins: ${item['defenseWins']}'),
-                      Text('Rank: ${item['rank']}'),
-                      Text('Clan: ${item['clan']['name']}'),
+                      Text("No data for this Month",
+                          style: Theme.of(context).textTheme.bodyMedium),
+                      Image.network(
+                        'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
+                        height: 300,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: IconButton(
+                              icon: Icon(Icons.arrow_back,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
+                                  size: 16),
+                              onPressed: decrementMonth,
+                            ),
+                          ),
+                          Text(
+                            DateFormat('MMMM yyyy').format(selectedMonth),
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: IconButton(
+                              icon: Icon(Icons.arrow_forward,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
+                                  size: 16),
+                              onPressed: incrementMonth,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
-              );
-            }).toList(),
-          );*/
+              ),
+            );
+          }
+        }
+      },
+    );
+  }
+}

@@ -99,6 +99,25 @@ class PlayerLegendCard extends StatelessWidget {
             .toString();
         diffTrophies = int.parse(currentTrophies) - int.parse(firstTrophies);
       }
+      else if(attacksList.isNotEmpty){
+        Map<String, dynamic> lastAttack = attacksList.last;
+        currentTrophies = lastAttack['trophies'].toString();
+        Map<String, dynamic> firstAttack = attacksList.first;
+        firstTrophies = (firstAttack['trophies'] - firstAttack['change']).toString();
+        diffTrophies = int.parse(currentTrophies) - int.parse(firstTrophies);
+      }
+      else if(defensesList.isNotEmpty){
+        Map<String, dynamic> lastDefense = defensesList.last;
+        currentTrophies = lastDefense['trophies'].toString();
+        Map<String, dynamic> firstDefense = defensesList.first;
+        firstTrophies = (firstDefense['trophies'] + firstDefense['change']).toString();
+        diffTrophies = int.parse(currentTrophies) - int.parse(firstTrophies);
+      }
+      else{
+        currentTrophies = details['trophies'].toString();
+        firstTrophies = details['trophies'].toString();
+      }
+      
       return GestureDetector(
         onTap: () {
           Navigator.push(
