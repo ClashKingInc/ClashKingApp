@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
-import 'dart:ui';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/data/troop_data.dart';
 import 'package:clashkingapp/api/player_legend.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:clashkingapp/subpages/legend_dashboard/components/LegendHeaderCard.dart';
+import 'package:clashkingapp/subpages/legend_dashboard/components/LegendUsedGearCard.dart';
+import 'package:clashkingapp/subpages/legend_dashboard/components/LegendTrophiesStartEndCard.dart';
+import 'package:clashkingapp/subpages/legend_dashboard/components/LegendOffenseDefenseCard.dart';
+import 'package:clashkingapp/subpages/legend_dashboard/components/LegendHistoryCard.dart';
 
 class LegendScreen extends StatefulWidget {
   final PlayerAccountInfo playerStats;
@@ -33,10 +36,11 @@ class LegendScreen extends StatefulWidget {
 class LegendScreenState extends State<LegendScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-  DateTime selectedDate = DateTime.now();
-  DateTime selectedMonth = DateTime.now();
-  Map<String, dynamic> dynamicLegendData = {};
-  late Future<List<dynamic>> seasonLegendData;
+  DateTime selectedDate = DateTime.now(); // Change date in legend tab
+  DateTime selectedMonth = DateTime.now(); // Change month in history tab
+  Map<String, dynamic> dynamicLegendData =
+      {}; // Legend days details (result of API fetchLegendData))
+  late Future<List<dynamic>> seasonLegendData; // List of EOS trophies
 
   @override
   void initState() {
@@ -103,24 +107,28 @@ class LegendScreenState extends State<LegendScreen>
             },
             child: SingleChildScrollView(
                 child: Column(children: [
-              buildHeader(context, dynamicLegendData),
+              LegendHeaderCard(
+                  widget: widget, dynamicLegendData: dynamicLegendData),
               ScrollableTab(
                 labelColor: Colors.black,
                 onTap: (value) {
-                  print('Tab $value selected');
                   setState(() {});
                 },
                 tabs: [
-                  Tab(text: "Today"),
-                  Tab(text: "Charts"),
-                  Tab(text: "History"),
+                  Tab(
+                      text:
+                          "By day"), // Show Attacks, Defenses and Gear for the selected day
+                  Tab(
+                      text:
+                          "Charts"), // Show charts of Trophies by month and EOS history
+                  Tab(text: "History"), // Show EOS history
                 ],
                 children: [
                   Container(
                     color: Theme.of(context).colorScheme.tertiary,
                     child: ListTile(
                       title: dynamicLegendData["legends"].isNotEmpty
-                          ? buildLegendStats(dynamicLegendData)
+                          ? buildLegendTab(dynamicLegendData)
                           : Center(child: Text('No data available')),
                     ),
                   ),
@@ -137,7 +145,7 @@ class LegendScreenState extends State<LegendScreen>
                     color: Theme.of(context).colorScheme.tertiary,
                     child: ListTile(
                       title: dynamicLegendData["legends"].isNotEmpty
-                          ? buildLegendHistoryStats(seasonLegendData)
+                          ? buildHistoryTab(seasonLegendData)
                           : Center(child: Text('No data available')),
                     ),
                   )
@@ -146,215 +154,24 @@ class LegendScreenState extends State<LegendScreen>
             ]))));
   }
 
-  // Header of the page
-  Stack buildHeader(
-      BuildContext context, Map<String, dynamic> dynamicLegendData) {
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.center,
-      children: <Widget>[
-        SizedBox(
-          height: 220,
-          width: double.infinity,
-          child: ImageFiltered(
-            imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-            child: ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.7),
-                  BlendMode.darken,
-                ),
-                child: Image.network(
-                  "https://clashkingfiles.b-cdn.net/landscape/legend-landscape.png",
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                )),
-          ),
-        ),
-        Positioned(
-          top: 0,
-          bottom: 0,
-          left: 10,
-          right: 10,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Center(
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    child: Column(
-                      children: [
-                        Text(
-                          "${dynamicLegendData['name']}",
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: Colors.white,
-                                  ),
-                        ),
-                        Text("${dynamicLegendData['tag']}",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge
-                                ?.copyWith(
-                                  color: Colors.grey,
-                                )),
-                        SizedBox(height: 16),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.network(
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border.png",
-                                width: 60,
-                              ),
-                              Text(widget.currentTrophies,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 32,
-                                      )),
-                              SizedBox(width: 8),
-                              Column(children: [
-                                Text(
-                                  "(${widget.diffTrophies >= 0 ? '+' : ''}${widget.diffTrophies.toString()})",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium
-                                      ?.copyWith(
-                                          color: widget.diffTrophies >= 0
-                                              ? Colors.green
-                                              : Colors.red),
-                                ),
-                                SizedBox(height: 32),
-                              ]),
-                            ]),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  Wrap(
-                                    spacing: 16,
-                                    runSpacing: 0,
-                                    children: <Widget>[
-                                      Chip(
-                                        avatar: CircleAvatar(
-                                            backgroundColor: Colors.transparent,
-                                            child: Image.network(
-                                                "https://clashkingfiles.b-cdn.net/country-flags/${dynamicLegendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
-                                        label: Text(
-                                          dynamicLegendData['rankings']
-                                                      ['country_name'] ==
-                                                  null
-                                              ? 'No Country'
-                                              : '${dynamicLegendData['rankings']['country_name']}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelMedium
-                                              ?.copyWith(color: Colors.white),
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          side: BorderSide(
-                                              color: Colors.white,
-                                              width:
-                                                  1), // Customize border color and width
-                                        ),
-                                      ),
-                                      Chip(
-                                        avatar: CircleAvatar(
-                                            backgroundColor: Colors.transparent,
-                                            child: Image.network(
-                                                "https://clashkingfiles.b-cdn.net/country-flags/${dynamicLegendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
-                                        label: Text(
-                                          dynamicLegendData['rankings']
-                                                      ['local_rank'] ==
-                                                  null
-                                              ? 'No rank'
-                                              : '${dynamicLegendData['rankings']['local_rank']}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelMedium
-                                              ?.copyWith(color: Colors.white),
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          side: BorderSide(
-                                              color: Colors.white,
-                                              width:
-                                                  1), // Customize border color and width
-                                        ),
-                                      ),
-                                      Chip(
-                                        avatar: CircleAvatar(
-                                            backgroundColor: Colors
-                                                .transparent, // Set to a suitable color for your design.
-                                            child: Image.network(
-                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")
-                                            // Using Container() as a fallback
-                                            ),
-                                        label: Text(
-                                            dynamicLegendData['rankings']
-                                                        ['local_rank'] ==
-                                                    null
-                                                ? 'No rank'
-                                                : '${dynamicLegendData['rankings']['local_rank']}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelMedium
-                                                ?.copyWith(
-                                                    color: Colors.white)),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          side: BorderSide(
-                                              color: Colors.white,
-                                              width:
-                                                  1), // Customize border color and width
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ]),
-        ),
-        Positioned(
-          top: 20,
-          left: 10,
-          child: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: Theme.of(context).colorScheme.onPrimary, size: 32),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildLegendStats(Map<String, dynamic> data) {
-    List<Widget> legendEntries = [];
-    Map<String, dynamic> legends = data['legends'];
+  Widget buildLegendTab(Map<String, dynamic> data) {
+    List<Widget> legendEntries =
+        []; // List of widgets to display in the legend tab
+    Map<String, dynamic> legends =
+        data['legends']; // Legend days details (attacks, defenses, gears)
 
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
 
     if (legends.containsKey(date)) {
-      Map<String, dynamic> details = legends[date];
+      Map<String, dynamic> details = legends[
+          date]; // Details of the selected day (attacks, defenses, gears)
 
-      String firstTrophies = '0';
+      String startTrophies = '0';
       String currentTrophies = "0";
 
+      // Extract the attacks and defenses list. The JSON structure has changed over time
+      // so we need to check if the new_attacks and new_defenses keys are present
+      // otherwise we fallback to the attacks and defenses keys (old structure)
       List<dynamic> attacksList = details.containsKey('new_attacks')
           ? details['new_attacks']
           : details['attacks'] ?? [];
@@ -362,6 +179,8 @@ class LegendScreenState extends State<LegendScreen>
           ? details['new_defenses']
           : details['defenses'] ?? [];
 
+      // Calculate the trophies at the beginning of day and at the end or current time if day not over
+      // Adapt depending on if the day has attacks, defenses or both
       if (attacksList.isNotEmpty && defensesList.isNotEmpty) {
         Map<String, dynamic> lastAttack = attacksList.last;
         Map<String, dynamic> lastDefense = defensesList.last;
@@ -371,7 +190,7 @@ class LegendScreenState extends State<LegendScreen>
             .toString();
         Map<String, dynamic> firstAttack = attacksList.first;
         Map<String, dynamic> firstDefense = defensesList.first;
-        firstTrophies = (firstAttack['time'] < firstDefense['time']
+        startTrophies = (firstAttack['time'] < firstDefense['time']
                 ? (firstAttack['trophies'] - firstAttack['change'])
                 : (firstDefense['trophies']) + firstDefense['change'])
             .toString();
@@ -379,56 +198,52 @@ class LegendScreenState extends State<LegendScreen>
         Map<String, dynamic> lastAttack = attacksList.last;
         currentTrophies = lastAttack['trophies'].toString();
         Map<String, dynamic> firstAttack = attacksList.first;
-        firstTrophies =
+        startTrophies =
             (firstAttack['trophies'] - firstAttack['change']).toString();
       } else if (defensesList.isNotEmpty) {
         Map<String, dynamic> lastDefense = defensesList.last;
         currentTrophies = lastDefense['trophies'].toString();
         Map<String, dynamic> firstDefense = defensesList.first;
-        firstTrophies =
+        startTrophies =
             (firstDefense['trophies'] + firstDefense['change']).toString();
       }
+
+      Map<String, dynamic> attacksStats = calculateStats(attacksList);
+      Map<String, dynamic> defensesStats = calculateStats(defensesList);
 
       legendEntries.add(
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Card(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          Text("Started",
-                              style: Theme.of(context).textTheme.titleSmall),
-                          Text(firstTrophies,
-                              style: Theme.of(context).textTheme.titleMedium),
-                        ],
-                      ),
-                      Image.network(
-                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border.png",
-                        width: 80,
-                      ),
-                      Column(children: [
-                        Text("Ended",
-                            style: Theme.of(context).textTheme.titleSmall),
-                        Text(currentTrophies,
-                            style: Theme.of(context).textTheme.titleMedium),
-                      ]),
-                    ]),
-              ),
+              // Display the first card with start and end trophies of the day
+              LegendTrophiesStartEndCard(
+                  context: context,
+                  startTrophies: startTrophies,
+                  currentTrophies: currentTrophies),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child:
-                        _buildOffenseSection("Offense", attacksList, context),
+                    child: LegendOffenseDefenseCard(
+                        title: "Offense",
+                        list: attacksList,
+                        context: context,
+                        stats: attacksStats,
+                        plusMinus: "+",
+                        icon:
+                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
                   ),
                   Expanded(
-                    child:
-                        _buildDefenseSection("Defense", defensesList, context),
+                    child: LegendOffenseDefenseCard(
+                        title: "Defense",
+                        list: defensesList,
+                        context: context,
+                        stats: defensesStats,
+                        plusMinus: "-",
+                        icon:
+                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield_Arrow.png"),
                   ),
                 ],
               ),
@@ -486,167 +301,10 @@ class LegendScreenState extends State<LegendScreen>
     ]);
   }
 
-  Widget _buildOffenseSection(
-      String title, List<dynamic> list, BuildContext context) {
-    int sum = 0;
-    if (list.isNotEmpty) {
-      sum = list
-          .whereType<Map>()
-          .map((item) => item['change'])
-          .reduce((value, element) => value + element);
-    }
-    int count = list.whereType<Map>().length +
-        list.whereType<Map>().where((item) => item['change'] > 40).length;
-    double average = sum / count;
-    int remaining = 320 - count * 40;
-    int bestPossibleTrophies = remaining + sum;
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(children: [
-            Text(title, style: Theme.of(context).textTheme.titleMedium),
-            Text(' (+$sum)', style: Theme.of(context).textTheme.labelLarge),
-          ]),
-          SizedBox(height: 8),
-          SizedBox(
-            height: 160,
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: list.map((item) {
-                  if (item is Map) {
-                    int change = item['change'];
-                    int time = item['time'];
-                    String timeAgo = _convertToTimeAgo(time);
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Image.network(
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
-                              width: 20,
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              '+$change',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                            Text(
-                              " ($timeAgo)",
-                              style: Theme.of(context).textTheme.labelSmall,
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  } else {
-                    return Text("$item");
-                  }
-                }).toList(),
-              ),
-            ),
-          ),
-          SizedBox(height: 8),
-          Text("Statistics", style: Theme.of(context).textTheme.bodyLarge),
-          Text("Total: $count/8", style: Theme.of(context).textTheme.bodySmall),
-          Text('Average: ${average.toStringAsFixed(2)}',
-              style: Theme.of(context).textTheme.bodySmall),
-          Text('Remaining: +$remaining',
-              style: Theme.of(context).textTheme.bodySmall),
-          Text('Best : +$bestPossibleTrophies',
-              style: Theme.of(context).textTheme.bodySmall),
-        ]),
-      ),
-    );
-  }
-
-  Widget _buildDefenseSection(
-      String title, List<dynamic> list, BuildContext context) {
-    int sum = 0;
-    if (list.isNotEmpty) {
-      sum = list
-          .whereType<Map>()
-          .map((item) => item['change'])
-          .reduce((value, element) => value + element);
-    }
-    int count = list.whereType<Map>().length +
-        list.whereType<Map>().where((item) => item['change'] > 40).length;
-    double average = sum / count;
-    int remaining = 320 - count * 40;
-    int bestPossibleTrophies = remaining + sum;
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(children: [
-            Text(title, style: Theme.of(context).textTheme.titleMedium),
-            Text(' (-$sum)', style: Theme.of(context).textTheme.labelLarge),
-          ]),
-          SizedBox(height: 8),
-          SizedBox(
-            height: 160,
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: list.map((item) {
-                  if (item is Map) {
-                    int change = item['change'];
-                    int time = item['time'];
-                    String timeAgo = _convertToTimeAgo(time);
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Image.network(
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield_Arrow.png",
-                              width: 20,
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              '-$change',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                            Text(
-                              " ($timeAgo)",
-                              style: Theme.of(context).textTheme.labelSmall,
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  } else {
-                    return Text("$item");
-                  }
-                }).toList(),
-              ),
-            ),
-          ),
-          SizedBox(height: 8),
-          Text("Statistics", style: Theme.of(context).textTheme.bodyLarge),
-          Text("Total: $count/8", style: Theme.of(context).textTheme.bodySmall),
-          Text('Average: ${average.toStringAsFixed(2)}',
-              style: Theme.of(context).textTheme.bodySmall),
-          Text('Remaining: -$remaining',
-              style: Theme.of(context).textTheme.bodySmall),
-          Text('Worst : -$bestPossibleTrophies',
-              style: Theme.of(context).textTheme.bodySmall),
-        ]),
-      ),
-    );
-  }
-
   Widget _buildGearSection(String title, List<dynamic> list) {
     Map<String, int> itemCounts = {};
 
+    // Count the number of time each gear was used (attacks only)
     for (var item in list) {
       if (item is Map) {
         List<dynamic> heroGear = item['hero_gear'] ?? [];
@@ -666,60 +324,10 @@ class LegendScreenState extends State<LegendScreen>
       }
     }
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(title, style: Theme.of(context).textTheme.titleMedium),
-            SizedBox(height: 8),
-            Wrap(
-              spacing: 8.0,
-              runSpacing: 8.0,
-              children: [
-                ...itemCounts.entries.map((entry) {
-                  var gearData = troopUrlsAndTypes[entry.key];
-                  return Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("${entry.value}",
-                          style: Theme.of(context).textTheme.bodyMedium),
-                      gearData != null
-                          ? Image.network(
-                              gearData['url'] ??
-                                  "https://clashkingfiles.b-cdn.net/clashkinglogo.png",
-                              width: 24)
-                          : Text("- ${entry.key}"),
-                    ],
-                  );
-                }),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+    return LegendUsedGearCard(context: context, itemCounts: itemCounts);
   }
 
-  String _convertToTimeAgo(int timestamp) {
-    DateTime now = DateTime.now();
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-    Duration diff = now.difference(date);
-
-    if (diff.inDays >= 1) {
-      return '${diff.inDays} day${diff.inDays == 1 ? "" : "s"} ago';
-    } else if (diff.inHours >= 1) {
-      return '${diff.inHours} hour${diff.inHours == 1 ? "" : "s"} ago';
-    } else if (diff.inMinutes >= 1) {
-      return '${diff.inMinutes} minute${diff.inMinutes == 1 ? "" : "s"} ago';
-    } else {
-      return 'Just now';
-    }
-  }
-
-  Widget buildLegendHistoryStats(Future<List<dynamic>> data) {
+  Widget buildHistoryTab(Future<List<dynamic>> data) {
     return FutureBuilder<List<dynamic>>(
       future: data,
       builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
@@ -729,103 +337,7 @@ class LegendScreenState extends State<LegendScreen>
           return Text('Error: ${snapshot.error}');
         } else {
           List<dynamic> data = snapshot.data!;
-          return Column(
-            children: data.map((item) {
-              return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 90,
-                                width: 80,
-                                child: Stack(
-                                  children: <Widget>[
-                                    Center(
-                                      child: Image.network(
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_No_Padding.png",
-                                        height: 80,
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment(0, -0.1),
-                                      child: Text(
-                                        DateFormat('MMMM\nyyyy').format(
-                                          DateTime(
-                                            int.parse(
-                                                item['season'].split('-')[0]),
-                                            int.parse(
-                                                item['season'].split('-')[1]),
-                                          ),
-                                        ),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium!
-                                            .copyWith(color: Colors.white),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Text("${item['clan']['name']}",
-                                  style:
-                                      Theme.of(context).textTheme.labelMedium),
-                            ],
-                          ),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Wrap(
-                                  alignment: WrapAlignment.center,
-                                  spacing: 4.0,
-                                  runSpacing: 0.0,
-                                  children: <Widget>[
-                                    Chip(
-                                        avatar: CircleAvatar(
-                                            backgroundColor: Colors.transparent,
-                                            child: Image.network(
-                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png")),
-                                        label: Text('${item['trophies']}')),
-                                    Chip(
-                                        avatar: CircleAvatar(
-                                            backgroundColor: Colors.transparent,
-                                            child: Image.network(
-                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
-                                        label: Text('${item['rank']}')),
-                                    Chip(
-                                        avatar: CircleAvatar(
-                                            backgroundColor: Colors.transparent,
-                                            child: Image.network(
-                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png")),
-                                        label: Text('${item['attackWins']}')),
-                                    Chip(
-                                        avatar: CircleAvatar(
-                                            backgroundColor: Colors.transparent,
-                                            child: Image.network(
-                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png")),
-                                        label: Text('${item['defenseWins']}')),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList(),
-          );
+          return LegendHistoryCard(data: data);
         }
       },
     );
@@ -895,6 +407,7 @@ class LegendScreenState extends State<LegendScreen>
 
       double rangeY = (maxY - minY) / 10;
       if (rangeY == 0) rangeY = 1;
+      
 
       return SizedBox(
         width: double.infinity,
@@ -1292,4 +805,28 @@ class LegendScreenState extends State<LegendScreen>
       },
     );
   }
+
+  Map<String, dynamic> calculateStats(List<dynamic> list) {
+    int sum = 0;
+    if (list.isNotEmpty) {
+      sum = list
+          .whereType<Map>()
+          .map((item) => item['change'])
+          .reduce((value, element) => value + element);
+    }
+    int count = list.whereType<Map>().length +
+        list.whereType<Map>().where((item) => item['change'] > 40).length;
+    double average = sum / count;
+    int remaining = 320 - count * 40;
+    int bestPossibleTrophies = remaining + sum;
+
+    return {
+      'sum': sum,
+      'count': count,
+      'average': average,
+      'remaining': remaining,
+      'bestPossibleTrophies': bestPossibleTrophies,
+    };
+  }
 }
+
