@@ -16,44 +16,63 @@ class PlayerLegendCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (legendData['legends'].isEmpty) {
-      return DefaultTextStyle(
-        style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          "Legend League",
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        SizedBox(
-                          height: 100,
-                          width: 100,
-                          child: Image.network(
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png"),
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: 8),
-                    Text("No Legend Data Found",
-                        style: Theme.of(context).textTheme.labelLarge),
-                  ],
-                ),
-              ],
+    DateTime selectedDate = DateTime.now();
+    String date = DateFormat('yyyy-MM-dd').format(selectedDate);
+    if (!legendData['legends'].containsKey(date)) {
+      return GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LegendScreen(
+                  playerStats: playerStats,
+                  legendData: legendData,
+                  diffTrophies: 0,
+                  currentTrophies: playerStats.trophies.toString(),
+                  firstTrophies: "0",
+                  attacksList: [],
+                  defensesList: []),
+            ),
+          );
+        },
+        child: DefaultTextStyle(
+          style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Text(
+                            "Legend League",
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: Image.network(
+                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png"),
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: 8),
+                      Center(
+                        child: Text("No Legend Data Found for today",
+                            style: Theme.of(context).textTheme.labelLarge),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       );
     } else {
-      DateTime selectedDate = DateTime.now();
-      String date = DateFormat('yyyy-MM-dd').format(selectedDate);
       Map<String, dynamic> details = legendData['legends'][date];
       String firstTrophies = '0';
       String currentTrophies = "0";
@@ -148,11 +167,10 @@ class PlayerLegendCard extends StatelessWidget {
                               runSpacing: 0.0, // gap between lines
                               children: <Widget>[
                                 Chip(
-                                    avatar:CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      child: Image.network(
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Start_Flag.png")),
-                                 
+                                    avatar: CircleAvatar(
+                                        backgroundColor: Colors.transparent,
+                                        child: Image.network(
+                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Start_Flag.png")),
                                     label: Text(firstTrophies,
                                         style: Theme.of(context)
                                             .textTheme

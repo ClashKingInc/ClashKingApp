@@ -52,6 +52,18 @@ class LegendScreenState extends State<LegendScreen>
     super.dispose();
   }
 
+  void incrementDate() {
+    setState(() {
+      selectedDate = selectedDate.add(Duration(days: 1));
+    });
+  }
+
+  void decrementDate() {
+    setState(() {
+      selectedDate = selectedDate.subtract(Duration(days: 1));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +78,7 @@ class LegendScreenState extends State<LegendScreen>
             },
             child: SingleChildScrollView(
                 child: Column(children: [
-              buildHeader(context),
+              buildHeader(context, dynamicLegendData),
               ScrollableTab(
                 labelColor: Colors.black,
                 onTap: (value) {
@@ -100,7 +112,7 @@ class LegendScreenState extends State<LegendScreen>
   }
 
   // Header of the page
-  Stack buildHeader(BuildContext context) {
+  Stack buildHeader(BuildContext context, Map<String, dynamic> dynamicLegendData) {
     return Stack(
       clipBehavior: Clip.none,
       alignment: Alignment.center,
@@ -328,6 +340,20 @@ class LegendScreenState extends State<LegendScreen>
                 : (firstDefense['trophies']) + firstDefense['change'])
             .toString();
       }
+      else if (attacksList.isNotEmpty) {
+        Map<String, dynamic> lastAttack = attacksList.last;
+        currentTrophies = lastAttack['trophies'].toString();
+        Map<String, dynamic> firstAttack = attacksList.first;
+        firstTrophies = (firstAttack['trophies'] - firstAttack['change'])
+            .toString();
+      }
+      else if (defensesList.isNotEmpty) {
+        Map<String, dynamic> lastDefense = defensesList.last;
+        currentTrophies = lastDefense['trophies'].toString();
+        Map<String, dynamic> firstDefense = defensesList.first;
+        firstTrophies = (firstDefense['trophies'] + firstDefense['change'])
+            .toString();
+      }
 
       legendEntries.add(
         Padding(
@@ -351,7 +377,7 @@ class LegendScreenState extends State<LegendScreen>
                         width: 80,
                       ),
                       Column(children: [
-                        Text("Current",
+                        Text("Ended",
                             style: Theme.of(context).textTheme.titleSmall),
                         Text(currentTrophies,
                             style: Theme.of(context).textTheme.titleMedium),
@@ -379,7 +405,48 @@ class LegendScreenState extends State<LegendScreen>
       );
     }
 
-    return Column(children: legendEntries);
+    return Column(children: <Widget>[
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          SizedBox(
+            width: 30,
+            height : 30,
+            child: IconButton(
+              icon: Icon(Icons.arrow_back,
+                  color: Theme.of(context).colorScheme.onBackground, size : 16),
+              onPressed: decrementDate,
+            ),
+          ),
+          Text(
+            DateFormat('dd MMMM yyyy').format(selectedDate),
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          SizedBox(
+            width: 30,
+            height : 30,
+            child: IconButton(
+              icon: Icon(Icons.arrow_forward,
+                  color: Theme.of(context).colorScheme.onBackground, size : 16),
+              onPressed: incrementDate,
+            ),
+          ),
+        ],
+      ),
+      if (legendEntries.isEmpty)
+      Column(children: [
+        SizedBox(height: 16),
+        Card(child:Padding(padding: EdgeInsets.all(16), child:
+        Text('Nothing to see here !'))),
+        SizedBox(height: 16),
+        Image.network(
+          'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
+          height: 350,
+          width: 200,
+        )])
+      else
+        ...legendEntries
+    ]);
   }
 
   Widget _buildOffenseSection(
@@ -460,10 +527,13 @@ class LegendScreenState extends State<LegendScreen>
 
   Widget _buildDefenseSection(
       String title, List<dynamic> list, BuildContext context) {
-    int sum = list
-        .whereType<Map>()
-        .map((item) => item['change'])
-        .reduce((value, element) => value + element);
+    int sum = 0;
+    if (list.isNotEmpty) {
+      sum = list
+          .whereType<Map>()
+          .map((item) => item['change'])
+          .reduce((value, element) => value + element);
+    }
     int count = list.whereType<Map>().length +
         list.whereType<Map>().where((item) => item['change'] > 40).length;
     double average = sum / count;
@@ -636,11 +706,12 @@ class LegendScreenState extends State<LegendScreen>
                                 width: 80,
                                 child: Stack(
                                   children: <Widget>[
-                                    Center(child :
-                                    Image.network(
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_No_Padding.png",
-                                      height: 80,
-                                    ),),
+                                    Center(
+                                      child: Image.network(
+                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_No_Padding.png",
+                                        height: 80,
+                                      ),
+                                    ),
                                     Align(
                                       alignment: Alignment(0, -0.1),
                                       child: Text(
@@ -662,7 +733,9 @@ class LegendScreenState extends State<LegendScreen>
                                   ],
                                 ),
                               ),
-                              Text("${item['clan']['name']}", style: Theme.of(context).textTheme.labelMedium),
+                              Text("${item['clan']['name']}",
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium),
                             ],
                           ),
                           SizedBox(width: 8),
@@ -674,7 +747,7 @@ class LegendScreenState extends State<LegendScreen>
                                 Wrap(
                                   alignment: WrapAlignment.center,
                                   spacing: 4.0,
-                                  runSpacing: 0.0, 
+                                  runSpacing: 0.0,
                                   children: <Widget>[
                                     Chip(
                                         avatar: CircleAvatar(
