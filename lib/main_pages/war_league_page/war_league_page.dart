@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
-import 'package:clashkingapp/subpages/war_league/current_war_info_page.dart';
+import 'package:clashkingapp/main_pages/war_league_page/war_war_league/current_war_info_page.dart';
 import 'package:clashkingapp/components/app_bar.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/main_pages/war_league_page/components/not_in_war_card.dart';
+import 'package:clashkingapp/main_pages/war_league_page/components/cwl_card.dart';
 
 class CurrentWarInfoPage extends StatelessWidget {
   final DiscordUser user;
@@ -23,36 +24,41 @@ class CurrentWarInfoPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.tertiary,
       appBar: CustomAppBar(user: user),
-      body: FutureBuilder<bool>(
+      body: FutureBuilder<String>(
         future: checkCurrentWar(playerStats),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            final isInwar = snapshot.data ?? false;
+            final warState = snapshot.data ?? false;
             return ListView(
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    if (isInwar)
+                    if (warState == "war")
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CurrentWarInfoScreen(
-                                    currentWarInfo: currentWarInfo!)),
+                              builder: (context) => CurrentWarInfoScreen(
+                                currentWarInfo: currentWarInfo!,
+                              ),
+                            ),
                           );
                         },
-                        child:
-                            CurrentWarInfoCard(currentWarInfo: currentWarInfo!),
+                        child: CurrentWarInfoCard(currentWarInfo: currentWarInfo!),
+                      )
+                    else if (warState == "cwl")
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                        child: CwlCard(playerStats: playerStats),
                       )
                     else
                       Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 4.0, horizontal: 8.0),
+                        padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                         child: NotInWarCard(playerStats: playerStats),
                       ),
                   ],
@@ -65,27 +71,47 @@ class CurrentWarInfoPage extends StatelessWidget {
     );
   }
 
-  Future<bool> checkCurrentWar(PlayerAccountInfo playerStats) async {
-    final response = await http.get(
+  Future<String> checkCurrentWar(PlayerAccountInfo playerStats) async {
+    final response_war = await http.get(
       Uri.parse(
           'https://api.clashking.xyz/v1/clans/${playerStats.clan.tag.replaceAll('#', '%23')}/currentwar'),
       headers: {'Authorization': 'Bearer ${dotenv.env['API_KEY']}'},
     );
-
-    if (response.statusCode == 200) {
-      var decodedResponse = jsonDecode(response.body);
+  
+    final response_cwl = await http.get(
+      Uri.parse(
+          'https://api.clashking.xyz/v1/clans/${playerStats.clan.tag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
+      headers: {'Authorization': 'Bearer ${dotenv.env['API_KEY']}'},
+    );
+  
+    if (response_war.statusCode == 200) {
+      var decodedResponse = jsonDecode(response_war.body);
       if (decodedResponse["state"] != "notInWar") {
-        currentWarInfo = CurrentWarInfo.fromJson(jsonDecode(response.body));
-        return true;
+        currentWarInfo = CurrentWarInfo.fromJson(jsonDecode(response_war.body));
+        return "war";
       } else {
-        return false;
+        DateTime now = DateTime.now();
+        if (now.day >= 1 && now.day <= 10) {
+          if (response_cwl.statusCode == 200) {
+            var decodedResponseCwl = jsonDecode(response_cwl.body);
+            if (decodedResponseCwl.containsKey("state")) {
+              return "cwl";
+            } else {
+              return "notInLeague";
+            }
+          } else {
+            return "notInWar";
+          }
+        } else {
+          throw Exception('Failed to load current war info');
+        }
       }
     } else {
       throw Exception('Failed to load current war info');
     }
   }
-}
 
+}
 
 
 class CurrentWarInfoCard extends StatelessWidget {

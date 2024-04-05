@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/clan_info.dart';
-import 'package:clashkingapp/subpages/clan/clan_info_page.dart';
+import 'package:clashkingapp/main_pages/clan_page/clan_info_page.dart';
 import 'package:clashkingapp/components/app_bar.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
 
