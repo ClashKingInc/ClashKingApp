@@ -1,18 +1,33 @@
 {
     "@@locale": "fr",
     "creatorCode" : "Code créateur : ClashKing",
+    "signInWithDiscord" : "Connexion avec Discord",
     "logout" : "Déconnexion",
     "language" : "Langue",
     "settings" : "Paramètres",
-    "selectLanguage": "Sélectionnez une langue",
-    "homeBase" : "Village principal",
-    "builderBase" : "Maison des ouvriers",
     "copiedToClipboard" : "Copié dans le presse-papiers",
-    "dashboard" : "Tableau de bord",
-    "clan" : "Clan",
+    "selectLanguage": "Sélectionnez une langue",
     
-    "management" : "Gestion",
-    "signInWithDiscord" : "Connexion avec Discord",
+    "dashboard" : "Profil",
+    "homeBase" : "Village principal",
+    "th" : "HDV",
+    "builderBase" : "Base des ouvriers",
+    "bh" : "MDO",
+    "leader" : "Chef",
+    "coLeader" : "Adjoint",
+    "elder" : "Aîné",
+    "member" : "Membre",
+    "heroes" : "Héros",
+    "equipment" : "Équipements",
+    "troops" : "Troupes",
+    "superTroops" : "Super Troupes",
+    "pets" : "Familiers",
+    "siegeMachines" : "Engins de siège",
+    "spells" : "Sorts",
+    "achievements" : "Succès",
+
+    "clan" : "Clan",
+    "clans" : "Clans",
 
     "warLeague" : "Guerre/Ligue",
     "startsIn" : "Début dans",
@@ -34,5 +49,7 @@
     "preparation" : "Préparation",
     "isNotInWar" : "n'est pas en guerre",
     "askForWar" : "Contactez un chef ou un adjoint pour lancer une guerre",
-    "warLogClosed" : "Le journal de guerre est privé"
+    "warLogClosed" : "Le journal de guerre est privé",
+
+    "management" : "Gestion"
 }

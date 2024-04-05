@@ -189,24 +189,29 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
         'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Sneaky_Goblin.png',
     'type': 'super-troop',
   },
-  'Super Giant': {
-    'url':
-        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Giant.png',
-    'type': 'super-troop',
-  },
   'Super Wall Breaker': {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Wall_Breaker.png',
     'type': 'super-troop',
   },
-  'Super Valkyrie': {
+  'Super Giant': {
     'url':
-        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Valkyrie.png',
+        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Giant.png',
     'type': 'super-troop',
   },
-  'Super Witch': {
+  'Rocket Balloon': {
     'url':
-        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Witch.png',
+        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Rocket_Balloon.png',
+    'type': 'super-troop',
+  },
+  'Super Wizard': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Wizard.png',
+    'type': 'super-troop',
+  },
+  'Super Dragon': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Dragon.png',
     'type': 'super-troop',
   },
   'Inferno Dragon': {
@@ -219,9 +224,14 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
         'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Minion.png',
     'type': 'super-troop',
   },
-  'Super Hog Rider': {
+  'Super Valkyrie': {
     'url':
-        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Hog_Rider.png',
+        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Valkyrie.png',
+    'type': 'super-troop',
+  },
+  'Super Witch': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Witch.png',
     'type': 'super-troop',
   },
   'Ice Hound': {
@@ -229,9 +239,19 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
         'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Ice_Hound.png',
     'type': 'super-troop',
   },
-  'Rocket Balloon': {
+  'Super Bowler' : {
     'url':
-        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Rocket_Balloon.png',
+        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Bowler.png',
+    'type': 'super-troop',
+  },
+  'Super Miner' : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Miner.png',
+    'type': 'super-troop',
+  },
+  'Super Hog Rider': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/super-troop-pics/Icon_HV_Super_Hog_Rider.png',
     'type': 'super-troop',
   },
 
@@ -452,4 +472,108 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
     'type': 'bb-troop',
   },
 
+  // Gears
+
+  // Queen
+  "Archer Puppet" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_AQ_Archer_Puppet.png',
+    'type': 'gear',
+  },
+  "Frozen Arrow" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_AQ_Frozen_Arrow.png',
+    'type': 'gear',
+  },
+  "Giant Arrow" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_AQ_Giant_Arrow.png',
+    'type': 'gear',
+  },
+  "Healer Puppet" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_AQ_Healer_Puppet.png',
+    'type': 'gear',
+  },
+  "Invisibility Vial" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_AQ_Invisibility_Vial.png',
+    'type': 'gear',
+  },
+
+// King 
+"Barbarian Puppet" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_BK_Barbarian_Puppet.png',
+    'type': 'gear',
+  },
+  "Earthquake Boots" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_BK_Earthquake_Boots.png',
+    'type': 'gear',
+  },
+  "Giant Gauntlet" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_BK_Giant_Gauntlet.png',
+    'type': 'gear',
+  },
+  "Rage Vial" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_BK_Rage_Vial.png',
+    'type': 'gear',
+  },
+  "Vampstache": {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_BK_Vampstache.png',
+    'type': 'gear',
+  },
+
+  // Warden
+  "Eternal Tome" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_GW_Eternal_Tome.png',
+    'type': 'gear',
+  },
+  "Fireball" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_GW_Fireball.png',
+    'type': 'gear',
+  },
+  "Healing Tome" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_GW_Healing_Tome.png',
+    'type': 'gear',
+  },
+  "Life Gem" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_GW_Life_Gem.png',
+    'type': 'gear',
+  },
+  "Rage Gem" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_GW_Rage_Gem.png',
+    'type': 'gear',
+  },
+
+  // Royal Champion
+  "Haste Vial" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_RC_Haste_Vial.png',
+    'type': 'gear',
+  },
+  "Hog Rider Doll" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_RC_Hog_Rider_Doll.png',
+    'type': 'gear',
+  },
+  "Royal Gem" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_RC_Royal_Gem.png',
+    'type': 'gear',
+  },
+  "Seeking Shield" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_RC_Seeking_Shield.png',
+    'type': 'gear',
+  },
 };

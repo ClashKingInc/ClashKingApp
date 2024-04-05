@@ -1,71 +1,87 @@
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/subpages/player_dashboard/player_info_page.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:clashkingapp/components/app_bar.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:lucide_icons/lucide_icons.dart';
-import 'package:clashkingapp/subpages/player_dashboard/player_legend_page.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/creator_code_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/player_infos_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/player_legend_card.dart';
+import 'package:clashkingapp/api/player_legend.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   final PlayerAccountInfo playerStats;
   final DiscordUser user;
 
   DashboardPage({required this.playerStats, required this.user});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.tertiary,
-      appBar: CustomAppBar(user: user),
-      body: ListView(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-            child: CreatorCodeCard(),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-            child: PlayerStatsCard(playerStats: playerStats),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-            child: PlayerLegendCard(playerStats: playerStats),
-          ),
-        ],
-      ),
-    );
-  }
+  DashboardPageState createState() => DashboardPageState();
 }
 
-class CreatorCodeCard extends StatelessWidget {
-  const CreatorCodeCard({
-    super.key,
-  });
+class DashboardPageState extends State<DashboardPage>
+    with SingleTickerProviderStateMixin {
+  late Future<Map<String, dynamic>> legendData;
+
+  @override
+  void initState() {
+    super.initState();
+    legendData = PlayerLegendService.fetchLegendData(widget.playerStats.tag);
+  }
+
+  @override
+  void didUpdateWidget(DashboardPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.playerStats.tag != oldWidget.playerStats.tag) {
+      legendData = PlayerLegendService.fetchLegendData(widget.playerStats.tag);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        // Padding right and left
-        padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
-        child: Row(
-          crossAxisAlignment:
-              CrossAxisAlignment.center, // Adjust vertical alignment here
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
+      appBar: CustomAppBar(user: widget.user),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            legendData = legendData = PlayerLegendService.fetchLegendData(widget.playerStats.tag);
+          });
+        },
+        child: ListView(
           children: <Widget>[
-            Image.asset('assets/icons/Crown.png',
-                width: 80, height: 80), // Specify your desired width and height
-            SizedBox(width: 16), // Add space between the image and text
-            Expanded(
-              // Use Expanded to ensure text takes up the remaining space
-              child: Text(
-                AppLocalizations.of(context)?.creatorCode ??
-                    'Creator Code : ClashKing',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+            // Creator Code Card
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              child: CreatorCodeCard(),
+            ),
+            // Player Infos Card
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              child: PlayerInfosCard(playerStats: widget.playerStats),
+            ),
+            // Legend Infos Card : Displayed only if data 
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              child: FutureBuilder<Map<String, dynamic>>(
+                future: legendData,
+                builder: (BuildContext context,
+                    AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                      return SizedBox.shrink();
+                  } else if (snapshot.hasError) {
+                    return Text(
+                        'Error: ${snapshot.error}'); // Show error if something went wrong
+                  } else {
+                    if (!snapshot.data!['legends'].isEmpty) {
+                      return PlayerLegendCard(
+                          playerStats: widget.playerStats,
+                          legendData:
+                              snapshot.data!); // Build PlayerLegendCard with data
+                    }
+                    else{
+                      return SizedBox.shrink();
+                    }
+                  }
+                },
               ),
             ),
           ],
@@ -75,246 +91,5 @@ class CreatorCodeCard extends StatelessWidget {
   }
 }
 
-class PlayerStatsCard extends StatelessWidget {
-  const PlayerStatsCard({
-    super.key,
-    required this.playerStats,
-  });
-
-  final PlayerAccountInfo playerStats;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => StatsScreen(playerStats: playerStats),
-          ),
-        );
-      },
-      child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.labelSmall ?? TextStyle(),
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          playerStats.name,
-                          style: Theme.of(context).textTheme.labelSmall,
-                        ),
-                        SizedBox(
-                          height: 100,
-                          width: 100,
-                          child: Image.network(playerStats.townHallPic),
-                        ),
-                        Text(
-                          '${playerStats.tag}',
-                          style: Theme.of(context).textTheme.labelSmall,
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Wrap(
-                            alignment: WrapAlignment.center,
-                            spacing: 4.0, // gap between adjacent chips
-                            runSpacing: 0.0, // gap between lines
-                            children: <Widget>[
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
-                                  child: Image.network(
-                                      "https://clashkingfiles.b-cdn.net/icons/Clan_Badge_Border_2.png"),
-                                ),
-                                labelPadding:
-                                    EdgeInsets.only(left: 2.0, right: 2.0),
-                                label: Text(
-                                  playerStats.clan.name,
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                ),
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
-                                  child: playerStats.warPreference == 'in'
-                                      ? Image.network(
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png")
-                                      : Image.network(
-                                          'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png'),
-                                ),
-                                labelPadding:
-                                    EdgeInsets.only(left: 2.0, right: 2.0),
-                                label: Text(
-                                  playerStats.warPreference.toString(),
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                ),
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
-                                  child: Image.network(playerStats.townHallPic),
-                                ),
-                                label: Text('${playerStats.townHallLevel}',
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall),
-                                labelPadding: EdgeInsets.zero,
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
-                                  child: Image.network(
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
-                                ),
-                                label: Text('${playerStats.trophies}',
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall),
-                                labelPadding: EdgeInsets.zero,
-                              ),
-                              Chip(
-                                avatar: Icon(LucideIcons.chevronsUpDown,
-                                    color: Color.fromARGB(255, 0, 136, 255)),
-                                labelPadding: EdgeInsets.zero,
-                                label: Text(
-                                  '${(playerStats.donations / (playerStats.donationsReceived == 0 ? 1 : playerStats.donationsReceived)).toStringAsFixed(2)}',
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                ),
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
-                                  child:
-                                      Image.network(playerStats.builderHallPic),
-                                ),
-                                label: Text('${playerStats.builderHallLevel}',
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall),
-                                labelPadding: EdgeInsets.zero,
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
-                                  child: Image.network(
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
-                                ),
-                                label: Text(
-                                    '${playerStats.builderBaseTrophies}',
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall),
-                                labelPadding: EdgeInsets.zero,
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
-                                  child: Image.network(
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
-                                ),
-                                labelPadding:
-                                    EdgeInsets.only(left: 2.0, right: 2.0),
-                                label: Text(
-                                  '${playerStats.warStars}',
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 
-
-class PlayerLegendCard extends StatelessWidget {
-  const PlayerLegendCard({
-    super.key,
-    required this.playerStats,
-  });
-
-  final PlayerAccountInfo playerStats;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LegendScreen(playerStats: playerStats),
-          ),
-        );
-      },
-      child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.labelSmall ?? TextStyle(),
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          "Legend League",
-                          style: Theme.of(context).textTheme.labelSmall,
-                        ),
-                        SizedBox(
-                          height: 100,
-                          width: 100,
-                          child: Image.network("https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png"),
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Wrap(
-                            alignment: WrapAlignment.center,
-                            spacing: 4.0, // gap between adjacent chips
-                            runSpacing: 0.0, // gap between lines
-                            children: <Widget>[
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}

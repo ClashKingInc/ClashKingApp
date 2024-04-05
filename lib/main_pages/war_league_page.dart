@@ -4,36 +4,75 @@ import 'package:clashkingapp/subpages/war_league/current_war_info_page.dart';
 import 'package:clashkingapp/components/app_bar.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/api/player_account_info.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CurrentWarInfoPage extends StatelessWidget {
-  final CurrentWarInfo currentWarInfo;
   final DiscordUser user;
+  final PlayerAccountInfo playerStats;
+  CurrentWarInfo? currentWarInfo;
 
-  CurrentWarInfoPage({required this.currentWarInfo, required this.user});
+  CurrentWarInfoPage({required this.user, required this.playerStats, this.currentWarInfo});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFFFF8E1),
       appBar: CustomAppBar(user: user),
-      body: ListView(
-        children: <Widget>[
-        Column(
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CurrentWarInfoScreen(currentWarInfo: currentWarInfo)),
-                );
-              },
-              child: CurrentWarInfoCard(currentWarInfo: currentWarInfo),
-            ),
-          ],
-        ),
-        ],
+      body: FutureBuilder<bool>(
+        future: checkCurrentWar(playerStats),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            final isInwar = snapshot.data ?? false;
+            return ListView(
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    if (isInwar)
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CurrentWarInfoScreen(currentWarInfo: currentWarInfo!)),
+                          );
+                        },
+                        child: CurrentWarInfoCard(currentWarInfo: currentWarInfo!),
+                      )
+                    else 
+                      Text('No current war'),
+                  ],
+                ),
+              ],
+            );
+          }
+        },
       ),
     );
+  }
+  Future<bool> checkCurrentWar(PlayerAccountInfo playerStats) async {
+    final response = await http.get(
+      Uri.parse('https://api.clashking.xyz/v1/clans/${playerStats.clan.tag.replaceAll('#', '%23')}/currentwar'),
+      headers: {'Authorization': 'Bearer ${dotenv.env['API_KEY']}'},
+    );
+
+    if (response.statusCode == 200) {
+      var decodedResponse = jsonDecode(response.body);
+      if (decodedResponse["state"] != "notInWar") { 
+        currentWarInfo = CurrentWarInfo.fromJson(jsonDecode(response.body));
+        return true;
+      }
+      else{
+        return false;
+      }
+    } else {
+      throw Exception('Failed to load current war info');
+    }
   }
 }
 
@@ -67,7 +106,7 @@ class CurrentWarInfoCard extends StatelessWidget {
                 case 'warEnded':
                   return _warEnded(context);
                 default:
-                  return Text('Clan state unknown'); //Reste que ce cas à gérer
+                  return Text('Clan state unknown');
               }
             }(),
             ),

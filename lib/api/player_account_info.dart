@@ -100,16 +100,36 @@ class Clan {
   final String tag;
   final String name;
   final int clanLevel;
-  // Include URLs for badges if needed
+  final BadgeUrls badgeUrls;
 
-  Clan({required this.tag, required this.name, required this.clanLevel});
+  Clan({required this.tag, required this.name, required this.clanLevel, required this.badgeUrls});
 
   factory Clan.fromJson(Map<String, dynamic> json) {
     return Clan(
       tag: json['tag'],
       name: json['name'],
       clanLevel: json['clanLevel'],
-      // Initialize URLs for badges from JSON if needed
+      badgeUrls: BadgeUrls.fromJson(json['badgeUrls']),
+    );
+  }
+}
+
+class BadgeUrls {
+  final String small;
+  final String large;
+  final String medium;
+
+  BadgeUrls({
+    required this.small,
+    required this.large,
+    required this.medium,
+  });
+
+  factory BadgeUrls.fromJson(Map<String, dynamic> json) {
+    return BadgeUrls(
+      small: json['small'],
+      large: json['large'],
+      medium: json['medium'],
     );
   }
 }
@@ -192,8 +212,6 @@ class Troop {
 
   factory Troop.fromJson(Map<String, dynamic> json) {
     String name = json['name'] ?? 'No name';
-    print(json['name']);
-    print(json['village']);
     if (name == 'Baby Dragon' && json['village'] == 'builderBase') {
       name = 'Baby Dragon 2';
     }
@@ -242,7 +260,7 @@ class PlayerService {
     PlayerAccounts playerAccounts =
         PlayerAccounts(playerAccountInfo: [], clanInfo: [], warInfo: []);
     ClanInfo clanInfo;
-    CurrentWarInfo warInfo;
+    CurrentWarInfo ? warInfo;
     List<Future> futures = [];
     final tags = user.tags;
 
@@ -260,13 +278,13 @@ class PlayerService {
 
           var results = await Future.wait<dynamic>([
             fetchClanInfo(playerStats.clan.tag),
-            fetchCurrentWarInfo(playerStats.clan.tag),
+            //fetchCurrentWarInfo(playerStats.clan.tag),
           ]);
           clanInfo = results[0] as ClanInfo;
           playerAccounts.clanInfo.add(clanInfo);
 
-          warInfo = results[1] as CurrentWarInfo;
-          playerAccounts.warInfo.add(warInfo);
+          /*warInfo = results[1] as CurrentWarInfo;
+          playerAccounts.warInfo.add(warInfo);*/
         }),
       );
     }

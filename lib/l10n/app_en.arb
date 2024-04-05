@@ -1,17 +1,33 @@
 {
     "@@locale": "en",
     "creatorCode" : "Creator Code : ClashKing",
+    "signInWithDiscord" : "Sign In with Discord",
     "logout" : "Log out",
     "language" : "Language",
     "settings" : "Settings",
     "selectLanguage": "Select a language",
-    "homeBase" : "Home Base",
-    "builderBase" : "Builder Base",
     "copiedToClipboard" : "Copied to clipboard",
+    
     "dashboard" : "Dashboard",
+    "homeBase" : "Home Base",
+    "th" : "TH",
+    "builderBase" : "Builder Base",
+    "bh" : "BH",
+    "leader" : "Leader",
+    "coLeader" : "Co-Leader",
+    "elder" : "Elder",
+    "member" : "Member",
+    "heroes" : "Heroes",
+    "equipment" : "Equipments",
+    "troops" : "Troops",
+    "superTroops" : "Super Troops",
+    "pets" : "Pets",
+    "siegeMachines" : "Siege Machines",
+    "spells" : "Spells",
+    "achievements" : "Achievements",
+
     "clan" : "Clan",
-    "management" : "Management",
-    "signInWithDiscord" : "Sign In with Discord",
+    "clans" : "Clans",
 
     "warLeague" : "War/League",
     "startsIn" : "Starts in",
@@ -33,5 +49,7 @@
     "preparation" : "Preparation",
     "isNotInWar" : "is not in war",
     "askForWar" : "Contact a leader or a co-leader to start a war",
-    "warLogClosed" : "War log closed"
+    "warLogClosed" : "War log closed",
+
+    "management" : "Management"
 }

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/main_pages/dashboard_page.dart';
 import 'package:clashkingapp/main_pages/clan_page.dart';
-import 'package:clashkingapp/main_pages/current_war_page.dart';
+import 'package:clashkingapp/main_pages/war_league_page.dart';
 import 'package:clashkingapp/main_pages/management_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/core/my_app.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -23,7 +24,6 @@ class MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _initializeAccounts() async {
-    print("User2: ${context.read<MyAppState>().user}");
     final appState = Provider.of<MyAppState>(context, listen: false);
     await appState.fetchPlayerAccounts(appState.user!);
   }
@@ -61,13 +61,11 @@ class MyHomePageState extends State<MyHomePage> {
                   : Center(
                       child:
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
-              appState.currentWarInfo != null && appState.user != null
-                  ? CurrentWarInfoPage(
-                      currentWarInfo: appState.currentWarInfo!,
-                      user: appState.user!)
-                  : Center(
-                      child:
-                          CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
+              appState.user != null && appState.playerStats != null
+                ? CurrentWarInfoPage(user: appState.user!, playerStats: appState.playerStats!)
+                : Center(
+                    child: CircularProgressIndicator(),
+                  ), // Wrap CircularProgressIndicator with Center
               //WarLeaguePage(currentWarInfo: appState.currentWarInfo,),
               ManagementPage(),
             ];
@@ -86,20 +84,20 @@ class MyHomePageState extends State<MyHomePage> {
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                     icon: Icon(Icons.dashboard),
-                    label: 'Dashboard',
+                    label: AppLocalizations.of(context)?.dashboard ?? 'Dashboard',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.shield),
-                    label: 'Clans',
+                    label: AppLocalizations.of(context)?.clan ?? 'Clan',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(
                         CustomIcons.swordCross), // Example icon for War/League
-                    label: 'War/League',
+                    label: AppLocalizations.of(context)?.warLeague ?? 'War/League',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.settings),
-                    label: 'Management',
+                    label: AppLocalizations.of(context)?.management ?? 'Management',
                   ),
                 ],
                 currentIndex: _selectedIndex,
