@@ -59,7 +59,6 @@ class LoginPage extends StatelessWidget {
     try {
       final result = await FlutterWebAuth2.authenticate(
           url: url.toString(), callbackUrlScheme: callbackUrlScheme);
-      print("Result: $result");
 
 // Extract code from resulting URL
       final code = Uri.parse(result).queryParameters['code'];

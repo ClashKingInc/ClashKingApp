@@ -225,7 +225,6 @@ class EquipedEquipment {
       required this.village});
 
   factory EquipedEquipment.fromJson(Map<String, dynamic> json) {
-    print(json);
     return EquipedEquipment(
       name: json['name'] ?? 'No name',
       level: json['level'] ?? 0,
@@ -250,7 +249,6 @@ class Equipment {
       required this.village});
 
   factory Equipment.fromJson(Map<String, dynamic> json) {
-    print(json);
     return Equipment(
       name: json['name'] ?? 'No name',
       level: json['level'] ?? 0,
@@ -324,7 +322,6 @@ class PlayerService {
     PlayerAccounts playerAccounts =
         PlayerAccounts(playerAccountInfo: [], clanInfo: [], warInfo: []);
     ClanInfo clanInfo;
-    CurrentWarInfo? warInfo;
     List<Future> futures = [];
     final tags = user.tags;
 
@@ -358,15 +355,11 @@ class PlayerService {
   }
 
   Future<PlayerAccountInfo> fetchPlayerStats(String tag) async {
-    print('Fetching player stats');
     tag = tag.replaceAll('#', '!');
 
     final response = await http.get(
       Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
     );
-
-    print('Response status: ${response.statusCode}'); // Print response status
-    print('Response body: ${response.body}'); // Print response body
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
@@ -414,14 +407,10 @@ class PlayerService {
   }
 
   Future<ClanInfo> fetchClanInfo(String clanTag) async {
-    print('Fetching clan info');
     clanTag = clanTag.replaceAll('#', '!');
     final response = await http.get(
       Uri.parse('https://api.clashking.xyz/v1/clans/$clanTag'),
     );
-
-    print('Response status: ${response.statusCode}'); // Print response status
-    print('Response body: ${response.body}'); // Print response body
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
@@ -433,14 +422,10 @@ class PlayerService {
   }
 
   Future<CurrentWarInfo> fetchCurrentWarInfo(String clanTag) async {
-    print('Fetching current war info');
     clanTag = clanTag.replaceAll('#', '!');
     final response = await http.get(
       Uri.parse('https://api.clashking.xyz/v1/clans/$clanTag/currentwar'),
     );
-
-    print('Response status: ${response.statusCode}'); // Print response status
-    print('Response body: ${response.body}'); // Print response body
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);

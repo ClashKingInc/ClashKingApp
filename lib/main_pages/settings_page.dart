@@ -8,11 +8,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SettingsInfoScreen extends StatelessWidget {
+class SettingsInfoScreen extends StatefulWidget {
   final DiscordUser user;
 
   SettingsInfoScreen({required this.user});
 
+  @override
+  State<SettingsInfoScreen> createState() => _SettingsInfoScreenState();
+}
+
+class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +85,7 @@ class SettingsInfoScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _showLanguageSelection(BuildContext context) async {
+  Future<void> _showLanguageSelection(context) async {
     final selectedLanguage = await showModalBottomSheet<String>(
       context: context,
       builder: (BuildContext context) {
@@ -99,7 +104,8 @@ class SettingsInfoScreen extends StatelessWidget {
       },
     );
 
-    if (selectedLanguage != null) {
+    // Check if the widget is still mounted before trying to use `context`
+    if (selectedLanguage != null && mounted) {
       Provider.of<MyAppState>(context, listen: false)
           .changeLanguage(selectedLanguage);
     }

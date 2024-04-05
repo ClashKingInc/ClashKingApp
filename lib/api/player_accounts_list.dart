@@ -21,8 +21,6 @@ class PlayerAccounts {
       clanInfo.add(clan);
       CurrentWarInfo war = CurrentWarInfo.fromJson(item['clan']['currentWar']);
       warInfo.add(war);
-
-      print('Player name: ${item['name']}');
     }
 
     return PlayerAccounts(playerAccountInfo: playerAccounts, clanInfo: clanInfo, warInfo: warInfo);

@@ -7,7 +7,6 @@ class PlayerLegendService{
         'https://api.clashking.xyz/player/${tag.substring(1)}/legends'));
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
-      print(body);
       return json.decode(body);
     } else {
       throw Exception('Failed to load seasons data');
@@ -21,7 +20,6 @@ class PlayerLegendSeasonsService {
         'https://api.clashking.xyz/player/${tag.substring(1)}/legend_rankings'));
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
-      print(body);
       return json.decode(body);
     } else {
       throw Exception('Failed to load seasons data');

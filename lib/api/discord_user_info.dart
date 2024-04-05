@@ -43,7 +43,6 @@ Future<DiscordUser> fetchDiscordUser(String accessToken) async {
   );
 
   if (response.statusCode == 200) {
-    print("Response user body: ${response.body}");
     DiscordUser user = DiscordUser.fromJson(jsonDecode(response.body));
     user = await fetchUserTags(user); // Fetch user tags
     return user;
@@ -61,7 +60,6 @@ Future<DiscordUser> fetchUserTags(DiscordUser user) async {
 
   if (response.statusCode == 200) {
     String responseBody = utf8.decode(response.bodyBytes);
-    print("Response tags body: $responseBody");
     Map<String, dynamic> responseBodyJson = jsonDecode(responseBody);
     responseBodyJson.removeWhere((key, value) => value == null); // Remove entries with null value
     user.tags = responseBodyJson.keys.toList(); // Update 'tags' in 'user'

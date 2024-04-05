@@ -148,9 +148,6 @@ class ClanService {
       Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
     );
 
-    print('Response status: ${response.statusCode}'); // Print response status
-    print('Response body: ${response.body}'); // Print response body
-
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       return ClanInfo.fromJson(jsonDecode(responseBody));

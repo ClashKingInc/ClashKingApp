@@ -10,7 +10,6 @@ import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -235,8 +234,8 @@ class MyAppState extends ChangeNotifier {
     if (selectedTag.value != null) {
       selectedTag.value = user!.tags.first;
       selectedTag.addListener(reloadData);
-      _loadLanguage();
     }
+      _loadLanguage();
   }
 
   Locale _locale = Locale('en');
@@ -267,7 +266,6 @@ class MyAppState extends ChangeNotifier {
       final response = await http.get(
         Uri.parse(
             'https://api.clashofclans.com/v1/clans/${playerStats?.tag.replaceAll('#', '%23')}/currentwar'),
-        headers: {'Authorization': 'Bearer ${dotenv.env['API_KEY']}'},
       );
 
       if (response.statusCode == 200) {
@@ -322,12 +320,9 @@ class MyAppState extends ChangeNotifier {
   Future<void> initializeUser() async {
     bool validToken = await isTokenValid();
     if (validToken) {
-      print("Token valide.");
       final accessToken = await getAccessToken();
       if (accessToken != null) {
-        print("Access token : $accessToken");
         user = await fetchDiscordUser(accessToken);
-        print("User: $user");
         notifyListeners();
       }
     } else {

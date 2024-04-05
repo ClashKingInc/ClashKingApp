@@ -135,7 +135,6 @@ class StatsScreenState extends State<StatsScreen>
               labelColor: Theme.of(context).colorScheme.onBackground,
               unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
               onTap: (value) {
-                print('Tab $value selected');
                 setState(() {
                   backgroundImageUrl = value == 0
                       ? "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png"
