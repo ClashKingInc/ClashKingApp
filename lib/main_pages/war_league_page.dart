@@ -19,7 +19,7 @@ class CurrentWarInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFF8E1),
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       appBar: CustomAppBar(user: user),
       body: FutureBuilder<bool>(
         future: checkCurrentWar(playerStats),

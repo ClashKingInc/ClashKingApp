@@ -32,6 +32,7 @@ class PlayerAccountInfo {
   final List<Hero> heroes;
   final List<Troop> troops;
   final List<Spell> spells;
+  final List<Equipment> equipments;
   String townHallPic = '';
   String builderHallPic = '';
 
@@ -60,6 +61,7 @@ class PlayerAccountInfo {
     required this.heroes,
     required this.troops,
     required this.spells,
+    required this.equipments,
   });
 
   factory PlayerAccountInfo.fromJson(Map<String, dynamic> json) {
@@ -92,6 +94,8 @@ class PlayerAccountInfo {
           List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x)) ?? []),
       spells:
           List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x)) ?? []),
+      equipments: List<Equipment>.from(
+          json['heroEquipment'].map((x) => Equipment.fromJson(x)) ?? []),
     );
   }
 }
@@ -102,7 +106,11 @@ class Clan {
   final int clanLevel;
   final BadgeUrls badgeUrls;
 
-  Clan({required this.tag, required this.name, required this.clanLevel, required this.badgeUrls});
+  Clan(
+      {required this.tag,
+      required this.name,
+      required this.clanLevel,
+      required this.badgeUrls});
 
   factory Clan.fromJson(Map<String, dynamic> json) {
     return Clan(
@@ -177,6 +185,7 @@ class Hero {
   final int level;
   final int maxLevel;
   final String village;
+  final List<EquipedEquipment> equipment;
   late String imageUrl;
   late String type;
 
@@ -184,10 +193,65 @@ class Hero {
       {required this.name,
       required this.level,
       required this.maxLevel,
-      required this.village});
+      required this.village,
+      required this.equipment});
 
   factory Hero.fromJson(Map<String, dynamic> json) {
     return Hero(
+      name: json['name'] ?? 'No name',
+      level: json['level'] ?? 0,
+      maxLevel: json['maxLevel'] ?? 0,
+      village: json['village'] ?? 'home',
+      equipment: json['equipment'] != null
+          ? List<EquipedEquipment>.from(
+              json['equipment'].map((x) => EquipedEquipment.fromJson(x)))
+          : [],
+    );
+  }
+}
+
+class EquipedEquipment {
+  final String name;
+  final int level;
+  final int maxLevel;
+  final String village;
+  late String imageUrl;
+  late String type;
+
+  EquipedEquipment(
+      {required this.name,
+      required this.level,
+      required this.maxLevel,
+      required this.village});
+
+  factory EquipedEquipment.fromJson(Map<String, dynamic> json) {
+    print(json);
+    return EquipedEquipment(
+      name: json['name'] ?? 'No name',
+      level: json['level'] ?? 0,
+      maxLevel: json['maxLevel'] ?? 0,
+      village: json['village'] ?? 'home',
+    );
+  }
+}
+
+class Equipment {
+  final String name;
+  final int level;
+  final int maxLevel;
+  final String village;
+  late String imageUrl;
+  late String type;
+
+  Equipment(
+      {required this.name,
+      required this.level,
+      required this.maxLevel,
+      required this.village});
+
+  factory Equipment.fromJson(Map<String, dynamic> json) {
+    print(json);
+    return Equipment(
       name: json['name'] ?? 'No name',
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
@@ -260,7 +324,7 @@ class PlayerService {
     PlayerAccounts playerAccounts =
         PlayerAccounts(playerAccountInfo: [], clanInfo: [], warInfo: []);
     ClanInfo clanInfo;
-    CurrentWarInfo ? warInfo;
+    CurrentWarInfo? warInfo;
     List<Future> futures = [];
     final tags = user.tags;
 
@@ -316,6 +380,7 @@ class PlayerService {
       await fetchImagesAndTypes(playerStats.troops);
       await fetchImagesAndTypes(playerStats.heroes);
       await fetchImagesAndTypes(playerStats.spells);
+      await fetchImagesAndTypes(playerStats.equipments);
       return playerStats;
     } else {
       throw Exception('Failed to load player stats');

@@ -1,7 +1,7 @@
 import 'package:clashkingapp/custom_icons_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:clashkingapp/main_pages/dashboard_page.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/dashboard_page.dart';
 import 'package:clashkingapp/main_pages/clan_page.dart';
 import 'package:clashkingapp/main_pages/war_league_page.dart';
 import 'package:clashkingapp/main_pages/management_page.dart';
@@ -80,7 +80,7 @@ class MyHomePageState extends State<MyHomePage> {
               ),
               bottomNavigationBar: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed, 
-                backgroundColor: Colors.white, 
+                backgroundColor: Theme.of(context).colorScheme.surface, 
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                     icon: Icon(Icons.dashboard),
@@ -101,10 +101,8 @@ class MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
                 currentIndex: _selectedIndex,
-                selectedItemColor: Color(
-                    0xFFC98910), // Using the primary color we picked from the logo
-                unselectedItemColor: Color(
-                    0xFF9B1F28), // A color that complements the primary color
+                selectedItemColor: Theme.of(context).colorScheme.primary,
+                unselectedItemColor: Theme.of(context).colorScheme.secondary,
                 showUnselectedLabels: true,
                 onTap: _onItemTapped,
               ),

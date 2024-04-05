@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/subpages/legend_dashboard/legend_functions.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/legend_functions.dart';
 
 class LegendOffenseDefenseCard extends StatelessWidget {
   const LegendOffenseDefenseCard(
@@ -75,12 +75,12 @@ class LegendOffenseDefenseCard extends StatelessWidget {
           Text("Statistics", style: Theme.of(context).textTheme.bodyLarge),
           Text("Total: ${stats["count"]}/8",
               style: Theme.of(context).textTheme.bodySmall),
-          Text('Average: ${stats["average"].toStringAsFixed(2)}',
+          Text('Average: ${stats["average"].toStringAsFixed(1)}',
               style: Theme.of(context).textTheme.bodySmall),
           Text('Remaining: $plusMinus${stats["remaining"]}',
               style: Theme.of(context).textTheme.bodySmall),
-          Text('Worst : $plusMinus${stats["bestPossibleTrophies"]}',
-              style: Theme.of(context).textTheme.bodySmall),
+          Text('${plusMinus == "-" ? "Worst" : "Best"} : $plusMinus${stats["bestPossibleTrophies"]}',
+            style: Theme.of(context).textTheme.bodySmall),
         ]),
       ),
     );

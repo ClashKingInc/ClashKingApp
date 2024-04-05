@@ -132,7 +132,8 @@ class StatsScreenState extends State<StatsScreen>
               child: hallChips,
             ),
             ScrollableTab(
-              labelColor: Colors.black,
+              labelColor: Theme.of(context).colorScheme.onBackground,
+              unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
               onTap: (value) {
                 print('Tab $value selected');
                 setState(() {
@@ -164,6 +165,8 @@ class StatsScreenState extends State<StatsScreen>
                         SizedBox(height: 10),
                         buildItemSection(widget.playerStats.heroes, 'hero',
                             AppLocalizations.of(context)?.heroes ?? 'Heroes'),
+                        buildItemSection(widget.playerStats.equipments, 'gear',
+                            AppLocalizations.of(context)?.equipment ?? 'Gears'),
                         buildItemSection(widget.playerStats.troops, 'troop',
                             AppLocalizations.of(context)?.troops ?? 'Troops'),
                         buildItemSection(
@@ -280,7 +283,7 @@ class StatsScreenState extends State<StatsScreen>
                                 border: Border.all(
                                   color: item.level == item.maxLevel
                                       ? Color(0xFFD4AF37) // Or
-                                      : Colors.black, // Noir
+                                      : Theme.of(context).colorScheme.onBackground, // Noir
                                   width: 2,
                                 ),
                               ),

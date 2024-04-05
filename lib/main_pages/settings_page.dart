@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/my_app.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
@@ -40,6 +41,15 @@ class SettingsInfoScreen extends StatelessWidget {
           Divider(),
           _buildListTile(
             context,
+            title: "Toggle theme",
+            leadingIcon: LucideIcons.sunMoon,
+            onTap: () {
+              Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();
+            },
+          ),
+          Divider(),
+          _buildListTile(
+            context,
             title: AppLocalizations.of(context)!.logout,
             leadingIcon: Icons.exit_to_app,
             onTap: _logOut,
@@ -57,9 +67,15 @@ class SettingsInfoScreen extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return ListTile(
-      title: Text(title),
-      subtitle: subtitle != null ? Text(subtitle) : null,
-      leading: Icon(leadingIcon),
+      title: Text(title,
+          style: TextStyle(color: Theme.of(context).colorScheme.onBackground)),
+      subtitle: subtitle != null
+          ? Text(subtitle,
+              style:
+                  TextStyle(color: Theme.of(context).colorScheme.onBackground))
+          : null,
+      leading:
+          Icon(leadingIcon, color: Theme.of(context).colorScheme.onBackground),
       onTap: onTap,
     );
   }

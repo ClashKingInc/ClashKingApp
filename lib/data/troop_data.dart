@@ -561,7 +561,7 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
         'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_RC_Haste_Vial.png',
     'type': 'gear',
   },
-  "Hog Rider Doll" : {
+  "Hog Rider Puppet" : {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_RC_Hog_Rider_Doll.png',
     'type': 'gear',
