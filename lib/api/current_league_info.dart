@@ -74,19 +74,19 @@ class BadgeUrls {
 class LeagueMember {
   final String tag;
   final String name;
-  final int townhallLevel;
+  final int townHallLevel;
 
   LeagueMember({
     required this.tag,
     required this.name,
-    required this.townhallLevel,
+    required this.townHallLevel,
   });
 
   factory LeagueMember.fromJson(Map<String, dynamic> json) {
     return LeagueMember(
       tag: json['tag'] ?? 'No tag',
       name: json['name']  ?? 'No name',
-      townhallLevel: json['townhallLevel'] ?? 0,
+      townHallLevel: json['townHallLevel'] ?? 0,
     );
   }
 }
