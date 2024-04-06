@@ -161,6 +161,7 @@ class CurrentWarInfoCard extends StatelessWidget {
             Center(
                 child: Text(
                     '${AppLocalizations.of(context)?.startsIn} $hours:$minutes')),
+            Center(child: Text(' ')),
           ],
         ),
         Column(

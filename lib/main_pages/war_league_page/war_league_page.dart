@@ -1,6 +1,8 @@
+import 'package:clashkingapp/api/current_league_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/main_pages/war_league_page/war_war_league/current_war_info_page.dart';
+import 'package:clashkingapp/main_pages/war_league_page/war_war_league/current_league_info_page.dart';
 import 'package:clashkingapp/components/app_bar.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
@@ -22,6 +24,7 @@ class CurrentWarInfoPage extends StatefulWidget {
 
 class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   CurrentWarInfo? currentWarInfo;
+  CurrentLeagueInfo? currentLeagueInfo;
 
   @override
   void initState() {
@@ -58,13 +61,20 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                             ),
                           );
                         },
-                        child:
-                            CurrentWarInfoCard(currentWarInfo: currentWarInfo!),
+                        child: CurrentWarInfoCard(currentWarInfo: currentWarInfo!),
                       )
                     else if (warState == "cwl")
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 4.0, horizontal: 8.0),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CurrentLeagueInfoScreen(
+                                currentLeagueInfo: currentLeagueInfo!,
+                              ),
+                            ),
+                          );
+                        },
                         child: CwlCard(playerStats: widget.playerStats),
                       )
                     else
@@ -105,6 +115,7 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
           if (responseCwl.statusCode == 200) {
             var decodedResponseCwl = jsonDecode(utf8.decode(responseCwl.bodyBytes));
             if (decodedResponseCwl.containsKey("state")) {
+              currentLeagueInfo = CurrentLeagueInfo.fromJson(jsonDecode(utf8.decode(responseCwl.bodyBytes)));
               return "cwl";
             } else {
               return "notInLeague";

@@ -35,12 +35,12 @@ class NotInWarCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '${playerStats.clan.name} ${AppLocalizations.of(context)?.isNotInWar ?? "is not in war"}',
+                                  '${playerStats.clan.name} ${AppLocalizations.of(context)?.isNotInWar ?? "is not in war."}',
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(
                                   AppLocalizations.of(context)?.askForWar ??
-                                      'Contact a leader or co-leader to start a war',
+                                      'Contact a leader or co-leader to start a war.',
                                   textAlign: TextAlign.center,
                                 ),
                               ],

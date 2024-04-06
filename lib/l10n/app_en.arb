@@ -30,6 +30,9 @@
     "clans" : "Clans",
 
     "warLeague" : "War/League",
+    "war" : "War",
+    "league" : "League",
+    "wars" : "Wars",
     "startsIn" : "Starts in",
     "endsIn" : "Ends in",
     "statistics" : "Statistics",
@@ -47,9 +50,10 @@
     "draw" : "Draw",
     "warEnded" : "War ended",
     "preparation" : "Preparation",
-    "isNotInWar" : "is not in war",
-    "askForWar" : "Contact a leader or a co-leader to start a war",
-    "warLogClosed" : "War log closed",
+    "isNotInWar" : "is not in war.",
+    "askForWar" : "Contact a leader or a co-leader to start a war.",
+    "warLogClosed" : "War log closed.",
+    "rounds" : "Rounds",
 
     "management" : "Management"
 }
