@@ -3,6 +3,9 @@ import 'package:clashkingapp/api/current_league_info.dart';
 import 'dart:ui';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/main_pages/clan_page/clan_info_page.dart';
+import 'package:clashkingapp/api/wars_league_info.dart';
 
 class CurrentLeagueInfoScreen extends StatefulWidget {
   final CurrentLeagueInfo currentLeagueInfo;
@@ -73,37 +76,73 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
 
 Widget buildRoundsTab(
     BuildContext context, CurrentLeagueInfo currentLeagueInfo) {
-  return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Text('Rounds', style: Theme.of(context).textTheme.headline6),
-    Text('Current round: ${currentLeagueInfo.state}'),
-    Text('Current war: ${currentLeagueInfo.season}'),
-    Column(
-      children: currentLeagueInfo.clans.map((clan) {
-        return Column(
-          children: <Widget>[
-            Text('Tag: ${clan.tag}'),
-            Text('Name: ${clan.name}'),
-            Image.network(clan.badgeUrls.small),
-            Text('Clan Level: ${clan.clanLevel}'),
-            Column(
-              children: clan.members.map((member) {
-                return Column(children: [
-                  Text('Member: ${member.name}'),
-                  Text('Tag: ${member.tag}'),
-                  Text('TownHall Level: ${member.townHallLevel}')
-                ]);
-              }).toList(),
-            ),
-          ],
-        );
-      }).toList(),
-    ),
-    Column(
-      children: currentLeagueInfo.rounds.map((round) {
-        return Text('Round: $round');
-      }).toList(),
-    )
-  ]);
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: currentLeagueInfo.rounds.asMap().entries.map((entry) {
+      int round =
+          entry.key + 1; // Assuming you want round numbering to start from 1
+      ClanLeagueRounds clanLeagueRounds = entry.value;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text('Round: $round',
+                style: Theme.of(context).textTheme.titleLarge),
+          ),
+          FutureBuilder<List<WarLeagueInfo>>(
+            future: clanLeagueRounds.warLeagueInfos,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (snapshot.hasData) {
+                return Column(
+                  children: snapshot.data!.map((warLeagueInfo) {
+                    return Card(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                          Text(
+                              'Preparation : ${warLeagueInfo.preparationStartTime}'),
+                          Text('Start Time: ${warLeagueInfo.startTime}'),
+                          Text('End Time: ${warLeagueInfo.endTime}'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(warLeagueInfo.clan.name),
+                                  Text(warLeagueInfo.clan.tag),
+                                  Text('${warLeagueInfo.clan.stars}'),
+                                  Text(
+                                      '${warLeagueInfo.clan.destructionPercentage.toStringAsFixed(2)}%'),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Text(warLeagueInfo.opponent.name),
+                                  Text(warLeagueInfo.opponent.tag),
+                                  Text('${warLeagueInfo.opponent.stars}'),
+                                  Text(
+                                      '${warLeagueInfo.opponent.destructionPercentage.toStringAsFixed(2)}%'),
+                                ],
+                              ),
+                            ],
+                          )
+                        ]));
+                  }).toList(),
+                );
+              } else {
+                return Text('No data available');
+              }
+            },
+          ),
+        ],
+      );
+    }).toList(),
+  );
 }
 
 Widget buildTeamsTab(
@@ -111,7 +150,7 @@ Widget buildTeamsTab(
   return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     Column(
       children: currentLeagueInfo.clans.map((clan) {
-        final townHallLevelCounts = <int, int>{};
+        var townHallLevelCounts = <int, int>{};
 
         for (var member in clan.members) {
           final townHallLevel = member.townHallLevel;
@@ -119,49 +158,81 @@ Widget buildTeamsTab(
               (townHallLevelCounts[townHallLevel] ?? 0) + 1;
         }
 
-        return Card(
-            child: Column(
-          children: <Widget>[
-            Row(
-              children: [
-                Column(
-                  children: [
-                    Text('${clan.name}',
-                        style: Theme.of(context).textTheme.bodyMedium),
-                    Text('${clan.tag}',
-                        style: Theme.of(context).textTheme.labelMedium),
-                    Image.network(clan.badgeUrls.small, width: 50, height: 50),
-                    Text('Lvl. ${clan.clanLevel}'),
-                  ],
+        var sortedEntries = townHallLevelCounts.entries.toList()
+          ..sort((a, b) => b.key.compareTo(a.key));
+
+        townHallLevelCounts = Map.fromEntries(sortedEntries);
+
+        return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Scaffold(
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    body: FutureBuilder<ClanInfo>(
+                      future: ClanService().fetchClanInfo(clan.tag),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return ClanInfoScreen(clanInfo: snapshot.data!);
+                        }
+                      },
+                    ),
+                  ),
                 ),
-                Wrap(
-                  children: townHallLevelCounts.entries.map((entry) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Wrap(
-                        children: [
-                          Image.network(
-                            'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${entry.key}.png',
-                            width: 20,
+              );
+            },
+            child: Card(
+                child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                      child: Column(children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.network(clan.badgeUrls.small,
+                            width: 35, height: 35),
+                        SizedBox(width: 10),
+                        Column(children: [
+                          Text(clan.name,
+                              style: Theme.of(context).textTheme.bodyMedium),
+                          Text(clan.tag,
+                              style: Theme.of(context).textTheme.labelMedium),
+                        ])
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      children: townHallLevelCounts.entries.map((entry) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Wrap(
+                            children: [
+                              Image.network(
+                                'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${entry.key}.png',
+                                width: 20,
+                              ),
+                              SizedBox(width: 5),
+                              Text('x${entry.value}'),
+                            ],
                           ),
-                          SizedBox(width: 5),
-                          Text('x${entry.value}'),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ],
-            )
-          ],
-        ));
+                        );
+                      }).toList(),
+                    ),
+                  ])),
+                ],
+              ),
+            )));
       }).toList(),
     ),
-    Column(
-      children: currentLeagueInfo.rounds.map((round) {
-        return Text('Round: $round');
-      }).toList(),
-    )
   ]);
 }
 
@@ -169,7 +240,7 @@ Widget buildWarsTab(BuildContext context) {
   return Column(
     children: [
       ListTile(
-        title: Text('Wars', style: Theme.of(context).textTheme.headline6),
+        title: Text('Wars', style: Theme.of(context).textTheme.titleLarge),
       ),
     ],
   );

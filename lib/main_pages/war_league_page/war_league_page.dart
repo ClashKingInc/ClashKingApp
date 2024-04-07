@@ -11,6 +11,7 @@ import 'dart:convert';
 import 'package:clashkingapp/main_pages/war_league_page/components/not_in_war_card.dart';
 import 'package:clashkingapp/main_pages/war_league_page/components/cwl_card.dart';
 import 'package:clashkingapp/main_pages/war_league_page/components/current_war_info_card.dart';
+import 'package:clashkingapp/api/wars_league_info.dart';
 
 class CurrentWarInfoPage extends StatefulWidget {
   final DiscordUser user;
@@ -25,6 +26,7 @@ class CurrentWarInfoPage extends StatefulWidget {
 class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   CurrentWarInfo? currentWarInfo;
   CurrentLeagueInfo? currentLeagueInfo;
+  List<Map<int, List<WarLeagueInfo>>> warLeagueInfoByRound = [];
 
   @override
   void initState() {
@@ -61,7 +63,8 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                             ),
                           );
                         },
-                        child: CurrentWarInfoCard(currentWarInfo: currentWarInfo!),
+                        child:
+                            CurrentWarInfoCard(currentWarInfo: currentWarInfo!),
                       )
                     else if (warState == "cwl")
                       GestureDetector(
@@ -107,15 +110,18 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
     if (responseWar.statusCode == 200) {
       var decodedResponse = jsonDecode(utf8.decode(responseWar.bodyBytes));
       if (decodedResponse["state"] != "notInWar") {
-        currentWarInfo = CurrentWarInfo.fromJson(jsonDecode(utf8.decode(responseWar.bodyBytes)));
+        currentWarInfo = CurrentWarInfo.fromJson(
+            jsonDecode(utf8.decode(responseWar.bodyBytes)));
         return "war";
       } else {
         DateTime now = DateTime.now();
         if (now.day >= 1 && now.day <= 10) {
           if (responseCwl.statusCode == 200) {
-            var decodedResponseCwl = jsonDecode(utf8.decode(responseCwl.bodyBytes));
+            var decodedResponseCwl =
+                jsonDecode(utf8.decode(responseCwl.bodyBytes));
             if (decodedResponseCwl.containsKey("state")) {
-              currentLeagueInfo = CurrentLeagueInfo.fromJson(jsonDecode(utf8.decode(responseCwl.bodyBytes)));
+              currentLeagueInfo = CurrentLeagueInfo.fromJson(
+                  jsonDecode(utf8.decode(responseCwl.bodyBytes)));
               return "cwl";
             } else {
               return "notInLeague";
