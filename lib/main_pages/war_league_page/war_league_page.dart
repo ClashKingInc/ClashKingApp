@@ -6,6 +6,7 @@ import 'package:clashkingapp/main_pages/war_league_page/war_war_league/current_l
 import 'package:clashkingapp/components/app_bar.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
+import 'package:clashkingapp/api/clan_info.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:clashkingapp/main_pages/war_league_page/components/not_in_war_card.dart';
@@ -15,8 +16,9 @@ import 'package:clashkingapp/main_pages/war_league_page/components/current_war_i
 class CurrentWarInfoPage extends StatefulWidget {
   final DiscordUser user;
   final PlayerAccountInfo playerStats;
+  final ClanInfo clanInfo;
 
-  CurrentWarInfoPage({required this.user, required this.playerStats});
+  CurrentWarInfoPage({required this.user, required this.playerStats, required this.clanInfo});
 
   @override
   State<CurrentWarInfoPage> createState() => _CurrentWarInfoPageState();
@@ -71,6 +73,8 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                             MaterialPageRoute(
                               builder: (context) => CurrentLeagueInfoScreen(
                                 currentLeagueInfo: currentLeagueInfo!,
+                                clanTag: widget.playerStats.clan.tag,
+                                clanInfo: widget.clanInfo,
                               ),
                             ),
                           );

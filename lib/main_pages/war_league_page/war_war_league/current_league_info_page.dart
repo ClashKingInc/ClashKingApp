@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_league_info.dart';
+import 'package:clashkingapp/api/clan_info.dart';
 import 'dart:ui';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CurrentLeagueInfoScreen extends StatefulWidget {
   final CurrentLeagueInfo currentLeagueInfo;
+  final String clanTag;
+  final ClanInfo clanInfo;
 
-  CurrentLeagueInfoScreen({super.key, required this.currentLeagueInfo});
+  CurrentLeagueInfoScreen({super.key, required this.currentLeagueInfo, required this.clanTag, required this.clanInfo});
 
   @override
   CurrentLeagueInfoScreenState createState() => CurrentLeagueInfoScreenState();
@@ -63,7 +66,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
             Tab(text: AppLocalizations.of(context)?.wars ?? 'Wars')
           ],
           children: [
-            ListTile(title: buildRoundsTab(context, widget.currentLeagueInfo)),
+            ListTile(title: buildRoundsTab(context, widget.currentLeagueInfo, widget.clanTag, widget.clanInfo)),
             ListTile(title: buildTeamsTab(context, widget.currentLeagueInfo)),
             ListTile(title: buildWarsTab(context)),
           ])
@@ -71,39 +74,47 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
   }
 }
 
-Widget buildRoundsTab(
-    BuildContext context, CurrentLeagueInfo currentLeagueInfo) {
-  return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Text('Rounds', style: Theme.of(context).textTheme.headline6),
-    Text('Current round: ${currentLeagueInfo.state}'),
-    Text('Current war: ${currentLeagueInfo.season}'),
-    Column(
-      children: currentLeagueInfo.clans.map((clan) {
-        return Column(
-          children: <Widget>[
-            Text('Tag: ${clan.tag}'),
-            Text('Name: ${clan.name}'),
-            Image.network(clan.badgeUrls.small),
-            Text('Clan Level: ${clan.clanLevel}'),
-            Column(
-              children: clan.members.map((member) {
-                return Column(children: [
-                  Text('Member: ${member.name}'),
-                  Text('Tag: ${member.tag}'),
-                  Text('TownHall Level: ${member.townHallLevel}')
-                ]);
-              }).toList(),
-            ),
-          ],
-        );
-      }).toList(),
-    ),
-    Column(
-      children: currentLeagueInfo.rounds.map((round) {
-        return Text('Round: $round');
-      }).toList(),
-    )
-  ]);
+Widget buildRoundsTab(BuildContext context, CurrentLeagueInfo currentLeagueInfo, String clanTag, ClanInfo clanInfo) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Center(child: Text('League: $clanTag ${clanInfo.warLeague.name}', style: TextStyle(fontWeight: FontWeight.bold))),
+      Center(child: Text('Season: ${currentLeagueInfo.season}', style: TextStyle(fontWeight: FontWeight.bold))),
+      ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true, // Important pour les ListView dans les Column/ScrollView
+        itemCount: currentLeagueInfo.rounds.length,
+        itemBuilder: (context, index) {
+          final round = currentLeagueInfo.rounds[index];
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Text('Round ${index + 1}:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: round.warTags.where((tag) => tag != "#0").length,
+                itemBuilder: (context, tagIndex) {
+                  final warTag = round.warTags[tagIndex];
+                  if (warTag == "#0") {
+                    return SizedBox.shrink();
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
+                    child: Text('WarTag: $warTag'),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      ),
+    ],
+  );
 }
 
 Widget buildTeamsTab(
@@ -157,11 +168,6 @@ Widget buildTeamsTab(
         ));
       }).toList(),
     ),
-    Column(
-      children: currentLeagueInfo.rounds.map((round) {
-        return Text('Round: $round');
-      }).toList(),
-    )
   ]);
 }
 

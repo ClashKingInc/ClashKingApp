@@ -5,8 +5,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class CurrentLeagueInfo {
   final String state;
   final String season;
-  final List<ClanLeagueDetails> clans;
-  final List<ClanLeagueRounds> rounds;
+  final List<LeagueClanDetails> clans;
+  final List<LeagueRounds> rounds;
 
   CurrentLeagueInfo({
     required this.state,
@@ -19,20 +19,20 @@ class CurrentLeagueInfo {
     return CurrentLeagueInfo(
       state: json['state'] ?? 'No state',
       season: json['season'] ?? 'No season',
-      clans: List<ClanLeagueDetails>.from(json['clans']?.map((x) => ClanLeagueDetails.fromJson(x)) ?? []),
-      rounds: List<ClanLeagueRounds>.from(json['rounds']?.map((x) => ClanLeagueRounds.fromJson(x)) ?? []),
+      clans: List<LeagueClanDetails>.from(json['clans']?.map((x) => LeagueClanDetails.fromJson(x)) ?? []),
+      rounds: List<LeagueRounds>.from(json['rounds']?.map((x) => LeagueRounds.fromJson(x)) ?? []),
     );
   }
 }
 
-class ClanLeagueDetails {
+class LeagueClanDetails {
   final String tag;
   final String name;
   final BadgeUrls badgeUrls;
   final int clanLevel;
   final List<LeagueMember> members;
 
-  ClanLeagueDetails({
+  LeagueClanDetails({
     required this.tag,
     required this.name,
     required this.badgeUrls,
@@ -40,8 +40,8 @@ class ClanLeagueDetails {
     required this.members,
   });
 
-  factory ClanLeagueDetails.fromJson(Map<String, dynamic> json) {
-    return ClanLeagueDetails(
+  factory LeagueClanDetails.fromJson(Map<String, dynamic> json) {
+    return LeagueClanDetails(
       tag: json['tag'] ?? 'No tag',
       name: json['name'] ?? 'No name',
       badgeUrls: BadgeUrls.fromJson(json['badgeUrls'] ?? {}),
@@ -91,23 +91,16 @@ class LeagueMember {
   }
 }
 
-class ClanLeagueRounds {
-  final List<List<String>> warTags;
+class LeagueRounds {
+  final List<String> warTags;
 
-  ClanLeagueRounds({
+  LeagueRounds({
     required this.warTags,
   });
 
-  factory ClanLeagueRounds.fromJson(Map<String, dynamic> json) {
-    var rounds = json['rounds'] as List<dynamic>? ?? [];
-    List<List<String>> parsedWarTags = rounds.map((round) {
-      var warTags = round['warTags'] as List<dynamic>? ?? [];
-      return warTags.map((tag) => tag.toString()).toList();
-    }).toList();
-    return ClanLeagueRounds(
-      warTags: parsedWarTags,
-    );
-  }
+  factory LeagueRounds.fromJson(Map<String, dynamic> json) => LeagueRounds(
+    warTags: List<String>.from(json['warTags'].map((x) => x)),
+  );
 }
 
 // Service
