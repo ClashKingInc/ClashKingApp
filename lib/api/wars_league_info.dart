@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class WarLeagueInfo {
   final String state;
@@ -181,17 +180,10 @@ class BestOpponentAttack {
 
 // Service
 class WarLeagueService {
-  Future<void> initEnv() async {
-    await dotenv.load(fileName: ".env");
-  }
-
   Future<WarLeagueInfo> fetchWarLeagueInfo(String warTag) async {
     warTag = warTag.replaceAll('#', '%23');
     final response = await http.get(
       Uri.parse('https://api.clashking.xyz/v1/clanwarleagues/wars/$warTag'),
-      headers: {
-        'Authorization': 'Bearer ${dotenv.env['API_KEY']}'
-      },
     );
 
     if (response.statusCode == 200) {
