@@ -4,7 +4,6 @@ import 'package:clashkingapp/api/clan_info.dart';
 import 'dart:ui';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_page.dart';
 import 'package:clashkingapp/api/wars_league_info.dart';
 
@@ -69,7 +68,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
             Tab(text: AppLocalizations.of(context)?.wars ?? 'Wars')
           ],
           children: [
-            ListTile(title: buildRoundsTab(context, widget.currentLeagueInfo, widget.clanTag, widget.clanInfo)),
+            ListTile(title: buildRoundsTab(context, widget.currentLeagueInfo)),
             ListTile(title: buildTeamsTab(context, widget.currentLeagueInfo)),
             ListTile(title: buildWarsTab(context)),
           ])

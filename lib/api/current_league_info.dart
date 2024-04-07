@@ -5,8 +5,8 @@ import 'package:clashkingapp/api/wars_league_info.dart';
 class CurrentLeagueInfo {
   final String state;
   final String season;
-  final List<LeagueClanDetails> clans;
-  final List<LeagueRounds> rounds;
+  final List<ClanLeagueDetails> clans;
+  final List<ClanLeagueRounds> rounds;
 
   CurrentLeagueInfo({
     required this.state,
@@ -27,14 +27,14 @@ class CurrentLeagueInfo {
   }
 }
 
-class LeagueClanDetails {
+class ClanLeagueDetails {
   final String tag;
   final String name;
   final BadgeUrls badgeUrls;
   final int clanLevel;
   final List<LeagueMember> members;
 
-  LeagueClanDetails({
+  ClanLeagueDetails({
     required this.tag,
     required this.name,
     required this.badgeUrls,
@@ -42,8 +42,8 @@ class LeagueClanDetails {
     required this.members,
   });
 
-  factory LeagueClanDetails.fromJson(Map<String, dynamic> json) {
-    return LeagueClanDetails(
+  factory ClanLeagueDetails.fromJson(Map<String, dynamic> json) {
+    return ClanLeagueDetails(
       tag: json['tag'] ?? 'No tag',
       name: json['name'] ?? 'No name',
       badgeUrls: BadgeUrls.fromJson(json['badgeUrls'] ?? {}),
@@ -98,7 +98,7 @@ class ClanLeagueRounds {
   final List<String> warTags;
   final Future<List<WarLeagueInfo>> warLeagueInfos;
 
-  LeagueRounds({
+  ClanLeagueRounds({
     required this.warTags,
     required this.warLeagueInfos,
   });
