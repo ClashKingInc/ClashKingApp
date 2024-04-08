@@ -123,7 +123,7 @@ class ClanLeagueRounds {
 
       if (response.statusCode == 200) {
         WarLeagueInfo warLeagueInfoItem =
-            WarLeagueInfo.fromJson(jsonDecode(response.body));
+            WarLeagueInfo.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         warLeagueInfos.add(warLeagueInfoItem);
       } else {
         throw Exception(
@@ -145,7 +145,7 @@ class CurrentLeagueService {
     );
 
     if (response.statusCode == 200) {
-      return CurrentLeagueInfo.fromJson(jsonDecode(response.body));
+      return CurrentLeagueInfo.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception(
           'Failed to load current league info with status code: ${response.statusCode}');

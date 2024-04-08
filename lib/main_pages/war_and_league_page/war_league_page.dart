@@ -1,17 +1,17 @@
 import 'package:clashkingapp/api/current_league_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
-import 'package:clashkingapp/main_pages/war_league_page/war_war_league/current_war_info_page.dart';
-import 'package:clashkingapp/main_pages/war_league_page/war_war_league/current_league_info_page.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/current_league_info_page.dart';
 import 'package:clashkingapp/components/app_bar.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:clashkingapp/main_pages/war_league_page/components/not_in_war_card.dart';
-import 'package:clashkingapp/main_pages/war_league_page/components/cwl_card.dart';
-import 'package:clashkingapp/main_pages/war_league_page/components/current_war_info_card.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/components/not_in_war_card.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/components/cwl_card.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/components/current_war_info_card.dart';
 import 'package:clashkingapp/api/wars_league_info.dart';
 
 class CurrentWarInfoPage extends StatefulWidget {
