@@ -86,16 +86,11 @@ class PlayerAccountInfo {
       clanCapitalContributions: json['clanCapitalContributions'] ?? 0,
       clan: Clan.fromJson(json['clan'] ?? {}),
       league: League.fromJson(json['league'] ?? {}),
-      achievements: List<Achievement>.from(
-          json['achievements'].map((x) => Achievement.fromJson(x ?? {}))),
-      heroes:
-          List<Hero>.from(json['heroes'].map((x) => Hero.fromJson(x)) ?? []),
-      troops:
-          List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x)) ?? []),
-      spells:
-          List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x)) ?? []),
-      equipments: List<Equipment>.from(
-          json['heroEquipment'].map((x) => Equipment.fromJson(x)) ?? []),
+      achievements: List<Achievement>.from(json['achievements'].map((x) => Achievement.fromJson(x ?? {}))),
+      heroes: List<Hero>.from(json['heroes'].map((x) => Hero.fromJson(x)) ?? []),
+      troops: List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x)) ?? []),
+      spells: List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x)) ?? []),
+      equipments: List<Equipment>.from(json['heroEquipment'].map((x) => Equipment.fromJson(x)) ?? []),
     );
   }
 }
@@ -263,6 +258,7 @@ class Troop {
   final int level;
   final int maxLevel;
   final String village;
+  final bool superTroopIsActive;
   late String imageUrl;
   late String type;
 
@@ -270,6 +266,7 @@ class Troop {
       {required this.name,
       required this.level,
       required this.maxLevel,
+      required this.superTroopIsActive,
       required this.village});
 
   factory Troop.fromJson(Map<String, dynamic> json) {
@@ -282,6 +279,7 @@ class Troop {
       name: name,
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
+      superTroopIsActive: json['superTroopIsActive'] ?? false,
       village: json['village'] ?? 'home',
     );
   }
@@ -291,7 +289,7 @@ class Spell {
   final String name;
   final int level;
   final int maxLevel;
-  final String village; // "home" or "builderBase"
+  final String village;
   late String imageUrl;
   late String type;
 
