@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:clashkingapp/subpages/player_dashboard/player_info_page.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
 
 class PlayerInfosCard extends StatelessWidget {
   const PlayerInfosCard({

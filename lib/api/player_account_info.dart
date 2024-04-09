@@ -32,6 +32,7 @@ class PlayerAccountInfo {
   final List<Hero> heroes;
   final List<Troop> troops;
   final List<Spell> spells;
+  final List<Equipment> equipments;
   String townHallPic = '';
   String builderHallPic = '';
 
@@ -60,6 +61,7 @@ class PlayerAccountInfo {
     required this.heroes,
     required this.troops,
     required this.spells,
+    required this.equipments,
   });
 
   factory PlayerAccountInfo.fromJson(Map<String, dynamic> json) {
@@ -84,14 +86,11 @@ class PlayerAccountInfo {
       clanCapitalContributions: json['clanCapitalContributions'] ?? 0,
       clan: Clan.fromJson(json['clan'] ?? {}),
       league: League.fromJson(json['league'] ?? {}),
-      achievements: List<Achievement>.from(
-          json['achievements'].map((x) => Achievement.fromJson(x ?? {}))),
-      heroes:
-          List<Hero>.from(json['heroes'].map((x) => Hero.fromJson(x)) ?? []),
-      troops:
-          List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x)) ?? []),
-      spells:
-          List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x)) ?? []),
+      achievements: List<Achievement>.from(json['achievements'].map((x) => Achievement.fromJson(x ?? {}))),
+      heroes: List<Hero>.from(json['heroes'].map((x) => Hero.fromJson(x)) ?? []),
+      troops: List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x)) ?? []),
+      spells: List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x)) ?? []),
+      equipments: List<Equipment>.from(json['heroEquipment'].map((x) => Equipment.fromJson(x)) ?? []),
     );
   }
 }
@@ -102,7 +101,11 @@ class Clan {
   final int clanLevel;
   final BadgeUrls badgeUrls;
 
-  Clan({required this.tag, required this.name, required this.clanLevel, required this.badgeUrls});
+  Clan(
+      {required this.tag,
+      required this.name,
+      required this.clanLevel,
+      required this.badgeUrls});
 
   factory Clan.fromJson(Map<String, dynamic> json) {
     return Clan(
@@ -177,6 +180,7 @@ class Hero {
   final int level;
   final int maxLevel;
   final String village;
+  final List<EquipedEquipment> equipment;
   late String imageUrl;
   late String type;
 
@@ -184,10 +188,63 @@ class Hero {
       {required this.name,
       required this.level,
       required this.maxLevel,
-      required this.village});
+      required this.village,
+      required this.equipment});
 
   factory Hero.fromJson(Map<String, dynamic> json) {
     return Hero(
+      name: json['name'] ?? 'No name',
+      level: json['level'] ?? 0,
+      maxLevel: json['maxLevel'] ?? 0,
+      village: json['village'] ?? 'home',
+      equipment: json['equipment'] != null
+          ? List<EquipedEquipment>.from(
+              json['equipment'].map((x) => EquipedEquipment.fromJson(x)))
+          : [],
+    );
+  }
+}
+
+class EquipedEquipment {
+  final String name;
+  final int level;
+  final int maxLevel;
+  final String village;
+  late String imageUrl;
+  late String type;
+
+  EquipedEquipment(
+      {required this.name,
+      required this.level,
+      required this.maxLevel,
+      required this.village});
+
+  factory EquipedEquipment.fromJson(Map<String, dynamic> json) {
+    return EquipedEquipment(
+      name: json['name'] ?? 'No name',
+      level: json['level'] ?? 0,
+      maxLevel: json['maxLevel'] ?? 0,
+      village: json['village'] ?? 'home',
+    );
+  }
+}
+
+class Equipment {
+  final String name;
+  final int level;
+  final int maxLevel;
+  final String village;
+  late String imageUrl;
+  late String type;
+
+  Equipment(
+      {required this.name,
+      required this.level,
+      required this.maxLevel,
+      required this.village});
+
+  factory Equipment.fromJson(Map<String, dynamic> json) {
+    return Equipment(
       name: json['name'] ?? 'No name',
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
@@ -201,6 +258,7 @@ class Troop {
   final int level;
   final int maxLevel;
   final String village;
+  final bool superTroopIsActive;
   late String imageUrl;
   late String type;
 
@@ -208,6 +266,7 @@ class Troop {
       {required this.name,
       required this.level,
       required this.maxLevel,
+      required this.superTroopIsActive,
       required this.village});
 
   factory Troop.fromJson(Map<String, dynamic> json) {
@@ -220,6 +279,7 @@ class Troop {
       name: name,
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
+      superTroopIsActive: json['superTroopIsActive'] ?? false,
       village: json['village'] ?? 'home',
     );
   }
@@ -229,7 +289,7 @@ class Spell {
   final String name;
   final int level;
   final int maxLevel;
-  final String village; // "home" or "builderBase"
+  final String village;
   late String imageUrl;
   late String type;
 
@@ -260,7 +320,6 @@ class PlayerService {
     PlayerAccounts playerAccounts =
         PlayerAccounts(playerAccountInfo: [], clanInfo: [], warInfo: []);
     ClanInfo clanInfo;
-    CurrentWarInfo ? warInfo;
     List<Future> futures = [];
     final tags = user.tags;
 
@@ -294,15 +353,11 @@ class PlayerService {
   }
 
   Future<PlayerAccountInfo> fetchPlayerStats(String tag) async {
-    print('Fetching player stats');
     tag = tag.replaceAll('#', '!');
 
     final response = await http.get(
       Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
     );
-
-    print('Response status: ${response.statusCode}'); // Print response status
-    print('Response body: ${response.body}'); // Print response body
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
@@ -316,6 +371,7 @@ class PlayerService {
       await fetchImagesAndTypes(playerStats.troops);
       await fetchImagesAndTypes(playerStats.heroes);
       await fetchImagesAndTypes(playerStats.spells);
+      await fetchImagesAndTypes(playerStats.equipments);
       return playerStats;
     } else {
       throw Exception('Failed to load player stats');
@@ -349,14 +405,10 @@ class PlayerService {
   }
 
   Future<ClanInfo> fetchClanInfo(String clanTag) async {
-    print('Fetching clan info');
     clanTag = clanTag.replaceAll('#', '!');
     final response = await http.get(
       Uri.parse('https://api.clashking.xyz/v1/clans/$clanTag'),
     );
-
-    print('Response status: ${response.statusCode}'); // Print response status
-    print('Response body: ${response.body}'); // Print response body
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
@@ -368,19 +420,15 @@ class PlayerService {
   }
 
   Future<CurrentWarInfo> fetchCurrentWarInfo(String clanTag) async {
-    print('Fetching current war info');
     clanTag = clanTag.replaceAll('#', '!');
     final response = await http.get(
       Uri.parse('https://api.clashking.xyz/v1/clans/$clanTag/currentwar'),
     );
 
-    print('Response status: ${response.statusCode}'); // Print response status
-    print('Response body: ${response.body}'); // Print response body
-
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       CurrentWarInfo warInfo =
-          CurrentWarInfo.fromJson(jsonDecode(responseBody));
+          CurrentWarInfo.fromJson(jsonDecode(responseBody), "war");
       return warInfo;
     } else {
       throw Exception('Failed to load current war info');

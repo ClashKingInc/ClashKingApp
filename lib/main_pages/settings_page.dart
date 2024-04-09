@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/my_app.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
@@ -7,11 +8,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SettingsInfoScreen extends StatelessWidget {
+class SettingsInfoScreen extends StatefulWidget {
   final DiscordUser user;
 
   SettingsInfoScreen({required this.user});
 
+  @override
+  State<SettingsInfoScreen> createState() => _SettingsInfoScreenState();
+}
+
+class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +46,15 @@ class SettingsInfoScreen extends StatelessWidget {
           Divider(),
           _buildListTile(
             context,
+            title: "Toggle theme",
+            leadingIcon: LucideIcons.sunMoon,
+            onTap: () {
+              Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();
+            },
+          ),
+          Divider(),
+          _buildListTile(
+            context,
             title: AppLocalizations.of(context)!.logout,
             leadingIcon: Icons.exit_to_app,
             onTap: _logOut,
@@ -57,14 +72,20 @@ class SettingsInfoScreen extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return ListTile(
-      title: Text(title),
-      subtitle: subtitle != null ? Text(subtitle) : null,
-      leading: Icon(leadingIcon),
+      title: Text(title,
+          style: TextStyle(color: Theme.of(context).colorScheme.onBackground)),
+      subtitle: subtitle != null
+          ? Text(subtitle,
+              style:
+                  TextStyle(color: Theme.of(context).colorScheme.onBackground))
+          : null,
+      leading:
+          Icon(leadingIcon, color: Theme.of(context).colorScheme.onBackground),
       onTap: onTap,
     );
   }
 
-  Future<void> _showLanguageSelection(BuildContext context) async {
+  Future<void> _showLanguageSelection(context) async {
     final selectedLanguage = await showModalBottomSheet<String>(
       context: context,
       builder: (BuildContext context) {
@@ -83,7 +104,8 @@ class SettingsInfoScreen extends StatelessWidget {
       },
     );
 
-    if (selectedLanguage != null) {
+    // Check if the widget is still mounted before trying to use `context`
+    if (selectedLanguage != null && mounted) {
       Provider.of<MyAppState>(context, listen: false)
           .changeLanguage(selectedLanguage);
     }

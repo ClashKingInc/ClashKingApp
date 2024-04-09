@@ -25,12 +25,18 @@ class StatsScreenState extends State<StatsScreen>
   String townHallImageUrl = "";
   List<Widget> stars = [];
   Widget hallChips = SizedBox.shrink();
+  List<String> activeEquipmentNames = [];
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
     townHallImageUrl = widget.playerStats.townHallPic;
+
+    activeEquipmentNames = widget.playerStats.heroes
+        .expand((hero) => hero.equipment)
+        .map((equipment) => equipment.name)
+        .toList();
   }
 
   @override
@@ -52,89 +58,98 @@ class StatsScreenState extends State<StatsScreen>
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.bottomCenter,
-              children: <Widget>[
-                SizedBox(
-                  height: 190,
-                  width: double.infinity,
-                  child: ImageFiltered(
-                    imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-                    child: ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                          Colors.black
-                              .withOpacity(0.3), // Adjust opacity as needed
-                          BlendMode.darken,
+            Container(
+                color: Theme.of(context).colorScheme.surface,
+                child: Column(children: [
+                  Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.bottomCenter,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 190,
+                        width: double.infinity,
+                        child: ImageFiltered(
+                          imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+                          child: ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(
+                                    0.3), // Adjust opacity as needed
+                                BlendMode.darken,
+                              ),
+                              child: Image.network(
+                                backgroundImageUrl,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              )),
                         ),
-                        child: Image.network(
-                          backgroundImageUrl,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        )),
+                      ),
+                      Positioned(
+                        bottom: -90,
+                        child: Column(children: [
+                          Image.network(townHallImageUrl, width: 170),
+                          Row(
+                            children: [
+                              stars.isNotEmpty
+                                  ? Row(
+                                      children: stars,
+                                    )
+                                  : SizedBox(height: 22)
+                            ],
+                          ),
+                        ]),
+                      ),
+                      Positioned(
+                        top: 20,
+                        left: 10,
+                        child: IconButton(
+                          icon: Icon(Icons.arrow_back,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              size: 32),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                Positioned(
-                  bottom: -90,
-                  child: Column(children: [
-                    Image.network(townHallImageUrl, width: 170),
-                    Row(
-                      children: [
-                        stars.isNotEmpty
-                            ? Row(
-                                children: stars,
-                              )
-                            : SizedBox(height: 22)
-                      ],
+                  SizedBox(height: 90),
+                  ListTile(
+                    title: Center(
+                      child: Text(
+                        widget.playerStats.name,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
                     ),
-                  ]),
-                ),
-                Positioned(
-                  top: 20,
-                  left: 10,
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        size: 32),
-                    onPressed: () => Navigator.of(context).pop(),
+                    subtitle: Center(
+                      child: InkWell(
+                        onTap: () {
+                          FlutterClipboard.copy(widget.playerStats.tag)
+                              .then((value) {
+                            final snackBar = SnackBar(
+                              content: Text(AppLocalizations.of(context)!
+                                  .copiedToClipboard),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(8.0), // Add padding if needed
+                          child: Text(widget.playerStats.tag, style: TextStyle(color : Theme.of(context).colorScheme.tertiary)),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 90),
-            ListTile(
-              title: Center(
-                child: Text(
-                  widget.playerStats.name,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              subtitle: Center(
-                child: InkWell(
-                  onTap: () {
-                    FlutterClipboard.copy(widget.playerStats.tag).then((value) {
-                      final snackBar = SnackBar(
-                        content: Text(
-                            AppLocalizations.of(context)!.copiedToClipboard),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(8.0), // Add padding if needed
-                    child: Text(widget.playerStats.tag),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                    child: hallChips,
                   ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-              child: hallChips,
-            ),
+                ])),
             ScrollableTab(
-              labelColor: Colors.black,
+              labelColor: Theme.of(context).colorScheme.onBackground,
+              tabBarDecoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
               onTap: (value) {
-                print('Tab $value selected');
                 setState(() {
                   backgroundImageUrl = value == 0
                       ? "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png"
@@ -155,52 +170,69 @@ class StatsScreenState extends State<StatsScreen>
                 Tab(text: AppLocalizations.of(context)!.builderBase),
               ],
               children: [
-                Container(
-                  color: Theme.of(context).colorScheme.tertiary,
-                  child: ListTile(
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 10),
-                        buildItemSection(widget.playerStats.heroes, 'hero',
-                            AppLocalizations.of(context)?.heroes ?? 'Heroes'),
-                        buildItemSection(widget.playerStats.troops, 'troop',
-                            AppLocalizations.of(context)?.troops ?? 'Troops'),
-                        buildItemSection(
-                            widget.playerStats.troops,
-                            'super-troop',
-                            AppLocalizations.of(context)?.superTroops ??
-                                'Super Troops'),
-                        buildItemSection(widget.playerStats.troops, 'pet',
-                            AppLocalizations.of(context)?.pets ?? 'Pets'),
-                        buildItemSection(
-                            widget.playerStats.troops,
-                            'siege-machine',
-                            AppLocalizations.of(context)?.siegeMachines ??
-                                'Siege Machine'),
-                        buildItemSection(widget.playerStats.spells, 'spell',
-                            AppLocalizations.of(context)?.spells ?? 'Spells')
-                      ],
-                    ),
+                ListTile(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10),
+                      buildItemSection(
+                          widget.playerStats.heroes,
+                          'hero',
+                          AppLocalizations.of(context)?.heroes ?? 'Heroes',
+                          activeEquipmentNames),
+                      buildItemSection(
+                          widget.playerStats.equipments,
+                          'gear',
+                          AppLocalizations.of(context)?.equipment ?? 'Gears',
+                          activeEquipmentNames),
+                      buildItemSection(
+                          widget.playerStats.troops,
+                          'troop',
+                          AppLocalizations.of(context)?.troops ?? 'Troops',
+                          activeEquipmentNames),
+                      buildItemSection(
+                          widget.playerStats.troops,
+                          'super-troop',
+                          AppLocalizations.of(context)?.superTroops ??
+                              'Super Troops',
+                          activeEquipmentNames),
+                      buildItemSection(
+                          widget.playerStats.troops,
+                          'pet',
+                          AppLocalizations.of(context)?.pets ?? 'Pets',
+                          activeEquipmentNames),
+                      buildItemSection(
+                          widget.playerStats.troops,
+                          'siege-machine',
+                          AppLocalizations.of(context)?.siegeMachines ??
+                              'Siege Machine',
+                          activeEquipmentNames),
+                      buildItemSection(
+                          widget.playerStats.spells,
+                          'spell',
+                          AppLocalizations.of(context)?.spells ?? 'Spells',
+                          activeEquipmentNames),
+                    ],
                   ),
                 ),
 
                 // Builder Base
-                Container(
-                  color: Theme.of(context).colorScheme.tertiary,
-                  child: ListTile(
-                    title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 10),
-                          buildItemSection(widget.playerStats.heroes, 'bb-hero',
-                              AppLocalizations.of(context)?.heroes ?? 'Heroes'),
-                          buildItemSection(
-                              widget.playerStats.troops,
-                              'bb-troop',
-                              AppLocalizations.of(context)?.troops ?? 'Troops'),
-                        ]),
-                  ),
+                ListTile(
+                  title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 10),
+                        buildItemSection(
+                            widget.playerStats.heroes,
+                            'bb-hero',
+                            AppLocalizations.of(context)?.heroes ?? 'Heroes',
+                            activeEquipmentNames),
+                        buildItemSection(
+                            widget.playerStats.troops,
+                            'bb-troop',
+                            AppLocalizations.of(context)?.troops ?? 'Troops',
+                            activeEquipmentNames),
+                      ]),
                 ),
               ],
             ),
@@ -221,9 +253,26 @@ class StatsScreenState extends State<StatsScreen>
     );
   }
 
-// Build the section for troops, super troops, pets, and siege machines
-  Widget buildItemSection(List<dynamic> items, String itemType, String title) {
+  double calculateCompletionPercentage(List<dynamic> items, String itemType) {
+    var filteredItems = items.where((item) => item.type == itemType).toList();
+
+    int totalMaxLevel =
+        filteredItems.fold(0, (prev, item) => (prev) + (item.maxLevel as int));
+    int totalCurrentLevel =
+        filteredItems.fold(0, (prev, item) => (prev) + (item.level as int));
+
+    if (totalMaxLevel == 0) return 0.0;
+
+    return (totalCurrentLevel / totalMaxLevel) * 100;
+  }
+
+  // Build the section for troops, super troops, pets, and siege machines
+  Widget buildItemSection(List<dynamic> items, String itemType, String title,
+      List<String> activeEquipmentNames) {
     List<String> itemNames = items.map((item) => item.name as String).toList();
+
+    double completionPercentage =
+        calculateCompletionPercentage(items, itemType);
 
     List<Widget> missingItems = [];
     troopUrlsAndTypes.forEach((name, data) {
@@ -262,8 +311,22 @@ class StatsScreenState extends State<StatsScreen>
               children: [
                 Align(
                   alignment: Alignment.center,
-                  child: Text(title,
-                      style: Theme.of(context).textTheme.titleMedium),
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '$title ',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        if (itemType != 'super-troop')
+                          TextSpan(
+                            text:
+                                '| ${completionPercentage.toStringAsFixed(2)}%',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
                 SizedBox(height: 10),
                 Center(
@@ -271,27 +334,42 @@ class StatsScreenState extends State<StatsScreen>
                     spacing: 5,
                     runSpacing: 5,
                     children: [
-                      ...items
-                          .where((item) => item.type == itemType)
-                          .map(
+                      ...items.where((item) => item.type == itemType).map(
                             (item) => Container(
                               decoration: BoxDecoration(
+                                color: item.type == 'gear'
+                                    ? (item.name == 'Frozen Arrow' ||
+                                            item.name == 'Giant Gauntlet' ||
+                                            item.name == 'Fireball'
+                                        ? Colors.purple
+                                        : Colors.blue)
+                                    : null,
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
-                                  color: item.level == item.maxLevel
-                                      ? Color(0xFFD4AF37) // Or
-                                      : Colors.black, // Noir
+                                  color:
+                                      activeEquipmentNames.contains(item.name)
+                                          ? Colors.red
+                                          : (item.level == item.maxLevel ||
+                                                  (item.type == 'super-troop' &&
+                                                      item.superTroopIsActive))
+                                              ? Color(0xFFD4AF37) // Or
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground, // Noir
                                   width: 2,
                                 ),
                               ),
                               child: Stack(
                                 children: <Widget>[
-                                  Image.network(item.imageUrl,
-                                      width: 40,
-                                      height: 40,
-                                      fit: BoxFit
-                                          .cover), // Display the item image
-                                  (item.level != 1)
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(6),
+                                    child: Image.network(item.imageUrl,
+                                        width: 40,
+                                        height: 40,
+                                        fit: BoxFit
+                                            .cover), // Display the item image
+                                  ),
+                                  (item.type != 'super-troop')
                                       ? Positioned(
                                           right: 1,
                                           bottom: 1,
@@ -326,8 +404,7 @@ class StatsScreenState extends State<StatsScreen>
                                 ],
                               ),
                             ),
-                          )
-                          ,
+                          ),
                       ...missingItems,
                     ],
                   ),
@@ -426,7 +503,11 @@ class StatsScreenState extends State<StatsScreen>
             color: Color.fromARGB(255, 0, 136, 255)),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          (widget.playerStats.donations / (widget.playerStats.donationsReceived == 0 ? 1 : widget.playerStats.donationsReceived)).toStringAsFixed(2),
+          (widget.playerStats.donations /
+                  (widget.playerStats.donationsReceived == 0
+                      ? 1
+                      : widget.playerStats.donationsReceived))
+              .toStringAsFixed(2),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -470,8 +551,7 @@ class StatsScreenState extends State<StatsScreen>
         ...buildAllHallChips(),
         Chip(
           avatar: CircleAvatar(
-              backgroundColor: Colors
-                  .transparent,
+              backgroundColor: Colors.transparent,
               child: widget.playerStats.warPreference == 'in'
                   ? Image.network(
                       "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png")
@@ -484,8 +564,7 @@ class StatsScreenState extends State<StatsScreen>
         ),
         Chip(
           avatar: CircleAvatar(
-            backgroundColor:
-                Colors.transparent,
+            backgroundColor: Colors.transparent,
             child: Image.network(
                 "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
           ),
@@ -497,8 +576,7 @@ class StatsScreenState extends State<StatsScreen>
         ),
         Chip(
           avatar: CircleAvatar(
-            backgroundColor:
-                Colors.transparent,
+            backgroundColor: Colors.transparent,
             child: Image.network(
                 "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png"),
           ),
@@ -510,8 +588,7 @@ class StatsScreenState extends State<StatsScreen>
         ),
         Chip(
           avatar: CircleAvatar(
-            backgroundColor:
-                Colors.transparent,
+            backgroundColor: Colors.transparent,
             child: Image.network(
                 "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
           ),
@@ -523,8 +600,7 @@ class StatsScreenState extends State<StatsScreen>
         ),
         Chip(
           avatar: CircleAvatar(
-            backgroundColor:
-                Colors.transparent,
+            backgroundColor: Colors.transparent,
             child: Image.network(
                 "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png"),
           ),

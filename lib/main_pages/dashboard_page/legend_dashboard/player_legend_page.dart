@@ -4,11 +4,12 @@ import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/api/player_legend.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:clashkingapp/subpages/legend_dashboard/components/LegendHeaderCard.dart';
-import 'package:clashkingapp/subpages/legend_dashboard/components/LegendUsedGearCard.dart';
-import 'package:clashkingapp/subpages/legend_dashboard/components/LegendTrophiesStartEndCard.dart';
-import 'package:clashkingapp/subpages/legend_dashboard/components/LegendOffenseDefenseCard.dart';
-import 'package:clashkingapp/subpages/legend_dashboard/components/LegendHistoryCard.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_header_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_used_gear_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_trophies_start_end_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_offense_defense_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_history_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/legend_functions.dart';
 
 class LegendScreen extends StatefulWidget {
   final PlayerAccountInfo playerStats;
@@ -110,7 +111,12 @@ class LegendScreenState extends State<LegendScreen>
               LegendHeaderCard(
                   widget: widget, dynamicLegendData: dynamicLegendData),
               ScrollableTab(
-                labelColor: Colors.black,
+                tabBarDecoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+              ),
+                labelColor: Theme.of(context).colorScheme.onBackground,
+                unselectedLabelColor:
+                    Theme.of(context).colorScheme.onBackground,
                 onTap: (value) {
                   setState(() {});
                 },
@@ -124,31 +130,21 @@ class LegendScreenState extends State<LegendScreen>
                   Tab(text: "History"), // Show EOS history
                 ],
                 children: [
-                  Container(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    child: ListTile(
-                      title: dynamicLegendData["legends"].isNotEmpty
-                          ? buildLegendTab(dynamicLegendData)
-                          : Center(child: Text('No data available')),
-                    ),
+                  ListTile(
+                    title: dynamicLegendData["legends"].isNotEmpty
+                        ? buildLegendTab(dynamicLegendData)
+                        : Center(child: Text('No data available')),
                   ),
-                  Container(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    child: ListTile(
-                      title: dynamicLegendData["legends"].isNotEmpty
-                          ? buildChartsStats(
-                              dynamicLegendData, seasonLegendData)
-                          : Center(child: Text('No data available')),
-                    ),
+                  ListTile(
+                    title: dynamicLegendData["legends"].isNotEmpty
+                        ? buildChartsStats(dynamicLegendData, seasonLegendData)
+                        : Center(child: Text('No data available')),
                   ),
-                  Container(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    child: ListTile(
-                      title: dynamicLegendData["legends"].isNotEmpty
-                          ? buildHistoryTab(seasonLegendData)
-                          : Center(child: Text('No data available')),
-                    ),
-                  )
+                  ListTile(
+                    title: dynamicLegendData["legends"].isNotEmpty
+                        ? buildHistoryTab(seasonLegendData)
+                        : Center(child: Text('No data available')),
+                  ),
                 ],
               )
             ]))));
@@ -407,7 +403,6 @@ class LegendScreenState extends State<LegendScreen>
 
       double rangeY = (maxY - minY) / 10;
       if (rangeY == 0) rangeY = 1;
-      
 
       return SizedBox(
         width: double.infinity,
@@ -805,28 +800,4 @@ class LegendScreenState extends State<LegendScreen>
       },
     );
   }
-
-  Map<String, dynamic> calculateStats(List<dynamic> list) {
-    int sum = 0;
-    if (list.isNotEmpty) {
-      sum = list
-          .whereType<Map>()
-          .map((item) => item['change'])
-          .reduce((value, element) => value + element);
-    }
-    int count = list.whereType<Map>().length +
-        list.whereType<Map>().where((item) => item['change'] > 40).length;
-    double average = sum / count;
-    int remaining = 320 - count * 40;
-    int bestPossibleTrophies = remaining + sum;
-
-    return {
-      'sum': sum,
-      'count': count,
-      'average': average,
-      'remaining': remaining,
-      'bestPossibleTrophies': bestPossibleTrophies,
-    };
-  }
 }
-

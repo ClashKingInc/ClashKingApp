@@ -30,11 +30,15 @@
     "clans" : "Clans",
 
     "warLeague" : "Guerre/Ligue",
+    "war" : "Guerre",
+    "league" : "Ligue",
+    "wars" : "Guerres",
     "startsIn" : "Début dans",
     "endsIn" : "Fin dans",
     "statistics" : "Statistiques",
     "attacks" : "Attaques",
     "stars" : "Étoiles",
+    "destructionRate" : "Taux de destruction",
     "events" : "Attaques",
     "team" : "Équipes",
     "myTeam" : "Mon équipe",
@@ -47,9 +51,10 @@
     "draw" : "Égalité",
     "warEnded" : "Terminée",
     "preparation" : "Préparation",
-    "isNotInWar" : "n'est pas en guerre",
-    "askForWar" : "Contactez un chef ou un adjoint pour lancer une guerre",
-    "warLogClosed" : "Le journal de guerre est privé",
+    "isNotInWar" : "n'est pas en guerre.",
+    "askForWar" : "Contactez un chef ou un adjoint pour lancer une guerre.",
+    "warLogClosed" : "Le journal de guerre est privé.",
+    "rounds" : "Tours",
 
     "management" : "Gestion"
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/subpages/legend_dashboard/player_legend_page.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_legend_page.dart';
 import 'dart:ui';
 
 class LegendHeaderCard extends StatelessWidget {

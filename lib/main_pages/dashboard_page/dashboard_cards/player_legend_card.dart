@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
-import 'package:clashkingapp/subpages/legend_dashboard/player_legend_page.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_legend_page.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
