@@ -25,12 +25,18 @@ class StatsScreenState extends State<StatsScreen>
   String townHallImageUrl = "";
   List<Widget> stars = [];
   Widget hallChips = SizedBox.shrink();
+  List<String> activeEquipmentNames = [];
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
     townHallImageUrl = widget.playerStats.townHallPic;
+
+    activeEquipmentNames = widget.playerStats.heroes
+    .expand((hero) => hero.equipment)
+    .map((equipment) => equipment.name)
+    .toList();
   }
 
   @override
@@ -164,43 +170,47 @@ class StatsScreenState extends State<StatsScreen>
                 Tab(text: AppLocalizations.of(context)!.builderBase),
               ],
               children: [
-                ListTile(
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 10),
-                      buildItemSection(widget.playerStats.heroes, 'hero',
-                          AppLocalizations.of(context)?.heroes ?? 'Heroes'),
-                      buildItemSection(widget.playerStats.equipments, 'gear',
-                          AppLocalizations.of(context)?.equipment ?? 'Gears'),
-                      buildItemSection(widget.playerStats.troops, 'troop',
-                          AppLocalizations.of(context)?.troops ?? 'Troops'),
-                      buildItemSection(
-                          widget.playerStats.troops,
-                          'super-troop',
-                          AppLocalizations.of(context)?.superTroops ??
-                              'Super Troops'),
-                      buildItemSection(widget.playerStats.troops, 'pet',
-                          AppLocalizations.of(context)?.pets ?? 'Pets'),
-                      buildItemSection(
-                          widget.playerStats.troops,
-                          'siege-machine',
-                          AppLocalizations.of(context)?.siegeMachines ??
-                              'Siege Machine'),
-                      buildItemSection(widget.playerStats.spells, 'spell',
-                          AppLocalizations.of(context)?.spells ?? 'Spells')
-                    ],
+                Container(
+                  color: Theme.of(context).colorScheme.tertiary,
+                  child: ListTile(
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 10),
+                        buildItemSection(widget.playerStats.heroes, 'hero',
+                            AppLocalizations.of(context)?.heroes ?? 'Heroes', activeEquipmentNames),
+                        buildItemSection(widget.playerStats.equipments, 'gear',
+                            AppLocalizations.of(context)?.equipment ?? 'Gears', activeEquipmentNames),
+                        buildItemSection(widget.playerStats.troops, 'troop',
+                            AppLocalizations.of(context)?.troops ?? 'Troops', activeEquipmentNames),
+                        buildItemSection(widget.playerStats.troops, 'super-troop',
+                            AppLocalizations.of(context)?.superTroops ?? 'Super Troops', activeEquipmentNames),
+                        buildItemSection(widget.playerStats.troops, 'pet',
+                            AppLocalizations.of(context)?.pets ?? 'Pets', activeEquipmentNames),
+                        buildItemSection(widget.playerStats.troops, 'siege-machine',
+                            AppLocalizations.of(context)?.siegeMachines ?? 'Siege Machine', activeEquipmentNames),
+                        buildItemSection(widget.playerStats.spells, 'spell',
+                            AppLocalizations.of(context)?.spells ?? 'Spells', activeEquipmentNames),
+                      ],
+                    ),
                   ),
                 ),
 
-                // Builder BaseListTile(
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  SizedBox(height: 10),
-                  buildItemSection(widget.playerStats.heroes, 'bb-hero',
-                      AppLocalizations.of(context)?.heroes ?? 'Heroes'),
-                  buildItemSection(widget.playerStats.troops, 'bb-troop',
-                      AppLocalizations.of(context)?.troops ?? 'Troops'),
-                ]),
+                // Builder Base
+                Container(
+                  color: Theme.of(context).colorScheme.tertiary,
+                  child: ListTile(
+                    title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 10),
+                          buildItemSection(widget.playerStats.heroes, 'bb-hero',
+                              AppLocalizations.of(context)?.heroes ?? 'Heroes', activeEquipmentNames),
+                          buildItemSection(widget.playerStats.troops, 'bb-troop',
+                              AppLocalizations.of(context)?.troops ?? 'Troops', activeEquipmentNames),
+                        ]),
+                  ),
+                ),
               ],
             ),
           ],
@@ -220,13 +230,27 @@ class StatsScreenState extends State<StatsScreen>
     );
   }
 
-// Build the section for troops, super troops, pets, and siege machines
-  Widget buildItemSection(List<dynamic> items, String itemType, String title) {
+  double calculateCompletionPercentage(List<dynamic> items, String itemType) {
+    var filteredItems = items.where((item) => item.type == itemType).toList();
+  
+    int totalMaxLevel = filteredItems.fold(0, (prev, item) => (prev) + (item.maxLevel as int));
+    int totalCurrentLevel = filteredItems.fold(0, (prev, item) => (prev) + (item.level as int));
+  
+    if (totalMaxLevel == 0) return 0.0;
+  
+    return (totalCurrentLevel / totalMaxLevel) * 100;
+  }
+
+  // Build the section for troops, super troops, pets, and siege machines
+  Widget buildItemSection(List<dynamic> items, String itemType, String title, List<String> activeEquipmentNames) {
     List<String> itemNames = items.map((item) => item.name as String).toList();
+
+    double completionPercentage = calculateCompletionPercentage(items, itemType);
 
     List<Widget> missingItems = [];
     troopUrlsAndTypes.forEach((name, data) {
       if (!itemNames.contains(name) && data['type'] == itemType) {
+        
         missingItems.add(
           Container(
             decoration: BoxDecoration(
@@ -253,85 +277,108 @@ class StatsScreenState extends State<StatsScreen>
     });
 
     return Card(
-        margin: EdgeInsets.only(bottom: 30),
-        elevation: 4,
-        child: Padding(
-            padding: EdgeInsets.only(bottom: 16, top: 8, left: 8, right: 8),
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(title,
-                      style: Theme.of(context).textTheme.titleMedium),
+      margin: EdgeInsets.only(bottom: 30),
+      elevation: 4,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 16, top: 8, left: 8, right: 8),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '$title ',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    if (itemType != 'super-troop')
+                      TextSpan(
+                        text: '| ${completionPercentage.toStringAsFixed(2)}%',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                  ],
                 ),
-                SizedBox(height: 10),
-                Center(
-                  child: Wrap(
-                    spacing: 5,
-                    runSpacing: 5,
-                    children: [
-                      ...items.where((item) => item.type == itemType).map(
-                            (item) => Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: item.level == item.maxLevel
-                                      ? Color(0xFFD4AF37) // Or
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .onBackground, // Noir
-                                  width: 2,
-                                ),
-                              ),
-                              child: Stack(
-                                children: <Widget>[
-                                  Image.network(item.imageUrl,
-                                      width: 40,
-                                      height: 40,
-                                      fit: BoxFit
-                                          .cover), // Display the item image
-                                  (item.level != 1)
-                                      ? Positioned(
-                                          right: 1,
-                                          bottom: 1,
-                                          child: Container(
-                                            height: 16,
-                                            width: 16,
-                                            padding: EdgeInsets.all(1),
-                                            decoration: BoxDecoration(
-                                              color: item.level == item.maxLevel
-                                                  ? Color(0xFFD4AF37) // Or
-                                                  : Colors.black, // Noir
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment
-                                                  .center, // Centrer verticalement
-                                              children: [
-                                                Text(
-                                                  item.level.toString(),
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 10,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      : SizedBox.shrink()
-                                ],
-                              ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Center(
+              child: Wrap(
+                spacing: 5,
+                runSpacing: 5,
+                children: [
+                  ...items
+                      .where((item) => item.type == itemType)
+                      .map(
+                        (item) =>  Container(
+                          decoration: BoxDecoration(
+                            color: item.type == 'gear' 
+                            ? (item.name == 'Frozen Arrow' || item.name == 'Giant Gauntlet' || item.name == 'Fireball' ? Colors.purple : Colors.blue) 
+                            : null,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: activeEquipmentNames.contains(item.name)
+                                ? Colors.red
+                                : (item.level == item.maxLevel || (item.type == 'super-troop' && item.superTroopIsActive))
+                                    ? Color(0xFFD4AF37) // Or
+                                    : Theme.of(context).colorScheme.onBackground, // Noir
+                            width: 2,
                             ),
                           ),
-                      ...missingItems,
-                    ],
-                  ),
-                ),
-              ],
-            )));
+                          child: Stack(
+                            children: <Widget>[
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(6),
+                                child: Image.network(item.imageUrl,
+                                    width: 40,
+                                    height: 40,
+                                    fit: BoxFit
+                                        .cover), // Display the item image
+                              ),
+                              (item.type != 'super-troop')
+                                  ? Positioned(
+                                      right: 1,
+                                      bottom: 1,
+                                      child: Container(
+                                        height: 16,
+                                        width: 16,
+                                        padding: EdgeInsets.all(1),
+                                        decoration: BoxDecoration(
+                                          color: item.level == item.maxLevel
+                                              ? Color(0xFFD4AF37) // Or
+                                              : Colors.black, // Noir
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .center, // Centrer verticalement
+                                          children: [
+                                            Text(
+                                              item.level.toString(),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : SizedBox.shrink()
+                            ],
+                          ),
+                        ),
+                      ),
+                  ...missingItems,
+                ],
+              ),
+            ),
+          ],
+        )
+      )
+    );
   }
 
   List<Widget> buildAllHallChips() {
