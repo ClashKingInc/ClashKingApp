@@ -122,7 +122,7 @@ class MyApp extends StatelessWidget {
                 seedColor: Color(0xFFFFFFFF), // primary color as the seed
                 primary: Color(0xFFC98910),
                 secondary: Color(0xFF9B1F28),
-                tertiary: Colors.grey,
+                tertiary: Colors.grey[600],
                 background: Color(0xFFFFF8E1),
                 surface: Color(0xFFFFFFFF),
                 error: Color(0xFFB00020),
