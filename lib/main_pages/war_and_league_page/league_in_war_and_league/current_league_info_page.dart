@@ -73,12 +73,10 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
           tabs: [
             Tab(text: AppLocalizations.of(context)?.rounds ?? 'Rounds'),
             Tab(text: AppLocalizations.of(context)?.team ?? 'Teams'),
-            Tab(text: AppLocalizations.of(context)?.wars ?? 'Wars')
           ],
           children: [
             ListTile(title: buildRoundsTab(context, widget.currentLeagueInfo)),
             ListTile(title: buildTeamsTab(context, widget.currentLeagueInfo)),
-            ListTile(title: buildWarsTab(context)),
           ])
     ])));
   }
@@ -88,7 +86,8 @@ Widget buildRoundsTab(
     BuildContext context, CurrentLeagueInfo currentLeagueInfo) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
-    children: currentLeagueInfo.rounds.asMap().entries.map((entry) {
+    children:
+        currentLeagueInfo.rounds.asMap().entries.toList().reversed.map((entry) {
       int round =
           entry.key + 1; // Assuming you want round numbering to start from 1
       ClanLeagueRounds clanLeagueRounds = entry.value;
@@ -151,7 +150,7 @@ Widget buildRoundsTab(
                                               color:
                                                   warLeagueInfo.clan.attacks ==
                                                           warLeagueInfo.teamSize
-                                                      ? Colors.purple
+                                                      ? Colors.blue[900]
                                                       : null,
                                             ),
                                       ),
@@ -257,7 +256,7 @@ Widget buildRoundsTab(
                                               color: warLeagueInfo
                                                           .opponent.attacks ==
                                                       warLeagueInfo.teamSize
-                                                  ? Colors.purple
+                                                  ? Colors.blue[900]
                                                   : null,
                                             ),
                                       ),
@@ -297,93 +296,140 @@ Widget buildRoundsTab(
 
 Widget buildTeamsTab(
     BuildContext context, CurrentLeagueInfo currentLeagueInfo) {
-  return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Column(
-      children: currentLeagueInfo.clans.map((clan) {
-        var townHallLevelCounts = <int, int>{};
+  return FutureBuilder<Map<String, int>>(
+    future: calculateTotalStars(currentLeagueInfo.rounds),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return CircularProgressIndicator();
+      } else if (snapshot.hasError) {
+        return Text('Error: ${snapshot.error}');
+      } else {
+        Map<String, int> totalStarsByClan = snapshot.data!;
+        var sortedClans = currentLeagueInfo.clans.toList()
+          ..sort((a, b) => (totalStarsByClan[b.tag] ?? 0)
+              .compareTo(totalStarsByClan[a.tag] ?? 0));
 
-        for (var member in clan.members) {
-          final townHallLevel = member.townHallLevel;
-          townHallLevelCounts[townHallLevel] =
-              (townHallLevelCounts[townHallLevel] ?? 0) + 1;
-        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              children: sortedClans.map((clan) {
+                var townHallLevelCounts = <int, int>{};
 
-        var sortedEntries = townHallLevelCounts.entries.toList()
-          ..sort((a, b) => b.key.compareTo(a.key));
+                for (var member in clan.members) {
+                  final townHallLevel = member.townHallLevel;
+                  townHallLevelCounts[townHallLevel] =
+                      (townHallLevelCounts[townHallLevel] ?? 0) + 1;
+                }
 
-        townHallLevelCounts = Map.fromEntries(sortedEntries);
+                var sortedEntries = townHallLevelCounts.entries.toList()
+                  ..sort((a, b) => b.key.compareTo(a.key));
 
-        return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Scaffold(
-                    backgroundColor: Theme.of(context).colorScheme.background,
-                    body: FutureBuilder<ClanInfo>(
-                      future: ClanService().fetchClanInfo(clan.tag),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          return ClanInfoScreen(clanInfo: snapshot.data!);
-                        }
-                      },
+                townHallLevelCounts = Map.fromEntries(sortedEntries);
+
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Scaffold(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.background,
+                          body: FutureBuilder<ClanInfo>(
+                            future: ClanService().fetchClanInfo(clan.tag),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                return ClanInfoScreen(clanInfo: snapshot.data!);
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.network(clan.badgeUrls.small, width: 35, height: 35),
+                                        SizedBox(width: 10),
+                                        Column(
+                                          children: [
+                                            Text(clan.name, style: Theme.of(context).textTheme.bodyMedium),
+                                            Text(clan.tag, style: Theme.of(context).textTheme.labelMedium),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text("${totalStarsByClan[clan.tag] ?? 0}"),
+                                            SizedBox(
+                                              child: Image.network(
+                                                "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
+                                                width: 20,
+                                                height: 20,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Wrap(
+                                  alignment: WrapAlignment.center,
+                                  children:
+                                      townHallLevelCounts.entries.map((entry) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Wrap(
+                                        children: [
+                                          Image.network(
+                                            'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${entry.key}.png',
+                                            width: 20,
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text('x${entry.value}'),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-            child: Card(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                      child: Column(children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.network(clan.badgeUrls.small,
-                            width: 35, height: 35),
-                        SizedBox(width: 10),
-                        Column(children: [
-                          Text(clan.name,
-                              style: Theme.of(context).textTheme.bodyMedium),
-                          Text(clan.tag,
-                              style: Theme.of(context).textTheme.labelMedium),
-                        ])
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Wrap(
-                      alignment: WrapAlignment.center,
-                      children: townHallLevelCounts.entries.map((entry) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Wrap(
-                            children: [
-                              Image.network(
-                                'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${entry.key}.png',
-                                width: 20,
-                              ),
-                              SizedBox(width: 5),
-                              Text('x${entry.value}'),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ])),
-                ],
-              ),
-            )));
-      }).toList(),
-    ),
-  ]);
+                );
+              }).toList(),
+            ),
+          ],
+        );
+      }
+    },
+  );
 }
 
 Widget buildWarsTab(BuildContext context) {
@@ -394,4 +440,27 @@ Widget buildWarsTab(BuildContext context) {
       ),
     ],
   );
+}
+
+Future<Map<String, int>> calculateTotalStars(
+    List<ClanLeagueRounds> rounds) async {
+  Map<String, int> totalStarsByClan = {};
+
+  for (var round in rounds) {
+    var wars = await round.warLeagueInfos;
+    for (var war in wars) {
+      if (!totalStarsByClan.containsKey(war.clan.tag)) {
+        totalStarsByClan[war.clan.tag] = 0;
+      }
+      if (!totalStarsByClan.containsKey(war.opponent.tag)) {
+        totalStarsByClan[war.opponent.tag] = 0;
+      }
+      totalStarsByClan[war.clan.tag] =
+          (totalStarsByClan[war.clan.tag] ?? 0) + war.clan.stars;
+      totalStarsByClan[war.opponent.tag] =
+          (totalStarsByClan[war.opponent.tag] ?? 0) + war.opponent.stars;
+    }
+  }
+
+  return totalStarsByClan;
 }
