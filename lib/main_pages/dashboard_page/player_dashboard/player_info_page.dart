@@ -32,11 +32,6 @@ class StatsScreenState extends State<StatsScreen>
     super.initState();
     tabController = TabController(length: 2, vsync: this);
     townHallImageUrl = widget.playerStats.townHallPic;
-
-    activeEquipmentNames = widget.playerStats.heroes
-        .expand((hero) => hero.equipment)
-        .map((equipment) => equipment.name)
-        .toList();
   }
 
   @override
@@ -178,40 +173,31 @@ class StatsScreenState extends State<StatsScreen>
                       buildItemSection(
                           widget.playerStats.heroes,
                           'hero',
-                          AppLocalizations.of(context)?.heroes ?? 'Heroes',
-                          activeEquipmentNames),
+                          AppLocalizations.of(context)?.heroes ?? 'Heroes'),
                       buildItemSection(
                           widget.playerStats.equipments,
                           'gear',
-                          AppLocalizations.of(context)?.equipment ?? 'Gears',
-                          activeEquipmentNames),
+                          AppLocalizations.of(context)?.equipment ?? 'Gears'),
                       buildItemSection(
                           widget.playerStats.troops,
                           'troop',
-                          AppLocalizations.of(context)?.troops ?? 'Troops',
-                          activeEquipmentNames),
+                          AppLocalizations.of(context)?.troops ?? 'Troops'),
                       buildItemSection(
                           widget.playerStats.troops,
                           'super-troop',
-                          AppLocalizations.of(context)?.superTroops ??
-                              'Super Troops',
-                          activeEquipmentNames),
+                          AppLocalizations.of(context)?.superTroops ??'Super Troops'),
                       buildItemSection(
                           widget.playerStats.troops,
                           'pet',
-                          AppLocalizations.of(context)?.pets ?? 'Pets',
-                          activeEquipmentNames),
+                          AppLocalizations.of(context)?.pets ?? 'Pets'),
                       buildItemSection(
                           widget.playerStats.troops,
                           'siege-machine',
-                          AppLocalizations.of(context)?.siegeMachines ??
-                              'Siege Machine',
-                          activeEquipmentNames),
+                          AppLocalizations.of(context)?.siegeMachines ?? 'Siege Machine'),
                       buildItemSection(
                           widget.playerStats.spells,
                           'spell',
-                          AppLocalizations.of(context)?.spells ?? 'Spells',
-                          activeEquipmentNames),
+                          AppLocalizations.of(context)?.spells ?? 'Spells'),
                     ],
                   ),
                 ),
@@ -225,13 +211,11 @@ class StatsScreenState extends State<StatsScreen>
                         buildItemSection(
                             widget.playerStats.heroes,
                             'bb-hero',
-                            AppLocalizations.of(context)?.heroes ?? 'Heroes',
-                            activeEquipmentNames),
+                            AppLocalizations.of(context)?.heroes ?? 'Heroes'),
                         buildItemSection(
                             widget.playerStats.troops,
                             'bb-troop',
-                            AppLocalizations.of(context)?.troops ?? 'Troops',
-                            activeEquipmentNames),
+                            AppLocalizations.of(context)?.troops ?? 'Troops'),
                       ]),
                 ),
               ],
@@ -266,13 +250,16 @@ class StatsScreenState extends State<StatsScreen>
     return (totalCurrentLevel / totalMaxLevel) * 100;
   }
 
+  String getEquipmentImageUrl(String equipmentName) {
+  return troopUrlsAndTypes[equipmentName]?['url'] ??
+      'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
+  }
+
   // Build the section for troops, super troops, pets, and siege machines
-  Widget buildItemSection(List<dynamic> items, String itemType, String title,
-      List<String> activeEquipmentNames) {
+  Widget buildItemSection(List<dynamic> items, String itemType, String title) {
     List<String> itemNames = items.map((item) => item.name as String).toList();
 
-    double completionPercentage =
-        calculateCompletionPercentage(items, itemType);
+    double completionPercentage = calculateCompletionPercentage(items, itemType);
 
     List<Widget> missingItems = [];
     troopUrlsAndTypes.forEach((name, data) {
@@ -315,15 +302,19 @@ class StatsScreenState extends State<StatsScreen>
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: '$title ',
+                          text: title,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        if (itemType != 'super-troop')
+                        if (itemType != 'super-troop') ...[
                           TextSpan(
-                            text:
-                                '| ${completionPercentage.toStringAsFixed(2)}%',
+                            text: ' | ',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          TextSpan(
+                            text: '${completionPercentage.toStringAsFixed(2)}%',
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
+                        ],
                       ],
                     ),
                   ),
@@ -347,27 +338,100 @@ class StatsScreenState extends State<StatsScreen>
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
                                   color:
-                                      activeEquipmentNames.contains(item.name)
-                                          ? Colors.red
-                                          : (item.level == item.maxLevel ||
-                                                  (item.type == 'super-troop' &&
-                                                      item.superTroopIsActive))
-                                              ? Color(0xFFD4AF37) // Or
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground, // Noir
+                                    (item.level == item.maxLevel ||
+                                            (item.type == 'super-troop' &&
+                                                item.superTroopIsActive))
+                                        ? Color(0xFFD4AF37) // Or
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onBackground, // Noir
                                   width: 2,
                                 ),
                               ),
                               child: Stack(
                                 children: <Widget>[
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(6),
-                                    child: Image.network(item.imageUrl,
-                                        width: 40,
-                                        height: 40,
-                                        fit: BoxFit
-                                            .cover), // Display the item image
+                                  GestureDetector(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Dialog(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(20),
+                                            ),
+                                            elevation: 6,
+                                            backgroundColor: Colors.transparent,
+                                            child: SingleChildScrollView(
+                                              child:Container(
+                                                height: 200,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  shape: BoxShape.rectangle,
+                                                  borderRadius: BorderRadius.circular(20),
+                                                ),
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    Text('${item.name}', style: TextStyle(color: Colors.black)),
+                                                    Image.network(item.imageUrl,
+                                                      width: 40,
+                                                      height: 40,
+                                                      fit: BoxFit.cover),
+                                                    Text(
+                                                      itemType == 'super-troop'
+                                                        ? (item.superTroopIsActive ? 'Actif' : 'Inactif')
+                                                        : 'Level : ${item.level}/${item.maxLevel}',
+                                                      style: TextStyle(color: Colors.black),
+                                                    ),
+                                                    itemType == 'hero'
+                                                      ? Container(
+                                                          child: Column(
+                                                            children: [
+                                                              ...item.equipment.map((equipment) => Padding(
+                                                                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                                                    child: Row(
+                                                                      mainAxisSize: MainAxisSize.min,
+                                                                      children: [
+                                                                        Image.network(
+                                                                          getEquipmentImageUrl(equipment.name),
+                                                                          width: 40,
+                                                                          height: 40,
+                                                                          fit: BoxFit.cover,
+                                                                        ),
+                                                                        SizedBox(width: 8),
+                                                                        Expanded(
+                                                                          child: Text(
+                                                                            equipment.name,
+                                                                            style: TextStyle(color: Colors.black),
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                          ),
+                                                                        ),
+                                                                        Text(
+                                                                          'Niveau : ${equipment.level}/${equipment.maxLevel}',
+                                                                          style: TextStyle(color: Colors.black),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        )
+                                                      : SizedBox.shrink(),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(6),
+                                      child: Image.network(item.imageUrl,
+                                          width: 40,
+                                          height: 40,
+                                          fit: BoxFit.cover), // Display the item image
+                                    ),
                                   ),
                                   (item.type != 'super-troop')
                                       ? Positioned(
@@ -386,7 +450,7 @@ class StatsScreenState extends State<StatsScreen>
                                             ),
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment
-                                                  .center, // Centrer verticalement
+                                                  .center,
                                               children: [
                                                 Text(
                                                   item.level.toString(),
