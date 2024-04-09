@@ -42,7 +42,7 @@ dependencies:
   crypto: ^3.0.1
   clipboard: ^0.1.3
   lucide_icons: ^0.257.0
-  scrollable_tab_view: ^1.0.3
+  scrollable_tab_view: ^1.0.5
   fl_chart: ^0.67.0
   tuple: ^2.0.0
 

@@ -9,9 +9,9 @@ import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:clashkingapp/main_pages/war_and_league_page/components/not_in_war_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/components/cwl_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/components/current_war_info_card.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/not_in_war_card.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/cwl_card.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/current_war_info_card.dart';
 import 'package:clashkingapp/api/wars_league_info.dart';
 
 class CurrentWarInfoPage extends StatefulWidget {
@@ -38,7 +38,6 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.tertiary,
       appBar: CustomAppBar(user: widget.user),
       body: FutureBuilder<String>(
         future: checkCurrentWar(widget.playerStats),
@@ -115,7 +114,7 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
       var decodedResponse = jsonDecode(utf8.decode(responseWar.bodyBytes));
       if (decodedResponse["state"] != "notInWar") {
         currentWarInfo = CurrentWarInfo.fromJson(
-            jsonDecode(utf8.decode(responseWar.bodyBytes)));
+            jsonDecode(utf8.decode(responseWar.bodyBytes)), "war");
         return "war";
       } else {
         DateTime now = DateTime.now();

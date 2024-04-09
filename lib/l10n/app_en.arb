@@ -38,6 +38,7 @@
     "statistics" : "Statistics",
     "attacks" : "Attacks",
     "stars" : "Stars",
+    "destructionRate" : "Destruction rate",
     "events" : "Events",
     "team" : "Teams",
     "myTeam" : "My team",

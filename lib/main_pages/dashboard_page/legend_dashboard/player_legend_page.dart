@@ -111,6 +111,9 @@ class LegendScreenState extends State<LegendScreen>
               LegendHeaderCard(
                   widget: widget, dynamicLegendData: dynamicLegendData),
               ScrollableTab(
+                tabBarDecoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+              ),
                 labelColor: Theme.of(context).colorScheme.onBackground,
                 unselectedLabelColor:
                     Theme.of(context).colorScheme.onBackground,
@@ -127,31 +130,21 @@ class LegendScreenState extends State<LegendScreen>
                   Tab(text: "History"), // Show EOS history
                 ],
                 children: [
-                  Container(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    child: ListTile(
-                      title: dynamicLegendData["legends"].isNotEmpty
-                          ? buildLegendTab(dynamicLegendData)
-                          : Center(child: Text('No data available')),
-                    ),
+                  ListTile(
+                    title: dynamicLegendData["legends"].isNotEmpty
+                        ? buildLegendTab(dynamicLegendData)
+                        : Center(child: Text('No data available')),
                   ),
-                  Container(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    child: ListTile(
-                      title: dynamicLegendData["legends"].isNotEmpty
-                          ? buildChartsStats(
-                              dynamicLegendData, seasonLegendData)
-                          : Center(child: Text('No data available')),
-                    ),
+                  ListTile(
+                    title: dynamicLegendData["legends"].isNotEmpty
+                        ? buildChartsStats(dynamicLegendData, seasonLegendData)
+                        : Center(child: Text('No data available')),
                   ),
-                  Container(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    child: ListTile(
-                      title: dynamicLegendData["legends"].isNotEmpty
-                          ? buildHistoryTab(seasonLegendData)
-                          : Center(child: Text('No data available')),
-                    ),
-                  )
+                  ListTile(
+                    title: dynamicLegendData["legends"].isNotEmpty
+                        ? buildHistoryTab(seasonLegendData)
+                        : Center(child: Text('No data available')),
+                  ),
                 ],
               )
             ]))));

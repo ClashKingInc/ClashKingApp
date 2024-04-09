@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'dart:ui';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -80,7 +81,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
         alignment: Alignment.center,
         children: <Widget>[
           SizedBox(
-            height: 230,
+            height: 240,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
               child: ColorFiltered(
@@ -110,7 +111,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                         children: [
                           Image.network(
                               widget.currentWarInfo.clan.badgeUrls.large,
-                              width: 100),
+                              width: 90),
                           Text(
                             widget.currentWarInfo.clan.name,
                             textAlign: TextAlign.center,
@@ -122,11 +123,17 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                                         .colorScheme
                                         .onPrimary),
                           ),
+                          Text(
+                              "${widget.currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)}%",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(color: Colors.white)),
                         ],
                       ),
                     ),
                     Text(
-                      "VS",
+                      "${widget.currentWarInfo.clan.stars} - ${widget.currentWarInfo.opponent.stars}",
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary),
                     ),
@@ -136,7 +143,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                         children: [
                           Image.network(
                               widget.currentWarInfo.opponent.badgeUrls.large,
-                              width: 100),
+                              width: 90),
                           Text(
                             widget.currentWarInfo.opponent.name,
                             textAlign: TextAlign.center,
@@ -147,6 +154,13 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onPrimary),
+                          ),
+                          Text(
+                            "${widget.currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)}%",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(color: Colors.white),
                           )
                         ],
                       ),
@@ -168,6 +182,9 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
         ],
       ),
       ScrollableTab(
+          tabBarDecoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+          ),
           labelColor: Theme.of(context).colorScheme.onBackground,
           unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
           onTap: (value) {
@@ -219,129 +236,382 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
   }
 
   Widget buildStatisticsTab(BuildContext context) {
+    Map<int, int> clanStarCounts =
+        countStars(widget.currentWarInfo.clan.members);
+    Map<int, int> opponentStarCounts =
+        countStars(widget.currentWarInfo.opponent.members);
+
+    int numberOfAttacks = widget.currentWarInfo.type == 'cwl'
+        ? widget.currentWarInfo.teamSize
+        : widget.currentWarInfo.teamSize * 2;
     final double clanStarsPercentage =
         widget.currentWarInfo.clan.stars / (widget.currentWarInfo.teamSize * 3);
     final double opponentStarsPercentage =
         widget.currentWarInfo.opponent.stars /
             (widget.currentWarInfo.teamSize * 3);
-    final double clanAttacksPercentage = widget.currentWarInfo.clan.attacks /
-        (widget.currentWarInfo.teamSize * 2);
+    final double clanAttacksPercentage =
+        widget.currentWarInfo.clan.attacks / numberOfAttacks;
     final double opponentAttacksPercentage =
-        widget.currentWarInfo.opponent.attacks /
-            (widget.currentWarInfo.teamSize * 2);
+        widget.currentWarInfo.opponent.attacks / numberOfAttacks;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Center(
-            child: Text(
-                '${widget.currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)}% - ${widget.currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)}%')),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Column(
-            children: [
-              Text(AppLocalizations.of(context)?.attacks ?? 'Attacks'),
-              Row(
-                children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        LinearProgressIndicator(
-                          value: clanAttacksPercentage,
-                          backgroundColor: Colors.grey[300],
-                          color: Colors.blue,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Center(
-                            child: Text(
-                              '${widget.currentWarInfo.clan.attacks}/${widget.currentWarInfo.teamSize * 2}',
-                              style: TextStyle(color: Colors.black),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.network(
+                              widget.currentWarInfo.clan.badgeUrls.small),
+                          Text(widget.currentWarInfo.clan.name),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.network(
+                              widget.currentWarInfo.opponent.badgeUrls.small),
+                          Text(widget.currentWarInfo.opponent.name),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Text(AppLocalizations.of(context)?.stars ?? 'Stars'),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: LinearProgressIndicator(
+                              value: clanStarsPercentage,
+                              backgroundColor: Colors.grey[300],
+                              color: Colors.blue,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        LinearProgressIndicator(
-                          value: opponentAttacksPercentage,
-                          backgroundColor: Colors.grey[300],
-                          color: Colors.red,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top:
-                                  5), // Ajoute de l'espace vertical au-dessus du texte
-                          child: Center(
-                            child: Text(
-                              '${widget.currentWarInfo.opponent.attacks}/${widget.currentWarInfo.teamSize * 2}',
-                              style: TextStyle(color: Colors.black),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: Center(
+                              child: Text(
+                                '${widget.currentWarInfo.clan.stars}/${widget.currentWarInfo.teamSize * 3}',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              Text(AppLocalizations.of(context)?.stars ?? 'Stars'),
-              Row(
-                children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        LinearProgressIndicator(
-                          value: clanStarsPercentage,
-                          backgroundColor: Colors.grey[300],
-                          color: Colors.blue,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top:
-                                  5), // Ajoute de l'espace vertical au-dessus du texte
-                          child: Center(
-                            child: Text(
-                              '${widget.currentWarInfo.clan.stars}/${widget.currentWarInfo.teamSize * 3}',
-                              style: TextStyle(color: Colors.black),
+                    SizedBox(
+                        width: 25,
+                        child: Image.network(
+                            "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png")),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: LinearProgressIndicator(
+                              value: opponentStarsPercentage,
+                              backgroundColor: Colors.grey[300],
+                              color: Colors.red,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        LinearProgressIndicator(
-                          value: opponentStarsPercentage,
-                          backgroundColor: Colors.grey[300],
-                          color: Colors.red,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Center(
-                            child: Text(
-                              '${widget.currentWarInfo.opponent.stars}/${widget.currentWarInfo.teamSize * 3}',
-                              style: TextStyle(color: Colors.black),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: Center(
+                              child: Text(
+                                '${widget.currentWarInfo.opponent.stars}/${widget.currentWarInfo.teamSize * 3}',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Text(AppLocalizations.of(context)?.attacks ?? 'Attacks'),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: LinearProgressIndicator(
+                              value: clanAttacksPercentage,
+                              backgroundColor: Colors.grey[300],
+                              color: Colors.blue,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: Center(
+                              child: Text(
+                                '${widget.currentWarInfo.clan.attacks}/$numberOfAttacks',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                        width: 25,
+                        child: Image.network(
+                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png")),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: LinearProgressIndicator(
+                              value: opponentAttacksPercentage,
+                              backgroundColor: Colors.grey[300],
+                              color: Colors.red,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top:
+                                    5), // Ajoute de l'espace vertical au-dessus du texte
+                            child: Center(
+                              child: Text(
+                                '${widget.currentWarInfo.opponent.attacks}/$numberOfAttacks',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Text(AppLocalizations.of(context)?.destructionRate ??
+                    'Destruction rate'),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: LinearProgressIndicator(
+                              value: widget
+                                      .currentWarInfo.clan.destructionPercentage
+                                      .toDouble() /
+                                  100,
+                              backgroundColor: Colors.grey[300],
+                              color: Colors.blue,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: Center(
+                              child: Text(
+                                '${widget.currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)}%',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                        width: 25, child: Icon(LucideIcons.percent, size: 25)),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: LinearProgressIndicator(
+                              value: widget.currentWarInfo.opponent
+                                      .destructionPercentage
+                                      .toDouble() /
+                                  100,
+                              backgroundColor: Colors.grey[300],
+                              color: Colors.red,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top:
+                                    5), // Ajoute de l'espace vertical au-dessus du texte
+                            child: Center(
+                              child: Text(
+                                '${widget.currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)}%',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Text("Number of stars"),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(clanStarCounts[0].toString()),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          SizedBox(
+                              width: 25,
+                              child: Image.network(
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
+                          SizedBox(
+                              width: 25,
+                              child: Image.network(
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
+                          SizedBox(
+                              width: 25,
+                              child: Image.network(
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
+                        ]),
+                    Text(opponentStarCounts[0].toString()),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(clanStarCounts[1].toString()),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          SizedBox(
+                              width: 25,
+                              child: Image.network(
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png")),
+                          SizedBox(
+                              width: 25,
+                              child: Image.network(
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
+                          SizedBox(
+                              width: 25,
+                              child: Image.network(
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
+                        ]),
+                    Text(opponentStarCounts[1].toString()),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(clanStarCounts[2].toString()),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 25,
+                          child: Image.network(
+                              "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
                         ),
+                        SizedBox(
+                          width: 25,
+                          child: Image.network(
+                              "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
+                        ),
+                        SizedBox(
+                            width: 25,
+                            child: Image.network(
+                                "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    Text(opponentStarCounts[2].toString()),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(clanStarCounts[3].toString()),
+                    Row(children: [
+                      SizedBox(
+                        width: 25,
+                        child: Image.network(
+                            "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
+                      ),
+                      SizedBox(
+                        width: 25,
+                        child: Image.network(
+                            "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
+                      ),
+                      SizedBox(
+                        width: 25,
+                        child: Image.network(
+                            "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
+                      ),
+                    ]),
+                    Text(opponentStarCounts[3].toString()),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ],
     );
+  }
+
+  Map<int, int> countStars(List<WarMember> members) {
+    Map<int, int> starCounts = {0: 0, 1: 0, 2: 0, 3: 0};
+
+    for (WarMember member in members) {
+      member.attacks?.forEach((attack) {
+        if (attack.stars == 0) {
+          starCounts[0] = starCounts[0]! + 1;
+        } else if (attack.stars == 1) {
+          starCounts[1] = starCounts[1]! + 1;
+        } else if (attack.stars == 2) {
+          starCounts[2] = starCounts[2]! + 1;
+        } else if (attack.stars == 3) {
+          starCounts[3] = starCounts[3]! + 1;
+        }
+      });
+    }
+
+    return starCounts;
   }
 
   Widget buildEventsTab(BuildContext context) {
@@ -385,21 +655,56 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
       itemCount: allAttacks.length,
       itemBuilder: (context, index) {
         var attack = allAttacks[index];
-        return ListTile(
-          title: Text(
-              "${getPlayerMapPositionByTag(attack["attackerTag"])}- ${attack["attackerName"]} - ${attack["destructionPercentage"]}%",
-              style: TextStyle(fontSize: 16),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis),
-          subtitle: Text(
-              "On ${getPlayerMapPositionByTag(attack["defenderTag"])}- ${getPlayerNameByTag(attack["defenderTag"])}, #${attack["order"]}",
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: generateStars(attack["stars"]),
-          ),
-        );
+        return Card(
+            child: Padding(
+                padding: EdgeInsets.all(8),
+                child: ListTile(
+                  title: Row(children: [
+                    SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: Image.network(
+                          'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["attackerTag"])}.png'),
+                    ),
+                    Expanded(
+                      child: Text(
+                          " ${getPlayerMapPositionByTag(attack["attackerTag"])}. ${attack["attackerName"]}",
+                          style: TextStyle(fontSize: 16),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis),
+                    ),
+                  ]),
+                  subtitle: Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Row(children: [
+                    SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: Image.network(
+                          'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack.png'),
+                    ),
+                    Expanded(
+                      child: Text(
+                        " ${getPlayerMapPositionByTag(attack["defenderTag"])}. ${getPlayerNameByTag(attack["defenderTag"])}",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.tertiary),
+                      ),
+                    ),
+                  ])),
+                  trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        ...generateStars(attack["stars"]),
+                      ]),
+                      Text('${attack["destructionPercentage"]}%',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.tertiary)),
+                    ],
+                  ),
+                )));
       },
     );
   }
@@ -583,10 +888,12 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
 
   List<Widget> generateStars(int numberOfStars) {
     return List<Widget>.generate(3, (index) {
-      return Icon(
-        index < numberOfStars ? Icons.star : Icons.star_border,
-        color: index < numberOfStars ? Colors.yellow : Colors.grey,
-        size: 16,
+      return Image.network(
+        index < numberOfStars
+            ? "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"
+            : "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png",
+        width: 16,
+        height: 16,
       );
     });
   }

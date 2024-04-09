@@ -19,7 +19,7 @@ class PlayerAccounts {
       playerAccounts.add(PlayerAccountInfo.fromJson(item));
       ClanInfo clan = ClanInfo.fromJson(item['clan']);
       clanInfo.add(clan);
-      CurrentWarInfo war = CurrentWarInfo.fromJson(item['clan']['currentWar']);
+      CurrentWarInfo war = CurrentWarInfo.fromJson(item['clan']['currentWar'], "war");
       warInfo.add(war);
     }
 

@@ -5,8 +5,8 @@ import 'dart:ui';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_page.dart';
-import 'package:clashkingapp/api/wars_league_info.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/war_league_info_screen.dart';
+import 'package:clashkingapp/api/current_war_info.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
 
 class CurrentLeagueInfoScreen extends StatefulWidget {
   final CurrentLeagueInfo currentLeagueInfo;
@@ -63,6 +63,9 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
       ),
       ScrollableTab(
           labelColor: Theme.of(context).colorScheme.onBackground,
+          tabBarDecoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+          ),
           unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
           onTap: (value) {
             print('Tab $value selected');
@@ -97,7 +100,7 @@ Widget buildRoundsTab(
             child: Text('Round $round',
                 style: Theme.of(context).textTheme.titleLarge),
           ),
-          FutureBuilder<List<WarLeagueInfo>>(
+          FutureBuilder<List<CurrentWarInfo>>(
             future: clanLeagueRounds.warLeagueInfos,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -112,8 +115,8 @@ Widget buildRoundsTab(
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => WarLeagueInfoScreen(
-                                  warLeagueInfo: warLeagueInfo),
+                              builder: (context) => CurrentWarInfoScreen(
+                                  currentWarInfo: warLeagueInfo),
                             ),
                           );
                         },
@@ -139,11 +142,18 @@ Widget buildRoundsTab(
                                             .textTheme
                                             .bodyMedium,
                                       ),
-                                     Text(
+                                      Text(
                                         "${warLeagueInfo.clan.attacks}/${warLeagueInfo.teamSize.toString()}",
-                                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                          color: warLeagueInfo.clan.attacks == warLeagueInfo.teamSize ? Colors.purple : null,
-                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge
+                                            ?.copyWith(
+                                              color:
+                                                  warLeagueInfo.clan.attacks ==
+                                                          warLeagueInfo.teamSize
+                                                      ? Colors.purple
+                                                      : null,
+                                            ),
                                       ),
                                       Text(
                                         "${warLeagueInfo.clan.destructionPercentage.toStringAsFixed(2)}%",
@@ -174,9 +184,21 @@ Widget buildRoundsTab(
                                               .textTheme
                                               .bodyLarge
                                               ?.copyWith(
-                                                color: warLeagueInfo.clan.stars > warLeagueInfo.opponent.stars ||
-                                                        (warLeagueInfo.clan.stars == warLeagueInfo.opponent.stars &&
-                                                         warLeagueInfo.clan.destructionPercentage > warLeagueInfo.opponent.destructionPercentage)
+                                                color: warLeagueInfo
+                                                                .clan.stars >
+                                                            warLeagueInfo
+                                                                .opponent
+                                                                .stars ||
+                                                        (warLeagueInfo.clan
+                                                                    .stars ==
+                                                                warLeagueInfo
+                                                                    .opponent
+                                                                    .stars &&
+                                                            warLeagueInfo.clan
+                                                                    .destructionPercentage >
+                                                                warLeagueInfo
+                                                                    .opponent
+                                                                    .destructionPercentage)
                                                     ? Colors.green
                                                     : null,
                                               ),
@@ -188,9 +210,21 @@ Widget buildRoundsTab(
                                               .textTheme
                                               .bodyLarge
                                               ?.copyWith(
-                                                color: warLeagueInfo.opponent.stars > warLeagueInfo.clan.stars ||
-                                                        (warLeagueInfo.opponent.stars == warLeagueInfo.clan.stars &&
-                                                         warLeagueInfo.opponent.destructionPercentage > warLeagueInfo.clan.destructionPercentage)
+                                                color: warLeagueInfo.opponent
+                                                                .stars >
+                                                            warLeagueInfo
+                                                                .clan.stars ||
+                                                        (warLeagueInfo.opponent
+                                                                    .stars ==
+                                                                warLeagueInfo
+                                                                    .clan
+                                                                    .stars &&
+                                                            warLeagueInfo
+                                                                    .opponent
+                                                                    .destructionPercentage >
+                                                                warLeagueInfo
+                                                                    .clan
+                                                                    .destructionPercentage)
                                                     ? Colors.green
                                                     : null,
                                               ),
@@ -216,9 +250,16 @@ Widget buildRoundsTab(
                                       ),
                                       Text(
                                         "${warLeagueInfo.opponent.attacks}/${warLeagueInfo.teamSize.toString()}",
-                                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                          color: warLeagueInfo.opponent.attacks == warLeagueInfo.teamSize ? Colors.purple : null,
-                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge
+                                            ?.copyWith(
+                                              color: warLeagueInfo
+                                                          .opponent.attacks ==
+                                                      warLeagueInfo.teamSize
+                                                  ? Colors.purple
+                                                  : null,
+                                            ),
                                       ),
                                       Text(
                                         "${warLeagueInfo.opponent.destructionPercentage.toStringAsFixed(2)}%",

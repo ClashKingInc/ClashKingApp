@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:clashkingapp/api/wars_league_info.dart';
+import 'package:clashkingapp/api/current_war_info.dart';
 
 class CurrentLeagueInfo {
   final String state;
@@ -96,7 +96,7 @@ class LeagueMember {
 
 class ClanLeagueRounds {
   final List<String> warTags;
-  final Future<List<WarLeagueInfo>> warLeagueInfos;
+  final Future<List<CurrentWarInfo>> warLeagueInfos;
 
   ClanLeagueRounds({
     required this.warTags,
@@ -106,15 +106,15 @@ class ClanLeagueRounds {
   factory ClanLeagueRounds.fromJson(Map<String, dynamic> json) {
     var warTags = json['warTags'] as List<dynamic>? ?? [];
     List<String> parsedWarTags = warTags.map((tag) => tag.toString()).toList();
-    Future<List<WarLeagueInfo>> warLeagueInfos = fetchWarLeagueInfos(parsedWarTags);
+    Future<List<CurrentWarInfo>> warLeagueInfos = fetchWarLeagueInfos(parsedWarTags);
     return ClanLeagueRounds(
       warTags: parsedWarTags,
       warLeagueInfos: warLeagueInfos,
     );
   }
 
-  static Future<List<WarLeagueInfo>> fetchWarLeagueInfos(List<String> warTags) async {
-    List<WarLeagueInfo> warLeagueInfos = [];
+  static Future<List<CurrentWarInfo>> fetchWarLeagueInfos(List<String> warTags) async {
+    List<CurrentWarInfo> warLeagueInfos = [];
     for (var warTag in warTags) {
       warTag = warTag.replaceAll('#', '%23');
       final response = await http.get(
@@ -122,8 +122,8 @@ class ClanLeagueRounds {
       );
 
       if (response.statusCode == 200) {
-        WarLeagueInfo warLeagueInfoItem =
-            WarLeagueInfo.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        CurrentWarInfo warLeagueInfoItem =
+            CurrentWarInfo.fromJson(jsonDecode(utf8.decode(response.bodyBytes)), "cwl");
         warLeagueInfos.add(warLeagueInfoItem);
       } else {
         throw Exception(

@@ -38,7 +38,6 @@ class DashboardPageState extends State<DashboardPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.tertiary,
       appBar: CustomAppBar(user: widget.user),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -84,6 +83,7 @@ class DashboardPageState extends State<DashboardPage>
                 },
               ),
             ),
+          
           ],
         ),
       ),

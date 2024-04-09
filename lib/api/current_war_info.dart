@@ -11,6 +11,7 @@ class CurrentWarInfo {
   final DateTime endTime;
   final ClanWarDetails clan;
   final ClanWarDetails opponent;
+  final String type;
 
   CurrentWarInfo({
     required this.state,
@@ -21,9 +22,10 @@ class CurrentWarInfo {
     required this.endTime,
     required this.clan,
     required this.opponent,
+    required this.type,
   });
 
-  factory CurrentWarInfo.fromJson(Map<String, dynamic> json) {
+  factory CurrentWarInfo.fromJson(Map<String, dynamic> json, String type) {
     return CurrentWarInfo(
       state: json['state'] ?? 'No state',
       teamSize: json['teamSize'] ?? 0,
@@ -33,6 +35,7 @@ class CurrentWarInfo {
       endTime: DateTime.parse(json['endTime']),
       clan: ClanWarDetails.fromJson(json['clan'] ?? {}),
       opponent: ClanWarDetails.fromJson(json['opponent'] ?? {}),
+      type : type,
     );
   }
 }
@@ -67,7 +70,8 @@ class ClanWarDetails {
       attacks: json['attacks'] ?? 0,
       stars: json['stars'] ?? 0,
       destructionPercentage: (json['destructionPercentage'] ?? 0.0).toDouble(),
-      members: List<WarMember>.from(json['members']?.map((x) => WarMember.fromJson(x)) ?? []),
+      members: List<WarMember>.from(
+          json['members']?.map((x) => WarMember.fromJson(x)) ?? []),
     );
   }
 }
@@ -114,12 +118,16 @@ class WarMember {
   factory WarMember.fromJson(Map<String, dynamic> json) {
     return WarMember(
       tag: json['tag'] ?? 'No tag',
-      name: json['name']  ?? 'No name',
+      name: json['name'] ?? 'No name',
       townhallLevel: json['townhallLevel'] ?? 0,
       mapPosition: json['mapPosition'] ?? 0,
-      attacks: (json['attacks'] as List?)?.map((x) => Attack.fromJson(x)).toList() ?? [],
+      attacks:
+          (json['attacks'] as List?)?.map((x) => Attack.fromJson(x)).toList() ??
+              [],
       opponentAttacks: json['opponentAttacks'] ?? 0,
-      bestOpponentAttack: json['bestOpponentAttack'] != null ? BestOpponentAttack.fromJson(json['bestOpponentAttack']) : null,
+      bestOpponentAttack: json['bestOpponentAttack'] != null
+          ? BestOpponentAttack.fromJson(json['bestOpponentAttack'])
+          : null,
     );
   }
 }
@@ -188,19 +196,26 @@ class CurrentWarService {
     await dotenv.load(fileName: ".env");
   }
 
-  Future<CurrentWarInfo> fetchCurrentWarInfo(String tag) async {
-    tag = tag.replaceAll('#', '%23'); // URL encode the '#' character
-    final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clans/$tag/currentwar'),
-      headers: {
-        'Authorization': 'Bearer ${dotenv.env['API_KEY']}'
-      },
-    );
-
-    if (response.statusCode == 200) {
-      return CurrentWarInfo.fromJson(jsonDecode(response.body));
+  Future<CurrentWarInfo> fetchCurrentWarInfo(String tag, String type) async {
+    tag = tag.replaceAll('#', '%23'); 
+  
+    late http.Response response;
+  
+    if (type == "war") {
+      response = await http.get(
+        Uri.parse('https://api.clashking.xyz/v1/clans/$tag/currentwar'),
+      );
     } else {
-      throw Exception('Failed to load current war info with status code: ${response.statusCode}');
+      response = await http.get(
+        Uri.parse('https://api.clashking.xyz/v1/clanwarleagues/wars/$tag'),
+      );
+    }
+  
+    if (response.statusCode == 200) {
+      return CurrentWarInfo.fromJson(jsonDecode(response.body), type);
+    } else {
+      throw Exception(
+          'Failed to load current war info with status code: ${response.statusCode}');
     }
   }
 }

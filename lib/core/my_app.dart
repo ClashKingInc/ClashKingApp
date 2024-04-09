@@ -36,8 +36,8 @@ class MyApp extends StatelessWidget {
                     255, 31, 31, 31), // primary color as the seed
                 primary: Color(0xFFC98910),
                 secondary: Color(0xFF9B1F28),
-                tertiary: Color.fromARGB(255, 61, 60, 60),
-                background: Color.fromARGB(255, 31, 31, 31),
+                tertiary: Colors.grey,
+                background: Color.fromARGB(255, 61, 60, 60),
                 surface: Color.fromARGB(255, 31, 31, 31),
                 error: Color(0xFFB00020),
                 onPrimary:
@@ -91,6 +91,11 @@ class MyApp extends StatelessWidget {
                     fontSize: 10,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.w500),
+                labelSmall: TextStyle(
+                    color: Colors.white,
+                    fontSize: 8,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500),
               ),
             ),
             themeMode: Provider.of<ThemeNotifier>(context).themeMode,
@@ -117,8 +122,8 @@ class MyApp extends StatelessWidget {
                 seedColor: Color(0xFFFFFFFF), // primary color as the seed
                 primary: Color(0xFFC98910),
                 secondary: Color(0xFF9B1F28),
-                tertiary: Color(0xFFFFF8E1),
-                background: Color(0xFFFFFFFF),
+                tertiary: Colors.grey,
+                background: Color(0xFFFFF8E1),
                 surface: Color(0xFFFFFFFF),
                 error: Color(0xFFB00020),
                 onPrimary:
@@ -308,7 +313,7 @@ class MyAppState extends ChangeNotifier {
   // Assume this method exists and fetches current war correctly
   Future<void> fetchCurrentWarInfo(String tag) async {
     try {
-      currentWarInfo = await CurrentWarService().fetchCurrentWarInfo(tag);
+      currentWarInfo = await CurrentWarService().fetchCurrentWarInfo(tag, "war");
       notifyListeners(); // Notify listeners to rebuild widgets that depend on currentWarInfo.
     } catch (e, s) {
       // Handle the error, maybe log it or show a user-friendly message
