@@ -45,6 +45,7 @@ dependencies:
   scrollable_tab_view: ^1.0.5
   fl_chart: ^0.67.0
   tuple: ^2.0.0
+  custom_sliding_segmented_control: ^1.8.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -320,8 +320,9 @@ class StatsScreenState extends State<StatsScreen>
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           TextSpan(
-                            text: '${completionPercentage.toStringAsFixed(2)}%',
-                            style: Theme.of(context).textTheme.bodyText1,
+                            text:
+                                '| ${completionPercentage.toStringAsFixed(2)}%',
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ],
                       ],
