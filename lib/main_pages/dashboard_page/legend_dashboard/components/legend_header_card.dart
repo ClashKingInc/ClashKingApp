@@ -19,7 +19,7 @@ class LegendHeaderCard extends StatelessWidget {
       alignment: Alignment.center,
       children: <Widget>[
         SizedBox(
-          height: 220,
+          height: 240,
           width: double.infinity,
           child: ImageFiltered(
             imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
@@ -36,7 +36,7 @@ class LegendHeaderCard extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 0,
+          top: 10,
           bottom: 0,
           left: 10,
           right: 10,
@@ -196,7 +196,7 @@ class LegendHeaderCard extends StatelessWidget {
               ]),
         ),
         Positioned(
-          top: 20,
+          top: 30,
           left: 10,
           child: IconButton(
             icon: Icon(Icons.arrow_back,

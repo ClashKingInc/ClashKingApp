@@ -156,13 +156,18 @@ class Achievement {
   final int stars;
   final int value;
   final int target;
-  // Include other fields if needed
+  final String info;
+  final String completionInfo;
+  final String village;
 
   Achievement(
       {required this.name,
       required this.stars,
       required this.value,
-      required this.target});
+      required this.target,
+      this.info = '',
+      this.completionInfo = '',
+      this.village = ''});
 
   factory Achievement.fromJson(Map<String, dynamic> json) {
     return Achievement(
@@ -170,7 +175,9 @@ class Achievement {
       stars: json['stars'] ?? 0,
       value: json['value'] ?? 0,
       target: json['target'] ?? 0,
-      // Initialize other fields from JSON if needed
+      info: json['info'] ?? '',
+      completionInfo: json['completionInfo'] ?? '',
+      village: json['village'] ?? 'home',
     );
   }
 }

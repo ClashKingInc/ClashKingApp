@@ -7,6 +7,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/data/troop_data.dart';
+import 'success_page.dart';
 
 class StatsScreen extends StatefulWidget {
   final PlayerAccountInfo playerStats;
@@ -81,7 +82,15 @@ class StatsScreenState extends State<StatsScreen>
                       Positioned(
                         bottom: -90,
                         child: Column(children: [
-                          Image.network(townHallImageUrl, width: 170),
+                          GestureDetector(
+                            onDoubleTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => SuccessScreen(playerStats: widget.playerStats)),
+                              );
+                            },
+                            child: Image.network(townHallImageUrl, width: 170),
+                          ),
                           Row(
                             children: [
                               stars.isNotEmpty
@@ -94,7 +103,7 @@ class StatsScreenState extends State<StatsScreen>
                         ]),
                       ),
                       Positioned(
-                        top: 20,
+                        top: 30,
                         left: 10,
                         child: IconButton(
                           icon: Icon(Icons.arrow_back,
