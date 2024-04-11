@@ -64,6 +64,7 @@ class TeamsCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Flexible(
                         fit: FlexFit.tight,
@@ -127,6 +128,7 @@ class TeamsCard extends StatelessWidget {
                             Row(
                               children: [
                                 Column(children: [
+                                  SizedBox(height: 6),
                                   Row(children: [
                                     Text(
                                         "${totalByClan[clan.tag]?['stars'] ?? 0}"),

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -140,41 +139,49 @@ class CurrentWarInfoCard extends StatelessWidget {
     String minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Column(
-          children: <Widget>[
-            SizedBox(
-              width: 90,
-              height: 90,
-              child: Image.network(currentWarInfo.clan.badgeUrls.large,
-                  fit: BoxFit.cover),
-            ),
-            Center(child: Text(currentWarInfo.clan.name)),
-          ],
+        Expanded(
+          flex: 3,
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                width: 70,
+                height: 70,
+                child: Image.network(currentWarInfo.clan.badgeUrls.large,
+                    fit: BoxFit.cover),
+              ),
+              Text(currentWarInfo.clan.name, textAlign: TextAlign.center)
+            ],
+          ),
         ),
-        Column(
-          children: <Widget>[
-            Center(
-                child: Text(AppLocalizations.of(context)?.preparation ??
-                    'Preparation')),
-            Center(
-                child: Text(
-                    '${AppLocalizations.of(context)?.startsIn} $hours:$minutes')),
-            Center(child: Text(' ')),
-          ],
+        Expanded(
+          flex: 4,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(AppLocalizations.of(context)?.preparation ?? 'Preparation',
+                  textAlign: TextAlign.center, style : Theme.of(context).textTheme.titleSmall),
+              SizedBox(height: 20),
+              Text('${AppLocalizations.of(context)?.startsIn} $hours:$minutes',
+                  textAlign: TextAlign.center),
+            ],
+          ),
         ),
-        Column(
-          children: <Widget>[
-            SizedBox(
-              width: 90,
-              height: 90,
-              child: Image.network(currentWarInfo.opponent.badgeUrls.large,
-                  fit: BoxFit.cover),
-            ),
-            Center(child: Text(currentWarInfo.opponent.name)),
-          ],
-        ),
+        Expanded(
+          flex: 3,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                width: 70,
+                height: 70,
+                child: Image.network(currentWarInfo.opponent.badgeUrls.large,
+                    fit: BoxFit.cover),
+              ),
+              Text(currentWarInfo.opponent.name, textAlign: TextAlign.center),
+            ],
+          ),
+        )
       ],
     );
   }

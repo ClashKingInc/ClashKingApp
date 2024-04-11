@@ -19,7 +19,8 @@ class CurrentWarInfoPage extends StatefulWidget {
   final PlayerAccountInfo playerStats;
   final ClanInfo clanInfo;
 
-  CurrentWarInfoPage({required this.user, required this.playerStats, required this.clanInfo});
+  CurrentWarInfoPage(
+      {required this.user, required this.playerStats, required this.clanInfo});
 
   @override
   State<CurrentWarInfoPage> createState() => _CurrentWarInfoPageState();
@@ -64,8 +65,12 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                             ),
                           );
                         },
-                        child:
-                            CurrentWarInfoCard(currentWarInfo: currentWarInfo!),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 4.0, horizontal: 8.0),
+                          child: CurrentWarInfoCard(
+                              currentWarInfo: currentWarInfo!),
+                        ),
                       )
                     else if (warState == "cwl")
                       GestureDetector(

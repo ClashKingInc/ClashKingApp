@@ -79,8 +79,13 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
             Tab(text: AppLocalizations.of(context)?.team ?? 'Teams')
           ],
           children: [
-            ListTile(title: WarStatisticsCard(currentWarInfo : widget.currentWarInfo)),
-            ListTile(title: WarEventsCard(currentWarInfo : widget.currentWarInfo, playerTab : playerTab)),
+            ListTile(
+                title:
+                    WarStatisticsCard(currentWarInfo: widget.currentWarInfo)),
+            ListTile(
+                title: WarEventsCard(
+                    currentWarInfo: widget.currentWarInfo,
+                    playerTab: playerTab)),
             ListTile(title: buildTeamsTab(context)),
           ])
     ])));
@@ -169,7 +174,8 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
           details.add(Text(
               '${AppLocalizations.of(context)?.attack ?? 'Attack'} ${i + 1} ${AppLocalizations.of(context)?.notUsed ?? 'not used'}',
               maxLines: 1,
-              overflow: TextOverflow.ellipsis));
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: Theme.of(context).colorScheme.tertiary)));
         }
       } else {
         // No attacks done
@@ -184,7 +190,8 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
       details.add(Text(
           '${AppLocalizations.of(context)?.defense ?? 'Defense'}(s) : ${member.opponentAttacks}',
           maxLines: 1,
-          overflow: TextOverflow.ellipsis));
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(color: Theme.of(context).colorScheme.tertiary)));
 
       if (member.bestOpponentAttack != null) {
         var bestAttack = member.bestOpponentAttack!;
@@ -220,7 +227,11 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
         );
       }
 
-      return WarTeamCard(playerTab: playerTab, details: details, widget: widget, member : member);
+      return WarTeamCard(
+          playerTab: playerTab,
+          details: details,
+          widget: widget,
+          member: member);
     }).toList();
 
     return Column(
