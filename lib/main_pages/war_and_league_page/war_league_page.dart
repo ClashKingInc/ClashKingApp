@@ -123,13 +123,13 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
         return "war";
       } else {
         DateTime now = DateTime.now();
-        if (now.day >= 1 && now.day <= 10) {
+        if (now.day >= 1 && now.day <= 12) {
           if (responseCwl.statusCode == 200) {
             var decodedResponseCwl =
                 jsonDecode(utf8.decode(responseCwl.bodyBytes));
             if (decodedResponseCwl.containsKey("state")) {
-              currentLeagueInfo = CurrentLeagueInfo.fromJson(
-                  jsonDecode(utf8.decode(responseCwl.bodyBytes)));
+              currentLeagueInfo =
+                  CurrentLeagueInfo.fromJson(decodedResponseCwl);
               return "cwl";
             } else {
               return "notInLeague";

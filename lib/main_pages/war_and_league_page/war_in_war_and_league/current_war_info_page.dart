@@ -3,7 +3,6 @@ import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/war_functions.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_header.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_statistics_card.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_events_card.dart';
@@ -137,105 +136,6 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
   }
 
   Widget buildMemberListView(List<WarMember> members, BuildContext context) {
-    members.sort((a, b) => a.mapPosition.compareTo(b.mapPosition));
-    print(widget.currentWarInfo.attacksPerMember);
-
-    List<Widget> memberWidgets = members.map((member) {
-      List<Widget> details = [];
-
-      // Générer les détails des attaques
-      if (member.attacks != null) {
-        for (var attack in member.attacks!) {
-          String imageUrlDef =
-              'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack.defenderTag, playerTab)}.png';
-          details.add(
-            Row(
-              children: <Widget>[
-                SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: Image.network(imageUrlDef),
-                ),
-                Expanded(
-                    child: Text(
-                        ' ${getPlayerMapPositionByTag(attack.defenderTag, playerTab)}. ${getPlayerNameByTag(attack.defenderTag, playerTab)}',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis)),
-                Text('${attack.destructionPercentage}% - '),
-                ...generateStars(attack.stars),
-              ],
-            ),
-          );
-        }
-        for (int i = details.length;
-            i < widget.currentWarInfo.attacksPerMember;
-            i++) {
-          details.add(Text(
-              '${AppLocalizations.of(context)?.attack ?? 'Attack'} ${i + 1} ${AppLocalizations.of(context)?.notUsed ?? 'not used'}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Theme.of(context).colorScheme.tertiary)));
-        }
-      } else {
-        // No attacks done
-        for (int i = 0; i < widget.currentWarInfo.attacksPerMember; i++) {
-          details.add(Text(
-              '${AppLocalizations.of(context)?.attack ?? 'Attack'} ${i + 1} ${AppLocalizations.of(context)?.notUsed ?? 'not used'}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis));
-        }
-      }
-
-      details.add(Text(
-          '${AppLocalizations.of(context)?.defense ?? 'Defense'}(s) : ${member.opponentAttacks}',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: Theme.of(context).colorScheme.tertiary)));
-
-      if (member.bestOpponentAttack != null) {
-        var bestAttack = member.bestOpponentAttack!;
-        details.add(
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              SizedBox(
-                width: 20,
-                height: 20,
-                child: Image.network(
-                    'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(bestAttack.defenderTag, playerTab)}.png'),
-              ),
-              Expanded(
-                child: Text(
-                    ' ${getPlayerMapPositionByTag(bestAttack.attackerTag, playerTab)}. ${getPlayerNameByTag(bestAttack.attackerTag, playerTab)}',
-                    style: TextStyle(fontSize: 14),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis),
-              ),
-              // Étoiles alignées à droite
-              Row(
-                children: <Widget>[
-                  Text(
-                    '${bestAttack.destructionPercentage}% - ',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  ...generateStars(bestAttack.stars),
-                ],
-              ),
-            ],
-          ),
-        );
-      }
-
-      return WarTeamCard(
-          playerTab: playerTab,
-          details: details,
-          widget: widget,
-          member: member);
-    }).toList();
-
-    return Column(
-      children: memberWidgets,
-    );
+    return WarTeamCard(playerTab: playerTab, widget: widget, members: members);
   }
 }

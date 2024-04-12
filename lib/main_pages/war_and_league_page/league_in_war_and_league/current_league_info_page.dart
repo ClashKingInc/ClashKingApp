@@ -1,3 +1,4 @@
+import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_league_info.dart';
 import 'package:clashkingapp/api/clan_info.dart';
@@ -8,6 +9,7 @@ import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/component/round_clans_card.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/component/teams_card.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/league_functions.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/component/members_card.dart';
 
 class CurrentLeagueInfoScreen extends StatefulWidget {
   final CurrentLeagueInfo currentLeagueInfo;
@@ -26,12 +28,26 @@ class CurrentLeagueInfoScreen extends StatefulWidget {
 
 class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
   late Future<Map<String, Map<String, dynamic>>> totalStarsAndPercentage;
+  late String sortMembersBy = 'stars';
+  late String sortTeamsBy = 'stars';
 
   @override
   void initState() {
     super.initState();
-    totalStarsAndPercentage =
-        calculateTotalStarsAndPercentage(widget.currentLeagueInfo.rounds);
+    totalStarsAndPercentage = calculateTotalStarsAndPercentage(
+        widget.currentLeagueInfo.rounds, sortTeamsBy);
+  }
+
+  void updateSortMembersBy(String newValue) {
+    setState(() {
+      sortMembersBy = newValue;
+    });
+  }
+
+  void updateSortTeamsBy(String newValue) {
+    setState(() {
+      sortTeamsBy = newValue;
+    });
   }
 
   @override
@@ -213,12 +229,16 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
           tabs: [
             Tab(text: AppLocalizations.of(context)?.rounds ?? 'Rounds'),
             Tab(text: AppLocalizations.of(context)?.team ?? 'Teams'),
+            Tab(text: "Members")
           ],
           children: [
             ListTile(title: buildRoundsTab(context, widget.currentLeagueInfo)),
             ListTile(
                 title: buildTeamsTab(context, widget.currentLeagueInfo,
-                    totalStarsAndPercentage)),
+                    totalStarsAndPercentage, sortTeamsBy, updateSortTeamsBy)),
+            ListTile(
+                title: buildMembersTab(context, widget.currentLeagueInfo,
+                    widget.clanTag, sortMembersBy, updateSortMembersBy))
           ])
     ])));
   }
@@ -265,23 +285,89 @@ Widget buildRoundsTab(
   );
 }
 
-Widget buildTeamsTab(BuildContext context, CurrentLeagueInfo currentLeagueInfo,
-    Future<Map<String, Map<String, dynamic>>> totalStarsAndPercentage) {
-  return FutureBuilder<Map<String, Map<String, dynamic>>>(
-    future: totalStarsAndPercentage,
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return CircularProgressIndicator();
-      } else if (snapshot.hasError) {
-        return Text('Error: ${snapshot.error}');
-      } else {
-        Map<String, Map<String, dynamic>> totalByClan = snapshot.data!;
-        var sortedClans = currentLeagueInfo.clans.toList()
-          ..sort((a, b) => (totalByClan[b.tag]?['stars'] ?? 0)
-              .compareTo(totalByClan[a.tag]?['stars'] ?? 0));
+Widget buildTeamsTab(
+    BuildContext context,
+    CurrentLeagueInfo currentLeagueInfo,
+    Future<Map<String, Map<String, dynamic>>> totalStarsAndPercentage,
+    String sortTeamsBy,
+    Function(String) updateSortTeamsBy) {
+  Map<String, String> sortByOptions = <String, String>{
+    'Stars': 'stars',
+    'Percentage': 'percentage',
+  };
+  return Column(children: [
+    FilterDropdown(
+        sortTeamsBy: sortTeamsBy,
+        updateSortTeamsBy: updateSortTeamsBy,
+        sortByOptions: sortByOptions),
+    SizedBox(height: 8),
+    FutureBuilder<Map<String, Map<String, dynamic>>>(
+      future: totalStarsAndPercentage,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          Map<String, Map<String, dynamic>> totalByClan = snapshot.data!;
+          var sortedClans = currentLeagueInfo.clans.toList()
+            ..sort((a, b) => (totalByClan[b.tag]?[sortTeamsBy] ?? 0)
+                .compareTo(totalByClan[a.tag]?[sortTeamsBy] ?? 0));
 
-        return TeamsCard(sortedClans: sortedClans, totalByClan: totalByClan);
-      }
-    },
-  );
+          return TeamsCard(sortedClans: sortedClans, totalByClan: totalByClan);
+        }
+      },
+    )
+  ]);
+}
+
+Widget buildMembersTab(
+    BuildContext context,
+    CurrentLeagueInfo currentLeagueInfo,
+    String clanTag,
+    String sortBy,
+    Function(String) updateSortBy) {
+      Map<String, String> sortByOptions = <String, String>{
+        'Average Stars': 'averageStars',
+        'Average Percentage': 'averagePercentage',
+        'Stars': 'stars',
+        'Percentage': 'percentage',
+      };
+  return Column(children: [
+    FilterDropdown(
+        sortTeamsBy: sortBy,
+        updateSortTeamsBy: updateSortBy,
+        sortByOptions: sortByOptions),
+    SizedBox(height: 8),
+    FutureBuilder<Map<String, dynamic>>(
+      future: calculateTotalStarsAndPercentageForMember(
+          currentLeagueInfo.rounds, clanTag, sortBy),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+              child:
+                  CircularProgressIndicator()); // Show a loading spinner while waiting
+        } else if (snapshot.hasError) {
+          return Text(
+              'Error: ${snapshot.error}'); // Show error message if something went wrong
+        } else {
+          // The future has completed with a result.
+          // You can now display the data in the snapshot.
+          Map<String, Map<String, dynamic>> totalStarsByMembers =
+              snapshot.data!['totalByMember'];
+
+          // Convert the map to a list of widgets for display
+          List<Widget> memberWidgets =
+              totalStarsByMembers.entries.toList().asMap().entries.map((entry) {
+            int index = entry.key;
+            MapEntry<String, Map<String, dynamic>> memberEntry = entry.value;
+
+            return MembersCard(memberEntry: memberEntry, index: index);
+          }).toList();
+
+          return Column(children: memberWidgets);
+        }
+      },
+    )
+  ]);
 }

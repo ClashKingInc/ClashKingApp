@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/clan_info.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 class ClanInfoCard extends StatelessWidget {
   const ClanInfoCard({

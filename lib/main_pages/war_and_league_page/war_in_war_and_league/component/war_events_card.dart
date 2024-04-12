@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/war_functions.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
 
 class WarEventsCard extends StatelessWidget {
-  const WarEventsCard({
-    super.key,
-    required this.currentWarInfo,
-    required this.playerTab
-  });
+  const WarEventsCard(
+      {super.key, required this.currentWarInfo, required this.playerTab});
 
   final CurrentWarInfo currentWarInfo;
   final List<PlayerTab> playerTab;
@@ -47,27 +43,29 @@ class WarEventsCard extends StatelessWidget {
     allAttacks.sort((a, b) => b["order"].compareTo(a["order"]));
 
     return Card(
-        child: ListView.builder(
-      shrinkWrap: true,
-      physics: ClampingScrollPhysics(),
-      itemCount: allAttacks.length,
-      itemBuilder: (context, index) {
-        var attack = allAttacks[index];
-        return Padding(
-            padding: EdgeInsets.only(bottom: 16, right: 8, left: 8),
-            child: Row(
+      child: Column(
+        children: List<Widget>.generate(
+          allAttacks.length,
+          (index) {
+            var attack = allAttacks[index];
+            return Padding(
+              padding: EdgeInsets.only(bottom: 16, right: 8, left: 8),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Expanded(
                     flex: 4,
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         SizedBox(
                           height: 40,
                           width: 40,
                           child: Image.network(
-                            'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["attackerTag"], playerTab)}.png',
+                            attack["clan"] == 0
+                                ? 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["attackerTag"], playerTab)}.png'
+                                : 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["defenderTag"], playerTab)}.png',
                           ),
                         ),
                         Expanded(
@@ -75,7 +73,9 @@ class WarEventsCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "N°${getPlayerMapPositionByTag(attack["attackerTag"], playerTab)}",
+                                attack["clan"] == 0
+                                    ? "N°${getPlayerMapPositionByTag(attack["attackerTag"], playerTab)}"
+                                    : "N°${getPlayerMapPositionByTag(attack["defenderTag"], playerTab)}",
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall
@@ -87,7 +87,9 @@ class WarEventsCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                "${attack["attackerName"]}",
+                                attack["clan"] == 0
+                                    ? "${attack["attackerName"]}"
+                                    : "${getPlayerNameByTag(attack["defenderTag"], playerTab)}",
                                 style: Theme.of(context).textTheme.bodySmall,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -106,7 +108,7 @@ class WarEventsCard extends StatelessWidget {
                         Text('${attack["destructionPercentage"]}%',
                             style: Theme.of(context)
                                 .textTheme
-                                .bodySmall
+                                .labelLarge
                                 ?.copyWith(
                                     color: Theme.of(context)
                                         .colorScheme
@@ -114,9 +116,15 @@ class WarEventsCard extends StatelessWidget {
                         Row(mainAxisSize: MainAxisSize.min, children: [
                           ...generateStars(attack["stars"]),
                         ]),
-                        Icon(attack["clan"] == 1
-                            ? LucideIcons.arrowRight
-                            : LucideIcons.arrowLeft),
+                        SizedBox(
+                          height: 15,
+                          width: 15,
+                          child: Image.network(
+                            attack["clan"] == 0
+                                ? 'https://clashkingfiles.b-cdn.net/icons/Icon_DC_ArrowRight.png'
+                                : 'https://clashkingfiles.b-cdn.net/icons/Icon_DC_ArrowLeft.png',
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -124,6 +132,7 @@ class WarEventsCard extends StatelessWidget {
                     flex: 4,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Expanded(
                           child: Column(
@@ -133,7 +142,9 @@ class WarEventsCard extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
-                                          "N°${getPlayerMapPositionByTag(attack["defenderTag"], playerTab)}",
+                                          attack["clan"] == 0
+                                              ? "N°${getPlayerMapPositionByTag(attack["defenderTag"], playerTab)}"
+                                              : "N°${getPlayerMapPositionByTag(attack["attackerTag"], playerTab)}",
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall
@@ -145,7 +156,9 @@ class WarEventsCard extends StatelessWidget {
                                           overflow: TextOverflow.ellipsis),
                                     ]),
                                 Text(
-                                    getPlayerNameByTag(attack["defenderTag"], playerTab),
+                                          attack["clan"] == 0
+                                          ? "${getPlayerNameByTag(attack["defenderTag"], playerTab)}"
+                                          : "${attack["attackerName"]}",
                                     style:
                                         Theme.of(context).textTheme.bodySmall,
                                     maxLines: 1,
@@ -156,13 +169,19 @@ class WarEventsCard extends StatelessWidget {
                           height: 40,
                           width: 40,
                           child: Image.network(
-                              'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["attackerTag"], playerTab)}.png'),
+                             attack["clan"] == 0
+                                          ? 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["attackerTag"], playerTab)}.png'
+                                          : 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["defenderTag"], playerTab)}.png'),
                         ),
                       ],
                     ),
                   )
-                ]));
-      },
-    ));
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
