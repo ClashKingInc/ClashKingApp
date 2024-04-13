@@ -74,7 +74,7 @@ class WarTeamCard extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        ...generateStars(bestAttack.stars),
+                                        ...generateStars(bestAttack.stars, 16),
                                       ],
                                     )
                                   ],
@@ -226,7 +226,7 @@ class WarTeamCard extends StatelessWidget {
                                           ),
                                           Row(
                                             children: [
-                                              ...generateStars(attack.stars),
+                                              ...generateStars(attack.stars, 16),
                                               Text(
                                                 ' - ${attack.destructionPercentage}%',
                                                 style: Theme.of(context)

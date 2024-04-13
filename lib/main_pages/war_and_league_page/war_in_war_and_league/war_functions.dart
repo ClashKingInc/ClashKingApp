@@ -25,14 +25,14 @@ Map<int, int> countStars(List<WarMember> members) {
 }
 
 
-  List<Widget> generateStars(int numberOfStars) {
+  List<Widget> generateStars(int numberOfStars, double size) {
     return List<Widget>.generate(3, (index) {
       return Image.network(
         index < numberOfStars
             ? "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"
             : "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png",
-        width: 16,
-        height: 16,
+        width: size,
+        height: size,
       );
     });
   }

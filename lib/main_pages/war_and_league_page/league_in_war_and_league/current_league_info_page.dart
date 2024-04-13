@@ -297,8 +297,8 @@ Widget buildTeamsTab(
   };
   return Column(children: [
     FilterDropdown(
-        sortTeamsBy: sortTeamsBy,
-        updateSortTeamsBy: updateSortTeamsBy,
+        sortBy: sortTeamsBy,
+        updateSortBy: updateSortTeamsBy,
         sortByOptions: sortByOptions),
     SizedBox(height: 8),
     FutureBuilder<Map<String, Map<String, dynamic>>>(
@@ -335,8 +335,8 @@ Widget buildMembersTab(
       };
   return Column(children: [
     FilterDropdown(
-        sortTeamsBy: sortBy,
-        updateSortTeamsBy: updateSortBy,
+        sortBy: sortBy,
+        updateSortBy: updateSortBy,
         sortByOptions: sortByOptions),
     SizedBox(height: 8),
     FutureBuilder<Map<String, dynamic>>(

@@ -78,14 +78,14 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
             Tab(text: AppLocalizations.of(context)?.team ?? 'Teams')
           ],
           children: [
-            ListTile(
-                title:
+            Padding(
+                padding: EdgeInsets.all(8),
+                child:
                     WarStatisticsCard(currentWarInfo: widget.currentWarInfo)),
-            ListTile(
-                title: WarEventsCard(
+            WarEventsCard(
                     currentWarInfo: widget.currentWarInfo,
-                    playerTab: playerTab)),
-            ListTile(title: buildTeamsTab(context)),
+                    playerTab: playerTab),
+            Padding(padding: EdgeInsets.all(8), child: buildTeamsTab(context)),
           ])
     ])));
   }

@@ -3,16 +3,16 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class FilterDropdown extends StatelessWidget {
-  final String sortTeamsBy;
-  final Function(String) updateSortTeamsBy;
+  final String sortBy;
+  final Function(String) updateSortBy;
   final Map<String, String> sortByOptions;
 
-  FilterDropdown({required this.sortTeamsBy, required this.updateSortTeamsBy, required this.sortByOptions});
+  FilterDropdown({required this.sortBy, required this.updateSortBy, required this.sortByOptions});
 
   @override
   Widget build(BuildContext context) {
     return DropdownButton2<String>(
-      value: sortTeamsBy,
+      value: sortBy,
       items: sortByOptions.entries.map((entry) {
         return DropdownMenuItem<String>(
           value: entry.value,
@@ -20,7 +20,7 @@ class FilterDropdown extends StatelessWidget {
         );
       }).toList(),
       onChanged: (String? newValue) {
-        updateSortTeamsBy(newValue!);
+        updateSortBy(newValue!);
       },
       style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
       underline: Container(),

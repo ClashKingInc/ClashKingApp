@@ -31,9 +31,7 @@ class WarStatisticsCard extends StatelessWidget {
         currentWarInfo.clan.attacks / numberOfAttacks;
     final double opponentAttacksPercentage =
         currentWarInfo.opponent.attacks / numberOfAttacks;
- return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+ return 
         Card(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -365,8 +363,6 @@ class WarStatisticsCard extends StatelessWidget {
               ],
             ),
           ),
-        ),
-      ],
-    );
+        );
   }
 }
