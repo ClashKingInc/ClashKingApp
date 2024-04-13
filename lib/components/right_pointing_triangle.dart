@@ -6,11 +6,11 @@ class RightPointingTriangle extends StatelessWidget {
   final double width;
 
   const RightPointingTriangle({
-    Key? key,
+    super.key,
     this.color = Colors.black,
     this.height = 50.0, // Default height for the triangle
     this.width = 50.0, // Default width for the triangle
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

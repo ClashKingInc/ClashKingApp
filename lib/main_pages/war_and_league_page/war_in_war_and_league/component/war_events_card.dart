@@ -11,10 +11,10 @@ class WarEventsCard extends StatefulWidget {
   final List<PlayerTab> playerTab;
 
   const WarEventsCard({
-    Key? key,
+    super.key,
     required this.currentWarInfo,
     required this.playerTab,
-  }) : super(key: key);
+  });
 
   @override
   _WarEventsCardState createState() => _WarEventsCardState();

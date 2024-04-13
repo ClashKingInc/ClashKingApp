@@ -29,13 +29,13 @@ class AchievementScreenState extends State<AchievementScreen>
         .where((achievement) => achievement.name != "Keep Your Account Safe!")
         .toList();
     achievementTotal = filteredAchievements.length;
-    filteredAchievements.forEach((achievement) {
+    for (var achievement in filteredAchievements) {
       if (achievement.value >= achievement.target && achievement.stars == 3) {
         achievementCompleted++;
       } else if ((achievement.name == 'Dragon Slayer' || achievement.name == 'Ungrateful Child') && achievement.value >= 1) {
         achievementCompleted++;
       }
-    });
+    }
   }
 
   @override
