@@ -107,7 +107,7 @@ class WarHeader extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 10,
+          top: 30,
           left: 10,
           child: IconButton(
             icon: Icon(Icons.arrow_back,
