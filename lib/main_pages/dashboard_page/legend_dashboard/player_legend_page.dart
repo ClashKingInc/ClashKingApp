@@ -10,6 +10,7 @@ import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/componen
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_offense_defense_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_history_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/legend_functions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LegendScreen extends StatefulWidget {
   final PlayerAccountInfo playerStats;
@@ -37,8 +38,8 @@ class LegendScreen extends StatefulWidget {
 class LegendScreenState extends State<LegendScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-  DateTime selectedDate = DateTime.now(); // Change date in legend tab
-  DateTime selectedMonth = DateTime.now(); // Change month in history tab
+  DateTime selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
+  DateTime selectedMonth = DateTime.now().toUtc().subtract(Duration(hours: 5)); // Change month in history tab
   Map<String, dynamic> dynamicLegendData =
       {}; // Legend days details (result of API fetchLegendData))
   late Future<List<dynamic>> seasonLegendData; // List of EOS trophies
@@ -47,8 +48,8 @@ class LegendScreenState extends State<LegendScreen>
   void initState() {
     super.initState();
     tabController = TabController(length: 3, vsync: this);
-    selectedDate = DateTime.now();
-    selectedMonth = DateTime.now();
+    selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
+    selectedMonth = DateTime.now().toUtc().subtract(Duration(hours: 5));
     dynamicLegendData = widget.legendData;
     seasonLegendData =
         PlayerLegendSeasonsService.fetchSeasonsData(widget.playerStats.tag);
@@ -112,8 +113,8 @@ class LegendScreenState extends State<LegendScreen>
                   widget: widget, dynamicLegendData: dynamicLegendData),
               ScrollableTab(
                 tabBarDecoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-              ),
+                  color: Theme.of(context).colorScheme.surface,
+                ),
                 labelColor: Theme.of(context).colorScheme.onBackground,
                 unselectedLabelColor:
                     Theme.of(context).colorScheme.onBackground,
@@ -122,12 +123,14 @@ class LegendScreenState extends State<LegendScreen>
                 },
                 tabs: [
                   Tab(
-                      text:
-                          "By day"), // Show Attacks, Defenses and Gear for the selected day
+                      text: AppLocalizations.of(context)?.byDay ??
+                          "By Day"), // Show Attacks, Defenses and Gear for the selected day
                   Tab(
-                      text:
+                      text: AppLocalizations.of(context)?.charts ??
                           "Charts"), // Show charts of Trophies by month and EOS history
-                  Tab(text: "History"), // Show EOS history
+                  Tab(
+                      text: AppLocalizations.of(context)?.history ??
+                          "History"), // Show EOS history
                 ],
                 children: [
                   ListTile(
@@ -223,7 +226,8 @@ class LegendScreenState extends State<LegendScreen>
                 children: [
                   Expanded(
                     child: LegendOffenseDefenseCard(
-                        title: "Offense",
+                        title:
+                            AppLocalizations.of(context)?.attacks ?? "Attacks",
                         list: attacksList,
                         context: context,
                         stats: attacksStats,
@@ -233,7 +237,8 @@ class LegendScreenState extends State<LegendScreen>
                   ),
                   Expanded(
                     child: LegendOffenseDefenseCard(
-                        title: "Defense",
+                        title: AppLocalizations.of(context)?.defenses ??
+                            "Defenses",
                         list: defensesList,
                         context: context,
                         stats: defensesStats,
@@ -264,7 +269,7 @@ class LegendScreenState extends State<LegendScreen>
             ),
           ),
           Text(
-            DateFormat('dd MMMM yyyy').format(selectedDate),
+            DateFormat('dd MMMM yyyy', Localizations.localeOf(context).languageCode).format(selectedDate),
             style: Theme.of(context).textTheme.labelLarge,
           ),
           SizedBox(
@@ -348,7 +353,7 @@ class LegendScreenState extends State<LegendScreen>
   }
 
   Widget buildTrophiesByMonthChart(Map<String, dynamic> legendData) {
-    Map<String, Map<String, String>> monthlyTrophies = {};
+    Map<String, Map<String, String>> seasonTrophies = {};
     Map<String, dynamic> legends = legendData['legends'];
 
     legends.forEach((date, details) {
@@ -371,35 +376,30 @@ class LegendScreenState extends State<LegendScreen>
         currentTrophies = lastDefense['trophies'].toString();
       }
 
-      String month = DateFormat('yyyy-MM').format(DateTime.parse(date));
-      String day = DateFormat('dd').format(DateTime.parse(date));
+      DateTime dateObj = DateTime.parse(date);
+      String season = findSeasonStartDate(dateObj).toString();
+      String day = DateFormat('dd').format(dateObj);
 
-      if (!monthlyTrophies.containsKey(month)) {
-        monthlyTrophies[month] = {};
+      if (!seasonTrophies.containsKey(season)) {
+        seasonTrophies[season] = {};
       }
-      monthlyTrophies[month]![day] = currentTrophies;
+      seasonTrophies[season]![day] = currentTrophies;
     });
 
-    // Extract the data for the given month
-    String month = DateFormat('yyyy-MM').format(selectedMonth);
-    Map<String, String> monthData = monthlyTrophies[month] ?? {};
+    // Now you need to calculate the season from the selectedMonth
+    DateTime seasonStart = findSeasonStartDate(selectedMonth);
+    String seasonKey = findSeasonStartDate(selectedMonth).toString();
+    Map<String, String> seasonData = seasonTrophies[seasonKey] ?? {};
 
     // Convert the data to a format that the chart can use
-    List<FlSpot> spots = monthData.entries.map((entry) {
-      return FlSpot(double.parse(entry.key), double.parse(entry.value));
-    }).toList();
-
-    // Sort the spots based on the day to ensure the graph is in order
-    spots.sort((a, b) => a.x.compareTo(b.x));
+    List<FlSpot> spots = convertToContinuousScale(seasonData, seasonStart);
 
     if (spots.isNotEmpty) {
       // Calculate minY and maxY for dynamic scaling
       double minY = spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b);
       double maxY = spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b);
-      minY = (minY / 10).floorToDouble() * 10;
-      maxY = (maxY / 10).ceilToDouble() * 10;
-      double minX = spots.map((spot) => spot.x).reduce((a, b) => a < b ? a : b);
-      double maxX = spots.map((spot) => spot.x).reduce((a, b) => a > b ? a : b);
+      double minX = 0;
+      double maxX = spots.length.toDouble() -1;
 
       double rangeY = (maxY - minY) / 10;
       if (rangeY == 0) rangeY = 1;
@@ -415,7 +415,9 @@ class LegendScreenState extends State<LegendScreen>
             padding: const EdgeInsets.only(
                 left: 10.0, right: 20.0, top: 10.0, bottom: 10.0),
             child: Column(children: [
-              Text("Trophies by month",
+              Text(
+                  AppLocalizations.of(context)?.trophiesByMonth ??
+                      "Trophies by Month",
                   style: Theme.of(context).textTheme.bodyMedium),
               SizedBox(height: 16),
               Expanded(
@@ -432,12 +434,12 @@ class LegendScreenState extends State<LegendScreen>
                         sideTitles: SideTitles(
                           showTitles: true,
                           reservedSize: 30,
-                          interval: 5,
+                          interval: 3, // Display a label every 3 days
                           getTitlesWidget: (double value, TitleMeta meta) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
-                              child: Text('${value.toInt()}'),
-                            );
+                            DateTime labelDate =
+                                seasonStart.add(Duration(days: value.toInt()));
+                            return Text(DateFormat('dd').format(labelDate),
+                                style: TextStyle(fontSize: 10));
                           },
                         ),
                       ),
@@ -516,7 +518,7 @@ class LegendScreenState extends State<LegendScreen>
                     ),
                   ),
                   Text(
-                    DateFormat('MMMM yyyy').format(selectedMonth),
+                    DateFormat('MMMM yyyy', Localizations.localeOf(context).languageCode).format(selectedMonth),
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   SizedBox(
@@ -638,7 +640,9 @@ class LegendScreenState extends State<LegendScreen>
                   padding: const EdgeInsets.only(
                       left: 10.0, right: 20.0, top: 10.0, bottom: 10.0),
                   child: Column(children: [
-                    Text("EOS Trophies",
+                    Text(
+                        AppLocalizations.of(context)?.eosTrophies ??
+                            "EOS Trophies",
                         style: Theme.of(context).textTheme.bodyMedium),
                     SizedBox(height: 16),
                     Expanded(

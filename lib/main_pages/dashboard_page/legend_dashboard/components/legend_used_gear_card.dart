@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/data/troop_data.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LegendUsedGearCard extends StatelessWidget {
   const LegendUsedGearCard({
@@ -21,7 +22,7 @@ class LegendUsedGearCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Heroes Gears",
+              Text(AppLocalizations.of(context)?.heroesEquipments ?? "Heroes Equipments",
                   style: Theme.of(context).textTheme.titleMedium),
               SizedBox(height: 8),
               Wrap(

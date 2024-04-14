@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/legend_functions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LegendOffenseDefenseCard extends StatelessWidget {
   const LegendOffenseDefenseCard(
@@ -40,7 +41,7 @@ class LegendOffenseDefenseCard extends StatelessWidget {
                   if (item is Map) {
                     int change = item['change'];
                     int time = item['time'];
-                    String timeAgo = convertToTimeAgo(time);
+                    String timeAgo = convertToTimeAgo(time, context);
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,14 +73,14 @@ class LegendOffenseDefenseCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8),
-          Text("Statistics", style: Theme.of(context).textTheme.bodyLarge),
-          Text("Total: ${stats["count"]}/8",
+          Text(AppLocalizations.of(context)?.statistics ?? "Statistics", style: Theme.of(context).textTheme.bodyLarge),
+          Text("${AppLocalizations.of(context)?.total ?? "Total"} : ${stats["count"]}/8",
               style: Theme.of(context).textTheme.bodySmall),
-          Text('Average: ${stats["average"].toStringAsFixed(1)}',
+          Text('${AppLocalizations.of(context)?.average ?? "Average"} : ${stats["average"].toStringAsFixed(1)}',
               style: Theme.of(context).textTheme.bodySmall),
-          Text('Remaining: $plusMinus${stats["remaining"]}',
+          Text('${AppLocalizations.of(context)?.remaining ?? "Remaining"} : $plusMinus${stats["remaining"]}',
               style: Theme.of(context).textTheme.bodySmall),
-          Text('${plusMinus == "-" ? "Worst" : "Best"} : $plusMinus${stats["bestPossibleTrophies"]}',
+          Text('${plusMinus == "-" ? AppLocalizations.of(context)?.worst ?? "Worst" :  AppLocalizations.of(context)?.best ??"Best"} : $plusMinus${stats["bestPossibleTrophies"]}',
             style: Theme.of(context).textTheme.bodySmall),
         ]),
       ),

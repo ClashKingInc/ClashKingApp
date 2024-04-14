@@ -21,6 +21,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settings),
         actions: [
@@ -46,7 +47,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           Divider(),
           _buildListTile(
             context,
-            title: "Toggle theme",
+            title: AppLocalizations.of(context)!.toggleTheme,
             leadingIcon: LucideIcons.sunMoon,
             onTap: () {
               Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();

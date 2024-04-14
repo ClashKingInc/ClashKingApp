@@ -156,13 +156,18 @@ class Achievement {
   final int stars;
   final int value;
   final int target;
-  // Include other fields if needed
+  final String info;
+  final String completionInfo;
+  final String village;
 
   Achievement(
       {required this.name,
       required this.stars,
       required this.value,
-      required this.target});
+      required this.target,
+      this.info = '',
+      this.completionInfo = '',
+      this.village = ''});
 
   factory Achievement.fromJson(Map<String, dynamic> json) {
     return Achievement(
@@ -170,7 +175,9 @@ class Achievement {
       stars: json['stars'] ?? 0,
       value: json['value'] ?? 0,
       target: json['target'] ?? 0,
-      // Initialize other fields from JSON if needed
+      info: json['info'] ?? '',
+      completionInfo: json['completionInfo'] ?? '',
+      village: json['village'] ?? 'home',
     );
   }
 }
@@ -210,14 +217,16 @@ class EquipedEquipment {
   final int level;
   final int maxLevel;
   final String village;
-  late String imageUrl;
+  String imageUrl;
   late String type;
 
   EquipedEquipment(
       {required this.name,
       required this.level,
       required this.maxLevel,
-      required this.village});
+      required this.village,
+      this.imageUrl = 'https://clashkingfiles.b-cdn.net/clashkinglogo.png'
+      });
 
   factory EquipedEquipment.fromJson(Map<String, dynamic> json) {
     return EquipedEquipment(
@@ -225,6 +234,7 @@ class EquipedEquipment {
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
       village: json['village'] ?? 'home',
+      imageUrl: json['imageUrl'] ?? 'https://clashkingfiles.b-cdn.net/clashkinglogo.png',
     );
   }
 }

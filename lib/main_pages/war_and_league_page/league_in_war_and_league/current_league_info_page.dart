@@ -1,12 +1,15 @@
+import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_league_info.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'dart:ui';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/main_pages/clan_page/clan_info_page.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/component/round_clans_card.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/component/teams_card.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/league_functions.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/component/members_card.dart';
 
 class CurrentLeagueInfoScreen extends StatefulWidget {
   final CurrentLeagueInfo currentLeagueInfo;
@@ -24,6 +27,29 @@ class CurrentLeagueInfoScreen extends StatefulWidget {
 }
 
 class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
+  late Future<Map<String, Map<String, dynamic>>> totalStarsAndPercentage;
+  late String sortMembersBy = 'stars';
+  late String sortTeamsBy = 'stars';
+
+  @override
+  void initState() {
+    super.initState();
+    totalStarsAndPercentage = calculateTotalStarsAndPercentage(
+        widget.currentLeagueInfo.rounds, sortTeamsBy);
+  }
+
+  void updateSortMembersBy(String newValue) {
+    setState(() {
+      sortMembersBy = newValue;
+    });
+  }
+
+  void updateSortTeamsBy(String newValue) {
+    setState(() {
+      sortTeamsBy = newValue;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,16 +60,14 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
         alignment: Alignment.center,
         children: <Widget>[
           SizedBox(
-            height: 230,
+            height: 190,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.5),
-                  BlendMode.darken,
-                ),
+                    Colors.black.withOpacity(0.5), BlendMode.darken),
                 child: Image.network(
-                  "https://clashkingfiles.b-cdn.net/landscape/war-landscape.jpg",
+                  "https://clashkingfiles.b-cdn.net/landscape/cwl-landscape.png",
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),
@@ -51,12 +75,144 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
             ),
           ),
           Positioned(
-            top: 10,
+            top: 30,
             left: 10,
             child: IconButton(
               icon: Icon(Icons.arrow_back,
                   color: Theme.of(context).colorScheme.onPrimary, size: 32),
               onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+          Positioned.fill(
+            child: FutureBuilder<Map<String, Map<String, dynamic>>>(
+              future: totalStarsAndPercentage,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  // Convert the map to a list of maps for easier sorting and indexing
+                  List<Map<String, dynamic>> clansList =
+                      snapshot.data!.entries.map((entry) {
+                    return {
+                      'clanTag': entry.key,
+                      'stars': entry.value['stars'],
+                    };
+                  }).toList();
+
+                  // Sort the list in descending order of stars
+                  clansList.sort((a, b) => b['stars'].compareTo(a['stars']));
+
+                  // Find the index of the clan in question
+                  int clanPosition = clansList
+                      .indexWhere((clan) => clan['clanTag'] == widget.clanTag);
+
+                  // Since index is 0-based, add 1 to get the position
+                  clanPosition += 1;
+
+                  int starsDifference = clansList[0]['stars'] -
+                      clansList[clanPosition - 1]['stars'];
+
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              height: 70,
+                              child: Image.network(
+                                  widget.clanInfo.badgeUrls.medium)),
+                          Column(
+                            children: [
+                              Text(
+                                widget.clanInfo.name,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(color: Colors.white),
+                              ),
+                              Text(
+                                widget.clanInfo.tag,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.copyWith(color: Colors.grey),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              SizedBox(
+                                  height: 30,
+                                  child: Image.network(
+                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Podium.png")),
+                              Text(
+                                "$clanPosition",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                  height: 30,
+                                  child: Image.network(
+                                      "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png")),
+                              Text(
+                                "${snapshot.data?[widget.clanTag]?['stars']}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                  height: 30,
+                                  child: Image.network(
+                                      "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
+                              Text(
+                                "$starsDifference",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                  height: 30,
+                                  child: Image.network(
+                                      "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png")),
+                              Text(
+                                "${snapshot.data?[widget.clanTag]?['percentage'].toStringAsFixed(0)}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
+                  );
+                }
+              },
             ),
           ),
         ],
@@ -73,12 +229,16 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
           tabs: [
             Tab(text: AppLocalizations.of(context)?.rounds ?? 'Rounds'),
             Tab(text: AppLocalizations.of(context)?.team ?? 'Teams'),
-            Tab(text: AppLocalizations.of(context)?.wars ?? 'Wars')
+            Tab(text: "Members")
           ],
           children: [
             ListTile(title: buildRoundsTab(context, widget.currentLeagueInfo)),
-            ListTile(title: buildTeamsTab(context, widget.currentLeagueInfo)),
-            ListTile(title: buildWarsTab(context)),
+            ListTile(
+                title: buildTeamsTab(context, widget.currentLeagueInfo,
+                    totalStarsAndPercentage, sortTeamsBy, updateSortTeamsBy)),
+            ListTile(
+                title: buildMembersTab(context, widget.currentLeagueInfo,
+                    widget.clanTag, sortMembersBy, updateSortMembersBy))
           ])
     ])));
   }
@@ -88,7 +248,8 @@ Widget buildRoundsTab(
     BuildContext context, CurrentLeagueInfo currentLeagueInfo) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
-    children: currentLeagueInfo.rounds.asMap().entries.map((entry) {
+    children:
+        currentLeagueInfo.rounds.asMap().entries.toList().reversed.map((entry) {
       int round =
           entry.key + 1; // Assuming you want round numbering to start from 1
       ClanLeagueRounds clanLeagueRounds = entry.value;
@@ -110,178 +271,7 @@ Widget buildRoundsTab(
               } else if (snapshot.hasData) {
                 return Column(
                   children: snapshot.data!.map((warLeagueInfo) {
-                    return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CurrentWarInfoScreen(
-                                  currentWarInfo: warLeagueInfo),
-                            ),
-                          );
-                        },
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start, // Add this line
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 40,
-                                        width: 40,
-                                        child: Image.network(
-                                            warLeagueInfo.clan.badgeUrls.small),
-                                      ),
-                                      Text(
-                                        warLeagueInfo.clan.name,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
-                                      ),
-                                      Text(
-                                        "${warLeagueInfo.clan.attacks}/${warLeagueInfo.teamSize.toString()}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge
-                                            ?.copyWith(
-                                              color:
-                                                  warLeagueInfo.clan.attacks ==
-                                                          warLeagueInfo.teamSize
-                                                      ? Colors.purple
-                                                      : null,
-                                            ),
-                                      ),
-                                      Text(
-                                        "${warLeagueInfo.clan.destructionPercentage.toStringAsFixed(2)}%",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium
-                                            ?.copyWith(
-                                              color: warLeagueInfo.clan
-                                                          .destructionPercentage >
-                                                      warLeagueInfo.opponent
-                                                          .destructionPercentage
-                                                  ? Colors.blue
-                                                  : null,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "${warLeagueInfo.clan.stars}",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge
-                                              ?.copyWith(
-                                                color: warLeagueInfo
-                                                                .clan.stars >
-                                                            warLeagueInfo
-                                                                .opponent
-                                                                .stars ||
-                                                        (warLeagueInfo.clan
-                                                                    .stars ==
-                                                                warLeagueInfo
-                                                                    .opponent
-                                                                    .stars &&
-                                                            warLeagueInfo.clan
-                                                                    .destructionPercentage >
-                                                                warLeagueInfo
-                                                                    .opponent
-                                                                    .destructionPercentage)
-                                                    ? Colors.green
-                                                    : null,
-                                              ),
-                                        ),
-                                        Text(" - "),
-                                        Text(
-                                          "${warLeagueInfo.opponent.stars}",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge
-                                              ?.copyWith(
-                                                color: warLeagueInfo.opponent
-                                                                .stars >
-                                                            warLeagueInfo
-                                                                .clan.stars ||
-                                                        (warLeagueInfo.opponent
-                                                                    .stars ==
-                                                                warLeagueInfo
-                                                                    .clan
-                                                                    .stars &&
-                                                            warLeagueInfo
-                                                                    .opponent
-                                                                    .destructionPercentage >
-                                                                warLeagueInfo
-                                                                    .clan
-                                                                    .destructionPercentage)
-                                                    ? Colors.green
-                                                    : null,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 40,
-                                        width: 40,
-                                        child: Image.network(warLeagueInfo
-                                            .opponent.badgeUrls.small),
-                                      ),
-                                      Text(
-                                        warLeagueInfo.opponent.name,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
-                                      ),
-                                      Text(
-                                        "${warLeagueInfo.opponent.attacks}/${warLeagueInfo.teamSize.toString()}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge
-                                            ?.copyWith(
-                                              color: warLeagueInfo
-                                                          .opponent.attacks ==
-                                                      warLeagueInfo.teamSize
-                                                  ? Colors.purple
-                                                  : null,
-                                            ),
-                                      ),
-                                      Text(
-                                        "${warLeagueInfo.opponent.destructionPercentage.toStringAsFixed(2)}%",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium
-                                            ?.copyWith(
-                                              color: warLeagueInfo.opponent
-                                                          .destructionPercentage >
-                                                      warLeagueInfo.clan
-                                                          .destructionPercentage
-                                                  ? Colors.blue
-                                                  : null,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ));
+                    return RoundClanCard(warLeagueInfo: warLeagueInfo);
                   }).toList(),
                 );
               } else {
@@ -296,102 +286,88 @@ Widget buildRoundsTab(
 }
 
 Widget buildTeamsTab(
-    BuildContext context, CurrentLeagueInfo currentLeagueInfo) {
-  return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Column(
-      children: currentLeagueInfo.clans.map((clan) {
-        var townHallLevelCounts = <int, int>{};
+    BuildContext context,
+    CurrentLeagueInfo currentLeagueInfo,
+    Future<Map<String, Map<String, dynamic>>> totalStarsAndPercentage,
+    String sortTeamsBy,
+    Function(String) updateSortTeamsBy) {
+  Map<String, String> sortByOptions = <String, String>{
+    'Stars': 'stars',
+    'Percentage': 'percentage',
+  };
+  return Column(children: [
+    FilterDropdown(
+        sortBy: sortTeamsBy,
+        updateSortBy: updateSortTeamsBy,
+        sortByOptions: sortByOptions),
+    SizedBox(height: 8),
+    FutureBuilder<Map<String, Map<String, dynamic>>>(
+      future: totalStarsAndPercentage,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          Map<String, Map<String, dynamic>> totalByClan = snapshot.data!;
+          var sortedClans = currentLeagueInfo.clans.toList()
+            ..sort((a, b) => (totalByClan[b.tag]?[sortTeamsBy] ?? 0)
+                .compareTo(totalByClan[a.tag]?[sortTeamsBy] ?? 0));
 
-        for (var member in clan.members) {
-          final townHallLevel = member.townHallLevel;
-          townHallLevelCounts[townHallLevel] =
-              (townHallLevelCounts[townHallLevel] ?? 0) + 1;
+          return TeamsCard(sortedClans: sortedClans, totalByClan: totalByClan);
         }
-
-        var sortedEntries = townHallLevelCounts.entries.toList()
-          ..sort((a, b) => b.key.compareTo(a.key));
-
-        townHallLevelCounts = Map.fromEntries(sortedEntries);
-
-        return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Scaffold(
-                    backgroundColor: Theme.of(context).colorScheme.background,
-                    body: FutureBuilder<ClanInfo>(
-                      future: ClanService().fetchClanInfo(clan.tag),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          return ClanInfoScreen(clanInfo: snapshot.data!);
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              );
-            },
-            child: Card(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                      child: Column(children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.network(clan.badgeUrls.small,
-                            width: 35, height: 35),
-                        SizedBox(width: 10),
-                        Column(children: [
-                          Text(clan.name,
-                              style: Theme.of(context).textTheme.bodyMedium),
-                          Text(clan.tag,
-                              style: Theme.of(context).textTheme.labelMedium),
-                        ])
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Wrap(
-                      alignment: WrapAlignment.center,
-                      children: townHallLevelCounts.entries.map((entry) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Wrap(
-                            children: [
-                              Image.network(
-                                'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${entry.key}.png',
-                                width: 20,
-                              ),
-                              SizedBox(width: 5),
-                              Text('x${entry.value}'),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ])),
-                ],
-              ),
-            )));
-      }).toList(),
-    ),
+      },
+    )
   ]);
 }
 
-Widget buildWarsTab(BuildContext context) {
-  return Column(
-    children: [
-      ListTile(
-        title: Text('Wars', style: Theme.of(context).textTheme.titleLarge),
-      ),
-    ],
-  );
+Widget buildMembersTab(
+    BuildContext context,
+    CurrentLeagueInfo currentLeagueInfo,
+    String clanTag,
+    String sortBy,
+    Function(String) updateSortBy) {
+      Map<String, String> sortByOptions = <String, String>{
+        'Average Stars': 'averageStars',
+        'Average Percentage': 'averagePercentage',
+        'Stars': 'stars',
+        'Percentage': 'percentage',
+      };
+  return Column(children: [
+    FilterDropdown(
+        sortBy: sortBy,
+        updateSortBy: updateSortBy,
+        sortByOptions: sortByOptions),
+    SizedBox(height: 8),
+    FutureBuilder<Map<String, dynamic>>(
+      future: calculateTotalStarsAndPercentageForMember(
+          currentLeagueInfo.rounds, clanTag, sortBy),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+              child:
+                  CircularProgressIndicator()); // Show a loading spinner while waiting
+        } else if (snapshot.hasError) {
+          return Text(
+              'Error: ${snapshot.error}'); // Show error message if something went wrong
+        } else {
+          // The future has completed with a result.
+          // You can now display the data in the snapshot.
+          Map<String, Map<String, dynamic>> totalStarsByMembers =
+              snapshot.data!['totalByMember'];
+
+          // Convert the map to a list of widgets for display
+          List<Widget> memberWidgets =
+              totalStarsByMembers.entries.toList().asMap().entries.map((entry) {
+            int index = entry.key;
+            MapEntry<String, Map<String, dynamic>> memberEntry = entry.value;
+
+            return MembersCard(memberEntry: memberEntry, index: index);
+          }).toList();
+
+          return Column(children: memberWidgets);
+        }
+      },
+    )
+  ]);
 }

@@ -29,7 +29,7 @@ class CurrentWarInfo {
     return CurrentWarInfo(
       state: json['state'] ?? 'No state',
       teamSize: json['teamSize'] ?? 0,
-      attacksPerMember: json['attacksPerMember'] ?? 0,
+      attacksPerMember: json['attacksPerMember'] ?? 1,
       preparationStartTime: DateTime.parse(json['preparationStartTime']),
       startTime: DateTime.parse(json['startTime']),
       endTime: DateTime.parse(json['endTime']),

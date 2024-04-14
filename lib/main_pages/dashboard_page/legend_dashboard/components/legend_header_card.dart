@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_legend_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:ui';
 
 class LegendHeaderCard extends StatelessWidget {
@@ -19,7 +20,7 @@ class LegendHeaderCard extends StatelessWidget {
       alignment: Alignment.center,
       children: <Widget>[
         SizedBox(
-          height: 220,
+          height: 240,
           width: double.infinity,
           child: ImageFiltered(
             imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
@@ -36,7 +37,7 @@ class LegendHeaderCard extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 0,
+          top: 10,
           bottom: 0,
           left: 10,
           right: 10,
@@ -44,9 +45,7 @@ class LegendHeaderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Center(
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    child: Column(
+                  child: Column(
                       children: [
                         Text(
                           "${dynamicLegendData['name']}",
@@ -101,7 +100,7 @@ class LegendHeaderCard extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Wrap(
-                                    spacing: 16,
+                                    spacing: 8,
                                     runSpacing: 0,
                                     children: <Widget>[
                                       Chip(
@@ -138,7 +137,7 @@ class LegendHeaderCard extends StatelessWidget {
                                           dynamicLegendData['rankings']
                                                       ['local_rank'] ==
                                                   null
-                                              ? 'No rank'
+                                              ? AppLocalizations.of(context)?.noRank ?? 'No rank'
                                               : '${dynamicLegendData['rankings']['local_rank']}',
                                           style: Theme.of(context)
                                               .textTheme
@@ -164,10 +163,10 @@ class LegendHeaderCard extends StatelessWidget {
                                             ),
                                         label: Text(
                                             dynamicLegendData['rankings']
-                                                        ['local_rank'] ==
+                                                        ['global_rank'] ==
                                                     null
-                                                ? 'No rank'
-                                                : '${dynamicLegendData['rankings']['local_rank']}',
+                                                ? AppLocalizations.of(context)?.noRank ?? 'No rank'
+                                                : '${dynamicLegendData['rankings']['global_rank']}',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .labelMedium
@@ -192,11 +191,11 @@ class LegendHeaderCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
+                
               ]),
         ),
         Positioned(
-          top: 20,
+          top: 30,
           left: 10,
           child: IconButton(
             icon: Icon(Icons.arrow_back,

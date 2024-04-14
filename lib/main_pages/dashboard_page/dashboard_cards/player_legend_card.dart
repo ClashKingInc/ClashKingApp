@@ -3,6 +3,7 @@ import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_legend_page.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlayerLegendCard extends StatelessWidget {
   const PlayerLegendCard({
@@ -16,7 +17,7 @@ class PlayerLegendCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime selectedDate = DateTime.now();
+    DateTime selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
     if (!legendData['legends'].containsKey(date)) {
       return GestureDetector(
@@ -48,7 +49,8 @@ class PlayerLegendCard extends StatelessWidget {
                       Column(
                         children: <Widget>[
                           Text(
-                            "Legend League",
+                            AppLocalizations.of(context)?.legendLeague ??
+                                "Legend League",
                             style: Theme.of(context).textTheme.labelLarge,
                           ),
                           SizedBox(
@@ -61,7 +63,9 @@ class PlayerLegendCard extends StatelessWidget {
                       ),
                       SizedBox(width: 8),
                       Center(
-                        child: Text("No Legend Data Found for today",
+                        child: Text(
+                            AppLocalizations.of(context)?.noLegendData ??
+                                "No Legend Data Found for today",
                             style: Theme.of(context).textTheme.labelLarge),
                       ),
                     ],
@@ -98,26 +102,25 @@ class PlayerLegendCard extends StatelessWidget {
                 : (firstDefense['trophies']) + firstDefense['change'])
             .toString();
         diffTrophies = int.parse(currentTrophies) - int.parse(firstTrophies);
-      }
-      else if(attacksList.isNotEmpty){
+      } else if (attacksList.isNotEmpty) {
         Map<String, dynamic> lastAttack = attacksList.last;
         currentTrophies = lastAttack['trophies'].toString();
         Map<String, dynamic> firstAttack = attacksList.first;
-        firstTrophies = (firstAttack['trophies'] - firstAttack['change']).toString();
+        firstTrophies =
+            (firstAttack['trophies'] - firstAttack['change']).toString();
         diffTrophies = int.parse(currentTrophies) - int.parse(firstTrophies);
-      }
-      else if(defensesList.isNotEmpty){
+      } else if (defensesList.isNotEmpty) {
         Map<String, dynamic> lastDefense = defensesList.last;
         currentTrophies = lastDefense['trophies'].toString();
         Map<String, dynamic> firstDefense = defensesList.first;
-        firstTrophies = (firstDefense['trophies'] + firstDefense['change']).toString();
+        firstTrophies =
+            (firstDefense['trophies'] + firstDefense['change']).toString();
         diffTrophies = int.parse(currentTrophies) - int.parse(firstTrophies);
-      }
-      else{
+      } else {
         currentTrophies = details['trophies'].toString();
         firstTrophies = details['trophies'].toString();
       }
-      
+
       return GestureDetector(
         onTap: () {
           Navigator.push(
@@ -147,7 +150,8 @@ class PlayerLegendCard extends StatelessWidget {
                       Column(
                         children: <Widget>[
                           Text(
-                            "Legend League",
+                            AppLocalizations.of(context)?.legendLeague ??
+                                "Legend League",
                             style: Theme.of(context).textTheme.labelLarge,
                           ),
                           SizedBox(
@@ -162,7 +166,7 @@ class PlayerLegendCard extends StatelessWidget {
                                   right: 30,
                                   top: 32,
                                   child: Text(
-                                    currentTrophies,
+                                    playerStats.trophies.toString(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleSmall!
@@ -178,7 +182,7 @@ class PlayerLegendCard extends StatelessWidget {
                       Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Wrap(
                               alignment: WrapAlignment.center,
@@ -194,6 +198,21 @@ class PlayerLegendCard extends StatelessWidget {
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelMedium)),
+                                Chip(
+                                  avatar: CircleAvatar(
+                                      backgroundColor: Colors.transparent,
+                                      child: Image.network(
+                                          "https://clashkingfiles.b-cdn.net/country-flags/${legendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
+                                  label: Text(
+                                    legendData['rankings']['local_rank'] == null
+                                        ? AppLocalizations.of(context)
+                                                ?.noRank ??
+                                            'No Rank'
+                                        : '${legendData['rankings']['local_rank']}',
+                                    style:
+                                        Theme.of(context).textTheme.labelMedium,
+                                  ),
+                                ),
                                 Chip(
                                   avatar: Icon(
                                     diffTrophies > 0
@@ -218,24 +237,13 @@ class PlayerLegendCard extends StatelessWidget {
                                   avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
                                       child: Image.network(
-                                          "https://clashkingfiles.b-cdn.net/country-flags/${legendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
-                                  label: Text(
-                                    legendData['rankings']['local_rank'] == null
-                                        ? 'No Rank'
-                                        : '${legendData['rankings']['local_rank']}',
-                                    style:
-                                        Theme.of(context).textTheme.labelMedium,
-                                  ),
-                                ),
-                                Chip(
-                                  avatar: CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      child: Image.network(
                                           "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
                                   label: Text(
                                     legendData['rankings']['global_rank'] ==
                                             null
-                                        ? 'No Rank'
+                                        ? AppLocalizations.of(context)
+                                                ?.noRank ??
+                                            'No Rank'
                                         : '${legendData['rankings']['global_rank']}',
                                     style:
                                         Theme.of(context).textTheme.labelMedium,
