@@ -12,6 +12,7 @@
     "all" : "All",
     "hourIndicator" : "h",
     "minIndicator" : "m",
+    "noDataAvailable" : "No data available.",
     
     "dashboard" : "Dashboard",
     "homeBase" : "Home Base",

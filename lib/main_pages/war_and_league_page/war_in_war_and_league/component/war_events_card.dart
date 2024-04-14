@@ -409,7 +409,7 @@ class _WarEventsCardState extends State<WarEventsCard> {
         Card(
             child: Padding(
                 padding: EdgeInsets.all(16),
-                child: Text('Nothing to see here !'))),
+                child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available'))),
         SizedBox(height: 32),
         Image.network(
           'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
