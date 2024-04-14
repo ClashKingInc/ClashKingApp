@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/war_functions.dart';
+
 class WarHeader extends StatelessWidget {
   const WarHeader({
     super.key,
@@ -37,7 +38,11 @@ class WarHeader extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              timeLeft(widget.currentWarInfo, context),
+              timeLeft(
+                  widget.currentWarInfo,
+                  context,
+                  Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -55,9 +60,8 @@ class WarHeader extends StatelessWidget {
                               .textTheme
                               .titleSmall
                               ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary),
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary),
                         ),
                         Text(
                             "${widget.currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)}%",
@@ -87,9 +91,8 @@ class WarHeader extends StatelessWidget {
                               .textTheme
                               .titleSmall
                               ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary),
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary),
                         ),
                         Text(
                           "${widget.currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)}%",

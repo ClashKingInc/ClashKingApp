@@ -38,11 +38,11 @@ Map<int, int> countStars(List<WarMember> members) {
   }
 
   
-  Widget timeLeft(currentWarInfo, context) {
+  Widget timeLeft(CurrentWarInfo currentWarInfo, BuildContext context, TextStyle? style) {
     DateTime now = DateTime.now();
     Duration difference = Duration.zero;
     String state = '';
-
+  
     if (currentWarInfo.state == 'preparation') {
       difference = currentWarInfo.startTime.difference(now);
       state = AppLocalizations.of(context)?.startsIn ?? 'Starting in';
@@ -50,10 +50,10 @@ Map<int, int> countStars(List<WarMember> members) {
       difference = currentWarInfo.endTime.difference(now);
       state = AppLocalizations.of(context)?.endsIn ?? 'Ends in';
     }
-
+  
     String hours = difference.inHours.toString().padLeft(2, '0');
     String minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
-
+  
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Center(
@@ -61,10 +61,7 @@ Map<int, int> countStars(List<WarMember> members) {
           currentWarInfo.state == 'warEnded'
               ? AppLocalizations.of(context)?.warEnded ?? 'War ended'
               : '$state $hours:$minutes',
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          style: style,
         ),
       ),
     );
