@@ -56,7 +56,7 @@ class PlayerInfosCard extends StatelessWidget {
                     SizedBox(width: 8),
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Wrap(
                             alignment: WrapAlignment.center,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LegendTrophiesStartEndCard extends StatelessWidget {
   const LegendTrophiesStartEndCard({
@@ -18,7 +19,7 @@ class LegendTrophiesStartEndCard extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Column(
           children: [
-            Text("Started", style: Theme.of(context).textTheme.titleSmall),
+            Text(AppLocalizations.of(context)?.started ?? "Started", style: Theme.of(context).textTheme.titleSmall),
             Text(startTrophies, style: Theme.of(context).textTheme.titleMedium),
           ],
         ),
@@ -27,7 +28,7 @@ class LegendTrophiesStartEndCard extends StatelessWidget {
           width: 80,
         ),
         Column(children: [
-          Text("Ended", style: Theme.of(context).textTheme.titleSmall),
+          Text(AppLocalizations.of(context)?.ended ?? "Ended", style: Theme.of(context).textTheme.titleSmall),
           Text(currentTrophies, style: Theme.of(context).textTheme.titleMedium),
         ]),
       ]),
