@@ -11,17 +11,18 @@ class WarEventsCard extends StatefulWidget {
   final List<PlayerTab> playerTab;
 
   const WarEventsCard({
-    Key? key,
+    super.key,
     required this.currentWarInfo,
     required this.playerTab,
-  }) : super(key: key);
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _WarEventsCardState createState() => _WarEventsCardState();
 }
 
 class _WarEventsCardState extends State<WarEventsCard> {
-  String filterOption = 'All'; // Default filter option
+  String filterOption = 'All';
 
   void updateFilterOption(String newOption) {
     setState(() {
