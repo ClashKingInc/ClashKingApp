@@ -8,6 +8,8 @@
     "copiedToClipboard" : "Copié dans le presse-papiers",
     "selectLanguage": "Sélectionnez une langue",
     "all" : "Tous",
+    "hourIndicator" : "h",
+    "minIndicator" : "m",
     
     "dashboard" : "Profil",
     "homeBase" : "Village principal",
@@ -40,6 +42,7 @@
     "statistics" : "Statistiques",
     "attacks" : "Attaques",
     "stars" : "Étoiles",
+    "numberOfStars" : "Nombre d'étoiles",
     "destructionRate" : "Taux de destruction",
     "events" : "Attaques",
     "team" : "Équipes",

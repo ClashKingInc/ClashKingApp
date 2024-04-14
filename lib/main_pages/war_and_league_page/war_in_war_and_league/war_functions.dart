@@ -39,6 +39,7 @@ Map<int, int> countStars(List<WarMember> members) {
 
   
   Widget timeLeft(CurrentWarInfo currentWarInfo, BuildContext context, TextStyle? style) {
+    String hourIndicator = AppLocalizations.of(context)?.hourIndicator ?? ":";
     DateTime now = DateTime.now();
     Duration difference = Duration.zero;
     String state = '';
@@ -60,7 +61,7 @@ Map<int, int> countStars(List<WarMember> members) {
         child: Text(
           currentWarInfo.state == 'warEnded'
               ? AppLocalizations.of(context)?.warEnded ?? 'War ended'
-              : '$state $hours:$minutes',
+              : '$state $hours$hourIndicator$minutes',
           style: style,
         ),
       ),

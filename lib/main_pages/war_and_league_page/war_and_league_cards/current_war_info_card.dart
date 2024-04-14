@@ -4,12 +4,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/war_functions.dart';
 
 class CurrentWarInfoCard extends StatelessWidget {
-  const CurrentWarInfoCard({
-    super.key,
-    required this.currentWarInfo,
-  });
+  const CurrentWarInfoCard(
+      {super.key, required this.currentWarInfo, required this.clanTag});
 
   final CurrentWarInfo currentWarInfo;
+  final String clanTag;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class CurrentWarInfoCard extends StatelessWidget {
                   case 'inWar':
                     return _inWarState(context);
                   case 'warEnded':
-                    return _warEnded(context);
+                    return _warEnded(context, clanTag);
                   default:
                     return Text('Clan state unknown');
                 }
@@ -45,7 +44,7 @@ class CurrentWarInfoCard extends StatelessWidget {
             AppLocalizations.of(context)?.warLogClosed ?? 'War log closed'));
   }
 
-  Widget _warEnded(BuildContext context) {
+  Widget _warEnded(BuildContext context, String clanTag) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -59,64 +58,70 @@ class CurrentWarInfoCard extends StatelessWidget {
                   child: Image.network(currentWarInfo.clan.badgeUrls.large,
                       fit: BoxFit.cover),
                 ),
-                Center(child: Text(currentWarInfo.clan.name)),
+                Text(currentWarInfo.clan.name,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall),
               ],
             )),
         Expanded(
           flex: 4,
           child: Column(
             children: <Widget>[
-              Center(
-                  child: Text(AppLocalizations.of(context)?.warEnded ?? 'War',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18))),
-              Center(
-                child: currentWarInfo.clan.stars > currentWarInfo.opponent.stars
-                    ? Text(AppLocalizations.of(context)?.victory ?? 'Victory',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.green))
-                    : currentWarInfo.clan.stars < currentWarInfo.opponent.stars
-                        ? Text(AppLocalizations.of(context)?.defeat ?? 'Defeat',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.red))
-                        : currentWarInfo.clan.destructionPercentage >
-                                currentWarInfo.opponent.destructionPercentage
-                            ? Text(
-                                AppLocalizations.of(context)?.victory ??
-                                    'Victory',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.green))
-                            : currentWarInfo.clan.destructionPercentage <
-                                    currentWarInfo
-                                        .opponent.destructionPercentage
-                                ? Text(
-                                    AppLocalizations.of(context)?.defeat ??
-                                        'Defeat',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.red))
-                                : Text(
-                                    AppLocalizations.of(context)?.draw ?? 'Tie',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18)),
-              ),
-              Center(
-                  child: Text(
-                      '${currentWarInfo.clan.stars.toString().padRight(2, ' ')} - ${currentWarInfo.opponent.stars.toString().padRight(2, ' ')} ',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20))),
-              Center(
-                  child: Text(
-                      '${currentWarInfo.clan.destructionPercentage.toStringAsFixed(2).padLeft(5, '0')}%    ${currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2).padLeft(5, ' ')}%')),
-              Center(child: Text(' ')),
+              Text(AppLocalizations.of(context)?.warEnded ?? 'War',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(fontWeight: FontWeight.bold)),
+              ((currentWarInfo.clan.tag == clanTag &&
+                          currentWarInfo.clan.stars >
+                              currentWarInfo.opponent.stars) ||
+                      (currentWarInfo.opponent.tag == clanTag &&
+                          currentWarInfo.clan.stars <
+                              currentWarInfo.opponent.stars) ||
+                      (currentWarInfo.clan.tag == clanTag &&
+                          currentWarInfo.clan.destructionPercentage >
+                              currentWarInfo.opponent.destructionPercentage) ||
+                      (currentWarInfo.opponent.tag == clanTag &&
+                          currentWarInfo.clan.destructionPercentage <
+                              currentWarInfo.opponent.destructionPercentage))
+                  ? Text(AppLocalizations.of(context)?.victory ?? 'Victory',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold, color: Colors.green))
+                  : ((currentWarInfo.clan.tag == clanTag &&
+                              currentWarInfo.clan.stars <
+                                  currentWarInfo.opponent.stars) ||
+                          currentWarInfo.opponent.tag == clanTag &&
+                              currentWarInfo.clan.stars >
+                                  currentWarInfo.opponent.stars ||
+                          (currentWarInfo.clan.tag == clanTag &&
+                              currentWarInfo.clan.destructionPercentage <
+                                  currentWarInfo
+                                      .opponent.destructionPercentage) ||
+                          (currentWarInfo.opponent.tag == clanTag &&
+                              currentWarInfo.clan.destructionPercentage >
+                                  currentWarInfo
+                                      .opponent.destructionPercentage))
+                      ? Text(AppLocalizations.of(context)?.defeat ?? 'Defeat',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red))
+                      : Text(AppLocalizations.of(context)?.draw ?? 'Tie',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(fontWeight: FontWeight.bold)),
+              Text(
+                  '${currentWarInfo.clan.stars.toString().padRight(2, ' ')} - ${currentWarInfo.opponent.stars.toString().padRight(2, ' ')} ',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold)),
+              Text(
+                  '${currentWarInfo.clan.destructionPercentage.toStringAsFixed(2).padLeft(5, '0')}%    ${currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2).padLeft(5, ' ')}%'),
+              Text('')
             ],
           ),
         ),
@@ -124,14 +129,15 @@ class CurrentWarInfoCard extends StatelessWidget {
           flex: 3,
           child: Column(
             children: <Widget>[
-              SizedBox(),
               SizedBox(
                 width: 70,
                 height: 70,
                 child: Image.network(currentWarInfo.opponent.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
-              Center(child: Text(currentWarInfo.opponent.name)),
+              Text(currentWarInfo.opponent.name,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall),
             ],
           ),
         ),
@@ -158,7 +164,9 @@ class CurrentWarInfoCard extends StatelessWidget {
                 child: Image.network(currentWarInfo.clan.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
-              Text(currentWarInfo.clan.name, textAlign: TextAlign.center)
+              Text(currentWarInfo.clan.name,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall)
             ],
           ),
         ),
@@ -187,7 +195,9 @@ class CurrentWarInfoCard extends StatelessWidget {
                 child: Image.network(currentWarInfo.opponent.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
-              Text(currentWarInfo.opponent.name, textAlign: TextAlign.center),
+              Text(currentWarInfo.opponent.name,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall),
             ],
           ),
         )
@@ -213,7 +223,9 @@ class CurrentWarInfoCard extends StatelessWidget {
                   child: Image.network(currentWarInfo.clan.badgeUrls.large,
                       fit: BoxFit.cover),
                 ),
-                Text(currentWarInfo.clan.name, textAlign: TextAlign.center),
+                Text(currentWarInfo.clan.name,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall),
               ],
             )),
         Expanded(
@@ -224,8 +236,9 @@ class CurrentWarInfoCard extends StatelessWidget {
                 Center(
                     child: Text(
                         '${currentWarInfo.clan.stars.toString().padRight(2, ' ')} - ${currentWarInfo.opponent.stars.toString().padRight(2, ' ')} ',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20))),
+                        style: Theme.of(context)
+                      .textTheme
+                      .titleMedium)),
                 Center(
                     child: Text(
                         '${currentWarInfo.clan.destructionPercentage.toStringAsFixed(2).padLeft(5, '0')}%    ${currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2).padLeft(5, ' ')}%')),
@@ -243,7 +256,9 @@ class CurrentWarInfoCard extends StatelessWidget {
                 child: Image.network(currentWarInfo.opponent.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
-              Text(currentWarInfo.opponent.name, textAlign: TextAlign.center),
+              Text(currentWarInfo.opponent.name,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall),
             ],
           ),
         )

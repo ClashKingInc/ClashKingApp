@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/api/current_league_info.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/current_war_info_card.dart';
 
 class CwlCard extends StatefulWidget {
   final CurrentLeagueInfo currentLeagueInfo;
@@ -29,6 +30,7 @@ class CwlCardState extends State<CwlCard> {
     Future<CurrentWarInfo?> getActiveWar() async {
       CurrentWarInfo? inWar;
       CurrentWarInfo? inPreparation;
+      CurrentWarInfo? lastMatchedWarInfo;
 
       for (var round in widget.currentLeagueInfo.rounds) {
         List<CurrentWarInfo> warLeagueInfos = await round.warLeagueInfos;
@@ -36,6 +38,8 @@ class CwlCardState extends State<CwlCard> {
         for (var warInfo in warLeagueInfos) {
           if (warInfo.clan.tag == widget.clanTag ||
               warInfo.opponent.tag == widget.clanTag) {
+            lastMatchedWarInfo = warInfo; // Store the last matched warInfo
+
             if (warInfo.state == 'inWar') {
               return warInfo; // Return immediately if 'inWar'
             } else if (warInfo.state == 'preparation') {
@@ -45,61 +49,31 @@ class CwlCardState extends State<CwlCard> {
         }
       }
 
-      // Get the last round's warLeagueInfos and return the last warInfo
-      List<CurrentWarInfo> lastRoundWarInfos =
-          await widget.currentLeagueInfo.rounds.last.warLeagueInfos;
-      return inPreparation ?? lastRoundWarInfos.last;
+      return inWar ?? inPreparation ?? lastMatchedWarInfo;
     }
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Center(
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    width: 70, // Maximum width
-                    height: 70, // Maximum height
-                    child: Center(
-                      child: Image.network(widget.clanInfo.badgeUrls.large,
-                          fit: BoxFit.cover),
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "We are in league !",
-                        textAlign: TextAlign.center,
-                      ),
-                      FutureBuilder<CurrentWarInfo?>(
-                        future: getActiveWar(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return CircularProgressIndicator();
-                          } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          } else {
-                            CurrentWarInfo? warInfo = snapshot.data;
-                            return Column( children : [Text('State: ${warInfo?.state}'),
-                            Text("${warInfo?.endTime}"),
-                            Text("${warInfo?.attacksPerMember}")
-                            ]);
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+    return FutureBuilder<CurrentWarInfo?>(
+      future: getActiveWar(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Card(
+              child: SizedBox(
+                  height: 100,
+                  width: double.infinity,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Loading war data..."),
+                        CircularProgressIndicator()
+                      ])));
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          CurrentWarInfo? warInfo = snapshot.data;
+          return CurrentWarInfoCard(
+              currentWarInfo: warInfo!, clanTag: widget.clanTag);
+        }
+      },
     );
   }
 }

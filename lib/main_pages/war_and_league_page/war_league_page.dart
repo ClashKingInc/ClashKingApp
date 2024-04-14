@@ -74,7 +74,7 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                               padding: EdgeInsets.symmetric(
                                   vertical: 4.0, horizontal: 8.0),
                               child: CurrentWarInfoCard(
-                                  currentWarInfo: currentWarInfo!),
+                                  currentWarInfo: currentWarInfo!, clanTag : widget.clanInfo.tag),
                             ),
                           )
                         else if (warState == "cwl")

@@ -1,6 +1,7 @@
 {
     "@@locale": "en",
     "creatorCode" : "Creator Code : ClashKing",
+
     "signInWithDiscord" : "Sign In with Discord",
     "logout" : "Log out",
     "language" : "Language",
@@ -8,6 +9,8 @@
     "selectLanguage": "Select a language",
     "copiedToClipboard" : "Copied to clipboard",
     "all" : "All",
+    "hourIndicator" : "h",
+    "minIndicator" : "m",
     
     "dashboard" : "Dashboard",
     "homeBase" : "Home Base",
@@ -40,6 +43,7 @@
     "statistics" : "Statistics",
     "attacks" : "Attacks",
     "stars" : "Stars",
+    "numberOfStars" : "Number of stars",
     "destructionRate" : "Destruction rate",
     "events" : "Events",
     "team" : "Teams",

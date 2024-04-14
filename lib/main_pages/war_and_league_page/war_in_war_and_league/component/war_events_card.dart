@@ -5,6 +5,7 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_leagu
 import 'package:clashkingapp/components/right_pointing_triangle.dart';
 import 'package:clashkingapp/components/left_pointing_triangle.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WarEventsCard extends StatefulWidget {
   final CurrentWarInfo currentWarInfo;
@@ -75,7 +76,7 @@ class _WarEventsCardState extends State<WarEventsCard> {
               sortBy: filterOption,
               updateSortBy: updateFilterOption,
               sortByOptions: {
-                'All': 'All',
+                AppLocalizations.of(context)?.all ?? "All" : 'All',
                 widget.currentWarInfo.clan.name: '0',
                 widget.currentWarInfo.opponent.name: '1'
               },

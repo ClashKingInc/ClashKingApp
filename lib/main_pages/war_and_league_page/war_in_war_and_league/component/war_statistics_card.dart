@@ -260,7 +260,7 @@ class WarStatisticsCard extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 20),
-                Text("Number of stars"),
+                Text(AppLocalizations.of(context)?.numberOfStars ?? "Number of stars"),
                 SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
