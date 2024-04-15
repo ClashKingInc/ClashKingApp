@@ -198,21 +198,26 @@ class PlayerLegendCard extends StatelessWidget {
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelMedium)),
-                                Chip(
-                                  avatar: CircleAvatar(
+                                if (legendData['rankings']['country_code'] !=
+                                    null)
+                                  Chip(
+                                    avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
                                       child: Image.network(
-                                          "https://clashkingfiles.b-cdn.net/country-flags/${legendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
-                                  label: Text(
-                                    legendData['rankings']['local_rank'] == null
-                                        ? AppLocalizations.of(context)
-                                                ?.noRank ??
-                                            'No Rank'
-                                        : '${legendData['rankings']['local_rank']}',
-                                    style:
-                                        Theme.of(context).textTheme.labelMedium,
+                                          "https://clashkingfiles.b-cdn.net/country-flags/${(legendData['rankings']['country_code'] ?? 'uk').toLowerCase()}.png"),
+                                    ),
+                                    label: Text(
+                                      legendData['rankings']['local_rank'] ==
+                                              null
+                                          ? AppLocalizations.of(context)
+                                                  ?.noRank ??
+                                              'No Rank'
+                                          : '${legendData['rankings']['local_rank']}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium,
+                                    ),
                                   ),
-                                ),
                                 Chip(
                                   avatar: Icon(
                                     diffTrophies > 0

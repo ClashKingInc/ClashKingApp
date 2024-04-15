@@ -275,7 +275,7 @@ Widget buildRoundsTab(
                   }).toList(),
                 );
               } else {
-                return Text('No data available');
+                return Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available');
               }
             },
           ),

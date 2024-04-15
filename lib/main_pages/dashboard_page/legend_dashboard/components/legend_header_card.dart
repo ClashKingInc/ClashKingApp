@@ -103,6 +103,7 @@ class LegendHeaderCard extends StatelessWidget {
                                     spacing: 8,
                                     runSpacing: 0,
                                     children: <Widget>[
+                                      if (dynamicLegendData['rankings']['country_code'] != null)
                                       Chip(
                                         avatar: CircleAvatar(
                                             backgroundColor: Colors.transparent,
@@ -128,6 +129,7 @@ class LegendHeaderCard extends StatelessWidget {
                                                   1), // Customize border color and width
                                         ),
                                       ),
+                                      if (dynamicLegendData['rankings']['country_code'] != null)
                                       Chip(
                                         avatar: CircleAvatar(
                                             backgroundColor: Colors.transparent,
