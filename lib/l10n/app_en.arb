@@ -90,5 +90,14 @@
     "warLogClosed" : "War log closed.",
     "rounds" : "Rounds",
 
+    "stateOfTheWar" : "State of the war",
+    "stillNeedsToWin" : "still needs to win",
+    "toTakeTheLead" : "to take the lead",
+    "or" : "or",
+    "star" : "star",
+    "moreDestruction" : "more destruction",
+    "clanDraw" : "The two clans are tied",
+    "fastCalculator" : "Fast calculator",
+
     "management" : "Management"
 }

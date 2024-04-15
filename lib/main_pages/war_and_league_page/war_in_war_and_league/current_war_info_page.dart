@@ -7,6 +7,7 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_leagu
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_statistics_card.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_events_card.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_team_card.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_calculator_card.dart';
 
 class PlayerTab {
   String tag;
@@ -80,11 +81,15 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
           children: [
             Padding(
                 padding: EdgeInsets.all(8),
-                child:
-                    WarStatisticsCard(currentWarInfo: widget.currentWarInfo)),
-            WarEventsCard(
-                    currentWarInfo: widget.currentWarInfo,
-                    playerTab: playerTab),
+                child: Column(
+                  children: [
+                    WarStatisticsCard(currentWarInfo: widget.currentWarInfo),
+                    SizedBox(height: 10),
+                    WarCalculatorCard(teamSize: widget.currentWarInfo.teamSize)
+                  ]
+                )
+            ),
+            WarEventsCard(currentWarInfo: widget.currentWarInfo,  playerTab: playerTab),
             Padding(padding: EdgeInsets.all(8), child: buildTeamsTab(context)),
           ])
     ])));

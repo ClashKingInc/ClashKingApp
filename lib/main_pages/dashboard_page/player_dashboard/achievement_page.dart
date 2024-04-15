@@ -212,7 +212,7 @@ class AchievementScreenState extends State<AchievementScreen>
           return Padding(padding : const EdgeInsets.only(bottom : 4),
           child : Card(
             child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 10, bottom : 6),
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 10, bottom : 3),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
