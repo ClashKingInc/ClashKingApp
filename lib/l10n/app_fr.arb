@@ -89,5 +89,14 @@
     "warLogClosed" : "Le journal de guerre est privé.",
     "rounds" : "Tours",
 
+    "stateOfTheWar" : "État de la guerre",
+    "stillNeedsToWin" : "doit encore gagner",
+    "toTakeTheLead" : "pour prendre l'avantage",
+    "ou" : "ou",
+    "star" : "étoile",
+    "moreDestruction" : "de destruction",
+    "clanDraw" : "Les deux clans sont à égalité",
+    "fastCalculator" : "Calculatrice rapide",
+
     "management" : "Gestion"
 }
