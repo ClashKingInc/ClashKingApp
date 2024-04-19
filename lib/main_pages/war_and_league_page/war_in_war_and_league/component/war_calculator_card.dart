@@ -23,6 +23,7 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
   void initState() {
     super.initState();
     _teamSizeController.text = widget.teamSize.toString();
+    _percentNeededController.text = (100 / widget.teamSize).toStringAsFixed(2);
   }
 
   @override
@@ -61,25 +62,33 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
                       decoration: InputDecoration(
                         labelText: 'Team size',
                         hintText: widget.teamSize.toString(),
+                        hintStyle: TextStyle(color: Colors.grey),
                       ),
                       keyboardType: TextInputType.number,
                     ),
                     TextField(
                       controller: _percentNeededController,
                       decoration: InputDecoration(
-                        labelText: '% Needed',
+                        labelText: '% Needed overall',
+                        hintText: (100 / widget.teamSize).toStringAsFixed(2),
+                        hintStyle: TextStyle(color: Colors.grey),
                       ),
                       keyboardType: TextInputType.number,
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _result = (double.parse(_percentNeededController.text)) * double.parse(_teamSizeController.text);
-                        });
-                      },
-                      child: Text('Calculate'),
+                    SizedBox(height: 10),
+                    SizedBox(
+                      width: 150,
+                      height: 50, 
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _result = (double.parse(_percentNeededController.text)) * double.parse(_teamSizeController.text);
+                          });
+                        },
+                        child: Text('Calculate'),
+                      ),
                     ),
-                    Text('To score overall ${_percentNeededController.text}%, you need to achieve ${_result.ceil()}%'),
+                    Text('To score overall ${_percentNeededController.text}%, you need to achieve at least ${_result.ceil()}%'),
                   ],
                 ),
               ),

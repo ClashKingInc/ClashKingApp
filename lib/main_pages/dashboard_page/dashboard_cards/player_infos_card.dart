@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlayerInfosCard extends StatelessWidget {
   const PlayerInfosCard({
@@ -59,14 +60,13 @@ class PlayerInfosCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Wrap(
-                            alignment: WrapAlignment.center,
-                            spacing: 4.0, // gap between adjacent chips
-                            runSpacing: 0.0, // gap between lines
+                            alignment: WrapAlignment.start,
+                            spacing: 7.0,
+                            runSpacing: -7.0,
                             children: <Widget>[
                               Chip(
                                 avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
+                                  backgroundColor: Colors.transparent,
                                   child: Image.network(
                                       playerStats.clan.badgeUrls.small),
                                 ),
@@ -87,10 +87,9 @@ class PlayerInfosCard extends StatelessWidget {
                                       : Image.network(
                                           'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png'),
                                 ),
-                                labelPadding:
-                                    EdgeInsets.only(left: 2.0, right: 2.0),
+                                labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
                                 label: Text(
-                                  playerStats.warPreference.toString(),
+                                  playerStats.warPreference == 'in' ? AppLocalizations.of(context)?.ready ?? 'Ready' : AppLocalizations.of(context)?.unready ?? 'Unready',
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
                               ),

@@ -141,7 +141,7 @@ class PlayerLegendCard extends StatelessWidget {
           style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
           child: Card(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -181,13 +181,12 @@ class PlayerLegendCard extends StatelessWidget {
                       SizedBox(width: 8),
                       Expanded(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Wrap(
-                              alignment: WrapAlignment.center,
-                              spacing: 4.0, // gap between adjacent chips
-                              runSpacing: 0.0, // gap between lines
+                              alignment: WrapAlignment.start,
+                              spacing: 7.0,
+                              runSpacing: -7.0,
                               children: <Widget>[
                                 Chip(
                                     avatar: CircleAvatar(
@@ -199,7 +198,7 @@ class PlayerLegendCard extends StatelessWidget {
                                             .textTheme
                                             .labelMedium)),
                                 if (legendData['rankings']['country_code'] !=
-                                    null)
+                                    null) 
                                   Chip(
                                     avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
@@ -209,9 +208,7 @@ class PlayerLegendCard extends StatelessWidget {
                                     label: Text(
                                       legendData['rankings']['local_rank'] ==
                                               null
-                                          ? AppLocalizations.of(context)
-                                                  ?.noRank ??
-                                              'No Rank'
+                                          ? '200+'
                                           : '${legendData['rankings']['local_rank']}',
                                       style: Theme.of(context)
                                           .textTheme

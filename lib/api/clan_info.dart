@@ -24,11 +24,12 @@ class ClanInfo {
   final bool isWarLogPublic;
   final WarLeague warLeague;
   final int members;
-  final List<dynamic> memberList; // Assuming member list details are not provided
-  final List<dynamic> labels; // Assuming label details are not provided
+  final Location location;
+  final List<dynamic> memberList;
+  final List<dynamic> labels;
   final int requiredBuilderBaseTrophies;
   final int requiredTownhallLevel;
-  final Map<String, dynamic> clanCapital; // Assuming detailed structure is not provided
+  final Map<String, dynamic> clanCapital;
 
   ClanInfo({
     required this.tag,
@@ -51,6 +52,7 @@ class ClanInfo {
     required this.isWarLogPublic,
     required this.warLeague,
     required this.members,
+    required this.location,
     required this.memberList,
     required this.labels,
     required this.requiredBuilderBaseTrophies,
@@ -70,7 +72,7 @@ class ClanInfo {
       clanPoints: json['clanPoints'] ?? 0,
       clanBuilderBasePoints: json['clanBuilderBasePoints'] ?? 0,
       clanCapitalPoints: json['clanCapitalPoints'] ?? 0,
-      capitalLeague: CapitalLeague.fromJson(json['capitalLeague']) ,
+      capitalLeague: CapitalLeague.fromJson(json['capitalLeague'] ?? {}),
       requiredTrophies: json['requiredTrophies'] ?? 0,
       warFrequency: json['warFrequency'] ?? 'No frequency',
       warWinStreak: json['warWinStreak'] ?? 0,
@@ -78,8 +80,9 @@ class ClanInfo {
       warTies: json['warTies'] ?? 0,
       warLosses: json['warLosses'] ?? 0,
       isWarLogPublic: json['isWarLogPublic'] ?? false,
-      warLeague: WarLeague.fromJson(json['warLeague']) ,
+      warLeague: WarLeague.fromJson(json['warLeague'] ?? {}) ,
       members: json['members'] ?? 0,
+      location: Location.fromJson(json['location'] ?? {}),
       memberList: json['memberList'] ?? [],
       labels: json['labels'] ?? [],
       requiredBuilderBaseTrophies: json['requiredBuilderBaseTrophies'] ?? 0,
@@ -129,6 +132,26 @@ class WarLeague {
     return WarLeague(
       id: json['id'],
       name: json['name'],
+    );
+  }
+}
+
+class Location {
+  final String localizedName;
+  final int id;
+  final String name;
+  final bool isCountry;
+  final String countryCode;
+
+  Location({required this.localizedName, required this.id, required this.name, required this.isCountry, required this.countryCode});
+
+  factory Location.fromJson(Map<String, dynamic> json) {
+    return Location(
+      localizedName: json['localizedName'] ?? 'No localizedName',
+      id: json['id'] ?? 0,
+      name: json['name'] ?? 'No name',
+      isCountry: json['isCountry'] ?? false,
+      countryCode: json['countryCode'] ?? 'No countryCode',
     );
   }
 }
