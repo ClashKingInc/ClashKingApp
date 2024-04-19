@@ -13,6 +13,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:home_widget/home_widget.dart';
+import 'dart:async';
+import 'package:clashkingapp/main_pages/war_and_league_page/war_league_page.dart';
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
@@ -240,7 +243,7 @@ class MyAppState extends ChangeNotifier {
       selectedTag.value = user!.tags.first;
       selectedTag.addListener(reloadData);
     }
-      _loadLanguage();
+    _loadLanguage();
   }
 
   Locale _locale = Locale('en');
@@ -260,6 +263,78 @@ class MyAppState extends ChangeNotifier {
   }
 
   Locale get locale => _locale;
+
+  void updateWidget() async {
+    // Function to update the widget
+    Future<void> update() async {
+      if (playerStats != null) {
+        final warInfo = await checkCurrentWar(playerStats!);
+        print('War info at : $warInfo');
+        // Send data to the widget
+        await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
+        // Request the Home Widget to update
+        await HomeWidget.updateWidget(
+          name: 'ExampleAppWidgetProvider',
+          androidName: 'ExampleAppWidgetProvider',
+        );
+      }
+    }
+
+    // Call the function immediately
+    await update();
+
+    // Then call it every minute
+    Timer.periodic(Duration(minutes : 15), (Timer t) async {
+      await update();
+    });
+  }
+
+  Future<String> checkCurrentWar(PlayerAccountInfo playerStats) async {
+    final responseWar = await http.get(
+      Uri.parse(
+          'https://api.clashking.xyz/v1/clans/${playerStats.clan.tag.replaceAll('#', '%23')}/currentwar'),
+    );
+
+    if (responseWar.statusCode == 200) {
+      var decodedResponse = jsonDecode(utf8.decode(responseWar.bodyBytes));
+      if (decodedResponse["state"] != "notInWar") {
+        // Accessing clan details
+        var clanName = decodedResponse["clan"]["name"];
+        var clanBadgeUrlMedium = decodedResponse["clan"]["badgeUrls"]["medium"];
+        var clanStars = decodedResponse["clan"]["stars"];
+
+        // Accessing opponent details
+        var opponentName = decodedResponse["opponent"]["name"];
+        var opponentBadgeUrlMedium =
+            decodedResponse["opponent"]["badgeUrls"]["medium"];
+        var opponentStars = decodedResponse["opponent"]["stars"];
+
+        // Create a Map object with the required fields
+        var result = {
+          "clan": {
+            "name": clanName,
+            "badgeUrlMedium": clanBadgeUrlMedium,
+            "stars": clanStars
+          },
+          "opponent": {
+            "name": opponentName,
+            "badgeUrlMedium": opponentBadgeUrlMedium,
+            "stars": opponentStars
+          }
+        };
+
+        // Convert the Map object to a JSON string
+        var jsonString = jsonEncode(result);
+
+        // Return the JSON string
+        return jsonString;
+      } else {
+        return "notInWar";
+      }
+    } else {
+      return "error";
+    }
+  }
 
   void reloadData() async {
     if (selectedTag.value != null) {
@@ -281,6 +356,7 @@ class MyAppState extends ChangeNotifier {
               (element) => element.clan.tag == playerStats?.clan.tag);
         }
       }
+      updateWidget();
       notifyListeners();
     }
   }
@@ -313,7 +389,8 @@ class MyAppState extends ChangeNotifier {
   // Assume this method exists and fetches current war correctly
   Future<void> fetchCurrentWarInfo(String tag) async {
     try {
-      currentWarInfo = await CurrentWarService().fetchCurrentWarInfo(tag, "war");
+      currentWarInfo =
+          await CurrentWarService().fetchCurrentWarInfo(tag, "war");
       notifyListeners(); // Notify listeners to rebuild widgets that depend on currentWarInfo.
     } catch (e, s) {
       // Handle the error, maybe log it or show a user-friendly message
