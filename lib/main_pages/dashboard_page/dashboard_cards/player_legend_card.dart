@@ -184,7 +184,7 @@ class PlayerLegendCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Wrap(
-                              alignment: WrapAlignment.spaceBetween,
+                              alignment: WrapAlignment.start,
                               spacing: 7.0,
                               runSpacing: -7.0,
                               children: <Widget>[
@@ -208,9 +208,7 @@ class PlayerLegendCard extends StatelessWidget {
                                     label: Text(
                                       legendData['rankings']['local_rank'] ==
                                               null
-                                          ? AppLocalizations.of(context)
-                                                  ?.noRank ??
-                                              'No Rank'
+                                          ? '200+'
                                           : '${legendData['rankings']['local_rank']}',
                                       style: Theme.of(context)
                                           .textTheme

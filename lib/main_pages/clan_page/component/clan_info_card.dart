@@ -71,7 +71,6 @@ class ClanInfoCard extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                           ),
-                          Spacer(),
                           Chip(
                             avatar: CircleAvatar(
                               backgroundColor: Colors
