@@ -17,6 +17,26 @@ class WarStatisticsCard extends StatelessWidget {
     Map<int, int> clanStarCounts = countStars(currentWarInfo.clan.members);
     Map<int, int> opponentStarCounts = countStars(currentWarInfo.opponent.members);
 
+    String getWarStatus() {
+      String stillNeedsToWin = AppLocalizations.of(context)?.stillNeedsToWin ?? 'still needs to win';
+      String toTakeTheLead = AppLocalizations.of(context)?.toTakeTheLead ?? 'to take the lead';
+      String star = AppLocalizations.of(context)?.starSmall ?? 'star';
+      String or = AppLocalizations.of(context)?.or ?? 'or';
+      String moreDestruction = AppLocalizations.of(context)?.moreDestruction ?? 'more destruction';
+
+      if (currentWarInfo.clan.stars < currentWarInfo.opponent.stars) {
+        return '${currentWarInfo.clan.name} $stillNeedsToWin ${currentWarInfo.opponent.stars - currentWarInfo.clan.stars + 1} $star(s) $toTakeTheLead.';
+      } else if (currentWarInfo.clan.stars > currentWarInfo.opponent.stars) {
+        return '${currentWarInfo.opponent.name} $stillNeedsToWin ${currentWarInfo.clan.stars - currentWarInfo.opponent.stars + 1} $star(s) $toTakeTheLead.';
+      } else if (currentWarInfo.clan.destructionPercentage > currentWarInfo.opponent.destructionPercentage) {
+        return '${currentWarInfo.clan.name} $stillNeedsToWin ${currentWarInfo.clan.destructionPercentage - currentWarInfo.opponent.destructionPercentage + 0.01}% $moreDestruction $or 1 $star $toTakeTheLead.';
+      } else if (currentWarInfo.clan.destructionPercentage < currentWarInfo.opponent.destructionPercentage) {
+        return '${currentWarInfo.opponent.name} $stillNeedsToWin ${currentWarInfo.opponent.destructionPercentage - currentWarInfo.clan.destructionPercentage + 0.01}% $moreDestruction $or 1 $star $toTakeTheLead.';
+      } else {
+        return '${AppLocalizations.of(context)?.clanDraw ?? 'The two clans are tied'}.';
+      }
+    }
+
     int numberOfAttacks = currentWarInfo.type == 'cwl'
         ? currentWarInfo.teamSize
         : currentWarInfo.teamSize * 2;
@@ -153,8 +173,7 @@ class WarStatisticsCard extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20),
-            Text(AppLocalizations.of(context)?.destructionRate ??
-                'Destruction rate'),
+            Text(AppLocalizations.of(context)?.destructionRate ?? 'Destruction rate'),
             SizedBox(height: 10),
             Row(
               children: [
@@ -201,7 +220,7 @@ class WarStatisticsCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(
                             top:
-                                5), // Ajoute de l'espace vertical au-dessus du texte
+                                5),
                         child: Center(
                           child: Text(
                             '${currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)}%',
@@ -324,20 +343,15 @@ class WarStatisticsCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    () {
-                      String stillNeedsToWin = AppLocalizations.of(context)?.stillNeedsToWin ?? 'still needs to win';
-                      String toTakeTheLead = AppLocalizations.of(context)?.toTakeTheLead ?? 'to take the lead';
-                      return currentWarInfo.clan.stars < currentWarInfo.opponent.stars
-                          ? '${currentWarInfo.clan.name} $stillNeedsToWin ${currentWarInfo.opponent.stars - currentWarInfo.clan.stars + 1} ${AppLocalizations.of(context)?.star ?? 'star'}(s) $toTakeTheLead.'
-                          : currentWarInfo.clan.stars > currentWarInfo.opponent.stars
-                              ? '${currentWarInfo.opponent.name} $stillNeedsToWin ${currentWarInfo.clan.stars - currentWarInfo.opponent.stars + 1} ${AppLocalizations.of(context)?.star ?? 'star'}(s) $toTakeTheLead.'
-                              : currentWarInfo.clan.destructionPercentage > currentWarInfo.opponent.destructionPercentage
-                                  ? '${currentWarInfo.clan.name} $stillNeedsToWin ${currentWarInfo.clan.destructionPercentage - currentWarInfo.opponent.destructionPercentage + 0.01}% ${AppLocalizations.of(context)?.moreDestruction ?? 'more destruction'} ${AppLocalizations.of(context)?.or ?? 'or'} 1 ${AppLocalizations.of(context)?.star ?? 'star'} $toTakeTheLead.'
-                                  : currentWarInfo.clan.destructionPercentage < currentWarInfo.opponent.destructionPercentage
-                                      ? '${currentWarInfo.opponent.name} $stillNeedsToWin ${currentWarInfo.opponent.destructionPercentage - currentWarInfo.clan.destructionPercentage + 0.01}% ${AppLocalizations.of(context)?.moreDestruction ?? 'more destruction'} ${AppLocalizations.of(context)?.or ?? 'or'} 1 ${AppLocalizations.of(context)?.star ?? 'star'} $toTakeTheLead.'
-                                      : '${AppLocalizations.of(context)?.clanDraw ?? 'The two clans are tied'}.';
-                    } (),
+                  Expanded(
+                    child: Text(
+                      getWarStatus(),
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
                   ),
                 ],
               ),

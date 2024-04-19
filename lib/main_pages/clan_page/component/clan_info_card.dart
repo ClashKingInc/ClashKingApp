@@ -18,23 +18,44 @@ class ClanInfoCard extends StatelessWidget {
           children: <Widget>[
             Row(
               children: [
-                SizedBox(
-                    height: 90,
-                    width: 90,
-                    child: Image.network(clanInfo.badgeUrls.large)),
+                Stack(
+                  children: [   
+                    SizedBox(
+                      height: 90,
+                      width: 90,
+                      child: Image.network(clanInfo.badgeUrls.large)
+                    ),       
+                    Positioned(
+                      top: 68, 
+                      left: 37,
+                      child: Image.network(
+                        "https://clashkingfiles.b-cdn.net/country-flags/${clanInfo.location.countryCode}.png",
+                        width: 16,
+                        height: 20,
+                      ),
+                    ),
+                  ],
+                ),
+                
                 SizedBox(width: 8),
-                Flexible(  // Replace Expanded with Flexible
+                Flexible(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(clanInfo.name,
-                          style: Theme.of(context).textTheme.titleSmall),
+                      Row(
+                        children: [
+                          Text(clanInfo.name, style: Theme.of(context).textTheme.titleSmall),
+                          Spacer(),
+                          Text('${clanInfo.members.toString()}/50', style: Theme.of(context).textTheme.titleSmall),
+                          SizedBox(width: 8),
+                        ],
+                      ),
                       Text(clanInfo.tag, style: Theme.of(context).textTheme.labelLarge),
                       SizedBox(height: 8),
                       Wrap(
                         alignment: WrapAlignment.spaceAround,
-                        spacing: 8.0, // gap between adjacent chips
-                        runSpacing: 0.0, // gap between lines
+                        spacing: 8.0,
+                        runSpacing: 0.0,
                         children: <Widget>[
                           Chip(
                             avatar: CircleAvatar(
@@ -50,6 +71,7 @@ class ClanInfoCard extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                           ),
+                          Spacer(),
                           Chip(
                             avatar: CircleAvatar(
                               backgroundColor: Colors
@@ -60,7 +82,7 @@ class ClanInfoCard extends StatelessWidget {
                             labelPadding:
                                 EdgeInsets.only(left: 2.0, right: 2.0),
                             label: Text(
-                              clanInfo.members.toString(),
+                              clanInfo.type.toString(),
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                           ),
@@ -69,10 +91,10 @@ class ClanInfoCard extends StatelessWidget {
                   ),
                 )
               ],
-            )
+            ),
           ],
         ),
-      ),
+      ), 
     );
   }
 }

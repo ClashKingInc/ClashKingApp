@@ -301,6 +301,11 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
         'https://clashkingfiles.b-cdn.net/home-base/pet-pics/Icon_HV_Hero_Pets_Spirit_Fox.png',
     'type': 'pet',
   },
+  'Angry Jelly' : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/pet-pics/Icon_HV_Hero_Pets_Angry_Jelly.png',
+    'type': 'pet',
+  },
 
   // Heroes
   'Barbarian King': {

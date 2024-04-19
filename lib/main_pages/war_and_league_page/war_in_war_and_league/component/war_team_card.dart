@@ -32,7 +32,6 @@ class WarTeamCard extends StatelessWidget {
             padding: EdgeInsets.all(16),
             child: Column(
               children: [
-                // Defense title
                 Row(children: [
                   Expanded(
                     flex: 4,
@@ -49,11 +48,10 @@ class WarTeamCard extends StatelessWidget {
                     ),
                   ),
                 ]),
-                // Defense line
                 if (bestAttack != null)
                   Column(
                     children: List<Widget>.generate(
-                      1, // itemCount is 1
+                      1,
                       (index) {
                         String imageUrlDef =
                             'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(bestAttack.defenderTag, playerTab)}.png';

@@ -18,11 +18,10 @@ class WarEventsCard extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _WarEventsCardState createState() => _WarEventsCardState();
+  WarEventsCardState createState() => WarEventsCardState();
 }
 
-class _WarEventsCardState extends State<WarEventsCard> {
+class WarEventsCardState extends State<WarEventsCard> {
   String filterOption = 'All';
 
   void updateFilterOption(String newOption) {
@@ -35,33 +34,37 @@ class _WarEventsCardState extends State<WarEventsCard> {
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> allAttacks = [];
 
-    if (filterOption == "All" || filterOption == "0") {
+    if (filterOption != "4") {
       for (var member in widget.currentWarInfo.clan.members) {
         member.attacks?.forEach((attack) {
-          allAttacks.add({
-            "attackerName": member.name,
-            "attackerTag": member.tag,
-            "defenderTag": attack.defenderTag,
-            "stars": attack.stars,
-            "destructionPercentage": attack.destructionPercentage,
-            "order": attack.order,
-            "clan": 0
-          });
+          if (filterOption == "All" || filterOption == "5" || attack.stars.toString() == filterOption) {
+            allAttacks.add({
+              "attackerName": member.name,
+              "attackerTag": member.tag,
+              "defenderTag": attack.defenderTag,
+              "stars": attack.stars,
+              "destructionPercentage": attack.destructionPercentage,
+              "order": attack.order,
+              "clan": 0
+            });
+          }
         });
       }
     }
-    if (filterOption == "All" || filterOption == "1") {
+    if (filterOption != "5") {
       for (var member in widget.currentWarInfo.opponent.members) {
         member.attacks?.forEach((attack) {
-          allAttacks.add({
-            "attackerName": member.name,
-            "attackerTag": member.tag,
-            "defenderTag": attack.defenderTag,
-            "stars": attack.stars,
-            "destructionPercentage": attack.destructionPercentage,
-            "order": attack.order,
-            "clan": 1
-          });
+          if (filterOption == "All" || filterOption == "4" || attack.stars.toString() == filterOption) {
+            allAttacks.add({
+              "attackerName": member.name,
+              "attackerTag": member.tag,
+              "defenderTag": attack.defenderTag,
+              "stars": attack.stars,
+              "destructionPercentage": attack.destructionPercentage,
+              "order": attack.order,
+              "clan": 1
+            });
+          }
         });
       }
     }
@@ -77,13 +80,17 @@ class _WarEventsCardState extends State<WarEventsCard> {
               updateSortBy: updateFilterOption,
               sortByOptions: {
                 AppLocalizations.of(context)?.all ?? "All" : 'All',
-                widget.currentWarInfo.clan.name: '0',
-                widget.currentWarInfo.opponent.name: '1'
+                widget.currentWarInfo.clan.name: '5',
+                widget.currentWarInfo.opponent.name: '4',
+                '3 ${AppLocalizations.of(context)?.starsSmall ?? "stars"}': '3',
+                '2 ${AppLocalizations.of(context)?.starsSmall ?? "stars"}': '2',
+                '1 ${AppLocalizations.of(context)?.starSmall ?? "star"}': '1',
+                '0 ${AppLocalizations.of(context)?.starSmall ?? "star"}': '0',
               },
             ),
             Card(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 child: Column(
                   children: List<Widget>.generate(
                     allAttacks.length,
@@ -233,7 +240,7 @@ class _WarEventsCardState extends State<WarEventsCard> {
                                           height: 40,
                                           width: 40,
                                           child: Image.network(
-                                              'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["attackerTag"], widget.playerTab)}.png')),
+                                              'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["defenderTag"], widget.playerTab)}.png')),
                                       SizedBox(width: 4),
                                     ],
                                   ),
@@ -324,74 +331,77 @@ class _WarEventsCardState extends State<WarEventsCard> {
                                                 ?.copyWith(
                                                     color: Theme.of(context)
                                                         .colorScheme
-                                                        .tertiary)),
+                                                        .tertiary),
+                                        ),
                                         Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              ...generateStars(
-                                                  attack["stars"], 13),
-                                            ]),
-                                      ],
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ...generateStars(
+                                                attack["stars"], 13),
+                                          ],
+                                        ),
+                                      ]
                                     ),
                                   ),
                                 ),
                                 Expanded(
-                                    flex: 4,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background,
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      children: [
-                                                        Text(
-                                                            "N°${getPlayerMapPositionByTag(attack["attackerTag"], widget.playerTab)}",
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodySmall
-                                                                ?.copyWith(
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .colorScheme
-                                                                        .tertiary),
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis),
-                                                      ]),
-                                                  Text(
-                                                      "${attack["attackerName"]}",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall,
-                                                      maxLines: 1,
-                                                      overflow: TextOverflow
-                                                          .ellipsis),
-                                                ]),
-                                          ),
-                                          SizedBox(
-                                            height: 40,
-                                            width: 40,
-                                            child: Image.network(
-                                                'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["defenderTag"], widget.playerTab)}.png'),
-                                          ),
-                                          SizedBox(width: 4),
-                                        ],
-                                      ),
-                                    ))
+                                  flex: 4,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .background,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                          "N°${getPlayerMapPositionByTag(attack["attackerTag"], widget.playerTab)}",
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .bodySmall
+                                                              ?.copyWith(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .tertiary),
+                                                          maxLines: 1,
+                                                          overflow:
+                                                              TextOverflow
+                                                                  .ellipsis),
+                                                    ]),
+                                                Text(
+                                                    "${attack["attackerName"]}",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall,
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow
+                                                        .ellipsis),
+                                              ]),
+                                        ),
+                                        SizedBox(
+                                          height: 40,
+                                          width: 40,
+                                          child: Image.network(
+                                              'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["attackerTag"], widget.playerTab)}.png'),
+                                        ),
+                                        SizedBox(width: 4),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
