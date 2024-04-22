@@ -60,7 +60,7 @@ class PlayerInfosCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Wrap(
-                            alignment: WrapAlignment.spaceBetween,
+                            alignment: WrapAlignment.start,
                             spacing: 7.0,
                             runSpacing: -7.0,
                             children: <Widget>[
