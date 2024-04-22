@@ -251,8 +251,8 @@ class CurrentWarInfoCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                width: 85,
-                height: 85,
+                width: 70,
+                height:70,
                 child: Image.network(currentWarInfo.opponent.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
