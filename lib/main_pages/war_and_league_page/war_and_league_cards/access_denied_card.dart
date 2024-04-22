@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class NotInWarCard extends StatefulWidget {
-
+class AccessDeniedCard extends StatefulWidget {
   final String clanName;
   final String clanBadgeUrl;
 
-  NotInWarCard({
+  AccessDeniedCard({
     super.key,
     required this.clanName,
     required this.clanBadgeUrl
   });
 
   @override
-  NotInWarCardState createState() => NotInWarCardState();
+  AccessDeniedCardState createState() => AccessDeniedCardState();
 }
 
-class NotInWarCardState extends State<NotInWarCard> {
+class AccessDeniedCardState extends State<AccessDeniedCard> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,19 +37,19 @@ class NotInWarCardState extends State<NotInWarCard> {
                     height: 70,
                     child: Center(
                       child: Image.network(
-                          widget.clanBadgeUrl,
-                          fit: BoxFit.cover),
+                        widget.clanBadgeUrl,
+                        fit: BoxFit.cover),
                     ),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '${widget.clanName} ${AppLocalizations.of(context)?.isNotInWar ?? "is not in war."}',
+                        '${widget.clanName}${AppLocalizations.of(context)?.warLogIsClosed ?? "'s war log is closed."}',
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        AppLocalizations.of(context)?.askForWar ?? 'Contact a leader or co-leader to start a war.',
+                        AppLocalizations.of(context)?.askForWarLogOpening ?? 'Contact a leader or a co-leader to open the war log.',
                         textAlign: TextAlign.center,
                       ),
                     ],
