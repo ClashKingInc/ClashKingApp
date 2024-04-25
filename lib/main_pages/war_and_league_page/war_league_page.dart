@@ -67,6 +67,7 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                                 MaterialPageRoute(
                                   builder: (context) => CurrentWarInfoScreen(
                                     currentWarInfo: currentWarInfo!,
+                                    discordUser: widget.user.tags,
                                   ),
                                 ),
                               );
@@ -75,7 +76,8 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                               padding: EdgeInsets.symmetric(
                                   vertical: 4.0, horizontal: 8.0),
                               child: CurrentWarInfoCard(
-                                  currentWarInfo: currentWarInfo!, clanTag : widget.clanInfo.tag),
+                                  currentWarInfo: currentWarInfo!, 
+                                  clanTag : widget.clanInfo.tag),
                             ),
                           )
                         else if (warState == "accessDenied")
@@ -96,6 +98,7 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                                     currentLeagueInfo: currentLeagueInfo!,
                                     clanTag: widget.playerStats.clan.tag,
                                     clanInfo: widget.clanInfo,
+                                    discordUser: widget.user.tags,
                                   ),
                                 ),
                               );

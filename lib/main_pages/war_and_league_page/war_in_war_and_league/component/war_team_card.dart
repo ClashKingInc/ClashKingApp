@@ -5,16 +5,18 @@ import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WarTeamCard extends StatelessWidget {
-  const WarTeamCard({
+  WarTeamCard({
     super.key,
     required this.playerTab,
     required this.widget,
     required this.members,
+    required this.discordUser,
   });
 
   final List<PlayerTab> playerTab;
   final CurrentWarInfoScreen widget;
   final List<WarMember> members;
+  final List<String> discordUser;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,13 @@ class WarTeamCard extends StatelessWidget {
     List<Widget> memberWidgets = members.map((member) {
       var bestAttack = member.bestOpponentAttack;
       return Card(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: widget.discordUser.contains(member.tag) ? Colors.green : Colors.transparent,
+            width: 2,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Padding(
             padding: EdgeInsets.all(16),
             child: Column(

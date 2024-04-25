@@ -10,11 +10,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class WarEventsCard extends StatefulWidget {
   final CurrentWarInfo currentWarInfo;
   final List<PlayerTab> playerTab;
+  final List<String> discordUser;
 
   const WarEventsCard({
     super.key,
     required this.currentWarInfo,
     required this.playerTab,
+    required this.discordUser,
   });
 
   @override
@@ -37,7 +39,9 @@ class WarEventsCardState extends State<WarEventsCard> {
     if (filterOption != "4") {
       for (var member in widget.currentWarInfo.clan.members) {
         member.attacks?.forEach((attack) {
-          if (filterOption == "All" || filterOption == "5" || attack.stars.toString() == filterOption) {
+          if (filterOption == "All" ||
+              filterOption == "5" ||
+              attack.stars.toString() == filterOption) {
             allAttacks.add({
               "attackerName": member.name,
               "attackerTag": member.tag,
@@ -54,7 +58,9 @@ class WarEventsCardState extends State<WarEventsCard> {
     if (filterOption != "5") {
       for (var member in widget.currentWarInfo.opponent.members) {
         member.attacks?.forEach((attack) {
-          if (filterOption == "All" || filterOption == "4" || attack.stars.toString() == filterOption) {
+          if (filterOption == "All" ||
+              filterOption == "4" ||
+              attack.stars.toString() == filterOption) {
             allAttacks.add({
               "attackerName": member.name,
               "attackerTag": member.tag,
@@ -73,21 +79,23 @@ class WarEventsCardState extends State<WarEventsCard> {
 
     if (allAttacks.isNotEmpty) {
       return Padding(
-          padding: EdgeInsets.all(8),
-          child: Column(children: [
+        padding: EdgeInsets.all(8),
+        child: Column(
+          children: [
             FilterDropdown(
               sortBy: filterOption,
               updateSortBy: updateFilterOption,
               sortByOptions: {
-                AppLocalizations.of(context)?.all ?? "All" : 'All',
+                AppLocalizations.of(context)?.all ?? "All": 'All',
                 widget.currentWarInfo.clan.name: '5',
                 widget.currentWarInfo.opponent.name: '4',
-                '3 ${AppLocalizations.of(context)?.starsSmall ?? "stars"}': '3',
-                '2 ${AppLocalizations.of(context)?.starsSmall ?? "stars"}': '2',
-                '1 ${AppLocalizations.of(context)?.starSmall ?? "star"}': '1',
-                '0 ${AppLocalizations.of(context)?.starSmall ?? "star"}': '0',
+                generateStars(3, 20): '3',
+                generateStars(2, 20): '2',
+                generateStars(1, 20): '1',
+                generateStars(0, 20): '0',
               },
             ),
+            SizedBox(height: 4),
             Card(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
@@ -97,6 +105,10 @@ class WarEventsCardState extends State<WarEventsCard> {
                     (index) {
                       var attack = allAttacks[index];
                       if (attack["clan"] == 0) {
+                        Color backgroundColor = widget.discordUser.contains(attack["attackerTag"])
+                          ? Colors.green
+                          : Theme.of(context).colorScheme.background;
+                        bool hasBorderAttack = widget.discordUser.contains(attack["attackerTag"]);
                         return Padding(
                           padding: EdgeInsets.only(top: 4, bottom: 4),
                           child: IntrinsicHeight(
@@ -107,9 +119,14 @@ class WarEventsCardState extends State<WarEventsCard> {
                                   flex: 4,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .background,
+                                      color: Theme.of(context).colorScheme.background,
+                                      border: hasBorderAttack
+                                        ? Border(
+                                            top: BorderSide(color: Colors.green, width: 2),
+                                            left: BorderSide(color: Colors.green, width: 2),
+                                            bottom: BorderSide(color: Colors.green, width: 2),
+                                          )
+                                        : null,
                                     ),
                                     child: Row(
                                       crossAxisAlignment:
@@ -163,6 +180,12 @@ class WarEventsCardState extends State<WarEventsCard> {
                                       color: Theme.of(context)
                                           .colorScheme
                                           .background,
+                                      border: hasBorderAttack
+                                        ? Border(
+                                            top: BorderSide(color: Colors.green, width: 2),
+                                            bottom: BorderSide(color: Colors.green, width: 2),
+                                          )
+                                        : null,
                                     ),
                                     child: Column(
                                       mainAxisAlignment:
@@ -195,46 +218,46 @@ class WarEventsCardState extends State<WarEventsCard> {
                                     children: [
                                       RightPointingTriangle(
                                         width: 10,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background,
+                                        color: backgroundColor,
                                       ),
                                       Expanded(
                                         child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    Text(
-                                                        "N°${getPlayerMapPositionByTag(attack["defenderTag"], widget.playerTab)}",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodySmall
-                                                            ?.copyWith(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .colorScheme
-                                                                    .tertiary),
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis),
-                                                  ]),
-                                              Text(
-                                                  getPlayerNameByTag(
-                                                      attack["defenderTag"],
-                                                      widget.playerTab),
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall,
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis),
-                                            ]),
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                    "N°${getPlayerMapPositionByTag(attack["defenderTag"], widget.playerTab)}",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall
+                                                        ?.copyWith(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .tertiary),
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow
+                                                        .ellipsis
+                                                ),
+                                              ],
+                                            ),
+                                            Text(
+                                                getPlayerNameByTag(
+                                                    attack["defenderTag"],
+                                                    widget.playerTab),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
+                                                maxLines: 1,
+                                                overflow:
+                                                    TextOverflow.ellipsis),
+                                          ],
+                                        ),
                                       ),
                                       SizedBox(
                                           height: 40,
@@ -250,6 +273,10 @@ class WarEventsCardState extends State<WarEventsCard> {
                           ),
                         );
                       } else {
+                        Color backgroundColor = widget.discordUser.contains(attack["defenderTag"])
+                          ? Colors.red
+                          : Theme.of(context).colorScheme.background;
+                        bool hasBorderDefense = widget.discordUser.contains(attack["defenderTag"]);
                         return Padding(
                           padding: EdgeInsets.only(top: 4, bottom: 4),
                           child: IntrinsicHeight(
@@ -304,9 +331,7 @@ class WarEventsCardState extends State<WarEventsCard> {
                                       ),
                                       LeftPointingTriangle(
                                         width: 10,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background,
+                                        color: backgroundColor,
                                       ),
                                     ],
                                   ),
@@ -318,20 +343,26 @@ class WarEventsCardState extends State<WarEventsCard> {
                                       color: Theme.of(context)
                                           .colorScheme
                                           .background,
+                                      border: hasBorderDefense
+                                        ? Border(
+                                            top: BorderSide(color: Colors.red, width: 2),
+                                            bottom: BorderSide(color: Colors.red, width: 2),
+                                          )
+                                        : null,
                                     ),
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                            '${attack["destructionPercentage"]}%',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelLarge
-                                                ?.copyWith(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .tertiary),
+                                          '${attack["destructionPercentage"]}%',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelLarge
+                                              ?.copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .tertiary),
                                         ),
                                         Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -340,7 +371,7 @@ class WarEventsCardState extends State<WarEventsCard> {
                                                 attack["stars"], 13),
                                           ],
                                         ),
-                                      ]
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -351,6 +382,13 @@ class WarEventsCardState extends State<WarEventsCard> {
                                       color: Theme.of(context)
                                           .colorScheme
                                           .background,
+                                      border: hasBorderDefense
+                                        ? Border(
+                                            top: BorderSide(color: Colors.red, width: 2),
+                                            right: BorderSide(color: Colors.red, width: 2),
+                                            bottom: BorderSide(color: Colors.red, width: 2),
+                                          )
+                                        : null,
                                     ),
                                     child: Row(
                                       children: [
@@ -377,9 +415,8 @@ class WarEventsCardState extends State<WarEventsCard> {
                                                                       .colorScheme
                                                                       .tertiary),
                                                           maxLines: 1,
-                                                          overflow:
-                                                              TextOverflow
-                                                                  .ellipsis),
+                                                          overflow: TextOverflow
+                                                              .ellipsis),
                                                     ]),
                                                 Text(
                                                     "${attack["attackerName"]}",
@@ -387,8 +424,8 @@ class WarEventsCardState extends State<WarEventsCard> {
                                                         .textTheme
                                                         .bodySmall,
                                                     maxLines: 1,
-                                                    overflow: TextOverflow
-                                                        .ellipsis),
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
                                               ]),
                                         ),
                                         SizedBox(
@@ -412,21 +449,40 @@ class WarEventsCardState extends State<WarEventsCard> {
                 ),
               ),
             ),
-          ]));
+          ],
+        ),
+      );
     } else {
-      return Column(children: [
-        SizedBox(height: 16),
-        Card(
-            child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available'))),
-        SizedBox(height: 32),
-        Image.network(
-          'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
-          height: 250,
-          width: 200,
-        )
-      ]);
+      return Column(
+        children: [
+          SizedBox(height: 8),
+          FilterDropdown(
+            sortBy: filterOption,
+            updateSortBy: updateFilterOption,
+            sortByOptions: {
+              AppLocalizations.of(context)?.all ?? "All": 'All',
+              widget.currentWarInfo.clan.name: '5',
+              widget.currentWarInfo.opponent.name: '4',
+              generateStars(3, 20): '3',
+              generateStars(2, 20): '2',
+              generateStars(1, 20): '1',
+              generateStars(0, 20): '0',
+            },
+          ),
+          SizedBox(height: 16),
+          Card(
+              child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(AppLocalizations.of(context)?.noDataAvailable ??
+                      'No data available'))),
+          SizedBox(height: 32),
+          Image.network(
+            'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
+            height: 250,
+            width: 200,
+          ),
+        ],
+      );
     }
   }
 }
