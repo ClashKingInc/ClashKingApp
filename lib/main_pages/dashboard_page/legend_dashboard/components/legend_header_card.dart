@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_legend_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'dart:ui';
 
 class LegendHeaderCard extends StatelessWidget {
@@ -37,7 +38,7 @@ class LegendHeaderCard extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 10,
+          top: 26,
           bottom: 0,
           left: 10,
           right: 10,
@@ -61,7 +62,7 @@ class LegendHeaderCard extends StatelessWidget {
                                 ?.copyWith(
                                   color: Colors.grey,
                                 )),
-                        SizedBox(height: 16),
+                        SizedBox(height: 10),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -106,81 +107,67 @@ class LegendHeaderCard extends StatelessWidget {
                                       if (dynamicLegendData['rankings']['country_code'] != null)
                                       Chip(
                                         avatar: CircleAvatar(
-                                            backgroundColor: Colors.transparent,
-                                            child: Image.network(
-                                                "https://clashkingfiles.b-cdn.net/country-flags/${dynamicLegendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
+                                          backgroundColor: Colors.transparent,
+                                          child: Image.network(
+                                            "https://clashkingfiles.b-cdn.net/country-flags/${dynamicLegendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
                                         label: Text(
-                                          dynamicLegendData['rankings']
-                                                      ['country_name'] ==
-                                                  null
-                                              ? 'No Country'
-                                              : '${dynamicLegendData['rankings']['country_name']}',
+                                          dynamicLegendData['rankings']['country_name'] == null
+                                            ? 'No Country'
+                                            : '${dynamicLegendData['rankings']['country_name']}',
                                           style: Theme.of(context)
-                                              .textTheme
-                                              .labelMedium
-                                              ?.copyWith(color: Colors.white),
+                                            .textTheme
+                                            .labelMedium
+                                            ?.copyWith(color: Colors.white),
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                           side: BorderSide(
-                                              color: Colors.white,
-                                              width:
-                                                  1), // Customize border color and width
+                                            color: Colors.white,
+                                            width: 1),
                                         ),
                                       ),
                                       if (dynamicLegendData['rankings']['country_code'] != null)
                                       Chip(
                                         avatar: CircleAvatar(
-                                            backgroundColor: Colors.transparent,
-                                            child: Image.network(
-                                                "https://clashkingfiles.b-cdn.net/country-flags/${dynamicLegendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
+                                          backgroundColor: Colors.transparent,
+                                          child: Image.network(
+                                              "https://clashkingfiles.b-cdn.net/country-flags/${dynamicLegendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
                                         label: Text(
-                                          dynamicLegendData['rankings']
-                                                      ['local_rank'] ==
-                                                  null
-                                              ? AppLocalizations.of(context)?.noRank ?? 'No rank'
-                                              : '${dynamicLegendData['rankings']['local_rank']}',
+                                          dynamicLegendData['rankings']['local_rank'] == null
+                                            ? AppLocalizations.of(context)?.noRank ?? 'No rank'
+                                            : '${dynamicLegendData['rankings']['local_rank']}',
                                           style: Theme.of(context)
-                                              .textTheme
-                                              .labelMedium
-                                              ?.copyWith(color: Colors.white),
+                                            .textTheme
+                                            .labelMedium
+                                            ?.copyWith(color: Colors.white),
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                           side: BorderSide(
-                                              color: Colors.white,
-                                              width:
-                                                  1), // Customize border color and width
+                                            color: Colors.white,
+                                            width: 1),
                                         ),
                                       ),
                                       Chip(
                                         avatar: CircleAvatar(
-                                            backgroundColor: Colors
-                                                .transparent, // Set to a suitable color for your design.
-                                            child: Image.network(
-                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")
-                                            // Using Container() as a fallback
-                                            ),
+                                          backgroundColor: Colors.transparent, // Set to a suitable color for your design.
+                                          child: Image.network(
+                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")
+                                        ),
                                         label: Text(
-                                            dynamicLegendData['rankings']
-                                                        ['global_rank'] ==
-                                                    null
-                                                ? AppLocalizations.of(context)?.noRank ?? 'No rank'
-                                                : '${dynamicLegendData['rankings']['global_rank']}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelMedium
-                                                ?.copyWith(
-                                                    color: Colors.white)),
+                                          dynamicLegendData['rankings']['global_rank'] == null
+                                            ? AppLocalizations.of(context)?.noRank ?? 'No rank'
+                                            : NumberFormat('#,###', 'fr_FR').format(dynamicLegendData['rankings']['global_rank']),
+                                          style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium
+                                            ?.copyWith(color: Colors.white)
+                                        ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                           side: BorderSide(
-                                              color: Colors.white,
-                                              width:
-                                                  1), // Customize border color and width
+                                            color: Colors.white,
+                                            width: 1),
                                         ),
                                       ),
                                     ],
@@ -193,8 +180,8 @@ class LegendHeaderCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                
-              ]),
+                ],
+              ),
         ),
         Positioned(
           top: 30,

@@ -79,10 +79,12 @@ class LegendHistoryCard extends StatelessWidget {
                                   label: Text('${item['trophies']}')),
                               Chip(
                                   avatar: CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      child: Image.network(
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
-                                  label: Text('${item['rank']}')),
+                                    backgroundColor: Colors.transparent,
+                                    child: Image.network(
+                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
+                                    label: Text(NumberFormat('#,###', 'fr_FR').format(item['rank']),
+                                  ), 
+                              ),
                               Chip(
                                   avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,

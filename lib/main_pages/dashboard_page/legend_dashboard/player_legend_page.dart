@@ -39,11 +39,8 @@ class LegendScreenState extends State<LegendScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   DateTime selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
-  DateTime selectedMonth = DateTime.now()
-      .toUtc()
-      .subtract(Duration(hours: 5)); // Change month in history tab
-  Map<String, dynamic> dynamicLegendData =
-      {}; // Legend days details (result of API fetchLegendData))
+  DateTime selectedMonth = DateTime.now().toUtc().subtract(Duration(hours: 5)); // Change month in history tab
+  Map<String, dynamic> dynamicLegendData = {}; // Legend days details (result of API fetchLegendData))
   late Future<List<dynamic>> seasonLegendData; // List of EOS trophies
 
   @override
@@ -53,8 +50,7 @@ class LegendScreenState extends State<LegendScreen>
     selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
     selectedMonth = DateTime.now().toUtc().subtract(Duration(hours: 5));
     dynamicLegendData = widget.legendData;
-    seasonLegendData =
-        PlayerLegendSeasonsService.fetchSeasonsData(widget.playerStats.tag);
+    seasonLegendData = PlayerLegendSeasonsService.fetchSeasonsData(widget.playerStats.tag);
   }
 
   @override
@@ -80,8 +76,7 @@ class LegendScreenState extends State<LegendScreen>
       if (selectedMonth.month == 12) {
         selectedMonth = DateTime(selectedMonth.year + 1, 1, selectedMonth.day);
       } else {
-        selectedMonth = DateTime(
-            selectedMonth.year, selectedMonth.month + 1, selectedMonth.day);
+        selectedMonth = DateTime(selectedMonth.year, selectedMonth.month + 1, selectedMonth.day);
       }
     });
   }
@@ -91,8 +86,7 @@ class LegendScreenState extends State<LegendScreen>
       if (selectedMonth.month == 1) {
         selectedMonth = DateTime(selectedMonth.year - 1, 12, selectedMonth.day);
       } else {
-        selectedMonth = DateTime(
-            selectedMonth.year, selectedMonth.month - 1, selectedMonth.day);
+        selectedMonth = DateTime(selectedMonth.year, selectedMonth.month - 1, selectedMonth.day);
       }
     });
   }
@@ -111,8 +105,7 @@ class LegendScreenState extends State<LegendScreen>
             },
             child: SingleChildScrollView(
                 child: Column(children: [
-              LegendHeaderCard(
-                  widget: widget, dynamicLegendData: dynamicLegendData),
+              LegendHeaderCard(widget: widget, dynamicLegendData: dynamicLegendData),
               ScrollableTab(
                 tabBarDecoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
@@ -125,14 +118,11 @@ class LegendScreenState extends State<LegendScreen>
                 },
                 tabs: [
                   Tab(
-                      text: AppLocalizations.of(context)?.byDay ??
-                          "By Day"), // Show Attacks, Defenses and Gear for the selected day
+                      text: AppLocalizations.of(context)?.byDay ?? "By Day"),
                   Tab(
-                      text: AppLocalizations.of(context)?.charts ??
-                          "Charts"), // Show charts of Trophies by month and EOS history
+                      text: AppLocalizations.of(context)?.charts ?? "Charts"),
                   Tab(
-                      text: AppLocalizations.of(context)?.history ??
-                          "History"), // Show EOS history
+                      text: AppLocalizations.of(context)?.history ?? "History"),
                 ],
                 children: [
                   ListTile(
@@ -156,16 +146,13 @@ class LegendScreenState extends State<LegendScreen>
   }
 
   Widget buildLegendTab(Map<String, dynamic> data) {
-    List<Widget> legendEntries =
-        []; // List of widgets to display in the legend tab
-    Map<String, dynamic> legends =
-        data['legends']; // Legend days details (attacks, defenses, gears)
+    List<Widget> legendEntries = [];
+    Map<String, dynamic> legends =  data['legends'];
 
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
 
     if (legends.containsKey(date)) {
-      Map<String, dynamic> details = legends[
-          date]; // Details of the selected day (attacks, defenses, gears)
+      Map<String, dynamic> details = legends[date];
 
       String startTrophies = '0';
       String currentTrophies = "0";
@@ -187,26 +174,22 @@ class LegendScreenState extends State<LegendScreen>
         Map<String, dynamic> lastDefense = defensesList.last;
         currentTrophies = (lastAttack['time'] > lastDefense['time']
                 ? lastAttack['trophies'].toString()
-                : lastDefense['trophies'])
-            .toString();
+                : lastDefense['trophies']).toString();
         Map<String, dynamic> firstAttack = attacksList.first;
         Map<String, dynamic> firstDefense = defensesList.first;
         startTrophies = (firstAttack['time'] < firstDefense['time']
                 ? (firstAttack['trophies'] - firstAttack['change'])
-                : (firstDefense['trophies']) + firstDefense['change'])
-            .toString();
+                : (firstDefense['trophies']) + firstDefense['change']) .toString();
       } else if (attacksList.isNotEmpty) {
         Map<String, dynamic> lastAttack = attacksList.last;
         currentTrophies = lastAttack['trophies'].toString();
         Map<String, dynamic> firstAttack = attacksList.first;
-        startTrophies =
-            (firstAttack['trophies'] - firstAttack['change']).toString();
+        startTrophies = (firstAttack['trophies'] - firstAttack['change']).toString();
       } else if (defensesList.isNotEmpty) {
         Map<String, dynamic> lastDefense = defensesList.last;
         currentTrophies = lastDefense['trophies'].toString();
         Map<String, dynamic> firstDefense = defensesList.first;
-        startTrophies =
-            (firstDefense['trophies'] + firstDefense['change']).toString();
+        startTrophies = (firstDefense['trophies'] + firstDefense['change']).toString();
       }
 
       Map<String, dynamic> attacksStats = calculateStats(attacksList);
