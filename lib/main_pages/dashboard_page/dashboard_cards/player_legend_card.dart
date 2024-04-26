@@ -67,7 +67,7 @@ class PlayerLegendCard extends StatelessWidget {
                           ),
                           Positioned(
                             right: 30,
-                            bottom: 44, //Tp verify later
+                            bottom: 42,
                             child: Text(
                               playerStats.trophies.toString(),
                               style: Theme.of(context)

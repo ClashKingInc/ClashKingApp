@@ -17,6 +17,7 @@ class LegendUsedGearCard extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: Card(
+        margin: EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 8),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

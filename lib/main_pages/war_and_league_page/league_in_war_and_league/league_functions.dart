@@ -4,9 +4,7 @@ import 'package:clashkingapp/api/current_league_info.dart';
 Widget buildWarsTab(BuildContext context) {
   return Column(
     children: [
-      ListTile(
-        title: Text('Wars', style: Theme.of(context).textTheme.titleLarge),
-      ),
+      Text('Wars', style: Theme.of(context).textTheme.titleLarge),
     ],
   );
 }

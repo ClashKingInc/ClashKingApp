@@ -16,11 +16,19 @@ class MyHomePage extends StatefulWidget {
 class MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   Future<void>? _initializeAccountsFuture;
+  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
     _initializeAccountsFuture = _initializeAccounts();
+    _pageController = PageController(initialPage: _selectedIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   Future<void> _initializeAccounts() async {
@@ -28,10 +36,16 @@ class MyHomePageState extends State<MyHomePage> {
     await appState.fetchPlayerAccounts(appState.user!);
   }
 
-  void _onItemTapped(int index) {
+  void _onPageChanged(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void _onItemTapped(int index) {
+    if (_pageController.hasClients) {
+      _pageController.jumpToPage(index);
+    }
   }
 
   @override
@@ -71,12 +85,10 @@ class MyHomePageState extends State<MyHomePage> {
             ];
 
             return Scaffold(
-              body: Center(
-                child: IndexedStack(
-                  index: _selectedIndex,
-                  children:
-                      widgetOptions, // Use widgetOptions here instead of _widgetOptions
-                ),
+              body: PageView(
+                controller: _pageController,
+                onPageChanged: _onPageChanged,
+                children: widgetOptions,
               ),
               bottomNavigationBar: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed, 

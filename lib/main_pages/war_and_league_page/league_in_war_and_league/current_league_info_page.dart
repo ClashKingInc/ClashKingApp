@@ -234,15 +234,9 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                 Tab(text: AppLocalizations.of(context)?.member ?? "Members")
               ],
               children: [
-                ListTile(
-                  title: buildRoundsTab(context, widget.currentLeagueInfo, widget.discordUser)
-                ),
-                ListTile(
-                  title: buildTeamsTab(context, widget.currentLeagueInfo, totalStarsAndPercentage, sortTeamsBy, updateSortTeamsBy)
-                ),
-                ListTile(
-                  title: buildMembersTab(context, widget.currentLeagueInfo, widget.clanTag, sortMembersBy, updateSortMembersBy)
-                ),
+                buildRoundsTab(context, widget.currentLeagueInfo, widget.discordUser),
+                buildTeamsTab(context, widget.currentLeagueInfo, totalStarsAndPercentage, sortTeamsBy, updateSortTeamsBy),
+                buildMembersTab(context, widget.currentLeagueInfo, widget.clanTag, sortMembersBy, updateSortMembersBy),
               ],
             ),
           ],

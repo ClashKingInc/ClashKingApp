@@ -117,32 +117,27 @@ class LegendScreenState extends State<LegendScreen>
                   setState(() {});
                 },
                 tabs: [
-                  Tab(
-                      text: AppLocalizations.of(context)?.byDay ?? "By Day"),
-                  Tab(
-                      text: AppLocalizations.of(context)?.charts ?? "Charts"),
-                  Tab(
-                      text: AppLocalizations.of(context)?.history ?? "History"),
+                  Tab(text: AppLocalizations.of(context)?.byDay ?? "By Day"),
+                  Tab(text: AppLocalizations.of(context)?.charts ?? "Charts"),
+                  Tab(text: AppLocalizations.of(context)?.history ?? "History"),
                 ],
                 children: [
-                  ListTile(
-                    title: dynamicLegendData["legends"].isNotEmpty
-                        ? buildLegendTab(dynamicLegendData)
-                        : Center(child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available')),
-                  ),
-                  ListTile(
-                    title: dynamicLegendData["legends"].isNotEmpty
-                        ? buildChartsStats(dynamicLegendData, seasonLegendData)
-                        : Center(child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available')),
-                  ),
-                  ListTile(
-                    title: dynamicLegendData["legends"].isNotEmpty
-                        ? buildHistoryTab(seasonLegendData)
-                        : Center(child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available')),
-                  ),
+                  dynamicLegendData["legends"].isNotEmpty
+                    ? buildLegendTab(dynamicLegendData)
+                    : Center(child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available')),
+                  dynamicLegendData["legends"].isNotEmpty
+                    ? buildChartsStats(dynamicLegendData, seasonLegendData)
+                    : Center(child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available')),
+                  dynamicLegendData["legends"].isNotEmpty
+                    ? buildHistoryTab(seasonLegendData)
+                    : Center(child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available')),
                 ],
-              )
-            ]))));
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget buildLegendTab(Map<String, dynamic> data) {
@@ -197,41 +192,40 @@ class LegendScreenState extends State<LegendScreen>
 
       legendEntries.add(
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
           child: Column(
             children: [
-              // Display the first card with start and end trophies of the day
               LegendTrophiesStartEndCard(
-                  context: context,
-                  startTrophies: startTrophies,
-                  currentTrophies: currentTrophies),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: LegendOffenseDefenseCard(
-                        title:
-                            AppLocalizations.of(context)?.attacks ?? "Attacks",
-                        list: attacksList,
-                        context: context,
-                        stats: attacksStats,
-                        plusMinus: "+",
-                        icon:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
-                  ),
-                  Expanded(
-                    child: LegendOffenseDefenseCard(
-                        title: AppLocalizations.of(context)?.defenses ??
-                            "Defenses",
-                        list: defensesList,
-                        context: context,
-                        stats: defensesStats,
-                        plusMinus: "-",
-                        icon:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield_Arrow.png"),
-                  ),
-                ],
+                context: context,
+                startTrophies: startTrophies,
+                currentTrophies: currentTrophies
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: LegendOffenseDefenseCard(
+                          title: AppLocalizations.of(context)?.attacks ?? "Attacks",
+                          list: attacksList,
+                          context: context,
+                          stats: attacksStats,
+                          plusMinus: "+",
+                          icon: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
+                    ),
+                    Expanded(
+                      child: LegendOffenseDefenseCard(
+                          title: AppLocalizations.of(context)?.defenses ?? "Defenses",
+                          list: defensesList,
+                          context: context,
+                          stats: defensesStats,
+                          plusMinus: "-",
+                          icon: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield_Arrow.png"),
+                    ),
+                  ],
+                ),
               ),
               _buildGearSection("Heroes Gears", attacksList),
             ],
@@ -241,6 +235,7 @@ class LegendScreenState extends State<LegendScreen>
     }
 
     return Column(children: <Widget>[
+      SizedBox(height: 10),
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -249,14 +244,14 @@ class LegendScreenState extends State<LegendScreen>
             height: 30,
             child: IconButton(
               icon: Icon(Icons.arrow_back,
-                  color: Theme.of(context).colorScheme.onBackground, size: 16),
+                color: Theme.of(context).colorScheme.onBackground, size: 16),
               onPressed: decrementDate,
             ),
           ),
           Text(
             DateFormat('dd MMMM yyyy',
-                    Localizations.localeOf(context).languageCode)
-                .format(selectedDate),
+                Localizations.localeOf(context).languageCode)
+              .format(selectedDate),
             style: Theme.of(context).textTheme.labelLarge,
           ),
           SizedBox(
@@ -264,20 +259,22 @@ class LegendScreenState extends State<LegendScreen>
             height: 30,
             child: IconButton(
               icon: Icon(Icons.arrow_forward,
-                  color: Theme.of(context).colorScheme.onBackground, size: 16),
+                color: Theme.of(context).colorScheme.onBackground, size: 16),
               onPressed: incrementDate,
             ),
           ),
+          SizedBox(width: 16)
         ],
       ),
       if (legendEntries.isEmpty)
         Column(children: [
-          SizedBox(height: 16),
+          SizedBox(height: 10),
           Card(
+            margin: EdgeInsets.only(bottom: 8, left: 16, right: 16),
               child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available'))),
-          SizedBox(height: 16),
+                padding: EdgeInsets.all(16),
+                child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available'))),
+          SizedBox(height: 10),
           Image.network(
             'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
             height: 350,
@@ -292,7 +289,6 @@ class LegendScreenState extends State<LegendScreen>
   Widget _buildGearSection(String title, List<dynamic> list) {
     Map<String, int> itemCounts = {};
 
-    // Count the number of time each gear was used (attacks only)
     for (var item in list) {
       if (item is Map) {
         List<dynamic> heroGear = item['hero_gear'] ?? [];
@@ -338,6 +334,7 @@ class LegendScreenState extends State<LegendScreen>
   Widget buildChartsStats(
       Map<String, dynamic> legendData, Future<List<dynamic>> seasonLegendData) {
     return Column(children: [
+      SizedBox(height: 10),
       buildTrophiesByMonthChart(legendData),
       buildLegendHistoryChart(seasonLegendData)
     ]);
@@ -399,6 +396,7 @@ class LegendScreenState extends State<LegendScreen>
         width: double.infinity,
         height: 500,
         child: Card(
+          margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
           elevation: 4,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -535,6 +533,7 @@ class LegendScreenState extends State<LegendScreen>
         width: double.infinity,
         height: 500,
         child: Card(
+          margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
           elevation: 4,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -609,7 +608,7 @@ class LegendScreenState extends State<LegendScreen>
               return FlSpot(x, y); // Use the timestamp as x value
             }).toList();
 
-// Sort by the timestamp in ascending order (from the earliest date to the latest)
+            // Sort by the timestamp in ascending order (from the earliest date to the latest)
             spots.sort((a, b) => a.x.compareTo(b.x));
 
             if (spots.isNotEmpty) {
@@ -630,6 +629,7 @@ class LegendScreenState extends State<LegendScreen>
                 width: double.infinity,
                 height: 500,
                 child: Card(
+                  margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
@@ -744,6 +744,7 @@ class LegendScreenState extends State<LegendScreen>
                 width: double.infinity,
                 height: 500,
                 child: Card(
+                  margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
