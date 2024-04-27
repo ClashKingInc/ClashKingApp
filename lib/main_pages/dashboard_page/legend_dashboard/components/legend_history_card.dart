@@ -11,6 +11,8 @@ class LegendHistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+
     return Column(
       children: [
         SizedBox(height: 10),
@@ -28,7 +30,7 @@ class LegendHistoryCard extends StatelessWidget {
                         children: <Widget>[
                           SizedBox(
                             height: 90,
-                            width: 80,
+                            width: 100,
                             child: Stack(
                               children: <Widget>[
                                 Center(
@@ -40,12 +42,12 @@ class LegendHistoryCard extends StatelessWidget {
                                 Align(
                                   alignment: Alignment(0, -0.1),
                                   child: Text(
-                                    DateFormat('MMMM\nyyyy').format(
-                                      DateTime(
-                                        int.parse(
-                                            item['season'].split('-')[0]),
-                                        int.parse(
-                                            item['season'].split('-')[1]),
+                                    capitalize(
+                                      DateFormat('MMMM\nyyyy', Localizations.localeOf(context).languageCode).format(
+                                        DateTime(
+                                          int.parse(item['season'].split('-')[0]),
+                                          int.parse(item['season'].split('-')[1]),
+                                        ),
                                       ),
                                     ),
                                     style: Theme.of(context)

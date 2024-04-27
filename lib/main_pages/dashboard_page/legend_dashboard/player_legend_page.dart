@@ -94,17 +94,18 @@ class LegendScreenState extends State<LegendScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: RefreshIndicator(
-            onRefresh: () {
-              return PlayerLegendService.fetchLegendData(widget.playerStats.tag)
-                  .then((data) {
-                setState(() {
-                  dynamicLegendData = data;
-                });
-              });
-            },
-            child: SingleChildScrollView(
-                child: Column(children: [
+      body: RefreshIndicator(
+        onRefresh: () {
+          return PlayerLegendService.fetchLegendData(widget.playerStats.tag)
+              .then((data) {
+            setState(() {
+              dynamicLegendData = data;
+            });
+          });
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
               LegendHeaderCard(widget: widget, dynamicLegendData: dynamicLegendData),
               ScrollableTab(
                 tabBarDecoration: BoxDecoration(
@@ -227,7 +228,8 @@ class LegendScreenState extends State<LegendScreen>
                   ],
                 ),
               ),
-              _buildGearSection("Heroes Gears", attacksList),
+              if (attacksList.isNotEmpty)
+                _buildGearSection("Heroes Gears", attacksList),
             ],
           ),
         ),
@@ -316,7 +318,10 @@ class LegendScreenState extends State<LegendScreen>
       future: data,
       builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Container(
+            margin: EdgeInsets.only(top: 200),
+            child: CircularProgressIndicator(),
+          );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
@@ -398,15 +403,12 @@ class LegendScreenState extends State<LegendScreen>
         child: Card(
           margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
           elevation: 4,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
-            padding: const EdgeInsets.only(
-                left: 10.0, right: 20.0, top: 10.0, bottom: 10.0),
+            padding: const EdgeInsets.only(left: 10.0, right: 20.0, top: 10.0, bottom: 10.0),
             child: Column(children: [
               Text(
-                  AppLocalizations.of(context)?.trophiesByMonth ??
-                      "Trophies by Month",
+                  AppLocalizations.of(context)?.trophiesByMonth ?? "Trophies by Month",
                   style: Theme.of(context).textTheme.bodyMedium),
               SizedBox(height: 16),
               Expanded(
@@ -591,7 +593,10 @@ class LegendScreenState extends State<LegendScreen>
       future: seasonLegendData,
       builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Container(
+            margin: EdgeInsets.only(top: 200),
+            child: CircularProgressIndicator(),
+          );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
