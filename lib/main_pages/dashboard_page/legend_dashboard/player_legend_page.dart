@@ -237,10 +237,45 @@ class LegendScreenState extends State<LegendScreen>
     }
 
     return Column(children: <Widget>[
-      SizedBox(height: 10),
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          SizedBox(width: 16),
+          IconButton(
+            icon: Icon(
+              Icons.calendar_today,
+              color: Theme.of(context).colorScheme.onBackground,
+              size: 16
+            ),
+            onPressed: () async {
+              final DateTime? picked = await showDatePicker(
+                context: context,
+                initialDate: selectedDate,
+                firstDate: DateTime(2018, 8),
+                lastDate: DateTime(2200),
+                builder: (BuildContext context, Widget? child) {
+                  return Theme(
+                    data: ThemeData(
+                      colorScheme: Theme.of(context).colorScheme.copyWith(
+                        primary: Theme.of(context).colorScheme.secondary, // Rond et boutons en bas
+                        onPrimary: Theme.of(context).colorScheme.onPrimary, // intérieur du jour sélectionné
+                        surface: Theme.of(context).colorScheme.background, // fond du calendrier mais en bizarre
+                        onSurface: Theme.of(context).colorScheme.onSurface, // Chiffres du calendrier + sélection année + manu de défilement mois
+                      ),
+                      dialogBackgroundColor: Theme.of(context).colorScheme.onPrimary, // wtf
+                    ),
+                    child: child!,
+                  );
+                },
+              );
+              if (picked != null && picked != selectedDate) {
+                setState(() {
+                  selectedDate = picked;
+                });
+              }
+            },
+          ),
+          Spacer(),
           SizedBox(
             width: 30,
             height: 30,
@@ -270,7 +305,6 @@ class LegendScreenState extends State<LegendScreen>
       ),
       if (legendEntries.isEmpty)
         Column(children: [
-          SizedBox(height: 10),
           Card(
             margin: EdgeInsets.only(bottom: 8, left: 16, right: 16),
               child: Padding(
@@ -537,11 +571,9 @@ class LegendScreenState extends State<LegendScreen>
         child: Card(
           margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
           elevation: 4,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
-            padding: const EdgeInsets.only(
-                left: 10.0, right: 20.0, top: 20.0, bottom: 10.0),
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0, bottom: 10.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
