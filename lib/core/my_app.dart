@@ -229,7 +229,7 @@ class ThemeNotifier with ChangeNotifier {
   }
 }
 
-class MyAppState extends ChangeNotifier {
+class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   PlayerAccounts? playerAccounts;
   PlayerAccountInfo? playerStats;
   ClanInfo? clanInfo;
@@ -239,11 +239,19 @@ class MyAppState extends ChangeNotifier {
   ValueNotifier<String?> selectedTag = ValueNotifier<String?>(null);
 
   MyAppState() {
+    WidgetsBinding.instance.addObserver(this);
     if (selectedTag.value != null) {
       selectedTag.value = user!.tags.first;
       selectedTag.addListener(reloadData);
     }
     _loadLanguage();
+  }
+
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   Locale _locale = Locale('en');
@@ -282,9 +290,11 @@ class MyAppState extends ChangeNotifier {
 
     // Call the function immediately
     await update();
+    print('Widget updated at ${DateTime.now()}');
 
     // Then call it every minute
-    Timer.periodic(Duration(minutes : 15), (Timer t) async {
+    Timer.periodic(Duration(minutes: 15), (Timer t) async {
+      print('Updating widget at ${DateTime.now()}');
       await update();
     });
   }
@@ -356,10 +366,20 @@ class MyAppState extends ChangeNotifier {
               (element) => element.clan.tag == playerStats?.clan.tag);
         }
       }
-      updateWidget();
-      notifyListeners();
     }
   }
+
+  @override
+void didChangeAppLifecycleState(AppLifecycleState state) {
+  super.didChangeAppLifecycleState(state);
+  print('App lifecycle state updated: $state');
+  if (state == AppLifecycleState.resumed) {
+    print('App is in the foreground');
+  } else if (state == AppLifecycleState.paused) {
+    print('App is in the background');
+    updateWidget();
+  }
+}
 
   // Assume this method exists and fetches player stats correctly
   Future<void> fetchPlayerAccounts(DiscordUser user) async {
