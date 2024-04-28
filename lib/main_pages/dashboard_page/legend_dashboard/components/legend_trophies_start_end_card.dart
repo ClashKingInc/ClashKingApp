@@ -16,6 +16,7 @@ class LegendTrophiesStartEndCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.only(left: 8, right: 8, bottom: 4),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Column(
           children: [

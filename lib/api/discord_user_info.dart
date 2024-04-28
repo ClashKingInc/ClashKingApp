@@ -31,7 +31,12 @@ class DiscordUser {
       globalName: json['global_name'],
       language: json['locale'],
     );
-  }  
+  }
+
+  @override
+  String toString() {
+    return 'DiscordUser{id: $id, username: $username, avatar: $avatar, email: $email, globalName: $globalName, language: $language, tags: $tags, selectedTagDetails: $selectedTagDetails}';
+  }
 }
 
 Future<DiscordUser> fetchDiscordUser(String accessToken) async {

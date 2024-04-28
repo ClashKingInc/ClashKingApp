@@ -38,12 +38,6 @@ class CurrentWarInfoCard extends StatelessWidget {
     );
   }
 
-  Widget _privateWarLog(BuildContext context) {
-    return Center(
-        child: Text(
-            AppLocalizations.of(context)?.warLogClosed ?? 'War log closed'));
-  }
-
   Widget _warEnded(BuildContext context, String clanTag) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -251,8 +245,8 @@ class CurrentWarInfoCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                width: 85,
-                height: 85,
+                width: 70,
+                height:70,
                 child: Image.network(currentWarInfo.opponent.badgeUrls.large,
                     fit: BoxFit.cover),
               ),

@@ -174,58 +174,54 @@ class StatsScreenState extends State<StatsScreen>
                 Tab(text: AppLocalizations.of(context)!.builderBase),
               ],
               children: [
-                ListTile(
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 10),
-                      buildItemSection(
-                          widget.playerStats.heroes,
-                          'hero',
-                          AppLocalizations.of(context)?.heroes ?? 'Heroes'),
-                      buildItemSection(
-                          widget.playerStats.equipments,
-                          'gear',
-                          AppLocalizations.of(context)?.equipment ?? 'Gears'),
-                      buildItemSection(
-                          widget.playerStats.troops,
-                          'troop',
-                          AppLocalizations.of(context)?.troops ?? 'Troops'),
-                      buildItemSection(
-                          widget.playerStats.troops,
-                          'super-troop',
-                          AppLocalizations.of(context)?.superTroops ??'Super Troops'),
-                      buildItemSection(
-                          widget.playerStats.troops,
-                          'pet',
-                          AppLocalizations.of(context)?.pets ?? 'Pets'),
-                      buildItemSection(
-                          widget.playerStats.troops,
-                          'siege-machine',
-                          AppLocalizations.of(context)?.siegeMachines ?? 'Siege Machine'),
-                      buildItemSection(
-                          widget.playerStats.spells,
-                          'spell',
-                          AppLocalizations.of(context)?.spells ?? 'Spells'),
-                    ],
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 10),
+                    buildItemSection(
+                      widget.playerStats.heroes,
+                      'hero',
+                      AppLocalizations.of(context)?.heroes ?? 'Heroes'),
+                    buildItemSection(
+                      widget.playerStats.equipments,
+                      'gear',
+                      AppLocalizations.of(context)?.equipment ?? 'Gears'),
+                    buildItemSection(
+                      widget.playerStats.troops,
+                      'troop',
+                      AppLocalizations.of(context)?.troops ?? 'Troops'),
+                    buildItemSection(
+                      widget.playerStats.troops,
+                      'super-troop',
+                      AppLocalizations.of(context)?.superTroops ??'Super Troops'),
+                    buildItemSection(
+                      widget.playerStats.troops,
+                      'pet',
+                      AppLocalizations.of(context)?.pets ?? 'Pets'),
+                    buildItemSection(
+                      widget.playerStats.troops,
+                      'siege-machine',
+                      AppLocalizations.of(context)?.siegeMachines ?? 'Siege Machine'),
+                    buildItemSection(
+                      widget.playerStats.spells,
+                      'spell',
+                      AppLocalizations.of(context)?.spells ?? 'Spells'),
+                  ],
                 ),
-
                 // Builder Base
-                ListTile(
-                  title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 10),
-                        buildItemSection(
-                            widget.playerStats.heroes,
-                            'bb-hero',
-                            AppLocalizations.of(context)?.heroes ?? 'Heroes'),
-                        buildItemSection(
-                            widget.playerStats.troops,
-                            'bb-troop',
-                            AppLocalizations.of(context)?.troops ?? 'Troops'),
-                      ]),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 10),
+                    buildItemSection(
+                      widget.playerStats.heroes,
+                      'bb-hero',
+                      AppLocalizations.of(context)?.heroes ?? 'Heroes'),
+                    buildItemSection(
+                      widget.playerStats.troops,
+                      'bb-troop',
+                      AppLocalizations.of(context)?.troops ?? 'Troops'),
+                  ]
                 ),
               ],
             ),
@@ -299,7 +295,7 @@ class StatsScreenState extends State<StatsScreen>
     });
 
     return Card(
-        margin: EdgeInsets.only(bottom: 30),
+        margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
         elevation: 4,
         child: Padding(
             padding: EdgeInsets.only(bottom: 16, top: 8, left: 8, right: 8),
@@ -320,8 +316,9 @@ class StatsScreenState extends State<StatsScreen>
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           TextSpan(
-                            text:
-                                '${completionPercentage.toStringAsFixed(2)}%',
+                            text: completionPercentage % 1 == 0
+                              ? '${completionPercentage.toInt()}%'
+                              : '${completionPercentage.toStringAsFixed(2)}%',
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ],
@@ -482,7 +479,9 @@ class StatsScreenState extends State<StatsScreen>
                   ),
                 ),
               ],
-            )));
+            ),
+          ),
+        );
   }
 
   List<Widget> buildAllHallChips() {

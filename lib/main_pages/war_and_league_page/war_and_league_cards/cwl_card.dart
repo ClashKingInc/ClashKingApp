@@ -13,7 +13,8 @@ class CwlCard extends StatefulWidget {
       {super.key,
       required this.currentLeagueInfo,
       required this.clanTag,
-      required this.clanInfo});
+      required this.clanInfo,
+  });
 
   @override
   CwlCardState createState() => CwlCardState();

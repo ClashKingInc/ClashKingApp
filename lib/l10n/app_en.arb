@@ -89,7 +89,9 @@
     "warEnded" : "War ended",
     "preparation" : "Preparation",
     "isNotInWar" : "is not in war.",
+    "warLogIsClosed" : "'s war log is closed.",
     "askForWar" : "Contact a leader or a co-leader to start a war.",
+    "askForWarLogOpening" : "Contact a leader or a co-leader to open the war log.",
     "warLogClosed" : "War log closed.",
     "rounds" : "Rounds",
 
