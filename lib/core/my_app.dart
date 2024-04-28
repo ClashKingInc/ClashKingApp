@@ -17,11 +17,22 @@ import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 
+@pragma("vm:entry-point")
+FutureOr<void> backgroundCallback(Uri? data) async {
+  // Assuming MyAppState is available and correctly managing state
+  WidgetsFlutterBinding.ensureInitialized();
+  final myAppState = MyAppState();
+  if (data != null) {
+    await myAppState.initializeFromBackground(data);
+  }
+}
+
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    HomeWidget.registerInteractivityCallback(backgroundCallback);
     return ChangeNotifierProvider(
         create: (context) => MyAppState(),
         child: Consumer<MyAppState>(builder: (context, appState, child) {
@@ -237,6 +248,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   DiscordUser? user;
   Future<void>? initializeUserFuture;
   ValueNotifier<String?> selectedTag = ValueNotifier<String?>(null);
+  String? clanTag;
 
   MyAppState() {
     WidgetsBinding.instance.addObserver(this);
@@ -271,20 +283,27 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   Locale get locale => _locale;
 
+  Future<void> initializeFromBackground(Uri data) async {
+    // Process the data or update the widget
+    print('Processing data in background: $data');
+    updateWidget();
+  }
+
   void updateWidget() async {
     // Function to update the widget
     Future<void> update() async {
-      if (playerStats != null) {
-        final warInfo = await checkCurrentWar(playerStats!);
-        print('War info at : $warInfo');
-        // Send data to the widget
-        await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
-        // Request the Home Widget to update
-        await HomeWidget.updateWidget(
-          name: 'WarAppWidgetProvider',
-          androidName: 'WarAppWidgetProvider',
-        );
+      if (clanTag == null) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        clanTag = prefs.getString('clanTag');
       }
+      final warInfo = await checkCurrentWar(clanTag!);
+      // Send data to the widget
+      await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
+      // Request the Home Widget to update
+      await HomeWidget.updateWidget(
+        name: 'WarAppWidgetProvider',
+        androidName: 'WarAppWidgetProvider',
+      );
     }
 
     // Call the function immediately
@@ -298,16 +317,16 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     });
   }
 
-  Future<String> checkCurrentWar(PlayerAccountInfo playerStats) async {
+  Future<String> checkCurrentWar(String clanTag) async {
     final responseWar = await http.get(
       Uri.parse(
-          'https://api.clashking.xyz/v1/clans/${playerStats.clan.tag.replaceAll('#', '%23')}/currentwar'),
+          'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar'),
     );
 
     if (responseWar.statusCode == 200) {
       var decodedResponse = jsonDecode(utf8.decode(responseWar.bodyBytes));
       if (decodedResponse["state"] != "notInWar") {
-        var teamSize = decodedResponse["teamSize"]*2;
+        var teamSize = decodedResponse["teamSize"] * 2;
         var state = decodedResponse["state"];
         var time = "";
 
@@ -347,8 +366,10 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
         // Create a Map object with the required fields
         var result = {
+          "updatedAt":
+              "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
           "state": time,
-          "score" : score,
+          "score": score,
           "clan": {
             "name": clanName,
             "badgeUrlMedium": clanBadgeUrlMedium,
@@ -380,6 +401,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     if (selectedTag.value != null) {
       playerStats = playerAccounts?.playerAccountInfo
           .firstWhere((element) => element.tag == selectedTag.value);
+      clanTag = playerStats?.clan.tag;
       clanInfo = playerAccounts?.clanInfo
           .firstWhere((element) => element.tag == playerStats?.clan.tag);
 
@@ -396,18 +418,9 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
               (element) => element.clan.tag == playerStats?.clan.tag);
         }
       }
-    }
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    print('App lifecycle state updated: $state');
-    if (state == AppLifecycleState.resumed) {
-      print('App is in the foreground');
-    } else if (state == AppLifecycleState.paused) {
-      print('App is in the background');
-      updateWidget();
+      
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('clanTag', clanTag!);
     }
   }
 

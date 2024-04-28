@@ -1,17 +1,16 @@
 package com.example.clashkingapp
 
 import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.SharedPreferences
-import android.widget.RemoteViews
-import com.example.clashkingapp.R
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Log
+import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import es.antonborri.home_widget.HomeWidgetProvider
 import org.json.JSONObject
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -27,6 +26,7 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
     private fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, widgetData: SharedPreferences) {
         val views = RemoteViews(context.packageName, R.layout.widget_layout)
 
+        println("Widget Data: $widgetData")
         // Get the war info from SharedPreferences
         val warInfoJson = widgetData.getString("warInfo", null)
         if (warInfoJson != null && warInfoJson != "notInWar") {
@@ -38,6 +38,9 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
 
         // Get war status
         val warStatus = warInfo.optString("state", "notInWar")
+
+        // Get updated time
+        val updatedTime = warInfo.optString("updatedAt", "")
 
         // Get the clan and opponent info
         val clanInfo = warInfo.getJSONObject("clan")
@@ -64,6 +67,14 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
         views.setTextViewText(R.id.clan_attacks, clanAttacks.toString())
         views.setTextViewText(R.id.opponent_percent, opponentPercent.toString())
         views.setTextViewText(R.id.opponent_attacks, opponentAttacks.toString())
+        views.setTextViewText(R.id.text_update_time, updatedTime)
+
+        // Background callback
+        val backgroundIntent = HomeWidgetBackgroundIntent.getBroadcast(
+            context,
+            Uri.parse("warWidget://refreshClicked")
+        )
+        views.setOnClickPendingIntent(R.id.refresh_icon, backgroundIntent)
 
 
         // Load the images from the URLs into the ImageViews
