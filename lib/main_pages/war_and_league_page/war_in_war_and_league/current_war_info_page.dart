@@ -7,6 +7,7 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_leagu
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_statistics_card.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_events_card.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_team_card.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_calculator_card.dart';
 
 class PlayerTab {
   String tag;
@@ -19,8 +20,9 @@ class PlayerTab {
 
 class CurrentWarInfoScreen extends StatefulWidget {
   final CurrentWarInfo currentWarInfo;
+  final List<String> discordUser;
 
-  CurrentWarInfoScreen({super.key, required this.currentWarInfo});
+  CurrentWarInfoScreen({super.key, required this.currentWarInfo, required this.discordUser});
 
   @override
   CurrentWarInfoScreenState createState() => CurrentWarInfoScreenState();
@@ -60,37 +62,46 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-            child: Column(children: [
-      WarHeader(widget: widget),
-      ScrollableTab(
-          tabBarDecoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          labelColor: Theme.of(context).colorScheme.onBackground,
-          unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
-          onTap: (value) {
-            print('Tab $value selected');
-          },
-          tabs: [
-            Tab(text: AppLocalizations.of(context)?.statistics ?? 'Statistics'),
-            Tab(text: AppLocalizations.of(context)?.events ?? 'Events'),
-            Tab(text: AppLocalizations.of(context)?.team ?? 'Teams')
-          ],
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            Padding(
-                padding: EdgeInsets.all(8),
-                child:
-                    WarStatisticsCard(currentWarInfo: widget.currentWarInfo)),
-            WarEventsCard(
-                    currentWarInfo: widget.currentWarInfo,
-                    playerTab: playerTab),
-            Padding(padding: EdgeInsets.all(8), child: buildTeamsTab(context)),
-          ])
-    ])));
+            WarHeader(widget: widget),
+            ScrollableTab(
+              tabBarDecoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              labelColor: Theme.of(context).colorScheme.onBackground,
+              unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
+              onTap: (value) {
+                print('Tab $value selected');
+              },
+              tabs: [
+                Tab(text: AppLocalizations.of(context)?.statistics ?? 'Statistics'),
+                Tab(text: AppLocalizations.of(context)?.events ?? 'Events'),
+                Tab(text: AppLocalizations.of(context)?.team ?? 'Teams')
+              ],
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      WarStatisticsCard(currentWarInfo: widget.currentWarInfo),
+                      SizedBox(height: 10),
+                      WarCalculatorCard(teamSize: widget.currentWarInfo.teamSize)
+                    ],
+                  ),
+                ),
+                WarEventsCard(currentWarInfo: widget.currentWarInfo, playerTab: playerTab, discordUser: widget.discordUser),
+                Padding(padding: EdgeInsets.all(8), child: buildTeamsTab(context, discordUser: widget.discordUser)),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
-  Widget buildTeamsTab(BuildContext context) {
+  Widget buildTeamsTab(BuildContext context, {List<String>? discordUser}) {
     return Column(
       children: [
         CustomSlidingSegmentedControl<int>(
@@ -126,16 +137,15 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
             });
           },
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 4),
         _currentSegment == 1
-            ? buildMemberListView(widget.currentWarInfo.clan.members, context)
-            : buildMemberListView(
-                widget.currentWarInfo.opponent.members, context),
+          ? buildMemberListView(widget.currentWarInfo.clan.members, context, widget.discordUser)
+          : buildMemberListView(widget.currentWarInfo.opponent.members, context, widget.discordUser),
       ],
     );
   }
 
-  Widget buildMemberListView(List<WarMember> members, BuildContext context) {
-    return WarTeamCard(playerTab: playerTab, widget: widget, members: members);
+  Widget buildMemberListView(List<WarMember> members, BuildContext context, List<String> discordUser) {
+    return WarTeamCard(playerTab: playerTab, widget: widget, members: members, discordUser: discordUser);
   }
 }

@@ -40,33 +40,54 @@ class PlayerLegendCard extends StatelessWidget {
           style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
           child: Card(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Column(
+                      Stack(
+                        alignment: Alignment.center,
                         children: <Widget>[
-                          Text(
-                            AppLocalizations.of(context)?.legendLeague ??
-                                "Legend League",
-                            style: Theme.of(context).textTheme.labelLarge,
+                          Column(
+                            children: <Widget>[
+                              Text(
+                                AppLocalizations.of(context)?.legendLeague ??
+                                    "Legend League",
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              SizedBox(
+                                height: 100,
+                                width: 100,
+                                child: Image.network(
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png"
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: Image.network(
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png"),
+                          Positioned(
+                            right: 30,
+                            bottom: 42,
+                            child: Text(
+                              playerStats.trophies.toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .copyWith(color: Colors.white),
+                            ),
                           ),
                         ],
                       ),
                       SizedBox(width: 8),
-                      Center(
+                      Flexible(
                         child: Text(
-                            AppLocalizations.of(context)?.noLegendData ??
-                                "No Legend Data Found for today",
-                            style: Theme.of(context).textTheme.labelLarge),
+                          AppLocalizations.of(context)?.noLegendData ??
+                              "No Legend Data found for today",
+                          style: Theme.of(context).textTheme.labelLarge,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                        ),
                       ),
                     ],
                   ),
@@ -141,7 +162,7 @@ class PlayerLegendCard extends StatelessWidget {
           style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
           child: Card(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -181,13 +202,12 @@ class PlayerLegendCard extends StatelessWidget {
                       SizedBox(width: 8),
                       Expanded(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Wrap(
-                              alignment: WrapAlignment.center,
-                              spacing: 4.0, // gap between adjacent chips
-                              runSpacing: 0.0, // gap between lines
+                              alignment: WrapAlignment.start,
+                              spacing: 7.0,
+                              runSpacing: -7.0,
                               children: <Widget>[
                                 Chip(
                                     avatar: CircleAvatar(
@@ -198,21 +218,24 @@ class PlayerLegendCard extends StatelessWidget {
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelMedium)),
-                                Chip(
-                                  avatar: CircleAvatar(
+                                if (legendData['rankings']['country_code'] !=
+                                    null) 
+                                  Chip(
+                                    avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
                                       child: Image.network(
-                                          "https://clashkingfiles.b-cdn.net/country-flags/${legendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
-                                  label: Text(
-                                    legendData['rankings']['local_rank'] == null
-                                        ? AppLocalizations.of(context)
-                                                ?.noRank ??
-                                            'No Rank'
-                                        : '${legendData['rankings']['local_rank']}',
-                                    style:
-                                        Theme.of(context).textTheme.labelMedium,
+                                          "https://clashkingfiles.b-cdn.net/country-flags/${(legendData['rankings']['country_code'] ?? 'uk').toLowerCase()}.png"),
+                                    ),
+                                    label: Text(
+                                      legendData['rankings']['local_rank'] ==
+                                              null
+                                          ? '200+'
+                                          : '${legendData['rankings']['local_rank']}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium,
+                                    ),
                                   ),
-                                ),
                                 Chip(
                                   avatar: Icon(
                                     diffTrophies > 0
@@ -239,14 +262,10 @@ class PlayerLegendCard extends StatelessWidget {
                                       child: Image.network(
                                           "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
                                   label: Text(
-                                    legendData['rankings']['global_rank'] ==
-                                            null
-                                        ? AppLocalizations.of(context)
-                                                ?.noRank ??
-                                            'No Rank'
-                                        : '${legendData['rankings']['global_rank']}',
-                                    style:
-                                        Theme.of(context).textTheme.labelMedium,
+                                    legendData['rankings']['global_rank'] == null
+                                        ? AppLocalizations.of(context)?.noRank ?? 'No Rank'
+                                        : NumberFormat('#,###', 'fr_FR').format(legendData['rankings']['global_rank']),
+                                    style: Theme.of(context).textTheme.labelMedium,
                                   ),
                                 ),
                               ],

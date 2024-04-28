@@ -4,10 +4,12 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_leagu
 
 class RoundClanCard extends StatelessWidget {
   final CurrentWarInfo warLeagueInfo;
+  final List<String> discordUser;
 
   const RoundClanCard({
     super.key,
     required this.warLeagueInfo,
+    required this.discordUser,
   });
 
   @override
@@ -18,7 +20,7 @@ class RoundClanCard extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  CurrentWarInfoScreen(currentWarInfo: warLeagueInfo),
+                  CurrentWarInfoScreen(currentWarInfo: warLeagueInfo, discordUser: discordUser),
             ),
           );
         },
@@ -26,7 +28,7 @@ class RoundClanCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(right: 8.0, top: 8.0, bottom: 8.0),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start, // Add this line
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   flex: 4,

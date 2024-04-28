@@ -5,7 +5,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 class FilterDropdown extends StatelessWidget {
   final String sortBy;
   final Function(String) updateSortBy;
-  final Map<String, String> sortByOptions;
+  final Map<dynamic, String> sortByOptions;
 
   FilterDropdown({required this.sortBy, required this.updateSortBy, required this.sortByOptions});
 
@@ -16,7 +16,9 @@ class FilterDropdown extends StatelessWidget {
       items: sortByOptions.entries.map((entry) {
         return DropdownMenuItem<String>(
           value: entry.value,
-          child: Text(entry.key),
+          child: entry.key is String
+          ? Text(entry.key)
+          : Row(children: entry.key as List<Widget>),
         );
       }).toList(),
       onChanged: (String? newValue) {

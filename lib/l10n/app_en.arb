@@ -12,6 +12,7 @@
     "all" : "All",
     "hourIndicator" : "h",
     "minIndicator" : "m",
+    "noDataAvailable" : "No data available.",
     
     "dashboard" : "Dashboard",
     "homeBase" : "Home Base",
@@ -23,6 +24,8 @@
     "coLeader" : "Co-Leader",
     "elder" : "Elder",
     "member" : "Member",
+    "ready" : "Ready",
+    "unready" : "Unready",
     "heroes" : "Heroes",
     "equipment" : "Equipments",
     "troops" : "Troops",
@@ -68,6 +71,7 @@
     "endsIn" : "Ends in",
     "statistics" : "Statistics",
     "stars" : "Stars",
+    "starsSmall" : "stars",
     "numberOfStars" : "Number of stars",
     "destructionRate" : "Destruction rate",
     "events" : "Events",
@@ -85,9 +89,21 @@
     "warEnded" : "War ended",
     "preparation" : "Preparation",
     "isNotInWar" : "is not in war.",
+    "warLogIsClosed" : "'s war log is closed.",
     "askForWar" : "Contact a leader or a co-leader to start a war.",
+    "askForWarLogOpening" : "Contact a leader or a co-leader to open the war log.",
     "warLogClosed" : "War log closed.",
     "rounds" : "Rounds",
+
+    "stateOfTheWar" : "State of the war",
+    "stillNeedsToWin" : "still needs to win",
+    "toTakeTheLead" : "to take the lead",
+    "or" : "or",
+    "star" : "star",
+    "starSmall" : "star",
+    "moreDestruction" : "more destruction",
+    "clanDraw" : "The two clans are tied",
+    "fastCalculator" : "Fast calculator",
 
     "management" : "Management"
 }
