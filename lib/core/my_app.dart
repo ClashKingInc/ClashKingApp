@@ -15,7 +15,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:home_widget/home_widget.dart';
 import 'dart:async';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_league_page.dart';
+import 'package:intl/intl.dart';
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
@@ -247,7 +247,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     _loadLanguage();
   }
 
-
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -282,8 +281,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
         // Request the Home Widget to update
         await HomeWidget.updateWidget(
-          name: 'ExampleAppWidgetProvider',
-          androidName: 'ExampleAppWidgetProvider',
+          name: 'WarAppWidgetProvider',
+          androidName: 'WarAppWidgetProvider',
         );
       }
     }
@@ -308,28 +307,59 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     if (responseWar.statusCode == 200) {
       var decodedResponse = jsonDecode(utf8.decode(responseWar.bodyBytes));
       if (decodedResponse["state"] != "notInWar") {
+        var teamSize = decodedResponse["teamSize"]*2;
+        var state = decodedResponse["state"];
+        var time = "";
+
         // Accessing clan details
         var clanName = decodedResponse["clan"]["name"];
         var clanBadgeUrlMedium = decodedResponse["clan"]["badgeUrls"]["medium"];
         var clanStars = decodedResponse["clan"]["stars"];
+        var clanPercent = decodedResponse["clan"]["destructionPercentage"];
+        var clanNumberOfAttacks = decodedResponse["clan"]["attacks"];
 
         // Accessing opponent details
         var opponentName = decodedResponse["opponent"]["name"];
         var opponentBadgeUrlMedium =
             decodedResponse["opponent"]["badgeUrls"]["medium"];
         var opponentStars = decodedResponse["opponent"]["stars"];
+        var opponentPercent =
+            decodedResponse["opponent"]["destructionPercentage"];
+        var opponentNumberOfAttacks = decodedResponse["opponent"]["attacks"];
+
+        //default score
+        var score = "$clanStars - $opponentStars";
+
+        // Accessing time details
+        if (state == "preparation") {
+          DateTime startTime = DateTime.parse(decodedResponse["startTime"]);
+          String formattedTime =
+              DateFormat('HH:mm').format(startTime.toLocal());
+          time = "Start at $formattedTime";
+          score = "-";
+        } else if (state == "inWar") {
+          DateTime endTime = DateTime.parse(decodedResponse["endTime"]);
+          String formattedTime = DateFormat('HH:mm').format(endTime.toLocal());
+          time = "End at $formattedTime";
+        } else if (state == "warEnded") {
+          time = "War Ended";
+        }
 
         // Create a Map object with the required fields
         var result = {
+          "state": time,
+          "score" : score,
           "clan": {
             "name": clanName,
             "badgeUrlMedium": clanBadgeUrlMedium,
-            "stars": clanStars
+            "percent": "$clanPercent%",
+            "attacks": "$clanNumberOfAttacks/$teamSize"
           },
           "opponent": {
             "name": opponentName,
             "badgeUrlMedium": opponentBadgeUrlMedium,
-            "stars": opponentStars
+            "percent": "$opponentPercent%",
+            "attacks": "$opponentNumberOfAttacks/$teamSize"
           }
         };
 
@@ -370,16 +400,16 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   @override
-void didChangeAppLifecycleState(AppLifecycleState state) {
-  super.didChangeAppLifecycleState(state);
-  print('App lifecycle state updated: $state');
-  if (state == AppLifecycleState.resumed) {
-    print('App is in the foreground');
-  } else if (state == AppLifecycleState.paused) {
-    print('App is in the background');
-    updateWidget();
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print('App lifecycle state updated: $state');
+    if (state == AppLifecycleState.resumed) {
+      print('App is in the foreground');
+    } else if (state == AppLifecycleState.paused) {
+      print('App is in the background');
+      updateWidget();
+    }
   }
-}
 
   // Assume this method exists and fetches player stats correctly
   Future<void> fetchPlayerAccounts(DiscordUser user) async {

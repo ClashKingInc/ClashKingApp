@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class MyWidget extends StatefulWidget {
   @override
-  _MyWidgetState createState() => _MyWidgetState();
+  MyWidgetState createState() => MyWidgetState();
 }
 
-class _MyWidgetState extends State<MyWidget> with WidgetsBindingObserver {
+class MyWidgetState extends State<MyWidget> with WidgetsBindingObserver {
   bool _isVisible = true;
 
   @override
