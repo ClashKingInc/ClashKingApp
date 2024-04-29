@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class PlayerLegendService{
-  static Future<Map<String, dynamic>> fetchLegendData( String tag) async {
+  static Future<Map<String, dynamic>> fetchLegendData(String tag) async {
     final response = await http.get(Uri.parse(
         'https://api.clashking.xyz/player/${tag.substring(1)}/legends'));
     if (response.statusCode == 200) {

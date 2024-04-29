@@ -62,21 +62,18 @@ class DashboardPageState extends State<DashboardPage>
               padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
               child: FutureBuilder<Map<String, dynamic>>(
                 future: legendData,
-                builder: (BuildContext context,
-                    AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                      return SizedBox.shrink();
+                    return SizedBox.shrink();
                   } else if (snapshot.hasError) {
-                    return Text(
-                        'Error: ${snapshot.error}'); // Show error if something went wrong
+                    return Text('Error: ${snapshot.error}');
                   } else {
                     if (!snapshot.data!['legends'].isEmpty) {
                       return PlayerLegendCard(
-                          playerStats: widget.playerStats,
-                          legendData:
-                              snapshot.data!); // Build PlayerLegendCard with data
-                    }
-                    else{
+                        playerStats: widget.playerStats,
+                        legendData: snapshot.data!
+                      ); // Build PlayerLegendCard with data
+                    } else {
                       return SizedBox.shrink();
                     }
                   }
