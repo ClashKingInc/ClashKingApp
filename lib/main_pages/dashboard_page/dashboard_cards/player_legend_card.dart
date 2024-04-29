@@ -4,6 +4,7 @@ import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_l
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PlayerLegendCard extends StatelessWidget {
   const PlayerLegendCard({
@@ -59,7 +60,7 @@ class PlayerLegendCard extends StatelessWidget {
                               SizedBox(
                                 height: 100,
                                 width: 100,
-                                child: Image.network(
+                                child: CachedNetworkImage(imageUrl: 
                                   "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png"
                                 ),
                               ),
@@ -180,7 +181,7 @@ class PlayerLegendCard extends StatelessWidget {
                             width: 100,
                             child: Stack(
                               children: <Widget>[
-                                Image.network(
+                                CachedNetworkImage(imageUrl: 
                                   "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png",
                                 ),
                                 Positioned(
@@ -212,7 +213,7 @@ class PlayerLegendCard extends StatelessWidget {
                                 Chip(
                                     avatar: CircleAvatar(
                                         backgroundColor: Colors.transparent,
-                                        child: Image.network(
+                                        child: CachedNetworkImage(imageUrl: 
                                             "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Start_Flag.png")),
                                     label: Text(firstTrophies,
                                         style: Theme.of(context)
@@ -223,7 +224,7 @@ class PlayerLegendCard extends StatelessWidget {
                                   Chip(
                                     avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
-                                      child: Image.network(
+                                      child: CachedNetworkImage(imageUrl: 
                                           "https://clashkingfiles.b-cdn.net/country-flags/${(legendData['rankings']['country_code'] ?? 'uk').toLowerCase()}.png"),
                                     ),
                                     label: Text(
@@ -259,7 +260,7 @@ class PlayerLegendCard extends StatelessWidget {
                                 Chip(
                                   avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
-                                      child: Image.network(
+                                      child: CachedNetworkImage(imageUrl: 
                                           "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
                                   label: Text(
                                     legendData['rankings']['global_rank'] == null

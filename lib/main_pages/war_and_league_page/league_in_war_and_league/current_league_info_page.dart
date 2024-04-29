@@ -10,6 +10,7 @@ import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_le
 import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/component/teams_card.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/league_functions.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/component/members_card.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CurrentLeagueInfoScreen extends StatefulWidget {
   final CurrentLeagueInfo currentLeagueInfo;
@@ -68,7 +69,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                     child: ColorFiltered(
                       colorFilter: ColorFilter.mode(
                           Colors.black.withOpacity(0.5), BlendMode.darken),
-                      child: Image.network(
+                      child: CachedNetworkImage(imageUrl: 
                         "https://clashkingfiles.b-cdn.net/landscape/cwl-landscape.png",
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -124,7 +125,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                               children: [
                                 SizedBox(
                                     height: 70,
-                                    child: Image.network(
+                                    child: CachedNetworkImage(imageUrl: 
                                         widget.clanInfo.badgeUrls.medium)),
                                 Column(
                                   children: [
@@ -153,7 +154,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                                   children: [
                                     SizedBox(
                                         height: 30,
-                                        child: Image.network(
+                                        child: CachedNetworkImage(imageUrl: 
                                             "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Podium.png")),
                                     Text(
                                       "$clanPosition",
@@ -168,7 +169,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                                   children: [
                                     SizedBox(
                                       height: 30,
-                                      child: Image.network("https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png")
+                                      child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png")
                                     ),
                                     Text(
                                       "${snapshot.data?[widget.clanTag]?['stars']}",
@@ -183,7 +184,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                                   children: [
                                     SizedBox(
                                         height: 30,
-                                        child: Image.network("https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")
+                                        child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")
                                     ),
                                     Text(
                                       "$starsDifference",
@@ -198,7 +199,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                                   children: [
                                     SizedBox(
                                         height: 30,
-                                        child: Image.network(
+                                        child: CachedNetworkImage(imageUrl: 
                                             "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png")),
                                     Text(
                                       "${snapshot.data?[widget.clanTag]?['percentage'].toStringAsFixed(0)}",

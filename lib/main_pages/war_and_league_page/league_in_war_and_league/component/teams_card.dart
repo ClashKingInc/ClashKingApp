@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_page.dart';
 import 'package:clashkingapp/api/current_league_info.dart';
 import 'package:clashkingapp/api/clan_info.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class TeamsCard extends StatelessWidget {
   const TeamsCard({
@@ -74,7 +75,7 @@ class TeamsCard extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image.network(clan.badgeUrls.small,
+                                    CachedNetworkImage(imageUrl: clan.badgeUrls.small,
                                         width: 40, height: 40),
                                     SizedBox(width: 10),
                                     Column(
@@ -102,7 +103,7 @@ class TeamsCard extends StatelessWidget {
                                       padding: const EdgeInsets.all(4.0),
                                       child: Wrap(
                                         children: [
-                                          Image.network(
+                                          CachedNetworkImage(imageUrl: 
                                             'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${entry.key}.png',
                                             width: 20,
                                           ),
@@ -132,7 +133,7 @@ class TeamsCard extends StatelessWidget {
                                         Text(
                                             "${totalByClan[clan.tag]?['stars'] ?? 0}"),
                                         SizedBox(
-                                          child: Image.network(
+                                          child: CachedNetworkImage(imageUrl: 
                                             "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
                                             width: 20,
                                             height: 20,

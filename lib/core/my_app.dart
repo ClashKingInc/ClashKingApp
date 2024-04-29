@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
+import 'package:workmanager/workmanager.dart';
 
 @pragma("vm:entry-point")
 FutureOr<void> backgroundCallback(Uri? data) async {
@@ -257,6 +258,11 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       selectedTag.addListener(reloadData);
     }
     _loadLanguage();
+    Workmanager().registerPeriodicTask(
+      '1',
+      'simplePeriodicTask',
+      frequency: Duration(minutes: 15),
+    );
   }
 
   @override
@@ -286,12 +292,10 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> initializeFromBackground(Uri data) async {
     // Process the data or update the widget
     print('Processing data in background: $data');
-    updateWidget();
+    updateWidgets();
   }
-
-  void updateWidget() async {
-    // Function to update the widget
-    Future<void> update() async {
+  
+  Future<void> updateWarWidget() async {
       if (clanTag == null) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         clanTag = prefs.getString('clanTag');
@@ -306,15 +310,9 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       );
     }
 
-    // Call the function immediately
-    await update();
+  void updateWidgets() async {
+    await updateWarWidget();
     print('Widget updated at ${DateTime.now()}');
-
-    // Then call it every minute
-    Timer.periodic(Duration(minutes: 15), (Timer t) async {
-      print('Updating widget at ${DateTime.now()}');
-      await update();
-    });
   }
 
   Future<String> checkCurrentWar(String clanTag) async {
@@ -421,6 +419,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('clanTag', clanTag!);
+      updateWidgets();
     }
   }
 

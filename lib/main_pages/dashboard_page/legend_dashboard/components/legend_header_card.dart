@@ -3,6 +3,7 @@ import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_l
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class LegendHeaderCard extends StatelessWidget {
   const LegendHeaderCard({
@@ -29,7 +30,7 @@ class LegendHeaderCard extends StatelessWidget {
                   Colors.black.withOpacity(0.7),
                   BlendMode.darken,
                 ),
-                child: Image.network(
+                child: CachedNetworkImage(imageUrl: 
                   "https://clashkingfiles.b-cdn.net/landscape/legend-landscape.png",
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -65,7 +66,7 @@ class LegendHeaderCard extends StatelessWidget {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.network(
+                          CachedNetworkImage(imageUrl: 
                             "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border.png",
                             width: 60,
                           ),
@@ -106,7 +107,7 @@ class LegendHeaderCard extends StatelessWidget {
                                   Chip(
                                     avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
-                                      child: Image.network(
+                                      child: CachedNetworkImage(imageUrl: 
                                         "https://clashkingfiles.b-cdn.net/country-flags/${dynamicLegendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
                                     label: Text(
                                       dynamicLegendData['rankings']['country_name'] == null
@@ -128,7 +129,7 @@ class LegendHeaderCard extends StatelessWidget {
                                   Chip(
                                     avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
-                                      child: Image.network(
+                                      child: CachedNetworkImage(imageUrl: 
                                           "https://clashkingfiles.b-cdn.net/country-flags/${dynamicLegendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
                                     label: Text(
                                       dynamicLegendData['rankings']['local_rank'] == null
@@ -149,7 +150,7 @@ class LegendHeaderCard extends StatelessWidget {
                                   Chip(
                                     avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent, // Set to a suitable color for your design.
-                                      child: Image.network(
+                                      child: CachedNetworkImage(imageUrl: 
                                         "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")
                                     ),
                                     label: Text(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 
 class MembersCard extends StatelessWidget {
@@ -31,7 +32,7 @@ class MembersCard extends StatelessWidget {
                           SizedBox(
                               height: 70,
                               width: 70,
-                              child: Image.network(
+                              child: CachedNetworkImage(imageUrl: 
                                   'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${memberEntry.value['townHallLevel']}.png')),
                         ],
                       ),
@@ -51,7 +52,7 @@ class MembersCard extends StatelessWidget {
                           SizedBox(
                               height: 20,
                               width: 20,
-                              child: Image.network(
+                              child: CachedNetworkImage(imageUrl: 
                                   'https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png')),
                         ],
                       ),
@@ -75,7 +76,7 @@ class MembersCard extends StatelessWidget {
                             SizedBox(
                                 height: 20,
                                 width: 20,
-                                child: Image.network(
+                                child: CachedNetworkImage(imageUrl: 
                                     'https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png')),
                           ],
                         ),

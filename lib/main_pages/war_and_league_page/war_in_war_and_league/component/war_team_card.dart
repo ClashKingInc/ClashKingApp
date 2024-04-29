@@ -3,6 +3,7 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_leagu
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class WarTeamCard extends StatelessWidget {
   WarTeamCard({
@@ -91,7 +92,7 @@ class WarTeamCard extends StatelessWidget {
                                 child: SizedBox(
                                     height: 26,
                                     width: 26,
-                                    child: Image.network(
+                                    child: CachedNetworkImage(imageUrl: 
                                         'https://clashkingfiles.b-cdn.net/icons/Icon_DC_ArrowLeft.png'))),
                             Expanded(
                                 flex: 6,
@@ -99,7 +100,7 @@ class WarTeamCard extends StatelessWidget {
                                   SizedBox(width: 8),
                                   SizedBox(
                                     width: 30,
-                                    child: Image.network(imageUrlDef),
+                                    child: CachedNetworkImage(imageUrl: imageUrlDef),
                                   ),
                                   Expanded(
                                     child: Text(
@@ -143,7 +144,7 @@ class WarTeamCard extends StatelessWidget {
                           child: SizedBox(
                             width: 20,
                             height: 20,
-                            child: Image.network(
+                            child: CachedNetworkImage(imageUrl: 
                               (member.attacks?.length ?? 0) ==
                                       widget.currentWarInfo.attacksPerMember
                                   ? "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Tick.png"
@@ -164,7 +165,7 @@ class WarTeamCard extends StatelessWidget {
                           SizedBox(
                             width: 70,
                             height: 70,
-                            child: Image.network(
+                            child: CachedNetworkImage(imageUrl: 
                                 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(member.tag, playerTab)}.png'),
                           ),
                           Text(
@@ -181,7 +182,7 @@ class WarTeamCard extends StatelessWidget {
                       child: SizedBox(
                         width: 26,
                         height: 26,
-                        child: Image.network(
+                        child: CachedNetworkImage(imageUrl: 
                             'https://clashkingfiles.b-cdn.net/icons/Icon_DC_ArrowRight.png'),
                       ),
                     ),
@@ -216,7 +217,7 @@ class WarTeamCard extends StatelessWidget {
                                   children: [
                                     SizedBox(
                                       width: 30,
-                                      child: Image.network(imageUrlDef),
+                                      child: CachedNetworkImage(imageUrl: imageUrlDef),
                                     ),
                                     Expanded(
                                       child: Column(
