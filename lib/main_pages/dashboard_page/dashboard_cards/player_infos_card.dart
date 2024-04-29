@@ -3,6 +3,7 @@ import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PlayerInfosCard extends StatelessWidget {
   const PlayerInfosCard({
@@ -38,7 +39,7 @@ class PlayerInfosCard extends StatelessWidget {
                         SizedBox(
                           height: 100,
                           width: 100,
-                          child: Image.network(playerStats.townHallPic),
+                          child: CachedNetworkImage(imageUrl: playerStats.townHallPic),
                         ),
                         Text(
                           playerStats.name,
@@ -67,7 +68,7 @@ class PlayerInfosCard extends StatelessWidget {
                               Chip(
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors.transparent,
-                                  child: Image.network(
+                                  child: CachedNetworkImage(imageUrl: 
                                       playerStats.clan.badgeUrls.small),
                                 ),
                                 labelPadding:
@@ -82,9 +83,9 @@ class PlayerInfosCard extends StatelessWidget {
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
                                   child: playerStats.warPreference == 'in'
-                                      ? Image.network(
+                                      ? CachedNetworkImage(imageUrl: 
                                           "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png")
-                                      : Image.network(
+                                      : CachedNetworkImage(imageUrl: 
                                           'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png'),
                                 ),
                                 labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -97,7 +98,7 @@ class PlayerInfosCard extends StatelessWidget {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
-                                  child: Image.network(playerStats.townHallPic),
+                                  child: CachedNetworkImage(imageUrl: playerStats.townHallPic),
                                 ),
                                 label: Text('${playerStats.townHallLevel}',
                                     style:
@@ -108,7 +109,7 @@ class PlayerInfosCard extends StatelessWidget {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
-                                  child: Image.network(
+                                  child: CachedNetworkImage(imageUrl: 
                                       "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
                                 ),
                                 label: Text('${playerStats.trophies}',
@@ -134,7 +135,7 @@ class PlayerInfosCard extends StatelessWidget {
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
                                   child:
-                                      Image.network(playerStats.builderHallPic),
+                                      CachedNetworkImage(imageUrl: playerStats.builderHallPic),
                                 ),
                                 label: Text('${playerStats.builderHallLevel}',
                                     style:
@@ -145,7 +146,7 @@ class PlayerInfosCard extends StatelessWidget {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
-                                  child: Image.network(
+                                  child: CachedNetworkImage(imageUrl: 
                                       "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
                                 ),
                                 label: Text(
@@ -158,7 +159,7 @@ class PlayerInfosCard extends StatelessWidget {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
-                                  child: Image.network(
+                                  child: CachedNetworkImage(imageUrl: 
                                       "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
                                 ),
                                 labelPadding:

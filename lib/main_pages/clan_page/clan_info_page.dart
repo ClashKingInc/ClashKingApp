@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ClanInfoScreen extends StatefulWidget {
   final ClanInfo clanInfo;
@@ -42,7 +43,7 @@ class ClanInfoScreenState extends State<ClanInfoScreen>
                                 Colors.black.withOpacity(0.3),
                                 BlendMode.darken,
                               ),
-                              child: Image.network(
+                              child: CachedNetworkImage(imageUrl: 
                                 backgroundImageUrl,
                                 width: double.infinity,
                                 fit: BoxFit.cover,

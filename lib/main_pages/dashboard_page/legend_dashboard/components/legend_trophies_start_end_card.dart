@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class LegendTrophiesStartEndCard extends StatelessWidget {
   const LegendTrophiesStartEndCard({
@@ -24,7 +25,7 @@ class LegendTrophiesStartEndCard extends StatelessWidget {
             Text(startTrophies, style: Theme.of(context).textTheme.titleMedium),
           ],
         ),
-        Image.network(
+        CachedNetworkImage(imageUrl: 
           "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border.png",
           width: 80,
         ),

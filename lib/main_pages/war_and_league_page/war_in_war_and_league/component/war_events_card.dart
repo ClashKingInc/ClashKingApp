@@ -6,6 +6,7 @@ import 'package:clashkingapp/components/right_pointing_triangle.dart';
 import 'package:clashkingapp/components/left_pointing_triangle.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class WarEventsCard extends StatefulWidget {
   final CurrentWarInfo currentWarInfo;
@@ -149,7 +150,7 @@ class WarEventsCardState extends State<WarEventsCard> {
                                             SizedBox(
                                               height: 40,
                                               width: 40,
-                                              child: Image.network(
+                                              child: CachedNetworkImage(imageUrl: 
                                                   'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["attackerTag"], widget.playerTab)}.png'),
                                             ),
                                             Expanded(
@@ -275,7 +276,7 @@ class WarEventsCardState extends State<WarEventsCard> {
                                           SizedBox(
                                               height: 40,
                                               width: 40,
-                                              child: Image.network(
+                                              child: CachedNetworkImage(imageUrl: 
                                                   'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["defenderTag"], widget.playerTab)}.png')),
                                           SizedBox(width: 4),
                                         ],
@@ -306,7 +307,7 @@ class WarEventsCardState extends State<WarEventsCard> {
                                           SizedBox(
                                             height: 40,
                                             width: 40,
-                                            child: Image.network(
+                                            child: CachedNetworkImage(imageUrl: 
                                               'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["defenderTag"], widget.playerTab)}.png',
                                             ),
                                           ),
@@ -444,7 +445,7 @@ class WarEventsCardState extends State<WarEventsCard> {
                                             SizedBox(
                                               height: 40,
                                               width: 40,
-                                              child: Image.network(
+                                              child: CachedNetworkImage(imageUrl: 
                                                   'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["attackerTag"], widget.playerTab)}.png'),
                                             ),
                                             SizedBox(width: 4),
@@ -501,7 +502,7 @@ class WarEventsCardState extends State<WarEventsCard> {
                   child: Text(AppLocalizations.of(context)?.noDataAvailable ??
                       'No data available'))),
           SizedBox(height: 32),
-          Image.network(
+          CachedNetworkImage(imageUrl: 
             'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
             height: 250,
             width: 200,

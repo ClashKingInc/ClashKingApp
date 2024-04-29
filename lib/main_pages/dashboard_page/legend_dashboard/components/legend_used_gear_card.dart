@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/data/troop_data.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class LegendUsedGearCard extends StatelessWidget {
   const LegendUsedGearCard({
@@ -41,7 +42,7 @@ class LegendUsedGearCard extends StatelessWidget {
                           Text("${entry.value}",
                             style: Theme.of(context).textTheme.bodyMedium),
                           gearData != null
-                            ? Image.network(
+                            ? CachedNetworkImage(imageUrl: 
                               gearData['url'] ??
                                 "https://clashkingfiles.b-cdn.net/clashkinglogo.png",
                               width: 24)

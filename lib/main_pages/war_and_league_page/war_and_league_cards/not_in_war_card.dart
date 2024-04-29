@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class NotInWarCard extends StatefulWidget {
 
@@ -33,7 +34,7 @@ class NotInWarCardState extends State<NotInWarCard> {
                     width: 70,
                     height: 70,
                     child: Center(
-                      child: Image.network(
+                      child: CachedNetworkImage(imageUrl: 
                           widget.clanBadgeUrl,
                           fit: BoxFit.cover),
                     ),

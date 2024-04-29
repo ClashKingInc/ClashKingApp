@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/war_functions.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class WarHeader extends StatelessWidget {
   const WarHeader({
@@ -26,7 +27,7 @@ class WarHeader extends StatelessWidget {
                 Colors.black.withOpacity(0.5),
                 BlendMode.darken,
               ),
-              child: Image.network(
+              child: CachedNetworkImage(imageUrl: 
                 "https://clashkingfiles.b-cdn.net/landscape/war-landscape.jpg",
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -50,7 +51,7 @@ class WarHeader extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.network(
+                        CachedNetworkImage(imageUrl: 
                             widget.currentWarInfo.clan.badgeUrls.large,
                             width: 90),
                         Text(
@@ -81,7 +82,7 @@ class WarHeader extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.network(
+                        CachedNetworkImage(imageUrl: 
                             widget.currentWarInfo.opponent.badgeUrls.large,
                             width: 90),
                         Text(

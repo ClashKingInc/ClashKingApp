@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/legend_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class LegendOffenseDefenseCard extends StatelessWidget {
   const LegendOffenseDefenseCard(
@@ -60,7 +61,7 @@ class LegendOffenseDefenseCard extends StatelessWidget {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.only(left: 20),
-                                    child: Image.network(
+                                    child: CachedNetworkImage(imageUrl: 
                                       icon,
                                       width: 20,
                                     ),

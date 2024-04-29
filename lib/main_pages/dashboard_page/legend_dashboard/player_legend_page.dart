@@ -11,6 +11,7 @@ import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/componen
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_history_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/legend_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class LegendScreen extends StatefulWidget {
   final PlayerAccountInfo playerStats;
@@ -311,7 +312,7 @@ class LegendScreenState extends State<LegendScreen>
                 padding: EdgeInsets.all(16),
                 child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available'))),
           SizedBox(height: 10),
-          Image.network(
+          CachedNetworkImage(imageUrl: 
             'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
             height: 350,
             width: 200,
@@ -579,7 +580,7 @@ class LegendScreenState extends State<LegendScreen>
               children: [
                 Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available',
                     style: Theme.of(context).textTheme.bodyMedium),
-                Image.network(
+                CachedNetworkImage(imageUrl: 
                   'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
                   height: 300,
                 ),
@@ -793,7 +794,7 @@ class LegendScreenState extends State<LegendScreen>
                       children: [
                         Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available',
                             style: Theme.of(context).textTheme.bodyMedium),
-                        Image.network(
+                        CachedNetworkImage(imageUrl: 
                           'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
                           height: 300,
                         ),

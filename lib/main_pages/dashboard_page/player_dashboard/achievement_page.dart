@@ -6,6 +6,7 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_leagu
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class AchievementScreen extends StatefulWidget {
   final PlayerAccountInfo playerStats;
@@ -81,7 +82,7 @@ class AchievementScreenState extends State<AchievementScreen>
                             Colors.black.withOpacity(0.3),
                             BlendMode.darken,
                           ),
-                          child: Image.network(
+                          child: CachedNetworkImage(imageUrl: 
                             backgroundImageUrl,
                             width: double.infinity,
                             fit: BoxFit.cover,
