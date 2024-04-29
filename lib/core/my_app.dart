@@ -396,6 +396,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void reloadData() async {
+
     if (selectedTag.value != null) {
       playerStats = playerAccounts?.playerAccountInfo
           .firstWhere((element) => element.tag == selectedTag.value);
@@ -421,6 +422,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       await prefs.setString('clanTag', clanTag!);
       updateWidgets();
     }
+    notifyListeners();
   }
 
   // Assume this method exists and fetches player stats correctly
