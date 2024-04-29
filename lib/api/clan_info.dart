@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import 'package:clashkingapp/data/league_data.dart';
 
 class ClanInfo {
   final String tag;
@@ -80,7 +80,7 @@ class ClanInfo {
       warTies: json['warTies'] ?? 0,
       warLosses: json['warLosses'] ?? 0,
       isWarLogPublic: json['isWarLogPublic'] ?? false,
-      warLeague: WarLeague.fromJson(json['warLeague'] ?? {}) ,
+      warLeague: WarLeague.fromJson(json['warLeague'] ?? {}),
       members: json['members'] ?? 0,
       location: Location.fromJson(json['location'] ?? {}),
       memberList: json['memberList'] ?? [],
@@ -125,15 +125,18 @@ class CapitalLeague {
 class WarLeague {
   final int id;
   final String name;
+  late String imageUrl;
 
   WarLeague({required this.id, required this.name});
 
   factory WarLeague.fromJson(Map<String, dynamic> json) {
-    return WarLeague(
+    WarLeague warLeague = WarLeague(
       id: json['id'],
       name: json['name'],
     );
+    return warLeague;
   }
+     
 }
 
 class Location {
@@ -143,7 +146,12 @@ class Location {
   final bool isCountry;
   final String countryCode;
 
-  Location({required this.localizedName, required this.id, required this.name, required this.isCountry, required this.countryCode});
+  Location(
+      {required this.localizedName,
+      required this.id,
+      required this.name,
+      required this.isCountry,
+      required this.countryCode});
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
@@ -156,11 +164,9 @@ class Location {
   }
 }
 
-
 // Service class to fetch clan info
 class ClanService {
-
-    Future<void> initEnv() async {
+  Future<void> initEnv() async {
     await dotenv.load(fileName: ".env");
   }
 
@@ -173,9 +179,22 @@ class ClanService {
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
-      return ClanInfo.fromJson(jsonDecode(responseBody));
+      ClanInfo clanInfo = ClanInfo.fromJson(jsonDecode(responseBody));
+      clanInfo.warLeague.imageUrl = await fetchLeagueImageUrl(clanInfo.warLeague.name);
+
+      return clanInfo;
     } else {
       throw Exception('Failed to load clan stats');
+    }
+  }
+
+  Future<String> fetchLeagueImageUrl(String name) async {
+    if (leaguesUrls.containsKey(name)) {
+      // If the league name is in the map, return the corresponding URL and type
+      return leaguesUrls[name]!['url']!;
+    } else {
+      // If the league name is not in the map, return default image URL and type
+      return 'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
     }
   }
 }

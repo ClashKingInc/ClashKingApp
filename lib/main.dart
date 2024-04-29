@@ -5,7 +5,6 @@ import 'package:clashkingapp/core/my_app.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 
-
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     // Your background task goes here
@@ -20,19 +19,15 @@ void callbackDispatcher() {
 Future main() async {
   await dotenv.load(); // Charge le fichier .env
   WidgetsFlutterBinding.ensureInitialized();
-  Workmanager().initialize(
-    callbackDispatcher,
-    isInDebugMode: false,
-  );
+  Workmanager().initialize(callbackDispatcher);
 
-  runApp(MultiProvider(
+  runApp(
+    MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeNotifier()),
         ChangeNotifierProvider(create: (_) => MyAppState()),
       ],
       child: MyApp(),
-    ),);
+    ),
+  );
 }
-
-
-

@@ -114,7 +114,7 @@ class LegendHistoryCard extends StatelessWidget {
               ),
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }

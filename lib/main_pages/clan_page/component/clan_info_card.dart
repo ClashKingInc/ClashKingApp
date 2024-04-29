@@ -21,11 +21,13 @@ class ClanInfoCard extends StatelessWidget {
               children: [
                 Stack(
                   children: [
+                    Padding(padding: EdgeInsets.all(5),
+                    child :
                     SizedBox(
-                        height: 90,
-                        width: 90,
+                        height: 80,
+                        width: 80,
                         child: CachedNetworkImage(
-                            imageUrl: clanInfo.badgeUrls.large)),
+                            imageUrl: clanInfo.badgeUrls.large))),
                     Positioned(
                       top: 68,
                       left: 37,
@@ -65,7 +67,7 @@ class ClanInfoCard extends StatelessWidget {
                               avatar: CircleAvatar(
                                 backgroundColor: Colors.transparent,
                                 child: CachedNetworkImage(
-                                    imageUrl: clanInfo.badgeUrls.small),
+                                    imageUrl: clanInfo.warLeague.imageUrl),
                               ),
                               labelPadding:
                                   EdgeInsets.only(left: 2.0, right: 2.0),
