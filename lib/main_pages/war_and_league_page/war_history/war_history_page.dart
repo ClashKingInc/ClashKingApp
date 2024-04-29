@@ -63,7 +63,7 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
               ], 
               children: [
                 Column(
-                  children: widget.warHistoryData.map<Widget>((war) {
+                  children: widget.warHistoryData.where((war) => war.containsKey('attacksPerMember')).map<Widget>((war) {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
