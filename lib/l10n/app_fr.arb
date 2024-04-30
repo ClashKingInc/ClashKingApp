@@ -61,6 +61,14 @@
 
     "clan" : "Clan",
     "clans" : "Clans",
+    "members" : "Membres",
+    "role" : "Rôle",
+    "expLevel" : "Niveau d'expérience",
+    "townHallLevel" : "Niveau d'HDV",
+    "builderBaseTrophies" : "Trophées MDO",
+    "donations" : "Dons",
+    "donationsReceived" : "Don reçus",
+    "trophies" : "Trophées",
 
     "warLeague" : "Guerre/Ligue",
     "war" : "Guerre",

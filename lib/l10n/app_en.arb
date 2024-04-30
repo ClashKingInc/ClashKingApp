@@ -62,6 +62,15 @@
 
     "clan" : "Clan",
     "clans" : "Clans",
+    "members" : "Members",
+    "role" : "Role",
+    "expLevel" : "Experience Level",
+    "townHallLevel" : "TH Level",
+    "builderBaseTrophies" : "BB Trophies",
+    "donations" : "Donations",
+    "donationsReceived" : "Donations Received",
+    "trophies" : "Trophies",
+  
 
     "warLeague" : "War/League",
     "war" : "War",

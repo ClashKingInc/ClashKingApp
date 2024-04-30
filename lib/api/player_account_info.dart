@@ -427,7 +427,6 @@ class PlayerService {
       String responseBody = utf8.decode(response.bodyBytes);
       ClanInfo clanInfo = ClanInfo.fromJson(jsonDecode(responseBody));
       clanInfo.warLeague.imageUrl = await fetchLeagueImageUrl(clanInfo.warLeague.name);
-      print("test : ${clanInfo.warLeague.imageUrl}");
 
       return clanInfo;
     } else {
