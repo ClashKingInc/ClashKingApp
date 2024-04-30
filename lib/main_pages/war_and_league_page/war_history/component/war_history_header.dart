@@ -51,6 +51,15 @@ class WarHistoryHeader extends StatelessWidget {
             ],
           ),
         ),
+        Positioned(
+          top: 30,
+          left: 10,
+          child: IconButton(
+            icon: Icon(Icons.arrow_back,
+                color: Theme.of(context).colorScheme.onPrimary, size: 32),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
       ],
     );
   }

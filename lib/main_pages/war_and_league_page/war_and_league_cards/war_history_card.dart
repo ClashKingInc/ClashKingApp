@@ -31,11 +31,14 @@ class WarHistoryCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(
                   children: [
-                    Text(
-                      'koukou les kopaing'
+                    Center(
+                      child: Text(
+                        'War History'
+                      ),
                     ),
                   ],
                 ),

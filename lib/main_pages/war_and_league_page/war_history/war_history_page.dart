@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-//import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_history/component/war_history_header.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_statistics_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_events_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_team_card.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/war_history/component/war_log_history_card.dart';
 
 class WarHistoryScreen extends StatefulWidget {
   final String clanTag;
@@ -58,20 +54,21 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
                 print('Tab $value selected');
               },
               tabs: [
-                Tab(text: 'War'),
-                Tab(text: 'League'),
+                Tab(text: 'War Log'),
+                Tab(text: AppLocalizations.of(context)?.statistics ?? 'Statistics'),
               ], 
               children: [
-                Column(
-                  children: widget.warHistoryData.where((war) => war.containsKey('attacksPerMember')).map<Widget>((war) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text('Clan Name: ${war["clan"]["name"]}'),
-                        Text('Score: ${war["clan"]["stars"]}'),
-                      ],
-                    );
-                  }).toList(),
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      WarLogHistoryCard(
+                        warHistoryData: widget.warHistoryData,
+                        discordUser: widget.discordUser,
+                        clanTag: widget.clanTag,
+                      ),
+                    ],
+                  ),
                 ),
                 Text('data'),
               ],
@@ -82,6 +79,4 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
     );
   }
 }
-      
-        
           

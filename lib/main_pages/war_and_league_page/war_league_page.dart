@@ -134,7 +134,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
     );
   }
 
-  Widget buildWarHistorySection(warHistoryData) {
+  Widget buildWarHistorySection(Future<List<dynamic>> warHistoryData) {
     return FutureBuilder<List<dynamic>>(
       future: warHistoryData,
       builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
@@ -150,11 +150,10 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
           if (data.isEmpty) {
             return SizedBox.shrink();
           } else {
-            List<dynamic> warHistoryData = snapshot.data ?? [];
             return Column(
               children: <Widget>[
                 WarHistoryCard(
-                  warHistoryData: warHistoryData,
+                  warHistoryData: data,
                   playerStats: widget.playerStats,
                   discordUser: widget.discordUser.tags,
                 ),
@@ -211,26 +210,3 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
     }
   }
 }
-
-/*Padding(
-                        padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                        child: Future<List<dynamic>> {}
-                          future: warHistoryData,
-                          builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return SizedBox.shrink();
-                            } else if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
-                            } else {
-                              if (!snapshot.data!['items'].isEmpty) {
-                                return WarHistoryCard(
-                                  warHistoryData: snapshot.data!,
-                                  playerStats: widget.playerStats,
-                                  discordUser: widget.user.tags,
-                                );
-                              } else {
-                                return SizedBox.shrink();
-                              }
-                            }
-                          },
-                        ), */
