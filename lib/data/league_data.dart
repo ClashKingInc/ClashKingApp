@@ -72,4 +72,41 @@ final Map<String, Map<String, String>> leaguesUrls = {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_CWL_Champion_3.png',
   },
+  'Bronze League': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_League_Bronze_2.png',
+  },
+  'Silver League': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_League_Silver_2.png',
+  },
+  'Gold League': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_League_Gold_2.png',
+  },
+  'Crystal League': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_League_Crystal_2.png',
+  },
+  'Master League': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_League_Master_2.png',
+  },
+  'Champion League': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_League_Champion.png',
+  },
+  'Titan League': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_League_Titan_1.png',
+  },
+  'Legend League': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_League_Legend_4.png',
+  },
+  'Unranked': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_CWL_Unranked.png',
+  },
+
 };

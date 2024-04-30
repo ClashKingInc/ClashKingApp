@@ -109,8 +109,7 @@ class PlayerInfosCard extends StatelessWidget {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
-                                  child: CachedNetworkImage(imageUrl: 
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
+                                  child: CachedNetworkImage(imageUrl: playerStats.leagueUrl),
                                 ),
                                 label: Text('${playerStats.trophies}',
                                     style:

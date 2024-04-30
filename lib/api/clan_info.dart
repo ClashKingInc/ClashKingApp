@@ -217,9 +217,9 @@ class Member{
 class League{
   final int id;
   final String name;
-  final iconUrls imageUrl;
+  final IconUrls imageUrl;
 
-  League({
+  League({ 
     required this.id,
     required this.name,
     required this.imageUrl,
@@ -229,24 +229,24 @@ class League{
     return League(
       id: json['id'] ?? 0,
       name: json['name'] ?? 'No name',
-      imageUrl: iconUrls.fromJson(json['iconUrls']),
+      imageUrl: IconUrls.fromJson(json['iconUrls']),
     );
   }
 }
 
-class iconUrls{
+class IconUrls{
   final String small;
   final String tiny;
   final String medium;
 
-  iconUrls({
+  IconUrls({
     required this.small,
     required this.tiny,
     required this.medium,
   });
 
-  factory iconUrls.fromJson(Map<String, dynamic> json) {
-    return iconUrls(
+  factory IconUrls.fromJson(Map<String, dynamic> json) {
+    return IconUrls(
       small: json['small'] ?? 'No small image URL',
       tiny: json['tiny'] ?? 'No tiny image URL',
       medium: json['medium'] ?? 'No medium image URL',
