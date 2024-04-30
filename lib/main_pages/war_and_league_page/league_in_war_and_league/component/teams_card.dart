@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/main_pages/clan_page/clan_info_page.dart';
+import 'package:clashkingapp/main_pages/clan_page/clan_info_page/clan_info_page.dart';
 import 'package:clashkingapp/api/current_league_info.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';

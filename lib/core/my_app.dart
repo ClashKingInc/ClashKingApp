@@ -256,6 +256,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     if (selectedTag.value != null) {
       selectedTag.value = user!.tags.first;
       selectedTag.addListener(reloadData);
+      selectedTag.addListener(updateWidgets);
     }
     _loadLanguage();
     Workmanager().registerPeriodicTask(
@@ -294,21 +295,21 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     print('Processing data in background: $data');
     updateWidgets();
   }
-  
+
   Future<void> updateWarWidget() async {
-      if (clanTag == null) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        clanTag = prefs.getString('clanTag');
-      }
-      final warInfo = await checkCurrentWar(clanTag!);
-      // Send data to the widget
-      await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
-      // Request the Home Widget to update
-      await HomeWidget.updateWidget(
-        name: 'WarAppWidgetProvider',
-        androidName: 'WarAppWidgetProvider',
-      );
+    if (clanTag == null) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      clanTag = prefs.getString('clanTag');
     }
+    final warInfo = await checkCurrentWar(clanTag!);
+    // Send data to the widget
+    await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
+    // Request the Home Widget to update
+    await HomeWidget.updateWidget(
+      name: 'WarAppWidgetProvider',
+      androidName: 'WarAppWidgetProvider',
+    );
+  }
 
   void updateWidgets() async {
     await updateWarWidget();
@@ -395,14 +396,23 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
-  void reloadData() async {
+  void refreshData() async {
+    await fetchPlayerAccounts(user!);
+    notifyListeners();
+  }
 
+  void reloadData() async {
+    print("Reloading data");
     if (selectedTag.value != null) {
+      print("Selected tag: ${selectedTag.value}");
       playerStats = playerAccounts?.playerAccountInfo
           .firstWhere((element) => element.tag == selectedTag.value);
+      print("Player stats: $playerStats");
       clanTag = playerStats?.clan.tag;
+      print("Clan tag: $clanTag");
       clanInfo = playerAccounts?.clanInfo
           .firstWhere((element) => element.tag == playerStats?.clan.tag);
+      print("Clan info: $clanInfo");
 
       final response = await http.get(
         Uri.parse(
@@ -417,10 +427,21 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
               (element) => element.clan.tag == playerStats?.clan.tag);
         }
       }
-      
+
+      // After fetching new data, check if the selectedTag.value still exists in the new items
+      if (playerAccounts?.playerAccountInfo
+              .any((element) => element.tag == selectedTag.value) ==
+          true) {
+        // If it exists, keep the selectedTag.value
+      } else {
+        // If it doesn't exist, set the selectedTag.value to the first item's value
+        if (playerAccounts?.playerAccountInfo.isNotEmpty == true) {
+          selectedTag.value = playerAccounts?.playerAccountInfo[0].tag;
+        }
+      }
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('clanTag', clanTag!);
-      updateWidgets();
     }
     notifyListeners();
   }
