@@ -292,7 +292,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> initializeFromBackground(Uri data) async {
     // Process the data or update the widget
-    print('Processing data in background: $data');
     updateWidgets();
   }
 
@@ -313,7 +312,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   void updateWidgets() async {
     await updateWarWidget();
-    print('Widget updated at ${DateTime.now()}');
   }
 
   Future<String> checkCurrentWar(String clanTag) async {
@@ -402,17 +400,12 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void reloadData() async {
-    print("Reloading data");
     if (selectedTag.value != null) {
-      print("Selected tag: ${selectedTag.value}");
       playerStats = playerAccounts?.playerAccountInfo
           .firstWhere((element) => element.tag == selectedTag.value);
-      print("Player stats: $playerStats");
       clanTag = playerStats?.clan.tag;
-      print("Clan tag: $clanTag");
       clanInfo = playerAccounts?.clanInfo
           .firstWhere((element) => element.tag == playerStats?.clan.tag);
-      print("Clan info: $clanInfo");
 
       final response = await http.get(
         Uri.parse(

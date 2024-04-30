@@ -446,7 +446,7 @@ class StatsScreenState extends State<StatsScreen>
           ClanInfo clanInfo =
               await ClanService().fetchClanInfo(widget.playerStats.clan.tag);
           if (mounted) {
-          Navigator.pop(context);
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -633,8 +633,8 @@ class StatsScreenState extends State<StatsScreen>
                   );
                 },
               );
-/*
-              PlayerLegendData legendData = await PlayerLegendService().fetchLegendData(widget.playerStats.tag);
+              PlayerLegendData legendData = await PlayerLegendService()
+                  .fetchLegendData(widget.playerStats.tag);
 
               Navigator.pop(context); // Dismiss the dialog
               Navigator.push(
@@ -642,14 +642,9 @@ class StatsScreenState extends State<StatsScreen>
                 MaterialPageRoute(
                   builder: (context) => LegendScreen(
                       playerStats: widget.playerStats,
-                      legendData: legendData,
-                      diffTrophies: diffTrophies,
-                      currentTrophies: currentTrophies,
-                      firstTrophies: firstTrophies,
-                      attacksList: attacksList,
-                      defensesList: defensesList),
+                      playerLegendData: legendData),
                 ),
-              );*/
+              );
             }
           },
           child: Chip(

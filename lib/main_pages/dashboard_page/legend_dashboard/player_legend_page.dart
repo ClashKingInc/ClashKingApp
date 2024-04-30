@@ -15,22 +15,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 class LegendScreen extends StatefulWidget {
   final PlayerAccountInfo playerStats;
-  final Map<String, dynamic> legendData;
-  final int diffTrophies;
-  final String currentTrophies;
-  final String firstTrophies;
-  final List<dynamic> attacksList;
-  final List<dynamic> defensesList;
+  final PlayerLegendData playerLegendData;
 
   LegendScreen(
-      {super.key,
-      required this.playerStats,
-      required this.legendData,
-      required this.diffTrophies,
-      required this.currentTrophies,
-      required this.firstTrophies,
-      required this.attacksList,
-      required this.defensesList});
+      {super.key, required this.playerStats, required this.playerLegendData});
 
   @override
   LegendScreenState createState() => LegendScreenState();
@@ -40,8 +28,11 @@ class LegendScreenState extends State<LegendScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   DateTime selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
-  DateTime selectedMonth = DateTime.now().toUtc().subtract(Duration(hours: 5)); // Change month in history tab
-  Map<String, dynamic> dynamicLegendData = {}; // Legend days details (result of API fetchLegendData))
+  DateTime selectedMonth = DateTime.now()
+      .toUtc()
+      .subtract(Duration(hours: 5)); // Change month in history tab
+  late PlayerLegendData
+      legendData; // Legend days details (result of API fetchLegendData))
   late Future<List<dynamic>> seasonLegendData; // List of EOS trophies
 
   @override
@@ -50,8 +41,9 @@ class LegendScreenState extends State<LegendScreen>
     tabController = TabController(length: 3, vsync: this);
     selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
     selectedMonth = DateTime.now().toUtc().subtract(Duration(hours: 5));
-    dynamicLegendData = widget.legendData;
-    seasonLegendData = PlayerLegendSeasonsService.fetchSeasonsData(widget.playerStats.tag);
+    legendData = widget.playerLegendData;
+    seasonLegendData =
+        PlayerLegendSeasonsService.fetchSeasonsData(widget.playerStats.tag);
   }
 
   @override
@@ -77,7 +69,8 @@ class LegendScreenState extends State<LegendScreen>
       if (selectedMonth.month == 12) {
         selectedMonth = DateTime(selectedMonth.year + 1, 1, selectedMonth.day);
       } else {
-        selectedMonth = DateTime(selectedMonth.year, selectedMonth.month + 1, selectedMonth.day);
+        selectedMonth = DateTime(
+            selectedMonth.year, selectedMonth.month + 1, selectedMonth.day);
       }
     });
   }
@@ -87,7 +80,8 @@ class LegendScreenState extends State<LegendScreen>
       if (selectedMonth.month == 1) {
         selectedMonth = DateTime(selectedMonth.year - 1, 12, selectedMonth.day);
       } else {
-        selectedMonth = DateTime(selectedMonth.year, selectedMonth.month - 1, selectedMonth.day);
+        selectedMonth = DateTime(
+            selectedMonth.year, selectedMonth.month - 1, selectedMonth.day);
       }
     });
   }
@@ -97,17 +91,19 @@ class LegendScreenState extends State<LegendScreen>
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () {
-          return PlayerLegendService.fetchLegendData(widget.playerStats.tag)
+          PlayerLegendService playerLegendService = PlayerLegendService();
+          return playerLegendService
+              .fetchLegendData(widget.playerStats.tag)
               .then((data) {
             setState(() {
-              dynamicLegendData = data;
+              legendData = data;
             });
           });
         },
         child: SingleChildScrollView(
           child: Column(
             children: [
-              LegendHeaderCard(widget: widget, dynamicLegendData: dynamicLegendData),
+              LegendHeaderCard(widget: widget, legendData: legendData),
               ScrollableTab(
                 tabBarDecoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
@@ -124,15 +120,24 @@ class LegendScreenState extends State<LegendScreen>
                   Tab(text: AppLocalizations.of(context)?.history ?? "History"),
                 ],
                 children: [
-                  dynamicLegendData["legends"].isNotEmpty
-                    ? buildLegendTab(dynamicLegendData)
-                    : Center(child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available')),
-                  dynamicLegendData["legends"].isNotEmpty
-                    ? buildChartsStats(dynamicLegendData, seasonLegendData)
-                    : Center(child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available')),
-                  dynamicLegendData["legends"].isNotEmpty
-                    ? buildHistoryTab(seasonLegendData)
-                    : Center(child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available')),
+                  legendData.legendData.isNotEmpty
+                      ? buildLegendTab(legendData)
+                      : Center(
+                          child: Text(
+                              AppLocalizations.of(context)?.noDataAvailable ??
+                                  'No data available')),
+                  legendData.legendData.isNotEmpty
+                      ? buildChartsStats(legendData, seasonLegendData)
+                      : Center(
+                          child: Text(
+                              AppLocalizations.of(context)?.noDataAvailable ??
+                                  'No data available')),
+                  legendData.legendData.isNotEmpty
+                      ? buildHistoryTab(seasonLegendData)
+                      : Center(
+                          child: Text(
+                              AppLocalizations.of(context)?.noDataAvailable ??
+                                  'No data available')),
                 ],
               ),
             ],
@@ -142,14 +147,13 @@ class LegendScreenState extends State<LegendScreen>
     );
   }
 
-  Widget buildLegendTab(Map<String, dynamic> data) {
+  Widget buildLegendTab(PlayerLegendData playerLegendData) {
     List<Widget> legendEntries = [];
-    Map<String, dynamic> legends =  data['legends'];
 
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
 
-    if (legends.containsKey(date)) {
-      Map<String, dynamic> details = legends[date];
+    if (playerLegendData.legendData.containsKey(date)) {
+      Map<String, dynamic> details = playerLegendData.legendData[date];
 
       String startTrophies = '0';
       String currentTrophies = "0";
@@ -171,22 +175,26 @@ class LegendScreenState extends State<LegendScreen>
         Map<String, dynamic> lastDefense = defensesList.last;
         currentTrophies = (lastAttack['time'] > lastDefense['time']
                 ? lastAttack['trophies'].toString()
-                : lastDefense['trophies']).toString();
+                : lastDefense['trophies'])
+            .toString();
         Map<String, dynamic> firstAttack = attacksList.first;
         Map<String, dynamic> firstDefense = defensesList.first;
         startTrophies = (firstAttack['time'] < firstDefense['time']
                 ? (firstAttack['trophies'] - firstAttack['change'])
-                : (firstDefense['trophies']) + firstDefense['change']) .toString();
+                : (firstDefense['trophies']) + firstDefense['change'])
+            .toString();
       } else if (attacksList.isNotEmpty) {
         Map<String, dynamic> lastAttack = attacksList.last;
         currentTrophies = lastAttack['trophies'].toString();
         Map<String, dynamic> firstAttack = attacksList.first;
-        startTrophies = (firstAttack['trophies'] - firstAttack['change']).toString();
+        startTrophies =
+            (firstAttack['trophies'] - firstAttack['change']).toString();
       } else if (defensesList.isNotEmpty) {
         Map<String, dynamic> lastDefense = defensesList.last;
         currentTrophies = lastDefense['trophies'].toString();
         Map<String, dynamic> firstDefense = defensesList.first;
-        startTrophies = (firstDefense['trophies'] + firstDefense['change']).toString();
+        startTrophies =
+            (firstDefense['trophies'] + firstDefense['change']).toString();
       }
 
       Map<String, dynamic> attacksStats = calculateStats(attacksList);
@@ -198,10 +206,9 @@ class LegendScreenState extends State<LegendScreen>
           child: Column(
             children: [
               LegendTrophiesStartEndCard(
-                context: context,
-                startTrophies: startTrophies,
-                currentTrophies: currentTrophies
-              ),
+                  context: context,
+                  startTrophies: startTrophies,
+                  currentTrophies: currentTrophies),
               Container(
                 margin: EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
                 child: Row(
@@ -210,21 +217,25 @@ class LegendScreenState extends State<LegendScreen>
                   children: [
                     Expanded(
                       child: LegendOffenseDefenseCard(
-                          title: AppLocalizations.of(context)?.attacks ?? "Attacks",
+                          title: AppLocalizations.of(context)?.attacks ??
+                              "Attacks",
                           list: attacksList,
                           context: context,
                           stats: attacksStats,
                           plusMinus: "+",
-                          icon: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
+                          icon:
+                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
                     ),
                     Expanded(
                       child: LegendOffenseDefenseCard(
-                          title: AppLocalizations.of(context)?.defenses ?? "Defenses",
+                          title: AppLocalizations.of(context)?.defenses ??
+                              "Defenses",
                           list: defensesList,
                           context: context,
                           stats: defensesStats,
                           plusMinus: "-",
-                          icon: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield_Arrow.png"),
+                          icon:
+                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield_Arrow.png"),
                     ),
                   ],
                 ),
@@ -243,11 +254,8 @@ class LegendScreenState extends State<LegendScreen>
         children: [
           SizedBox(width: 16),
           IconButton(
-            icon: Icon(
-              Icons.calendar_today,
-              color: Theme.of(context).colorScheme.onBackground,
-              size: 16
-            ),
+            icon: Icon(Icons.calendar_today,
+                color: Theme.of(context).colorScheme.onBackground, size: 16),
             onPressed: () async {
               final DateTime? picked = await showDatePicker(
                 context: context,
@@ -258,12 +266,23 @@ class LegendScreenState extends State<LegendScreen>
                   return Theme(
                     data: ThemeData(
                       colorScheme: Theme.of(context).colorScheme.copyWith(
-                        primary: Theme.of(context).colorScheme.secondary, // Rond et boutons en bas
-                        onPrimary: Theme.of(context).colorScheme.onPrimary, // intérieur du jour sélectionné
-                        surface: Theme.of(context).colorScheme.background, // fond du calendrier mais en bizarre
-                        onSurface: Theme.of(context).colorScheme.onSurface, // Chiffres du calendrier + sélection année + manu de défilement mois
-                      ),
-                      dialogBackgroundColor: Theme.of(context).colorScheme.onPrimary, // wtf
+                            primary: Theme.of(context)
+                                .colorScheme
+                                .secondary, // Rond et boutons en bas
+                            onPrimary: Theme.of(context)
+                                .colorScheme
+                                .onPrimary, // intérieur du jour sélectionné
+                            surface: Theme.of(context)
+                                .colorScheme
+                                .background, // fond du calendrier mais en bizarre
+                            onSurface: Theme.of(context)
+                                .colorScheme
+                                .onSurface, // Chiffres du calendrier + sélection année + manu de défilement mois
+                            surfaceTint:
+                                Colors.transparent, // fond du calendrier
+                          ),
+                      dialogBackgroundColor:
+                          Theme.of(context).colorScheme.onPrimary,
                     ),
                     child: child!,
                   );
@@ -282,14 +301,14 @@ class LegendScreenState extends State<LegendScreen>
             height: 30,
             child: IconButton(
               icon: Icon(Icons.arrow_back,
-                color: Theme.of(context).colorScheme.onBackground, size: 16),
+                  color: Theme.of(context).colorScheme.onBackground, size: 16),
               onPressed: decrementDate,
             ),
           ),
           Text(
             DateFormat('dd MMMM yyyy',
-                Localizations.localeOf(context).languageCode)
-              .format(selectedDate),
+                    Localizations.localeOf(context).languageCode)
+                .format(selectedDate),
             style: Theme.of(context).textTheme.labelLarge,
           ),
           SizedBox(
@@ -297,7 +316,7 @@ class LegendScreenState extends State<LegendScreen>
             height: 30,
             child: IconButton(
               icon: Icon(Icons.arrow_forward,
-                color: Theme.of(context).colorScheme.onBackground, size: 16),
+                  color: Theme.of(context).colorScheme.onBackground, size: 16),
               onPressed: incrementDate,
             ),
           ),
@@ -307,13 +326,15 @@ class LegendScreenState extends State<LegendScreen>
       if (legendEntries.isEmpty)
         Column(children: [
           Card(
-            margin: EdgeInsets.only(bottom: 8, left: 16, right: 16),
+              margin: EdgeInsets.only(bottom: 8, left: 16, right: 16),
               child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available'))),
+                  padding: EdgeInsets.all(16),
+                  child: Text(AppLocalizations.of(context)?.noDataAvailable ??
+                      'No data available'))),
           SizedBox(height: 10),
-          CachedNetworkImage(imageUrl: 
-            'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
+          CachedNetworkImage(
+            imageUrl:
+                'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
             height: 350,
             width: 200,
           )
@@ -344,7 +365,6 @@ class LegendScreenState extends State<LegendScreen>
         }
       }
     }
-
     return LegendUsedGearCard(context: context, itemCounts: itemCounts);
   }
 
@@ -362,29 +382,30 @@ class LegendScreenState extends State<LegendScreen>
         } else {
           List<dynamic> data = snapshot.data!;
           if (data.isEmpty) {
-            return Center(child :Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available'));
+            return Center(
+                child: Text(AppLocalizations.of(context)?.noDataAvailable ??
+                    'No data available'));
           } else {
-          return LegendHistoryCard(data: data);
+            return LegendHistoryCard(data: data);
           }
         }
       },
     );
   }
 
-  Widget buildChartsStats(
-      Map<String, dynamic> legendData, Future<List<dynamic>> seasonLegendData) {
+  Widget buildChartsStats(PlayerLegendData playerLegendData,
+      Future<List<dynamic>> seasonLegendData) {
     return Column(children: [
       SizedBox(height: 10),
-      buildTrophiesByMonthChart(legendData),
+      buildTrophiesByMonthChart(playerLegendData.legendData),
       buildLegendHistoryChart(seasonLegendData)
     ]);
   }
 
   Widget buildTrophiesByMonthChart(Map<String, dynamic> legendData) {
     Map<String, Map<String, String>> seasonTrophies = {};
-    Map<String, dynamic> legends = legendData['legends'];
 
-    legends.forEach((date, details) {
+    legendData.forEach((date, details) {
       String currentTrophies = "0";
       List<dynamic> attacksList = details['new_attacks'] ?? [];
       List<dynamic> defensesList = details['new_defenses'] ?? [];
@@ -438,12 +459,15 @@ class LegendScreenState extends State<LegendScreen>
         child: Card(
           margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
           elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 20.0, top: 10.0, bottom: 10.0),
+            padding: const EdgeInsets.only(
+                left: 10.0, right: 20.0, top: 10.0, bottom: 10.0),
             child: Column(children: [
               Text(
-                  AppLocalizations.of(context)?.trophiesByMonth ?? "Trophies by Month",
+                  AppLocalizations.of(context)?.trophiesByMonth ??
+                      "Trophies by Month",
                   style: Theme.of(context).textTheme.bodyMedium),
               SizedBox(height: 16),
               Expanded(
@@ -572,16 +596,21 @@ class LegendScreenState extends State<LegendScreen>
         child: Card(
           margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
           elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0, bottom: 10.0),
+            padding: const EdgeInsets.only(
+                left: 10.0, right: 10.0, top: 20.0, bottom: 10.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available',
+                Text(
+                    AppLocalizations.of(context)?.noDataAvailable ??
+                        'No data available',
                     style: Theme.of(context).textTheme.bodyMedium),
-                CachedNetworkImage(imageUrl: 
-                  'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
+                CachedNetworkImage(
+                  imageUrl:
+                      'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
                   height: 300,
                 ),
                 Row(
@@ -667,7 +696,8 @@ class LegendScreenState extends State<LegendScreen>
                 width: double.infinity,
                 height: 500,
                 child: Card(
-                  margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
+                  margin:
+                      EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
@@ -782,7 +812,8 @@ class LegendScreenState extends State<LegendScreen>
                 width: double.infinity,
                 height: 500,
                 child: Card(
-                  margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
+                  margin:
+                      EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
@@ -792,10 +823,13 @@ class LegendScreenState extends State<LegendScreen>
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available',
+                        Text(
+                            AppLocalizations.of(context)?.noDataAvailable ??
+                                'No data available',
                             style: Theme.of(context).textTheme.bodyMedium),
-                        CachedNetworkImage(imageUrl: 
-                          'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
+                        CachedNetworkImage(
+                          imageUrl:
+                              'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
                           height: 300,
                         ),
                         Row(

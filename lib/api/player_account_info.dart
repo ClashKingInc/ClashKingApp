@@ -371,7 +371,7 @@ class PlayerService {
 
       playerStats.builderHallPic = await fetchPlayerBuilderHallByTownHallLevel(
           playerStats.builderHallLevel);
-      await fetchImagesAndTypes(playerStats.troops);
+      await fetchImagesAndTypes(playerStats.troops); 
       await fetchImagesAndTypes(playerStats.heroes);
       await fetchImagesAndTypes(playerStats.spells);
       await fetchImagesAndTypes(playerStats.equipments);
@@ -412,7 +412,6 @@ class PlayerService {
 
   Future<ClanInfo> fetchClanInfo(String tag) async {
     tag = tag.replaceAll('#', '!');
-    print('Fetching clan info for $tag');
 
     final response = await http.get(
       Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
@@ -431,7 +430,6 @@ class PlayerService {
   }
 
   Future<String> fetchLeagueImageUrl(String name) async {
-    print('Fetching league image for $name');
     if (leaguesUrls.containsKey(name)) {
       // If the league name is in the map, return the corresponding URL and type
       return leaguesUrls[name]!['url']!;
@@ -450,7 +448,6 @@ class PlayerService {
   
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
-      print(jsonDecode(responseBody));
       return jsonDecode(responseBody)['league'] ?? "Unranked";
     } else {
       return "Unranked";
