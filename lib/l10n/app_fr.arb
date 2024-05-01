@@ -12,6 +12,11 @@
     "hourIndicator" : "h",
     "minIndicator" : "m",
     "noDataAvailable" : "Aucune donnée disponible.",
+
+    "manageAccounts" : "Gérer les comptes",
+    "enterPlayerTag" : "Saisir le tag du joueur",
+    "addAccount" : "Ajouter le compte", 
+    
     
     "dashboard" : "Profil",
     "homeBase" : "Village principal",

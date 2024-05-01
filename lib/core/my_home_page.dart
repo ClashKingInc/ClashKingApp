@@ -7,7 +7,7 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_league_page.dart
 import 'package:clashkingapp/main_pages/management_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/core/my_app.dart';
-import 'package:clashkingapp/components/app_bar.dart';
+import 'package:clashkingapp/components/app_bar/app_bar.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
