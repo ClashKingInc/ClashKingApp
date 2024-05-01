@@ -1,11 +1,12 @@
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:flutter/material.dart';
+import 'package:clashkingapp/core/my_app.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
-import 'package:clashkingapp/components/app_bar.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/creator_code_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_infos_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_legend_card.dart';
 import 'package:clashkingapp/api/player_legend.dart';
+import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
   final PlayerAccountInfo playerStats;
@@ -19,30 +20,34 @@ class DashboardPage extends StatefulWidget {
 
 class DashboardPageState extends State<DashboardPage>
     with SingleTickerProviderStateMixin {
-  late Future<Map<String, dynamic>> legendData;
+  late Future<PlayerLegendData> legendData;
 
   @override
   void initState() {
     super.initState();
-    legendData = PlayerLegendService.fetchLegendData(widget.playerStats.tag);
+    PlayerLegendService playerLegendService = PlayerLegendService();
+    legendData = playerLegendService.fetchLegendData(widget.playerStats.tag);
   }
 
   @override
   void didUpdateWidget(DashboardPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.playerStats.tag != oldWidget.playerStats.tag) {
-      legendData = PlayerLegendService.fetchLegendData(widget.playerStats.tag);
+      PlayerLegendService playerLegendService = PlayerLegendService();
+      legendData = playerLegendService.fetchLegendData(widget.playerStats.tag);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(user: widget.user),
       body: RefreshIndicator(
         onRefresh: () async {
           setState(() {
-            legendData = legendData = PlayerLegendService.fetchLegendData(widget.playerStats.tag);
+            final appState = Provider.of<MyAppState>(context, listen: false);
+            appState.refreshData();
+            PlayerLegendService playerLegendService = PlayerLegendService();
+            legendData = playerLegendService.fetchLegendData(widget.playerStats.tag);
           });
         },
         child: ListView(
@@ -57,26 +62,23 @@ class DashboardPageState extends State<DashboardPage>
               padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
               child: PlayerInfosCard(playerStats: widget.playerStats),
             ),
-            // Legend Infos Card : Displayed only if data 
+            // Legend Infos Card : Displayed only if data
             Padding(
               padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-              child: FutureBuilder<Map<String, dynamic>>(
+              child: FutureBuilder<PlayerLegendData>(
                 future: legendData,
                 builder: (BuildContext context,
-                    AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                    AsyncSnapshot<PlayerLegendData> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                      return SizedBox.shrink();
+                    return SizedBox.shrink();
                   } else if (snapshot.hasError) {
-                    return Text(
-                        'Error: ${snapshot.error}'); // Show error if something went wrong
+                    return Text('Error: ${snapshot.error}');
                   } else {
-                    if (!snapshot.data!['legends'].isEmpty) {
+                    if (snapshot.data!.legendData.isNotEmpty) {
                       return PlayerLegendCard(
                           playerStats: widget.playerStats,
-                          legendData:
-                              snapshot.data!); // Build PlayerLegendCard with data
-                    }
-                    else{
+                          playerLegendData: snapshot.data!); // Build PlayerLegendCard with data
+                    } else {
                       return SizedBox.shrink();
                     }
                   }
@@ -89,6 +91,3 @@ class DashboardPageState extends State<DashboardPage>
     );
   }
 }
-
-
-

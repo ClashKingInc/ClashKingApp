@@ -13,12 +13,27 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:home_widget/home_widget.dart';
+import 'dart:async';
+import 'package:intl/intl.dart';
+import 'package:workmanager/workmanager.dart';
+
+@pragma("vm:entry-point")
+FutureOr<void> backgroundCallback(Uri? data) async {
+  // Assuming MyAppState is available and correctly managing state
+  WidgetsFlutterBinding.ensureInitialized();
+  final myAppState = MyAppState();
+  if (data != null) {
+    await myAppState.initializeFromBackground(data);
+  }
+}
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    HomeWidget.registerInteractivityCallback(backgroundCallback);
     return ChangeNotifierProvider(
         create: (context) => MyAppState(),
         child: Consumer<MyAppState>(builder: (context, appState, child) {
@@ -226,7 +241,7 @@ class ThemeNotifier with ChangeNotifier {
   }
 }
 
-class MyAppState extends ChangeNotifier {
+class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   PlayerAccounts? playerAccounts;
   PlayerAccountInfo? playerStats;
   ClanInfo? clanInfo;
@@ -234,13 +249,27 @@ class MyAppState extends ChangeNotifier {
   DiscordUser? user;
   Future<void>? initializeUserFuture;
   ValueNotifier<String?> selectedTag = ValueNotifier<String?>(null);
+  String? clanTag;
 
   MyAppState() {
+    WidgetsBinding.instance.addObserver(this);
     if (selectedTag.value != null) {
       selectedTag.value = user!.tags.first;
       selectedTag.addListener(reloadData);
+      selectedTag.addListener(updateWidgets);
     }
-      _loadLanguage();
+    _loadLanguage();
+    Workmanager().registerPeriodicTask(
+      '1',
+      'simplePeriodicTask',
+      frequency: Duration(minutes: 15),
+    );
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   Locale _locale = Locale('en');
@@ -261,10 +290,122 @@ class MyAppState extends ChangeNotifier {
 
   Locale get locale => _locale;
 
+  Future<void> initializeFromBackground(Uri data) async {
+    // Process the data or update the widget
+    updateWidgets();
+  }
+
+  Future<void> updateWarWidget() async {
+    if (clanTag == null) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      clanTag = prefs.getString('clanTag');
+    }
+    final warInfo = await checkCurrentWar(clanTag!);
+    // Send data to the widget
+    await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
+    // Request the Home Widget to update
+    await HomeWidget.updateWidget(
+      name: 'WarAppWidgetProvider',
+      androidName: 'WarAppWidgetProvider',
+    );
+  }
+
+  void updateWidgets() async {
+    await updateWarWidget();
+  }
+
+  Future<String> checkCurrentWar(String clanTag) async {
+    final responseWar = await http.get(
+      Uri.parse(
+          'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar'),
+    );
+
+    if (responseWar.statusCode == 200) {
+      var decodedResponse = jsonDecode(utf8.decode(responseWar.bodyBytes));
+      if (decodedResponse["state"] != "notInWar") {
+        var teamSize = decodedResponse["teamSize"] * 2;
+        var state = decodedResponse["state"];
+        var time = "";
+
+        // Accessing clan details
+        var clanName = decodedResponse["clan"]["name"];
+        var clanBadgeUrlMedium = decodedResponse["clan"]["badgeUrls"]["medium"];
+        var clanStars = decodedResponse["clan"]["stars"];
+        var clanPercent = decodedResponse["clan"]["destructionPercentage"];
+        var clanNumberOfAttacks = decodedResponse["clan"]["attacks"];
+
+        // Accessing opponent details
+        var opponentName = decodedResponse["opponent"]["name"];
+        var opponentBadgeUrlMedium =
+            decodedResponse["opponent"]["badgeUrls"]["medium"];
+        var opponentStars = decodedResponse["opponent"]["stars"];
+        var opponentPercent =
+            decodedResponse["opponent"]["destructionPercentage"];
+        var opponentNumberOfAttacks = decodedResponse["opponent"]["attacks"];
+
+        //default score
+        var score = "$clanStars - $opponentStars";
+
+        // Accessing time details
+        if (state == "preparation") {
+          DateTime startTime = DateTime.parse(decodedResponse["startTime"]);
+          String formattedTime =
+              DateFormat('HH:mm').format(startTime.toLocal());
+          time = "Start at $formattedTime";
+          score = "-";
+        } else if (state == "inWar") {
+          DateTime endTime = DateTime.parse(decodedResponse["endTime"]);
+          String formattedTime = DateFormat('HH:mm').format(endTime.toLocal());
+          time = "End at $formattedTime";
+        } else if (state == "warEnded") {
+          time = "War Ended";
+        }
+
+        // Create a Map object with the required fields
+        var result = {
+          "updatedAt":
+              "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
+          "state": time,
+          "score": score,
+          "clan": {
+            "name": clanName,
+            "badgeUrlMedium": clanBadgeUrlMedium,
+            "percent": "$clanPercent%",
+            "attacks": "$clanNumberOfAttacks/$teamSize"
+          },
+          "opponent": {
+            "name": opponentName,
+            "badgeUrlMedium": opponentBadgeUrlMedium,
+            "percent": "$opponentPercent%",
+            "attacks": "$opponentNumberOfAttacks/$teamSize"
+          }
+        };
+
+        // Convert the Map object to a JSON string
+        var jsonString = jsonEncode(result);
+
+        // Return the JSON string
+        return jsonString;
+      } else {
+        return "notInWar";
+      }
+    } else {
+      return "error";
+    }
+  }
+
+  void refreshData() async {
+    await fetchPlayerAccounts(user!);
+    notifyListeners();
+  }
+
   void reloadData() async {
+    print("Reloading data");
     if (selectedTag.value != null) {
+      print("Selected tag: ${selectedTag.value}");
       playerStats = playerAccounts?.playerAccountInfo
           .firstWhere((element) => element.tag == selectedTag.value);
+      clanTag = playerStats?.clan.tag;
       clanInfo = playerAccounts?.clanInfo
           .firstWhere((element) => element.tag == playerStats?.clan.tag);
 
@@ -281,8 +422,27 @@ class MyAppState extends ChangeNotifier {
               (element) => element.clan.tag == playerStats?.clan.tag);
         }
       }
-      notifyListeners();
+
+      // After fetching new data, check if the selectedTag.value still exists in the new items
+      if (playerAccounts?.playerAccountInfo
+              .any((element) => element.tag == selectedTag.value) !=
+          true) {
+        // The current value is not in the new items list
+        if (playerAccounts?.playerAccountInfo.isNotEmpty == true) {
+          print("Selected tag not found in new items");
+          // Safely setting the first available tag as the new value
+          selectedTag.value = playerAccounts!.playerAccountInfo.first.tag;
+        } else {
+          print("No valid items found");
+          // Handle the case where there are no valid items
+          selectedTag.value = null;
+        }
+      }
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('clanTag', clanTag!);
     }
+    notifyListeners();
   }
 
   // Assume this method exists and fetches player stats correctly
@@ -313,7 +473,8 @@ class MyAppState extends ChangeNotifier {
   // Assume this method exists and fetches current war correctly
   Future<void> fetchCurrentWarInfo(String tag) async {
     try {
-      currentWarInfo = await CurrentWarService().fetchCurrentWarInfo(tag, "war");
+      currentWarInfo =
+          await CurrentWarService().fetchCurrentWarInfo(tag, "war");
       notifyListeners(); // Notify listeners to rebuild widgets that depend on currentWarInfo.
     } catch (e, s) {
       // Handle the error, maybe log it or show a user-friendly message

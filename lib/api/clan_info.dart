@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import 'package:clashkingapp/data/league_data.dart';
 
 class ClanInfo {
   final String tag;
@@ -25,7 +25,7 @@ class ClanInfo {
   final WarLeague warLeague;
   final int members;
   final Location location;
-  final List<dynamic> memberList;
+  final List<Member> memberList;
   final List<dynamic> labels;
   final int requiredBuilderBaseTrophies;
   final int requiredTownhallLevel;
@@ -80,10 +80,10 @@ class ClanInfo {
       warTies: json['warTies'] ?? 0,
       warLosses: json['warLosses'] ?? 0,
       isWarLogPublic: json['isWarLogPublic'] ?? false,
-      warLeague: WarLeague.fromJson(json['warLeague'] ?? {}) ,
+      warLeague: WarLeague.fromJson(json['warLeague'] ?? {}),
       members: json['members'] ?? 0,
       location: Location.fromJson(json['location'] ?? {}),
-      memberList: json['memberList'] ?? [],
+      memberList: (json['memberList'] as List<dynamic>).map((e) => Member.fromJson(e)).toList(),
       labels: json['labels'] ?? [],
       requiredBuilderBaseTrophies: json['requiredBuilderBaseTrophies'] ?? 0,
       requiredTownhallLevel: json['requiredTownhallLevel'] ?? 0,
@@ -125,15 +125,18 @@ class CapitalLeague {
 class WarLeague {
   final int id;
   final String name;
+  late String imageUrl;
 
   WarLeague({required this.id, required this.name});
 
   factory WarLeague.fromJson(Map<String, dynamic> json) {
-    return WarLeague(
+    WarLeague warLeague = WarLeague(
       id: json['id'],
       name: json['name'],
     );
+    return warLeague;
   }
+     
 }
 
 class Location {
@@ -143,7 +146,12 @@ class Location {
   final bool isCountry;
   final String countryCode;
 
-  Location({required this.localizedName, required this.id, required this.name, required this.isCountry, required this.countryCode});
+  Location(
+      {required this.localizedName,
+      required this.id,
+      required this.name,
+      required this.isCountry,
+      required this.countryCode});
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
@@ -156,11 +164,116 @@ class Location {
   }
 }
 
+class Member{
+  final String tag;
+  final String name;
+  final String role;
+  final int townHallLevel;
+  final int expLevel;
+  final League league;
+  final int trophies;
+  final int builderBaseTrophies;
+  final int clanRank;
+  final int previousClanRank;
+  final int donations;
+  final int donationsReceived;
+  final BuilderBaseLeague builderBaseLeague;
+
+  Member({
+    required this.tag,
+    required this.name,
+    required this.role,
+    required this.townHallLevel,
+    required this.expLevel,
+    required this.league,
+    required this.trophies,
+    required this.builderBaseTrophies,
+    required this.clanRank,
+    required this.previousClanRank,
+    required this.donations,
+    required this.donationsReceived,
+    required this.builderBaseLeague,
+  });
+
+  factory Member.fromJson(Map<String, dynamic> json) {
+    return Member(
+      tag: json['tag'] ?? 'No tag',
+      name: json['name'] ?? 'No name',
+      role: json['role'] ?? 'No role',
+      townHallLevel: json['townHallLevel'] ?? 0,
+      expLevel: json['expLevel'] ?? 0,
+      league: League.fromJson(json['league']),
+      trophies: json['trophies'] ?? 0,
+      builderBaseTrophies: json['builderBaseTrophies'] ?? 0,
+      clanRank: json['clanRank'] ?? 0,
+      previousClanRank: json['previousClanRank'] ?? 0,
+      donations: json['donations'] ?? 0,
+      donationsReceived: json['donationsReceived'] ?? 0,
+      builderBaseLeague: BuilderBaseLeague.fromJson(json['builderBaseLeague']),
+    );
+  }
+}
+
+class League{
+  final int id;
+  final String name;
+  final IconUrls imageUrl;
+
+  League({ 
+    required this.id,
+    required this.name,
+    required this.imageUrl,
+  });
+
+  factory League.fromJson(Map<String, dynamic> json) {
+    return League(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? 'No name',
+      imageUrl: IconUrls.fromJson(json['iconUrls']),
+    );
+  }
+}
+
+class IconUrls{
+  final String small;
+  final String tiny;
+  final String medium;
+
+  IconUrls({
+    required this.small,
+    required this.tiny,
+    required this.medium,
+  });
+
+  factory IconUrls.fromJson(Map<String, dynamic> json) {
+    return IconUrls(
+      small: json['small'] ?? 'No small image URL',
+      tiny: json['tiny'] ?? 'No tiny image URL',
+      medium: json['medium'] ?? 'No medium image URL',
+    );
+  }
+}
+
+class BuilderBaseLeague{
+  final int id;
+  final String name;
+
+  BuilderBaseLeague({
+    required this.id,
+    required this.name,
+  });
+
+  factory BuilderBaseLeague.fromJson(Map<String, dynamic> json) {
+    return BuilderBaseLeague(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? 'No name',
+    );
+  }
+}
 
 // Service class to fetch clan info
 class ClanService {
-
-    Future<void> initEnv() async {
+  Future<void> initEnv() async {
     await dotenv.load(fileName: ".env");
   }
 
@@ -173,9 +286,22 @@ class ClanService {
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
-      return ClanInfo.fromJson(jsonDecode(responseBody));
+      ClanInfo clanInfo = ClanInfo.fromJson(jsonDecode(responseBody));
+      clanInfo.warLeague.imageUrl = await fetchLeagueImageUrl(clanInfo.warLeague.name);
+
+      return clanInfo;
     } else {
       throw Exception('Failed to load clan stats');
+    }
+  }
+
+  Future<String> fetchLeagueImageUrl(String name) async {
+    if (leaguesUrls.containsKey(name)) {
+      // If the league name is in the map, return the corresponding URL and type
+      return leaguesUrls[name]!['url']!;
+    } else {
+      // If the league name is not in the map, return default image URL and type
+      return 'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
     }
   }
 }

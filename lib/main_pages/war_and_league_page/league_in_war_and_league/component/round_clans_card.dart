@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class RoundClanCard extends StatelessWidget {
   final CurrentWarInfo warLeagueInfo;
@@ -42,14 +43,14 @@ class RoundClanCard extends StatelessWidget {
                             SizedBox(
                               height: 50,
                               width: 50,
-                              child: Image.network(
+                              child: CachedNetworkImage(imageUrl: 
                                   warLeagueInfo.clan.badgeUrls.small),
                             ),
                             Column(
                               children: [
                                 Row(children: [
                                   SizedBox(
-                                    child: Image.network(
+                                    child: CachedNetworkImage(imageUrl: 
                                       "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
                                       width: 12,
                                       height: 12,
@@ -63,7 +64,7 @@ class RoundClanCard extends StatelessWidget {
                                 ]),
                                 Row(children: [
                                   SizedBox(
-                                    child: Image.network(
+                                    child: CachedNetworkImage(imageUrl: 
                                       "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
                                       width: 12,
                                       height: 12,
@@ -155,7 +156,7 @@ class RoundClanCard extends StatelessWidget {
                                             .textTheme
                                             .labelMedium),
                                     SizedBox(
-                                      child: Image.network(
+                                      child: CachedNetworkImage(imageUrl: 
                                         "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
                                         width: 12,
                                         height: 12,
@@ -171,7 +172,7 @@ class RoundClanCard extends StatelessWidget {
                                             .textTheme
                                             .labelMedium),
                                     SizedBox(
-                                      child: Image.network(
+                                      child: CachedNetworkImage(imageUrl: 
                                         "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
                                         width: 12,
                                         height: 12,
@@ -183,7 +184,7 @@ class RoundClanCard extends StatelessWidget {
                           SizedBox(
                             height: 50,
                             width: 50,
-                            child: Image.network(
+                            child: CachedNetworkImage(imageUrl: 
                                 warLeagueInfo.opponent.badgeUrls.small),
                           ),
                         ],

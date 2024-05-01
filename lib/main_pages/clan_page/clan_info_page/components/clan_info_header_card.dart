@@ -1,0 +1,193 @@
+import 'dart:ui';
+import 'package:clashkingapp/api/clan_info.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+import 'package:clashkingapp/main_pages/clan_page/clan_info_page/components/clan_wars_stats_card.dart';
+
+class ClanInfoHeaderCard extends StatefulWidget {
+  final ClanInfo clanInfo;
+
+  ClanInfoHeaderCard({required this.clanInfo});
+
+  @override
+  ClanInfoHeaderCardState createState() => ClanInfoHeaderCardState();
+}
+
+class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
+  @override
+  Widget build(BuildContext context) {
+    String backgroundImageUrl =
+        "https://clashkingfiles.b-cdn.net/landscape/clan-landscape.png";
+    return Column(
+      children: [
+        Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.bottomCenter,
+          children: <Widget>[
+            SizedBox(
+              height: 130,
+              width: double.infinity,
+              child: ImageFiltered(
+                imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+                child: ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                      Colors.black.withOpacity(0.6),
+                      BlendMode.darken,
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: backgroundImageUrl,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )),
+              ),
+            ),
+            Positioned(
+              bottom: -50,
+              child: CachedNetworkImage(
+                imageUrl: widget.clanInfo.badgeUrls.large,
+                width: 130,
+              ),
+            ),
+            Positioned(
+              top: 30,
+              left: 10,
+              child: IconButton(
+                icon: Icon(Icons.arrow_back,
+                    color: Theme.of(context).colorScheme.onPrimary, size: 32),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ],
+        ),
+        Column(children: [
+          SizedBox(height: 50),
+          Text(
+            widget.clanInfo.name,
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+          ),
+          SizedBox(height: 10),
+          Chip(
+            avatar: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              child: CachedNetworkImage(
+                  imageUrl: widget.clanInfo.warLeague.imageUrl),
+            ),
+            label: Text(widget.clanInfo.warLeague.name,
+                style: Theme.of(context).textTheme.labelLarge),
+          ),
+          Wrap(
+            spacing: 8,
+            runSpacing: 0,
+            alignment: WrapAlignment.center,
+            children: <Widget>[
+              Chip(
+                avatar: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    child: CachedNetworkImage(
+                        imageUrl:
+                            "https://clashkingfiles.b-cdn.net/country-flags/${widget.clanInfo.location.countryCode}.png")),
+                label: Text(widget.clanInfo.location.name,
+                    style: Theme.of(context).textTheme.labelLarge),
+              ),
+              Chip(
+                avatar: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: Icon(LucideIcons.users,
+                      color: Theme.of(context).colorScheme.onBackground,
+                      size: 16),
+                ),
+                label: Text("${widget.clanInfo.members.toString()}/50",
+                    style: Theme.of(context).textTheme.labelLarge),
+              ),
+              Chip(
+                avatar: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: CachedNetworkImage(
+                      imageUrl:
+                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
+                ),
+                label: Text(widget.clanInfo.clanPoints.toString(),
+                    style: Theme.of(context).textTheme.labelLarge),
+              ),
+              Chip(
+                avatar: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: CachedNetworkImage(
+                      imageUrl:
+                          "https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${widget.clanInfo.requiredTownhallLevel}.png"),
+                ),
+                label: Text(widget.clanInfo.requiredTownhallLevel.toString(),
+                    style: Theme.of(context).textTheme.labelLarge),
+              ),
+              Chip(
+                avatar: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: CachedNetworkImage(
+                      imageUrl:
+                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack.png"),
+                ),
+                label: Text(widget.clanInfo.clanCapitalPoints.toString(),
+                    style: Theme.of(context).textTheme.labelLarge),
+              ),
+              Chip(
+                avatar: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: Icon(LucideIcons.mail,
+                      color: Theme.of(context).colorScheme.onBackground,
+                      size: 16),
+                ),
+                label: Text(widget.clanInfo.type.toString(),
+                    style: Theme.of(context).textTheme.labelLarge),
+              ),
+              Chip(
+                avatar: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: CachedNetworkImage(
+                      imageUrl:
+                          "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png"),
+                ),
+                label: Text(widget.clanInfo.warFrequency.toString(),
+                    style: Theme.of(context).textTheme.labelLarge),
+              ),
+              
+            ],
+          ),
+          SizedBox(height: 10),
+          Text(
+            widget.clanInfo.description,
+            style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(height: 20),
+          ButtonBar(
+            alignment: MainAxisAlignment.spaceAround,
+            buttonPadding: EdgeInsets.only(top: 0),
+            children: <Widget>[
+              TextButton(
+                  child: Text('Stats',
+                      style: Theme.of(context).textTheme.bodyMedium),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ClanWarsStatsCard(clanInfo: widget.clanInfo);
+                      },
+                    );
+                  }),
+              TextButton(
+                  child: Text('War Logs',
+                      style: Theme.of(context).textTheme.bodyMedium),
+                  onPressed: () {}),
+            ],
+          ),
+        ]),
+      ],
+    );
+  }
+}

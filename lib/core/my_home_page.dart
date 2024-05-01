@@ -7,6 +7,7 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_league_page.dart
 import 'package:clashkingapp/main_pages/management_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/core/my_app.dart';
+import 'package:clashkingapp/components/app_bar.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -76,7 +77,7 @@ class MyHomePageState extends State<MyHomePage> {
                       child:
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
               appState.user != null && appState.playerStats != null
-                ? CurrentWarInfoPage(user: appState.user!, playerStats: appState.playerStats!, clanInfo: appState.clanInfo!)
+                ? CurrentWarInfoPage(discordUser: appState.user!, playerStats: appState.playerStats!, clanInfo: appState.clanInfo!)
                 : Center(
                     child: CircularProgressIndicator(),
                   ), // Wrap CircularProgressIndicator with Center
@@ -85,6 +86,7 @@ class MyHomePageState extends State<MyHomePage> {
             ];
 
             return Scaffold(
+              appBar:CustomAppBar(user: appState.user!),
               body: PageView(
                 controller: _pageController,
                 onPageChanged: _onPageChanged,

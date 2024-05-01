@@ -1,25 +1,27 @@
+import 'package:clashkingapp/api/player_legend.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_legend_page.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PlayerLegendCard extends StatelessWidget {
   const PlayerLegendCard({
     super.key,
     required this.playerStats,
-    required this.legendData,
+    required this.playerLegendData,
   });
 
   final PlayerAccountInfo playerStats;
-  final Map<String, dynamic> legendData;
+  final PlayerLegendData playerLegendData;
 
-  @override
+  @override 
   Widget build(BuildContext context) {
     DateTime selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
-    if (!legendData['legends'].containsKey(date)) {
+    if (!playerLegendData.legendData.containsKey(date)) {
       return GestureDetector(
         onTap: () {
           Navigator.push(
@@ -27,13 +29,8 @@ class PlayerLegendCard extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => LegendScreen(
                   playerStats: playerStats,
-                  legendData: legendData,
-                  diffTrophies: 0,
-                  currentTrophies: playerStats.trophies.toString(),
-                  firstTrophies: "0",
-                  attacksList: [],
-                  defensesList: []),
-            ),
+                  playerLegendData: playerLegendData
+            )),
           );
         },
         child: DefaultTextStyle(
@@ -59,7 +56,7 @@ class PlayerLegendCard extends StatelessWidget {
                               SizedBox(
                                 height: 100,
                                 width: 100,
-                                child: Image.network(
+                                child: CachedNetworkImage(imageUrl: 
                                   "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png"
                                 ),
                               ),
@@ -98,49 +95,6 @@ class PlayerLegendCard extends StatelessWidget {
         ),
       );
     } else {
-      Map<String, dynamic> details = legendData['legends'][date];
-      String firstTrophies = '0';
-      String currentTrophies = "0";
-      int diffTrophies = 0;
-      List<dynamic> attacksList = details.containsKey('new_attacks')
-          ? details['new_attacks']
-          : details['attacks'] ?? [];
-      List<dynamic> defensesList = details.containsKey('new_defenses')
-          ? details['new_defenses']
-          : details['defenses'] ?? [];
-
-      if (attacksList.isNotEmpty && defensesList.isNotEmpty) {
-        Map<String, dynamic> lastAttack = attacksList.last;
-        Map<String, dynamic> lastDefense = defensesList.last;
-        currentTrophies = (lastAttack['time'] > lastDefense['time']
-                ? lastAttack['trophies'].toString()
-                : lastDefense['trophies'])
-            .toString();
-        Map<String, dynamic> firstAttack = attacksList.first;
-        Map<String, dynamic> firstDefense = defensesList.first;
-        firstTrophies = (firstAttack['time'] < firstDefense['time']
-                ? (firstAttack['trophies'] - firstAttack['change'])
-                : (firstDefense['trophies']) + firstDefense['change'])
-            .toString();
-        diffTrophies = int.parse(currentTrophies) - int.parse(firstTrophies);
-      } else if (attacksList.isNotEmpty) {
-        Map<String, dynamic> lastAttack = attacksList.last;
-        currentTrophies = lastAttack['trophies'].toString();
-        Map<String, dynamic> firstAttack = attacksList.first;
-        firstTrophies =
-            (firstAttack['trophies'] - firstAttack['change']).toString();
-        diffTrophies = int.parse(currentTrophies) - int.parse(firstTrophies);
-      } else if (defensesList.isNotEmpty) {
-        Map<String, dynamic> lastDefense = defensesList.last;
-        currentTrophies = lastDefense['trophies'].toString();
-        Map<String, dynamic> firstDefense = defensesList.first;
-        firstTrophies =
-            (firstDefense['trophies'] + firstDefense['change']).toString();
-        diffTrophies = int.parse(currentTrophies) - int.parse(firstTrophies);
-      } else {
-        currentTrophies = details['trophies'].toString();
-        firstTrophies = details['trophies'].toString();
-      }
 
       return GestureDetector(
         onTap: () {
@@ -149,12 +103,7 @@ class PlayerLegendCard extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => LegendScreen(
                   playerStats: playerStats,
-                  legendData: legendData,
-                  diffTrophies: diffTrophies,
-                  currentTrophies: currentTrophies,
-                  firstTrophies: firstTrophies,
-                  attacksList: attacksList,
-                  defensesList: defensesList),
+                  playerLegendData: playerLegendData),
             ),
           );
         },
@@ -180,7 +129,7 @@ class PlayerLegendCard extends StatelessWidget {
                             width: 100,
                             child: Stack(
                               children: <Widget>[
-                                Image.network(
+                                CachedNetworkImage(imageUrl: 
                                   "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png",
                                 ),
                                 Positioned(
@@ -212,25 +161,25 @@ class PlayerLegendCard extends StatelessWidget {
                                 Chip(
                                     avatar: CircleAvatar(
                                         backgroundColor: Colors.transparent,
-                                        child: Image.network(
+                                        child: CachedNetworkImage(imageUrl: 
                                             "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Start_Flag.png")),
-                                    label: Text(firstTrophies,
+                                    label: Text(playerLegendData.firstTrophies,
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelMedium)),
-                                if (legendData['rankings']['country_code'] !=
+                                if (playerLegendData.legendRanking['country_code'] !=
                                     null) 
                                   Chip(
                                     avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
-                                      child: Image.network(
-                                          "https://clashkingfiles.b-cdn.net/country-flags/${(legendData['rankings']['country_code'] ?? 'uk').toLowerCase()}.png"),
+                                      child: CachedNetworkImage(imageUrl: 
+                                          "https://clashkingfiles.b-cdn.net/country-flags/${(playerLegendData.legendRanking['country_code'] ?? 'uk').toLowerCase()}.png"),
                                     ),
                                     label: Text(
-                                      legendData['rankings']['local_rank'] ==
+                                      playerLegendData.legendRanking['local_rank'] ==
                                               null
                                           ? '200+'
-                                          : '${legendData['rankings']['local_rank']}',
+                                          : '${playerLegendData.legendRanking['local_rank']}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelMedium,
@@ -238,20 +187,20 @@ class PlayerLegendCard extends StatelessWidget {
                                   ),
                                 Chip(
                                   avatar: Icon(
-                                    diffTrophies > 0
+                                    playerLegendData.diffTrophies > 0
                                         ? LucideIcons.chevronUp
                                         : LucideIcons.chevronDown,
-                                    color: diffTrophies > 0
+                                    color: playerLegendData.diffTrophies > 0
                                         ? Colors.green
                                         : Colors.red,
                                   ),
                                   label: Text(
-                                    "${diffTrophies >= 0 ? '+' : ''}${diffTrophies.toString()}",
+                                    "${playerLegendData.diffTrophies >= 0 ? '+' : ''}${playerLegendData.diffTrophies.toString()}",
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelMedium
                                         ?.copyWith(
-                                            color: diffTrophies >= 0
+                                            color: playerLegendData.diffTrophies >= 0
                                                 ? Colors.green
                                                 : Colors.red),
                                   ),
@@ -259,12 +208,12 @@ class PlayerLegendCard extends StatelessWidget {
                                 Chip(
                                   avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
-                                      child: Image.network(
+                                      child: CachedNetworkImage(imageUrl: 
                                           "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
                                   label: Text(
-                                    legendData['rankings']['global_rank'] == null
+                                    playerLegendData.legendRanking['global_rank'] == null
                                         ? AppLocalizations.of(context)?.noRank ?? 'No Rank'
-                                        : NumberFormat('#,###', 'fr_FR').format(legendData['rankings']['global_rank']),
+                                        : NumberFormat('#,###', 'fr_FR').format(playerLegendData.legendRanking['global_rank']),
                                     style: Theme.of(context).textTheme.labelMedium,
                                   ),
                                 ),

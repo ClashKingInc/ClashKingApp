@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/war_functions.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CurrentWarInfoCard extends StatelessWidget {
   const CurrentWarInfoCard(
@@ -49,7 +50,7 @@ class CurrentWarInfoCard extends StatelessWidget {
                 SizedBox(
                   width: 70,
                   height: 70,
-                  child: Image.network(currentWarInfo.clan.badgeUrls.large,
+                  child: CachedNetworkImage(imageUrl: currentWarInfo.clan.badgeUrls.large,
                       fit: BoxFit.cover),
                 ),
                 Text(currentWarInfo.clan.name,
@@ -126,7 +127,7 @@ class CurrentWarInfoCard extends StatelessWidget {
               SizedBox(
                 width: 70,
                 height: 70,
-                child: Image.network(currentWarInfo.opponent.badgeUrls.large,
+                child: CachedNetworkImage(imageUrl: currentWarInfo.opponent.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
               Text(currentWarInfo.opponent.name,
@@ -155,7 +156,7 @@ class CurrentWarInfoCard extends StatelessWidget {
               SizedBox(
                 width: 70,
                 height: 70,
-                child: Image.network(currentWarInfo.clan.badgeUrls.large,
+                child: CachedNetworkImage(imageUrl: currentWarInfo.clan.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
               Text(currentWarInfo.clan.name,
@@ -186,7 +187,7 @@ class CurrentWarInfoCard extends StatelessWidget {
               SizedBox(
                 width: 70,
                 height: 70,
-                child: Image.network(currentWarInfo.opponent.badgeUrls.large,
+                child: CachedNetworkImage(imageUrl: currentWarInfo.opponent.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
               Text(currentWarInfo.opponent.name,
@@ -200,8 +201,7 @@ class CurrentWarInfoCard extends StatelessWidget {
   }
 
   Widget _inWarState(BuildContext context) {
-    Widget timeLeftText = timeLeft(
-        currentWarInfo, context, Theme.of(context).textTheme.bodyMedium);
+    Widget timeLeftText = timeLeft(currentWarInfo, context, Theme.of(context).textTheme.bodyMedium);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -214,7 +214,7 @@ class CurrentWarInfoCard extends StatelessWidget {
                 SizedBox(
                   width: 70,
                   height: 70,
-                  child: Image.network(currentWarInfo.clan.badgeUrls.large,
+                  child: CachedNetworkImage(imageUrl: currentWarInfo.clan.badgeUrls.large,
                       fit: BoxFit.cover),
                 ),
                 Text(currentWarInfo.clan.name,
@@ -247,7 +247,7 @@ class CurrentWarInfoCard extends StatelessWidget {
               SizedBox(
                 width: 70,
                 height:70,
-                child: Image.network(currentWarInfo.opponent.badgeUrls.large,
+                child: CachedNetworkImage(imageUrl: currentWarInfo.opponent.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
               Text(currentWarInfo.opponent.name,

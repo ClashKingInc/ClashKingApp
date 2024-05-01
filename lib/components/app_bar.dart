@@ -4,6 +4,7 @@ import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/my_app.dart';
 import 'package:clashkingapp/main_pages/settings_page.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final DiscordUser user;
@@ -75,7 +76,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                     SizedBox(
                       height: 30,
                       width: 30,
-                      child: Image.network(imageUrl),
+                      child: CachedNetworkImage(imageUrl: imageUrl),
                     ),
                     SizedBox(width: 4),
                     Text(name,

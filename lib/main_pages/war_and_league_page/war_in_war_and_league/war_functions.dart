@@ -2,7 +2,7 @@ import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 
 Map<int, int> countStars(List<WarMember> members) {
   Map<int, int> starCounts = {0: 0, 1: 0, 2: 0, 3: 0};
@@ -27,7 +27,7 @@ Map<int, int> countStars(List<WarMember> members) {
 
   List<Widget> generateStars(int numberOfStars, double size) {
     return List<Widget>.generate(3, (index) {
-      return Image.network(
+      return CachedNetworkImage(imageUrl: 
         index < numberOfStars
             ? "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"
             : "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png",

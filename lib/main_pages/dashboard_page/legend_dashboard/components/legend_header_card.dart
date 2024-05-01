@@ -3,16 +3,18 @@ import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_l
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/api/player_legend.dart';
 
 class LegendHeaderCard extends StatelessWidget {
   const LegendHeaderCard({
     super.key,
     required this.widget,
-    required this.dynamicLegendData,
+    required this.legendData,
   });
 
   final LegendScreen widget;
-  final Map<String, dynamic> dynamicLegendData;
+  final PlayerLegendData legendData;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class LegendHeaderCard extends StatelessWidget {
                   Colors.black.withOpacity(0.7),
                   BlendMode.darken,
                 ),
-                child: Image.network(
+                child: CachedNetworkImage(imageUrl: 
                   "https://clashkingfiles.b-cdn.net/landscape/legend-landscape.png",
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -48,13 +50,13 @@ class LegendHeaderCard extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      "${dynamicLegendData['name']}",
+                      legendData.name,
                       style:
                           Theme.of(context).textTheme.titleMedium?.copyWith(
                                 color: Colors.white,
                               ),
                     ),
-                    Text("${dynamicLegendData['tag']}",
+                    Text(legendData.tag,
                         style: Theme.of(context)
                             .textTheme
                             .labelLarge
@@ -65,11 +67,11 @@ class LegendHeaderCard extends StatelessWidget {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.network(
+                          CachedNetworkImage(imageUrl: 
                             "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border.png",
                             width: 60,
                           ),
-                          Text(widget.currentTrophies,
+                          Text(widget.playerLegendData.currentTrophies,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge
@@ -80,12 +82,12 @@ class LegendHeaderCard extends StatelessWidget {
                           SizedBox(width: 8),
                           Column(children: [
                             Text(
-                              "(${widget.diffTrophies >= 0 ? '+' : ''}${widget.diffTrophies.toString()})",
+                              "(${widget.playerLegendData.diffTrophies >= 0 ? '+' : ''}${widget.playerLegendData.diffTrophies.toString()})",
                               style: Theme.of(context)
                                   .textTheme
                                   .labelMedium
                                   ?.copyWith(
-                                    color: widget.diffTrophies >= 0
+                                    color: widget.playerLegendData.diffTrophies >= 0
                                       ? Colors.green
                                       : Colors.red),
                             ),
@@ -102,16 +104,16 @@ class LegendHeaderCard extends StatelessWidget {
                                 spacing: 8,
                                 runSpacing: 0,
                                 children: <Widget>[
-                                  if (dynamicLegendData['rankings']['country_code'] != null)
+                                  if (legendData.rankings['country_code'] != null)
                                   Chip(
                                     avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
-                                      child: Image.network(
-                                        "https://clashkingfiles.b-cdn.net/country-flags/${dynamicLegendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
+                                      child: CachedNetworkImage(imageUrl: 
+                                        "https://clashkingfiles.b-cdn.net/country-flags/${legendData.rankings['country_code']!.toLowerCase() ?? 'uk'}.png")),
                                     label: Text(
-                                      dynamicLegendData['rankings']['country_name'] == null
+                                      legendData.rankings['country_name'] == null
                                         ? 'No Country'
-                                        : '${dynamicLegendData['rankings']['country_name']}',
+                                        : '${legendData.rankings['country_name']}',
                                       style: Theme.of(context)
                                         .textTheme
                                         .labelMedium
@@ -124,16 +126,16 @@ class LegendHeaderCard extends StatelessWidget {
                                         width: 1),
                                     ),
                                   ),
-                                  if (dynamicLegendData['rankings']['country_code'] != null)
+                                  if (legendData.rankings['country_code'] != null)
                                   Chip(
                                     avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
-                                      child: Image.network(
-                                          "https://clashkingfiles.b-cdn.net/country-flags/${dynamicLegendData['rankings']['country_code']!.toLowerCase() ?? 'uk'}.png")),
+                                      child: CachedNetworkImage(imageUrl: 
+                                          "https://clashkingfiles.b-cdn.net/country-flags/${legendData.rankings['country_code']!.toLowerCase() ?? 'uk'}.png")),
                                     label: Text(
-                                      dynamicLegendData['rankings']['local_rank'] == null
+                                      legendData.rankings['local_rank'] == null
                                         ? AppLocalizations.of(context)?.noRank ?? 'No rank'
-                                        : '${dynamicLegendData['rankings']['local_rank']}',
+                                        : '${legendData.rankings['local_rank']}',
                                       style: Theme.of(context)
                                         .textTheme
                                         .labelMedium
@@ -149,13 +151,13 @@ class LegendHeaderCard extends StatelessWidget {
                                   Chip(
                                     avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent, // Set to a suitable color for your design.
-                                      child: Image.network(
+                                      child: CachedNetworkImage(imageUrl: 
                                         "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")
                                     ),
                                     label: Text(
-                                      dynamicLegendData['rankings']['global_rank'] == null
+                                      legendData.rankings['global_rank'] == null
                                         ? AppLocalizations.of(context)?.noRank ?? 'No rank'
-                                        : NumberFormat('#,###', 'fr_FR').format(dynamicLegendData['rankings']['global_rank']),
+                                        : NumberFormat('#,###', 'fr_FR').format(legendData.rankings['global_rank']),
                                       style: Theme.of(context)
                                         .textTheme
                                         .labelMedium

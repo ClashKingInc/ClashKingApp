@@ -3,6 +3,7 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_leagu
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class WarStatisticsCard extends StatelessWidget {
   const WarStatisticsCard({
@@ -83,7 +84,7 @@ class WarStatisticsCard extends StatelessWidget {
                 ),
                 SizedBox(
                     width: 25,
-                    child: Image.network(
+                    child: CachedNetworkImage(imageUrl: 
                         "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png")),
                 Expanded(
                   child: Stack(
@@ -142,7 +143,7 @@ class WarStatisticsCard extends StatelessWidget {
                 ),
                 SizedBox(
                     width: 25,
-                    child: Image.network(
+                    child: CachedNetworkImage(imageUrl: 
                         "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png")),
                 Expanded(
                   child: Stack(
@@ -247,15 +248,15 @@ class WarStatisticsCard extends StatelessWidget {
                     children: [
                       SizedBox(
                           width: 25,
-                          child: Image.network(
+                          child: CachedNetworkImage(imageUrl: 
                               "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                       SizedBox(
                           width: 25,
-                          child: Image.network(
+                          child: CachedNetworkImage(imageUrl: 
                               "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                       SizedBox(
                           width: 25,
-                          child: Image.network(
+                          child: CachedNetworkImage(imageUrl: 
                               "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                     ]),
                 Text(opponentStarCounts[0].toString()),
@@ -271,15 +272,15 @@ class WarStatisticsCard extends StatelessWidget {
                     children: [
                       SizedBox(
                           width: 25,
-                          child: Image.network(
+                          child: CachedNetworkImage(imageUrl: 
                               "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png")),
                       SizedBox(
                           width: 25,
-                          child: Image.network(
+                          child: CachedNetworkImage(imageUrl: 
                               "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                       SizedBox(
                           width: 25,
-                          child: Image.network(
+                          child: CachedNetworkImage(imageUrl: 
                               "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                     ]),
                 Text(opponentStarCounts[1].toString()),
@@ -294,17 +295,17 @@ class WarStatisticsCard extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: 25,
-                      child: Image.network(
+                      child: CachedNetworkImage(imageUrl: 
                           "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
                     ),
                     SizedBox(
                       width: 25,
-                      child: Image.network(
+                      child: CachedNetworkImage(imageUrl: 
                           "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
                     ),
                     SizedBox(
                         width: 25,
-                        child: Image.network(
+                        child: CachedNetworkImage(imageUrl: 
                             "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                   ],
                 ),
@@ -319,17 +320,17 @@ class WarStatisticsCard extends StatelessWidget {
                 Row(children: [
                   SizedBox(
                     width: 25,
-                    child: Image.network(
+                    child: CachedNetworkImage(imageUrl: 
                         "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
                   ),
                   SizedBox(
                     width: 25,
-                    child: Image.network(
+                    child: CachedNetworkImage(imageUrl: 
                         "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
                   ),
                   SizedBox(
                     width: 25,
-                    child: Image.network(
+                    child: CachedNetworkImage(imageUrl: 
                         "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
                   ),
                 ]),

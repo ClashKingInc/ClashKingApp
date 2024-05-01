@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class AccessDeniedCard extends StatefulWidget {
   final String clanName;
@@ -36,7 +37,7 @@ class AccessDeniedCardState extends State<AccessDeniedCard> {
                     width: 70,
                     height: 70,
                     child: Center(
-                      child: Image.network(
+                      child: CachedNetworkImage(imageUrl: 
                         widget.clanBadgeUrl,
                         fit: BoxFit.cover),
                     ),

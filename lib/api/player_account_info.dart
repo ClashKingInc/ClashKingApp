@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/api/player_accounts_list.dart';
 import 'package:clashkingapp/data/troop_data.dart';
+import 'package:clashkingapp/data/league_data.dart';
 
 class PlayerAccountInfo {
   final String name;
@@ -27,14 +28,15 @@ class PlayerAccountInfo {
   final int donationsReceived;
   final int clanCapitalContributions;
   final Clan clan;
-  final League league;
   final List<Achievement> achievements;
   final List<Hero> heroes;
   final List<Troop> troops;
   final List<Spell> spells;
   final List<Equipment> equipments;
+  String league = '';
   String townHallPic = '';
   String builderHallPic = '';
+  String leagueUrl = '';
 
   PlayerAccountInfo({
     required this.name,
@@ -56,7 +58,6 @@ class PlayerAccountInfo {
     required this.donationsReceived,
     required this.clanCapitalContributions,
     required this.clan,
-    required this.league,
     required this.achievements,
     required this.heroes,
     required this.troops,
@@ -85,12 +86,16 @@ class PlayerAccountInfo {
       donationsReceived: json['donationsReceived'] ?? 0,
       clanCapitalContributions: json['clanCapitalContributions'] ?? 0,
       clan: Clan.fromJson(json['clan'] ?? {}),
-      league: League.fromJson(json['league'] ?? {}),
-      achievements: List<Achievement>.from(json['achievements'].map((x) => Achievement.fromJson(x ?? {}))),
-      heroes: List<Hero>.from(json['heroes'].map((x) => Hero.fromJson(x)) ?? []),
-      troops: List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x)) ?? []),
-      spells: List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x)) ?? []),
-      equipments: List<Equipment>.from(json['heroEquipment'].map((x) => Equipment.fromJson(x)) ?? []),
+      achievements: List<Achievement>.from(
+          json['achievements'].map((x) => Achievement.fromJson(x ?? {}))),
+      heroes:
+          List<Hero>.from(json['heroes'].map((x) => Hero.fromJson(x)) ?? []),
+      troops:
+          List<Troop>.from(json['troops'].map((x) => Troop.fromJson(x)) ?? []),
+      spells:
+          List<Spell>.from(json['spells'].map((x) => Spell.fromJson(x)) ?? []),
+      equipments: List<Equipment>.from(
+          json['heroEquipment'].map((x) => Equipment.fromJson(x)) ?? []),
     );
   }
 }
@@ -133,20 +138,6 @@ class BadgeUrls {
       small: json['small'],
       large: json['large'],
       medium: json['medium'],
-    );
-  }
-}
-
-class League {
-  final String name;
-  // Include URLs for icons if needed
-
-  League({required this.name});
-
-  factory League.fromJson(Map<String, dynamic> json) {
-    return League(
-      name: json['name'] ?? 'No name',
-      // Initialize URLs for icons from JSON if needed
     );
   }
 }
@@ -225,8 +216,7 @@ class EquipedEquipment {
       required this.level,
       required this.maxLevel,
       required this.village,
-      this.imageUrl = 'https://clashkingfiles.b-cdn.net/clashkinglogo.png'
-      });
+      this.imageUrl = 'https://clashkingfiles.b-cdn.net/clashkinglogo.png'});
 
   factory EquipedEquipment.fromJson(Map<String, dynamic> json) {
     return EquipedEquipment(
@@ -234,7 +224,8 @@ class EquipedEquipment {
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
       village: json['village'] ?? 'home',
-      imageUrl: json['imageUrl'] ?? 'https://clashkingfiles.b-cdn.net/clashkinglogo.png',
+      imageUrl: json['imageUrl'] ??
+          'https://clashkingfiles.b-cdn.net/clashkinglogo.png',
     );
   }
 }
@@ -337,12 +328,15 @@ class PlayerService {
     for (int i = 0; i < tags.length; i++) {
       futures.add(
         fetchPlayerStats(tags[i]).then((playerStats) async {
-          user.selectedTagDetails.add({
-            'tag': playerStats.tag,
-            'imageUrl': playerStats.townHallPic,
-            'name': playerStats.name,
-            'townHallLevel': playerStats.townHallLevel,
-          });
+          if (!user.selectedTagDetails
+              .any((details) => details['tag'] == playerStats.tag)) {
+            user.selectedTagDetails.add({
+              'tag': playerStats.tag,
+              'imageUrl': playerStats.townHallPic,
+              'name': playerStats.name,
+              'townHallLevel': playerStats.townHallLevel,
+            });
+          }
           playerAccounts.playerAccountInfo.add(playerStats);
 
           var results = await Future.wait<dynamic>([
@@ -359,6 +353,13 @@ class PlayerService {
     }
 
     await Future.wait(futures);
+
+    // Remove any selected tag details that are not in the player accounts list anymore
+    user.selectedTagDetails.removeWhere((details) {
+      return !playerAccounts.playerAccountInfo
+          .any((playerStats) => playerStats.tag == details['tag']);
+    });
+
     return playerAccounts;
   }
 
@@ -376,12 +377,17 @@ class PlayerService {
       playerStats.townHallPic =
           await fetchPlayerTownHallByTownHallLevel(playerStats.townHallLevel);
 
+      playerStats.leagueUrl = await fetchLeagueImageUrl(playerStats.league);
+
       playerStats.builderHallPic = await fetchPlayerBuilderHallByTownHallLevel(
           playerStats.builderHallLevel);
       await fetchImagesAndTypes(playerStats.troops);
       await fetchImagesAndTypes(playerStats.heroes);
       await fetchImagesAndTypes(playerStats.spells);
       await fetchImagesAndTypes(playerStats.equipments);
+      print(playerStats.tag);
+      playerStats.league = await fetchLeagueName(playerStats.tag);
+      playerStats.leagueUrl = await fetchLeagueImageUrl(playerStats.league);
       return playerStats;
     } else {
       throw Exception('Failed to load player stats');
@@ -414,18 +420,47 @@ class PlayerService {
     return builderHallPic;
   }
 
-  Future<ClanInfo> fetchClanInfo(String clanTag) async {
-    clanTag = clanTag.replaceAll('#', '!');
+  Future<ClanInfo> fetchClanInfo(String tag) async {
+    tag = tag.replaceAll('#', '!');
+
     final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clans/$clanTag'),
+      Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
     );
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       ClanInfo clanInfo = ClanInfo.fromJson(jsonDecode(responseBody));
+      clanInfo.warLeague.imageUrl =
+          await fetchLeagueImageUrl(clanInfo.warLeague.name);
+
       return clanInfo;
     } else {
-      throw Exception('Failed to load clan info');
+      throw Exception('Failed to load clan stats');
+    }
+  }
+
+  Future<String> fetchLeagueImageUrl(String name) async {
+    if (leaguesUrls.containsKey(name)) {
+      // If the league name is in the map, return the corresponding URL and type
+      return leaguesUrls[name]!['url']!;
+    } else {
+      // If the league name is not in the map, return default image URL and type
+      return 'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
+    }
+  }
+
+  Future<String> fetchLeagueName(String tag) async {
+    tag = tag.replaceAll('#', '!');
+
+    final response = await http.get(
+      Uri.parse('https://api.clashking.xyz/player/$tag/stats'),
+    );
+
+    if (response.statusCode == 200) {
+      String responseBody = utf8.decode(response.bodyBytes);
+      return jsonDecode(responseBody)['league'] ?? "Unranked";
+    } else {
+      return "Unranked";
     }
   }
 

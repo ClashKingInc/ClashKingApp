@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class LegendHistoryCard extends StatelessWidget {
   const LegendHistoryCard({
@@ -34,7 +35,7 @@ class LegendHistoryCard extends StatelessWidget {
                             child: Stack(
                               children: <Widget>[
                                 Center(
-                                  child: Image.network(
+                                  child: CachedNetworkImage(imageUrl: 
                                     "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_No_Padding.png",
                                     height: 80,
                                   ),
@@ -79,13 +80,13 @@ class LegendHistoryCard extends StatelessWidget {
                                 Chip(
                                     avatar: CircleAvatar(
                                         backgroundColor: Colors.transparent,
-                                        child: Image.network(
+                                        child: CachedNetworkImage(imageUrl: 
                                             "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png")),
                                     label: Text('${item['trophies']}')),
                                 Chip(
                                     avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
-                                      child: Image.network(
+                                      child: CachedNetworkImage(imageUrl: 
                                           "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
                                       label: Text(NumberFormat('#,###', 'fr_FR').format(item['rank']),
                                     ), 
@@ -93,13 +94,13 @@ class LegendHistoryCard extends StatelessWidget {
                                 Chip(
                                     avatar: CircleAvatar(
                                         backgroundColor: Colors.transparent,
-                                        child: Image.network(
+                                        child: CachedNetworkImage(imageUrl: 
                                             "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png")),
                                     label: Text('${item['attackWins']}')),
                                 Chip(
                                     avatar: CircleAvatar(
                                         backgroundColor: Colors.transparent,
-                                        child: Image.network(
+                                        child: CachedNetworkImage(imageUrl: 
                                             "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png")),
                                     label: Text('${item['defenseWins']}')),
                               ],
@@ -113,7 +114,7 @@ class LegendHistoryCard extends StatelessWidget {
               ),
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }
