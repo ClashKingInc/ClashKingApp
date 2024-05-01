@@ -400,7 +400,9 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void reloadData() async {
+    print("Reloading data");
     if (selectedTag.value != null) {
+      print("Selected tag: ${selectedTag.value}");
       playerStats = playerAccounts?.playerAccountInfo
           .firstWhere((element) => element.tag == selectedTag.value);
       clanTag = playerStats?.clan.tag;
@@ -423,13 +425,17 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
       // After fetching new data, check if the selectedTag.value still exists in the new items
       if (playerAccounts?.playerAccountInfo
-              .any((element) => element.tag == selectedTag.value) ==
+              .any((element) => element.tag == selectedTag.value) !=
           true) {
-        // If it exists, keep the selectedTag.value
-      } else {
-        // If it doesn't exist, set the selectedTag.value to the first item's value
+        // The current value is not in the new items list
         if (playerAccounts?.playerAccountInfo.isNotEmpty == true) {
-          selectedTag.value = playerAccounts?.playerAccountInfo[0].tag;
+          print("Selected tag not found in new items");
+          // Safely setting the first available tag as the new value
+          selectedTag.value = playerAccounts!.playerAccountInfo.first.tag;
+        } else {
+          print("No valid items found");
+          // Handle the case where there are no valid items
+          selectedTag.value = null;
         }
       }
 

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/current_league_info_page.dart';
-import 'package:clashkingapp/components/app_bar.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/api/clan_info.dart';
@@ -40,91 +39,90 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(user: widget.user),
         body: RefreshIndicator(
-          onRefresh: () async {
-            setState(() {
-            });
-          },
-          child: FutureBuilder<String>(
-            future: checkCurrentWar(widget.playerStats),
-            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                final warState = snapshot.data ?? false;
-                return ListView(
+      onRefresh: () async {
+        setState(() {});
+      },
+      child: FutureBuilder<String>(
+        future: checkCurrentWar(widget.playerStats),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            final warState = snapshot.data ?? false;
+            return ListView(
+              children: <Widget>[
+                Column(
                   children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        if (warState == "war")
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CurrentWarInfoScreen(
-                                    currentWarInfo: currentWarInfo!,
-                                    discordUser: widget.user.tags,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 4.0, horizontal: 8.0),
-                              child: CurrentWarInfoCard(
-                                  currentWarInfo: currentWarInfo!, 
-                                  clanTag : widget.clanInfo.tag),
+                    if (warState == "war")
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CurrentWarInfoScreen(
+                                currentWarInfo: currentWarInfo!,
+                                discordUser: widget.user.tags,
+                              ),
                             ),
-                          )
-                        else if (warState == "accessDenied")
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: AccessDeniedCard(
-                              clanName: widget.playerStats.clan.name, 
-                              clanBadgeUrl: widget.playerStats.clan.badgeUrls.large
+                          );
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 4.0, horizontal: 8.0),
+                          child: CurrentWarInfoCard(
+                              currentWarInfo: currentWarInfo!,
+                              clanTag: widget.clanInfo.tag),
+                        ),
+                      )
+                    else if (warState == "accessDenied")
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: AccessDeniedCard(
+                            clanName: widget.playerStats.clan.name,
+                            clanBadgeUrl:
+                                widget.playerStats.clan.badgeUrls.large),
+                      )
+                    else if (warState == "cwl")
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CurrentLeagueInfoScreen(
+                                currentLeagueInfo: currentLeagueInfo!,
+                                clanTag: widget.playerStats.clan.tag,
+                                clanInfo: widget.clanInfo,
+                                discordUser: widget.user.tags,
+                              ),
                             ),
-                          )
-                        else if (warState == "cwl")
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CurrentLeagueInfoScreen(
-                                    currentLeagueInfo: currentLeagueInfo!,
-                                    clanTag: widget.playerStats.clan.tag,
-                                    clanInfo: widget.clanInfo,
-                                    discordUser: widget.user.tags,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: CwlCard(
-                              currentLeagueInfo: currentLeagueInfo!,
-                              clanTag: widget.playerStats.clan.tag,
-                              clanInfo: widget.clanInfo,
-                            ),
-                          )
-                        else
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 4.0, horizontal: 8.0),
-                            child:NotInWarCard(
-                              clanName: widget.playerStats.clan.name, 
-                              clanBadgeUrl: widget.playerStats.clan.badgeUrls.large),
-                          ),
-                      ],
-                    ),
+                          );
+                        },
+                        child: CwlCard(
+                          currentLeagueInfo: currentLeagueInfo!,
+                          clanTag: widget.playerStats.clan.tag,
+                          clanInfo: widget.clanInfo,
+                        ),
+                      )
+                    else
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 4.0, horizontal: 8.0),
+                        child: NotInWarCard(
+                            clanName: widget.playerStats.clan.name,
+                            clanBadgeUrl:
+                                widget.playerStats.clan.badgeUrls.large),
+                      ),
                   ],
-                );
-              }
-            },
-          ),
-        ));
+                ),
+              ],
+            );
+          }
+        },
+      ),
+    ));
   }
 
   Future<String> checkCurrentWar(PlayerAccountInfo playerStats) async {
@@ -140,8 +138,10 @@ class _CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
 
     if (responseWar.statusCode == 200) {
       var decodedResponse = jsonDecode(utf8.decode(responseWar.bodyBytes));
-      if (decodedResponse["state"] != "notInWar" && decodedResponse["reason"] != "accessDenied") {
-        currentWarInfo = CurrentWarInfo.fromJson(jsonDecode(utf8.decode(responseWar.bodyBytes)), "war");
+      if (decodedResponse["state"] != "notInWar" &&
+          decodedResponse["reason"] != "accessDenied") {
+        currentWarInfo = CurrentWarInfo.fromJson(
+            jsonDecode(utf8.decode(responseWar.bodyBytes)), "war");
         return "war";
       } else if (decodedResponse["reason"] == "accessDenied") {
         return "accessDenied";

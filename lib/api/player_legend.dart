@@ -69,9 +69,6 @@ class PlayerLegendService {
   Future<void> calculateLegendData(PlayerLegendData playerLegendData) async {
     DateTime selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
-    print(
-        "${date} : ${playerLegendData.legendData.containsKey(date).toString()}");
-    print("${playerLegendData.legendData[date]}");
     if (playerLegendData.legendData == {} ||
         !playerLegendData.legendData.containsKey(date)) {
       playerLegendData.firstTrophies = "0";

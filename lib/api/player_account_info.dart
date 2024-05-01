@@ -328,12 +328,15 @@ class PlayerService {
     for (int i = 0; i < tags.length; i++) {
       futures.add(
         fetchPlayerStats(tags[i]).then((playerStats) async {
-          user.selectedTagDetails.add({
-            'tag': playerStats.tag,
-            'imageUrl': playerStats.townHallPic,
-            'name': playerStats.name,
-            'townHallLevel': playerStats.townHallLevel,
-          });
+          if (!user.selectedTagDetails
+              .any((details) => details['tag'] == playerStats.tag)) {
+            user.selectedTagDetails.add({
+              'tag': playerStats.tag,
+              'imageUrl': playerStats.townHallPic,
+              'name': playerStats.name,
+              'townHallLevel': playerStats.townHallLevel,
+            });
+          }
           playerAccounts.playerAccountInfo.add(playerStats);
 
           var results = await Future.wait<dynamic>([
@@ -350,6 +353,13 @@ class PlayerService {
     }
 
     await Future.wait(futures);
+
+    // Remove any selected tag details that are not in the player accounts list anymore
+    user.selectedTagDetails.removeWhere((details) {
+      return !playerAccounts.playerAccountInfo
+          .any((playerStats) => playerStats.tag == details['tag']);
+    });
+
     return playerAccounts;
   }
 
@@ -371,7 +381,7 @@ class PlayerService {
 
       playerStats.builderHallPic = await fetchPlayerBuilderHallByTownHallLevel(
           playerStats.builderHallLevel);
-      await fetchImagesAndTypes(playerStats.troops); 
+      await fetchImagesAndTypes(playerStats.troops);
       await fetchImagesAndTypes(playerStats.heroes);
       await fetchImagesAndTypes(playerStats.spells);
       await fetchImagesAndTypes(playerStats.equipments);
@@ -441,11 +451,11 @@ class PlayerService {
 
   Future<String> fetchLeagueName(String tag) async {
     tag = tag.replaceAll('#', '!');
-  
+
     final response = await http.get(
       Uri.parse('https://api.clashking.xyz/player/$tag/stats'),
     );
-  
+
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       return jsonDecode(responseBody)['league'] ?? "Unranked";

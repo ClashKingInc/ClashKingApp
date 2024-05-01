@@ -2,7 +2,6 @@ import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/my_app.dart';
 import 'package:clashkingapp/api/discord_user_info.dart';
-import 'package:clashkingapp/components/app_bar.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/creator_code_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_infos_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_legend_card.dart';
@@ -42,15 +41,13 @@ class DashboardPageState extends State<DashboardPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(user: widget.user),
       body: RefreshIndicator(
         onRefresh: () async {
           setState(() {
             final appState = Provider.of<MyAppState>(context, listen: false);
             appState.refreshData();
             PlayerLegendService playerLegendService = PlayerLegendService();
-            legendData =
-                playerLegendService.fetchLegendData(widget.playerStats.tag);
+            legendData = playerLegendService.fetchLegendData(widget.playerStats.tag);
           });
         },
         child: ListView(
