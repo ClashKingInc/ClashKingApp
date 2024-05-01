@@ -41,6 +41,10 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
         widgetData: SharedPreferences
     ) {
         val views = RemoteViews(context.packageName, R.layout.widget_layout)
+
+        // Set the PendingIntent to the root layout of the widget
+        views.setOnClickPendingIntent(R.id.root_layout, getPendingIntent(context))
+
         println("Widget Data: $widgetData")
         // Get the war info from SharedPreferences
         val warInfoJson = widgetData.getString("warInfo", null)
@@ -101,7 +105,7 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
                 context,
                 0,
                 updateIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
 
             views.setOnClickPendingIntent(R.id.refresh_icon, updatePendingIntent)
@@ -155,4 +159,9 @@ private fun downloadBitmap(url: String): Bitmap? {
         e.printStackTrace()
         null
     }
+}
+
+private fun getPendingIntent(context: Context): PendingIntent {
+    val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+    return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 }

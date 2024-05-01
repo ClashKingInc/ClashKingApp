@@ -71,9 +71,9 @@ class DashboardPageState extends State<DashboardPage>
                     AsyncSnapshot<PlayerLegendData> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return SizedBox.shrink();
+                    return SizedBox.shrink();
                   } else if (snapshot.hasError) {
-                    return Text(
-                        'Error: ${snapshot.error}'); // Show error if something went wrong
+                    return Text('Error: ${snapshot.error}');
                   } else {
                     if (snapshot.data!.legendData.isNotEmpty) {
                       return PlayerLegendCard(

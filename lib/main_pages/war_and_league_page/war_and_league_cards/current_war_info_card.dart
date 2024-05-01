@@ -201,8 +201,7 @@ class CurrentWarInfoCard extends StatelessWidget {
   }
 
   Widget _inWarState(BuildContext context) {
-    Widget timeLeftText = timeLeft(
-        currentWarInfo, context, Theme.of(context).textTheme.bodyMedium);
+    Widget timeLeftText = timeLeft(currentWarInfo, context, Theme.of(context).textTheme.bodyMedium);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
