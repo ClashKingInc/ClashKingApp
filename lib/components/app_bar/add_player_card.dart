@@ -76,7 +76,9 @@ class AddPlayerCardState extends State<AddPlayerCard> {
               Provider.of<MyAppState>(context, listen: false)
                   .reloadUsersAccounts();
             }
-            Navigator.of(context).pop();
+            if (errorMessage.isEmpty) {
+              Navigator.of(context).pop();
+            }
           },
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
