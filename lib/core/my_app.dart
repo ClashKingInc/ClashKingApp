@@ -404,6 +404,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       await fetchUserTags(user!);
       await fetchPlayerAccounts(user!);
       reloadData();
+      selectedTag.value = user!.tags.first;
     } else {
       print("User is null");
     }
