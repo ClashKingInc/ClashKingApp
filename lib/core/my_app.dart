@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
                 tertiary: Colors.grey,
                 background: Color.fromARGB(255, 61, 60, 60),
                 surface: Color.fromARGB(255, 31, 31, 31),
-                error: Color(0xFFB00020),
+                error: Color.fromARGB(255, 255, 0, 0),
                 onPrimary:
                     Color(0xFFFFFFFF), // Text color on top of primary color
                 onSecondary:
@@ -392,6 +392,24 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     } else {
       return "error";
     }
+  }
+
+  bool isLoading = false;
+
+  Future<void> reloadUsersAccounts() async {
+    isLoading = true;
+    notifyListeners();
+    await initializeUser();
+    if (user != null) {
+      await fetchUserTags(user!);
+      await fetchPlayerAccounts(user!);
+      reloadData();
+    } else {
+      print("User is null");
+    }
+    await Future.delayed(Duration(seconds: 1)); // Example delay
+    isLoading = false;
+    notifyListeners();
   }
 
   void refreshData() async {

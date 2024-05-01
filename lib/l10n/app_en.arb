@@ -13,6 +13,10 @@
     "hourIndicator" : "h",
     "minIndicator" : "m",
     "noDataAvailable" : "No data available.",
+
+    "manageAccounts" : "Manage accounts",
+    "enterPlayerTag" : "Enter a player tag",
+    "addAccount" : "Add account", 
     
     "dashboard" : "Dashboard",
     "homeBase" : "Home Base",
