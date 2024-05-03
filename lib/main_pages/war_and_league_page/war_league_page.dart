@@ -23,7 +23,9 @@ class CurrentWarInfoPage extends StatefulWidget {
   final DiscordUser discordUser;
 
   CurrentWarInfoPage(
-      {required this.discordUser, required this.playerStats, required this.clanInfo});
+      {required this.discordUser,
+      required this.playerStats,
+      required this.clanInfo});
 
   @override
   State<CurrentWarInfoPage> createState() => CurrentWarInfoPageState();
@@ -89,43 +91,43 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                               vertical: 4.0, horizontal: 8.0),
-                            child: CurrentWarInfoCard(
-                              currentWarInfo: currentWarInfo!, 
-                              clanTag : widget.clanInfo.tag),
-                          ),
-                        )
-                      else if (warState == "accessDenied")
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: AccessDeniedCard(
-                            clanName: widget.playerStats.clan.name, 
-                            clanBadgeUrl: widget.playerStats.clan.badgeUrls.large
-                          ),
-                        )
-                      else if (warState == "cwl")
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CurrentLeagueInfoScreen(
-                                  currentLeagueInfo: currentLeagueInfo!,
-                                  clanTag: widget.playerStats.clan.tag,
-                                  clanInfo: widget.clanInfo,
-                                  discordUser: widget.discordUser.tags,
-                                ),
+                          child: CurrentWarInfoCard(
+                              currentWarInfo: currentWarInfo!,
+                              clanTag: widget.clanInfo.tag),
+                        ),
+                      )
+                    else if (warState == "accessDenied")
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: AccessDeniedCard(
+                            clanName: widget.playerStats.clan.name,
+                            clanBadgeUrl:
+                                widget.playerStats.clan.badgeUrls.large),
+                      )
+                    else if (warState == "cwl")
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CurrentLeagueInfoScreen(
+                                currentLeagueInfo: currentLeagueInfo!,
+                                clanTag: widget.playerStats.clan.tag,
+                                clanInfo: widget.clanInfo,
+                                discordUser: widget.discordUser.tags,
                               ),
-                            );
-                          },
-                          child: CwlCard(
-                            currentLeagueInfo: currentLeagueInfo!,
-                            clanTag: widget.playerStats.clan.tag,
-                            clanInfo: widget.clanInfo,
-                          ),
-                        )
-                      else
-                        Padding(
-                          padding: EdgeInsets.symmetric(
+                            ),
+                          );
+                        },
+                        child: CwlCard(
+                          currentLeagueInfo: currentLeagueInfo!,
+                          clanTag: widget.playerStats.clan.tag,
+                          clanInfo: widget.clanInfo,
+                        ),
+                      )
+                    else
+                      Padding(
+                        padding: EdgeInsets.symmetric(
                             vertical: 4.0, horizontal: 8.0),
                           child: NotInWarCard(
                             clanName: widget.playerStats.clan.name, 
@@ -184,16 +186,15 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
       var decodedResponse = jsonDecode(utf8.decode(responseWar.bodyBytes));
       if (decodedResponse["state"] != "notInWar" &&
           decodedResponse["reason"] != "accessDenied") {
+            print("war");
         currentWarInfo = CurrentWarInfo.fromJson(
             jsonDecode(utf8.decode(responseWar.bodyBytes)), "war");
         return "war";
       } else if (decodedResponse["reason"] == "accessDenied") {
         return "accessDenied";
       } else if (decodedResponse["state"] == "notInWar") {
-        return "notInWar";
-      } else {
         DateTime now = DateTime.now();
-        if (now.day >= 1 && now.day <= 14) {
+        if (now.day >= 1 && now.day <= 10) {
           if (responseCwl.statusCode == 200) {
             var decodedResponseCwl =
                 jsonDecode(utf8.decode(responseCwl.bodyBytes));
@@ -201,18 +202,13 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
               currentLeagueInfo =
                   CurrentLeagueInfo.fromJson(decodedResponseCwl);
               return "cwl";
-            } else {
-              return "notInLeague";
             }
-          } else {
-            return "notInWar";
           }
-        } else {
-          throw Exception('Failed to load current war info');
         }
       }
     } else {
       throw Exception('Failed to load current war info');
     }
+    return "notInWar";
   }
 }

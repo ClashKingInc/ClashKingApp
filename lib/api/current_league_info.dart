@@ -106,14 +106,16 @@ class ClanLeagueRounds {
   factory ClanLeagueRounds.fromJson(Map<String, dynamic> json) {
     var warTags = json['warTags'] as List<dynamic>? ?? [];
     List<String> parsedWarTags = warTags.map((tag) => tag.toString()).toList();
-    Future<List<CurrentWarInfo>> warLeagueInfos = fetchWarLeagueInfos(parsedWarTags);
+    Future<List<CurrentWarInfo>> warLeagueInfos =
+        fetchWarLeagueInfos(parsedWarTags);
     return ClanLeagueRounds(
       warTags: parsedWarTags,
       warLeagueInfos: warLeagueInfos,
     );
   }
 
-  static Future<List<CurrentWarInfo>> fetchWarLeagueInfos(List<String> warTags) async {
+  static Future<List<CurrentWarInfo>> fetchWarLeagueInfos(
+      List<String> warTags) async {
     List<CurrentWarInfo> warLeagueInfos = [];
     for (var warTag in warTags) {
       warTag = warTag.replaceAll('#', '%23');
@@ -122,9 +124,14 @@ class ClanLeagueRounds {
       );
 
       if (response.statusCode == 200) {
-        CurrentWarInfo warLeagueInfoItem =
-            CurrentWarInfo.fromJson(jsonDecode(utf8.decode(response.bodyBytes)), "cwl");
-        warLeagueInfos.add(warLeagueInfoItem);
+        Map<String, dynamic> json = jsonDecode(utf8.decode(response.bodyBytes));
+        print(json);
+        if (json['state'] != "notInWar") {
+          print("inWar");
+          CurrentWarInfo warLeagueInfoItem = CurrentWarInfo.fromJson(
+              jsonDecode(utf8.decode(response.bodyBytes)), "cwl");
+          warLeagueInfos.add(warLeagueInfoItem);
+        }
       } else {
         throw Exception(
             'Failed to load war league info with status code: ${response.statusCode}');
@@ -136,7 +143,6 @@ class ClanLeagueRounds {
 
 // Service
 class CurrentLeagueService {
-
   Future<CurrentLeagueInfo> fetchCurrentLeagueInfo(String tag) async {
     tag = tag.replaceAll('#', '%23'); // URL encode the '#' character
     final response = await http.get(
@@ -145,12 +151,11 @@ class CurrentLeagueService {
     );
 
     if (response.statusCode == 200) {
-      return CurrentLeagueInfo.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+      return CurrentLeagueInfo.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception(
           'Failed to load current league info with status code: ${response.statusCode}');
     }
   }
 }
-
-
