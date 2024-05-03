@@ -85,13 +85,12 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
           SizedBox(height: 15),
           ElevatedButton(
             onPressed: () async {
-              final myAppState = Provider.of<MyAppState>(context, listen: false);
               final navigator = Navigator.of(context);
               String token = await login();
               String playerTag = _dropdownValue!;
               final success = await deleteLink(playerTag, token, updateErrorMessage, context);
               if (success) {
-                myAppState.reloadUsersAccounts();
+                Provider.of<MyAppState>(context, listen: false).reloadUsersAccounts();
               }
               if (errorMessage.isEmpty) {
                 navigator.pop();
