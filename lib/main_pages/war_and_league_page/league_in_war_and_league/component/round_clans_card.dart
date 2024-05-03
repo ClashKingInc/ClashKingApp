@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:intl/intl.dart';
 
 class RoundClanCard extends StatelessWidget {
   final CurrentWarInfo warLeagueInfo;
@@ -20,8 +21,8 @@ class RoundClanCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  CurrentWarInfoScreen(currentWarInfo: warLeagueInfo, discordUser: discordUser),
+              builder: (context) => CurrentWarInfoScreen(
+                  currentWarInfo: warLeagueInfo, discordUser: discordUser),
             ),
           );
         },
@@ -34,8 +35,6 @@ class RoundClanCard extends StatelessWidget {
                 Expanded(
                   flex: 4,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -43,15 +42,16 @@ class RoundClanCard extends StatelessWidget {
                             SizedBox(
                               height: 50,
                               width: 50,
-                              child: CachedNetworkImage(imageUrl: 
-                                  warLeagueInfo.clan.badgeUrls.small),
+                              child: CachedNetworkImage(
+                                  imageUrl: warLeagueInfo.clan.badgeUrls.small),
                             ),
                             Column(
                               children: [
                                 Row(children: [
                                   SizedBox(
-                                    child: CachedNetworkImage(imageUrl: 
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
                                       width: 12,
                                       height: 12,
                                     ),
@@ -64,8 +64,9 @@ class RoundClanCard extends StatelessWidget {
                                 ]),
                                 Row(children: [
                                   SizedBox(
-                                    child: CachedNetworkImage(imageUrl: 
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
                                       width: 12,
                                       height: 12,
                                     ),
@@ -82,6 +83,7 @@ class RoundClanCard extends StatelessWidget {
                       Text(
                         warLeagueInfo.clan.name,
                         style: Theme.of(context).textTheme.bodyMedium,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -91,7 +93,11 @@ class RoundClanCard extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: 14),
+                      Text(
+                          warLeagueInfo.state == "preparation"
+                              ? "Starts at ${DateFormat('HH:mm').format(warLeagueInfo.startTime.toLocal())}"
+                              : "Ends at ${DateFormat('HH:mm').format(warLeagueInfo.endTime.toLocal())}",
+                          style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -143,7 +149,7 @@ class RoundClanCard extends StatelessWidget {
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Column(
                             children: [
@@ -156,8 +162,9 @@ class RoundClanCard extends StatelessWidget {
                                             .textTheme
                                             .labelMedium),
                                     SizedBox(
-                                      child: CachedNetworkImage(imageUrl: 
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
                                         width: 12,
                                         height: 12,
                                       ),
@@ -172,8 +179,9 @@ class RoundClanCard extends StatelessWidget {
                                             .textTheme
                                             .labelMedium),
                                     SizedBox(
-                                      child: CachedNetworkImage(imageUrl: 
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
                                         width: 12,
                                         height: 12,
                                       ),
@@ -184,14 +192,16 @@ class RoundClanCard extends StatelessWidget {
                           SizedBox(
                             height: 50,
                             width: 50,
-                            child: CachedNetworkImage(imageUrl: 
-                                warLeagueInfo.opponent.badgeUrls.small),
+                            child: CachedNetworkImage(
+                                imageUrl:
+                                    warLeagueInfo.opponent.badgeUrls.small),
                           ),
                         ],
                       ),
                       Text(
                         warLeagueInfo.opponent.name,
                         style: Theme.of(context).textTheme.bodyMedium,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
