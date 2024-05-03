@@ -71,7 +71,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
             String token = await login();
             String playerTag = controller.text;
             final success = await addLink(
-                playerTag, widget.userId, token, updateErrorMessage);
+                playerTag, widget.userId, token, updateErrorMessage, context);
             if (success) {
               Provider.of<MyAppState>(context, listen: false)
                   .reloadUsersAccounts();
@@ -94,7 +94,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
             ),
             elevation: MaterialStateProperty.all(4),
           ),
-          child: Text(AppLocalizations.of(context)!.addAccount),
+          child: Text(AppLocalizations.of(context)!.addAccount, style: Theme.of(context).textTheme.bodyMedium),
         ),
       ],
     );

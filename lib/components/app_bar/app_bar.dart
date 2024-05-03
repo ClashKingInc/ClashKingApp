@@ -29,9 +29,13 @@ class CustomAppBarState extends State<CustomAppBar> {
   void initState() {
     super.initState();
     _loadSelectedTag().then((_) {
-      if (selectedTag == null && widget.user.tags.isNotEmpty) {
+      if (selectedTag == null ||
+          !widget.user.selectedTagDetails
+              .any((details) => details['tag'] == selectedTag)) {
         setState(() {
-          selectedTag = widget.user.tags.first;
+          selectedTag = widget.user.selectedTagDetails.isNotEmpty
+              ? widget.user.selectedTagDetails.first['tag']
+              : null;
           _saveSelectedTag(selectedTag!);
         });
       }
@@ -91,8 +95,12 @@ class CustomAppBarState extends State<CustomAppBar> {
                                       children: [
                                         CustomSlidingSegmentedControl<int>(
                                           children: {
-                                            0: Text('Add Player'),
-                                            1: Text('Delete Player'),
+                                            0: Text(AppLocalizations.of(context)
+                                                    ?.add ??
+                                                'Add'),
+                                            1: Text(AppLocalizations.of(context)
+                                                    ?.delete ??
+                                                'Delete'),
                                           },
                                           initialValue: currentSegment,
                                           decoration: BoxDecoration(
@@ -131,7 +139,8 @@ class CustomAppBarState extends State<CustomAppBar> {
                                         ),
                                         SizedBox(height: 4),
                                         currentSegment == 1
-                                            ? DeletePlayerCard()
+                                            ? DeletePlayerCard(
+                                                user: widget.user)
                                             : AddPlayerCard(
                                                 userId: widget.user.id),
                                       ],

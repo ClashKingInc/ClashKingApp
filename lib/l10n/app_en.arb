@@ -16,7 +16,15 @@
 
     "manageAccounts" : "Manage accounts",
     "enterPlayerTag" : "Enter a player tag",
-    "addAccount" : "Add account", 
+    "add" : "Add",
+    "delete" : "Delete",
+    "addAccount" : "Add account",
+    "deleteAccount" : "Delete account",
+    "playerTagNotExists" : "The player tag entered does not exist.",
+    "accountAlreadyLinked" : "'The player tag is already linked to someone.'",
+    "failedToAddTryAgain" : "Failed to add link. Please try again later.",
+    "failedToDeleteTryAgain" : "Failed to delete link. Please try again later.",
+
     
     "dashboard" : "Dashboard",
     "homeBase" : "Home Base",

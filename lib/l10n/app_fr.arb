@@ -15,7 +15,14 @@
 
     "manageAccounts" : "Gérer les comptes",
     "enterPlayerTag" : "Saisir le tag du joueur",
+    "add" : "Ajouter",
+    "delete" : "Supprimer",
     "addAccount" : "Ajouter le compte", 
+    "deleteAccount" : "Supprimer le compte",
+    "playerTagNotExists" : "Le tag du joueur n'existe pas.",
+    "accountAlreadyLinked" : "Ce compte est déjà lié à un utilisateur.",
+    "failedToAddTryAgain" : "Échec de l'ajout du compte. Veuillez réessayer plus tard.",
+    "failedToDeleteTryAgain" : "Échec de la suppression du compte. Veuillez réessayer plus tard.",
     
     
     "dashboard" : "Profil",
