@@ -1,3 +1,4 @@
+import 'package:clashkingapp/api/war_log.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_history/war_history_page.dart';
@@ -6,8 +7,9 @@ class WarHistoryCard extends StatelessWidget {
   final List<dynamic> warHistoryData;
   final PlayerAccountInfo playerStats;
   final List<String> discordUser;
+  final List<WarLogDetails> warLogData;
 
-  const WarHistoryCard({super.key, required this.warHistoryData, required this.playerStats, required this.discordUser});
+  const WarHistoryCard({super.key, required this.warHistoryData, required this.playerStats, required this.discordUser, required this.warLogData});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,7 @@ class WarHistoryCard extends StatelessWidget {
               clanTag: playerStats.clan.tag,
               discordUser: discordUser,
               warHistoryData: warHistoryData,
+              warLogData: warLogData,
             ),
           ),
         );

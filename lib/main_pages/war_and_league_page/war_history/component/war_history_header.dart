@@ -18,7 +18,7 @@ class WarHistoryHeader extends StatelessWidget {
       alignment: Alignment.center,
       children: <Widget>[
         SizedBox(
-          height: 240,
+          height: 200,
           child: ImageFiltered(
             imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
             child: ColorFiltered(
