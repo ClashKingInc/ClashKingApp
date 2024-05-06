@@ -17,6 +17,7 @@ import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:workmanager/workmanager.dart';
+import 'package:clashkingapp/api/current_league_info.dart';
 
 @pragma("vm:entry-point")
 FutureOr<void> backgroundCallback(Uri? data) async {
@@ -315,82 +316,146 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<String> checkCurrentWar(String clanTag) async {
+    CurrentWarInfo? currentWarInfo;
+    String time = "";
+    String score = "-";
+    print("Checking current war for $clanTag");
+
     final responseWar = await http.get(
       Uri.parse(
           'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar'),
     );
 
+    final responseCwl = await http.get(
+      Uri.parse(
+          'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
+    );
+
     if (responseWar.statusCode == 200) {
       var decodedResponse = jsonDecode(utf8.decode(responseWar.bodyBytes));
-      if (decodedResponse["state"] != "notInWar") {
-        var teamSize = decodedResponse["teamSize"] * 2;
-        var state = decodedResponse["state"];
-        var time = "";
+      if (decodedResponse["state"] != "notInWar" &&
+          decodedResponse["reason"] != "accessDenied") {
+        currentWarInfo = CurrentWarInfo.fromJson(
+            jsonDecode(utf8.decode(responseWar.bodyBytes)), "war");
+      } else if (decodedResponse["state"] == "notInWar") {
+        print("Not in war");
+        DateTime now = DateTime.now();
+        if (now.day >= 1 && now.day <= 10) {
+          print("Checking CWL");
+          if (responseCwl.statusCode == 200) {
+            print("CWL response 200");
+            var decodedResponseCwl =
+                jsonDecode(utf8.decode(responseCwl.bodyBytes));
+            if (decodedResponseCwl.containsKey("state")) {
+              print("CWL state found");
+              CurrentLeagueInfo currentLeagueInfo =
+                  CurrentLeagueInfo.fromJson(decodedResponseCwl);
+              CurrentWarInfo? inWar;
+              CurrentWarInfo? inPreparation;
+              CurrentWarInfo? lastMatchedWarInfo;
 
-        // Accessing clan details
-        var clanName = decodedResponse["clan"]["name"];
-        var clanBadgeUrlMedium = decodedResponse["clan"]["badgeUrls"]["medium"];
-        var clanStars = decodedResponse["clan"]["stars"];
-        var clanPercent = decodedResponse["clan"]["destructionPercentage"];
-        var clanNumberOfAttacks = decodedResponse["clan"]["attacks"];
+              for (var round in currentLeagueInfo.rounds) {
+                List<CurrentWarInfo> warLeagueInfos =
+                    await round.warLeagueInfos;
 
-        // Accessing opponent details
-        var opponentName = decodedResponse["opponent"]["name"];
-        var opponentBadgeUrlMedium =
-            decodedResponse["opponent"]["badgeUrls"]["medium"];
-        var opponentStars = decodedResponse["opponent"]["stars"];
-        var opponentPercent =
-            decodedResponse["opponent"]["destructionPercentage"];
-        var opponentNumberOfAttacks = decodedResponse["opponent"]["attacks"];
+                for (var warInfo in warLeagueInfos) {
+                  if (warInfo.clan.tag == clanTag ||
+                      warInfo.opponent.tag == clanTag) {
+                    lastMatchedWarInfo =
+                        warInfo; // Store the last matched warInfo
 
-        //default score
-        var score = "$clanStars - $opponentStars";
+                    if (warInfo.state == 'inWar') {
+                      print("state : ${warInfo.state}");
+                      inWar = warInfo;
+                    } else if (warInfo.state == 'preparation') {
+                      inPreparation = warInfo;
+                    }
+                  }
+                }
+              }
 
-        // Accessing time details
-        if (state == "preparation") {
-          DateTime startTime = DateTime.parse(decodedResponse["startTime"]);
-          String formattedTime =
-              DateFormat('HH:mm').format(startTime.toLocal());
-          time = "Start at $formattedTime";
-          score = "-";
-        } else if (state == "inWar") {
-          DateTime endTime = DateTime.parse(decodedResponse["endTime"]);
-          String formattedTime = DateFormat('HH:mm').format(endTime.toLocal());
-          time = "End at $formattedTime";
-        } else if (state == "warEnded") {
-          time = "War Ended";
+              currentWarInfo = inWar ?? inPreparation ?? lastMatchedWarInfo;
+
+              // Accessing time details
+              if (currentWarInfo?.state == "preparation") {
+                String formattedTime = DateFormat('HH:mm')
+                    .format(currentWarInfo!.startTime.toLocal());
+                time = "Starts at $formattedTime";
+              } else if (currentWarInfo?.state == "inWar") {
+                String formattedTime =
+                    DateFormat('HH:mm').format(currentWarInfo!.endTime.toLocal());
+                time = "Ends at $formattedTime";
+              } else if (currentWarInfo?.state == "warEnded") {
+                time = "War Ended";
+              }
+            } else {
+              var result = {
+                "updatedAt":
+                    "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
+                "timeState": time,
+                "state": "error"
+              };
+              return jsonEncode(result);
+            }
+          } else {
+            var result = {
+              "updatedAt":
+                  "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
+              "timeState": time,
+              "state": "error"
+            };
+            return jsonEncode(result);
+          }
+        } else {
+          var result = {
+            "updatedAt":
+                "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
+            "timeState": time,
+            "state": "notInWar"
+          };
+          return jsonEncode(result);
         }
-
-        // Create a Map object with the required fields
+      } else {
         var result = {
           "updatedAt":
               "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
-          "state": time,
-          "score": score,
-          "clan": {
-            "name": clanName,
-            "badgeUrlMedium": clanBadgeUrlMedium,
-            "percent": "$clanPercent%",
-            "attacks": "$clanNumberOfAttacks/$teamSize"
-          },
-          "opponent": {
-            "name": opponentName,
-            "badgeUrlMedium": opponentBadgeUrlMedium,
-            "percent": "$opponentPercent%",
-            "attacks": "$opponentNumberOfAttacks/$teamSize"
-          }
+          "timeState": time,
+          "state": "notInWar"
         };
-
-        // Convert the Map object to a JSON string
-        var jsonString = jsonEncode(result);
-
-        // Return the JSON string
-        return jsonString;
-      } else {
-        return "notInWar";
+        return jsonEncode(result);
       }
+
+      var result = {
+        "updatedAt": "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
+        "timeState": time,
+        "score": "${currentWarInfo?.clan.stars} - ${currentWarInfo?.opponent.stars}",
+        "clan": {
+          "name": currentWarInfo?.clan.name,
+          "badgeUrlMedium": currentWarInfo?.clan.badgeUrls.medium,
+          "percent": "${currentWarInfo?.clan.destructionPercentage}%",
+          "attacks":
+              "${currentWarInfo?.clan.attacks}/${currentWarInfo?.teamSize}"
+        },
+        "opponent": {
+          "name": currentWarInfo?.opponent.name,
+          "badgeUrlMedium": currentWarInfo?.opponent.badgeUrls.medium,
+          "percent": "${currentWarInfo?.opponent.destructionPercentage}%",
+          "attacks":
+              "${currentWarInfo?.opponent.attacks}/${currentWarInfo?.teamSize}"
+        }
+      };
+      // Convert the Map object to a JSON string
+      var jsonString = jsonEncode(result);
+
+      // Return the JSON string
+      return jsonString;
     } else {
-      return "error";
+      var result = {
+        "updatedAt": "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
+        "timeState": time,
+        "state": "error"
+      };
+      return jsonEncode(result);
     }
   }
 
