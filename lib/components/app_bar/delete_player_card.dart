@@ -82,18 +82,18 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
                       .bodySmall
                       ?.copyWith(color: Theme.of(context).colorScheme.error))
               : SizedBox.shrink(),
-          SizedBox(height: 15), // Add spacing
+          SizedBox(height: 15),
           ElevatedButton(
             onPressed: () async {
+              final navigator = Navigator.of(context);
               String token = await login();
               String playerTag = _dropdownValue!;
               final success = await deleteLink(playerTag, token, updateErrorMessage, context);
               if (success) {
-                Provider.of<MyAppState>(context, listen: false)
-                    .reloadUsersAccounts();
+                Provider.of<MyAppState>(context, listen: false).reloadUsersAccounts();
               }
               if (errorMessage.isEmpty) {
-                Navigator.of(context).pop();
+                navigator.pop();
               }
             },
             style: ButtonStyle(

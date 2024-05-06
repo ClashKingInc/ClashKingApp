@@ -62,7 +62,7 @@ class CurrentWarInfoCard extends StatelessWidget {
           flex: 4,
           child: Column(
             children: <Widget>[
-              Text(AppLocalizations.of(context)?.warEnded ?? 'War',
+              Text(AppLocalizations.of(context)?.warEnded ?? 'War ended',
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall

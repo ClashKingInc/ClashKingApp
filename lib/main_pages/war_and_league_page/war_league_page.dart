@@ -8,6 +8,7 @@ import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/api/war_history.dart';
+import 'package:clashkingapp/api/war_log.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/not_in_war_card.dart';
@@ -35,51 +36,60 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   CurrentLeagueInfo? currentLeagueInfo;
   List<Map<int, List<WarLeagueInfo>>> warLeagueInfoByRound = [];
   late Future<List<dynamic>> warHistoryData;
+  late Future<WarLog> warLogData;
 
   @override
   void initState() {
     super.initState();
     warHistoryData = WarHistoryService.fetchWarHistoryData(widget.clanInfo.tag);
+    warLogData = WarLogService.fetchWarLogData(widget.clanInfo.tag);
+      // Après avoir chargé warLogData
+  warLogData.then((data) {
+    print("War Log Data Loaded: ${data.items.length} items");
+    if (data.items.isNotEmpty) {
+      print("First item of War Log: ${data.items.first}");
+    }
+  });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: RefreshIndicator(
-      onRefresh: () async {
-        setState(() {
-          warHistoryData = warHistoryData =
-              WarHistoryService.fetchWarHistoryData(widget.clanInfo.tag);
-        });
-      },
-      child: FutureBuilder<String>(
-        future: checkCurrentWar(widget.playerStats),
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            final warState = snapshot.data ?? false;
-            return ListView(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    if (warState == "war")
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CurrentWarInfoScreen(
-                                currentWarInfo: currentWarInfo!,
-                                discordUser: widget.discordUser.tags,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            warHistoryData = WarHistoryService.fetchWarHistoryData(widget.clanInfo.tag);
+            warLogData = WarLogService.fetchWarLogData(widget.clanInfo.tag);
+          });
+        },
+        child: FutureBuilder<String>(
+          future: checkCurrentWar(widget.playerStats),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              final warState = snapshot.data ?? false;
+              return ListView(
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      if (warState == "war")
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CurrentWarInfoScreen(
+                                  currentWarInfo: currentWarInfo!,
+                                  discordUser: widget.discordUser.tags,
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
                               vertical: 4.0, horizontal: 8.0),
                           child: CurrentWarInfoCard(
                               currentWarInfo: currentWarInfo!,
@@ -119,52 +129,47 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: 4.0, horizontal: 8.0),
-                        child: NotInWarCard(
-                            clanName: widget.playerStats.clan.name,
-                            clanBadgeUrl:
-                                widget.playerStats.clan.badgeUrls.large),
-                      ),
-                    buildWarHistorySection(warHistoryData)
-                  ],
-                ),
-              ],
-            );
-          }
-        },
-      ),
-    ));
-  }
-
-  Widget buildWarHistorySection(Future<List<dynamic>> warHistoryData) {
-    return FutureBuilder<List<dynamic>>(
-      future: warHistoryData,
-      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            margin: EdgeInsets.only(top: 200),
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else {
-          List<dynamic> data = snapshot.data ?? [];
-          if (data.isEmpty) {
-            return SizedBox.shrink();
-          } else {
-            return Column(
-              children: <Widget>[
-                WarHistoryCard(
-                  warHistoryData: data,
-                  playerStats: widget.playerStats,
-                  discordUser: widget.discordUser.tags,
-                ),
-              ],
-            );
-          }
-        }
-      },
+                          child: NotInWarCard(
+                            clanName: widget.playerStats.clan.name, 
+                            clanBadgeUrl: widget.playerStats.clan.badgeUrls.large),
+                        ),
+                      buildWarHistorySection()
+                    ],
+                  ),
+                ],
+              );
+            }
+          },
+        ),
+      )
     );
   }
+
+  Widget buildWarHistorySection() {
+  return FutureBuilder<List<dynamic>>(
+    future: Future.wait([warHistoryData, warLogData.then((value) => value.items)]),
+    builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return Text('Error: ${snapshot.error}');
+      } else if (snapshot.hasData) {
+        List<dynamic> warHistory = snapshot.data![0];
+        List<WarLogDetails> warLogDetails = snapshot.data![1] as List<WarLogDetails>;
+
+        return WarHistoryCard(
+          warHistoryData: warHistory,
+          warLogData: warLogDetails,
+          playerStats: widget.playerStats,
+          discordUser: widget.discordUser.tags,
+        );
+      } else {
+        return SizedBox.shrink();
+      }
+    },
+  );
+}
+
 
   Future<String> checkCurrentWar(PlayerAccountInfo playerStats) async {
     final responseWar = await http.get(

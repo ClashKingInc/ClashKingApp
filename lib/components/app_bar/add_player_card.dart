@@ -68,16 +68,17 @@ class AddPlayerCardState extends State<AddPlayerCard> {
         // Styled ElevatedButton
         ElevatedButton(
           onPressed: () async {
+            final myAppState = Provider.of<MyAppState>(context, listen: false);
+            final navigator = Navigator.of(context);
+
             String token = await login();
             String playerTag = controller.text;
-            final success = await addLink(
-                playerTag, widget.userId, token, updateErrorMessage, context);
+            final success = await addLink(playerTag, widget.userId, token, updateErrorMessage, context);
             if (success) {
-              Provider.of<MyAppState>(context, listen: false)
-                  .reloadUsersAccounts();
+              myAppState.reloadUsersAccounts();
             }
             if (errorMessage.isEmpty) {
-              Navigator.of(context).pop();
+              navigator.pop();
             }
           },
           style: ButtonStyle(

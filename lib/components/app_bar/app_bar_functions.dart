@@ -28,6 +28,11 @@ Future<String> login() async {
 
 Future<bool> addLink(String playerTag, String discordId, String authToken,
     Function updateErrorMessage, BuildContext context) async {
+
+  final playerTagNotExists = AppLocalizations.of(context)!.playerTagNotExists;
+  final accountAlreadyLinked = AppLocalizations.of(context)!.accountAlreadyLinked;
+  final failedToAddTryAgain = AppLocalizations.of(context)!.failedToAddTryAgain;
+
   final url = Uri.parse('https://cocdiscord.link/links');
   final response = await http.post(
     url,
@@ -47,17 +52,18 @@ Future<bool> addLink(String playerTag, String discordId, String authToken,
     updateErrorMessage('');
     return true;
   } else if (response.statusCode == 400) {
-    updateErrorMessage(AppLocalizations.of(context)!.playerTagNotExists);
+    updateErrorMessage(playerTagNotExists);
   } else if (response.statusCode == 409) {
-    updateErrorMessage(AppLocalizations.of(context)!.accountAlreadyLinked);
+    updateErrorMessage(accountAlreadyLinked);
   } else {
-    updateErrorMessage(AppLocalizations.of(context)!.failedToAddTryAgain);
+    updateErrorMessage(failedToAddTryAgain);
   }
   return false;
 }
 
 Future<bool> deleteLink(String playerTag, String authToken, Function updateErrorMessage, BuildContext context) async {
   playerTag = playerTag.replaceAll('#', '');
+  final failedToDeleteTryAgain = AppLocalizations.of(context)!.failedToDeleteTryAgain;
   final url = Uri.parse('https://cocdiscord.link/links/$playerTag');
   final response = await http.delete(
     url,
@@ -74,7 +80,7 @@ Future<bool> deleteLink(String playerTag, String authToken, Function updateError
     return true;
   }
   {
-    updateErrorMessage(AppLocalizations.of(context)!.failedToDeleteTryAgain);
+    updateErrorMessage(failedToDeleteTryAgain);
   }
   return false;
 }

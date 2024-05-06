@@ -9,12 +9,13 @@ class WarLog {
   });
 
   factory WarLog.fromJson(Map<String, dynamic> json) {
-    var itemList = (json['items'] as List)
-      .map((itemJson) => WarLogDetails.fromJson(itemJson))
-      .toList();
-    return WarLog(items: itemList);
+    var itemList = json['items'] != null 
+      ? (json['items'] as List).map((itemJson) => WarLogDetails.fromJson(itemJson as Map<String, dynamic>)).toList()
+      : [];
+    return WarLog(items: itemList.cast<WarLogDetails>());
   }
 }
+
 
 class WarLogDetails {
   final String result;
@@ -35,10 +36,10 @@ class WarLogDetails {
 
   factory WarLogDetails.fromJson(Map<String, dynamic> json) {
     return WarLogDetails(
-      result: json['result'],
+      result: json['result'] ?? '',
       endTime: DateTime.parse(json['endTime']),
-      teamSize: json['teamSize'],
-      attacksPerMember: json['attacksPerMember'],
+      teamSize: json['teamSize'] ?? 0,
+      attacksPerMember: json['attacksPerMember'] ?? 1,
       clan: ClanDetails.fromJson(json['clan']),
       opponent: ClanDetails.fromJson(json['opponent']),
     );
@@ -48,7 +49,7 @@ class WarLogDetails {
 class ClanDetails {
   final String tag;
   final String name;
-  final Map<String, String> badgeUrls;
+  final BadgeUrls badgeUrls;
   final int clanLevel;
   final int attacks;
   final int stars;
@@ -68,25 +69,46 @@ class ClanDetails {
 
   factory ClanDetails.fromJson(Map<String, dynamic> json) {
     return ClanDetails(
-      tag: json['tag'],
-      name: json['name'],
-      badgeUrls: Map<String, String>.from(json['badgeUrls']),
-      clanLevel: json['clanLevel'],
-      attacks: json['attacks'],
-      stars: json['stars'],
-      destructionPercentage: json['destructionPercentage'].toDouble(),
-      expEarned: json['expEarned'],
+      tag: json['tag'] ?? '',
+      name: json['name'] ?? '',
+      badgeUrls: BadgeUrls.fromJson(json['badgeUrls'] ?? {}),
+      clanLevel: json['clanLevel'] ?? 0,
+      attacks: json['attacks'] ?? 0,
+      stars: json['stars'] ?? 0,
+      destructionPercentage: (json['destructionPercentage'] as num?)?.toDouble() ?? 0.0,
+      expEarned: json['expEarned'] ?? 0,
+    );
+  }
+}
+
+class BadgeUrls {
+  final String small;
+  final String large;
+  final String medium;
+
+  BadgeUrls({
+    required this.small,
+    required this.large,
+    required this.medium,
+  });
+
+  factory BadgeUrls.fromJson(Map<String, dynamic> json) {
+    return BadgeUrls(
+      small: json['small'] ?? '',
+      large: json['large'] ?? '',
+      medium: json['medium'] ?? '',
     );
   }
 }
 
 class WarLogService {
-  static Future<List<dynamic>> fetchWarLogData(String tag) async {
+  static Future<WarLog> fetchWarLogData(String tag) async {
     final response = await http.get(Uri.parse(
-        'https://api.clashking.xyz/v1/clans/${tag.substring(1)}/warlog'));
+        'https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/warlog'));
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
-      return json.decode(body);
+      Map<String, dynamic> jsonBody = json.decode(body);
+      return WarLog.fromJson(jsonBody);
     } else {
       throw Exception('Failed to load war history data');
     }

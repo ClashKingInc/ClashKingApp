@@ -132,6 +132,8 @@ class ClanMembersState extends State<ClanMembers> {
         Member member = entry.value;
         return GestureDetector(
             onTap: () async {
+              final navigator = Navigator.of(context);
+
               showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -143,9 +145,8 @@ class ClanMembersState extends State<ClanMembers> {
               );
               PlayerAccountInfo playerStats =
                   await PlayerService().fetchPlayerStats(member.tag);
-              Navigator.pop(context); // Dismiss the dialog
-              Navigator.push(
-                context,
+              navigator.pop(); // Dismiss the dialog
+              navigator.push(
                 MaterialPageRoute(
                   builder: (context) => StatsScreen(playerStats: playerStats),
                 ),

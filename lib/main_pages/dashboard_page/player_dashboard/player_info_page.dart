@@ -624,6 +624,8 @@ class StatsScreenState extends State<StatsScreen>
         GestureDetector(
           onTap: () async {
             if (widget.playerStats.league == "Legend League") {
+              final navigator = Navigator.of(context);
+
               showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -636,9 +638,8 @@ class StatsScreenState extends State<StatsScreen>
               PlayerLegendData legendData = await PlayerLegendService()
                   .fetchLegendData(widget.playerStats.tag);
 
-              Navigator.pop(context); // Dismiss the dialog
-              Navigator.push(
-                context,
+              navigator.pop();
+              navigator.push(
                 MaterialPageRoute(
                   builder: (context) => LegendScreen(
                       playerStats: widget.playerStats,
