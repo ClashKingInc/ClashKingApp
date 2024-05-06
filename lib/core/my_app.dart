@@ -318,7 +318,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   Future<String> checkCurrentWar(String clanTag) async {
     CurrentWarInfo? currentWarInfo;
     String time = "";
-    String score = "-";
     print("Checking current war for $clanTag");
 
     final responseWar = await http.get(
@@ -382,8 +381,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
                     .format(currentWarInfo!.startTime.toLocal());
                 time = "Starts at $formattedTime";
               } else if (currentWarInfo?.state == "inWar") {
-                String formattedTime =
-                    DateFormat('HH:mm').format(currentWarInfo!.endTime.toLocal());
+                String formattedTime = DateFormat('HH:mm')
+                    .format(currentWarInfo!.endTime.toLocal());
                 time = "Ends at $formattedTime";
               } else if (currentWarInfo?.state == "warEnded") {
                 time = "War Ended";
@@ -428,7 +427,9 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       var result = {
         "updatedAt": "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
         "timeState": time,
-        "score": "${currentWarInfo?.clan.stars} - ${currentWarInfo?.opponent.stars}",
+        "score": currentWarInfo?.state == "preparation"
+            ? "-"
+            : "${currentWarInfo?.clan.stars} - ${currentWarInfo?.opponent.stars}",
         "clan": {
           "name": currentWarInfo?.clan.name,
           "badgeUrlMedium": currentWarInfo?.clan.badgeUrls.medium,
