@@ -35,13 +35,13 @@ class ClanInfoPageState extends State<ClanInfoPage>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        ClanInfoScreen(clanInfo: widget.clanInfo)),
+                  builder: (context) =>
+                    ClanInfoScreen(clanInfo: widget.clanInfo)),
               );
             },
             child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                child: ClanInfoCard(clanInfo: widget.clanInfo)),
+              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              child: ClanInfoCard(clanInfo: widget.clanInfo)),
           ),
           // Add more cards as needed
         ],

@@ -64,7 +64,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
               alignment: Alignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 190,
+                  height: 220,
                   child: ImageFiltered(
                     imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                     child: ColorFiltered(
@@ -89,7 +89,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
-                Positioned.fill(
+                Positioned(
                   child: FutureBuilder<Map<String, Map<String, dynamic>>>(
                     future: totalStarsAndPercentage,
                     builder: (context, snapshot) {
@@ -124,6 +124,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            SizedBox(height: 36),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -152,6 +153,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                                 )
                               ],
                             ),
+                            SizedBox(height: 16),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -263,7 +265,9 @@ Widget buildRoundsTab(BuildContext context, CurrentLeagueInfo currentLeagueInfo,
     List<String> discordUser) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
-    children: currentLeagueInfo.rounds.asMap().entries.toList().reversed.map((entry) {
+    children: [
+      SizedBox(height: 4),
+      ...currentLeagueInfo.rounds.asMap().entries.toList().reversed.map((entry) {
       int round = entry.key + 1; // Assuming you want round numbering to start from 1
       ClanLeagueRounds clanLeagueRounds = entry.value;
       return FutureBuilder<List<CurrentWarInfo>>(
@@ -286,15 +290,15 @@ Widget buildRoundsTab(BuildContext context, CurrentLeagueInfo currentLeagueInfo,
                   return RoundClanCard(
                       warLeagueInfo: warLeagueInfo,
                       discordUser: discordUser);
-                }).toList(),
+                }),
               ],
             );
           } else {
-            return SizedBox.shrink(); // Return an empty widget if there's no data
+            return SizedBox.shrink();
           }
         },
       );
-    }).toList(),
+    }),]
   );
 }
 
@@ -309,11 +313,12 @@ Widget buildTeamsTab(
     'Percentage': 'percentage',
   };
   return Column(children: [
+    SizedBox(height: 8),
     FilterDropdown(
         sortBy: sortTeamsBy,
         updateSortBy: updateSortTeamsBy,
         sortByOptions: sortByOptions),
-    SizedBox(height: 8),
+    SizedBox(height: 4),
     FutureBuilder<Map<String, Map<String, dynamic>>>(
       future: totalStarsAndPercentage,
       builder: (context, snapshot) {
@@ -347,11 +352,12 @@ Widget buildMembersTab(
     'Percentage': 'percentage',
   };
   return Column(children: [
+    SizedBox(height: 8),
     FilterDropdown(
         sortBy: sortBy,
         updateSortBy: updateSortBy,
         sortByOptions: sortByOptions),
-    SizedBox(height: 8),
+    SizedBox(height: 4),
     FutureBuilder<Map<String, dynamic>>(
       future: calculateTotalStarsAndPercentageForMember(
           currentLeagueInfo.rounds, clanTag, sortBy),

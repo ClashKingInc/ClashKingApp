@@ -24,7 +24,7 @@ class ClanInfoScreenState extends State<ClanInfoScreen>
               color: Theme.of(context).colorScheme.surface,
               child: ClanInfoHeaderCard(clanInfo: widget.clanInfo),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 8),
             ClanMembers(clanInfo: widget.clanInfo),
           ],
         ),

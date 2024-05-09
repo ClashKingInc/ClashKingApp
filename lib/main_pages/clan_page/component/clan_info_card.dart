@@ -12,7 +12,8 @@ class ClanInfoCard extends StatelessWidget {
   final ClanInfo clanInfo;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
