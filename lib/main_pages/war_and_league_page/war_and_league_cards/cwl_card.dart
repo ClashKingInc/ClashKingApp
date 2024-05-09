@@ -9,11 +9,11 @@ class CwlCard extends StatefulWidget {
   final String clanTag;
   final ClanInfo clanInfo;
 
-  CwlCard(
-      {super.key,
-      required this.currentLeagueInfo,
-      required this.clanTag,
-      required this.clanInfo,
+  CwlCard({
+    super.key,
+    required this.currentLeagueInfo,
+    required this.clanTag,
+    required this.clanInfo,
   });
 
   @override
@@ -26,33 +26,33 @@ class CwlCardState extends State<CwlCard> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Future<CurrentWarInfo?> getActiveWar() async {
-      CurrentWarInfo? inWar;
-      CurrentWarInfo? inPreparation;
-      CurrentWarInfo? lastMatchedWarInfo;
+  Future<CurrentWarInfo?> getActiveWar() async {
+    CurrentWarInfo? inWar;
+    CurrentWarInfo? inPreparation;
+    CurrentWarInfo? lastMatchedWarInfo;
 
-      for (var round in widget.currentLeagueInfo.rounds) {
-        List<CurrentWarInfo> warLeagueInfos = await round.warLeagueInfos;
+    for (var round in widget.currentLeagueInfo.rounds) {
+      List<CurrentWarInfo> warLeagueInfos = await round.warLeagueInfos;
 
-        for (var warInfo in warLeagueInfos) {
-          if (warInfo.clan.tag == widget.clanTag ||
-              warInfo.opponent.tag == widget.clanTag) {
-            lastMatchedWarInfo = warInfo; // Store the last matched warInfo
+      for (var warInfo in warLeagueInfos) {
+        if (warInfo.clan.tag == widget.clanTag ||
+            warInfo.opponent.tag == widget.clanTag) {
+          lastMatchedWarInfo = warInfo; // Store the last matched warInfo
 
-            if (warInfo.state == 'inWar') {
-              return warInfo; // Return immediately if 'inWar'
-            } else if (warInfo.state == 'preparation') {
-              inPreparation = warInfo; // Store 'preparation' warInfo
-            }
+          if (warInfo.state == 'inWar') {
+            return warInfo; // Return immediately if 'inWar'
+          } else if (warInfo.state == 'preparation') {
+            inPreparation = warInfo; // Store 'preparation' warInfo
           }
         }
       }
-
-      return inWar ?? inPreparation ?? lastMatchedWarInfo;
     }
 
+    return inWar ?? inPreparation ?? lastMatchedWarInfo;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return FutureBuilder<CurrentWarInfo?>(
       future: getActiveWar(),
       builder: (context, snapshot) {
