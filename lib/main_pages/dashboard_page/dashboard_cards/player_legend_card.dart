@@ -187,10 +187,10 @@ class PlayerLegendCard extends StatelessWidget {
                                   ),
                                 Chip(
                                   avatar: Icon(
-                                    playerLegendData.diffTrophies > 0
+                                    playerLegendData.diffTrophies >= 0
                                         ? LucideIcons.chevronUp
                                         : LucideIcons.chevronDown,
-                                    color: playerLegendData.diffTrophies > 0
+                                    color: playerLegendData.diffTrophies >= 0
                                         ? Colors.green
                                         : Colors.red,
                                   ),
