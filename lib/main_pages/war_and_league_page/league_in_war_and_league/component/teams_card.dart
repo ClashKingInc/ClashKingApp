@@ -66,24 +66,27 @@ class TeamsCard extends StatelessWidget {
                     Card(
                       shape: RoundedRectangleBorder(
                         side: clan.tag == clanTag
-                          ? BorderSide(color: Colors.green, width: 2)
-                          : BorderSide.none,
+                            ? BorderSide(color: Colors.green, width: 2)
+                            : BorderSide.none,
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Flexible(
-                              fit: FlexFit.tight,
-                              flex: 8,
+                            Expanded(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
+                                      Text(
+                                        "${sortedClans.indexOf(clan) + 1}.",
+                                        style: Theme.of(context).textTheme.titleMedium
+                                      ),
+                                      SizedBox(width: 50),
                                       CachedNetworkImage(imageUrl: clan.badgeUrls.small,
                                         width: 40, height: 40),
                                       SizedBox(width: 10),
@@ -99,6 +102,27 @@ class TeamsCard extends StatelessWidget {
                                             style: Theme.of(context)
                                               .textTheme
                                               .labelMedium),
+                                        ],
+                                      ),
+                                      SizedBox(width: 40),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text("  ${totalByClan[clan.tag]?['stars'] ?? 0}"),
+                                              SizedBox(
+                                                child: CachedNetworkImage(
+                                                  imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
+                                                  width: 20,
+                                                  height: 20,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Text(
+                                            "${totalByClan[clan.tag]?['percentage'].toStringAsFixed(0) ?? 0.0}%",
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -130,56 +154,11 @@ class TeamsCard extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Flexible(
-                              fit: FlexFit.tight,
-                              flex: 2,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Column(
-                                        children: [
-                                          SizedBox(height: 6),
-                                          Row(children: [
-                                            Text(
-                                              "${totalByClan[clan.tag]?['stars'] ?? 0}"),
-                                            SizedBox(
-                                              child: CachedNetworkImage(imageUrl: 
-                                                "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
-                                                width: 20,
-                                                height: 20,
-                                              ),
-                                            ),
-                                          ]),
-                                          SizedBox(height: 8),
-                                          Text(
-                                            "${totalByClan[clan.tag]?['percentage'].toStringAsFixed(0) ?? 0.0}%",
-                                            style: Theme.of(context)
-                                              .textTheme
-                                              .labelLarge
-                                              ?.copyWith(
-                                                color: Theme.of(context)
-                                                  .colorScheme
-                                                  .tertiary),
-                                          ),
-                                        ],  
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: 10,
-                      left: 20,
-                      child: Text("${sortedClans.indexOf(clan) + 1}.",
-                        style: Theme.of(context).textTheme.titleMedium),
-                    ),
-                  ],  
+                  ],
                 ),
               );
             }

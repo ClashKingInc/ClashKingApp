@@ -194,7 +194,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
         return "accessDenied";
       } else if (decodedResponse["state"] == "notInWar") {
         DateTime now = DateTime.now();
-        if (now.day >= 1 && now.day <= 10) {
+        if (now.day >= 1 && now.day <= 12) {
           if (responseCwl.statusCode == 200) {
             var decodedResponseCwl =
                 jsonDecode(utf8.decode(responseCwl.bodyBytes));
