@@ -14,8 +14,9 @@ import 'package:clashkingapp/api/player_legend.dart';
 
 class StatsScreen extends StatefulWidget {
   final PlayerAccountInfo playerStats;
+  final List<String> discordUser;
 
-  StatsScreen({super.key, required this.playerStats});
+  StatsScreen({super.key, required this.playerStats, required this.discordUser});
 
   @override
   StatsScreenState createState() => StatsScreenState();
@@ -24,8 +25,7 @@ class StatsScreen extends StatefulWidget {
 class StatsScreenState extends State<StatsScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-  String backgroundImageUrl =
-      "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png";
+  String backgroundImageUrl = "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png";
   String townHallImageUrl = "";
   List<Widget> stars = [];
   Widget hallChips = SizedBox.shrink();
@@ -73,17 +73,17 @@ class StatsScreenState extends State<StatsScreen>
               onTap: (value) {
                 setState(() {
                   backgroundImageUrl = value == 0
-                      ? "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png"
-                      : "https://clashkingfiles.b-cdn.net/landscape/builder-landscape.png";
+                    ? "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png"
+                    : "https://clashkingfiles.b-cdn.net/landscape/builder-landscape.png";
                   townHallImageUrl = value == 0
-                      ? widget.playerStats.townHallPic
-                      : widget.playerStats.builderHallPic;
+                    ? widget.playerStats.townHallPic
+                    : widget.playerStats.builderHallPic;
                   stars = value == 0
-                      ? _buildStars(widget.playerStats.townHallWeaponLevel)
-                      : _buildStars(0);
+                    ? _buildStars(widget.playerStats.townHallWeaponLevel)
+                    : _buildStars(0);
                   hallChips = value == 0
-                      ? buildTownHallChips()
-                      : buildBuilderHallChips();
+                    ? buildTownHallChips()
+                    : buildBuilderHallChips();
                 });
               },
               tabs: [
@@ -96,35 +96,31 @@ class StatsScreenState extends State<StatsScreen>
                   children: [
                     SizedBox(height: 10),
                     buildItemSection(widget.playerStats.heroes, 'hero',
-                        AppLocalizations.of(context)?.heroes ?? 'Heroes'),
+                      AppLocalizations.of(context)?.heroes ?? 'Heroes'),
                     buildItemSection(widget.playerStats.equipments, 'gear',
-                        AppLocalizations.of(context)?.equipment ?? 'Gears'),
+                      AppLocalizations.of(context)?.equipment ?? 'Gears'),
                     buildItemSection(widget.playerStats.troops, 'troop',
-                        AppLocalizations.of(context)?.troops ?? 'Troops'),
-                    buildItemSection(
-                        widget.playerStats.troops,
-                        'super-troop',
-                        AppLocalizations.of(context)?.superTroops ??
-                            'Super Troops'),
+                      AppLocalizations.of(context)?.troops ?? 'Troops'),
+                    buildItemSection(widget.playerStats.troops,'super-troop',
+                      AppLocalizations.of(context)?.superTroops ?? 'Super Troops'),
                     buildItemSection(widget.playerStats.troops, 'pet',
-                        AppLocalizations.of(context)?.pets ?? 'Pets'),
-                    buildItemSection(
-                        widget.playerStats.troops,
-                        'siege-machine',
-                        AppLocalizations.of(context)?.siegeMachines ??
-                            'Siege Machine'),
+                      AppLocalizations.of(context)?.pets ?? 'Pets'),
+                    buildItemSection( widget.playerStats.troops, 'siege-machine',
+                      AppLocalizations.of(context)?.siegeMachines ?? 'Siege Machine'),
                     buildItemSection(widget.playerStats.spells, 'spell',
-                        AppLocalizations.of(context)?.spells ?? 'Spells'),
+                      AppLocalizations.of(context)?.spells ?? 'Spells'),
                   ],
                 ),
-                // Builder Base
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  SizedBox(height: 10),
-                  buildItemSection(widget.playerStats.heroes, 'bb-hero',
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, 
+                  children: [
+                    SizedBox(height: 10),
+                    buildItemSection(widget.playerStats.heroes, 'bb-hero',
                       AppLocalizations.of(context)?.heroes ?? 'Heroes'),
-                  buildItemSection(widget.playerStats.troops, 'bb-troop',
+                    buildItemSection(widget.playerStats.troops, 'bb-troop',
                       AppLocalizations.of(context)?.troops ?? 'Troops'),
-                ]),
+                  ],
+                ),
               ],
             ),
           ],
@@ -147,10 +143,8 @@ class StatsScreenState extends State<StatsScreen>
   double calculateCompletionPercentage(List<dynamic> items, String itemType) {
     var filteredItems = items.where((item) => item.type == itemType).toList();
 
-    int totalMaxLevel =
-        filteredItems.fold(0, (prev, item) => (prev) + (item.maxLevel as int));
-    int totalCurrentLevel =
-        filteredItems.fold(0, (prev, item) => (prev) + (item.level as int));
+    int totalMaxLevel = filteredItems.fold(0, (prev, item) => (prev) + (item.maxLevel as int));
+    int totalCurrentLevel = filteredItems.fold(0, (prev, item) => (prev) + (item.level as int));
 
     if (totalMaxLevel == 0) return 0.0;
 
@@ -159,15 +153,14 @@ class StatsScreenState extends State<StatsScreen>
 
   String getEquipmentImageUrl(String equipmentName) {
     return troopUrlsAndTypes[equipmentName]?['url'] ??
-        'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
+      'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
   }
 
   // Build the section for troops, super troops, pets, and siege machines
   Widget buildItemSection(List<dynamic> items, String itemType, String title) {
     List<String> itemNames = items.map((item) => item.name as String).toList();
 
-    double completionPercentage =
-        calculateCompletionPercentage(items, itemType);
+    double completionPercentage = calculateCompletionPercentage(items, itemType);
 
     List<Widget> missingItems = [];
     troopUrlsAndTypes.forEach((name, data) {
@@ -186,11 +179,10 @@ class StatsScreenState extends State<StatsScreen>
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
               child: CachedNetworkImage(
-                  imageUrl: data['url'] ??
-                      "https://clashkingfiles.b-cdn.net/clashkinglogo.png",
-                  height: 40,
-                  width: 40,
-                  fit: BoxFit.cover),
+                imageUrl: data['url'] ?? "https://clashkingfiles.b-cdn.net/clashkinglogo.png",
+                height: 40,
+                width: 40,
+                fit: BoxFit.cover),
             ),
           ),
         );
@@ -220,8 +212,8 @@ class StatsScreenState extends State<StatsScreen>
                       ),
                       TextSpan(
                         text: completionPercentage % 1 == 0
-                            ? '${completionPercentage.toInt()}%'
-                            : '${completionPercentage.toStringAsFixed(2)}%',
+                          ? '${completionPercentage.toInt()}%'
+                          : '${completionPercentage.toStringAsFixed(2)}%',
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ],
@@ -239,21 +231,20 @@ class StatsScreenState extends State<StatsScreen>
                         (item) => Container(
                           decoration: BoxDecoration(
                             color: item.type == 'gear'
-                                ? (item.name == 'Frozen Arrow' ||
-                                        item.name == 'Giant Gauntlet' ||
-                                        item.name == 'Fireball'
-                                    ? Colors.purple
-                                    : Colors.blue)
-                                : null,
+                              ? (item.name == 'Frozen Arrow' ||
+                                  item.name == 'Giant Gauntlet' ||
+                                  item.name == 'Fireball' ||
+                                  item.name == 'Spiky Ball'
+                                ? Colors.purple
+                                : Colors.blue)
+                              : null,
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: (item.level == item.maxLevel ||
-                                      (item.type == 'super-troop' &&
-                                          item.superTroopIsActive))
-                                  ? Color(0xFFD4AF37) // Or
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .onBackground, // Noir
+                              color: (item.level == item.maxLevel || (item.type == 'super-troop' && item.superTroopIsActive))
+                                ? Color(0xFFD4AF37)
+                                : Theme.of(context)
+                                  .colorScheme
+                                  .onBackground,
                               width: 2,
                             ),
                           ),
@@ -266,8 +257,7 @@ class StatsScreenState extends State<StatsScreen>
                                     builder: (BuildContext context) {
                                       return Dialog(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
                                         elevation: 6,
                                         backgroundColor: Colors.transparent,
@@ -277,80 +267,59 @@ class StatsScreenState extends State<StatsScreen>
                                             decoration: BoxDecoration(
                                               color: Colors.white,
                                               shape: BoxShape.rectangle,
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
+                                              borderRadius: BorderRadius.circular(20),
                                             ),
                                             child: Column(
                                               children: <Widget>[
                                                 Text('${item.name}',
-                                                    style: TextStyle(
-                                                        color: Colors.black)),
+                                                  style: TextStyle(color: Colors.black)),
                                                 CachedNetworkImage(
-                                                    imageUrl: item.imageUrl,
-                                                    width: 40,
-                                                    height: 40,
-                                                    fit: BoxFit.cover),
+                                                  imageUrl: item.imageUrl,
+                                                  width: 40,
+                                                  height: 40,
+                                                  fit: BoxFit.cover),
                                                 Text(
                                                   itemType == 'super-troop'
-                                                      ? (item.superTroopIsActive
-                                                          ? 'Actif'
-                                                          : 'Inactif')
-                                                      : 'Level : ${item.level}/${item.maxLevel}',
-                                                  style: TextStyle(
-                                                      color: Colors.black),
+                                                    ? (item.superTroopIsActive
+                                                      ? 'Actif'
+                                                      : 'Inactif')
+                                                    : 'Level : ${item.level}/${item.maxLevel}',
+                                                  style: TextStyle(color: Colors.black),
                                                 ),
                                                 itemType == 'hero'
-                                                    ? Column(
-                                                        children: [
-                                                          ...item.equipment.map(
-                                                            (equipment) =>
-                                                                Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      vertical:
-                                                                          4.0),
-                                                              child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: [
-                                                                  CachedNetworkImage(
-                                                                    imageUrl: getEquipmentImageUrl(
-                                                                        equipment
-                                                                            .name),
-                                                                    width: 40,
-                                                                    height: 40,
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                  ),
-                                                                  SizedBox(
-                                                                      width: 8),
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                      equipment
-                                                                          .name,
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.black),
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    'Level : ${equipment.level}/${equipment.maxLevel}',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .black),
-                                                                  ),
-                                                                ],
+                                                  ? Column(
+                                                    children: [
+                                                      ...item.equipment.map(
+                                                        (equipment) => Padding(
+                                                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                                          child: Row(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              CachedNetworkImage(
+                                                                imageUrl: getEquipmentImageUrl(equipment.name),
+                                                                width: 40,
+                                                                height: 40,
+                                                                fit: BoxFit.cover,
                                                               ),
-                                                            ),
+                                                              SizedBox(width: 8),
+                                                              Expanded(
+                                                                child: Text(
+                                                                  equipment.name,
+                                                                  style: TextStyle(color:Colors.black),
+                                                                  overflow: TextOverflow.ellipsis,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                'Level : ${equipment.level}/${equipment.maxLevel}',
+                                                                style: TextStyle(color: Colors.black),
+                                                              ),
+                                                            ],
                                                           ),
-                                                        ],
-                                                      )
-                                                    : SizedBox.shrink(),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                  : SizedBox.shrink(),
                                               ],
                                             ),
                                           ),
@@ -362,11 +331,10 @@ class StatsScreenState extends State<StatsScreen>
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(6),
                                   child: CachedNetworkImage(
-                                      imageUrl: item.imageUrl,
-                                      width: 40,
-                                      height: 40,
-                                      fit: BoxFit
-                                          .cover), // Display the item image
+                                    imageUrl: item.imageUrl,
+                                    width: 40,
+                                    height: 40,
+                                    fit: BoxFit.cover),
                                 ),
                               ),
                               (item.type != 'super-troop')
@@ -450,7 +418,7 @@ class StatsScreenState extends State<StatsScreen>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ClanInfoScreen(clanInfo: clanInfo),
+                builder: (context) => ClanInfoScreen(clanInfo: clanInfo, discordUser: widget.discordUser),
               ),
             );
           }
@@ -474,8 +442,7 @@ class StatsScreenState extends State<StatsScreen>
           backgroundColor:
               Colors.transparent, // Set to a suitable color for your design.
           child: CachedNetworkImage(
-              imageUrl:
-                  "https://clashkingfiles.b-cdn.net/home-base/hero-pics/Icon_HV_Hero_Archer_Queen.png"),
+              imageUrl: "https://clashkingfiles.b-cdn.net/home-base/hero-pics/Icon_HV_Hero_Archer_Queen.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -485,8 +452,7 @@ class StatsScreenState extends State<StatsScreen>
       ),
       Chip(
         avatar: CircleAvatar(
-          backgroundColor:
-              Colors.transparent, // Set to a suitable color for your design.
+          backgroundColor:Colors.transparent, // Set to a suitable color for your design.
           child: CachedNetworkImage(imageUrl: widget.playerStats.townHallPic),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -497,11 +463,9 @@ class StatsScreenState extends State<StatsScreen>
       ),
       Chip(
         avatar: CircleAvatar(
-          backgroundColor:
-              Colors.transparent, // Set to a suitable color for your design.
+          backgroundColor: Colors.transparent, // Set to a suitable color for your design.
           child: CachedNetworkImage(
-              imageUrl:
-                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_XP.png"),
+              imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_XP.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -510,8 +474,7 @@ class StatsScreenState extends State<StatsScreen>
         ),
       ),
       Chip(
-        avatar: Icon(LucideIcons.chevronUp,
-            color: Color.fromARGB(255, 27, 114, 33)),
+        avatar: Icon(LucideIcons.chevronUp, color: Color.fromARGB(255, 27, 114, 33)),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
           '${widget.playerStats.donations}',
@@ -519,8 +482,7 @@ class StatsScreenState extends State<StatsScreen>
         ),
       ),
       Chip(
-        avatar: Icon(LucideIcons.chevronDown,
-            color: Color.fromARGB(255, 155, 4, 4)),
+        avatar: Icon(LucideIcons.chevronDown, color: Color.fromARGB(255, 155, 4, 4)),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
           '${widget.playerStats.donationsReceived}',
@@ -528,25 +490,21 @@ class StatsScreenState extends State<StatsScreen>
         ),
       ),
       Chip(
-        avatar: Icon(LucideIcons.chevronsUpDown,
-            color: Color.fromARGB(255, 0, 136, 255)),
+        avatar: Icon(LucideIcons.chevronsUpDown, color: Color.fromARGB(255, 0, 136, 255)),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          (widget.playerStats.donations /
-                  (widget.playerStats.donationsReceived == 0
-                      ? 1
-                      : widget.playerStats.donationsReceived))
+          (widget.playerStats.donations / (widget.playerStats.donationsReceived == 0
+            ? 1
+            : widget.playerStats.donationsReceived))
               .toStringAsFixed(2),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
       Chip(
         avatar: CircleAvatar(
-          backgroundColor:
-              Colors.transparent, // Set to a suitable color for your design.
+          backgroundColor: Colors.transparent, // Set to a suitable color for your design.
           child: CachedNetworkImage(
-              imageUrl:
-                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
+            imageUrl:"https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -556,17 +514,13 @@ class StatsScreenState extends State<StatsScreen>
       ),
       Chip(
         avatar: CircleAvatar(
-          backgroundColor:
-              Colors.transparent, // Set to a suitable color for your design.
+          backgroundColor: Colors.transparent, // Set to a suitable color for your design.
           child: CachedNetworkImage(
-              imageUrl:
-                  "https://clashkingfiles.b-cdn.net/icons/Icon_CC_Resource_Capital_Gold_small.png"),
+            imageUrl:"https://clashkingfiles.b-cdn.net/icons/Icon_CC_Resource_Capital_Gold_small.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          NumberFormat('#,###', 'fr_FR')
-              .format(widget.playerStats.clanCapitalContributions)
-              .replaceAll(',', ' '),
+          NumberFormat('#,###', 'fr_FR').format(widget.playerStats.clanCapitalContributions).replaceAll(',', ' '),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
