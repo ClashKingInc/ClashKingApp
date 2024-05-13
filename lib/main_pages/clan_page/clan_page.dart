@@ -8,9 +8,9 @@ import 'package:provider/provider.dart';
 
 class ClanInfoPage extends StatefulWidget {
   final ClanInfo clanInfo;
-  final DiscordUser user;
+  final DiscordUser discordUser;
 
-  ClanInfoPage({required this.clanInfo, required this.user});
+  ClanInfoPage({required this.clanInfo, required this.discordUser});
 
   @override
   ClanInfoPageState createState() => ClanInfoPageState();
@@ -35,8 +35,8 @@ class ClanInfoPageState extends State<ClanInfoPage>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                    ClanInfoScreen(clanInfo: widget.clanInfo)),
+                  builder: (context) => ClanInfoScreen(clanInfo: widget.clanInfo, discordUser: widget.discordUser.tags)
+                ),
               );
             },
             child: Padding(

@@ -243,7 +243,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
               ],
               children: [
                 buildRoundsTab(context, widget.currentLeagueInfo, widget.discordUser),
-                buildTeamsTab(context, widget.currentLeagueInfo, widget.clanTag, totalStarsAndPercentage, sortTeamsBy, updateSortTeamsBy),
+                buildTeamsTab(context, widget.currentLeagueInfo, widget.discordUser, widget.clanTag, totalStarsAndPercentage, sortTeamsBy, updateSortTeamsBy),
                 buildMembersTab(context, widget.currentLeagueInfo, widget.discordUser, widget.clanTag, sortMembersBy, updateSortMembersBy),
               ],
             ),
@@ -294,7 +294,7 @@ Widget buildRoundsTab(BuildContext context, CurrentLeagueInfo currentLeagueInfo,
   );
 }
 
-Widget buildTeamsTab(BuildContext context, CurrentLeagueInfo currentLeagueInfo, String clanTag, 
+Widget buildTeamsTab(BuildContext context, CurrentLeagueInfo currentLeagueInfo, List<String> discordUser, String clanTag, 
   Future<Map<String, Map<String, dynamic>>> totalStarsAndPercentage, String sortTeamsBy, Function(String) updateSortTeamsBy
 ) {
   Map<String, String> sortByOptions = <String, String>{
@@ -323,7 +323,7 @@ Widget buildTeamsTab(BuildContext context, CurrentLeagueInfo currentLeagueInfo, 
             var sortedClans = currentLeagueInfo.clans.toList()
               ..sort((a, b) => (totalByClan[b.tag]?[sortTeamsBy] ?? 0)
                 .compareTo(totalByClan[a.tag]?[sortTeamsBy] ?? 0));
-            return TeamsCard(sortedClans: sortedClans, totalByClan: totalByClan, clanTag: clanTag);
+            return TeamsCard(sortedClans: sortedClans, totalByClan: totalByClan, clanTag: clanTag, discordUser: discordUser);
           }
         },
       ),

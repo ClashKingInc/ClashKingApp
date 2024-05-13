@@ -9,9 +9,11 @@ class PlayerInfosCard extends StatelessWidget {
   const PlayerInfosCard({
     super.key,
     required this.playerStats,
+    required this.discordUser,
   });
 
   final PlayerAccountInfo playerStats;
+  final List<String> discordUser;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class PlayerInfosCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => StatsScreen(playerStats: playerStats),
+            builder: (context) => StatsScreen(playerStats: playerStats, discordUser: discordUser),
           ),
         );
       },

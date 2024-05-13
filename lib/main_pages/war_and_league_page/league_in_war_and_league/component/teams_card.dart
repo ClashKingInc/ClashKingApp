@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_page/clan_info_page.dart';
 import 'package:clashkingapp/api/current_league_info.dart';
@@ -10,11 +11,13 @@ class TeamsCard extends StatelessWidget {
     required this.sortedClans,
     required this.totalByClan,
     required this.clanTag,
+    required this.discordUser,
   });
 
   final List<ClanLeagueDetails> sortedClans;
   final Map<String, Map<String, dynamic>> totalByClan;
   final String clanTag;
+  final List<String> discordUser;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +56,7 @@ class TeamsCard extends StatelessWidget {
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else {
-                              return ClanInfoScreen(clanInfo: snapshot.data!);
+                              return ClanInfoScreen(clanInfo: snapshot.data!, discordUser: []);
                             }
                           },
                         ),
