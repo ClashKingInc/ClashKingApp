@@ -33,9 +33,9 @@ class ClanInfoCard extends StatelessWidget {
                       Text(clanInfo.tag,
                           style: Theme.of(context).textTheme.labelLarge),
                     ])),
-                SizedBox(width: 8),
+                SizedBox(width: 12),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Row(
                       children: [
