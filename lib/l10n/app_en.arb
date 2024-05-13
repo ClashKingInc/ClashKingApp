@@ -126,6 +126,9 @@
     "moreDestruction" : "more destruction",
     "clanDraw" : "The two clans are tied",
     "fastCalculator" : "Fast calculator",
+    "teamSize" : "Team size",
+    "neededOverall" : "% Needed overall",
+    "calculate" : "Calculate",
 
     "management" : "Management"
 }

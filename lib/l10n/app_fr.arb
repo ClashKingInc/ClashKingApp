@@ -124,6 +124,9 @@
     "moreDestruction" : "de destruction",
     "clanDraw" : "Les deux clans sont à égalité",
     "fastCalculator" : "Calculatrice rapide",
+    "teamSize" : "Taille de l'équipe",
+    "neededOverall" : "% Total nécessaire",
+    "calculate" : "Calculer",
 
     "management" : "Gestion"
 }
