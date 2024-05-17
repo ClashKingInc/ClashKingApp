@@ -84,11 +84,12 @@
     "donationsRatio" : "Donations Ratio",
     "trophies" : "Trophies",
   
-
     "warLeague" : "War/League",
     "war" : "War",
     "league" : "League",
     "wars" : "Wars",
+    "warHistory" : "War History",
+    "warLog" : "War Log",
     "startsIn" : "Starts in",
     "endsIn" : "Ends in",
     "statistics" : "Statistics",

@@ -24,7 +24,6 @@
     "failedToAddTryAgain" : "Échec de l'ajout du compte. Veuillez réessayer plus tard.",
     "failedToDeleteTryAgain" : "Échec de la suppression du compte. Veuillez réessayer plus tard.",
     
-    
     "dashboard" : "Profil",
     "homeBase" : "Village principal",
     "th" : "HDV",
@@ -87,6 +86,8 @@
     "war" : "Guerre",
     "league" : "Ligue",
     "wars" : "Guerres",
+    "warHistory" : "Historique de guerre",
+    "warLog" : "Journal",
     "startsIn" : "Début dans",
     "endsIn" : "Fin dans",
     "statistics" : "Statistiques",
