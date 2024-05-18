@@ -5,6 +5,7 @@ import 'package:clipboard/clipboard.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PlayerInfoHeaderCard extends StatefulWidget {
   final PlayerAccountInfo playerStats;
@@ -44,8 +45,7 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                   imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                   child: ColorFiltered(
                       colorFilter: ColorFilter.mode(
-                        Colors.black
-                            .withOpacity(0.3), // Adjust opacity as needed
+                        Colors.black.withOpacity(0.3),
                         BlendMode.darken,
                       ),
                       child: CachedNetworkImage(
@@ -62,21 +62,18 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                     onDoubleTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => AchievementScreen(
-                                playerStats: widget.playerStats)),
+                        MaterialPageRoute(builder: (context) => AchievementScreen(playerStats: widget.playerStats)),
                       );
                     },
-                    child: CachedNetworkImage(
-                        imageUrl: widget.townHallImageUrl, width: 170),
+                    child: CachedNetworkImage(imageUrl: widget.townHallImageUrl, width: 170),
                   ),
                   Row(
                     children: [
                       widget.stars.isNotEmpty
-                          ? Row(
-                              children: widget.stars,
-                            )
-                          : SizedBox(height: 22)
+                        ? Row(
+                            children: widget.stars,
+                          )
+                        : SizedBox(height: 22)
                     ],
                   ),
                 ]),
@@ -85,45 +82,62 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                 top: 30,
                 left: 10,
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back,
-                      color: Theme.of(context).colorScheme.onPrimary, size: 32),
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Theme.of(context).colorScheme.onPrimary, size: 32),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 90),
-          ListTile(
-            title: Center(
-              child: Text(
-                widget.playerStats.name,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-            subtitle: Center(
-              child: InkWell(
-                onTap: () {
-                  FlutterClipboard.copy(widget.playerStats.tag).then((value) {
-                    final snackBar = SnackBar(
-                      content:
-                          Text(AppLocalizations.of(context)!.copiedToClipboard),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  });
-                },
-                child: Container(
-                  padding: EdgeInsets.all(8.0), // Add padding if needed
-                  child: Text(widget.playerStats.tag,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.tertiary)),
+          SizedBox(height: 96),
+          Stack(
+            children: [
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.playerStats.name,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        FlutterClipboard.copy(widget.playerStats.tag).then((value) {
+                          final snackBar = SnackBar(
+                            content: Text(AppLocalizations.of(context)!.copiedToClipboard),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        });
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(top: 2.0, bottom: 10.0),
+                        child: Text(widget.playerStats.tag,
+                          style: TextStyle(color: Theme.of(context).colorScheme.tertiary)),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
+              Positioned(
+                top: -8, right: 24,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.sports_esports_rounded,
+                    color: Theme.of(context).colorScheme.onSurface, size: 32),
+                  onPressed: () {
+                    launchUrl(Uri.parse('https://link.clashofclans.com/fr?action=OpenPlayerProfile&tag=${widget.playerStats.tag}'));
+                  },
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: widget.hallChips,
           ),
-        ]));
+        ],
+      ),
+    );
   }
 }

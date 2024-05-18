@@ -25,7 +25,6 @@
     "failedToAddTryAgain" : "Échec de l'ajout du compte. Veuillez réessayer plus tard.",
     "failedToDeleteTryAgain" : "Échec de la suppression du compte. Veuillez réessayer plus tard.",
     
-    
     "dashboard" : "Profil",
     "homeBase" : "Village principal",
     "th" : "HDV",
@@ -88,6 +87,8 @@
     "war" : "Guerre",
     "league" : "Ligue",
     "wars" : "Guerres",
+    "warHistory" : "Historique de guerre",
+    "warLog" : "Journal",
     "startsIn" : "Début dans",
     "endsIn" : "Fin dans",
     "statistics" : "Statistiques",
@@ -125,6 +126,9 @@
     "moreDestruction" : "de destruction",
     "clanDraw" : "Les deux clans sont à égalité",
     "fastCalculator" : "Calculatrice rapide",
+    "teamSize" : "Taille de l'équipe",
+    "neededOverall" : "% Total nécessaire",
+    "calculate" : "Calculer",
 
     "management" : "Gestion"
 }

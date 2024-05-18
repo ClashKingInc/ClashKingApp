@@ -112,13 +112,19 @@ Future<Map<String, dynamic>> calculateTotalStarsAndPercentageForMember(
   }
 
   // Convert the map to a list of entries
-  List<MapEntry<String, Map<String, dynamic>>> entries =
-      totalByMember.entries.toList();
+  List<MapEntry<String, Map<String, dynamic>>> entries = totalByMember.entries.toList();
 
-// Sort the list of entries by the number of stars
-  entries.sort((a, b) => b.value[sortBy].compareTo(a.value[sortBy]));
+  // Sort the list of entries by the number of stars
+  entries.sort((a, b) {
+    int comparison = b.value[sortBy].compareTo(a.value[sortBy]);
+    if (comparison == 0 && ( sortBy == 'stars' || sortBy == 'averageStars')) {
+      // En cas d'égalité sur les étoiles, trie par pourcentage de destruction
+      comparison = b.value['percentage'].compareTo(a.value['percentage']);
+    }
+    return comparison;
+  });
 
-// Convert the sorted list of entries back to a map
+  // Convert the sorted list of entries back to a map
   totalByMember = Map<String, Map<String, dynamic>>.fromEntries(entries);
 
   return {

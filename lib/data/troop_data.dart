@@ -532,6 +532,11 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
         'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_BK_Vampstache.png',
     'type': 'gear',
   },
+  "Spiky Ball": {
+    'url':
+        'https://clashkingfiles.b-cdn.net/clashkinglogo.png',
+    'type': 'gear',
+  },
 
   // Warden
   "Eternal Tome" : {

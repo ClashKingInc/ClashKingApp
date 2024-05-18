@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_page/components/clan_wars_stats_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ClanInfoHeaderCard extends StatefulWidget {
   final ClanInfo clanInfo;
@@ -26,7 +27,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
           alignment: Alignment.bottomCenter,
           children: <Widget>[
             SizedBox(
-              height: 130,
+              height: 180,
               width: double.infinity,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
@@ -43,7 +44,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               ),
             ),
             Positioned(
-              bottom: -50,
+              bottom: 0,
               child: CachedNetworkImage(
                 imageUrl: widget.clanInfo.badgeUrls.large,
                 width: 130,
@@ -61,15 +62,32 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
           ],
         ),
         Column(children: [
-          SizedBox(height: 50),
-          Text(
-            widget.clanInfo.name,
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+          SizedBox(height: 20),
+          Stack(
+            children: [
+              Positioned(
+                top: -8, right: 24,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.sports_esports_rounded,
+                    color: Theme.of(context).colorScheme.onSurface, size: 32),
+                  onPressed: () {
+                    launchUrl(Uri.parse('https://link.clashofclans.com/fr?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
+                  },
+                ),
+              ),
+              Center(
+                child: Text(
+                  widget.clanInfo.name,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 6),
           Chip(
             avatar: CircleAvatar(
               backgroundColor: Colors.transparent,
@@ -161,7 +179,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
             widget.clanInfo.description,
             style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
-            maxLines: 3,
+            maxLines: 6,
             overflow: TextOverflow.ellipsis,
           ),
           SizedBox(height: 20),
@@ -170,20 +188,22 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
             buttonPadding: EdgeInsets.only(top: 0),
             children: <Widget>[
               TextButton(
-                  child: Text('Stats',
-                      style: Theme.of(context).textTheme.bodyMedium),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ClanWarsStatsCard(clanInfo: widget.clanInfo);
-                      },
-                    );
-                  }),
+                child: Text('Stats',
+                  style: Theme.of(context).textTheme.bodyMedium),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return ClanWarsStatsCard(clanInfo: widget.clanInfo);
+                    },
+                  );
+                }
+              ),
               TextButton(
-                  child: Text('War Logs',
-                      style: Theme.of(context).textTheme.bodyMedium),
-                  onPressed: () {}),
+                child: Text('War Logs',
+                  style: Theme.of(context).textTheme.bodyMedium),
+                onPressed: () {
+                }),
             ],
           ),
         ]),
