@@ -47,6 +47,40 @@ class MyApp extends StatelessWidget {
                 elevation: 2.0,
               ),
               canvasColor: Colors.transparent,
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  foregroundColor: Theme.of(context).colorScheme.onSecondary,
+                  surfaceTintColor: Colors.transparent,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  elevation: 5,
+                  textStyle: Theme.of(context).textTheme.bodyLarge,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // Rounded corners
+                  ),
+                ),
+              ),
+              inputDecorationTheme: InputDecorationTheme(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.secondary,
+                    width: 2,
+                  ),
+                ),
+                contentPadding: EdgeInsets.all(8),
+                labelStyle: TextStyle(
+                  fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                  color:Color(0xFFFFFFFF),
+                  decorationColor: Color(0xFFC98910),
+                ),
+                hintStyle: TextStyle(
+                  backgroundColor: Colors.transparent,
+                  fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                  color: Colors.grey,
+                  overflow: TextOverflow.ellipsis
+                ),
+              ),
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Color.fromARGB(
                     255, 31, 31, 31), // primary color as the seed
@@ -132,6 +166,40 @@ class MyApp extends StatelessWidget {
                 color: Color(0xFFFFFFFF)
                     .withOpacity(1.0), // 1.0 means 100% opacity
                 elevation: 2.0,
+              ),
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  foregroundColor: Theme.of(context).colorScheme.onSecondary,
+                  surfaceTintColor: Colors.transparent,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  elevation: 5,
+                  textStyle: Theme.of(context).textTheme.bodyLarge,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // Rounded corners
+                  ),
+                ),
+              ),
+              inputDecorationTheme: InputDecorationTheme(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.secondary,
+                    width: 2,
+                  ),
+                ),
+                contentPadding: EdgeInsets.all(8),
+                labelStyle: TextStyle(
+                  fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                  color: Theme.of(context).colorScheme.onBackground,
+                  decorationColor: Theme.of(context).colorScheme.secondary,
+                ),
+                hintStyle: TextStyle(
+                  backgroundColor: Colors.transparent,
+                  fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                  color: Theme.of(context).colorScheme.tertiary,
+                  overflow: TextOverflow.ellipsis
+                ),
               ),
               canvasColor: Colors.transparent,
               colorScheme: ColorScheme.fromSeed(
@@ -301,14 +369,16 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       clanTag = prefs.getString('clanTag');
     }
-    final warInfo = await checkCurrentWar(clanTag!);
-    // Send data to the widget
-    await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
-    // Request the Home Widget to update
-    await HomeWidget.updateWidget(
-      name: 'WarAppWidgetProvider',
-      androidName: 'WarAppWidgetProvider',
-    );
+    if (clanTag != null) {
+      final warInfo = await checkCurrentWar(clanTag!);
+      // Send data to the widget
+      await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
+      // Request the Home Widget to update
+      await HomeWidget.updateWidget(
+        name: 'WarAppWidgetProvider',
+        androidName: 'WarAppWidgetProvider',
+      );
+    }
   }
 
   void updateWidgets() async {
@@ -433,14 +503,16 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         "clan": {
           "name": currentWarInfo?.clan.name,
           "badgeUrlMedium": currentWarInfo?.clan.badgeUrls.medium,
-          "percent": "${currentWarInfo?.clan.destructionPercentage}%",
+          "percent":
+              "${currentWarInfo?.clan.destructionPercentage.toStringAsFixed(2)}%",
           "attacks":
               "${currentWarInfo?.clan.attacks}/${currentWarInfo?.teamSize}"
         },
         "opponent": {
           "name": currentWarInfo?.opponent.name,
           "badgeUrlMedium": currentWarInfo?.opponent.badgeUrls.medium,
-          "percent": "${currentWarInfo?.opponent.destructionPercentage}%",
+          "percent":
+              "${currentWarInfo?.opponent.destructionPercentage.toStringAsFixed(2)}%",
           "attacks":
               "${currentWarInfo?.opponent.attacks}/${currentWarInfo?.teamSize}"
         }
@@ -465,16 +537,21 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> reloadUsersAccounts() async {
     isLoading = true;
     notifyListeners();
-    await initializeUser();
+    if (user!.isDiscordUser) {
+      await initializeUser();
+    }
     if (user != null) {
-      await fetchUserTags(user!);
+      if (user!.isDiscordUser) {
+        await fetchUserTags(user!);
+      }
+      print("userTag : ${user!.tags}");
       await fetchPlayerAccounts(user!);
       reloadData();
       selectedTag.value = user!.tags.first;
     } else {
       print("User is null");
     }
-    await Future.delayed(Duration(seconds: 1)); // Example delay
+    await Future.delayed(Duration(seconds: 1));
     isLoading = false;
     notifyListeners();
   }
@@ -486,6 +563,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   void reloadData() async {
     print("Reloading data");
+    selectedTag.value ??= user!.tags.first;
     if (selectedTag.value != null) {
       print("Selected tag: ${selectedTag.value}");
       playerStats = playerAccounts?.playerAccountInfo
@@ -572,6 +650,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     bool validToken = await isTokenValid();
     if (validToken) {
       final accessToken = await getAccessToken();
+      print("Access token: $accessToken");
       if (accessToken != null) {
         user = await fetchDiscordUser(accessToken);
         notifyListeners();

@@ -88,11 +88,21 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
               final navigator = Navigator.of(context);
               String token = await login();
               String playerTag = _dropdownValue!;
-              final success = await deleteLink(playerTag, token, updateErrorMessage, context);
-              if (success) {
-                Provider.of<MyAppState>(context, listen: false).reloadUsersAccounts();
-              }
-              if (errorMessage.isEmpty) {
+              if (widget.user.isDiscordUser) {
+                final success = await deleteLink(
+                    playerTag, token, updateErrorMessage, context);
+                if (success) {
+                  Provider.of<MyAppState>(context, listen: false)
+                      .reloadUsersAccounts();
+                }
+                if (errorMessage.isEmpty) {
+                  navigator.pop();
+                }
+              } else {
+                widget.user.tags.remove(playerTag);
+                print('User tags: ${widget.user.tags}');
+                Provider.of<MyAppState>(context, listen: false)
+                    .reloadUsersAccounts();
                 navigator.pop();
               }
             },
@@ -110,7 +120,8 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
               ),
               elevation: MaterialStateProperty.all(4),
             ),
-            child: Text(AppLocalizations.of(context)!.deleteAccount, style: Theme.of(context).textTheme.bodyMedium),
+            child: Text(AppLocalizations.of(context)!.deleteAccount,
+                style: Theme.of(context).textTheme.bodyMedium),
           ),
         ]));
   }
