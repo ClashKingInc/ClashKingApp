@@ -53,7 +53,7 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
               labelColor: Theme.of(context).colorScheme.onBackground,
               unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
               tabs: [
-                Tab(text: 'War Log'),
+                Tab(text: AppLocalizations.of(context)?.warLog ?? 'War Log'),
                 Tab(text: AppLocalizations.of(context)?.statistics ?? 'Statistics'),
               ], 
               children: [
@@ -70,7 +70,9 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
                     ],
                   ),
                 ),
-                Text('data'),
+                Center(
+                  child: Text('Work in progress'),
+                ), 
               ],
             ),
           ],

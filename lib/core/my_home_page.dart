@@ -68,13 +68,13 @@ class MyHomePageState extends State<MyHomePage> {
             List<Widget> widgetOptions = [
               appState.playerAccounts != null && appState.playerStats != null
                   ? DashboardPage(
-                      playerStats: appState.playerStats!, user: appState.user!)
+                      playerStats: appState.playerStats!, discordUser: appState.user!)
                   : Center(
                       child:
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
               appState.clanInfo != null && appState.user != null
                   ? ClanInfoPage(
-                      clanInfo: appState.clanInfo!, user: appState.user!)
+                      clanInfo: appState.clanInfo!, discordUser: appState.user!)
                   : Center(
                       child:
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center

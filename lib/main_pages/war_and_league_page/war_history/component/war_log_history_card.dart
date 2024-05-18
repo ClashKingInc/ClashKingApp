@@ -39,7 +39,7 @@ class WarLogHistoryCardState extends State<WarLogHistoryCard> {
       children: [
         CustomSlidingSegmentedControl(
           children: {
-            0: Text('War Log'),
+            0: Text(AppLocalizations.of(context)?.warLog ?? 'War Log'),
             1: Text('War with details'),
           },
           onValueChanged: (value) {
@@ -54,7 +54,7 @@ class WarLogHistoryCardState extends State<WarLogHistoryCard> {
           ),
           thumbDecoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(.3),
@@ -118,7 +118,7 @@ class WarLogHistoryCardState extends State<WarLogHistoryCard> {
       }
       warHistoryWidgets.add(
         Container(
-          margin: EdgeInsets.only(top: 10),
+          margin: EdgeInsets.only(top: 6, left: 4, right: 4),
           padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
@@ -211,6 +211,7 @@ class WarLogHistoryCardState extends State<WarLogHistoryCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              SizedBox(height: 2),
               Center(
                 child: Column(
                   children: List<Widget>.generate(widget.warLogData.length, (index) {
@@ -221,6 +222,7 @@ class WarLogHistoryCardState extends State<WarLogHistoryCard> {
                     }
 
                     return  Card(
+                      margin: EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child:Column(

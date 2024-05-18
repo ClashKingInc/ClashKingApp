@@ -37,7 +37,7 @@ class CwlCardState extends State<CwlCard> {
       for (var warInfo in warLeagueInfos) {
         if (warInfo.clan.tag == widget.clanTag ||
             warInfo.opponent.tag == widget.clanTag) {
-          lastMatchedWarInfo = warInfo; // Store the last matched warInfo
+            lastMatchedWarInfo = warInfo; // Store the last matched warInfo
 
           if (warInfo.state == 'inWar') {
             return warInfo; // Return immediately if 'inWar'
@@ -58,6 +58,7 @@ class CwlCardState extends State<CwlCard> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Card(
+            margin: EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
               child: SizedBox(
                   height: 100,
                   width: double.infinity,

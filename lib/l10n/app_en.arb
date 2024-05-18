@@ -85,11 +85,12 @@
     "donationsRatio" : "Donations Ratio",
     "trophies" : "Trophies",
   
-
     "warLeague" : "War/League",
     "war" : "War",
     "league" : "League",
     "wars" : "Wars",
+    "warHistory" : "War History",
+    "warLog" : "War Log",
     "startsIn" : "Starts in",
     "endsIn" : "Ends in",
     "statistics" : "Statistics",
@@ -127,6 +128,9 @@
     "moreDestruction" : "more destruction",
     "clanDraw" : "The two clans are tied",
     "fastCalculator" : "Fast calculator",
+    "teamSize" : "Team size",
+    "neededOverall" : "% Needed overall",
+    "calculate" : "Calculate",
 
     "management" : "Management"
 }

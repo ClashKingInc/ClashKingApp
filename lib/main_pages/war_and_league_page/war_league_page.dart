@@ -23,9 +23,9 @@ class CurrentWarInfoPage extends StatefulWidget {
   final DiscordUser discordUser;
 
   CurrentWarInfoPage(
-      {required this.discordUser,
-      required this.playerStats,
-      required this.clanInfo});
+    {required this.discordUser,
+    required this.playerStats,
+    required this.clanInfo});
 
   @override
   State<CurrentWarInfoPage> createState() => CurrentWarInfoPageState();
@@ -43,13 +43,12 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
     super.initState();
     warHistoryData = WarHistoryService.fetchWarHistoryData(widget.clanInfo.tag);
     warLogData = WarLogService.fetchWarLogData(widget.clanInfo.tag);
-      // Après avoir chargé warLogData
-  warLogData.then((data) {
-    print("War Log Data Loaded: ${data.items.length} items");
-    if (data.items.isNotEmpty) {
-      print("First item of War Log: ${data.items.first}");
-    }
-  });
+    warLogData.then((data) {
+      print("War Log Data Loaded: ${data.items.length} items");
+      if (data.items.isNotEmpty) {
+        print("First item of War Log: ${data.items.first}");
+      }
+    });
   }
 
   @override
@@ -89,20 +88,18 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                             );
                           },
                           child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 4.0, horizontal: 8.0),
+                            padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                           child: CurrentWarInfoCard(
-                              currentWarInfo: currentWarInfo!,
-                              clanTag: widget.clanInfo.tag),
+                            currentWarInfo: currentWarInfo!,
+                            clanTag: widget.clanInfo.tag),
                         ),
                       )
                     else if (warState == "accessDenied")
                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: AccessDeniedCard(
-                            clanName: widget.playerStats.clan.name,
-                            clanBadgeUrl:
-                                widget.playerStats.clan.badgeUrls.large),
+                          clanName: widget.playerStats.clan.name,
+                          clanBadgeUrl: widget.playerStats.clan.badgeUrls.large),
                       )
                     else if (warState == "cwl")
                       GestureDetector(
@@ -127,12 +124,11 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                       )
                     else
                       Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 4.0, horizontal: 8.0),
-                          child: NotInWarCard(
-                            clanName: widget.playerStats.clan.name, 
-                            clanBadgeUrl: widget.playerStats.clan.badgeUrls.large),
-                        ),
+                        padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                        child: NotInWarCard(
+                          clanName: widget.playerStats.clan.name, 
+                          clanBadgeUrl: widget.playerStats.clan.badgeUrls.large),
+                      ),
                       buildWarHistorySection()
                     ],
                   ),
@@ -173,34 +169,28 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
 
   Future<String> checkCurrentWar(PlayerAccountInfo playerStats) async {
     final responseWar = await http.get(
-      Uri.parse(
-          'https://api.clashking.xyz/v1/clans/${playerStats.clan.tag.replaceAll('#', '%23')}/currentwar'),
+      Uri.parse('https://api.clashking.xyz/v1/clans/${playerStats.clan.tag.replaceAll('#', '%23')}/currentwar'),
     );
 
     final responseCwl = await http.get(
-      Uri.parse(
-          'https://api.clashking.xyz/v1/clans/${playerStats.clan.tag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
+      Uri.parse('https://api.clashking.xyz/v1/clans/${playerStats.clan.tag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
     );
 
     if (responseWar.statusCode == 200) {
       var decodedResponse = jsonDecode(utf8.decode(responseWar.bodyBytes));
       if (decodedResponse["state"] != "notInWar" &&
           decodedResponse["reason"] != "accessDenied") {
-            print("war");
-        currentWarInfo = CurrentWarInfo.fromJson(
-            jsonDecode(utf8.decode(responseWar.bodyBytes)), "war");
+        currentWarInfo = CurrentWarInfo.fromJson(jsonDecode(utf8.decode(responseWar.bodyBytes)), "war");
         return "war";
       } else if (decodedResponse["reason"] == "accessDenied") {
         return "accessDenied";
       } else if (decodedResponse["state"] == "notInWar") {
         DateTime now = DateTime.now();
-        if (now.day >= 1 && now.day <= 10) {
+        if (now.day >= 1 && now.day <= 12) {
           if (responseCwl.statusCode == 200) {
-            var decodedResponseCwl =
-                jsonDecode(utf8.decode(responseCwl.bodyBytes));
+            var decodedResponseCwl = jsonDecode(utf8.decode(responseCwl.bodyBytes));
             if (decodedResponseCwl.containsKey("state")) {
-              currentLeagueInfo =
-                  CurrentLeagueInfo.fromJson(decodedResponseCwl);
+              currentLeagueInfo = CurrentLeagueInfo.fromJson(decodedResponseCwl);
               return "cwl";
             }
           }

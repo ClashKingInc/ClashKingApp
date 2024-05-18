@@ -34,6 +34,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
   late TabController subTabController;
   List<PlayerTab> playerTab = [];
   int _currentSegment = 1;
+     bool filterActive = false;
 
   @override
   void initState() {
@@ -102,50 +103,82 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
   }
 
   Widget buildTeamsTab(BuildContext context, {List<String>? discordUser}) {
+
     return Column(
       children: [
-        CustomSlidingSegmentedControl<int>(
-          initialValue: _currentSegment,
-          children: {
-            1: Text(AppLocalizations.of(context)?.myTeam ?? 'My team'),
-            2: Text(AppLocalizations.of(context)?.enemiesTeam ?? 'Enemies'),
-          },
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          thumbDecoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(6),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(.3),
-                blurRadius: 4.0,
-                spreadRadius: 1.0,
-                offset: Offset(
-                  0.0,
-                  2.0,
+        Stack(
+          children: [
+            Center(
+              child: CustomSlidingSegmentedControl<int>(
+                initialValue: _currentSegment,
+                children: {
+                  1: Text(AppLocalizations.of(context)?.myTeam ?? 'My team'),
+                  2: Text(AppLocalizations.of(context)?.enemiesTeam ?? 'Enemies'),
+                },
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(8),
                 ),
+                thumbDecoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(6),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 4.0,
+                      spreadRadius: 1.0,
+                      offset: Offset(0.0, 2.0),
+                    ),
+                  ],
+                ),
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeInToLinear,
+                onValueChanged: (v) {
+                  setState(() {
+                    _currentSegment = v;
+                  });
+                },
               ),
-            ],
-          ),
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeInToLinear,
-          onValueChanged: (v) {
-            setState(() {
-              _currentSegment = v;
-            });
-          },
+            ),
+            Positioned(
+              top: -4,
+              right: 12,
+              child: IconButton(
+                icon: Icon(Icons.link, color: filterActive ? Colors.green : Colors.grey),
+                onPressed: () {
+                  setState(() {
+                    filterActive = !filterActive;
+                  });
+                },
+                tooltip: 'Filter Active Users',
+              ),
+            ),
+          ],
         ),
         SizedBox(height: 4),
-        _currentSegment == 1
-          ? buildMemberListView(widget.currentWarInfo.clan.members, context, widget.discordUser)
-          : buildMemberListView(widget.currentWarInfo.opponent.members, context, widget.discordUser),
+        buildMemberListView(
+          _currentSegment == 1 ? widget.currentWarInfo.clan.members : widget.currentWarInfo.opponent.members, 
+          context, 
+          widget.discordUser, 
+          filterActive
+        ),
       ],
     );
   }
 
-  Widget buildMemberListView(List<WarMember> members, BuildContext context, List<String> discordUser) {
-    return WarTeamCard(playerTab: playerTab, widget: widget, members: members, discordUser: discordUser);
+  Widget buildMemberListView(List<WarMember> members, BuildContext context, List<String> discordUser, bool filterActive) {
+    List<WarMember> displayedMembers = filterActive
+      ? members.where((member) => discordUser.contains(member.tag)).toList()
+      : List.from(members);
+  
+    displayedMembers.sort((a, b) => a.mapPosition.compareTo(b.mapPosition));
+  
+    return WarTeamCard(
+      playerTab: playerTab,
+      widget: widget,
+      members: displayedMembers,
+      discordUser: discordUser,
+      filterActive: filterActive,
+    );
   }
 }

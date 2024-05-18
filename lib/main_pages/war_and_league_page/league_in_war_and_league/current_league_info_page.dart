@@ -19,11 +19,11 @@ class CurrentLeagueInfoScreen extends StatefulWidget {
   final List<String> discordUser;
 
   CurrentLeagueInfoScreen(
-      {super.key,
-      required this.currentLeagueInfo,
-      required this.clanTag,
-      required this.clanInfo,
-      required this.discordUser});
+    {super.key,
+    required this.currentLeagueInfo,
+    required this.clanTag,
+    required this.clanInfo,
+    required this.discordUser});
 
   @override
   CurrentLeagueInfoScreenState createState() => CurrentLeagueInfoScreenState();
@@ -38,7 +38,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
   void initState() {
     super.initState();
     totalStarsAndPercentage = calculateTotalStarsAndPercentage(
-        widget.currentLeagueInfo.rounds, sortTeamsBy);
+      widget.currentLeagueInfo.rounds, sortTeamsBy);
   }
 
   void updateSortMembersBy(String newValue) {
@@ -64,15 +64,14 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
               alignment: Alignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 190,
+                  height: 220,
                   child: ImageFiltered(
                     imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                     child: ColorFiltered(
                       colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.5), BlendMode.darken),
+                        Colors.black.withOpacity(0.5), BlendMode.darken),
                       child: CachedNetworkImage(
-                        imageUrl:
-                            "https://clashkingfiles.b-cdn.net/landscape/cwl-landscape.png",
+                        imageUrl: "https://clashkingfiles.b-cdn.net/landscape/cwl-landscape.png",
                         width: double.infinity,
                         fit: BoxFit.cover,
                       ),
@@ -83,13 +82,14 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                   top: 30,
                   left: 10,
                   child: IconButton(
-                    icon: Icon(Icons.arrow_back,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        size: 32),
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      size: 32),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
-                Positioned.fill(
+                Positioned(
                   child: FutureBuilder<Map<String, Map<String, dynamic>>>(
                     future: totalStarsAndPercentage,
                     builder: (context, snapshot) {
@@ -108,119 +108,117 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                         }).toList();
 
                         // Sort the list in descending order of stars
-                        clansList
-                            .sort((a, b) => b['stars'].compareTo(a['stars']));
+                        clansList.sort((a, b) => b['stars'].compareTo(a['stars']));
 
                         // Find the index of the clan in question
                         int clanPosition = clansList.indexWhere(
-                            (clan) => clan['clanTag'] == widget.clanTag);
+                          (clan) => clan['clanTag'] == widget.clanTag);
 
                         // Since index is 0-based, add 1 to get the position
                         clanPosition += 1;
 
                         int starsDifference = clansList[0]['stars'] -
-                            clansList[clanPosition - 1]['stars'];
+                          clansList[clanPosition - 1]['stars'];
 
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            SizedBox(height: 36),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                    height: 70,
-                                    child: CachedNetworkImage(
-                                        imageUrl:
-                                            widget.clanInfo.badgeUrls.medium)),
+                                  height: 70,
+                                  child: CachedNetworkImage(
+                                    imageUrl: widget.clanInfo.badgeUrls.medium)),
                                 Column(
                                   children: [
                                     Text(
                                       widget.clanInfo.name,
                                       style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium
-                                          ?.copyWith(color: Colors.white),
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(color: Colors.white),
                                     ),
                                     Text(
                                       widget.clanInfo.tag,
                                       style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge
-                                          ?.copyWith(color: Colors.grey),
+                                        .textTheme
+                                        .labelLarge
+                                        ?.copyWith(color: Colors.grey),
                                     ),
                                   ],
-                                )
+                                ),
                               ],
                             ),
+                            SizedBox(height: 16),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Column(
                                   children: [
                                     SizedBox(
-                                        height: 30,
-                                        child: CachedNetworkImage(
-                                            imageUrl:
-                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Podium.png")),
+                                      height: 30,
+                                      child: CachedNetworkImage(
+                                        imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Podium.png")),
                                     Text(
                                       "$clanPosition",
                                       style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: Colors.white),
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(color: Colors.white),
                                     ),
                                   ],
                                 ),
                                 Column(
                                   children: [
                                     SizedBox(
-                                        height: 30,
-                                        child: CachedNetworkImage(
-                                            imageUrl:
-                                                "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png")),
+                                      height: 30,
+                                      child: CachedNetworkImage(
+                                        imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png")),
                                     Text(
                                       "${snapshot.data?[widget.clanTag]?['stars']}",
                                       style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: Colors.white),
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(color: Colors.white),
                                     ),
                                   ],
                                 ),
                                 Column(
                                   children: [
                                     SizedBox(
-                                        height: 30,
-                                        child: CachedNetworkImage(
-                                            imageUrl:
-                                                "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
+                                      height: 30,
+                                      child: CachedNetworkImage(
+                                        imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                                     Text(
                                       "$starsDifference",
                                       style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: Colors.white),
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(color: Colors.white),
                                     ),
                                   ],
                                 ),
                                 Column(
                                   children: [
                                     SizedBox(
-                                        height: 30,
-                                        child: CachedNetworkImage(
-                                            imageUrl:
-                                                "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png")),
+                                      height: 30,
+                                      child: CachedNetworkImage(
+                                        imageUrl:"https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png"
+                                      )
+                                    ),
                                     Text(
                                       "${snapshot.data?[widget.clanTag]?['percentage'].toStringAsFixed(0)}",
                                       style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: Colors.white),
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(color: Colors.white),
                                     ),
                                   ],
                                 ),
                               ],
-                            )
+                            ),
                           ],
                         );
                       }
@@ -244,12 +242,9 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                 Tab(text: AppLocalizations.of(context)?.member ?? "Members")
               ],
               children: [
-                buildRoundsTab(
-                    context, widget.currentLeagueInfo, widget.discordUser),
-                buildTeamsTab(context, widget.currentLeagueInfo,
-                    totalStarsAndPercentage, sortTeamsBy, updateSortTeamsBy),
-                buildMembersTab(context, widget.currentLeagueInfo,
-                    widget.clanTag, sortMembersBy, updateSortMembersBy),
+                buildRoundsTab(context, widget.currentLeagueInfo, widget.discordUser),
+                buildTeamsTab(context, widget.currentLeagueInfo, widget.discordUser, widget.clanTag, totalStarsAndPercentage, sortTeamsBy, updateSortTeamsBy),
+                buildMembersTab(context, widget.currentLeagueInfo, widget.discordUser, widget.clanTag, sortMembersBy, updateSortMembersBy),
               ],
             ),
           ],
@@ -259,12 +254,13 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
   }
 }
 
-Widget buildRoundsTab(BuildContext context, CurrentLeagueInfo currentLeagueInfo,
-    List<String> discordUser) {
+Widget buildRoundsTab(BuildContext context, CurrentLeagueInfo currentLeagueInfo, List<String> discordUser) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
-    children: currentLeagueInfo.rounds.asMap().entries.toList().reversed.map((entry) {
-      int round = entry.key + 1; // Assuming you want round numbering to start from 1
+    children: [
+      SizedBox(height: 4),
+      ...currentLeagueInfo.rounds.asMap().entries.toList().reversed.map((entry) {
+      int round = entry.key + 1;
       ClanLeagueRounds clanLeagueRounds = entry.value;
       return FutureBuilder<List<CurrentWarInfo>>(
         future: clanLeagueRounds.warLeagueInfos,
@@ -284,103 +280,101 @@ Widget buildRoundsTab(BuildContext context, CurrentLeagueInfo currentLeagueInfo,
                 ),
                 ...snapshot.data!.map((warLeagueInfo) {
                   return RoundClanCard(
-                      warLeagueInfo: warLeagueInfo,
-                      discordUser: discordUser);
-                }).toList(),
+                    warLeagueInfo: warLeagueInfo,
+                    discordUser: discordUser);
+                }),
               ],
             );
           } else {
-            return SizedBox.shrink(); // Return an empty widget if there's no data
+            return SizedBox.shrink();
           }
         },
       );
-    }).toList(),
+    }),]
   );
 }
 
-Widget buildTeamsTab(
-    BuildContext context,
-    CurrentLeagueInfo currentLeagueInfo,
-    Future<Map<String, Map<String, dynamic>>> totalStarsAndPercentage,
-    String sortTeamsBy,
-    Function(String) updateSortTeamsBy) {
+Widget buildTeamsTab(BuildContext context, CurrentLeagueInfo currentLeagueInfo, List<String> discordUser, String clanTag, 
+  Future<Map<String, Map<String, dynamic>>> totalStarsAndPercentage, String sortTeamsBy, Function(String) updateSortTeamsBy
+) {
   Map<String, String> sortByOptions = <String, String>{
     'Stars': 'stars',
     'Percentage': 'percentage',
   };
-  return Column(children: [
-    FilterDropdown(
+
+  return Column(
+    children: [
+      SizedBox(height: 8),
+      FilterDropdown(
         sortBy: sortTeamsBy,
         updateSortBy: updateSortTeamsBy,
-        sortByOptions: sortByOptions),
-    SizedBox(height: 8),
-    FutureBuilder<Map<String, Map<String, dynamic>>>(
-      future: totalStarsAndPercentage,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else {
-          Map<String, Map<String, dynamic>> totalByClan = snapshot.data!;
-          var sortedClans = currentLeagueInfo.clans.toList()
-            ..sort((a, b) => (totalByClan[b.tag]?[sortTeamsBy] ?? 0)
+        sortByOptions: sortByOptions
+      ),
+      SizedBox(height: 4),
+      FutureBuilder<Map<String, Map<String, dynamic>>>(
+        future: totalStarsAndPercentage,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            Map<String, Map<String, dynamic>> totalByClan = snapshot.data!;
+            var sortedClans = currentLeagueInfo.clans.toList()
+              ..sort((a, b) => (totalByClan[b.tag]?[sortTeamsBy] ?? 0)
                 .compareTo(totalByClan[a.tag]?[sortTeamsBy] ?? 0));
-
-          return TeamsCard(sortedClans: sortedClans, totalByClan: totalByClan);
-        }
-      },
-    )
-  ]);
+            return TeamsCard(sortedClans: sortedClans, totalByClan: totalByClan, clanTag: clanTag, discordUser: discordUser);
+          }
+        },
+      ),
+    ],
+  );
 }
 
-Widget buildMembersTab(
-    BuildContext context,
-    CurrentLeagueInfo currentLeagueInfo,
-    String clanTag,
-    String sortBy,
-    Function(String) updateSortBy) {
+Widget buildMembersTab(BuildContext context, CurrentLeagueInfo currentLeagueInfo, List<String> discordUser,
+String clanTag, String sortBy, Function(String) updateSortBy
+) {
   Map<String, String> sortByOptions = <String, String>{
     'Average Stars': 'averageStars',
     'Average Percentage': 'averagePercentage',
     'Stars': 'stars',
     'Percentage': 'percentage',
   };
-  return Column(children: [
-    FilterDropdown(
+
+  return Column(
+    children: [
+      SizedBox(height: 8),
+      FilterDropdown(
         sortBy: sortBy,
         updateSortBy: updateSortBy,
         sortByOptions: sortByOptions),
-    SizedBox(height: 8),
-    FutureBuilder<Map<String, dynamic>>(
-      future: calculateTotalStarsAndPercentageForMember(
-          currentLeagueInfo.rounds, clanTag, sortBy),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-              child:
-                  CircularProgressIndicator()); // Show a loading spinner while waiting
-        } else if (snapshot.hasError) {
-          return Text(
-              'Error: ${snapshot.error}'); // Show error message if something went wrong
-        } else {
-          // The future has completed with a result.
-          // You can now display the data in the snapshot.
-          Map<String, Map<String, dynamic>> totalStarsByMembers =
-              snapshot.data!['totalByMember'];
+      SizedBox(height: 4),
+      FutureBuilder<Map<String, dynamic>>(
+        future: calculateTotalStarsAndPercentageForMember(currentLeagueInfo.rounds, clanTag, sortBy),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child:CircularProgressIndicator()
+            );
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // The future has completed with a result.
+            // You can now display the data in the snapshot.
+            Map<String, Map<String, dynamic>> totalStarsByMembers = snapshot.data!['totalByMember'];
 
-          // Convert the map to a list of widgets for display
-          List<Widget> memberWidgets =
-              totalStarsByMembers.entries.toList().asMap().entries.map((entry) {
-            int index = entry.key;
-            MapEntry<String, Map<String, dynamic>> memberEntry = entry.value;
+            // Convert the map to a list of widgets for display
+            List<Widget> memberWidgets = totalStarsByMembers.entries.toList().asMap().entries.map((entry) {
+              int index = entry.key;
+              MapEntry<String, Map<String, dynamic>> memberEntry = entry.value;
 
-            return MembersCard(memberEntry: memberEntry, index: index);
-          }).toList();
+              return MembersCard(memberEntry: memberEntry, index: index, discordUser: discordUser);
+            }).toList();
 
-          return Column(children: memberWidgets);
-        }
-      },
-    )
-  ]);
+            return Column(children: memberWidgets);
+          }
+        },
+      ),
+    ],
+  );
 }

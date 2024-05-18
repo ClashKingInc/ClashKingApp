@@ -12,12 +12,14 @@ class WarTeamCard extends StatelessWidget {
     required this.widget,
     required this.members,
     required this.discordUser,
+    required this.filterActive
   });
 
   final List<PlayerTab> playerTab;
   final CurrentWarInfoScreen widget;
   final List<WarMember> members;
   final List<String> discordUser;
+  final bool filterActive;
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +28,9 @@ class WarTeamCard extends StatelessWidget {
       numberOfAttacks = 1;
     }
 
-    members.sort((a, b) => a.mapPosition.compareTo(b.mapPosition));
-
     List<Widget> memberWidgets = members.map((member) {
       var bestAttack = member.bestOpponentAttack;
+
       return Card(
         shape: RoundedRectangleBorder(
           side: BorderSide(
@@ -112,7 +113,9 @@ class WarTeamCard extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                ])),
+                                ],
+                              ),
+                            ),
                           ],
                         );
                       },
@@ -120,10 +123,11 @@ class WarTeamCard extends StatelessWidget {
                   )
                 else
                   SizedBox.shrink(),
-                Row(children: [
+                Row(
+                  children: [
                   Expanded(
                     flex: 4,
-                    child: Container(), // Add this line
+                    child: Container(),
                   ),
                   Expanded(
                     flex: 6,
@@ -154,8 +158,9 @@ class WarTeamCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                ]),
+                    ),
+                  ],
+                ),
                 Row(
                   children: <Widget>[
                     Expanded(
@@ -190,7 +195,7 @@ class WarTeamCard extends StatelessWidget {
                       flex: 6,
                       child: Column(
                         children: List<Widget>.generate(
-                          numberOfAttacks, // Always display two attacks
+                          numberOfAttacks,
                           (index) {
                             if (member.attacks == null ||
                                 member.attacks!.length <= index) {
@@ -258,7 +263,8 @@ class WarTeamCard extends StatelessWidget {
                   ],
                 ),
               ],
-            )),
+            ),
+          ),
       );
     }).toList();
 
