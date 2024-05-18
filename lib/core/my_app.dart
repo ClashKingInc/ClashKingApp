@@ -71,15 +71,14 @@ class MyApp extends StatelessWidget {
                 contentPadding: EdgeInsets.all(8),
                 labelStyle: TextStyle(
                   fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                  color:Color(0xFFFFFFFF),
+                  color: Color(0xFFFFFFFF),
                   decorationColor: Color(0xFFC98910),
                 ),
                 hintStyle: TextStyle(
-                  backgroundColor: Colors.transparent,
-                  fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                  color: Colors.grey,
-                  overflow: TextOverflow.ellipsis
-                ),
+                    backgroundColor: Colors.transparent,
+                    fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                    color: Colors.grey,
+                    overflow: TextOverflow.ellipsis),
               ),
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Color.fromARGB(
@@ -195,11 +194,10 @@ class MyApp extends StatelessWidget {
                   decorationColor: Theme.of(context).colorScheme.secondary,
                 ),
                 hintStyle: TextStyle(
-                  backgroundColor: Colors.transparent,
-                  fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                  color: Theme.of(context).colorScheme.tertiary,
-                  overflow: TextOverflow.ellipsis
-                ),
+                    backgroundColor: Colors.transparent,
+                    fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                    color: Theme.of(context).colorScheme.tertiary,
+                    overflow: TextOverflow.ellipsis),
               ),
               canvasColor: Colors.transparent,
               colorScheme: ColorScheme.fromSeed(
@@ -444,19 +442,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
               }
 
               currentWarInfo = inWar ?? inPreparation ?? lastMatchedWarInfo;
-
-              // Accessing time details
-              if (currentWarInfo?.state == "preparation") {
-                String formattedTime = DateFormat('HH:mm')
-                    .format(currentWarInfo!.startTime.toLocal());
-                time = "Starts at $formattedTime";
-              } else if (currentWarInfo?.state == "inWar") {
-                String formattedTime = DateFormat('HH:mm')
-                    .format(currentWarInfo!.endTime.toLocal());
-                time = "Ends at $formattedTime";
-              } else if (currentWarInfo?.state == "warEnded") {
-                time = "War Ended";
-              }
             } else {
               var result = {
                 "updatedAt":
@@ -492,6 +477,20 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
           "state": "notInWar"
         };
         return jsonEncode(result);
+      }
+
+      print("Current war info: ${currentWarInfo?.state}");
+      // Accessing time details
+      if (currentWarInfo?.state == "preparation") {
+        String formattedTime =
+            DateFormat('HH:mm').format(currentWarInfo!.startTime.toLocal());
+        time = "Starts at $formattedTime";
+      } else if (currentWarInfo?.state == "inWar") {
+        String formattedTime =
+            DateFormat('HH:mm').format(currentWarInfo!.endTime.toLocal());
+        time = "Ends at $formattedTime";
+      } else if (currentWarInfo?.state == "warEnded") {
+        time = "War Ended";
       }
 
       var result = {
