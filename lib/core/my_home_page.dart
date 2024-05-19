@@ -7,7 +7,7 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_league_page.dart
 import 'package:clashkingapp/main_pages/management_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/core/my_app.dart';
-import 'package:clashkingapp/components/app_bar.dart';
+import 'package:clashkingapp/components/app_bar/app_bar.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -63,16 +63,18 @@ class MyHomePageState extends State<MyHomePage> {
               ),
             );
           } else {
+            print('User: ${appState.playerAccounts}');
+            print('PlayerStats: ${appState.playerStats}');
             List<Widget> widgetOptions = [
               appState.playerAccounts != null && appState.playerStats != null
                   ? DashboardPage(
-                      playerStats: appState.playerStats!, user: appState.user!)
+                      playerStats: appState.playerStats!, discordUser: appState.user!)
                   : Center(
                       child:
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
               appState.clanInfo != null && appState.user != null
                   ? ClanInfoPage(
-                      clanInfo: appState.clanInfo!, user: appState.user!)
+                      clanInfo: appState.clanInfo!, discordUser: appState.user!)
                   : Center(
                       child:
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center

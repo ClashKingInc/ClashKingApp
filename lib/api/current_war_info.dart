@@ -20,23 +20,37 @@ class CurrentWarInfo {
     required this.preparationStartTime,
     required this.startTime,
     required this.endTime,
-    required this.clan,
+    required this.clan ,
     required this.opponent,
     required this.type,
   });
 
   factory CurrentWarInfo.fromJson(Map<String, dynamic> json, String type) {
-    return CurrentWarInfo(
-      state: json['state'] ?? 'No state',
-      teamSize: json['teamSize'] ?? 0,
-      attacksPerMember: json['attacksPerMember'] ?? 1,
-      preparationStartTime: DateTime.parse(json['preparationStartTime']),
-      startTime: DateTime.parse(json['startTime']),
-      endTime: DateTime.parse(json['endTime']),
-      clan: ClanWarDetails.fromJson(json['clan'] ?? {}),
-      opponent: ClanWarDetails.fromJson(json['opponent'] ?? {}),
-      type : type,
-    );
+    if (json['state'] == "notInwar" && json["teamSize"] == 0) {
+      return CurrentWarInfo(
+        state: json['state'] ?? 'No state',
+        teamSize: 0,
+        attacksPerMember: 0,
+        preparationStartTime: DateTime.now(),
+        startTime: DateTime.now(),
+        endTime: DateTime.now(),
+        clan: ClanWarDetails.fromJson({}),
+        opponent: ClanWarDetails.fromJson({}),
+        type: type,
+      );
+    } else {
+      return CurrentWarInfo(
+        state: json['state'] ?? 'No state',
+        teamSize: json['teamSize'] ?? 0,
+        attacksPerMember: json['attacksPerMember'] ?? 1,
+        preparationStartTime: DateTime.parse(json['preparationStartTime']),
+        startTime: DateTime.parse(json['startTime']),
+        endTime: DateTime.parse(json['endTime']),
+        clan: ClanWarDetails.fromJson(json['clan'] ?? {}),
+        opponent: ClanWarDetails.fromJson(json['opponent'] ?? {}),
+        type: type,
+      );
+    }
   }
 }
 
@@ -197,10 +211,10 @@ class CurrentWarService {
   }
 
   Future<CurrentWarInfo> fetchCurrentWarInfo(String tag, String type) async {
-    tag = tag.replaceAll('#', '%23'); 
-  
+    tag = tag.replaceAll('#', '%23');
+
     late http.Response response;
-  
+
     if (type == "war") {
       response = await http.get(
         Uri.parse('https://api.clashking.xyz/v1/clans/$tag/currentwar'),
@@ -210,7 +224,7 @@ class CurrentWarService {
         Uri.parse('https://api.clashking.xyz/v1/clanwarleagues/wars/$tag'),
       );
     }
-  
+
     if (response.statusCode == 200) {
       return CurrentWarInfo.fromJson(jsonDecode(response.body), type);
     } else {

@@ -14,6 +14,7 @@ class CurrentWarInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.all(8),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -62,7 +63,7 @@ class CurrentWarInfoCard extends StatelessWidget {
           flex: 4,
           child: Column(
             children: <Widget>[
-              Text(AppLocalizations.of(context)?.warEnded ?? 'War',
+              Text(AppLocalizations.of(context)?.warEnded ?? 'War ended',
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall

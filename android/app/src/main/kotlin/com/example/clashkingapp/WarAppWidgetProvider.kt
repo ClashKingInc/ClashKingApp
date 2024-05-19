@@ -45,7 +45,10 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
         // Set the PendingIntent to the root layout of the widget
         views.setOnClickPendingIntent(R.id.root_layout, getPendingIntent(context))
 
-        println("Widget Data: $widgetData")
+        println("Widget Data: ")
+        for ((key, value) in widgetData.all) {
+            println("$key: $value")
+        }
         // Get the war info from SharedPreferences
         val warInfoJson = widgetData.getString("warInfo", null)
         if (warInfoJson != null && warInfoJson != "notInWar") {
@@ -56,7 +59,7 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
             val score = warInfo.optString("score", "")
 
             // Get war status
-            val warStatus = warInfo.optString("state", "notInWar")
+            val warStatus = warInfo.optString("timeState", "notInWar")
 
             // Get updated time
             val updatedTime = warInfo.optString("updatedAt", "")
@@ -94,23 +97,6 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
             views.setTextViewText(R.id.opponent_attacks, opponentAttacks.toString())
             views.setTextViewText(R.id.text_update_time, updatedTime)
 
-            // Update the widget when the refresh icon is clicked
-            val updateIntent = Intent(context, WarAppWidgetProvider::class.java).apply {
-                action = ACTION_UPDATE_WIDGET
-                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-            }
-
-            // Create a PendingIntent to handle the click event
-            val updatePendingIntent = PendingIntent.getBroadcast(
-                context,
-                0,
-                updateIntent,
-                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-
-            views.setOnClickPendingIntent(R.id.refresh_icon, updatePendingIntent)
-
-
             // Load the images from the URLs into the ImageViews
             Thread {
                 val clanBitmap = downloadBitmap(clanBadgeUrlMedium)
@@ -120,8 +106,24 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
                 appWidgetManager.updateAppWidget(appWidgetId, views)
             }.start()
         } else {
-            views.setTextViewText(R.id.text_score, "You're currently not in War.")
+            views.setTextViewText(R.id.text_state, "You're currently not in War.")
         }
+
+        // Update the widget when the refresh icon is clicked
+        val updateIntent = Intent(context, WarAppWidgetProvider::class.java).apply {
+            action = ACTION_UPDATE_WIDGET
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        }
+
+        // Create a PendingIntent to handle the click event
+        val updatePendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            updateIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        views.setOnClickPendingIntent(R.id.refresh_icon, updatePendingIntent)
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }

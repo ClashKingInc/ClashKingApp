@@ -43,9 +43,12 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.calculate),
+                  Icon(
+                    Icons.calculate,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                   Padding(
-                    padding: EdgeInsets.only(left: 8.0),
+                    padding: EdgeInsets.only(left: 4.0),
                     child: Text(AppLocalizations.of(context)?.fastCalculator ?? 'Fast calculator'),
                   ),
                 ],
@@ -54,41 +57,64 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
             Visibility(
               visible: _isExpanded,
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
                 child: Column(
                   children: [
                     TextField(
                       controller: _teamSizeController,
                       decoration: InputDecoration(
-                        labelText: 'Team size',
+                        labelText: AppLocalizations.of(context)?.teamSize ?? 'Team size',
+                        labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                         hintText: widget.teamSize.toString(),
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 16),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).colorScheme.onSurface),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).colorScheme.onSurface),
+                        ),
                       ),
                       keyboardType: TextInputType.number,
                     ),
                     TextField(
                       controller: _percentNeededController,
                       decoration: InputDecoration(
-                        labelText: '% Needed overall',
+                        labelText: AppLocalizations.of(context)?.neededOverall ?? '% Needed overall',
+                        labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                         hintText: (100 / widget.teamSize).toStringAsFixed(2),
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 16),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).colorScheme.onSurface),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).colorScheme.onSurface),
+                        ),
                       ),
                       keyboardType: TextInputType.number,
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 16),
                     SizedBox(
                       width: 150,
                       height: 50, 
-                      child: ElevatedButton(
+                      child: OutlinedButton(
                         onPressed: () {
                           setState(() {
                             _result = (double.parse(_percentNeededController.text)) * double.parse(_teamSizeController.text);
                           });
                         },
-                        child: Text('Calculate'),
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: Theme.of(context).colorScheme.onSurface),
+                        ),
+                        child: Text(AppLocalizations.of(context)?.calculate ?? 'Calculate', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                       ),
                     ),
-                    Text('To score overall ${_percentNeededController.text}%, you need to achieve at least ${_result.ceil()}%'),
+                    SizedBox(height: 12),
+                    Center(
+                      child: Text(
+                        'To score overall ${_percentNeededController.text}%, you need to achieve at least ${_result.ceil()}%',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ],
                 ),
               ),

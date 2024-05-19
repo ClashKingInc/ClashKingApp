@@ -1,3 +1,4 @@
+import 'package:clashkingapp/api/war_log.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -8,8 +9,9 @@ class WarHistoryScreen extends StatefulWidget {
   final String clanTag;
   final List<String> discordUser;
   final List<dynamic> warHistoryData;
+  final List<WarLogDetails> warLogData;
 
-  WarHistoryScreen({super.key, required this.clanTag, required this.discordUser, required this.warHistoryData});
+  WarHistoryScreen({super.key, required this.clanTag, required this.discordUser, required this.warHistoryData, required this.warLogData});
 
   @override
   WarHistoryScreenState createState() => WarHistoryScreenState();
@@ -50,11 +52,8 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
               ),
               labelColor: Theme.of(context).colorScheme.onBackground,
               unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
-              onTap: (value) {
-                print('Tab $value selected');
-              },
               tabs: [
-                Tab(text: 'War Log'),
+                Tab(text: AppLocalizations.of(context)?.warLog ?? 'War Log'),
                 Tab(text: AppLocalizations.of(context)?.statistics ?? 'Statistics'),
               ], 
               children: [
@@ -66,11 +65,14 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
                         warHistoryData: widget.warHistoryData,
                         discordUser: widget.discordUser,
                         clanTag: widget.clanTag,
+                        warLogData: widget.warLogData,
                       ),
                     ],
                   ),
                 ),
-                Text('data'),
+                Center(
+                  child: Text('Work in progress'),
+                ), 
               ],
             ),
           ],

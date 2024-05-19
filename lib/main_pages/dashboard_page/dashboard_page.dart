@@ -10,9 +10,9 @@ import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
   final PlayerAccountInfo playerStats;
-  final DiscordUser user;
+  final DiscordUser discordUser;
 
-  DashboardPage({required this.playerStats, required this.user});
+  DashboardPage({required this.playerStats, required this.discordUser});
 
   @override
   DashboardPageState createState() => DashboardPageState();
@@ -60,7 +60,7 @@ class DashboardPageState extends State<DashboardPage>
             // Player Infos Card
             Padding(
               padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-              child: PlayerInfosCard(playerStats: widget.playerStats),
+              child: PlayerInfosCard(playerStats: widget.playerStats, discordUser: widget.discordUser.tags),
             ),
             // Legend Infos Card : Displayed only if data
             Padding(
@@ -77,7 +77,7 @@ class DashboardPageState extends State<DashboardPage>
                     if (snapshot.data!.legendData.isNotEmpty) {
                       return PlayerLegendCard(
                           playerStats: widget.playerStats,
-                          playerLegendData: snapshot.data!); // Build PlayerLegendCard with data
+                          playerLegendData: snapshot.data!);
                     } else {
                       return SizedBox.shrink();
                     }

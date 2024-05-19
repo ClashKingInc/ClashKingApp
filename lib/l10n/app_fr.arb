@@ -2,6 +2,7 @@
     "@@locale": "fr",
     "creatorCode" : "Code créateur : ClashKing",
     "signInWithDiscord" : "Connexion avec Discord",
+    "guestMode" : "Mode invité",
     "logout" : "Déconnexion",
     "language" : "Langue",
     "settings" : "Paramètres",
@@ -12,6 +13,17 @@
     "hourIndicator" : "h",
     "minIndicator" : "m",
     "noDataAvailable" : "Aucune donnée disponible.",
+
+    "manageAccounts" : "Gérer les comptes",
+    "enterPlayerTag" : "Saisir le tag du joueur",
+    "add" : "Ajouter",
+    "delete" : "Supprimer",
+    "addAccount" : "Ajouter le compte", 
+    "deleteAccount" : "Supprimer le compte",
+    "playerTagNotExists" : "Le tag du joueur n'existe pas.",
+    "accountAlreadyLinked" : "Ce compte est déjà lié à un utilisateur.",
+    "failedToAddTryAgain" : "Échec de l'ajout du compte. Veuillez réessayer plus tard.",
+    "failedToDeleteTryAgain" : "Échec de la suppression du compte. Veuillez réessayer plus tard.",
     
     "dashboard" : "Profil",
     "homeBase" : "Village principal",
@@ -75,6 +87,8 @@
     "war" : "Guerre",
     "league" : "Ligue",
     "wars" : "Guerres",
+    "warHistory" : "Historique de guerre",
+    "warLog" : "Journal",
     "startsIn" : "Début dans",
     "endsIn" : "Fin dans",
     "statistics" : "Statistiques",
@@ -112,6 +126,9 @@
     "moreDestruction" : "de destruction",
     "clanDraw" : "Les deux clans sont à égalité",
     "fastCalculator" : "Calculatrice rapide",
+    "teamSize" : "Taille de l'équipe",
+    "neededOverall" : "% Total nécessaire",
+    "calculate" : "Calculer",
 
     "management" : "Gestion"
 }
