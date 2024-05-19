@@ -567,9 +567,9 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       print("Selected tag: ${selectedTag.value}");
       playerStats = playerAccounts?.playerAccountInfo
           .firstWhere((element) => element.tag == selectedTag.value);
-      clanTag = playerStats?.clan.tag;
-      clanInfo = playerAccounts?.clanInfo
-          .firstWhere((element) => element.tag == playerStats?.clan.tag);
+      clanTag = playerStats?.clan!.tag;
+      clanInfo = playerAccounts?.clanInfo!
+          .firstWhere((element) => element.tag == playerStats?.clan!.tag);
 
       final response = await http.get(
         Uri.parse(
@@ -581,7 +581,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         if (decodedResponse["state"] != "notInWar") {
           // Correctly check the "state" field as a string
           currentWarInfo = playerAccounts?.warInfo.firstWhere(
-              (element) => element.clan.tag == playerStats?.clan.tag);
+              (element) => element.clan.tag == playerStats?.clan!.tag);
         }
       }
 
