@@ -62,7 +62,7 @@ Future<DiscordUser> fetchDiscordUser(String accessToken) async {
       username: 'ILoveClashKing',
       avatar: 'https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png',
       email: 'Unknown',
-      globalName: 'Guest',
+      globalName: 'ILoveClashKing',
       language: 'en',
     );
     user.isDiscordUser = false;

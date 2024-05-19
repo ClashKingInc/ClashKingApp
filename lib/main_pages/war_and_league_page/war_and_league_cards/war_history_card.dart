@@ -20,7 +20,7 @@ class WarHistoryCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => WarHistoryScreen(
-              clanTag: playerStats.clan.tag,
+              clanTag: playerStats.clan!.tag,
               discordUser: discordUser,
               warHistoryData: warHistoryData,
               warLogData: warLogData,
