@@ -13,6 +13,13 @@
     "hourIndicator" : "h",
     "minIndicator" : "m",
     "noDataAvailable" : "No data available.",
+    "close" : "Close",
+    "error" : "Error",
+    "player" : "Player",
+    "notFoundOrNotLinkedToOurSystem" : "not found or not linked to our system.",
+    "tryAnotherNameOrTagOrLinkIt" : "Try another name/tag or link it.",
+    "playerNotFound" : "Player not found",
+    "noValueEntered" : "No value entered",
 
     "manageAccounts" : "Manage accounts",
     "enterPlayerTag" : "Enter a player tag",
@@ -25,6 +32,8 @@
     "failedToAddTryAgain" : "Failed to add link. Please try again later.",
     "failedToDeleteTryAgain" : "Failed to delete link. Please try again later.",
 
+    "search" : "Search",
+    "tagOrNamePlayer" : "Player's tag or name",
     
     "dashboard" : "Dashboard",
     "homeBase" : "Home Base",

@@ -5,6 +5,7 @@ import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/creator_code_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_infos_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_legend_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_search_card.dart';
 import 'package:clashkingapp/api/player_legend.dart';
 import 'package:provider/provider.dart';
 
@@ -56,6 +57,10 @@ class DashboardPageState extends State<DashboardPage>
             Padding(
               padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
               child: CreatorCodeCard(),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              child: PlayerSearchCard(discordUser: widget.discordUser.tags),
             ),
             // Player Infos Card
             Padding(

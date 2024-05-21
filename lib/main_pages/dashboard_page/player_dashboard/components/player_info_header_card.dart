@@ -57,26 +57,28 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
               ),
               Positioned(
                 bottom: -90,
-                child: Column(children: [
-                  GestureDetector(
-                    onDoubleTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AchievementScreen(playerStats: widget.playerStats)),
-                      );
-                    },
-                    child: CachedNetworkImage(imageUrl: widget.townHallImageUrl, width: 170),
-                  ),
-                  Row(
-                    children: [
-                      widget.stars.isNotEmpty
-                        ? Row(
-                            children: widget.stars,
-                          )
-                        : SizedBox(height: 22)
-                    ],
-                  ),
-                ]),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onDoubleTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AchievementScreen(playerStats: widget.playerStats)),
+                        );
+                      },
+                      child: CachedNetworkImage(imageUrl: widget.townHallImageUrl, width: 170),
+                    ),
+                    Row(
+                      children: [
+                        widget.stars.isNotEmpty
+                          ? Row(
+                              children: widget.stars,
+                            )
+                          : SizedBox(height: 22)
+                      ],
+                    ),
+                  ],
+                ),
               ),
               Positioned(
                 top: 30,

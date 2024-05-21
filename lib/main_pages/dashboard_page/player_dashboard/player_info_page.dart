@@ -271,8 +271,7 @@ class StatsScreenState extends State<StatsScreen>
                                             ),
                                             child: Column(
                                               children: <Widget>[
-                                                Text('${item.name}',
-                                                  style: TextStyle(color: Colors.black)),
+                                                Text('${item.name}', style: TextStyle(color: Colors.black)),
                                                 CachedNetworkImage(
                                                   imageUrl: item.imageUrl,
                                                   width: 40,
@@ -347,14 +346,12 @@ class StatsScreenState extends State<StatsScreen>
                                         padding: EdgeInsets.all(1),
                                         decoration: BoxDecoration(
                                           color: item.level == item.maxLevel
-                                              ? Color(0xFFD4AF37) // Or
-                                              : Colors.black, // Noir
-                                          borderRadius:
-                                              BorderRadius.circular(4),
+                                            ? Color(0xFFD4AF37) // Or
+                                            : Colors.black, // Noir
+                                          borderRadius: BorderRadius.circular(4),
                                         ),
                                         child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               item.level.toString(),
@@ -426,8 +423,7 @@ class StatsScreenState extends State<StatsScreen>
         child: Chip(
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
-              imageUrl: widget.playerStats.clan.badgeUrls.small,
+            child: CachedNetworkImage(imageUrl: widget.playerStats.clan.badgeUrls.small,
             ),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -439,10 +435,8 @@ class StatsScreenState extends State<StatsScreen>
       ),
       Chip(
         avatar: CircleAvatar(
-          backgroundColor:
-              Colors.transparent, // Set to a suitable color for your design.
-          child: CachedNetworkImage(
-              imageUrl: "https://clashkingfiles.b-cdn.net/home-base/hero-pics/Icon_HV_Hero_Archer_Queen.png"),
+          backgroundColor:Colors.transparent,
+          child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/home-base/hero-pics/Icon_HV_Hero_Archer_Queen.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -452,7 +446,7 @@ class StatsScreenState extends State<StatsScreen>
       ),
       Chip(
         avatar: CircleAvatar(
-          backgroundColor:Colors.transparent, // Set to a suitable color for your design.
+          backgroundColor:Colors.transparent,
           child: CachedNetworkImage(imageUrl: widget.playerStats.townHallPic),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -463,9 +457,8 @@ class StatsScreenState extends State<StatsScreen>
       ),
       Chip(
         avatar: CircleAvatar(
-          backgroundColor: Colors.transparent, // Set to a suitable color for your design.
-          child: CachedNetworkImage(
-              imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_XP.png"),
+          backgroundColor: Colors.transparent,
+          child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_XP.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -502,9 +495,8 @@ class StatsScreenState extends State<StatsScreen>
       ),
       Chip(
         avatar: CircleAvatar(
-          backgroundColor: Colors.transparent, // Set to a suitable color for your design.
-          child: CachedNetworkImage(
-            imageUrl:"https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
+          backgroundColor: Colors.transparent,
+          child: CachedNetworkImage(imageUrl:"https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -514,9 +506,8 @@ class StatsScreenState extends State<StatsScreen>
       ),
       Chip(
         avatar: CircleAvatar(
-          backgroundColor: Colors.transparent, // Set to a suitable color for your design.
-          child: CachedNetworkImage(
-            imageUrl:"https://clashkingfiles.b-cdn.net/icons/Icon_CC_Resource_Capital_Gold_small.png"),
+          backgroundColor: Colors.transparent,
+          child: CachedNetworkImage(imageUrl:"https://clashkingfiles.b-cdn.net/icons/Icon_CC_Resource_Capital_Gold_small.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -536,14 +527,10 @@ class StatsScreenState extends State<StatsScreen>
         ...buildAllHallChips(),
         Chip(
           avatar: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: widget.playerStats.warPreference == 'in'
-                  ? CachedNetworkImage(
-                      imageUrl:
-                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png")
-                  : CachedNetworkImage(
-                      imageUrl:
-                          'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png')),
+            backgroundColor: Colors.transparent,
+            child: widget.playerStats.warPreference == 'in'
+              ? CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png")
+              : CachedNetworkImage(imageUrl: 'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png')),
           label: Text(
             widget.playerStats.warPreference,
             style: Theme.of(context).textTheme.labelLarge,
@@ -552,9 +539,7 @@ class StatsScreenState extends State<StatsScreen>
         Chip(
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
-                imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
+            child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -565,9 +550,7 @@ class StatsScreenState extends State<StatsScreen>
         Chip(
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
-                imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png"),
+            child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -589,15 +572,14 @@ class StatsScreenState extends State<StatsScreen>
                   );
                 },
               );
-              PlayerLegendData legendData = await PlayerLegendService()
-                  .fetchLegendData(widget.playerStats.tag);
-
+              PlayerLegendData legendData = await PlayerLegendService().fetchLegendData(widget.playerStats.tag);
               navigator.pop();
               navigator.push(
                 MaterialPageRoute(
                   builder: (context) => LegendScreen(
-                      playerStats: widget.playerStats,
-                      playerLegendData: legendData),
+                    playerStats: widget.playerStats,
+                    playerLegendData: legendData
+                  ),
                 ),
               );
             }
@@ -617,9 +599,7 @@ class StatsScreenState extends State<StatsScreen>
         Chip(
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
-                imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png"),
+            child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -640,10 +620,8 @@ class StatsScreenState extends State<StatsScreen>
         ...buildAllHallChips(),
         Chip(
           avatar: CircleAvatar(
-            backgroundColor:
-                Colors.transparent, // Set to a suitable color for your design.
-            child:
-                CachedNetworkImage(imageUrl: widget.playerStats.builderHallPic),
+            backgroundColor:Colors.transparent,
+            child: CachedNetworkImage(imageUrl: widget.playerStats.builderHallPic),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -653,11 +631,8 @@ class StatsScreenState extends State<StatsScreen>
         ),
         Chip(
           avatar: CircleAvatar(
-            backgroundColor:
-                Colors.transparent, // Set to a suitable color for your design.
-            child: CachedNetworkImage(
-                imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
+            backgroundColor:Colors.transparent,
+            child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -667,11 +642,8 @@ class StatsScreenState extends State<StatsScreen>
         ),
         Chip(
           avatar: CircleAvatar(
-            backgroundColor:
-                Colors.transparent, // Set to a suitable color for your design.
-            child: CachedNetworkImage(
-                imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png"),
+            backgroundColor: Colors.transparent,
+            child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -681,6 +653,5 @@ class StatsScreenState extends State<StatsScreen>
         ),
       ],
     );
-    // Other chips...
   }
 }

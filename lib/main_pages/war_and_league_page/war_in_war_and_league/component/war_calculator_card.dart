@@ -105,7 +105,10 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(color: Theme.of(context).colorScheme.onSurface),
                         ),
-                        child: Text(AppLocalizations.of(context)?.calculate ?? 'Calculate', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                        child: Text(
+                          AppLocalizations.of(context)?.calculate ?? 'Calculate', 
+                          style: TextStyle(color: Theme.of(context).colorScheme.onSurface)
+                        ),
                       ),
                     ),
                     SizedBox(height: 12),

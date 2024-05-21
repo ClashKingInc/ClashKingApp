@@ -12,6 +12,13 @@
     "hourIndicator" : "h",
     "minIndicator" : "m",
     "noDataAvailable" : "Aucune donnée disponible.",
+    "close" : "Fermer",
+    "error" : "Erreur",
+    "player" : "Joueur",
+    "notFoundOrNotLinkedToOurSystem" : "introuvable ou non lié à notre système.",
+    "tryAnotherNameOrTagOrLinkIt" : "Essayez un autre nom/tag ou liez le.",
+    "playerNotFound" : "Joueur introuvable",
+    "noValueEntered" : "Aucune valeur saisie",
 
     "manageAccounts" : "Gérer les comptes",
     "enterPlayerTag" : "Saisir le tag du joueur",
@@ -24,6 +31,9 @@
     "failedToAddTryAgain" : "Échec de l'ajout du compte. Veuillez réessayer plus tard.",
     "failedToDeleteTryAgain" : "Échec de la suppression du compte. Veuillez réessayer plus tard.",
     
+    "search" : "Rechercher",
+    "tagOrNamePlayer" : "Tag ou nom du joueur", 
+
     "dashboard" : "Profil",
     "homeBase" : "Village principal",
     "th" : "HDV",
