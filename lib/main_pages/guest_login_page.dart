@@ -6,8 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/services.dart'; 
+import 'package:flutter/services.dart';
 import 'package:clashkingapp/core/my_home_page.dart';
+import 'package:clashkingapp/api/cocdiscord_link_functions.dart';
 
 class InviteLoginPage extends StatefulWidget {
   final DiscordUser user;
@@ -46,7 +47,8 @@ class InviteLoginPageState extends State<InviteLoginPage> {
   Future<void> _onSearchChanged(String value) async {
     final List<String> results = await _suggestionCallback(value);
     setState(() {
-      _suggestions = results.where((String tag) => !_tags.contains(tag)).toList();
+      _suggestions =
+          results.where((String tag) => !_tags.contains(tag)).toList();
     });
   }
 
@@ -74,10 +76,24 @@ class InviteLoginPageState extends State<InviteLoginPage> {
     });
   }
 
-  void _onSubmitted(String text) {
+  void _onSubmitted(String text) async {
     if (text.trim().isNotEmpty) {
+      if (!text.startsWith('#')) {
+        text = '#' + text;
+      }
+      String authToken = await login();
+      String status = await checkIfPlayerTagExists(text, authToken, context);
+      if (status == 'notExist') {
+        updateErrorMessage('$text does not exist');
+      } else if (status == 'alreadyLinked') {
+        updateErrorMessage('$text is already linked');
+      } else {
+        updateErrorMessage('');
+      }
       setState(() {
-        _tags = <String>[..._tags, text.trim()];
+        if (!_tags.contains(text) && status == 'Ok') {
+          _tags = <String>[..._tags, text.trim()];
+        }
       });
     } else {
       _chipFocusNode.unfocus();
@@ -89,7 +105,15 @@ class InviteLoginPageState extends State<InviteLoginPage> {
 
   void _onChanged(List<String> data) {
     setState(() {
-      _tags = data;
+      _tags.addAll(data);
+    });
+  }
+
+  String errorMessage = '';
+
+  void updateErrorMessage(String message) {
+    setState(() {
+      errorMessage = message;
     });
   }
 
@@ -124,109 +148,141 @@ class InviteLoginPageState extends State<InviteLoginPage> {
             },
           ),
         ),
-        body: Column(
-          children: [
-            SizedBox(
-              height: 100,
-              width: 100,
-              child: CachedNetworkImage(
-                  imageUrl:
-                      "https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png"),
-            ),
-            SizedBox(
-              width: 200,
-              child: CachedNetworkImage(
-                  imageUrl:
-                      "https://clashkingfiles.b-cdn.net/logos/ClashKing-name-logo.png"),
-            ),
-            SizedBox(height: 32),
-            Text('Create your guest profile',
-                style: Theme.of(context).textTheme.titleLarge),
-            Padding(
-              padding: EdgeInsets.all(32.0),
-              child: Form(
-                key: _formKey,
-                child: ListBody(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsetsDirectional.only(bottom: 16),
-                      child: TextFormField(
-                        controller: _usernameController,
-                        decoration: InputDecoration(
-                          labelText: 'Username',
-                          hintText: 'Enter Username',
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a username';
-                          }
-                          return null;
-                        },
-                        onChanged: (value) => widget.user.globalName = value,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.only(bottom: 16),
-                      child: ChipsInput<String>(
-                        values: _tags,
-                        decoration: InputDecoration(
-                          labelText: 'Player Tags',
-                          hintText: 'Enter Tags',
-                          prefixIcon: Icon(Icons.tag),
-                        ),
-                        strutStyle: StrutStyle(fontSize: 15),
-                        onChanged: _onChanged,
-                        onSubmitted: _onSubmitted,
-                        chipBuilder: _chipBuilder,
-                        onTextChanged: _onSearchChanged,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'[a-zA-Z0-9]'),
+        body: SingleChildScrollView(
+          // Permet le défilement
+          child: Column(
+            children: [
+              SizedBox(
+                height: 100,
+                width: 100,
+                child: CachedNetworkImage(
+                    imageUrl:
+                        "https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png"),
+              ),
+              SizedBox(
+                width: 200,
+                child: CachedNetworkImage(
+                    imageUrl:
+                        "https://clashkingfiles.b-cdn.net/logos/ClashKing-name-logo.png"),
+              ),
+              SizedBox(height: 32),
+              Text('Create your guest profile',
+                  style: Theme.of(context).textTheme.titleLarge),
+              Padding(
+                padding: EdgeInsets.all(32.0),
+                child: Form(
+                  key: _formKey,
+                  child: ListBody(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsetsDirectional.only(bottom: 16),
+                        child: TextFormField(
+                          controller: _usernameController,
+                          decoration: InputDecoration(
+                            labelText: 'Username',
+                            hintText: 'Enter Username',
                           ),
-                        ],
-                      ),
-                    ),
-                    if (_suggestions.isNotEmpty)
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: _suggestions.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return TagSuggestion(
-                              _suggestions[index],
-                              onTap: _selectSuggestion,
-                            );
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a username';
+                            }
+                            return null;
                           },
+                          onChanged: (value) => widget.user.globalName = value,
                         ),
                       ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          widget.user.globalName = _usernameController.text;
+                      Padding(
+                        padding: EdgeInsetsDirectional.only(bottom: 16),
+                        child: ChipsInput<String>(
+                          values: _tags,
+                          decoration: _tags.isEmpty ? InputDecoration(
+                            labelText: 'Player Tags',
+                            hintText: '#2QVPCJJV',
+                          ) : InputDecoration(
+                            labelText: 'Player Tags',
+                            floatingLabelBehavior: FloatingLabelBehavior.always
+                          ),
+                          strutStyle: StrutStyle(fontSize: 15),
+                          onChanged: _onChanged,
+                          onSubmitted: _onSubmitted,
+                          chipBuilder: _chipBuilder,
+                          onTextChanged: _onSearchChanged,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'[#a-zA-Z0-9]*'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (_suggestions.isNotEmpty)
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: _suggestions.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return TagSuggestion(
+                                _suggestions[index],
+                                onTap: _selectSuggestion,
+                              );
+                            },
+                          ),
+                        ),
+                      if (errorMessage.isNotEmpty) Text(errorMessage),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            widget.user.globalName = _usernameController.text;
 
-                          for (int i = 0; i < _tags.length; i++) {
-                            if (!_tags[i].startsWith('#')) {
-                              _tags[i] = '#' + _tags[i];
+                            String authToken = await login();
+
+                            bool allTagsExist = true;
+                            bool allTagsNotLinked = true;
+                            List<String> nonExistentTags = [];
+                            List<String> alreadyLinkedTags = [];
+                            String status = '';
+
+                            for (int i = 0; i < _tags.length; i++) {
+                              status = await checkIfPlayerTagExists(
+                                  _tags[i], authToken, context);
+                              if (status == 'notExist') {
+                                nonExistentTags.add(_tags[i]);
+                                allTagsExist = false;
+                              } else if (status == 'alreadyLinked') {
+                                alreadyLinkedTags.add(_tags[i]);
+                                allTagsNotLinked = false;
+                              }
+                            }
+                            if (allTagsExist && allTagsNotLinked) {
+                              // Save the tags to the user object (assuming user is DiscordUser object)
+                              widget.user.tags = _tags;
+
+                              print('UserTags: ${widget.user.tags}');
+
+                              // Navigate to the next screen
+                              globalNavigatorKey.currentState!.pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => MyHomePage(),
+                                ),
+                              );
+                            } else {
+                              if (!allTagsExist) {
+                                updateErrorMessage(
+                                    'The following tags do not exist : ${nonExistentTags.join(', ')}');
+                              }
+                              if (!allTagsNotLinked) {
+                                updateErrorMessage(
+                                    'The following tags are already linked : ${alreadyLinkedTags.join(', ')}');
+                              }
                             }
                           }
-                          widget.user.tags = _tags;
-
-                          print('UserTags: ${widget.user.tags}');
-
-                          // Navigate to the next screen
-                          globalNavigatorKey.currentState!.pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => MyHomePage(),
-                            ),
-                          );
-                        }
-                      },
-                      child: Text('Save'),
-                    ),
-                  ],
+                        },
+                        child: Text('Save'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -243,11 +299,6 @@ class TagSuggestion extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       key: ObjectKey(tag),
-      leading: CircleAvatar(
-        child: Text(
-          tag[0].toUpperCase(),
-        ),
-      ),
       title: Text(tag),
       onTap: () => onTap?.call(tag),
     );
@@ -273,9 +324,6 @@ class TagInputChip extends StatelessWidget {
       child: InputChip(
         key: ObjectKey(tag),
         label: Text(tag),
-        avatar: CircleAvatar(
-          child: Text(tag[0].toUpperCase()),
-        ),
         onDeleted: () => onDeleted(tag),
         onSelected: (bool value) => onSelected(tag),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -458,4 +506,3 @@ class ChipsInputEditingController<T> extends TextEditingController {
     );
   }
 }
-

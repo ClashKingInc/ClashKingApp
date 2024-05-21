@@ -71,12 +71,12 @@ class PlayerInfosCard extends StatelessWidget {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors.transparent,
                                   child: CachedNetworkImage(imageUrl: 
-                                      playerStats.clan.badgeUrls.small),
+                                      playerStats.clan!.badgeUrls.small),
                                 ),
                                 labelPadding:
                                     EdgeInsets.only(left: 2.0, right: 2.0),
                                 label: Text(
-                                  playerStats.clan.name,
+                                  playerStats.clan!.name,
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
                               ),

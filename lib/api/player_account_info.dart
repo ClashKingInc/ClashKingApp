@@ -27,7 +27,7 @@ class PlayerAccountInfo {
   final int donations;
   final int donationsReceived;
   final int clanCapitalContributions;
-  final Clan clan;
+  final Clan? clan;
   final List<Achievement> achievements;
   final List<Hero> heroes;
   final List<Troop> troops;
@@ -85,7 +85,7 @@ class PlayerAccountInfo {
       donations: json['donations'] ?? 0,
       donationsReceived: json['donationsReceived'] ?? 0,
       clanCapitalContributions: json['clanCapitalContributions'] ?? 0,
-      clan: Clan.fromJson(json['clan'] ?? {}),
+      clan: json['clan'] != null ? Clan.fromJson(json['clan']) : null,
       achievements: List<Achievement>.from(
           json['achievements'].map((x) => Achievement.fromJson(x ?? {}))),
       heroes:
@@ -320,7 +320,7 @@ class PlayerService {
   Future<PlayerAccounts> fetchPlayerAccounts(DiscordUser user) async {
     PlayerAccounts playerAccounts =
         PlayerAccounts(playerAccountInfo: [], clanInfo: [], warInfo: []);
-    ClanInfo clanInfo;
+    ClanInfo? clanInfo;
     List<Future> futures = [];
     final tags = user.tags;
 
@@ -339,12 +339,14 @@ class PlayerService {
           }
           playerAccounts.playerAccountInfo.add(playerStats);
 
-          var results = await Future.wait<dynamic>([
-            fetchClanInfo(playerStats.clan.tag),
-            //fetchCurrentWarInfo(playerStats.clan.tag),
-          ]);
-          clanInfo = results[0] as ClanInfo;
-          playerAccounts.clanInfo.add(clanInfo);
+          if (playerStats.clan != null && playerStats.clan!.tag.isNotEmpty) {
+            var results = await Future.wait<dynamic>([
+              fetchClanInfo(playerStats.clan!.tag),
+              //fetchCurrentWarInfo(playerStats.clan.tag),
+            ]);
+            clanInfo = results[0] as ClanInfo;
+            playerAccounts.clanInfo!.add(clanInfo!);
+          } 
 
           /*warInfo = results[1] as CurrentWarInfo;
           playerAccounts.warInfo.add(warInfo);*/

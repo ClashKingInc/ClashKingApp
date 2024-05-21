@@ -59,10 +59,10 @@ Future<DiscordUser> fetchDiscordUser(String accessToken) async {
   } else {
     DiscordUser user = DiscordUser(
       id: '0',
-      username: 'Guest',
+      username: 'ILoveClashKing',
       avatar: 'https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png',
       email: 'Unknown',
-      globalName: 'Guest',
+      globalName: 'ILoveClashKing',
       language: 'en',
     );
     user.isDiscordUser = false;

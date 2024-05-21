@@ -98,8 +98,8 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: AccessDeniedCard(
-                          clanName: widget.playerStats.clan.name,
-                          clanBadgeUrl: widget.playerStats.clan.badgeUrls.large),
+                          clanName: widget.playerStats.clan!.name,
+                          clanBadgeUrl: widget.playerStats.clan!.badgeUrls.large),
                       )
                     else if (warState == "cwl")
                       GestureDetector(
@@ -109,7 +109,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                             MaterialPageRoute(
                               builder: (context) => CurrentLeagueInfoScreen(
                                 currentLeagueInfo: currentLeagueInfo!,
-                                clanTag: widget.playerStats.clan.tag,
+                                clanTag: widget.playerStats.clan!.tag,
                                 clanInfo: widget.clanInfo,
                                 discordUser: widget.discordUser.tags,
                               ),
@@ -118,7 +118,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                         },
                         child: CwlCard(
                           currentLeagueInfo: currentLeagueInfo!,
-                          clanTag: widget.playerStats.clan.tag,
+                          clanTag: widget.playerStats.clan!.tag,
                           clanInfo: widget.clanInfo,
                         ),
                       )
@@ -126,8 +126,8 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                         child: NotInWarCard(
-                          clanName: widget.playerStats.clan.name, 
-                          clanBadgeUrl: widget.playerStats.clan.badgeUrls.large),
+                          clanName: widget.playerStats.clan!.name, 
+                          clanBadgeUrl: widget.playerStats.clan!.badgeUrls.large),
                       ),
                       buildWarHistorySection()
                     ],
@@ -169,11 +169,11 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
 
   Future<String> checkCurrentWar(PlayerAccountInfo playerStats) async {
     final responseWar = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clans/${playerStats.clan.tag.replaceAll('#', '%23')}/currentwar'),
+      Uri.parse('https://api.clashking.xyz/v1/clans/${playerStats.clan!.tag.replaceAll('#', '%23')}/currentwar'),
     );
 
     final responseCwl = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clans/${playerStats.clan.tag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
+      Uri.parse('https://api.clashking.xyz/v1/clans/${playerStats.clan!.tag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
     );
 
     if (responseWar.statusCode == 200) {

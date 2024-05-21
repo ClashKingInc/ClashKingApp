@@ -409,7 +409,7 @@ class StatsScreenState extends State<StatsScreen>
             },
           );
           ClanInfo clanInfo =
-              await ClanService().fetchClanInfo(widget.playerStats.clan.tag);
+              await ClanService().fetchClanInfo(widget.playerStats.clan!.tag);
           if (mounted) {
             Navigator.pop(context);
             Navigator.push(
@@ -423,12 +423,13 @@ class StatsScreenState extends State<StatsScreen>
         child: Chip(
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(imageUrl: widget.playerStats.clan.badgeUrls.small,
+            child: CachedNetworkImage(
+              imageUrl: widget.playerStats.clan!.badgeUrls.small,
             ),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
-            widget.playerStats.clan.name,
+            widget.playerStats.clan!.name,
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
