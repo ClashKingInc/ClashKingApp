@@ -1,3 +1,4 @@
+import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/components/app_bar/app_bar_functions.dart';
@@ -6,9 +7,9 @@ import 'package:clashkingapp/core/my_app.dart';
 import 'package:provider/provider.dart';
 
 class AddPlayerCard extends StatefulWidget {
-  final String userId;
+  final DiscordUser user;
 
-  const AddPlayerCard({super.key, required this.userId});
+  const AddPlayerCard({super.key, required this.user});
 
   @override
   AddPlayerCardState createState() => AddPlayerCardState();
@@ -73,11 +74,19 @@ class AddPlayerCardState extends State<AddPlayerCard> {
 
             String token = await login();
             String playerTag = controller.text;
-            final success = await addLink(playerTag, widget.userId, token, updateErrorMessage, context);
-            if (success) {
+            if (widget.user.isDiscordUser) {
+              final success = await addLink(playerTag, widget.user.id, token,
+                  updateErrorMessage, context);
+              if (success) {
+                myAppState.reloadUsersAccounts();
+              }
+              if (errorMessage.isEmpty) {
+                navigator.pop();
+              }
+            } else {
+              widget.user.tags.add("#$playerTag");
+              print('User tags: ${widget.user.tags}');
               myAppState.reloadUsersAccounts();
-            }
-            if (errorMessage.isEmpty) {
               navigator.pop();
             }
           },
@@ -95,7 +104,8 @@ class AddPlayerCardState extends State<AddPlayerCard> {
             ),
             elevation: MaterialStateProperty.all(4),
           ),
-          child: Text(AppLocalizations.of(context)!.addAccount, style: Theme.of(context).textTheme.bodyMedium),
+          child: Text(AppLocalizations.of(context)!.addAccount,
+              style: Theme.of(context).textTheme.bodyMedium),
         ),
       ],
     );

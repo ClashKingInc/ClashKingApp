@@ -28,6 +28,7 @@ class CustomAppBarState extends State<CustomAppBar> {
   @override
   void initState() {
     super.initState();
+    print("init state : ${widget.user.selectedTagDetails}");
     _loadSelectedTag().then((_) {
       if (selectedTag == null ||
           !widget.user.selectedTagDetails
@@ -44,11 +45,13 @@ class CustomAppBarState extends State<CustomAppBar> {
 
   Future<void> _loadSelectedTag() async {
     final prefs = await SharedPreferences.getInstance();
+    print("selected : ${prefs.getString('selectedTag')}");
     selectedTag = prefs.getString('selectedTag');
   }
 
   Future<void> _saveSelectedTag(String tag) async {
     final prefs = await SharedPreferences.getInstance();
+    print("save selected : $tag");
     prefs.setString('selectedTag', tag);
   }
 
@@ -141,8 +144,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                                         currentSegment == 1
                                             ? DeletePlayerCard(
                                                 user: widget.user)
-                                            : AddPlayerCard(
-                                                userId: widget.user.id),
+                                            : AddPlayerCard(user: widget.user),
                                       ],
                                     ),
                                   ),
@@ -213,8 +215,8 @@ class CustomAppBarState extends State<CustomAppBar> {
                 );
               },
               child: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://cdn.discordapp.com/avatars/${widget.user.id}/${widget.user.avatar}.png'),
+                backgroundImage: NetworkImage(widget.user.avatar),
+                backgroundColor: Colors.transparent,
               ),
             ),
           ],

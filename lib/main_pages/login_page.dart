@@ -10,6 +10,7 @@ import 'package:crypto/crypto.dart'; // Pour sha256
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 //import 'dart:html' as html;
 
 class LoginPage extends StatelessWidget {
@@ -122,20 +123,96 @@ class LoginPage extends StatelessWidget {
     }
   }*/
 
+   Future<void> signInInInviteMode(BuildContext context) async {
+          // Save the access token using shared_preferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('access_token', 'inviteMode');
+
+      // Save the expiration date of the access token
+      DateTime expirationDate = DateTime(9999, 12, 31);
+      await prefs.setString(
+          'expiration_date', expirationDate.toIso8601String());
+
+      // Navigate to MyHomePage
+      globalNavigatorKey.currentState!.pushReplacement(
+        MaterialPageRoute(builder: (context) => StartupWidget()),
+      );
+
+   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          child: Text(AppLocalizations.of(context)!.signInWithDiscord),
-          onPressed: () async {
-              await signInWithDiscordFromMobile(context);
-            /*if (kIsWeb) {
-              await signInWithDiscordFromWeb(context);
-            } else {
-              await signInWithDiscordFromMobile(context);
-            }*/
-          },
+      body: SingleChildScrollView(
+        // Permet le défilement
+        child: Center(
+          child: ConstrainedBox(
+            constraints:
+                BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+            child: Column(
+              mainAxisAlignment:
+                  MainAxisAlignment.center, // Centre verticalement
+              children: [
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 150,
+                      width: 150,
+                      child: CachedNetworkImage(
+                          imageUrl:
+                              "https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png"),
+                    ),
+                    SizedBox(
+                      width: 250,
+                      child: CachedNetworkImage(
+                          imageUrl:
+                              "https://clashkingfiles.b-cdn.net/logos/ClashKing-name-logo.png"),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 64),
+                ButtonTheme(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      minimumSize: Size(240, 48),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.discord, size: 24),
+                        SizedBox(width: 8),
+                        Text(AppLocalizations.of(context)!.signInWithDiscord),
+                      ],
+                    ),
+                    onPressed: () async {
+                      await signInWithDiscordFromMobile(context);
+                    },
+                  ),
+                ),
+                SizedBox(height: 16), // Espace entre les boutons
+                ButtonTheme(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      minimumSize: Size(240, 48),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.group_add, size: 24),
+                        SizedBox(width: 8),
+                        Text(AppLocalizations.of(context)!.guestMode),
+                      ],
+                    ),
+                    onPressed: () async {
+                      await signInInInviteMode(context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
