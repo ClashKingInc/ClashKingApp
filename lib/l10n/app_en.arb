@@ -4,6 +4,18 @@
 
     "signInWithDiscord" : "Sign In with Discord",
     "guestMode" : "Guest Mode",
+    "createGuestProfile" : "Create your guest profile",
+    "doesNotExist" : "does not exist.",
+    "isAlreadyLinked" : "is already linked to someone.",
+    "username" : "Username",
+    "pleaseEnterUsername" : "Please enter a username",
+    "playerTags" : "Player Tags",
+    "pleaseEnterPlayerTags" : "Please enter player tags",
+    "followingTagsDoNotExist" : "The following tags do not exist :",
+    "followingTagsAreAlreadyLinked" : "The following tags are already linked to someone :",
+    
+
+    "login" : "Login",
     "logout" : "Log out",
     "language" : "Language",
     "settings" : "Settings",
@@ -82,6 +94,7 @@
     "trophiesByMonth" : "Trophies by month",
     "eosTrophies" : "End Of Season Trophies",
 
+    "noClan" : "No clan",
     "clan" : "Clan",
     "clans" : "Clans",
     "members" : "Members",

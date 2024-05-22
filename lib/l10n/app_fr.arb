@@ -1,8 +1,21 @@
 {
     "@@locale": "fr",
     "creatorCode" : "Code créateur : ClashKing",
+
     "signInWithDiscord" : "Connexion avec Discord",
     "guestMode" : "Mode invité",
+    "createGuestProfile" : "Créer un profil invité",
+    "doesNotExist" : "n'existe pas.",
+    "isAlreadyLinked" : "est déjà lié à un compte.",
+    "username" : "Nom d'utilisateur",
+    "pleaseEnterUsername" : "Veuillez saisir un nom d'utilisateur",
+    "playerTags" : "Tags de joueur",
+    "pleaseEnterPlayerTags" : "Veuillez saisir un tag de joueur",
+    "followingTagsDoNotExist" : "Les tags suivants n'existent pas :",
+    "followingTagsAreAlreadyLinked" : "Les tags suivants sont déjà liés à un compte :",
+    
+
+    "login" : "Connexion",
     "logout" : "Déconnexion",
     "language" : "Langue",
     "settings" : "Paramètres",
@@ -81,6 +94,7 @@
     "trophiesByMonth" : "Trophées par mois",
     "eosTrophies" : "Trophées en fin de saison",
 
+    "noClan" : "Aucun clan",
     "clan" : "Clan",
     "clans" : "Clans",
     "members" : "Membres",

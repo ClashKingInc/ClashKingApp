@@ -8,6 +8,7 @@ import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
 import 'package:clashkingapp/api/cocdiscord_link_functions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GuestLoginPage extends StatefulWidget {
   final MyAppState appState;
@@ -83,9 +84,9 @@ class GuestLoginPageState extends State<GuestLoginPage> {
       String authToken = await login();
       String status = await checkIfPlayerTagExists(text, authToken, context);
       if (status == 'notExist') {
-        updateErrorMessage('$text does not exist');
+        updateErrorMessage('$text ${AppLocalizations.of(context)!.doesNotExist}');
       } else if (status == 'alreadyLinked') {
-        updateErrorMessage('$text is already linked');
+        updateErrorMessage('$text ${AppLocalizations.of(context)!.isAlreadyLinked}');
       } else {
         updateErrorMessage('');
       }
@@ -168,7 +169,7 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                         "https://clashkingfiles.b-cdn.net/logos/ClashKing-name-logo.png"),
               ),
               SizedBox(height: 32),
-              Text('Create your guest profile',
+              Text(AppLocalizations.of(context)!.createGuestProfile,
                   style: Theme.of(context).textTheme.titleLarge),
               Padding(
                 padding: EdgeInsets.all(32.0),
@@ -181,12 +182,12 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                         child: TextFormField(
                           controller: _usernameController,
                           decoration: InputDecoration(
-                            labelText: 'Username',
-                            hintText: 'Enter Username',
+                            labelText: AppLocalizations.of(context)!.username,
+                            hintText: AppLocalizations.of(context)!.username,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter a username';
+                              return AppLocalizations.of(context)!.pleaseEnterUsername;
                             }
                             return null;
                           },
@@ -198,10 +199,10 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                         child: ChipsInput<String>(
                           values: _tags,
                           decoration: _tags.isEmpty ? InputDecoration(
-                            labelText: 'Player Tags',
+                            labelText: AppLocalizations.of(context)!.playerTags,
                             hintText: '#2QVPCJJV',
                           ) : InputDecoration(
-                            labelText: 'Player Tags',
+                            labelText: AppLocalizations.of(context)!.playerTags,
                             floatingLabelBehavior: FloatingLabelBehavior.always
                           ),
                           strutStyle: StrutStyle(fontSize: 15),
@@ -271,16 +272,16 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                             } else {
                               if (!allTagsExist) {
                                 updateErrorMessage(
-                                    'The following tags do not exist : ${nonExistentTags.join(', ')}');
+                                    '${AppLocalizations.of(context)!.followingTagsDoNotExist} ${nonExistentTags.join(', ')}');
                               }
                               if (!allTagsNotLinked) {
                                 updateErrorMessage(
-                                    'The following tags are already linked : ${alreadyLinkedTags.join(', ')}');
+                                    '${AppLocalizations.of(context)!.followingTagsAreAlreadyLinked} ${alreadyLinkedTags.join(', ')}');
                               }
                             }
                           }
                         },
-                        child: Text('Save'),
+                        child: Text(AppLocalizations.of(context)!.login),
                       ),
                     ],
                   ),

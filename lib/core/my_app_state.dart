@@ -148,7 +148,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       selectedTag.value = user!.tags.first;
     }
 
-    // Fetch the new data
+    // Fetch the new data for playerStats, clanInfo and currentWarInfo
     if (selectedTag.value != null) {
       print("Selected tag: ${selectedTag.value}");
 
@@ -156,23 +156,27 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
           .firstWhere((element) => element.tag == selectedTag.value);
 
       if (playerStats?.clan != null) {
+
+        // Fetch the clan info from the clan tag
         clanInfo = playerAccounts?.clanInfo!
             .firstWhere((element) => element.tag == playerStats?.clan!.tag);
+          
+        // Save the clan tag in the shared preferences for the widget
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('clanTag', playerStats?.clan!.tag ?? '');
-      }
 
-      final response = await http.get(
-        Uri.parse(
-            'https://api.clashofclans.com/v1/clans/${playerStats?.tag.replaceAll('#', '%23')}/currentwar'),
-      );
+        // Fetch the current war info if the player is in war
+        final response = await http.get(
+          Uri.parse(
+              'https://api.clashofclans.com/v1/clans/${playerStats?.tag.replaceAll('#', '%23')}/currentwar'),
+        );
 
-      if (response.statusCode == 200) {
-        var decodedResponse = jsonDecode(response.body);
-        if (decodedResponse["state"] != "notInWar") {
-          // Correctly check the "state" field as a string
-          currentWarInfo = playerAccounts?.warInfo.firstWhere(
-              (element) => element.clan.tag == playerStats?.clan!.tag);
+        if (response.statusCode == 200) {
+          var decodedResponse = jsonDecode(response.body);
+          if (decodedResponse["state"] != "notInWar") {
+            currentWarInfo = playerAccounts?.warInfo.firstWhere(
+                (element) => element.clan.tag == playerStats?.clan!.tag);
+          }
         }
       }
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LegendHistoryCard extends StatelessWidget {
   const LegendHistoryCard({
@@ -61,7 +62,7 @@ class LegendHistoryCard extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Text("${item['clan']['name']}",
+                          Text("${item['clan']['name'] ?? AppLocalizations.of(context)!.noClan}",
                               style:
                                   Theme.of(context).textTheme.labelMedium),
                         ],
