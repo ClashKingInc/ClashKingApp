@@ -1,25 +1,24 @@
 import 'dart:async';
 
+import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
-import 'package:clashkingapp/core/my_home_page.dart';
 import 'package:clashkingapp/api/cocdiscord_link_functions.dart';
 
-class InviteLoginPage extends StatefulWidget {
-  final DiscordUser user;
+class GuestLoginPage extends StatefulWidget {
+  final MyAppState appState;
 
-  InviteLoginPage({required this.user});
+  GuestLoginPage({required this.appState});
 
   @override
-  InviteLoginPageState createState() => InviteLoginPageState();
+  GuestLoginPageState createState() => GuestLoginPageState();
 }
 
-class InviteLoginPageState extends State<InviteLoginPage> {
+class GuestLoginPageState extends State<GuestLoginPage> {
   final _formKey = GlobalKey<FormState>(); // Form key for managing form state
 
   // Controllers to manage text input
@@ -33,8 +32,8 @@ class InviteLoginPageState extends State<InviteLoginPage> {
   void initState() {
     super.initState();
     // Initialize controllers with existing user data if available
-    _usernameController.text = widget.user.globalName;
-    _tags = widget.user.tags; // Assuming tags are List<String>
+    _usernameController.text = "ILoveClashKing";
+    _tags = []; // Assuming tags are List<String>
   }
 
   @override
@@ -124,6 +123,9 @@ class InviteLoginPageState extends State<InviteLoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    String globalName = '';
+    List<String> tags = [];
+
     return WillPopScope(
       onWillPop: () async {
         final prefs = await SharedPreferences.getInstance();
@@ -188,7 +190,7 @@ class InviteLoginPageState extends State<InviteLoginPage> {
                             }
                             return null;
                           },
-                          onChanged: (value) => widget.user.globalName = value,
+                          onChanged: (value) => globalName = value,
                         ),
                       ),
                       Padding(
@@ -230,7 +232,7 @@ class InviteLoginPageState extends State<InviteLoginPage> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            widget.user.globalName = _usernameController.text;
+                            globalName = _usernameController.text;
 
                             String authToken = await login();
 
@@ -253,14 +255,17 @@ class InviteLoginPageState extends State<InviteLoginPage> {
                             }
                             if (allTagsExist && allTagsNotLinked) {
                               // Save the tags to the user object (assuming user is DiscordUser object)
-                              widget.user.tags = _tags;
+                              tags = _tags;
 
-                              print('UserTags: ${widget.user.tags}');
+                              final prefs = await SharedPreferences.getInstance();
+                              prefs.setString("user_type", "guest");
+                              prefs.setString('username', globalName);
+                              prefs.setStringList('tags', tags);
 
                               // Navigate to the next screen
                               globalNavigatorKey.currentState!.pushReplacement(
                                 MaterialPageRoute(
-                                  builder: (context) => MyHomePage(),
+                                  builder: (context) => StartupWidget(),
                                 ),
                               );
                             } else {

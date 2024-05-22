@@ -6,7 +6,7 @@ import 'package:clashkingapp/main_pages/clan_page/clan_page.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_league_page.dart';
 import 'package:clashkingapp/main_pages/management_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/core/my_app.dart';
+import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/components/app_bar/app_bar.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -72,14 +72,14 @@ class MyHomePageState extends State<MyHomePage> {
                   : Center(
                       child:
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
-              appState.clanInfo != null && appState.user != null
+              appState.user != null
                   ? ClanInfoPage(
-                      clanInfo: appState.clanInfo!, discordUser: appState.user!)
+                      clanInfo: appState.clanInfo, user: appState.user!)
                   : Center(
                       child:
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
               appState.user != null && appState.playerStats != null
-                ? CurrentWarInfoPage(discordUser: appState.user!, playerStats: appState.playerStats!, clanInfo: appState.clanInfo!)
+                ? CurrentWarInfoPage(discordUser: appState.user!, playerStats: appState.playerStats!, clanInfo: appState.clanInfo)
                 : Center(
                     child: CircularProgressIndicator(),
                   ), // Wrap CircularProgressIndicator with Center

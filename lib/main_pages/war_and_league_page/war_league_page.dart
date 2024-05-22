@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/current_league_info_page.dart';
-import 'package:clashkingapp/api/discord_user_info.dart';
+import 'package:clashkingapp/api/user_info.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/api/war_history.dart';
@@ -18,9 +18,9 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards
 import 'package:clashkingapp/api/wars_league_info.dart';
 
 class CurrentWarInfoPage extends StatefulWidget {
-  final ClanInfo clanInfo;
+  final ClanInfo? clanInfo;
   final PlayerAccountInfo playerStats;
-  final DiscordUser discordUser;
+  final User discordUser;
 
   CurrentWarInfoPage(
     {required this.discordUser,
@@ -41,8 +41,8 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   @override
   void initState() {
     super.initState();
-    warHistoryData = WarHistoryService.fetchWarHistoryData(widget.clanInfo.tag);
-    warLogData = WarLogService.fetchWarLogData(widget.clanInfo.tag);
+    warHistoryData = WarHistoryService.fetchWarHistoryData(widget.clanInfo!.tag);
+    warLogData = WarLogService.fetchWarLogData(widget.clanInfo!.tag);
     warLogData.then((data) {
       print("War Log Data Loaded: ${data.items.length} items");
       if (data.items.isNotEmpty) {
@@ -57,8 +57,8 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
       body: RefreshIndicator(
         onRefresh: () async {
           setState(() {
-            warHistoryData = WarHistoryService.fetchWarHistoryData(widget.clanInfo.tag);
-            warLogData = WarLogService.fetchWarLogData(widget.clanInfo.tag);
+            warHistoryData = WarHistoryService.fetchWarHistoryData(widget.clanInfo!.tag);
+            warLogData = WarLogService.fetchWarLogData(widget.clanInfo!.tag);
           });
         },
         child: FutureBuilder<String>(
@@ -91,7 +91,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                             padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                           child: CurrentWarInfoCard(
                             currentWarInfo: currentWarInfo!,
-                            clanTag: widget.clanInfo.tag),
+                            clanTag: widget.clanInfo!.tag),
                         ),
                       )
                     else if (warState == "accessDenied")
@@ -110,7 +110,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                               builder: (context) => CurrentLeagueInfoScreen(
                                 currentLeagueInfo: currentLeagueInfo!,
                                 clanTag: widget.playerStats.clan!.tag,
-                                clanInfo: widget.clanInfo,
+                                clanInfo: widget.clanInfo!,
                                 discordUser: widget.discordUser.tags,
                               ),
                             ),
@@ -119,7 +119,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                         child: CwlCard(
                           currentLeagueInfo: currentLeagueInfo!,
                           clanTag: widget.playerStats.clan!.tag,
-                          clanInfo: widget.clanInfo,
+                          clanInfo: widget.clanInfo!,
                         ),
                       )
                     else

@@ -1,7 +1,7 @@
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/core/my_app.dart';
-import 'package:clashkingapp/api/discord_user_info.dart';
+import 'package:clashkingapp/core/my_app_state.dart';
+import 'package:clashkingapp/api/user_info.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/creator_code_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_infos_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_legend_card.dart';
@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
   final PlayerAccountInfo playerStats;
-  final DiscordUser discordUser;
+  final User discordUser;
 
   DashboardPage({required this.playerStats, required this.discordUser});
 
