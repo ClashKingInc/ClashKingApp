@@ -39,8 +39,6 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   @override
   void initState() {
     super.initState();
-    warLogData = WarLogService.fetchWarLogData(widget.clanInfo.tag);
-    warHistoryData = WarHistoryService.fetchWarHistoryData(widget.clanInfo!.tag);
     warLogData = WarLogService.fetchWarLogData(widget.clanInfo!.tag);
     warLogData.then((data) {
       print("War Log Data Loaded: ${data.items.length} items");
@@ -56,8 +54,6 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
       body: RefreshIndicator(
         onRefresh: () async {
           setState(() {
-            warLogData = WarLogService.fetchWarLogData(widget.clanInfo.tag);
-            warHistoryData = WarHistoryService.fetchWarHistoryData(widget.clanInfo!.tag);
             warLogData = WarLogService.fetchWarLogData(widget.clanInfo!.tag);
           });
         },
