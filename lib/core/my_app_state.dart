@@ -180,6 +180,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
                 (element) => element.clan.tag == playerStats?.clan!.tag);
           }
         }
+      } else {
+        clanInfo = null;
       }
     }
     notifyListeners();
