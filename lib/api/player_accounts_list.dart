@@ -19,7 +19,7 @@ class PlayerAccounts {
 
     for (var item in json) {
       playerAccounts.add(PlayerAccountInfo.fromJson(item));
-      if (!item['clan'] == null) {
+      if (item['clan'] != null) {
         ClanInfo clan = ClanInfo.fromJson(item['clan']);
         clanInfo!.add(clan);
         CurrentWarInfo war =

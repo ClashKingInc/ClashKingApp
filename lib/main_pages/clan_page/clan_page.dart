@@ -1,16 +1,16 @@
-import 'package:clashkingapp/core/my_app.dart';
+import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_page/clan_info_page.dart';
-import 'package:clashkingapp/api/discord_user_info.dart';
+import 'package:clashkingapp/api/user_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/component/clan_info_card.dart';
 import 'package:provider/provider.dart';
 
 class ClanInfoPage extends StatefulWidget {
-  final ClanInfo clanInfo;
-  final DiscordUser discordUser;
+  final ClanInfo? clanInfo;
+  final User user;
 
-  ClanInfoPage({required this.clanInfo, required this.discordUser});
+  ClanInfoPage({required this.clanInfo, required this.user});
 
   @override
   ClanInfoPageState createState() => ClanInfoPageState();
@@ -30,19 +30,28 @@ class ClanInfoPageState extends State<ClanInfoPage>
       },
       child: ListView(
         children: <Widget>[
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ClanInfoScreen(clanInfo: widget.clanInfo, discordUser: widget.discordUser.tags)
-                ),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-              child: ClanInfoCard(clanInfo: widget.clanInfo)),
-          ),
+          if (widget.clanInfo != null)
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ClanInfoScreen(
+                          clanInfo: widget.clanInfo!,
+                          discordUser: widget.user.tags)),
+                );
+              },
+              child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                  child: ClanInfoCard(clanInfo: widget.clanInfo!)),
+            )
+          else
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                child: Card(
+                    child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text("No clan")))),
           // Add more cards as needed
         ],
       ),

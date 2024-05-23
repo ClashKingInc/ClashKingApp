@@ -22,7 +22,8 @@ class PlayerInfosCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => StatsScreen(playerStats: playerStats, discordUser: discordUser),
+            builder: (context) =>
+                StatsScreen(playerStats: playerStats, discordUser: discordUser),
           ),
         );
       },
@@ -41,7 +42,8 @@ class PlayerInfosCard extends StatelessWidget {
                         SizedBox(
                           height: 100,
                           width: 100,
-                          child: CachedNetworkImage(imageUrl: playerStats.townHallPic),
+                          child: CachedNetworkImage(
+                              imageUrl: playerStats.townHallPic),
                         ),
                         Text(
                           playerStats.name,
@@ -67,32 +69,42 @@ class PlayerInfosCard extends StatelessWidget {
                             spacing: 7.0,
                             runSpacing: -7.0,
                             children: <Widget>[
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  child: CachedNetworkImage(imageUrl: 
-                                      playerStats.clan!.badgeUrls.small),
+                              if (playerStats.clan != null)
+                                Chip(
+                                  avatar: CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    child: CachedNetworkImage(
+                                        imageUrl:
+                                            playerStats.clan!.badgeUrls.small),
+                                  ),
+                                  labelPadding:
+                                      EdgeInsets.only(left: 2.0, right: 2.0),
+                                  label: Text(
+                                    playerStats.clan!.name,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
                                 ),
-                                labelPadding:
-                                    EdgeInsets.only(left: 2.0, right: 2.0),
-                                label: Text(
-                                  playerStats.clan!.name,
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                              ),
                               Chip(
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
                                   child: playerStats.warPreference == 'in'
-                                      ? CachedNetworkImage(imageUrl: 
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png")
-                                      : CachedNetworkImage(imageUrl: 
-                                          'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png'),
+                                      ? CachedNetworkImage(
+                                          imageUrl:
+                                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png")
+                                      : CachedNetworkImage(
+                                          imageUrl:
+                                              'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png'),
                                 ),
-                                labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                labelPadding:
+                                    EdgeInsets.only(left: 2.0, right: 2.0),
                                 label: Text(
-                                  playerStats.warPreference == 'in' ? AppLocalizations.of(context)?.ready ?? 'Ready' : AppLocalizations.of(context)?.unready ?? 'Unready',
+                                  playerStats.warPreference == 'in'
+                                      ? AppLocalizations.of(context)?.ready ??
+                                          'Ready'
+                                      : AppLocalizations.of(context)?.unready ??
+                                          'Unready',
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
                               ),
@@ -100,7 +112,8 @@ class PlayerInfosCard extends StatelessWidget {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
-                                  child: CachedNetworkImage(imageUrl: playerStats.townHallPic),
+                                  child: CachedNetworkImage(
+                                      imageUrl: playerStats.townHallPic),
                                 ),
                                 label: Text('${playerStats.townHallLevel}',
                                     style:
@@ -111,7 +124,8 @@ class PlayerInfosCard extends StatelessWidget {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
-                                  child: CachedNetworkImage(imageUrl: playerStats.leagueUrl),
+                                  child: CachedNetworkImage(
+                                      imageUrl: playerStats.leagueUrl),
                                 ),
                                 label: Text('${playerStats.trophies}',
                                     style:
@@ -135,8 +149,8 @@ class PlayerInfosCard extends StatelessWidget {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
-                                  child:
-                                      CachedNetworkImage(imageUrl: playerStats.builderHallPic),
+                                  child: CachedNetworkImage(
+                                      imageUrl: playerStats.builderHallPic),
                                 ),
                                 label: Text('${playerStats.builderHallLevel}',
                                     style:
@@ -147,8 +161,9 @@ class PlayerInfosCard extends StatelessWidget {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
-                                  child: CachedNetworkImage(imageUrl: 
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
+                                  child: CachedNetworkImage(
+                                      imageUrl:
+                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
                                 ),
                                 label: Text(
                                     '${playerStats.builderBaseTrophies}',
@@ -160,8 +175,9 @@ class PlayerInfosCard extends StatelessWidget {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
-                                  child: CachedNetworkImage(imageUrl: 
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
+                                  child: CachedNetworkImage(
+                                      imageUrl:
+                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
                                 ),
                                 labelPadding:
                                     EdgeInsets.only(left: 2.0, right: 2.0),

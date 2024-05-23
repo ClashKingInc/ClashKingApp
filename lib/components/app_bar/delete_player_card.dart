@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/api/cocdiscord_link_functions.dart';
-import 'package:clashkingapp/api/discord_user_info.dart';
+import 'package:clashkingapp/api/user_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/core/my_app.dart';
+import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:provider/provider.dart';
 
 class DeletePlayerCard extends StatefulWidget {
-  final DiscordUser user;
+  final User user;
 
   const DeletePlayerCard({super.key, required this.user});
 

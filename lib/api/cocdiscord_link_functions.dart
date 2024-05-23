@@ -109,7 +109,6 @@ Future<bool> getLinks(
 Future<String> checkIfPlayerTagExists(
     String playerTag, String authToken, BuildContext context) async {
   playerTag = playerTag.replaceAll('#', '');
-  final playerTagNotExists = AppLocalizations.of(context)!.playerTagNotExists;
   final response = await http.get(
     Uri.parse('https://api.clashking.xyz/v1/clans/$playerTag'),
   );

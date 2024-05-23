@@ -1,25 +1,25 @@
 import 'dart:async';
 
+import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
-import 'package:clashkingapp/core/my_home_page.dart';
 import 'package:clashkingapp/api/cocdiscord_link_functions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class InviteLoginPage extends StatefulWidget {
-  final DiscordUser user;
+class GuestLoginPage extends StatefulWidget {
+  final MyAppState appState;
 
-  InviteLoginPage({required this.user});
+  GuestLoginPage({required this.appState});
 
   @override
-  InviteLoginPageState createState() => InviteLoginPageState();
+  GuestLoginPageState createState() => GuestLoginPageState();
 }
 
-class InviteLoginPageState extends State<InviteLoginPage> {
+class GuestLoginPageState extends State<GuestLoginPage> {
   final _formKey = GlobalKey<FormState>(); // Form key for managing form state
 
   // Controllers to manage text input
@@ -33,8 +33,8 @@ class InviteLoginPageState extends State<InviteLoginPage> {
   void initState() {
     super.initState();
     // Initialize controllers with existing user data if available
-    _usernameController.text = widget.user.globalName;
-    _tags = widget.user.tags; // Assuming tags are List<String>
+    _usernameController.text = "ILoveClashKing";
+    _tags = []; // Assuming tags are List<String>
   }
 
   @override
@@ -84,9 +84,9 @@ class InviteLoginPageState extends State<InviteLoginPage> {
       String authToken = await login();
       String status = await checkIfPlayerTagExists(text, authToken, context);
       if (status == 'notExist') {
-        updateErrorMessage('$text does not exist');
+        updateErrorMessage('$text ${AppLocalizations.of(context)!.doesNotExist}');
       } else if (status == 'alreadyLinked') {
-        updateErrorMessage('$text is already linked');
+        updateErrorMessage('$text ${AppLocalizations.of(context)!.isAlreadyLinked}');
       } else {
         updateErrorMessage('');
       }
@@ -124,6 +124,9 @@ class InviteLoginPageState extends State<InviteLoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    String globalName = '';
+    List<String> tags = [];
+
     return WillPopScope(
       onWillPop: () async {
         final prefs = await SharedPreferences.getInstance();
@@ -166,7 +169,7 @@ class InviteLoginPageState extends State<InviteLoginPage> {
                         "https://clashkingfiles.b-cdn.net/logos/ClashKing-name-logo.png"),
               ),
               SizedBox(height: 32),
-              Text('Create your guest profile',
+              Text(AppLocalizations.of(context)!.createGuestProfile,
                   style: Theme.of(context).textTheme.titleLarge),
               Padding(
                 padding: EdgeInsets.all(32.0),
@@ -179,16 +182,16 @@ class InviteLoginPageState extends State<InviteLoginPage> {
                         child: TextFormField(
                           controller: _usernameController,
                           decoration: InputDecoration(
-                            labelText: 'Username',
-                            hintText: 'Enter Username',
+                            labelText: AppLocalizations.of(context)!.username,
+                            hintText: AppLocalizations.of(context)!.username,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter a username';
+                              return AppLocalizations.of(context)!.pleaseEnterUsername;
                             }
                             return null;
                           },
-                          onChanged: (value) => widget.user.globalName = value,
+                          onChanged: (value) => globalName = value,
                         ),
                       ),
                       Padding(
@@ -196,10 +199,10 @@ class InviteLoginPageState extends State<InviteLoginPage> {
                         child: ChipsInput<String>(
                           values: _tags,
                           decoration: _tags.isEmpty ? InputDecoration(
-                            labelText: 'Player Tags',
+                            labelText: AppLocalizations.of(context)!.playerTags,
                             hintText: '#2QVPCJJV',
                           ) : InputDecoration(
-                            labelText: 'Player Tags',
+                            labelText: AppLocalizations.of(context)!.playerTags,
                             floatingLabelBehavior: FloatingLabelBehavior.always
                           ),
                           strutStyle: StrutStyle(fontSize: 15),
@@ -230,7 +233,7 @@ class InviteLoginPageState extends State<InviteLoginPage> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            widget.user.globalName = _usernameController.text;
+                            globalName = _usernameController.text;
 
                             String authToken = await login();
 
@@ -253,29 +256,32 @@ class InviteLoginPageState extends State<InviteLoginPage> {
                             }
                             if (allTagsExist && allTagsNotLinked) {
                               // Save the tags to the user object (assuming user is DiscordUser object)
-                              widget.user.tags = _tags;
+                              tags = _tags;
 
-                              print('UserTags: ${widget.user.tags}');
+                              final prefs = await SharedPreferences.getInstance();
+                              prefs.setString("user_type", "guest");
+                              prefs.setString('username', globalName);
+                              prefs.setStringList('tags', tags);
 
                               // Navigate to the next screen
                               globalNavigatorKey.currentState!.pushReplacement(
                                 MaterialPageRoute(
-                                  builder: (context) => MyHomePage(),
+                                  builder: (context) => StartupWidget(),
                                 ),
                               );
                             } else {
                               if (!allTagsExist) {
                                 updateErrorMessage(
-                                    'The following tags do not exist : ${nonExistentTags.join(', ')}');
+                                    '${AppLocalizations.of(context)!.followingTagsDoNotExist} ${nonExistentTags.join(', ')}');
                               }
                               if (!allTagsNotLinked) {
                                 updateErrorMessage(
-                                    'The following tags are already linked : ${alreadyLinkedTags.join(', ')}');
+                                    '${AppLocalizations.of(context)!.followingTagsAreAlreadyLinked} ${alreadyLinkedTags.join(', ')}');
                               }
                             }
                           }
                         },
-                        child: Text('Save'),
+                        child: Text(AppLocalizations.of(context)!.login),
                       ),
                     ],
                   ),

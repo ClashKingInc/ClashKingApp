@@ -51,7 +51,8 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
         }
         // Get the war info from SharedPreferences
         val warInfoJson = widgetData.getString("warInfo", null)
-        if (warInfoJson != null && warInfoJson != "notInWar") {
+        if (warInfoJson != "notInWar" && warInfoJson != null) {
+            print("War Info: $warInfoJson");
             // Parse the JSON string into a JSONObject
             val warInfo = JSONObject(warInfoJson)
 
