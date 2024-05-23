@@ -5,6 +5,7 @@ import 'package:clashkingapp/main_pages/clan_page/clan_info_page/clan_info_page.
 import 'package:clashkingapp/api/user_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/component/clan_info_card.dart';
 import 'package:provider/provider.dart';
+import 'package:clashkingapp/main_pages/clan_page/component/clan_search.dart';
 
 class ClanInfoPage extends StatefulWidget {
   final ClanInfo? clanInfo;
@@ -20,6 +21,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
     with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
+    print("clanInfo : ${widget.clanInfo}");
     return Scaffold(
         body: RefreshIndicator(
       onRefresh: () async {
@@ -30,6 +32,10 @@ class ClanInfoPageState extends State<ClanInfoPage>
       },
       child: ListView(
         children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+            child: ClanSearch(),
+          ),
           if (widget.clanInfo != null)
             GestureDetector(
               onTap: () {
