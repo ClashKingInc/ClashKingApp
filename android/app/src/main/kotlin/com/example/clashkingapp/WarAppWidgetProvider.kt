@@ -55,8 +55,6 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
         if (warInfoJson != null) {
             val warInfo = JSONObject(warInfoJson)
             val state = warInfo.getString("state")
-            print("War Info: $warInfoJson")
-            println("State: $state")
             val updatedTime = warInfo.optString("updatedAt", "")
             views.setTextViewText(R.id.text_update_time, updatedTime)
             when (state) {
@@ -178,6 +176,8 @@ fun setWidgetText(views: RemoteViews, stateText: String) {
     ).forEach {
         views.setTextViewText(it, "")
     }
+    views.setImageViewBitmap(R.id.clan_flag, null)
+    views.setImageViewBitmap(R.id.opponent_flag, null)
 }
 
 data class ClanOrOpponentDetails(
