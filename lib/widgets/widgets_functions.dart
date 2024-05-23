@@ -5,12 +5,22 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/api/current_league_info.dart';
 
-
 // Get the current war data for a clan
-Future<String> checkCurrentWar(String clanTag) async {
+Future<String> checkCurrentWar(String? clanTag) async {
   CurrentWarInfo? currentWarInfo;
   String time = "";
   int multiplicator = 2;
+  print("checkcurrentwar called");
+
+  if (clanTag == null || clanTag.isEmpty) {
+    print("No clan to check war for");
+    var result = {
+      "updatedAt": "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
+      "timeState": time,
+      "state": "notInClan"
+    };
+    return jsonEncode(result);
+  }
   print("Checking current war for $clanTag");
 
   final responseWar = await http.get(
@@ -118,6 +128,7 @@ Future<String> checkCurrentWar(String clanTag) async {
     }
 
     var result = {
+      "state": currentWarInfo?.state ?? "error",
       "updatedAt": "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
       "timeState": time,
       "score": currentWarInfo?.state == "preparation"

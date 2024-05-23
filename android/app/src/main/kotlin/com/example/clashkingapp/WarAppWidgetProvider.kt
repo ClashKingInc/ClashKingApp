@@ -51,63 +51,54 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
         }
         // Get the war info from SharedPreferences
         val warInfoJson = widgetData.getString("warInfo", null)
-        if (warInfoJson != "notInWar" && warInfoJson != null) {
-            print("War Info: $warInfoJson");
-            // Parse the JSON string into a JSONObject
+
+        if (warInfoJson != null) {
             val warInfo = JSONObject(warInfoJson)
-
-            // Get score
-            val score = warInfo.optString("score", "")
-
-            // Get war status
-            val warStatus = warInfo.optString("timeState", "notInWar")
-
-            // Get updated time
+            val state = warInfo.getString("state")
+            print("War Info: $warInfoJson")
+            println("State: $state")
             val updatedTime = warInfo.optString("updatedAt", "")
-
-            // Get the clan and opponent info
-            val clanInfo = warInfo.getJSONObject("clan")
-            val opponentInfo = warInfo.getJSONObject("opponent")
-
-            // Get the clan details
-            val clanName = clanInfo.optString("name", "Unknown Clan")
-            val clanBadgeUrlMedium = clanInfo.optString(
-                "badgeUrlMedium",
-                "https://clashkingfiles.b-cdn.net/clashkinglogo.png"
-            )
-            val clanPercent = clanInfo.optString("percent", "0%")
-            val clanAttacks = clanInfo.optString("attacks", "0/0")
-
-            // Get the opponent details
-            val opponentName = opponentInfo.optString("name", "Unknown Opponent")
-            val opponentBadgeUrlMedium = opponentInfo.optString(
-                "badgeUrlMedium",
-                "https://clashkingfiles.b-cdn.net/clashkinglogo.png"
-            )
-            val opponentPercent = opponentInfo.optString("percent", "0%")
-            val opponentAttacks = opponentInfo.optString("attacks", "0/0")
-
-            // Set the clan and opponent details to the views
-            views.setTextViewText(R.id.clan_name, clanName)
-            views.setTextViewText(R.id.opponent_name, opponentName)
-            views.setTextViewText(R.id.text_score, score)
-            views.setTextViewText(R.id.text_state, warStatus)
-            views.setTextViewText(R.id.clan_percent, clanPercent.toString())
-            views.setTextViewText(R.id.clan_attacks, clanAttacks.toString())
-            views.setTextViewText(R.id.opponent_percent, opponentPercent.toString())
-            views.setTextViewText(R.id.opponent_attacks, opponentAttacks.toString())
             views.setTextViewText(R.id.text_update_time, updatedTime)
+            when (state) {
+                "notInWar" -> {
+                    println("Not in War")
+                    setWidgetText(views, "You're currently not in War.")
+                }
 
-            // Load the images from the URLs into the ImageViews
-            Thread {
-                val clanBitmap = downloadBitmap(clanBadgeUrlMedium)
-                val opponentBitmap = downloadBitmap(opponentBadgeUrlMedium)
-                views.setImageViewBitmap(R.id.clan_flag, clanBitmap)
-                views.setImageViewBitmap(R.id.opponent_flag, opponentBitmap)
-                appWidgetManager.updateAppWidget(appWidgetId, views)
-            }.start()
-        } else {
-            views.setTextViewText(R.id.text_state, "You're currently not in War.")
+                "notInClan" -> {
+                    println("Not in Clan")
+                    setWidgetText(views, "You're currently not in a Clan.")
+                }
+
+                "error" -> {
+                    println("Error")
+                    setWidgetText(views, "An error occurred while fetching data.")
+                }
+
+                else -> {
+
+                    val score = warInfo.optString("score", "")
+                    val warStatus = warInfo.optString("timeState", "notInWar")
+
+                    val clanInfo = warInfo.getJSONObject("clan")
+                    val opponentInfo = warInfo.getJSONObject("opponent")
+
+                    val clanDetails = getClanOrOpponentDetails(clanInfo)
+                    val opponentDetails = getClanOrOpponentDetails(opponentInfo)
+
+                    views.setTextViewText(R.id.text_score, score)
+                    views.setTextViewText(R.id.text_state, warStatus)
+                    setDetailsToViews(views, clanDetails, opponentDetails)
+
+                    Thread {
+                        val clanBitmap = downloadBitmap(clanDetails.badgeUrl)
+                        val opponentBitmap = downloadBitmap(opponentDetails.badgeUrl)
+                        views.setImageViewBitmap(R.id.clan_flag, clanBitmap)
+                        views.setImageViewBitmap(R.id.opponent_flag, opponentBitmap)
+                        appWidgetManager.updateAppWidget(appWidgetId, views)
+                    }.start()
+                }
+            }
         }
 
         // Update the widget when the refresh icon is clicked
@@ -133,7 +124,10 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (intent.action == ACTION_UPDATE_WIDGET) {
-            val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+            val appWidgetId = intent.getIntExtra(
+                AppWidgetManager.EXTRA_APPWIDGET_ID,
+                AppWidgetManager.INVALID_APPWIDGET_ID
+            )
             val views = RemoteViews(context.packageName, R.layout.widget_layout)
             views.setTextViewText(R.id.text_update_time, "Updating...")
             AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, views)
@@ -167,4 +161,53 @@ private fun downloadBitmap(url: String): Bitmap? {
 private fun getPendingIntent(context: Context): PendingIntent {
     val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
     return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+}
+
+
+fun setWidgetText(views: RemoteViews, stateText: String) {
+    views.setTextViewText(R.id.text_state, stateText)
+    listOf(
+        R.id.clan_name,
+        R.id.opponent_name,
+        R.id.text_score,
+        R.id.clan_percent,
+        R.id.clan_attacks,
+        R.id.opponent_percent,
+        R.id.opponent_attacks,
+        R.id.text_update_time
+    ).forEach {
+        views.setTextViewText(it, "")
+    }
+}
+
+data class ClanOrOpponentDetails(
+    val name: String,
+    val badgeUrl: String,
+    val percent: String,
+    val attacks: String
+)
+
+fun getClanOrOpponentDetails(info: JSONObject): ClanOrOpponentDetails {
+    return ClanOrOpponentDetails(
+        name = info.optString("name", "Unknown"),
+        badgeUrl = info.optString(
+            "badgeUrlMedium",
+            "https://clashkingfiles.b-cdn.net/clashkinglogo.png"
+        ),
+        percent = info.optString("percent", "0%"),
+        attacks = info.optString("attacks", "0/0")
+    )
+}
+
+fun setDetailsToViews(
+    views: RemoteViews,
+    clanDetails: ClanOrOpponentDetails,
+    opponentDetails: ClanOrOpponentDetails
+) {
+    views.setTextViewText(R.id.clan_name, clanDetails.name)
+    views.setTextViewText(R.id.clan_percent, clanDetails.percent)
+    views.setTextViewText(R.id.clan_attacks, clanDetails.attacks)
+    views.setTextViewText(R.id.opponent_name, opponentDetails.name)
+    views.setTextViewText(R.id.opponent_percent, opponentDetails.percent)
+    views.setTextViewText(R.id.opponent_attacks, opponentDetails.attacks)
 }

@@ -36,7 +36,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       selectedTag.value ??= user!.tags.first;
     }
     selectedTag.addListener(reloadData);
-    selectedTag.addListener(updateWidgets);
+    //selectedTag.addListener(updateWidgets);
 
     _loadLanguage(); // Load the language from the shared preferences
 
@@ -84,28 +84,23 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   // Update the war widget
   Future<void> updateWarWidget() async {
-    if (clanTag == null) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      clanTag = prefs.getString('clanTag');
-    }
-    if (clanTag != null) {
-      final warInfo = await checkCurrentWar(clanTag!);
-      print("War info: $warInfo");
-      // Send data to the widget
-      await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
-      // Request the Home Widget to update
-      await HomeWidget.updateWidget(
-        name: 'WarAppWidgetProvider',
-        androidName: 'WarAppWidgetProvider',
-      );
-    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    clanTag = prefs.getString('clanTag');
+    final warInfo = await checkCurrentWar(clanTag);
+    print("War info: $warInfo");
+    // Send data to the widget
+    await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
+    // Request the Home Widget to update
+    await HomeWidget.updateWidget(
+      name: 'WarAppWidgetProvider',
+      androidName: 'WarAppWidgetProvider',
+    );
   }
 
   // Update the widgets
   void updateWidgets() async {
-    if (clanTag != null) {
-      await updateWarWidget();
-    }
+    print("Updating widgets");
+    await updateWarWidget();
   }
 
   /* User management */
@@ -155,15 +150,22 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       playerStats = playerAccounts?.playerAccountInfo
           .firstWhere((element) => element.tag == selectedTag.value);
 
-      if (playerStats?.clan != null) {
+      // Save the clan tag in the shared preferences for the widget
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (playerStats != null && playerStats?.clan != null) {
+        await prefs.setString('clanTag', playerStats!.clan!.tag);
+        print("Clan tag: ${playerStats!.clan!.tag}");
+      } else {
+        print('playerStats or playerStats.clan is null');
+        await prefs.setString('clanTag', '');
+        print("no clan tag");
+      }
+      updateWidgets();
 
+      if (playerStats?.clan != null) {
         // Fetch the clan info from the clan tag
         clanInfo = playerAccounts?.clanInfo!
             .firstWhere((element) => element.tag == playerStats?.clan!.tag);
-          
-        // Save the clan tag in the shared preferences for the widget
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('clanTag', playerStats?.clan!.tag ?? '');
 
         // Fetch the current war info if the player is in war
         final response = await http.get(
