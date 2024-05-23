@@ -8,10 +8,9 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_history/componen
 class WarHistoryScreen extends StatefulWidget {
   final String clanTag;
   final List<String> discordUser;
-  final List<dynamic> warHistoryData;
   final List<WarLogDetails> warLogData;
 
-  WarHistoryScreen({super.key, required this.clanTag, required this.discordUser, required this.warHistoryData, required this.warLogData});
+  WarHistoryScreen({super.key, required this.clanTag, required this.discordUser, required this.warLogData});
 
   @override
   WarHistoryScreenState createState() => WarHistoryScreenState();
@@ -43,7 +42,6 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
         child: Column(
           children: [
             WarHistoryHeader(
-              warHistoryData: widget.warHistoryData,
               discordUser: widget.discordUser,
             ),
             ScrollableTab(
@@ -62,7 +60,6 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
                   child: Column(
                     children: [
                       WarLogHistoryCard(
-                        warHistoryData: widget.warHistoryData,
                         discordUser: widget.discordUser,
                         clanTag: widget.clanTag,
                         warLogData: widget.warLogData,

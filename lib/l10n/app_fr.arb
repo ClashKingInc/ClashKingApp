@@ -126,6 +126,7 @@
     "askForWarLogOpening" : "Contactez un chef ou un adjoint pour ouvrir le journal de guerre.",
     "warLogClosed" : "Le journal de guerre est privé.",
     "rounds" : "Tours",
+    "noDataAvailableForThisWar" : "Aucune donnée disponible pour cette guerre",
 
     "stateOfTheWar" : "État de la guerre",
     "stillNeedsToWin" : "doit encore gagner",

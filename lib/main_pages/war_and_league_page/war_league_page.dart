@@ -7,7 +7,6 @@ import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_le
 import 'package:clashkingapp/api/discord_user_info.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/api/clan_info.dart';
-import 'package:clashkingapp/api/war_history.dart';
 import 'package:clashkingapp/api/war_log.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -35,13 +34,11 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   CurrentWarInfo? currentWarInfo;
   CurrentLeagueInfo? currentLeagueInfo;
   List<Map<int, List<WarLeagueInfo>>> warLeagueInfoByRound = [];
-  late Future<List<dynamic>> warHistoryData;
   late Future<WarLog> warLogData;
 
   @override
   void initState() {
     super.initState();
-    warHistoryData = WarHistoryService.fetchWarHistoryData(widget.clanInfo.tag);
     warLogData = WarLogService.fetchWarLogData(widget.clanInfo.tag);
     warLogData.then((data) {
       print("War Log Data Loaded: ${data.items.length} items");
@@ -57,7 +54,6 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
       body: RefreshIndicator(
         onRefresh: () async {
           setState(() {
-            warHistoryData = WarHistoryService.fetchWarHistoryData(widget.clanInfo.tag);
             warLogData = WarLogService.fetchWarLogData(widget.clanInfo.tag);
           });
         },
@@ -143,18 +139,16 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
 
   Widget buildWarHistorySection() {
   return FutureBuilder<List<dynamic>>(
-    future: Future.wait([warHistoryData, warLogData.then((value) => value.items)]),
+    future: Future.wait([warLogData.then((value) => value.items)]),
     builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return Center(child: CircularProgressIndicator());
       } else if (snapshot.hasError) {
         return Text('Error: ${snapshot.error}');
       } else if (snapshot.hasData) {
-        List<dynamic> warHistory = snapshot.data![0];
-        List<WarLogDetails> warLogDetails = snapshot.data![1] as List<WarLogDetails>;
+        List<WarLogDetails> warLogDetails = snapshot.data![0] as List<WarLogDetails>;
 
         return WarHistoryCard(
-          warHistoryData: warHistory,
           warLogData: warLogDetails,
           playerStats: widget.playerStats,
           discordUser: widget.discordUser.tags,

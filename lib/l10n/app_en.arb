@@ -127,6 +127,7 @@
     "askForWarLogOpening" : "Contact a leader or a co-leader to open the war log.",
     "warLogClosed" : "War log closed.",
     "rounds" : "Rounds",
+    "noDataAvailableForThisWar" : "No data available for this war",
 
     "stateOfTheWar" : "State of the war",
     "stillNeedsToWin" : "still needs to win",
