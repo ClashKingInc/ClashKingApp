@@ -55,21 +55,21 @@ class DashboardPageState extends State<DashboardPage>
           children: <Widget>[
             // Creator Code Card
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              padding: EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0),
               child: CreatorCodeCard(),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              padding: EdgeInsets.only(left: 8.0, right: 8.0),
               child: PlayerSearchCard(discordUser: widget.discordUser.tags),
             ),
             // Player Infos Card
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              padding: EdgeInsets.only(left: 8.0, right: 8.0),
               child: PlayerInfosCard(playerStats: widget.playerStats, discordUser: widget.discordUser.tags),
             ),
             // Legend Infos Card : Displayed only if data
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              padding: EdgeInsets.only(left: 8.0, right: 8.0),
               child: FutureBuilder<PlayerLegendData>(
                 future: legendData,
                 builder: (BuildContext context,
