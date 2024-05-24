@@ -47,6 +47,7 @@
     
     "search" : "Rechercher",
     "tagOrNamePlayer" : "Tag ou nom du joueur", 
+    "searchPlayer" : "Rechercher un joueur",
 
     "dashboard" : "Profil",
     "homeBase" : "Village principal",

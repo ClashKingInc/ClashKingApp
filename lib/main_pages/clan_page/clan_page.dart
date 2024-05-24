@@ -37,7 +37,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
           child: ListView(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: ClanSearch(discordUser: widget.user.tags),
               ),
               if (widget.clanInfo != null)
@@ -53,13 +53,13 @@ class ClanInfoPageState extends State<ClanInfoPage>
                   },
                   child: Padding(
                       padding:
-                          EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                          EdgeInsets.symmetric(horizontal: 8.0),
                       child: ClanInfoCard(clanInfo: widget.clanInfo!)),
                 )
               else
                 Padding(
                     padding:
-                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                        EdgeInsets.symmetric(horizontal: 8.0),
                     child: Card(
                         child: Padding(
                             padding: const EdgeInsets.all(16.0),

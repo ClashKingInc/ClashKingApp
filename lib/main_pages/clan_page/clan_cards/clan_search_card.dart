@@ -82,10 +82,11 @@ class ClanSearchState extends State<ClanSearch> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: TextField(
               controller: _controller,
               decoration: InputDecoration(
+                border: InputBorder.none,
                 labelText: AppLocalizations.of(context)!.searchClan,
                 suffixIcon: IntrinsicWidth(
                   child: Row(

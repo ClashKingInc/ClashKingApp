@@ -41,56 +41,64 @@ class DashboardPageState extends State<DashboardPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () async {
-          setState(() {
-            final appState = Provider.of<MyAppState>(context, listen: false);
-            appState.refreshData();
-            PlayerLegendService playerLegendService = PlayerLegendService();
-            legendData = playerLegendService.fetchLegendData(widget.playerStats.tag);
-          });
-        },
-        child: ListView(
-          children: <Widget>[
-            // Creator Code Card
-            Padding(
-              padding: EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0),
-              child: CreatorCodeCard(),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 8.0, right: 8.0),
-              child: PlayerSearchCard(discordUser: widget.discordUser.tags),
-            ),
-            // Player Infos Card
-            Padding(
-              padding: EdgeInsets.only(left: 8.0, right: 8.0),
-              child: PlayerInfosCard(playerStats: widget.playerStats, discordUser: widget.discordUser.tags),
-            ),
-            // Legend Infos Card : Displayed only if data
-            Padding(
-              padding: EdgeInsets.only(left: 8.0, right: 8.0),
-              child: FutureBuilder<PlayerLegendData>(
-                future: legendData,
-                builder: (BuildContext context,
-                    AsyncSnapshot<PlayerLegendData> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return SizedBox.shrink();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    if (snapshot.data!.legendData.isNotEmpty) {
-                      return PlayerLegendCard(
-                          playerStats: widget.playerStats,
-                          playerLegendData: snapshot.data!);
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  }
-                },
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: RefreshIndicator(
+          onRefresh: () async {
+            setState(() {
+              final appState = Provider.of<MyAppState>(context, listen: false);
+              appState.refreshData();
+              PlayerLegendService playerLegendService = PlayerLegendService();
+              legendData =
+                  playerLegendService.fetchLegendData(widget.playerStats.tag);
+            });
+          },
+          child: ListView(
+            children: <Widget>[
+              // Creator Code Card
+              Padding(
+                padding: EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0),
+                child: CreatorCodeCard(),
               ),
-            ),
-          ],
+              Padding(
+                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                child: PlayerSearchCard(discordUser: widget.discordUser.tags),
+              ),
+              // Player Infos Card
+              Padding(
+                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                child: PlayerInfosCard(
+                    playerStats: widget.playerStats,
+                    discordUser: widget.discordUser.tags),
+              ),
+              // Legend Infos Card : Displayed only if data
+              Padding(
+                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                child: FutureBuilder<PlayerLegendData>(
+                  future: legendData,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<PlayerLegendData> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return SizedBox.shrink();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      if (snapshot.data!.legendData.isNotEmpty) {
+                        return PlayerLegendCard(
+                            playerStats: widget.playerStats,
+                            playerLegendData: snapshot.data!);
+                      } else {
+                        return SizedBox.shrink();
+                      }
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

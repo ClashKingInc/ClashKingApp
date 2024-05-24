@@ -47,6 +47,7 @@
 
     "search" : "Search",
     "tagOrNamePlayer" : "Player's tag or name",
+    "searchPlayer" : "Search player",
     
     "dashboard" : "Dashboard",
     "homeBase" : "Home Base",
