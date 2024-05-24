@@ -27,11 +27,7 @@ Future<String> login() async {
 }
 
 Future<bool> addLink(String playerTag, String discordId, String authToken,
-    Function updateErrorMessage, BuildContext context) async {
-  final playerTagNotExists = AppLocalizations.of(context)!.playerTagNotExists;
-  final accountAlreadyLinked =
-      AppLocalizations.of(context)!.accountAlreadyLinked;
-  final failedToAddTryAgain = AppLocalizations.of(context)!.failedToAddTryAgain;
+    Function updateErrorMessage, String playerTagNotExists, String accountAlreadyLinked, String failedToAddTryAgain) async {
 
   final url = Uri.parse('https://cocdiscord.link/links');
   final response = await http.post(
@@ -88,7 +84,7 @@ Future<bool> deleteLink(String playerTag, String authToken,
 }
 
 Future<bool> getLinks(
-    String playerTag, String authToken, BuildContext context) async {
+    String playerTag, String authToken) async {
   playerTag = playerTag.replaceAll('#', '');
   final url = Uri.parse('https://cocdiscord.link/links/$playerTag');
   final response = await http.get(
@@ -114,7 +110,7 @@ Future<String> checkIfPlayerTagExists(
   );
 
   if (response.statusCode == 200) {
-    if (await getLinks(playerTag, authToken, context)) {
+    if (await getLinks(playerTag, authToken)) {
       return "Ok";
     } else {
       return "alreadyLinked";

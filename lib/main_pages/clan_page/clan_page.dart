@@ -22,45 +22,53 @@ class ClanInfoPageState extends State<ClanInfoPage>
   @override
   Widget build(BuildContext context) {
     print("clanInfo : ${widget.clanInfo}");
-    return Scaffold(
-        body: RefreshIndicator(
-      onRefresh: () async {
-        setState(() {
-          final appState = Provider.of<MyAppState>(context, listen: false);
-          appState.refreshData();
-        });
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
       },
-      child: ListView(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-            child: ClanSearch(),
+      child: Scaffold(
+        body: RefreshIndicator(
+          onRefresh: () async {
+            setState(() {
+              final appState = Provider.of<MyAppState>(context, listen: false);
+              appState.refreshData();
+            });
+          },
+          child: ListView(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
+                child: ClanSearch(discordUser: widget.user.tags),
+              ),
+              if (widget.clanInfo != null)
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ClanInfoScreen(
+                              clanInfo: widget.clanInfo!,
+                              discordUser: widget.user.tags)),
+                    );
+                  },
+                  child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                      child: ClanInfoCard(clanInfo: widget.clanInfo!)),
+                )
+              else
+                Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                    child: Card(
+                        child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text("No clan")))),
+              // Add more cards as needed
+            ],
           ),
-          if (widget.clanInfo != null)
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ClanInfoScreen(
-                          clanInfo: widget.clanInfo!,
-                          discordUser: widget.user.tags)),
-                );
-              },
-              child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                  child: ClanInfoCard(clanInfo: widget.clanInfo!)),
-            )
-          else
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                child: Card(
-                    child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text("No clan")))),
-          // Add more cards as needed
-        ],
+        ),
       ),
-    ));
+    );
   }
 }

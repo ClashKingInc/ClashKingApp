@@ -273,6 +273,7 @@ class BuilderBaseLeague{
 
 // Service class to fetch clan info
 class ClanService {
+  
   Future<void> initEnv() async {
     await dotenv.load(fileName: ".env");
   }

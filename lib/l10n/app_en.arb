@@ -94,7 +94,12 @@
     "trophiesByMonth" : "Trophies by month",
     "eosTrophies" : "End Of Season Trophies",
 
+    "searchClan" : "Search clan",
+    "noResult" : "No result",
+    "filters" : "Filters",
     "noClan" : "No clan",
+    "apply" : "Apply",
+    "cancel" : "Cancel",
     "clan" : "Clan",
     "clans" : "Clans",
     "members" : "Members",
@@ -155,5 +160,7 @@
     "neededOverall" : "% Needed overall",
     "calculate" : "Calculate",
 
-    "management" : "Management"
+    "management" : "Management",
+
+    "comingSoon" : "Coming soon !"
 }

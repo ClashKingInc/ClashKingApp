@@ -27,6 +27,11 @@ class AddPlayerCardState extends State<AddPlayerCard> {
 
   @override
   Widget build(BuildContext context) {
+    final playerTagNotExists = AppLocalizations.of(context)!.playerTagNotExists;
+    final accountAlreadyLinked =
+        AppLocalizations.of(context)!.accountAlreadyLinked;
+    final failedToAddTryAgain =
+        AppLocalizations.of(context)!.failedToAddTryAgain;
     return Column(
       children: [
         SizedBox(height: 30),
@@ -75,8 +80,14 @@ class AddPlayerCardState extends State<AddPlayerCard> {
             String token = await login();
             String playerTag = controller.text;
             if (widget.user.isDiscordUser) {
-              final success = await addLink(playerTag, widget.user.id, token,
-                  updateErrorMessage, context);
+              final success = await addLink(
+                  playerTag,
+                  widget.user.id,
+                  token,
+                  updateErrorMessage,
+                  playerTagNotExists,
+                  accountAlreadyLinked,
+                  failedToAddTryAgain);
               if (success) {
                 myAppState.reloadUsersAccounts();
               }

@@ -158,7 +158,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       } else {
         print('playerStats or playerStats.clan is null');
         await prefs.setString('clanTag', '');
-        print("no clan tag");
       }
       updateWidgets();
 

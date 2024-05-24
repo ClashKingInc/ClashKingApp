@@ -65,6 +65,7 @@ class MyHomePageState extends State<MyHomePage> {
           } else {
             print('User: ${appState.playerAccounts}');
             print('PlayerStats: ${appState.playerStats}');
+            print("ClanInfo : ${appState.clanInfo}");
             List<Widget> widgetOptions = [
               appState.playerAccounts != null && appState.playerStats != null
                   ? DashboardPage(
