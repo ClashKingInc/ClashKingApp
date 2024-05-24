@@ -62,7 +62,8 @@ class ClanInfoPageState extends State<ClanInfoPage>
                   child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Text(AppLocalizations.of(context)!.noClan, textAlign: TextAlign.center),
+                      child: Text(AppLocalizations.of(context)!.noClan,
+                          textAlign: TextAlign.center),
                     ),
                   ),
                 ),

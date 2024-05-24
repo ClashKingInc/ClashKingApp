@@ -141,6 +141,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                         clanName: widget.playerStats.clan!.name,
                         clanBadgeUrl: widget.playerStats.clan!.badgeUrls.large),
                   ),
+                if (warState != "noClan")
                 buildWarHistorySection()
               ],
             );
