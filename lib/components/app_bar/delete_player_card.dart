@@ -35,6 +35,10 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
 
   @override
   Widget build(BuildContext context) {
+    final failedToDeleteTryAgain =
+        AppLocalizations.of(context)!.failedToDeleteTryAgain;
+    var myAppState = Provider.of<MyAppState>(context, listen: false);
+
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(children: [
@@ -89,11 +93,10 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
               String token = await login();
               String playerTag = _dropdownValue!;
               if (widget.user.isDiscordUser) {
-                final success = await deleteLink(
-                    playerTag, token, updateErrorMessage, context);
-                if (success) {
-                  Provider.of<MyAppState>(context, listen: false)
-                      .reloadUsersAccounts();
+                final success = await deleteLink(playerTag, token,
+                    updateErrorMessage, failedToDeleteTryAgain);
+                if (success && mounted) {
+                  myAppState.reloadUsersAccounts();
                 }
                 if (errorMessage.isEmpty) {
                   navigator.pop();
@@ -101,8 +104,7 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
               } else {
                 widget.user.tags.remove(playerTag);
                 print('User tags: ${widget.user.tags}');
-                Provider.of<MyAppState>(context, listen: false)
-                    .reloadUsersAccounts();
+                myAppState.reloadUsersAccounts();
                 navigator.pop();
               }
             },

@@ -1,11 +1,11 @@
 import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/clan_info.dart';
-import 'package:clashkingapp/main_pages/clan_page/clan_info_page/clan_info_page.dart';
+import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
 import 'package:clashkingapp/api/user_info.dart';
-import 'package:clashkingapp/main_pages/clan_page/component/clan_info_card.dart';
+import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_info_card.dart';
 import 'package:provider/provider.dart';
-import 'package:clashkingapp/main_pages/clan_page/component/clan_search.dart';
+import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_search_card.dart';
 
 class ClanInfoPage extends StatefulWidget {
   final ClanInfo? clanInfo;

@@ -3,7 +3,7 @@ import 'package:clashkingapp/api/clan_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:clashkingapp/main_pages/clan_page/clan_info_page/components/clan_wars_stats_card.dart';
+import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/components/clan_wars_stats_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ClanInfoHeaderCard extends StatefulWidget {

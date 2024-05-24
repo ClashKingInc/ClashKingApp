@@ -116,9 +116,11 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   Future<void> _logOut() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    final appState = Provider.of<MyAppState>(context, listen: false);
-    globalNavigatorKey.currentState?.pushReplacement(
-      MaterialPageRoute(builder: (context) => LoginPage(appState: appState)),
-    );
+    if (mounted) {
+      final appState = Provider.of<MyAppState>(context, listen: false);
+      globalNavigatorKey.currentState?.pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginPage(appState: appState)),
+      );
+    }
   }
 }

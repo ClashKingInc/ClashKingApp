@@ -79,7 +79,7 @@ class GuestLoginPageState extends State<GuestLoginPage> {
   void _onSubmitted(String text) async {
     if (text.trim().isNotEmpty) {
       if (!text.startsWith('#')) {
-        text = '#' + text;
+        text = '#$text';
       }
       String authToken = await login();
       String status = await checkIfPlayerTagExists(text, authToken, context);

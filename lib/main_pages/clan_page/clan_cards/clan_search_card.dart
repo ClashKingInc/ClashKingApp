@@ -20,6 +20,7 @@ class ClanSearchState extends State<ClanSearch> {
   bool isSearching = false;
   bool isEmpty = true;
   Timer? _debounce;
+  String lastSearch = '';
 
   @override
   void initState() {
@@ -39,18 +40,20 @@ class ClanSearchState extends State<ClanSearch> {
     isEmpty = _controller.text.isEmpty;
 
     _debounce = Timer(const Duration(seconds: 1), () {
-      if (!isEmpty) {
-        setState(() {
-          print('Searching to true');
-          isSearching = true;
+      if (_controller.text != lastSearch) {
+        if (!isEmpty) {
+          setState(() {
+            isSearching = true;
+          });
+        }
+        _searchResults = _searchClans(_controller.text);
+        _searchResults!.whenComplete(() {
+          setState(() {
+            isSearching = false;
+          });
         });
+        lastSearch = _controller.text;
       }
-      _searchResults = _searchClans(_controller.text);
-      _searchResults!.whenComplete(() {
-        setState(() {
-          isSearching = false;
-        });
-      });
     });
   }
 
@@ -101,10 +104,9 @@ class ClanSearchState extends State<ClanSearch> {
                           },
                           color: Theme.of(context).colorScheme.onSurface),
                       isSearching
-                          ? Container(
+                          ? SizedBox(
                               width: 20.0,
                               height: 20.0,
-                              padding: EdgeInsets.all(10.0),
                               child: CircularProgressIndicator(),
                             )
                           : !isEmpty

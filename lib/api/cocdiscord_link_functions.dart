@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 Future<String> login() async {
@@ -58,10 +57,8 @@ Future<bool> addLink(String playerTag, String discordId, String authToken,
 }
 
 Future<bool> deleteLink(String playerTag, String authToken,
-    Function updateErrorMessage, BuildContext context) async {
+    Function updateErrorMessage, String failedToDeleteTryAgain) async {
   playerTag = playerTag.replaceAll('#', '');
-  final failedToDeleteTryAgain =
-      AppLocalizations.of(context)!.failedToDeleteTryAgain;
   final url = Uri.parse('https://cocdiscord.link/links/$playerTag');
   final response = await http.delete(
     url,
