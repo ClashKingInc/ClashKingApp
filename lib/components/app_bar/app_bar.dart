@@ -52,7 +52,7 @@ class CustomAppBarState extends State<CustomAppBar> {
     // Vérifiez si le tag sélectionné est dans la liste des tags de l'utilisateur
     if (!widget.user.selectedTagDetails
         .any((details) => details['tag'] == selectedTag)) {
-          print("user details: ${widget.user.selectedTagDetails}");
+      print("user details: ${widget.user.selectedTagDetails}");
       // Si ce n'est pas le cas, définissez le tag sélectionné sur une valeur par défaut
       selectedTag = widget.user.selectedTagDetails.isNotEmpty
           ? widget.user.selectedTagDetails.first['tag']
@@ -100,9 +100,9 @@ class CustomAppBarState extends State<CustomAppBar> {
                             return StatefulBuilder(
                               builder: (context, setState) {
                                 return AlertDialog(
-                                  title: Text(AppLocalizations.of(context)
-                                          ?.manageAccounts ??
-                                      'Manage Accounts'),
+                                  title: Text(
+                                      AppLocalizations.of(context)?.manage ??
+                                          'Manage'),
                                   content: SingleChildScrollView(
                                     // Add this
                                     child: Column(
@@ -183,11 +183,14 @@ class CustomAppBarState extends State<CustomAppBar> {
                                 child: CachedNetworkImage(imageUrl: imageUrl),
                               ),
                               SizedBox(width: 4),
-                              Text(name,
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface)),
+                              Text(
+                                name,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
                             ],
                           ),
                         );
@@ -198,13 +201,8 @@ class CustomAppBarState extends State<CustomAppBar> {
                           children: <Widget>[
                             Icon(Icons.settings),
                             SizedBox(width: 4),
-                            Text(
-                                AppLocalizations.of(context)?.manageAccounts ??
-                                    'Manage Accounts',
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface)),
+                            Text(AppLocalizations.of(context)?.manage ??
+                                'Manage'),
                           ],
                         ),
                       ),
@@ -214,8 +212,11 @@ class CustomAppBarState extends State<CustomAppBar> {
       actions: <Widget>[
         Row(
           children: <Widget>[
-            SizedBox(width: 8), // Add some spacing
-            Text(widget.user.globalName),
+            Text(
+              widget.user.globalName,
+              style: Theme.of(context).textTheme.bodyMedium,
+              overflow: TextOverflow.ellipsis,
+            ),
             Padding(padding: EdgeInsets.all(5)),
             GestureDetector(
               onTap: () async {

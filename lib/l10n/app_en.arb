@@ -34,7 +34,7 @@
     "playerNotFound" : "Player not found",
     "noValueEntered" : "No value entered",
 
-    "manageAccounts" : "Manage accounts",
+    "manage" : "Manage",
     "enterPlayerTag" : "Enter a player tag",
     "add" : "Add",
     "delete" : "Delete",
@@ -96,7 +96,7 @@
     "eosTrophies" : "End Of Season Trophies",
 
     "searchClan" : "Search clan",
-    "noResult" : "No result",
+    "noResult" : "No result.",
     "filters" : "Filters",
     "noClan" : "No clan",
     "joinClanToUnlockNewFeatures" : "Join a clan to unlock new features.",

@@ -103,28 +103,36 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                 border: InputBorder.none,
                 labelText: AppLocalizations.of(context)!.searchPlayer,
                 suffixIcon: IntrinsicWidth(
-                  child: isSearching
-                      ? SizedBox(
-                          width: 20.0,
-                          height: 20.0,
-                          child: CircularProgressIndicator(),
-                        )
-                      : !isEmpty
-                          ? IconButton(
-                              icon: Icon(Icons.clear,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
-                              onPressed: () {
-                                _controller.clear();
-                                setState(() {
-                                  isSearching = false;
-                                });
-                              },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      isSearching
+                          ? SizedBox(
+                              width: 20.0,
+                              height: 20.0,
+                              child: CircularProgressIndicator(),
                             )
-                          : Icon(
-                              Icons.search,
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
+                          : !isEmpty
+                              ? IconButton(
+                                  icon: Icon(Icons.clear,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface),
+                                  onPressed: () {
+                                    _controller.clear();
+                                    setState(() {
+                                      isSearching = false;
+                                    });
+                                  },
+                                )
+                              : Icon(
+                                  Icons.search,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -149,8 +157,10 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                 ));
               } else {
                 if (_controller.text.length >= 2) {
-                  return Center(
-                      child: Text(AppLocalizations.of(context)!.noResult));
+                  return Column(children: [
+                    Center(child: Text(AppLocalizations.of(context)!.noResult)),
+                    SizedBox(height: 8)
+                  ]);
                 } else {
                   return SizedBox.shrink();
                 }

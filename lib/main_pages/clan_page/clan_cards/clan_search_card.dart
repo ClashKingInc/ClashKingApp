@@ -142,7 +142,9 @@ class ClanSearchState extends State<ClanSearch> {
                 return SizedBox.shrink();
               } else if (snapshot.hasError) {
                 return Center(child: Text("Error: ${snapshot.error}"));
-              } else if (snapshot.hasData) {
+              } else if (snapshot.hasData &&
+                  snapshot.data != null &&
+                  snapshot.data!.isNotEmpty) {
                 return SingleChildScrollView(
                   child: Column(
                     children: snapshot.data!.map<Widget>((clan) {
@@ -153,8 +155,10 @@ class ClanSearchState extends State<ClanSearch> {
                 );
               } else {
                 if (_controller.text.length >= 2) {
-                  return Center(
-                      child: Text(AppLocalizations.of(context)!.noResult));
+                  return Column(children: [
+                    Center(child: Text(AppLocalizations.of(context)!.noResult)),
+                    SizedBox(height: 8)
+                  ]);
                 } else {
                   return SizedBox.shrink();
                 }

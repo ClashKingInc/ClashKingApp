@@ -34,7 +34,7 @@
     "playerNotFound" : "Joueur introuvable",
     "noValueEntered" : "Aucune valeur saisie",
 
-    "manageAccounts" : "Gérer les comptes",
+    "manage" : "Gérer",
     "enterPlayerTag" : "Saisir le tag du joueur",
     "add" : "Ajouter",
     "delete" : "Supprimer",
@@ -60,7 +60,7 @@
     "elder" : "Aîné",
     "member" : "Membre",
     "ready" : "Prêt",
-    "unready" : "Non prêt",
+    "unready" : "Pas prêt",
     "heroes" : "Héros",
     "equipment" : "Équipements",
     "troops" : "Troupes",
@@ -96,7 +96,7 @@
     "eosTrophies" : "Trophées en fin de saison",
 
     "searchClan" : "Rechercher un clan",
-    "noResult" : "Aucun résultat",
+    "noResult" : "Aucun résultat.",
     "filters" : "Filtres",
     "noClan" : "Aucun clan",
     "joinClanToUnlockNewFeatures" : "Rejoignez un clan pour débloquer de nouvelles fonctionnalités.",
