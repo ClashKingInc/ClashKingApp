@@ -238,7 +238,8 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                       if (errorMessage.isNotEmpty) Text(errorMessage),
                       ElevatedButton(
                         onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
+                          if (_formKey.currentState!.validate() &&
+                              _tags.isNotEmpty) {
                             globalName = _usernameController.text;
 
                             String authToken = await login();

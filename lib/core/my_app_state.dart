@@ -191,9 +191,9 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   // Fetch the player accounts from the user tags
   Future<void> fetchPlayerAccounts(User user) async {
     try {
+      print("Fetching player accounts");
       playerAccounts = await PlayerService().fetchPlayerAccounts(user);
       reloadData();
-      notifyListeners(); // Notify listeners to rebuild widgets that depend on playerStats.
     } catch (e, s) {
       print("Error fetching player stats: $e");
       print("Stack trace: $s");

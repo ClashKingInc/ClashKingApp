@@ -24,9 +24,14 @@ Future<String> login() async {
   }
 }
 
-Future<bool> addLink(String playerTag, String discordId, String authToken,
-    Function updateErrorMessage, String playerTagNotExists, String accountAlreadyLinked, String failedToAddTryAgain) async {
-
+Future<bool> addLink(
+    String playerTag,
+    String discordId,
+    String authToken,
+    Function updateErrorMessage,
+    String playerTagNotExists,
+    String accountAlreadyLinked,
+    String failedToAddTryAgain) async {
   final url = Uri.parse('https://cocdiscord.link/links');
   final response = await http.post(
     url,
@@ -79,9 +84,8 @@ Future<bool> deleteLink(String playerTag, String authToken,
   return false;
 }
 
-Future<bool> getLinks(
-    String playerTag, String authToken) async {
-  playerTag = playerTag.replaceAll('#', '');
+Future<bool> getLinks(String playerTag, String authToken) async {
+  playerTag = playerTag.replaceFirst('#', '').replaceFirst("!", "");
   final url = Uri.parse('https://cocdiscord.link/links/$playerTag');
   final response = await http.get(
     url,
@@ -92,6 +96,8 @@ Future<bool> getLinks(
     },
   );
 
+  print(response.body);
+
   if (response.statusCode == 404) {
     return true;
   }
@@ -100,11 +106,12 @@ Future<bool> getLinks(
 
 Future<String> checkIfPlayerTagExists(
     String playerTag, String authToken) async {
-  playerTag = playerTag.replaceAll('#', '');
+  playerTag = playerTag.replaceAll('#', '!');
   final response = await http.get(
-    Uri.parse('https://api.clashking.xyz/v1/clans/$playerTag'),
+    Uri.parse('https://api.clashking.xyz/v1/players/$playerTag'),
   );
 
+  print(response.body);
   if (response.statusCode == 200) {
     if (await getLinks(playerTag, authToken)) {
       return "Ok";

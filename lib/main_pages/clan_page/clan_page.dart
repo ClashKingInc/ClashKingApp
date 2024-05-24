@@ -6,6 +6,7 @@ import 'package:clashkingapp/api/user_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_info_card.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_search_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ClanInfoPage extends StatefulWidget {
   final ClanInfo? clanInfo;
@@ -52,19 +53,19 @@ class ClanInfoPageState extends State<ClanInfoPage>
                     );
                   },
                   child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
                       child: ClanInfoCard(clanInfo: widget.clanInfo!)),
                 )
               else
                 Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Card(
-                        child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text("No clan")))),
-              // Add more cards as needed
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(AppLocalizations.of(context)!.noClan, textAlign: TextAlign.center),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
