@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 
 Future<String> login() async {
   final url = Uri.parse('https://cocdiscord.link/login');
@@ -100,7 +99,7 @@ Future<bool> getLinks(
 }
 
 Future<String> checkIfPlayerTagExists(
-    String playerTag, String authToken, BuildContext context) async {
+    String playerTag, String authToken) async {
   playerTag = playerTag.replaceAll('#', '');
   final response = await http.get(
     Uri.parse('https://api.clashking.xyz/v1/clans/$playerTag'),

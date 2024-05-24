@@ -79,7 +79,7 @@ class LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     onPressed: () async {
-                      await DiscordSignIn(context);
+                      await discordSignIn(context);
                     },
                   ),
                 ),
@@ -112,7 +112,7 @@ class LoginPageState extends State<LoginPage> {
   }
 
   // Fonction pour lancer le processus d'authentification
-  Future<void> DiscordSignIn(BuildContext context) async {
+  Future<void> discordSignIn(BuildContext context) async {
     String codeVerifier;
     String codeChallenge;
     // Construct the URL

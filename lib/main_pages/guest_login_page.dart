@@ -82,11 +82,13 @@ class GuestLoginPageState extends State<GuestLoginPage> {
         text = '#$text';
       }
       String authToken = await login();
-      String status = await checkIfPlayerTagExists(text, authToken, context);
+      String status = await checkIfPlayerTagExists(text, authToken);
       if (status == 'notExist') {
-        updateErrorMessage('$text ${AppLocalizations.of(context)!.doesNotExist}');
+        updateErrorMessage(
+            '$text ${AppLocalizations.of(context)!.doesNotExist}');
       } else if (status == 'alreadyLinked') {
-        updateErrorMessage('$text ${AppLocalizations.of(context)!.isAlreadyLinked}');
+        updateErrorMessage(
+            '$text ${AppLocalizations.of(context)!.isAlreadyLinked}');
       } else {
         updateErrorMessage('');
       }
@@ -126,15 +128,14 @@ class GuestLoginPageState extends State<GuestLoginPage> {
   Widget build(BuildContext context) {
     String globalName = '';
     List<String> tags = [];
+    final navigator = Navigator.of(context);
 
     return WillPopScope(
       onWillPop: () async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.remove('access_token');
-        if (mounted) {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => StartupWidget()));
-        }
+        navigator.pushReplacement(
+            MaterialPageRoute(builder: (_) => StartupWidget()));
         return false;
       },
       child: Scaffold(
@@ -187,7 +188,8 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return AppLocalizations.of(context)!.pleaseEnterUsername;
+                              return AppLocalizations.of(context)!
+                                  .pleaseEnterUsername;
                             }
                             return null;
                           },
@@ -198,13 +200,17 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                         padding: EdgeInsetsDirectional.only(bottom: 16),
                         child: ChipsInput<String>(
                           values: _tags,
-                          decoration: _tags.isEmpty ? InputDecoration(
-                            labelText: AppLocalizations.of(context)!.playerTags,
-                            hintText: '#2QVPCJJV',
-                          ) : InputDecoration(
-                            labelText: AppLocalizations.of(context)!.playerTags,
-                            floatingLabelBehavior: FloatingLabelBehavior.always
-                          ),
+                          decoration: _tags.isEmpty
+                              ? InputDecoration(
+                                  labelText:
+                                      AppLocalizations.of(context)!.playerTags,
+                                  hintText: '#2QVPCJJV',
+                                )
+                              : InputDecoration(
+                                  labelText:
+                                      AppLocalizations.of(context)!.playerTags,
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always),
                           strutStyle: StrutStyle(fontSize: 15),
                           onChanged: _onChanged,
                           onSubmitted: _onSubmitted,
@@ -245,7 +251,7 @@ class GuestLoginPageState extends State<GuestLoginPage> {
 
                             for (int i = 0; i < _tags.length; i++) {
                               status = await checkIfPlayerTagExists(
-                                  _tags[i], authToken, context);
+                                  _tags[i], authToken);
                               if (status == 'notExist') {
                                 nonExistentTags.add(_tags[i]);
                                 allTagsExist = false;
@@ -258,7 +264,8 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                               // Save the tags to the user object (assuming user is DiscordUser object)
                               tags = _tags;
 
-                              final prefs = await SharedPreferences.getInstance();
+                              final prefs =
+                                  await SharedPreferences.getInstance();
                               prefs.setString("user_type", "guest");
                               prefs.setString('username', globalName);
                               prefs.setStringList('tags', tags);
