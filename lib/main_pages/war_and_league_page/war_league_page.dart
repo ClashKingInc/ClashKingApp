@@ -15,7 +15,7 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards
 import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/current_war_info_card.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/war_history_card.dart';
 import 'package:clashkingapp/api/wars_league_info.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
 
 class CurrentWarInfoPage extends StatefulWidget {
   final ClanInfo? clanInfo;
@@ -125,14 +125,11 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                   )
                 else if (warState == "noClan")
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(AppLocalizations.of(context)!.noClan, textAlign: TextAlign.center),
-                      ),
-                    ),
-                  )
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Card(
+                    child: NoClanCard(),
+                  ),
+                )
                 else
                   Padding(
                     padding:
