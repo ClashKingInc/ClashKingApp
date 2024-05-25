@@ -64,13 +64,11 @@ class MyHomePageState extends State<MyHomePage> {
               ),
             );
           } else {
-            print('User: ${appState.playerAccounts}');
-            print('PlayerStats: ${appState.playerStats}');
-            print("ClanInfo : ${appState.clanInfo}");
             List<Widget> widgetOptions = [
               appState.playerAccounts != null && appState.playerStats != null
                   ? DashboardPage(
-                      playerStats: appState.playerStats!, discordUser: appState.user!)
+                      playerStats: appState.playerStats!,
+                      discordUser: appState.user!)
                   : Center(
                       child:
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
@@ -81,28 +79,32 @@ class MyHomePageState extends State<MyHomePage> {
                       child:
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
               appState.user != null && appState.playerStats != null
-                ? CurrentWarInfoPage(discordUser: appState.user!, playerStats: appState.playerStats!, clanInfo: appState.clanInfo)
-                : Center(
-                    child: CircularProgressIndicator(),
-                  ), // Wrap CircularProgressIndicator with Center
+                  ? CurrentWarInfoPage(
+                      discordUser: appState.user!,
+                      playerStats: appState.playerStats!,
+                      clanInfo: appState.clanInfo)
+                  : Center(
+                      child: CircularProgressIndicator(),
+                    ), // Wrap CircularProgressIndicator with Center
               //WarLeaguePage(currentWarInfo: appState.currentWarInfo,),
               ManagementPage(),
             ];
 
             return Scaffold(
-              appBar:CustomAppBar(user: appState.user!),
+              appBar: CustomAppBar(user: appState.user!),
               body: PageView(
                 controller: _pageController,
                 onPageChanged: _onPageChanged,
                 children: widgetOptions,
               ),
               bottomNavigationBar: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed, 
-                backgroundColor: Theme.of(context).colorScheme.surface, 
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                     icon: Icon(Icons.dashboard),
-                    label: AppLocalizations.of(context)?.dashboard ?? 'Dashboard',
+                    label:
+                        AppLocalizations.of(context)?.dashboard ?? 'Dashboard',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.shield),
@@ -111,11 +113,13 @@ class MyHomePageState extends State<MyHomePage> {
                   BottomNavigationBarItem(
                     icon: Icon(
                         CustomIcons.swordCross), // Example icon for War/League
-                    label: AppLocalizations.of(context)?.warLeague ?? 'War/League',
+                    label:
+                        AppLocalizations.of(context)?.warLeague ?? 'War/League',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.settings),
-                    label: AppLocalizations.of(context)?.management ?? 'Management',
+                    label: AppLocalizations.of(context)?.management ??
+                        'Management',
                   ),
                 ],
                 currentIndex: _selectedIndex,

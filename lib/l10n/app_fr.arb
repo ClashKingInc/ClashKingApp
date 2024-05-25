@@ -13,6 +13,8 @@
     "pleaseEnterPlayerTags" : "Veuillez saisir un tag de joueur",
     "followingTagsDoNotExist" : "Les tags suivants n'existent pas :",
     "followingTagsAreAlreadyLinked" : "Les tags suivants sont déjà liés à un compte :",
+    "welcome" : "Bienvenue !",
+    "welcomeMessage" : "Pour commencer, ajoutez un ou plusieurs compte Clash of clans à votre profil. Vous pourrez en ajouter ou en supprimer à tout moment.",
     
 
     "login" : "Connexion",

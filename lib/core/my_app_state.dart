@@ -106,13 +106,13 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   /* User management */
 
   // Reload the user accounts
-  Future<void> reloadUsersAccounts() async {
+  Future<void> reloadUsersAccounts(context) async {
     isLoading = true; // Set the loading state to true
 
     notifyListeners();
 
     if (user!.isDiscordUser) {
-      await initializeDiscordUser();
+      await initializeDiscordUser(context);
     }
     if (user != null) {
       if (user!.isDiscordUser) {
@@ -225,17 +225,14 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   /* User initialization at the opening of the app : Guest or Discord User */
 
-  // Initialize the user as a Discord user
-  Future<void> initializeDiscordUser() async {
-    bool validToken = await isTokenValid(); // Check if the token is valid
-    if (validToken) {
-      final accessToken = await getAccessToken();
-      if (accessToken != null) {
-        user = await fetchDiscordUser(accessToken);
+  Future<void> initializeDiscordUser(BuildContext context) async {
+    final accessToken = await getAccessToken();
+    if (accessToken != null) {
+      user = await fetchDiscordUser(accessToken);
+      if (user!.tags.isEmpty) {
+      } else {
         notifyListeners();
       }
-    } else {
-      print("Token non valide ou absent.");
     }
   }
 

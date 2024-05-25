@@ -3,7 +3,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/theme_notifier.dart';
 import 'package:clashkingapp/api/user_info.dart';
-import 'package:clashkingapp/main_pages/login_page.dart';
+import 'package:clashkingapp/main_pages/login_page/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -117,9 +117,8 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     if(mounted){
-    final appState = Provider.of<MyAppState>(context, listen: false);
     globalNavigatorKey.currentState?.pushReplacement(
-      MaterialPageRoute(builder: (context) => LoginPage(appState: appState)),
+      MaterialPageRoute(builder: (context) => LoginPage()),
     );
     }
   }

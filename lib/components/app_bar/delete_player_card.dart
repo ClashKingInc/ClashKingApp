@@ -96,7 +96,7 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
                 final success = await deleteLink(playerTag, token,
                     updateErrorMessage, failedToDeleteTryAgain);
                 if (success && mounted) {
-                  myAppState.reloadUsersAccounts();
+                  myAppState.reloadUsersAccounts(context);
                 }
                 if (errorMessage.isEmpty) {
                   navigator.pop();
@@ -104,7 +104,7 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
               } else {
                 widget.user.tags.remove(playerTag);
                 print('User tags: ${widget.user.tags}');
-                myAppState.reloadUsersAccounts();
+                myAppState.reloadUsersAccounts(context);
                 navigator.pop();
               }
             },

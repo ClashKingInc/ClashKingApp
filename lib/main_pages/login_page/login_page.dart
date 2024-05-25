@@ -11,16 +11,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/main_pages/guest_login_page.dart';
-import 'package:clashkingapp/core/my_app_state.dart';
+import 'package:clashkingapp/main_pages/login_page/guest_login_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //import 'dart:html' as html;
 
 class LoginPage extends StatefulWidget {
-  final MyAppState appState;
-
-  const LoginPage({required this.appState});
-
   @override
   LoginPageState createState() => LoginPageState();
 }
@@ -99,9 +95,19 @@ class LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     onPressed: () async {
-                      await guestModeSignIn(context);
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) => GuestLoginPage()),
+                      );
                     },
                   ),
+                ),
+                SizedBox(height: 8),
+                TextButton(
+                  child: Text('Need help? Join us on Discord.', style: Theme.of(context).textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline)),
+                  onPressed: () async {
+                    launchUrl(Uri.parse('https://discord.gg/clashking'));
+                  },
                 ),
               ],
             ),
@@ -212,12 +218,4 @@ class LoginPageState extends State<LoginPage> {
       );
     }
   }*/
-
-  Future<void> guestModeSignIn(BuildContext context) async {
-    // Navigate to InviteloginPage
-    globalNavigatorKey.currentState!.pushReplacement(
-      MaterialPageRoute(
-          builder: (context) => GuestLoginPage(appState: widget.appState)),
-    );
-  }
 }

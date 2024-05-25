@@ -13,6 +13,8 @@
     "pleaseEnterPlayerTags" : "Please enter player tags",
     "followingTagsDoNotExist" : "The following tags do not exist :",
     "followingTagsAreAlreadyLinked" : "The following tags are already linked to someone :",
+    "welcome" : "Welcome !",
+    "welcomeMessage" : "Please add one or more Clash Of Clan accounts to your profile. You can add or remove accounts later.",
     
 
     "login" : "Login",
