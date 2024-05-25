@@ -1,13 +1,13 @@
-import 'package:clashkingapp/api/discord_user_info.dart';
+import 'package:clashkingapp/api/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/api/cocdiscord_link_functions.dart';
 import 'package:flutter/services.dart';
-import 'package:clashkingapp/core/my_app.dart';
 import 'package:provider/provider.dart';
+import 'package:clashkingapp/core/my_app_state.dart';
 
 class AddPlayerCard extends StatefulWidget {
-  final DiscordUser user;
+  final User user;
 
   const AddPlayerCard({super.key, required this.user});
 
@@ -27,6 +27,11 @@ class AddPlayerCardState extends State<AddPlayerCard> {
 
   @override
   Widget build(BuildContext context) {
+    final playerTagNotExists = AppLocalizations.of(context)!.playerTagNotExists;
+    final accountAlreadyLinked =
+        AppLocalizations.of(context)!.accountAlreadyLinked;
+    final failedToAddTryAgain =
+        AppLocalizations.of(context)!.failedToAddTryAgain;
     return Column(
       children: [
         SizedBox(height: 30),
@@ -75,10 +80,16 @@ class AddPlayerCardState extends State<AddPlayerCard> {
             String token = await login();
             String playerTag = controller.text;
             if (widget.user.isDiscordUser) {
-              final success = await addLink(playerTag, widget.user.id, token,
-                  updateErrorMessage, context);
+              final success = await addLink(
+                  playerTag,
+                  widget.user.id,
+                  token,
+                  updateErrorMessage,
+                  playerTagNotExists,
+                  accountAlreadyLinked,
+                  failedToAddTryAgain);
               if (success) {
-                myAppState.reloadUsersAccounts();
+                myAppState.reloadUsersAccounts(context);
               }
               if (errorMessage.isEmpty) {
                 navigator.pop();
@@ -86,7 +97,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
             } else {
               widget.user.tags.add("#$playerTag");
               print('User tags: ${widget.user.tags}');
-              myAppState.reloadUsersAccounts();
+              myAppState.reloadUsersAccounts(context);
               navigator.pop();
             }
           },

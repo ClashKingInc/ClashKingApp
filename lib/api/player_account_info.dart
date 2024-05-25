@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
-import 'package:clashkingapp/api/discord_user_info.dart';
+import 'package:clashkingapp/api/user_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/api/player_accounts_list.dart';
@@ -317,7 +317,7 @@ class PlayerService {
     await dotenv.load(fileName: ".env");
   }
 
-  Future<PlayerAccounts> fetchPlayerAccounts(DiscordUser user) async {
+  Future<PlayerAccounts> fetchPlayerAccounts(User user) async {
     PlayerAccounts playerAccounts =
         PlayerAccounts(playerAccountInfo: [], clanInfo: [], warInfo: []);
     ClanInfo? clanInfo;

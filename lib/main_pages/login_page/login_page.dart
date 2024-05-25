@@ -11,10 +11,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/main_pages/login_page/guest_login_page.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 //import 'dart:html' as html;
 
-class LoginPage extends StatelessWidget {
-  // Assurez-vous d'avoir initialisé dotenv avant de l'utiliser pour charger les variables d'environnement
+class LoginPage extends StatefulWidget {
+  @override
+  LoginPageState createState() => LoginPageState();
+}
+
+class LoginPageState extends State<LoginPage> {
   final String clientId = dotenv.env['DISCORD_CLIENT_ID']!;
   final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
   final String clientSecret = dotenv.env['DISCORD_CLIENT_SECRET']!;
@@ -22,8 +29,96 @@ class LoginPage extends StatelessWidget {
   // final String redirectWebUri = dotenv.env['DISCORD_REDIRECT_URI_WEB']!;
   // Discord n'utilise pas clientSecret dans le flux d'authentification côté client, donc il pourrait ne pas être nécessaire ici
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        // Permet le défilement
+        child: Center(
+          child: ConstrainedBox(
+            constraints:
+                BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+            child: Column(
+              mainAxisAlignment:
+                  MainAxisAlignment.center, // Centre verticalement
+              children: [
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 150,
+                      width: 150,
+                      child: CachedNetworkImage(
+                          imageUrl:
+                              "https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png"),
+                    ),
+                    SizedBox(
+                      width: 250,
+                      child: CachedNetworkImage(
+                          imageUrl:
+                              "https://clashkingfiles.b-cdn.net/logos/ClashKing-name-logo.png"),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 64),
+                ButtonTheme(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      minimumSize: Size(240, 48),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.discord, size: 24),
+                        SizedBox(width: 8),
+                        Text(AppLocalizations.of(context)!.signInWithDiscord),
+                      ],
+                    ),
+                    onPressed: () async {
+                      await discordSignIn(context);
+                    },
+                  ),
+                ),
+                SizedBox(height: 16), // Espace entre les boutons
+                ButtonTheme(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      minimumSize: Size(240, 48),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.group_add, size: 24),
+                        SizedBox(width: 8),
+                        Text(AppLocalizations.of(context)!.guestMode),
+                      ],
+                    ),
+                    onPressed: () async {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) => GuestLoginPage()),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 8),
+                TextButton(
+                  child: Text('Need help? Join us on Discord.', style: Theme.of(context).textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline)),
+                  onPressed: () async {
+                    launchUrl(Uri.parse('https://discord.gg/clashking'));
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   // Fonction pour lancer le processus d'authentification
-  Future<void> signInWithDiscordFromMobile(BuildContext context) async {
+  Future<void> discordSignIn(BuildContext context) async {
     String codeVerifier;
     String codeChallenge;
     // Construct the URL
@@ -82,6 +177,7 @@ class LoginPage extends StatelessWidget {
 
       // Save the access token using shared_preferences
       final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_type', 'discord');
       await prefs.setString('access_token', accessToken);
 
       // Save the expiration date of the access token
@@ -122,99 +218,4 @@ class LoginPage extends StatelessWidget {
       );
     }
   }*/
-
-   Future<void> signInInInviteMode(BuildContext context) async {
-          // Save the access token using shared_preferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('access_token', 'inviteMode');
-
-      // Save the expiration date of the access token
-      DateTime expirationDate = DateTime(9999, 12, 31);
-      await prefs.setString(
-          'expiration_date', expirationDate.toIso8601String());
-
-      // Navigate to MyHomePage
-      globalNavigatorKey.currentState!.pushReplacement(
-        MaterialPageRoute(builder: (context) => StartupWidget()),
-      );
-
-   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        // Permet le défilement
-        child: Center(
-          child: ConstrainedBox(
-            constraints:
-                BoxConstraints(minHeight: MediaQuery.of(context).size.height),
-            child: Column(
-              mainAxisAlignment:
-                  MainAxisAlignment.center, // Centre verticalement
-              children: [
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 150,
-                      width: 150,
-                      child: CachedNetworkImage(
-                          imageUrl:
-                              "https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png"),
-                    ),
-                    SizedBox(
-                      width: 250,
-                      child: CachedNetworkImage(
-                          imageUrl:
-                              "https://clashkingfiles.b-cdn.net/logos/ClashKing-name-logo.png"),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 64),
-                ButtonTheme(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                      minimumSize: Size(240, 48),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.discord, size: 24),
-                        SizedBox(width: 8),
-                        Text(AppLocalizations.of(context)!.signInWithDiscord),
-                      ],
-                    ),
-                    onPressed: () async {
-                      await signInWithDiscordFromMobile(context);
-                    },
-                  ),
-                ),
-                SizedBox(height: 16), // Espace entre les boutons
-                ButtonTheme(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      minimumSize: Size(240, 48),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.group_add, size: 24),
-                        SizedBox(width: 8),
-                        Text(AppLocalizations.of(context)!.guestMode),
-                      ],
-                    ),
-                    onPressed: () async {
-                      await signInInInviteMode(context);
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }

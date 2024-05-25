@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:clashkingapp/core/my_app.dart';
-import 'package:clashkingapp/api/discord_user_info.dart';
-import 'package:clashkingapp/main_pages/login_page.dart';
+import 'package:clashkingapp/core/theme_notifier.dart';
+import 'package:clashkingapp/api/user_info.dart';
+import 'package:clashkingapp/main_pages/login_page/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/core/my_app_state.dart';
 
 class SettingsInfoScreen extends StatefulWidget {
-  final DiscordUser user;
+  final User user;
 
   SettingsInfoScreen({required this.user});
 
@@ -115,9 +116,10 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   Future<void> _logOut() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-
+    if(mounted){
     globalNavigatorKey.currentState?.pushReplacement(
       MaterialPageRoute(builder: (context) => LoginPage()),
     );
+    }
   }
 }

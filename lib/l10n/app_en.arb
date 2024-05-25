@@ -4,6 +4,20 @@
 
     "signInWithDiscord" : "Sign In with Discord",
     "guestMode" : "Guest Mode",
+    "createGuestProfile" : "Create your guest profile",
+    "doesNotExist" : "does not exist.",
+    "isAlreadyLinked" : "is already linked to someone.",
+    "username" : "Username",
+    "pleaseEnterUsername" : "Please enter a username",
+    "playerTags" : "Player Tags",
+    "pleaseEnterPlayerTags" : "Please enter player tags",
+    "followingTagsDoNotExist" : "The following tags do not exist :",
+    "followingTagsAreAlreadyLinked" : "The following tags are already linked to someone :",
+    "welcome" : "Welcome !",
+    "welcomeMessage" : "Please add one or more Clash Of Clan accounts to your profile. You can add or remove accounts later.",
+    
+
+    "login" : "Login",
     "logout" : "Log out",
     "language" : "Language",
     "settings" : "Settings",
@@ -14,8 +28,15 @@
     "hourIndicator" : "h",
     "minIndicator" : "m",
     "noDataAvailable" : "No data available.",
+    "close" : "Close",
+    "error" : "Error",
+    "player" : "Player",
+    "notFoundOrNotLinkedToOurSystem" : "not found or not linked to our system.",
+    "tryAnotherNameOrTagOrLinkIt" : "Try another name/tag or link it.",
+    "playerNotFound" : "Player not found",
+    "noValueEntered" : "No value entered",
 
-    "manageAccounts" : "Manage accounts",
+    "manage" : "Manage",
     "enterPlayerTag" : "Enter a player tag",
     "add" : "Add",
     "delete" : "Delete",
@@ -26,6 +47,9 @@
     "failedToAddTryAgain" : "Failed to add link. Please try again later.",
     "failedToDeleteTryAgain" : "Failed to delete link. Please try again later.",
 
+    "search" : "Search",
+    "tagOrNamePlayer" : "Player's tag or name",
+    "searchPlayer" : "Search player",
     
     "dashboard" : "Dashboard",
     "homeBase" : "Home Base",
@@ -73,6 +97,13 @@
     "trophiesByMonth" : "Trophies by month",
     "eosTrophies" : "End Of Season Trophies",
 
+    "searchClan" : "Search clan",
+    "noResult" : "No result.",
+    "filters" : "Filters",
+    "noClan" : "No clan",
+    "joinClanToUnlockNewFeatures" : "Join a clan to unlock new features.",
+    "apply" : "Apply",
+    "cancel" : "Cancel",
     "clan" : "Clan",
     "clans" : "Clans",
     "members" : "Members",
@@ -118,6 +149,7 @@
     "askForWarLogOpening" : "Contact a leader or a co-leader to open the war log.",
     "warLogClosed" : "War log closed.",
     "rounds" : "Rounds",
+    "noDataAvailableForThisWar" : "No data available for this war",
 
     "stateOfTheWar" : "State of the war",
     "stillNeedsToWin" : "still needs to win",
@@ -132,5 +164,7 @@
     "neededOverall" : "% Needed overall",
     "calculate" : "Calculate",
 
-    "management" : "Management"
+    "management" : "Management",
+
+    "comingSoon" : "Coming soon !"
 }

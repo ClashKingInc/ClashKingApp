@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/data/league_data.dart';
 
-class ClanInfo {
+class ClanSearch {
   final String tag;
   final String name;
   final String type;
@@ -31,7 +31,7 @@ class ClanInfo {
   final int requiredTownhallLevel;
   final Map<String, dynamic> clanCapital;
 
-  ClanInfo({
+  ClanSearch({
     required this.tag,
     required this.name,
     required this.type,
@@ -60,8 +60,8 @@ class ClanInfo {
     required this.clanCapital,
   });
 
-  factory ClanInfo.fromJson(Map<String, dynamic> json) {
-    return ClanInfo(
+  factory ClanSearch.fromJson(Map<String, dynamic> json) {
+    return ClanSearch(
       tag: json['tag'] ?? 'No tag',
       name: json['name'] ?? 'No name',
       type: json['type'] ?? 'No type',
@@ -273,12 +273,11 @@ class BuilderBaseLeague{
 
 // Service class to fetch clan info
 class ClanService {
-  
   Future<void> initEnv() async {
     await dotenv.load(fileName: ".env");
   }
 
-  Future<ClanInfo> fetchClanInfo(String tag) async {
+  Future<ClanSearch> fetchClanInfo(String tag) async {
     tag = tag.replaceAll('#', '!');
 
     final response = await http.get(
@@ -287,7 +286,7 @@ class ClanService {
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
-      ClanInfo clanInfo = ClanInfo.fromJson(jsonDecode(responseBody));
+      ClanSearch clanInfo = ClanSearch.fromJson(jsonDecode(responseBody));
       clanInfo.warLeague.imageUrl = await fetchLeagueImageUrl(clanInfo.warLeague.name);
 
       return clanInfo;

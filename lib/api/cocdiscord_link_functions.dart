@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter/material.dart';
 
 Future<String> login() async {
   final url = Uri.parse('https://cocdiscord.link/login');
@@ -26,13 +24,14 @@ Future<String> login() async {
   }
 }
 
-Future<bool> addLink(String playerTag, String discordId, String authToken,
-    Function updateErrorMessage, BuildContext context) async {
-  final playerTagNotExists = AppLocalizations.of(context)!.playerTagNotExists;
-  final accountAlreadyLinked =
-      AppLocalizations.of(context)!.accountAlreadyLinked;
-  final failedToAddTryAgain = AppLocalizations.of(context)!.failedToAddTryAgain;
-
+Future<bool> addLink(
+    String playerTag,
+    String discordId,
+    String authToken,
+    Function updateErrorMessage,
+    String playerTagNotExists,
+    String accountAlreadyLinked,
+    String failedToAddTryAgain) async {
   final url = Uri.parse('https://cocdiscord.link/links');
   final response = await http.post(
     url,
@@ -62,10 +61,8 @@ Future<bool> addLink(String playerTag, String discordId, String authToken,
 }
 
 Future<bool> deleteLink(String playerTag, String authToken,
-    Function updateErrorMessage, BuildContext context) async {
+    Function updateErrorMessage, String failedToDeleteTryAgain) async {
   playerTag = playerTag.replaceAll('#', '');
-  final failedToDeleteTryAgain =
-      AppLocalizations.of(context)!.failedToDeleteTryAgain;
   final url = Uri.parse('https://cocdiscord.link/links/$playerTag');
   final response = await http.delete(
     url,
@@ -87,9 +84,8 @@ Future<bool> deleteLink(String playerTag, String authToken,
   return false;
 }
 
-Future<bool> getLinks(
-    String playerTag, String authToken, BuildContext context) async {
-  playerTag = playerTag.replaceAll('#', '');
+Future<bool> getLinks(String playerTag, String authToken) async {
+  playerTag = playerTag.replaceFirst('#', '').replaceFirst("!", "");
   final url = Uri.parse('https://cocdiscord.link/links/$playerTag');
   final response = await http.get(
     url,
@@ -100,6 +96,8 @@ Future<bool> getLinks(
     },
   );
 
+  print(response.body);
+
   if (response.statusCode == 404) {
     return true;
   }
@@ -107,15 +105,15 @@ Future<bool> getLinks(
 }
 
 Future<String> checkIfPlayerTagExists(
-    String playerTag, String authToken, BuildContext context) async {
-  playerTag = playerTag.replaceAll('#', '');
-  final playerTagNotExists = AppLocalizations.of(context)!.playerTagNotExists;
+    String playerTag, String authToken) async {
+  playerTag = playerTag.replaceAll('#', '!');
   final response = await http.get(
-    Uri.parse('https://api.clashking.xyz/v1/clans/$playerTag'),
+    Uri.parse('https://api.clashking.xyz/v1/players/$playerTag'),
   );
 
+  print(response.body);
   if (response.statusCode == 200) {
-    if (await getLinks(playerTag, authToken, context)) {
+    if (await getLinks(playerTag, authToken)) {
       return "Ok";
     } else {
       return "alreadyLinked";

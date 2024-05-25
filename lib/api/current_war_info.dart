@@ -228,13 +228,22 @@ class CurrentWarService {
     if (response.statusCode == 200) {
       return CurrentWarInfo.fromJson(jsonDecode(response.body), type);
     } else {
-      throw Exception(
-          'Failed to load current war info with status code: ${response.statusCode}');
+      throw Exception('Failed to load current war info with status code: ${response.statusCode}');
+    }
+  }
+
+  static Future<CurrentWarInfo?> fetchWarDataFromTime(String tag, DateTime end) async {
+    String endTime = end.toIso8601String();
+    endTime = endTime.replaceAll('-', '').replaceAll(':', '');
+    
+    final response = await http.get(Uri.parse('https://api.clashking.xyz/war/${tag.substring(1)}/previous/$endTime'));
+    print('test');
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> jsonBody = json.decode(body);
+      return CurrentWarInfo.fromJson(jsonBody, 'current');
+    } else {
+      return null;
     }
   }
 }
-/*
-Gros chêne : VY2J0LL
-Le petit chêne : 2QPCJQQ2U
-Gland Esport : 2GRCROPUG 
-*/

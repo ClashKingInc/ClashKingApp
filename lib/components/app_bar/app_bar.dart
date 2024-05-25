@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:clashkingapp/api/discord_user_info.dart';
+import 'package:clashkingapp/api/user_info.dart';
 import 'package:provider/provider.dart';
-import 'package:clashkingapp/core/my_app.dart';
+import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/main_pages/settings_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,7 +11,7 @@ import 'package:clashkingapp/components/app_bar/add_player_card.dart';
 import 'package:clashkingapp/components/app_bar/delete_player_card.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final DiscordUser user;
+  final User user;
 
   CustomAppBar({required this.user});
 
@@ -27,8 +27,9 @@ class CustomAppBarState extends State<CustomAppBar> {
 
   @override
   void initState() {
+    print("User tags : ${widget.user.tags}");
     super.initState();
-    print("init state : ${widget.user.selectedTagDetails}");
+    print("user init state : ${widget.user.selectedTagDetails}");
     _loadSelectedTag().then((_) {
       if (selectedTag == null ||
           !widget.user.selectedTagDetails
@@ -45,8 +46,19 @@ class CustomAppBarState extends State<CustomAppBar> {
 
   Future<void> _loadSelectedTag() async {
     final prefs = await SharedPreferences.getInstance();
-    print("selected : ${prefs.getString('selectedTag')}");
+    print("user selected : ${prefs.getString('selectedTag')}");
     selectedTag = prefs.getString('selectedTag');
+
+    // Vérifiez si le tag sélectionné est dans la liste des tags de l'utilisateur
+    if (!widget.user.selectedTagDetails
+        .any((details) => details['tag'] == selectedTag)) {
+      print("user details: ${widget.user.selectedTagDetails}");
+      // Si ce n'est pas le cas, définissez le tag sélectionné sur une valeur par défaut
+      selectedTag = widget.user.selectedTagDetails.isNotEmpty
+          ? widget.user.selectedTagDetails.first['tag']
+          : null;
+      _saveSelectedTag(selectedTag!);
+    }
   }
 
   Future<void> _saveSelectedTag(String tag) async {
@@ -88,9 +100,9 @@ class CustomAppBarState extends State<CustomAppBar> {
                             return StatefulBuilder(
                               builder: (context, setState) {
                                 return AlertDialog(
-                                  title: Text(AppLocalizations.of(context)
-                                          ?.manageAccounts ??
-                                      'Manage Accounts'),
+                                  title: Text(
+                                      AppLocalizations.of(context)?.manage ??
+                                          'Manage'),
                                   content: SingleChildScrollView(
                                     // Add this
                                     child: Column(
@@ -171,11 +183,14 @@ class CustomAppBarState extends State<CustomAppBar> {
                                 child: CachedNetworkImage(imageUrl: imageUrl),
                               ),
                               SizedBox(width: 4),
-                              Text(name,
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface)),
+                              Text(
+                                name,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
                             ],
                           ),
                         );
@@ -186,13 +201,8 @@ class CustomAppBarState extends State<CustomAppBar> {
                           children: <Widget>[
                             Icon(Icons.settings),
                             SizedBox(width: 4),
-                            Text(
-                                AppLocalizations.of(context)?.manageAccounts ??
-                                    'Manage Accounts',
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface)),
+                            Text(AppLocalizations.of(context)?.manage ??
+                                'Manage'),
                           ],
                         ),
                       ),
@@ -202,8 +212,11 @@ class CustomAppBarState extends State<CustomAppBar> {
       actions: <Widget>[
         Row(
           children: <Widget>[
-            SizedBox(width: 8), // Add some spacing
-            Text(widget.user.globalName),
+            Text(
+              widget.user.globalName,
+              style: Theme.of(context).textTheme.bodyMedium,
+              overflow: TextOverflow.ellipsis,
+            ),
             Padding(padding: EdgeInsets.all(5)),
             GestureDetector(
               onTap: () async {

@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 class WarHistoryHeader extends StatelessWidget {
   const WarHistoryHeader({
     super.key,
-    required this.warHistoryData,
     required this.discordUser,
   });
 
-  final List<dynamic> warHistoryData;
   final List<String> discordUser;
 
   @override

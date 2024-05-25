@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/api/cocdiscord_link_functions.dart';
-import 'package:clashkingapp/api/discord_user_info.dart';
+import 'package:clashkingapp/api/user_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/core/my_app.dart';
+import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:provider/provider.dart';
 
 class DeletePlayerCard extends StatefulWidget {
-  final DiscordUser user;
+  final User user;
 
   const DeletePlayerCard({super.key, required this.user});
 
@@ -35,6 +35,10 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
 
   @override
   Widget build(BuildContext context) {
+    final failedToDeleteTryAgain =
+        AppLocalizations.of(context)!.failedToDeleteTryAgain;
+    var myAppState = Provider.of<MyAppState>(context, listen: false);
+
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(children: [
@@ -89,11 +93,10 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
               String token = await login();
               String playerTag = _dropdownValue!;
               if (widget.user.isDiscordUser) {
-                final success = await deleteLink(
-                    playerTag, token, updateErrorMessage, context);
-                if (success) {
-                  Provider.of<MyAppState>(context, listen: false)
-                      .reloadUsersAccounts();
+                final success = await deleteLink(playerTag, token,
+                    updateErrorMessage, failedToDeleteTryAgain);
+                if (success && mounted) {
+                  myAppState.reloadUsersAccounts(context);
                 }
                 if (errorMessage.isEmpty) {
                   navigator.pop();
@@ -101,8 +104,7 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
               } else {
                 widget.user.tags.remove(playerTag);
                 print('User tags: ${widget.user.tags}');
-                Provider.of<MyAppState>(context, listen: false)
-                    .reloadUsersAccounts();
+                myAppState.reloadUsersAccounts(context);
                 navigator.pop();
               }
             },

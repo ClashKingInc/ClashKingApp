@@ -2,44 +2,35 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DiscordUser {
+class User {
   final String id;
-  final String username;
   final String avatar;
-  final String email;
   String globalName;
-  String language;
   bool isDiscordUser = false;
   List<String> tags = [];
   List<Map<String, dynamic>> selectedTagDetails = [];
 
-  DiscordUser({
+  User({
     required this.id,
-    required this.username,
     required this.avatar,
-    required this.email,
     required this.globalName,
-    required this.language,
   });
 
-  factory DiscordUser.fromJson(Map<String, dynamic> json) {
-    return DiscordUser(
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
       id: json['id'],
-      username: json['username'],
       avatar: 'https://cdn.discordapp.com/avatars/${json['id']}/${json['avatar']}.png',
-      email: json['email'],
       globalName: json['global_name'],
-      language: json['locale'],
     );
   }
 
   @override
   String toString() {
-    return 'DiscordUser{id: $id, username: $username, avatar: https://cdn.discordapp.com/avatars/$id/$avatar.png, email: $email, globalName: $globalName, language: $language, isDiscordUser : $isDiscordUser, tags: $tags, selectedTagDetails: $selectedTagDetails}';
+    return 'DiscordUser{id: $id, avatar: https://cdn.discordapp.com/avatars/$id/$avatar.png, globalName: $globalName, isDiscordUser : $isDiscordUser, tags: $tags, selectedTagDetails: $selectedTagDetails}';
   }
 }
 
-Future<DiscordUser> fetchDiscordUser(String accessToken) async {
+Future<User> fetchDiscordUser(String accessToken) async {
   if (accessToken != "inviteMode") {
     final response = await http.get(
       Uri.https('discord.com', '/api/users/@me'),
@@ -49,28 +40,25 @@ Future<DiscordUser> fetchDiscordUser(String accessToken) async {
     );
 
     if (response.statusCode == 200) {
-      DiscordUser user = DiscordUser.fromJson(jsonDecode(response.body));
+      User user = User.fromJson(jsonDecode(response.body));
       user.isDiscordUser = true;
-      user = await fetchUserTags(user); // Fetch user tags
+      user = await fetchDiscordUserTags(user); // Fetch user tags
       return user;
     } else {
       throw Exception('Failed to fetch user');
     }
   } else {
-    DiscordUser user = DiscordUser(
+    User user = User(
       id: '0',
-      username: 'ILoveClashKing',
       avatar: 'https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png',
-      email: 'Unknown',
       globalName: 'ILoveClashKing',
-      language: 'en',
     );
     user.isDiscordUser = false;
     return user;
   }
 }
 
-Future<DiscordUser> fetchUserTags(DiscordUser user) async {
+Future<User> fetchDiscordUserTags(User user) async {
   print('Fetching user tags for ${user.id}...');
   final response = await http.post(
     Uri.parse('https://api.clashking.xyz/discord_links'),
@@ -91,4 +79,11 @@ Future<DiscordUser> fetchUserTags(DiscordUser user) async {
   } else {
     throw Exception('Failed to load user tags');
   }
+}
+
+Future<User> fetchGuestUserTags(User user) async {
+  final prefs = await SharedPreferences.getInstance();
+  List<String>tags = prefs.getStringList("tags") ?? [];
+  user.tags = tags;
+  return user;
 }

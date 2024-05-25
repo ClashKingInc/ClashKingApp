@@ -44,39 +44,17 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                   child: ColorFiltered(
-                      colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.3),
-                        BlendMode.darken,
-                      ),
-                      child: CachedNetworkImage(
-                        imageUrl: widget.backgroundImageUrl,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      )),
+                    colorFilter: ColorFilter.mode(
+                      Colors.black.withOpacity(0.3),
+                      BlendMode.darken,
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.backgroundImageUrl,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
-              Positioned(
-                bottom: -90,
-                child: Column(children: [
-                  GestureDetector(
-                    onDoubleTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AchievementScreen(playerStats: widget.playerStats)),
-                      );
-                    },
-                    child: CachedNetworkImage(imageUrl: widget.townHallImageUrl, width: 170),
-                  ),
-                  Row(
-                    children: [
-                      widget.stars.isNotEmpty
-                        ? Row(
-                            children: widget.stars,
-                          )
-                        : SizedBox(height: 22)
-                    ],
-                  ),
-                ]),
               ),
               Positioned(
                 top: 30,
@@ -88,15 +66,31 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
+              Positioned(
+                bottom: -72,
+                child: Column(
+                  children: [
+                    CachedNetworkImage(imageUrl: widget.townHallImageUrl, width: 170),
+                  ],
+                ),
+              ),
             ],
           ),
-          SizedBox(height: 96),
+          SizedBox(height: 46),
           Stack(
             children: [
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    SizedBox(height: 22),
+                    widget.stars.isNotEmpty
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: widget.stars,
+                        )
+                      : SizedBox(height: 22),
+                    SizedBox(height: 8),
                     Text(
                       widget.playerStats.name,
                       style: Theme.of(context).textTheme.titleLarge,
@@ -105,7 +99,14 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                       onTap: () {
                         FlutterClipboard.copy(widget.playerStats.tag).then((value) {
                           final snackBar = SnackBar(
-                            content: Text(AppLocalizations.of(context)!.copiedToClipboard),
+                            content: Center(
+                              child: Text(
+                                AppLocalizations.of(context)!.copiedToClipboard,
+                                style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                              ),
+                            ),
+                            duration: Duration(milliseconds: 1500),
+                            backgroundColor: Theme.of(context).colorScheme.surface,
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         });
@@ -120,7 +121,54 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                 ),
               ),
               Positioned(
-                top: -8, right: 24,
+                top: 0,
+                left: 34,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.verified_rounded,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    size: 32,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AchievementScreen(playerStats: widget.playerStats),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Positioned(
+                top: 0, 
+                right: 34,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.question_mark_rounded,
+                    color: Theme.of(context).colorScheme.onSurface, size: 32),
+                  onPressed: () {
+                    launchUrl(Uri.parse('https://link.clashofclans.com/fr?action=OpenPlayerProfile&tag=${widget.playerStats.tag}'));
+                  },
+                ),
+              ),
+              Positioned(
+                top: 56, left: 34,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.equalizer_rounded,
+                    color: Theme.of(context).colorScheme.onSurface, size: 32),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AchievementScreen(playerStats: widget.playerStats),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Positioned(
+                top: 56, right: 34,
                 child: IconButton(
                   icon: Icon(
                     Icons.sports_esports_rounded,

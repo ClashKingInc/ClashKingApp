@@ -1,8 +1,23 @@
 {
     "@@locale": "fr",
     "creatorCode" : "Code créateur : ClashKing",
+
     "signInWithDiscord" : "Connexion avec Discord",
     "guestMode" : "Mode invité",
+    "createGuestProfile" : "Créer un profil invité",
+    "doesNotExist" : "n'existe pas.",
+    "isAlreadyLinked" : "est déjà lié à un compte.",
+    "username" : "Nom d'utilisateur",
+    "pleaseEnterUsername" : "Veuillez saisir un nom d'utilisateur",
+    "playerTags" : "Tags de joueur",
+    "pleaseEnterPlayerTags" : "Veuillez saisir un tag de joueur",
+    "followingTagsDoNotExist" : "Les tags suivants n'existent pas :",
+    "followingTagsAreAlreadyLinked" : "Les tags suivants sont déjà liés à un compte :",
+    "welcome" : "Bienvenue !",
+    "welcomeMessage" : "Pour commencer, ajoutez un ou plusieurs compte Clash of clans à votre profil. Vous pourrez en ajouter ou en supprimer à tout moment.",
+    
+
+    "login" : "Connexion",
     "logout" : "Déconnexion",
     "language" : "Langue",
     "settings" : "Paramètres",
@@ -13,8 +28,15 @@
     "hourIndicator" : "h",
     "minIndicator" : "m",
     "noDataAvailable" : "Aucune donnée disponible.",
+    "close" : "Fermer",
+    "error" : "Erreur",
+    "player" : "Joueur",
+    "notFoundOrNotLinkedToOurSystem" : "introuvable ou non lié à notre système.",
+    "tryAnotherNameOrTagOrLinkIt" : "Essayez un autre nom/tag ou liez le.",
+    "playerNotFound" : "Joueur introuvable",
+    "noValueEntered" : "Aucune valeur saisie",
 
-    "manageAccounts" : "Gérer les comptes",
+    "manage" : "Gérer",
     "enterPlayerTag" : "Saisir le tag du joueur",
     "add" : "Ajouter",
     "delete" : "Supprimer",
@@ -25,6 +47,10 @@
     "failedToAddTryAgain" : "Échec de l'ajout du compte. Veuillez réessayer plus tard.",
     "failedToDeleteTryAgain" : "Échec de la suppression du compte. Veuillez réessayer plus tard.",
     
+    "search" : "Rechercher",
+    "tagOrNamePlayer" : "Tag ou nom du joueur", 
+    "searchPlayer" : "Rechercher un joueur",
+
     "dashboard" : "Profil",
     "homeBase" : "Village principal",
     "th" : "HDV",
@@ -36,7 +62,7 @@
     "elder" : "Aîné",
     "member" : "Membre",
     "ready" : "Prêt",
-    "unready" : "Non prêt",
+    "unready" : "Pas prêt",
     "heroes" : "Héros",
     "equipment" : "Équipements",
     "troops" : "Troupes",
@@ -71,6 +97,13 @@
     "trophiesByMonth" : "Trophées par mois",
     "eosTrophies" : "Trophées en fin de saison",
 
+    "searchClan" : "Rechercher un clan",
+    "noResult" : "Aucun résultat.",
+    "filters" : "Filtres",
+    "noClan" : "Aucun clan",
+    "joinClanToUnlockNewFeatures" : "Rejoignez un clan pour débloquer de nouvelles fonctionnalités.",
+    "apply" : "Appliquer",
+    "cancel" : "Annuler",
     "clan" : "Clan",
     "clans" : "Clans",
     "members" : "Membres",
@@ -116,6 +149,7 @@
     "askForWarLogOpening" : "Contactez un chef ou un adjoint pour ouvrir le journal de guerre.",
     "warLogClosed" : "Le journal de guerre est privé.",
     "rounds" : "Tours",
+    "noDataAvailableForThisWar" : "Aucune donnée disponible pour cette guerre",
 
     "stateOfTheWar" : "État de la guerre",
     "stillNeedsToWin" : "doit encore gagner",
@@ -130,5 +164,7 @@
     "neededOverall" : "% Total nécessaire",
     "calculate" : "Calculer",
 
-    "management" : "Gestion"
+    "management" : "Gestion",
+
+    "comingSoon" : "Bientôt disponible !"
 }

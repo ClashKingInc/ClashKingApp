@@ -5,12 +5,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_history/war_history_page.dart';
 
 class WarHistoryCard extends StatelessWidget {
-  final List<dynamic> warHistoryData;
   final PlayerAccountInfo playerStats;
   final List<String> discordUser;
   final List<WarLogDetails> warLogData;
 
-  const WarHistoryCard({super.key, required this.warHistoryData, required this.playerStats, required this.discordUser, required this.warLogData});
+  const WarHistoryCard({super.key, required this.playerStats, required this.discordUser, required this.warLogData});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +21,6 @@ class WarHistoryCard extends StatelessWidget {
             builder: (context) => WarHistoryScreen(
               clanTag: playerStats.clan!.tag,
               discordUser: discordUser,
-              warHistoryData: warHistoryData,
               warLogData: warLogData,
             ),
           ),

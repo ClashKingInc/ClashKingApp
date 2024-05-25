@@ -18,11 +18,11 @@ final Map<String, Map<String, String>> leaguesUrls = {
   },
   'Silver League II': {
     'url':
-        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_CWL_Silver_2.png',
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_CWL_Silver_12.png',
   },
   'Silver League III': {
     'url':
-        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_CWL_Silver_3.png',
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_CWL_Silver_13.png',
   },
   'Gold League I': {
     'url':
