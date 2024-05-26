@@ -7,11 +7,11 @@ String convertToTimeAgo(int timestamp, context) {
   Duration diff = now.difference(date);
 
   if (diff.inDays >= 1) {
-    return '${diff.inDays} ${diff.inDays == 1 ? AppLocalizations.of(context)?.dayAgo : AppLocalizations.of(context)?.daysAgo}';
+    return '${diff.inDays == 1 ? AppLocalizations.of(context)?.dayAgo(diff.inDays) : AppLocalizations.of(context)?.daysAgo(diff.inDays)}';
   } else if (diff.inHours >= 1) {
-    return '${diff.inHours} ${diff.inHours == 1 ? AppLocalizations.of(context)?.hourAgo : AppLocalizations.of(context)?.hoursAgo}';
+    return '${diff.inHours == 1 ? AppLocalizations.of(context)?.hourAgo(diff.inHours) : AppLocalizations.of(context)?.hoursAgo(diff.inHours)}';
   } else if (diff.inMinutes >= 1) {
-    return '${diff.inMinutes} ${diff.inMinutes == 1 ? AppLocalizations.of(context)?.minuteAgo : AppLocalizations.of(context)?.minutesAgo}';
+    return '${diff.inMinutes == 1 ? AppLocalizations.of(context)?.minuteAgo(diff.inMinutes) : AppLocalizations.of(context)?.minutesAgo(diff.inMinutes)}';
   } else {
     return AppLocalizations.of(context)?.justNow ?? "Just now";
   }

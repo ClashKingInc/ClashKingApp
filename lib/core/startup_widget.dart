@@ -67,11 +67,9 @@ class StartupWidgetState extends State<StartupWidget> {
       String status = await checkIfPlayerTagExists(text, authToken);
 
       if (status == 'notExist') {
-        updateErrorMessage(
-            '$text ${AppLocalizations.of(context)!.doesNotExist}');
+        updateErrorMessage(AppLocalizations.of(context)!.doesNotExist(text));
       } else if (status == 'alreadyLinked') {
-        updateErrorMessage(
-            '$text ${AppLocalizations.of(context)!.isAlreadyLinked}');
+        updateErrorMessage(AppLocalizations.of(context)!.isAlreadyLinked(text));
       } else {
         String playerTagNotExists =
             AppLocalizations.of(context)!.playerTagNotExists;

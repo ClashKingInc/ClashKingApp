@@ -92,11 +92,9 @@ class GuestLoginPageState extends State<GuestLoginPage> {
       String status = await checkIfPlayerTagExists(text, authToken);
 
       if (status == 'notExist') {
-        updateErrorMessage(
-            '$text ${AppLocalizations.of(context)!.doesNotExist}');
+        updateErrorMessage(AppLocalizations.of(context)!.doesNotExist(text));
       } else if (status == 'alreadyLinked') {
-        updateErrorMessage(
-            '$text ${AppLocalizations.of(context)!.isAlreadyLinked}');
+        updateErrorMessage(AppLocalizations.of(context)!.isAlreadyLinked(text));
       } else {
         updateErrorMessage('');
       }
@@ -306,11 +304,15 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                               } else {
                                 if (!allTagsExist) {
                                   updateErrorMessage(
-                                      '${AppLocalizations.of(context)!.followingTagsDoNotExist} ${nonExistentTags.join(', ')}');
+                                      AppLocalizations.of(context)!
+                                          .followingTagsDoNotExist(
+                                              nonExistentTags.join(', ')));
                                 }
                                 if (!allTagsNotLinked) {
                                   updateErrorMessage(
-                                      '${AppLocalizations.of(context)!.followingTagsAreAlreadyLinked} ${alreadyLinkedTags.join(', ')}');
+                                      AppLocalizations.of(context)!
+                                          .followingTagsAreAlreadyLinked(
+                                              alreadyLinkedTags.join(', ')));
                                 }
                               }
                             }

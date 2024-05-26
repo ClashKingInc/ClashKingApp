@@ -71,7 +71,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
             child: Center(
               child: message == AppLocalizations.of(context)?.playerNotFound
                 ? Text(
-                  '${AppLocalizations.of(context)?.player ?? 'Player'} $_searchInput ${AppLocalizations.of(context)?.notFoundOrNotLinkedToOurSystem ?? 'not found or not linked to our system.'} ${AppLocalizations.of(context)?.tryAnotherNameOrTagOrLinkIt ?? 'Try another name/tag or link it.'}'
+                  '${AppLocalizations.of(context)?.player ?? 'Player'} ${AppLocalizations.of(context)?.notFoundOrNotLinkedToOurSystem(_searchInput) ?? 'not found or not linked to our system.'} ${AppLocalizations.of(context)?.tryAnotherNameOrTagOrLinkIt ?? 'Try another name/tag or link it.'}'
                   )
                 : null,
             ),
@@ -128,7 +128,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    '${AppLocalizations.of(context)?.player ?? 'Player'} $_searchInput ${AppLocalizations.of(context)?.notFoundOrNotLinkedToOurSystem ?? 'not found or not linked to our system.'} ${AppLocalizations.of(context)?.tryAnotherNameOrTagOrLinkIt ?? 'Try another name/tag or link it.'}',
+                    '${AppLocalizations.of(context)?.player ?? 'Player'} ${AppLocalizations.of(context)?.notFoundOrNotLinkedToOurSystem(_searchInput) ?? 'not found or not linked to our system.'} ${AppLocalizations.of(context)?.tryAnotherNameOrTagOrLinkIt ?? 'Try another name/tag or link it.'}',
                     textAlign: TextAlign.center,
                   ),
                 ],

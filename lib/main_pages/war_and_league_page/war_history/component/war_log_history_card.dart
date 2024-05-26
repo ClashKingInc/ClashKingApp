@@ -1,10 +1,12 @@
 import 'package:clashkingapp/api/current_war_info.dart';
+import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/api/war_log.dart';
+
 
 class WarLogHistoryCard extends StatefulWidget {
   final List<String> discordUser;
@@ -23,23 +25,102 @@ class WarLogHistoryCard extends StatefulWidget {
 }
 
 class WarLogHistoryCardState extends State<WarLogHistoryCard> {
+  String? selectedFilter;
   String formatDate(DateTime date, BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
     final format = locale == 'fr' ? 'dd/MM/yyyy' : 'MM/dd/yyyy';
     return DateFormat(format).format(date);
   }
 
+  List<WarLogDetails> getFilteredWarLogData() {
+    List<WarLogDetails> filteredData = widget.warLogData.where((warLogDetail) => warLogDetail.attacksPerMember == 2).toList();
+    if (selectedFilter == null) {
+      return filteredData;
+    }
+
+    switch (selectedFilter) {
+      case 'victory':
+        return filteredData.where((warLogDetail) => warLogDetail.result == 'win').toList();
+      case 'defeat':
+        return filteredData.where((warLogDetail) => warLogDetail.result == 'lose').toList();
+      case 'draw':
+        return filteredData.where((warLogDetail) => warLogDetail.result == 'draw').toList();
+      case 'perfectWar':
+        return filteredData.where((warLogDetail) => (warLogDetail.clan.destructionPercentage == 100 || warLogDetail.opponent.destructionPercentage == 100)).toList();
+      case 'newest':
+        return filteredData;
+      case 'oldest':
+        return filteredData.reversed.toList();
+      case '5':
+      case '10':
+      case '15':
+      case '20':
+      case '25':
+      case '30':
+      case '40':
+      case '50':
+        final teamSize = int.parse(selectedFilter!);
+        return filteredData.where((warLogDetail) => warLogDetail.teamSize == teamSize).toList();
+      default:
+        return filteredData;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final filteredWarLogData = getFilteredWarLogData();
 
     return Column(
       children: [
-        buildAllLog(context),
+        FilterDropdown(
+          sortBy: selectedFilter ?? 'newest', 
+          updateSortBy: (String newValue) {
+            setState(() {
+              selectedFilter = newValue;
+            });
+          }, 
+          sortByOptions: {
+            AppLocalizations.of(context)?.newest ?? 'Newest': 'newest',
+            AppLocalizations.of(context)?.oldest ?? 'Oldest': 'oldest',
+            AppLocalizations.of(context)?.victory ?? 'Victory': 'victory',
+            AppLocalizations.of(context)?.defeat ?? 'Defeat': 'defeat',
+            AppLocalizations.of(context)?.draw ?? 'Draw': 'draw',
+            AppLocalizations.of(context)?.perfectWar ?? 'Perfect War': 'perfectWar',
+            '5v5': '5',
+            '10v10': '10',
+            '15v15': '15',
+            '20v20': '20',
+            '25v25': '25',
+            '30v30': '30',
+            '40v40': '40',
+            '50v50': '50',
+          },
+        ),
+        SizedBox(height: 2),
+        filteredWarLogData.isEmpty
+          ? Column(
+            children: [
+              SizedBox(height: 16),
+              Card(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available'),
+                ),
+              ),
+              SizedBox(height: 32),
+              CachedNetworkImage(
+                imageUrl: 'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
+                height: 250,
+                width: 200,
+              ),
+            ],
+          )
+          : buildAllLog(context, filteredWarLogData),
       ],
     );
   }
 
-  Widget buildAllLog(BuildContext context) {
+  Widget buildAllLog(BuildContext context, List<WarLogDetails> warLogData) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,11 +128,8 @@ class WarLogHistoryCardState extends State<WarLogHistoryCard> {
           SizedBox(height: 2),
           Center(
             child: Column(
-              children: List<Widget>.generate(widget.warLogData.length, (index) {
-                final warLogDetail = widget.warLogData[index];
-                if (warLogDetail.attacksPerMember != 2) {
-                  return SizedBox.shrink();
-                }
+              children: List<Widget>.generate(warLogData.length, (index) {
+                final warLogDetail = warLogData[index];
                 
                 return GestureDetector(
                   onTap: () {
@@ -136,6 +214,7 @@ class WarLogHistoryCardState extends State<WarLogHistoryCard> {
                                         ? ('${warLogDetail.opponent.destructionPercentage.toInt()}%').padRight(7, ' ') 
                                         : ('${warLogDetail.opponent.destructionPercentage.toStringAsFixed(2)}%').padLeft(5, ' ')}'
                                     ),
+                                    SizedBox(height: 2),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
