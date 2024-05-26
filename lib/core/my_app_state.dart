@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:workmanager/workmanager.dart';
+import 'package:clashkingapp/l10n/locale.dart';
 
 class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   PlayerAccounts? playerAccounts;
@@ -57,13 +58,32 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   /* Language management */
 
-  // Load the language from the shared preferences
+  // This method checks if the locale is supported, if not, it falls back to English
+  Locale _getLocaleFallback(Locale locale) {
+    for (LocaleInfo supportedLocaleInfo in supportedLocales) {
+      if (supportedLocaleInfo.languageCode == locale.languageCode) {
+        return Locale(supportedLocaleInfo.languageCode); // Return if supported
+      }
+    }
+    return Locale('en'); // Fallback to English
+  }
+
+// Load the language from the shared preferences or set to the system locale
   void _loadLanguage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? languageCode = prefs.getString('languageCode');
-    _locale = languageCode != null
-        ? Locale(languageCode)
-        : Locale('en'); // Default language is English
+
+    if (languageCode != null) {
+      // If there is a language code saved, use it if supported
+      Locale userLocale = Locale(languageCode);
+      _locale = _getLocaleFallback(userLocale);
+    } else {
+      // No saved language code, so use the system locale if supported
+      Locale systemLocale = Locale(WidgetsBinding
+          .instance.platformDispatcher.locales.first.languageCode);
+      _locale = _getLocaleFallback(systemLocale);
+    }
+
     notifyListeners();
   }
 

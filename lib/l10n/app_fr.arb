@@ -5,14 +5,42 @@
     "signInWithDiscord" : "Connexion avec Discord",
     "guestMode" : "Mode invité",
     "createGuestProfile" : "Créer un profil invité",
-    "doesNotExist" : "n'existe pas.",
-    "isAlreadyLinked" : "est déjà lié à un compte.",
+    "doesNotExist" : "{tag} n'existe pas.",
+    "@doesNotExist": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
+    "isAlreadyLinked" : "{tag} est déjà lié à un compte.",
+    "@isAlreadyLinked": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
     "username" : "Nom d'utilisateur",
     "pleaseEnterUsername" : "Veuillez saisir un nom d'utilisateur",
     "playerTags" : "Tags de joueur",
     "pleaseEnterPlayerTags" : "Veuillez saisir un tag de joueur",
-    "followingTagsDoNotExist" : "Les tags suivants n'existent pas :",
-    "followingTagsAreAlreadyLinked" : "Les tags suivants sont déjà liés à un compte :",
+    "followingTagsDoNotExist" : "Les tags suivants n'existent pas : {tags}.",
+    "@followingTagsDoNotExist" : {
+        "placeholders": {
+            "tags": {
+                "type" : "String"
+            }
+        }
+    },
+    "followingTagsAreAlreadyLinked" : "Les tags suivants sont déjà liés à un compte : {tags}.",
+    "@followingTagsAreAlreadyLinked": {
+        "placeholders": {
+            "tags": {
+                "type": "String"
+            }
+        }
+    },
     "welcome" : "Bienvenue !",
     "welcomeMessage" : "Pour commencer, ajoutez un ou plusieurs compte Clash of clans à votre profil. Vous pourrez en ajouter ou en supprimer à tout moment.",
     
@@ -24,11 +52,16 @@
     "toggleTheme" :"Changer de thème",
     "copiedToClipboard" : "Copié dans le presse-papiers",
     "selectLanguage": "Sélectionnez une langue",
+    "faq" : "FAQ",
+    "faqIsThisFromSupercell" : "Cette application est-elle de Supercell ?",
+    "faqSubtitle" : "Foire aux questions",
+    "helpUsTranslate" : "Aidez-nous à traduire",
     "all" : "Tous",
     "hourIndicator" : "h",
     "minIndicator" : "m",
     "noDataAvailable" : "Aucune donnée disponible.",
     "close" : "Fermer",
+    "closed" : "Fermé",
     "error" : "Erreur",
     "player" : "Joueur",
     "notFoundOrNotLinkedToOurSystem" : "introuvable ou non lié à notre système.",
@@ -85,14 +118,62 @@
     "best" : "Meilleur",
     "total" : "Total",
     "heroesEquipments" : "Équipements de héros",
-    "beforeTimeAgo" : "Il y a",
-    "dayAgo" : "jour",
-    "daysAgo" : "jours",
-    "hourAgo" : "heure",
-    "hoursAgo" : "heures",
-    "minuteAgo" : "minute",
-    "minutesAgo" : "minutes",
-    "secondAgo" : "s",
+    "dayAgo" : "Il y a {day} jour",
+    "@dayAgo": {
+        "placeholders": {
+            "day": {
+                "type": "int"
+            }
+        }
+    },
+    "daysAgo" : "Il y a {days} jours",
+    "@daysAgo": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "hourAgo" : "Il y a {hour} heure",
+    "@hourAgo": {
+        "placeholders": {
+            "hour": {
+                "type": "int"
+            }
+        }
+    },
+    "hoursAgo" : "Il y a {hours} heures",
+    "@hoursAgo": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "minuteAgo" : "Il y a {minute} minute",
+    "@minuteAgo": {
+        "placeholders": {
+            "minute": {
+                "type": "int"
+            }
+        }
+    },
+    "minutesAgo" : "Il y a {minutes} minutes",
+    "@minutesAgo": {
+        "placeholders": {
+            "minutes": {
+                "type": "int"
+            }
+        }
+    },
+    "secondAgo" : "Il y a {seconds}s",
+    "@secondAgo": {
+        "placeholders": {
+            "seconds": {
+                "type": "int"
+            }
+        }
+    },
     "justNow" : "À l'instant",
     "trophiesByMonth" : "Trophées par mois",
     "eosTrophies" : "Trophées en fin de saison",
@@ -103,6 +184,8 @@
     "noClan" : "Aucun clan",
     "joinClanToUnlockNewFeatures" : "Rejoignez un clan pour débloquer de nouvelles fonctionnalités.",
     "apply" : "Appliquer",
+    "open" : "Ouvert",
+    "inviteOnly" : "Invitation",
     "cancel" : "Annuler",
     "clan" : "Clan",
     "clans" : "Clans",
@@ -115,6 +198,12 @@
     "donationsReceived" : "Don reçus",
     "donationsRatio" : "Ratio de dons",
     "trophies" : "Trophées",
+    "always" : "Toujours",
+    "never" : "Jamais",
+    "unknown" : "Inconnu",
+    "oncePerWeek" : "1/semaine",
+    "twicePerWeek" : "2/semaine",
+    "rarely" : "Rarement",
 
     "warLeague" : "Guerre/Ligue",
     "war" : "Guerre",
@@ -141,10 +230,27 @@
     "victory" : "Victoire",
     "defeat" : "Défaite",
     "draw" : "Égalité",
+    "perfectWar" : "Perf map",
+    "newest" : "Plus récente",
+    "oldest" : "Plus ancienne",
     "warEnded" : "Terminée",
     "preparation" : "Préparation",
-    "isNotInWar" : "n'est pas en guerre.",
-    "warLogIsClosed" : " a son journal de guerre privé.",
+    "isNotInWar" : "{clan} n'est pas en guerre.",
+    "@isNotInWar": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            }
+        }
+    },
+    "warLogIsClosed" : "{clan} a son journal de guerre privé.",
+    "@warLogIsClosed": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            }
+        }
+    },
     "askForWar" : "Contactez un chef ou un adjoint pour lancer une guerre.",
     "askForWarLogOpening" : "Contactez un chef ou un adjoint pour ouvrir le journal de guerre.",
     "warLogClosed" : "Le journal de guerre est privé.",

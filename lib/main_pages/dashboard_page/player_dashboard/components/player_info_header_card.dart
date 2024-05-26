@@ -147,7 +147,18 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                     Icons.question_mark_rounded,
                     color: Theme.of(context).colorScheme.onSurface, size: 32),
                   onPressed: () {
-                    launchUrl(Uri.parse('https://link.clashofclans.com/fr?action=OpenPlayerProfile&tag=${widget.playerStats.tag}'));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Center(
+                          child: Text(
+                            AppLocalizations.of(context)?.comingSoon ?? 'Comming soon !',
+                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                          ),
+                        ),
+                        duration: Duration(milliseconds: 1500),
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                      ),
+                    );
                   },
                 ),
               ),
@@ -158,10 +169,16 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                     Icons.equalizer_rounded,
                     color: Theme.of(context).colorScheme.onSurface, size: 32),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AchievementScreen(playerStats: widget.playerStats),
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Center(
+                          child: Text(
+                            AppLocalizations.of(context)?.comingSoon ?? 'Comming soon !',
+                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                          ),
+                        ),
+                        duration: Duration(milliseconds: 1500),
+                        backgroundColor: Theme.of(context).colorScheme.surface,
                       ),
                     );
                   },
