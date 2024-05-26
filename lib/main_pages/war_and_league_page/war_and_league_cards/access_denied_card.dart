@@ -45,8 +45,7 @@ class AccessDeniedCardState extends State<AccessDeniedCard> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        '${widget.clanName}${AppLocalizations.of(context)?.warLogIsClosed ?? "'s war log is closed."}',
+                      Text(AppLocalizations.of(context)?.warLogIsClosed(widget.clanName) ?? "'s war log is closed.",
                         textAlign: TextAlign.center,
                       ),
                       Text(

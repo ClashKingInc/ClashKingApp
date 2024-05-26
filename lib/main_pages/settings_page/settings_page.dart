@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
+import 'package:clashkingapp/l10n/locale.dart';
+import 'package:clashkingapp/main_pages/settings_page/faq_page.dart';
 
 class SettingsInfoScreen extends StatefulWidget {
   final User user;
@@ -46,12 +49,41 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
             },
           ),
           Divider(),
+          Consumer<ThemeNotifier>(
+            builder: (context, themeNotifier, child) {
+              return _buildListTile(
+                context,
+                title: AppLocalizations.of(context)!.toggleTheme,
+                leadingIcon: LucideIcons.sunMoon,
+                onTap: () {
+                  themeNotifier.toggleTheme();
+                },
+              );
+            },
+          ),
+          Divider(),
           _buildListTile(
             context,
-            title: AppLocalizations.of(context)!.toggleTheme,
-            leadingIcon: LucideIcons.sunMoon,
-            onTap: () {
-              Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();
+            title: AppLocalizations.of(context)!.faq,
+            subtitle: AppLocalizations.of(context)!.faqSubtitle,
+            leadingIcon: Icons.question_answer,
+            onTap: () async {
+              // Open FAQ page
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => FaqScreen()),
+              );
+            },
+          ),
+          Divider(),
+          _buildListTile(
+            context,
+            title: AppLocalizations.of(context)!.helpUsTranslate,
+            leadingIcon: Icons.language,
+            onTap: () async {
+              // Open FAQ page
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => FaqScreen()),
+              );
             },
           ),
           Divider(),
@@ -94,11 +126,17 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: <String>['en', 'fr'].map((String language) {
+            children: supportedLocales.map((LocaleInfo locale) {
               return ListTile(
-                leading: Icon(Icons.language),
-                title: Text(language == 'en' ? 'English' : 'Français'),
-                onTap: () => Navigator.pop(context, language),
+                leading: CachedNetworkImage(
+                  imageUrl: locale.flagUrl,
+                  width: 32,
+                  height: 32,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+                title: Text(locale.languageName),
+                onTap: () => Navigator.pop(context, locale.languageCode),
               );
             }).toList(),
           ),
@@ -116,10 +154,10 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   Future<void> _logOut() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    if(mounted){
-    globalNavigatorKey.currentState?.pushReplacement(
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
+    if (mounted) {
+      globalNavigatorKey.currentState?.pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
     }
   }
 }

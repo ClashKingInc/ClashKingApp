@@ -5,14 +5,42 @@
     "signInWithDiscord" : "Sign In with Discord",
     "guestMode" : "Guest Mode",
     "createGuestProfile" : "Create your guest profile",
-    "doesNotExist" : "does not exist.",
-    "isAlreadyLinked" : "is already linked to someone.",
+    "doesNotExist" : "{tag} does not exist.",
+    "@doesNotExist": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
+    "isAlreadyLinked" : "{tag} is already linked to someone.",
+    "@isAlreadyLinked": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
     "username" : "Username",
     "pleaseEnterUsername" : "Please enter a username",
     "playerTags" : "Player Tags",
     "pleaseEnterPlayerTags" : "Please enter player tags",
-    "followingTagsDoNotExist" : "The following tags do not exist :",
-    "followingTagsAreAlreadyLinked" : "The following tags are already linked to someone :",
+    "followingTagsDoNotExist" : "The following tags do not exist: {tags}.",
+    "@followingTagsDoNotExist": {
+        "placeholders": {
+            "tags": {
+                "type": "String"
+            }
+        }
+    },
+    "followingTagsAreAlreadyLinked" : "The following tags are already linked to someone: {tags}.",
+    "@followingTagsAreAlreadyLinked": {
+        "placeholders": {
+            "tags": {
+                "type": "String"
+            }
+        }
+    },
     "welcome" : "Welcome !",
     "welcomeMessage" : "Please add one or more Clash Of Clan accounts to your profile. You can add or remove accounts later.",
     
@@ -23,6 +51,10 @@
     "settings" : "Settings",
     "toggleTheme" : "Toggle Theme",
     "selectLanguage": "Select a language",
+    "faq" : "FAQ",
+    "faqSubtitle" : "Frequently Asked Questions",
+    "faqIsThisFromSupercell" : "Is this App from Supercell ?",
+    "helpUsTranslate" : "Help us translate",
     "copiedToClipboard" : "Copied to clipboard",
     "all" : "All",
     "hourIndicator" : "h",
@@ -31,7 +63,14 @@
     "close" : "Close",
     "error" : "Error",
     "player" : "Player",
-    "notFoundOrNotLinkedToOurSystem" : "not found or not linked to our system.",
+    "notFoundOrNotLinkedToOurSystem" : "{player} not found or not linked to our system.",
+    "@notFoundOrNotLinkedToOurSystem": {
+        "placeholders": {
+            "player": {
+                "type": "String"
+            }
+        }
+    },
     "tryAnotherNameOrTagOrLinkIt" : "Try another name/tag or link it.",
     "playerNotFound" : "Player not found",
     "noValueEntered" : "No value entered",
@@ -43,7 +82,7 @@
     "addAccount" : "Add account",
     "deleteAccount" : "Delete account",
     "playerTagNotExists" : "The player tag entered does not exist.",
-    "accountAlreadyLinked" : "'The player tag is already linked to someone.'",
+    "accountAlreadyLinked" : "The player tag is already linked to someone.",
     "failedToAddTryAgain" : "Failed to add link. Please try again later.",
     "failedToDeleteTryAgain" : "Failed to delete link. Please try again later.",
 
@@ -85,14 +124,62 @@
     "best" : "Best",
     "total" : "Total",
     "heroesEquipments" : "Heroes equipments",
-    "beforeTimeAgo" : "",
-    "daysAgo" : "days ago",
-    "dayAgo" : "day ago",
-    "hourAgo" : "hour ago",
-    "hoursAgo" : "hours ago",
-    "minuteAgo" : "minute ago",
-    "minutesAgo" : "minutes ago",
-    "secondAgo" : "s",
+    "daysAgo" : "{days} days ago",
+    "@daysAgo": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "dayAgo" : "{day} day ago",
+    "@dayAgo": {
+        "placeholders": {
+            "day": {
+                "type": "int"
+            }
+        }
+    },
+    "hourAgo" : "{hour} hour ago",
+    "@hourAgo": {
+        "placeholders": {
+            "hour": {
+                "type": "int"
+            }
+        }
+    },
+    "hoursAgo" : "{hours} hours ago",
+    "@hoursAgo": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "minuteAgo" : "{minute} minute ago",
+    "@minuteAgo": {
+        "placeholders": {
+            "minute": {
+                "type": "int"
+            }
+        }
+    },
+    "minutesAgo" : "{minutes} minutes ago",
+    "@minutseAgo": {
+        "placeholders": {
+            "minutes": {
+                "type": "int"
+            }
+        }
+    },
+    "secondAgo" : "{seconds}s ago",
+    "@secondAgo": {
+        "placeholders": {
+            "seconds": {
+                "type": "int"
+            }
+        }
+    },
     "justNow" : "Just Now",
     "trophiesByMonth" : "Trophies by month",
     "eosTrophies" : "End Of Season Trophies",
@@ -143,8 +230,22 @@
     "draw" : "Draw",
     "warEnded" : "War ended",
     "preparation" : "Preparation",
-    "isNotInWar" : "is not in war.",
-    "warLogIsClosed" : "'s war log is closed.",
+    "isNotInWar" : "{clan} is not in war.",
+    "@isNotInWar": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            }
+        }
+    },
+    "warLogIsClosed" : "{clan}'s war log is closed.",
+    "@warLogIsClosed": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            }
+        }
+    },
     "askForWar" : "Contact a leader or a co-leader to start a war.",
     "askForWarLogOpening" : "Contact a leader or a co-leader to open the war log.",
     "warLogClosed" : "War log closed.",
