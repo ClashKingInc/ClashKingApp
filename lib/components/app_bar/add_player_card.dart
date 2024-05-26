@@ -88,7 +88,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
                   playerTagNotExists,
                   accountAlreadyLinked,
                   failedToAddTryAgain);
-              if (success) {
+              if (success && context.mounted) {
                 myAppState.reloadUsersAccounts(context);
               }
               if (errorMessage.isEmpty) {
@@ -97,7 +97,9 @@ class AddPlayerCardState extends State<AddPlayerCard> {
             } else {
               widget.user.tags.add("#$playerTag");
               print('User tags: ${widget.user.tags}');
-              myAppState.reloadUsersAccounts(context);
+              if (context.mounted) {
+                myAppState.reloadUsersAccounts(context);
+              }
               navigator.pop();
             }
           },

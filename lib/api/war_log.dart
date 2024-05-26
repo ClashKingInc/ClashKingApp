@@ -9,13 +9,15 @@ class WarLog {
   });
 
   factory WarLog.fromJson(Map<String, dynamic> json) {
-    var itemList = json['items'] != null 
-      ? (json['items'] as List).map((itemJson) => WarLogDetails.fromJson(itemJson as Map<String, dynamic>)).toList()
-      : [];
+    var itemList = json['items'] != null
+        ? (json['items'] as List)
+            .map((itemJson) =>
+                WarLogDetails.fromJson(itemJson as Map<String, dynamic>))
+            .toList()
+        : [];
     return WarLog(items: itemList.cast<WarLogDetails>());
   }
 }
-
 
 class WarLogDetails {
   final String result;
@@ -75,7 +77,8 @@ class ClanDetails {
       clanLevel: json['clanLevel'] ?? 0,
       attacks: json['attacks'] ?? 0,
       stars: json['stars'] ?? 0,
-      destructionPercentage: (json['destructionPercentage'] as num?)?.toDouble() ?? 0.0,
+      destructionPercentage:
+          (json['destructionPercentage'] as num?)?.toDouble() ?? 0.0,
       expEarned: json['expEarned'] ?? 0,
     );
   }
@@ -105,10 +108,14 @@ class WarLogService {
   static Future<WarLog> fetchWarLogData(String tag) async {
     final response = await http.get(Uri.parse(
         'https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/warlog'));
+    print(response.body);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       Map<String, dynamic> jsonBody = json.decode(body);
       return WarLog.fromJson(jsonBody);
+    } else if (response.statusCode == 403) {
+      return WarLog(items: []);
     } else {
       throw Exception('Failed to load war history data');
     }

@@ -91,9 +91,9 @@ class GuestLoginPageState extends State<GuestLoginPage> {
       String authToken = await login();
       String status = await checkIfPlayerTagExists(text, authToken);
 
-      if (status == 'notExist') {
+      if (status == 'notExist' && mounted) {
         updateErrorMessage(AppLocalizations.of(context)!.doesNotExist(text));
-      } else if (status == 'alreadyLinked') {
+      } else if (status == 'alreadyLinked' && mounted) {
         updateErrorMessage(AppLocalizations.of(context)!.isAlreadyLinked(text));
       } else {
         updateErrorMessage('');
@@ -128,10 +128,6 @@ class GuestLoginPageState extends State<GuestLoginPage> {
     });
   }
 
-  FutureOr<List<String>> _suggestionCallback(String text) {
-    // Replace with actual suggestion logic if needed
-    return [];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,14 +139,14 @@ class GuestLoginPageState extends State<GuestLoginPage> {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: WillPopScope(
-        onWillPop: () async {
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.remove('access_token');
-          navigator.pushReplacement(
-              MaterialPageRoute(builder: (_) => StartupWidget()));
-          return false;
-        },
+      child: PopScope(
+        canPop : true,
+      onPopInvoked: (didPop) async {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('access_token');
+        navigator.pushReplacement(
+          MaterialPageRoute(builder: (_) => StartupWidget()));
+      },
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -302,13 +298,13 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                                   ),
                                 );
                               } else {
-                                if (!allTagsExist) {
+                                if (!allTagsExist && context.mounted) {
                                   updateErrorMessage(
                                       AppLocalizations.of(context)!
                                           .followingTagsDoNotExist(
                                               nonExistentTags.join(', ')));
                                 }
-                                if (!allTagsNotLinked) {
+                                if (!allTagsNotLinked && context.mounted) {
                                   updateErrorMessage(
                                       AppLocalizations.of(context)!
                                           .followingTagsAreAlreadyLinked(

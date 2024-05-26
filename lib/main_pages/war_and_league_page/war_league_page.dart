@@ -35,7 +35,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   CurrentWarInfo? currentWarInfo;
   CurrentLeagueInfo? currentLeagueInfo;
   List<Map<int, List<WarLeagueInfo>>> warLeagueInfoByRound = [];
-  late Future<WarLog> warLogData;
+  late Future<WarLog> warLogData = Future.value(WarLog(items: []));
 
   @override
   void initState() {
@@ -48,9 +48,6 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
           print("First item of War Log: ${data.items.first}");
         }
       });
-    } else {
-      print("Clan Info is null");
-      warLogData = Future.value(WarLog(items: []));
     }
   }
 
@@ -124,11 +121,11 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                   )
                 else if (warState == "noClan")
                   Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Card(
-                    child: NoClanCard(),
-                  ),
-                )
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Card(
+                      child: NoClanCard(),
+                    ),
+                  )
                 else
                   Padding(
                     padding:
@@ -137,8 +134,8 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                         clanName: widget.playerStats.clan!.name,
                         clanBadgeUrl: widget.playerStats.clan!.badgeUrls.large),
                   ),
-                if (warState != "noClan")
-                buildWarHistorySection()
+                if (warState != "noClan" && warState != "accessDenied")
+                  buildWarHistorySection()
               ],
             );
           }
@@ -193,8 +190,6 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
         currentWarInfo = CurrentWarInfo.fromJson(
             jsonDecode(utf8.decode(responseWar.bodyBytes)), "war");
         return "war";
-      } else if (decodedResponse["reason"] == "accessDenied") {
-        return "accessDenied";
       } else if (decodedResponse["state"] == "notInWar") {
         DateTime now = DateTime.now();
         if (now.day >= 1 && now.day <= 12) {
@@ -209,6 +204,8 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
           }
         }
       }
+    } else if (responseWar.statusCode == 403) {
+      return "accessDenied";
     } else {
       throw Exception('Failed to load current war info');
     }
