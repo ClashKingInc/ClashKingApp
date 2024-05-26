@@ -17,8 +17,11 @@ class FilterDropdown extends StatelessWidget {
         return DropdownMenuItem<String>(
           value: entry.value,
           child: entry.key is String
-          ? Text(entry.key)
-          : Row(children: entry.key as List<Widget>),
+            ? Center(child: Text(entry.key),)
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: entry.key as List<Widget>
+              ),
         );
       }).toList(),
       onChanged: (String? newValue) {
@@ -45,6 +48,7 @@ class FilterDropdown extends StatelessWidget {
         elevation: 16,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(10),
         ),
         scrollbarTheme: ScrollbarThemeData(
           radius: const Radius.circular(40),
