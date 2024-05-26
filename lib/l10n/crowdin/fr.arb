@@ -4,14 +4,42 @@
     "signInWithDiscord": "Se connecter avec Discord",
     "guestMode": "Mode Invité",
     "createGuestProfile": "Créez votre profil invité",
-    "doesNotExist": "n'existe pas.",
-    "isAlreadyLinked": "est déjà lié à quelqu'un.",
+    "doesNotExist": "{tag} does not exist.",
+    "@doesNotExist": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
+    "isAlreadyLinked": "{tag} is already linked to someone.",
+    "@isAlreadyLinked": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
     "username": "Nom d’utilisateur",
     "pleaseEnterUsername": "Veuillez entrer un nom d'utilisateur",
     "playerTags": "Tags du joueur",
     "pleaseEnterPlayerTags": "Veuillez saisir les tags du joueur",
-    "followingTagsDoNotExist": "Les tags suivants n'existent pas :",
-    "followingTagsAreAlreadyLinked": "Les tags suivants sont déjà liés à quelqu'un :",
+    "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
+    "@followingTagsDoNotExist": {
+        "placeholders": {
+            "tags": {
+                "type": "String"
+            }
+        }
+    },
+    "followingTagsAreAlreadyLinked": "The following tags are already linked to someone: {tags}.",
+    "@followingTagsAreAlreadyLinked": {
+        "placeholders": {
+            "tags": {
+                "type": "String"
+            }
+        }
+    },
     "welcome": "Bienvenue !",
     "welcomeMessage": "Veuillez ajouter un ou plusieurs comptes Clash Of Clan à votre profil. Vous pouvez ajouter ou supprimer des comptes plus tard.",
     "login": "Connexion",
@@ -20,15 +48,27 @@
     "settings": "Paramètres",
     "toggleTheme": "Changer de thème",
     "selectLanguage": "Choisir une langue",
+    "faq": "FAQ",
+    "faqSubtitle": "Frequently Asked Questions",
+    "faqIsThisFromSupercell": "Is this App from Supercell ?",
+    "helpUsTranslate": "Help us translate",
     "copiedToClipboard": "Copié dans le presse-papiers",
     "all": "Tous",
     "hourIndicator": "h",
     "minIndicator": "m",
     "noDataAvailable": "Aucune donnée disponible.",
     "close": "Fermer",
+    "closed": "Closed",
     "error": "Erreur",
     "player": "Joueur",
-    "notFoundOrNotLinkedToOurSystem": "introuvable ou non lié à notre système.",
+    "notFoundOrNotLinkedToOurSystem": "{player} not found or not linked to our system.",
+    "@notFoundOrNotLinkedToOurSystem": {
+        "placeholders": {
+            "player": {
+                "type": "String"
+            }
+        }
+    },
     "tryAnotherNameOrTagOrLinkIt": "Essayez un autre nom/tag ou liez-le.",
     "playerNotFound": "Joueur introuvable",
     "noValueEntered": "Aucune valeur saisie",
@@ -39,7 +79,7 @@
     "addAccount": "Ajouter le compte",
     "deleteAccount": "Supprimer le compte",
     "playerTagNotExists": "Le tag du joueur saisi n'existe pas.",
-    "accountAlreadyLinked": "Les tags suivants sont déjà liés à quelqu'un.",
+    "accountAlreadyLinked": "The player tag is already linked to someone.",
     "failedToAddTryAgain": "Échec de l'ajout du compte. Veuillez réessayer plus tard.",
     "failedToDeleteTryAgain": "Échec de la suppression du compte. Veuillez réessayer plus tard.",
     "search": "Rechercher",
@@ -79,14 +119,62 @@
     "best": "Meilleur",
     "total": "Total",
     "heroesEquipments": "Équipements de Héros",
-    "beforeTimeAgo": "",
-    "daysAgo": "jours",
-    "dayAgo": "jour",
-    "hourAgo": "heure",
-    "hoursAgo": "heures",
-    "minuteAgo": "minute",
-    "minutesAgo": "minutes",
-    "secondAgo": "s",
+    "daysAgo": "{days} days ago",
+    "@daysAgo": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "dayAgo": "{day} day ago",
+    "@dayAgo": {
+        "placeholders": {
+            "day": {
+                "type": "int"
+            }
+        }
+    },
+    "hourAgo": "{hour} hour ago",
+    "@hourAgo": {
+        "placeholders": {
+            "hour": {
+                "type": "int"
+            }
+        }
+    },
+    "hoursAgo": "{hours} hours ago",
+    "@hoursAgo": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "minuteAgo": "{minute} minute ago",
+    "@minuteAgo": {
+        "placeholders": {
+            "minute": {
+                "type": "int"
+            }
+        }
+    },
+    "minutesAgo": "{minutes} minutes ago",
+    "@minutseAgo": {
+        "placeholders": {
+            "minutes": {
+                "type": "int"
+            }
+        }
+    },
+    "secondAgo": "{seconds}s ago",
+    "@secondAgo": {
+        "placeholders": {
+            "seconds": {
+                "type": "int"
+            }
+        }
+    },
     "justNow": "À l'instant",
     "trophiesByMonth": "Trophées par mois",
     "eosTrophies": "Trophées en fin de saison",
@@ -96,6 +184,8 @@
     "noClan": "Aucun clan",
     "joinClanToUnlockNewFeatures": "Rejoignez un clan pour débloquer de nouvelles fonctionnalités.",
     "apply": "Appliquer",
+    "open": "Open",
+    "inviteOnly": "Invite Only",
     "cancel": "Annuler",
     "clan": "Clan",
     "clans": "Clans",
@@ -108,6 +198,12 @@
     "donationsReceived": "Dons reçus",
     "donationsRatio": "Ratio de dons",
     "trophies": "Trophées",
+    "always": "Always",
+    "never": "Never",
+    "unknown": "Unknown",
+    "oncePerWeek": "1/week",
+    "twicePerWeek": "2/week",
+    "rarely": "Rarely",
     "warLeague": "Guerre/Ligue",
     "war": "Guerre",
     "league": "Ligue",
@@ -133,27 +229,44 @@
     "victory": "Victoire",
     "defeat": "Défaite",
     "draw": "Égalité",
+    "perfectWar": "Perfect war",
+    "newest": "Newest",
+    "oldest": "Oldest",
     "warEnded": "Guerre terminée",
     "preparation": "Préparation",
-    "isNotInWar": "n'est pas en guerre.",
-    "warLogIsClosed": "a son journal de guerre privé.",
-    "askForWar": "Contact a leader or a co-leader to start a war.",
-    "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-    "warLogClosed": "War log closed.",
-    "rounds": "Rounds",
-    "noDataAvailableForThisWar": "No data available for this war",
-    "stateOfTheWar": "State of the war",
-    "stillNeedsToWin": "still needs to win",
-    "toTakeTheLead": "to take the lead",
-    "or": "or",
-    "star": "star",
-    "starSmall": "star",
-    "moreDestruction": "more destruction",
-    "clanDraw": "The two clans are tied",
-    "fastCalculator": "Fast calculator",
-    "teamSize": "Team size",
-    "neededOverall": "% Needed overall",
-    "calculate": "Calculate",
-    "management": "Management",
-    "comingSoon": "Coming soon !"
+    "isNotInWar": "{clan} is not in war.",
+    "@isNotInWar": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            }
+        }
+    },
+    "warLogIsClosed": "{clan}'s war log is closed.",
+    "@warLogIsClosed": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            }
+        }
+    },
+    "askForWar": "Contactez un chef ou un adjoint pour lancer une guerre.",
+    "askForWarLogOpening": "Contactez un chef ou un adjoint pour ouvrir le journal de guerre.",
+    "warLogClosed": "Le journal de guerre est privé.",
+    "rounds": "Tours",
+    "noDataAvailableForThisWar": "Aucune donnée disponible pour cette guerre",
+    "stateOfTheWar": "État de la guerre",
+    "stillNeedsToWin": "doit encore gagner",
+    "toTakeTheLead": "pour prendre l'avantage",
+    "or": "ou",
+    "star": "Étoile",
+    "starSmall": "étoile",
+    "moreDestruction": "plus de destruction",
+    "clanDraw": "Les deux clans sont à égalité",
+    "fastCalculator": "Calculatrice rapide",
+    "teamSize": "Taille de l'équipe",
+    "neededOverall": "% total nécessaire",
+    "calculate": "Calculer",
+    "management": "Gestion",
+    "comingSoon": "Bientôt disponible !"
 }
