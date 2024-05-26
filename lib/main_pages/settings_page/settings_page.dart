@@ -11,6 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/l10n/locale.dart';
 import 'package:clashkingapp/main_pages/settings_page/faq_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsInfoScreen extends StatefulWidget {
   final User user;
@@ -80,10 +81,8 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
             title: AppLocalizations.of(context)!.helpUsTranslate,
             leadingIcon: Icons.language,
             onTap: () async {
-              // Open FAQ page
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => FaqScreen()),
-              );
+              launchUrl(Uri.parse(
+                  'https://crowdin.com/project/clashkingapp/invite?h=87a407268713f1cb79724a2e0c00a5d52098842'));
             },
           ),
           Divider(),
