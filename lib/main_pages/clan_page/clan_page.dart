@@ -37,6 +37,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
           },
           child: ListView(
             children: <Widget>[
+              SizedBox(height: 4),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: ClanSearch(discordUser: widget.user.tags),

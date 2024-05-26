@@ -88,8 +88,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                       );
                     },
                     child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                      padding: EdgeInsets.only(left: 4.0, right: 4.0),
                       child: CurrentWarInfoCard(
                           currentWarInfo: currentWarInfo!,
                           clanTag: widget.clanInfo!.tag),
@@ -97,7 +96,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                   )
                 else if (warState == "accessDenied")
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: EdgeInsets.only(left: 4.0, right: 4.0),
                     child: AccessDeniedCard(
                         clanName: widget.playerStats.clan!.name,
                         clanBadgeUrl: widget.playerStats.clan!.badgeUrls.large),
