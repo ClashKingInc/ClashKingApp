@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/api/war_log.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
@@ -9,7 +10,11 @@ class WarHistoryCard extends StatelessWidget {
   final List<String> discordUser;
   final List<WarLogDetails> warLogData;
 
-  const WarHistoryCard({super.key, required this.playerStats, required this.discordUser, required this.warLogData});
+  const WarHistoryCard(
+      {super.key,
+      required this.playerStats,
+      required this.discordUser,
+      required this.warLogData});
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +37,19 @@ class WarHistoryCard extends StatelessWidget {
           margin: EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 8),
           child: Padding(
             padding: const EdgeInsets.all(8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)?.warHistory ?? 'War History'
-                    ),
-                  ],
+                SizedBox(
+                  height: 90,
+                  width: 90,
+                  child: CachedNetworkImage(
+                      imageUrl:
+                          "https://clashkingfiles.b-cdn.net/icons/Decoration_HV_The_Warrior_Statue.png"),
                 ),
+                SizedBox(width: 12),
+                Text(AppLocalizations.of(context)?.warHistory ?? 'War History',
+                    textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyLarge),
               ],
             ),
           ),
