@@ -68,7 +68,7 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
                   ),
                 ),
                 Center(
-                  child: Text('Work in progress'),
+                  child: Text(AppLocalizations.of(context)?.comingSoon ?? 'Coming Soon'),
                 ), 
               ],
             ),

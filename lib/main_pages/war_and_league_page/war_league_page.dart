@@ -16,6 +16,7 @@ import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards
 import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/war_history_card.dart';
 import 'package:clashkingapp/api/wars_league_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
+import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/war_functions.dart';
 
 class CurrentWarInfoPage extends StatefulWidget {
   final ClanInfo? clanInfo;
@@ -36,6 +37,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   CurrentLeagueInfo? currentLeagueInfo;
   List<Map<int, List<WarLeagueInfo>>> warLeagueInfoByRound = [];
   late Future<WarLog> warLogData = Future.value(WarLog(items: []));
+  late Map<String, String> warLogStats = {};
 
   @override
   void initState() {
@@ -46,6 +48,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
         print("War Log Data Loaded: ${data.items.length} items");
         if (data.items.isNotEmpty) {
           print("First item of War Log: ${data.items.first}");
+          warLogStats = analyzeWarLogs(data.items);
         }
       });
     }
@@ -160,6 +163,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
             warLogData: warLogDetails,
             playerStats: widget.playerStats,
             discordUser: widget.discordUser.tags,
+            warLogStats: warLogStats,
           );
         } else {
           return SizedBox.shrink();
