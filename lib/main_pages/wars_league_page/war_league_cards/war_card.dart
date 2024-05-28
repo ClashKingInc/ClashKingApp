@@ -36,6 +36,7 @@ class CurrentWarInfoCard extends StatelessWidget {
   Widget _warEnded(BuildContext context, String clanTag) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
           flex: 3,
@@ -57,11 +58,13 @@ class CurrentWarInfoCard extends StatelessWidget {
         Expanded(
           flex: 4,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(AppLocalizations.of(context)?.warEnded ?? 'War ended',
                   style: Theme.of(context)
                       .textTheme
-                      .titleSmall
+                      .bodySmall
                       ?.copyWith(fontWeight: FontWeight.bold)),
               ((currentWarInfo.clan.tag == clanTag &&
                           currentWarInfo.clan.stars >
@@ -119,7 +122,6 @@ class CurrentWarInfoCard extends StatelessWidget {
               ),
               Text(
                   '${currentWarInfo.clan.destructionPercentage % 1 == 0 ? currentWarInfo.clan.destructionPercentage.toInt().toString().padLeft(6, ' ') : currentWarInfo.clan.destructionPercentage.toStringAsFixed(2).padLeft(5, '0')}%    ${currentWarInfo.opponent.destructionPercentage % 1 == 0 ? ('${currentWarInfo.opponent.destructionPercentage.toInt()}%').padRight(7, ' ') : ('${currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)}%').padLeft(5, ' ')}'),
-              SizedBox(height: 100),
             ],
           ),
         ),
