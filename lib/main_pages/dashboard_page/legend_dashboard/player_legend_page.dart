@@ -4,7 +4,7 @@ import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/api/player_legend.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_header_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_header.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_used_gear_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_trophies_start_end_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_offense_defense_card.dart';

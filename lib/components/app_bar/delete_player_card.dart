@@ -95,7 +95,7 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
               if (widget.user.isDiscordUser) {
                 final success = await deleteLink(playerTag, token,
                     updateErrorMessage, failedToDeleteTryAgain);
-                if (success && mounted) {
+                if (success && context.mounted) {
                   myAppState.reloadUsersAccounts(context);
                 }
                 if (errorMessage.isEmpty) {
@@ -104,7 +104,9 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
               } else {
                 widget.user.tags.remove(playerTag);
                 print('User tags: ${widget.user.tags}');
-                myAppState.reloadUsersAccounts(context);
+                if (context.mounted) {
+                  myAppState.reloadUsersAccounts(context);
+                }
                 navigator.pop();
               }
             },
