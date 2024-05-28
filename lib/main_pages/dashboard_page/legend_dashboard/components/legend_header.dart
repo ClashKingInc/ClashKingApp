@@ -16,6 +16,7 @@ class LegendHeaderCard extends StatelessWidget {
   final LegendScreen widget;
   final PlayerLegendData legendData;
 
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -31,8 +32,9 @@ class LegendHeaderCard extends StatelessWidget {
                   Colors.black.withOpacity(0.7),
                   BlendMode.darken,
                 ),
-                child: CachedNetworkImage(imageUrl: 
-                  "https://clashkingfiles.b-cdn.net/landscape/legend-landscape.png",
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "https://clashkingfiles.b-cdn.net/landscape/legend-landscape.png",
                   width: double.infinity,
                   fit: BoxFit.cover,
                 )),
@@ -51,24 +53,22 @@ class LegendHeaderCard extends StatelessWidget {
                   children: [
                     Text(
                       legendData.name,
-                      style:
-                          Theme.of(context).textTheme.titleMedium?.copyWith(
-                                color: Colors.white,
-                              ),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Colors.white,
+                          ),
                     ),
                     Text(legendData.tag,
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge
-                            ?.copyWith(
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
                               color: Colors.grey,
                             )),
                     SizedBox(height: 10),
-                    Row(
+                    if (widget.playerLegendData.currentTrophies != "0")
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CachedNetworkImage(imageUrl: 
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border.png",
+                          CachedNetworkImage(
+                            imageUrl:
+                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border.png",
                             width: 60,
                           ),
                           Text(widget.playerLegendData.currentTrophies,
@@ -80,20 +80,43 @@ class LegendHeaderCard extends StatelessWidget {
                                     fontSize: 32,
                                   )),
                           SizedBox(width: 8),
-                          Column(children: [
-                            Text(
-                              "(${widget.playerLegendData.diffTrophies >= 0 ? '+' : ''}${widget.playerLegendData.diffTrophies.toString()})",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium
-                                  ?.copyWith(
-                                    color: widget.playerLegendData.diffTrophies >= 0
-                                      ? Colors.green
-                                      : Colors.red),
-                            ),
-                            SizedBox(height: 32),
-                          ]),
-                        ]),
+                          Column(
+                            children: [
+                              Text(
+                                "(${widget.playerLegendData.diffTrophies >= 0 ? '+' : ''}${widget.playerLegendData.diffTrophies.toString()})",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(
+                                        color: widget.playerLegendData
+                                                    .diffTrophies >=
+                                                0
+                                            ? Colors.green
+                                            : Colors.red),
+                              ),
+                              SizedBox(height: 32),
+                            ],
+                          ),
+                        ],
+                      ),
+                    if (widget.playerLegendData.currentTrophies == "0")
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl:
+                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border.png",
+                            width: 60,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.notInLegendLeague,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(color: Colors.white),
+                          ),
+                        ],
+                      ),
                     SizedBox(height: 8),
                     Row(
                       children: [
@@ -104,70 +127,80 @@ class LegendHeaderCard extends StatelessWidget {
                                 spacing: 8,
                                 runSpacing: 0,
                                 children: <Widget>[
-                                  if (legendData.rankings['country_code'] != null)
+                                  if (legendData.rankings['country_code'] !=
+                                      null)
+                                    Chip(
+                                      avatar: CircleAvatar(
+                                          backgroundColor: Colors.transparent,
+                                          child: CachedNetworkImage(
+                                              imageUrl:
+                                                  "https://clashkingfiles.b-cdn.net/country-flags/${legendData.rankings['country_code']!.toLowerCase() ?? 'uk'}.png")),
+                                      label: Text(
+                                        legendData.rankings['country_name'] ==
+                                                null
+                                            ? 'No Country'
+                                            : '${legendData.rankings['country_name']}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium
+                                            ?.copyWith(color: Colors.white),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        side: BorderSide(
+                                            color: Colors.white, width: 1),
+                                      ),
+                                    ),
+                                  if (legendData.rankings['country_code'] !=
+                                      null)
+                                    Chip(
+                                      avatar: CircleAvatar(
+                                          backgroundColor: Colors.transparent,
+                                          child: CachedNetworkImage(
+                                              imageUrl:
+                                                  "https://clashkingfiles.b-cdn.net/country-flags/${legendData.rankings['country_code']!.toLowerCase() ?? 'uk'}.png")),
+                                      label: Text(
+                                        legendData.rankings['local_rank'] ==
+                                                null
+                                            ? AppLocalizations.of(context)
+                                                    ?.noRank ??
+                                                'No rank'
+                                            : '${legendData.rankings['local_rank']}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium
+                                            ?.copyWith(color: Colors.white),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        side: BorderSide(
+                                            color: Colors.white, width: 1),
+                                      ),
+                                    ),
                                   Chip(
                                     avatar: CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      child: CachedNetworkImage(imageUrl: 
-                                        "https://clashkingfiles.b-cdn.net/country-flags/${legendData.rankings['country_code']!.toLowerCase() ?? 'uk'}.png")),
+                                        backgroundColor: Colors
+                                            .transparent, // Set to a suitable color for your design.
+                                        child: CachedNetworkImage(
+                                            imageUrl:
+                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
                                     label: Text(
-                                      legendData.rankings['country_name'] == null
-                                        ? 'No Country'
-                                        : '${legendData.rankings['country_name']}',
-                                      style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium
-                                        ?.copyWith(color: Colors.white),
-                                    ),
+                                        legendData.rankings['global_rank'] ==
+                                                null
+                                            ? AppLocalizations.of(context)
+                                                    ?.noRank ??
+                                                'No rank'
+                                            : NumberFormat('#,###', 'fr_FR')
+                                                .format(legendData
+                                                    .rankings['global_rank']),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium
+                                            ?.copyWith(color: Colors.white)),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                       side: BorderSide(
-                                        color: Colors.white,
-                                        width: 1),
-                                    ),
-                                  ),
-                                  if (legendData.rankings['country_code'] != null)
-                                  Chip(
-                                    avatar: CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      child: CachedNetworkImage(imageUrl: 
-                                          "https://clashkingfiles.b-cdn.net/country-flags/${legendData.rankings['country_code']!.toLowerCase() ?? 'uk'}.png")),
-                                    label: Text(
-                                      legendData.rankings['local_rank'] == null
-                                        ? AppLocalizations.of(context)?.noRank ?? 'No rank'
-                                        : '${legendData.rankings['local_rank']}',
-                                      style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium
-                                        ?.copyWith(color: Colors.white),
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      side: BorderSide(
-                                        color: Colors.white,
-                                        width: 1),
-                                    ),
-                                  ),
-                                  Chip(
-                                    avatar: CircleAvatar(
-                                      backgroundColor: Colors.transparent, // Set to a suitable color for your design.
-                                      child: CachedNetworkImage(imageUrl: 
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")
-                                    ),
-                                    label: Text(
-                                      legendData.rankings['global_rank'] == null
-                                        ? AppLocalizations.of(context)?.noRank ?? 'No rank'
-                                        : NumberFormat('#,###', 'fr_FR').format(legendData.rankings['global_rank']),
-                                      style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium
-                                        ?.copyWith(color: Colors.white)
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      side: BorderSide(
-                                        color: Colors.white,
-                                        width: 1),
+                                          color: Colors.white, width: 1),
                                     ),
                                   ),
                                 ],
