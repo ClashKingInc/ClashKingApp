@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/api/current_league_info.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/current_war_info_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/war_card.dart';
 
 class CwlCard extends StatefulWidget {
   final CurrentLeagueInfo currentLeagueInfo;

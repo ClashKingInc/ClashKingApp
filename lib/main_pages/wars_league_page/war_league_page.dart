@@ -1,22 +1,22 @@
 import 'package:clashkingapp/api/current_league_info.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/access_denied_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/access_denied_card.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/current_league_info_page.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/league/current_league_info_page.dart';
 import 'package:clashkingapp/api/user_info.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/api/war_log.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/not_in_war_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/cwl_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/current_war_info_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/war_history_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/not_in_war_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/cwl_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/war_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/war_history_card.dart';
 import 'package:clashkingapp/api/wars_league_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/war_functions.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 
 class CurrentWarInfoPage extends StatefulWidget {
   final ClanInfo? clanInfo;

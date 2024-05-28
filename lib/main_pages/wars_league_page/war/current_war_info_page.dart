@@ -3,11 +3,11 @@ import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_header.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_statistics_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_events_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_team_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/component/war_calculator_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/component/war_header.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/component/war_statistics_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/component/war_events_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/component/war_team_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/component/war_calculator_card.dart';
 
 class PlayerTab {
   String tag;

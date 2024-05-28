@@ -2,15 +2,17 @@ import 'package:clashkingapp/api/war_log.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_history/component/war_history_header.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_history/component/war_log_history_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_history/component/war_history_header.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_history/component/war_log_history_card.dart';
 
 class WarHistoryScreen extends StatefulWidget {
   final String clanTag;
   final List<String> discordUser;
   final List<WarLogDetails> warLogData;
+  final Map<String, String> warLogStats;
+  final String clanName;
 
-  WarHistoryScreen({super.key, required this.clanTag, required this.discordUser, required this.warLogData});
+  WarHistoryScreen({super.key, required this.clanTag, required this.discordUser, required this.warLogData, required this.warLogStats, required this.clanName});
 
   @override
   WarHistoryScreenState createState() => WarHistoryScreenState();
@@ -43,6 +45,8 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
           children: [
             WarHistoryHeader(
               discordUser: widget.discordUser,
+              clanName : widget.clanName,
+              clanTag: widget.clanTag,
             ),
             ScrollableTab(
               tabBarDecoration: BoxDecoration(

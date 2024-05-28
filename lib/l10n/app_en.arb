@@ -3,6 +3,7 @@
     "creatorCode": "Creator Code : ClashKing",
     "signInWithDiscord": "Sign In with Discord",
     "guestMode": "Guest Mode",
+    "needHelpJoinDiscord": "Need help? Join us on Discord.",
     "createGuestProfile": "Create your guest profile",
     "doesNotExist": "{tag} does not exist.",
     "@doesNotExist": {

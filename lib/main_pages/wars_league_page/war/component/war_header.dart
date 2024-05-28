@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/war_functions.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class WarHeader extends StatelessWidget {
