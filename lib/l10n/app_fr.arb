@@ -4,6 +4,7 @@
 
     "signInWithDiscord" : "Connexion avec Discord",
     "guestMode" : "Mode invité",
+    "needHelpJoinDiscord": "Besoin d'aide ? Rejoins-nous sur Discord.",
     "createGuestProfile" : "Créer un profil invité",
     "doesNotExist" : "{tag} n'existe pas.",
     "@doesNotExist": {
@@ -235,7 +236,9 @@
     "warHistory" : "Historique de guerre",
     "warLog" : "Journal",
     "startsIn" : "Début dans",
+    "startsAt" : "Débute à",
     "endsIn" : "Fin dans",
+    "endsAt" : "Se termine à",
     "statistics" : "Statistiques",
     "stars" : "Étoiles",
     "starsSmall" : "étoiles",
