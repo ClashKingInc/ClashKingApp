@@ -132,6 +132,7 @@
     "charts" : "Graphs",
     "history" : "Historique",
     "legendLeague" : "Ligue légende", 
+    "notInLegendLeague" : "Pas en ligue légende",
     "noLegendData" : "Pas de données pour la ligue légende aujourd'hui",
     "noRank" : "Non classé",
     "started" : "Début",

@@ -104,7 +104,7 @@ class LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 8),
                 TextButton(
-                  child: Text('Need help? Join us on Discord.', style: Theme.of(context).textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline)),
+                  child: Text(AppLocalizations.of(context)!.needHelpJoinDiscord, style: Theme.of(context).textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline)),
                   onPressed: () async {
                     launchUrl(Uri.parse('https://discord.gg/clashking'));
                   },

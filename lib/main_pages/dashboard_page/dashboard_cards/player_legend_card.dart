@@ -17,7 +17,7 @@ class PlayerLegendCard extends StatelessWidget {
   final PlayerAccountInfo playerStats;
   final PlayerLegendData playerLegendData;
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     DateTime selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
@@ -27,17 +27,17 @@ class PlayerLegendCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => LegendScreen(
-                  playerStats: playerStats,
-                  playerLegendData: playerLegendData
-            )),
+                builder: (context) => LegendScreen(
+                    playerStats: playerStats,
+                    playerLegendData: playerLegendData)),
           );
         },
         child: DefaultTextStyle(
           style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
           child: Card(
             child: Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 4),
+              padding: const EdgeInsets.only(
+                  left: 16.0, right: 16.0, top: 16.0, bottom: 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -56,23 +56,24 @@ class PlayerLegendCard extends StatelessWidget {
                               SizedBox(
                                 height: 100,
                                 width: 100,
-                                child: CachedNetworkImage(imageUrl: 
-                                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png"
-                                ),
+                                child: CachedNetworkImage(
+                                    imageUrl:
+                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png"),
                               ),
                             ],
                           ),
-                          Positioned(
-                            right: 30,
-                            bottom: 42,
-                            child: Text(
-                              playerStats.trophies.toString(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .copyWith(color: Colors.white),
+                          if (playerStats.league == "Legend League")
+                            Positioned(
+                              right: 30,
+                              bottom: 42,
+                              child: Text(
+                                playerStats.trophies.toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(color: Colors.white),
+                              ),
                             ),
-                          ),
                         ],
                       ),
                       SizedBox(width: 8),
@@ -95,15 +96,13 @@ class PlayerLegendCard extends StatelessWidget {
         ),
       );
     } else {
-
       return GestureDetector(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => LegendScreen(
-                  playerStats: playerStats,
-                  playerLegendData: playerLegendData),
+                  playerStats: playerStats, playerLegendData: playerLegendData),
             ),
           );
         },
@@ -111,7 +110,8 @@ class PlayerLegendCard extends StatelessWidget {
           style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
           child: Card(
             child: Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 4),
+              padding: const EdgeInsets.only(
+                  left: 16.0, right: 16.0, top: 16.0, bottom: 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -129,8 +129,9 @@ class PlayerLegendCard extends StatelessWidget {
                             width: 100,
                             child: Stack(
                               children: <Widget>[
-                                CachedNetworkImage(imageUrl: 
-                                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png",
+                                CachedNetworkImage(
+                                  imageUrl:
+                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png",
                                 ),
                                 Positioned(
                                   right: 30,
@@ -161,22 +162,26 @@ class PlayerLegendCard extends StatelessWidget {
                                 Chip(
                                     avatar: CircleAvatar(
                                         backgroundColor: Colors.transparent,
-                                        child: CachedNetworkImage(imageUrl: 
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Start_Flag.png")),
+                                        child: CachedNetworkImage(
+                                            imageUrl:
+                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Start_Flag.png")),
                                     label: Text(playerLegendData.firstTrophies,
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelMedium)),
-                                if (playerLegendData.legendRanking['country_code'] !=
-                                    null) 
+                                if (playerLegendData
+                                        .legendRanking['country_code'] !=
+                                    null)
                                   Chip(
                                     avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
-                                      child: CachedNetworkImage(imageUrl: 
-                                          "https://clashkingfiles.b-cdn.net/country-flags/${(playerLegendData.legendRanking['country_code'] ?? 'uk').toLowerCase()}.png"),
+                                      child: CachedNetworkImage(
+                                          imageUrl:
+                                              "https://clashkingfiles.b-cdn.net/country-flags/${(playerLegendData.legendRanking['country_code'] ?? 'uk').toLowerCase()}.png"),
                                     ),
                                     label: Text(
-                                      playerLegendData.legendRanking['local_rank'] ==
+                                      playerLegendData.legendRanking[
+                                                  'local_rank'] ==
                                               null
                                           ? '200+'
                                           : '${playerLegendData.legendRanking['local_rank']}',
@@ -200,21 +205,31 @@ class PlayerLegendCard extends StatelessWidget {
                                         .textTheme
                                         .labelMedium
                                         ?.copyWith(
-                                            color: playerLegendData.diffTrophies >= 0
-                                                ? Colors.green
-                                                : Colors.red),
+                                            color:
+                                                playerLegendData.diffTrophies >=
+                                                        0
+                                                    ? Colors.green
+                                                    : Colors.red),
                                   ),
                                 ),
                                 Chip(
                                   avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
-                                      child: CachedNetworkImage(imageUrl: 
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
+                                      child: CachedNetworkImage(
+                                          imageUrl:
+                                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
                                   label: Text(
-                                    playerLegendData.legendRanking['global_rank'] == null
-                                        ? AppLocalizations.of(context)?.noRank ?? 'No Rank'
-                                        : NumberFormat('#,###', 'fr_FR').format(playerLegendData.legendRanking['global_rank']),
-                                    style: Theme.of(context).textTheme.labelMedium,
+                                    playerLegendData
+                                                .legendRanking['global_rank'] ==
+                                            null
+                                        ? AppLocalizations.of(context)
+                                                ?.noRank ??
+                                            'No Rank'
+                                        : NumberFormat('#,###', 'fr_FR').format(
+                                            playerLegendData
+                                                .legendRanking['global_rank']),
+                                    style:
+                                        Theme.of(context).textTheme.labelMedium,
                                   ),
                                 ),
                               ],

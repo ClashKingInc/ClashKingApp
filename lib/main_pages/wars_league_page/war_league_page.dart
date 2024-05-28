@@ -1,21 +1,22 @@
 import 'package:clashkingapp/api/current_league_info.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/access_denied_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/access_denied_card.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/league_in_war_and_league/current_league_info_page.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/league/current_league_info_page.dart';
 import 'package:clashkingapp/api/user_info.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/api/war_log.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/not_in_war_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/cwl_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/current_war_info_card.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_and_league_cards/war_history_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/not_in_war_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/cwl_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/war_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/war_history_card.dart';
 import 'package:clashkingapp/api/wars_league_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 
 class CurrentWarInfoPage extends StatefulWidget {
   final ClanInfo? clanInfo;
@@ -35,7 +36,8 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   CurrentWarInfo? currentWarInfo;
   CurrentLeagueInfo? currentLeagueInfo;
   List<Map<int, List<WarLeagueInfo>>> warLeagueInfoByRound = [];
-  late Future<WarLog> warLogData;
+  late Future<WarLog> warLogData = Future.value(WarLog(items: []));
+  late Map<String, String> warLogStats = {};
 
   @override
   void initState() {
@@ -46,11 +48,9 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
         print("War Log Data Loaded: ${data.items.length} items");
         if (data.items.isNotEmpty) {
           print("First item of War Log: ${data.items.first}");
+          warLogStats = analyzeWarLogs(data.items);
         }
       });
-    } else {
-      print("Clan Info is null");
-      warLogData = Future.value(WarLog(items: []));
     }
   }
 
@@ -124,11 +124,11 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                   )
                 else if (warState == "noClan")
                   Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Card(
-                    child: NoClanCard(),
-                  ),
-                )
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Card(
+                      child: NoClanCard(),
+                    ),
+                  )
                 else
                   Padding(
                     padding:
@@ -137,8 +137,8 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                         clanName: widget.playerStats.clan!.name,
                         clanBadgeUrl: widget.playerStats.clan!.badgeUrls.large),
                   ),
-                if (warState != "noClan")
-                buildWarHistorySection()
+                if (warState != "noClan" && warState != "accessDenied")
+                  buildWarHistorySection()
               ],
             );
           }
@@ -163,6 +163,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
             warLogData: warLogDetails,
             playerStats: widget.playerStats,
             discordUser: widget.discordUser.tags,
+            warLogStats: warLogStats,
           );
         } else {
           return SizedBox.shrink();
@@ -193,8 +194,6 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
         currentWarInfo = CurrentWarInfo.fromJson(
             jsonDecode(utf8.decode(responseWar.bodyBytes)), "war");
         return "war";
-      } else if (decodedResponse["reason"] == "accessDenied") {
-        return "accessDenied";
       } else if (decodedResponse["state"] == "notInWar") {
         DateTime now = DateTime.now();
         if (now.day >= 1 && now.day <= 12) {
@@ -209,6 +208,8 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
           }
         }
       }
+    } else if (responseWar.statusCode == 403) {
+      return "accessDenied";
     } else {
       throw Exception('Failed to load current war info');
     }

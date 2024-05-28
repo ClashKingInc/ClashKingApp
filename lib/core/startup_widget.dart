@@ -54,6 +54,7 @@ class StartupWidgetState extends State<StartupWidget> {
 
   Future<void> _onSubmitted(String text) async {
     print('on submitted');
+    final appState = Provider.of<MyAppState>(context, listen: false);
     if (isLoading) {
       return;
     }
@@ -66,34 +67,36 @@ class StartupWidgetState extends State<StartupWidget> {
       }
       String status = await checkIfPlayerTagExists(text, authToken);
 
-      if (status == 'notExist') {
-        updateErrorMessage(AppLocalizations.of(context)!.doesNotExist(text));
-      } else if (status == 'alreadyLinked') {
-        updateErrorMessage(AppLocalizations.of(context)!.isAlreadyLinked(text));
-      } else {
-        String playerTagNotExists =
-            AppLocalizations.of(context)!.playerTagNotExists;
-        String accountAlreadyLinked =
-            AppLocalizations.of(context)!.accountAlreadyLinked;
-        String failedToAddTryAgain =
-            AppLocalizations.of(context)!.failedToAddTryAgain;
-        text = text.replaceFirst('#', '');
-        final appState = Provider.of<MyAppState>(context, listen: false);
-        final success = await addLink(
-            text,
-            appState.user!.id,
-            authToken,
-            updateErrorMessage,
-            playerTagNotExists,
-            accountAlreadyLinked,
-            failedToAddTryAgain);
+      if (mounted) {
+        if (status == 'notExist') {
+          updateErrorMessage(AppLocalizations.of(context)!.doesNotExist(text));
+        } else if (status == 'alreadyLinked') {
+          updateErrorMessage(
+              AppLocalizations.of(context)!.isAlreadyLinked(text));
+        } else {
+          String playerTagNotExists =
+              AppLocalizations.of(context)!.playerTagNotExists;
+          String accountAlreadyLinked =
+              AppLocalizations.of(context)!.accountAlreadyLinked;
+          String failedToAddTryAgain =
+              AppLocalizations.of(context)!.failedToAddTryAgain;
+          text = text.replaceFirst('#', '');
+          final success = await addLink(
+              text,
+              appState.user!.id,
+              authToken,
+              updateErrorMessage,
+              playerTagNotExists,
+              accountAlreadyLinked,
+              failedToAddTryAgain);
 
-        setState(() {
-          if (!_tags.contains(text) && success == true) {
-            _tags = <String>[..._tags, text.trim()];
-            print(_tags);
-          }
-        });
+          setState(() {
+            if (!_tags.contains(text) && success == true) {
+              _tags = <String>[..._tags, text.trim()];
+              print(_tags);
+            }
+          });
+        }
       }
     } else {
       _chipFocusNode.unfocus();
@@ -132,7 +135,7 @@ class StartupWidgetState extends State<StartupWidget> {
     // If yes and the user is a discord user, initialize the discord user
     else if (userType == "discord") {
       bool validToken = await isTokenValid(); // Check if the token is valid
-      if (validToken) {
+      if (validToken && mounted) {
         await appState
             .initializeDiscordUser(context); // Initialize discord user
 
@@ -192,13 +195,6 @@ class StartupWidgetState extends State<StartupWidget> {
                 onDeleted: (String tag) => localOnChipDeleted(tag),
                 onSelected: _onChipTapped,
               );
-            }
-
-            void localSelectSuggestion(String tag) {
-              if (!_tags.contains(tag)) {
-                _tags.add(tag);
-                setState(() {}); // Ensuring the dialog updates
-              }
             }
 
             return AlertDialog(

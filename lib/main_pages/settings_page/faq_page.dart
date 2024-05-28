@@ -22,15 +22,14 @@ class _FaqScreenState extends State<FaqScreen> {
             title: Text(AppLocalizations.of(context)!.faqIsThisFromSupercell),
             children: <Widget>[
               ListTile(
-                title: Text(
-                    "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy"),
+                title: Text(AppLocalizations.of(context)!.faqFanContentPolicy),
               ),
             ],
           ),
           ExpansionTile(
             iconColor: Theme.of(context).colorScheme.secondary,
             collapsedIconColor: Theme.of(context).colorScheme.primary,
-            title: Text('Why isn\'t the data always accurate or missing?'),
+            title: Text(AppLocalizations.of(context)!.faqWhyNotAccurate),
             children: <Widget>[
               ListTile(
                 title: RichText(
@@ -38,35 +37,35 @@ class _FaqScreenState extends State<FaqScreen> {
                     style: Theme.of(context).textTheme.bodyLarge,
                     children: <TextSpan>[
                       TextSpan(
-                        text: 'Clan not tracked\n',
+                        text: AppLocalizations.of(context)!.faqClanNotTracked,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           decoration: TextDecoration.underline,
                         ),
                       ),
                       TextSpan(
-                          text:
-                              'ClashKing can only get this info if the clan is tracked. If your clan seems not to be tracked, please invite him on a Discord server and use the command /addclan. We hope to make this feature available in the app soon.\n\n'),
+                          text: AppLocalizations.of(context)!
+                              .faqClanNotTrackedAnswer),
                       TextSpan(
-                        text: 'Tracking down\n',
+                        text: AppLocalizations.of(context)!.faqTrackingDown,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           decoration: TextDecoration.underline,
                         ),
                       ),
                       TextSpan(
-                          text:
-                              'The traking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.\n\n'),
+                          text: AppLocalizations.of(context)!
+                              .faqTrackingDownAnswer),
                       TextSpan(
-                        text: 'Clash of Clans API limitation\n',
+                        text: AppLocalizations.of(context)!.faqApiLimitation,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           decoration: TextDecoration.underline,
                         ),
                       ),
                       TextSpan(
-                          text:
-                              'Some data are provided by Clash of Clans and their API have some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was one attack.'),
+                          text: AppLocalizations.of(context)!
+                              .faqApiLimitationAnswer),
                     ],
                   ),
                 ),
@@ -76,7 +75,7 @@ class _FaqScreenState extends State<FaqScreen> {
           ExpansionTile(
             iconColor: Theme.of(context).colorScheme.secondary,
             collapsedIconColor: Theme.of(context).colorScheme.primary,
-            title: Text('How can I support your work?'),
+            title: Text(AppLocalizations.of(context)!.faqSupportWork),
             children: <Widget>[
               ListTile(
                 title: Column(
@@ -86,15 +85,26 @@ class _FaqScreenState extends State<FaqScreen> {
                         style: Theme.of(context).textTheme.bodyLarge,
                         children: <TextSpan>[
                           TextSpan(
-                              text: 'There are several ways to support us:\n'),
-                          TextSpan(text: '\u2022 Use code "ClashKing",\n'),
-                          TextSpan(text: '\u2022 Support us on Patreon,\n'),
+                              text: AppLocalizations.of(context)!
+                                  .faqSupportWorkAnswer),
+                          TextSpan(
+                              text:  "\u2022 ${AppLocalizations.of(context)!
+                                  .faqUseCodeClashKing},\n"),
+                          TextSpan(
+                              text: "\u2022 ${AppLocalizations.of(context)!
+                                  .faqSupportUsOnPatreon},\n"),
                           TextSpan(
                               text:
-                                  '\u2022 Share the app with your friends,\n'),
-                          TextSpan(text: '\u2022 Rate the app on the store,\n'),
-                          TextSpan(text: '\u2022 Help us translate the app,\n'),
-                          TextSpan(text: '\u2022 Join our Discord server.\n'),
+                                   "\u2022 ${AppLocalizations.of(context)!.faqShareTheApp},\n"),
+                          TextSpan(
+                              text:
+                                   "\u2022 ${AppLocalizations.of(context)!.faqRateTheApp},\n"),
+                          TextSpan(
+                              text:  "\u2022 ${AppLocalizations.of(context)!
+                                  .faqHelpUsTranslate},\n"),
+                          TextSpan(
+                              text:  "\u2022 ${AppLocalizations.of(context)!
+                                  .faqJoinDiscord},\n"),
                         ],
                       ),
                     ),
@@ -109,7 +119,8 @@ class _FaqScreenState extends State<FaqScreen> {
                           children: [
                             Icon(Icons.gamepad, size: 24),
                             SizedBox(width: 8),
-                            Text("Use code 'ClashKing'"),
+                            Text(AppLocalizations.of(context)!
+                                .faqUseCodeClashKing),
                           ],
                         ),
                         onPressed: () async {
@@ -128,7 +139,8 @@ class _FaqScreenState extends State<FaqScreen> {
                           children: [
                             Icon(Icons.coffee, size: 24),
                             SizedBox(width: 8),
-                            Text("Support us on Patreon"),
+                            Text(AppLocalizations.of(context)!
+                                .faqSupportUsOnPatreon),
                           ],
                         ),
                         onPressed: () async {
@@ -147,7 +159,8 @@ class _FaqScreenState extends State<FaqScreen> {
                           children: [
                             Icon(Icons.discord, size: 24),
                             SizedBox(width: 8),
-                            Text("Join Discord Server"),
+                            Text(AppLocalizations.of(context)!
+                                .faqJoinDiscord),
                           ],
                         ),
                         onPressed: () async {
@@ -163,13 +176,12 @@ class _FaqScreenState extends State<FaqScreen> {
           ExpansionTile(
             iconColor: Theme.of(context).colorScheme.secondary,
             collapsedIconColor: Theme.of(context).colorScheme.primary,
-            title: Text('How can I invite your bot on my Discord server?'),
+            title: Text(AppLocalizations.of(context)!.faqHowToInviteTheBot),
             children: <Widget>[
               ListTile(
                 title: Column(
                   children: [
-                    Text(
-                        'You can invite our bot on your server by clicking on the button below. You will need to have the "Manage Server" permission to add the bot.'),
+                    Text(AppLocalizations.of(context)!.faqHowToInviteTheBot),
                     SizedBox(height: 8),
                   ],
                 ),
@@ -186,7 +198,7 @@ class _FaqScreenState extends State<FaqScreen> {
                           children: [
                             Icon(Icons.discord, size: 24),
                             SizedBox(width: 8),
-                            Text("Invite ClashKing Bot"),
+                            Text(AppLocalizations.of(context)!.faqInviteTheBot),
                           ],
                         ),
                         onPressed: () async {
@@ -203,15 +215,12 @@ class _FaqScreenState extends State<FaqScreen> {
           ExpansionTile(
             iconColor: Theme.of(context).colorScheme.secondary,
             collapsedIconColor: Theme.of(context).colorScheme.primary,
-            title: Text(
-                'I need help or make a suggestion. How can I contact you?'),
+            title: Text(AppLocalizations.of(context)!.faqNeedHelp),
             children: <Widget>[
               ListTile(
                 title: Column(
                   children: [
-                    Text(
-                        'You can join our Discord server and ask for help or make a feedback there or send us an email at devs@clashkingbot.com. \nPlease write in English or French only.'),
-                    SizedBox(height: 8),
+                    Text(AppLocalizations.of(context)!.faqNeedHelpAnswer), SizedBox(height: 8),
                   ],
                 ),
                 subtitle: Column(
@@ -227,7 +236,7 @@ class _FaqScreenState extends State<FaqScreen> {
                           children: [
                             Icon(Icons.email, size: 24),
                             SizedBox(width: 8),
-                            Text("Send Email"),
+                            Text(AppLocalizations.of(context)!.faqSendEmail),
                           ],
                         ),
                         onPressed: () async {
@@ -257,7 +266,7 @@ class _FaqScreenState extends State<FaqScreen> {
                           children: [
                             Icon(Icons.discord, size: 24),
                             SizedBox(width: 8),
-                            Text("Join Discord"),
+                            Text(AppLocalizations.of(context)!.faqJoinDiscord),
                           ],
                         ),
                         onPressed: () async {

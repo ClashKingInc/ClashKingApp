@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/war_functions.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';

@@ -4,7 +4,7 @@ import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/api/player_legend.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_header_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_header.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_used_gear_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_trophies_start_end_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_offense_defense_card.dart';
@@ -40,7 +40,8 @@ class LegendScreenState extends State<LegendScreen>
     super.initState();
     tabController = TabController(length: 3, vsync: this);
     selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
-    selectedMonth = DateTime.now().toUtc().subtract(Duration(hours: 5));
+    selectedMonth = findCurrentSeasonMonth(
+        DateTime.now().toUtc().subtract(Duration(hours: 5)));
     legendData = widget.playerLegendData;
     seasonLegendData =
         PlayerLegendSeasonsService.fetchSeasonsData(widget.playerStats.tag);
@@ -406,52 +407,71 @@ class LegendScreenState extends State<LegendScreen>
     Map<String, Map<String, String>> seasonTrophies = {};
 
     legendData.forEach((date, details) {
-      String currentTrophies = "0";
+      String dailyTrophies = "0";
       List<dynamic> attacksList = details['new_attacks'] ?? [];
       List<dynamic> defensesList = details['new_defenses'] ?? [];
 
       if (attacksList.isNotEmpty && defensesList.isNotEmpty) {
         var lastAttack = attacksList.last;
         var lastDefense = defensesList.last;
-        currentTrophies = (lastAttack['time'] > lastDefense['time']
+        dailyTrophies = (lastAttack['time'] > lastDefense['time']
                 ? lastAttack['trophies']
                 : lastDefense['trophies'])
             .toString();
       } else if (attacksList.isNotEmpty) {
         var lastAttack = attacksList.last;
-        currentTrophies = lastAttack['trophies'].toString();
+        dailyTrophies = lastAttack['trophies'].toString();
       } else if (defensesList.isNotEmpty) {
         var lastDefense = defensesList.last;
-        currentTrophies = lastDefense['trophies'].toString();
+        dailyTrophies = lastDefense['trophies'].toString();
       }
 
       DateTime dateObj = DateTime.parse(date);
       String season = findSeasonStartDate(dateObj).toString();
       String day = DateFormat('dd').format(dateObj);
 
+      print('Season: $season, Day: $day, Trophies: $dailyTrophies');
+
       if (!seasonTrophies.containsKey(season)) {
         seasonTrophies[season] = {};
       }
-      seasonTrophies[season]![day] = currentTrophies;
+      seasonTrophies[season]![day] = dailyTrophies;
     });
 
+    print(seasonTrophies);
+
     // Now you need to calculate the season from the selectedMonth
-    DateTime seasonStart = findSeasonStartDate(selectedMonth);
-    String seasonKey = findSeasonStartDate(selectedMonth).toString();
+
+    DateTime firstDaySelectedMonth =
+        DateTime(selectedMonth.year, selectedMonth.month, 1);
+    DateTime lastDayPreviousMonth =
+        firstDaySelectedMonth.subtract(Duration(days: 1));
+
+    while (lastDayPreviousMonth.weekday != DateTime.monday) {
+      lastDayPreviousMonth = lastDayPreviousMonth.subtract(Duration(days: 1));
+    }
+
+    DateTime seasonStart = lastDayPreviousMonth;
+    String seasonKey = lastDayPreviousMonth.toString();
+
     Map<String, String> seasonData = seasonTrophies[seasonKey] ?? {};
 
     // Convert the data to a format that the chart can use
     List<FlSpot> spots = convertToContinuousScale(seasonData, seasonStart);
 
+    print(spots);
     if (spots.isNotEmpty) {
       // Calculate minY and maxY for dynamic scaling
       double minY = spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b);
       double maxY = spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b);
-      double minX = 0;
-      double maxX = spots.length.toDouble() - 1;
+      double minX = spots.first.x;
+      double maxX = spots.first.x + spots.length.toDouble() - 1;
 
       double rangeY = (maxY - minY) / 10;
       if (rangeY == 0) rangeY = 1;
+
+      print("minY: $minY, maxY: $maxY, rangeY: $rangeY");
+      print("minX: $minX, maxX: $maxX");
 
       return SizedBox(
         width: double.infinity,

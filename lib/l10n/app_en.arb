@@ -134,6 +134,7 @@
     "charts": "Charts",
     "history": "History",
     "legendLeague": "Legend League",
+    "notInLegendLeague": "Legend League",
     "noLegendData": "No Legend Data Found for today",
     "noRank": "No ranking",
     "started": "Started",

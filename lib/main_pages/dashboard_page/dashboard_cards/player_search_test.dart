@@ -27,26 +27,40 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
         _isLoading = true;
       });
       if (_searchInput.isEmpty) {
-        _showErrorDialog(AppLocalizations.of(context)?.noValueEntered ?? 'No value entered', _searchInput);
+        _showErrorDialog(
+            AppLocalizations.of(context)?.noValueEntered ?? 'No value entered',
+            _searchInput);
       } else if (RegExp(r'^#[PYLQGRJCUV0289]{3,9}$').hasMatch(_searchInput)) {
-        PlayerAccountInfo playerStats = await PlayerService().fetchPlayerStats(_searchInput);
+        PlayerAccountInfo playerStats =
+            await PlayerService().fetchPlayerStats(_searchInput);
         _navigateToStatsScreen(playerStats);
       } else if (RegExp(r'^[PYLQGRJCUV0289]{3,9}$').hasMatch(_searchInput)) {
-        PlayerAccountInfo playerStats = await PlayerService().fetchPlayerStats('#$_searchInput');
+        PlayerAccountInfo playerStats =
+            await PlayerService().fetchPlayerStats('#$_searchInput');
         _navigateToStatsScreen(playerStats);
       } else {
-        List<PlayerNameInfo> playerNameInfo = await PlayerNameInfo.fetchPlayerNameInfo(_searchInput);
-        showSearchResults(context, playerNameInfo, _searchInput);
+        List<PlayerNameInfo> playerNameInfo =
+            await PlayerNameInfo.fetchPlayerNameInfo(_searchInput);
+        if (mounted) {
+          showSearchResults(context, playerNameInfo, _searchInput);
+        }
       }
     } catch (e) {
-      _showErrorDialog(AppLocalizations.of(context)?.playerNotFound ?? 'Player not Found', _searchInput);
+      if (mounted) {
+        _showErrorDialog(
+            AppLocalizations.of(context)?.playerNotFound ?? 'Player not Found',
+            _searchInput);
+      }
     }
   }
 
   Future<void> _navigateToStatsScreen(PlayerAccountInfo playerStats) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => StatsScreen(playerStats: playerStats, discordUser: widget.discordUser,),
+        builder: (context) => StatsScreen(
+          playerStats: playerStats,
+          discordUser: widget.discordUser,
+        ),
       ),
     );
 
@@ -70,10 +84,9 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
             height: 90,
             child: Center(
               child: message == AppLocalizations.of(context)?.playerNotFound
-                ? Text(
-                  '${AppLocalizations.of(context)?.player ?? 'Player'} ${AppLocalizations.of(context)?.notFoundOrNotLinkedToOurSystem(_searchInput) ?? 'not found or not linked to our system.'} ${AppLocalizations.of(context)?.tryAnotherNameOrTagOrLinkIt ?? 'Try another name/tag or link it.'}'
-                  )
-                : null,
+                  ? Text(
+                      '${AppLocalizations.of(context)?.player ?? 'Player'} ${AppLocalizations.of(context)?.notFoundOrNotLinkedToOurSystem(_searchInput) ?? 'not found or not linked to our system.'} ${AppLocalizations.of(context)?.tryAnotherNameOrTagOrLinkIt ?? 'Try another name/tag or link it.'}')
+                  : null,
             ),
           ),
           actions: <Widget>[
@@ -110,7 +123,8 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
     );
   }
 
-  void showSearchResults(BuildContext context, List<PlayerNameInfo> playerNameInfo, String searchInput) {
+  void showSearchResults(BuildContext context,
+      List<PlayerNameInfo> playerNameInfo, String searchInput) {
     setState(() {
       _isLoading = false;
     });
@@ -184,13 +198,18 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                                 child: Text(
                                   '${playerNameInfo[index].th}',
                                   style: TextStyle(
-                                    fontSize: (DefaultTextStyle.of(context).style.fontSize ?? 14) * 0.7,
+                                    fontSize: (DefaultTextStyle.of(context)
+                                                .style
+                                                .fontSize ??
+                                            14) *
+                                        0.7,
                                     height: 0.8,
                                   ),
                                 ),
                               ),
                             ),
-                            TextSpan(text: ' | ${playerNameInfo[index].clanName}'),
+                            TextSpan(
+                                text: ' | ${playerNameInfo[index].clanName}'),
                           ],
                         ),
                       ),
@@ -201,19 +220,28 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                         barrierDismissible: false,
                         builder: (BuildContext context) {
                           return FutureBuilder<PlayerAccountInfo>(
-                            future: PlayerService().fetchPlayerStats(playerNameInfo[index].tag),
-                            builder: (BuildContext context, AsyncSnapshot<PlayerAccountInfo> snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return Center(child: CircularProgressIndicator());
+                            future: PlayerService()
+                                .fetchPlayerStats(playerNameInfo[index].tag),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<PlayerAccountInfo> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator());
                               } else if (snapshot.hasError) {
-                                return Text('${AppLocalizations.of(context)?.error ?? 'Error'}: ${snapshot.error}');
+                                return Text(
+                                    '${AppLocalizations.of(context)?.error ?? 'Error'}: ${snapshot.error}');
                               } else {
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
                                   Navigator.of(context).pop();
                                   Navigator.of(context).pop();
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => StatsScreen(playerStats: snapshot.data!, discordUser: widget.discordUser,),
+                                      builder: (context) => StatsScreen(
+                                        playerStats: snapshot.data!,
+                                        discordUser: widget.discordUser,
+                                      ),
                                     ),
                                   );
                                 });
@@ -279,7 +307,8 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                 _handleSearch();
               },
               decoration: InputDecoration(
-                hintText: AppLocalizations.of(context)?.tagOrNamePlayer ?? 'Player\'s tag or name',
+                hintText: AppLocalizations.of(context)?.tagOrNamePlayer ??
+                    'Player\'s tag or name',
                 hintStyle: TextStyle(
                   fontSize: 16,
                   color: Theme.of(context).colorScheme.onSurface,
@@ -291,20 +320,20 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
           ),
           IconButton(
             icon: _isLoading
-              ? SizedBox(
-                  height: 24.0,
-                  width: 24.0,
-                  child: CircularProgressIndicator(),
-                )
-              : Icon(
-                Icons.search,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                ? SizedBox(
+                    height: 24.0,
+                    width: 24.0,
+                    child: CircularProgressIndicator(),
+                  )
+                : Icon(
+                    Icons.search,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             onPressed: _handleSearch,
           ),
           SizedBox(width: 16.0)
         ],
       ),
     );
-  }   
+  }
 }

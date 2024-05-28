@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/war_functions.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';

@@ -1,13 +1,18 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class WarHistoryHeader extends StatelessWidget {
   const WarHistoryHeader({
     super.key,
     required this.discordUser,
+    required this.clanName,
+    required this.clanTag
   });
 
   final List<String> discordUser;
+  final String clanName;
+  final String clanTag;
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +41,26 @@ class WarHistoryHeader extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "War History",
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary),
+              SizedBox(
+                height: 100,
+                width: 100,
+                child: CachedNetworkImage(
+                    imageUrl:
+                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_War.png"),
               ),
               Text(
-                "Clan Tag",
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary),
+                clanName,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+              ),
+              Text(
+                clanTag,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: Theme.of(context).colorScheme.tertiary),
               ),
             ],
           ),

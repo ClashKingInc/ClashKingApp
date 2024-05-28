@@ -63,16 +63,31 @@ class ClanSearchState extends State<ClanSearch> {
       isSearching = false;
       return [];
     }
+    dynamic response;
 
-    var response = await http.get(Uri.parse(
-        'https://api.clashking.xyz/v1/clans?name=$query&limit=20&memberList=false'));
-
-    if (response.statusCode == 200) {
-      var body = utf8.decode(response.bodyBytes);
-      var data = jsonDecode(body);
-      return data['items'];
+    if (query.startsWith('#')) {
+      query = query.replaceFirst("#", '!');
+      response = await http
+          .get(Uri.parse('https://api.clashking.xyz/v1/clans/$query'));
+      if (response.statusCode == 200) {
+        var body = utf8.decode(response.bodyBytes);
+        var data = jsonDecode(body);
+        print(data);
+        return [data];
+      } else {
+        return [];
+      }
     } else {
-      throw Exception('Failed to load clans');
+      response = await http.get(Uri.parse(
+          'https://api.clashking.xyz/v1/clans?name=$query&limit=20&memberList=false'));
+
+      if (response.statusCode == 200) {
+        var body = utf8.decode(response.bodyBytes);
+        var data = jsonDecode(body);
+        return data['items'];
+      } else {
+        throw Exception('Failed to load clans');
+      }
     }
   }
 

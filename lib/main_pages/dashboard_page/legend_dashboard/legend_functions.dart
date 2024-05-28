@@ -44,54 +44,65 @@ DateTime findSeasonStartDate(DateTime date) {
   int year = date.year;
   int month = date.month;
 
-  DateTime firstDayNextMonth = DateTime(year, month + 1, 1);
-  DateTime lastDayCurrentMonth = firstDayNextMonth.subtract(Duration(days: 1));
+  DateTime firstDayCurrentMonth = DateTime(year, month, 1);
+  DateTime lastDayCurrentMonth =
+      DateTime(year, month + 1, 1).subtract(Duration(days: 1));
 
-  int daysToLastMondayOfThisMonth =
-      (lastDayCurrentMonth.weekday - DateTime.monday);
-  if (daysToLastMondayOfThisMonth < 0) {
-    daysToLastMondayOfThisMonth += 7; // Ensure non-negative result
-  }
-  DateTime lastMondayOfThisMonth =
-      lastDayCurrentMonth.subtract(Duration(days: daysToLastMondayOfThisMonth));
-  if (date.isAfter(lastMondayOfThisMonth) ||
-      date.isAtSameMomentAs(lastMondayOfThisMonth)) {
-    return lastMondayOfThisMonth;
-  } else {
-    // Find the first day of the current month
-    DateTime firstDayCurrentMonth = DateTime(year, month, 1);
+  int daysToLastMondayOfCurrentMonth =
+      (lastDayCurrentMonth.weekday - DateTime.monday) % 7;
+  DateTime lastMondayOfCurrentMonth = lastDayCurrentMonth
+      .subtract(Duration(days: daysToLastMondayOfCurrentMonth));
 
-    // Subtract one day to get the last day of the previous month
+  // Si la date est avant le dernier lundi, alors il faut aller chercher le dernier lundi du mois précédent
+  if (date.isBefore(lastMondayOfCurrentMonth)) {
     DateTime lastDayPreviousMonth =
         firstDayCurrentMonth.subtract(Duration(days: 1));
-
-    // Calculate the weekday of the last day of the previous month
-    int daysToLastMonday = (lastDayPreviousMonth.weekday - DateTime.monday);
-    if (daysToLastMonday < 0) {
-      daysToLastMonday += 7; // Ensure non-negative result
-    }
-
-    // Get the last Monday of the previous month by subtracting the days calculated
-    DateTime lastMonday =
-        lastDayPreviousMonth.subtract(Duration(days: daysToLastMonday));
-
-    return lastMonday;
+    int daysToLastMondayOfPreviousMonth =
+        (lastDayPreviousMonth.weekday - DateTime.monday) % 7;
+    return lastDayPreviousMonth
+        .subtract(Duration(days: daysToLastMondayOfPreviousMonth));
   }
+
+  return lastMondayOfCurrentMonth;
 }
 
 List<FlSpot> convertToContinuousScale(
     Map<String, String> seasonData, DateTime seasonStart) {
   List<FlSpot> spots = [];
-  List<String> labels = []; // This will hold the labels for the x-axis
 
+  print(seasonStart);
   int index = 0;
   seasonData.forEach((day, trophies) {
+    while (seasonStart.add(Duration(days: index)).day != int.parse(day) &&
+        seasonStart.day <= 32) {
+      index++;
+    }
+
     spots.add(FlSpot(index.toDouble(), double.parse(trophies)));
-    print(day);
-    labels.add(
-        day); // Assuming 'day' is a String like '25', '26', ..., '01', '02', etc.
     index++;
   });
-  
+
   return spots;
+}
+
+DateTime findCurrentSeasonMonth(currentDate) {
+  DateTime selectedMonth = DateTime.now().toUtc().subtract(Duration(hours: 5));
+
+  DateTime firstDaySelectedMonth =
+      DateTime(selectedMonth.year, selectedMonth.month, 1);
+  DateTime lastDayPreviousMonth =
+      firstDaySelectedMonth.subtract(Duration(days: 1));
+
+  while (lastDayPreviousMonth.weekday != DateTime.monday) {
+    lastDayPreviousMonth = lastDayPreviousMonth.subtract(Duration(days: 1));
+  }
+
+  // If selectedMonth is after the last Monday of the previous month, move to the next month
+  if (selectedMonth.isAfter(lastDayPreviousMonth)) {
+    selectedMonth = DateTime(selectedMonth.year, selectedMonth.month + 1, 1);
+  }
+
+  print(
+      selectedMonth); // This will print the selectedMonth, moved to the next month if necessary
+  return selectedMonth;
 }

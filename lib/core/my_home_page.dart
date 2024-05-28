@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_page.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_page.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_league_page.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_league_page.dart';
 import 'package:clashkingapp/main_pages/management_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/core/my_app_state.dart';

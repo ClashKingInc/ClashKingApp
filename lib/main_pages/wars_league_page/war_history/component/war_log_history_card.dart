@@ -1,6 +1,6 @@
 import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
-import 'package:clashkingapp/main_pages/war_and_league_page/war_in_war_and_league/current_war_info_page.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
