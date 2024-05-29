@@ -397,6 +397,7 @@ class StatsScreenState extends State<StatsScreen>
     }
 
     return [
+      if (widget.playerStats.clan != null)
       GestureDetector(
         onTap: () async {
           showDialog(
