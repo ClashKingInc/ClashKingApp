@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/core/theme_notifier.dart';
-import 'package:flutter/services.dart';
 
 // CallbackDispatcher for background execution (Android only)
 void callbackDispatcher() {
@@ -25,7 +24,6 @@ Future main() async {
   Workmanager().initialize(
       callbackDispatcher); // Required by Workmanager to initialize the callback dispatcher
 
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
   runApp(
     MultiProvider(
       providers: [
