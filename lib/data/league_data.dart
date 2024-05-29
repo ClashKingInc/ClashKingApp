@@ -72,6 +72,18 @@ final Map<String, Map<String, String>> leaguesUrls = {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_CWL_Champion_3.png',
   },
+  'Titan League I': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_League_Titan_1.png',
+  },
+  'Titan League II': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_League_Titan_1.png',
+  },
+  'Titan League III': {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_League_Titan_1.png',
+  },
   'Bronze League': {
     'url':
         'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_League_Bronze_2.png',
