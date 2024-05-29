@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<MyAppState>(
         builder: (context, appState, child) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             themeMode: Provider.of<ThemeNotifier>(context).themeMode,
             locale: appState.locale,
             localizationsDelegates: [

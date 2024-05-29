@@ -157,7 +157,7 @@ class Location {
     return Location(
       localizedName: json['localizedName'] ?? 'No localizedName',
       id: json['id'] ?? 0,
-      name: json['name'] ?? 'No name',
+      name: json['name'] ?? 'Unknown country',
       isCountry: json['isCountry'] ?? false,
       countryCode: json['countryCode'] ?? 'No countryCode',
     );

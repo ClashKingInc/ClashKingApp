@@ -71,71 +71,66 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
         child: Row(
           children: [
-            Expanded(
-              flex: 3,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 8),
-                      child: CachedNetworkImage(
-                          imageUrl: townHallUrl ??
-                              "https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-16.png"),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 7,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("${widget.player['name']} "),
-                      Text("${widget.player['tag']}",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.tertiary)),
-                      SizedBox(width: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Wrap(
-                            alignment: WrapAlignment.start,
-                            spacing: 7.0,
-                            runSpacing: -7.0,
-                            children: <Widget>[
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  child: CachedNetworkImage(
-                                      imageUrl: leagueUrl ??
-                                          (widget.player.containsKey('league') && widget.player['league'] is Map && widget.player['league'].containsKey('iconUrls')
-                                              ? widget.player['league']
-                                                  ['iconUrls']['tiny']
-                                              : 'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_CWL_Unranked.png')),
-                                ),
-                                label: Text(
-                                  widget.player['trophies'].toString(),
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                  SizedBox(
+                    width: 50,
+                    child: CachedNetworkImage(
+                        imageUrl: townHallUrl ??
+                            "https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-16.png"),
                   ),
                 ],
               ),
+            ),
+            SizedBox(width: 8), 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("${widget.player['name']} "),
+                    Text("${widget.player['tag']}",
+                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.tertiary)),
+                    SizedBox(width: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Wrap(
+                          alignment: WrapAlignment.start,
+                          spacing: 7.0,
+                          runSpacing: -7.0,
+                          children: <Widget>[
+                            Chip(
+                              avatar: CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                child: CachedNetworkImage(
+                                    imageUrl: leagueUrl ??
+                                        (widget.player.containsKey('league') &&
+                                                widget.player['league']
+                                                    is Map &&
+                                                widget.player['league']
+                                                    .containsKey('iconUrls')
+                                            ? widget.player['league']
+                                                ['iconUrls']['tiny']
+                                            : 'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_CWL_Unranked.png')),
+                              ),
+                              label: Text(
+                                widget.player['trophies'].toString(),
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

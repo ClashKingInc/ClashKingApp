@@ -7,7 +7,6 @@ import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/core/theme_notifier.dart';
 
-
 // CallbackDispatcher for background execution (Android only)
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
@@ -20,14 +19,18 @@ void callbackDispatcher() {
 
 Future main() async {
   await dotenv.load(); // Load .env file
-  WidgetsFlutterBinding.ensureInitialized(); // Required by Workmanager to ensure binding is initialized
-  Workmanager().initialize(callbackDispatcher); // Required by Workmanager to initialize the callback dispatcher
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Required by Workmanager to ensure binding is initialized
+  Workmanager().initialize(
+      callbackDispatcher); // Required by Workmanager to initialize the callback dispatcher
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ThemeNotifier()), // ThemeNotifier (Theme data)
-        ChangeNotifierProvider(create: (_) => MyAppState()), // MyAppState (User data)
+        ChangeNotifierProvider(
+            create: (_) => ThemeNotifier()), // ThemeNotifier (Theme data)
+        ChangeNotifierProvider(
+            create: (_) => MyAppState()), // MyAppState (User data)
       ],
       child: MyApp(),
     ),

@@ -534,7 +534,7 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
   },
   "Spiky Ball": {
     'url':
-        'https://clashkingfiles.b-cdn.net/clashkinglogo.png',
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_BK_Spiky_Ball.png',
     'type': 'gear',
   },
 
