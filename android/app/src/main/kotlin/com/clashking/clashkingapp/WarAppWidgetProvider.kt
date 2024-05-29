@@ -1,4 +1,4 @@
-package com.example.clashkingapp
+package com.clashking.clashkingapp
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -19,7 +19,7 @@ import java.net.URL
 class WarAppWidgetProvider : HomeWidgetProvider() {
 
     companion object {
-        const val ACTION_UPDATE_WIDGET = "com.example.clashkingapp.ACTION_UPDATE_WIDGET"
+        const val ACTION_UPDATE_WIDGET = "com.clashking.clashkingapp.ACTION_UPDATE_WIDGET"
     }
 
     override fun onUpdate(
