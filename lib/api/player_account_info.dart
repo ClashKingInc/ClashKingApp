@@ -387,7 +387,6 @@ class PlayerService {
       await fetchImagesAndTypes(playerStats.heroes);
       await fetchImagesAndTypes(playerStats.spells);
       await fetchImagesAndTypes(playerStats.equipments);
-      print(playerStats.tag);
       playerStats.league = await fetchLeagueName(playerStats.tag);
       playerStats.leagueUrl = await fetchLeagueImageUrl(playerStats.league);
       return playerStats;

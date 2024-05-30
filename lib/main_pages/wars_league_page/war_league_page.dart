@@ -45,9 +45,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
     if (widget.clanInfo != null) {
       warLogData = WarLogService.fetchWarLogData(widget.clanInfo!.tag);
       warLogData.then((data) {
-        print("War Log Data Loaded: ${data.items.length} items");
         if (data.items.isNotEmpty) {
-          print("First item of War Log: ${data.items.first}");
           warLogStats = analyzeWarLogs(data.items);
         }
       });

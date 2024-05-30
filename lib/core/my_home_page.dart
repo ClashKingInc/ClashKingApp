@@ -33,7 +33,6 @@ class MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _initializeAccounts() async {
-    print('Initializing accounts');
     final appState = Provider.of<MyAppState>(context, listen: false);
     await appState.fetchPlayerAccounts(appState.user!);
   }

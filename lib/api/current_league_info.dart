@@ -125,9 +125,7 @@ class ClanLeagueRounds {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> json = jsonDecode(utf8.decode(response.bodyBytes));
-        print(json);
         if (json['state'] != "notInWar") {
-          print("inWar");
           CurrentWarInfo warLeagueInfoItem = CurrentWarInfo.fromJson(
               jsonDecode(utf8.decode(response.bodyBytes)), "cwl");
           warLeagueInfos.add(warLeagueInfoItem);

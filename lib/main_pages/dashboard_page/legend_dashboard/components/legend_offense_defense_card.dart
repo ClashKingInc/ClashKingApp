@@ -60,7 +60,7 @@ class LegendOffenseDefenseCard extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(left: 20),
+                                    padding: EdgeInsets.only(left: 8.0),
                                     child: CachedNetworkImage(imageUrl: 
                                       icon,
                                       width: 20,

@@ -103,7 +103,6 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
                 }
               } else {
                 widget.user.tags.remove(playerTag);
-                print('User tags: ${widget.user.tags}');
                 if (context.mounted) {
                   myAppState.reloadUsersAccounts(context);
                 }

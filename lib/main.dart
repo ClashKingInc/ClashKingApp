@@ -11,7 +11,6 @@ import 'package:clashkingapp/core/theme_notifier.dart';
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     final myAppState = MyAppState();
-    print('Updating widget at ${DateTime.now()}');
     await myAppState.updateWarWidget();
     return Future.value(true);
   });

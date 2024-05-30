@@ -10,10 +10,8 @@ Future<String> checkCurrentWar(String? clanTag) async {
   CurrentWarInfo? currentWarInfo;
   String time = "";
   int multiplicator = 2;
-  print("checkcurrentwar called");
 
   if (clanTag == null || clanTag.isEmpty) {
-    print("No clan to check war for");
     var result = {
       "updatedAt": "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
       "timeState": time,
@@ -21,7 +19,6 @@ Future<String> checkCurrentWar(String? clanTag) async {
     };
     return jsonEncode(result);
   }
-  print("Checking current war for $clanTag");
 
   final responseWar = await http.get(
     Uri.parse(
@@ -40,16 +37,12 @@ Future<String> checkCurrentWar(String? clanTag) async {
       currentWarInfo = CurrentWarInfo.fromJson(
           jsonDecode(utf8.decode(responseWar.bodyBytes)), "war");
     } else if (decodedResponse["state"] == "notInWar") {
-      print("Not in war");
       DateTime now = DateTime.now();
       if (now.day >= 1 && now.day <= 10) {
-        print("Checking CWL");
         if (responseCwl.statusCode == 200) {
-          print("CWL response 200");
           var decodedResponseCwl =
               jsonDecode(utf8.decode(responseCwl.bodyBytes));
           if (decodedResponseCwl.containsKey("state")) {
-            print("CWL state found");
             CurrentLeagueInfo currentLeagueInfo =
                 CurrentLeagueInfo.fromJson(decodedResponseCwl);
             CurrentWarInfo? inWar;
@@ -67,7 +60,6 @@ Future<String> checkCurrentWar(String? clanTag) async {
                       warInfo; // Store the last matched warInfo
 
                   if (warInfo.state == 'inWar') {
-                    print("state : ${warInfo.state}");
                     inWar = warInfo;
                   } else if (warInfo.state == 'preparation') {
                     inPreparation = warInfo;
@@ -113,7 +105,6 @@ Future<String> checkCurrentWar(String? clanTag) async {
       return jsonEncode(result);
     }
 
-    print("Current war info: ${currentWarInfo?.state}");
     // Accessing time details
     if (currentWarInfo?.state == "preparation") {
       String formattedTime =
