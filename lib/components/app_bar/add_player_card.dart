@@ -96,7 +96,6 @@ class AddPlayerCardState extends State<AddPlayerCard> {
               }
             } else {
               widget.user.tags.add("#$playerTag");
-              print('User tags: ${widget.user.tags}');
               if (context.mounted) {
                 myAppState.reloadUsersAccounts(context);
               }

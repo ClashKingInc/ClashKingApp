@@ -250,7 +250,6 @@ class ClanMembersState extends State<ClanMembers> {
                                       )
                                     ]);
                                   } catch (e) {
-                                    print(e);
                                     return SizedBox.shrink();
                                   }
                                 case 'donations':

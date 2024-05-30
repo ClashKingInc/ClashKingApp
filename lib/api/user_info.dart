@@ -59,7 +59,6 @@ Future<User> fetchDiscordUser(String accessToken) async {
 }
 
 Future<User> fetchDiscordUserTags(User user) async {
-  print('Fetching user tags for ${user.id}...');
   final response = await http.post(
     Uri.parse('https://api.clashking.xyz/discord_links'),
     headers: {"Content-Type": "application/json"},

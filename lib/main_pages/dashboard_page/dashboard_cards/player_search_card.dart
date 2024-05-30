@@ -68,16 +68,13 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
           .get(Uri.parse('https://api.clashking.xyz/player/search/$query'));
     }
 
-    print('Searching for $query');
     if (query.isEmpty || query.length < 3) {
       isSearching = false;
       return [];
     }
 
-    print(response.statusCode);
 
     if (response.statusCode == 200) {
-      print(response.body);
       var body = utf8.decode(response.bodyBytes);
       var data = jsonDecode(body);
       if (data.containsKey('items')) {
@@ -147,7 +144,6 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
               } else if (snapshot.hasData &&
                   snapshot.data != null &&
                   snapshot.data!.isNotEmpty) {
-                print(snapshot.data!);
                 return SingleChildScrollView(
                     child: Column(
                   children: snapshot.data!.map<Widget>((player) {

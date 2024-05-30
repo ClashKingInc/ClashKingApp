@@ -225,8 +225,6 @@ class CurrentWarService {
       );
     }
 
-    print(response.body);
-
     if (response.statusCode == 200) {
       return CurrentWarInfo.fromJson(jsonDecode(response.body), type);
     } else {
@@ -239,7 +237,6 @@ class CurrentWarService {
     endTime = endTime.replaceAll('-', '').replaceAll(':', '');
     
     final response = await http.get(Uri.parse('https://api.clashking.xyz/war/${tag.substring(1)}/previous/$endTime'));
-    print('test');
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       Map<String, dynamic> jsonBody = json.decode(body);

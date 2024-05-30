@@ -22,7 +22,6 @@ class ClanInfoPageState extends State<ClanInfoPage>
     with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    print("clanInfo : ${widget.clanInfo}");
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();

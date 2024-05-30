@@ -53,7 +53,6 @@ class StartupWidgetState extends State<StartupWidget> {
   void _onChipTapped(String tag) {}
 
   Future<void> _onSubmitted(String text) async {
-    print('on submitted');
     final appState = Provider.of<MyAppState>(context, listen: false);
     if (isLoading) {
       return;
@@ -93,7 +92,6 @@ class StartupWidgetState extends State<StartupWidget> {
           setState(() {
             if (!_tags.contains(text) && success == true) {
               _tags = <String>[..._tags, text.trim()];
-              print(_tags);
             }
           });
         }
@@ -173,7 +171,6 @@ class StartupWidgetState extends State<StartupWidget> {
           builder: (BuildContext context, StateSetter setState) {
             void localOnSubmit(String text) async {
               await _onSubmitted(text);
-              print('Submitted');
               setState(() {});
             }
 
@@ -182,7 +179,6 @@ class StartupWidgetState extends State<StartupWidget> {
                   AppLocalizations.of(context)!.failedToDeleteTryAgain;
               bool success = await deleteLink(
                   tag, authToken, updateErrorMessage, failedToDeleteTryAgain);
-              print("Delete success: $success");
               setState(() {
                 // Use dialog's setState
                 _tags.removeWhere((t) => t == tag);

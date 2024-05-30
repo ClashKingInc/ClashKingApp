@@ -430,15 +430,11 @@ class LegendScreenState extends State<LegendScreen>
       String season = findSeasonStartDate(dateObj).toString();
       String day = DateFormat('dd').format(dateObj);
 
-      print('Season: $season, Day: $day, Trophies: $dailyTrophies');
-
       if (!seasonTrophies.containsKey(season)) {
         seasonTrophies[season] = {};
       }
       seasonTrophies[season]![day] = dailyTrophies;
     });
-
-    print(seasonTrophies);
 
     // Now you need to calculate the season from the selectedMonth
 
@@ -459,7 +455,6 @@ class LegendScreenState extends State<LegendScreen>
     // Convert the data to a format that the chart can use
     List<FlSpot> spots = convertToContinuousScale(seasonData, seasonStart);
 
-    print(spots);
     if (spots.isNotEmpty) {
       // Calculate minY and maxY for dynamic scaling
       double minY = spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b);
@@ -469,10 +464,6 @@ class LegendScreenState extends State<LegendScreen>
 
       double rangeY = (maxY - minY) / 10;
       if (rangeY == 0) rangeY = 1;
-
-      print("minY: $minY, maxY: $maxY, rangeY: $rangeY");
-      print("minX: $minX, maxX: $maxX");
-
       return SizedBox(
         width: double.infinity,
         height: 500,

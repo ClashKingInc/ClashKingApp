@@ -27,9 +27,7 @@ class CustomAppBarState extends State<CustomAppBar> {
 
   @override
   void initState() {
-    print("User tags : ${widget.user.tags}");
     super.initState();
-    print("user init state : ${widget.user.selectedTagDetails}");
     _loadSelectedTag().then((_) {
       if (selectedTag == null ||
           !widget.user.selectedTagDetails
@@ -46,13 +44,11 @@ class CustomAppBarState extends State<CustomAppBar> {
 
   Future<void> _loadSelectedTag() async {
     final prefs = await SharedPreferences.getInstance();
-    print("user selected : ${prefs.getString('selectedTag')}");
     selectedTag = prefs.getString('selectedTag');
 
     // Vérifiez si le tag sélectionné est dans la liste des tags de l'utilisateur
     if (!widget.user.selectedTagDetails
         .any((details) => details['tag'] == selectedTag)) {
-      print("user details: ${widget.user.selectedTagDetails}");
       // Si ce n'est pas le cas, définissez le tag sélectionné sur une valeur par défaut
       selectedTag = widget.user.selectedTagDetails.isNotEmpty
           ? widget.user.selectedTagDetails.first['tag']
@@ -63,7 +59,6 @@ class CustomAppBarState extends State<CustomAppBar> {
 
   Future<void> _saveSelectedTag(String tag) async {
     final prefs = await SharedPreferences.getInstance();
-    print("save selected : $tag");
     prefs.setString('selectedTag', tag);
   }
 
@@ -72,7 +67,6 @@ class CustomAppBarState extends State<CustomAppBar> {
     var appState = Provider.of<MyAppState>(context);
     widget.user.selectedTagDetails
         .sort((a, b) => b['townHallLevel'].compareTo(a['townHallLevel']));
-    print(widget.user.selectedTagDetails);
     return AppBar(
       automaticallyImplyLeading: false,
       title: appState.isLoading
