@@ -13,7 +13,7 @@
             }
         }
     },
-    "isAlreadyLinked": "{tag} is already linked to someone.",
+    "isAlreadyLinked": "{tag} ist bereits mit jemand anderem verknüpft.",
     "@isAlreadyLinked": {
         "placeholders": {
             "tag": {
@@ -21,8 +21,8 @@
             }
         }
     },
-    "username": "Username",
-    "pleaseEnterUsername": "Please enter a username",
+    "username": "Benutzername",
+    "pleaseEnterUsername": "Bitte gib einen Benutzernamen ein",
     "playerTags": "Player Tags",
     "pleaseEnterPlayerTags": "Please enter player tags",
     "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
