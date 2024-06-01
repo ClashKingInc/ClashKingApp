@@ -205,9 +205,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     try {
       playerAccounts = await PlayerService().fetchPlayerAccounts(user);
       reloadData();
-    } catch (e, s) {
-      print("Error fetching player stats: $e");
-      print("Stack trace: $s");
+    } catch (e) {
+      throw Exception('Failed to load player accounts: $e');
     }
   }
 
@@ -216,9 +215,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     try {
       clanInfo = await ClanService().fetchClanInfo(tag);
       notifyListeners(); // Notify listeners to rebuild widgets that depend on clanInfo.
-    } catch (e, s) {
-      print("Error fetching clan info: $e");
-      print("Stack trace: $s");
+    } catch (e) {
+      throw Exception('Failed to load clan info: $e');
     }
   }
 
@@ -228,9 +226,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       currentWarInfo =
           await CurrentWarService().fetchCurrentWarInfo(tag, "war");
       notifyListeners(); // Notify listeners to rebuild widgets that depend on currentWarInfo.
-    } catch (e, s) {
-      print("Error fetching current war info: $e");
-      print("Stack trace: $s");
+    } catch (e) {
+      throw Exception('Failed to load current war info: $e');
     }
   }
 

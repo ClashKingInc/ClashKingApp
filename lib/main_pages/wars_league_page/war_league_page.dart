@@ -38,11 +38,13 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   List<Map<int, List<WarLeagueInfo>>> warLeagueInfoByRound = [];
   late Future<WarLog> warLogData = Future.value(WarLog(items: []));
   late Map<String, String> warLogStats = {};
+  late Future<String> currentWarFuture;
 
   @override
   void initState() {
     super.initState();
     if (widget.clanInfo != null) {
+      currentWarFuture = checkCurrentWar(widget.playerStats);
       warLogData = WarLogService.fetchWarLogData(widget.clanInfo!.tag);
       warLogData.then((data) {
         if (data.items.isNotEmpty) {
@@ -62,7 +64,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
         });
       },
       child: FutureBuilder<String>(
-        future: checkCurrentWar(widget.playerStats),
+        future: currentWarFuture,
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());

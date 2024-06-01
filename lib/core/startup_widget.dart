@@ -177,7 +177,7 @@ class StartupWidgetState extends State<StartupWidget> {
             void localOnChipDeleted(String tag) async {
               String failedToDeleteTryAgain =
                   AppLocalizations.of(context)!.failedToDeleteTryAgain;
-              bool success = await deleteLink(
+              await deleteLink(
                   tag, authToken, updateErrorMessage, failedToDeleteTryAgain);
               setState(() {
                 // Use dialog's setState

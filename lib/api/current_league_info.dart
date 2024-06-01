@@ -106,7 +106,7 @@ class ClanLeagueRounds {
   factory ClanLeagueRounds.fromJson(Map<String, dynamic> json) {
     var warTags = json['warTags'] as List<dynamic>? ?? [];
     List<String> parsedWarTags = warTags.map((tag) => tag.toString()).toList();
-    Future<List<CurrentWarInfo>> warLeagueInfos =
+    Future<List<CurrentWarInfo>> warLeagueInfos = 
         fetchWarLeagueInfos(parsedWarTags);
     return ClanLeagueRounds(
       warTags: parsedWarTags,
@@ -114,30 +114,42 @@ class ClanLeagueRounds {
     );
   }
 
-  static Future<List<CurrentWarInfo>> fetchWarLeagueInfos(
-      List<String> warTags) async {
-    List<CurrentWarInfo> warLeagueInfos = [];
-    for (var warTag in warTags) {
-      warTag = warTag.replaceAll('#', '%23');
-      final response = await http.get(
-        Uri.parse('https://api.clashking.xyz/v1/clanwarleagues/wars/$warTag'),
-      );
+  static Future<List<CurrentWarInfo>> fetchWarLeagueInfos(List<String> warTags) async {
+    List<Future<CurrentWarInfo?>> futures = [];
 
-      if (response.statusCode == 200) {
-        Map<String, dynamic> json = jsonDecode(utf8.decode(response.bodyBytes));
-        if (json['state'] != "notInWar") {
-          CurrentWarInfo warLeagueInfoItem = CurrentWarInfo.fromJson(
-              jsonDecode(utf8.decode(response.bodyBytes)), "cwl");
-          warLeagueInfos.add(warLeagueInfoItem);
-        }
-      } else {
-        throw Exception(
-            'Failed to load war league info with status code: ${response.statusCode}');
+    for (var warTag in warTags) {
+      if (warTag != "#0") {
+        warTag = warTag.replaceAll('#', '%23');
+        Future<CurrentWarInfo?> warLeagueInfo = fetchWarLeagueInfo(warTag);
+        futures.add(warLeagueInfo);
       }
     }
-    return warLeagueInfos;
+
+    // Filter out null values and convert to Future<CurrentWarInfo>
+    var results = await Future.wait(futures);
+    return results.where((result) => result != null).cast<CurrentWarInfo>().toList();
+  }
+
+  static Future<CurrentWarInfo?> fetchWarLeagueInfo(String warTag) async {
+    final response = await http.get(
+      Uri.parse('https://api.clashking.xyz/v1/clanwarleagues/wars/$warTag'),
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> json = jsonDecode(utf8.decode(response.bodyBytes));
+      if (json['state'] != "notInWar") {
+        return CurrentWarInfo.fromJson(json, "cwl");
+      }
+    } else if (response.statusCode == 429) {
+      throw Exception('Too many requests at the same time. Please retry in a few minutes.');
+    } else {
+      throw Exception('Failed to load war league info with status code: ${response.statusCode}');
+    }
+
+    return null;
   }
 }
+
 
 // Service
 class CurrentLeagueService {
