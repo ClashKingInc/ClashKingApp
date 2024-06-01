@@ -129,15 +129,6 @@ Map<String, String> analyzeWarLogs(List<WarLogDetails> warLogs) {
   double averageOpponentStarsPerMember =
       totalMembers > 0 ? opponentTotalStars / totalMembers : 0;
 
-  print("logCount: $logCount");
-  print("totalWins: $totalWins");
-  print("totalLosses: $totalLosses");
-  print("totalTies: $totalTies");
-  print("totalMembers: $totalMembers");
-  print("clanTotalDestruction: $clanTotalDestruction");
-  print("clanTotalStars: $clanTotalStars");
-  print("opponentTotalDestruction: $opponentTotalDestruction");
-
   return {
     'totalWins': totalWins.toString(),
     'totalLosses': totalLosses.toString(),

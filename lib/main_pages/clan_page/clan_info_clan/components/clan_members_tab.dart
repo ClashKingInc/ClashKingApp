@@ -142,7 +142,7 @@ class ClanMembersState extends State<ClanMembers> {
             ),
           ],
         ),
-        SizedBox(height: 4),
+        SizedBox(height: 8),
         ...filteredMembers.asMap().entries.map((entry) {
           int index = entry.key + 1;
           Member member = entry.value;
@@ -250,7 +250,6 @@ class ClanMembersState extends State<ClanMembers> {
                                       )
                                     ]);
                                   } catch (e) {
-                                    print(e);
                                     return SizedBox.shrink();
                                   }
                                 case 'donations':

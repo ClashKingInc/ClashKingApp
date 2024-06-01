@@ -1,4 +1,4 @@
-package com.example.clashkingapp
+package com.clashking.clashkingapp
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -19,7 +19,7 @@ import java.net.URL
 class WarAppWidgetProvider : HomeWidgetProvider() {
 
     companion object {
-        const val ACTION_UPDATE_WIDGET = "com.example.clashkingapp.ACTION_UPDATE_WIDGET"
+        const val ACTION_UPDATE_WIDGET = "com.clashking.clashkingapp.ACTION_UPDATE_WIDGET"
     }
 
     override fun onUpdate(
@@ -45,10 +45,6 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
         // Set the PendingIntent to the root layout of the widget
         views.setOnClickPendingIntent(R.id.root_layout, getPendingIntent(context))
 
-        println("Widget Data: ")
-        for ((key, value) in widgetData.all) {
-            println("$key: $value")
-        }
         // Get the war info from SharedPreferences
         val warInfoJson = widgetData.getString("warInfo", null)
 
@@ -59,17 +55,14 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
             views.setTextViewText(R.id.text_update_time, updatedTime)
             when (state) {
                 "notInWar" -> {
-                    println("Not in War")
                     setWidgetText(views, "You're currently not in War.")
                 }
 
                 "notInClan" -> {
-                    println("Not in Clan")
                     setWidgetText(views, "You're currently not in a Clan.")
                 }
 
                 "error" -> {
-                    println("Error")
                     setWidgetText(views, "An error occurred while fetching data.")
                 }
 

@@ -70,7 +70,6 @@ List<FlSpot> convertToContinuousScale(
     Map<String, String> seasonData, DateTime seasonStart) {
   List<FlSpot> spots = [];
 
-  print(seasonStart);
   int index = 0;
   seasonData.forEach((day, trophies) {
     while (seasonStart.add(Duration(days: index)).day != int.parse(day) &&
@@ -102,7 +101,5 @@ DateTime findCurrentSeasonMonth(currentDate) {
     selectedMonth = DateTime(selectedMonth.year, selectedMonth.month + 1, 1);
   }
 
-  print(
-      selectedMonth); // This will print the selectedMonth, moved to the next month if necessary
   return selectedMonth;
 }

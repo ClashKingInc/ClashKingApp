@@ -47,7 +47,6 @@ Future<bool> addLink(
   );
 
   if (response.statusCode == 200) {
-    print("Link added successfully.");
     updateErrorMessage('');
     return true;
   } else if (response.statusCode == 400) {
@@ -74,7 +73,6 @@ Future<bool> deleteLink(String playerTag, String authToken,
   );
 
   if (response.statusCode == 200) {
-    print("Link deleted successfully.");
     updateErrorMessage('');
     return true;
   }
@@ -96,7 +94,6 @@ Future<bool> getLinks(String playerTag, String authToken) async {
     },
   );
 
-  print(response.body);
 
   if (response.statusCode == 404) {
     return true;
@@ -111,7 +108,6 @@ Future<String> checkIfPlayerTagExists(
     Uri.parse('https://api.clashking.xyz/v1/players/$playerTag'),
   );
 
-  print(response.body);
   if (response.statusCode == 200) {
     if (await getLinks(playerTag, authToken)) {
       return "Ok";

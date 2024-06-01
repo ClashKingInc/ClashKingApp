@@ -58,7 +58,6 @@ class ClanSearchState extends State<ClanSearch> {
   }
 
   Future<List<dynamic>> _searchClans(String query) async {
-    print('Searching for $query');
     if (query.isEmpty || query.length < 3) {
       isSearching = false;
       return [];
@@ -72,7 +71,6 @@ class ClanSearchState extends State<ClanSearch> {
       if (response.statusCode == 200) {
         var body = utf8.decode(response.bodyBytes);
         var data = jsonDecode(body);
-        print(data);
         return [data];
       } else {
         return [];

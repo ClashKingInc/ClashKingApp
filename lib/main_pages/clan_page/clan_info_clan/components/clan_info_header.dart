@@ -98,6 +98,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
             runSpacing: 0,
             alignment: WrapAlignment.center,
             children: <Widget>[
+              if(widget.clanInfo.location.name != 'Unknown country')
               Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,

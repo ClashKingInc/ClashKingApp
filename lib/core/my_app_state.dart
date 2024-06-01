@@ -107,7 +107,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     clanTag = prefs.getString('clanTag');
     final warInfo = await checkCurrentWar(clanTag);
-    print("War info: $warInfo");
     // Send data to the widget
     await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
     // Request the Home Widget to update
@@ -119,7 +118,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   // Update the widgets
   void updateWidgets() async {
-    print("Updating widgets");
     await updateWarWidget();
   }
 
@@ -141,9 +139,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       selectedTag.value = user!.tags.first;
       await fetchPlayerAccounts(user!);
       reloadData();
-    } else {
-      print("User is null");
-    }
+    } 
 
     await Future.delayed(Duration(seconds: 1));
     isLoading = false;
@@ -156,7 +152,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void reloadData() async {
-    print("Reloading data");
 
     // Check if the selected tag is still valid after fetching new data
     if (!user!.tags.contains(selectedTag.value)) {
@@ -165,7 +160,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
     // Fetch the new data for playerStats, clanInfo and currentWarInfo
     if (selectedTag.value != null) {
-      print("Selected tag: ${selectedTag.value}");
 
       playerStats = playerAccounts?.playerAccountInfo
           .firstWhere((element) => element.tag == selectedTag.value);
@@ -174,9 +168,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       if (playerStats != null && playerStats?.clan != null) {
         await prefs.setString('clanTag', playerStats!.clan!.tag);
-        print("Clan tag: ${playerStats!.clan!.tag}");
       } else {
-        print('playerStats or playerStats.clan is null');
         await prefs.setString('clanTag', '');
       }
       updateWidgets();
@@ -211,7 +203,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   // Fetch the player accounts from the user tags
   Future<void> fetchPlayerAccounts(User user) async {
     try {
-      print("Fetching player accounts");
       playerAccounts = await PlayerService().fetchPlayerAccounts(user);
       reloadData();
     } catch (e, s) {
