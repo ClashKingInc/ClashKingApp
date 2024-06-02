@@ -11,6 +11,8 @@ Future<String> checkCurrentWar(String? clanTag) async {
   String time = "";
   int multiplicator = 2;
 
+  print("Clan Tag: $clanTag");
+
   if (clanTag == null || clanTag.isEmpty) {
     var result = {
       "updatedAt": "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
@@ -83,8 +85,9 @@ Future<String> checkCurrentWar(String? clanTag) async {
             "updatedAt":
                 "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
             "timeState": time,
-            "state": "error"
+            "state": "notInWar"
           };
+          print("Result: $result");
           return jsonEncode(result);
         }
       } else {
@@ -94,6 +97,7 @@ Future<String> checkCurrentWar(String? clanTag) async {
           "timeState": time,
           "state": "notInWar"
         };
+        print("Result: $result");
         return jsonEncode(result);
       }
     } else {
@@ -102,6 +106,7 @@ Future<String> checkCurrentWar(String? clanTag) async {
         "timeState": time,
         "state": "notInWar"
       };
+      print("Result: $result");
       return jsonEncode(result);
     }
 

@@ -22,9 +22,12 @@ class CurrentWarInfoPage extends StatefulWidget {
   final ClanInfo? clanInfo;
   final PlayerAccountInfo playerStats;
   final User discordUser;
+  @override
+  final Key key;
 
   CurrentWarInfoPage(
-      {required this.discordUser,
+      {required this.key,
+      required this.discordUser,
       required this.playerStats,
       required this.clanInfo});
 
@@ -43,12 +46,18 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   @override
   void initState() {
     super.initState();
+    setupData();
+  }
+
+  void setupData() {
     if (widget.clanInfo != null) {
       currentWarFuture = checkCurrentWar(widget.playerStats);
       warLogData = WarLogService.fetchWarLogData(widget.clanInfo!.tag);
       warLogData.then((data) {
         if (data.items.isNotEmpty) {
-          warLogStats = analyzeWarLogs(data.items);
+          setState(() {
+            warLogStats = analyzeWarLogs(data.items);
+          });
         }
       });
     }

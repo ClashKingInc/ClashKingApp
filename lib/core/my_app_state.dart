@@ -107,13 +107,18 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     clanTag = prefs.getString('clanTag');
     final warInfo = await checkCurrentWar(clanTag);
-    // Send data to the widget
-    await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
-    // Request the Home Widget to update
-    await HomeWidget.updateWidget(
-      name: 'WarAppWidgetProvider',
-      androidName: 'WarAppWidgetProvider',
-    );
+    print('War info: $warInfo');
+    try {
+      // Send data to the widget
+      await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
+      // Request the Home Widget to update
+      await HomeWidget.updateWidget(
+        name: 'WarAppWidgetProvider',
+        androidName: 'WarAppWidgetProvider',
+      );
+    } catch (e) {
+      print('Error updating widget: $e');
+    }
   }
 
   // Update the widgets
@@ -139,7 +144,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       selectedTag.value = user!.tags.first;
       await fetchPlayerAccounts(user!);
       reloadData();
-    } 
+    }
 
     await Future.delayed(Duration(seconds: 1));
     isLoading = false;
@@ -152,7 +157,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void reloadData() async {
-
     // Check if the selected tag is still valid after fetching new data
     if (!user!.tags.contains(selectedTag.value)) {
       selectedTag.value = user!.tags.first;
@@ -160,7 +164,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
     // Fetch the new data for playerStats, clanInfo and currentWarInfo
     if (selectedTag.value != null) {
-
       playerStats = playerAccounts?.playerAccountInfo
           .firstWhere((element) => element.tag == selectedTag.value);
 
@@ -223,7 +226,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   // Fetch the current war info from clan tag
   Future<void> fetchCurrentWarInfo(String tag) async {
     try {
-      currentWarInfo = await CurrentWarService().fetchCurrentWarInfo(tag, "war");
+      currentWarInfo =
+          await CurrentWarService().fetchCurrentWarInfo(tag, "war");
       notifyListeners(); // Notify listeners to rebuild widgets that depend on currentWarInfo.
     } catch (e) {
       throw Exception('Failed to load current war info: $e');
