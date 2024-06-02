@@ -52,8 +52,7 @@ class DashboardPageState extends State<DashboardPage>
               final appState = Provider.of<MyAppState>(context, listen: false);
               appState.refreshData();
               PlayerLegendService playerLegendService = PlayerLegendService();
-              legendData =
-                  playerLegendService.fetchLegendData(widget.playerStats.tag);
+              legendData = playerLegendService.fetchLegendData(widget.playerStats.tag);
             });
           },
           child: ListView(
