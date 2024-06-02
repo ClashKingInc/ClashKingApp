@@ -223,8 +223,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   // Fetch the current war info from clan tag
   Future<void> fetchCurrentWarInfo(String tag) async {
     try {
-      currentWarInfo =
-          await CurrentWarService().fetchCurrentWarInfo(tag, "war");
+      currentWarInfo = await CurrentWarService().fetchCurrentWarInfo(tag, "war");
       notifyListeners(); // Notify listeners to rebuild widgets that depend on currentWarInfo.
     } catch (e) {
       throw Exception('Failed to load current war info: $e');

@@ -39,7 +39,7 @@ class WarHistoryCard extends StatelessWidget {
       child: DefaultTextStyle(
         style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
         child: Card(
-          margin: EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 8),
+          margin: EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 4),
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
