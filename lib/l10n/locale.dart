@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class LocaleInfo {
   final String languageCode;
   final String languageName;
