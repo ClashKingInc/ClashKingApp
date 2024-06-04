@@ -19,7 +19,8 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
-      avatar: 'https://cdn.discordapp.com/avatars/${json['id']}/${json['avatar']}.png',
+      avatar:
+          'https://cdn.discordapp.com/avatars/${json['id']}/${json['avatar']}.png',
       globalName: json['global_name'],
     );
   }
@@ -30,7 +31,7 @@ class User {
   }
 }
 
-Future<User> fetchDiscordUser(String accessToken) async {
+Future<User?> fetchDiscordUser(String accessToken) async {
   if (accessToken != "inviteMode") {
     final response = await http.get(
       Uri.https('discord.com', '/api/users/@me'),
@@ -39,13 +40,15 @@ Future<User> fetchDiscordUser(String accessToken) async {
       },
     );
 
+    print(response.body);
+
     if (response.statusCode == 200) {
       User user = User.fromJson(jsonDecode(response.body));
       user.isDiscordUser = true;
       user = await fetchDiscordUserTags(user); // Fetch user tags
       return user;
     } else {
-      throw Exception('Failed to fetch user');
+      return null;
     }
   } else {
     User user = User(
@@ -70,10 +73,12 @@ Future<User> fetchDiscordUserTags(User user) async {
     Map<String, dynamic> responseBodyJson = jsonDecode(responseBody);
     responseBodyJson.removeWhere(
         (key, value) => value == null); // Remove entries with null value
-    user.tags = responseBodyJson.keys.toList(); // Update 'tags' in 'user'
+    if (responseBodyJson.keys.isNotEmpty) {
+      user.tags = responseBodyJson.keys.toList(); // Update 'tags' in 'user'
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('selectedTag', user.tags.first);
+    }
 
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('selectedTag', user.tags.first);
     return user;
   } else {
     throw Exception('Failed to load user tags');
@@ -82,7 +87,7 @@ Future<User> fetchDiscordUserTags(User user) async {
 
 Future<User> fetchGuestUserTags(User user) async {
   final prefs = await SharedPreferences.getInstance();
-  List<String>tags = prefs.getStringList("tags") ?? [];
+  List<String> tags = prefs.getStringList("tags") ?? [];
   user.tags = tags;
   return user;
 }

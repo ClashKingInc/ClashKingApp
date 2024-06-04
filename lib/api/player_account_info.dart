@@ -474,7 +474,7 @@ class PlayerService {
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       CurrentWarInfo warInfo =
-          CurrentWarInfo.fromJson(jsonDecode(responseBody), "war");
+          CurrentWarInfo.fromJson(jsonDecode(responseBody), "war", clanTag);
       return warInfo;
     } else {
       throw Exception('Failed to load current war info');

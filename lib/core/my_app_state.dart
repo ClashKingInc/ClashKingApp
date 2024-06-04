@@ -13,6 +13,7 @@ import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
+import 'package:clashkingapp/main_pages/login_page/login_page.dart';
 
 class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   PlayerAccounts? playerAccounts;
@@ -238,12 +239,24 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> initializeDiscordUser(BuildContext context) async {
     final accessToken = await getAccessToken();
-    if (accessToken != null) {
+    bool tokenValid = await isTokenValid();
+    print(accessToken);
+    print(tokenValid);
+    if (accessToken != null && tokenValid) {
       user = await fetchDiscordUser(accessToken);
-      if (user!.tags.isEmpty) {
-      } else {
+      if (user != null) {
         notifyListeners();
+      } else {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.clear();
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
       }
+    } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
     }
   }
 
