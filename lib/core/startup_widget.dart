@@ -177,7 +177,7 @@ class StartupWidgetState extends State<StartupWidget> {
             void localOnChipDeleted(String tag) async {
               String failedToDeleteTryAgain =
                   AppLocalizations.of(context)!.failedToDeleteTryAgain;
-              bool success = await deleteLink(
+              await deleteLink(
                   tag, authToken, updateErrorMessage, failedToDeleteTryAgain);
               setState(() {
                 // Use dialog's setState
@@ -194,6 +194,7 @@ class StartupWidgetState extends State<StartupWidget> {
             }
 
             return AlertDialog(
+              scrollable: true,
               surfaceTintColor: Colors.transparent,
               title: Column(children: [
                 SizedBox(
@@ -218,51 +219,51 @@ class StartupWidgetState extends State<StartupWidget> {
                     textAlign: TextAlign.center),
                 SizedBox(height: 16),
               ]),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ChipsInput<String>(
-                      focusNode: _chipFocusNode,
-                      values: _tags,
-                      decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                          icon: isLoading
-                              ? CircularProgressIndicator()
-                              : SizedBox.shrink(),
-                          onPressed: () {},
-                        ),
-                        labelText: AppLocalizations.of(context)!.playerTags,
-                        hintText: _tags.isEmpty ? '#2QVPCJJV' : null,
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ChipsInput<String>(
+                    focusNode: _chipFocusNode,
+                    values: _tags,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: isLoading
+                            ? CircularProgressIndicator()
+                            : SizedBox.shrink(),
+                        onPressed: () {},
                       ),
-                      strutStyle: StrutStyle(fontSize: 15),
-                      onChanged: (List<String> data) {
-                        setState(() {
-                          _tags = data;
-                        });
-                      },
-                      onSubmitted: localOnSubmit,
-                      chipBuilder: localChipBuilder,
-                      onTextChanged: _onSearchChanged,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                            RegExp(r'[#a-zA-Z0-9]*')),
-                      ],
+                      labelText: AppLocalizations.of(context)!.playerTags,
+                      hintText: _tags.isEmpty ? '#2QVPCJJV' : null,
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
                     ),
-                    if (errorMessage.isNotEmpty)
-                      Column(
-                          children: [SizedBox(height: 16), Text(errorMessage)]),
-                  ],
-                ),
+                    strutStyle: StrutStyle(fontSize: 15),
+                    onChanged: (List<String> data) {
+                      setState(() {
+                        _tags.addAll(data.where((tag) => !_tags.contains(tag)));
+                      });
+                    },
+                    onSubmitted: localOnSubmit,
+                    chipBuilder: localChipBuilder,
+                    onTextChanged: _onSearchChanged,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'[#a-zA-Z0-9]*')),
+                    ],
+                  ),
+                  if (errorMessage.isNotEmpty)
+                    Column(
+                        children: [SizedBox(height: 16), Text(errorMessage)]),
+                ],
               ),
               actions: <Widget>[
                 TextButton(
                   child: Text('OK'),
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (_) => StartupWidget()));
+                    if (_tags.isNotEmpty) {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (_) => StartupWidget()));
+                    }
                   },
                 ),
               ],

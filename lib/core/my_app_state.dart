@@ -13,6 +13,7 @@ import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
+import 'package:clashkingapp/main_pages/login_page/login_page.dart';
 
 class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   PlayerAccounts? playerAccounts;
@@ -107,13 +108,17 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     clanTag = prefs.getString('clanTag');
     final warInfo = await checkCurrentWar(clanTag);
-    // Send data to the widget
-    await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
-    // Request the Home Widget to update
-    await HomeWidget.updateWidget(
-      name: 'WarAppWidgetProvider',
-      androidName: 'WarAppWidgetProvider',
-    );
+    try {
+      // Send data to the widget
+      await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
+      // Request the Home Widget to update
+      await HomeWidget.updateWidget(
+        name: 'WarAppWidgetProvider',
+        androidName: 'WarAppWidgetProvider',
+      );
+    } catch (e) {
+      print('Error updating widget: $e');
+    }
   }
 
   // Update the widgets
@@ -139,7 +144,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       selectedTag.value = user!.tags.first;
       await fetchPlayerAccounts(user!);
       reloadData();
-    } 
+    }
 
     await Future.delayed(Duration(seconds: 1));
     isLoading = false;
@@ -152,7 +157,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void reloadData() async {
-
     // Check if the selected tag is still valid after fetching new data
     if (!user!.tags.contains(selectedTag.value)) {
       selectedTag.value = user!.tags.first;
@@ -160,7 +164,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
     // Fetch the new data for playerStats, clanInfo and currentWarInfo
     if (selectedTag.value != null) {
-
       playerStats = playerAccounts?.playerAccountInfo
           .firstWhere((element) => element.tag == selectedTag.value);
 
@@ -205,9 +208,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     try {
       playerAccounts = await PlayerService().fetchPlayerAccounts(user);
       reloadData();
-    } catch (e, s) {
-      print("Error fetching player stats: $e");
-      print("Stack trace: $s");
+    } catch (e) {
+      throw Exception('Failed to load player accounts: $e');
     }
   }
 
@@ -216,9 +218,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     try {
       clanInfo = await ClanService().fetchClanInfo(tag);
       notifyListeners(); // Notify listeners to rebuild widgets that depend on clanInfo.
-    } catch (e, s) {
-      print("Error fetching clan info: $e");
-      print("Stack trace: $s");
+    } catch (e) {
+      throw Exception('Failed to load clan info: $e');
     }
   }
 
@@ -228,9 +229,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       currentWarInfo =
           await CurrentWarService().fetchCurrentWarInfo(tag, "war");
       notifyListeners(); // Notify listeners to rebuild widgets that depend on currentWarInfo.
-    } catch (e, s) {
-      print("Error fetching current war info: $e");
-      print("Stack trace: $s");
+    } catch (e) {
+      throw Exception('Failed to load current war info: $e');
     }
   }
 
@@ -238,12 +238,22 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> initializeDiscordUser(BuildContext context) async {
     final accessToken = await getAccessToken();
-    if (accessToken != null) {
+    bool tokenValid = await isTokenValid();
+    if (accessToken != null && tokenValid) {
       user = await fetchDiscordUser(accessToken);
-      if (user!.tags.isEmpty) {
-      } else {
+      if (user != null) {
         notifyListeners();
+      } else {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.clear();
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
       }
+    } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
     }
   }
 

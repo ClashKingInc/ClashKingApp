@@ -192,7 +192,7 @@ class LoginPageState extends State<LoginPage> {
         MaterialPageRoute(builder: (context) => StartupWidget()),
       );
     } catch (e) {
-      print("Error: $e");
+      throw Exception('Failed to authenticate with Discord: $e');
     }
   }
 

@@ -79,6 +79,9 @@ class MyHomePageState extends State<MyHomePage> {
                           CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
               appState.user != null && appState.playerStats != null
                   ? CurrentWarInfoPage(
+                      key: ValueKey(appState.playerStats!.clan != null
+                          ? appState.playerStats!.clan!.tag
+                          : appState.playerStats!.tag),
                       discordUser: appState.user!,
                       playerStats: appState.playerStats!,
                       clanInfo: appState.clanInfo)

@@ -22,9 +22,12 @@ class CurrentWarInfoPage extends StatefulWidget {
   final ClanInfo? clanInfo;
   final PlayerAccountInfo playerStats;
   final User discordUser;
+  @override
+  final Key key;
 
   CurrentWarInfoPage(
-      {required this.discordUser,
+      {required this.key,
+      required this.discordUser,
       required this.playerStats,
       required this.clanInfo});
 
@@ -38,15 +41,23 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   List<Map<int, List<WarLeagueInfo>>> warLeagueInfoByRound = [];
   late Future<WarLog> warLogData = Future.value(WarLog(items: []));
   late Map<String, String> warLogStats = {};
+  late Future<String> currentWarFuture;
 
   @override
   void initState() {
     super.initState();
+    setupData();
+  }
+
+  void setupData() {
     if (widget.clanInfo != null) {
+      currentWarFuture = checkCurrentWar(widget.playerStats);
       warLogData = WarLogService.fetchWarLogData(widget.clanInfo!.tag);
       warLogData.then((data) {
         if (data.items.isNotEmpty) {
-          warLogStats = analyzeWarLogs(data.items);
+          setState(() {
+            warLogStats = analyzeWarLogs(data.items);
+          });
         }
       });
     }
@@ -62,7 +73,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
         });
       },
       child: FutureBuilder<String>(
-        future: checkCurrentWar(widget.playerStats),
+        future: currentWarFuture,
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -190,7 +201,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
       if (decodedResponse["state"] != "notInWar" &&
           decodedResponse["reason"] != "accessDenied") {
         currentWarInfo = CurrentWarInfo.fromJson(
-            jsonDecode(utf8.decode(responseWar.bodyBytes)), "war");
+            jsonDecode(utf8.decode(responseWar.bodyBytes)), "war", playerStats.clan!.tag);
         return "war";
       } else if (decodedResponse["state"] == "notInWar") {
         DateTime now = DateTime.now();
@@ -200,7 +211,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                 jsonDecode(utf8.decode(responseCwl.bodyBytes));
             if (decodedResponseCwl.containsKey("state")) {
               currentLeagueInfo =
-                  CurrentLeagueInfo.fromJson(decodedResponseCwl);
+                  CurrentLeagueInfo.fromJson(decodedResponseCwl, playerStats.clan!.tag);
               return "cwl";
             }
           }
