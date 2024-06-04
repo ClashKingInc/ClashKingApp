@@ -1,11 +1,11 @@
 {
     "@@locale": "de",
-    "creatorCode": "Creator-Code: ClashKing",
-    "signInWithDiscord": "Mit Discord anmelden",
-    "guestMode": "Gast-Modus",
-    "needHelpJoinDiscord": "Hilfe benötigt? Tritt unserem Discord bei.",
-    "createGuestProfile": "Gästeprofil erstellen",
-    "doesNotExist": "{tag} existiert nicht.",
+    "creatorCode": "Creator Code : ClashKing",
+    "signInWithDiscord": "Sign In with Discord",
+    "guestMode": "Guest Mode",
+    "needHelpJoinDiscord": "Need help? Join us on Discord.",
+    "createGuestProfile": "Create your guest profile",
+    "doesNotExist": "{tag} does not exist.",
     "@doesNotExist": {
         "placeholders": {
             "tag": {
@@ -13,7 +13,7 @@
             }
         }
     },
-    "isAlreadyLinked": "{tag} ist bereits mit jemand anderem verknüpft.",
+    "isAlreadyLinked": "{tag} is already linked to someone.",
     "@isAlreadyLinked": {
         "placeholders": {
             "tag": {
@@ -21,8 +21,8 @@
             }
         }
     },
-    "username": "Benutzername",
-    "pleaseEnterUsername": "Bitte gib einen Benutzernamen ein",
+    "username": "Username",
+    "pleaseEnterUsername": "Please enter a username",
     "playerTags": "Player Tags",
     "pleaseEnterPlayerTags": "Please enter player tags",
     "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
