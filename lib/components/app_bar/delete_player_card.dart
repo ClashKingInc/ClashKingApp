@@ -104,7 +104,6 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
                       navigator.pop();
                     }
                   } else {
-                    print('No tags left');
                     navigator.push(
                         MaterialPageRoute(builder: (_) => StartupWidget()));
                   }

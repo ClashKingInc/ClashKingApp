@@ -108,7 +108,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     clanTag = prefs.getString('clanTag');
     final warInfo = await checkCurrentWar(clanTag);
-    print('War info: $warInfo');
     try {
       // Send data to the widget
       await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
@@ -240,8 +239,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> initializeDiscordUser(BuildContext context) async {
     final accessToken = await getAccessToken();
     bool tokenValid = await isTokenValid();
-    print(accessToken);
-    print(tokenValid);
     if (accessToken != null && tokenValid) {
       user = await fetchDiscordUser(accessToken);
       if (user != null) {

@@ -40,8 +40,6 @@ Future<User?> fetchDiscordUser(String accessToken) async {
       },
     );
 
-    print(response.body);
-
     if (response.statusCode == 200) {
       User user = User.fromJson(jsonDecode(response.body));
       user.isDiscordUser = true;

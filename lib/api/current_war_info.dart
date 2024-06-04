@@ -26,7 +26,6 @@ class CurrentWarInfo {
   });
 
   factory CurrentWarInfo.fromJson(Map<String, dynamic> json, String type, String clanTag) {
-    print(clanTag);
     if (json['state'] == "notInwar" && json["teamSize"] == 0) {
       return CurrentWarInfo(
         state: json['state'] ?? 'No state',
