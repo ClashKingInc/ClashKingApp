@@ -67,7 +67,6 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
                 }
 
                 else -> {
-
                     val score = warInfo.optString("score", "")
                     val warStatus = warInfo.optString("timeState", "notInWar")
 

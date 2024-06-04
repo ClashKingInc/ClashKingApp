@@ -250,7 +250,7 @@ class _FaqScreenState extends State<FaqScreen> {
                           if (await canLaunchUrl(Uri.parse(url))) {
                             await launchUrl(Uri.parse(url));
                           } else {
-                            print('Could not launch $url');
+                            throw 'Could not launch $url';
                           }
                         },
                       ),

@@ -35,14 +35,13 @@ class CwlCardState extends State<CwlCard> {
       List<CurrentWarInfo> warLeagueInfos = await round.warLeagueInfos;
 
       for (var warInfo in warLeagueInfos) {
-        if (warInfo.clan.tag == widget.clanTag ||
-            warInfo.opponent.tag == widget.clanTag) {
-            lastMatchedWarInfo = warInfo; // Store the last matched warInfo
+        if (warInfo.clan.tag == widget.clanTag || warInfo.opponent.tag == widget.clanTag) {
+          lastMatchedWarInfo = warInfo;
 
           if (warInfo.state == 'inWar') {
-            return warInfo; // Return immediately if 'inWar'
+            return warInfo;
           } else if (warInfo.state == 'preparation') {
-            inPreparation = warInfo; // Store 'preparation' warInfo
+            inPreparation = warInfo;
           }
         }
       }
@@ -58,22 +57,25 @@ class CwlCardState extends State<CwlCard> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Card(
-            margin: EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
-              child: SizedBox(
-                  height: 100,
-                  width: double.infinity,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Loading war data..."),
-                        CircularProgressIndicator()
-                      ])));
+            margin: EdgeInsets.only(top: 8, left: 12, right: 12, bottom: 8),
+            child: SizedBox(
+              height: 100,
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Loading war data..."),
+                  SizedBox(height: 10),
+                  CircularProgressIndicator()
+                ],
+              ),
+            ),
+          );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
           CurrentWarInfo? warInfo = snapshot.data;
-          return CurrentWarInfoCard(
-              currentWarInfo: warInfo!, clanTag: widget.clanTag);
+          return CurrentWarInfoCard(currentWarInfo: warInfo!, clanTag: widget.clanTag);
         }
       },
     );
