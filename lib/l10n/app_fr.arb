@@ -139,6 +139,7 @@
     "ended" : "Fin",
     "average" : "Moyenne",
     "remaining" : "Restant",
+    "toDoList" : "Tâches du jour",
     "worst" : "Pire",
     "best" : "Meilleur",
     "total" : "Total",

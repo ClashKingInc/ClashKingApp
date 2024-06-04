@@ -61,11 +61,9 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
     if (RegExp(r'^#[PYLQGRJCUV0289]{3,9}$').hasMatch(query) ||
         RegExp(r'^[PYLQGRJCUV0289]{3,9}$').hasMatch(query)) {
       query = query.replaceFirst('#', '!');
-      response = await http
-          .get(Uri.parse('https://api.clashking.xyz/v1/players/$query'));
+      response = await http.get(Uri.parse('https://api.clashking.xyz/v1/players/$query'));
     } else {
-      response = await http
-          .get(Uri.parse('https://api.clashking.xyz/player/search/$query'));
+      response = await http.get(Uri.parse('https://api.clashking.xyz/player/search/$query'));
     }
 
     if (query.isEmpty || query.length < 3) {
@@ -105,29 +103,28 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       isSearching
-                          ? SizedBox(
-                              width: 20.0,
-                              height: 20.0,
-                              child: CircularProgressIndicator(),
-                            )
-                          : !isEmpty
-                              ? IconButton(
-                                  icon: Icon(Icons.clear,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface),
-                                  onPressed: () {
-                                    _controller.clear();
-                                    setState(() {
-                                      isSearching = false;
-                                    });
-                                  },
-                                )
-                              : Icon(
-                                  Icons.search,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
+                        ? SizedBox(
+                            width: 20.0,
+                            height: 20.0,
+                            child: CircularProgressIndicator(),
+                          )
+                        : !isEmpty
+                            ? IconButton(
+                                icon: Icon(
+                                  Icons.clear,
+                                  color: Theme.of(context).colorScheme.onSurface),
+                                onPressed: () {
+                                  _controller.clear();
+                                  setState(() {
+                                    isSearching = false;
+                                  });
+                                },
+                              )
+                            : Icon(
+                                Icons.search,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                        SizedBox(width: 8),
                     ],
                   ),
                 ),
