@@ -13,6 +13,7 @@ import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
+import 'package:clashkingapp/main_pages/login_page/login_page.dart';
 
 class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   PlayerAccounts? playerAccounts;
@@ -107,7 +108,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     clanTag = prefs.getString('clanTag');
     final warInfo = await checkCurrentWar(clanTag);
-    print('War info: $warInfo');
     try {
       // Send data to the widget
       await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
@@ -237,13 +237,23 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   /* User initialization at the opening of the app : Guest or Discord User */
 
   Future<void> initializeDiscordUser(BuildContext context) async {
+    NavigatorState navigator = Navigator.of(context);
     final accessToken = await getAccessToken();
-    if (accessToken != null) {
+    bool tokenValid = await isTokenValid();
+    if (accessToken != null && tokenValid) {
       user = await fetchDiscordUser(accessToken);
-      if (user!.tags.isEmpty) {
-      } else {
+      if (user != null) {
         notifyListeners();
+      } else {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.clear();
+        navigator
+            .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
       }
+    } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+      navigator.pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
     }
   }
 

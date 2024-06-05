@@ -23,7 +23,7 @@ class PlayerAccounts {
         ClanInfo clan = ClanInfo.fromJson(item['clan']);
         clanInfo!.add(clan);
         CurrentWarInfo war =
-            CurrentWarInfo.fromJson(item['clan']['currentWar'], "war");
+            CurrentWarInfo.fromJson(item['clan']['currentWar'], "war", clan.tag);
         warInfo.add(war);
       } else {
         clanInfo = null;

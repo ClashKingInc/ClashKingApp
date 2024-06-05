@@ -65,6 +65,7 @@ class CwlCardState extends State<CwlCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Loading war data..."),
+                  SizedBox(height: 10),
                   CircularProgressIndicator()
                 ],
               ),

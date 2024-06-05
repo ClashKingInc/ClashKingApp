@@ -25,7 +25,7 @@ class CurrentWarInfo {
     required this.type,
   });
 
-  factory CurrentWarInfo.fromJson(Map<String, dynamic> json, String type) {
+  factory CurrentWarInfo.fromJson(Map<String, dynamic> json, String type, String clanTag) {
     if (json['state'] == "notInwar" && json["teamSize"] == 0) {
       return CurrentWarInfo(
         state: json['state'] ?? 'No state',
@@ -46,8 +46,8 @@ class CurrentWarInfo {
         preparationStartTime: DateTime.parse(json['preparationStartTime']),
         startTime: DateTime.parse(json['startTime']),
         endTime: DateTime.parse(json['endTime']),
-        clan: ClanWarDetails.fromJson(json['clan'] ?? {}),
-        opponent: ClanWarDetails.fromJson(json['opponent'] ?? {}),
+        clan: ClanWarDetails.fromJson(json['clan']['tag'] == clanTag ? json['clan']  : json['opponent'] ?? {}),
+        opponent: ClanWarDetails.fromJson(json['clan']['tag'] == clanTag ? json['opponent'] : json['clan'] ?? {}),
         type: type,
       );
     }
@@ -226,7 +226,7 @@ class CurrentWarService {
     }
 
     if (response.statusCode == 200) {
-      return CurrentWarInfo.fromJson(jsonDecode(response.body), type);
+      return CurrentWarInfo.fromJson(jsonDecode(response.body), type, tag);
     } else {
       throw Exception('Failed to load current war info with status code: ${response.statusCode}');
     }
@@ -240,7 +240,7 @@ class CurrentWarService {
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       Map<String, dynamic> jsonBody = json.decode(body);
-      return CurrentWarInfo.fromJson(jsonBody, 'current');
+      return CurrentWarInfo.fromJson(jsonBody, 'current', tag);
     } else {
       return null;
     }

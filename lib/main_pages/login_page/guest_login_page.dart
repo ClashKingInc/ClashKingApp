@@ -250,6 +250,7 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                             ),
                           ),
                         if (errorMessage.isNotEmpty) Text(errorMessage),
+                        SizedBox(height: 16),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
