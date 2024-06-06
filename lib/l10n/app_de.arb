@@ -23,9 +23,9 @@
     },
     "username": "Benutzername",
     "pleaseEnterUsername": "Bitte gib einen Benutzernamen ein",
-    "playerTags": "Player Tags",
-    "pleaseEnterPlayerTags": "Please enter player tags",
-    "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
+    "playerTags": "Spielerkürzel",
+    "pleaseEnterPlayerTags": "Bitte Spielerkürzel eingeben",
+    "followingTagsDoNotExist": "Die folgenden Spielerkürzel existieren nicht: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
             "tags": {
@@ -33,7 +33,7 @@
             }
         }
     },
-    "followingTagsAreAlreadyLinked": "The following tags are already linked to someone: {tags}.",
+    "followingTagsAreAlreadyLinked": "Die folgenden Spielerkürzel sind bereits mit jemand anderem verknüpft: {tags}.",
     "@followingTagsAreAlreadyLinked": {
         "placeholders": {
             "tags": {
@@ -41,12 +41,12 @@
             }
         }
     },
-    "welcome": "Welcome !",
-    "welcomeMessage": "Please add one or more Clash Of Clan accounts to your profile. You can add or remove accounts later.",
-    "login": "Login",
-    "logout": "Log out",
-    "language": "Language",
-    "settings": "Settings",
+    "welcome": "Willkommen!",
+    "welcomeMessage": "Bitte füge deinem Profil einen oder mehrere Clash of Clans Accounts hinzu. Du kannst später weitere Accounts hinzufügen oder entfernen.",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "language": "Sprache",
+    "settings": "Einstellungen",
     "toggleTheme": "Toggle Theme",
     "selectLanguage": "Select a language",
     "faq": "FAQ",
