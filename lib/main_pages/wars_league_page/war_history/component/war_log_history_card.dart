@@ -44,7 +44,7 @@ class WarLogHistoryCardState extends State<WarLogHistoryCard> {
       case 'defeat':
         return filteredData.where((warLogDetail) => warLogDetail.result == 'lose').toList();
       case 'draw':
-        return filteredData.where((warLogDetail) => warLogDetail.result == 'draw').toList();
+        return filteredData.where((warLogDetail) => warLogDetail.result =='tie').toList();
       case 'perfectWar':
         return filteredData.where((warLogDetail) => (warLogDetail.clan.destructionPercentage == 100 || warLogDetail.opponent.destructionPercentage == 100)).toList();
       case 'newest':

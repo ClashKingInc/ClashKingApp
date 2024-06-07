@@ -237,6 +237,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   /* User initialization at the opening of the app : Guest or Discord User */
 
   Future<void> initializeDiscordUser(BuildContext context) async {
+    NavigatorState navigator = Navigator.of(context);
     final accessToken = await getAccessToken();
     bool tokenValid = await isTokenValid();
     if (accessToken != null && tokenValid) {
@@ -246,14 +247,13 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       } else {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.clear();
-        Navigator.of(context)
+        navigator
             .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
       }
     } else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.clear();
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+      navigator.pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
     }
   }
 
