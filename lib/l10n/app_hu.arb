@@ -41,7 +41,7 @@
             }
         }
     },
-    "welcome": "Üdv!",
+    "welcome": "Welcome!",
     "welcomeMessage": "Kérjük adj egy vagy több Clash Of Clans fiókot a profilodhoz. Később tudsz további fiókokat hozzáadni.",
     "login": "Bejelentkezés",
     "logout": "Kijelentkezés",
@@ -51,15 +51,15 @@
     "selectLanguage": "Nyelv kiválasztása",
     "faq": "GYIK",
     "faqSubtitle": "Gyakran Ismételt Kérdések",
-    "faqIsThisFromSupercell": "Ez az alkalmazás a Supercelltől származik?",
+    "faqIsThisFromSupercell": "Is this App from Supercell?",
     "faqFanContentPolicy": "Ez az anyag nem hivatalos, és nem kapott jóváhagyást Supercelltől. További információért lásd a Supercell rajongói tartalomra vonatkozó irányelveit: www.supercell.com/fan-content-policy",
-    "faqWhyNotAccurate": "Miért nem mindig pontosak az adatok, vagy miért hiányoznak?",
+    "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
     "faqClanNotTracked": "Klán nincs követve\n",
-    "faqClanNotTrackedAnswer": "A ClashKing csak akkor kaphatja meg ezt az információt, ha klán követve van. Ha úgy tűnik, hogy a klán nem követett, kérjük, adja hozzá a ClashKing bot-ot a Discord szerverre, és használja az /addclan parancsot. Reméljük, hogy hamarosan elérhető lesz ez a funkció az alkalmazásban.",
+    "faqClanNotTrackedAnswer": "ClashKing can only get this info if the clan is tracked. If your clan seems not to be tracked, please invite it on a Discord server and use the command /addclan. We hope to make this feature available in the app soon.",
     "faqTrackingDown": "Lekövetés\n",
-    "faqTrackingDownAnswer": "The traking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.\n\n",
+    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.\n\n",
     "faqApiLimitation": "Clash of Clans API limitation\n",
-    "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API have some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was one attack. It is also why we do not have any informations on your buildings levels.",
+    "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was one attack. It is also why we do not have any information on your buildings levels.",
     "faqSupportWork": "How can I support your work?",
     "faqSupportWorkAnswer": "There are several ways to support us:\n",
     "faqUseCodeClashKing": "Use code \"ClashKing\"",
@@ -184,7 +184,7 @@
         }
     },
     "minutesAgo": "{minutes} minutes ago",
-    "@minutseAgo": {
+    "@minutesAgo": {
         "placeholders": {
             "minutes": {
                 "type": "int"
@@ -294,5 +294,5 @@
     "neededOverall": "% Needed overall",
     "calculate": "Calculate",
     "management": "Management",
-    "comingSoon": "Coming soon !"
+    "comingSoon": "Coming soon!"
 }
