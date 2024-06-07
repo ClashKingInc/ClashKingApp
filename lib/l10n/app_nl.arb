@@ -41,7 +41,7 @@
             }
         }
     },
-    "welcome": "Welcome!",
+    "welcome": "Welkom!",
     "welcomeMessage": "Voeg alstublieft één of meer Clash Of Clans accounts toe aan je profiel. Je kan later accounts toevoegen of verwijderen.",
     "login": "Inloggen",
     "logout": "Uitloggen",
@@ -51,7 +51,7 @@
     "selectLanguage": "Selecteer een taal",
     "faq": "FAQ",
     "faqSubtitle": "Veelgestelde Vragen",
-    "faqIsThisFromSupercell": "Is this App from Supercell?",
+    "faqIsThisFromSupercell": "Is deze app van Supercell?",
     "faqFanContentPolicy": "Dit materiaal is onofficieel en wordt niet goedgekeurd door Supercell. Voor meer informatie, zie de Fan Content Policy van Supercell: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
     "faqClanNotTracked": "Clan niet bijgehouden\n",
@@ -294,5 +294,5 @@
     "neededOverall": "% Nodig in totaal",
     "calculate": "Berekenen",
     "management": "Beheren",
-    "comingSoon": "Coming soon!"
+    "comingSoon": "Binnenkort beschikbaar!"
 }
