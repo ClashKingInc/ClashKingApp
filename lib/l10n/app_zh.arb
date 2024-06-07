@@ -1,8 +1,8 @@
 {
     "@@locale": "zh-CN",
-    "creatorCode": "Creator Code : ClashKing",
-    "signInWithDiscord": "Sign In with Discord",
-    "guestMode": "Guest Mode",
+    "creatorCode": "",
+    "signInWithDiscord": "今天早睡",
+    "guestMode": "游客模式",
     "needHelpJoinDiscord": "Need help? Join us on Discord.",
     "createGuestProfile": "Create your guest profile",
     "doesNotExist": "{tag} does not exist.",
