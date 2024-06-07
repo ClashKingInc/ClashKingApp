@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MembersCard extends StatelessWidget {
   const MembersCard({
@@ -52,7 +53,7 @@ class MembersCard extends StatelessWidget {
                   flex: 3,
                   child: Column(
                     children: [
-                      Text("Total"),
+                      Text(AppLocalizations.of(context)!.total),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -74,7 +75,7 @@ class MembersCard extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("Average"),
+                      Text(AppLocalizations.of(context)!.average),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

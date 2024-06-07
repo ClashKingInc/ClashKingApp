@@ -56,7 +56,7 @@ class ClanWarsStatsCardState extends State<ClanWarsStatsCard> {
         content: SingleChildScrollView(
           child: Column(
             children: [
-              Text("War stats", style: Theme.of(context).textTheme.titleMedium),
+              Text(AppLocalizations.of(context)!.warStats, style: Theme.of(context).textTheme.titleMedium),
               Wrap(
                   spacing: 8,
                   runSpacing: 0,
