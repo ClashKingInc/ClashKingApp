@@ -184,7 +184,7 @@
         }
     },
     "minutesAgo": "{minutes} minutes ago",
-    "@minutseAgo": {
+    "@minutesAgo": {
         "placeholders": {
             "minutes": {
                 "type": "int"
