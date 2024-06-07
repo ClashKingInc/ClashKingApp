@@ -241,7 +241,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
               tabs: [
                 Tab(text: AppLocalizations.of(context)?.rounds ?? 'Rounds'),
                 Tab(text: AppLocalizations.of(context)?.team ?? 'Teams'),
-                Tab(text: AppLocalizations.of(context)?.member ?? "Members")
+                Tab(text: AppLocalizations.of(context)?.members ?? "Members")
               ],
               children: [
                 buildRoundsTab(

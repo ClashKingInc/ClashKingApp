@@ -63,8 +63,8 @@ Future<Map<String, dynamic>> calculateTotalStarsAndPercentageForMember(
               'name': member.name,
               'attacksDone': 0,
               'warParticipated': 0,
-              'averageStars' : 0,
-              'averagePercentage' : 0.0,
+              'averageStars': 0,
+              'averagePercentage': 0.0,
             };
           }
           if (member.attacks != null) {
@@ -75,7 +75,9 @@ Future<Map<String, dynamic>> calculateTotalStarsAndPercentageForMember(
               totalByMember[member.tag]?['attacksDone'] += 1;
             }
           }
-          totalByMember[member.tag]?['warParticipated'] += 1;
+          if (war.state != "preparation") {
+            totalByMember[member.tag]!['warParticipated'] += 1;
+          }
         }
       }
       if (war.opponent.tag == clanTag) {
@@ -88,8 +90,8 @@ Future<Map<String, dynamic>> calculateTotalStarsAndPercentageForMember(
               'name': member.name,
               'attacksDone': 0,
               'warParticipated': 0,
-              'averageStars' : 0,
-              'averagePercentage' : 0.0,
+              'averageStars': 0,
+              'averagePercentage': 0.0,
             };
           }
           if (member.attacks != null) {
@@ -107,17 +109,21 @@ Future<Map<String, dynamic>> calculateTotalStarsAndPercentageForMember(
   }
 
   for (var member in totalByMember.keys) {
-    totalByMember[member]?['averageStars'] = totalByMember[member]!['stars'] / totalByMember[member]!['warParticipated'];
-    totalByMember[member]?['averagePercentage'] = totalByMember[member]!['percentage'] / totalByMember[member]!['warParticipated'];
+    totalByMember[member]?['averageStars'] = totalByMember[member]!['stars'] /
+        totalByMember[member]!['warParticipated'];
+    totalByMember[member]?['averagePercentage'] =
+        totalByMember[member]!['percentage'] /
+            totalByMember[member]!['warParticipated'];
   }
 
   // Convert the map to a list of entries
-  List<MapEntry<String, Map<String, dynamic>>> entries = totalByMember.entries.toList();
+  List<MapEntry<String, Map<String, dynamic>>> entries =
+      totalByMember.entries.toList();
 
   // Sort the list of entries by the number of stars
   entries.sort((a, b) {
     int comparison = b.value[sortBy].compareTo(a.value[sortBy]);
-    if (comparison == 0 && ( sortBy == 'stars' || sortBy == 'averageStars')) {
+    if (comparison == 0 && (sortBy == 'stars' || sortBy == 'averageStars')) {
       // En cas d'égalité sur les étoiles, trie par pourcentage de destruction
       comparison = b.value['percentage'].compareTo(a.value['percentage']);
     }
