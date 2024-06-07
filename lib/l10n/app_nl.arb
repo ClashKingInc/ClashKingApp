@@ -1,11 +1,11 @@
 {
     "@@locale": "nl",
     "creatorCode": "Creator Code : ClashKing",
-    "signInWithDiscord": "Sign In with Discord",
+    "signInWithDiscord": "Inloggen met Discord",
     "guestMode": "Gastmodus",
     "needHelpJoinDiscord": "Hulp nodig? Doe mee op Discord.",
     "createGuestProfile": "Create your guest profile",
-    "doesNotExist": "{tag} does not exist.",
+    "doesNotExist": "{tag} bestaat niet.",
     "@doesNotExist": {
         "placeholders": {
             "tag": {
@@ -13,7 +13,7 @@
             }
         }
     },
-    "isAlreadyLinked": "{tag} is already linked to someone.",
+    "isAlreadyLinked": "{tag} is al aan iemand gekoppeld.",
     "@isAlreadyLinked": {
         "placeholders": {
             "tag": {
@@ -22,8 +22,8 @@
         }
     },
     "username": "Gebruikersnaam",
-    "pleaseEnterUsername": "Please enter a username",
-    "playerTags": "Player Tags",
+    "pleaseEnterUsername": "Voer alstublieft een gebruikersnaam in",
+    "playerTags": "Spelers Tags",
     "pleaseEnterPlayerTags": "Please enter player tags",
     "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
     "@followingTagsDoNotExist": {
@@ -41,8 +41,8 @@
             }
         }
     },
-    "welcome": "Welcome !",
-    "welcomeMessage": "Please add one or more Clash Of Clan accounts to your profile. You can add or remove accounts later.",
+    "welcome": "Welkom !",
+    "welcomeMessage": "Voeg alstublieft één of meer Clash Of Clans accounts toe aan uw profiel. U kunt later accounts toevoegen of verwijderen.",
     "login": "Inloggen",
     "logout": "Uitloggen",
     "language": "Taal",
@@ -62,11 +62,11 @@
     "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API have some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was one attack. It is also why we do not have any informations on your buildings levels.",
     "faqSupportWork": "Hoe kan ik uw werk ondersteunen?",
     "faqSupportWorkAnswer": "Er zijn verschillende manieren om ons te steunen:\n",
-    "faqUseCodeClashKing": "Use code \"ClashKing\"",
+    "faqUseCodeClashKing": "Gebruik code \"ClashKing\"",
     "faqSupportUsOnPatreon": "Steun ons op Patreon",
     "faqShareTheApp": "Deel deze app met je vrienden",
     "faqRateTheApp": "Beoordeel de app in de winkel",
-    "faqHelpUsTranslate": "Help us translate the app",
+    "faqHelpUsTranslate": "Help ons de app te vertalen",
     "faqHowToInviteTheBot": "How can I invite your bot on my Discord server?",
     "faqHowToInviteTheBotAnswer": "You can invite our bot on your server by clicking on the button below. You will need to have the \"Manage Server\" permission to add the bot.",
     "faqInviteTheBot": "Nodig ClashKing Bot uit",
@@ -76,7 +76,7 @@
     "faqJoinDiscord": "Join Discord Server",
     "helpUsTranslate": "Help ons vertalen",
     "copiedToClipboard": "Gekopieerd naar klembord",
-    "all": "All",
+    "all": "Alle",
     "hourIndicator": "u",
     "minIndicator": "m",
     "noDataAvailable": "Geen gegevens beschikbaar.",
@@ -94,56 +94,56 @@
     },
     "tryAnotherNameOrTagOrLinkIt": "Probeer een andere naam/tag of link het.",
     "playerNotFound": "Speler niet gevonden",
-    "noValueEntered": "No value entered",
-    "manage": "Manage",
-    "enterPlayerTag": "Enter a player tag",
-    "add": "Add",
-    "delete": "Delete",
-    "addAccount": "Add account",
-    "deleteAccount": "Delete account",
+    "noValueEntered": "Geen waarde ingevoerd",
+    "manage": "Beheren",
+    "enterPlayerTag": "Voer een spelertag in",
+    "add": "Toevoegen",
+    "delete": "Verwijderen",
+    "addAccount": "Account toevoegen",
+    "deleteAccount": "Account verwijderen",
     "playerTagNotExists": "The player tag entered does not exist.",
-    "accountAlreadyLinked": "The player tag is already linked to someone.",
+    "accountAlreadyLinked": "De speler tag is al aan iemand gekoppeld.",
     "failedToAddTryAgain": "Failed to add link. Please try again later.",
     "failedToDeleteTryAgain": "Failed to delete link. Please try again later.",
-    "search": "Search",
+    "search": "Zoeken",
     "tagOrNamePlayer": "Player's tag or name",
-    "searchPlayer": "Search player",
+    "searchPlayer": "Zoek speler",
     "dashboard": "Dashboard",
-    "homeBase": "Home Base",
-    "th": "TH",
-    "builderBase": "Builder Base",
-    "bh": "BH",
-    "clanCapital": "Clan Capital",
-    "leader": "Leader",
-    "coLeader": "Co-Leader",
-    "elder": "Elder",
-    "member": "Member",
+    "homeBase": "Thuisbasis",
+    "th": "SH",
+    "builderBase": "Bouwerbasis",
+    "bh": "BB",
+    "clanCapital": "Clan Hoofdstad",
+    "leader": "Leider",
+    "coLeader": "Co-Leider",
+    "elder": "Oudste",
+    "member": "Lid",
     "ready": "Gereed",
     "unready": "Unready",
-    "heroes": "Heroes",
-    "equipment": "Equipments",
-    "troops": "Troops",
-    "superTroops": "Super Troops",
-    "pets": "Pets",
-    "siegeMachines": "Siege Machines",
-    "spells": "Spells",
-    "achievements": "Achievements",
+    "heroes": "Helden",
+    "equipment": "Uitrusting",
+    "troops": "Troepen",
+    "superTroops": "Supertroepen",
+    "pets": "Huisdieren",
+    "siegeMachines": "Belegeringsmachines",
+    "spells": "Spreuken",
+    "achievements": "Prestaties",
     "byDay": "Per dag",
     "charts": "Grafieken",
-    "history": "History",
+    "history": "Geschiedenis",
     "legendLeague": "Legendarische Divisie",
-    "notInLegendLeague": "Legend League",
-    "noLegendData": "No Legend Data Found for today",
+    "notInLegendLeague": "Legendarische Divisie",
+    "noLegendData": "Geen legendegegevens gevonden voor vandaag",
     "noRank": "No ranking",
-    "started": "Started",
-    "ended": "Ended",
-    "average": "Average",
-    "remaining": "Remaining",
-    "worst": "Worst",
+    "started": "Gestart",
+    "ended": "Afgelopen",
+    "average": "Gemiddelde",
+    "remaining": "Resterend",
+    "worst": "Slechtste",
     "best": "Best",
-    "total": "Total",
-    "heroesEquipments": "Heroes equipments",
-    "daysAgo": "{days} days ago",
+    "total": "Totaal",
+    "heroesEquipments": "Heldenuitrusting",
+    "daysAgo": "{days} dagen geleden",
     "@daysAgo": {
         "placeholders": {
             "days": {
@@ -151,7 +151,7 @@
             }
         }
     },
-    "dayAgo": "{day} day ago",
+    "dayAgo": "{day} dag geleden",
     "@dayAgo": {
         "placeholders": {
             "day": {
@@ -159,7 +159,7 @@
             }
         }
     },
-    "hourAgo": "{hour} hour ago",
+    "hourAgo": "{hour} uur geleden",
     "@hourAgo": {
         "placeholders": {
             "hour": {
@@ -167,7 +167,7 @@
             }
         }
     },
-    "hoursAgo": "{hours} hours ago",
+    "hoursAgo": "{hours} uren geleden",
     "@hoursAgo": {
         "placeholders": {
             "hours": {
@@ -175,7 +175,7 @@
             }
         }
     },
-    "minuteAgo": "{minute} minute ago",
+    "minuteAgo": "{minute} minuut geleden",
     "@minuteAgo": {
         "placeholders": {
             "minute": {
@@ -183,7 +183,7 @@
             }
         }
     },
-    "minutesAgo": "{minutes} minutes ago",
+    "minutesAgo": "{minutes} minuten geleden",
     "@minutseAgo": {
         "placeholders": {
             "minutes": {
@@ -191,7 +191,7 @@
             }
         }
     },
-    "secondAgo": "{seconds}s ago",
+    "secondAgo": "{seconds}s geleden",
     "@secondAgo": {
         "placeholders": {
             "seconds": {
@@ -199,27 +199,27 @@
             }
         }
     },
-    "justNow": "Just Now",
+    "justNow": "Zojuist",
     "trophiesByMonth": "Trophies by month",
     "eosTrophies": "End Of Season Trophies",
     "searchClan": "Search clan",
-    "noResult": "No result.",
+    "noResult": "Geen resultaat.",
     "filters": "Filters",
-    "noClan": "No clan",
-    "joinClanToUnlockNewFeatures": "Join a clan to unlock new features.",
-    "apply": "Apply",
+    "noClan": "Geen clan",
+    "joinClanToUnlockNewFeatures": "Sluit je aan bij een clan om nieuwe functies te ontgrendelen.",
+    "apply": "Toepassen",
     "open": "Open",
-    "inviteOnly": "Invite Only",
-    "cancel": "Cancel",
+    "inviteOnly": "Op uitnodiging",
+    "cancel": "Annuleren",
     "clan": "Clan",
     "clans": "Clans",
-    "members": "Members",
-    "role": "Role",
-    "expLevel": "Experience Level",
+    "members": "Leden",
+    "role": "Rol",
+    "expLevel": "Ervaringsniveau",
     "townHallLevel": "TH Level",
-    "builderBaseTrophies": "BB Trophies",
-    "donations": "Donations",
-    "donationsReceived": "Donations Received",
+    "builderBaseTrophies": "BB Trofeeën",
+    "donations": "Donaties",
+    "donationsReceived": "Donaties ontvangen",
     "donationsRatio": "Donations Ratio",
     "trophies": "Trofeeën",
     "always": "Altijd",
@@ -227,18 +227,18 @@
     "unknown": "Onbekend",
     "oncePerWeek": "1/week",
     "twicePerWeek": "2/week",
-    "rarely": "Rarely",
+    "rarely": "Zelden",
     "warLeague": "War/League",
-    "war": "War",
-    "league": "League",
-    "wars": "Wars",
-    "warHistory": "War History",
+    "war": "Oorlog",
+    "league": "Competitie",
+    "wars": "Oorlogen",
+    "warHistory": "Oorlogsgeschiedenis",
     "warLog": "War Log",
-    "startsIn": "Starts in",
-    "startsAt": "Starts at",
-    "endsIn": "Ends in",
-    "endsAt": "Ends at",
-    "statistics": "Statistics",
+    "startsIn": "Begint in",
+    "startsAt": "Begint op",
+    "endsIn": "Endigt in",
+    "endsAt": "Eindigt op",
+    "statistics": "Statistieken",
     "stars": "Sterren",
     "starsSmall": "sterren",
     "numberOfStars": "Aantal sterren",
@@ -247,20 +247,20 @@
     "team": "Teams",
     "myTeam": "Mijn team",
     "enemiesTeam": "Vijanden",
-    "defense": "Defense",
-    "defenses": "Defenses",
+    "defense": "Verdediging",
+    "defenses": "Verdedigingen",
     "attack": "Aanval",
     "attacks": "Aanvallen",
-    "notUsed": "not used",
-    "victory": "Victory",
-    "defeat": "Defeat",
+    "notUsed": "niet gebruikt",
+    "victory": "Overwinning",
+    "defeat": "Verslagen",
     "draw": "Gelijkspel",
     "perfectWar": "Perfect war",
     "newest": "Newest",
     "oldest": "Oldest",
     "warEnded": "Oorlog beëindigd",
     "preparation": "Voorbereiding",
-    "isNotInWar": "{clan} is not in war.",
+    "isNotInWar": "{clan} is niet in oorlog.",
     "@isNotInWar": {
         "placeholders": {
             "clan": {
@@ -268,7 +268,7 @@
             }
         }
     },
-    "warLogIsClosed": "{clan}'s war log is closed.",
+    "warLogIsClosed": "Het oorloglogboek van {clan} is gesloten.",
     "@warLogIsClosed": {
         "placeholders": {
             "clan": {
@@ -276,23 +276,23 @@
             }
         }
     },
-    "askForWar": "Contact a leader or a co-leader to start a war.",
-    "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
+    "askForWar": "Neem contact op met de leider of een co-leider om een oorlog te starten.",
+    "askForWarLogOpening": "Neem contact op met de leider of een co-leider om het oorloglogsboek te openen.",
     "warLogClosed": "War log closed.",
     "rounds": "Rounds",
     "noDataAvailableForThisWar": "No data available for this war",
     "stateOfTheWar": "State of the war",
-    "stillNeedsToWin": "still needs to win",
-    "toTakeTheLead": "to take the lead",
-    "or": "or",
-    "star": "star",
-    "starSmall": "star",
+    "stillNeedsToWin": "moet nog steeds winnen",
+    "toTakeTheLead": "om de leiding nemen",
+    "or": "of",
+    "star": "ster",
+    "starSmall": "ster",
     "moreDestruction": "more destruction",
-    "clanDraw": "The two clans are tied",
-    "fastCalculator": "Fast calculator",
-    "teamSize": "Team size",
+    "clanDraw": "De twee clans staan gelijk",
+    "fastCalculator": "Snelle rekenmachine",
+    "teamSize": "Teamgrootte",
     "neededOverall": "% Nodig in totaal",
     "calculate": "Berekenen",
-    "management": "Management",
+    "management": "Beheren",
     "comingSoon": "Binnenkort beschikbaar!"
 }
