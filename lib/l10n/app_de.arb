@@ -184,7 +184,7 @@
         }
     },
     "minutesAgo": "vor {minutes} Minuten",
-    "@minutseAgo": {
+    "@minutesAgo": {
         "placeholders": {
             "minutes": {
                 "type": "int"
