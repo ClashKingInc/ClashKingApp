@@ -91,6 +91,7 @@ class LegendScreenState extends State<LegendScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
+          backgroundColor: Theme.of(context).colorScheme.surface,
         onRefresh: () {
           PlayerLegendService playerLegendService = PlayerLegendService();
           return playerLegendService

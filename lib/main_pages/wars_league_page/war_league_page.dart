@@ -67,6 +67,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: RefreshIndicator(
+          backgroundColor: Theme.of(context).colorScheme.surface,
       onRefresh: () async {
         setState(() {
           warLogData = WarLogService.fetchWarLogData(widget.clanInfo!.tag);

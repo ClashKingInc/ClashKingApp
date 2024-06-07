@@ -6,6 +6,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PlayerInfoHeaderCard extends StatefulWidget {
   final PlayerAccountInfo playerStats;
@@ -190,8 +191,10 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                   icon: Icon(
                     Icons.sports_esports_rounded,
                     color: Theme.of(context).colorScheme.onSurface, size: 32),
-                  onPressed: () {
-                    launchUrl(Uri.parse('https://link.clashofclans.com/fr?action=OpenPlayerProfile&tag=${widget.playerStats.tag}'));
+                  onPressed: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    final languagecode = prefs.getString('languageCode');
+                    launchUrl(Uri.parse('https://link.clashofclans.com/$languagecode?action=OpenPlayerProfile&tag=${widget.playerStats.tag}'));
                   },
                 ),
               ),

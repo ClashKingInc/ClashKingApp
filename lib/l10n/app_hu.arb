@@ -1,11 +1,11 @@
 {
     "@@locale": "hu",
-    "creatorCode": "Creator Code : ClashKing",
-    "signInWithDiscord": "Sign In with Discord",
-    "guestMode": "Guest Mode",
-    "needHelpJoinDiscord": "Need help? Join us on Discord.",
-    "createGuestProfile": "Create your guest profile",
-    "doesNotExist": "{tag} does not exist.",
+    "creatorCode": "Alkotói kód",
+    "signInWithDiscord": "Bejelentkezés Discorddal",
+    "guestMode": "Vendég mód",
+    "needHelpJoinDiscord": "Szükség van segítségre? Érj el minket Discordon.",
+    "createGuestProfile": "Hozd létre a vendég profilodat",
+    "doesNotExist": "{tag} nem létezik.",
     "@doesNotExist": {
         "placeholders": {
             "tag": {
@@ -13,7 +13,7 @@
             }
         }
     },
-    "isAlreadyLinked": "{tag} is already linked to someone.",
+    "isAlreadyLinked": "{tag} már csatolva van.",
     "@isAlreadyLinked": {
         "placeholders": {
             "tag": {
@@ -21,11 +21,11 @@
             }
         }
     },
-    "username": "Username",
-    "pleaseEnterUsername": "Please enter a username",
-    "playerTags": "Player Tags",
-    "pleaseEnterPlayerTags": "Please enter player tags",
-    "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
+    "username": "Felhasználónév",
+    "pleaseEnterUsername": "Kérjük, adja meg a felhasználónevet",
+    "playerTags": "Játékos tag",
+    "pleaseEnterPlayerTags": "Kérjük adja meg a tagjeit",
+    "followingTagsDoNotExist": "Ezek a tag-ek nem léteznek: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
             "tags": {
@@ -33,7 +33,7 @@
             }
         }
     },
-    "followingTagsAreAlreadyLinked": "The following tags are already linked to someone: {tags}.",
+    "followingTagsAreAlreadyLinked": "Ezek a tag-ek már csatolva vannak: {tags}.",
     "@followingTagsAreAlreadyLinked": {
         "placeholders": {
             "tags": {
@@ -41,22 +41,22 @@
             }
         }
     },
-    "welcome": "Welcome !",
-    "welcomeMessage": "Please add one or more Clash Of Clan accounts to your profile. You can add or remove accounts later.",
-    "login": "Login",
-    "logout": "Log out",
-    "language": "Language",
-    "settings": "Settings",
-    "toggleTheme": "Toggle Theme",
-    "selectLanguage": "Select a language",
-    "faq": "FAQ",
-    "faqSubtitle": "Frequently Asked Questions",
-    "faqIsThisFromSupercell": "Is this App from Supercell ?",
-    "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-    "faqWhyNotAccurate": "Why isn't the data always accurate or missing?",
-    "faqClanNotTracked": "Clan not tracked\n",
-    "faqClanNotTrackedAnswer": "ClashKing can only get this info if the clan is tracked. If your clan seems not to be tracked, please invite him on a Discord server and use the command /addclan. We hope to make this feature available in the app soon.",
-    "faqTrackingDown": "Tracking down\n",
+    "welcome": "Üdv!",
+    "welcomeMessage": "Kérjük adj egy vagy több Clash Of Clans fiókot a profilodhoz. Később tudsz további fiókokat hozzáadni.",
+    "login": "Bejelentkezés",
+    "logout": "Kijelentkezés",
+    "language": "Nyelv",
+    "settings": "Beállítások",
+    "toggleTheme": "Téma váltása",
+    "selectLanguage": "Nyelv kiválasztása",
+    "faq": "GYIK",
+    "faqSubtitle": "Gyakran Ismételt Kérdések",
+    "faqIsThisFromSupercell": "Ez az alkalmazás a Supercelltől származik?",
+    "faqFanContentPolicy": "Ez az anyag nem hivatalos, és nem kapott jóváhagyást Supercelltől. További információért lásd a Supercell rajongói tartalomra vonatkozó irányelveit: www.supercell.com/fan-content-policy",
+    "faqWhyNotAccurate": "Miért nem mindig pontosak az adatok, vagy miért hiányoznak?",
+    "faqClanNotTracked": "Klán nincs követve\n",
+    "faqClanNotTrackedAnswer": "A ClashKing csak akkor kaphatja meg ezt az információt, ha klán követve van. Ha úgy tűnik, hogy a klán nem követett, kérjük, adja hozzá a ClashKing bot-ot a Discord szerverre, és használja az /addclan parancsot. Reméljük, hogy hamarosan elérhető lesz ez a funkció az alkalmazásban.",
+    "faqTrackingDown": "Lekövetés\n",
     "faqTrackingDownAnswer": "The traking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.\n\n",
     "faqApiLimitation": "Clash of Clans API limitation\n",
     "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API have some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was one attack. It is also why we do not have any informations on your buildings levels.",

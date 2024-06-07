@@ -29,14 +29,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settings),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.info_outline),
-            onPressed: () {
-              // Show some information about settings or the app
-            },
-          ),
-        ],
+        actions: [],
       ),
       body: ListView(
         children: <Widget>[
@@ -123,22 +116,26 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       context: context,
       builder: (BuildContext context) {
         return SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: supportedLocales.map((LocaleInfo locale) {
-                return ListTile(
-                  leading: CachedNetworkImage(
-                    imageUrl: locale.flagUrl,
-                    width: 32,
-                    height: 32,
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),
-                  title: Text(locale.languageName),
-                  onTap: () => Navigator.pop(context, locale.languageCode),
-                );
-              }).toList(),
+          child: Container(
+            color: Theme.of(context).colorScheme.surface, // Replace with your desired color
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: supportedLocales.map((LocaleInfo locale) {
+                  return ListTile(
+                    leading: CachedNetworkImage(
+                      imageUrl: locale.flagUrl,
+                      width: 32,
+                      height: 32,
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
+                    title: Text(locale.languageName),
+                    onTap: () => Navigator.pop(context, locale.languageCode),
+                  );
+                }).toList(),
+              ),
             ),
           ),
         );

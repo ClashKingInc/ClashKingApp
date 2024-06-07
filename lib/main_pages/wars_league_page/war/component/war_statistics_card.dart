@@ -204,7 +204,7 @@ class WarStatisticsCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 25, child: Icon(LucideIcons.percent, size: 25)),
+                SizedBox(width: 25, child: Icon(LucideIcons.percent, size: 25, color: Theme.of(context).colorScheme.onSurface)),
                 Expanded(
                   child: Stack(
                     children: [

@@ -127,6 +127,7 @@ class ClanMembersState extends State<ClanMembers> {
                     updateSortBy: updateFilter,
                     sortByOptions: filterOptions
                   ),
+                  SizedBox(height: 8),
                 ],
               ),
             ),
