@@ -42,7 +42,7 @@
         }
     },
     "welcome": "Welkom!",
-    "welcomeMessage": "Voeg alstublieft één of meer Clash Of Clans accounts toe aan je profiel. Je kan later accounts toevoegen of verwijderen.",
+    "welcomeMessage": "Voeg alsjeblieft één of meer Clash Of Clans accounts toe aan je profiel. Je kan later accounts toevoegen of verwijderen.",
     "login": "Inloggen",
     "logout": "Uitloggen",
     "language": "Taal",
@@ -119,7 +119,7 @@
     "elder": "Oudste",
     "member": "Lid",
     "ready": "Gereed",
-    "unready": "Onklaar",
+    "unready": "Niet klaar",
     "heroes": "Helden",
     "equipment": "Uitrusting",
     "troops": "Troepen",
@@ -220,7 +220,7 @@
     "builderBaseTrophies": "BB Trofeeën",
     "donations": "Donaties",
     "donationsReceived": "Donaties ontvangen",
-    "donationsRatio": "Donaties verhouding",
+    "donationsRatio": "Donatie verhouding",
     "trophies": "Trofeeën",
     "always": "Altijd",
     "never": "Nooit",
@@ -233,8 +233,8 @@
     "league": "Competitie",
     "wars": "Oorlogen",
     "warHistory": "Oorlogsgeschiedenis",
-    "warLog": "Oorlogslogboek",
-    "startsIn": "Begint in",
+    "warLog": "Oorlogs logboek",
+    "startsIn": "Begint over",
     "startsAt": "Begint op",
     "endsIn": "Eindigt in",
     "endsAt": "Eindigt op",
@@ -258,7 +258,7 @@
     "perfectWar": "Perfecte oorlog",
     "newest": "Nieuwste",
     "oldest": "Oudste",
-    "warEnded": "Oorlog beëindigd",
+    "warEnded": "Oorlog afgelopen",
     "preparation": "Voorbereiding",
     "isNotInWar": "{clan} is niet in oorlog.",
     "@isNotInWar": {
@@ -268,7 +268,7 @@
             }
         }
     },
-    "warLogIsClosed": "Het oorloglogboek van {clan} is gesloten.",
+    "warLogIsClosed": "Het oorlogs logboek van {clan} is gesloten.",
     "@warLogIsClosed": {
         "placeholders": {
             "clan": {
@@ -277,7 +277,7 @@
         }
     },
     "askForWar": "Neem contact op met de leider of een co-leider om een oorlog te starten.",
-    "askForWarLogOpening": "Neem contact op met de leider of een co-leider om het oorloglogsboek te openen.",
+    "askForWarLogOpening": "Neem contact op met de leider of een co-leider om het oorlogs logsboek te openen.",
     "warLogClosed": "Oorlog log gesloten.",
     "rounds": "Rondes",
     "noDataAvailableForThisWar": "Geen gegevens beschikbaar voor deze oorlog",
