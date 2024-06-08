@@ -195,6 +195,7 @@ class StartupWidgetState extends State<StartupWidget> {
 
             return AlertDialog(
               scrollable: true,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               surfaceTintColor: Colors.transparent,
               title: Column(children: [
                 SizedBox(

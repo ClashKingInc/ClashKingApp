@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
             title: 'ClashKing',
             // Dark theme
             darkTheme: ThemeData(
+              scaffoldBackgroundColor: Color.fromARGB(255, 61, 60, 60), 
               cardTheme: CardTheme(
                 surfaceTintColor: Colors.transparent,
                 color: Color.fromARGB(255, 31, 31, 31)
@@ -91,15 +92,12 @@ class MyApp extends StatelessWidget {
                 primary: Color(0xFFC98910),
                 secondary: Color(0xFF9B1F28),
                 tertiary: Colors.grey,
-                background: Color.fromARGB(255, 61, 60, 60),
                 surface: Color.fromARGB(255, 31, 31, 31),
                 error: Color.fromARGB(255, 255, 0, 0),
                 onPrimary:
                     Color(0xFFFFFFFF), // Text color on top of primary color
                 onSecondary:
                     Color(0xFFFFFFFF), // Text color on top of secondary color
-                onBackground:
-                    Color(0xFFFFFFFF), // Typically white text for readibility
                 onSurface:
                     Color(0xFFFFFFFF), // Typically white text for readibility
                 onError: Color(0xFFFFFFFF), // White text on top of error color
@@ -155,6 +153,7 @@ class MyApp extends StatelessWidget {
             // Light theme
             theme: ThemeData(
               useMaterial3: true,
+              scaffoldBackgroundColor: Color(0xFFFFF8E1),
               cardTheme: CardTheme(
                 surfaceTintColor: Colors.transparent,
                 color: Color(0xFFFFFFFF)
@@ -185,7 +184,7 @@ class MyApp extends StatelessWidget {
                 contentPadding: EdgeInsets.all(8),
                 labelStyle: TextStyle(
                   fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                  color: Theme.of(context).colorScheme.onBackground,
+                  color: Theme.of(context).colorScheme.onSurface,
                   decorationColor: Theme.of(context).colorScheme.secondary,
                 ),
                 hintStyle: TextStyle(
@@ -200,15 +199,12 @@ class MyApp extends StatelessWidget {
                 primary: Color(0xFFC98910),
                 secondary: Color(0xFF9B1F28),
                 tertiary: Colors.grey[600],
-                background: Color(0xFFFFF8E1),
                 surface: Color(0xFFFFFFFF),
                 error: Color(0xFFB00020),
                 onPrimary:
                     Color(0xFFFFFFFF), // Text color on top of primary color
                 onSecondary:
                     Color(0xFFFFFFFF), // Text color on top of secondary color
-                onBackground:
-                    Color(0xFF000000), // Typically black text for readibility
                 onSurface:
                     Color(0xFF000000), // Typically black text for readibility
                 onError: Color(0xFFFFFFFF), // White text on top of error color

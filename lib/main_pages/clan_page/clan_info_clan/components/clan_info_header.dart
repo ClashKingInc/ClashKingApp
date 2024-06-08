@@ -117,7 +117,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: Icon(LucideIcons.users, color: Theme.of(context).colorScheme.onBackground, size: 16),
+                  child: Icon(LucideIcons.users, color: Theme.of(context).colorScheme.onSurface, size: 16),
                 ),
                 label: Text(
                   "${widget.clanInfo.members.toString()}/50",
@@ -157,7 +157,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: Icon(LucideIcons.mail, color: Theme.of(context).colorScheme.onBackground, size: 16),
+                  child: Icon(LucideIcons.mail, color: Theme.of(context).colorScheme.onSurface, size: 16),
                 ),
                 label: Text(
                   () {
