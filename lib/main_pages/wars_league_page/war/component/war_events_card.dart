@@ -121,7 +121,7 @@ class WarEventsCardState extends State<WarEventsCard> {
                           if (attack["clan"] == 0) {
                             Color backgroundColor = widget.discordUser.contains(attack["attackerTag"])
                               ? Colors.green
-                              : Theme.of(context).colorScheme.background;
+                              : Theme.of(context).scaffoldBackgroundColor;
                             bool hasBorderAttack = widget.discordUser.contains(attack["attackerTag"]);
                             return Padding(
                               padding: EdgeInsets.only(top: 4, bottom: 4),
@@ -133,7 +133,7 @@ class WarEventsCardState extends State<WarEventsCard> {
                                       flex: 4,
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.background,
+                                          color: Theme.of(context).scaffoldBackgroundColor,
                                           border: hasBorderAttack
                                             ? Border(
                                               top: BorderSide(color: Colors.green, width: 2),
@@ -181,7 +181,7 @@ class WarEventsCardState extends State<WarEventsCard> {
                                       flex: 2,
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.background,
+                                          color: Theme.of(context).scaffoldBackgroundColor,
                                           border: hasBorderAttack
                                             ? Border(
                                                 top: BorderSide(color: Colors.green, width: 2),
@@ -257,7 +257,7 @@ class WarEventsCardState extends State<WarEventsCard> {
                           } else {
                             Color backgroundColor = widget.discordUser.contains(attack["defenderTag"])
                               ? Colors.red
-                              : Theme.of(context).colorScheme.background;
+                              : Theme.of(context).scaffoldBackgroundColor;
                             bool hasBorderDefense = widget.discordUser.contains(attack["defenderTag"]);
                             return Padding(
                               padding: EdgeInsets.only(top: 4, bottom: 4),
@@ -309,7 +309,7 @@ class WarEventsCardState extends State<WarEventsCard> {
                                       flex: 2,
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.background,
+                                          color: Theme.of(context).scaffoldBackgroundColor,
                                           border: hasBorderDefense
                                             ? Border(
                                               top: BorderSide(color: Colors.red, width: 2),
@@ -338,7 +338,7 @@ class WarEventsCardState extends State<WarEventsCard> {
                                       flex: 4,
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.background,
+                                          color: Theme.of(context).scaffoldBackgroundColor,
                                           border: hasBorderDefense
                                             ? Border(
                                               top: BorderSide(color: Colors.red, width: 2),

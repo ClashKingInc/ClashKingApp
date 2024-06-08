@@ -232,11 +232,11 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
               ],
             ),
             ScrollableTab(
-              labelColor: Theme.of(context).colorScheme.onBackground,
+              labelColor: Theme.of(context).colorScheme.onSurface,
               tabBarDecoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
               ),
-              unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
+              unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
               onTap: (value) {},
               tabs: [
                 Tab(text: AppLocalizations.of(context)?.rounds ?? 'Rounds'),

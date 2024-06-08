@@ -52,8 +52,8 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
               tabBarDecoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
               ),
-              labelColor: Theme.of(context).colorScheme.onBackground,
-              unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
+              labelColor: Theme.of(context).colorScheme.onSurface,
+              unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
               tabs: [
                 Tab(text: AppLocalizations.of(context)?.warLog ?? 'War Log'),
                 Tab(text: AppLocalizations.of(context)?.statistics ?? 'Statistics'),

@@ -72,8 +72,8 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
               tabBarDecoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
               ),
-              labelColor: Theme.of(context).colorScheme.onBackground,
-              unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
+              labelColor: Theme.of(context).colorScheme.onSurface,
+              unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
               onTap: (value) {},
               tabs: [
                 Tab(
