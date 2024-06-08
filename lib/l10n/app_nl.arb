@@ -23,9 +23,9 @@
     },
     "username": "Gebruikersnaam",
     "pleaseEnterUsername": "Voer een gebruikersnaam in",
-    "playerTags": "Spelers Tags",
-    "pleaseEnterPlayerTags": "Voer een speler tag in",
-    "followingTagsDoNotExist": "De volgende tags bestaan niet: {tags}.",
+    "playerTags": "Speler Labels",
+    "pleaseEnterPlayerTags": "Voer een speler label in",
+    "followingTagsDoNotExist": "De volgende labels bestaan niet: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
             "tags": {
@@ -33,7 +33,7 @@
             }
         }
     },
-    "followingTagsAreAlreadyLinked": "De volgende tags zijn al gekoppeld aan iemand: {tags}.",
+    "followingTagsAreAlreadyLinked": "De volgende labels zijn al gekoppeld aan iemand: {tags}.",
     "@followingTagsAreAlreadyLinked": {
         "placeholders": {
             "tags": {
@@ -56,7 +56,7 @@
     "faqWhyNotAccurate": "Waarom zijn de gegevens soms onnauwkeurig of ontbreken ze?",
     "faqClanNotTracked": "Clan niet bijgehouden\n",
     "faqClanNotTrackedAnswer": "ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan ClashKing uit op je Discord server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.",
-    "faqTrackingDown": "Tracking down\n",
+    "faqTrackingDown": "Tracking niet beschikbaar",
     "faqTrackingDownAnswer": "Het volgen kan gedurende een bepaalde periode stoppen met werken. Daarom kunnen er soms gaten in je gegevens zitten. We werken eraan om dit te verbeteren.\n\n",
     "faqApiLimitation": "Clash of Clans API limitatie\n",
     "faqApiLimitationAnswer": "Sommige gegevens worden geleverd door Clash of Clans en hun API heeft enkele beperkingen. Bijvoorbeeld, bij het volgen in de legendarisch divisie worden trofeeënwinst en -verlies soms gestapeld alsof ze van één aanval zijn. Dit is ook de reden waarom we geen informatie hebben over het niveau van je gebouwen.",
@@ -228,7 +228,7 @@
     "oncePerWeek": "1/week",
     "twicePerWeek": "2/week",
     "rarely": "Zelden",
-    "warLeague": "War/League",
+    "warLeague": "Oorlog/Divisies",
     "war": "Oorlog",
     "league": "Competitie",
     "wars": "Oorlogen",
@@ -242,7 +242,7 @@
     "stars": "Sterren",
     "starsSmall": "sterren",
     "numberOfStars": "Aantal sterren",
-    "destructionRate": "Destruction rate",
+    "destructionRate": "Vernietigingssnelheid",
     "events": "Events",
     "team": "Teams",
     "myTeam": "Mijn team",
@@ -293,7 +293,7 @@
     "teamSize": "Teamgrootte",
     "neededOverall": "% Nodig in totaal",
     "calculate": "Berekenen",
-    "warStats": "War Stats",
+    "warStats": "Oorlogstatistieken",
     "management": "Beheren",
     "comingSoon": "Binnenkort beschikbaar!"
 }
