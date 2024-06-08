@@ -1,6 +1,6 @@
 {
     "@@locale": "es-ES",
-    "creatorCode": "Código del Creador: ClashKing",
+    "creatorCode": "Código de Creador: ClashKing",
     "signInWithDiscord": "Iniciar sesión con Discord",
     "guestMode": "Modo Invitado",
     "needHelpJoinDiscord": "¿Necesitas ayuda? Únete a nosotros en Discord.",
@@ -139,11 +139,11 @@
     "ended": "Terminado",
     "average": "Promedio",
     "remaining": "Restante",
-    "worst": "Worst",
-    "best": "Best",
+    "worst": "Peor",
+    "best": "Mejor",
     "total": "Total",
-    "heroesEquipments": "Heroes equipments",
-    "daysAgo": "{days} days ago",
+    "heroesEquipments": "Equipos de Héroes",
+    "daysAgo": "hace {days} días",
     "@daysAgo": {
         "placeholders": {
             "days": {
@@ -151,7 +151,7 @@
             }
         }
     },
-    "dayAgo": "{day} day ago",
+    "dayAgo": "Hace {day} día",
     "@dayAgo": {
         "placeholders": {
             "day": {
@@ -159,7 +159,7 @@
             }
         }
     },
-    "hourAgo": "{hour} hour ago",
+    "hourAgo": "Hace {hour} hora",
     "@hourAgo": {
         "placeholders": {
             "hour": {
@@ -167,7 +167,7 @@
             }
         }
     },
-    "hoursAgo": "{hours} hours ago",
+    "hoursAgo": "Hace {hours} horas",
     "@hoursAgo": {
         "placeholders": {
             "hours": {
@@ -175,7 +175,7 @@
             }
         }
     },
-    "minuteAgo": "{minute} minute ago",
+    "minuteAgo": "Hace {minute} minuto",
     "@minuteAgo": {
         "placeholders": {
             "minute": {
@@ -183,7 +183,7 @@
             }
         }
     },
-    "minutesAgo": "{minutes} minutes ago",
+    "minutesAgo": "hace {minutes} minutos",
     "@minutesAgo": {
         "placeholders": {
             "minutes": {
@@ -191,7 +191,7 @@
             }
         }
     },
-    "secondAgo": "{seconds}s ago",
+    "secondAgo": "Hace {seconds} segundos",
     "@secondAgo": {
         "placeholders": {
             "seconds": {
@@ -199,68 +199,68 @@
             }
         }
     },
-    "justNow": "Just Now",
-    "trophiesByMonth": "Trophies by month",
-    "eosTrophies": "End Of Season Trophies",
-    "searchClan": "Search clan",
-    "noResult": "No result.",
-    "filters": "Filters",
-    "noClan": "No clan",
-    "joinClanToUnlockNewFeatures": "Join a clan to unlock new features.",
-    "apply": "Apply",
-    "open": "Open",
-    "inviteOnly": "Invite Only",
-    "cancel": "Cancel",
+    "justNow": "Ahora mismo",
+    "trophiesByMonth": "Trofeos por mes",
+    "eosTrophies": "Trofeos de fin de temporada",
+    "searchClan": "Buscar clan",
+    "noResult": "Sin resultados.",
+    "filters": "Filtros",
+    "noClan": "Sin clan",
+    "joinClanToUnlockNewFeatures": "Únete a un clan para desbloquear nuevas funciones.",
+    "apply": "Aplicar",
+    "open": "Abierto",
+    "inviteOnly": "Solo invitación",
+    "cancel": "Cancelar",
     "clan": "Clan",
-    "clans": "Clans",
-    "members": "Members",
-    "role": "Role",
-    "expLevel": "Experience Level",
-    "townHallLevel": "TH Level",
-    "builderBaseTrophies": "BB Trophies",
-    "donations": "Donations",
-    "donationsReceived": "Donations Received",
-    "donationsRatio": "Donations Ratio",
-    "trophies": "Trophies",
-    "always": "Always",
-    "never": "Never",
-    "unknown": "Unknown",
-    "oncePerWeek": "1/week",
-    "twicePerWeek": "2/week",
-    "rarely": "Rarely",
-    "warLeague": "War/League",
-    "war": "War",
-    "league": "League",
-    "wars": "Wars",
-    "warHistory": "War History",
-    "warLog": "War Log",
-    "startsIn": "Starts in",
-    "startsAt": "Starts at",
-    "endsIn": "Ends in",
-    "endsAt": "Ends at",
-    "statistics": "Statistics",
-    "stars": "Stars",
-    "starsSmall": "stars",
-    "numberOfStars": "Number of stars",
-    "destructionRate": "Destruction rate",
-    "events": "Events",
-    "team": "Teams",
-    "myTeam": "My team",
-    "enemiesTeam": "Enemies",
-    "defense": "Defense",
-    "defenses": "Defenses",
-    "attack": "Attack",
-    "attacks": "Attacks",
-    "notUsed": "not used",
-    "victory": "Victory",
-    "defeat": "Defeat",
-    "draw": "Draw",
-    "perfectWar": "Perfect war",
-    "newest": "Newest",
-    "oldest": "Oldest",
-    "warEnded": "War ended",
-    "preparation": "Preparation",
-    "isNotInWar": "{clan} is not in war.",
+    "clans": "Clanes",
+    "members": "Miembros",
+    "role": "Rol",
+    "expLevel": "Nivel de Experiencia",
+    "townHallLevel": "Nivel TH",
+    "builderBaseTrophies": "Trofeos BB",
+    "donations": "Donaciones",
+    "donationsReceived": "Donaciones recibidas",
+    "donationsRatio": "Relación de donaciones",
+    "trophies": "Trofeos",
+    "always": "Siempre",
+    "never": "Nunca",
+    "unknown": "Desconocido",
+    "oncePerWeek": "una vez por semana",
+    "twicePerWeek": "dos veces a la semana",
+    "rarely": "Raramente",
+    "warLeague": "Guerra/Liga",
+    "war": "Guerra",
+    "league": "Liga",
+    "wars": "Guerras",
+    "warHistory": "Curso de Guerra",
+    "warLog": "Registro de guerra",
+    "startsIn": "Comienza en:",
+    "startsAt": "Comienza a las",
+    "endsIn": "Termina en",
+    "endsAt": "Termina a las",
+    "statistics": "Estadísticas",
+    "stars": "Estrellas",
+    "starsSmall": "estrellas",
+    "numberOfStars": "Número de estrellas",
+    "destructionRate": "Tasa de destrucción",
+    "events": "Eventos",
+    "team": "Grupos",
+    "myTeam": "Mi equipo",
+    "enemiesTeam": "Enemigos",
+    "defense": "Defensa",
+    "defenses": "Defensas",
+    "attack": "Ataque",
+    "attacks": "Ataques",
+    "notUsed": "no se usa",
+    "victory": "¡Victoria!",
+    "defeat": "Derrota",
+    "draw": "Empate",
+    "perfectWar": "Guerra perfecta",
+    "newest": "Más reciente",
+    "oldest": "Más antiguos",
+    "warEnded": "La guerra ha terminado",
+    "preparation": "Preparación",
+    "isNotInWar": "{clan} no está en guerra.",
     "@isNotInWar": {
         "placeholders": {
             "clan": {
@@ -268,7 +268,7 @@
             }
         }
     },
-    "warLogIsClosed": "{clan}'s war log is closed.",
+    "warLogIsClosed": "El registro de guerra de {clan} está cerrado.",
     "@warLogIsClosed": {
         "placeholders": {
             "clan": {
@@ -276,24 +276,24 @@
             }
         }
     },
-    "askForWar": "Contact a leader or a co-leader to start a war.",
-    "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-    "warLogClosed": "War log closed.",
-    "rounds": "Rounds",
-    "noDataAvailableForThisWar": "No data available for this war",
-    "stateOfTheWar": "State of the war",
-    "stillNeedsToWin": "still needs to win",
-    "toTakeTheLead": "to take the lead",
-    "or": "or",
-    "star": "star",
-    "starSmall": "star",
-    "moreDestruction": "more destruction",
-    "clanDraw": "The two clans are tied",
-    "fastCalculator": "Fast calculator",
-    "teamSize": "Team size",
-    "neededOverall": "% Needed overall",
-    "calculate": "Calculate",
-    "warStats": "War Stats",
-    "management": "Management",
-    "comingSoon": "Coming soon!"
+    "askForWar": "Contacta a un líder o un colíder para comenzar una guerra.",
+    "askForWarLogOpening": "Contacta a un líder o un colíder para hacer público el registro de guerra.",
+    "warLogClosed": "El registro de guerra cerrado.",
+    "rounds": "Rondas",
+    "noDataAvailableForThisWar": "No hay datos disponibles para esta guerra",
+    "stateOfTheWar": "Estado de la guerra",
+    "stillNeedsToWin": "todavía necesita",
+    "toTakeTheLead": "tomar la delantera",
+    "or": "o",
+    "star": "estrella",
+    "starSmall": "estrella",
+    "moreDestruction": "más destrucción",
+    "clanDraw": "Ambos clanes están empatados",
+    "fastCalculator": "Calculadora rápida",
+    "teamSize": "Tamaño del equipo",
+    "neededOverall": "% Total necesario",
+    "calculate": "Calcular",
+    "warStats": "Estadísticas de Guerra",
+    "management": "Administración",
+    "comingSoon": "¡Próximamente!"
 }
