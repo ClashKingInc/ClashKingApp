@@ -1,10 +1,10 @@
 {
     "@@locale": "nl",
-    "creatorCode": "Maker Code : ClashKing",
+    "creatorCode": "Makerscode: ClashKing",
     "signInWithDiscord": "Inloggen met Discord",
     "guestMode": "Gastmodus",
     "needHelpJoinDiscord": "Hulp nodig? Doe mee op Discord.",
-    "createGuestProfile": "Maak uw gastprofiel aan",
+    "createGuestProfile": "Maak je gastprofiel aan",
     "doesNotExist": "{tag} bestaat niet.",
     "@doesNotExist": {
         "placeholders": {
@@ -22,9 +22,9 @@
         }
     },
     "username": "Gebruikersnaam",
-    "pleaseEnterUsername": "Voer alstublieft een gebruikersnaam in",
+    "pleaseEnterUsername": "Voer een gebruikersnaam in",
     "playerTags": "Spelers Tags",
-    "pleaseEnterPlayerTags": "Voer spelertags in",
+    "pleaseEnterPlayerTags": "Voer een speler tag in",
     "followingTagsDoNotExist": "De volgende tags bestaan niet: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
