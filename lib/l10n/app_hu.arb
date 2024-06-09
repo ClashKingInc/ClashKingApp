@@ -42,7 +42,7 @@
         }
     },
     "welcome": "Üdv!",
-    "welcomeMessage": "Kérjük adj egy vagy több Clash Of Clans fiókot a profilodhoz. Később tudsz további fiókokat hozzáadni.",
+    "welcomeMessage": "Please add one or more Clash Of Clans accounts to your profile. You can add or remove accounts later.",
     "login": "Bejelentkezés",
     "logout": "Kijelentkezés",
     "language": "Nyelv",
@@ -71,9 +71,9 @@
     "faqHowToInviteTheBotAnswer": "Meg tudod hívni a bot-ot a lent lévő gomb megnyomásával. Ehhez \"Manage Server\" joghoz van szükséged.",
     "faqInviteTheBot": "Hívd meg a ClashKing bot-ot",
     "faqNeedHelp": "Segítségre van szükségem, vagy szeretnék egy javaslatot tenni. Hogyan tudok kapcsolatba lépni?",
-    "faqNeedHelpAnswer": "Csatlakozhatsz a Discord szerverünkhöz és kérhetsz segítset, vagy küldhetsz emailt a devs@clashkingbot.com címre.\nKérjük csak angolul vagy franciául írj.",
+    "faqNeedHelpAnswer": "You can join our Discord server to ask for help or provide feedback, or you can email us at devs@clashkingbot.com. Please write in English or French only.",
     "faqSendEmail": "Küldjön egy e-mailt",
-    "faqJoinDiscord": "Csatlakozzon a Discord szerverhez",
+    "faqJoinDiscord": "Join our Discord Server",
     "helpUsTranslate": "Segíts a fordításban",
     "copiedToClipboard": "Vágólapra másolva",
     "all": "Összes",
@@ -216,7 +216,7 @@
     "noClan": "No clan",
     "joinClanToUnlockNewFeatures": "Join a clan to unlock new features.",
     "apply": "Apply",
-    "open": "Open",
+    "opened": "Opened",
     "inviteOnly": "Invite Only",
     "cancel": "Cancel",
     "clan": "Clan",
@@ -284,7 +284,7 @@
             }
         }
     },
-    "askForWar": "Contact a leader or a co-leader to start a war.",
+    "askForWar": "Contact the leader or a co-leader to start a war.",
     "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
     "warLogClosed": "War log closed.",
     "rounds": "Rounds",
