@@ -335,6 +335,7 @@
     "neededOverall": "Benötigte %",
     "calculate": "Berechnen",
     "warStats": "Kriegsstatistiken",
+    "noAccountLinkedToYourProfileFound": "No account linked to your profile found",
     "management": "Verwaltung",
     "comingSoon": "Bald verfügbar!"
 }
