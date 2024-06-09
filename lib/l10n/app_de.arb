@@ -42,7 +42,7 @@
         }
     },
     "welcome": "Willkommen!",
-    "welcomeMessage": "Bitte füge deinem Profil einen oder mehrere Clash of Clans Accounts hinzu. Du kannst später weitere Accounts hinzufügen oder entfernen.",
+    "welcomeMessage": "Please add one or more Clash Of Clans accounts to your profile. You can add or remove accounts later.",
     "login": "Anmelden",
     "logout": "Abmelden",
     "language": "Sprache",
@@ -71,9 +71,9 @@
     "faqHowToInviteTheBotAnswer": "Du kannst unseren Bot auf deinen Server einladen, indem du auf den unten stehenden Button klickst. Du benötigst die Berechtigung \"Server verwalten\", um den Bot hinzuzufügen.",
     "faqInviteTheBot": "ClashKing Bot einladen",
     "faqNeedHelp": "Ich brauche Hilfe oder möchte einen Vorschlag machen. Wie kann ich euch erreichen?",
-    "faqNeedHelpAnswer": "Du kannst unserem Discord-Server beitreten und dort um Hilfe bitten, Feedback geben oder uns eine E-Mail an devs@clashkingbot.com senden. \nBitte schreib uns, wenn möglich nur auf Englisch oder Französisch.",
+    "faqNeedHelpAnswer": "You can join our Discord server to ask for help or provide feedback, or you can email us at devs@clashkingbot.com. Please write in English or French only.",
     "faqSendEmail": "Sende eine E-Mail",
-    "faqJoinDiscord": "Discord-Server beitreten",
+    "faqJoinDiscord": "Join our Discord Server",
     "helpUsTranslate": "Hilf uns bei der Übersetzung",
     "copiedToClipboard": "In die Zwischenablage kopiert",
     "all": "Alle",
@@ -216,7 +216,7 @@
     "noClan": "Kein Clan",
     "joinClanToUnlockNewFeatures": "Tritt einem Clan bei, um neue Funktionen freizuschalten.",
     "apply": "Anwenden",
-    "open": "Öffnen",
+    "opened": "Opened",
     "inviteOnly": "Nur auf Einladung",
     "cancel": "Abbrechen",
     "clan": "Clan",
@@ -284,7 +284,7 @@
             }
         }
     },
-    "askForWar": "Kontaktiere den Anführer, oder einen Vize-Anführer, um einen Krieg zu starten.",
+    "askForWar": "Contact the leader or a co-leader to start a war.",
     "askForWarLogOpening": "Kontaktiere den Anführer, oder einen Vize-Anführer, um den Kriegslog öffentlich zu machen.",
     "warLogClosed": "Kriegslog geschlossen.",
     "rounds": "Runden",
