@@ -122,6 +122,6 @@ flutter_icons:
   image_path: "assets/icons/Crown-white-background.png"
   remove_alpha_ios: true
   adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/icons/Crown.png"
+  adaptive_icon_foreground: "assets/icons/ic_launcher_foreground.png"
 flutter_intl:
   enabled: true

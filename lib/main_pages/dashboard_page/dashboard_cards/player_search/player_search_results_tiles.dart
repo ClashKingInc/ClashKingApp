@@ -2,6 +2,7 @@ import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_i
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlayerSearchResultTile extends StatefulWidget {
   final dynamic player;
@@ -26,76 +27,77 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
 
   Future<void> fetchLeagueUrl() async {
     if (widget.player.containsKey('league')) {
-      leagueUrl =
-          await PlayerService().fetchLeagueImageUrl(widget.player["league"]);
+      print(widget.player['league'].runtimeType.toString());
+      if(widget.player['league'] is Map && widget.player['league'].containsKey('name')) {
+        print(widget.player['league']['name']);
+        leagueUrl = await PlayerService().fetchLeagueImageUrl(widget.player['league']['name']);
+      } else {
+        leagueUrl = await PlayerService().fetchLeagueImageUrl(widget.player['league']);
+      }
     }
     setState(() {});
   }
 
   Future<void> fetchTownHallUrl() async {
     if (widget.player.containsKey('townHallLevel')) {
-      townHallUrl = await PlayerService()
-          .fetchPlayerTownHallByTownHallLevel(widget.player['townHallLevel']);
+      townHallUrl = await PlayerService().fetchPlayerTownHallByTownHallLevel(widget.player['townHallLevel']);
     } else {
-      townHallUrl = await PlayerService()
-          .fetchPlayerTownHallByTownHallLevel(widget.player['th']);
+      townHallUrl = await PlayerService().fetchPlayerTownHallByTownHallLevel(widget.player['th']);
     }
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        final navigator = Navigator.of(context);
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        );
-        PlayerAccountInfo playerStats =
-            await PlayerService().fetchPlayerStats(widget.player['tag']);
-        navigator.pop();
-        navigator.push(
-          MaterialPageRoute(
-            builder: (context) =>
-                StatsScreen(playerStats: playerStats, discordUser: widget.user),
-          ),
-        );
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: 50,
-                    child: CachedNetworkImage(
-                        imageUrl: townHallUrl ??
-                            "https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-16.png"),
-                  ),
-                ],
-              ),
+    return Card(
+      color: Colors.transparent,
+      elevation: 0.0,
+      child: InkWell(
+        onTap: () async {
+          final navigator = Navigator.of(context);
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          );
+          PlayerAccountInfo playerStats = await PlayerService().fetchPlayerStats(widget.player['tag']);
+          navigator.pop();
+          navigator.push(
+            MaterialPageRoute(
+              builder: (context) => StatsScreen(playerStats: playerStats, discordUser: widget.user),
             ),
-            SizedBox(width: 8), 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: 50,
+                      child: CachedNetworkImage(
+                        imageUrl: townHallUrl ?? "https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-16.png"),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 8), 
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("${widget.player['name']} "),
-                    Text("${widget.player['tag']}",
-                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                            color: Theme.of(context).colorScheme.tertiary)),
+                    Text(
+                      "${widget.player['tag']}",
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.tertiary),
+                    ),
                     SizedBox(width: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -109,18 +111,22 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                               avatar: CircleAvatar(
                                 backgroundColor: Colors.transparent,
                                 child: CachedNetworkImage(
-                                    imageUrl: leagueUrl ??
-                                        (widget.player.containsKey('league') &&
-                                                widget.player['league']
-                                                    is Map &&
-                                                widget.player['league']
-                                                    .containsKey('iconUrls')
-                                            ? widget.player['league']
-                                                ['iconUrls']['tiny']
-                                            : 'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_CWL_Unranked.png')),
+                                  imageUrl: leagueUrl ??
+                                    (widget.player.containsKey('league') && widget.player['league']
+                                      is Map && widget.player['league'].containsKey('iconUrls')
+                                        ? widget.player['league']['iconUrls']['tiny']
+                                        : 'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_CWL_Unranked.png'),
+                                ),
                               ),
                               label: Text(
                                 widget.player['trophies'].toString(),
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                            ),
+                            Chip(
+                              labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                              label: Text(
+                                widget.player['clan_name'] ?? widget.player['clan']?['name'] ?? AppLocalizations.of(context)?.noClan,
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                             ),
@@ -130,9 +136,9 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                     ),
                   ],
                 ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
