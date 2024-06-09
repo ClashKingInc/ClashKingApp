@@ -108,7 +108,7 @@
     "search": "Suchen",
     "tagOrNamePlayer": "Spielerkürzel oder Name",
     "searchPlayer": "Spieler suchen",
-    "nameOrTag": "Name or tag",
+    "nameOrTag": "Name oder Kürzel",
     "dashboard": "Übersicht",
     "homeBase": "Heimatbasis",
     "th": "RH",
@@ -207,10 +207,10 @@
     "noResult": "Kein Ergebnis.",
     "filters": "Filter",
     "whatever": "Whatever",
-    "warFrequency": "War frequency",
+    "warFrequency": "Kriegshäufigkeit",
     "minimumMembers": "Minimum members",
     "maximumMembers": "Maximum members",
-    "location": "Location",
+    "location": "Standort",
     "minimumClanPoints": "Minimum clan points",
     "minimumClanLevel": "Minimum clan level",
     "noClan": "Kein Clan",
@@ -307,7 +307,7 @@
             }
         }
     },
-    "starsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+    "starsAndPercentNeededToTakeTheLead": "{clan} benötigt noch {percent}% oder 1 Stern mehr, um die Führung zu übernehmen",
     "@starsAndPercentNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
