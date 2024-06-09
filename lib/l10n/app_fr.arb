@@ -328,6 +328,7 @@
     "neededOverall": "% Total nécessaire",
     "calculate": "Calculer",
     "warStats": "Statistiques de guerre",
+    "noAccountLinkedToYourProfileFound": "Aucun compte lié à votre profil trouvé",
     "management": "Gestion",
     "comingSoon": "Bientôt disponible !"
 }

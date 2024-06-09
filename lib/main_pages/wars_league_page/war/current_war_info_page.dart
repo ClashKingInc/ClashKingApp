@@ -44,13 +44,11 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
     subTabController = TabController(length: 2, vsync: this);
 
     for (var member in widget.currentWarInfo.clan.members) {
-      playerTab.add(PlayerTab(
-          member.tag, member.name, member.townhallLevel, member.mapPosition));
+      playerTab.add(PlayerTab(member.tag, member.name, member.townhallLevel, member.mapPosition),);
     }
 
     for (var member in widget.currentWarInfo.opponent.members) {
-      playerTab.add(PlayerTab(
-          member.tag, member.name, member.townhallLevel, member.mapPosition));
+      playerTab.add(PlayerTab(member.tag, member.name, member.townhallLevel, member.mapPosition),);
     }
   }
 
@@ -76,9 +74,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
               unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
               onTap: (value) {},
               tabs: [
-                Tab(
-                    text: AppLocalizations.of(context)?.statistics ??
-                        'Statistics'),
+                Tab(text: AppLocalizations.of(context)?.statistics ?? 'Statistics'),
                 Tab(text: AppLocalizations.of(context)?.events ?? 'Events'),
                 Tab(text: AppLocalizations.of(context)?.team ?? 'Teams')
               ],
@@ -94,13 +90,15 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                   ),
                 ),
                 WarEventsCard(
-                    currentWarInfo: widget.currentWarInfo,
-                    playerTab: playerTab,
-                    discordUser: widget.discordUser),
+                  currentWarInfo: widget.currentWarInfo,
+                  playerTab: playerTab,
+                  discordUser: widget.discordUser,
+                ),
                 Padding(
-                    padding: EdgeInsets.all(8),
-                    child: buildTeamsTab(context,
-                        discordUser: widget.discordUser)),
+                  padding: EdgeInsets.all(8),
+                  child: buildTeamsTab(context,
+                  discordUser: widget.discordUser),
+                ),
               ],
             ),
           ],
@@ -119,8 +117,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                 initialValue: _currentSegment,
                 children: {
                   1: Text(AppLocalizations.of(context)?.myTeam ?? 'My team'),
-                  2: Text(
-                      AppLocalizations.of(context)?.enemiesTeam ?? 'Enemies'),
+                  2: Text(AppLocalizations.of(context)?.enemiesTeam ?? 'Enemies'),
                 },
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
@@ -151,8 +148,10 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
               top: -4,
               right: 12,
               child: IconButton(
-                icon: Icon(Icons.link,
-                    color: filterActive ? Colors.green : Colors.grey),
+                icon: Icon(
+                  Icons.link,
+                  color: filterActive ? Colors.green : Colors.grey,
+                ),
                 onPressed: () {
                   setState(() {
                     filterActive = !filterActive;
@@ -165,21 +164,21 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
         ),
         SizedBox(height: 4),
         buildMemberListView(
-            _currentSegment == 1
-                ? widget.currentWarInfo.clan.members
-                : widget.currentWarInfo.opponent.members,
-            context,
-            widget.discordUser,
-            filterActive),
+          _currentSegment == 1
+            ? widget.currentWarInfo.clan.members
+            : widget.currentWarInfo.opponent.members,
+          context,
+          widget.discordUser,
+          filterActive,
+        ),
       ],
     );
   }
 
-  Widget buildMemberListView(List<WarMember> members, BuildContext context,
-      List<String> discordUser, bool filterActive) {
+  Widget buildMemberListView(List<WarMember> members, BuildContext context, List<String> discordUser, bool filterActive) {
     List<WarMember> displayedMembers = filterActive
-        ? members.where((member) => discordUser.contains(member.tag)).toList()
-        : List.from(members);
+      ? members.where((member) => discordUser.contains(member.tag)).toList()
+      : List.from(members);
 
     displayedMembers.sort((a, b) => a.mapPosition.compareTo(b.mapPosition));
 

@@ -114,7 +114,7 @@ class CurrentWarInfoCard extends StatelessWidget {
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
               Text(
-                '${currentWarInfo.clan.stars.toString().padRight(2, ' ')} - ${currentWarInfo.opponent.stars.toString().padRight(2, ' ')} ',
+                '${currentWarInfo.clan.stars.toString().padLeft(2, ' ')} - ${currentWarInfo.opponent.stars.toString().padRight(2, ' ')} ',
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium
@@ -242,7 +242,7 @@ class CurrentWarInfoCard extends StatelessWidget {
                   textAlign: TextAlign.center),
               Center(
                 child: Text(
-                  '${currentWarInfo.clan.stars.toString().padRight(2, ' ')} - ${currentWarInfo.opponent.stars.toString().padRight(2, ' ')} ',
+                  '${currentWarInfo.clan.stars.toString().padLeft(2, ' ')} - ${currentWarInfo.opponent.stars.toString().padRight(2, ' ')} ',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
