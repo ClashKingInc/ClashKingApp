@@ -123,21 +123,23 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       context: context,
       builder: (BuildContext context) {
         return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: supportedLocales.map((LocaleInfo locale) {
-              return ListTile(
-                leading: CachedNetworkImage(
-                  imageUrl: locale.flagUrl,
-                  width: 32,
-                  height: 32,
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ),
-                title: Text(locale.languageName),
-                onTap: () => Navigator.pop(context, locale.languageCode),
-              );
-            }).toList(),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: supportedLocales.map((LocaleInfo locale) {
+                return ListTile(
+                  leading: CachedNetworkImage(
+                    imageUrl: locale.flagUrl,
+                    width: 32,
+                    height: 32,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                  title: Text(locale.languageName),
+                  onTap: () => Navigator.pop(context, locale.languageCode),
+                );
+              }).toList(),
+            ),
           ),
         );
       },
