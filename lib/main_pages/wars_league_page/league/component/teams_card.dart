@@ -46,7 +46,7 @@ class TeamsCard extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => Scaffold(
                         backgroundColor:
-                            Theme.of(context).colorScheme.background,
+                            Theme.of(context).scaffoldBackgroundColor,
                         body: FutureBuilder<ClanInfo>(
                           future: ClanService().fetchClanInfo(clan.tag),
                           builder: (context, snapshot) {

@@ -28,6 +28,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
       },
       child: Scaffold(
         body: RefreshIndicator(
+          backgroundColor: Theme.of(context).colorScheme.surface,
           onRefresh: () async {
             setState(() {
               final appState = Provider.of<MyAppState>(context, listen: false);

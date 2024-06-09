@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreatorCodeCard extends StatelessWidget {
   const CreatorCodeCard({
@@ -10,8 +11,11 @@ class CreatorCodeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        launchUrl(Uri.parse('https://link.clashofclans.com/fr?action=SupportCreator&id=Clashking'));
+      onTap: () async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        final languagecode = prefs.getString('languageCode');
+        launchUrl(Uri.parse(
+            'https://link.clashofclans.com/$languagecode?action=SupportCreator&id=Clashking'));
       },
       child: Card(
         child: Padding(
@@ -23,7 +27,8 @@ class CreatorCodeCard extends StatelessWidget {
               SizedBox(width: 16),
               Expanded(
                 child: Text(
-                  AppLocalizations.of(context)?.creatorCode ?? 'Creator Code : ClashKing',
+                  AppLocalizations.of(context)?.creatorCode ??
+                      'Creator Code : ClashKing',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,

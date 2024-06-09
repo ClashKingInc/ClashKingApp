@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/components/clan_wars_stats_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -68,8 +69,10 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                 top: -8, right: 24,
                 child: IconButton(
                   icon: Icon(Icons.sports_esports_rounded,color: Theme.of(context).colorScheme.onSurface, size: 32),
-                  onPressed: () {
-                    launchUrl(Uri.parse('https://link.clashofclans.com/fr?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
+                  onPressed: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    final languagecode = prefs.getString('languageCode');
+                    launchUrl(Uri.parse('https://link.clashofclans.com/$languagecode?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
                   },
                 ),
               ),
@@ -114,7 +117,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: Icon(LucideIcons.users, color: Theme.of(context).colorScheme.onBackground, size: 16),
+                  child: Icon(LucideIcons.users, color: Theme.of(context).colorScheme.onSurface, size: 16),
                 ),
                 label: Text(
                   "${widget.clanInfo.members.toString()}/50",
@@ -154,7 +157,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: Icon(LucideIcons.mail, color: Theme.of(context).colorScheme.onBackground, size: 16),
+                  child: Icon(LucideIcons.mail, color: Theme.of(context).colorScheme.onSurface, size: 16),
                 ),
                 label: Text(
                   () {
