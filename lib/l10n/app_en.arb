@@ -42,7 +42,7 @@
         }
     },
     "welcome": "Welcome!",
-    "welcomeMessage": "Please add one or more Clash Of Clan accounts to your profile. You can add or remove accounts later.",
+    "welcomeMessage": "Please add one or more Clash Of Clans accounts to your profile. You can add or remove accounts later.",
     "login": "Login",
     "logout": "Log out",
     "language": "Language",
@@ -71,9 +71,9 @@
     "faqHowToInviteTheBotAnswer": "You can invite our bot on your server by clicking on the button below. You will need to have the \"Manage Server\" permission to add the bot.",
     "faqInviteTheBot": "Invite ClashKing Bot",
     "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
-    "faqNeedHelpAnswer": "You can join our Discord server and ask for help or make a feedback there or send us an email at devs@clashkingbot.com. \nPlease write in English or French only.",
+    "faqNeedHelpAnswer": "You can join our Discord server to ask for help or provide feedback, or you can email us at devs@clashkingbot.com. Please write in English or French only.",
     "faqSendEmail": "Send an email",
-    "faqJoinDiscord": "Join Discord Server",
+    "faqJoinDiscord": "Join our Discord Server",
     
 
     "helpUsTranslate": "Help us translate",
@@ -218,7 +218,7 @@
     "noClan": "No clan",
     "joinClanToUnlockNewFeatures": "Join a clan to unlock new features.",
     "apply": "Apply",
-    "open": "Open",
+    "opened": "Opened",
     "inviteOnly": "Invite Only",
     "cancel": "Cancel",
     "clan": "Clan",
@@ -286,7 +286,7 @@
             }
         }
     },
-    "askForWar": "Contact a leader or a co-leader to start a war.",
+    "askForWar": "Contact the leader or a co-leader to start a war.",
     "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
     "warLogClosed": "War log closed.",
     "rounds": "Rounds",
