@@ -110,6 +110,7 @@
     "search": "Search",
     "tagOrNamePlayer": "Player's tag or name",
     "searchPlayer": "Search player",
+    "nameOrTag" : "Name or tag",
     "dashboard": "Dashboard",
     "homeBase": "Home Base",
     "th": "TH",
@@ -207,6 +208,13 @@
     "searchClan": "Search clan",
     "noResult": "No result.",
     "filters": "Filters",
+    "whatever" : "Whatever",
+    "warFrequency": "War frequency",
+    "minimumMembers": "Minimum members",
+    "maximumMembers": "Maximum members",
+    "location": "Location",
+    "minimumClanPoints": "Minimum clan points",
+    "minimumClanLevel": "Minimum clan level",
     "noClan": "No clan",
     "joinClanToUnlockNewFeatures": "Join a clan to unlock new features.",
     "apply": "Apply",
@@ -284,14 +292,47 @@
     "rounds": "Rounds",
     "noDataAvailableForThisWar": "No data available for this war",
     "stateOfTheWar": "State of the war",
-    "stillNeedsToWin": "still needs to win",
-    "toTakeTheLead": "to take the lead",
-    "or": "or",
-    "star": "star",
-    "starSmall": "star",
-    "moreDestruction": "more destruction",
+    "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+    "@starsNeededToTakeTheLead": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "star": {
+                "type": "int"
+            },
+            "star2": {
+                "type": "int"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "starsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+    "@starsAndPercentNeededToTakeTheLead": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
     "clanDraw": "The two clans are tied",
     "fastCalculator": "Fast calculator",
+    "fastCalculatorAnswer" : "To achieve a destruction rate of {percentNeeded}%, you need a total of {result}%.",
+    "@fastCalculatorAnswer": {
+        "placeholders": {
+            "percentNeedeed": {
+                "type": "String"
+            },
+            "result" : {
+                "type": "String"
+            }
+        }
+    },
     "teamSize": "Team size",
     "neededOverall": "% Needed overall",
     "calculate": "Calculate",

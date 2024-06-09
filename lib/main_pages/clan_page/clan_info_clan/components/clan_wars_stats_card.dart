@@ -34,6 +34,7 @@ class ClanWarsStatsCardState extends State<ClanWarsStatsCard> {
 
     return AlertDialog(
         surfaceTintColor: Colors.transparent,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Row(
           children: [
             CachedNetworkImage(
@@ -112,7 +113,7 @@ class ClanWarsStatsCardState extends State<ClanWarsStatsCard> {
                         backgroundColor: Colors.transparent,
                         child: Icon(
                           LucideIcons.lock,
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                           size: 16,
                         ),
                       ),
@@ -124,7 +125,7 @@ class ClanWarsStatsCardState extends State<ClanWarsStatsCard> {
                     Chip(
                       avatar: Icon(
                         LucideIcons.flame,
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Theme.of(context).colorScheme.onSurface,
                         size: 16,
                       ),
                       label: Text(

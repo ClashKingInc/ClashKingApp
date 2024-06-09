@@ -73,7 +73,6 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
       return [];
     }
 
-
     if (response.statusCode == 200) {
       var body = utf8.decode(response.bodyBytes);
       var data = jsonDecode(body);
@@ -98,7 +97,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
               controller: _controller,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                labelText: AppLocalizations.of(context)!.searchPlayer,
+                labelText: "${AppLocalizations.of(context)!.searchPlayer} (${AppLocalizations.of(context)!.nameOrTag})",                
                 suffixIcon: IntrinsicWidth(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -128,6 +127,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
                                 ),
+                      SizedBox(width: 8.0)
                     ],
                   ),
                 ),

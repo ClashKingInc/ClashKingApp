@@ -21,6 +21,7 @@ class ClanSearchState extends State<ClanSearch> {
   bool isEmpty = true;
   Timer? _debounce;
   String lastSearch = '';
+  String searchFilters = '';
 
   @override
   void initState() {
@@ -46,7 +47,11 @@ class ClanSearchState extends State<ClanSearch> {
             isSearching = true;
           });
         }
-        _searchResults = _searchClans(_controller.text);
+        String query = '';
+        if (_controller.text != '') {
+          query = "name=${_controller.text}";
+        }
+        _searchResults = _searchClans("$query$searchFilters");
         _searchResults!.whenComplete(() {
           setState(() {
             isSearching = false;
@@ -58,7 +63,7 @@ class ClanSearchState extends State<ClanSearch> {
   }
 
   Future<List<dynamic>> _searchClans(String query) async {
-    if (query.isEmpty || query.length < 3) {
+    if (query.isEmpty || query.length < 8) {
       isSearching = false;
       return [];
     }
@@ -68,6 +73,7 @@ class ClanSearchState extends State<ClanSearch> {
       query = query.replaceFirst("#", '!');
       response = await http
           .get(Uri.parse('https://api.clashking.xyz/v1/clans/$query'));
+
       if (response.statusCode == 200) {
         var body = utf8.decode(response.bodyBytes);
         var data = jsonDecode(body);
@@ -77,7 +83,7 @@ class ClanSearchState extends State<ClanSearch> {
       }
     } else {
       response = await http.get(Uri.parse(
-          'https://api.clashking.xyz/v1/clans?name=$query&limit=20&memberList=false'));
+          'https://api.clashking.xyz/v1/clans?$query&limit=20&memberList=false'));
 
       if (response.statusCode == 200) {
         var body = utf8.decode(response.bodyBytes);
@@ -100,7 +106,8 @@ class ClanSearchState extends State<ClanSearch> {
               controller: _controller,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                labelText: AppLocalizations.of(context)!.searchClan,
+                labelText:
+                    "${AppLocalizations.of(context)!.searchClan} (${AppLocalizations.of(context)!.nameOrTag})",
                 suffixIcon: IntrinsicWidth(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -109,12 +116,25 @@ class ClanSearchState extends State<ClanSearch> {
                       IconButton(
                           icon: Icon(Icons.filter_list),
                           onPressed: () {
-                            showDialog(
+                            showDialog<String>(
                               context: context,
                               builder: (BuildContext context) {
                                 return ClanSearchFilters();
                               },
-                            );
+                            ).then((String? filters) {
+                              if (filters != null) {
+                                setState(() {
+                                  String query = '';
+                                  if (_controller.text != '') {
+                                    query = "name=${_controller.text}$filters";
+                                  } else {
+                                    query = filters.replaceFirst('&', '');
+                                  }
+                                  searchFilters = filters;
+                                  _searchResults = _searchClans(query);
+                                });
+                              }
+                            });
                           },
                           color: Theme.of(context).colorScheme.onSurface),
                       isSearching
@@ -130,6 +150,7 @@ class ClanSearchState extends State<ClanSearch> {
                                           .colorScheme
                                           .onSurface),
                                   onPressed: () {
+                                    searchFilters = '';
                                     _controller.clear();
                                     setState(() {
                                       isSearching = false;

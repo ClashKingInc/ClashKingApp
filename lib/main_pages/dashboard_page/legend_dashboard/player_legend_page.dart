@@ -91,7 +91,7 @@ class LegendScreenState extends State<LegendScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
-          backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         onRefresh: () {
           PlayerLegendService playerLegendService = PlayerLegendService();
           return playerLegendService
@@ -110,9 +110,8 @@ class LegendScreenState extends State<LegendScreen>
                 tabBarDecoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                 ),
-                labelColor: Theme.of(context).colorScheme.onBackground,
-                unselectedLabelColor:
-                    Theme.of(context).colorScheme.onBackground,
+                labelColor: Theme.of(context).colorScheme.onSurface,
+                unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
                 onTap: (value) {
                   setState(() {});
                 },
@@ -257,38 +256,13 @@ class LegendScreenState extends State<LegendScreen>
           SizedBox(width: 16),
           IconButton(
             icon: Icon(Icons.calendar_today,
-                color: Theme.of(context).colorScheme.onBackground, size: 16),
+                color: Theme.of(context).colorScheme.onSurface, size: 16),
             onPressed: () async {
-              final DateTime? picked = await showDatePicker(
+              DateTime? picked = await showDatePicker(
                 context: context,
                 initialDate: selectedDate,
                 firstDate: DateTime(2018, 8),
                 lastDate: DateTime(2200),
-                builder: (BuildContext context, Widget? child) {
-                  return Theme(
-                    data: ThemeData(
-                      colorScheme: Theme.of(context).colorScheme.copyWith(
-                            primary: Theme.of(context)
-                                .colorScheme
-                                .secondary, // Rond et boutons en bas
-                            onPrimary: Theme.of(context)
-                                .colorScheme
-                                .onPrimary, // intérieur du jour sélectionné
-                            surface: Theme.of(context)
-                                .colorScheme
-                                .background, // fond du calendrier mais en bizarre
-                            onSurface: Theme.of(context)
-                                .colorScheme
-                                .onSurface, // Chiffres du calendrier + sélection année + manu de défilement mois
-                            surfaceTint:
-                                Colors.transparent, // fond du calendrier
-                          ),
-                      dialogBackgroundColor:
-                          Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    child: child!,
-                  );
-                },
               );
               if (picked != null && picked != selectedDate) {
                 setState(() {
@@ -303,7 +277,7 @@ class LegendScreenState extends State<LegendScreen>
             height: 30,
             child: IconButton(
               icon: Icon(Icons.arrow_back,
-                  color: Theme.of(context).colorScheme.onBackground, size: 16),
+                  color: Theme.of(context).colorScheme.onSurface, size: 16),
               onPressed: decrementDate,
             ),
           ),
@@ -318,7 +292,7 @@ class LegendScreenState extends State<LegendScreen>
             height: 30,
             child: IconButton(
               icon: Icon(Icons.arrow_forward,
-                  color: Theme.of(context).colorScheme.onBackground, size: 16),
+                  color: Theme.of(context).colorScheme.onSurface, size: 16),
               onPressed: incrementDate,
             ),
           ),
@@ -574,7 +548,7 @@ class LegendScreenState extends State<LegendScreen>
                     height: 30,
                     child: IconButton(
                       icon: Icon(Icons.arrow_back,
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                           size: 16),
                       onPressed: decrementMonth,
                     ),
@@ -590,7 +564,7 @@ class LegendScreenState extends State<LegendScreen>
                     height: 30,
                     child: IconButton(
                       icon: Icon(Icons.arrow_forward,
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                           size: 16),
                       onPressed: incrementMonth,
                     ),
@@ -633,7 +607,7 @@ class LegendScreenState extends State<LegendScreen>
                       height: 30,
                       child: IconButton(
                         icon: Icon(Icons.arrow_back,
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.onSurface,
                             size: 16),
                         onPressed: decrementMonth,
                       ),
@@ -647,7 +621,7 @@ class LegendScreenState extends State<LegendScreen>
                       height: 30,
                       child: IconButton(
                         icon: Icon(Icons.arrow_forward,
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.onSurface,
                             size: 16),
                         onPressed: incrementMonth,
                       ),
@@ -852,9 +826,8 @@ class LegendScreenState extends State<LegendScreen>
                               height: 30,
                               child: IconButton(
                                 icon: Icon(Icons.arrow_back,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
                                     size: 16),
                                 onPressed: decrementMonth,
                               ),
@@ -868,9 +841,8 @@ class LegendScreenState extends State<LegendScreen>
                               height: 30,
                               child: IconButton(
                                 icon: Icon(Icons.arrow_forward,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
                                     size: 16),
                                 onPressed: incrementMonth,
                               ),

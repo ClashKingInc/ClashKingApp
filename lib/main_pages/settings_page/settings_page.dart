@@ -99,14 +99,14 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   }) {
     return ListTile(
       title: Text(title,
-          style: TextStyle(color: Theme.of(context).colorScheme.onBackground)),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
       subtitle: subtitle != null
           ? Text(subtitle,
               style:
-                  TextStyle(color: Theme.of(context).colorScheme.onBackground))
+                  TextStyle(color: Theme.of(context).colorScheme.onSurface))
           : null,
       leading:
-          Icon(leadingIcon, color: Theme.of(context).colorScheme.onBackground),
+          Icon(leadingIcon, color: Theme.of(context).colorScheme.onSurface),
       onTap: onTap,
     );
   }
