@@ -165,7 +165,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                       case 'inviteOnly':
                         return AppLocalizations.of(context)!.inviteOnly;
                       case 'open':
-                        return AppLocalizations.of(context)!.open;
+                        return AppLocalizations.of(context)!.opened;
                       case 'closed':
                         return AppLocalizations.of(context)!.closed;
                       default:
