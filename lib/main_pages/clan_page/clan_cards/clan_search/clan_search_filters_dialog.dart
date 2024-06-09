@@ -141,7 +141,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
 
     return AlertDialog(
       insetPadding: EdgeInsets.all(16),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
       title: Text(AppLocalizations.of(context)!.filters,
           textAlign: TextAlign.center),
@@ -151,6 +151,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
           child: Column(
             children: <Widget>[
               Card(
+                color: Theme.of(context).scaffoldBackgroundColor,
                 child: Column(
                   children: [
                     SizedBox(height: 8),
@@ -176,6 +177,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 ),
               ),
               Card(
+                color: Theme.of(context).scaffoldBackgroundColor,
                 child: Column(
                   children: [
                     SizedBox(height: 8),
@@ -253,6 +255,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 ),
               ),
               Card(
+                color: Theme.of(context).scaffoldBackgroundColor,
                 child: Column(
                   children: [
                     SizedBox(height: 8),
@@ -354,6 +357,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 ),
               ),
               Card(
+                color: Theme.of(context).scaffoldBackgroundColor,
                 child: Column(
                   children: [
                     SizedBox(height: 8),
@@ -415,6 +419,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 ),
               ),
               Card(
+                color: Theme.of(context).scaffoldBackgroundColor,
                 child: Column(
                   children: [
                     SizedBox(height: 8),

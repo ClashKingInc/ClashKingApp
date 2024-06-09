@@ -89,8 +89,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                     children: [
                       WarStatisticsCard(currentWarInfo: widget.currentWarInfo),
                       SizedBox(height: 10),
-                      WarCalculatorCard(
-                          teamSize: widget.currentWarInfo.teamSize)
+                      WarCalculatorCard(currentWarInfo: widget.currentWarInfo)
                     ],
                   ),
                 ),
