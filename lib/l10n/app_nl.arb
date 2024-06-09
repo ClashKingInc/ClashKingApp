@@ -57,7 +57,7 @@
     "faqClanNotTracked": "Clan niet bijgehouden",
     "faqClanNotTrackedAnswer": "ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan ClashKing uit op je Discord server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.",
     "faqTrackingDown": "Tracking niet beschikbaar",
-    "faqTrackingDownAnswer": "Het volgen kan gedurende een bepaalde periode stoppen met werken. Daarom kunnen er soms gaten in je gegevens zitten. We werken eraan om dit te verbeteren.\n\n",
+    "faqTrackingDownAnswer": "Het tracken kan gedurende een bepaalde periode stoppen met werken. Daarom kunnen er soms gaten in je gegevens zitten. We werken eraan om dit te verbeteren.\n\n",
     "faqApiLimitation": "Clash of Clans API limitatie\n",
     "faqApiLimitationAnswer": "Sommige gegevens worden geleverd door Clash of Clans en hun API heeft enkele beperkingen. Bijvoorbeeld, bij het volgen in de legendarisch divisie worden trofeeënwinst en -verlies soms gestapeld alsof ze van één aanval zijn. Dit is ook de reden waarom we geen informatie hebben over het niveau van je gebouwen.",
     "faqSupportWork": "Hoe kan ik je werk ondersteunen?",
@@ -108,6 +108,7 @@
     "search": "Zoeken",
     "tagOrNamePlayer": "Spelers tag of naam",
     "searchPlayer": "Zoek speler",
+    "nameOrTag": "Name or tag",
     "dashboard": "Dashboard",
     "homeBase": "Thuisbasis",
     "th": "SH",
@@ -205,6 +206,13 @@
     "searchClan": "Zoek clan",
     "noResult": "Geen resultaat.",
     "filters": "Filters",
+    "whatever": "Whatever",
+    "warFrequency": "War frequency",
+    "minimumMembers": "Minimum members",
+    "maximumMembers": "Maximum members",
+    "location": "Location",
+    "minimumClanPoints": "Minimum clan points",
+    "minimumClanLevel": "Minimum clan level",
     "noClan": "Geen clan",
     "joinClanToUnlockNewFeatures": "Sluit je aan bij een clan om nieuwe functies te ontgrendelen.",
     "apply": "Toepassen",
@@ -282,14 +290,47 @@
     "rounds": "Rondes",
     "noDataAvailableForThisWar": "Geen gegevens beschikbaar voor deze oorlog",
     "stateOfTheWar": "Staat van de oorlog",
-    "stillNeedsToWin": "moet nog steeds winnen",
-    "toTakeTheLead": "om de leiding nemen",
-    "or": "of",
-    "star": "ster",
-    "starSmall": "ster",
-    "moreDestruction": "meer vernietiging",
+    "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+    "@starsNeededToTakeTheLead": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "star": {
+                "type": "int"
+            },
+            "star2": {
+                "type": "int"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "starsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+    "@starsAndPercentNeededToTakeTheLead": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
     "clanDraw": "De twee clans staan gelijk",
     "fastCalculator": "Snelle rekenmachine",
+    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, you need a total of {result}%.",
+    "@fastCalculatorAnswer": {
+        "placeholders": {
+            "percentNeedeed": {
+                "type": "String"
+            },
+            "result": {
+                "type": "String"
+            }
+        }
+    },
     "teamSize": "Teamgrootte",
     "neededOverall": "% Nodig in totaal",
     "calculate": "Berekenen",
