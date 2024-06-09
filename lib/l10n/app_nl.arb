@@ -42,7 +42,7 @@
         }
     },
     "welcome": "Welkom!",
-    "welcomeMessage": "Voeg alsjeblieft één of meer Clash Of Clans accounts toe aan je profiel. Je kan later accounts toevoegen of verwijderen.",
+    "welcomeMessage": "Please add one or more Clash Of Clans accounts to your profile. You can add or remove accounts later.",
     "login": "Inloggen",
     "logout": "Uitloggen",
     "language": "Taal",
@@ -54,7 +54,7 @@
     "faqIsThisFromSupercell": "Is deze app van Supercell?",
     "faqFanContentPolicy": "Dit materiaal is onofficieel en wordt niet goedgekeurd door Supercell. Voor meer informatie, zie de Fan Content Policy van Supercell: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Waarom zijn de gegevens soms onnauwkeurig of ontbreken ze?",
-    "faqClanNotTracked": "Clan niet bijgehouden",
+    "faqClanNotTracked": "Clan niet bijgehouden\n",
     "faqClanNotTrackedAnswer": "ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan ClashKing uit op je Discord server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.",
     "faqTrackingDown": "Tracking niet beschikbaar",
     "faqTrackingDownAnswer": "Het tracken kan gedurende een bepaalde periode stoppen met werken. Daarom kunnen er soms gaten in je gegevens zitten. We werken eraan om dit te verbeteren.\n\n",
@@ -71,9 +71,9 @@
     "faqHowToInviteTheBotAnswer": "Je kan onze bot uitnodigen op uw server door op de onderstaande knop te klikken. Je moet de toestemming \"Server beheren\" hebben om de bot toe te voegen.",
     "faqInviteTheBot": "ClashKing Bot uitnodigen",
     "faqNeedHelp": "Ik heb hulp nodig of ik zou graag een suggestie willen doen. Hoe kan ik contact met u opnemen?",
-    "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server en daar om hulp vragen of feedback te geven, of je kan ons een e-mail sturen naar devs@clashkingbot.com. \nGraag alleen in het Engels of Frans schrijven.",
+    "faqNeedHelpAnswer": "You can join our Discord server to ask for help or provide feedback, or you can email us at devs@clashkingbot.com. Please write in English or French only.",
     "faqSendEmail": "Stuur een e-mail",
-    "faqJoinDiscord": "Word lid van de Discord server",
+    "faqJoinDiscord": "Join our Discord Server",
     "helpUsTranslate": "Help ons vertalen",
     "copiedToClipboard": "Gekopieerd naar klembord",
     "all": "Alle",
@@ -216,7 +216,7 @@
     "noClan": "Geen clan",
     "joinClanToUnlockNewFeatures": "Sluit je aan bij een clan om nieuwe functies te ontgrendelen.",
     "apply": "Toepassen",
-    "open": "Open",
+    "opened": "Opened",
     "inviteOnly": "Op uitnodiging",
     "cancel": "Annuleren",
     "clan": "Clan",
@@ -284,13 +284,13 @@
             }
         }
     },
-    "askForWar": "Neem contact op met de leider of een co-leider om een oorlog te starten.",
+    "askForWar": "Contact the leader or a co-leader to start a war.",
     "askForWarLogOpening": "Neem contact op met de leider of een co-leider om het oorlogs logsboek te openen.",
     "warLogClosed": "Oorlogs logboek gesloten.",
     "rounds": "Rondes",
     "noDataAvailableForThisWar": "Geen gegevens beschikbaar voor deze oorlog",
     "stateOfTheWar": "Staat van de oorlog",
-    "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+    "starsNeededToTakeTheLead": "{clan} heeft nog {star} meer ster(ren) nodig of {stars2} ster(ren) en {percent}% om de leiding te nemen.",
     "@starsNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -307,7 +307,7 @@
             }
         }
     },
-    "starsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+    "starsAndPercentNeededToTakeTheLead": "{clan} heeft nog {percent}% of 1 meer ster nodig om de leiding te nemen",
     "@starsAndPercentNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -320,7 +320,7 @@
     },
     "clanDraw": "De twee clans staan gelijk",
     "fastCalculator": "Snelle rekenmachine",
-    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, you need a total of {result}%.",
+    "fastCalculatorAnswer": "Om een vernietigingspercentage van {percentNeeded}% te bereiken, heb je in totaal {result}% nodig.",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
