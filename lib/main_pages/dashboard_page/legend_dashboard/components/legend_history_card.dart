@@ -36,8 +36,9 @@ class LegendHistoryCard extends StatelessWidget {
                             child: Stack(
                               children: <Widget>[
                                 Center(
-                                  child: CachedNetworkImage(imageUrl: 
-                                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_No_Padding.png",
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_No_Padding.png",
                                     height: 80,
                                   ),
                                 ),
@@ -45,10 +46,16 @@ class LegendHistoryCard extends StatelessWidget {
                                   alignment: Alignment(0, -0.1),
                                   child: Text(
                                     capitalize(
-                                      DateFormat('MMMM\nyyyy', Localizations.localeOf(context).languageCode).format(
+                                      DateFormat(
+                                              'MMMM\nyyyy',
+                                              Localizations.localeOf(context)
+                                                  .languageCode)
+                                          .format(
                                         DateTime(
-                                          int.parse(item['season'].split('-')[0]),
-                                          int.parse(item['season'].split('-')[1]),
+                                          int.parse(
+                                              item['season'].split('-')[0]),
+                                          int.parse(
+                                              item['season'].split('-')[1]),
                                         ),
                                       ),
                                     ),
@@ -62,9 +69,9 @@ class LegendHistoryCard extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Text("${item['clan']['name'] ?? AppLocalizations.of(context)!.noClan}",
-                              style:
-                                  Theme.of(context).textTheme.labelMedium),
+                          Text(
+                              "${item['clan']['name'] ?? AppLocalizations.of(context)!.noClan}",
+                              style: Theme.of(context).textTheme.labelMedium),
                         ],
                       ),
                       SizedBox(width: 8),
@@ -81,28 +88,34 @@ class LegendHistoryCard extends StatelessWidget {
                                 Chip(
                                     avatar: CircleAvatar(
                                         backgroundColor: Colors.transparent,
-                                        child: CachedNetworkImage(imageUrl: 
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png")),
+                                        child: CachedNetworkImage(
+                                            imageUrl:
+                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png")),
                                     label: Text('${item['trophies']}')),
                                 Chip(
-                                    avatar: CircleAvatar(
+                                  avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
-                                      child: CachedNetworkImage(imageUrl: 
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
-                                      label: Text(NumberFormat('#,###', 'fr_FR').format(item['rank']),
-                                    ), 
+                                      child: CachedNetworkImage(
+                                          imageUrl:
+                                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
+                                  label: Text(
+                                    NumberFormat('#,###', 'fr_FR')
+                                        .format(item['rank']),
+                                  ),
                                 ),
                                 Chip(
                                     avatar: CircleAvatar(
                                         backgroundColor: Colors.transparent,
-                                        child: CachedNetworkImage(imageUrl: 
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png")),
+                                        child: CachedNetworkImage(
+                                            imageUrl:
+                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png")),
                                     label: Text('${item['attackWins']}')),
                                 Chip(
                                     avatar: CircleAvatar(
                                         backgroundColor: Colors.transparent,
-                                        child: CachedNetworkImage(imageUrl: 
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png")),
+                                        child: CachedNetworkImage(
+                                            imageUrl:
+                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png")),
                                     label: Text('${item['defenseWins']}')),
                               ],
                             ),

@@ -45,7 +45,16 @@ class MyApp extends StatelessWidget {
             title: 'ClashKing',
             // Dark theme
             darkTheme: ThemeData(
-              scaffoldBackgroundColor: Color.fromARGB(255, 61, 60, 60), 
+              scaffoldBackgroundColor: Color.fromARGB(255, 61, 60, 60),
+              datePickerTheme: DatePickerThemeData(
+                backgroundColor: Color.fromARGB(255, 61, 60, 60),
+                surfaceTintColor: Colors.transparent,
+                headerForegroundColor: Colors.white,
+                headerBackgroundColor:Color(0xFFC98910),
+                dayForegroundColor: WidgetStateProperty.all(Colors.white),
+                yearForegroundColor: WidgetStateProperty.all(Colors.white),
+                todayForegroundColor: WidgetStateProperty.all(Colors.white),
+              ),
               cardTheme: CardTheme(
                 surfaceTintColor: Colors.transparent,
                 color: Color.fromARGB(255, 31, 31, 31)
@@ -153,7 +162,16 @@ class MyApp extends StatelessWidget {
             // Light theme
             theme: ThemeData(
               useMaterial3: true,
-              scaffoldBackgroundColor: Color(0xFFFFF8E1),
+              scaffoldBackgroundColor: Color.fromRGBO(255, 248, 225, 1),
+              datePickerTheme: DatePickerThemeData(
+                backgroundColor: Colors.white,
+                surfaceTintColor: Colors.transparent,
+                headerForegroundColor: Colors.white,
+                headerBackgroundColor:Color(0xFFC98910),
+                dayForegroundColor: WidgetStateProperty.all(Colors.black),
+                yearForegroundColor: WidgetStateProperty.all(Colors.black),
+                todayForegroundColor: WidgetStateProperty.all(Colors.black),
+              ),
               cardTheme: CardTheme(
                 surfaceTintColor: Colors.transparent,
                 color: Color(0xFFFFFFFF)
