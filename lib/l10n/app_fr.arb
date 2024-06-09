@@ -277,7 +277,7 @@
             }
         }
     },
-    "askForWar": "Contactez un chef ou un adjoint pour lancer une guerre.",
+    "askForWar": "Contactez le chef ou un adjoint pour lancer une guerre.",
     "askForWarLogOpening": "Contactez un chef ou un adjoint pour ouvrir le journal de guerre.",
     "warLogClosed": "Le journal de guerre est privé.",
     "rounds": "Tours",
