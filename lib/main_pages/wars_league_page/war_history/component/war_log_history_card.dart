@@ -28,7 +28,7 @@ class WarLogHistoryCardState extends State<WarLogHistoryCard> {
   String? selectedFilter;
   String formatDate(DateTime date, BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
-    final format = locale == 'fr' ? 'dd/MM/yyyy' : 'MM/dd/yyyy';
+    final format = locale == 'jp' ? 'yyyy/MM/dd' : 'dd/MM/yyyy';
     return DateFormat(format).format(date);
   }
 
