@@ -43,8 +43,12 @@ class AchievementScreenState extends State<AchievementScreen>
       }
     }
 
-    double ratio = achievementTotal > 0 ? (achievementCompleted / achievementTotal) * 100 : 0.0;
-    achievementStringRatio = ratio == ratio.round() ? ratio.round().toString() : ratio.toStringAsFixed(2);
+    double ratio = achievementTotal > 0
+        ? (achievementCompleted / achievementTotal) * 100
+        : 0.0;
+    achievementStringRatio = ratio == ratio.round()
+        ? ratio.round().toString()
+        : ratio.toStringAsFixed(2);
   }
 
   void updateFilter(String newFilter) {
@@ -58,8 +62,10 @@ class AchievementScreenState extends State<AchievementScreen>
     Map<String, String> filterOptions = {
       AppLocalizations.of(context)?.all ?? 'All': 'All',
       AppLocalizations.of(context)?.homeBase ?? 'Home Base': 'home',
-      AppLocalizations.of(context)?.builderBase ?? 'Builder Base' : 'builderBase',
-      AppLocalizations.of(context)?.clanCapital ?? 'Clan Capital': 'clanCapital',
+      AppLocalizations.of(context)?.builderBase ?? 'Builder Base':
+          'builderBase',
+      AppLocalizations.of(context)?.clanCapital ?? 'Clan Capital':
+          'clanCapital',
     };
 
     return Scaffold(
@@ -82,8 +88,8 @@ class AchievementScreenState extends State<AchievementScreen>
                             Colors.black.withOpacity(0.3),
                             BlendMode.darken,
                           ),
-                          child: CachedNetworkImage(imageUrl: 
-                            backgroundImageUrl,
+                          child: CachedNetworkImage(
+                            imageUrl: backgroundImageUrl,
                             width: double.infinity,
                             fit: BoxFit.cover,
                           ),
@@ -93,8 +99,12 @@ class AchievementScreenState extends State<AchievementScreen>
                     Positioned(
                       bottom: 70,
                       child: Text(
-                        AppLocalizations.of(context)?.achievements ?? 'Achievements',
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        AppLocalizations.of(context)?.achievements ??
+                            'Achievements',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(color: Colors.white),
                       ),
                     ),
                     Positioned(
@@ -108,17 +118,21 @@ class AchievementScreenState extends State<AchievementScreen>
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: LinearProgressIndicator(
-                                value: achievementTotal > 0 ? achievementCompleted / achievementTotal : 0.0,
+                                value: achievementTotal > 0
+                                    ? achievementCompleted / achievementTotal
+                                    : 0.0,
                                 minHeight: 30,
                                 backgroundColor: Color.fromRGBO(61, 60, 60, 1),
-                                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.secondary),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Theme.of(context).colorScheme.secondary),
                               ),
                             ),
                           ),
                           Center(
                             child: Text(
                               '${achievementCompleted.toString()}/${achievementTotal.toString()} - $achievementStringRatio%',
-                              style: TextStyle(fontSize: 16, color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.white),
                             ),
                           ),
                         ],
@@ -148,7 +162,9 @@ class AchievementScreenState extends State<AchievementScreen>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Center(
-                        child: Text(AppLocalizations.of(context)?.homeBase ?? 'Home Base',
+                        child: Text(
+                            AppLocalizations.of(context)?.homeBase ??
+                                'Home Base',
                             style: Theme.of(context).textTheme.headlineMedium),
                       ),
                       _buildAchievementsForVillage('home'),
@@ -160,7 +176,9 @@ class AchievementScreenState extends State<AchievementScreen>
                     children: [
                       SizedBox(height: 14),
                       Center(
-                        child: Text(AppLocalizations.of(context)?.builderBase ?? 'Builder Base',
+                        child: Text(
+                            AppLocalizations.of(context)?.builderBase ??
+                                'Builder Base',
                             style: Theme.of(context).textTheme.headlineMedium),
                       ),
                       _buildAchievementsForVillage('builderBase'),
@@ -172,9 +190,11 @@ class AchievementScreenState extends State<AchievementScreen>
                     children: [
                       SizedBox(height: 14),
                       Center(
-                        child: Text(AppLocalizations.of(context)?.clanCapital ?? 'Clan capital',
-                          style: Theme.of(context).textTheme.headlineMedium)
-                      ),
+                          child: Text(
+                              AppLocalizations.of(context)?.clanCapital ??
+                                  'Clan capital',
+                              style:
+                                  Theme.of(context).textTheme.headlineMedium)),
                       _buildAchievementsForVillage('clanCapital'),
                     ],
                   ),
@@ -188,7 +208,7 @@ class AchievementScreenState extends State<AchievementScreen>
 
   Widget _buildAchievementsForVillage(String village) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10, top: 20), 
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: widget.playerStats.achievements
@@ -210,56 +230,60 @@ class AchievementScreenState extends State<AchievementScreen>
           String progressStringRatio =
               '${formatNumber(achievement.value)}/${achievement.target.toString().replaceAll(RegExp('000000\$'), 'M')} - $progressStr%';
 
-          return Padding(padding : const EdgeInsets.only(bottom : 4),
-          child : Card(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 10, bottom : 3),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+          return Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 16, top: 10, bottom: 3),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        achievement.name,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      Spacer(),
-                      ...generateStars(stars, 22)
-                    ],
-                  ),
-                  Text(
-                    achievement.info.replaceAll(RegExp('000000 '), 'M '),
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
-                  SizedBox(height: 8),
-                  Stack(
-                    children: [
-                      SizedBox(
-                        height: 20,
-                        width: double.infinity,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: LinearProgressIndicator(
-                            value: progress / 100,
-                            minHeight: 20,
-                            backgroundColor: Color.fromRGBO(61, 60, 60, 1),
-                            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.secondary),
+                      Row(
+                        children: [
+                          Text(
+                            achievement.name,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
                           ),
-                        ),
+                          Spacer(),
+                          ...generateStars(stars, 22)
+                        ],
                       ),
-                      Center(
-                        child: Text(
-                          progressStringRatio,
-                          style: TextStyle(color: Colors.white),
-                        ),
+                      Text(
+                        achievement.info.replaceAll(RegExp('000000 '), 'M '),
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
+                      SizedBox(height: 8),
+                      Stack(
+                        children: [
+                          SizedBox(
+                            height: 20,
+                            width: double.infinity,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: LinearProgressIndicator(
+                                value: progress / 100,
+                                minHeight: 20,
+                                backgroundColor: Color.fromRGBO(61, 60, 60, 1),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Theme.of(context).colorScheme.secondary),
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: Text(
+                              progressStringRatio,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
                     ],
                   ),
-                  SizedBox(height: 10),
-                ],
-              ),
-            ),
-          ));
+                ),
+              ));
         }).toList(),
       ),
     );

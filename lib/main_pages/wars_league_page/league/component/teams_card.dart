@@ -46,7 +46,7 @@ class TeamsCard extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => Scaffold(
                         backgroundColor:
-                            Theme.of(context).colorScheme.background,
+                            Theme.of(context).scaffoldBackgroundColor,
                         body: FutureBuilder<ClanInfo>(
                           future: ClanService().fetchClanInfo(clan.tag),
                           builder: (context, snapshot) {
@@ -69,8 +69,8 @@ class TeamsCard extends StatelessWidget {
                     Card(
                       shape: RoundedRectangleBorder(
                         side: clan.tag == clanTag
-                            ? BorderSide(color: Colors.green, width: 2)
-                            : BorderSide.none,
+                          ? BorderSide(color: Colors.green, width: 2)
+                          : BorderSide.none,
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Padding(
@@ -83,71 +83,76 @@ class TeamsCard extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        "${sortedClans.indexOf(clan) + 1}.",
-                                        style: Theme.of(context).textTheme.titleMedium
+                                      SizedBox(width: 16),
+                                      SizedBox(
+                                        width: 20,
+                                        child: Text(
+                                          "${sortedClans.indexOf(clan) + 1}.",
+                                          style: Theme.of(context).textTheme.titleMedium
+                                        ),
                                       ),
-                                      SizedBox(width: 50),
-                                      CachedNetworkImage(imageUrl: clan.badgeUrls.small,
-                                        width: 40, height: 40),
-                                      SizedBox(width: 10),
-                                      Column(
-                                        crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                        children: [
-                                          Text(clan.name,
-                                            style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium),
-                                          Text(clan.tag,
-                                            style: Theme.of(context)
-                                              .textTheme
-                                              .labelMedium),
-                                        ],
+                                      SizedBox(width: 20),
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            CachedNetworkImage(
+                                              imageUrl: clan.badgeUrls.small,
+                                              width: 40, height: 40,
+                                            ),
+                                            SizedBox(width: 10),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(clan.name,style: Theme.of(context).textTheme.bodyMedium),
+                                                Text(clan.tag, style: Theme.of(context).textTheme.labelMedium),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      SizedBox(width: 40),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text("  ${totalByClan[clan.tag]?['stars'] ?? 0}"),
-                                              SizedBox(
-                                                child: CachedNetworkImage(
-                                                  imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
-                                                  width: 20,
-                                                  height: 20,
+                                      SizedBox(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text("  ${totalByClan[clan.tag]?['stars'] ?? 0}"),
+                                                SizedBox(
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
+                                                    width: 20,
+                                                    height: 20,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          Text(
-                                            "${totalByClan[clan.tag]?['percentage'].toStringAsFixed(0) ?? 0.0}%",
-                                          ),
-                                        ],
+                                              ],
+                                            ),
+                                            Text(
+                                              "${totalByClan[clan.tag]?['percentage'].toStringAsFixed(0) ?? 0.0}%",
+                                            ),
+                                          ],
+                                        ),
                                       ),
+                                      SizedBox(width: 20),
                                     ],
                                   ),
                                   SizedBox(height: 10),
                                   Wrap(
                                     alignment: WrapAlignment.center,
-                                    children:
-                                        townHallLevelCounts.entries.map((entry) {
+                                    children: townHallLevelCounts.entries.map((entry) {
                                       return Padding(
                                         padding: const EdgeInsets.all(4.0),
                                         child: Wrap(
                                           children: [
-                                            CachedNetworkImage(imageUrl: 
-                                              'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${entry.key}.png',
+                                            CachedNetworkImage(
+                                              imageUrl: 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${entry.key}.png',
                                               width: 20,
                                             ),
                                             SizedBox(width: 5),
-                                            Text('x${entry.value}',
-                                              style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
+                                            Text(
+                                              'x${entry.value}',
+                                              style: Theme.of(context).textTheme.bodyMedium,
                                             ),
                                           ],
                                         ),

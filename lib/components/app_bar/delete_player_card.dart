@@ -117,18 +117,18 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
               }
             },
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
+              backgroundColor: WidgetStateProperty.all(
                   Theme.of(context).colorScheme.primary),
-              foregroundColor: MaterialStateProperty.all(
+              foregroundColor: WidgetStateProperty.all(
                   Theme.of(context).colorScheme.onPrimary),
-              padding: MaterialStateProperty.all(
+              padding: WidgetStateProperty.all(
                   EdgeInsets.symmetric(vertical: 12, horizontal: 24)),
-              textStyle: MaterialStateProperty.all(
+              textStyle: WidgetStateProperty.all(
                   Theme.of(context).textTheme.bodyLarge),
-              shape: MaterialStateProperty.all(
+              shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
-              elevation: MaterialStateProperty.all(4),
+              elevation: WidgetStateProperty.all(4),
             ),
             child: Text(AppLocalizations.of(context)!.deleteAccount,
                 style: Theme.of(context).textTheme.bodyMedium),

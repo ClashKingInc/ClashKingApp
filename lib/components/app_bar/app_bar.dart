@@ -94,6 +94,8 @@ class CustomAppBarState extends State<CustomAppBar> {
                             return StatefulBuilder(
                               builder: (context, setState) {
                                 return AlertDialog(
+                                  backgroundColor:
+                                      Theme.of(context).scaffoldBackgroundColor,
                                   title: Text(
                                       AppLocalizations.of(context)?.manage ??
                                           'Manage'),

@@ -41,8 +41,8 @@
             }
         }
     },
-    "welcome": "Welcome !",
-    "welcomeMessage": "Please add one or more Clash Of Clan accounts to your profile. You can add or remove accounts later.",
+    "welcome": "Welcome!",
+    "welcomeMessage": "Please add one or more Clash Of Clans accounts to your profile. You can add or remove accounts later.",
     "login": "Login",
     "logout": "Log out",
     "language": "Language",
@@ -51,16 +51,16 @@
     "selectLanguage": "Select a language",
     "faq": "FAQ",
     "faqSubtitle": "Frequently Asked Questions",
-    "faqIsThisFromSupercell": "Is this App from Supercell ?",
+    "faqIsThisFromSupercell": "Is this App from Supercell?",
     "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-    "faqWhyNotAccurate": "Why isn't the data always accurate or missing?",
+    "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
     "faqClanNotTracked": "Clan not tracked\n",
-    "faqClanNotTrackedAnswer": "ClashKing can only get this info if the clan is tracked. If your clan seems not to be tracked, please invite him on a Discord server and use the command /addclan. We hope to make this feature available in the app soon.",
+    "faqClanNotTrackedAnswer": "ClashKing can only get this info if the clan is tracked. If your clan seems not to be tracked, please invite it on a Discord server and use the command /addclan. We hope to make this feature available in the app soon.",
     "faqTrackingDown": "Tracking down\n",
-    "faqTrackingDownAnswer": "The traking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.\n\n",
+    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.\n\n",
     "faqApiLimitation": "Clash of Clans API limitation\n",
-    "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API have some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was one attack. It is also why we do not have any informations on your buildings levels.",
-    "faqSupportWork" : "How can I support your work?",
+    "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was one attack. It is also why we do not have any information on your buildings levels.",
+    "faqSupportWork": "How can I support your work?",
     "faqSupportWorkAnswer": "There are several ways to support us:\n",
     "faqUseCodeClashKing": "Use code \"ClashKing\"",
     "faqSupportUsOnPatreon": "Support us on Patreon",
@@ -70,10 +70,10 @@
     "faqHowToInviteTheBot": "How can I invite your bot on my Discord server?",
     "faqHowToInviteTheBotAnswer": "You can invite our bot on your server by clicking on the button below. You will need to have the \"Manage Server\" permission to add the bot.",
     "faqInviteTheBot": "Invite ClashKing Bot",
-    "faqNeedHelp" : "I need help or I would like to make a suggestion. How can I contact you?",
-    "faqNeedHelpAnswer": "You can join our Discord server and ask for help or make a feedback there or send us an email at devs@clashkingbot.com. \nPlease write in English or French only.",
+    "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
+    "faqNeedHelpAnswer": "You can join our Discord server to ask for help or provide feedback, or you can email us at devs@clashkingbot.com. Please write in English or French only.",
     "faqSendEmail": "Send an email",
-    "faqJoinDiscord": "Join Discord Server",
+    "faqJoinDiscord": "Join our Discord Server",
     
 
     "helpUsTranslate": "Help us translate",
@@ -110,6 +110,7 @@
     "search": "Search",
     "tagOrNamePlayer": "Player's tag or name",
     "searchPlayer": "Search player",
+    "nameOrTag" : "Name or tag",
     "dashboard": "Dashboard",
     "homeBase": "Home Base",
     "th": "TH",
@@ -187,7 +188,7 @@
         }
     },
     "minutesAgo": "{minutes} minutes ago",
-    "@minutseAgo": {
+    "@minutesAgo": {
         "placeholders": {
             "minutes": {
                 "type": "int"
@@ -208,10 +209,17 @@
     "searchClan": "Search clan",
     "noResult": "No result.",
     "filters": "Filters",
+    "whatever" : "Whatever",
+    "warFrequency": "War frequency",
+    "minimumMembers": "Minimum members",
+    "maximumMembers": "Maximum members",
+    "location": "Location",
+    "minimumClanPoints": "Minimum clan points",
+    "minimumClanLevel": "Minimum clan level",
     "noClan": "No clan",
     "joinClanToUnlockNewFeatures": "Join a clan to unlock new features.",
     "apply": "Apply",
-    "open": "Open",
+    "opened": "Opened",
     "inviteOnly": "Invite Only",
     "cancel": "Cancel",
     "clan": "Clan",
@@ -279,23 +287,58 @@
             }
         }
     },
-    "askForWar": "Contact a leader or a co-leader to start a war.",
+    "askForWar": "Contact the leader or a co-leader to start a war.",
     "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
     "warLogClosed": "War log closed.",
     "rounds": "Rounds",
     "noDataAvailableForThisWar": "No data available for this war",
     "stateOfTheWar": "State of the war",
-    "stillNeedsToWin": "still needs to win",
-    "toTakeTheLead": "to take the lead",
-    "or": "or",
-    "star": "star",
-    "starSmall": "star",
-    "moreDestruction": "more destruction",
+    "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+    "@starsNeededToTakeTheLead": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "star": {
+                "type": "int"
+            },
+            "star2": {
+                "type": "int"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "starsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+    "@starsAndPercentNeededToTakeTheLead": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
     "clanDraw": "The two clans are tied",
     "fastCalculator": "Fast calculator",
+    "fastCalculatorAnswer" : "To achieve a destruction rate of {percentNeeded}%, you need a total of {result}%.",
+    "@fastCalculatorAnswer": {
+        "placeholders": {
+            "percentNeedeed": {
+                "type": "String"
+            },
+            "result" : {
+                "type": "String"
+            }
+        }
+    },
     "teamSize": "Team size",
     "neededOverall": "% Needed overall",
     "calculate": "Calculate",
+    "warStats" : "War Stats",
+    "noAccountLinkedToYourProfileFound": "No account linked to your profile found",
     "management": "Management",
-    "comingSoon": "Coming soon !"
+    "comingSoon": "Coming soon!"
 }

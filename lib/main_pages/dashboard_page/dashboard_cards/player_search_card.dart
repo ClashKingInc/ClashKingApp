@@ -62,7 +62,9 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
         RegExp(r'^[PYLQGRJCUV0289]{3,9}$').hasMatch(query)) {
       query = query.replaceFirst('#', '!');
       response = await http.get(Uri.parse('https://api.clashking.xyz/v1/players/$query'));
+      response = await http.get(Uri.parse('https://api.clashking.xyz/v1/players/$query'));
     } else {
+      response = await http.get(Uri.parse('https://api.clashking.xyz/player/search/$query'));
       response = await http.get(Uri.parse('https://api.clashking.xyz/player/search/$query'));
     }
 
@@ -70,7 +72,6 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
       isSearching = false;
       return [];
     }
-
 
     if (response.statusCode == 200) {
       var body = utf8.decode(response.bodyBytes);
@@ -81,7 +82,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
         return [data];
       }
     } else {
-      throw Exception('Failed to load players');
+      return [];
     }
   }
 
@@ -96,7 +97,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
               controller: _controller,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                labelText: AppLocalizations.of(context)!.searchPlayer,
+                labelText: "${AppLocalizations.of(context)!.searchPlayer} (${AppLocalizations.of(context)!.nameOrTag})",                
                 suffixIcon: IntrinsicWidth(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -109,22 +110,23 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                             child: CircularProgressIndicator(),
                           )
                         : !isEmpty
-                            ? IconButton(
-                                icon: Icon(
-                                  Icons.clear,
-                                  color: Theme.of(context).colorScheme.onSurface),
-                                onPressed: () {
-                                  _controller.clear();
-                                  setState(() {
-                                    isSearching = false;
-                                  });
-                                },
-                              )
-                            : Icon(
-                                Icons.search,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                        SizedBox(width: 8),
+                          ? IconButton(
+                            icon: Icon(
+                              Icons.clear,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                            onPressed: () {
+                              _controller.clear();
+                              setState(() {
+                                isSearching = false;
+                              });
+                            },
+                          )
+                          : Icon(
+                            Icons.search,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                      SizedBox(width: 8.0),
                     ],
                   ),
                 ),
@@ -140,14 +142,17 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                 return Center(child: Text("No results found."));
               } else if (snapshot.hasData &&
                   snapshot.data != null &&
+                  snapshot.data != [] &&
                   snapshot.data!.isNotEmpty) {
+                print("test");
+                print(snapshot.data);
                 return SingleChildScrollView(
-                    child: Column(
-                  children: snapshot.data!.map<Widget>((player) {
-                    return PlayerSearchResultTile(
-                        player: player, user: widget.discordUser);
-                  }).toList(),
-                ));
+                  child: Column(
+                    children: snapshot.data!.map<Widget>((player) {
+                      return PlayerSearchResultTile(player: player, user: widget.discordUser);
+                    }).toList(),
+                  )
+                );
               } else {
                 if (_controller.text.length >= 2) {
                   return Column(children: [

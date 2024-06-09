@@ -1,8 +1,10 @@
 import 'dart:ui';
+import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/api/clan_info.dart';
 
 class WarHeader extends StatelessWidget {
   const WarHeader({
@@ -39,11 +41,8 @@ class WarHeader extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              timeLeft(
-                  widget.currentWarInfo,
-                  context,
-                  Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary)),
+              timeLeft(widget.currentWarInfo,context,
+                Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.onPrimary)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -51,57 +50,94 @@ class WarHeader extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CachedNetworkImage(imageUrl: 
-                            widget.currentWarInfo.clan.badgeUrls.large,
-                            width: 90),
-                        Text(
-                          widget.currentWarInfo.clan.name,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
+                        GestureDetector(
+                          onTap: () async {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            );
+                            ClanInfo clanInfo = await ClanService().fetchClanInfo(widget.currentWarInfo.clan.tag);
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ClanInfoScreen(clanInfo: clanInfo, discordUser: widget.discordUser),
+                              ),
+                            );
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl: widget.currentWarInfo.clan.badgeUrls.large,
+                            width: 90,
+                          ),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            widget.currentWarInfo.clan.name,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onPrimary),
+                          ),
                         ),
                         Text(
-                            "${widget.currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)}%",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.copyWith(color: Colors.white)),
+                          "${widget.currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)}%",
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white),
+                        ),
                       ],
                     ),
                   ),
                   Text(
                     "${widget.currentWarInfo.clan.stars} - ${widget.currentWarInfo.opponent.stars}",
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary),
+                      color: Theme.of(context).colorScheme.onPrimary),
                   ),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CachedNetworkImage(imageUrl: 
-                            widget.currentWarInfo.opponent.badgeUrls.large,
-                            width: 90),
-                        Text(
-                          widget.currentWarInfo.opponent.name,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
+                        GestureDetector(
+                          onTap: () async {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            );
+                            ClanInfo clanInfo = await ClanService().fetchClanInfo(widget.currentWarInfo.opponent.tag);
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ClanInfoScreen(clanInfo: clanInfo, discordUser: widget.discordUser),
+                              ),
+                            );
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl: widget.currentWarInfo.opponent.badgeUrls.large,
+                            width: 90,
+                          ),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            widget.currentWarInfo.opponent.name,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onPrimary),
+                          ),
                         ),
                         Text(
                           "${widget.currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)}%",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(color: Colors.white),
-                        )
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white),
+                        ),
                       ],
                     ),
                   ),
@@ -114,8 +150,10 @@ class WarHeader extends StatelessWidget {
           top: 30,
           left: 10,
           child: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: Theme.of(context).colorScheme.onPrimary, size: 32),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Theme.of(context).colorScheme.onPrimary, size: 32,
+            ),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),

@@ -127,6 +127,7 @@ class ClanMembersState extends State<ClanMembers> {
                     updateSortBy: updateFilter,
                     sortByOptions: filterOptions
                   ),
+                  SizedBox(height: 6),
                 ],
               ),
             ),
@@ -142,14 +143,24 @@ class ClanMembersState extends State<ClanMembers> {
             ),
           ],
         ),
-        SizedBox(height: 8),
-        ...filteredMembers.asMap().entries.map((entry) {
-          int index = entry.key + 1;
-          Member member = entry.value;
-          return GestureDetector(
+        if (filteredMembers.isEmpty)
+          Card(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                AppLocalizations.of(context)?.noAccountLinkedToYourProfileFound ?? 'No account linked to your profile found',
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          )
+        else
+          ...filteredMembers.asMap().entries.map((entry) {
+            int index = entry.key + 1;
+            Member member = entry.value;
+            return GestureDetector(
               onTap: () async {
                 final navigator = Navigator.of(context);
-
                 showDialog(
                   context: context,
                   barrierDismissible: false,
@@ -183,10 +194,12 @@ class ClanMembersState extends State<ClanMembers> {
                         children: [
                           Expanded(
                             child: Text(index.toString(),
-                            style: Theme.of(context).textTheme.bodyMedium)),
+                            style: Theme.of(context).textTheme.bodyMedium),
+                          ),
                           Expanded(
-                              flex: 6,
-                              child: Row(children: [
+                            flex: 6,
+                            child: Row(
+                              children: [
                                 Column(
                                   children: [
                                     CachedNetworkImage(

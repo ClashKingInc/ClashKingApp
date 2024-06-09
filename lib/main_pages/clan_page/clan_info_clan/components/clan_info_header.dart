@@ -1,9 +1,11 @@
 import 'dart:ui';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/components/clan_wars_stats_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -32,15 +34,16 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                 child: ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.6),
-                      BlendMode.darken,
-                    ),
-                    child: CachedNetworkImage(
-                      imageUrl: backgroundImageUrl,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    )),
+                  colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.6),
+                    BlendMode.darken,
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: backgroundImageUrl,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
             Positioned(
@@ -68,8 +71,10 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                 top: -8, right: 24,
                 child: IconButton(
                   icon: Icon(Icons.sports_esports_rounded,color: Theme.of(context).colorScheme.onSurface, size: 32),
-                  onPressed: () {
-                    launchUrl(Uri.parse('https://link.clashofclans.com/fr?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
+                  onPressed: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    final languagecode = prefs.getString('languageCode');
+                    launchUrl(Uri.parse('https://link.clashofclans.com/$languagecode?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
                   },
                 ),
               ),
@@ -82,7 +87,30 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               ),
             ],
           ),
-          SizedBox(height: 6),
+          InkWell(
+            onTap: () {
+              FlutterClipboard.copy(widget.clanInfo.tag).then((value) {
+                final snackBar = SnackBar(
+                  content: Center(
+                    child: Text(
+                      AppLocalizations.of(context)!.copiedToClipboard,
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                    ),
+                  ),
+                  duration: Duration(milliseconds: 1500),
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              });
+            },
+            child: Container(
+              padding: EdgeInsets.only(top: 2.0, bottom: 4.0),
+              child: Text(
+                widget.clanInfo.tag,
+                style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
+              ),
+            ),
+          ),
           Chip(
             avatar: CircleAvatar(
               backgroundColor: Colors.transparent,
@@ -114,7 +142,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: Icon(LucideIcons.users, color: Theme.of(context).colorScheme.onBackground, size: 16),
+                  child: Icon(LucideIcons.users, color: Theme.of(context).colorScheme.onSurface, size: 16),
                 ),
                 label: Text(
                   "${widget.clanInfo.members.toString()}/50",
@@ -154,7 +182,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: Icon(LucideIcons.mail, color: Theme.of(context).colorScheme.onBackground, size: 16),
+                  child: Icon(LucideIcons.mail, color: Theme.of(context).colorScheme.onSurface, size: 16),
                 ),
                 label: Text(
                   () {
@@ -162,7 +190,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                       case 'inviteOnly':
                         return AppLocalizations.of(context)!.inviteOnly;
                       case 'open':
-                        return AppLocalizations.of(context)!.open;
+                        return AppLocalizations.of(context)!.opened;
                       case 'closed':
                         return AppLocalizations.of(context)!.closed;
                       default:

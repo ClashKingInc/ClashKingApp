@@ -65,11 +65,11 @@ class StatsScreenState extends State<StatsScreen>
               hallChips: hallChips,
             ),
             ScrollableTab(
-              labelColor: Theme.of(context).colorScheme.onBackground,
+              labelColor: Theme.of(context).colorScheme.onSurface,
               tabBarDecoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
               ),
-              unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
+              unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
               onTap: (value) {
                 setState(() {
                   backgroundImageUrl = value == 0
@@ -88,7 +88,7 @@ class StatsScreenState extends State<StatsScreen>
               },
               tabs: [
                 Tab(text: AppLocalizations.of(context)!.homeBase),
-                Tab(text: AppLocalizations.of(context)!.builderBase),
+                Tab(text: AppLocalizations.of(context)!.builderBase), 
               ],
               children: [
                 Column(
@@ -244,7 +244,7 @@ class StatsScreenState extends State<StatsScreen>
                                 ? Color(0xFFD4AF37)
                                 : Theme.of(context)
                                   .colorScheme
-                                  .onBackground,
+                                  .onSurface,
                               width: 2,
                             ),
                           ),

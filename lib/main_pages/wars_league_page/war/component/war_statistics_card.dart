@@ -16,23 +16,52 @@ class WarStatisticsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<int, int> clanStarCounts = countStars(currentWarInfo.clan.members);
-    Map<int, int> opponentStarCounts = countStars(currentWarInfo.opponent.members);
+    Map<int, int> opponentStarCounts =
+        countStars(currentWarInfo.opponent.members);
 
     String getWarStatus() {
-      String stillNeedsToWin = AppLocalizations.of(context)?.stillNeedsToWin ?? 'still needs to win';
-      String toTakeTheLead = AppLocalizations.of(context)?.toTakeTheLead ?? 'to take the lead';
-      String star = AppLocalizations.of(context)?.starSmall ?? 'star';
-      String or = AppLocalizations.of(context)?.or ?? 'or';
-      String moreDestruction = AppLocalizations.of(context)?.moreDestruction ?? 'more destruction';
-
       if (currentWarInfo.clan.stars < currentWarInfo.opponent.stars) {
-        return '${currentWarInfo.clan.name} $stillNeedsToWin ${currentWarInfo.opponent.stars - currentWarInfo.clan.stars + 1} $star(s) $toTakeTheLead.';
+        return AppLocalizations.of(context)?.starsNeededToTakeTheLead(
+                currentWarInfo.clan.name,
+                currentWarInfo.opponent.stars - currentWarInfo.clan.stars + 1,
+                currentWarInfo.opponent.stars - currentWarInfo.clan.stars,
+                (currentWarInfo.opponent.destructionPercentage -
+                        currentWarInfo.clan.destructionPercentage +
+                        0.01)
+                    .toStringAsFixed(2),
+                currentWarInfo.opponent.stars - currentWarInfo.clan.stars) ??
+            "";
       } else if (currentWarInfo.clan.stars > currentWarInfo.opponent.stars) {
-        return '${currentWarInfo.opponent.name} $stillNeedsToWin ${currentWarInfo.clan.stars - currentWarInfo.opponent.stars + 1} $star(s) $toTakeTheLead.';
-      } else if (currentWarInfo.clan.destructionPercentage > currentWarInfo.opponent.destructionPercentage) {
-        return '${currentWarInfo.clan.name} $stillNeedsToWin ${currentWarInfo.clan.destructionPercentage - currentWarInfo.opponent.destructionPercentage + 0.01}% $moreDestruction $or 1 $star $toTakeTheLead.';
-      } else if (currentWarInfo.clan.destructionPercentage < currentWarInfo.opponent.destructionPercentage) {
-        return '${currentWarInfo.opponent.name} $stillNeedsToWin ${currentWarInfo.opponent.destructionPercentage - currentWarInfo.clan.destructionPercentage + 0.01}% $moreDestruction $or 1 $star $toTakeTheLead.';
+        return AppLocalizations.of(context)?.starsNeededToTakeTheLead(
+                currentWarInfo.opponent.name,
+                currentWarInfo.clan.stars - currentWarInfo.opponent.stars + 1,
+                currentWarInfo.clan.stars - currentWarInfo.opponent.stars,
+                (currentWarInfo.clan.destructionPercentage -
+                        currentWarInfo.opponent.destructionPercentage +
+                        0.01)
+                    .toStringAsFixed(2),
+                currentWarInfo.clan.stars - currentWarInfo.opponent.stars) ??
+            "";
+      } else if (currentWarInfo.clan.destructionPercentage >
+          currentWarInfo.opponent.destructionPercentage) {
+        return AppLocalizations.of(context)?.starsAndPercentNeededToTakeTheLead(
+              currentWarInfo.clan.name,
+              (currentWarInfo.clan.destructionPercentage -
+                      currentWarInfo.opponent.destructionPercentage +
+                      0.01)
+                  .toStringAsFixed(2),
+            ) ??
+            '';
+      } else if (currentWarInfo.clan.destructionPercentage <
+          currentWarInfo.opponent.destructionPercentage) {
+        return AppLocalizations.of(context)?.starsAndPercentNeededToTakeTheLead(
+              currentWarInfo.opponent.name,
+              (currentWarInfo.opponent.destructionPercentage -
+                      currentWarInfo.clan.destructionPercentage +
+                      0.01)
+                  .toStringAsFixed(2),
+            ) ??
+            "";
       } else {
         return '${AppLocalizations.of(context)?.clanDraw ?? 'The two clans are tied'}.';
       }
@@ -84,8 +113,9 @@ class WarStatisticsCard extends StatelessWidget {
                 ),
                 SizedBox(
                     width: 25,
-                    child: CachedNetworkImage(imageUrl: 
-                        "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png")),
+                    child: CachedNetworkImage(
+                        imageUrl:
+                            "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png")),
                 Expanded(
                   child: Stack(
                     children: [
@@ -143,8 +173,9 @@ class WarStatisticsCard extends StatelessWidget {
                 ),
                 SizedBox(
                     width: 25,
-                    child: CachedNetworkImage(imageUrl: 
-                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png")),
+                    child: CachedNetworkImage(
+                        imageUrl:
+                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png")),
                 Expanded(
                   child: Stack(
                     children: [
@@ -157,9 +188,7 @@ class WarStatisticsCard extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            top:
-                                5),
+                        padding: const EdgeInsets.only(top: 5),
                         child: Center(
                           child: Text(
                             '${currentWarInfo.opponent.attacks}/$numberOfAttacks',
@@ -174,7 +203,8 @@ class WarStatisticsCard extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20),
-            Text(AppLocalizations.of(context)?.destructionRate ?? 'Destruction rate'),
+            Text(AppLocalizations.of(context)?.destructionRate ??
+                'Destruction rate'),
             SizedBox(height: 10),
             Row(
               children: [
@@ -204,7 +234,11 @@ class WarStatisticsCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 25, child: Icon(LucideIcons.percent, size: 25)),
+                SizedBox(
+                    width: 25,
+                    child: Icon(LucideIcons.percent,
+                        size: 25,
+                        color: Theme.of(context).colorScheme.onSurface)),
                 Expanded(
                   child: Stack(
                     children: [
@@ -219,9 +253,7 @@ class WarStatisticsCard extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            top:
-                                5),
+                        padding: const EdgeInsets.only(top: 5),
                         child: Center(
                           child: Text(
                             '${currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)}%',
@@ -248,16 +280,19 @@ class WarStatisticsCard extends StatelessWidget {
                     children: [
                       SizedBox(
                           width: 25,
-                          child: CachedNetworkImage(imageUrl: 
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
+                          child: CachedNetworkImage(
+                              imageUrl:
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                       SizedBox(
                           width: 25,
-                          child: CachedNetworkImage(imageUrl: 
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
+                          child: CachedNetworkImage(
+                              imageUrl:
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                       SizedBox(
                           width: 25,
-                          child: CachedNetworkImage(imageUrl: 
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
+                          child: CachedNetworkImage(
+                              imageUrl:
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                     ]),
                 Text(opponentStarCounts[0].toString()),
               ],
@@ -272,16 +307,19 @@ class WarStatisticsCard extends StatelessWidget {
                     children: [
                       SizedBox(
                           width: 25,
-                          child: CachedNetworkImage(imageUrl: 
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png")),
+                          child: CachedNetworkImage(
+                              imageUrl:
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png")),
                       SizedBox(
                           width: 25,
-                          child: CachedNetworkImage(imageUrl: 
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
+                          child: CachedNetworkImage(
+                              imageUrl:
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                       SizedBox(
                           width: 25,
-                          child: CachedNetworkImage(imageUrl: 
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
+                          child: CachedNetworkImage(
+                              imageUrl:
+                                  "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                     ]),
                 Text(opponentStarCounts[1].toString()),
               ],
@@ -295,18 +333,21 @@ class WarStatisticsCard extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: 25,
-                      child: CachedNetworkImage(imageUrl: 
-                          "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
+                      child: CachedNetworkImage(
+                          imageUrl:
+                              "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
                     ),
                     SizedBox(
                       width: 25,
-                      child: CachedNetworkImage(imageUrl: 
-                          "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
+                      child: CachedNetworkImage(
+                          imageUrl:
+                              "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
                     ),
                     SizedBox(
                         width: 25,
-                        child: CachedNetworkImage(imageUrl: 
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
+                        child: CachedNetworkImage(
+                            imageUrl:
+                                "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png")),
                   ],
                 ),
                 Text(opponentStarCounts[2].toString()),
@@ -320,18 +361,21 @@ class WarStatisticsCard extends StatelessWidget {
                 Row(children: [
                   SizedBox(
                     width: 25,
-                    child: CachedNetworkImage(imageUrl: 
-                        "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
+                    child: CachedNetworkImage(
+                        imageUrl:
+                            "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
                   ),
                   SizedBox(
                     width: 25,
-                    child: CachedNetworkImage(imageUrl: 
-                        "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
+                    child: CachedNetworkImage(
+                        imageUrl:
+                            "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
                   ),
                   SizedBox(
                     width: 25,
-                    child: CachedNetworkImage(imageUrl: 
-                        "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
+                    child: CachedNetworkImage(
+                        imageUrl:
+                            "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png"),
                   ),
                 ]),
                 Text(opponentStarCounts[3].toString()),
@@ -339,7 +383,8 @@ class WarStatisticsCard extends StatelessWidget {
             ),
             if (currentWarInfo.state == 'inWar') ...{
               SizedBox(height: 20),
-              Text(AppLocalizations.of(context)?.stateOfTheWar ?? 'State of the war'),
+              Text(AppLocalizations.of(context)?.stateOfTheWar ??
+                  'State of the war'),
               SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
