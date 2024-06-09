@@ -108,6 +108,7 @@
     "search": "Busca",
     "tagOrNamePlayer": "Etiqueta o nombre del jugador",
     "searchPlayer": "Buscar jugador",
+    "nameOrTag": "Name or tag",
     "dashboard": "Panel",
     "homeBase": "Aldea",
     "th": "TH",
@@ -205,6 +206,13 @@
     "searchClan": "Buscar clan",
     "noResult": "Sin resultados.",
     "filters": "Filtros",
+    "whatever": "Whatever",
+    "warFrequency": "War frequency",
+    "minimumMembers": "Minimum members",
+    "maximumMembers": "Maximum members",
+    "location": "Location",
+    "minimumClanPoints": "Minimum clan points",
+    "minimumClanLevel": "Minimum clan level",
     "noClan": "Sin clan",
     "joinClanToUnlockNewFeatures": "Únete a un clan para desbloquear nuevas funciones.",
     "apply": "Aplicar",
@@ -282,14 +290,47 @@
     "rounds": "Rondas",
     "noDataAvailableForThisWar": "No hay datos disponibles para esta guerra",
     "stateOfTheWar": "Estado de la guerra",
-    "stillNeedsToWin": "todavía necesita",
-    "toTakeTheLead": "tomar la delantera",
-    "or": "o",
-    "star": "estrella",
-    "starSmall": "estrella",
-    "moreDestruction": "más destrucción",
+    "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+    "@starsNeededToTakeTheLead": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "star": {
+                "type": "int"
+            },
+            "star2": {
+                "type": "int"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "starsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+    "@starsAndPercentNeededToTakeTheLead": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
     "clanDraw": "Ambos clanes están empatados",
     "fastCalculator": "Calculadora rápida",
+    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, you need a total of {result}%.",
+    "@fastCalculatorAnswer": {
+        "placeholders": {
+            "percentNeedeed": {
+                "type": "String"
+            },
+            "result": {
+                "type": "String"
+            }
+        }
+    },
     "teamSize": "Tamaño del equipo",
     "neededOverall": "% Total necesario",
     "calculate": "Calcular",
