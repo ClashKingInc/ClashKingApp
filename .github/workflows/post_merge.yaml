@@ -3,7 +3,7 @@ name: Execute Script on Merge to Main
 on:
   push:
     branches:
-      - main 
+      - l10n_main 
 
 jobs:
   run-script:
