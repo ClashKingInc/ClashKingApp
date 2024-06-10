@@ -152,7 +152,7 @@
             }
         }
     },
-    "dayAgo": "vor einem Tag",
+    "dayAgo": "{day} day ago",
     "@dayAgo": {
         "placeholders": {
             "day": {
@@ -160,7 +160,7 @@
             }
         }
     },
-    "hourAgo": "vor einer Stunde",
+    "hourAgo": "{hour} hour ago",
     "@hourAgo": {
         "placeholders": {
             "hour": {
@@ -176,7 +176,7 @@
             }
         }
     },
-    "minuteAgo": "vor einer Minute",
+    "minuteAgo": "{minute} minute ago",
     "@minuteAgo": {
         "placeholders": {
             "minute": {
