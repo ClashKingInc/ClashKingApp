@@ -52,7 +52,7 @@
     "faq": "FAQ",
     "faqSubtitle": "Häufig gestellte Fragen",
     "faqIsThisFromSupercell": "Ist diese App von Supercell?",
-    "faqFanContentPolicy": "Diese Daten sind inoffiziell und werden nicht von Supercell bereitgestellt. Weitere Informationen findest du in den Richtlinien für Fan-Content: www.supercell.com/fan-content-policy",
+    "faqFanContentPolicy": "Dieses Material ist nicht offiziell und nicht von Supercell bewilligt. Weitere Informationen findest du in Supercells Richtlinien für Fan-Content unter https://supercell.com/en/fan-content-policy/de",
     "faqWhyNotAccurate": "Warum sind die Daten manchmal ungenau oder fehlen?",
     "faqClanNotTracked": "Clan wird nicht getrackt\n",
     "faqClanNotTrackedAnswer": "ClashKing kann diese Informationen nur erhalten, wenn der Clan aufgezeichnet wird. Wenn dein Clan noch nicht aufgezeichnet wird, lade unseren Discord-Bot zu deinem Discord-Server ein und verwende den Befehl /addclan. Wir hoffen, diese Funktion bald auch in der App verfügbar machen zu können.\n",
@@ -73,7 +73,7 @@
     "faqNeedHelp": "Ich brauche Hilfe oder möchte einen Vorschlag machen. Wie kann ich euch erreichen?",
     "faqNeedHelpAnswer": "Du kannst unserem Discord-Server beitreten und dort um Hilfe bitten, oder Feedback geben oder uns eine E-Mail an devs@clashkingbot.com senden. Bitte schreib uns, wenn möglich nur auf Englisch oder Französisch.",
     "faqSendEmail": "Sende eine E-Mail",
-    "faqJoinDiscord": "Join our Discord Server",
+    "faqJoinDiscord": "Unserem Discord-Server beitreten",
     "helpUsTranslate": "Hilf uns bei der Übersetzung",
     "copiedToClipboard": "In die Zwischenablage kopiert",
     "all": "Alle",
@@ -206,17 +206,17 @@
     "searchClan": "Clan suchen",
     "noResult": "Kein Ergebnis.",
     "filters": "Filter",
-    "whatever": "Whatever",
+    "whatever": "Egal",
     "warFrequency": "Kriegshäufigkeit",
-    "minimumMembers": "Minimum members",
-    "maximumMembers": "Maximum members",
+    "minimumMembers": "Mindestanzahl von Mitgliedern",
+    "maximumMembers": "Maximale Anzahl von Mitgliedern",
     "location": "Standort",
-    "minimumClanPoints": "Minimum clan points",
-    "minimumClanLevel": "Minimum clan level",
+    "minimumClanPoints": "Minimale Clanpunkte",
+    "minimumClanLevel": "Erforderlicher Clanlevel",
     "noClan": "Kein Clan",
     "joinClanToUnlockNewFeatures": "Tritt einem Clan bei, um neue Funktionen freizuschalten.",
     "apply": "Anwenden",
-    "opened": "Opened",
+    "opened": "Geöffnet",
     "inviteOnly": "Nur auf Einladung",
     "cancel": "Abbrechen",
     "clan": "Clan",
@@ -290,7 +290,7 @@
     "rounds": "Runden",
     "noDataAvailableForThisWar": "Keine Daten für diesen Krieg verfügbar",
     "stateOfTheWar": "Kriegszwischenstand",
-    "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+    "starsNeededToTakeTheLead": "{clan} benötigt noch {star} Stern(e) oder {stars2} Stern(e) und {percent}%, um die Führung zu übernehmen.",
     "@starsNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -318,9 +318,9 @@
             }
         }
     },
-    "clanDraw": "Die beiden Clans sind gebunden",
+    "clanDraw": "Das Spiel ist ein Unentschieden",
     "fastCalculator": "Schnellrechner",
-    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, you need a total of {result}%.",
+    "fastCalculatorAnswer": "Um eine Zerstörungsrate von {percentNeeded}% zu erreichen, benötigst du insgesamt {result}%.",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
@@ -335,7 +335,7 @@
     "neededOverall": "Benötigte %",
     "calculate": "Berechnen",
     "warStats": "Kriegsstatistiken",
-    "noAccountLinkedToYourProfileFound": "No account linked to your profile found",
+    "noAccountLinkedToYourProfileFound": "Kein mit deinem Profil verknüpftes Konto gefunden",
     "management": "Verwaltung",
     "comingSoon": "Bald verfügbar!"
 }
