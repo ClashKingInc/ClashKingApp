@@ -18,12 +18,12 @@ class ToDoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ToDoScreen(playerStats: playerStats, discordUser: discordUser),
-          ),
-        );
+        //Navigator.push(
+        //  context,
+        //  MaterialPageRoute(
+        //    builder: (context) => ToDoScreen(playerStats: playerStats, discordUser: discordUser),
+        //  ),
+        //);
       },
       child: DefaultTextStyle(
         style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
@@ -57,30 +57,33 @@ class ToDoCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Text(
-                            'Legends hits 8/8 - Total 8/16',
+                          Text(AppLocalizations.of(context)?.comingSoon ?? 'Coming soon!',
                             style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
                           ),
-                          Text(
-                            'Clan Games',
-                            style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-                          ),
-                          Text(
-                            'War attacks',
-                            style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-                          ),
-                          Text(
-                            'Season pass',
-                            style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-                          ),
-                          Text(
-                            'War Castle',
-                            style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-                          ),
-                          Text(
-                            'Season pass',
-                            style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-                          ),
+                          //Text(
+                          //  'Legends hits 8/8 - Total 8/16',
+                          //  style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+                          //),
+                          //Text(
+                          //  'Clan Games',
+                          //  style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+                          //),
+                          //Text(
+                          //  'War attacks',
+                          //  style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+                          //),
+                          //Text(
+                          //  'Season pass',
+                          //  style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+                          //),
+                          //Text(
+                          //  'War Castle',
+                          //  style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+                          //),
+                          //Text(
+                          //  'Season pass',
+                          //  style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+                          //),
                         ],
                       ),
                     ),
