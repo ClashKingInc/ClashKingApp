@@ -6,6 +6,7 @@ import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/creator_c
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_infos_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_legend_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_search_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/to_do_card.dart';
 import 'package:clashkingapp/api/player_legend.dart';
 import 'package:provider/provider.dart';
 
@@ -53,8 +54,7 @@ class DashboardPageState extends State<DashboardPage>
               final appState = Provider.of<MyAppState>(context, listen: false);
               appState.refreshData();
               PlayerLegendService playerLegendService = PlayerLegendService();
-              legendData =
-                  playerLegendService.fetchLegendData(widget.playerStats.tag);
+              legendData = playerLegendService.fetchLegendData(widget.playerStats.tag);
             });
           },
           child: ListView(
@@ -97,6 +97,10 @@ class DashboardPageState extends State<DashboardPage>
                     }
                   },
                 ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 4),
+                child: ToDoCard(discordUser: widget.discordUser.tags, playerStats: widget.playerStats),
               ),
             ],
           ),
