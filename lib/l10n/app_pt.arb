@@ -1,5 +1,5 @@
 {
-    "@@locale": "pt",
+    "@@locale": "pt-PT",
     "creatorCode": "Creator Code : ClashKing",
     "signInWithDiscord": "Sign In with Discord",
     "guestMode": "Guest Mode",
@@ -335,6 +335,7 @@
     "neededOverall": "% Needed overall",
     "calculate": "Calculate",
     "warStats": "War Stats",
+    "noAccountLinkedToYourProfileFound": "No account linked to your profile found",
     "management": "Management",
     "comingSoon": "Coming soon!"
 }
