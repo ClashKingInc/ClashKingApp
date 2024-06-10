@@ -140,6 +140,7 @@
     "ended": "Beendet",
     "average": "Durchschnitt",
     "remaining": "Verbleibend",
+    "toDoList": "To do list",
     "worst": "Am schlechtesten",
     "best": "Am besten",
     "total": "Insgesamt",
@@ -152,7 +153,7 @@
             }
         }
     },
-    "dayAgo": "{day} day ago",
+    "dayAgo": "vor einem Tag",
     "@dayAgo": {
         "placeholders": {
             "day": {
@@ -160,7 +161,7 @@
             }
         }
     },
-    "hourAgo": "{hour} hour ago",
+    "hourAgo": "vor einer Stunde",
     "@hourAgo": {
         "placeholders": {
             "hour": {
@@ -176,7 +177,7 @@
             }
         }
     },
-    "minuteAgo": "{minute} minute ago",
+    "minuteAgo": "vor einer Minute",
     "@minuteAgo": {
         "placeholders": {
             "minute": {
@@ -207,6 +208,7 @@
     "noResult": "Kein Ergebnis.",
     "filters": "Filter",
     "whatever": "Egal",
+    "any": "Any",
     "warFrequency": "Kriegshäufigkeit",
     "minimumMembers": "Mindestanzahl von Mitgliedern",
     "maximumMembers": "Maximale Anzahl von Mitgliedern",
