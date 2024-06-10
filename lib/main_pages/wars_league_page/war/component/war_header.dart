@@ -29,8 +29,9 @@ class WarHeader extends StatelessWidget {
                 Colors.black.withOpacity(0.5),
                 BlendMode.darken,
               ),
-              child: CachedNetworkImage(imageUrl: 
-                "https://clashkingfiles.b-cdn.net/landscape/war-landscape.jpg",
+              child: CachedNetworkImage(
+                imageUrl:
+                    "https://clashkingfiles.b-cdn.net/landscape/war-landscape.jpg",
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
@@ -41,8 +42,11 @@ class WarHeader extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              timeLeft(widget.currentWarInfo,context,
-                Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.onPrimary)),
+              timeLeft(
+                  widget.currentWarInfo,
+                  context,
+                  Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -61,17 +65,23 @@ class WarHeader extends StatelessWidget {
                                 );
                               },
                             );
-                            ClanInfo clanInfo = await ClanService().fetchClanInfo(widget.currentWarInfo.clan.tag);
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ClanInfoScreen(clanInfo: clanInfo, discordUser: widget.discordUser),
-                              ),
-                            );
+                            ClanInfo clanInfo = await ClanService()
+                                .fetchClanInfo(widget.currentWarInfo.clan.tag);
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ClanInfoScreen(
+                                      clanInfo: clanInfo,
+                                      discordUser: widget.discordUser),
+                                ),
+                              );
+                            }
                           },
                           child: CachedNetworkImage(
-                            imageUrl: widget.currentWarInfo.clan.badgeUrls.large,
+                            imageUrl:
+                                widget.currentWarInfo.clan.badgeUrls.large,
                             width: 90,
                           ),
                         ),
@@ -80,13 +90,21 @@ class WarHeader extends StatelessWidget {
                           child: Text(
                             widget.currentWarInfo.clan.name,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: Theme.of(context).colorScheme.onPrimary),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
                           ),
                         ),
                         Text(
                           "${widget.currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)}%",
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: Colors.white),
                         ),
                       ],
                     ),
@@ -94,7 +112,7 @@ class WarHeader extends StatelessWidget {
                   Text(
                     "${widget.currentWarInfo.clan.stars} - ${widget.currentWarInfo.opponent.stars}",
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary),
+                        color: Theme.of(context).colorScheme.onPrimary),
                   ),
                   Expanded(
                     child: Column(
@@ -111,17 +129,24 @@ class WarHeader extends StatelessWidget {
                                 );
                               },
                             );
-                            ClanInfo clanInfo = await ClanService().fetchClanInfo(widget.currentWarInfo.opponent.tag);
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ClanInfoScreen(clanInfo: clanInfo, discordUser: widget.discordUser),
-                              ),
-                            );
+                            ClanInfo clanInfo = await ClanService()
+                                .fetchClanInfo(
+                                    widget.currentWarInfo.opponent.tag);
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ClanInfoScreen(
+                                      clanInfo: clanInfo,
+                                      discordUser: widget.discordUser),
+                                ),
+                              );
+                            }
                           },
                           child: CachedNetworkImage(
-                            imageUrl: widget.currentWarInfo.opponent.badgeUrls.large,
+                            imageUrl:
+                                widget.currentWarInfo.opponent.badgeUrls.large,
                             width: 90,
                           ),
                         ),
@@ -130,13 +155,21 @@ class WarHeader extends StatelessWidget {
                           child: Text(
                             widget.currentWarInfo.opponent.name,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: Theme.of(context).colorScheme.onPrimary),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
                           ),
                         ),
                         Text(
                           "${widget.currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)}%",
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: Colors.white),
                         ),
                       ],
                     ),
@@ -152,7 +185,8 @@ class WarHeader extends StatelessWidget {
           child: IconButton(
             icon: Icon(
               Icons.arrow_back,
-              color: Theme.of(context).colorScheme.onPrimary, size: 32,
+              color: Theme.of(context).colorScheme.onPrimary,
+              size: 32,
             ),
             onPressed: () => Navigator.of(context).pop(),
           ),
