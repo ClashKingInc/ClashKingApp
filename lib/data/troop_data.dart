@@ -586,4 +586,9 @@ final Map<String, Map<String, String>> troopUrlsAndTypes = {
         'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_RC_Seeking_Shield.png',
     'type': 'gear',
   },
+  "Rocket Spear" : {
+    'url':
+        'https://clashkingfiles.b-cdn.net/home-base/equipement-pics/Hero_Equipment_RC_Rocket_Spear.png',
+    'type': 'gear',
+  },
 };

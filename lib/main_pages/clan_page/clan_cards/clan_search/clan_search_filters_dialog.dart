@@ -205,39 +205,41 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                                 child: Text(
                                     AppLocalizations.of(context)!.whatever),
                               ),
-                              ..._countries
-                                  .map<DropdownMenuItem<String>>((item) {
-                                return DropdownMenuItem<String>(
-                                  value: item['id'].toString(),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      item["isCountry"] == true
-                                          ? CachedNetworkImage(
-                                              imageUrl:
-                                                  "https://clashkingfiles.b-cdn.net/country-flags/${item['countryCode']}.png",
-                                              width: 16,
-                                              height: 20,
-                                              errorWidget:
-                                                  (context, url, error) => Icon(
-                                                      Icons.flag,
-                                                      size: 16,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onSurface),
-                                            )
-                                          : Icon(Icons.flag,
-                                              size: 16,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface),
-                                      SizedBox(width: 8.0),
-                                      Text(item['name'],
-                                          overflow: TextOverflow.ellipsis),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
+                              ..._countries.map<DropdownMenuItem<String>>(
+                                (item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item['id'].toString(),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        item["isCountry"] == true
+                                            ? CachedNetworkImage(
+                                                imageUrl:
+                                                    "https://clashkingfiles.b-cdn.net/country-flags/${item['countryCode']}.png",
+                                                width: 16,
+                                                height: 20,
+                                                errorWidget: (context, url,
+                                                        error) =>
+                                                    Icon(Icons.flag,
+                                                        size: 16,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface),
+                                              )
+                                            : Icon(Icons.flag,
+                                                size: 16,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface),
+                                        SizedBox(width: 8.0),
+                                        Text(item['name'],
+                                            overflow: TextOverflow.ellipsis),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
                             ],
                             onChanged: (String? newValue) {
                               setState(() {
@@ -248,7 +250,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             },
                           ),
                         ),
-                    SizedBox(height: 8),
+                        SizedBox(height: 8),
                       ],
                     ),
                   ],
