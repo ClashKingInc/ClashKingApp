@@ -98,4 +98,6 @@ pubspec.lock
 
 **/flutter/generated_plugins.cmake
 
+# Localization
+untranslated_messages.json
 
