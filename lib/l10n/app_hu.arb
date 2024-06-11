@@ -1,7 +1,7 @@
 {
     "@@locale": "hu",
-    "creatorCode": "Alkotói kód",
-    "signInWithDiscord": "Bejelentkezés Discorddal",
+    "creatorCode": "Alkotói kód : ClashKing",
+    "signInWithDiscord": "Bejelentkezés Discord-dal",
     "guestMode": "Vendég mód",
     "needHelpJoinDiscord": "Szükség van segítségre? Érj el minket Discordon.",
     "createGuestProfile": "Hozd létre a vendég profilodat",
@@ -71,9 +71,9 @@
     "faqHowToInviteTheBotAnswer": "Meg tudod hívni a bot-ot a lent lévő gomb megnyomásával. Ehhez \"Manage Server\" joghoz van szükséged.",
     "faqInviteTheBot": "Hívd meg a ClashKing bot-ot",
     "faqNeedHelp": "Segítségre van szükségem, vagy szeretnék egy javaslatot tenni. Hogyan tudok kapcsolatba lépni?",
-    "faqNeedHelpAnswer": "You can join our Discord server to ask for help or provide feedback, or you can email us at devs@clashkingbot.com. Please write in English or French only.",
+    "faqNeedHelpAnswer": "Csatlakozhatsz a Discord szerverünkhöz és kérhetsz segítset, vagy küldhetsz emailt a devs@clashkingbot.com címre.\nKérjük csak angolul vagy franciául írj.",
     "faqSendEmail": "Küldjön egy e-mailt",
-    "faqJoinDiscord": "Join our Discord Server",
+    "faqJoinDiscord": "Csatlakozz a Discord szerverünkhöz",
     "helpUsTranslate": "Segíts a fordításban",
     "copiedToClipboard": "Vágólapra másolva",
     "all": "Összes",
@@ -140,12 +140,12 @@
     "ended": "Befejezve",
     "average": "Átlag",
     "remaining": "Hátralévő idő",
-    "toDoList": "To do list",
-    "worst": "Worst",
-    "best": "Best",
-    "total": "Total",
-    "heroesEquipments": "Heroes equipments",
-    "daysAgo": "{days} days ago",
+    "toDoList": "Teendőlista",
+    "worst": "Legrosszabb",
+    "best": "Legjobb",
+    "total": "Összes",
+    "heroesEquipments": "Hősök felszerelései",
+    "daysAgo": "{days} napja",
     "@daysAgo": {
         "placeholders": {
             "days": {
@@ -153,7 +153,7 @@
             }
         }
     },
-    "dayAgo": "{day} day ago",
+    "dayAgo": "{day} napja",
     "@dayAgo": {
         "placeholders": {
             "day": {
@@ -161,7 +161,7 @@
             }
         }
     },
-    "hourAgo": "{hour} hour ago",
+    "hourAgo": "{hour} órája",
     "@hourAgo": {
         "placeholders": {
             "hour": {
@@ -169,7 +169,7 @@
             }
         }
     },
-    "hoursAgo": "{hours} hours ago",
+    "hoursAgo": "{hours} órája",
     "@hoursAgo": {
         "placeholders": {
             "hours": {
@@ -177,7 +177,7 @@
             }
         }
     },
-    "minuteAgo": "{minute} minute ago",
+    "minuteAgo": "{minute} perce",
     "@minuteAgo": {
         "placeholders": {
             "minute": {
@@ -185,7 +185,7 @@
             }
         }
     },
-    "minutesAgo": "{minutes} minutes ago",
+    "minutesAgo": "{minutes} perce",
     "@minutesAgo": {
         "placeholders": {
             "minutes": {
@@ -193,7 +193,7 @@
             }
         }
     },
-    "secondAgo": "{seconds}s ago",
+    "secondAgo": "{seconds} másodperce",
     "@secondAgo": {
         "placeholders": {
             "seconds": {
@@ -201,27 +201,27 @@
             }
         }
     },
-    "justNow": "Just Now",
-    "trophiesByMonth": "Trophies by month",
-    "eosTrophies": "End Of Season Trophies",
-    "searchClan": "Search clan",
-    "noResult": "No result.",
-    "filters": "Filters",
-    "whatever": "Whatever",
-    "any": "Any",
-    "warFrequency": "War frequency",
-    "minimumMembers": "Minimum members",
-    "maximumMembers": "Maximum members",
-    "location": "Location",
-    "minimumClanPoints": "Minimum clan points",
-    "minimumClanLevel": "Minimum clan level",
-    "noClan": "No clan",
-    "joinClanToUnlockNewFeatures": "Join a clan to unlock new features.",
-    "apply": "Apply",
-    "opened": "Opened",
-    "inviteOnly": "Invite Only",
-    "cancel": "Cancel",
-    "clan": "Clan",
+    "justNow": "Épp most",
+    "trophiesByMonth": "Kupák hónap szerint",
+    "eosTrophies": "Szezonvégi kupák",
+    "searchClan": "Klán keresése",
+    "noResult": "Nincs találat.",
+    "filters": "Szűrők",
+    "whatever": "Mindegy",
+    "any": "Bármely",
+    "warFrequency": "Háború gyakorisága",
+    "minimumMembers": "Minimum tagok",
+    "maximumMembers": "Maximum tagok",
+    "location": "Tartózkodási hely",
+    "minimumClanPoints": "Minimális klán pontok",
+    "minimumClanLevel": "Minimális klán szint",
+    "noClan": "Nincs klán",
+    "joinClanToUnlockNewFeatures": "Csatlakozz egy klánhoz az új funkciók feloldásához.",
+    "apply": "Jelentkezés",
+    "opened": "Megnyitva",
+    "inviteOnly": "Csak meghívással",
+    "cancel": "Mégse",
+    "clan": "Klán",
     "clans": "Klánok",
     "members": "Tagok",
     "role": "Szerepkör",
@@ -286,13 +286,13 @@
             }
         }
     },
-    "askForWar": "Contact the leader or a co-leader to start a war.",
-    "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-    "warLogClosed": "War log closed.",
-    "rounds": "Rounds",
-    "noDataAvailableForThisWar": "No data available for this war",
-    "stateOfTheWar": "State of the war",
-    "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+    "askForWar": "Lépj kapcsolatba egy vezetővel vagy egy társvezetővel, hogy háborút indíts.",
+    "askForWarLogOpening": "Lépj kapcsolatba egy vezetővel vagy egy társvezetővel, hogy megnyisd a háború naplót.",
+    "warLogClosed": "Háborúnapló lezárva.",
+    "rounds": "Körök",
+    "noDataAvailableForThisWar": "Nem áll rendelkezésre adat ehhez a háborúhoz",
+    "stateOfTheWar": "Háború állapota",
+    "starsNeededToTakeTheLead": "{clan} még {star} csillagot vagy {stars2} csillagot és {percent}%-ot kell szereznie az élre kerüléshez.",
     "@starsNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -309,7 +309,7 @@
             }
         }
     },
-    "starsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+    "starsAndPercentNeededToTakeTheLead": "{clan} még {percent}%-ot vagy még 1 csillagot kell szereznie az élre kerüléshez",
     "@starsAndPercentNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -320,9 +320,9 @@
             }
         }
     },
-    "clanDraw": "The two clans are tied",
-    "fastCalculator": "Fast calculator",
-    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, you need a total of {result}%.",
+    "clanDraw": "A klánok fej-fej mellett vannak",
+    "fastCalculator": "Gyors számológép",
+    "fastCalculatorAnswer": "Annak érdekében, hogy elérjük a {percentNeeded}%-os megsemmisítési arányt, összesen {result}%-ra van szükség.",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
@@ -333,11 +333,11 @@
             }
         }
     },
-    "teamSize": "Team size",
-    "neededOverall": "% Needed overall",
-    "calculate": "Calculate",
-    "warStats": "War Stats",
-    "noAccountLinkedToYourProfileFound": "No account linked to your profile found",
-    "management": "Management",
-    "comingSoon": "Coming soon!"
+    "teamSize": "Csapat mérete",
+    "neededOverall": "% Szükséges összesen",
+    "calculate": "Számítás",
+    "warStats": "Háború Statisztika",
+    "noAccountLinkedToYourProfileFound": "A profilhoz nem található csatolt fiók",
+    "management": "Kezelés",
+    "comingSoon": "Hamarosan!"
 }
