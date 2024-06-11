@@ -106,8 +106,12 @@ class ClanSearchState extends State<ClanSearch> {
               controller: _controller,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                labelText:
-                    "${AppLocalizations.of(context)!.searchClan} (${AppLocalizations.of(context)!.nameOrTag})",
+                labelText: AppLocalizations.of(context)!.searchClan,
+                hintText: AppLocalizations.of(context)!.nameOrTag,
+                hintStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontSize: 16,
+                ),
                 suffixIcon: IntrinsicWidth(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,

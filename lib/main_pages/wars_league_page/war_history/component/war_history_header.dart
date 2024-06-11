@@ -41,26 +41,21 @@ class WarHistoryHeader extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(height: 20),
               SizedBox(
                 height: 100,
                 width: 100,
-                child: CachedNetworkImage(
-                    imageUrl:
-                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_War.png"),
+                child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_War.png"),
               ),
               Text(
                 clanName,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                style: Theme.of(context).textTheme.titleLarge
+                  ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
               Text(
                 clanTag,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: Theme.of(context).colorScheme.tertiary),
+                style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: Theme.of(context).colorScheme.tertiary),
               ),
             ],
           ),
@@ -69,8 +64,10 @@ class WarHistoryHeader extends StatelessWidget {
           top: 30,
           left: 10,
           child: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: Theme.of(context).colorScheme.onPrimary, size: 32),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Theme.of(context).colorScheme.onPrimary, size: 32
+            ),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),

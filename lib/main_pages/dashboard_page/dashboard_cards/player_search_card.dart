@@ -95,7 +95,12 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
               controller: _controller,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                labelText: "${AppLocalizations.of(context)!.searchPlayer} (${AppLocalizations.of(context)!.nameOrTag})",                
+                labelText: AppLocalizations.of(context)!.searchPlayer,
+                hintText: AppLocalizations.of(context)!.nameOrTag,
+                hintStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontSize: 16,
+                ),
                 suffixIcon: IntrinsicWidth(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -103,10 +108,10 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                     children: [
                       isSearching
                         ? SizedBox(
-                            width: 20.0,
-                            height: 20.0,
-                            child: CircularProgressIndicator(),
-                          )
+                          width: 20.0,
+                          height: 20.0,
+                          child: CircularProgressIndicator(),
+                        )
                         : !isEmpty
                           ? IconButton(
                             icon: Icon(
@@ -138,10 +143,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                 return SizedBox.shrink();
               } else if (snapshot.hasError) {
                 return Center(child: Text("No results found."));
-              } else if (snapshot.hasData &&
-                  snapshot.data != null &&
-                  snapshot.data != [] &&
-                  snapshot.data!.isNotEmpty) {
+              } else if (snapshot.hasData && snapshot.data != null && snapshot.data != [] && snapshot.data!.isNotEmpty) {
                 print("test");
                 print(snapshot.data);
                 return SingleChildScrollView(
@@ -153,10 +155,16 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                 );
               } else {
                 if (_controller.text.length >= 2) {
-                  return Column(children: [
-                    Center(child: Text(AppLocalizations.of(context)!.noResult)),
-                    SizedBox(height: 8)
-                  ]);
+                  return Column(
+                    children: [
+                      Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.noResult,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                    ],
+                  );
                 } else {
                   return SizedBox.shrink();
                 }
