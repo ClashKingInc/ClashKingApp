@@ -1,8 +1,10 @@
 import 'dart:ui';
+import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/api/clan_info.dart';
 
 class WarHeader extends StatelessWidget {
   const WarHeader({
@@ -27,8 +29,9 @@ class WarHeader extends StatelessWidget {
                 Colors.black.withOpacity(0.5),
                 BlendMode.darken,
               ),
-              child: CachedNetworkImage(imageUrl: 
-                "https://clashkingfiles.b-cdn.net/landscape/war-landscape.jpg",
+              child: CachedNetworkImage(
+                imageUrl:
+                    "https://clashkingfiles.b-cdn.net/landscape/war-landscape.jpg",
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
@@ -51,25 +54,58 @@ class WarHeader extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CachedNetworkImage(imageUrl: 
-                            widget.currentWarInfo.clan.badgeUrls.large,
-                            width: 90),
-                        Text(
-                          widget.currentWarInfo.clan.name,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
+                        GestureDetector(
+                          onTap: () async {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            );
+                            ClanInfo clanInfo = await ClanService()
+                                .fetchClanInfo(widget.currentWarInfo.clan.tag);
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ClanInfoScreen(
+                                      clanInfo: clanInfo,
+                                      discordUser: widget.discordUser),
+                                ),
+                              );
+                            }
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                widget.currentWarInfo.clan.badgeUrls.large,
+                            width: 90,
+                          ),
                         ),
-                        Text(
-                            "${widget.currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)}%",
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            widget.currentWarInfo.clan.name,
+                            textAlign: TextAlign.center,
                             style: Theme.of(context)
                                 .textTheme
-                                .bodySmall
-                                ?.copyWith(color: Colors.white)),
+                                .titleSmall
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
+                          ),
+                        ),
+                        Text(
+                          "${widget.currentWarInfo.clan.destructionPercentage.toStringAsFixed(2)}%",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: Colors.white),
+                        ),
                       ],
                     ),
                   ),
@@ -82,18 +118,51 @@ class WarHeader extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CachedNetworkImage(imageUrl: 
-                            widget.currentWarInfo.opponent.badgeUrls.large,
-                            width: 90),
-                        Text(
-                          widget.currentWarInfo.opponent.name,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
+                        GestureDetector(
+                          onTap: () async {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            );
+                            ClanInfo clanInfo = await ClanService()
+                                .fetchClanInfo(
+                                    widget.currentWarInfo.opponent.tag);
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ClanInfoScreen(
+                                      clanInfo: clanInfo,
+                                      discordUser: widget.discordUser),
+                                ),
+                              );
+                            }
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                widget.currentWarInfo.opponent.badgeUrls.large,
+                            width: 90,
+                          ),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            widget.currentWarInfo.opponent.name,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
+                          ),
                         ),
                         Text(
                           "${widget.currentWarInfo.opponent.destructionPercentage.toStringAsFixed(2)}%",
@@ -101,7 +170,7 @@ class WarHeader extends StatelessWidget {
                               .textTheme
                               .bodySmall
                               ?.copyWith(color: Colors.white),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -114,8 +183,11 @@ class WarHeader extends StatelessWidget {
           top: 30,
           left: 10,
           child: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: Theme.of(context).colorScheme.onPrimary, size: 32),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Theme.of(context).colorScheme.onPrimary,
+              size: 32,
+            ),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),

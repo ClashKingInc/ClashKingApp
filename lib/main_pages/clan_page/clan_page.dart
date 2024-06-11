@@ -48,14 +48,17 @@ class ClanInfoPageState extends State<ClanInfoPage>
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ClanInfoScreen(
-                              clanInfo: widget.clanInfo!,
-                              discordUser: widget.user.tags)),
+                        builder: (context) => ClanInfoScreen(
+                          clanInfo: widget.clanInfo!,
+                          discordUser: widget.user.tags
+                        ),
+                      ),
                     );
                   },
                   child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ClanInfoCard(clanInfo: widget.clanInfo!)),
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ClanInfoCard(clanInfo: widget.clanInfo!),
+                  ),
                 )
               else
                 Padding(

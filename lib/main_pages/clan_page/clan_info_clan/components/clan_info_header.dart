@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/components/clan_wars_stats_card.dart';
@@ -20,7 +21,8 @@ class ClanInfoHeaderCard extends StatefulWidget {
 class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
   @override
   Widget build(BuildContext context) {
-    String backgroundImageUrl = "https://clashkingfiles.b-cdn.net/landscape/clan-landscape.png";
+    String backgroundImageUrl =
+        "https://clashkingfiles.b-cdn.net/landscape/clan-landscape.png";
     return Column(
       children: [
         Stack(
@@ -33,15 +35,16 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                 child: ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.6),
-                      BlendMode.darken,
-                    ),
-                    child: CachedNetworkImage(
-                      imageUrl: backgroundImageUrl,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    )),
+                  colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.6),
+                    BlendMode.darken,
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: backgroundImageUrl,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
             Positioned(
@@ -55,7 +58,8 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               top: 30,
               left: 10,
               child: IconButton(
-                icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.onPrimary, size: 32),
+                icon: Icon(Icons.arrow_back,
+                    color: Theme.of(context).colorScheme.onPrimary, size: 32),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
@@ -66,30 +70,75 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
           Stack(
             children: [
               Positioned(
-                top: -8, right: 24,
+                top: -8,
+                right: 24,
                 child: IconButton(
-                  icon: Icon(Icons.sports_esports_rounded,color: Theme.of(context).colorScheme.onSurface, size: 32),
+                  icon: Icon(Icons.sports_esports_rounded,
+                      color: Theme.of(context).colorScheme.onSurface, size: 32),
                   onPressed: () async {
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
                     final languagecode = prefs.getString('languageCode');
-                    launchUrl(Uri.parse('https://link.clashofclans.com/$languagecode?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
+                    launchUrl(Uri.parse(
+                        'https://link.clashofclans.com/$languagecode?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
+                  },
+                ),
+              ),
+              Positioned(
+                top: -8,
+                left: 24,
+                child: IconButton(
+                  icon: Icon(Icons.bar_chart_rounded,
+                      color: Theme.of(context).colorScheme.onSurface, size: 32),
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ClanWarsStatsCard(clanInfo: widget.clanInfo);
+                      },
+                    );
                   },
                 ),
               ),
               Center(
                 child: Text(
                   widget.clanInfo.name,
-                  style: Theme.of(context).textTheme.titleLarge
-                    ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 6),
+          InkWell(
+            onTap: () {
+              FlutterClipboard.copy(widget.clanInfo.tag).then((value) {
+                final snackBar = SnackBar(
+                  content: Center(
+                    child: Text(
+                      AppLocalizations.of(context)!.copiedToClipboard,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface),
+                    ),
+                  ),
+                  duration: Duration(milliseconds: 1500),
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              });
+            },
+            child: Container(
+              padding: EdgeInsets.only(top: 2.0, bottom: 4.0),
+              child: Text(
+                widget.clanInfo.tag,
+                style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
+              ),
+            ),
+          ),
           Chip(
             avatar: CircleAvatar(
               backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(imageUrl: widget.clanInfo.warLeague.imageUrl),
+              child: CachedNetworkImage(
+                  imageUrl: widget.clanInfo.warLeague.imageUrl),
             ),
             label: Text(
               widget.clanInfo.warLeague.name,
@@ -101,23 +150,25 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
             runSpacing: 0,
             alignment: WrapAlignment.center,
             children: <Widget>[
-              if(widget.clanInfo.location.name != 'Unknown country')
-              Chip(
-                avatar: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: CachedNetworkImage(
-                    imageUrl: "https://clashkingfiles.b-cdn.net/country-flags/${widget.clanInfo.location.countryCode}.png",
+              if (widget.clanInfo.location.name != 'Unknown country')
+                Chip(
+                  avatar: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    child: CachedNetworkImage(
+                      imageUrl:
+                          "https://clashkingfiles.b-cdn.net/country-flags/${widget.clanInfo.location.countryCode}.png",
                     ),
                   ),
-                label: Text(
-                  widget.clanInfo.location.name,
-                  style: Theme.of(context).textTheme.labelLarge,
+                  label: Text(
+                    widget.clanInfo.location.name,
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
                 ),
-              ),
               Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: Icon(LucideIcons.users, color: Theme.of(context).colorScheme.onSurface, size: 16),
+                  child: Icon(LucideIcons.users,
+                      color: Theme.of(context).colorScheme.onSurface, size: 16),
                 ),
                 label: Text(
                   "${widget.clanInfo.members.toString()}/50",
@@ -127,7 +178,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
+                  child: CachedNetworkImage(
+                      imageUrl:
+                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
                 ),
                 label: Text(
                   widget.clanInfo.clanPoints.toString(),
@@ -137,7 +190,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${widget.clanInfo.requiredTownhallLevel}.png"),
+                  child: CachedNetworkImage(
+                      imageUrl:
+                          "https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${widget.clanInfo.requiredTownhallLevel}.png"),
                 ),
                 label: Text(
                   widget.clanInfo.requiredTownhallLevel.toString(),
@@ -147,7 +202,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack.png"),
+                  child: CachedNetworkImage(
+                      imageUrl:
+                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack.png"),
                 ),
                 label: Text(
                   widget.clanInfo.clanCapitalPoints.toString(),
@@ -157,7 +214,8 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: Icon(LucideIcons.mail, color: Theme.of(context).colorScheme.onSurface, size: 16),
+                  child: Icon(LucideIcons.mail,
+                      color: Theme.of(context).colorScheme.onSurface, size: 16),
                 ),
                 label: Text(
                   () {
@@ -178,7 +236,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png"),
+                  child: CachedNetworkImage(
+                      imageUrl:
+                          "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png"),
                 ),
                 label: Text(
                   () {
@@ -212,29 +272,57 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
             maxLines: 6,
             overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 16),
           ButtonBar(
             alignment: MainAxisAlignment.spaceAround,
             buttonPadding: EdgeInsets.only(top: 0),
             children: <Widget>[
               TextButton(
-                child: Text(
-                  AppLocalizations.of(context)?.statistics ?? 'Statistics',
-                  style: Theme.of(context).textTheme.bodyMedium,
+                child: Row(
+                  children: [
+                    CachedNetworkImage(
+                      width: 20,
+                      imageUrl:
+                          "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      AppLocalizations.of(context)?.war ?? 'War',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
                 ),
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return ClanWarsStatsCard(clanInfo: widget.clanInfo);
-                    },
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Center(
+                        child: Text(
+                          AppLocalizations.of(context)?.comingSoon ??
+                              'Comming soon !',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface),
+                        ),
+                      ),
+                      duration: Duration(milliseconds: 1500),
+                      backgroundColor: Theme.of(context).colorScheme.surface,
+                    ),
                   );
-                }
+                },
               ),
               TextButton(
-                child: Text(
-                  AppLocalizations.of(context)?.warLog ?? 'War Log',
-                  style: Theme.of(context).textTheme.bodyMedium,
+                child: Row(
+                  children: [
+                    CachedNetworkImage(
+                      width: 20,
+                      imageUrl:
+                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_War.png",
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      AppLocalizations.of(context)?.warLog ?? 'War Log',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
                 ),
                 onPressed: () {
                   if (widget.clanInfo.isWarLogPublic == false) {
@@ -242,8 +330,10 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                       SnackBar(
                         content: Center(
                           child: Text(
-                            AppLocalizations.of(context)?.warLogClosed ?? 'War Log closed.',
-                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                            AppLocalizations.of(context)?.warLogClosed ??
+                                'War Log closed.',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface),
                           ),
                         ),
                         duration: Duration(milliseconds: 1500),
@@ -255,8 +345,10 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                       SnackBar(
                         content: Center(
                           child: Text(
-                            AppLocalizations.of(context)?.comingSoon ?? 'Comming soon !',
-                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                            AppLocalizations.of(context)?.comingSoon ??
+                                'Comming soon !',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface),
                           ),
                         ),
                         duration: Duration(milliseconds: 1500),

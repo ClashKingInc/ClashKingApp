@@ -23,16 +23,21 @@ class ClanInfoCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Column(children: [
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Column(
+                    children: [
                       SizedBox(
-                          height: 70,
-                          width: 70,
-                          child: CachedNetworkImage(
-                              imageUrl: clanInfo.badgeUrls.large)),
-                      Text(clanInfo.tag,
-                          style: Theme.of(context).textTheme.labelLarge),
-                    ])),
+                        height: 70,
+                        width: 70,
+                        child: CachedNetworkImage(imageUrl: clanInfo.badgeUrls.large),
+                      ),
+                      Text(
+                        clanInfo.tag,
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ]
+                  ),
+                ),
                 SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,34 +46,40 @@ class ClanInfoCard extends StatelessWidget {
                       children: [
                         if(clanInfo.location.countryCode != "No countryCode")
                         CachedNetworkImage(
-                          imageUrl:
-                              "https://clashkingfiles.b-cdn.net/country-flags/${clanInfo.location.countryCode}.png",
+                          imageUrl: "https://clashkingfiles.b-cdn.net/country-flags/${clanInfo.location.countryCode}.png",
                           width: 16,
                           height: 20,
                         ),
                         SizedBox(width: 8),
-                        Text(clanInfo.name,
-                            style: Theme.of(context).textTheme.titleSmall),
+                        Text(
+                          clanInfo.name,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
                       ],
                     ),
                     SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(LucideIcons.users,
-                            size: 16,
-                            color: Theme.of(context).colorScheme.onSurface),
+                        Icon(
+                          LucideIcons.users,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                         SizedBox(width: 8),
-                        Text('${clanInfo.members.toString()}/50   |   ',
-                            style: Theme.of(context).textTheme.labelLarge),
+                        Text(
+                          '${clanInfo.members.toString()}/50   |   ',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
                         SizedBox(
                           height: 16,
                           width: 16,
-                            child: CachedNetworkImage(
-                                imageUrl:
-                                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png")),
+                          child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
+                        ),
                         SizedBox(width: 4),
-                        Text(clanInfo.clanPoints.toString(),
-                            style: Theme.of(context).textTheme.labelLarge),
+                        Text(
+                          clanInfo.clanPoints.toString(),
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
                       ],
                     ),
                     SizedBox(height: 8),
@@ -77,8 +88,7 @@ class ClanInfoCard extends StatelessWidget {
                         SizedBox(
                           height: 20,
                           width: 20,
-                          child: CachedNetworkImage(
-                              imageUrl: clanInfo.warLeague.imageUrl),
+                          child: CachedNetworkImage(imageUrl: clanInfo.warLeague.imageUrl),
                         ),
                         SizedBox(width: 8),
                         Text(

@@ -1,421 +1,105 @@
 {
   "af": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "ar": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "ca": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "cs": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "da": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "de": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "el": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "es": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "fi": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
-  ],
-
-  "fr": [
-    "opened"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "he": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "hu": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "it": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "ja": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "ko": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "nl": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "no": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "pl": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "pt": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "ro": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "ru": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "sr": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "sv": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "tr": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "uk": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "vi": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ],
 
   "zh": [
-    "nameOrTag",
-    "whatever",
-    "warFrequency",
-    "minimumMembers",
-    "maximumMembers",
-    "location",
-    "minimumClanPoints",
-    "minimumClanLevel",
-    "opened",
-    "starsNeededToTakeTheLead",
-    "starsAndPercentNeededToTakeTheLead",
-    "fastCalculatorAnswer",
-    "warStats"
+    "noAccountLinkedToYourProfileFound"
   ]
 }
