@@ -100,7 +100,7 @@ class DashboardPageState extends State<DashboardPage>
               ),
               Padding(
                 padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 4),
-                child: ToDoCard(discordUser: widget.discordUser.tags, playerStats: widget.playerStats),
+                child: ToDoCard(tags: widget.discordUser.tags, playerStats: widget.playerStats),
               ),
             ],
           ),

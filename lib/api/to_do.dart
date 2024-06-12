@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class PlayerToDoData {
-  final List<PlayerToDoData> items;
+  final List<PlayerData> items;
 
   PlayerToDoData({required this.items});
 
@@ -10,7 +10,12 @@ class PlayerToDoData {
     var itemList = json['items'] != null
       ? (json['items'] as List).map((itemJson) => PlayerData.fromJson(itemJson as Map<String, dynamic>)).toList()
       : [];
-    return PlayerToDoData(items: itemList.cast<PlayerToDoData>());
+    return PlayerToDoData(items: itemList.cast<PlayerData>());
+  }
+
+  @override
+  String toString() {
+    return 'PlayerToDoData: ${items.toString()}';
   }
 }
 
@@ -37,7 +42,8 @@ class PlayerData {
     return PlayerData(
       playerTag: json['player_tag'] ?? '',
       currentClan: json['current_clan'] ?? '',
-      legends: json['legends'] != null ? LegendData.fromJson(json['legends']) : null,
+      legends:
+          json['legends'] != null ? LegendData.fromJson(json['legends']) : null,
       seasonPass: json['season_pass'],
       lastActive: json['last_active'] ?? 0,
       raids: RaidData.fromJson(json['raids']),
@@ -77,7 +83,8 @@ class DefenseDetail {
   final int time;
   final int trophies;
 
-  DefenseDetail({required this.change, required this.time, required this.trophies});
+  DefenseDetail(
+      {required this.change, required this.time, required this.trophies});
 
   factory DefenseDetail.fromJson(Map<String, dynamic> json) {
     return DefenseDetail(
@@ -142,7 +149,8 @@ class PlayerDataService {
       String encodedTag = entry.value.replaceAll('#', '%23');
       return '${entry.key == 0 ? '' : '&'}player_tags=$encodedTag';
     }).join('');
-    final response = await http.get(Uri.parse('https://api.clashking.xyz/player/to-do?$tagsParameter'));
+    final response = await http.get(
+        Uri.parse('https://api.clashking.xyz/player/to-do?$tagsParameter'));
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       Map<String, dynamic> jsonBody = json.decode(body);
