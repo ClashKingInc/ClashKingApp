@@ -1,5 +1,5 @@
 {
-    "@@locale": "es",
+    "@@locale": "es-ES",
     "creatorCode": "Código de Creador: ClashKing",
     "signInWithDiscord": "Iniciar sesión con Discord",
     "guestMode": "Modo Invitado",
@@ -108,7 +108,7 @@
     "search": "Busca",
     "tagOrNamePlayer": "Etiqueta o nombre del jugador",
     "searchPlayer": "Buscar jugador",
-    "nameOrTag": "Name or tag",
+    "nameOrTag": "Nombre o etiqueta",
     "dashboard": "Panel",
     "homeBase": "Aldea",
     "th": "TH",
@@ -125,7 +125,7 @@
     "equipment": "Equipos",
     "troops": "Tropas",
     "superTroops": "Supertropas",
-    "pets": "Animales",
+    "pets": "Mascoras",
     "siegeMachines": "Máquinas de asedio",
     "spells": "Hechizos",
     "achievements": "Logros",
@@ -140,11 +140,11 @@
     "ended": "Terminado",
     "average": "Promedio",
     "remaining": "Restante",
-    "toDoList": "To do list",
+    "toDoList": "Lista de tareas pendientes",
     "worst": "Peor",
     "best": "Mejor",
     "total": "Total",
-    "heroesEquipments": "Equipos de Héroes",
+    "heroesEquipments": "Equipo heroico",
     "daysAgo": "hace {days} días",
     "@daysAgo": {
         "placeholders": {
@@ -208,17 +208,17 @@
     "noResult": "Sin resultados.",
     "filters": "Filtros",
     "whatever": "Whatever",
-    "any": "Any",
-    "warFrequency": "War frequency",
-    "minimumMembers": "Minimum members",
-    "maximumMembers": "Maximum members",
-    "location": "Location",
-    "minimumClanPoints": "Minimum clan points",
-    "minimumClanLevel": "Minimum clan level",
+    "any": "Cualquiera",
+    "warFrequency": "Frecuencia de guerra",
+    "minimumMembers": "Miembros mínimos",
+    "maximumMembers": "Miembros máximos",
+    "location": "Localización",
+    "minimumClanPoints": "Puntos mínimos del clan",
+    "minimumClanLevel": "Nivel mínimo del clan",
     "noClan": "Sin clan",
     "joinClanToUnlockNewFeatures": "Únete a un clan para desbloquear nuevas funciones.",
     "apply": "Aplicar",
-    "opened": "Opened",
+    "opened": "Abierto",
     "inviteOnly": "Solo invitación",
     "cancel": "Cancelar",
     "clan": "Clan",
@@ -286,13 +286,13 @@
             }
         }
     },
-    "askForWar": "Contact the leader or a co-leader to start a war.",
+    "askForWar": "Contacta a un líder o un colíder para iniciar una guerra.",
     "askForWarLogOpening": "Contacta a un líder o un colíder para hacer público el registro de guerra.",
     "warLogClosed": "El registro de guerra cerrado.",
     "rounds": "Rondas",
     "noDataAvailableForThisWar": "No hay datos disponibles para esta guerra",
     "stateOfTheWar": "Estado de la guerra",
-    "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+    "starsNeededToTakeTheLead": "{clan} todavía necesita {star} estrella(s) más o {stars2} estrella(s) y {percent}% para tomar la delantera.",
     "@starsNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -309,7 +309,7 @@
             }
         }
     },
-    "starsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+    "starsAndPercentNeededToTakeTheLead": "{clan} todavía necesita {percent}% o 1 estrella más para tomar la delantera",
     "@starsAndPercentNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -322,7 +322,7 @@
     },
     "clanDraw": "Ambos clanes están empatados",
     "fastCalculator": "Calculadora rápida",
-    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, you need a total of {result}%.",
+    "fastCalculatorAnswer": "Para lograr una tasa de destrucción del {percentNeeded}%, necesitas un total de {result}%.",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
@@ -337,7 +337,7 @@
     "neededOverall": "% Total necesario",
     "calculate": "Calcular",
     "warStats": "Estadísticas de Guerra",
-    "noAccountLinkedToYourProfileFound": "No account linked to your profile found",
+    "noAccountLinkedToYourProfileFound": "No se encontró ninguna cuenta vinculada a su perfil",
     "management": "Administración",
     "comingSoon": "¡Próximamente!"
 }
