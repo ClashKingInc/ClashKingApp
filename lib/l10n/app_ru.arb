@@ -112,40 +112,40 @@
     "dashboard": "Панель управления",
     "homeBase": "Home Base",
     "th": "TH",
-    "builderBase": "Builder Base",
+    "builderBase": "Деревня Строителя",
     "bh": "BH",
-    "clanCapital": "Clan Capital",
-    "leader": "Leader",
-    "coLeader": "Co-Leader",
-    "elder": "Elder",
-    "member": "Member",
-    "ready": "Ready",
-    "unready": "Unready",
-    "heroes": "Heroes",
-    "equipment": "Equipments",
-    "troops": "Troops",
-    "superTroops": "Super Troops",
-    "pets": "Pets",
-    "siegeMachines": "Siege Machines",
-    "spells": "Spells",
-    "achievements": "Achievements",
-    "byDay": "By Day",
-    "charts": "Charts",
-    "history": "History",
-    "legendLeague": "Legend League",
-    "notInLegendLeague": "Legend League",
-    "noLegendData": "No Legend Data Found for today",
-    "noRank": "No ranking",
-    "started": "Started",
-    "ended": "Ended",
-    "average": "Average",
-    "remaining": "Remaining",
-    "toDoList": "To do list",
-    "worst": "Worst",
-    "best": "Best",
-    "total": "Total",
-    "heroesEquipments": "Heroes equipments",
-    "daysAgo": "{days} days ago",
+    "clanCapital": "Столица клана",
+    "leader": "Глава",
+    "coLeader": "Соруководитель",
+    "elder": "Старейшина",
+    "member": "Участник",
+    "ready": "Готов к бою",
+    "unready": "Не готов",
+    "heroes": "Герои",
+    "equipment": "Снаряжение",
+    "troops": "Войны",
+    "superTroops": "Супервойны",
+    "pets": "Животные",
+    "siegeMachines": "Осадные машины",
+    "spells": "Заклинания",
+    "achievements": "Список достижений",
+    "byDay": "За день",
+    "charts": "Диаграммы",
+    "history": "Журнал",
+    "legendLeague": "Легендарная лига",
+    "notInLegendLeague": "Легендарная лига",
+    "noLegendData": "Данные о легендах не найдены сегодня",
+    "noRank": "Нет рейтингов",
+    "started": "Запущен",
+    "ended": "Завершен",
+    "average": "Средний",
+    "remaining": "Осталось",
+    "toDoList": "Список дел",
+    "worst": "Наихудший",
+    "best": "Лучший",
+    "total": "Всего",
+    "heroesEquipments": "Снаряжение героя",
+    "daysAgo": "{days} дн. назад",
     "@daysAgo": {
         "placeholders": {
             "days": {
@@ -153,7 +153,7 @@
             }
         }
     },
-    "dayAgo": "{day} day ago",
+    "dayAgo": "{day} день назад",
     "@dayAgo": {
         "placeholders": {
             "day": {
@@ -161,7 +161,7 @@
             }
         }
     },
-    "hourAgo": "{hour} hour ago",
+    "hourAgo": "{hour} час назад",
     "@hourAgo": {
         "placeholders": {
             "hour": {
@@ -169,7 +169,7 @@
             }
         }
     },
-    "hoursAgo": "{hours} hours ago",
+    "hoursAgo": "{hours} часов назад",
     "@hoursAgo": {
         "placeholders": {
             "hours": {
@@ -177,7 +177,7 @@
             }
         }
     },
-    "minuteAgo": "{minute} minute ago",
+    "minuteAgo": "{minute} минуту назад",
     "@minuteAgo": {
         "placeholders": {
             "minute": {
@@ -185,7 +185,7 @@
             }
         }
     },
-    "minutesAgo": "{minutes} minutes ago",
+    "minutesAgo": "{minutes} минут назад",
     "@minutesAgo": {
         "placeholders": {
             "minutes": {
@@ -193,7 +193,7 @@
             }
         }
     },
-    "secondAgo": "{seconds}s ago",
+    "secondAgo": "{seconds} сек. назад",
     "@secondAgo": {
         "placeholders": {
             "seconds": {
@@ -201,13 +201,13 @@
             }
         }
     },
-    "justNow": "Just Now",
+    "justNow": "Сейчас",
     "trophiesByMonth": "Трофеи по месяцам",
     "eosTrophies": "Трофеи конца сезона",
     "searchClan": "Найти клан",
     "noResult": "Нет результатов.",
     "filters": "Фильтры",
-    "whatever": "Whatever",
+    "whatever": "Не важно",
     "any": "Any",
     "warFrequency": "War frequency",
     "minimumMembers": "Minimum members",
