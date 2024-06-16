@@ -59,7 +59,7 @@
     "faqTrackingDown": "Tracking nicht aktiv\n",
     "faqTrackingDownAnswer": "Das Tracking kann für eine gewisse Zeit nicht funktionieren. Deshalb kann es manchmal Lücken in den Daten geben. Wir arbeiten daran, dies zu verbessern.\n\n",
     "faqApiLimitation": "Clash of Clans API-Einschränkung\n",
-    "faqApiLimitationAnswer": "Einige Daten werden von Clash of Clans bereitgestellt und ihre API hat einige Einschränkungen. Dies ist der Fall beim Legenden-Tracking, wo manchmal der Trophäen-Gewinn und -Verlust verrechnet wird, als würde es sich nur um einen Angriff handeln, und nicht um einen Angriff und eine Verteidigung. Das ist auch der Grund, warum wir keine Daten über Verteidigungslevel haben.",
+    "faqApiLimitationAnswer": "Einige Daten werden von Clash of Clans bereitgestellt und ihre API hat gewisse Limitierungen. Dies ist der Fall beim Legenden-Tracking, bei dem manchmal Trophäen-Gewinne und -Verluste verrechnet werden, als wäre es ein einzelner Angriff. Das ist auch der Grund, warum wir keine Daten über eure Gebäude-Level haben.",
     "faqSupportWork": "Wie kann ich eure Arbeit unterstützen?",
     "faqSupportWorkAnswer": "Es gibt mehrere Möglichkeiten, uns zu unterstützen:\n",
     "faqUseCodeClashKing": "Creator-Code \"ClashKing\" verwenden",
@@ -153,7 +153,7 @@
             }
         }
     },
-    "dayAgo": "vor einem Tag",
+    "dayAgo": "Vor {day} Tag(en)",
     "@dayAgo": {
         "placeholders": {
             "day": {
@@ -161,7 +161,7 @@
             }
         }
     },
-    "hourAgo": "vor einer Stunde",
+    "hourAgo": "Vor {hour} Stunde(n)",
     "@hourAgo": {
         "placeholders": {
             "hour": {
@@ -177,7 +177,7 @@
             }
         }
     },
-    "minuteAgo": "vor einer Minute",
+    "minuteAgo": "Vor {minute} Minute(n)",
     "@minuteAgo": {
         "placeholders": {
             "minute": {
@@ -216,7 +216,7 @@
     "minimumClanPoints": "Minimale Clanpunkte",
     "minimumClanLevel": "Erforderlicher Clanlevel",
     "noClan": "Kein Clan",
-    "joinClanToUnlockNewFeatures": "Tritt einem Clan bei, um neue Funktionen freizuschalten.",
+    "joinClanToUnlockNewFeatures": "Trete einem Clan bei, um neue Funktionen freizuschalten.",
     "apply": "Anwenden",
     "opened": "Geöffnet",
     "inviteOnly": "Nur auf Einladung",
@@ -242,8 +242,8 @@
     "war": "Krieg",
     "league": "Clankriegsliga",
     "wars": "Kriege",
-    "warHistory": "Kriegsverlauf",
-    "warLog": "Kriegslog",
+    "warHistory": "Kriegsvergangenheit",
+    "warLog": "Kriegsverlauf",
     "startsIn": "Beginnt in",
     "startsAt": "Beginnt um",
     "endsIn": "Endet in",
@@ -251,7 +251,7 @@
     "statistics": "Statistiken",
     "stars": "Sterne",
     "starsSmall": "Sterne",
-    "numberOfStars": "Anzahl an Sternen",
+    "numberOfStars": "Anzahl der Sterne",
     "destructionRate": "Zerstörungsrate",
     "events": "Ereignisse",
     "team": "Teams",
