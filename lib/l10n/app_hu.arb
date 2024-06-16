@@ -24,7 +24,6 @@
     "username": "Felhasználónév",
     "pleaseEnterUsername": "Kérjük, adja meg a felhasználónevet",
     "playerTags": "Játékos tag",
-    "pleaseEnterPlayerTags": "Kérjük adja meg a tagjeit",
     "followingTagsDoNotExist": "Ezek a tag-ek nem léteznek: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
@@ -77,11 +76,17 @@
     "helpUsTranslate": "Segíts a fordításban",
     "copiedToClipboard": "Vágólapra másolva",
     "all": "Összes",
+    "@all": {
+        "description": "all items"
+    },
     "hourIndicator": "ó",
     "minIndicator": "p",
     "noDataAvailable": "Nincs rendelkezésre álló adat.",
     "close": "Bezárás",
     "closed": "Bezárva",
+    "@closed": {
+        "description": "WarLog closed"
+    },
     "error": "Hiba",
     "player": "Játékos",
     "notFoundOrNotLinkedToOurSystem": "{player} nem található vagy nincs kapcsolva a rendszerünkhöz.",
@@ -98,7 +103,13 @@
     "manage": "Kezelés",
     "enterPlayerTag": "Adjon meg egy játékos tag-et",
     "add": "Hozzáadás",
+    "@add": {
+        "description": "Add an account"
+    },
     "delete": "Törlés",
+    "@delete": {
+        "description": "Delete an account"
+    },
     "addAccount": "Fiók hozzáadása",
     "deleteAccount": "Fiók törlése",
     "playerTagNotExists": "A megadott játékos tag nem létezik.",
@@ -106,9 +117,12 @@
     "failedToAddTryAgain": "Nem sikerült hozzákapcsolni. Kérjük, próbálja újra később.",
     "failedToDeleteTryAgain": "A kapcsolat törlése nem sikerült. Kérjük, próbálja meg később újra.",
     "search": "Keresés",
+    "@search": {
+        "description": "Search for a player or a clan"
+    },
     "tagOrNamePlayer": "Játékos tag-je vagy neve",
     "searchPlayer": "Játékos keresése",
-    "nameOrTag": "Név vagy tag",
+    "nameOrTagPlayer": "Player's name or tag",
     "dashboard": "Vezérlőpult",
     "homeBase": "Fő bázis",
     "th": "TH",
@@ -119,8 +133,14 @@
     "coLeader": "Társvezető",
     "elder": "Segítő",
     "member": "Tag",
-    "ready": "Kész",
-    "unready": "Nem kész",
+    "ready": "Opted In",
+    "@ready": {
+        "description": "Opted In for war"
+    },
+    "unready": "Opted Out",
+    "@unready": {
+        "description": "Opted Out for war"
+    },
     "heroes": "Hősök",
     "equipment": "Felszerelések",
     "troops": "Csapatok",
@@ -130,19 +150,43 @@
     "spells": "Varázs szerek",
     "achievements": "Mérföldkövek",
     "byDay": "Naponta",
+    "@byDay": {
+        "description": "Shows stats by day"
+    },
     "charts": "Diagramok",
     "history": "Előzmények",
+    "@history": {
+        "description": "Shows EOS trophies history"
+    },
     "legendLeague": "Legenda liga",
-    "notInLegendLeague": "Legenda liga",
+    "notInLegendLeague": "Not in Legend League",
     "noLegendData": "Nincs legenda adat ma",
     "noRank": "Nincs rangsorolás",
     "started": "Elkezdődött",
+    "@started": {
+        "description": "Title for the number of trophies at the beginning of the day"
+    },
     "ended": "Befejezve",
+    "@ended": {
+        "description": "Title for the number of trophies at the end of the day"
+    },
     "average": "Átlag",
+    "@average": {
+        "description": "Average value of legend trophies (defense and attack)"
+    },
     "remaining": "Hátralévő idő",
+    "@remaining": {
+        "description": "Remaining attacks or defenses"
+    },
     "toDoList": "Teendőlista",
     "worst": "Legrosszabb",
+    "@worst": {
+        "description": "Worst end of day trophies"
+    },
     "best": "Legjobb",
+    "@best": {
+        "description": "Best end of day trophies"
+    },
     "total": "Összes",
     "heroesEquipments": "Hősök felszerelései",
     "daysAgo": "{days} napja",
@@ -205,10 +249,21 @@
     "trophiesByMonth": "Kupák hónap szerint",
     "eosTrophies": "Szezonvégi kupák",
     "searchClan": "Klán keresése",
+    "nameOrTagClan": "Clan's name or tag",
     "noResult": "Nincs találat.",
     "filters": "Szűrők",
     "whatever": "Mindegy",
+    "@whatever": {
+        "description": "Whatever the value"
+    },
     "any": "Bármely",
+    "@any": {
+        "description": "Any value is accepted"
+    },
+    "notSet": "Not set",
+    "@notSet": {
+        "description": "Filter value is not set"
+    },
     "warFrequency": "Háború gyakorisága",
     "minimumMembers": "Minimum tagok",
     "maximumMembers": "Maximum tagok",
@@ -219,6 +274,9 @@
     "joinClanToUnlockNewFeatures": "Csatlakozz egy klánhoz az új funkciók feloldásához.",
     "apply": "Jelentkezés",
     "opened": "Megnyitva",
+    "@opened": {
+        "description": "Clan is opened"
+    },
     "inviteOnly": "Csak meghívással",
     "cancel": "Mégse",
     "clan": "Klán",
@@ -242,18 +300,80 @@
     "war": "Háború",
     "league": "Rangok",
     "wars": "Háborúk",
+    "ongoingWar": "Ongoing war",
+    "ongoingCwl": "Ongoing CWL",
+    "notInWar": "Not in war",
     "warHistory": "Háború lista",
     "warLog": "Háború napló",
-    "startsIn": "Kezdődik",
-    "startsAt": "Kezdődik",
-    "endsIn": "Végez",
-    "endsAt": "Véget ér",
+    "publicWarLog": "Public War Log",
+    "privateWarLog": "Private War Log",
+    "startsIn": "Starts in {time}",
+    "@startsIn": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "startsAt": "Starts at {time}",
+    "@startsAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "endsIn": "Ends in {time}",
+    "@endsIn": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "endsAt": "Ends at {time}",
+    "@endsAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "leftOnAt": "Left on {date} at {time}.",
+    "@leftOnAt": {
+        "description": "[The player] left the clan on 16/06/2024 at 10:35.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "joinedOnAt": "Joined on {date} at {time}.",
+    "@joinedOnAt": {
+        "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
     "statistics": "Statisztikák",
     "stars": "Csillagok",
-    "starsSmall": "csillagok",
     "numberOfStars": "Csillagok száma",
     "destructionRate": "Elpusztítási arány",
+    "@destructionRate": {
+        "description": "Percentage of destruction in war"
+    },
     "events": "Események",
+    "@events": {
+        "description": "War events"
+    },
     "team": "Csapatok",
     "myTeam": "Csapatom",
     "enemiesTeam": "Ellenségek",
@@ -261,10 +381,12 @@
     "defenses": "Védekezések",
     "attack": "Támadás",
     "attacks": "Támadások",
-    "notUsed": "nem használt",
     "victory": "Győzelem",
     "defeat": "Vereség",
     "draw": "Döntetlen",
+    "@draw": {
+        "description": "War ended in a draw"
+    },
     "perfectWar": "Tökéletes háború",
     "newest": "Legújabb",
     "oldest": "Legidősebb",
@@ -322,7 +444,7 @@
     },
     "clanDraw": "A klánok fej-fej mellett vannak",
     "fastCalculator": "Gyors számológép",
-    "fastCalculatorAnswer": "Annak érdekében, hogy elérjük a {percentNeeded}%-os megsemmisítési arányt, összesen {result}%-ra van szükség.",
+    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
