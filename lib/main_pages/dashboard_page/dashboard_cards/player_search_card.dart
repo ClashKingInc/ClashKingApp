@@ -96,7 +96,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 labelText: AppLocalizations.of(context)!.searchPlayer,
-                hintText: AppLocalizations.of(context)!.nameOrTag,
+                hintText: AppLocalizations.of(context)!.nameOrTagPlayer,
                 hintStyle: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 16,
@@ -144,8 +144,6 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
               } else if (snapshot.hasError) {
                 return Center(child: Text("No results found."));
               } else if (snapshot.hasData && snapshot.data != null && snapshot.data != [] && snapshot.data!.isNotEmpty) {
-                print("test");
-                print(snapshot.data);
                 return SingleChildScrollView(
                   child: Column(
                     children: snapshot.data!.map<Widget>((player) {

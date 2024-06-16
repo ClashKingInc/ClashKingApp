@@ -46,7 +46,6 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
           _selectedCountry = 0;
         }
       });
-      print(_countries);
     } else {
       throw Exception('Failed to load countries');
     }
@@ -116,7 +115,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
       DropdownMenuItem(
           value: 'whatever',
           alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!.whatever)),
+          child: Text(AppLocalizations.of(context)!.notSet)),
       DropdownMenuItem(
           value: 'always',
           alignment: Alignment.center,
@@ -203,7 +202,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                                 value: '0',
                                 alignment: Alignment.center,
                                 child: Text(
-                                    AppLocalizations.of(context)!.whatever),
+                                    AppLocalizations.of(context)!.notSet),
                               ),
                               ..._countries.map<DropdownMenuItem<String>>(
                                 (item) {

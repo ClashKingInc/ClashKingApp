@@ -172,7 +172,7 @@ class CurrentWarInfoCard extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              '${AppLocalizations.of(context)?.startsAt} ${DateFormat('HH:mm').format(currentWarInfo.startTime.toLocal())}',
+              '${AppLocalizations.of(context)?.startsAt(DateFormat('HH:mm').format(currentWarInfo.startTime.toLocal()))}',
               style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
@@ -237,7 +237,7 @@ class CurrentWarInfoCard extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Text(
-                  "${AppLocalizations.of(context)?.endsAt} ${DateFormat('HH:mm').format(currentWarInfo.endTime.toLocal())}",
+                  "${AppLocalizations.of(context)?.endsAt(DateFormat('HH:mm').format(currentWarInfo.endTime.toLocal()))}",
                   style: Theme.of(context).textTheme.bodySmall,
                   textAlign: TextAlign.center),
               Center(

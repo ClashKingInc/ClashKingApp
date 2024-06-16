@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/api/league_data_manager.dart';
+import 'package:clashkingapp/api/functions.dart';
 
 class PlayerSearchResultTile extends StatefulWidget {
   final dynamic player;
@@ -27,12 +29,10 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
 
   Future<void> fetchLeagueUrl() async {
     if (widget.player.containsKey('league')) {
-      print(widget.player['league'].runtimeType.toString());
       if(widget.player['league'] is Map && widget.player['league'].containsKey('name')) {
-        print(widget.player['league']['name']);
-        leagueUrl = await PlayerService().fetchLeagueImageUrl(widget.player['league']['name']);
+        leagueUrl = LeagueDataManager().getLeagueUrl(widget.player['league']['name']);
       } else {
-        leagueUrl = await PlayerService().fetchLeagueImageUrl(widget.player['league']);
+        leagueUrl = LeagueDataManager().getLeagueUrl(widget.player['league']);
       }
     }
     setState(() {});
@@ -40,9 +40,9 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
 
   Future<void> fetchTownHallUrl() async {
     if (widget.player.containsKey('townHallLevel')) {
-      townHallUrl = await PlayerService().fetchPlayerTownHallByTownHallLevel(widget.player['townHallLevel']);
+      townHallUrl = await fetchPlayerTownHallByTownHallLevel(widget.player['townHallLevel']);
     } else {
-      townHallUrl = await PlayerService().fetchPlayerTownHallByTownHallLevel(widget.player['th']);
+      townHallUrl = await fetchPlayerTownHallByTownHallLevel(widget.player['th']);
     }
     setState(() {});
   }

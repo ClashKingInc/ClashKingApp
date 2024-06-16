@@ -24,7 +24,6 @@
     "username": "Nom d'utilisateur",
     "pleaseEnterUsername": "Veuillez saisir un nom d'utilisateur",
     "playerTags": "Tags de joueur",
-    "pleaseEnterPlayerTags": "Veuillez saisir un tag de joueur",
     "followingTagsDoNotExist": "Les tags suivants n'existent pas : {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
@@ -101,7 +100,7 @@
     "search": "Rechercher",
     "tagOrNamePlayer": "Tag ou nom du joueur",
     "searchPlayer": "Rechercher un joueur",
-    "nameOrTag": "Nom ou tag",
+    "nameOrTagPlayer": "Nom ou tag du joueur",
     "dashboard": "Profil",
     "homeBase": "Village principal",
     "th": "HDV",
@@ -112,8 +111,8 @@
     "coLeader": "Adjoint",
     "elder": "Aîné",
     "member": "Membre",
-    "ready": "Prêt",
-    "unready": "Pas prêt",
+    "ready": "Participe",
+    "unready": "Ne participe pas",
     "heroes": "Héros",
     "equipment": "Équipements",
     "troops": "Troupes",
@@ -198,10 +197,12 @@
     "trophiesByMonth": "Trophées par mois",
     "eosTrophies": "Trophées en fin de saison",
     "searchClan": "Rechercher un clan",
+    "nameOrTagClan": "Nom ou tag du clan",
     "noResult": "Aucun résultat.",
     "filters": "Filtres",
     "whatever": "Peu importe",
     "any" : "Tous",
+    "notSet": "Non défini",
     "warFrequency": "Fréquence de guerre",
     "minimumMembers": "Membres minimum",
     "maximumMembers": "Membres maximum",
@@ -235,12 +236,67 @@
     "war": "Guerre",
     "league": "Ligue",
     "wars": "Guerres",
+    "ongoingWar": "Guerre en cours",
+    "ongoingCwl": "Ligue en cours",
+    "notInWar": "Pas en guerre",
     "warHistory": "Historique de guerre",
     "warLog": "Journal",
-    "startsIn": "Début dans",
-    "startsAt": "Débute à",
-    "endsIn": "Fin dans",
-    "endsAt": "Se termine à",
+    "publicWarLog": "Journal de guerre public",
+    "privateWarLog": "Journal de guerre privé",
+    "startsIn": "Début dans {time}",
+    "@startsIn": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "startsAt": "Débute à {time}",
+    "@startsAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "endsIn": "Fin dans {time}",
+    "@endsIn": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "endsAt": "Se termine à {time}",
+    "@endsAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "leftOnAt": "Est parti le {date} à {time}.",
+    "@leftOnAt": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "joinedOnAt": "A rejoint le {date} à {time}.",
+    "@joinedOnAt": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
     "statistics": "Statistiques",
     "stars": "Étoiles",
     "starsSmall": "étoiles",
@@ -285,7 +341,7 @@
     "rounds": "Tours",
     "noDataAvailableForThisWar": "Aucune donnée disponible pour cette guerre",
     "stateOfTheWar": "État de la guerre",
-    "starsNeededToTakeTheLead": "{clan} à besoin de {star} étoile(s) supplémentaire(s) ou {star2} étoiles et {percent}% pour prendre l'avantage.",
+    "starsNeededToTakeTheLead": "{clan} a besoin de {star} étoile(s) supplémentaire(s) ou {star2} étoiles et {percent}% pour prendre l'avantage.",
     "@starsNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -315,7 +371,7 @@
     },
     "clanDraw": "Les deux clans sont à égalité",
     "fastCalculator": "Calculatrice rapide",
-    "fastCalculatorAnswer": "Pour obtenir un taux de destruction de {percentNeeded}%, vous devez faire {result}% au total.",
+    "fastCalculatorAnswer": "Pour obtenir un taux de destruction de {percentNeeded}%, un total de {result}% est nécessaire.",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
@@ -327,7 +383,7 @@
         }
     },
     "teamSize": "Taille de l'équipe",
-    "neededOverall": "% Total nécessaire",
+    "neededOverall": "% total nécessaire",
     "calculate": "Calculer",
     "warStats": "Statistiques de guerre",
     "noAccountLinkedToYourProfileFound": "Aucun compte lié à votre profil trouvé",

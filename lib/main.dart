@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/core/theme_notifier.dart';
+import 'package:clashkingapp/api/league_data_manager.dart';
+import 'package:clashkingapp/api/troop_data_manager.dart';
 
 // CallbackDispatcher for background execution (Android only)
 void callbackDispatcher() {
@@ -23,6 +25,8 @@ Future main() async {
   Workmanager().initialize(
       callbackDispatcher); // Required by Workmanager to initialize the callback dispatcher
 
+  await LeagueDataManager().loadLeagueData();
+  await TroopDataManager().loadTroopData();
   runApp(
     MultiProvider(
       providers: [

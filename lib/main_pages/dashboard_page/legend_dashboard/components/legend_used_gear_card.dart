@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/data/troop_data.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/api/troop_data_manager.dart';
 
 class LegendUsedGearCard extends StatelessWidget {
   const LegendUsedGearCard({
@@ -32,7 +32,7 @@ class LegendUsedGearCard extends StatelessWidget {
                 runSpacing: 8.0,
                 children: [
                   ...itemCounts.entries.map((entry) {
-                    var gearData = troopUrlsAndTypes[entry.key];
+                    var gearData = TroopDataManager().troopUrlsAndTypes[entry.key];
                     return SizedBox(
                       width: MediaQuery.of(context).size.width / 5 - 8,
                       child: Row(

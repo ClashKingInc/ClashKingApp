@@ -4,6 +4,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/api/war_log.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:clashkingapp/api/current_league_info.dart';
 
 Map<int, int> countStars(List<WarMember> members) {
   Map<int, int> starCounts = {0: 0, 1: 0, 2: 0, 3: 0};
@@ -43,17 +46,23 @@ Widget timeLeft(
   DateTime now = DateTime.now();
   Duration difference = Duration.zero;
   String state = '';
+  String hours = '';
+  String minutes = '';
+  String time = '';
 
   if (currentWarInfo.state == 'preparation') {
     difference = currentWarInfo.startTime.difference(now);
-    state = AppLocalizations.of(context)?.startsIn ?? 'Starting in';
+    hours = difference.inHours.toString().padLeft(2, '0');
+    minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
+    time = hours + hourIndicator + minutes;
+    state = AppLocalizations.of(context)?.startsIn(time) ?? 'Starting in';
   } else if (currentWarInfo.state == 'inWar') {
     difference = currentWarInfo.endTime.difference(now);
-    state = AppLocalizations.of(context)?.endsIn ?? 'Ends in';
+    hours = difference.inHours.toString().padLeft(2, '0');
+    minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
+    time = hours + hourIndicator + minutes;
+    state = AppLocalizations.of(context)?.endsIn(time) ?? 'Ends in';
   }
-
-  String hours = difference.inHours.toString().padLeft(2, '0');
-  String minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
 
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -61,7 +70,7 @@ Widget timeLeft(
       child: Text(
         currentWarInfo.state == 'warEnded'
             ? AppLocalizations.of(context)?.warEnded ?? 'War ended'
-            : '$state $hours$hourIndicator$minutes',
+            : state,
         style: style,
       ),
     ),
@@ -140,4 +149,51 @@ Map<String, String> analyzeWarLogs(List<WarLogDetails> warLogs) {
     'averageOpponentStarsPerMember':
         averageOpponentStarsPerMember.toStringAsFixed(1)
   };
+}
+
+Future<String> checkCurrentWar(
+    String clanTag,
+    LeagueInfoContainer leagueInfoContainer,
+    WarInfoContainer warInfoContainer) async {
+  if (clanTag == "") {
+    return "noClan";
+  }
+
+  final responseWar = await http.get(
+    Uri.parse(
+        'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar'),
+  );
+
+  final responseCwl = await http.get(
+    Uri.parse(
+        'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
+  );
+
+  if (responseWar.statusCode == 200) {
+    var decodedResponse = jsonDecode(utf8.decode(responseWar.bodyBytes));
+    if (decodedResponse["state"] != "notInWar" &&
+        decodedResponse["reason"] != "accessDenied") {
+      warInfoContainer.currentWarInfo = CurrentWarInfo.fromJson(
+          jsonDecode(utf8.decode(responseWar.bodyBytes)), "war", clanTag);
+      return "war";
+    } else if (decodedResponse["state"] == "notInWar") {
+      DateTime now = DateTime.now();
+      if (now.day >= 1 && now.day <= 12) {
+        if (responseCwl.statusCode == 200) {
+          var decodedResponseCwl =
+              jsonDecode(utf8.decode(responseCwl.bodyBytes));
+          if (decodedResponseCwl.containsKey("state")) {
+            leagueInfoContainer.currentLeagueInfo =
+                CurrentLeagueInfo.fromJson(decodedResponseCwl, clanTag);
+            return "cwl";
+          }
+        }
+      }
+    }
+  } else if (responseWar.statusCode == 403) {
+    return "accessDenied";
+  } else {
+    throw Exception('Failed to load current war info');
+  }
+  return "notInWar";
 }

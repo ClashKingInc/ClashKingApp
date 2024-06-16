@@ -86,6 +86,19 @@ class PlayerInfosCard extends StatelessWidget {
                                   ),
                                 ),
                               Chip(
+                                avatar: Icon(LucideIcons.chevronsUpDown,
+                                    color: Color.fromARGB(255, 0, 136, 255)),
+                                labelPadding: EdgeInsets.zero,
+                                label: Text(
+                                  (playerStats.donations /
+                                          (playerStats.donationsReceived == 0
+                                              ? 1
+                                              : playerStats.donationsReceived))
+                                      .toStringAsFixed(2),
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                              ),
+                              Chip(
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors
                                       .transparent, // Set to a suitable color for your design.
@@ -110,71 +123,7 @@ class PlayerInfosCard extends StatelessWidget {
                               ),
                               Chip(
                                 avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
-                                  child: CachedNetworkImage(
-                                      imageUrl: playerStats.townHallPic),
-                                ),
-                                label: Text('${playerStats.townHallLevel}',
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge),
-                                labelPadding: EdgeInsets.zero,
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
-                                  child: CachedNetworkImage(
-                                      imageUrl: playerStats.leagueUrl),
-                                ),
-                                label: Text('${playerStats.trophies}',
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge),
-                                labelPadding: EdgeInsets.zero,
-                              ),
-                              Chip(
-                                avatar: Icon(LucideIcons.chevronsUpDown,
-                                    color: Color.fromARGB(255, 0, 136, 255)),
-                                labelPadding: EdgeInsets.zero,
-                                label: Text(
-                                  (playerStats.donations /
-                                          (playerStats.donationsReceived == 0
-                                              ? 1
-                                              : playerStats.donationsReceived))
-                                      .toStringAsFixed(2),
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
-                                  child: CachedNetworkImage(
-                                      imageUrl: playerStats.builderHallPic),
-                                ),
-                                label: Text('${playerStats.builderHallLevel}',
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge),
-                                labelPadding: EdgeInsets.zero,
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
-                                  child: CachedNetworkImage(
-                                      imageUrl:
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
-                                ),
-                                label: Text(
-                                    '${playerStats.builderBaseTrophies}',
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge),
-                                labelPadding: EdgeInsets.zero,
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
+                                  backgroundColor: Colors.transparent,
                                   child: CachedNetworkImage(
                                       imageUrl:
                                           "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
@@ -185,6 +134,39 @@ class PlayerInfosCard extends StatelessWidget {
                                   '${playerStats.warStars}',
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
+                              ),
+                              Chip(
+                                avatar: CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  child: CachedNetworkImage(
+                                      imageUrl: playerStats.townHallPic),
+                                ),
+                                label: Text('${playerStats.townHallLevel}',
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge),
+                                labelPadding: EdgeInsets.zero,
+                              ),
+                              Chip(
+                                avatar: CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  child: CachedNetworkImage(
+                                      imageUrl: playerStats.leagueUrl),
+                                ),
+                                label: Text('${playerStats.trophies}',
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge),
+                                labelPadding: EdgeInsets.zero,
+                              ),
+                              Chip(
+                                avatar: CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  child: CachedNetworkImage(
+                                      imageUrl: playerStats.builderHallPic),
+                                ),
+                                label: Text('${playerStats.builderHallLevel}',
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge),
+                                labelPadding: EdgeInsets.zero,
                               ),
                             ],
                           ),
