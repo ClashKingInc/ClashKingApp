@@ -41,7 +41,7 @@ class ClanWarDetails {
   final int attacks;
   final int stars;
   final double destructionPercentage;
-  final List<WarMember> members;
+  final List<WarLeagueMember> members;
 
   ClanWarDetails({
     required this.tag,
@@ -63,7 +63,7 @@ class ClanWarDetails {
       attacks: json['attacks'] ?? 0,
       stars: json['stars'] ?? 0,
       destructionPercentage: (json['destructionPercentage'] ?? 0.0).toDouble(),
-      members: List<WarMember>.from(json['members']?.map((x) => WarMember.fromJson(x)) ?? []),
+      members: List<WarLeagueMember>.from(json['members']?.map((x) => WarLeagueMember.fromJson(x)) ?? []),
     );
   }
 }
@@ -88,7 +88,7 @@ class BadgeUrls {
   }
 }
 
-class WarMember {
+class WarLeagueMember {
   final String tag;
   final String name;
   final int townhallLevel;
@@ -97,7 +97,7 @@ class WarMember {
   final int opponentAttacks;
   final BestOpponentAttack? bestOpponentAttack;
 
-  WarMember({
+  WarLeagueMember({
     required this.tag,
     required this.name,
     required this.townhallLevel,
@@ -107,8 +107,8 @@ class WarMember {
     this.bestOpponentAttack,
   });
 
-  factory WarMember.fromJson(Map<String, dynamic> json) {
-    return WarMember(
+  factory WarLeagueMember.fromJson(Map<String, dynamic> json) {
+    return WarLeagueMember(
       tag: json['tag'] ?? 'No tag',
       name: json['name']  ?? 'No name',
       townhallLevel: json['townhallLevel'] ?? 0,

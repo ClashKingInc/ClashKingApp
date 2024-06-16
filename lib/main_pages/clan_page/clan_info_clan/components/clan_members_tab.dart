@@ -209,22 +209,25 @@ class ClanMembersState extends State<ClanMembers> {
                                   ],
                                 ),
                                 SizedBox(width: 8),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("${member.name} ",
-                                      style: Theme.of(context).textTheme.bodyMedium),
-                                    Text(
-                                      member.role == 'admin'
-                                        ? AppLocalizations.of(context)!.elder
-                                        : member.role == 'coLeader'
-                                          ? AppLocalizations.of(context)!.coLeader
-                                          : member.role == 'leader'
-                                            ? AppLocalizations.of(context)!.leader
-                                            : AppLocalizations.of(context)!.member,
-                                      style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Theme.of(context).colorScheme.tertiary)
-                                    ),
-                                  ],
+                                Expanded( // Wrap the Text widget with Expanded
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("${member.name} ",
+                                        style: Theme.of(context).textTheme.bodyMedium,
+                                        overflow: TextOverflow.ellipsis), // This should now work as expected
+                                      Text(
+                                        member.role == 'admin'
+                                          ? AppLocalizations.of(context)!.elder
+                                          : member.role == 'coLeader'
+                                            ? AppLocalizations.of(context)!.coLeader
+                                            : member.role == 'leader'
+                                              ? AppLocalizations.of(context)!.leader
+                                              : AppLocalizations.of(context)!.member,
+                                        style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Theme.of(context).colorScheme.tertiary)
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),

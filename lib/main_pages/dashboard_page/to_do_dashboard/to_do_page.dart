@@ -7,7 +7,6 @@ import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/data/troop_data.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/components/player_info_header_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';

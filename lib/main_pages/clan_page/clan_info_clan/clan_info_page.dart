@@ -23,7 +23,7 @@ class ClanInfoScreenState extends State<ClanInfoScreen>
           children: [
             Container(
               color: Theme.of(context).colorScheme.surface,
-              child: ClanInfoHeaderCard(clanInfo: widget.clanInfo),
+              child: ClanInfoHeaderCard(clanInfo: widget.clanInfo, user : widget.discordUser),
             ),
             SizedBox(height: 8),
             ClanMembers(clanInfo: widget.clanInfo, discordUser: widget.discordUser),

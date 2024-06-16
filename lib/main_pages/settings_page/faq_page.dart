@@ -184,7 +184,7 @@ class _FaqScreenState extends State<FaqScreen> {
               ListTile(
                 title: Column(
                   children: [
-                    Text(AppLocalizations.of(context)!.faqHowToInviteTheBot),
+                    Text(AppLocalizations.of(context)!.faqHowToInviteTheBotAnswer),
                     SizedBox(height: 8),
                   ],
                 ),

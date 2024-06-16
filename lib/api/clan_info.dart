@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:clashkingapp/data/league_data.dart';
+import 'package:clashkingapp/api/league_data_manager.dart';
 
 class ClanInfo {
   final String tag;
@@ -83,7 +83,9 @@ class ClanInfo {
       warLeague: WarLeague.fromJson(json['warLeague'] ?? {}),
       members: json['members'] ?? 0,
       location: Location.fromJson(json['location'] ?? {}),
-      memberList: (json['memberList'] as List<dynamic>).map((e) => Member.fromJson(e)).toList(),
+      memberList: (json['memberList'] as List<dynamic>)
+          .map((e) => Member.fromJson(e))
+          .toList(),
       labels: json['labels'] ?? [],
       requiredBuilderBaseTrophies: json['requiredBuilderBaseTrophies'] ?? 0,
       requiredTownhallLevel: json['requiredTownhallLevel'] ?? 0,
@@ -136,7 +138,6 @@ class WarLeague {
     );
     return warLeague;
   }
-     
 }
 
 class Location {
@@ -164,7 +165,7 @@ class Location {
   }
 }
 
-class Member{
+class Member {
   final String tag;
   final String name;
   final String role;
@@ -214,12 +215,12 @@ class Member{
   }
 }
 
-class League{
+class League {
   final int id;
   final String name;
   final IconUrls imageUrl;
 
-  League({ 
+  League({
     required this.id,
     required this.name,
     required this.imageUrl,
@@ -234,7 +235,7 @@ class League{
   }
 }
 
-class IconUrls{
+class IconUrls {
   final String small;
   final String tiny;
   final String medium;
@@ -254,7 +255,7 @@ class IconUrls{
   }
 }
 
-class BuilderBaseLeague{
+class BuilderBaseLeague {
   final int id;
   final String name;
 
@@ -273,7 +274,8 @@ class BuilderBaseLeague{
 
 // Service class to fetch clan info
 class ClanService {
-  
+  Map<String, String> leagueUrls = {};
+
   Future<void> initEnv() async {
     await dotenv.load(fileName: ".env");
   }
@@ -288,7 +290,7 @@ class ClanService {
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       ClanInfo clanInfo = ClanInfo.fromJson(jsonDecode(responseBody));
-      clanInfo.warLeague.imageUrl = await fetchLeagueImageUrl(clanInfo.warLeague.name);
+      clanInfo.warLeague.imageUrl = LeagueDataManager().getLeagueUrl(clanInfo.warLeague.name);
 
       return clanInfo;
     } else {
@@ -296,13 +298,8 @@ class ClanService {
     }
   }
 
-  Future<String> fetchLeagueImageUrl(String name) async {
-    if (leaguesUrls.containsKey(name)) {
-      // If the league name is in the map, return the corresponding URL and type
-      return leaguesUrls[name]!['url']!;
-    } else {
-      // If the league name is not in the map, return default image URL and type
-      return 'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
-    }
+  String fetchLeagueImageUrl(String name) {
+    return leagueUrls[name] ??
+        'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
   }
 }

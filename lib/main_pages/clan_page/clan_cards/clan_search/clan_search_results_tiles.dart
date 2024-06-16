@@ -4,7 +4,7 @@ import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
+import 'package:clashkingapp/api/league_data_manager.dart';
 
 class ClanSearchResultTile extends StatefulWidget {
   final dynamic clan;
@@ -26,8 +26,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
   }
 
   Future<void> fetchLeagueUrl() async {
-    leagueUrl = await PlayerService()
-        .fetchLeagueImageUrl(widget.clan['warLeague']['name']);
+    leagueUrl = LeagueDataManager().getLeagueUrl(widget.clan['warLeague']['name']);
     setState(() {});
   }
 

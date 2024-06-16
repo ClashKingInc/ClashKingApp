@@ -152,7 +152,7 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                       SnackBar(
                         content: Center(
                           child: Text(
-                            AppLocalizations.of(context)?.comingSoon ?? 'Comming soon !',
+                            AppLocalizations.of(context)?.comingSoon ?? 'Coming soon !',
                             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                           ),
                         ),
@@ -174,7 +174,7 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                       SnackBar(
                         content: Center(
                           child: Text(
-                            AppLocalizations.of(context)?.comingSoon ?? 'Comming soon !',
+                            AppLocalizations.of(context)?.comingSoon ?? 'Coming soon !',
                             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                           ),
                         ),

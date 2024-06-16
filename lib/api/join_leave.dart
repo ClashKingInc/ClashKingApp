@@ -1,0 +1,67 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:clashkingapp/api/functions.dart';
+
+class JoinLeaveItem {
+  final String name;
+  final String tag;
+  final int th;
+  final DateTime time;
+  final String clan;
+  final String type;
+  String townHallPic = "";
+
+  JoinLeaveItem({
+    required this.name,
+    required this.tag,
+    required this.th,
+    required this.time,
+    required this.clan,
+    required this.type,
+  });
+
+  factory JoinLeaveItem.fromJson(Map<String, dynamic> json) {
+    return JoinLeaveItem(
+      name: json['name'],
+      tag: json['tag'],
+      th: json['th'],
+      time: DateTime.parse(json['time']),
+      clan: json['clan'],
+      type: json['type'],
+    );
+  }
+}
+
+class JoinLeaveClan {
+  final List<JoinLeaveItem> items;
+
+  JoinLeaveClan({required this.items});
+
+  factory JoinLeaveClan.fromJson(Map<String, dynamic> json) {
+    var list = json['items'] as List;
+    List<JoinLeaveItem> itemsList =
+        list.map((i) => JoinLeaveItem.fromJson(i)).toList();
+    return JoinLeaveClan(items: itemsList);
+  }
+}
+
+class JoinLeaveClanService {
+  Future<JoinLeaveClan> fetchJoinLeaveData(String clanTag) async {
+    clanTag = clanTag.replaceAll('#', '!');
+    final response = await http
+        .get(Uri.parse('https://api.clashking.xyz/clan/$clanTag/join-leave'));
+
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      JoinLeaveClan joinLeaveClan =
+          JoinLeaveClan.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+      for (var item in joinLeaveClan.items) {
+        item.townHallPic = await fetchPlayerTownHallByTownHallLevel(item.th);
+      }
+      return joinLeaveClan;
+    } else {
+      throw Exception('Failed to load join leave data');
+    }
+  }
+}

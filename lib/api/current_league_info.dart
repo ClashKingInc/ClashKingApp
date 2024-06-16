@@ -2,6 +2,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/api/current_war_info.dart';
 
+class LeagueInfoContainer {
+  CurrentLeagueInfo? currentLeagueInfo;
+
+  LeagueInfoContainer({this.currentLeagueInfo});
+}
+
 class CurrentLeagueInfo {
   final String state;
   final String season;

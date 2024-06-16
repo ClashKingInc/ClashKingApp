@@ -2,6 +2,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+class WarInfoContainer {
+  CurrentWarInfo? currentWarInfo;
+
+  WarInfoContainer({this.currentWarInfo});
+}
+
 class CurrentWarInfo {
   final String state;
   final int teamSize;
