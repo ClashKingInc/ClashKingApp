@@ -4,7 +4,7 @@ import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/data/troop_data.dart';
+import 'package:clashkingapp/api/troop_data_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/components/player_info_header_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
@@ -163,7 +163,7 @@ class StatsScreenState extends State<StatsScreen>
   }
 
   String getEquipmentImageUrl(String equipmentName) {
-    return troopUrlsAndTypes[equipmentName]?['url'] ??
+    return TroopDataManager().getTroopInfo(equipmentName)['url'] ??
         'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
   }
 
@@ -175,7 +175,7 @@ class StatsScreenState extends State<StatsScreen>
         calculateCompletionPercentage(items, itemType);
 
     List<Widget> missingItems = [];
-    troopUrlsAndTypes.forEach((name, data) {
+    TroopDataManager().troopUrlsAndTypes.forEach((name, data) {
       if (!itemNames.contains(name) && data['type'] == itemType) {
         missingItems.add(
           Container(
@@ -277,85 +277,109 @@ class StatsScreenState extends State<StatsScreen>
                                         backgroundColor: Colors.transparent,
                                         child: SingleChildScrollView(
                                           child: Container(
-                                            height: 200,
                                             decoration: BoxDecoration(
-                                              color: Colors.white,
+                                              color: Theme.of(context)
+                                                  .scaffoldBackgroundColor,
                                               shape: BoxShape.rectangle,
                                               borderRadius:
                                                   BorderRadius.circular(20),
                                             ),
-                                            child: Column(
-                                              children: <Widget>[
-                                                Text('${item.name}',
-                                                    style: TextStyle(
-                                                        color: Colors.black)),
-                                                CachedNetworkImage(
-                                                    imageUrl: item.imageUrl,
-                                                    width: 40,
-                                                    height: 40,
-                                                    fit: BoxFit.cover),
-                                                Text(
-                                                  itemType == 'super-troop'
-                                                      ? (item.superTroopIsActive
-                                                          ? 'Actif'
-                                                          : 'Inactif')
-                                                      : 'Level : ${item.level}/${item.maxLevel}',
-                                                  style: TextStyle(
-                                                      color: Colors.black),
-                                                ),
-                                                itemType == 'hero'
-                                                    ? Column(
-                                                        children: [
-                                                          ...item.equipment.map(
-                                                            (equipment) =>
-                                                                Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      vertical:
-                                                                          4.0),
-                                                              child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: [
-                                                                  CachedNetworkImage(
-                                                                    imageUrl: getEquipmentImageUrl(
-                                                                        equipment
-                                                                            .name),
-                                                                    width: 40,
-                                                                    height: 40,
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                  ),
-                                                                  SizedBox(
-                                                                      width: 8),
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                      equipment
-                                                                          .name,
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.black),
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  CachedNetworkImage(
+                                                      imageUrl: item.imageUrl,
+                                                      width: 80,
+                                                      height: 80,
+                                                      fit: BoxFit.cover),
+                                                  Text(
+                                                    '${item.name}',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleSmall
+                                                        ?.copyWith(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onSurface),
+                                                  ),
+                                                  Text(
+                                                    itemType == 'super-troop'
+                                                        ? (item.superTroopIsActive
+                                                            ? 'Actif'
+                                                            : 'Inactif')
+                                                        : 'Level : ${item.level}/${item.maxLevel}',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium
+                                                        ?.copyWith(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onSurface),
+                                                  ),
+                                                  itemType == 'hero'
+                                                      ? Column(
+                                                          children: [
+                                                            ...item.equipment
+                                                                .map(
+                                                              (equipment) =>
+                                                                  Padding(
+                                                                padding: const EdgeInsets
+                                                                    .symmetric(
+                                                                    vertical:
+                                                                        4.0),
+                                                                child: Row(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    CachedNetworkImage(
+                                                                      imageUrl:
+                                                                          getEquipmentImageUrl(
+                                                                              equipment.name),
+                                                                      width: 40,
+                                                                      height:
+                                                                          40,
+                                                                      fit: BoxFit
+                                                                          .cover,
                                                                     ),
-                                                                  ),
-                                                                  Text(
-                                                                    'Level : ${equipment.level}/${equipment.maxLevel}',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .black),
-                                                                  ),
-                                                                ],
+                                                                    SizedBox(
+                                                                        width:
+                                                                            8),
+                                                                    Expanded(
+                                                                      child:
+                                                                          Text(
+                                                                        equipment
+                                                                            .name,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Theme.of(context).colorScheme.onSurface),
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                      ),
+                                                                    ),
+                                                                    Text(
+                                                                      'Level : ${equipment.level}/${equipment.maxLevel}',
+                                                                      style: TextStyle(
+                                                                          color: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .onSurface),
+                                                                    ),
+                                                                  ],
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      )
-                                                    : SizedBox.shrink(),
-                                              ],
+                                                          ],
+                                                        )
+                                                      : SizedBox.shrink(),
+                                                      SizedBox(height: 8),
+                                                  Text(
+                                                      "More data coming soon!"),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -382,21 +406,40 @@ class StatsScreenState extends State<StatsScreen>
                                         padding: EdgeInsets.all(1),
                                         decoration: BoxDecoration(
                                           color: item.level == item.maxLevel
-                                              ? Color(0xFFD4AF37) // Or
-                                              : Colors.black, // Noir
+                                              ? Colors.transparent
+                                              : Colors.black,
                                           borderRadius:
                                               BorderRadius.circular(4),
                                         ),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                        child: Stack(
                                           children: [
-                                            Text(
-                                              item.level.toString(),
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
+                                            item.level == item.maxLevel
+                                                ? Shimmer.fromColors(
+                                                    baseColor:
+                                                        Color(0xFFD4AF37),
+                                                    highlightColor:
+                                                        Color(0xFFD4AF37)
+                                                            .withOpacity(0.7),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            Color(0xFFD4AF37),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4),
+                                                      ),
+                                                    ),
+                                                  )
+                                                : SizedBox(), // Empty widget for non-max level
+                                            Align(
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                item.level.toString(),
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -601,7 +644,9 @@ class StatsScreenState extends State<StatsScreen>
                       imageUrl:
                           'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png')),
           label: Text(
-            widget.playerStats.warPreference,
+            widget.playerStats.warPreference == 'in'
+                ? AppLocalizations.of(context)?.ready ?? 'Ready'
+                : AppLocalizations.of(context)?.unready ?? 'Unready',
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),

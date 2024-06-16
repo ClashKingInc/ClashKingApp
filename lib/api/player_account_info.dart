@@ -5,8 +5,8 @@ import 'package:clashkingapp/api/user_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/api/player_accounts_list.dart';
-import 'package:clashkingapp/data/troop_data.dart';
-import 'package:clashkingapp/data/league_data.dart';
+import 'package:clashkingapp/api/league_data_manager.dart';
+import 'package:clashkingapp/api/troop_data_manager.dart';
 
 class PlayerAccountInfo {
   final String name;
@@ -379,7 +379,7 @@ class PlayerService {
       playerStats.townHallPic =
           await fetchPlayerTownHallByTownHallLevel(playerStats.townHallLevel);
 
-      playerStats.leagueUrl = await fetchLeagueImageUrl(playerStats.league);
+      playerStats.leagueUrl = LeagueDataManager().getLeagueUrl(playerStats.league);
 
       playerStats.builderHallPic = await fetchPlayerBuilderHallByTownHallLevel(
           playerStats.builderHallLevel);
@@ -388,7 +388,7 @@ class PlayerService {
       await fetchImagesAndTypes(playerStats.spells);
       await fetchImagesAndTypes(playerStats.equipments);
       playerStats.league = await fetchLeagueName(playerStats.tag);
-      playerStats.leagueUrl = await fetchLeagueImageUrl(playerStats.league);
+      playerStats.leagueUrl = LeagueDataManager().getLeagueUrl(playerStats.league);
       return playerStats;
     } else {
       throw Exception('Failed to load player stats');
@@ -431,22 +431,11 @@ class PlayerService {
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       ClanInfo clanInfo = ClanInfo.fromJson(jsonDecode(responseBody));
-      clanInfo.warLeague.imageUrl =
-          await fetchLeagueImageUrl(clanInfo.warLeague.name);
+      clanInfo.warLeague.imageUrl = LeagueDataManager().getLeagueUrl(clanInfo.warLeague.name);
 
       return clanInfo;
     } else {
       throw Exception('Failed to load clan stats');
-    }
-  }
-
-  Future<String> fetchLeagueImageUrl(String name) async {
-    if (leaguesUrls.containsKey(name)) {
-      // If the league name is in the map, return the corresponding URL and type
-      return leaguesUrls[name]!['url']!;
-    } else {
-      // If the league name is not in the map, return default image URL and type
-      return 'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
     }
   }
 
@@ -483,23 +472,10 @@ class PlayerService {
 
   Future<void> fetchImagesAndTypes(List<dynamic> items) async {
     for (var item in items) {
-      Map<String, String> urlAndType = await fetchTroopImageUrl(item.name);
+      Map<String, String> urlAndType = TroopDataManager().getTroopInfo(item.name);
       item.imageUrl = urlAndType['url'] ??
           'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
       item.type = urlAndType['type'] ?? 'unknown';
-    }
-  }
-
-  Future<Map<String, String>> fetchTroopImageUrl(String name) async {
-    if (troopUrlsAndTypes.containsKey(name)) {
-      // If the troop name is in the map, return the corresponding URL and type
-      return troopUrlsAndTypes[name]!;
-    } else {
-      // If the troop name is not in the map, return default image URL and type
-      return {
-        'url': 'https://clashkingfiles.b-cdn.net/clashkinglogo.png',
-        'type': 'unknown',
-      };
     }
   }
 }

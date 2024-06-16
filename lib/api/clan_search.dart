@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:clashkingapp/data/league_data.dart';
+import 'package:clashkingapp/api/league_data_manager.dart';
 
 class ClanSearch {
   final String tag;
@@ -279,29 +279,17 @@ class ClanService {
 
   Future<ClanSearch> fetchClanInfo(String tag) async {
     tag = tag.replaceAll('#', '!');
-
-    final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
-    );
+    final response = await http.get(Uri.parse('https://api.clashking.xyz/v1/clans/$tag'));
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       ClanSearch clanInfo = ClanSearch.fromJson(jsonDecode(responseBody));
-      clanInfo.warLeague.imageUrl = await fetchLeagueImageUrl(clanInfo.warLeague.name);
+      // Access league URL from the LeagueDataManager singleton
+      clanInfo.warLeague.imageUrl = LeagueDataManager().getLeagueUrl(clanInfo.warLeague.name);
 
       return clanInfo;
     } else {
       throw Exception('Failed to load clan stats');
-    }
-  }
-
-  Future<String> fetchLeagueImageUrl(String name) async {
-    if (leaguesUrls.containsKey(name)) {
-      // If the league name is in the map, return the corresponding URL and type
-      return leaguesUrls[name]!['url']!;
-    } else {
-      // If the league name is not in the map, return default image URL and type
-      return 'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
     }
   }
 }

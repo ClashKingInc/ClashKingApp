@@ -4,7 +4,6 @@ import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/data/troop_data.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/components/player_info_header_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
@@ -25,7 +24,8 @@ class ToDoScreen extends StatefulWidget {
 class ToDoScreenState extends State<ToDoScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-  String backgroundImageUrl = "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png";
+  String backgroundImageUrl =
+      "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png";
   String townHallImageUrl = "";
   List<Widget> stars = [];
   Widget hallChips = SizedBox.shrink();
@@ -73,17 +73,17 @@ class ToDoScreenState extends State<ToDoScreen>
               onTap: (value) {
                 setState(() {
                   backgroundImageUrl = value == 0
-                    ? "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png"
-                    : "https://clashkingfiles.b-cdn.net/landscape/builder-landscape.png";
+                      ? "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png"
+                      : "https://clashkingfiles.b-cdn.net/landscape/builder-landscape.png";
                   townHallImageUrl = value == 0
-                    ? widget.playerStats.townHallPic
-                    : widget.playerStats.builderHallPic;
+                      ? widget.playerStats.townHallPic
+                      : widget.playerStats.builderHallPic;
                   stars = value == 0
-                    ? _buildStars(widget.playerStats.townHallWeaponLevel)
-                    : _buildStars(0);
+                      ? _buildStars(widget.playerStats.townHallWeaponLevel)
+                      : _buildStars(0);
                   hallChips = value == 0
-                    ? buildTownHallChips()
-                    : buildBuilderHallChips();
+                      ? buildTownHallChips()
+                      : buildBuilderHallChips();
                 });
               },
               tabs: [
@@ -96,29 +96,35 @@ class ToDoScreenState extends State<ToDoScreen>
                   children: [
                     SizedBox(height: 10),
                     buildItemSection(widget.playerStats.heroes, 'hero',
-                      AppLocalizations.of(context)?.heroes ?? 'Heroes'),
+                        AppLocalizations.of(context)?.heroes ?? 'Heroes'),
                     buildItemSection(widget.playerStats.equipments, 'gear',
-                      AppLocalizations.of(context)?.equipment ?? 'Gears'),
+                        AppLocalizations.of(context)?.equipment ?? 'Gears'),
                     buildItemSection(widget.playerStats.troops, 'troop',
-                      AppLocalizations.of(context)?.troops ?? 'Troops'),
-                    buildItemSection(widget.playerStats.troops,'super-troop',
-                      AppLocalizations.of(context)?.superTroops ?? 'Super Troops'),
+                        AppLocalizations.of(context)?.troops ?? 'Troops'),
+                    buildItemSection(
+                        widget.playerStats.troops,
+                        'super-troop',
+                        AppLocalizations.of(context)?.superTroops ??
+                            'Super Troops'),
                     buildItemSection(widget.playerStats.troops, 'pet',
-                      AppLocalizations.of(context)?.pets ?? 'Pets'),
-                    buildItemSection( widget.playerStats.troops, 'siege-machine',
-                      AppLocalizations.of(context)?.siegeMachines ?? 'Siege Machine'),
+                        AppLocalizations.of(context)?.pets ?? 'Pets'),
+                    buildItemSection(
+                        widget.playerStats.troops,
+                        'siege-machine',
+                        AppLocalizations.of(context)?.siegeMachines ??
+                            'Siege Machine'),
                     buildItemSection(widget.playerStats.spells, 'spell',
-                      AppLocalizations.of(context)?.spells ?? 'Spells'),
+                        AppLocalizations.of(context)?.spells ?? 'Spells'),
                   ],
                 ),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, 
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 10),
                     buildItemSection(widget.playerStats.heroes, 'bb-hero',
-                      AppLocalizations.of(context)?.heroes ?? 'Heroes'),
+                        AppLocalizations.of(context)?.heroes ?? 'Heroes'),
                     buildItemSection(widget.playerStats.troops, 'bb-troop',
-                      AppLocalizations.of(context)?.troops ?? 'Troops'),
+                        AppLocalizations.of(context)?.troops ?? 'Troops'),
                   ],
                 ),
               ],
@@ -143,51 +149,24 @@ class ToDoScreenState extends State<ToDoScreen>
   double calculateCompletionPercentage(List<dynamic> items, String itemType) {
     var filteredItems = items.where((item) => item.type == itemType).toList();
 
-    int totalMaxLevel = filteredItems.fold(0, (prev, item) => (prev) + (item.maxLevel as int));
-    int totalCurrentLevel = filteredItems.fold(0, (prev, item) => (prev) + (item.level as int));
+    int totalMaxLevel =
+        filteredItems.fold(0, (prev, item) => (prev) + (item.maxLevel as int));
+    int totalCurrentLevel =
+        filteredItems.fold(0, (prev, item) => (prev) + (item.level as int));
 
     if (totalMaxLevel == 0) return 0.0;
 
     return (totalCurrentLevel / totalMaxLevel) * 100;
   }
 
-  String getEquipmentImageUrl(String equipmentName) {
-    return troopUrlsAndTypes[equipmentName]?['url'] ??
-      'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
-  }
-
   // Build the section for troops, super troops, pets, and siege machines
   Widget buildItemSection(List<dynamic> items, String itemType, String title) {
     List<String> itemNames = items.map((item) => item.name as String).toList();
 
-    double completionPercentage = calculateCompletionPercentage(items, itemType);
+    double completionPercentage =
+        calculateCompletionPercentage(items, itemType);
 
     List<Widget> missingItems = [];
-    troopUrlsAndTypes.forEach((name, data) {
-      if (!itemNames.contains(name) && data['type'] == itemType) {
-        missingItems.add(
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey,
-                width: 2,
-              ),
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: ColorFiltered(
-              colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
-              child: CachedNetworkImage(
-                imageUrl: data['url'] ?? "https://clashkingfiles.b-cdn.net/clashkinglogo.png",
-                height: 40,
-                width: 40,
-                fit: BoxFit.cover),
-            ),
-          ),
-        );
-      }
-    });
 
     return Card(
       margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
@@ -212,8 +191,8 @@ class ToDoScreenState extends State<ToDoScreen>
                       ),
                       TextSpan(
                         text: completionPercentage % 1 == 0
-                          ? '${completionPercentage.toInt()}%'
-                          : '${completionPercentage.toStringAsFixed(2)}%',
+                            ? '${completionPercentage.toInt()}%'
+                            : '${completionPercentage.toStringAsFixed(2)}%',
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ],
@@ -231,20 +210,20 @@ class ToDoScreenState extends State<ToDoScreen>
                         (item) => Container(
                           decoration: BoxDecoration(
                             color: item.type == 'gear'
-                              ? (item.name == 'Frozen Arrow' ||
-                                  item.name == 'Giant Gauntlet' ||
-                                  item.name == 'Fireball' ||
-                                  item.name == 'Spiky Ball'
-                                ? Colors.purple
-                                : Colors.blue)
-                              : null,
+                                ? (item.name == 'Frozen Arrow' ||
+                                        item.name == 'Giant Gauntlet' ||
+                                        item.name == 'Fireball' ||
+                                        item.name == 'Spiky Ball'
+                                    ? Colors.purple
+                                    : Colors.blue)
+                                : null,
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: (item.level == item.maxLevel || (item.type == 'super-troop' && item.superTroopIsActive))
-                                ? Color(0xFFD4AF37)
-                                : Theme.of(context)
-                                  .colorScheme
-                                  .onBackground,
+                              color: (item.level == item.maxLevel ||
+                                      (item.type == 'super-troop' &&
+                                          item.superTroopIsActive))
+                                  ? Color(0xFFD4AF37)
+                                  : Theme.of(context).colorScheme.onBackground,
                               width: 2,
                             ),
                           ),
@@ -257,7 +236,8 @@ class ToDoScreenState extends State<ToDoScreen>
                                     builder: (BuildContext context) {
                                       return Dialog(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
                                         elevation: 6,
                                         backgroundColor: Colors.transparent,
@@ -267,58 +247,71 @@ class ToDoScreenState extends State<ToDoScreen>
                                             decoration: BoxDecoration(
                                               color: Colors.white,
                                               shape: BoxShape.rectangle,
-                                              borderRadius: BorderRadius.circular(20),
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
                                             ),
                                             child: Column(
                                               children: <Widget>[
-                                                Text('${item.name}', style: TextStyle(color: Colors.black)),
+                                                Text('${item.name}',
+                                                    style: TextStyle(
+                                                        color: Colors.black)),
                                                 CachedNetworkImage(
-                                                  imageUrl: item.imageUrl,
-                                                  width: 40,
-                                                  height: 40,
-                                                  fit: BoxFit.cover),
+                                                    imageUrl: item.imageUrl,
+                                                    width: 40,
+                                                    height: 40,
+                                                    fit: BoxFit.cover),
                                                 Text(
                                                   itemType == 'super-troop'
-                                                    ? (item.superTroopIsActive
-                                                      ? 'Actif'
-                                                      : 'Inactif')
-                                                    : 'Level : ${item.level}/${item.maxLevel}',
-                                                  style: TextStyle(color: Colors.black),
+                                                      ? (item.superTroopIsActive
+                                                          ? 'Actif'
+                                                          : 'Inactif')
+                                                      : 'Level : ${item.level}/${item.maxLevel}',
+                                                  style: TextStyle(
+                                                      color: Colors.black),
                                                 ),
                                                 itemType == 'hero'
-                                                  ? Column(
-                                                    children: [
-                                                      ...item.equipment.map(
-                                                        (equipment) => Padding(
-                                                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                                          child: Row(
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            children: [
-                                                              CachedNetworkImage(
-                                                                imageUrl: getEquipmentImageUrl(equipment.name),
-                                                                width: 40,
-                                                                height: 40,
-                                                                fit: BoxFit.cover,
+                                                    ? Column(
+                                                        children: [
+                                                          ...item.equipment.map(
+                                                            (equipment) =>
+                                                                Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      vertical:
+                                                                          4.0),
+                                                              child: Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  SizedBox(
+                                                                      width: 8),
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      equipment
+                                                                          .name,
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              Colors.black),
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                    ),
+                                                                  ),
+                                                                  Text(
+                                                                    'Level : ${equipment.level}/${equipment.maxLevel}',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .black),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                              SizedBox(width: 8),
-                                                              Expanded(
-                                                                child: Text(
-                                                                  equipment.name,
-                                                                  style: TextStyle(color:Colors.black),
-                                                                  overflow: TextOverflow.ellipsis,
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                'Level : ${equipment.level}/${equipment.maxLevel}',
-                                                                style: TextStyle(color: Colors.black),
-                                                              ),
-                                                            ],
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                  : SizedBox.shrink(),
+                                                        ],
+                                                      )
+                                                    : SizedBox.shrink(),
                                               ],
                                             ),
                                           ),
@@ -330,10 +323,10 @@ class ToDoScreenState extends State<ToDoScreen>
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(6),
                                   child: CachedNetworkImage(
-                                    imageUrl: item.imageUrl,
-                                    width: 40,
-                                    height: 40,
-                                    fit: BoxFit.cover),
+                                      imageUrl: item.imageUrl,
+                                      width: 40,
+                                      height: 40,
+                                      fit: BoxFit.cover),
                                 ),
                               ),
                               (item.type != 'super-troop')
@@ -346,12 +339,14 @@ class ToDoScreenState extends State<ToDoScreen>
                                         padding: EdgeInsets.all(1),
                                         decoration: BoxDecoration(
                                           color: item.level == item.maxLevel
-                                            ? Color(0xFFD4AF37) // Or
-                                            : Colors.black, // Noir
-                                          borderRadius: BorderRadius.circular(4),
+                                              ? Color(0xFFD4AF37) // Or
+                                              : Colors.black, // Noir
+                                          borderRadius:
+                                              BorderRadius.circular(4),
                                         ),
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               item.level.toString(),
@@ -398,47 +393,50 @@ class ToDoScreenState extends State<ToDoScreen>
 
     return [
       if (widget.playerStats.clan != null)
-      GestureDetector(
-        onTap: () async {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-          );
-          ClanInfo clanInfo =
-              await ClanService().fetchClanInfo(widget.playerStats.clan!.tag);
-          if (mounted) {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ClanInfoScreen(clanInfo: clanInfo, discordUser: widget.discordUser),
-              ),
+        GestureDetector(
+          onTap: () async {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
             );
-          }
-        },
-        child: Chip(
-          avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
-              imageUrl: widget.playerStats.clan!.badgeUrls.small,
+            ClanInfo clanInfo =
+                await ClanService().fetchClanInfo(widget.playerStats.clan!.tag);
+            if (mounted) {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ClanInfoScreen(
+                      clanInfo: clanInfo, discordUser: widget.discordUser),
+                ),
+              );
+            }
+          },
+          child: Chip(
+            avatar: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              child: CachedNetworkImage(
+                imageUrl: widget.playerStats.clan!.badgeUrls.small,
+              ),
+            ),
+            labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+            label: Text(
+              widget.playerStats.clan!.name,
+              style: Theme.of(context).textTheme.labelLarge,
             ),
           ),
-          labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-          label: Text(
-            widget.playerStats.clan!.name,
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
         ),
-      ),
       Chip(
         avatar: CircleAvatar(
-          backgroundColor:Colors.transparent,
-          child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/home-base/hero-pics/Icon_HV_Hero_Archer_Queen.png"),
+          backgroundColor: Colors.transparent,
+          child: CachedNetworkImage(
+              imageUrl:
+                  "https://clashkingfiles.b-cdn.net/home-base/hero-pics/Icon_HV_Hero_Archer_Queen.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -448,7 +446,7 @@ class ToDoScreenState extends State<ToDoScreen>
       ),
       Chip(
         avatar: CircleAvatar(
-          backgroundColor:Colors.transparent,
+          backgroundColor: Colors.transparent,
           child: CachedNetworkImage(imageUrl: widget.playerStats.townHallPic),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -460,7 +458,9 @@ class ToDoScreenState extends State<ToDoScreen>
       Chip(
         avatar: CircleAvatar(
           backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_XP.png"),
+          child: CachedNetworkImage(
+              imageUrl:
+                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_XP.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -469,7 +469,8 @@ class ToDoScreenState extends State<ToDoScreen>
         ),
       ),
       Chip(
-        avatar: Icon(LucideIcons.chevronUp, color: Color.fromARGB(255, 27, 114, 33)),
+        avatar: Icon(LucideIcons.chevronUp,
+            color: Color.fromARGB(255, 27, 114, 33)),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
           '${widget.playerStats.donations}',
@@ -477,7 +478,8 @@ class ToDoScreenState extends State<ToDoScreen>
         ),
       ),
       Chip(
-        avatar: Icon(LucideIcons.chevronDown, color: Color.fromARGB(255, 155, 4, 4)),
+        avatar: Icon(LucideIcons.chevronDown,
+            color: Color.fromARGB(255, 155, 4, 4)),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
           '${widget.playerStats.donationsReceived}',
@@ -485,12 +487,14 @@ class ToDoScreenState extends State<ToDoScreen>
         ),
       ),
       Chip(
-        avatar: Icon(LucideIcons.chevronsUpDown, color: Color.fromARGB(255, 0, 136, 255)),
+        avatar: Icon(LucideIcons.chevronsUpDown,
+            color: Color.fromARGB(255, 0, 136, 255)),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          (widget.playerStats.donations / (widget.playerStats.donationsReceived == 0
-            ? 1
-            : widget.playerStats.donationsReceived))
+          (widget.playerStats.donations /
+                  (widget.playerStats.donationsReceived == 0
+                      ? 1
+                      : widget.playerStats.donationsReceived))
               .toStringAsFixed(2),
           style: Theme.of(context).textTheme.labelLarge,
         ),
@@ -498,7 +502,9 @@ class ToDoScreenState extends State<ToDoScreen>
       Chip(
         avatar: CircleAvatar(
           backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(imageUrl:"https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
+          child: CachedNetworkImage(
+              imageUrl:
+                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -509,11 +515,15 @@ class ToDoScreenState extends State<ToDoScreen>
       Chip(
         avatar: CircleAvatar(
           backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(imageUrl:"https://clashkingfiles.b-cdn.net/icons/Icon_CC_Resource_Capital_Gold_small.png"),
+          child: CachedNetworkImage(
+              imageUrl:
+                  "https://clashkingfiles.b-cdn.net/icons/Icon_CC_Resource_Capital_Gold_small.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          NumberFormat('#,###', 'fr_FR').format(widget.playerStats.clanCapitalContributions).replaceAll(',', ' '),
+          NumberFormat('#,###', 'fr_FR')
+              .format(widget.playerStats.clanCapitalContributions)
+              .replaceAll(',', ' '),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -529,10 +539,14 @@ class ToDoScreenState extends State<ToDoScreen>
         ...buildAllHallChips(),
         Chip(
           avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: widget.playerStats.warPreference == 'in'
-              ? CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png")
-              : CachedNetworkImage(imageUrl: 'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png')),
+              backgroundColor: Colors.transparent,
+              child: widget.playerStats.warPreference == 'in'
+                  ? CachedNetworkImage(
+                      imageUrl:
+                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png")
+                  : CachedNetworkImage(
+                      imageUrl:
+                          'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png')),
           label: Text(
             widget.playerStats.warPreference,
             style: Theme.of(context).textTheme.labelLarge,
@@ -541,7 +555,9 @@ class ToDoScreenState extends State<ToDoScreen>
         Chip(
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
+            child: CachedNetworkImage(
+                imageUrl:
+                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -552,7 +568,9 @@ class ToDoScreenState extends State<ToDoScreen>
         Chip(
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png"),
+            child: CachedNetworkImage(
+                imageUrl:
+                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -574,14 +592,14 @@ class ToDoScreenState extends State<ToDoScreen>
                   );
                 },
               );
-              PlayerLegendData legendData = await PlayerLegendService().fetchLegendData(widget.playerStats.tag);
+              PlayerLegendData legendData = await PlayerLegendService()
+                  .fetchLegendData(widget.playerStats.tag);
               navigator.pop();
               navigator.push(
                 MaterialPageRoute(
                   builder: (context) => LegendScreen(
-                    playerStats: widget.playerStats,
-                    playerLegendData: legendData
-                  ),
+                      playerStats: widget.playerStats,
+                      playerLegendData: legendData),
                 ),
               );
             }
@@ -601,7 +619,9 @@ class ToDoScreenState extends State<ToDoScreen>
         Chip(
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png"),
+            child: CachedNetworkImage(
+                imageUrl:
+                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -622,8 +642,9 @@ class ToDoScreenState extends State<ToDoScreen>
         ...buildAllHallChips(),
         Chip(
           avatar: CircleAvatar(
-            backgroundColor:Colors.transparent,
-            child: CachedNetworkImage(imageUrl: widget.playerStats.builderHallPic),
+            backgroundColor: Colors.transparent,
+            child:
+                CachedNetworkImage(imageUrl: widget.playerStats.builderHallPic),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -633,8 +654,10 @@ class ToDoScreenState extends State<ToDoScreen>
         ),
         Chip(
           avatar: CircleAvatar(
-            backgroundColor:Colors.transparent,
-            child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
+            backgroundColor: Colors.transparent,
+            child: CachedNetworkImage(
+                imageUrl:
+                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -645,7 +668,9 @@ class ToDoScreenState extends State<ToDoScreen>
         Chip(
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png"),
+            child: CachedNetworkImage(
+                imageUrl:
+                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
