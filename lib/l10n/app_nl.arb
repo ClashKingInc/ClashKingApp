@@ -24,7 +24,6 @@
     "username": "Gebruikersnaam",
     "pleaseEnterUsername": "Voer een gebruikersnaam in",
     "playerTags": "Speler Tags",
-    "pleaseEnterPlayerTags": "Voer een speler-ID in",
     "followingTagsDoNotExist": "De volgende labels bestaan niet: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
@@ -77,11 +76,17 @@
     "helpUsTranslate": "Help ons vertalen",
     "copiedToClipboard": "Gekopieerd naar klembord",
     "all": "Alle",
+    "@all": {
+        "description": "all items"
+    },
     "hourIndicator": "u",
     "minIndicator": "m",
     "noDataAvailable": "Geen gegevens beschikbaar.",
     "close": "Sluiten",
     "closed": "Gesloten",
+    "@closed": {
+        "description": "WarLog closed"
+    },
     "error": "Fout",
     "player": "Speler",
     "notFoundOrNotLinkedToOurSystem": "{player} niet gevonden of niet gekoppeld aan ons systeem.",
@@ -98,7 +103,13 @@
     "manage": "Beheren",
     "enterPlayerTag": "Voer een speler-ID in",
     "add": "Toevoegen",
+    "@add": {
+        "description": "Add an account"
+    },
     "delete": "Verwijderen",
+    "@delete": {
+        "description": "Delete an account"
+    },
     "addAccount": "Account toevoegen",
     "deleteAccount": "Account verwijderen",
     "playerTagNotExists": "Het ingevoerde speler-ID bestaat niet.",
@@ -106,9 +117,12 @@
     "failedToAddTryAgain": "Link toevoegen mislukt. Probeer het later opnieuw.",
     "failedToDeleteTryAgain": "Link verwijderen mislukt. Probeer het later opnieuw.",
     "search": "Zoeken",
+    "@search": {
+        "description": "Search for a player or a clan"
+    },
     "tagOrNamePlayer": "Spelers tag of naam",
     "searchPlayer": "Zoek speler",
-    "nameOrTag": "Naam of tag",
+    "nameOrTagPlayer": "Player's name or tag",
     "dashboard": "Dashboard",
     "homeBase": "Thuisbasis",
     "th": "SH",
@@ -119,8 +133,14 @@
     "coLeader": "Co-Leider",
     "elder": "Oudste",
     "member": "Lid",
-    "ready": "Gereed",
-    "unready": "Niet klaar",
+    "ready": "Opted In",
+    "@ready": {
+        "description": "Opted In for war"
+    },
+    "unready": "Opted Out",
+    "@unready": {
+        "description": "Opted Out for war"
+    },
     "heroes": "Helden",
     "equipment": "Uitrusting",
     "troops": "Troepen",
@@ -130,19 +150,43 @@
     "spells": "Spreuken",
     "achievements": "Prestaties",
     "byDay": "Per dag",
+    "@byDay": {
+        "description": "Shows stats by day"
+    },
     "charts": "Grafieken",
     "history": "Geschiedenis",
+    "@history": {
+        "description": "Shows EOS trophies history"
+    },
     "legendLeague": "Legendarische Divisie",
-    "notInLegendLeague": "Legendarische Divisie",
+    "notInLegendLeague": "Not in Legend League",
     "noLegendData": "Geen legendarische gegevens gevonden voor vandaag",
     "noRank": "Geen ranking",
     "started": "Gestart",
+    "@started": {
+        "description": "Title for the number of trophies at the beginning of the day"
+    },
     "ended": "Afgelopen",
+    "@ended": {
+        "description": "Title for the number of trophies at the end of the day"
+    },
     "average": "Gemiddelde",
+    "@average": {
+        "description": "Average value of legend trophies (defense and attack)"
+    },
     "remaining": "Resterend",
+    "@remaining": {
+        "description": "Remaining attacks or defenses"
+    },
     "toDoList": "Takenlijst",
     "worst": "Slechtste",
+    "@worst": {
+        "description": "Worst end of day trophies"
+    },
     "best": "Beste",
+    "@best": {
+        "description": "Best end of day trophies"
+    },
     "total": "Totaal",
     "heroesEquipments": "Heldenuitrusting",
     "daysAgo": "{days} dagen geleden",
@@ -205,10 +249,21 @@
     "trophiesByMonth": "Trofeeën per maand",
     "eosTrophies": "Einde van Seizoen Trofeeën",
     "searchClan": "Zoek clan",
+    "nameOrTagClan": "Clan's name or tag",
     "noResult": "Geen resultaat.",
     "filters": "Filters",
     "whatever": "Wat dan ook",
+    "@whatever": {
+        "description": "Whatever the value"
+    },
     "any": "Alle",
+    "@any": {
+        "description": "Any value is accepted"
+    },
+    "notSet": "Not set",
+    "@notSet": {
+        "description": "Filter value is not set"
+    },
     "warFrequency": "Oorlog frequentie",
     "minimumMembers": "Minimum aantal leden",
     "maximumMembers": "Maximaal aantal leden",
@@ -219,6 +274,9 @@
     "joinClanToUnlockNewFeatures": "Sluit je aan bij een clan om nieuwe functies te ontgrendelen.",
     "apply": "Toepassen",
     "opened": "Geopend",
+    "@opened": {
+        "description": "Clan is opened"
+    },
     "inviteOnly": "Op uitnodiging",
     "cancel": "Annuleren",
     "clan": "Clan",
@@ -242,18 +300,80 @@
     "war": "Oorlog",
     "league": "Competitie",
     "wars": "Oorlogen",
+    "ongoingWar": "Ongoing war",
+    "ongoingCwl": "Ongoing CWL",
+    "notInWar": "Not in war",
     "warHistory": "Oorlogsgeschiedenis",
     "warLog": "Oorlogs logboek",
-    "startsIn": "Begint over",
-    "startsAt": "Begint op",
-    "endsIn": "Eindigt in",
-    "endsAt": "Eindigt op",
+    "publicWarLog": "Public War Log",
+    "privateWarLog": "Private War Log",
+    "startsIn": "Starts in {time}",
+    "@startsIn": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "startsAt": "Starts at {time}",
+    "@startsAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "endsIn": "Ends in {time}",
+    "@endsIn": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "endsAt": "Ends at {time}",
+    "@endsAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "leftOnAt": "Left on {date} at {time}.",
+    "@leftOnAt": {
+        "description": "[The player] left the clan on 16/06/2024 at 10:35.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "joinedOnAt": "Joined on {date} at {time}.",
+    "@joinedOnAt": {
+        "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
     "statistics": "Statistieken",
     "stars": "Sterren",
-    "starsSmall": "sterren",
     "numberOfStars": "Aantal sterren",
     "destructionRate": "Vernietigingssnelheid",
+    "@destructionRate": {
+        "description": "Percentage of destruction in war"
+    },
     "events": "Events",
+    "@events": {
+        "description": "War events"
+    },
     "team": "Teams",
     "myTeam": "Mijn team",
     "enemiesTeam": "Vijanden",
@@ -261,10 +381,12 @@
     "defenses": "Verdedigingen",
     "attack": "Aanval",
     "attacks": "Aanvallen",
-    "notUsed": "niet gebruikt",
     "victory": "Overwinning",
     "defeat": "Verslagen",
     "draw": "Gelijkspel",
+    "@draw": {
+        "description": "War ended in a draw"
+    },
     "perfectWar": "Perfecte oorlog",
     "newest": "Nieuwste",
     "oldest": "Oudste",
@@ -322,7 +444,7 @@
     },
     "clanDraw": "De twee clans staan gelijk",
     "fastCalculator": "Snelle rekenmachine",
-    "fastCalculatorAnswer": "Om een vernietigingspercentage van {percentNeeded}% te bereiken, heb je in totaal {result}% nodig.",
+    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
