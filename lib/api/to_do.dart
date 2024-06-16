@@ -23,7 +23,7 @@ class PlayerData {
   final String playerTag;
   final String currentClan;
   final LegendData? legends;
-  final int seasonPass;
+  //final int seasonPass;
   final int lastActive;
   final RaidData raids;
   final CwlData cwl;
@@ -32,7 +32,7 @@ class PlayerData {
     required this.playerTag,
     required this.currentClan,
     this.legends,
-    required this.seasonPass,
+    //required this.seasonPass,
     required this.lastActive,
     required this.raids,
     required this.cwl,
@@ -41,13 +41,12 @@ class PlayerData {
   factory PlayerData.fromJson(Map<String, dynamic> json) {
     return PlayerData(
       playerTag: json['player_tag'] ?? '',
-      currentClan: json['current_clan'] ?? '',
-      legends:
-          json['legends'] != null ? LegendData.fromJson(json['legends']) : null,
-      seasonPass: json['season_pass'],
+      currentClan: json['current_clan'] ?? 'No clan',
+      legends: json['legends'] != null && json['raids'].isNotEmpty ? LegendData.fromJson(json['legends']) : null,
+      //seasonPass: json['season_pass'] ?? 0,
       lastActive: json['last_active'] ?? 0,
-      raids: RaidData.fromJson(json['raids']),
-      cwl: CwlData.fromJson(json['cwl']),
+      raids: json['raids'] != null && json['raids'].isNotEmpty ? RaidData.fromJson(json['raids']) : RaidData(attacksDone: 0, attackLimit: 0),
+      cwl: json['cwl'] != null && json['cwl'].isNotEmpty ? CwlData.fromJson(json['cwl']) : CwlData(attacksDone: 0, attackLimit: 0),
     );
   }
 }
@@ -149,8 +148,12 @@ class PlayerDataService {
       String encodedTag = entry.value.replaceAll('#', '%23');
       return '${entry.key == 0 ? '' : '&'}player_tags=$encodedTag';
     }).join('');
-    final response = await http.get(
-        Uri.parse('https://api.clashking.xyz/player/to-do?$tagsParameter'));
+    final response = await http.get(Uri.parse('https://api.clashking.xyz/player/to-do?$tagsParameter'));
+    print('blabla');
+    print(response.body);
+    print(response.statusCode);
+    print('**********************************************');
+
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       Map<String, dynamic> jsonBody = json.decode(body);
