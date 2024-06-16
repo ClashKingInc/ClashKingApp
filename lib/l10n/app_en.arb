@@ -342,6 +342,30 @@
             }
         }
     },
+    "leftOnAt" : "Left on {date} at {time}.",
+    "@leftOnAt": {
+        "description": "[The player] left the clan on 16/06/2024 at 10:35.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "joinedOnAt" : "Joined on {date} at {time}.",
+    "@joinedOnAt": {
+        "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
     "statistics": "Statistics",
     "stars": "Stars",
     "numberOfStars": "Number of stars",

@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
 import 'package:clashkingapp/api/player_account_info.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ClanJoinLeaveBody extends StatefulWidget {
   final List<String> user;
@@ -78,8 +79,18 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
                                           .tertiary)),
                           Text(
                             item.type == "join"
-                                ? "Joined on ${DateFormat('dd/MM/yyyy').format(item.time.toLocal())} at ${DateFormat('HH:mm').format(item.time.toLocal())}"
-                                : "Left on ${DateFormat('dd/MM/yyyy').format(item.time.toLocal())} at ${DateFormat('HH:mm').format(item.time.toLocal())}",
+                                ? AppLocalizations.of(context)?.joinedOnAt(
+                                        DateFormat('dd/MM/yyyy')
+                                            .format(item.time.toLocal()),
+                                        DateFormat('HH:mm')
+                                            .format(item.time.toLocal())) ??
+                                    "Joined on ${DateFormat('dd/MM/yyyy').format(item.time.toLocal())} at ${DateFormat('HH:mm').format(item.time.toLocal())}."
+                                : AppLocalizations.of(context)?.leftOnAt(
+                                        DateFormat('dd/MM/yyyy')
+                                            .format(item.time.toLocal()),
+                                        DateFormat('HH:mm')
+                                            .format(item.time.toLocal())) ??
+                                    "Left on ${DateFormat('dd/MM/yyyy').format(item.time.toLocal())} at ${DateFormat('HH:mm').format(item.time.toLocal())}.",
                             style: Theme.of(context).textTheme.bodySmall,
                           )
                         ],
