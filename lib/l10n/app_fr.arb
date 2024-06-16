@@ -275,6 +275,28 @@
             }
         }
     },
+    "leftOnAt": "Est parti le {date} à {time}.",
+    "@leftOnAt": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "joinedOnAt": "A rejoint le {date} à {time}.",
+    "@joinedOnAt": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
     "statistics": "Statistiques",
     "stars": "Étoiles",
     "starsSmall": "étoiles",
