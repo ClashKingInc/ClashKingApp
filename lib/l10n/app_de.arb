@@ -286,12 +286,12 @@
             }
         }
     },
-    "askForWar": "Kontaktiere den Anführer, oder einen Vize-Anführer, um einen Krieg zu starten.",
-    "askForWarLogOpening": "Kontaktiere den Anführer, oder einen Vize-Anführer, um den Kriegslog öffentlich zu machen.",
+    "askForWar": "Kontaktiere den Anführer oder einen Vize-Anführer, um einen Krieg zu starten.",
+    "askForWarLogOpening": "Kontaktiere den Anführer oder einen Vize-Anführer, um den Kriegsverlauf öffentlich zu machen.",
     "warLogClosed": "Kriegslog geschlossen.",
     "rounds": "Runden",
     "noDataAvailableForThisWar": "Keine Daten für diesen Krieg verfügbar",
-    "stateOfTheWar": "Kriegszwischenstand",
+    "stateOfTheWar": "Kriegsstand",
     "starsNeededToTakeTheLead": "{clan} benötigt noch {star} Stern(e) oder {stars2} Stern(e) und {percent}%, um die Führung zu übernehmen.",
     "@starsNeededToTakeTheLead": {
         "placeholders": {
@@ -309,7 +309,7 @@
             }
         }
     },
-    "starsAndPercentNeededToTakeTheLead": "{clan} benötigt noch {percent}% oder 1 Stern mehr, um die Führung zu übernehmen",
+    "starsAndPercentNeededToTakeTheLead": "{clan} benötigt noch {percent}% oder 1 Stern, um die Führung zu übernehmen",
     "@starsAndPercentNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -320,7 +320,7 @@
             }
         }
     },
-    "clanDraw": "Das Spiel ist ein Unentschieden",
+    "clanDraw": "Die beiden Clans sind gleichauf",
     "fastCalculator": "Schnellrechner",
     "fastCalculatorAnswer": "Um eine Zerstörungsrate von {percentNeeded}% zu erreichen, benötigst du insgesamt {result}%.",
     "@fastCalculatorAnswer": {
