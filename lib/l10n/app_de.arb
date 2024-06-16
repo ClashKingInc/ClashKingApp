@@ -55,7 +55,7 @@
     "faqFanContentPolicy": "Dieses Material ist nicht offiziell und nicht von Supercell bewilligt. Weitere Informationen findest du in Supercells Richtlinien für Fan-Content unter https://supercell.com/en/fan-content-policy/de",
     "faqWhyNotAccurate": "Warum sind die Daten manchmal ungenau oder fehlen?",
     "faqClanNotTracked": "Clan wird nicht getrackt\n",
-    "faqClanNotTrackedAnswer": "ClashKing kann diese Informationen nur erhalten, wenn der Clan aufgezeichnet wird. Wenn dein Clan noch nicht aufgezeichnet wird, lade unseren Discord-Bot zu deinem Discord-Server ein und verwende den Befehl /addclan. Wir hoffen, diese Funktion bald auch in der App verfügbar machen zu können.\n",
+    "faqClanNotTrackedAnswer": "ClashKing kann diese Informationen nur abrufen, wenn der Clan erfasst ist. Wenn dein Clan nicht erfasst ist, lade bitte den ClashKing Bot auf deinen Discord-Server ein und benutze den Befehl /addclan. Wir arbeiten daran, diese Funktion bald in der App verfügbar zu machen.",
     "faqTrackingDown": "Tracking nicht aktiv\n",
     "faqTrackingDownAnswer": "Das Tracking kann für eine gewisse Zeit nicht funktionieren. Deshalb kann es manchmal Lücken in den Daten geben. Wir arbeiten daran, dies zu verbessern.\n\n",
     "faqApiLimitation": "Clash of Clans API-Einschränkung\n",
