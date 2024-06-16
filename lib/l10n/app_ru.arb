@@ -24,7 +24,6 @@
     "username": "Имя пользователя",
     "pleaseEnterUsername": "Пожалуйста, введите имя пользователя",
     "playerTags": "Теги игрока",
-    "pleaseEnterPlayerTags": "Пожалуйста, введите теги игрока",
     "followingTagsDoNotExist": "Следующие теги не существуют: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
@@ -77,11 +76,17 @@
     "helpUsTranslate": "Помогите нам с переводом",
     "copiedToClipboard": "Скопировано в буфер обмена",
     "all": "Все",
+    "@all": {
+        "description": "all items"
+    },
     "hourIndicator": "ч",
     "minIndicator": "м",
     "noDataAvailable": "Данные отсутствуют.",
     "close": "Закрыть",
     "closed": "Закрыт",
+    "@closed": {
+        "description": "WarLog closed"
+    },
     "error": "Ошибка",
     "player": "Игрок",
     "notFoundOrNotLinkedToOurSystem": "{player} не найден или не связан с нашей системой.",
@@ -98,7 +103,13 @@
     "manage": "Управление",
     "enterPlayerTag": "Введите тег игрока",
     "add": "Добавить",
+    "@add": {
+        "description": "Add an account"
+    },
     "delete": "Удалить",
+    "@delete": {
+        "description": "Delete an account"
+    },
     "addAccount": "Добавить аккаунт",
     "deleteAccount": "Удалить аккаунт",
     "playerTagNotExists": "Введенный тег игрока не существует.",
@@ -106,9 +117,12 @@
     "failedToAddTryAgain": "Не удалось добавить ссылку. Пожалуйста, повторите попытку позже.",
     "failedToDeleteTryAgain": "Не удалось добавить ссылку. Пожалуйста, повторите попытку позже.",
     "search": "Поиск",
+    "@search": {
+        "description": "Search for a player or a clan"
+    },
     "tagOrNamePlayer": "Тег или имя игрока",
     "searchPlayer": "Найти игрока",
-    "nameOrTag": "Имя или тег",
+    "nameOrTagPlayer": "Player's name or tag",
     "dashboard": "Панель управления",
     "homeBase": "Home Base",
     "th": "TH",
@@ -119,8 +133,14 @@
     "coLeader": "Соруководитель",
     "elder": "Старейшина",
     "member": "Участник",
-    "ready": "Готов к бою",
-    "unready": "Не готов",
+    "ready": "Opted In",
+    "@ready": {
+        "description": "Opted In for war"
+    },
+    "unready": "Opted Out",
+    "@unready": {
+        "description": "Opted Out for war"
+    },
     "heroes": "Герои",
     "equipment": "Снаряжение",
     "troops": "Войны",
@@ -130,19 +150,43 @@
     "spells": "Заклинания",
     "achievements": "Список достижений",
     "byDay": "За день",
+    "@byDay": {
+        "description": "Shows stats by day"
+    },
     "charts": "Диаграммы",
     "history": "Журнал",
+    "@history": {
+        "description": "Shows EOS trophies history"
+    },
     "legendLeague": "Легендарная лига",
-    "notInLegendLeague": "Легендарная лига",
+    "notInLegendLeague": "Not in Legend League",
     "noLegendData": "Данные о легендах не найдены сегодня",
     "noRank": "Нет рейтингов",
     "started": "Запущен",
+    "@started": {
+        "description": "Title for the number of trophies at the beginning of the day"
+    },
     "ended": "Завершен",
+    "@ended": {
+        "description": "Title for the number of trophies at the end of the day"
+    },
     "average": "Средний",
+    "@average": {
+        "description": "Average value of legend trophies (defense and attack)"
+    },
     "remaining": "Осталось",
+    "@remaining": {
+        "description": "Remaining attacks or defenses"
+    },
     "toDoList": "Список дел",
     "worst": "Наихудший",
+    "@worst": {
+        "description": "Worst end of day trophies"
+    },
     "best": "Лучший",
+    "@best": {
+        "description": "Best end of day trophies"
+    },
     "total": "Всего",
     "heroesEquipments": "Снаряжение героя",
     "daysAgo": "{days} дн. назад",
@@ -205,10 +249,21 @@
     "trophiesByMonth": "Трофеи по месяцам",
     "eosTrophies": "Трофеи конца сезона",
     "searchClan": "Найти клан",
+    "nameOrTagClan": "Clan's name or tag",
     "noResult": "Нет результатов.",
     "filters": "Фильтры",
     "whatever": "Не важно",
+    "@whatever": {
+        "description": "Whatever the value"
+    },
     "any": "Any",
+    "@any": {
+        "description": "Any value is accepted"
+    },
+    "notSet": "Not set",
+    "@notSet": {
+        "description": "Filter value is not set"
+    },
     "warFrequency": "War frequency",
     "minimumMembers": "Минимум участников",
     "maximumMembers": "Максимум участников",
@@ -219,6 +274,9 @@
     "joinClanToUnlockNewFeatures": "Присоединитесь к Клану для разблокировки новых функций.",
     "apply": "Применить",
     "opened": "Opened",
+    "@opened": {
+        "description": "Clan is opened"
+    },
     "inviteOnly": "Invite Only",
     "cancel": "Cancel",
     "clan": "Clan",
@@ -242,18 +300,80 @@
     "war": "War",
     "league": "League",
     "wars": "Wars",
+    "ongoingWar": "Ongoing war",
+    "ongoingCwl": "Ongoing CWL",
+    "notInWar": "Not in war",
     "warHistory": "War History",
     "warLog": "War Log",
-    "startsIn": "Starts in",
-    "startsAt": "Starts at",
-    "endsIn": "Ends in",
-    "endsAt": "Ends at",
+    "publicWarLog": "Public War Log",
+    "privateWarLog": "Private War Log",
+    "startsIn": "Starts in {time}",
+    "@startsIn": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "startsAt": "Starts at {time}",
+    "@startsAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "endsIn": "Ends in {time}",
+    "@endsIn": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "endsAt": "Ends at {time}",
+    "@endsAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "leftOnAt": "Left on {date} at {time}.",
+    "@leftOnAt": {
+        "description": "[The player] left the clan on 16/06/2024 at 10:35.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "joinedOnAt": "Joined on {date} at {time}.",
+    "@joinedOnAt": {
+        "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
     "statistics": "Statistics",
     "stars": "Stars",
-    "starsSmall": "stars",
     "numberOfStars": "Number of stars",
     "destructionRate": "Destruction rate",
+    "@destructionRate": {
+        "description": "Percentage of destruction in war"
+    },
     "events": "Events",
+    "@events": {
+        "description": "War events"
+    },
     "team": "Teams",
     "myTeam": "My team",
     "enemiesTeam": "Enemies",
@@ -261,10 +381,12 @@
     "defenses": "Defenses",
     "attack": "Attack",
     "attacks": "Attacks",
-    "notUsed": "not used",
     "victory": "Победа",
     "defeat": "Поражение",
     "draw": "Ничья",
+    "@draw": {
+        "description": "War ended in a draw"
+    },
     "perfectWar": "Идеальная война",
     "newest": "Newest",
     "oldest": "Oldest",
@@ -322,7 +444,7 @@
     },
     "clanDraw": "The two clans are tied",
     "fastCalculator": "Fast calculator",
-    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, you need a total of {result}%.",
+    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
