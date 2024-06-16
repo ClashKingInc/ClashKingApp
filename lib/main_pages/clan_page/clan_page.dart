@@ -1,4 +1,5 @@
 import 'package:clashkingapp/core/my_app_state.dart';
+import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_join_leave_card.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/api/clan_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
@@ -67,6 +68,14 @@ class ClanInfoPageState extends State<ClanInfoPage>
                     child: NoClanCard(),
                   ),
                 ),
+              SizedBox(height: 4),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: ClanJoinLeaveCard(
+                  discordUser: widget.user.tags,
+                  clanInfo: widget.clanInfo!,
+                )
+              ),
             ],
           ),
         ),

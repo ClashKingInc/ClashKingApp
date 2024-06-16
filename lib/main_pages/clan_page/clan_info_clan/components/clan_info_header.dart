@@ -342,14 +342,12 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                             ),
                             label: Shimmer.fromColors(
                               period: Duration(seconds: 3),
-                              baseColor: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface, // Replace with your base color
+                              baseColor:
+                                  Theme.of(context).colorScheme.onSurface,
                               highlightColor: Theme.of(context)
                                   .colorScheme
                                   .onSurface
-                                  .withOpacity(
-                                      0.3), // Replace with your highlight color
+                                  .withOpacity(0.3),
                               child: Text(
                                 AppLocalizations.of(context)?.publicWarLog ??
                                     'Public War Log',
@@ -380,12 +378,15 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               ],
             ),
             SizedBox(height: 10),
-            Text(
-              widget.clanInfo.description,
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-              maxLines: 6,
-              overflow: TextOverflow.ellipsis,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                widget.clanInfo.description,
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+                maxLines: 6,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             SizedBox(height: 16),
             FutureBuilder<String>(
@@ -434,14 +435,12 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               SizedBox(width: 8),
                               Shimmer.fromColors(
                                 period: Duration(seconds: 3),
-                                baseColor: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface, // Replace with your base color
+                                baseColor:
+                                    Theme.of(context).colorScheme.onSurface,
                                 highlightColor: Theme.of(context)
                                     .colorScheme
                                     .onSurface
-                                    .withOpacity(
-                                        0.3), // Replace with your highlight color
+                                    .withOpacity(0.3),
                                 child: Text(
                                   AppLocalizations.of(context)?.ongoingWar ??
                                       "Ongoing War",
@@ -493,14 +492,12 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                 SizedBox(width: 8),
                                 Shimmer.fromColors(
                                   period: Duration(seconds: 3),
-                                  baseColor: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface, // Replace with your base color
+                                  baseColor:
+                                      Theme.of(context).colorScheme.onSurface,
                                   highlightColor: Theme.of(context)
                                       .colorScheme
                                       .onSurface
-                                      .withOpacity(
-                                          0.3), // Replace with your highlight color
+                                      .withOpacity(0.3),
                                   child: Text(
                                     AppLocalizations.of(context)?.ongoingCwl ??
                                         "Ongoing CWL",
@@ -550,21 +547,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                       SizedBox(height: 16),
                     ]);
                   } else {
-                    return Row(
-                      children: [
-                        CachedNetworkImage(
-                          width: 20,
-                          imageUrl:
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          AppLocalizations.of(context)?.notInWar ??
-                              "Not in War",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
-                    );
+                    return SizedBox.shrink();
                   }
                 }
               },
