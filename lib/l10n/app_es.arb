@@ -133,11 +133,11 @@
     "coLeader": "Colíder",
     "elder": "Veterano",
     "member": "Miembro",
-    "ready": "Opted In",
+    "ready": "Optar por participar",
     "@ready": {
         "description": "Opted In for war"
     },
-    "unready": "Opted Out",
+    "unready": "Optar por no participar",
     "@unready": {
         "description": "Opted Out for war"
     },
@@ -301,7 +301,7 @@
     "league": "Liga",
     "wars": "Guerras",
     "ongoingWar": "Guerra en curso",
-    "ongoingCwl": "CWL en curso",
+    "ongoingCwl": "LGC en curso",
     "notInWar": "No está en guerra",
     "warHistory": "Curso de Guerra",
     "warLog": "Registro de guerra",
