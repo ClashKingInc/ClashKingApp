@@ -122,7 +122,7 @@
     },
     "tagOrNamePlayer": "Etiqueta o nombre del jugador",
     "searchPlayer": "Buscar jugador",
-    "nameOrTagPlayer": "Player's name or tag",
+    "nameOrTagPlayer": "Nombre o etiqueta del jugador",
     "dashboard": "Panel",
     "homeBase": "Aldea",
     "th": "TH",
@@ -159,7 +159,7 @@
         "description": "Shows EOS trophies history"
     },
     "legendLeague": "Liga de Leyendas",
-    "notInLegendLeague": "Not in Legend League",
+    "notInLegendLeague": "No está en la Liga de Leyendas",
     "noLegendData": "No se han encontrado datos de leyenda hoy",
     "noRank": "Sin ranking",
     "started": "Comenzado",
@@ -249,10 +249,10 @@
     "trophiesByMonth": "Trofeos por mes",
     "eosTrophies": "Trofeos de fin de temporada",
     "searchClan": "Buscar clan",
-    "nameOrTagClan": "Clan's name or tag",
+    "nameOrTagClan": "Nombre o etiqueta del clan",
     "noResult": "Sin resultados.",
     "filters": "Filtros",
-    "whatever": "Whatever",
+    "whatever": "Como sea",
     "@whatever": {
         "description": "Whatever the value"
     },
@@ -260,7 +260,7 @@
     "@any": {
         "description": "Any value is accepted"
     },
-    "notSet": "Not set",
+    "notSet": "No establecido",
     "@notSet": {
         "description": "Filter value is not set"
     },
@@ -300,14 +300,14 @@
     "war": "Guerra",
     "league": "Liga",
     "wars": "Guerras",
-    "ongoingWar": "Ongoing war",
-    "ongoingCwl": "Ongoing CWL",
-    "notInWar": "Not in war",
+    "ongoingWar": "Guerra en curso",
+    "ongoingCwl": "CWL en curso",
+    "notInWar": "No está en guerra",
     "warHistory": "Curso de Guerra",
     "warLog": "Registro de guerra",
-    "publicWarLog": "Public War Log",
-    "privateWarLog": "Private War Log",
-    "startsIn": "Starts in {time}",
+    "publicWarLog": "Registro de guerra pública",
+    "privateWarLog": "Registro de guerra privada",
+    "startsIn": "Comienza en {time}",
     "@startsIn": {
         "placeholders": {
             "time": {
@@ -315,7 +315,7 @@
             }
         }
     },
-    "startsAt": "Starts at {time}",
+    "startsAt": "Comienza en {time}",
     "@startsAt": {
         "placeholders": {
             "time": {
@@ -323,7 +323,7 @@
             }
         }
     },
-    "endsIn": "Ends in {time}",
+    "endsIn": "Termina en {time}",
     "@endsIn": {
         "placeholders": {
             "time": {
@@ -331,7 +331,7 @@
             }
         }
     },
-    "endsAt": "Ends at {time}",
+    "endsAt": "Termina en {time}",
     "@endsAt": {
         "placeholders": {
             "time": {
@@ -339,7 +339,7 @@
             }
         }
     },
-    "leftOnAt": "Left on {date} at {time}.",
+    "leftOnAt": "Se fue el {date} a las {time}.",
     "@leftOnAt": {
         "description": "[The player] left the clan on 16/06/2024 at 10:35.",
         "placeholders": {
@@ -351,7 +351,7 @@
             }
         }
     },
-    "joinedOnAt": "Joined on {date} at {time}.",
+    "joinedOnAt": "Se unió el {date} a las {time}.",
     "@joinedOnAt": {
         "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
         "placeholders": {
@@ -444,7 +444,7 @@
     },
     "clanDraw": "Ambos clanes están empatados",
     "fastCalculator": "Calculadora rápida",
-    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
+    "fastCalculatorAnswer": "Para lograr una tasa de destrucción de {percentNeeded}%, se necesita un total de {result}%.",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
