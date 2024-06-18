@@ -122,7 +122,7 @@
     },
     "tagOrNamePlayer": "Spelers tag of naam",
     "searchPlayer": "Zoek speler",
-    "nameOrTagPlayer": "Player's name or tag",
+    "nameOrTagPlayer": "Spelers-ID of naam",
     "dashboard": "Dashboard",
     "homeBase": "Thuisbasis",
     "th": "SH",
@@ -133,11 +133,11 @@
     "coLeader": "Co-Leider",
     "elder": "Oudste",
     "member": "Lid",
-    "ready": "Opted In",
+    "ready": "Aangemeld",
     "@ready": {
         "description": "Opted In for war"
     },
-    "unready": "Opted Out",
+    "unready": "Afgemeld",
     "@unready": {
         "description": "Opted Out for war"
     },
@@ -159,7 +159,7 @@
         "description": "Shows EOS trophies history"
     },
     "legendLeague": "Legendarische Divisie",
-    "notInLegendLeague": "Not in Legend League",
+    "notInLegendLeague": "Niet in de Legendarische Divisie",
     "noLegendData": "Geen legendarische gegevens gevonden voor vandaag",
     "noRank": "Geen ranking",
     "started": "Gestart",
@@ -249,7 +249,7 @@
     "trophiesByMonth": "Trofeeën per maand",
     "eosTrophies": "Einde van Seizoen Trofeeën",
     "searchClan": "Zoek clan",
-    "nameOrTagClan": "Clan's name or tag",
+    "nameOrTagClan": "Naam of label van de clan",
     "noResult": "Geen resultaat.",
     "filters": "Filters",
     "whatever": "Wat dan ook",
@@ -260,7 +260,7 @@
     "@any": {
         "description": "Any value is accepted"
     },
-    "notSet": "Not set",
+    "notSet": "Niet ingesteld",
     "@notSet": {
         "description": "Filter value is not set"
     },
@@ -300,14 +300,14 @@
     "war": "Oorlog",
     "league": "Competitie",
     "wars": "Oorlogen",
-    "ongoingWar": "Ongoing war",
-    "ongoingCwl": "Ongoing CWL",
-    "notInWar": "Not in war",
+    "ongoingWar": "Lopende oorlog",
+    "ongoingCwl": "Lopende CWL",
+    "notInWar": "Niet in oorlog",
     "warHistory": "Oorlogsgeschiedenis",
     "warLog": "Oorlogs logboek",
-    "publicWarLog": "Public War Log",
-    "privateWarLog": "Private War Log",
-    "startsIn": "Starts in {time}",
+    "publicWarLog": "Openbaar Oorlogslogboek",
+    "privateWarLog": "Privé Oorlogslogboek",
+    "startsIn": "Begint over {time}",
     "@startsIn": {
         "placeholders": {
             "time": {
@@ -315,7 +315,7 @@
             }
         }
     },
-    "startsAt": "Starts at {time}",
+    "startsAt": "Begint om {time}",
     "@startsAt": {
         "placeholders": {
             "time": {
@@ -323,7 +323,7 @@
             }
         }
     },
-    "endsIn": "Ends in {time}",
+    "endsIn": "Eindigt in {time}",
     "@endsIn": {
         "placeholders": {
             "time": {
@@ -331,7 +331,7 @@
             }
         }
     },
-    "endsAt": "Ends at {time}",
+    "endsAt": "Eindigt om {time}",
     "@endsAt": {
         "placeholders": {
             "time": {
@@ -339,7 +339,7 @@
             }
         }
     },
-    "leftOnAt": "Left on {date} at {time}.",
+    "leftOnAt": "Vertrokken op {date} om {time}.",
     "@leftOnAt": {
         "description": "[The player] left the clan on 16/06/2024 at 10:35.",
         "placeholders": {
@@ -351,7 +351,7 @@
             }
         }
     },
-    "joinedOnAt": "Joined on {date} at {time}.",
+    "joinedOnAt": "Lid geworden op {date} om {time}.",
     "@joinedOnAt": {
         "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
         "placeholders": {
@@ -444,7 +444,7 @@
     },
     "clanDraw": "De twee clans staan gelijk",
     "fastCalculator": "Snelle rekenmachine",
-    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
+    "fastCalculatorAnswer": "Om een vernietigingspercentage van {percentNeeded}% te bereiken, heb je in totaal {result}% nodig.",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
