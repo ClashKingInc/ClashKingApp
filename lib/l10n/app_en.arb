@@ -342,6 +342,10 @@
             }
         }
     },
+    "joinLeaveLogs": "Join/Leave Logs",
+    "@joinLeaveLogs": {
+        "description": "Logs of players joining or leaving the clan."
+    },
     "leftOnAt" : "Left on {date} at {time}.",
     "@leftOnAt": {
         "description": "[The player] left the clan on 16/06/2024 at 10:35.",
