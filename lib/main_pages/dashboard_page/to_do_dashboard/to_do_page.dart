@@ -3,16 +3,14 @@ import 'package:clashkingapp/api/to_do.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/components/player_info_header_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
-import 'package:clashkingapp/api/clan_info.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_legend_page.dart';
-import 'package:clashkingapp/api/player_legend.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 
 class ToDoScreen extends StatefulWidget {
   final PlayerAccountInfo playerStats;

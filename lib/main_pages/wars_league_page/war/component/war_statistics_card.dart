@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/api/current_war_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 

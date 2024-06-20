@@ -8,7 +8,6 @@ class User {
   String globalName;
   bool isDiscordUser = false;
   List<String> tags = [];
-  List<Map<String, dynamic>> selectedTagDetails = [];
 
   User({
     required this.id,
@@ -27,7 +26,7 @@ class User {
 
   @override
   String toString() {
-    return 'DiscordUser{id: $id, avatar: https://cdn.discordapp.com/avatars/$id/$avatar.png, globalName: $globalName, isDiscordUser : $isDiscordUser, tags: $tags, selectedTagDetails: $selectedTagDetails}';
+    return 'DiscordUser{id: $id, avatar: https://cdn.discordapp.com/avatars/$id/$avatar.png, globalName: $globalName, isDiscordUser : $isDiscordUser, tags: $tags}';
   }
 }
 

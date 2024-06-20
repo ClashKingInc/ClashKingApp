@@ -1,17 +1,16 @@
-import 'package:clashkingapp/api/player_account_info.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
-import 'package:clashkingapp/api/user_info.dart';
+import 'package:clashkingapp/classes/user.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/creator_code_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_infos_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_legend_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_search_card.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/to_do_card.dart';
-import 'package:clashkingapp/api/player_legend.dart';
+import 'package:clashkingapp/classes/profile/legend_league.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
-  final PlayerAccountInfo playerStats;
+  final ProfileInfo playerStats;
   final User discordUser;
 
   DashboardPage({required this.playerStats, required this.discordUser});
@@ -23,22 +22,6 @@ class DashboardPage extends StatefulWidget {
 class DashboardPageState extends State<DashboardPage>
     with SingleTickerProviderStateMixin {
   late Future<PlayerLegendData> legendData;
-
-  @override
-  void initState() {
-    super.initState();
-    PlayerLegendService playerLegendService = PlayerLegendService();
-    legendData = playerLegendService.fetchLegendData(widget.playerStats.tag);
-  }
-
-  @override
-  void didUpdateWidget(DashboardPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.playerStats.tag != oldWidget.playerStats.tag) {
-      PlayerLegendService playerLegendService = PlayerLegendService();
-      legendData = playerLegendService.fetchLegendData(widget.playerStats.tag);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +36,6 @@ class DashboardPageState extends State<DashboardPage>
             setState(() {
               final appState = Provider.of<MyAppState>(context, listen: false);
               appState.refreshData();
-              PlayerLegendService playerLegendService = PlayerLegendService();
-              legendData = playerLegendService.fetchLegendData(widget.playerStats.tag);
             });
           },
           child: ListView(
@@ -76,32 +57,18 @@ class DashboardPageState extends State<DashboardPage>
                     discordUser: widget.discordUser.tags),
               ),
               // Legend Infos Card : Displayed only if data
-              Padding(
-                padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                child: FutureBuilder<PlayerLegendData>(
-                  future: legendData,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<PlayerLegendData> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return SizedBox.shrink();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      if (snapshot.data!.legendData.isNotEmpty) {
-                        return PlayerLegendCard(
-                            playerStats: widget.playerStats,
-                            playerLegendData: snapshot.data!);
-                      } else {
-                        return SizedBox.shrink();
-                      }
-                    }
-                  },
+              if (widget.playerStats.playerLegendData != null)
+                Padding(
+                  padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                  child: PlayerLegendCard(
+                    playerStats: widget.playerStats,
+                    playerLegendData: widget.playerStats.playerLegendData!,
+                  ),
                 ),
-              ),
-              Padding(
+              /*Padding(
                 padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 4),
-                child: ToDoCard(tags: widget.discordUser.tags, playerStats: widget.playerStats),
-              ),
+                child: ToDoCard(discordUser: widget.discordUser.tags, playerStats: widget.playerStats),
+              ),*/
             ],
           ),
         ),

@@ -1,13 +1,13 @@
 import 'package:clashkingapp/main_pages/clan_page/clan_join_leave/clan_join_leave_body.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_join_leave/clan_join_leave_header.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/join_leave.dart';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/join_leave.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 
 class ClanJoinLeaveScreen extends StatefulWidget {
   final List<String> user;
   final JoinLeaveClan joinLeaveClan;
-  final ClanInfo clanInfo;
+  final Clan? clanInfo;
 
   ClanJoinLeaveScreen(
       {super.key,

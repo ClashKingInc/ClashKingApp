@@ -1,4 +1,4 @@
-import 'package:clashkingapp/api/player_account_info.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/components/achievement_page.dart';
 import 'package:clipboard/clipboard.dart';
@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PlayerInfoHeaderCard extends StatefulWidget {
-  final PlayerAccountInfo playerStats;
+  final ProfileInfo playerStats;
   final String townHallImageUrl;
   final List<Widget> stars;
   final Widget hallChips;

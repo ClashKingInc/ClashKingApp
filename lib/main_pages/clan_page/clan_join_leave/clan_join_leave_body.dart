@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/join_leave.dart';
+import 'package:clashkingapp/classes/clan/join_leave.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 
 class ClanJoinLeaveBody extends StatefulWidget {
   final List<String> user;
@@ -36,8 +36,8 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
                   );
                 },
               );
-              PlayerAccountInfo playerStats =
-                  await PlayerService().fetchPlayerStats(item.tag);
+              ProfileInfo playerStats =
+                  await ProfileInfoService().fetchProfileInfo(item.tag);
               navigator.pop();
               navigator.push(
                 MaterialPageRoute(

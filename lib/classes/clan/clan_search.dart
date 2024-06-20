@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:clashkingapp/api/league_data_manager.dart';
+import 'package:clashkingapp/classes/data/league_data_manager.dart';
 
-class ClanInfo {
+class ClanSearch {
   final String tag;
   final String name;
   final String type;
@@ -31,7 +31,7 @@ class ClanInfo {
   final int requiredTownhallLevel;
   final Map<String, dynamic> clanCapital;
 
-  ClanInfo({
+  ClanSearch({
     required this.tag,
     required this.name,
     required this.type,
@@ -60,8 +60,8 @@ class ClanInfo {
     required this.clanCapital,
   });
 
-  factory ClanInfo.fromJson(Map<String, dynamic> json) {
-    return ClanInfo(
+  factory ClanSearch.fromJson(Map<String, dynamic> json) {
+    return ClanSearch(
       tag: json['tag'] ?? 'No tag',
       name: json['name'] ?? 'No name',
       type: json['type'] ?? 'No type',
@@ -83,9 +83,7 @@ class ClanInfo {
       warLeague: WarLeague.fromJson(json['warLeague'] ?? {}),
       members: json['members'] ?? 0,
       location: Location.fromJson(json['location'] ?? {}),
-      memberList: (json['memberList'] as List<dynamic>)
-          .map((e) => Member.fromJson(e))
-          .toList(),
+      memberList: (json['memberList'] as List<dynamic>).map((e) => Member.fromJson(e)).toList(),
       labels: json['labels'] ?? [],
       requiredBuilderBaseTrophies: json['requiredBuilderBaseTrophies'] ?? 0,
       requiredTownhallLevel: json['requiredTownhallLevel'] ?? 0,
@@ -138,6 +136,7 @@ class WarLeague {
     );
     return warLeague;
   }
+     
 }
 
 class Location {
@@ -158,14 +157,14 @@ class Location {
     return Location(
       localizedName: json['localizedName'] ?? 'No localizedName',
       id: json['id'] ?? 0,
-      name: json['name'] ?? 'Unknown country',
+      name: json['name'] ?? 'No name',
       isCountry: json['isCountry'] ?? false,
       countryCode: json['countryCode'] ?? 'No countryCode',
     );
   }
 }
 
-class Member {
+class Member{
   final String tag;
   final String name;
   final String role;
@@ -215,12 +214,12 @@ class Member {
   }
 }
 
-class League {
+class League{
   final int id;
   final String name;
   final IconUrls imageUrl;
 
-  League({
+  League({ 
     required this.id,
     required this.name,
     required this.imageUrl,
@@ -235,7 +234,7 @@ class League {
   }
 }
 
-class IconUrls {
+class IconUrls{
   final String small;
   final String tiny;
   final String medium;
@@ -255,7 +254,7 @@ class IconUrls {
   }
 }
 
-class BuilderBaseLeague {
+class BuilderBaseLeague{
   final int id;
   final String name;
 
@@ -274,32 +273,23 @@ class BuilderBaseLeague {
 
 // Service class to fetch clan info
 class ClanService {
-  Map<String, String> leagueUrls = {};
-
   Future<void> initEnv() async {
     await dotenv.load(fileName: ".env");
   }
 
-  Future<ClanInfo> fetchClanInfo(String tag) async {
+  Future<ClanSearch> fetchClanInfo(String tag) async {
     tag = tag.replaceAll('#', '!');
-
-    final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
-    );
+    final response = await http.get(Uri.parse('https://api.clashking.xyz/v1/clans/$tag'));
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
-      ClanInfo clanInfo = ClanInfo.fromJson(jsonDecode(responseBody));
+      ClanSearch clanInfo = ClanSearch.fromJson(jsonDecode(responseBody));
+      // Access league URL from the LeagueDataManager singleton
       clanInfo.warLeague.imageUrl = LeagueDataManager().getLeagueUrl(clanInfo.warLeague.name);
 
       return clanInfo;
     } else {
       throw Exception('Failed to load clan stats');
     }
-  }
-
-  String fetchLeagueImageUrl(String name) {
-    return leagueUrls[name] ??
-        'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
   }
 }

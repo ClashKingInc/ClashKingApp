@@ -8,7 +8,7 @@ import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/main_pages/login_page/tag_input_chip.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:clashkingapp/api/cocdiscord_link_functions.dart';
+import 'package:clashkingapp/classes/cocdiscord_link_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 

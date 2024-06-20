@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/api/league_data_manager.dart';
+import 'package:clashkingapp/classes/data/league_data_manager.dart';
 
 class ClanSearchResultTile extends StatefulWidget {
   final dynamic clan;
@@ -47,7 +47,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
               );
             },
           );
-          ClanInfo clanInfo = await ClanService().fetchClanInfo(widget.clan['tag']);
+          Clan clanInfo = await ClanService().fetchClanInfo(widget.clan['tag']);
           navigator.pop();
           navigator.push(
             MaterialPageRoute(builder: (context) => ClanInfoScreen(clanInfo: clanInfo, discordUser: widget.user)),

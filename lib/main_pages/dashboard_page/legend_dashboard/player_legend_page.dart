@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/api/player_legend.dart';
+import 'package:clashkingapp/classes/profile/legend_league.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_header.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_used_gear_card.dart';
@@ -14,7 +14,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class LegendScreen extends StatefulWidget {
-  final PlayerAccountInfo playerStats;
+  final ProfileInfo playerStats;
   final PlayerLegendData playerLegendData;
 
   LegendScreen(
@@ -93,14 +93,7 @@ class LegendScreenState extends State<LegendScreen>
       body: RefreshIndicator(
         backgroundColor: Theme.of(context).colorScheme.surface,
         onRefresh: () {
-          PlayerLegendService playerLegendService = PlayerLegendService();
-          return playerLegendService
-              .fetchLegendData(widget.playerStats.tag)
-              .then((data) {
-            setState(() {
-              legendData = data;
-            });
-          });
+          return Future.value();
         },
         child: SingleChildScrollView(
           child: Column(

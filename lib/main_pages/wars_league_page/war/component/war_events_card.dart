@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
-import 'package:clashkingapp/api/current_war_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:clashkingapp/components/right_pointing_triangle.dart';
 import 'package:clashkingapp/components/left_pointing_triangle.dart';

@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/core/theme_notifier.dart';
-import 'package:clashkingapp/api/league_data_manager.dart';
-import 'package:clashkingapp/api/troop_data_manager.dart';
+import 'package:clashkingapp/classes/data/league_data_manager.dart';
+import 'package:clashkingapp/classes/data/troop_data_manager.dart';
 
 // CallbackDispatcher for background execution (Android only)
 void callbackDispatcher() {

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:clashkingapp/api/functions.dart';
+import 'package:clashkingapp/classes/functions.dart';
 
 class JoinLeaveItem {
   final String name;
@@ -51,7 +51,6 @@ class JoinLeaveClanService {
     final response = await http
         .get(Uri.parse('https://api.clashking.xyz/clan/$clanTag/join-leave'));
 
-    print(response.body);
 
     if (response.statusCode == 200) {
       JoinLeaveClan joinLeaveClan =

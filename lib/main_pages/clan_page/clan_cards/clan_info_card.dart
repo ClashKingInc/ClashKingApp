@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -9,7 +9,7 @@ class ClanInfoCard extends StatelessWidget {
     required this.clanInfo,
   });
 
-  final ClanInfo clanInfo;
+  final Clan? clanInfo;
 
   @override
   Widget build(
@@ -29,10 +29,10 @@ class ClanInfoCard extends StatelessWidget {
                       SizedBox(
                         height: 70,
                         width: 70,
-                        child: CachedNetworkImage(imageUrl: clanInfo.badgeUrls.large),
+                        child: CachedNetworkImage(imageUrl: clanInfo!.badgeUrls.large),
                       ),
                       Text(
-                        clanInfo.tag,
+                        clanInfo!.tag,
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ]
@@ -44,15 +44,15 @@ class ClanInfoCard extends StatelessWidget {
                   children: <Widget>[
                     Row(
                       children: [
-                        if(clanInfo.location.countryCode != "No countryCode")
+                        if(clanInfo!.location!.countryCode != "No countryCode")
                         CachedNetworkImage(
-                          imageUrl: "https://clashkingfiles.b-cdn.net/country-flags/${clanInfo.location.countryCode}.png",
+                          imageUrl: "https://clashkingfiles.b-cdn.net/country-flags/${clanInfo!.location!.countryCode}.png",
                           width: 16,
                           height: 20,
                         ),
                         SizedBox(width: 8),
                         Text(
-                          clanInfo.name,
+                          clanInfo!.name,
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ],
@@ -67,7 +67,7 @@ class ClanInfoCard extends StatelessWidget {
                         ),
                         SizedBox(width: 8),
                         Text(
-                          '${clanInfo.members.toString()}/50   |   ',
+                          '${clanInfo!.members.toString()}/50   |   ',
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
                         SizedBox(
@@ -77,7 +77,7 @@ class ClanInfoCard extends StatelessWidget {
                         ),
                         SizedBox(width: 4),
                         Text(
-                          clanInfo.clanPoints.toString(),
+                          clanInfo!.clanPoints.toString(),
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
                       ],
@@ -88,11 +88,11 @@ class ClanInfoCard extends StatelessWidget {
                         SizedBox(
                           height: 20,
                           width: 20,
-                          child: CachedNetworkImage(imageUrl: clanInfo.warLeague.imageUrl),
+                          child: CachedNetworkImage(imageUrl: clanInfo!.warLeague!.imageUrl),
                         ),
                         SizedBox(width: 8),
                         Text(
-                          clanInfo.warLeague.name.toString(),
+                          clanInfo!.warLeague!.name.toString(),
                           style: Theme.of(context).textTheme.labelLarge,
                         )
                       ],

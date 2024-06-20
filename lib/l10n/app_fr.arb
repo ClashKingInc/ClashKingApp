@@ -275,6 +275,7 @@
             }
         }
     },
+    "joinLeaveLogs": "Historique d'arrivées/départs",
     "leftOnAt": "Est parti le {date} à {time}.",
     "@leftOnAt": {
         "placeholders": {

@@ -1,11 +1,11 @@
-import 'package:clashkingapp/api/player_legend.dart';
+
+import 'package:clashkingapp/classes/profile/legend_league.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_legend_page.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';import 'package:clashkingapp/classes/profile/profile_info.dart';
 
 class PlayerLegendCard extends StatelessWidget {
   const PlayerLegendCard({
@@ -14,7 +14,7 @@ class PlayerLegendCard extends StatelessWidget {
     required this.playerLegendData,
   });
 
-  final PlayerAccountInfo playerStats;
+  final ProfileInfo playerStats;
   final PlayerLegendData playerLegendData;
 
   @override

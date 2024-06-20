@@ -1,15 +1,15 @@
 import 'dart:ui';
 import 'dart:math';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 
 class AchievementScreen extends StatefulWidget {
-  final PlayerAccountInfo playerStats;
+  final ProfileInfo playerStats;
 
   AchievementScreen({super.key, required this.playerStats});
 

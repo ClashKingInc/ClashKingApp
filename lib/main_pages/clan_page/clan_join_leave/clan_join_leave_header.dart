@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/join_leave.dart';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/join_leave.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -9,7 +9,7 @@ import 'package:clipboard/clipboard.dart';
 class ClanJoinLeaveHeader extends StatefulWidget {
   final List<String> user;
   final JoinLeaveClan joinLeaveClan;
-  final ClanInfo clanInfo;
+  final Clan? clanInfo;
 
   ClanJoinLeaveHeader(
       {super.key,
@@ -54,19 +54,19 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
             bottom: 0,
             child: Column(children: [
               CachedNetworkImage(
-                imageUrl: widget.clanInfo.badgeUrls.large,
+                imageUrl: widget.clanInfo!.badgeUrls.large,
                 width: 100,
               ),
               Center(
                 child: Text(
-                  widget.clanInfo.name,
+                  widget.clanInfo!.name,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Colors.white),
                 ),
               ),
               InkWell(
                 onTap: () {
-                  FlutterClipboard.copy(widget.clanInfo.tag).then((value) {
+                  FlutterClipboard.copy(widget.clanInfo!.tag).then((value) {
                     final snackBar = SnackBar(
                       content: Center(
                         child: Text(
@@ -84,7 +84,7 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
                 child: Container(
                   padding: EdgeInsets.only(top: 2.0, bottom: 4.0),
                   child: Text(
-                    widget.clanInfo.tag,
+                    widget.clanInfo!.tag,
                     style: TextStyle(
                         color: Colors.white),
                   ),

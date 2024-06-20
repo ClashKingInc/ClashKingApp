@@ -1,29 +1,22 @@
-import 'package:clashkingapp/api/user_info.dart';
+import 'package:clashkingapp/classes/user.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
-import 'package:clashkingapp/api/clan_info.dart';
-import 'package:clashkingapp/api/current_war_info.dart';
-import 'package:clashkingapp/api/player_accounts_list.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/widgets/widgets_functions.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
 import 'package:clashkingapp/main_pages/login_page/login_page.dart';
+import 'package:clashkingapp/classes/accounts.dart';
 
 class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
-  PlayerAccounts? playerAccounts;
-  PlayerAccountInfo? playerStats;
-  ClanInfo? clanInfo;
-  CurrentWarInfo? currentWarInfo;
   User? user;
   Future<void>? initializeUserFuture;
-  ValueNotifier<String?> selectedTag = ValueNotifier<String?>(null);
   String? clanTag;
+  Account? account;
+  Accounts? accounts;
+  ValueNotifier<String?> selectedTagNotifier = ValueNotifier<String?>(null);
 
   Locale _locale = Locale('en'); // Default language is English
   Locale get locale => _locale; // Getter for the locale
@@ -32,13 +25,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   MyAppState() {
     // Initialize the default page to first tag
     WidgetsBinding.instance.addObserver(this);
-
-    // Set initial tag to the first tag of the user
-    if (user != null) {
-      selectedTag.value ??= user!.tags.first;
-    }
-    selectedTag.addListener(reloadData);
-    //selectedTag.addListener(updateWidgets);
 
     _loadLanguage(); // Load the language from the shared preferences
 
@@ -54,6 +40,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this); // Remove the observer
+    selectedTagNotifier.dispose(); // Dispose the ValueNotifier
     super.dispose();
   }
 
@@ -141,9 +128,9 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       if (user!.isDiscordUser) {
         await fetchDiscordUserTags(user!);
       }
-      selectedTag.value = user!.tags.first;
-      await fetchPlayerAccounts(user!);
-      reloadData();
+      accounts!.selectedTag = ValueNotifier<String?>(user!.tags.first);
+      accounts = await AccountsService().fetchAccounts(user!);
+      initializeData();
     }
 
     await Future.delayed(Duration(seconds: 1));
@@ -152,85 +139,30 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void refreshData() async {
-    await fetchPlayerAccounts(user!);
+    await AccountsService().fetchAccounts(user!);
     notifyListeners();
   }
 
-  void reloadData() async {
-    // Check if the selected tag is still valid after fetching new data
-    if (!user!.tags.contains(selectedTag.value)) {
-      selectedTag.value = user!.tags.first;
-    }
-
-    // Fetch the new data for playerStats, clanInfo and currentWarInfo
-    if (selectedTag.value != null) {
-      playerStats = playerAccounts?.playerAccountInfo
-          .firstWhere((element) => element.tag == selectedTag.value);
-
-      // Save the clan tag in the shared preferences for the widget
+  Future<bool> initializeData() async {
+    try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      if (playerStats != null && playerStats?.clan != null) {
-        await prefs.setString('clanTag', playerStats!.clan!.tag);
+      accounts = await AccountsService().fetchAccounts(user!);
+      // Check if the selected tag is still valid after fetching new data
+      if (!user!.tags.contains(accounts!.selectedTag.value)) {
+        accounts!.selectedTag = ValueNotifier<String?>(user!.tags.first);
+      }
+      account = accounts!.findAccountBySelectedTag();
+      if (account != null && account!.profileInfo.clan != null) {
+        await prefs.setString('clanTag', account!.profileInfo.clan!.tag);
       } else {
         await prefs.setString('clanTag', '');
       }
       updateWidgets();
-
-      if (playerStats?.clan != null) {
-        // Fetch the clan info from the clan tag
-        clanInfo = playerAccounts?.clanInfo!
-            .firstWhere((element) => element.tag == playerStats?.clan!.tag);
-
-        // Fetch the current war info if the player is in war
-        final response = await http.get(
-          Uri.parse(
-              'https://api.clashofclans.com/v1/clans/${playerStats?.tag.replaceAll('#', '%23')}/currentwar'),
-        );
-
-        if (response.statusCode == 200) {
-          var decodedResponse = jsonDecode(response.body);
-          if (decodedResponse["state"] != "notInWar") {
-            currentWarInfo = playerAccounts?.warInfo.firstWhere(
-                (element) => element.clan.tag == playerStats?.clan!.tag);
-          }
-        }
-      } else {
-        clanInfo = null;
-      }
-    }
-    notifyListeners();
-  }
-
-  /* Fetch data from the API to initialize User accounts data*/
-
-  // Fetch the player accounts from the user tags
-  Future<void> fetchPlayerAccounts(User user) async {
-    try {
-      playerAccounts = await PlayerService().fetchPlayerAccounts(user);
-      reloadData();
+      notifyListeners();
+      return true;
     } catch (e) {
-      throw Exception('Failed to load player accounts: $e');
-    }
-  }
-
-  // Fetch the clan info from clan tag
-  Future<void> fetchClanInfo(String tag) async {
-    try {
-      clanInfo = await ClanService().fetchClanInfo(tag);
-      notifyListeners(); // Notify listeners to rebuild widgets that depend on clanInfo.
-    } catch (e) {
-      throw Exception('Failed to load clan info: $e');
-    }
-  }
-
-  // Fetch the current war info from clan tag
-  Future<void> fetchCurrentWarInfo(String tag) async {
-    try {
-      currentWarInfo =
-          await CurrentWarService().fetchCurrentWarInfo(tag, "war");
-      notifyListeners(); // Notify listeners to rebuild widgets that depend on currentWarInfo.
-    } catch (e) {
-      throw Exception('Failed to load current war info: $e');
+      print(e);
+      return false;
     }
   }
 
