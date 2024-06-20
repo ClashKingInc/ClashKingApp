@@ -134,25 +134,152 @@ class ToDoScreenState extends State<ToDoScreen>
       for (var playerData in widget.data.items.where((item) => item.playerTag == tag)) {
         cards.add(
             Card(
+              margin: const EdgeInsets.only(top: 8, left: 12, right: 12),
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(playerData.playerTag),
-                        Text('Last Active: ${DateFormat('dd/MM/yy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(playerData.lastActive * 1000))}'),
-                        if (widget.isInTimeFrame)
-                          if (playerData.raids.attackLimit == 0)
-                            Text('Raids: 0/5')
-                          else  
-                            Text('Raids: ${playerData.raids.attacksDone}/${playerData.raids.attackLimit}'),
-                        if (playerData.cwl.attackLimit != 0)
-                          Text('CWL: ${playerData.cwl.attacksDone}/${playerData.cwl.attackLimit}'),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 100,
+                              width: 100,
+                              child: CachedNetworkImage(imageUrl: widget.playerStats.townHallPic),
+                            ),
+                            Text(
+                              widget.playerStats.name,
+                              style: 
+                                Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold) ??
+                                TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              tag,
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                children: <Widget>[
+                                  Text('Last Active: ${DateFormat('dd/MM/yy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(playerData.lastActive * 1000))}'),
+                                  Wrap(
+                                    alignment: WrapAlignment.start,
+                                    spacing: 7.0,
+                                    runSpacing: -7.0,
+                                    children: <Widget>[
+                                      Chip(
+                                        avatar: CircleAvatar(
+                                          backgroundColor: Colors.transparent,
+                                          child: CachedNetworkImage(
+                                            imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                                          ),
+                                        ),
+                                        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                        label: Text(
+                                          "2/2",
+                                          style: Theme.of(context).textTheme.labelLarge,
+                                        ),
+                                      ),
+                                      Chip(
+                                        avatar: CircleAvatar(
+                                          backgroundColor: Colors.transparent,
+                                          child: CachedNetworkImage(
+                                            imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                                          ),
+                                        ),
+                                        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                        label: Text(
+                                          "1/1",
+                                          style: Theme.of(context).textTheme.labelLarge,
+                                        ),
+                                      ),
+                                      Chip(
+                                        avatar: CircleAvatar(
+                                          backgroundColor: Colors.transparent,
+                                          child: CachedNetworkImage(
+                                            imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Raid_Attack.png",
+                                          ),
+                                        ),
+                                        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                        label: Text(
+                                          "6/6",
+                                          style: Theme.of(context).textTheme.labelLarge,
+                                        ),
+                                      ),
+                                      Chip(
+                                        avatar: CircleAvatar(
+                                          backgroundColor: Colors.transparent,
+                                          child: CachedNetworkImage(
+                                            imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                                          ),
+                                        ),
+                                        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                        label: Text(
+                                          "2/2",
+                                          style: Theme.of(context).textTheme.labelLarge,
+                                        ),
+                                      ),
+                                      Chip(
+                                        avatar: CircleAvatar(
+                                          backgroundColor: Colors.transparent,
+                                          child: CachedNetworkImage(
+                                            imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                                          ),
+                                        ),
+                                        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                        label: Text(
+                                          "1/1",
+                                          style: Theme.of(context).textTheme.labelLarge,
+                                        ),
+                                      ),
+                                      Chip(
+                                        avatar: CircleAvatar(
+                                          backgroundColor: Colors.transparent,
+                                          child: CachedNetworkImage(
+                                            imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Raid_Attack.png",
+                                          ),
+                                        ),
+                                        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                        label: Text(
+                                          "6/6",
+                                          style: Theme.of(context).textTheme.labelLarge,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              if (widget.isInTimeFrame)
+                                if (playerData.raids.attackLimit == 0)
+                                  Text('Raids: 0/5')
+                                else  
+                                  Text('Raids: ${playerData.raids.attacksDone}/${playerData.raids.attackLimit}'),
+                              if (playerData.cwl.attackLimit != 0)
+                                Text('CWL: ${playerData.cwl.attacksDone}/${playerData.cwl.attackLimit}'),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [    
+                        SizedBox(width: 8),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 100,
+                          child: LinearProgressIndicator(
+                            value: 0.5,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Text('100%', style: Theme.of(context).textTheme.labelMedium),
+                      ],
+                    ),
                   ],
                 ),
               ),
