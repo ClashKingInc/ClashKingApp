@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/api/troop_data_manager.dart';
+import 'package:clashkingapp/classes/data/troop_data_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/components/player_info_header_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_legend_page.dart';
-import 'package:clashkingapp/api/player_legend.dart';
 import 'package:shimmer/shimmer.dart';
 
 class StatsScreen extends StatefulWidget {
-  final PlayerAccountInfo playerStats;
+  final ProfileInfo playerStats;
   final List<String> discordUser;
 
   StatsScreen(
@@ -375,7 +374,7 @@ class StatsScreenState extends State<StatsScreen>
                                                           ],
                                                         )
                                                       : SizedBox.shrink(),
-                                                      SizedBox(height: 8),
+                                                  SizedBox(height: 8),
                                                   Text(
                                                       "More data coming soon!"),
                                                 ],
@@ -490,7 +489,7 @@ class StatsScreenState extends State<StatsScreen>
                 );
               },
             );
-            ClanInfo clanInfo =
+            Clan? clanInfo =
                 await ClanService().fetchClanInfo(widget.playerStats.clan!.tag);
             if (mounted) {
               Navigator.pop(context);
@@ -690,16 +689,18 @@ class StatsScreenState extends State<StatsScreen>
                   );
                 },
               );
-              PlayerLegendData legendData = await PlayerLegendService()
-                  .fetchLegendData(widget.playerStats.tag);
               navigator.pop();
-              navigator.push(
-                MaterialPageRoute(
-                  builder: (context) => LegendScreen(
+              if (widget.playerStats.playerLegendData != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LegendScreen(
                       playerStats: widget.playerStats,
-                      playerLegendData: legendData),
-                ),
-              );
+                      playerLegendData: widget.playerStats.playerLegendData!,
+                    ),
+                  ),
+                );
+              }
             }
           },
           child: Chip(

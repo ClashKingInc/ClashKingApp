@@ -1,16 +1,14 @@
-import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_join_leave_card.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
-import 'package:clashkingapp/api/user_info.dart';
+import 'package:clashkingapp/classes/user.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_info_card.dart';
-import 'package:provider/provider.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_search_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
 
 class ClanInfoPage extends StatefulWidget {
-  final ClanInfo? clanInfo;
+  final Clan? clanInfo;
   final User user;
 
   ClanInfoPage({required this.clanInfo, required this.user});
@@ -31,10 +29,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
         body: RefreshIndicator(
           backgroundColor: Theme.of(context).colorScheme.surface,
           onRefresh: () async {
-            setState(() {
-              final appState = Provider.of<MyAppState>(context, listen: false);
-              appState.refreshData();
-            });
+            setState(() {});
           },
           child: ListView(
             children: <Widget>[
@@ -69,13 +64,14 @@ class ClanInfoPageState extends State<ClanInfoPage>
                   ),
                 ),
               SizedBox(height: 4),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: ClanJoinLeaveCard(
-                  discordUser: widget.user.tags,
-                  clanInfo: widget.clanInfo!,
-                )
-              ),
+              if (widget.clanInfo != null)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: ClanJoinLeaveCard(
+                    discordUser: widget.user.tags,
+                    clanInfo: widget.clanInfo!,
+                  ),
+                ),
             ],
           ),
         ),

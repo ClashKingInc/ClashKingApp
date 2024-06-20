@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ClanWarsStatsCard extends StatefulWidget {
-  final ClanInfo clanInfo;
+  final Clan clanInfo;
 
   const ClanWarsStatsCard({required this.clanInfo});
 

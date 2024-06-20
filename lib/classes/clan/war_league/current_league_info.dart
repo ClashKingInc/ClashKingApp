@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:clashkingapp/api/current_war_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
+import 'package:clashkingapp/classes/clan/badge_urls.dart';
 
 class LeagueInfoContainer {
   CurrentLeagueInfo? currentLeagueInfo;
-
   LeagueInfoContainer({this.currentLeagueInfo});
 }
 
@@ -21,14 +21,16 @@ class CurrentLeagueInfo {
     required this.rounds,
   });
 
-  factory CurrentLeagueInfo.fromJson(Map<String, dynamic> json, String clanTag) {
+  factory CurrentLeagueInfo.fromJson(
+      Map<String, dynamic> json, String clanTag) {
     return CurrentLeagueInfo(
       state: json['state'] ?? 'No state',
       season: json['season'] ?? 'No season',
       clans: List<ClanLeagueDetails>.from(
           json['clans']?.map((x) => ClanLeagueDetails.fromJson(x)) ?? []),
       rounds: List<ClanLeagueRounds>.from(
-          json['rounds']?.map((x) => ClanLeagueRounds.fromJson(x, clanTag)) ?? []),
+          json['rounds']?.map((x) => ClanLeagueRounds.fromJson(x, clanTag)) ??
+              []),
     );
   }
 }
@@ -56,26 +58,6 @@ class ClanLeagueDetails {
       clanLevel: json['clanLevel'] ?? 0,
       members: List<LeagueMember>.from(
           json['members']?.map((x) => LeagueMember.fromJson(x)) ?? []),
-    );
-  }
-}
-
-class BadgeUrls {
-  final String small;
-  final String large;
-  final String medium;
-
-  BadgeUrls({
-    required this.small,
-    required this.large,
-    required this.medium,
-  });
-
-  factory BadgeUrls.fromJson(Map<String, dynamic> json) {
-    return BadgeUrls(
-      small: json['small'],
-      large: json['large'],
-      medium: json['medium'],
     );
   }
 }
@@ -112,7 +94,7 @@ class ClanLeagueRounds {
   factory ClanLeagueRounds.fromJson(Map<String, dynamic> json, String clanTag) {
     var warTags = json['warTags'] as List<dynamic>? ?? [];
     List<String> parsedWarTags = warTags.map((tag) => tag.toString()).toList();
-    Future<List<CurrentWarInfo>> warLeagueInfos = 
+    Future<List<CurrentWarInfo>> warLeagueInfos =
         fetchWarLeagueInfos(parsedWarTags, clanTag);
     return ClanLeagueRounds(
       warTags: parsedWarTags,
@@ -120,23 +102,29 @@ class ClanLeagueRounds {
     );
   }
 
-  static Future<List<CurrentWarInfo>> fetchWarLeagueInfos(List<String> warTags, String clanTag) async {
+  static Future<List<CurrentWarInfo>> fetchWarLeagueInfos(
+      List<String> warTags, String clanTag) async {
     List<Future<CurrentWarInfo?>> futures = [];
 
     for (var warTag in warTags) {
       if (warTag != "#0") {
         warTag = warTag.replaceAll('#', '%23');
-        Future<CurrentWarInfo?> warLeagueInfo = fetchWarLeagueInfo(warTag, clanTag);
+        Future<CurrentWarInfo?> warLeagueInfo =
+            fetchWarLeagueInfo(warTag, clanTag);
         futures.add(warLeagueInfo);
       }
     }
 
     // Filter out null values and convert to Future<CurrentWarInfo>
     var results = await Future.wait(futures);
-    return results.where((result) => result != null).cast<CurrentWarInfo>().toList();
+    return results
+        .where((result) => result != null)
+        .cast<CurrentWarInfo>()
+        .toList();
   }
 
-  static Future<CurrentWarInfo?> fetchWarLeagueInfo(String warTag, String clanTag) async {
+  static Future<CurrentWarInfo?> fetchWarLeagueInfo(
+      String warTag, String clanTag) async {
     final response = await http.get(
       Uri.parse('https://api.clashking.xyz/v1/clanwarleagues/wars/$warTag'),
     );
@@ -147,15 +135,16 @@ class ClanLeagueRounds {
         return CurrentWarInfo.fromJson(json, "cwl", clanTag);
       }
     } else if (response.statusCode == 429) {
-      throw Exception('Too many requests at the same time. Please retry in a few minutes.');
+      throw Exception(
+          'Too many requests at the same time. Please retry in a few minutes.');
     } else {
-      throw Exception('Failed to load war league info with status code: ${response.statusCode}');
+      throw Exception(
+          'Failed to load war league info with status code: ${response.statusCode}');
     }
 
     return null;
   }
 }
-
 
 // Service
 class CurrentLeagueService {

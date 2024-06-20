@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/current_league_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
 
 Widget buildWarsTab(BuildContext context) {
   return Column(

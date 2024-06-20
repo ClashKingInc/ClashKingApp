@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/clan_info.dart';
-import 'package:clashkingapp/api/current_league_info.dart';
-import 'package:clashkingapp/api/current_war_info.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/war_card.dart';
 
 class CwlCard extends StatefulWidget {
   final CurrentLeagueInfo currentLeagueInfo;
   final String clanTag;
-  final ClanInfo clanInfo;
+  final Clan clanInfo;
 
   CwlCard({
     super.key,

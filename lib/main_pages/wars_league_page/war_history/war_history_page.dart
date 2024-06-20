@@ -1,4 +1,4 @@
-import 'package:clashkingapp/api/war_log.dart';
+import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -9,7 +9,7 @@ class WarHistoryScreen extends StatefulWidget {
   final String clanTag;
   final List<String> discordUser;
   final List<WarLogDetails> warLogData;
-  final Map<String, String> warLogStats;
+  final WarLogStats warLogStats;
   final String clanName;
 
   WarHistoryScreen({super.key, required this.clanTag, required this.discordUser, required this.warLogData, required this.warLogStats, required this.clanName});

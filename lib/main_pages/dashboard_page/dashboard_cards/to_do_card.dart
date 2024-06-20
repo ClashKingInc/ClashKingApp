@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/to_do_page.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ToDoCard extends StatelessWidget {
+  
   const ToDoCard({
     super.key,
     required this.playerStats,
     required this.discordUser,
   });
 
-  final PlayerAccountInfo playerStats;
+  final ProfileInfo playerStats;
   final List<String> discordUser;
 
   @override

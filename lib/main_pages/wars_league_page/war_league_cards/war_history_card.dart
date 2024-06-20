@@ -1,16 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/api/war_log.dart';
+import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/war_history_page.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class WarHistoryCard extends StatelessWidget {
-  final PlayerAccountInfo playerStats;
+  final ProfileInfo playerStats;
   final List<String> discordUser;
   final List<WarLogDetails> warLogData;
-  final Map<String, String> warLogStats;
+  final WarLogStats warLogStats;
 
   const WarHistoryCard(
       {super.key,
@@ -80,7 +80,7 @@ class WarHistoryCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            label: Text(warLogStats['totalWins'] ?? '0',
+                            label: Text(warLogStats.totalWins.toString(),
                                 style: Theme.of(context).textTheme.labelLarge),
                           ),
                           Chip(
@@ -95,7 +95,7 @@ class WarHistoryCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            label: Text(warLogStats['totalLosses'] ?? '0',
+                            label: Text(warLogStats.totalLosses.toString(),
                                 style: Theme.of(context).textTheme.labelLarge),
                           ),
                           Chip(
@@ -110,7 +110,7 @@ class WarHistoryCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            label: Text(warLogStats['totalTies'] ?? '0',
+                            label: Text(warLogStats.totalTies.toString(),
                                 style: Theme.of(context).textTheme.labelLarge),
                           ),
                           Chip(
@@ -121,7 +121,7 @@ class WarHistoryCard extends StatelessWidget {
                                   color:
                                       Theme.of(context).colorScheme.onSurface),
                             ),
-                            label: Text(warLogStats['averageMembers'] ?? '0',
+                            label: Text(warLogStats.averageMembers.toString(),
                                 style: Theme.of(context).textTheme.labelLarge),
                           ),
                           Chip(
@@ -133,7 +133,7 @@ class WarHistoryCard extends StatelessWidget {
                                       Theme.of(context).colorScheme.onSurface),
                             ),
                             label: Text(
-                                warLogStats['averageClanStarsPerMember'] ?? '0',
+                                warLogStats.averageClanStarsPerMember.toString(),
                                 style: Theme.of(context).textTheme.labelLarge),
                           ),
                           Chip(
@@ -145,7 +145,7 @@ class WarHistoryCard extends StatelessWidget {
                                       Theme.of(context).colorScheme.onSurface),
                             ),
                             label: Text(
-                                warLogStats['averageClanDestruction'] ?? '0',
+                                warLogStats.averageClanDestruction.toString(),
                                 style: Theme.of(context).textTheme.labelLarge),
                           ),
                         ],

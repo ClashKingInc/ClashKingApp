@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_join_leave/clan_join_leave.dart';
-import 'package:clashkingapp/api/join_leave.dart';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/join_leave.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -10,7 +10,7 @@ class ClanJoinLeaveCard extends StatelessWidget {
       {super.key, required this.discordUser, required this.clanInfo});
 
   final List<String> discordUser;
-  final ClanInfo clanInfo;
+  final Clan? clanInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class ClanJoinLeaveCard extends StatelessWidget {
           },
         );
         JoinLeaveClan joinLeaveClan =
-            await JoinLeaveClanService().fetchJoinLeaveData(clanInfo.tag);
+            await JoinLeaveClanService().fetchJoinLeaveData(clanInfo!.tag);
         navigator.pop();
         navigator.push(
           MaterialPageRoute(

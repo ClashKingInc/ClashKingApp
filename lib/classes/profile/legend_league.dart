@@ -2,19 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-class PlayerLegendSeasonsService {
-  static Future<List<dynamic>> fetchSeasonsData(String tag) async {
-    final response = await http.get(Uri.parse(
-        'https://api.clashking.xyz/player/${tag.substring(1)}/legend_rankings'));
-
-    if (response.statusCode == 200) {
-      String body = utf8.decode(response.bodyBytes);
-      return json.decode(body);
-    } else {
-      throw Exception('Failed to load seasons data');
-    }
-  }
-}
 
 class PlayerLegendData {
   final Map<String, dynamic> legendData;
@@ -53,7 +40,7 @@ class PlayerLegendData {
 }
 
 class PlayerLegendService {
-  Future<PlayerLegendData> fetchLegendData(String tag) async {
+  Future<PlayerLegendData?> fetchLegendData(String tag) async {
     final response = await http.get(Uri.parse(
         'https://api.clashking.xyz/player/${tag.substring(1)}/legends'));
     if (response.statusCode == 200) {
@@ -63,7 +50,7 @@ class PlayerLegendService {
       await calculateLegendData(playerLegendData);
       return playerLegendData;
     } else {
-      throw Exception('Failed to load seasons data');
+      return null;
     }
   }
 
@@ -127,6 +114,20 @@ class PlayerLegendService {
       playerLegendData.diffTrophies = diffTrophies;
       playerLegendData.attacksList = attacksList;
       playerLegendData.defensesList = defensesList;
+    }
+  }
+}
+
+class PlayerLegendSeasonsService {
+  static Future<List<dynamic>> fetchSeasonsData(String tag) async {
+    final response = await http.get(Uri.parse(
+        'https://api.clashking.xyz/player/${tag.substring(1)}/legend_rankings'));
+
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      return json.decode(body);
+    } else {
+      throw Exception('Failed to load seasons data');
     }
   }
 }

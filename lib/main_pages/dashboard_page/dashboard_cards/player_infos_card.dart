@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,7 +12,7 @@ class PlayerInfosCard extends StatelessWidget {
     required this.discordUser,
   });
 
-  final PlayerAccountInfo playerStats;
+  final ProfileInfo playerStats;
   final List<String> discordUser;
 
   @override

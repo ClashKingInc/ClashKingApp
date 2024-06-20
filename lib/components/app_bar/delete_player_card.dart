@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/api/cocdiscord_link_functions.dart';
-import 'package:clashkingapp/api/user_info.dart';
+import 'package:clashkingapp/classes/cocdiscord_link_functions.dart';
+import 'package:clashkingapp/classes/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/startup_widget.dart';
+import 'package:clashkingapp/classes/accounts.dart';
 
 class DeletePlayerCard extends StatefulWidget {
   final User user;
+  final Accounts accounts;
 
-  const DeletePlayerCard({super.key, required this.user});
+  const DeletePlayerCard({super.key, required this.user, required this.accounts});
 
   @override
   DeletePlayerCardState createState() => DeletePlayerCardState();
@@ -29,9 +31,6 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
   @override
   void initState() {
     super.initState();
-    if (widget.user.selectedTagDetails.isNotEmpty) {
-      _dropdownValue = widget.user.selectedTagDetails.first['tag'];
-    }
   }
 
   @override
@@ -49,11 +48,11 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
             dropdownColor: Theme.of(context).colorScheme.surface,
             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             underline: Container(),
-            items: widget.user.selectedTagDetails
-                .map<DropdownMenuItem<String>>((details) {
-              String tag = details['tag'];
-              String imageUrl = details['imageUrl'];
-              String name = details['name'];
+            items: widget.accounts.accounts
+                .map<DropdownMenuItem<String>>((Account account) {
+              String tag = account.profileInfo.tag;
+              String imageUrl = account.profileInfo.townHallPic;
+              String name = account.profileInfo.name;
               return DropdownMenuItem<String>(
                 value: tag,
                 child: Row(

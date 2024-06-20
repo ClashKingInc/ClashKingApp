@@ -1,10 +1,10 @@
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/api/league_data_manager.dart';
-import 'package:clashkingapp/api/functions.dart';
+import 'package:clashkingapp/classes/data/league_data_manager.dart';
+import 'package:clashkingapp/classes/functions.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 
 class PlayerSearchResultTile extends StatefulWidget {
   final dynamic player;
@@ -64,7 +64,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
               );
             },
           );
-          PlayerAccountInfo playerStats = await PlayerService().fetchPlayerStats(widget.player['tag']);
+          ProfileInfo playerStats = await ProfileInfoService().fetchProfileInfo(widget.player['tag']);
           navigator.pop();
           navigator.push(
             MaterialPageRoute(

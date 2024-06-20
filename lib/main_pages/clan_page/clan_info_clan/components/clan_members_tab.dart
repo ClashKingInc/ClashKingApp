@@ -1,14 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
+import 'package:clashkingapp/classes/clan/member.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 
 class ClanMembers extends StatefulWidget {
-  final ClanInfo clanInfo;
+  final Clan clanInfo;
   final List<String> discordUser;
 
   ClanMembers({required this.clanInfo, required this.discordUser});
@@ -55,7 +56,7 @@ class ClanMembersState extends State<ClanMembers> {
     };
 
     // Convert the memberList to a List so we can sort it
-    List<Member> members = widget.clanInfo.memberList.toList();
+    List<Member> members = widget.clanInfo.memberList!.toList();
 
     List<Member> filteredMembers = linkFilterActive
       ? members.where((m) => widget.discordUser.contains(m.tag)).toList()
@@ -170,11 +171,11 @@ class ClanMembersState extends State<ClanMembers> {
                     );
                   },
                 );
-                PlayerAccountInfo playerStats = await PlayerService().fetchPlayerStats(member.tag);
+                ProfileInfo profileInfo = await ProfileInfoService().fetchProfileInfo(member.tag);
                 navigator.pop(); // Dismiss the dialog
                 navigator.push(
                   MaterialPageRoute(
-                    builder: (context) => StatsScreen(playerStats: playerStats, discordUser: widget.discordUser),
+                    builder: (context) => StatsScreen(playerStats: profileInfo, discordUser: widget.discordUser),
                   ),
                 );
               },

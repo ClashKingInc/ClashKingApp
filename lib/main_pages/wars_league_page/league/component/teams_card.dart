@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
-import 'package:clashkingapp/api/current_league_info.dart';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class TeamsCard extends StatelessWidget {
@@ -47,7 +47,7 @@ class TeamsCard extends StatelessWidget {
                       builder: (context) => Scaffold(
                         backgroundColor:
                             Theme.of(context).scaffoldBackgroundColor,
-                        body: FutureBuilder<ClanInfo>(
+                        body: FutureBuilder<Clan>(
                           future: ClanService().fetchClanInfo(clan.tag),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==

@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/components/player_info_header_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
-import 'package:clashkingapp/api/clan_info.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_legend_page.dart';
-import 'package:clashkingapp/api/player_legend.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 
 class ToDoScreen extends StatefulWidget {
-  final PlayerAccountInfo playerStats;
+  final ProfileInfo playerStats;
   final List<String> discordUser;
 
   ToDoScreen({super.key, required this.playerStats, required this.discordUser});
@@ -161,7 +159,6 @@ class ToDoScreenState extends State<ToDoScreen>
 
   // Build the section for troops, super troops, pets, and siege machines
   Widget buildItemSection(List<dynamic> items, String itemType, String title) {
-    List<String> itemNames = items.map((item) => item.name as String).toList();
 
     double completionPercentage =
         calculateCompletionPercentage(items, itemType);
@@ -404,7 +401,7 @@ class ToDoScreenState extends State<ToDoScreen>
                 );
               },
             );
-            ClanInfo clanInfo =
+            Clan? clanInfo =
                 await ClanService().fetchClanInfo(widget.playerStats.clan!.tag);
             if (mounted) {
               Navigator.pop(context);
@@ -592,7 +589,7 @@ class ToDoScreenState extends State<ToDoScreen>
                   );
                 },
               );
-              PlayerLegendData legendData = await PlayerLegendService()
+              /*PlayerLegendData legendData = await PlayerLegendService()
                   .fetchLegendData(widget.playerStats.tag);
               navigator.pop();
               navigator.push(
@@ -601,7 +598,7 @@ class ToDoScreenState extends State<ToDoScreen>
                       playerStats: widget.playerStats,
                       playerLegendData: legendData),
                 ),
-              );
+              );*/
             }
           },
           child: Chip(
