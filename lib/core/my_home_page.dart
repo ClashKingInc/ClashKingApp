@@ -34,7 +34,7 @@ class MyHomePageState extends State<MyHomePage> {
 
   Future<void> _initializeAccounts() async {
     final appState = Provider.of<MyAppState>(context, listen: false);
-    bool isInit = await appState.initializeData();
+    await appState.initializeData();
   }
 
   void _onPageChanged(int index) {

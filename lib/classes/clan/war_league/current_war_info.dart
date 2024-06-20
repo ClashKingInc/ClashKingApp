@@ -188,36 +188,6 @@ class CurrentWarService {
     await dotenv.load(fileName: ".env");
   }
 
-  Future<CurrentWarInfo?> fetchCurrentWarInfo(String tag, String type) async {
-    tag = tag.replaceAll('#', '%23');
-
-    late http.Response response;
-
-    if (type == "war") {
-      response = await http.get(
-        Uri.parse('https://api.clashking.xyz/v1/clans/$tag/currentwar'),
-      );
-    } else {
-      response = await http.get(
-        Uri.parse('https://api.clashking.xyz/v1/clanwarleagues/wars/$tag'),
-      );
-    }
-
-    if (response.statusCode == 200) {
-      dynamic decodedBody = jsonDecode(utf8.decode(response.bodyBytes));
-      if (decodedBody["state"] != "notInWar") {
-        CurrentWarInfo currentWarInfo =
-            CurrentWarInfo.fromJson(decodedBody, type, tag);
-        return currentWarInfo;
-      } else {
-        return null;
-      }
-    } else {
-      throw Exception(
-          'Failed to load current war info with status code: ${response.statusCode}');
-    }
-  }
-
   static Future<CurrentWarInfo?> fetchWarDataFromTime(
       String tag, DateTime end) async {
     String endTime = end.toIso8601String();

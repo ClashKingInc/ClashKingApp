@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_join_leave/clan_join_leave.dart';
-import 'package:clashkingapp/classes/clan/join_leave.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class ClanJoinLeaveCard extends StatelessWidget {
   const ClanJoinLeaveCard(
@@ -17,24 +17,11 @@ class ClanJoinLeaveCard extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         final navigator = Navigator.of(context);
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        );
-        JoinLeaveClan joinLeaveClan =
-            await JoinLeaveClanService().fetchJoinLeaveData(clanInfo!.tag);
-        navigator.pop();
+
         navigator.push(
           MaterialPageRoute(
-            builder: (context) => ClanJoinLeaveScreen(
-                user: discordUser,
-                joinLeaveClan: joinLeaveClan,
-                clanInfo: clanInfo),
+            builder: (context) =>
+                ClanJoinLeaveScreen(user: discordUser, clanInfo: clanInfo),
           ),
         );
       },
@@ -70,6 +57,49 @@ class ClanJoinLeaveCard extends StatelessWidget {
                             style: Theme.of(context).textTheme.bodyMedium,
                             textAlign: TextAlign.center,
                             softWrap: true, // Explicitly allowing text to wrap
+                          ),
+                          Wrap(
+                            alignment: WrapAlignment.start,
+                            spacing: 7.0,
+                            runSpacing: -7.0,
+                            children: <Widget>[
+                              Chip(
+                                avatar: CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    child: Icon(LucideIcons.logOut,
+                                        size: 16, color: Colors.red)),
+                                labelPadding: EdgeInsets.symmetric(horizontal: 2),
+                                label: Text(
+                                  clanInfo!.joinLeaveClan.leaveNumber
+                                      .toString(),
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                              ),
+                              Chip(
+                                avatar: CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    child: Icon(LucideIcons.logIn,
+                                        size: 16, color: Colors.green)),
+                                labelPadding: EdgeInsets.symmetric(horizontal: 2),
+                                label: Text(
+                                  clanInfo!.joinLeaveClan.joinNumber.toString(),
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                              ),
+                              Chip(
+                                avatar: CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    child: Icon(LucideIcons.arrowUpDown,
+                                        size: 16, color: Colors.blue)),
+                                labelPadding: EdgeInsets.symmetric(horizontal: 2),
+                                label: Text(
+                                  (clanInfo!.joinLeaveClan.joinNumber -
+                                          clanInfo!.joinLeaveClan.leaveNumber)
+                                      .toString(),
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

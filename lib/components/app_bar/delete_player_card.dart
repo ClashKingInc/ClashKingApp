@@ -12,7 +12,8 @@ class DeletePlayerCard extends StatefulWidget {
   final User user;
   final Accounts accounts;
 
-  const DeletePlayerCard({super.key, required this.user, required this.accounts});
+  const DeletePlayerCard(
+      {super.key, required this.user, required this.accounts});
 
   @override
   DeletePlayerCardState createState() => DeletePlayerCardState();
@@ -31,6 +32,10 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
   @override
   void initState() {
     super.initState();
+    // Set the default value for _dropdownValue
+    if (widget.accounts.accounts.isNotEmpty) {
+      _dropdownValue = widget.accounts.accounts.first.profileInfo.tag;
+    }
   }
 
   @override
@@ -74,6 +79,7 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
             onChanged: (String? newValue) {
               setState(() {
                 _dropdownValue = newValue!;
+                print('Selected tag: $_dropdownValue');
               });
             },
             value: _dropdownValue,

@@ -34,6 +34,8 @@ class JoinLeaveItem {
 
 class JoinLeaveClan {
   final List<JoinLeaveItem> items;
+  late int joinNumber = 0;
+  late int leaveNumber = 0;
 
   JoinLeaveClan({required this.items});
 
@@ -46,17 +48,21 @@ class JoinLeaveClan {
 }
 
 class JoinLeaveClanService {
-  Future<JoinLeaveClan> fetchJoinLeaveData(String clanTag) async {
+  static Future<JoinLeaveClan> fetchJoinLeaveData(String clanTag) async {
     clanTag = clanTag.replaceAll('#', '!');
     final response = await http
         .get(Uri.parse('https://api.clashking.xyz/clan/$clanTag/join-leave'));
-
 
     if (response.statusCode == 200) {
       JoinLeaveClan joinLeaveClan =
           JoinLeaveClan.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       for (var item in joinLeaveClan.items) {
         item.townHallPic = await fetchPlayerTownHallByTownHallLevel(item.th);
+        if (item.type == 'join') {
+          joinLeaveClan.joinNumber+=1;
+        } else {
+          joinLeaveClan.leaveNumber+=1;
+        }
       }
       return joinLeaveClan;
     } else {

@@ -55,7 +55,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                     child: Padding(
                       padding: EdgeInsets.only(left: 4.0, right: 4.0),
                       child: CurrentWarInfoCard(
-                          currentWarInfo: widget.account.warInfo!,
+                          currentWarInfo: widget.account.clan!.currentWarInfo,
                           clanTag: widget.account.clan!.tag),
                     ),
                   )

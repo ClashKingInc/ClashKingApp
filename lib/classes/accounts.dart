@@ -2,8 +2,6 @@ import 'package:clashkingapp/classes/user.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
-import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
-import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
 import 'package:flutter/foundation.dart';
 
 class Accounts {
@@ -34,11 +32,8 @@ class Accounts {
 class Account {
   final ProfileInfo profileInfo;
   final Clan? clan;
-  final CurrentWarInfo? warInfo;
-  final CurrentLeagueInfo? leagueInfo;
 
-  Account(
-      {required this.profileInfo, this.clan, this.warInfo, this.leagueInfo});
+  Account({required this.profileInfo, this.clan});
 }
 
 class AccountsService {
@@ -58,32 +53,18 @@ class AccountsService {
         ProfileInfo profileInfo =
             await ProfileInfoService().fetchProfileInfo(tag);
         Clan? clanInfo;
-        CurrentWarInfo? warInfo;
-        CurrentLeagueInfo? leagueInfo;
-        DateTime now = DateTime.now();
 
         if (profileInfo.clan != null) {
           var results = await Future.wait([
             ClanService().fetchClanInfo(profileInfo.clan!.tag),
-            CurrentWarService()
-                .fetchCurrentWarInfo(profileInfo.clan!.tag, "war"),
-            now.day >= 1 && now.day <= 10
-                ? CurrentLeagueService()
-                    .fetchCurrentLeagueInfo(profileInfo.clan!.tag)
-                : Future.value(null),
           ]);
-
           clanInfo = results[0] as Clan?;
-          warInfo = results[1] as CurrentWarInfo?;
-          leagueInfo = results[2] as CurrentLeagueInfo?;
         }
 
         // Step 4: Create an Account object
         return Account(
           profileInfo: profileInfo,
           clan: clanInfo,
-          warInfo: warInfo,
-          leagueInfo: leagueInfo,
         );
       }).toList();
 

@@ -1,4 +1,5 @@
 import 'package:clashkingapp/classes/clan/badge_urls.dart';
+import 'package:clashkingapp/classes/clan/join_leave.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
 
 import 'dart:convert';
@@ -43,6 +44,7 @@ class Clan {
   late CurrentWarInfo currentWarInfo;
   late String warState;
   late WarLog warLog;
+  late JoinLeaveClan joinLeaveClan;
 
   Clan({
     required this.tag,
@@ -145,8 +147,22 @@ class ClanService {
           clanInfo.warLeague!.imageUrl =
               LeagueDataManager().getLeagueUrl(clanInfo.warLeague!.name);
         }
-        clanInfo.warState = await checkCurrentWar(tag, clanInfo);
-        clanInfo.warLog = await WarLogService.fetchWarLogData(tag);
+
+        // Parallelize the fetching of warState and warLog
+        final warStateFuture = checkCurrentWar(tag, clanInfo);
+        final warLogFuture = WarLogService.fetchWarLogData(tag);
+        final joinLeaveLog = JoinLeaveClanService.fetchJoinLeaveData(clanInfo.tag);
+
+        // Wait for both futures to complete
+        final results = await Future.wait([warStateFuture, warLogFuture, joinLeaveLog]);
+
+        // Assign the results to clanInfo
+        clanInfo.warState =
+            results[0] as String; // Assuming checkCurrentWar returns a String
+        clanInfo.warLog = results[1]
+            as WarLog; // Assuming WarLogService.fetchWarLogData returns a WarLog
+        clanInfo.joinLeaveClan = results[2] as JoinLeaveClan;
+
         return clanInfo;
       } else {
         throw Exception('Failed to load clan stats');
