@@ -34,35 +34,21 @@ class CurrentWarInfo {
 
   factory CurrentWarInfo.fromJson(
       Map<String, dynamic> json, String type, String clanTag) {
-    if (json['state'] == "notInwar" && json["teamSize"] == 0) {
-      return CurrentWarInfo(
-        state: json['state'] ?? 'No state',
-        teamSize: 0,
-        attacksPerMember: 0,
-        preparationStartTime: DateTime.now(),
-        startTime: DateTime.now(),
-        endTime: DateTime.now(),
-        clan: ClanWarDetails.fromJson({}),
-        opponent: ClanWarDetails.fromJson({}),
-        type: type,
-      );
-    } else {
-      return CurrentWarInfo(
-        state: json['state'] ?? 'No state',
-        teamSize: json['teamSize'] ?? 0,
-        attacksPerMember: json['attacksPerMember'] ?? 1,
-        preparationStartTime: DateTime.parse(json['preparationStartTime']),
-        startTime: DateTime.parse(json['startTime']),
-        endTime: DateTime.parse(json['endTime']),
-        clan: ClanWarDetails.fromJson(json['clan']['tag'] == clanTag
-            ? json['clan']
-            : json['opponent'] ?? {}),
-        opponent: ClanWarDetails.fromJson(json['clan']['tag'] == clanTag
-            ? json['opponent']
-            : json['clan'] ?? {}),
-        type: type,
-      );
-    }
+    return CurrentWarInfo(
+      state: json['state'] ?? 'No state',
+      teamSize: json['teamSize'] ?? 0,
+      attacksPerMember: json['attacksPerMember'] ?? 1,
+      preparationStartTime: DateTime.parse(json['preparationStartTime']),
+      startTime: DateTime.parse(json['startTime']),
+      endTime: DateTime.parse(json['endTime']),
+      clan: ClanWarDetails.fromJson(json['clan']['tag'] == clanTag
+          ? json['clan']
+          : json['opponent'] ?? {}),
+      opponent: ClanWarDetails.fromJson(json['clan']['tag'] == clanTag
+          ? json['opponent']
+          : json['clan'] ?? {}),
+      type: type,
+    );
   }
 }
 
@@ -202,7 +188,7 @@ class CurrentWarService {
     await dotenv.load(fileName: ".env");
   }
 
-  Future<CurrentWarInfo> fetchCurrentWarInfo(String tag, String type) async {
+  Future<CurrentWarInfo?> fetchCurrentWarInfo(String tag, String type) async {
     tag = tag.replaceAll('#', '%23');
 
     late http.Response response;
@@ -218,8 +204,14 @@ class CurrentWarService {
     }
 
     if (response.statusCode == 200) {
-      String decodedBody = utf8.decode(response.bodyBytes);
-      return CurrentWarInfo.fromJson(jsonDecode(decodedBody), type, tag);
+      dynamic decodedBody = jsonDecode(utf8.decode(response.bodyBytes));
+      if (decodedBody["state"] != "notInWar") {
+        CurrentWarInfo currentWarInfo =
+            CurrentWarInfo.fromJson(decodedBody, type, tag);
+        return currentWarInfo;
+      } else {
+        return null;
+      }
     } else {
       throw Exception(
           'Failed to load current war info with status code: ${response.statusCode}');

@@ -47,67 +47,74 @@ class AccountsService {
   }
 
   Future<Accounts> fetchAccounts(User user) async {
-    final tags = user.tags;
+    try {
+      final tags = user.tags;
 
-    // Step 1: Initialize an empty list for Account objects
-    List<Account> accountsList = [];
+      // Step 1: Initialize an empty list for Account objects
+      List<Account> accountsList = [];
 
-    // Step 2: Create a list of futures for each tag
-    List<Future<Account>> fetchTasks = tags.map((tag) async {
-      ProfileInfo profileInfo =
-          await ProfileInfoService().fetchProfileInfo(tag);
-      Clan? clanInfo;
-      CurrentWarInfo? warInfo;
-      CurrentLeagueInfo? leagueInfo;
-      DateTime now = DateTime.now();
+      // Step 2: Create a list of futures for each tag
+      List<Future<Account>> fetchTasks = tags.map((tag) async {
+        ProfileInfo profileInfo =
+            await ProfileInfoService().fetchProfileInfo(tag);
+        Clan? clanInfo;
+        CurrentWarInfo? warInfo;
+        CurrentLeagueInfo? leagueInfo;
+        DateTime now = DateTime.now();
 
-      if (profileInfo.clan != null) {
-        var results = await Future.wait([
-          ClanService().fetchClanInfo(profileInfo.clan!.tag),
-          CurrentWarService().fetchCurrentWarInfo(profileInfo.clan!.tag, "war"),
-          now.day >= 1 && now.day <= 10
-              ? CurrentLeagueService()
-                  .fetchCurrentLeagueInfo(profileInfo.clan!.tag)
-              : Future.value(null),
-        ]);
+        if (profileInfo.clan != null) {
+          var results = await Future.wait([
+            ClanService().fetchClanInfo(profileInfo.clan!.tag),
+            CurrentWarService()
+                .fetchCurrentWarInfo(profileInfo.clan!.tag, "war"),
+            now.day >= 1 && now.day <= 10
+                ? CurrentLeagueService()
+                    .fetchCurrentLeagueInfo(profileInfo.clan!.tag)
+                : Future.value(null),
+          ]);
 
-        clanInfo = results[0] as Clan?;
-        warInfo = results[1] as CurrentWarInfo?;
-        leagueInfo = results[2] as CurrentLeagueInfo?;
-      }
+          clanInfo = results[0] as Clan?;
+          warInfo = results[1] as CurrentWarInfo?;
+          leagueInfo = results[2] as CurrentLeagueInfo?;
+        }
 
-      // Step 4: Create an Account object
-      return Account(
-        profileInfo: profileInfo,
-        clan: clanInfo,
-        warInfo: warInfo,
-        leagueInfo: leagueInfo,
-      );
-    }).toList();
+        // Step 4: Create an Account object
+        return Account(
+          profileInfo: profileInfo,
+          clan: clanInfo,
+          warInfo: warInfo,
+          leagueInfo: leagueInfo,
+        );
+      }).toList();
 
-    // Step 3: Use Future.wait to run all fetch tasks concurrently
-    accountsList = await Future.wait(fetchTasks);
+      // Step 3: Use Future.wait to run all fetch tasks concurrently
+      accountsList = await Future.wait(fetchTasks);
 
-    // Sort the accountsList
-    accountsList.sort((a, b) {
-      int townHallComparison =
-          b.profileInfo.townHallLevel.compareTo(a.profileInfo.townHallLevel);
-      if (townHallComparison != 0) {
-        return townHallComparison;
-      } else {
-        return b.profileInfo.expLevel.compareTo(a.profileInfo.expLevel);
-      }
-    });
+      // Sort the accountsList
+      accountsList.sort((a, b) {
+        int townHallComparison =
+            b.profileInfo.townHallLevel.compareTo(a.profileInfo.townHallLevel);
+        if (townHallComparison != 0) {
+          return townHallComparison;
+        } else {
+          return b.profileInfo.expLevel.compareTo(a.profileInfo.expLevel);
+        }
+      });
 
-    print(accountsList.first);
+      print(accountsList.first.clan);
 
-    // Step 5: Create an Accounts object
-    Accounts accounts = Accounts(accounts: accountsList);
+      // Step 5: Create an Accounts object
+      Accounts accounts = Accounts(accounts: accountsList);
 
-    accounts.selectedTag = ValueNotifier<String?>(tags.first);
-    print(accounts.selectedTag.value);
+      accounts.selectedTag = ValueNotifier<String?>(tags.first);
+      print(accounts.selectedTag.value);
 
-    // Step 6: Return the Accounts object
-    return accounts;
+      // Step 6: Return the Accounts object
+      return accounts;
+    } catch (e, stackTrace) {
+      print('Exception: $e');
+      print('StackTrace: $stackTrace');
+      throw Exception('Failed to load accounts: $e');
+    }
   }
 }

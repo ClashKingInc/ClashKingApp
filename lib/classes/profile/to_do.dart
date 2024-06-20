@@ -149,10 +149,6 @@ class PlayerDataService {
       return '${entry.key == 0 ? '' : '&'}player_tags=$encodedTag';
     }).join('');
     final response = await http.get(Uri.parse('https://api.clashking.xyz/player/to-do?$tagsParameter'));
-    print('blabla');
-    print(response.body);
-    print(response.statusCode);
-    print('**********************************************');
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);

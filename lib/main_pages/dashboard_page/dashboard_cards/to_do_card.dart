@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/api/to_do.dart';
+import 'package:clashkingapp/classes/profile/to_do.dart';
 import 'package:intl/intl.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/to_do_page.dart';
 
 class ToDoCard extends StatefulWidget {
   const ToDoCard({
@@ -12,7 +13,7 @@ class ToDoCard extends StatefulWidget {
     required this.tags,
   });
 
-  final PlayerAccountInfo playerStats;
+  final ProfileInfo playerStats;
   final List<String> tags;
 
   @override

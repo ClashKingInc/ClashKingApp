@@ -147,6 +147,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       accounts = await AccountsService().fetchAccounts(user!);
+
+      print("accounts: $accounts");
       // Check if the selected tag is still valid after fetching new data
       if (!user!.tags.contains(accounts!.selectedTag.value)) {
         accounts!.selectedTag = ValueNotifier<String?>(user!.tags.first);

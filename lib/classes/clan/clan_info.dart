@@ -74,47 +74,51 @@ class Clan {
   });
 
   factory Clan.fromJson(Map<String, dynamic> json) {
-    return Clan(
-      tag: json['tag'] ?? 'No tag',
-      name: json['name'] ?? 'No name',
-      type: json['type'] ?? 'No type',
-      description: json['description'] ?? 'No description',
-      isFamilyFriendly: json['isFamilyFriendly'] ?? false,
-      badgeUrls: BadgeUrls.fromJson(json['badgeUrls']),
-      clanLevel: json['clanLevel'] ?? 0,
-      clanPoints: json['clanPoints'] ?? 0,
-      clanBuilderBasePoints: json['clanBuilderBasePoints'] ?? 0,
-      clanCapitalPoints: json['clanCapitalPoints'] ?? 0,
-      capitalLeague:
-          json['capitalLeague'] != null && json['capitalLeague'].isNotEmpty
-              ? CapitalLeague.fromJson(json['capitalLeague'])
-              : null,
-      requiredTrophies: json['requiredTrophies'] ?? 0,
-      warFrequency: json['warFrequency'] ?? 'No frequency',
-      warWinStreak: json['warWinStreak'] ?? 0,
-      warWins: json['warWins'] ?? 0,
-      warTies: json['warTies'] ?? 0,
-      warLosses: json['warLosses'] ?? 0,
-      isWarLogPublic: json['isWarLogPublic'] ?? false,
-      warLeague: json['warLeague'] != null && json['warLeague'].isNotEmpty
-          ? WarLeague.fromJson(json['warLeague'])
-          : null,
-      members: json['members'] ?? 0,
-      location: json['location'] != null &&
-              (json['location'] as Map<String, dynamic>).isNotEmpty
-          ? Location.fromJson(json['location'])
-          : null,
-      memberList: json['memberList'] != null &&
-              (json['memberList'] as List<dynamic>).isNotEmpty
-          ? (json['memberList'] as List<dynamic>)
-              .map((e) => Member.fromJson(e))
-              .toList()
-          : null,
-      labels: json['labels'] ?? [],
-      requiredBuilderBaseTrophies: json['requiredBuilderBaseTrophies'] ?? 0,
-      requiredTownhallLevel: json['requiredTownhallLevel'] ?? 0,
-      clanCapital: json['clanCapital'] ?? {},
-    );
+    try {
+      return Clan(
+        tag: json['tag'] ?? 'No tag',
+        name: json['name'] ?? 'No name',
+        type: json['type'] ?? 'No type',
+        description: json['description'] ?? 'No description',
+        isFamilyFriendly: json['isFamilyFriendly'] ?? false,
+        badgeUrls: BadgeUrls.fromJson(json['badgeUrls']),
+        clanLevel: json['clanLevel'] ?? 0,
+        clanPoints: json['clanPoints'] ?? 0,
+        clanBuilderBasePoints: json['clanBuilderBasePoints'] ?? 0,
+        clanCapitalPoints: json['clanCapitalPoints'] ?? 0,
+        capitalLeague:
+            json['capitalLeague'] != null && json['capitalLeague'].isNotEmpty
+                ? CapitalLeague.fromJson(json['capitalLeague'])
+                : null,
+        requiredTrophies: json['requiredTrophies'] ?? 0,
+        warFrequency: json['warFrequency'] ?? 'No frequency',
+        warWinStreak: json['warWinStreak'] ?? 0,
+        warWins: json['warWins'] ?? 0,
+        warTies: json['warTies'] ?? 0,
+        warLosses: json['warLosses'] ?? 0,
+        isWarLogPublic: json['isWarLogPublic'] ?? false,
+        warLeague: json['warLeague'] != null && json['warLeague'].isNotEmpty
+            ? WarLeague.fromJson(json['warLeague'])
+            : null,
+        members: json['members'] ?? 0,
+        location: json['location'] != null &&
+                (json['location'] as Map<String, dynamic>).isNotEmpty
+            ? Location.fromJson(json['location'])
+            : null,
+        memberList: json['memberList'] != null &&
+                (json['memberList'] as List<dynamic>).isNotEmpty
+            ? (json['memberList'] as List<dynamic>)
+                .map((e) => Member.fromJson(e))
+                .toList()
+            : null,
+        labels: json['labels'] ?? [],
+        requiredBuilderBaseTrophies: json['requiredBuilderBaseTrophies'] ?? 0,
+        requiredTownhallLevel: json['requiredTownhallLevel'] ?? 0,
+        clanCapital: json['clanCapital'] ?? {},
+      );
+    } catch (e) {
+      throw Exception('Failed to load clan stats : $e');
+    }
   }
 }
 
@@ -127,24 +131,28 @@ class ClanService {
   }
 
   Future<Clan> fetchClanInfo(String tag) async {
-    tag = tag.replaceAll('#', '!');
+    try {
+      tag = tag.replaceAll('#', '!');
 
-    final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
-    );
+      final response = await http.get(
+        Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
+      );
 
-    if (response.statusCode == 200) {
-      String responseBody = utf8.decode(response.bodyBytes);
-      Clan clanInfo = Clan.fromJson(jsonDecode(responseBody));
-      if (clanInfo.warLeague != null) {
-        clanInfo.warLeague!.imageUrl =
-            LeagueDataManager().getLeagueUrl(clanInfo.warLeague!.name);
+      if (response.statusCode == 200) {
+        String responseBody = utf8.decode(response.bodyBytes);
+        Clan clanInfo = Clan.fromJson(jsonDecode(responseBody));
+        if (clanInfo.warLeague != null) {
+          clanInfo.warLeague!.imageUrl =
+              LeagueDataManager().getLeagueUrl(clanInfo.warLeague!.name);
+        }
+        clanInfo.warState = await checkCurrentWar(tag, clanInfo);
+        clanInfo.warLog = await WarLogService.fetchWarLogData(tag);
+        return clanInfo;
+      } else {
+        throw Exception('Failed to load clan stats');
       }
-      clanInfo.warState = await checkCurrentWar(tag, clanInfo);
-      clanInfo.warLog = await WarLogService.fetchWarLogData(tag);
-      return clanInfo;
-    } else {
-      throw Exception('Failed to load clan stats');
+    } catch (e) {
+      throw Exception('Failed to load clan stats : $e');
     }
   }
 

@@ -27,12 +27,14 @@ class CustomAppBarState extends State<CustomAppBar> {
   @override
   void initState() {
     super.initState();
-    // Définir la valeur par défaut de selectedTagNotifier
-    var appState = Provider.of<MyAppState>(context, listen: false);
-    if (appState.selectedTagNotifier.value == null && widget.accounts.accounts.isNotEmpty) {
-      appState.selectedTagNotifier.value = widget.accounts.accounts.first.profileInfo.tag;
-      appState.account = widget.accounts.accounts.first;
-    }
+    // Définir la valeur par défaut de selectedTagNotifier après la phase de construction
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      var appState = Provider.of<MyAppState>(context, listen: false);
+      if (appState.selectedTagNotifier.value == null && widget.accounts.accounts.isNotEmpty) {
+        appState.selectedTagNotifier.value = widget.accounts.accounts.first.profileInfo.tag;
+        appState.account = widget.accounts.accounts.first;
+      }
+    });
   }
 
   @override
@@ -50,17 +52,18 @@ class CustomAppBarState extends State<CustomAppBar> {
                   value: selectedTag,
                   elevation: 16,
                   dropdownColor: Theme.of(context).colorScheme.surface,
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                   underline: Container(),
                   onChanged: (String? newValue) async {
                     if (newValue != "manageAccounts") {
-                      appState.selectedTagNotifier.value = newValue;
-                      appState.account = appState.accounts!.accounts.firstWhere(
-                          (element) => element.profileInfo.tag == newValue);
-                      print(appState.account!.profileInfo.tag);
-                      // Rafraîchissez l'état de la page
-                      setState(() {});
+                      // Utiliser addPostFrameCallback pour différer les modifications d'état
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        setState(() {
+                          appState.selectedTagNotifier.value = newValue;
+                          appState.account = appState.accounts!.accounts.firstWhere(
+                              (element) => element.profileInfo.tag == newValue);
+                        });
+                      });
                     } else {
                       showDialog(
                         context: context,
@@ -69,48 +72,31 @@ class CustomAppBarState extends State<CustomAppBar> {
                           return StatefulBuilder(
                             builder: (context, setState) {
                               return AlertDialog(
-                                backgroundColor:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                                title: Text(
-                                    AppLocalizations.of(context)?.manage ??
-                                        'Manage'),
+                                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                title: Text(AppLocalizations.of(context)?.manage ?? 'Manage'),
                                 content: SingleChildScrollView(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       CustomSlidingSegmentedControl<int>(
                                         children: {
-                                          0: Text(AppLocalizations.of(context)
-                                                  ?.add ??
-                                              'Add'),
-                                          1: Text(AppLocalizations.of(context)
-                                                  ?.delete ??
-                                              'Delete'),
+                                          0: Text(AppLocalizations.of(context)?.add ?? 'Add'),
+                                          1: Text(AppLocalizations.of(context)?.delete ?? 'Delete'),
                                         },
                                         initialValue: currentSegment,
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                                          color: Theme.of(context).colorScheme.primary,
+                                          borderRadius: BorderRadius.circular(8),
                                         ),
                                         thumbDecoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .surface,
-                                          borderRadius:
-                                              BorderRadius.circular(6),
+                                          color: Theme.of(context).colorScheme.surface,
+                                          borderRadius: BorderRadius.circular(6),
                                           boxShadow: [
                                             BoxShadow(
-                                              color:
-                                                  Colors.black.withOpacity(.3),
+                                              color: Colors.black.withOpacity(.3),
                                               blurRadius: 4.0,
                                               spreadRadius: 1.0,
-                                              offset: Offset(
-                                                0.0,
-                                                2.0,
-                                              ),
+                                              offset: Offset(0.0, 2.0),
                                             ),
                                           ],
                                         ),
@@ -124,9 +110,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                                       ),
                                       SizedBox(height: 4),
                                       currentSegment == 1
-                                          ? DeletePlayerCard(
-                                              user: widget.user,
-                                              accounts: widget.accounts)
+                                          ? DeletePlayerCard(user: widget.user, accounts: widget.accounts)
                                           : AddPlayerCard(user: widget.user),
                                     ],
                                   ),
@@ -139,8 +123,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                     }
                   },
                   items: [
-                    ...widget.accounts.accounts
-                        .map<DropdownMenuItem<String>>((Account account) {
+                    ...widget.accounts.accounts.map<DropdownMenuItem<String>>((Account account) {
                       String tag = account.profileInfo.tag;
                       String imageUrl = account.profileInfo.townHallPic;
                       String name = account.profileInfo.name;
@@ -164,15 +147,14 @@ class CustomAppBarState extends State<CustomAppBar> {
                           ],
                         ),
                       );
-                    }).toList(), // Ensure the result is a list
+                    }).toList(),
                     DropdownMenuItem<String>(
                       value: "manageAccounts",
                       child: Row(
                         children: <Widget>[
                           Icon(Icons.settings),
                           SizedBox(width: 4),
-                          Text(
-                              AppLocalizations.of(context)?.manage ?? 'Manage'),
+                          Text(AppLocalizations.of(context)?.manage ?? 'Manage'),
                         ],
                       ),
                     ),
@@ -194,8 +176,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          SettingsInfoScreen(user: widget.user)),
+                      builder: (context) => SettingsInfoScreen(user: widget.user)),
                 );
               },
               child: CircleAvatar(
@@ -205,7 +186,7 @@ class CustomAppBarState extends State<CustomAppBar> {
             ),
           ],
         ),
-        SizedBox(width: 16), // Add some spacing on the right side
+        SizedBox(width: 16),
       ],
     );
   }
