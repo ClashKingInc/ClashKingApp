@@ -51,9 +51,9 @@ class ClanJoinLeaveCard extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         AppLocalizations.of(context)!.joinLeaveLogs,
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: Theme.of(context).textTheme.labelLarge,
                         textAlign: TextAlign.center,
-                        softWrap: true, // Explicitly allowing text to wrap
+                        softWrap: true,
                       ),
                       Wrap(
                         alignment: WrapAlignment.start,

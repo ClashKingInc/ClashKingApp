@@ -125,7 +125,6 @@ class Clan {
   }
 }
 
-// Service class to fetch clan info
 class ClanService {
   Map<String, String> leagueUrls = {};
 
@@ -133,9 +132,9 @@ class ClanService {
     await dotenv.load(fileName: ".env");
   }
 
-  Future<Clan> fetchClanInfo(String tag) async {
+  Future<Clan> fetchClanInfo(String clanTag) async {
     try {
-      tag = tag.replaceAll('#', '!');
+      String tag = clanTag.replaceAll('#', '!');
 
       final clanInfoFuture = http.get(
         Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
@@ -146,7 +145,7 @@ class ClanService {
       int timestampLastMonday = lastMonday.millisecondsSinceEpoch ~/ 1000;
 
       // Start fetching warState, warLog, and joinLeaveLog in parallel
-      final warStateFuture = fetchCurrentWarInfo(tag);
+      final warStateFuture = fetchWarStateInfo(clanTag);
       final warLogFuture = WarLogService.fetchWarLogData(tag);
       final joinLeaveLogFuture = JoinLeaveClanService.fetchJoinLeaveData(
           tag, timestampLastMonday.toString());
@@ -180,7 +179,6 @@ class ClanService {
         } else {
           clanInfo.warState = warStateInfo.state;
         }
-        clanInfo.warState = warStateInfo.state;
         clanInfo.currentWarInfo = warStateInfo.currentWarInfo;
         clanInfo.currentLeagueInfo = warStateInfo.currentLeagueInfo;
         clanInfo.warLog = warLog;
@@ -200,10 +198,31 @@ class ClanService {
         'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
   }
 
+  Future<WarStateInfo> fetchWarStateInfo(String clanTag) async {
+    final now = DateTime.now();
+    final warInfoFuture = fetchCurrentWarInfo(clanTag);
+    final leagueInfoFuture = (now.day > 1 && now.day < 12)
+        ? fetchCurrentLeagueInfo(clanTag)
+        : Future.value(null);
+
+    final responses = await Future.wait([warInfoFuture, leagueInfoFuture]);
+
+    final warStateInfo = responses[0] as WarStateInfo;
+    final leagueInfo = responses[1] as CurrentLeagueInfo?;
+
+    if (warStateInfo.state == "notInWar" && leagueInfo != null) {
+      return WarStateInfo(state: "cwl", currentLeagueInfo: leagueInfo);
+    }
+
+    return warStateInfo;
+  }
+
   Future<WarStateInfo> fetchCurrentWarInfo(String clanTag) async {
+    String tag = clanTag.replaceAll('#', '!');
+
     final responseWar = await http.get(
       Uri.parse(
-          'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar'),
+          'https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/currentwar'),
     );
 
     if (responseWar.statusCode == 200) {

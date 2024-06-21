@@ -114,9 +114,9 @@ class WarHistoryCard extends StatelessWidget {
                                 .warHistoryDrawsDescription(
                                     warLogStats.totalTies),
                           ),
-                          IconChip(
-                            icon: LucideIcons.star,
-                            size: 16,
+                          ImageChip(
+                            imageUrl:
+                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
                             label: warLogStats.averageClanStarsPerMember
                                 .toString(),
                             description: AppLocalizations.of(context)!

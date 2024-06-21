@@ -49,7 +49,6 @@ class JoinLeaveClan {
 
 class JoinLeaveClanService {
   static Future<JoinLeaveClan> fetchJoinLeaveData(String clanTag, String startTime) async {
-    print(startTime);
     clanTag = clanTag.replaceAll('#', '!');
     final response = await http
         .get(Uri.parse('https://api.clashking.xyz/clan/$clanTag/join-leave?timestamp_start=$startTime&limit=500'));

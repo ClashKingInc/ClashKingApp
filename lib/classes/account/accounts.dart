@@ -54,15 +54,13 @@ class AccountsService {
             await ProfileInfoService().fetchProfileInfo(tag);
         Clan? clanInfo;
 
-        print("profileInfo fetched");
-
         if (profileInfo.clan != null) {
           var results = await Future.wait([
             ClanService().fetchClanInfo(profileInfo.clan!.tag),
           ]);
           clanInfo = results[0] as Clan?;
         }
-        print("clanInfo fetched");
+        
         // Step 4: Create an Account object
         return Account(
           profileInfo: profileInfo,

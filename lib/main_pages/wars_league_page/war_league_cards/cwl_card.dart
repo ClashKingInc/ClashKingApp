@@ -57,7 +57,6 @@ class CwlCardState extends State<CwlCard> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Card(
-            margin: EdgeInsets.only(top: 8, left: 12, right: 12, bottom: 8),
             child: SizedBox(
               height: 100,
               width: double.infinity,

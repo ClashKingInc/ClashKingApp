@@ -63,7 +63,6 @@ class ClanInfoPageState extends State<ClanInfoPage>
                     child: NoClanCard(),
                   ),
                 ),
-              SizedBox(height: 4),
               if (widget.clanInfo != null)
                 GestureDetector(
                   onTap: () {
@@ -75,9 +74,12 @@ class ClanInfoPageState extends State<ClanInfoPage>
                       ),
                     );
                   },
-                  child: ClanJoinLeaveCard(
-                    discordUser: widget.user.tags,
-                    clanInfo: widget.clanInfo!,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ClanJoinLeaveCard(
+                      discordUser: widget.user.tags,
+                      clanInfo: widget.clanInfo!,
+                    ),
                   ),
                 ),
             ],

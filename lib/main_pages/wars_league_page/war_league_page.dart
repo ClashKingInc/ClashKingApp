@@ -39,6 +39,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
         },
         child: Column(
           children: [
+              SizedBox(height: 4),
             warState == "war"
                 ? GestureDetector(
                     onTap: () {
@@ -46,14 +47,15 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => CurrentWarInfoScreen(
-                            currentWarInfo: widget.account.clan!.currentWarInfo!,
+                            currentWarInfo:
+                                widget.account.clan!.currentWarInfo!,
                             discordUser: widget.discordUser.tags,
                           ),
                         ),
                       );
                     },
                     child: Padding(
-                      padding: EdgeInsets.only(left: 4.0, right: 4.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: CurrentWarInfoCard(
                           currentWarInfo: widget.account.clan!.currentWarInfo!,
                           clanTag: widget.account.clan!.tag),
@@ -99,8 +101,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                                 ),
                               )
                             : Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 8.0),
+                                padding: EdgeInsets.symmetric(horizontal: 8.0),
                                 child: NotInWarCard(
                                     clanName:
                                         widget.account.profileInfo.clan!.name,
