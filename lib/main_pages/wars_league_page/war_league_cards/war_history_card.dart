@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/war_history_page.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:clashkingapp/components/chip.dart';
 
 class WarHistoryCard extends StatelessWidget {
   final ProfileInfo playerStats;
@@ -31,7 +32,7 @@ class WarHistoryCard extends StatelessWidget {
               discordUser: discordUser,
               warLogData: warLogData,
               warLogStats: warLogStats,
-              clanName : playerStats.clan!.name,
+              clanName: playerStats.clan!.name,
             ),
           ),
         );
@@ -68,85 +69,77 @@ class WarHistoryCard extends StatelessWidget {
                         spacing: 7.0,
                         runSpacing: -7.0,
                         children: [
-                          Chip(
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Container(
-                                width: 16,
-                                height: 16,
-                                decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  shape: BoxShape.circle,
-                                ),
+                          CustomChip(
+                            icon: Container(
+                              width: 16,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                shape: BoxShape.circle,
                               ),
                             ),
-                            label: Text(warLogStats.totalWins.toString(),
-                                style: Theme.of(context).textTheme.labelLarge),
+                            labelPadding: 8,
+                            label: warLogStats.totalWins.toString(),
+                            description: AppLocalizations.of(context)!
+                                .warHistoryWinsDescription(
+                                    warLogStats.totalWins),
                           ),
-                          Chip(
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Container(
-                                width: 16,
-                                height: 16,
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  shape: BoxShape.circle,
-                                ),
+                          CustomChip(
+                            icon: Container(
+                              width: 16,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
                               ),
                             ),
-                            label: Text(warLogStats.totalLosses.toString(),
-                                style: Theme.of(context).textTheme.labelLarge),
+                            labelPadding: 8,
+                            label: warLogStats.totalLosses.toString(),
+                            description: AppLocalizations.of(context)!
+                                .warHistoryLossesDescription(
+                                    warLogStats.totalLosses),
                           ),
-                          Chip(
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Container(
-                                width: 16,
-                                height: 16,
-                                decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  shape: BoxShape.circle,
-                                ),
+                          CustomChip(
+                            icon: Container(
+                              width: 16,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                shape: BoxShape.circle,
                               ),
                             ),
-                            label: Text(warLogStats.totalTies.toString(),
-                                style: Theme.of(context).textTheme.labelLarge),
+                            labelPadding: 8,
+                            label: warLogStats.totalTies.toString(),
+                            description: AppLocalizations.of(context)!
+                                .warHistoryDrawsDescription(
+                                    warLogStats.totalTies),
                           ),
-                          Chip(
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Icon(LucideIcons.users,
-                                  size: 16,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
-                            ),
-                            label: Text(warLogStats.averageMembers.toString(),
-                                style: Theme.of(context).textTheme.labelLarge),
+                          IconChip(
+                            icon: LucideIcons.star,
+                            size: 16,
+                            label: warLogStats.averageClanStarsPerMember
+                                .toString(),
+                            description: AppLocalizations.of(context)!
+                                .warHistoryAverageWarStarsDescription(
+                                    warLogStats.averageClanStarsPerMember),
                           ),
-                          Chip(
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Icon(LucideIcons.star,
-                                  size: 16,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
-                            ),
-                            label: Text(
-                                warLogStats.averageClanStarsPerMember.toString(),
-                                style: Theme.of(context).textTheme.labelLarge),
+                          IconChip(
+                            icon: LucideIcons.users,
+                            size: 16,
+                            label: warLogStats.averageMembers.toString(),
+                            description: AppLocalizations.of(context)!
+                                .warHistoryAverageMembersDescription(
+                                    warLogStats.averageMembers),
                           ),
-                          Chip(
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Icon(LucideIcons.percent,
-                                  size: 16,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
-                            ),
-                            label: Text(
+                          IconChip(
+                            icon: LucideIcons.percent,
+                            size: 16,
+                            label:
                                 warLogStats.averageClanDestruction.toString(),
-                                style: Theme.of(context).textTheme.labelLarge),
+                            description: AppLocalizations.of(context)!
+                                .warHistoryAverageHitRateDescription(warLogStats
+                                    .averageClanDestruction
+                                    .toStringAsFixed(2)),
                           ),
                         ],
                       ),

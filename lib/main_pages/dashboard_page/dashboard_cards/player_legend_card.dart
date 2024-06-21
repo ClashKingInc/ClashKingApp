@@ -1,11 +1,12 @@
-
-import 'package:clashkingapp/classes/profile/legend_league.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_legend_page.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';import 'package:clashkingapp/classes/profile/profile_info.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
+import 'package:clashkingapp/components/chip.dart';
 
 class PlayerLegendCard extends StatelessWidget {
   const PlayerLegendCard({
@@ -19,6 +20,7 @@ class PlayerLegendCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(playerLegendData.legendRanking);
     DateTime selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
     if (!playerLegendData.legendData.containsKey(date)) {
@@ -159,78 +161,91 @@ class PlayerLegendCard extends StatelessWidget {
                               spacing: 7.0,
                               runSpacing: -7.0,
                               children: <Widget>[
-                                Chip(
-                                    avatar: CircleAvatar(
-                                        backgroundColor: Colors.transparent,
-                                        child: CachedNetworkImage(
-                                            imageUrl:
-                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Start_Flag.png")),
-                                    label: Text(playerLegendData.firstTrophies,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium)),
+                                ImageChip(
+                                  imageUrl:
+                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Start_Flag.png",
+                                  label: playerLegendData.firstTrophies,
+                                  description: AppLocalizations.of(context)!
+                                      .legendStartDescription(
+                                          playerLegendData.firstTrophies),
+                                ),
                                 if (playerLegendData
                                         .legendRanking['country_code'] !=
                                     null)
-                                  Chip(
-                                    avatar: CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      child: CachedNetworkImage(
-                                          imageUrl:
-                                              "https://clashkingfiles.b-cdn.net/country-flags/${(playerLegendData.legendRanking['country_code'] ?? 'uk').toLowerCase()}.png"),
-                                    ),
-                                    label: Text(
-                                      playerLegendData.legendRanking[
-                                                  'local_rank'] ==
-                                              null
-                                          ? '200+'
-                                          : '${playerLegendData.legendRanking['local_rank']}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelMedium,
-                                    ),
-                                  ),
-                                Chip(
-                                  avatar: Icon(
-                                    playerLegendData.diffTrophies >= 0
-                                        ? LucideIcons.chevronUp
-                                        : LucideIcons.chevronDown,
-                                    color: playerLegendData.diffTrophies >= 0
-                                        ? Colors.green
-                                        : Colors.red,
-                                  ),
-                                  label: Text(
-                                    "${playerLegendData.diffTrophies >= 0 ? '+' : ''}${playerLegendData.diffTrophies.toString()}",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium
-                                        ?.copyWith(
-                                            color:
-                                                playerLegendData.diffTrophies >=
-                                                        0
-                                                    ? Colors.green
-                                                    : Colors.red),
-                                  ),
-                                ),
-                                Chip(
-                                  avatar: CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      child: CachedNetworkImage(
-                                          imageUrl:
-                                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
-                                  label: Text(
-                                    playerLegendData
-                                                .legendRanking['global_rank'] ==
+                                  ImageChip(
+                                    labelPadding: 4,
+                                    imageUrl:
+                                        "https://clashkingfiles.b-cdn.net/country-flags/${(playerLegendData.legendRanking['country_code'] ?? 'uk').toLowerCase()}.png",
+                                    label: playerLegendData
+                                                .legendRanking['local_rank'] ==
+                                            null
+                                        ? '200+'
+                                        : '${playerLegendData.legendRanking['local_rank']}',
+                                    description: playerLegendData
+                                                .legendRanking['local_rank'] ==
                                             null
                                         ? AppLocalizations.of(context)
-                                                ?.noRank ??
-                                            'No Rank'
-                                        : NumberFormat('#,###', 'fr_FR').format(
-                                            playerLegendData
-                                                .legendRanking['global_rank']),
-                                    style:
-                                        Theme.of(context).textTheme.labelMedium,
+                                                ?.legendNoRankLocalDescription(
+                                                    playerLegendData
+                                                            .legendRanking[
+                                                        'country_name'],
+                                                    playerStats.trophies) ??
+                                            "No local rank."
+                                        : AppLocalizations.of(context)
+                                                ?.legendRankLocalDescription(
+                                                    playerLegendData
+                                                            .legendRanking[
+                                                        'country_name'],
+                                                    playerLegendData
+                                                            .legendRanking[
+                                                        'local_rank'],
+                                                    playerStats.trophies) ??
+                                            'No infos on local rank.',
                                   ),
+                                IconChip(
+                                  icon: playerLegendData.diffTrophies >= 0
+                                      ? LucideIcons.chevronUp
+                                      : LucideIcons.chevronDown,
+                                  color: playerLegendData.diffTrophies >= 0
+                                      ? Colors.green
+                                      : Colors.red,
+                                  size: 16,
+                                  label:
+                                      "${playerLegendData.diffTrophies >= 0 ? '+' : ''}${playerLegendData.diffTrophies.toString()}",
+                                  description: playerLegendData.diffTrophies >=
+                                          0
+                                      ? AppLocalizations.of(context)!
+                                          .legendGainDescription(
+                                              playerLegendData.diffTrophies)
+                                      : AppLocalizations.of(context)!
+                                          .legendLossDescription(
+                                              -playerLegendData.diffTrophies),
+                                ),
+                                ImageChip(
+                                  imageUrl:
+                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png",
+                                  label: playerLegendData
+                                              .legendRanking['global_rank'] ==
+                                          null
+                                      ? AppLocalizations.of(context)?.noRank ??
+                                          'No Rank'
+                                      : NumberFormat('#,###', 'fr_FR').format(
+                                          playerLegendData
+                                              .legendRanking['global_rank']),
+                                  description: playerLegendData
+                                              .legendRanking['global_rank'] ==
+                                          null
+                                      ? AppLocalizations.of(context)
+                                              ?.legendNoGlobalRankDescription(
+                                                  playerStats.trophies) ??
+                                          'No global rank.'
+                                      : AppLocalizations.of(context)
+                                              ?.legendGlobalRankDescription(
+                                                  playerLegendData
+                                                          .legendRanking[
+                                                      'global_rank'],
+                                                  playerStats.trophies) ??
+                                          'No infos on global rank.',
                                 ),
                               ],
                             ),

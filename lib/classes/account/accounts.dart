@@ -1,4 +1,4 @@
-import 'package:clashkingapp/classes/user.dart';
+import 'package:clashkingapp/classes/account/user.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';

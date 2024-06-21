@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/components/chip.dart';
 
 class PlayerInfosCard extends StatelessWidget {
   const PlayerInfosCard({
@@ -17,6 +18,16 @@ class PlayerInfosCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double ratioDonation = playerStats.donations /
+        (playerStats.donationsReceived == 0
+            ? 1
+            : playerStats.donationsReceived);
+    String imageOptInOut = playerStats.warPreference == 'in'
+        ? "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png"
+        : 'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png';
+    String warPreference = playerStats.warPreference == 'in'
+        ? AppLocalizations.of(context)?.ready ?? 'Ready'
+        : AppLocalizations.of(context)?.unready ?? 'Unready';
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -70,104 +81,61 @@ class PlayerInfosCard extends StatelessWidget {
                             runSpacing: -7.0,
                             children: <Widget>[
                               if (playerStats.clan != null)
-                                Chip(
-                                  avatar: CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(
-                                        imageUrl:
-                                            playerStats.clan!.badgeUrls.small),
-                                  ),
-                                  labelPadding:
-                                      EdgeInsets.only(left: 2.0, right: 2.0),
-                                  label: Text(
-                                    playerStats.clan!.name,
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
-                                  ),
+                                ImageChip(
+                                  imageUrl: playerStats.clan!.badgeUrls.small,
+                                  labelPadding: 2,
+                                  label: playerStats.clan!.name,
+                                  description: AppLocalizations.of(context)!
+                                      .playerClanDescription(
+                                          playerStats.clan!.name,
+                                          playerStats.clan!.tag),
                                 ),
-                              Chip(
-                                avatar: Icon(LucideIcons.chevronsUpDown,
-                                    color: Color.fromARGB(255, 0, 136, 255)),
-                                labelPadding: EdgeInsets.zero,
-                                label: Text(
-                                  (playerStats.donations /
-                                          (playerStats.donationsReceived == 0
-                                              ? 1
-                                              : playerStats.donationsReceived))
-                                      .toStringAsFixed(2),
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
+                              IconChip(
+                                  icon: LucideIcons.chevronsUpDown,
+                                  label: ratioDonation.toStringAsFixed(2),
+                                  color: Color.fromARGB(255, 0, 136, 255),
+                                  size: 20,
+                                  description: AppLocalizations.of(context)!
+                                      .playerRatioDescription(
+                                          ratioDonation.toStringAsFixed(2),
+                                          playerStats.donations
+                                              .toStringAsFixed(0),
+                                          playerStats.donationsReceived
+                                              .toStringAsFixed(0))),
+                              ImageChip(
+                                imageUrl: imageOptInOut,
+                                label: warPreference,
+                                description: AppLocalizations.of(context)!
+                                    .playerWarPreferenceDescription(
+                                        warPreference),
                               ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors
-                                      .transparent, // Set to a suitable color for your design.
-                                  child: playerStats.warPreference == 'in'
-                                      ? CachedNetworkImage(
-                                          imageUrl:
-                                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png")
-                                      : CachedNetworkImage(
-                                          imageUrl:
-                                              'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png'),
-                                ),
-                                labelPadding:
-                                    EdgeInsets.only(left: 2.0, right: 2.0),
-                                label: Text(
-                                  playerStats.warPreference == 'in'
-                                      ? AppLocalizations.of(context)?.ready ??
-                                          'Ready'
-                                      : AppLocalizations.of(context)?.unready ??
-                                          'Unready',
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  child: CachedNetworkImage(
-                                      imageUrl:
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
-                                ),
-                                labelPadding:
-                                    EdgeInsets.only(left: 2.0, right: 2.0),
-                                label: Text(
-                                  '${playerStats.warStars}',
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  child: CachedNetworkImage(
-                                      imageUrl: playerStats.townHallPic),
-                                ),
-                                label: Text('${playerStats.townHallLevel}',
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge),
-                                labelPadding: EdgeInsets.zero,
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  child: CachedNetworkImage(
-                                      imageUrl: playerStats.leagueUrl),
-                                ),
-                                label: Text('${playerStats.trophies}',
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge),
-                                labelPadding: EdgeInsets.zero,
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  child: CachedNetworkImage(
-                                      imageUrl: playerStats.builderHallPic),
-                                ),
-                                label: Text('${playerStats.builderHallLevel}',
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge),
-                                labelPadding: EdgeInsets.zero,
-                              ),
+                              ImageChip(
+                                  imageUrl:
+                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
+                                  label: playerStats.warStars.toString(),
+                                  description: AppLocalizations.of(context)!
+                                      .playerWarStarsDescription(
+                                          playerStats.warStars)),
+                              ImageChip(
+                                  imageUrl: playerStats.townHallPic,
+                                  label: playerStats.townHallLevel.toString(),
+                                  description: AppLocalizations.of(context)!
+                                      .playerTownHallLevelDescription(
+                                          playerStats.townHallLevel)),
+                              ImageChip(
+                                  imageUrl: playerStats.leagueUrl,
+                                  label: playerStats.trophies.toString(),
+                                  description: AppLocalizations.of(context)!
+                                      .playerTrophiesDescription(
+                                          playerStats.trophies,
+                                          playerStats.league)),
+                              ImageChip(
+                                  imageUrl: playerStats.builderHallPic,
+                                  label:
+                                      playerStats.builderHallLevel.toString(),
+                                  description: AppLocalizations.of(context)!
+                                      .playerBuilderBaseDescription(
+                                          playerStats.builderHallLevel, playerStats.builderBaseTrophies)),
                             ],
                           ),
                         ],

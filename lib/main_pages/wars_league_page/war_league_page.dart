@@ -2,13 +2,13 @@ import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/access
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/league/current_league_info_page.dart';
-import 'package:clashkingapp/classes/user.dart';
+import 'package:clashkingapp/classes/account/user.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/not_in_war_card.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/cwl_card.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/war_card.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/war_history_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
-import 'package:clashkingapp/classes/accounts.dart';
+import 'package:clashkingapp/classes/account/accounts.dart';
 
 class CurrentWarInfoPage extends StatefulWidget {
   final Account account;

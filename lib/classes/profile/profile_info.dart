@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:clashkingapp/classes/profile/achievement.dart';
-import 'package:clashkingapp/classes/profile/equipment.dart';
-import 'package:clashkingapp/classes/profile/hero.dart';
-import 'package:clashkingapp/classes/profile/spell.dart';
-import 'package:clashkingapp/classes/profile/troop.dart';
+import 'package:clashkingapp/classes/profile/description/achievement.dart';
+import 'package:clashkingapp/classes/profile/description/equipment.dart';
+import 'package:clashkingapp/classes/profile/description/hero.dart';
+import 'package:clashkingapp/classes/profile/description/spell.dart';
+import 'package:clashkingapp/classes/profile/description/troop.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/functions.dart';
 import 'package:clashkingapp/classes/data/league_data_manager.dart';
-import 'package:clashkingapp/classes/profile/legend_league.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
 
 class ProfileInfo {
   final String name;

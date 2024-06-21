@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/classes/clan/join_leave.dart';
+import 'package:clashkingapp/classes/clan/logs/join_leave.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -26,7 +26,7 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
   @override
   Widget build(BuildContext context) {
     String backgroundImageUrl =
-        "https://clashkingfiles.b-cdn.net/landscape/clan-landscape.png";
+        "https://clashkingfiles.b-cdn.net/landscape/join-leave-landscape.png";
     return Column(children: [
       Stack(
         clipBehavior: Clip.none,

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/main_pages/clan_page/clan_join_leave/clan_join_leave.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:clashkingapp/components/chip.dart';
+import 'package:clashkingapp/classes/functions.dart';
+import 'package:intl/intl.dart';
 
 class ClanJoinLeaveCard extends StatelessWidget {
   const ClanJoinLeaveCard(
@@ -14,101 +16,99 @@ class ClanJoinLeaveCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        final navigator = Navigator.of(context);
+    final now = DateTime.now();
+    DateTime lastMonday = findLastMondayOfMonth(now.year, now.month - 1);
+    String formattedDate =
+        DateFormat.yMMMMd(Localizations.localeOf(context).toString())
+            .format(lastMonday);
+    int joinDifference = clanInfo!.joinLeaveClan.joinNumber -
+        clanInfo!.joinLeaveClan.leaveNumber;
 
-        navigator.push(
-          MaterialPageRoute(
-            builder: (context) =>
-                ClanJoinLeaveScreen(user: discordUser, clanInfo: clanInfo),
-          ),
-        );
-      },
-      child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        children: [
-                          CachedNetworkImage(
-                              height: 70,
-                              width: 70,
-                              imageUrl:
-                                  "https://clashkingfiles.b-cdn.net/stickers/Troop_HV_Goblin.png"),
-                        ],
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    children: [
+                      CachedNetworkImage(
+                          height: 70,
+                          width: 70,
+                          imageUrl:
+                              "https://clashkingfiles.b-cdn.net/stickers/Troop_HV_Goblin.png"),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 7,
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        AppLocalizations.of(context)!.joinLeaveLogs,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                        softWrap: true, // Explicitly allowing text to wrap
                       ),
-                    ),
-                    Expanded(
-                      flex: 7,
-                      child: Column(
+                      Wrap(
+                        alignment: WrapAlignment.start,
+                        spacing: 7.0,
+                        runSpacing: -7.0,
                         children: <Widget>[
-                          Text(
-                            AppLocalizations.of(context)!.joinLeaveLogs,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.center,
-                            softWrap: true, // Explicitly allowing text to wrap
+                          IconChip(
+                            icon: LucideIcons.logOut,
+                            color: Colors.red,
+                            size: 16,
+                            labelPadding: 2,
+                            label:
+                                clanInfo!.joinLeaveClan.leaveNumber.toString(),
+                            description: AppLocalizations.of(context)!
+                                .leaveNumberDescription(
+                                    clanInfo!.joinLeaveClan.leaveNumber,
+                                    formattedDate),
                           ),
-                          Wrap(
-                            alignment: WrapAlignment.start,
-                            spacing: 7.0,
-                            runSpacing: -7.0,
-                            children: <Widget>[
-                              Chip(
-                                avatar: CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child: Icon(LucideIcons.logOut,
-                                        size: 16, color: Colors.red)),
-                                labelPadding: EdgeInsets.symmetric(horizontal: 2),
-                                label: Text(
-                                  clanInfo!.joinLeaveClan.leaveNumber
-                                      .toString(),
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child: Icon(LucideIcons.logIn,
-                                        size: 16, color: Colors.green)),
-                                labelPadding: EdgeInsets.symmetric(horizontal: 2),
-                                label: Text(
-                                  clanInfo!.joinLeaveClan.joinNumber.toString(),
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                              ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child: Icon(LucideIcons.arrowUpDown,
-                                        size: 16, color: Colors.blue)),
-                                labelPadding: EdgeInsets.symmetric(horizontal: 2),
-                                label: Text(
-                                  (clanInfo!.joinLeaveClan.joinNumber -
-                                          clanInfo!.joinLeaveClan.leaveNumber)
-                                      .toString(),
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                              ),
-                            ],
+                          IconChip(
+                            icon: LucideIcons.logIn,
+                            color: Colors.green,
+                            size: 16,
+                            labelPadding: 2,
+                            label:
+                                clanInfo!.joinLeaveClan.joinNumber.toString(),
+                            description: AppLocalizations.of(context)!
+                                .joinNumberDescription(
+                                    clanInfo!.joinLeaveClan.joinNumber,
+                                    formattedDate),
                           ),
+                          IconChip(
+                              icon: LucideIcons.arrowUpDown,
+                              color: Colors.blue,
+                              size: 16,
+                              labelPadding: 2,
+                              label: joinDifference.toString(),
+                              description: joinDifference > 0
+                                  ? AppLocalizations.of(context)!
+                                      .joinLeaveDifferenceUpDescription(
+                                          joinDifference, formattedDate)
+                                  : joinDifference < 0
+                                      ? AppLocalizations.of(context)!
+                                          .joinLeaveDifferenceDownDescription(
+                                              -joinDifference, formattedDate)
+                                      : AppLocalizations.of(context)!
+                                          .joinLeaveDifferenceEqualDescription(
+                                              formattedDate)),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
+          ],
         ),
       ),
     );

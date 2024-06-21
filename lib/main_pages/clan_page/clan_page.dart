@@ -2,10 +2,11 @@ import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_join_leave_car
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
-import 'package:clashkingapp/classes/user.dart';
+import 'package:clashkingapp/classes/account/user.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_info_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_search_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
+import 'package:clashkingapp/main_pages/clan_page/clan_join_leave/clan_join_leave.dart';
 
 class ClanInfoPage extends StatefulWidget {
   final Clan? clanInfo;
@@ -45,9 +46,8 @@ class ClanInfoPageState extends State<ClanInfoPage>
                       context,
                       MaterialPageRoute(
                         builder: (context) => ClanInfoScreen(
-                          clanInfo: widget.clanInfo!,
-                          discordUser: widget.user.tags
-                        ),
+                            clanInfo: widget.clanInfo!,
+                            discordUser: widget.user.tags),
                       ),
                     );
                   },
@@ -65,8 +65,16 @@ class ClanInfoPageState extends State<ClanInfoPage>
                 ),
               SizedBox(height: 4),
               if (widget.clanInfo != null)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ClanJoinLeaveScreen(
+                            user: widget.user.tags, clanInfo: widget.clanInfo!),
+                      ),
+                    );
+                  },
                   child: ClanJoinLeaveCard(
                     discordUser: widget.user.tags,
                     clanInfo: widget.clanInfo!,

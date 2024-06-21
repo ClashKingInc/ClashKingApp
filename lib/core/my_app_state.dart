@@ -1,4 +1,4 @@
-import 'package:clashkingapp/classes/user.dart';
+import 'package:clashkingapp/classes/account/user.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/widgets/widgets_functions.dart';
@@ -8,7 +8,7 @@ import 'dart:async';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
 import 'package:clashkingapp/main_pages/login_page/login_page.dart';
-import 'package:clashkingapp/classes/accounts.dart';
+import 'package:clashkingapp/classes/account/accounts.dart';
 
 class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   User? user;

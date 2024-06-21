@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/classes/profile/legend_league.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
 
 class LegendHeaderCard extends StatelessWidget {
   const LegendHeaderCard({

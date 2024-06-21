@@ -27,6 +27,10 @@ class PlayerLegendData {
       required this.rankings,
       required this.streak});
 
+
+  bool get isEmpty => legendData.isEmpty;
+  bool get isNotEmpty => legendData.isNotEmpty;
+
   factory PlayerLegendData.fromJson(Map<String, dynamic> json) {
     return PlayerLegendData(
         legendData: json['legends'] ?? {},

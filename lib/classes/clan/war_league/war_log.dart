@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:clashkingapp/classes/clan/badge_urls.dart';
+import 'package:clashkingapp/classes/clan/description/badge_urls.dart';
 
 class WarLog {
   final List<WarLogDetails> items;
@@ -167,6 +167,7 @@ class WarLogStatsService {
             totalTies++;
             break;
         }
+        print(log.teamSize);
         totalMembers += log.teamSize;
         clanTotalDestruction += log.clan.destructionPercentage;
         clanTotalStars += log.clan.stars;

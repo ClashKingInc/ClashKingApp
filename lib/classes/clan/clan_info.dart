@@ -1,17 +1,18 @@
-import 'package:clashkingapp/classes/clan/badge_urls.dart';
-import 'package:clashkingapp/classes/clan/join_leave.dart';
+import 'package:clashkingapp/classes/clan/description/badge_urls.dart';
+import 'package:clashkingapp/classes/clan/logs/join_leave.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/classes/data/league_data_manager.dart';
-import 'package:clashkingapp/classes/clan/capital_league.dart';
-import 'package:clashkingapp/classes/clan/location.dart';
-import 'package:clashkingapp/classes/clan/member.dart';
-import 'package:clashkingapp/classes/clan/war_league.dart';
+import 'package:clashkingapp/classes/clan/description/capital_league.dart';
+import 'package:clashkingapp/classes/clan/description/location.dart';
+import 'package:clashkingapp/classes/clan/description/member.dart';
+import 'package:clashkingapp/classes/clan/description/war_league.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
 import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
+import 'package:clashkingapp/classes/functions.dart';
 
 class Clan {
   final String tag;
@@ -148,13 +149,19 @@ class ClanService {
               LeagueDataManager().getLeagueUrl(clanInfo.warLeague!.name);
         }
 
+        final now = DateTime.now();
+        DateTime lastMonday = findLastMondayOfMonth(now.year, now.month-1);
+        int timestampLastMonday = lastMonday.millisecondsSinceEpoch ~/ 1000;
+
         // Parallelize the fetching of warState and warLog
         final warStateFuture = checkCurrentWar(tag, clanInfo);
         final warLogFuture = WarLogService.fetchWarLogData(tag);
-        final joinLeaveLog = JoinLeaveClanService.fetchJoinLeaveData(clanInfo.tag);
+        final joinLeaveLog = JoinLeaveClanService.fetchJoinLeaveData(
+            clanInfo.tag, timestampLastMonday.toString());
 
         // Wait for both futures to complete
-        final results = await Future.wait([warStateFuture, warLogFuture, joinLeaveLog]);
+        final results =
+            await Future.wait([warStateFuture, warLogFuture, joinLeaveLog]);
 
         // Assign the results to clanInfo
         clanInfo.warState =

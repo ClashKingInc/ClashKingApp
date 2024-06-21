@@ -100,7 +100,78 @@
     "search": "Rechercher",
     "tagOrNamePlayer": "Tag ou nom du joueur",
     "searchPlayer": "Rechercher un joueur",
-    "nameOrTagPlayer": "Nom ou tag du joueur",
+    "nameOrTagPlayer": "Nom ou tag du joueur",    
+    "playerClanDescription" : "Ton clan est \"{clan}\" ({tag}).",
+    "@playerClanDescription": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
+    "playerRatioDescription" : "Ton ratio de dons est de {ratio}. Tu as donné {donations} troupes et reçu {received} troupes.",
+    "@playerRatioDescription": {
+        "placeholders": {
+            "ratio": {
+                "type": "String"
+            },
+            "donations": {
+                "type": "String"
+            },
+            "received": {
+                "type": "String"
+            }
+        }
+    },
+    "playerWarPreferenceDescription" : "Ta préférence de guerre est \"{preference}\".",
+    "@playerWarPreferenceDescription": {
+        "placeholders": {
+            "preference": {
+                "type": "String"
+            }
+        }
+    },
+    "playerWarStarsDescription" : "Tu as obtenu {stars} étoiles en guerre",
+    "@playerNumberOfWarStarsDescription": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "playerTrophiesDescription" : "Tu as {trophies} trophées en {league}.",
+    "@playerTrophiesDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            },
+            "league": {
+                "type": "String"
+            }
+        }
+    },
+    "playerTownHallLevelDescription" : "Tu es HDV {level}.",
+    "@playerTownHallLevelDescription": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "playerBuilderBaseDescription" : "Ta maison des ouvriers est niveau {level} et tu as {trophies} trophées.",
+    "@playerBuilderBaseDescription": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            },
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
     "dashboard": "Profil",
     "homeBase": "Village principal",
     "th": "HDV",
@@ -127,6 +198,71 @@
     "legendLeague": "Ligue légende",
     "notInLegendLeague": "Pas en ligue légende",
     "noLegendData": "Pas de données pour la ligue légende aujourd'hui",
+    "legendStartDescription" : "Tu as commencé la journée avec {trophies} trophées.",
+    "@legendStartDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "String"
+            }
+        }
+    },
+    "legendNoRankLocalDescription" : "Tu n'es actuellement pas classé ({country}) avec {trophies} trophées.",
+    "@legendNoRankLocalDescription": {
+        "placeholders": {
+            "country": {
+                "type": "String"
+            },
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendRankLocalDescription" : "Tu es actuellement classé {rank} ({country}) avec {trophies} trophées.",
+    "@legendRankDescription": {
+        "placeholders": {
+            "rank": {
+                "type": "int"
+            },
+            "country": {
+                "type": "String"
+            },
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendGainDescription" : "Tu as gagné {trophies} trophées aujourd'hui.",
+    "@legendGainDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendLossDescription" : "Tu as perdu {trophies} trophées aujourd'hui.",
+    "@legendLossDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendNoGlobalRankDescription" : "Tu n'es actuellement pas classé monde avec {trophies} trophées.",
+    "@legendNoGlobalRankDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendGlobalRankDescription" : "Tu es actuellement classé {rank} monde avec {trophies} trophées",
+    "@legendGlobalRankDescription": {
+        "placeholders": {
+            "rank": {
+                "type": "int"
+            }
+        }
+    },
     "noRank": "Non classé",
     "started": "Début",
     "ended": "Fin",
@@ -240,6 +376,54 @@
     "ongoingCwl": "Ligue en cours",
     "notInWar": "Pas en guerre",
     "warHistory": "Historique de guerre",
+    "warHistoryWinsDescription" : "Nous avons enregistré les données de {wins} guerres gagnées.",
+    "@warHistoryWinsDescription": {
+        "placeholders": {
+            "wins": {
+                "type": "int"
+            }
+        }
+    },
+    "warHistoryLossesDescription" : "Nous avons enregistré les données de {losses} guerres perdues.",
+    "@warHistoryLossesDescription": {
+        "placeholders": {
+            "losses": {
+                "type": "int"
+            }
+        }
+    },
+    "warHistoryDrawsDescription" : "Nous avons enregistré les données de {draws} guerres nulles.",
+    "@warHistoryDrawsDescription": {
+        "placeholders": {
+            "draws": {
+                "type": "int"
+            }
+        }
+    },
+    "warHistoryAverageMembersDescription" : "Ton clan a une moyenne de {members} membres participants pour les guerres enregistrées.",
+    "@warHistoryAverageMembersDescription": {
+        "placeholders": {
+            "members": {
+                "type": "int"
+            }
+        }
+    },
+    "warHistoryAverageWarStarsDescription" : "Ton clan a une moyenne de {stars} étoiles pour les guerres enregistrées.",
+    "@warHistoryAverageWarStarsDescription": {
+        "placeholders": {
+            "stars": {
+                "type": "double"
+            }
+        }
+    },
+    "warHistoryAverageHitRateDescription" : "Ton clan a une moyenne de {percent} % de taux de destruction pour les guerres enregistrées.",
+    "@warHistoryAverageHitRateDescription": {
+        "placeholders": {
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
     "warLog": "Journal",
     "publicWarLog": "Journal de guerre public",
     "privateWarLog": "Journal de guerre privé",
@@ -276,6 +460,60 @@
         }
     },
     "joinLeaveLogs": "Historique d'arrivées/départs",
+    "leaveNumberDescription" : "{number} joueurs ont quitté le clan durant la saison actuelle ({date}).",
+    "@leaveNumberDescription": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinNumberDescription" : "{number} joueurs ont rejoint le clan durant la saison actuelle ({date}).",
+    "@joinNumberDescription": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinLeaveDifferenceUpDescription" : "Ton clan a gagné {number} nouveaux membres durant la saison actuelle ({date}).",
+    "@joinLeaveDifferenceUpDescription": {
+        "description": "Number of new members gained by the clan this season.",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+
+        }
+    },
+    "joinLeaveDifferenceDownDescription" : "Ton clan a perdu {number} membres durant la saison actuelle ({date}).",
+    "@joinLeaveDifferenceDownDescription": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinLeaveDifferenceEqualDescription" : "Ton clan a maintenu son nombre de membres durant la saison actuelle ({date}).",
+    "@joinLeaveDifferenceEqualDescription": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
     "leftOnAt": "Est parti le {date} à {time}.",
     "@leftOnAt": {
         "placeholders": {

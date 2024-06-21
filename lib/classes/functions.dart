@@ -89,3 +89,18 @@ Future<void> fetchImagesAndTypes(List<dynamic> items) async {
     item.type = urlAndType['type'] ?? 'unknown';
   }
 }
+
+DateTime findLastMondayOfMonth(int year, int month) {
+  DateTime firstDayOfNextMonth = DateTime(year, month + 1, 1);
+
+  DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
+
+  int weekdayOfLastDay = lastDayOfMonth.weekday;
+
+  int daysToLastMonday = (weekdayOfLastDay - DateTime.monday) % 7;
+
+  DateTime lastMondayOfMonth =
+      lastDayOfMonth.subtract(Duration(days: daysToLastMonday));
+
+  return lastMondayOfMonth;
+}
