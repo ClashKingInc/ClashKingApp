@@ -107,8 +107,7 @@ class ProfileInfo {
 
 class ProfileInfoService {
 // Placeholder methods for fetching data
-  Future<ProfileInfo> fetchProfileInfo(String tag) async {
-    // Fetch profile info based on tag
+   Future<ProfileInfo> fetchProfileInfo(String tag) async {
     tag = tag.replaceAll('#', '!');
 
     final response = await http.get(
@@ -118,26 +117,36 @@ class ProfileInfoService {
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
       ProfileInfo profileInfo = ProfileInfo.fromJson(jsonDecode(responseBody));
-      profileInfo.townHallPic =
-          await fetchPlayerTownHallByTownHallLevel(profileInfo.townHallLevel);
 
-      profileInfo.leagueUrl =
-          LeagueDataManager().getLeagueUrl(profileInfo.league);
+      // Start fetching all data concurrently
+      final townHallPicFuture = fetchPlayerTownHallByTownHallLevel(profileInfo.townHallLevel);
+      final builderHallPicFuture = fetchPlayerBuilderHallByTownHallLevel(profileInfo.builderHallLevel);
+      final troopsFuture = fetchImagesAndTypes(profileInfo.troops);
+      final heroesFuture = fetchImagesAndTypes(profileInfo.heroes);
+      final spellsFuture = fetchImagesAndTypes(profileInfo.spells);
+      final equipmentsFuture = fetchImagesAndTypes(profileInfo.equipments);
+      final leagueNameFuture = fetchLeagueName(profileInfo.tag);
+      final playerLegendDataFuture = PlayerLegendService().fetchLegendData(profileInfo.tag);
 
-      profileInfo.builderHallPic = await fetchPlayerBuilderHallByTownHallLevel(
-          profileInfo.builderHallLevel);
-      await fetchImagesAndTypes(profileInfo.troops);
-      await fetchImagesAndTypes(profileInfo.heroes);
-      await fetchImagesAndTypes(profileInfo.spells);
-      await fetchImagesAndTypes(profileInfo.equipments);
-      profileInfo.league = await fetchLeagueName(profileInfo.tag);
-      profileInfo.leagueUrl =
-          LeagueDataManager().getLeagueUrl(profileInfo.league);
-      
-      print(profileInfo.leagueUrl);
+      // Await all futures to complete
+      final results = await Future.wait([
+        townHallPicFuture,
+        builderHallPicFuture,
+        troopsFuture,
+        heroesFuture,
+        spellsFuture,
+        equipmentsFuture,
+        leagueNameFuture,
+        playerLegendDataFuture,
+      ]);
 
-      profileInfo.playerLegendData =
-          await PlayerLegendService().fetchLegendData(profileInfo.tag);
+      // Assign results to profileInfo
+      profileInfo.townHallPic = results[0] as String;
+      profileInfo.builderHallPic = results[1] as String;
+      // Troops, heroes, spells, and equipments are updated by reference, no need to reassign
+      profileInfo.league = results[6] as String;
+      profileInfo.leagueUrl = LeagueDataManager().getLeagueUrl(profileInfo.league);
+      profileInfo.playerLegendData = results[7] as PlayerLegendData?;
 
       return profileInfo;
     } else {

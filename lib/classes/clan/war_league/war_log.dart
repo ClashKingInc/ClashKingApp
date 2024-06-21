@@ -167,7 +167,6 @@ class WarLogStatsService {
             totalTies++;
             break;
         }
-        print(log.teamSize);
         totalMembers += log.teamSize;
         clanTotalDestruction += log.clan.destructionPercentage;
         clanTotalStars += log.clan.stars;

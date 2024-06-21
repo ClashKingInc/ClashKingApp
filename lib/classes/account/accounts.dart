@@ -54,13 +54,15 @@ class AccountsService {
             await ProfileInfoService().fetchProfileInfo(tag);
         Clan? clanInfo;
 
+        print("profileInfo fetched");
+
         if (profileInfo.clan != null) {
           var results = await Future.wait([
             ClanService().fetchClanInfo(profileInfo.clan!.tag),
           ]);
           clanInfo = results[0] as Clan?;
         }
-
+        print("clanInfo fetched");
         // Step 4: Create an Account object
         return Account(
           profileInfo: profileInfo,
@@ -82,13 +84,11 @@ class AccountsService {
         }
       });
 
-      print(accountsList.first.clan);
 
       // Step 5: Create an Accounts object
       Accounts accounts = Accounts(accounts: accountsList);
 
       accounts.selectedTag = ValueNotifier<String?>(tags.first);
-      print(accounts.selectedTag.value);
 
       // Step 6: Return the Accounts object
       return accounts;

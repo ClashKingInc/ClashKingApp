@@ -34,6 +34,7 @@ class CurrentWarInfo {
 
   factory CurrentWarInfo.fromJson(
       Map<String, dynamic> json, String type, String clanTag) {
+
     return CurrentWarInfo(
       state: json['state'] ?? 'No state',
       teamSize: json['teamSize'] ?? 0,

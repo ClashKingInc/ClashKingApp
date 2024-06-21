@@ -79,7 +79,6 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
             onChanged: (String? newValue) {
               setState(() {
                 _dropdownValue = newValue!;
-                print('Selected tag: $_dropdownValue');
               });
             },
             value: _dropdownValue,

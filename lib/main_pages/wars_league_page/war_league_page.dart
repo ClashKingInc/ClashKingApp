@@ -46,7 +46,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => CurrentWarInfoScreen(
-                            currentWarInfo: widget.account.clan!.currentWarInfo,
+                            currentWarInfo: widget.account.clan!.currentWarInfo!,
                             discordUser: widget.discordUser.tags,
                           ),
                         ),
@@ -55,7 +55,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                     child: Padding(
                       padding: EdgeInsets.only(left: 4.0, right: 4.0),
                       child: CurrentWarInfoCard(
-                          currentWarInfo: widget.account.clan!.currentWarInfo,
+                          currentWarInfo: widget.account.clan!.currentWarInfo!,
                           clanTag: widget.account.clan!.tag),
                     ),
                   )
@@ -75,7 +75,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                                 MaterialPageRoute(
                                   builder: (context) => CurrentLeagueInfoScreen(
                                     currentLeagueInfo:
-                                        widget.account.clan!.currentLeagueInfo,
+                                        widget.account.clan!.currentLeagueInfo!,
                                     clanTag:
                                         widget.account.profileInfo.clan!.tag,
                                     clanInfo: widget.account.clan!,
@@ -86,7 +86,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                             },
                             child: CwlCard(
                               currentLeagueInfo:
-                                  widget.account.clan!.currentLeagueInfo,
+                                  widget.account.clan!.currentLeagueInfo!,
                               clanTag: widget.account.profileInfo.clan!.tag,
                               clanInfo: widget.account.clan!,
                             ),

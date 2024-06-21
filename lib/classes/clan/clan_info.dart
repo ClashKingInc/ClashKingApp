@@ -41,8 +41,8 @@ class Clan {
   final int requiredBuilderBaseTrophies;
   final int requiredTownhallLevel;
   final Map<String, dynamic> clanCapital;
-  late CurrentLeagueInfo currentLeagueInfo;
-  late CurrentWarInfo currentWarInfo;
+  late CurrentLeagueInfo? currentLeagueInfo;
+  late CurrentWarInfo? currentWarInfo;
   late String warState;
   late WarLog warLog;
   late JoinLeaveClan joinLeaveClan;
@@ -137,45 +137,61 @@ class ClanService {
     try {
       tag = tag.replaceAll('#', '!');
 
-      final response = await http.get(
+      final clanInfoFuture = http.get(
         Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
       );
 
-      if (response.statusCode == 200) {
-        String responseBody = utf8.decode(response.bodyBytes);
+      final now = DateTime.now();
+      DateTime lastMonday = findLastMondayOfMonth(now.year, now.month - 1);
+      int timestampLastMonday = lastMonday.millisecondsSinceEpoch ~/ 1000;
+
+      // Start fetching warState, warLog, and joinLeaveLog in parallel
+      final warStateFuture = fetchCurrentWarInfo(tag);
+      final warLogFuture = WarLogService.fetchWarLogData(tag);
+      final joinLeaveLogFuture = JoinLeaveClanService.fetchJoinLeaveData(
+          tag, timestampLastMonday.toString());
+
+      // Wait for all futures to complete
+      final responses = await Future.wait([
+        clanInfoFuture,
+        warStateFuture,
+        warLogFuture,
+        joinLeaveLogFuture,
+      ]);
+
+      // Extract responses
+      final clanInfoResponse = responses[0] as http.Response;
+      final warStateInfo = responses[1] as WarStateInfo;
+      final warLog = responses[2] as WarLog;
+      final joinLeaveLog = responses[3] as JoinLeaveClan;
+
+      if (clanInfoResponse.statusCode == 200) {
+        String responseBody = utf8.decode(clanInfoResponse.bodyBytes);
         Clan clanInfo = Clan.fromJson(jsonDecode(responseBody));
+
         if (clanInfo.warLeague != null) {
           clanInfo.warLeague!.imageUrl =
               LeagueDataManager().getLeagueUrl(clanInfo.warLeague!.name);
         }
 
-        final now = DateTime.now();
-        DateTime lastMonday = findLastMondayOfMonth(now.year, now.month-1);
-        int timestampLastMonday = lastMonday.millisecondsSinceEpoch ~/ 1000;
-
-        // Parallelize the fetching of warState and warLog
-        final warStateFuture = checkCurrentWar(tag, clanInfo);
-        final warLogFuture = WarLogService.fetchWarLogData(tag);
-        final joinLeaveLog = JoinLeaveClanService.fetchJoinLeaveData(
-            clanInfo.tag, timestampLastMonday.toString());
-
-        // Wait for both futures to complete
-        final results =
-            await Future.wait([warStateFuture, warLogFuture, joinLeaveLog]);
-
         // Assign the results to clanInfo
-        clanInfo.warState =
-            results[0] as String; // Assuming checkCurrentWar returns a String
-        clanInfo.warLog = results[1]
-            as WarLog; // Assuming WarLogService.fetchWarLogData returns a WarLog
-        clanInfo.joinLeaveClan = results[2] as JoinLeaveClan;
+        if (warStateInfo.currentLeagueInfo != null) {
+          clanInfo.warState = "cwl";
+        } else {
+          clanInfo.warState = warStateInfo.state;
+        }
+        clanInfo.warState = warStateInfo.state;
+        clanInfo.currentWarInfo = warStateInfo.currentWarInfo;
+        clanInfo.currentLeagueInfo = warStateInfo.currentLeagueInfo;
+        clanInfo.warLog = warLog;
+        clanInfo.joinLeaveClan = joinLeaveLog;
 
         return clanInfo;
       } else {
         throw Exception('Failed to load clan stats');
       }
     } catch (e) {
-      throw Exception('Failed to load clan stats : $e');
+      throw Exception('Failed to load clan stats: $e');
     }
   }
 
@@ -184,47 +200,58 @@ class ClanService {
         'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
   }
 
-  Future<String> checkCurrentWar(String clanTag, Clan clan) async {
-    if (clanTag == "") {
-      return "noClan";
-    }
-
+  Future<WarStateInfo> fetchCurrentWarInfo(String clanTag) async {
     final responseWar = await http.get(
       Uri.parse(
           'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar'),
-    );
-
-    final responseCwl = await http.get(
-      Uri.parse(
-          'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
     );
 
     if (responseWar.statusCode == 200) {
       var decodedResponse = jsonDecode(utf8.decode(responseWar.bodyBytes));
       if (decodedResponse["state"] != "notInWar" &&
           decodedResponse["reason"] != "accessDenied") {
-        clan.currentWarInfo = CurrentWarInfo.fromJson(
-            jsonDecode(utf8.decode(responseWar.bodyBytes)), "war", clanTag);
-        return "war";
+        final currentWarInfo =
+            CurrentWarInfo.fromJson(decodedResponse, "war", clanTag);
+        return WarStateInfo(state: "war", currentWarInfo: currentWarInfo);
       } else if (decodedResponse["state"] == "notInWar") {
-        DateTime now = DateTime.now();
-        if (now.day >= 1 && now.day <= 12) {
-          if (responseCwl.statusCode == 200) {
-            var decodedResponseCwl =
-                jsonDecode(utf8.decode(responseCwl.bodyBytes));
-            if (decodedResponseCwl.containsKey("state")) {
-              clan.currentLeagueInfo =
-                  CurrentLeagueInfo.fromJson(decodedResponseCwl, clanTag);
-              return "cwl";
-            }
-          }
-        }
+        return WarStateInfo(state: "notInWar");
       }
     } else if (responseWar.statusCode == 403) {
-      return "accessDenied";
+      return WarStateInfo(state: "accessDenied");
     } else {
       throw Exception('Failed to load current war info');
     }
-    return "notInWar";
+    return WarStateInfo(state: "notInWar");
   }
+
+  Future<CurrentLeagueInfo?> fetchCurrentLeagueInfo(String clanTag) async {
+    final responseCwl = await http.get(
+      Uri.parse(
+          'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
+    );
+
+    if (responseCwl.statusCode == 200) {
+      var decodedResponseCwl = jsonDecode(utf8.decode(responseCwl.bodyBytes));
+      if (decodedResponseCwl.containsKey("state")) {
+        return CurrentLeagueInfo.fromJson(decodedResponseCwl, clanTag);
+      }
+    } else if (responseCwl.statusCode == 403) {
+      return null;
+    } else {
+      throw Exception('Failed to load current league info');
+    }
+    return null;
+  }
+}
+
+class WarStateInfo {
+  final String state;
+  final CurrentWarInfo? currentWarInfo;
+  final CurrentLeagueInfo? currentLeagueInfo;
+
+  WarStateInfo({
+    required this.state,
+    this.currentWarInfo,
+    this.currentLeagueInfo,
+  });
 }

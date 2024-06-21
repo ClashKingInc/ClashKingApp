@@ -206,7 +206,6 @@ class _CustomChipState extends State<CustomChip> {
 
   @override
   Widget build(BuildContext context) {
-    final actualColor = widget.color ?? Theme.of(context).colorScheme.onSurface;
     return GestureDetector(
       onTap: _toggleTooltip,
       child: Tooltip(
