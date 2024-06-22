@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
 
 class LegendOffenseDefenseCard extends StatelessWidget {
-  const LegendOffenseDefenseCard(
-    {super.key,
+  const LegendOffenseDefenseCard({
+    super.key,
     required this.title,
     required this.list,
     required this.context,
     required this.stats,
     required this.plusMinus,
-    required this.icon}
-  );
+    required this.icon,
+  });
 
   final String title;
   final List<dynamic> list;
@@ -26,16 +27,16 @@ class LegendOffenseDefenseCard extends StatelessWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-        child: Center( 
+        child: Center(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center, 
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                Text(title, style: Theme.of(context).textTheme.titleMedium),
-                Text(' ($plusMinus${stats["sum"]})',
-                  style: Theme.of(context).textTheme.labelLarge),
+                  Text(title, style: Theme.of(context).textTheme.titleMedium),
+                  Text(' ($plusMinus${stats["sum"]})',
+                      style: Theme.of(context).textTheme.labelLarge),
                 ],
               ),
               SizedBox(height: 8),
@@ -46,9 +47,9 @@ class LegendOffenseDefenseCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: list.map((item) {
-                      if (item is Map) {
-                        int change = item['change'];
-                        int time = item['time'];
+                      if (item is Attack || item is Defense) {
+                        int change = item.change;
+                        int time = item.time;
                         String timeAgo = convertToTimeAgo(time, context);
 
                         return Column(
@@ -61,19 +62,23 @@ class LegendOffenseDefenseCard extends StatelessWidget {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.only(left: 8.0),
-                                    child: CachedNetworkImage(imageUrl: 
-                                      icon,
+                                    child: CachedNetworkImage(
+                                      imageUrl: icon,
                                       width: 20,
                                     ),
                                   ),
                                   SizedBox(width: 4),
                                   Text(
                                     '$plusMinus$change',
-                                    style: Theme.of(context).textTheme.bodyMedium,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium,
                                   ),
                                   Text(
                                     " ($timeAgo)",
-                                    style: Theme.of(context).textTheme.labelSmall,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall,
                                   ),
                                 ],
                               ),
@@ -88,15 +93,20 @@ class LegendOffenseDefenseCard extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 8),
-              Text(AppLocalizations.of(context)?.statistics ?? "Statistics", style: Theme.of(context).textTheme.bodyLarge),
-              Text("${AppLocalizations.of(context)?.total ?? "Total"} : ${stats["count"]}/8",
+              Text(AppLocalizations.of(context)?.statistics ?? "Statistics",
+                  style: Theme.of(context).textTheme.bodyLarge),
+              Text(
+                  "${AppLocalizations.of(context)?.total ?? "Total"} : ${stats["count"]}/8",
                   style: Theme.of(context).textTheme.bodySmall),
-              Text('${AppLocalizations.of(context)?.average ?? "Average"} : ${stats["average"].toStringAsFixed(1)}',
+              Text(
+                  '${AppLocalizations.of(context)?.average ?? "Average"} : ${stats["average"].toStringAsFixed(1)}',
                   style: Theme.of(context).textTheme.bodySmall),
-              Text('${AppLocalizations.of(context)?.remaining ?? "Remaining"} : $plusMinus${stats["remaining"]}',
+              Text(
+                  '${AppLocalizations.of(context)?.remaining ?? "Remaining"} : $plusMinus${stats["remaining"]}',
                   style: Theme.of(context).textTheme.bodySmall),
-              Text('${plusMinus == "-" ? AppLocalizations.of(context)?.worst ?? "Worst" :  AppLocalizations.of(context)?.best ??"Best"} : $plusMinus${stats["bestPossibleTrophies"]}',
-                style: Theme.of(context).textTheme.bodySmall),
+              Text(
+                  '${plusMinus == "-" ? AppLocalizations.of(context)?.worst ?? "Worst" : AppLocalizations.of(context)?.best ?? "Best"} : $plusMinus${stats["bestPossibleTrophies"]}',
+                  style: Theme.of(context).textTheme.bodySmall),
             ],
           ),
         ),

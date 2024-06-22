@@ -39,7 +39,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
         },
         child: Column(
           children: [
-              SizedBox(height: 4),
+            SizedBox(height: 4),
             warState == "war"
                 ? GestureDetector(
                     onTap: () {

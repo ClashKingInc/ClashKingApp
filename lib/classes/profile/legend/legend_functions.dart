@@ -1,5 +1,7 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
+
 
 String convertToTimeAgo(int timestamp, context) {
   DateTime now = DateTime.now();
@@ -19,17 +21,32 @@ String convertToTimeAgo(int timestamp, context) {
 
 Map<String, dynamic> calculateStats(List<dynamic> list) {
   int sum = 0;
+  int count = 0;
+  double average = 0;
+  int remaining = 320;
+  int bestPossibleTrophies = 0;
+
   if (list.isNotEmpty) {
-    sum = list
-        .whereType<Map>()
-        .map((item) => item['change'])
-        .reduce((value, element) => value + element);
+    var filteredList =
+        list.where((item) => item is Attack || item is Defense).toList();
+    if (filteredList.isNotEmpty) {
+      sum = filteredList
+          .map((item) =>
+              (item is Attack ? item.change : (item as Defense).change))
+          .reduce((value, element) => value + element);
+      count = filteredList.length +
+          filteredList
+              .where((item) =>
+                  (item is Attack ? item.change : (item as Defense).change) >
+                  40)
+              .length;
+      average = sum / count;
+      remaining = 320 - count * 40;
+      bestPossibleTrophies = remaining + sum;
+    }
   }
-  int count = list.whereType<Map>().length +
-      list.whereType<Map>().where((item) => item['change'] > 40).length;
-  double average = count == 0 ? 0 : sum / count;
-  int remaining = 320 - count * 40;
-  int bestPossibleTrophies = remaining + sum;
+
+  print('sum: $sum');
 
   return {
     'sum': sum,
