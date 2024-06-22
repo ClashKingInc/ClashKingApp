@@ -13,8 +13,7 @@ class Accounts {
   // Method to find the account with the selected tag
   Account? findAccountBySelectedTag() {
     try {
-      return accounts
-          .firstWhere((acc) => acc.profileInfo.tag == selectedTag.value);
+      return accounts.firstWhere((acc) => acc.profileInfo.tag == selectedTag.value);
     } catch (e) {
       return null;
     }
@@ -82,13 +81,10 @@ class AccountsService {
         }
       });
 
-      print(accountsList.first.clan);
-
       // Step 5: Create an Accounts object
       Accounts accounts = Accounts(accounts: accountsList);
 
       accounts.selectedTag = ValueNotifier<String?>(tags.first);
-      print(accounts.selectedTag.value);
 
       // Step 6: Return the Accounts object
       return accounts;

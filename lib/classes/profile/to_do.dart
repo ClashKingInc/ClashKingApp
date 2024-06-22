@@ -23,56 +23,55 @@ class PlayerData {
   final String playerTag;
   final String currentClan;
   final LegendData? legends;
-  //final int seasonPass;
+  final int seasonPass;
   final int lastActive;
   final RaidData raids;
   final CwlData cwl;
+  final ClanGames? clanGames;
+  //war
+  //clanGames
 
   PlayerData({
     required this.playerTag,
     required this.currentClan,
     this.legends,
-    //required this.seasonPass,
+    required this.seasonPass,
     required this.lastActive,
     required this.raids,
     required this.cwl,
+    this.clanGames,
   });
 
   factory PlayerData.fromJson(Map<String, dynamic> json) {
     return PlayerData(
       playerTag: json['player_tag'] ?? '',
       currentClan: json['current_clan'] ?? 'No clan',
-      legends: json['legends'] != null && json['raids'].isNotEmpty ? LegendData.fromJson(json['legends']) : null,
-      //seasonPass: json['season_pass'] ?? 0,
+      legends: json['legends'] != null && json['legends'].isNotEmpty ? LegendData.fromJson(json['legends']) : null,
+      seasonPass: json['season_pass'] is int ? json['season_pass'] : 0,
       lastActive: json['last_active'] ?? 0,
       raids: json['raids'] != null && json['raids'].isNotEmpty ? RaidData.fromJson(json['raids']) : RaidData(attacksDone: 0, attackLimit: 0),
       cwl: json['cwl'] != null && json['cwl'].isNotEmpty ? CwlData.fromJson(json['cwl']) : CwlData(attacksDone: 0, attackLimit: 0),
+      clanGames: json['clan_games'] != null && json['clan_games'].isNotEmpty ? ClanGames.fromJson(json['clan_games']) : null,
     );
   }
 }
 
 class LegendData {
   final List<int> defenses;
-  //final List<DefenseDetail> newDefenses;
   final int numAttacks;
   final List<int> attacks;
-  //final List<AttackDetail> newAttacks;
 
   LegendData({
     required this.defenses,
-    //required this.newDefenses,
     required this.numAttacks,
     required this.attacks,
-    //required this.newAttacks,
   });
 
   factory LegendData.fromJson(Map<String, dynamic> json) {
     return LegendData(
       defenses: List<int>.from(json['defenses'] ?? []),
-      //newDefenses: (json['new_defenses'] as List? ?? []).map((e) => DefenseDetail.fromJson(e as Map<String, dynamic>)).toList(),
       numAttacks: json['num_attacks'] ?? 0,
       attacks: List<int>.from(json['attacks'] ?? []),
-      //newAttacks: (json['new_attacks'] as List? ?? []).map((e) => AttackDetail.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
 }
@@ -138,6 +137,20 @@ class CwlData {
     return CwlData(
       attackLimit: json['attack_limit'] ?? 0,
       attacksDone: json['attacks_done'] ?? 0,
+    );
+  }
+}
+
+class ClanGames {
+  final String clanTag;
+  final int points;
+
+  ClanGames({required this.clanTag, required this.points});
+
+  factory ClanGames.fromJson(Map<String, dynamic> json) {
+    return ClanGames(
+      clanTag: json['points'] ?? '',
+      points: json['max_points'] ?? 0,
     );
   }
 }

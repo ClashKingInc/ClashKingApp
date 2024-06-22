@@ -78,7 +78,8 @@ class MyHomePageState extends State<MyHomePage> {
                 appState.account != null
                     ? DashboardPage(
                         playerStats: appState.account!.profileInfo,
-                        discordUser: appState.user!)
+                        discordUser: appState.user!,
+                        accounts: appState.accounts!)
                     : Center(child: CircularProgressIndicator()),
                 appState.account != null && appState.user != null
                     ? ClanInfoPage(
@@ -120,7 +121,7 @@ class MyHomePageState extends State<MyHomePage> {
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(CustomIcons
-                          .swordCross), // Example icon for War/League
+                          .swordCross),
                       label: AppLocalizations.of(context)?.warLeague ??
                           'War/League',
                     ),

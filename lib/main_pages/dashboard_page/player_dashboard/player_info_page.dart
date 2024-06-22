@@ -246,7 +246,8 @@ class StatsScreenState extends State<StatsScreen>
                                 ? (item.name == 'Frozen Arrow' ||
                                         item.name == 'Giant Gauntlet' ||
                                         item.name == 'Fireball' ||
-                                        item.name == 'Spiky Ball'
+                                        item.name == 'Spiky Ball' ||
+                                        item.name == 'Rocket Spear'
                                     ? Colors.purple
                                     : Colors.blue)
                                 : null,

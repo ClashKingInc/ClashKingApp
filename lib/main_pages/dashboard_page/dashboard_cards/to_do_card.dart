@@ -1,3 +1,4 @@
+import 'package:clashkingapp/classes/accounts.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,10 +12,12 @@ class ToDoCard extends StatefulWidget {
     super.key,
     required this.playerStats,
     required this.tags,
+    required this.accounts,
   });
 
   final ProfileInfo playerStats;
   final List<String> tags;
+  final Accounts accounts;
 
   @override
   ToDoCardState createState() => ToDoCardState();
@@ -34,9 +37,12 @@ class ToDoCardState extends State<ToDoCard> {
     DateTime nowUtc = DateTime.now().toUtc();
     bool isInTimeFrame = false;
 
+    print('iuazehrfiuzhr${widget.playerStats.tag}');
+
     if (nowUtc.weekday == DateTime.friday && nowUtc.hour >= 6) {
       isInTimeFrame = true;
-    } else if (nowUtc.weekday == DateTime.saturday || nowUtc.weekday == DateTime.sunday) {
+    } else if (nowUtc.weekday == DateTime.saturday ||
+        nowUtc.weekday == DateTime.sunday) {
       isInTimeFrame = true;
     } else if (nowUtc.weekday == DateTime.monday && nowUtc.hour < 6) {
       isInTimeFrame = true;
@@ -48,22 +54,14 @@ class ToDoCardState extends State<ToDoCard> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox.shrink(); // Show a loading spinner while waiting
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}'); // Show error if something went wrong
+          return Text(
+              'Error: ${snapshot.error}'); // Show error if something went wrong
         } else {
           PlayerToDoData? data = snapshot.data;
           if (data != null) {
             for (var item in data.items) {
-              print(item.playerTag);
-              print(item.currentClan);
-              print(item.legends?.attacks);
-              print(item.legends?.defenses);
-              //print(item.seasonPass);
-              print(item.lastActive);
-              print(item.raids.attacksDone);
-              print(item.raids.attackLimit);
+              print(item.clanGames?.points);
               print(item.cwl.attacksDone);
-              print(item.cwl.attackLimit);
-
             }
           }
 
@@ -73,7 +71,12 @@ class ToDoCardState extends State<ToDoCard> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ToDoScreen(playerStats: widget.playerStats, tags: widget.tags, isInTimeFrame: isInTimeFrame, data: data),
+                    builder: (context) => ToDoScreen(
+                      playerStats: widget.playerStats,
+                      tags: widget.tags,
+                      isInTimeFrame: isInTimeFrame,
+                      data: data,
+                      accounts: widget.accounts),
                   ),
                 );
               } else {
@@ -83,7 +86,6 @@ class ToDoCardState extends State<ToDoCard> {
                   ),
                 );
               }
-              
             },
             child: DefaultTextStyle(
               style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
@@ -100,15 +102,15 @@ class ToDoCardState extends State<ToDoCard> {
                             children: <Widget>[
                               Text(
                                 AppLocalizations.of(context)?.toDoList ?? 'To Do List',
-                                style: (Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold)) ?? TextStyle(fontWeight: FontWeight.bold),
+                                style: (Theme.of(context).textTheme.labelLarge?.copyWith(
+                                  fontWeight: FontWeight.bold)) ??
+                                  TextStyle(fontWeight: FontWeight.bold),
                               ),
                               SizedBox(height: 12),
                               SizedBox(
                                 height: 100,
                                 width: 100,
-                                child: CachedNetworkImage(
-                                  imageUrl: 'https://clashkingfiles.b-cdn.net/icons/Magic_Item_Builder_Potion.png'
-                                ),
+                                child: CachedNetworkImage(imageUrl: 'https://clashkingfiles.b-cdn.net/icons/Magic_Item_Builder_Potion.png'),
                               ),
                             ],
                           ),
@@ -122,12 +124,13 @@ class ToDoCardState extends State<ToDoCard> {
                                   style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
                                 ),
                                 if (data != null) ...{
-                                  for (var playerData in data.items.where((item) => item.playerTag == widget.playerStats.tag)) ...[
+                                  for (var playerData in data.items.where(
+                                      (item) =>item.playerTag ==widget.playerStats.tag)) ...[
                                     Text('Last Active: ${DateFormat('dd/MM/yy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(playerData.lastActive * 1000))}'),
                                     if (isInTimeFrame)
                                       if (playerData.raids.attackLimit == 0)
                                         Text('Raids: 0/5')
-                                      else  
+                                      else
                                         Text('Raids: ${playerData.raids.attacksDone}/${playerData.raids.attackLimit}'),
                                     if (playerData.cwl.attackLimit != 0)
                                       Text('CWL: ${playerData.cwl.attacksDone}/${playerData.cwl.attackLimit}'),
