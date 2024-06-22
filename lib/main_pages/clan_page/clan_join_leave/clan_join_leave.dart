@@ -36,7 +36,7 @@ class ClanJoinLeaveScreenState extends State<ClanJoinLeaveScreen>
                   joinLeaveClan: widget.clanInfo!.joinLeaveClan,
                   clanInfo: widget.clanInfo),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 8),
             ClanJoinLeaveBody(
                 user: widget.user, joinLeaveClan: widget.clanInfo!.joinLeaveClan)
           ])

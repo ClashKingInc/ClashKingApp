@@ -1,3 +1,6 @@
+import 'package:clashkingapp/classes/account/accounts.dart';
+
+import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/to_do_card.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
@@ -12,8 +15,9 @@ import 'package:provider/provider.dart';
 class DashboardPage extends StatefulWidget {
   final ProfileInfo playerStats;
   final User discordUser;
+  final Accounts accounts;
 
-  DashboardPage({required this.playerStats, required this.discordUser});
+  DashboardPage({required this.playerStats, required this.discordUser, required this.accounts});
 
   @override
   DashboardPageState createState() => DashboardPageState();
@@ -66,10 +70,10 @@ class DashboardPageState extends State<DashboardPage>
                     playerLegendData: widget.playerStats.playerLegendData!,
                   ),
                 ),
-              /*Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 4),
-                child: ToDoCard(discordUser: widget.discordUser.tags, playerStats: widget.playerStats),
-              ),*/
+                child: ToDoCard(tags: widget.discordUser.tags, playerStats: widget.playerStats, accounts: widget.accounts),
+              ),
             ],
           ),
         ),

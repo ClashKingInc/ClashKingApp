@@ -51,7 +51,7 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
             ),
           ),
           Positioned(
-            bottom: 0,
+            bottom: 10,
             child: Column(children: [
               CachedNetworkImage(
                 imageUrl: widget.clanInfo!.badgeUrls.large,
