@@ -13,6 +13,7 @@ import 'package:clashkingapp/classes/clan/description/war_league.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
 import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
 import 'package:clashkingapp/classes/functions.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class Clan {
   final String tag;
@@ -119,8 +120,9 @@ class Clan {
         requiredTownhallLevel: json['requiredTownhallLevel'] ?? 0,
         clanCapital: json['clanCapital'] ?? {},
       );
-    } catch (e) {
-      throw Exception('Failed to load clan stats : $e');
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      throw Exception('Failed to load clan stats : $exception');
     }
   }
 }
@@ -188,8 +190,9 @@ class ClanService {
       } else {
         throw Exception('Failed to load clan stats');
       }
-    } catch (e) {
-      throw Exception('Failed to load clan stats: $e');
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      throw Exception('Failed to load clan stats: $exception');
     }
   }
 

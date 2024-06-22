@@ -9,6 +9,7 @@ import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
 import 'package:clashkingapp/main_pages/login_page/login_page.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   User? user;
@@ -103,8 +104,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         name: 'WarAppWidgetProvider',
         androidName: 'WarAppWidgetProvider',
       );
-    } catch (e) {
-      print('Error updating widget: $e');
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
     }
   }
 
@@ -161,8 +162,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       updateWidgets();
       notifyListeners();
       return true;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
       return false;
     }
   }

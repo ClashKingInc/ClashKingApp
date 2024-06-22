@@ -9,6 +9,7 @@ import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/functions.dart';
 import 'package:clashkingapp/classes/data/league_data_manager.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProfileInfo {
   final String name;
@@ -104,53 +105,103 @@ class ProfileInfo {
 }
 
 // Service
-
 class ProfileInfoService {
-// Placeholder methods for fetching data
-   Future<ProfileInfo> fetchProfileInfo(String tag) async {
-    tag = tag.replaceAll('#', '!');
-
-    final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
+  Future<ProfileInfo> fetchProfileInfo(String tag) async {
+    final transaction = Sentry.startTransaction(
+      'fetchProfileInfo',
+      'task',
+      bindToScope: true,
     );
 
-    if (response.statusCode == 200) {
-      String responseBody = utf8.decode(response.bodyBytes);
-      ProfileInfo profileInfo = ProfileInfo.fromJson(jsonDecode(responseBody));
+    try {
+      tag = tag.replaceAll('#', '!');
 
-      // Start fetching all data concurrently
-      final townHallPicFuture = fetchPlayerTownHallByTownHallLevel(profileInfo.townHallLevel);
-      final builderHallPicFuture = fetchPlayerBuilderHallByTownHallLevel(profileInfo.builderHallLevel);
-      final troopsFuture = fetchImagesAndTypes(profileInfo.troops);
-      final heroesFuture = fetchImagesAndTypes(profileInfo.heroes);
-      final spellsFuture = fetchImagesAndTypes(profileInfo.spells);
-      final equipmentsFuture = fetchImagesAndTypes(profileInfo.equipments);
-      final leagueNameFuture = fetchLeagueName(profileInfo.tag);
-      final playerLegendDataFuture = PlayerLegendService().fetchLegendData(profileInfo.tag);
+      // Lancer fetchLeagueName et fetchLegendData en parallèle
+      final leagueNameSpan = transaction.startChild('fetchLeagueName');
+      final playerLegendDataSpan = transaction.startChild('fetchLegendData');
 
-      // Await all futures to complete
-      final results = await Future.wait([
-        townHallPicFuture,
-        builderHallPicFuture,
-        troopsFuture,
-        heroesFuture,
-        spellsFuture,
-        equipmentsFuture,
-        leagueNameFuture,
-        playerLegendDataFuture,
-      ]);
+      final leagueNameFuture =
+          fetchWithSpan(leagueNameSpan, () => fetchLeagueName(tag));
+      final playerLegendDataFuture = fetchWithSpan(playerLegendDataSpan,
+          () => PlayerLegendService().fetchLegendData(tag));
 
-      // Assign results to profileInfo
-      profileInfo.townHallPic = results[0] as String;
-      profileInfo.builderHallPic = results[1] as String;
-      // Troops, heroes, spells, and equipments are updated by reference, no need to reassign
-      profileInfo.league = results[6] as String;
-      profileInfo.leagueUrl = LeagueDataManager().getLeagueUrl(profileInfo.league);
-      profileInfo.playerLegendData = results[7] as PlayerLegendData?;
+      // Effectuer l'appel HTTP principal
+      final responseSpan = transaction.startChild('http.get');
+      final response = await http.get(
+        Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
+      );
+      responseSpan.finish(
+          status: response.statusCode == 200
+              ? SpanStatus.ok()
+              : SpanStatus.internalError());
 
-      return profileInfo;
-    } else {
-      throw Exception('Failed to load player stats');
+      if (response.statusCode == 200) {
+        String responseBody = utf8.decode(response.bodyBytes);
+        ProfileInfo profileInfo =
+            ProfileInfo.fromJson(jsonDecode(responseBody));
+
+        // Start fetching all data concurrently
+        final townHallPicSpan =
+            transaction.startChild('fetchPlayerTownHallByTownHallLevel');
+        final builderHallPicSpan =
+            transaction.startChild('fetchPlayerBuilderHallByTownHallLevel');
+        final troopsSpan = transaction.startChild('fetchImagesAndTypes_troops');
+        final heroesSpan = transaction.startChild('fetchImagesAndTypes_heroes');
+        final spellsSpan = transaction.startChild('fetchImagesAndTypes_spells');
+        final equipmentsSpan =
+            transaction.startChild('fetchImagesAndTypes_equipments');
+
+        final results = await Future.wait([
+          fetchWithSpan(
+              townHallPicSpan,
+              () => fetchPlayerTownHallByTownHallLevel(
+                  profileInfo.townHallLevel)),
+          fetchWithSpan(
+              builderHallPicSpan,
+              () => fetchPlayerBuilderHallByTownHallLevel(
+                  profileInfo.builderHallLevel)),
+          fetchWithSpan(
+              troopsSpan, () => fetchImagesAndTypes(profileInfo.troops)),
+          fetchWithSpan(
+              heroesSpan, () => fetchImagesAndTypes(profileInfo.heroes)),
+          fetchWithSpan(
+              spellsSpan, () => fetchImagesAndTypes(profileInfo.spells)),
+          fetchWithSpan(equipmentsSpan,
+              () => fetchImagesAndTypes(profileInfo.equipments)),
+          leagueNameFuture,
+          playerLegendDataFuture,
+        ]);
+
+        // Assign results to profileInfo
+        profileInfo.townHallPic = results[0] as String;
+        profileInfo.builderHallPic = results[1] as String;
+        profileInfo.league = results[6] as String;
+        profileInfo.leagueUrl =
+            LeagueDataManager().getLeagueUrl(profileInfo.league);
+        profileInfo.playerLegendData = results[7] as PlayerLegendData?;
+
+        transaction.finish(status: SpanStatus.ok());
+        return profileInfo;
+      } else {
+        throw Exception('Failed to load player stats');
+      }
+    } catch (exception, stackTrace) {
+      transaction.finish(status: SpanStatus.internalError());
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      throw Exception('Failed to load player stats: $exception');
+    }
+  }
+
+  Future<T> fetchWithSpan<T>(
+      ISentrySpan span, Future<T> Function() action) async {
+    try {
+      T result = await action();
+      span.finish(status: SpanStatus.ok());
+      return result;
+    } catch (exception, stackTrace) {
+      span.finish(status: SpanStatus.internalError());
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      rethrow;
     }
   }
 }

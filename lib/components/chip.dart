@@ -56,6 +56,14 @@ class _ImageChipState extends State<ImageChip> {
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
           borderRadius: BorderRadius.circular(4),
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
+              spreadRadius:2,
+              blurRadius: 2,
+              offset: Offset(0, 1),
+            ),
+          ],
         ),
         child: Chip(
           avatar: CircleAvatar(
@@ -136,7 +144,15 @@ class _IconChipState extends State<IconChip> {
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
+              spreadRadius:2,
+              blurRadius: 2,
+              offset: Offset(0, 1),
+            ),
+          ],
         ),
         child: Chip(
           avatar: CircleAvatar(
@@ -215,7 +231,7 @@ class _CustomChipState extends State<CustomChip> {
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Chip(
           avatar: CircleAvatar(

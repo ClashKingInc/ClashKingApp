@@ -46,8 +46,6 @@ Map<String, dynamic> calculateStats(List<dynamic> list) {
     }
   }
 
-  print('sum: $sum');
-
   return {
     'sum': sum,
     'count': count,
