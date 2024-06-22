@@ -125,6 +125,78 @@
     "tagOrNamePlayer": "Player's tag or name",
     "searchPlayer": "Search player",
     "nameOrTagPlayer": "Player's name or tag",
+    "playerClanDescription" : "Your clan is \"{clan}\" ({tag}).",
+    "@playerClanDescription": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "tag": {
+                "type": "String"
+            }
+
+        }
+    },
+    "playerRatioDescription" : "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+    "@playerRatioDescription": {
+        "placeholders": {
+            "ratio": {
+                "type": "String"
+            },
+            "donations": {
+                "type": "String"
+            },
+            "received": {
+                "type": "String"
+            }
+        }
+    },
+    "playerWarPreferenceDescription" : "Your war preference is \"{preference}\".",
+    "@playerWarPreferenceDescription": {
+        "placeholders": {
+            "preference": {
+                "type": "String"
+            }
+        }
+    },
+    "playerWarStarsDescription" : "You have {stars} war stars.",
+    "@playerWarStarsDescription": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "playerTrophiesDescription" : "You have {trophies} trophies. You're currently in {league}.",
+    "@playerTrophiesDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            },
+            "league": {
+                "type": "String"
+            }
+        }
+    },
+    "playerTownHallLevelDescription" : "Your town hall level is {level}.",
+    "@playerTownHallLevelDescription": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "playerBuilderBaseDescription" : "Your Builder Hall level is {level} and you have {trophies} trophies.",
+    "@playerBuilderBaseDescription": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            },
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
     "dashboard": "Dashboard",
     "homeBase": "Home Base",
     "th": "TH",
@@ -163,6 +235,71 @@
     "legendLeague": "Legend League",
     "notInLegendLeague": "Not in Legend League",
     "noLegendData": "No Legend Data Found for today",
+    "legendStartDescription" : "You started the day with {trophies} trophies.",
+    "@legendStartDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "String"
+            }
+        }
+    },
+    "legendNoRankLocalDescription" : "You are currently not ranked ({country}) with {trophies} trophies.",
+    "@legendNoRankLocalDescription": {
+        "placeholders": {
+            "country": {
+                "type": "String"
+            },
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendRankLocalDescription" : "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+    "@legendRankDescription": {
+        "placeholders": {
+            "rank": {
+                "type": "int"
+            },
+            "country": {
+                "type": "String"
+            },
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendGainDescription" : "You gained {trophies} trophies for now.",
+    "@legendGainDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendLossDescription" : "You lost {trophies} trophies for now.",
+    "@legendLossDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendNoGlobalRankDescription" : "You are currently not ranked globally with {trophies} trophies.",
+    "@legendNoGlobalRankDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendGlobalRankDescription" : "You are currently ranked {rank} globally.",
+    "@legendGlobalRankDescription": {
+        "placeholders": {
+            "rank": {
+                "type": "int"
+            }
+        }
+    },
     "noRank": "No ranking",
     "started": "Started",
     "@started": {
@@ -307,6 +444,54 @@
     "ongoingCwl": "Ongoing CWL",
     "notInWar": "Not in war",
     "warHistory": "War History",
+    "warHistoryWinsDescription" : "We tracked the data of {wins} war wins for your clan.",
+    "@warHistoryWinsDescription": {
+        "placeholders": {
+            "wins": {
+                "type": "int"
+            }
+        }
+    },
+    "warHistoryLossesDescription" : "We tracked the data of {losses} war losses for your clan.",
+    "@warHistoryLossesDescription": {
+        "placeholders": {
+            "losses": {
+                "type": "int"
+            }
+        }
+    },
+    "warHistoryDrawsDescription" : "We tracked the data of {draws} war draws for your clan.",
+    "@warHistoryDrawsDescription": {
+        "placeholders": {
+            "draws": {
+                "type": "int"
+            }
+        }
+    },
+    "warHistoryAverageMembersDescription" : "Your clan has an average of {members} members participating per war we've tracked.",
+    "@warHistoryAverageMembersDescription": {
+        "placeholders": {
+            "members": {
+                "type": "int"
+            }
+        }
+    },
+    "warHistoryAverageWarStarsDescription" : "Your clan has an average of {stars} stars per attack at the end of the wars we've tracked.",
+    "@warHistoryAverageWarStarsDescription": {
+        "placeholders": {
+            "stars": {
+                "type": "double"
+            }
+        }
+    },
+    "warHistoryAverageHitRateDescription" : "Your clan has an average of {percent} destruction rate at the end of the wars we've tracked.",
+    "@warHistoryAverageHitRateDescription": {
+        "placeholders": {
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
     "warLog": "War Log",
     "publicWarLog": "Public War Log",
     "privateWarLog": "Private War Log",
@@ -343,6 +528,63 @@
         }
     },
     "joinLeaveLogs": "Join/Leave Logs",
+    "leaveNumberDescription" : "{number} players left the clan during the current season ({date}).",
+    "@leaveNumberDescription": {
+        "description": "Number of players who left the clan during the current season.",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinNumberDescription" : "{number} players joined the clan during the current season ({date}).",
+    "@joinNumberDescription": {
+        "description": "Number of players who joined the clan during the current season.",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinLeaveDifferenceUpDescription" : "Your clan has gained {number} new members this season ({date}).",
+    "@joinLeaveDifferenceUpDescription": {
+        "description": "Number of new members gained by the clan this season.",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinLeaveDifferenceDownDescription" : "Your clan has lost {number} members this season ({date}).",
+    "@joinLeaveDifferenceDownDescription": {
+        "description": "Number of members lost by the clan this season.",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinLeaveDifferenceEqualDescription" : "Your clan has the same number of members as at the beginning of the season ({date}).",
+    "@joinLeaveDifferenceEqualDescription": {
+        "description": "Difference in the number of members between the beginning and the end of the season.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
     "@joinLeaveLogs": {
         "description": "Logs of players joining or leaving the clan."
     },

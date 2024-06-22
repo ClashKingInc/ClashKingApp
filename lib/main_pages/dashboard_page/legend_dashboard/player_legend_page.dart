@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/classes/profile/legend_league.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_header.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_used_gear_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_trophies_start_end_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_offense_defense_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_history_card.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/legend_functions.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 

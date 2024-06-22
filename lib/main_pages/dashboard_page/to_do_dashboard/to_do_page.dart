@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:clashkingapp/classes/accounts.dart';
+import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:clashkingapp/classes/profile/to_do.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:flutter/material.dart';
@@ -58,12 +58,12 @@ class ToDoScreenState extends State<ToDoScreen>
     DateTime now = DateTime.now();
     DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
     Duration diff = now.difference(date);
-  
+
     int days = diff.inDays;
     int hours = diff.inHours % 24;
     int minutes = diff.inMinutes % 60;
     String finalDiff = '';
-  
+
     if (days > 0) {
       finalDiff += AppLocalizations.of(context)?.daysAgo(days) ?? "$days jours";
       if (hours > 0) finalDiff += ' ${hours}h';
@@ -76,7 +76,7 @@ class ToDoScreenState extends State<ToDoScreen>
     } else {
       return AppLocalizations.of(context)?.justNow ?? "À l'instant";
     }
-  
+
     return finalDiff;
   }
 

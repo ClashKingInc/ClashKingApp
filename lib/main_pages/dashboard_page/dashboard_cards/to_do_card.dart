@@ -1,4 +1,4 @@
-import 'package:clashkingapp/classes/accounts.dart';
+import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

@@ -1,14 +1,15 @@
-import 'package:clashkingapp/classes/accounts.dart';
+import 'package:clashkingapp/classes/account/accounts.dart';
+
+import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/to_do_card.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
-import 'package:clashkingapp/classes/user.dart';
+import 'package:clashkingapp/classes/account/user.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/creator_code_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_infos_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_legend_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_search_card.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/to_do_card.dart';
-import 'package:clashkingapp/classes/profile/legend_league.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -60,7 +61,8 @@ class DashboardPageState extends State<DashboardPage>
                     discordUser: widget.discordUser.tags),
               ),
               // Legend Infos Card : Displayed only if data
-              if (widget.playerStats.playerLegendData != null)
+              if (widget.playerStats.playerLegendData != null &&
+                  widget.playerStats.playerLegendData!.isNotEmpty)
                 Padding(
                   padding: EdgeInsets.only(left: 8.0, right: 8.0),
                   child: PlayerLegendCard(

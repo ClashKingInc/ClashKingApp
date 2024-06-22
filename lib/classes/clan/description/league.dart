@@ -1,4 +1,4 @@
-import 'package:clashkingapp/classes/clan/icon_urls.dart';
+import 'package:clashkingapp/classes/clan/description/icon_urls.dart';
 
 class League {
   final int id;

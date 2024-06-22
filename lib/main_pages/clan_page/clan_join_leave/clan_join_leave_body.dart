@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/classes/clan/join_leave.dart';
+import 'package:clashkingapp/classes/clan/logs/join_leave.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';

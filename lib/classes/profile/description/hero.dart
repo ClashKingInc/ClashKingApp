@@ -1,4 +1,4 @@
-import 'package:clashkingapp/classes/profile/equiped_equipment.dart';
+import 'package:clashkingapp/classes/profile/description/equiped_equipment.dart';
 
 class Hero {
   final String name;

@@ -1,5 +1,5 @@
-import 'package:clashkingapp/classes/clan/builder_base_league.dart';
-import 'package:clashkingapp/classes/clan/league.dart';
+import 'package:clashkingapp/classes/clan/description/builder_base_league.dart';
+import 'package:clashkingapp/classes/clan/description/league.dart';
 
 class Member {
   final String tag;

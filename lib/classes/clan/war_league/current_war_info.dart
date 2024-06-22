@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:clashkingapp/classes/clan/badge_urls.dart';
+import 'package:clashkingapp/classes/clan/description/badge_urls.dart';
 
 class WarInfoContainer {
   CurrentWarInfo? currentWarInfo;
@@ -34,6 +34,7 @@ class CurrentWarInfo {
 
   factory CurrentWarInfo.fromJson(
       Map<String, dynamic> json, String type, String clanTag) {
+
     return CurrentWarInfo(
       state: json['state'] ?? 'No state',
       teamSize: json['teamSize'] ?? 0,

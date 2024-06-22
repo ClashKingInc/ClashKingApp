@@ -6,7 +6,7 @@ import 'package:clashkingapp/global_keys.dart';
 import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
-import 'package:clashkingapp/classes/cocdiscord_link_functions.dart';
+import 'package:clashkingapp/classes/account/cocdiscord_link_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/login_page/tag_input_chip.dart';
 

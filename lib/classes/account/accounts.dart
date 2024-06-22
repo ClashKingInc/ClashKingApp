@@ -1,4 +1,4 @@
-import 'package:clashkingapp/classes/user.dart';
+import 'package:clashkingapp/classes/account/user.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
@@ -13,7 +13,8 @@ class Accounts {
   // Method to find the account with the selected tag
   Account? findAccountBySelectedTag() {
     try {
-      return accounts.firstWhere((acc) => acc.profileInfo.tag == selectedTag.value);
+      return accounts
+          .firstWhere((acc) => acc.profileInfo.tag == selectedTag.value);
     } catch (e) {
       return null;
     }
@@ -59,7 +60,7 @@ class AccountsService {
           ]);
           clanInfo = results[0] as Clan?;
         }
-
+        
         // Step 4: Create an Account object
         return Account(
           profileInfo: profileInfo,
@@ -80,6 +81,7 @@ class AccountsService {
           return b.profileInfo.expLevel.compareTo(a.profileInfo.expLevel);
         }
       });
+
 
       // Step 5: Create an Accounts object
       Accounts accounts = Accounts(accounts: accountsList);
