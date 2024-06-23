@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class PlayerLegendData {
   final Map<String, LegendDay> legendData;
@@ -29,7 +30,8 @@ class PlayerLegendData {
 
   factory PlayerLegendData.fromJson(Map<String, dynamic> json) {
     var legendDataJson = json['legends'] as Map<String, dynamic>? ?? {};
-    Map<String, LegendDay> legendDataMap = legendDataJson.map((key, value) => MapEntry(key, LegendDay.fromJson(value)));
+    Map<String, LegendDay> legendDataMap = legendDataJson
+        .map((key, value) => MapEntry(key, LegendDay.fromJson(value)));
 
     return PlayerLegendData(
       legendData: legendDataMap,
@@ -60,17 +62,21 @@ class PlayerLegendData {
 
 class PlayerLegendService {
   Future<PlayerLegendData?> fetchLegendData(String tag) async {
-    final response = await http.get(Uri.parse(
-        'https://api.clashking.xyz/player/${tag.substring(1)}/legends'));
+    try {
+      final response = await http.get(Uri.parse(
+          'https://api.clashking.xyz/player/${tag.substring(1)}/legends'));
 
-    print(response.body);
-    if (response.statusCode == 200) {
-      String responseBody = utf8.decode(response.bodyBytes);
-      PlayerLegendData playerLegendData =
-          PlayerLegendData.fromJson(jsonDecode(responseBody));
-      await calculateLegendData(playerLegendData);
-      return playerLegendData;
-    } else {
+      if (response.statusCode == 200) {
+        String responseBody = utf8.decode(response.bodyBytes);
+        PlayerLegendData playerLegendData =
+            PlayerLegendData.fromJson(jsonDecode(responseBody));
+        await calculateLegendData(playerLegendData);
+        return playerLegendData;
+      } else {
+        return null;
+      }
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
       return null;
     }
   }
@@ -154,6 +160,7 @@ class PlayerLegendSeasonsService {
     }
   }
 }
+
 class HeroGear {
   final String name;
   final int level;
@@ -211,7 +218,6 @@ class Attack {
   }
 }
 
-
 class Defense {
   final int change;
   final int time;
@@ -261,8 +267,10 @@ class LegendDay {
     var attacksJson = json['attacks'] as List<dynamic>? ?? [];
     var newAttacksJson = json['new_attacks'] as List<dynamic>? ?? [];
 
-    List<Defense> newDefensesList = newDefensesJson.map((i) => Defense.fromJson(i)).toList();
-    List<Attack> newAttacksList = newAttacksJson.map((i) => Attack.fromJson(i)).toList();
+    List<Defense> newDefensesList =
+        newDefensesJson.map((i) => Defense.fromJson(i)).toList();
+    List<Attack> newAttacksList =
+        newAttacksJson.map((i) => Attack.fromJson(i)).toList();
 
     return LegendDay(
       defenses: defensesJson.cast<int>(),
@@ -283,4 +291,3 @@ class LegendDay {
     };
   }
 }
-

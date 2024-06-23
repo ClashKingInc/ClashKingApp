@@ -12,30 +12,30 @@ import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProfileInfo {
-  final String name;
-  final String tag;
-  final int townHallLevel;
-  final int townHallWeaponLevel;
-  final int expLevel;
-  final int trophies;
-  final int bestTrophies;
-  final int warStars;
-  final int attackWins;
-  final int defenseWins;
-  final int builderHallLevel;
-  final int builderBaseTrophies;
-  final int bestBuilderBaseTrophies;
-  final String role;
-  final String warPreference;
-  final int donations;
-  final int donationsReceived;
-  final int clanCapitalContributions;
-  final Clan? clan;
-  final List<Achievement> achievements;
-  final List<Hero> heroes;
-  final List<Troop> troops;
-  final List<Spell> spells;
-  final List<Equipment> equipments;
+  String name;
+  String tag;
+  int townHallLevel;
+  int townHallWeaponLevel;
+  int expLevel;
+  int trophies;
+  int bestTrophies;
+  int warStars;
+  int attackWins;
+  int defenseWins;
+  int builderHallLevel;
+  int builderBaseTrophies;
+  int bestBuilderBaseTrophies;
+  String role;
+  String warPreference;
+  int donations;
+  int donationsReceived;
+  int clanCapitalContributions;
+  Clan? clan;
+  List<Achievement> achievements;
+  List<Hero> heroes;
+  List<Troop> troops;
+  List<Spell> spells;
+  List<Equipment> equipments;
   String league = '';
   String townHallPic = '';
   String builderHallPic = '';
@@ -103,6 +103,40 @@ class ProfileInfo {
       equipments: List<Equipment>.from(
           json['heroEquipment'].map((x) => Equipment.fromJson(x)) ?? []),
     );
+  }
+
+  void updateFrom(ProfileInfo profileInfo) {
+    name = profileInfo.name;
+    tag = profileInfo.tag;
+    townHallLevel = profileInfo.townHallLevel;
+    townHallWeaponLevel = profileInfo.townHallWeaponLevel;
+    expLevel = profileInfo.expLevel;
+    trophies = profileInfo.trophies;
+    bestTrophies = profileInfo.bestTrophies;
+    warStars = profileInfo.warStars;
+    attackWins = profileInfo.attackWins;
+    defenseWins = profileInfo.defenseWins;
+    builderHallLevel = profileInfo.builderHallLevel;
+    builderBaseTrophies = profileInfo.builderBaseTrophies;
+    bestBuilderBaseTrophies = profileInfo.bestBuilderBaseTrophies;
+    role = profileInfo.role;
+    warPreference = profileInfo.warPreference;
+    donations = profileInfo.donations;
+    donationsReceived = profileInfo.donationsReceived;
+    clanCapitalContributions = profileInfo.clanCapitalContributions;
+    clan = profileInfo.clan;
+    achievements = profileInfo.achievements;
+    heroes = profileInfo.heroes;
+    troops = profileInfo.troops;
+    spells = profileInfo.spells;
+    equipments = profileInfo.equipments;
+    league = profileInfo.league;
+    townHallPic = profileInfo.townHallPic;
+    builderHallPic = profileInfo.builderHallPic;
+    leagueUrl = profileInfo.leagueUrl;
+    playerLegendData = profileInfo.playerLegendData;
+    initialized = profileInfo.initialized;
+    legendsInitialized = profileInfo.legendsInitialized;
   }
 }
 
@@ -194,8 +228,8 @@ class ProfileInfoService {
       final playerLegendData =
           await PlayerLegendService().fetchLegendData(profileInfo.tag);
       profileInfo.playerLegendData = playerLegendData;
-      profileInfo.legendsInitialized = true; 
-      
+      profileInfo.legendsInitialized = true;
+
       playerLegendDataSpan.finish(status: SpanStatus.ok());
     } catch (e) {
       playerLegendDataSpan.finish(status: SpanStatus.internalError());

@@ -48,7 +48,7 @@ class TeamsCard extends StatelessWidget {
                         backgroundColor:
                             Theme.of(context).scaffoldBackgroundColor,
                         body: FutureBuilder<Clan>(
-                          future: ClanService().fetchClanInfo(clan.tag),
+                          future: ClanService().fetchClanAndWarInfo(clan.tag),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {

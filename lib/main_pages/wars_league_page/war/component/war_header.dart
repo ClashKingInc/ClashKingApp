@@ -66,7 +66,7 @@ class WarHeader extends StatelessWidget {
                               },
                             );
                             Clan clanInfo = await ClanService()
-                                .fetchClanInfo(widget.currentWarInfo.clan.tag);
+                                .fetchClanAndWarInfo(widget.currentWarInfo.clan.tag);
                             if (context.mounted) {
                               Navigator.pop(context);
                               Navigator.push(
@@ -130,7 +130,7 @@ class WarHeader extends StatelessWidget {
                               },
                             );
                             Clan clanInfo = await ClanService()
-                                .fetchClanInfo(
+                                .fetchClanAndWarInfo(
                                     widget.currentWarInfo.opponent.tag);
                             if (context.mounted) {
                               Navigator.pop(context);

@@ -47,7 +47,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
               );
             },
           );
-          Clan clanInfo = await ClanService().fetchClanInfo(widget.clan['tag']);
+          Clan clanInfo = await ClanService().fetchClanAndWarInfo(widget.clan['tag']);
           navigator.pop();
           navigator.push(
             MaterialPageRoute(builder: (context) => ClanInfoScreen(clanInfo: clanInfo, discordUser: widget.user)),
