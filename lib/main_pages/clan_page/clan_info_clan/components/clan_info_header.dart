@@ -435,16 +435,12 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               SizedBox(width: 8),
                               Shimmer.fromColors(
                                 period: Duration(seconds: 3),
-                                baseColor:
-                                    Theme.of(context).colorScheme.onSurface,
-                                highlightColor: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(0.3),
+                                baseColor:Colors.white,
+                                highlightColor: Colors.white.withOpacity(0.4),
                                 child: Text(
                                   AppLocalizations.of(context)?.ongoingWar ??
                                       "Ongoing War",
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  style: Theme.of(context).textTheme.bodyMedium
                                 ),
                               ),
                             ],

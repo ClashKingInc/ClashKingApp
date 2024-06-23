@@ -42,6 +42,7 @@ class ProfileInfo {
   String leagueUrl = '';
   PlayerLegendData? playerLegendData;
   bool initialized = false;
+  bool legendsInitialized = false;
 
   ProfileInfo({
     required this.name,
@@ -135,6 +136,7 @@ class ProfileInfoService {
 
         // Start fetching additional data in the background
         _fetchAdditionalProfileData(profileInfo, transaction);
+        _fetchPlayerLegendData(profileInfo, transaction);
 
         transaction.finish(status: SpanStatus.ok());
         return profileInfo;
@@ -160,7 +162,6 @@ class ProfileInfoService {
     final equipmentsSpan =
         transaction.startChild('fetchImagesAndTypes_equipments');
     final leagueNameSpan = transaction.startChild('fetchLeagueName');
-    final playerLegendDataSpan = transaction.startChild('fetchLegendData');
 
     final results = await Future.wait([
       fetchWithSpan(townHallPicSpan,
@@ -175,8 +176,6 @@ class ProfileInfoService {
       fetchWithSpan(
           equipmentsSpan, () => fetchImagesAndTypes(profileInfo.equipments)),
       fetchWithSpan(leagueNameSpan, () => fetchLeagueName(profileInfo.tag)),
-      fetchWithSpan(playerLegendDataSpan,
-          () => PlayerLegendService().fetchLegendData(profileInfo.tag)),
     ]);
 
     // Assign results to profileInfo
@@ -185,8 +184,23 @@ class ProfileInfoService {
     profileInfo.league = results[6] as String;
     profileInfo.leagueUrl =
         LeagueDataManager().getLeagueUrl(profileInfo.league);
-    profileInfo.playerLegendData = results[7] as PlayerLegendData?;
     profileInfo.initialized = true; // Set initialized to true
+  }
+
+  Future<void> _fetchPlayerLegendData(
+      ProfileInfo profileInfo, ISentrySpan transaction) async {
+    final playerLegendDataSpan = transaction.startChild('fetchLegendData');
+    try {
+      final playerLegendData =
+          await PlayerLegendService().fetchLegendData(profileInfo.tag);
+      profileInfo.playerLegendData = playerLegendData;
+      profileInfo.legendsInitialized = true; 
+      
+      playerLegendDataSpan.finish(status: SpanStatus.ok());
+    } catch (e) {
+      playerLegendDataSpan.finish(status: SpanStatus.internalError());
+      rethrow;
+    }
   }
 
   Future<T> fetchWithSpan<T>(

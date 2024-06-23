@@ -28,16 +28,24 @@ class DashboardPage extends StatefulWidget {
 
 class DashboardPageState extends State<DashboardPage>
     with SingleTickerProviderStateMixin {
-  late Future<void> _initializeFuture;
+  late Future<void> _initializeProfileFuture;
+  late Future<void> _initializeLegendsFuture;
 
   @override
   void initState() {
     super.initState();
-    _initializeFuture = _checkInitialization();
+    _initializeProfileFuture = _checkInitialization();
+    _initializeLegendsFuture = _checkLegendsInitialization();
   }
 
   Future<void> _checkInitialization() async {
     while (!widget.playerStats.initialized) {
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+  }
+
+  Future<void> _checkLegendsInitialization() async {
+    while (!widget.playerStats.legendsInitialized) {
       await Future.delayed(Duration(milliseconds: 100));
     }
   }
@@ -59,7 +67,6 @@ class DashboardPageState extends State<DashboardPage>
           },
           child: ListView(
             children: <Widget>[
-              // Player Infos Card
               // Creator Code Card
               Padding(
                 padding: EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0),
@@ -70,7 +77,7 @@ class DashboardPageState extends State<DashboardPage>
                 child: PlayerSearchCard(discordUser: widget.discordUser.tags),
               ),
               FutureBuilder<void>(
-                future: _initializeFuture,
+                future: _initializeProfileFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return SizedBox.shrink();
@@ -78,19 +85,37 @@ class DashboardPageState extends State<DashboardPage>
                     Sentry.captureException(snapshot.error);
                     return Center(
                       child: Text(
-                        'Error loading data. Check your internet connection.',
+                        'Error loading user data. Check your internet connection.',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    );
+                  } else {
+                    return Padding(
+                      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                      child: PlayerInfosCard(
+                          playerStats: widget.playerStats,
+                          discordUser: widget.discordUser.tags),
+                    );
+                  }
+                },
+              ),
+              FutureBuilder<void>(
+                future:  Future.wait([_initializeLegendsFuture, _initializeProfileFuture]),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SizedBox.shrink();
+                  } else if (snapshot.hasError) {
+                    Sentry.captureException(snapshot.error);
+                    return Center(
+                      child: Text(
+                        'Error loading user data. Check your internet connection.',
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     );
                   } else {
                     return Column(
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                          child: PlayerInfosCard(
-                              playerStats: widget.playerStats,
-                              discordUser: widget.discordUser.tags),
-                        ),
+                        
                         // Legend Infos Card : Displayed only if data
                         if (widget.playerStats.playerLegendData != null &&
                             widget.playerStats.playerLegendData!.isNotEmpty)

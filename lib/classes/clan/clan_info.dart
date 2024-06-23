@@ -47,6 +47,7 @@ class Clan {
   late String warState;
   late WarLog warLog;
   late JoinLeaveClan joinLeaveClan;
+  bool initialized = false;
 
   Clan({
     required this.tag,
@@ -186,7 +187,6 @@ class ClanService {
         clanInfo.currentLeagueInfo = warStateInfo.currentLeagueInfo;
         clanInfo.warLog = warLog;
         clanInfo.joinLeaveClan = joinLeaveLog;
-        print("Clan info fetched: ${clanInfo.name}");
         return clanInfo;
       } else {
         throw Exception('Failed to load clan stats');

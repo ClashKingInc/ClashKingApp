@@ -7,6 +7,7 @@ import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_info_card.dart
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_search_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_join_leave/clan_join_leave.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ClanInfoPage extends StatefulWidget {
   final Clan? clanInfo;
@@ -20,72 +21,106 @@ class ClanInfoPage extends StatefulWidget {
 
 class ClanInfoPageState extends State<ClanInfoPage>
     with SingleTickerProviderStateMixin {
+  Future<void>? _initializeClanFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeClanFuture = _checkInitialization();
+  }
+
+  Future<void> _checkInitialization() async {
+    while (widget.clanInfo == null && !widget.clanInfo!.initialized) {
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-        body: RefreshIndicator(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          onRefresh: () async {
-            setState(() {});
-          },
-          child: ListView(
-            children: <Widget>[
-              SizedBox(height: 4),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: ClanSearch(discordUser: widget.user.tags),
-              ),
-              if (widget.clanInfo != null)
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ClanInfoScreen(
-                            clanInfo: widget.clanInfo!,
-                            discordUser: widget.user.tags),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: ClanInfoCard(clanInfo: widget.clanInfo!),
-                  ),
-                )
-              else
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Card(
-                    child: NoClanCard(),
-                  ),
-                ),
-              if (widget.clanInfo != null)
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ClanJoinLeaveScreen(
-                            user: widget.user.tags, clanInfo: widget.clanInfo!),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: ClanJoinLeaveCard(
-                      discordUser: widget.user.tags,
-                      clanInfo: widget.clanInfo!,
+    return FutureBuilder<void>(
+      future: _initializeClanFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SizedBox.shrink();
+        } else if (snapshot.hasError) {
+          //Sentry.captureException(snapshot.error);
+          print("error");
+          print(snapshot.error);
+          return Center(
+            child: Text(
+              'Error loading user data. Check your internet connection.',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          );
+        } else {
+          return GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Scaffold(
+              body: RefreshIndicator(
+                backgroundColor: Theme.of(context).colorScheme.surface,
+                onRefresh: () async {
+                  setState(() {});
+                },
+                child: ListView(
+                  children: <Widget>[
+                    SizedBox(height: 4),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: ClanSearch(discordUser: widget.user.tags),
                     ),
-                  ),
+                    if (widget.clanInfo != null)
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ClanInfoScreen(
+                                  clanInfo: widget.clanInfo!,
+                                  discordUser: widget.user.tags),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: ClanInfoCard(clanInfo: widget.clanInfo!),
+                        ),
+                      )
+                    else
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Card(
+                          child: NoClanCard(),
+                        ),
+                      ),
+                    if (widget.clanInfo != null)
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ClanJoinLeaveScreen(
+                                  user: widget.user.tags,
+                                  clanInfo: widget.clanInfo!),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: ClanJoinLeaveCard(
+                            discordUser: widget.user.tags,
+                            clanInfo: widget.clanInfo!,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-            ],
-          ),
-        ),
-      ),
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 }

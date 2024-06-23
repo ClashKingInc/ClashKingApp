@@ -60,7 +60,8 @@ class AccountsService {
       // Step 2: Create a list of futures for each tag
       List<Future<void>> fetchTasks = tags.map((tag) async {
         final profileSpan = transaction.startChild('fetchProfileInfo');
-        ProfileInfo profileInfo = await ProfileInfoService().fetchProfileInfo(tag);
+        ProfileInfo profileInfo =
+            await ProfileInfoService().fetchProfileInfo(tag);
         profileSpan.finish(status: SpanStatus.ok());
 
         // Step 4: Create an Account object
@@ -74,13 +75,15 @@ class AccountsService {
 
         // Load clanInfo in the background
         if (profileInfo.clan != null) {
-          fetchClanInfoInBackground(profileInfo.clan!.tag, account, transaction);
+          fetchClanInfoInBackground(
+              profileInfo.clan!.tag, account, transaction);
         }
       }).toList();
 
       // Step 3: Use Future.wait to run all fetch tasks concurrently
       final fetchSpan = transaction.startChild('Future.wait');
-      await Future.wait(fetchTasks); // We don't assign the result to accountsList anymore
+      await Future.wait(
+          fetchTasks); // We don't assign the result to accountsList anymore
       fetchSpan.finish(status: SpanStatus.ok());
 
       // Sort the accountsList
@@ -110,17 +113,18 @@ class AccountsService {
     }
   }
 
-  void fetchClanInfoInBackground(String clanTag, Account account, ISentrySpan transaction) async {
+  void fetchClanInfoInBackground(
+      String clanTag, Account account, ISentrySpan transaction) async {
     final clanSpan = transaction.startChild('fetchClanInfo');
     try {
       Clan clanInfo = await ClanService().fetchClanInfo(clanTag);
       account.clan = clanInfo;
       clanSpan.finish(status: SpanStatus.ok());
+      clanInfo.initialized = true;
+      print("clan Info fetched");
     } catch (exception, stackTrace) {
       clanSpan.finish(status: SpanStatus.internalError());
       Sentry.captureException(exception, stackTrace: stackTrace);
     }
   }
 }
-
-

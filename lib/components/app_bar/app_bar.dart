@@ -25,21 +25,32 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class CustomAppBarState extends State<CustomAppBar> {
+  late ValueNotifier<bool> _initializedNotifier;
+
   @override
   void initState() {
     super.initState();
+    _initializedNotifier = ValueNotifier(false);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var appState = Provider.of<MyAppState>(context, listen: false);
-      if (appState.selectedTagNotifier.value == null && widget.accounts.accounts.isNotEmpty) {
-        appState.selectedTagNotifier.value = widget.accounts.accounts.first.profileInfo.tag;
+      if (appState.selectedTagNotifier.value == null &&
+          widget.accounts.accounts.isNotEmpty) {
+        appState.selectedTagNotifier.value =
+            widget.accounts.accounts.first.profileInfo.tag;
         appState.account = widget.accounts.accounts.first;
       }
+      _checkInitialization(appState.account!.profileInfo);
     });
   }
 
-  Future<void> _waitForInitialization(ProfileInfo profileInfo) async {
-    while (!profileInfo.initialized) {
-      await Future.delayed(Duration(milliseconds: 100));
+  void _checkInitialization(ProfileInfo profileInfo) {
+    if (!profileInfo.initialized) {
+      Future.delayed(Duration(milliseconds: 100), () {
+        _checkInitialization(profileInfo);
+      });
+    } else {
+      _initializedNotifier.value = true;
     }
   }
 
@@ -52,37 +63,27 @@ class CustomAppBarState extends State<CustomAppBar> {
       title: ValueListenableBuilder<String?>(
         valueListenable: appState.selectedTagNotifier,
         builder: (context, selectedTag, child) {
-          if (selectedTag == null) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          final selectedAccount = widget.accounts.accounts.firstWhere(
-            (account) => account.profileInfo.tag == selectedTag,
-            orElse: () => widget.accounts.accounts.first,
-          );
-
-          return FutureBuilder<void>(
-            future: _waitForInitialization(selectedAccount.profileInfo),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return SizedBox.shrink();
-              }
-
+          return ValueListenableBuilder<bool>(
+            valueListenable: _initializedNotifier,
+            builder: (context, initialized, child) {
               return DropdownButton<String>(
                 value: selectedTag,
                 elevation: 16,
                 dropdownColor: Theme.of(context).colorScheme.surface,
-                style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
                 underline: Container(),
                 onChanged: (String? newValue) async {
                   if (newValue != "manageAccounts") {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       setState(() {
                         appState.selectedTagNotifier.value = newValue;
-                        appState.account = appState.accounts!.accounts.firstWhere(
+                        appState.account =
+                            appState.accounts!.accounts.firstWhere(
                           (element) => element.profileInfo.tag == newValue,
                         );
                       });
+                      _checkInitialization(appState.account!.profileInfo);
                     });
                   } else {
                     showDialog(
@@ -92,24 +93,35 @@ class CustomAppBarState extends State<CustomAppBar> {
                         return StatefulBuilder(
                           builder: (context, setState) {
                             return AlertDialog(
-                              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                              title: Text(AppLocalizations.of(context)?.manage ?? 'Manage'),
+                              backgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              title: Text(
+                                  AppLocalizations.of(context)?.manage ??
+                                      'Manage'),
                               content: SingleChildScrollView(
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     CustomSlidingSegmentedControl<int>(
                                       children: {
-                                        0: Text(AppLocalizations.of(context)?.add ?? 'Add'),
-                                        1: Text(AppLocalizations.of(context)?.delete ?? 'Delete'),
+                                        0: Text(
+                                            AppLocalizations.of(context)?.add ??
+                                                'Add'),
+                                        1: Text(AppLocalizations.of(context)
+                                                ?.delete ??
+                                            'Delete'),
                                       },
                                       initialValue: currentSegment,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       thumbDecoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.surface,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface,
                                         borderRadius: BorderRadius.circular(6),
                                         boxShadow: [
                                           BoxShadow(
@@ -130,7 +142,9 @@ class CustomAppBarState extends State<CustomAppBar> {
                                     ),
                                     SizedBox(height: 4),
                                     currentSegment == 1
-                                        ? DeletePlayerCard(user: widget.user, accounts: widget.accounts)
+                                        ? DeletePlayerCard(
+                                            user: widget.user,
+                                            accounts: widget.accounts)
                                         : AddPlayerCard(user: widget.user),
                                   ],
                                 ),
@@ -143,7 +157,8 @@ class CustomAppBarState extends State<CustomAppBar> {
                   }
                 },
                 items: [
-                  ...widget.accounts.accounts.map<DropdownMenuItem<String>>((Account account) {
+                  ...widget.accounts.accounts
+                      .map<DropdownMenuItem<String>>((Account account) {
                     String tag = account.profileInfo.tag;
                     String imageUrl = account.profileInfo.townHallPic;
                     String name = account.profileInfo.name;
@@ -197,7 +212,9 @@ class CustomAppBarState extends State<CustomAppBar> {
               onTap: () async {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SettingsInfoScreen(user: widget.user)),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          SettingsInfoScreen(user: widget.user)),
                 );
               },
               child: CircleAvatar(
