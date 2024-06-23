@@ -65,16 +65,16 @@ class ToDoScreenState extends State<ToDoScreen>
     String finalDiff = '';
 
     if (days > 0) {
-      finalDiff += AppLocalizations.of(context)?.daysAgo(days) ?? "$days jours";
+      finalDiff += AppLocalizations.of(context)?.daysAgo(days) ?? "$days days";
       if (hours > 0) finalDiff += ' ${hours}h';
       if (minutes > 0) finalDiff += ' ${minutes}m';
     } else if (hours > 0) {
-      finalDiff += AppLocalizations.of(context)?.hoursAgo(hours) ?? "$hours heures";
+      finalDiff += AppLocalizations.of(context)?.hoursAgo(hours) ?? "$hours hours";
       if (minutes > 0) finalDiff += ' ${minutes}m';
     } else if (minutes > 0) {
       finalDiff += AppLocalizations.of(context)?.minutesAgo(minutes) ?? "$minutes minutes";
     } else {
-      return AppLocalizations.of(context)?.justNow ?? "À l'instant";
+      return AppLocalizations.of(context)?.justNow ?? "Just now";
     }
 
     return finalDiff;
@@ -84,7 +84,7 @@ class ToDoScreenState extends State<ToDoScreen>
   Widget build(BuildContext context) {
     Map<String, String> filterOptions = {
       AppLocalizations.of(context)!.all: 'all',
-      'byEvent': 'byEvent',
+      //'byEvent': 'byEvent',
     };
 
     return Scaffold(

@@ -149,8 +149,8 @@ class ClanGames {
 
   factory ClanGames.fromJson(Map<String, dynamic> json) {
     return ClanGames(
-      clanTag: json['points'] ?? '',
-      points: json['max_points'] ?? 0,
+      clanTag: json['clanTag'] ?? '',
+      points: json['points'] ?? 0,
     );
   }
 }
