@@ -64,6 +64,18 @@ class StatsScreenState extends State<StatsScreen>
     hallChips = buildTownHallChips();
   }
 
+  Future<void> _refreshData() async {
+    // Fetch the updated profile information
+    final profileInfo = await ProfileInfoService().fetchProfileInfo(widget.playerStats.tag);
+
+    setState(() {
+      // Update the player stats with the newly fetched data
+      widget.playerStats.updateFrom(profileInfo);
+      _initializeProfileFuture = _checkInitialization();
+      _initializeLegendsFuture = _checkLegendsInitialization();
+    });
+  }
+
   @override
   void dispose() {
     tabController.dispose();
@@ -87,89 +99,105 @@ class StatsScreenState extends State<StatsScreen>
           );
         } else {
           return Scaffold(
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  PlayerInfoHeaderCard(
-                    playerStats: widget.playerStats,
-                    backgroundImageUrl: backgroundImageUrl,
-                    townHallImageUrl: townHallImageUrl,
-                    stars: stars,
-                    hallChips: hallChips,
-                  ),
-                  ScrollableTab(
-                    labelColor: Theme.of(context).colorScheme.onSurface,
-                    tabBarDecoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
+            body: RefreshIndicator(
+              onRefresh: _refreshData,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    PlayerInfoHeaderCard(
+                      playerStats: widget.playerStats,
+                      backgroundImageUrl: backgroundImageUrl,
+                      townHallImageUrl: townHallImageUrl,
+                      stars: stars,
+                      hallChips: hallChips,
                     ),
-                    unselectedLabelColor:
-                        Theme.of(context).colorScheme.onSurface,
-                    onTap: (value) {
-                      setState(() {
-                        backgroundImageUrl = value == 0
-                            ? "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png"
-                            : "https://clashkingfiles.b-cdn.net/landscape/builder-landscape.png";
-                        townHallImageUrl = value == 0
-                            ? widget.playerStats.townHallPic
-                            : widget.playerStats.builderHallPic;
-                        stars = value == 0
-                            ? _buildStars(
-                                widget.playerStats.townHallWeaponLevel)
-                            : _buildStars(0);
-                        hallChips = value == 0
-                            ? buildTownHallChips()
-                            : buildBuilderHallChips();
-                      });
-                    },
-                    tabs: [
-                      Tab(text: AppLocalizations.of(context)!.homeBase),
-                      Tab(text: AppLocalizations.of(context)!.builderBase),
-                    ],
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 10),
-                          buildItemSection(widget.playerStats.heroes, 'hero',
-                              AppLocalizations.of(context)?.heroes ?? 'Heroes'),
-                          buildItemSection(
-                              widget.playerStats.equipments,
-                              'gear',
-                              AppLocalizations.of(context)?.equipment ??
-                                  'Gears'),
-                          buildItemSection(widget.playerStats.troops, 'troop',
-                              AppLocalizations.of(context)?.troops ?? 'Troops'),
-                          buildItemSection(
-                              widget.playerStats.troops,
-                              'super-troop',
-                              AppLocalizations.of(context)?.superTroops ??
-                                  'Super Troops'),
-                          buildItemSection(widget.playerStats.troops, 'pet',
-                              AppLocalizations.of(context)?.pets ?? 'Pets'),
-                          buildItemSection(
-                              widget.playerStats.troops,
-                              'siege-machine',
-                              AppLocalizations.of(context)?.siegeMachines ??
-                                  'Siege Machine'),
-                          buildItemSection(widget.playerStats.spells, 'spell',
-                              AppLocalizations.of(context)?.spells ?? 'Spells'),
-                        ],
+                    ScrollableTab(
+                      labelColor: Theme.of(context).colorScheme.onSurface,
+                      tabBarDecoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 10),
-                          buildItemSection(widget.playerStats.heroes, 'bb-hero',
-                              AppLocalizations.of(context)?.heroes ?? 'Heroes'),
-                          buildItemSection(
-                              widget.playerStats.troops,
-                              'bb-troop',
-                              AppLocalizations.of(context)?.troops ?? 'Troops'),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                      unselectedLabelColor:
+                          Theme.of(context).colorScheme.onSurface,
+                      onTap: (value) {
+                        setState(() {
+                          backgroundImageUrl = value == 0
+                              ? "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png"
+                              : "https://clashkingfiles.b-cdn.net/landscape/builder-landscape.png";
+                          townHallImageUrl = value == 0
+                              ? widget.playerStats.townHallPic
+                              : widget.playerStats.builderHallPic;
+                          stars = value == 0
+                              ? _buildStars(
+                                  widget.playerStats.townHallWeaponLevel)
+                              : _buildStars(0);
+                          hallChips = value == 0
+                              ? buildTownHallChips()
+                              : buildBuilderHallChips();
+                        });
+                      },
+                      tabs: [
+                        Tab(text: AppLocalizations.of(context)!.homeBase),
+                        Tab(text: AppLocalizations.of(context)!.builderBase),
+                      ],
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 10),
+                            buildItemSection(
+                                widget.playerStats.heroes,
+                                'hero',
+                                AppLocalizations.of(context)?.heroes ??
+                                    'Heroes'),
+                            buildItemSection(
+                                widget.playerStats.equipments,
+                                'gear',
+                                AppLocalizations.of(context)?.equipment ??
+                                    'Gears'),
+                            buildItemSection(
+                                widget.playerStats.troops,
+                                'troop',
+                                AppLocalizations.of(context)?.troops ??
+                                    'Troops'),
+                            buildItemSection(
+                                widget.playerStats.troops,
+                                'super-troop',
+                                AppLocalizations.of(context)?.superTroops ??
+                                    'Super Troops'),
+                            buildItemSection(widget.playerStats.troops, 'pet',
+                                AppLocalizations.of(context)?.pets ?? 'Pets'),
+                            buildItemSection(
+                                widget.playerStats.troops,
+                                'siege-machine',
+                                AppLocalizations.of(context)?.siegeMachines ??
+                                    'Siege Machine'),
+                            buildItemSection(
+                                widget.playerStats.spells,
+                                'spell',
+                                AppLocalizations.of(context)?.spells ??
+                                    'Spells'),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 10),
+                            buildItemSection(
+                                widget.playerStats.heroes,
+                                'bb-hero',
+                                AppLocalizations.of(context)?.heroes ??
+                                    'Heroes'),
+                            buildItemSection(
+                                widget.playerStats.troops,
+                                'bb-troop',
+                                AppLocalizations.of(context)?.troops ??
+                                    'Troops'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -532,7 +560,7 @@ class StatsScreenState extends State<StatsScreen>
               },
             );
             Clan? clanInfo =
-                await ClanService().fetchClanInfo(widget.playerStats.clan!.tag);
+                await ClanService().fetchClanAndWarInfo(widget.playerStats.clan!.tag);
             if (mounted) {
               Navigator.pop(context);
               Navigator.push(

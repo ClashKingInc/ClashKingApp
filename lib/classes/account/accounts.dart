@@ -75,7 +75,7 @@ class AccountsService {
 
         // Load clanInfo in the background
         if (profileInfo.clan != null) {
-          fetchClanInfoInBackground(
+          fetchClanWarInfoInBackground(
               profileInfo.clan!.tag, account, transaction);
         }
       }).toList();
@@ -113,18 +113,19 @@ class AccountsService {
     }
   }
 
-  void fetchClanInfoInBackground(
+  void fetchClanWarInfoInBackground(
       String clanTag, Account account, ISentrySpan transaction) async {
     final clanSpan = transaction.startChild('fetchClanInfo');
     try {
-      Clan clanInfo = await ClanService().fetchClanInfo(clanTag);
+      Clan clanInfo = await ClanService().fetchClanAndWarInfo(clanTag);
       account.clan = clanInfo;
       clanSpan.finish(status: SpanStatus.ok());
-      clanInfo.initialized = true;
+      clanInfo.clanInitialized = true;
+      clanInfo.warInitialized = true;
       print("clan Info fetched");
     } catch (exception, stackTrace) {
       clanSpan.finish(status: SpanStatus.internalError());
       Sentry.captureException(exception, stackTrace: stackTrace);
     }
-  }
+  }  
 }

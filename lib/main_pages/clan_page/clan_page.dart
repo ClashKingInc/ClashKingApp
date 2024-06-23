@@ -30,8 +30,22 @@ class ClanInfoPageState extends State<ClanInfoPage>
   }
 
   Future<void> _checkInitialization() async {
-    while (widget.clanInfo == null && !widget.clanInfo!.initialized) {
+    while (widget.clanInfo == null || !widget.clanInfo!.clanInitialized) {
       await Future.delayed(Duration(milliseconds: 100));
+    }
+  }
+
+  Future<void> _refreshData() async {
+    // Fetch the updated profile information
+    if (widget.clanInfo != null) {
+      widget.clanInfo!.clanInitialized = false;
+      final updatedClanInfo =
+          await ClanService().fetchClanInfo(widget.clanInfo!);
+      setState(() {
+        // Update the player stats with the newly fetched data
+        widget.clanInfo!.updateClanInfoFrom(updatedClanInfo);
+        _initializeClanFuture = _checkInitialization();
+      });
     }
   }
 
@@ -51,69 +65,79 @@ class ClanInfoPageState extends State<ClanInfoPage>
             ),
           );
         } else {
-          return GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: Scaffold(
-              body: RefreshIndicator(
-                backgroundColor: Theme.of(context).colorScheme.surface,
-                onRefresh: () async {
-                  setState(() {});
-                },
-                child: ListView(
-                  children: <Widget>[
-                    SizedBox(height: 4),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ClanSearch(discordUser: widget.user.tags),
+          return Scaffold(
+            body: RefreshIndicator(
+              onRefresh: _refreshData,
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 4),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              child: ClanSearch(discordUser: widget.user.tags),
+                            ),
+                            if (widget.clanInfo != null)
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ClanInfoScreen(
+                                          clanInfo: widget.clanInfo!,
+                                          discordUser: widget.user.tags),
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child:
+                                      ClanInfoCard(clanInfo: widget.clanInfo!),
+                                ),
+                              )
+                            else
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Card(
+                                  child: NoClanCard(),
+                                ),
+                              ),
+                            if (widget.clanInfo != null)
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ClanJoinLeaveScreen(
+                                          user: widget.user.tags,
+                                          clanInfo: widget.clanInfo!),
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: ClanJoinLeaveCard(
+                                    discordUser: widget.user.tags,
+                                    clanInfo: widget.clanInfo!,
+                                  ),
+                                ),
+                              ),
+                            Spacer(),
+                          ],
+                        ),
+                      ),
                     ),
-                    if (widget.clanInfo != null)
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ClanInfoScreen(
-                                  clanInfo: widget.clanInfo!,
-                                  discordUser: widget.user.tags),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          child: ClanInfoCard(clanInfo: widget.clanInfo!),
-                        ),
-                      )
-                    else
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Card(
-                          child: NoClanCard(),
-                        ),
-                      ),
-                    if (widget.clanInfo != null)
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ClanJoinLeaveScreen(
-                                  user: widget.user.tags,
-                                  clanInfo: widget.clanInfo!),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          child: ClanJoinLeaveCard(
-                            discordUser: widget.user.tags,
-                            clanInfo: widget.clanInfo!,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
           );
