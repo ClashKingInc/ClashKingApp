@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
@@ -78,7 +79,9 @@ Future<User> fetchDiscordUserTags(User user) async {
 
     return user;
   } else {
-    throw Exception('Failed to load user tags');
+    Sentry.captureMessage(
+        'Failed to load user tags for user ${user.id}: ${response.statusCode}, ${response.body}');
+    throw Exception('Failed to load user tags for user ${user.id}');
   }
 }
 

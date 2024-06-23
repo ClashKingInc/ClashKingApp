@@ -137,6 +137,7 @@ class ClanService {
   Future<Clan> fetchClanInfo(String clanTag) async {
     try {
       String tag = clanTag.replaceAll('#', '!');
+      print('Fetching clan info for $tag');
 
       final clanInfoFuture = http.get(
         Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
@@ -185,7 +186,7 @@ class ClanService {
         clanInfo.currentLeagueInfo = warStateInfo.currentLeagueInfo;
         clanInfo.warLog = warLog;
         clanInfo.joinLeaveClan = joinLeaveLog;
-
+        print("Clan info fetched: ${clanInfo.name}");
         return clanInfo;
       } else {
         throw Exception('Failed to load clan stats');

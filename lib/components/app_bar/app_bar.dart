@@ -9,6 +9,7 @@ import 'package:custom_sliding_segmented_control/custom_sliding_segmented_contro
 import 'package:clashkingapp/components/app_bar/add_player_card.dart';
 import 'package:clashkingapp/components/app_bar/delete_player_card.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final User user;
@@ -27,7 +28,6 @@ class CustomAppBarState extends State<CustomAppBar> {
   @override
   void initState() {
     super.initState();
-    // Définir la valeur par défaut de selectedTagNotifier après la phase de construction
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var appState = Provider.of<MyAppState>(context, listen: false);
       if (appState.selectedTagNotifier.value == null && widget.accounts.accounts.isNotEmpty) {
@@ -37,131 +37,153 @@ class CustomAppBarState extends State<CustomAppBar> {
     });
   }
 
+  Future<void> _waitForInitialization(ProfileInfo profileInfo) async {
+    while (!profileInfo.initialized) {
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var appState = Provider.of<MyAppState>(context);
 
     return AppBar(
       automaticallyImplyLeading: false,
-      title: appState.isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ValueListenableBuilder<String?>(
-              valueListenable: appState.selectedTagNotifier,
-              builder: (context, selectedTag, child) {
-                return DropdownButton<String>(
-                  value: selectedTag,
-                  elevation: 16,
-                  dropdownColor: Theme.of(context).colorScheme.surface,
-                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                  underline: Container(),
-                  onChanged: (String? newValue) async {
-                    if (newValue != "manageAccounts") {
-                      // Utiliser addPostFrameCallback pour différer les modifications d'état
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        setState(() {
-                          appState.selectedTagNotifier.value = newValue;
-                          appState.account = appState.accounts!.accounts.firstWhere(
-                              (element) => element.profileInfo.tag == newValue);
-                        });
+      title: ValueListenableBuilder<String?>(
+        valueListenable: appState.selectedTagNotifier,
+        builder: (context, selectedTag, child) {
+          if (selectedTag == null) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          final selectedAccount = widget.accounts.accounts.firstWhere(
+            (account) => account.profileInfo.tag == selectedTag,
+            orElse: () => widget.accounts.accounts.first,
+          );
+
+          return FutureBuilder<void>(
+            future: _waitForInitialization(selectedAccount.profileInfo),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return SizedBox.shrink();
+              }
+
+              return DropdownButton<String>(
+                value: selectedTag,
+                elevation: 16,
+                dropdownColor: Theme.of(context).colorScheme.surface,
+                style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                underline: Container(),
+                onChanged: (String? newValue) async {
+                  if (newValue != "manageAccounts") {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      setState(() {
+                        appState.selectedTagNotifier.value = newValue;
+                        appState.account = appState.accounts!.accounts.firstWhere(
+                          (element) => element.profileInfo.tag == newValue,
+                        );
                       });
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          int currentSegment = 0;
-                          return StatefulBuilder(
-                            builder: (context, setState) {
-                              return AlertDialog(
-                                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                title: Text(AppLocalizations.of(context)?.manage ?? 'Manage'),
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      CustomSlidingSegmentedControl<int>(
-                                        children: {
-                                          0: Text(AppLocalizations.of(context)?.add ?? 'Add'),
-                                          1: Text(AppLocalizations.of(context)?.delete ?? 'Delete'),
-                                        },
-                                        initialValue: currentSegment,
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.primary,
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        thumbDecoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.surface,
-                                          borderRadius: BorderRadius.circular(6),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black.withOpacity(.3),
-                                              blurRadius: 4.0,
-                                              spreadRadius: 1.0,
-                                              offset: Offset(0.0, 2.0),
-                                            ),
-                                          ],
-                                        ),
-                                        duration: Duration(milliseconds: 300),
-                                        curve: Curves.easeInToLinear,
-                                        onValueChanged: (newValue) {
-                                          setState(() {
-                                            currentSegment = newValue;
-                                          });
-                                        },
+                    });
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        int currentSegment = 0;
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return AlertDialog(
+                              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                              title: Text(AppLocalizations.of(context)?.manage ?? 'Manage'),
+                              content: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CustomSlidingSegmentedControl<int>(
+                                      children: {
+                                        0: Text(AppLocalizations.of(context)?.add ?? 'Add'),
+                                        1: Text(AppLocalizations.of(context)?.delete ?? 'Delete'),
+                                      },
+                                      initialValue: currentSegment,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).colorScheme.primary,
+                                        borderRadius: BorderRadius.circular(8),
                                       ),
-                                      SizedBox(height: 4),
-                                      currentSegment == 1
-                                          ? DeletePlayerCard(user: widget.user, accounts: widget.accounts)
-                                          : AddPlayerCard(user: widget.user),
-                                    ],
-                                  ),
+                                      thumbDecoration: BoxDecoration(
+                                        color: Theme.of(context).colorScheme.surface,
+                                        borderRadius: BorderRadius.circular(6),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(.3),
+                                            blurRadius: 4.0,
+                                            spreadRadius: 1.0,
+                                            offset: Offset(0.0, 2.0),
+                                          ),
+                                        ],
+                                      ),
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.easeInToLinear,
+                                      onValueChanged: (newValue) {
+                                        setState(() {
+                                          currentSegment = newValue;
+                                        });
+                                      },
+                                    ),
+                                    SizedBox(height: 4),
+                                    currentSegment == 1
+                                        ? DeletePlayerCard(user: widget.user, accounts: widget.accounts)
+                                        : AddPlayerCard(user: widget.user),
+                                  ],
                                 ),
-                              );
-                            },
-                          );
-                        },
-                      );
-                    }
-                  },
-                  items: [
-                    ...widget.accounts.accounts.map<DropdownMenuItem<String>>((Account account) {
-                      String tag = account.profileInfo.tag;
-                      String imageUrl = account.profileInfo.townHallPic;
-                      String name = account.profileInfo.name;
-                      return DropdownMenuItem<String>(
-                        value: tag,
-                        child: Row(
-                          children: <Widget>[
-                            SizedBox(
-                              height: 30,
-                              width: 30,
-                              child: CachedNetworkImage(imageUrl: imageUrl),
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              name,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                    DropdownMenuItem<String>(
-                      value: "manageAccounts",
+                            );
+                          },
+                        );
+                      },
+                    );
+                  }
+                },
+                items: [
+                  ...widget.accounts.accounts.map<DropdownMenuItem<String>>((Account account) {
+                    String tag = account.profileInfo.tag;
+                    String imageUrl = account.profileInfo.townHallPic;
+                    String name = account.profileInfo.name;
+                    return DropdownMenuItem<String>(
+                      value: tag,
                       child: Row(
                         children: <Widget>[
-                          Icon(Icons.settings),
+                          SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CachedNetworkImage(imageUrl: imageUrl),
+                          ),
                           SizedBox(width: 4),
-                          Text(AppLocalizations.of(context)?.manage ?? 'Manage'),
+                          Text(
+                            name,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
                         ],
                       ),
+                    );
+                  }).toList(),
+                  DropdownMenuItem<String>(
+                    value: "manageAccounts",
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.settings),
+                        SizedBox(width: 4),
+                        Text(AppLocalizations.of(context)?.manage ?? 'Manage'),
+                      ],
                     ),
-                  ],
-                );
-              },
-            ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ),
       actions: <Widget>[
         Row(
           children: <Widget>[
@@ -175,8 +197,7 @@ class CustomAppBarState extends State<CustomAppBar> {
               onTap: () async {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => SettingsInfoScreen(user: widget.user)),
+                  MaterialPageRoute(builder: (context) => SettingsInfoScreen(user: widget.user)),
                 );
               },
               child: CircleAvatar(

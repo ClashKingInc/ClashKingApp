@@ -66,7 +66,6 @@ class MyHomePageState extends State<MyHomePage> {
           return ValueListenableBuilder<String?>(
             valueListenable: appState.selectedTagNotifier,
             builder: (context, selectedTag, child) {
-              // Ensure appState.account is updated based on selectedTag
               if (selectedTag != null && appState.accounts != null) {
                 appState.account = appState.accounts!.accounts.firstWhere(
                   (account) => account.profileInfo.tag == selectedTag,
@@ -112,23 +111,19 @@ class MyHomePageState extends State<MyHomePage> {
                   items: <BottomNavigationBarItem>[
                     BottomNavigationBarItem(
                       icon: Icon(Icons.dashboard),
-                      label: AppLocalizations.of(context)?.dashboard ??
-                          'Dashboard',
+                      label: AppLocalizations.of(context)?.dashboard ?? 'Dashboard',
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(Icons.shield),
                       label: AppLocalizations.of(context)?.clan ?? 'Clan',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(CustomIcons
-                          .swordCross),
-                      label: AppLocalizations.of(context)?.warLeague ??
-                          'War/League',
+                      icon: Icon(CustomIcons.swordCross),
+                      label: AppLocalizations.of(context)?.warLeague ?? 'War/League',
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(Icons.settings),
-                      label: AppLocalizations.of(context)?.management ??
-                          'Management',
+                      label: AppLocalizations.of(context)?.management ?? 'Management',
                     ),
                   ],
                   currentIndex: _selectedIndex,

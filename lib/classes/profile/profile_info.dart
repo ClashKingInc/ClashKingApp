@@ -40,7 +40,8 @@ class ProfileInfo {
   String townHallPic = '';
   String builderHallPic = '';
   String leagueUrl = '';
-  late PlayerLegendData? playerLegendData;
+  PlayerLegendData? playerLegendData;
+  bool initialized = false;
 
   ProfileInfo({
     required this.name,
@@ -116,16 +117,7 @@ class ProfileInfoService {
     try {
       tag = tag.replaceAll('#', '!');
 
-      // Lancer fetchLeagueName et fetchLegendData en parallèle
-      final leagueNameSpan = transaction.startChild('fetchLeagueName');
-      final playerLegendDataSpan = transaction.startChild('fetchLegendData');
-
-      final leagueNameFuture =
-          fetchWithSpan(leagueNameSpan, () => fetchLeagueName(tag));
-      final playerLegendDataFuture = fetchWithSpan(playerLegendDataSpan,
-          () => PlayerLegendService().fetchLegendData(tag));
-
-      // Effectuer l'appel HTTP principal
+      // Fetch profile info first
       final responseSpan = transaction.startChild('http.get');
       final response = await http.get(
         Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
@@ -139,46 +131,10 @@ class ProfileInfoService {
         String responseBody = utf8.decode(response.bodyBytes);
         ProfileInfo profileInfo =
             ProfileInfo.fromJson(jsonDecode(responseBody));
+        print('Profile info fetched: ${profileInfo.name}');
 
-        // Start fetching all data concurrently
-        final townHallPicSpan =
-            transaction.startChild('fetchPlayerTownHallByTownHallLevel');
-        final builderHallPicSpan =
-            transaction.startChild('fetchPlayerBuilderHallByTownHallLevel');
-        final troopsSpan = transaction.startChild('fetchImagesAndTypes_troops');
-        final heroesSpan = transaction.startChild('fetchImagesAndTypes_heroes');
-        final spellsSpan = transaction.startChild('fetchImagesAndTypes_spells');
-        final equipmentsSpan =
-            transaction.startChild('fetchImagesAndTypes_equipments');
-
-        final results = await Future.wait([
-          fetchWithSpan(
-              townHallPicSpan,
-              () => fetchPlayerTownHallByTownHallLevel(
-                  profileInfo.townHallLevel)),
-          fetchWithSpan(
-              builderHallPicSpan,
-              () => fetchPlayerBuilderHallByTownHallLevel(
-                  profileInfo.builderHallLevel)),
-          fetchWithSpan(
-              troopsSpan, () => fetchImagesAndTypes(profileInfo.troops)),
-          fetchWithSpan(
-              heroesSpan, () => fetchImagesAndTypes(profileInfo.heroes)),
-          fetchWithSpan(
-              spellsSpan, () => fetchImagesAndTypes(profileInfo.spells)),
-          fetchWithSpan(equipmentsSpan,
-              () => fetchImagesAndTypes(profileInfo.equipments)),
-          leagueNameFuture,
-          playerLegendDataFuture,
-        ]);
-
-        // Assign results to profileInfo
-        profileInfo.townHallPic = results[0] as String;
-        profileInfo.builderHallPic = results[1] as String;
-        profileInfo.league = results[6] as String;
-        profileInfo.leagueUrl =
-            LeagueDataManager().getLeagueUrl(profileInfo.league);
-        profileInfo.playerLegendData = results[7] as PlayerLegendData?;
+        // Start fetching additional data in the background
+        _fetchAdditionalProfileData(profileInfo, transaction);
 
         transaction.finish(status: SpanStatus.ok());
         return profileInfo;
@@ -192,15 +148,55 @@ class ProfileInfoService {
     }
   }
 
+  Future<void> _fetchAdditionalProfileData(
+      ProfileInfo profileInfo, ISentrySpan transaction) async {
+    final townHallPicSpan =
+        transaction.startChild('fetchPlayerTownHallByTownHallLevel');
+    final builderHallPicSpan =
+        transaction.startChild('fetchPlayerBuilderHallByTownHallLevel');
+    final troopsSpan = transaction.startChild('fetchImagesAndTypes_troops');
+    final heroesSpan = transaction.startChild('fetchImagesAndTypes_heroes');
+    final spellsSpan = transaction.startChild('fetchImagesAndTypes_spells');
+    final equipmentsSpan =
+        transaction.startChild('fetchImagesAndTypes_equipments');
+    final leagueNameSpan = transaction.startChild('fetchLeagueName');
+    final playerLegendDataSpan = transaction.startChild('fetchLegendData');
+
+    final results = await Future.wait([
+      fetchWithSpan(townHallPicSpan,
+          () => fetchPlayerTownHallByTownHallLevel(profileInfo.townHallLevel)),
+      fetchWithSpan(
+          builderHallPicSpan,
+          () => fetchPlayerBuilderHallByTownHallLevel(
+              profileInfo.builderHallLevel)),
+      fetchWithSpan(troopsSpan, () => fetchImagesAndTypes(profileInfo.troops)),
+      fetchWithSpan(heroesSpan, () => fetchImagesAndTypes(profileInfo.heroes)),
+      fetchWithSpan(spellsSpan, () => fetchImagesAndTypes(profileInfo.spells)),
+      fetchWithSpan(
+          equipmentsSpan, () => fetchImagesAndTypes(profileInfo.equipments)),
+      fetchWithSpan(leagueNameSpan, () => fetchLeagueName(profileInfo.tag)),
+      fetchWithSpan(playerLegendDataSpan,
+          () => PlayerLegendService().fetchLegendData(profileInfo.tag)),
+    ]);
+
+    // Assign results to profileInfo
+    profileInfo.townHallPic = results[0] as String;
+    profileInfo.builderHallPic = results[1] as String;
+    profileInfo.league = results[6] as String;
+    profileInfo.leagueUrl =
+        LeagueDataManager().getLeagueUrl(profileInfo.league);
+    profileInfo.playerLegendData = results[7] as PlayerLegendData?;
+    profileInfo.initialized = true; // Set initialized to true
+  }
+
   Future<T> fetchWithSpan<T>(
-      ISentrySpan span, Future<T> Function() action) async {
+      ISentrySpan span, Future<T> Function() future) async {
     try {
-      T result = await action();
+      final result = await future();
       span.finish(status: SpanStatus.ok());
       return result;
-    } catch (exception, stackTrace) {
+    } catch (e) {
       span.finish(status: SpanStatus.internalError());
-      Sentry.captureException(exception, stackTrace: stackTrace);
       rethrow;
     }
   }
