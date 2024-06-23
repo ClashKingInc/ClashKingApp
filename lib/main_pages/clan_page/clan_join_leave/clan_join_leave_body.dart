@@ -48,6 +48,14 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
     });
   }
 
+  //void printAllNames(int count) {
+  //  for (var item in widget.joinLeaveClan.items) {
+  //    print(item.name);
+  //    count++;
+  //    print(count);
+  //  }
+  //}
+
   @override
   Widget build(BuildContext context) {
     Map<String, String> filterOptions = {
@@ -56,6 +64,10 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
       AppLocalizations.of(context)?.leave ?? "Leave": "leave",
       AppLocalizations.of(context)?.reset ?? "Reset": "reset",
     };
+
+    //int count = 0;
+    //printAllNames(count);
+    //print(widget.joinLeaveClan.items.length);
 
     return Column(
       children: [
