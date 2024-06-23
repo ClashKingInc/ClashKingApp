@@ -43,9 +43,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox.shrink();
         } else if (snapshot.hasError) {
-          //Sentry.captureException(snapshot.error);
-          print("error");
-          print(snapshot.error);
+          Sentry.captureException(snapshot.error);
           return Center(
             child: Text(
               'Error loading user data. Check your internet connection.',

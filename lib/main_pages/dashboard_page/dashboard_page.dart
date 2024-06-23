@@ -100,7 +100,8 @@ class DashboardPageState extends State<DashboardPage>
                 },
               ),
               FutureBuilder<void>(
-                future:  Future.wait([_initializeLegendsFuture, _initializeProfileFuture]),
+                future: Future.wait(
+                    [_initializeLegendsFuture, _initializeProfileFuture]),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return SizedBox.shrink();
@@ -115,7 +116,6 @@ class DashboardPageState extends State<DashboardPage>
                   } else {
                     return Column(
                       children: [
-                        
                         // Legend Infos Card : Displayed only if data
                         if (widget.playerStats.playerLegendData != null &&
                             widget.playerStats.playerLegendData!.isNotEmpty)
@@ -127,18 +127,17 @@ class DashboardPageState extends State<DashboardPage>
                                   widget.playerStats.playerLegendData!,
                             ),
                           ),
-                        Padding(
-                          padding:
-                              EdgeInsets.only(left: 8.0, right: 8.0, bottom: 4),
-                          child: ToDoCard(
-                              tags: widget.discordUser.tags,
-                              playerStats: widget.playerStats,
-                              accounts: widget.accounts),
-                        ),
                       ],
                     );
                   }
                 },
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 4),
+                child: ToDoCard(
+                    tags: widget.discordUser.tags,
+                    playerStats: widget.playerStats,
+                    accounts: widget.accounts),
               ),
             ],
           ),

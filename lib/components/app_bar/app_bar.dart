@@ -9,7 +9,6 @@ import 'package:custom_sliding_segmented_control/custom_sliding_segmented_contro
 import 'package:clashkingapp/components/app_bar/add_player_card.dart';
 import 'package:clashkingapp/components/app_bar/delete_player_card.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
-import 'package:clashkingapp/classes/profile/profile_info.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final User user;
@@ -40,14 +39,17 @@ class CustomAppBarState extends State<CustomAppBar> {
             widget.accounts.accounts.first.profileInfo.tag;
         appState.account = widget.accounts.accounts.first;
       }
-      _checkInitialization(appState.account!.profileInfo);
+      _checkInitialization(widget.accounts);
     });
   }
 
-  void _checkInitialization(ProfileInfo profileInfo) {
-    if (!profileInfo.initialized) {
+  void _checkInitialization(Accounts accounts) {
+    bool allInitialized =
+        accounts.accounts.every((account) => account.profileInfo.initialized);
+
+    if (!allInitialized) {
       Future.delayed(Duration(milliseconds: 100), () {
-        _checkInitialization(profileInfo);
+        _checkInitialization(accounts);
       });
     } else {
       _initializedNotifier.value = true;
@@ -83,7 +85,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                           (element) => element.profileInfo.tag == newValue,
                         );
                       });
-                      _checkInitialization(appState.account!.profileInfo);
+                      _checkInitialization(appState.accounts!);
                     });
                   } else {
                     showDialog(
@@ -166,11 +168,14 @@ class CustomAppBarState extends State<CustomAppBar> {
                       value: tag,
                       child: Row(
                         children: <Widget>[
-                          SizedBox(
-                            height: 30,
-                            width: 30,
-                            child: CachedNetworkImage(imageUrl: imageUrl),
-                          ),
+                          if (account.profileInfo.initialized)
+                            SizedBox(
+                              height: 30,
+                              width: 30,
+                              child: CachedNetworkImage(imageUrl: imageUrl),
+                            )
+                          else
+                            SizedBox(height: 30, width: 30),
                           SizedBox(width: 4),
                           Text(
                             name,

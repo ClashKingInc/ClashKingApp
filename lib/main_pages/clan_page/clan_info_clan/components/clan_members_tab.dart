@@ -190,6 +190,9 @@ class ClanMembersState extends State<ClanMembers> {
                 );
                 ProfileInfo profileInfo =
                     await ProfileInfoService().fetchProfileInfo(member.tag);
+                while (profileInfo.initialized != true) {
+                  await Future.delayed(Duration(milliseconds: 100));
+                }
                 navigator.pop(); // Dismiss the dialog
                 navigator.push(
                   MaterialPageRoute(
@@ -243,8 +246,7 @@ class ClanMembersState extends State<ClanMembers> {
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium,
-                                          overflow: TextOverflow
-                                              .ellipsis), // This should now work as expected
+                                          overflow: TextOverflow.ellipsis),
                                       Text(
                                           member.role == 'admin'
                                               ? AppLocalizations.of(context)!

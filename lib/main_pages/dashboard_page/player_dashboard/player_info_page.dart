@@ -34,6 +34,7 @@ class StatsScreenState extends State<StatsScreen>
   Widget hallChips = SizedBox.shrink();
   List<String> activeEquipmentNames = [];
   Future<void>? _initializeProfileFuture;
+  Future<void>? _initializeLegendsFuture;
 
   @override
   void initState() {
@@ -41,10 +42,17 @@ class StatsScreenState extends State<StatsScreen>
     tabController = TabController(length: 2, vsync: this);
     townHallImageUrl = widget.playerStats.townHallPic;
     _initializeProfileFuture = _checkInitialization();
+    _initializeLegendsFuture = _checkLegendsInitialization();
   }
 
   Future<void> _checkInitialization() async {
     while (!widget.playerStats.initialized) {
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+  }
+
+  Future<void> _checkLegendsInitialization() async {
+    while (!widget.playerStats.legendsInitialized) {
       await Future.delayed(Duration(milliseconds: 100));
     }
   }
@@ -709,55 +717,87 @@ class StatsScreenState extends State<StatsScreen>
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
-        GestureDetector(
-          onTap: () async {
-            if (widget.playerStats.league == "Legend League") {
-              final navigator = Navigator.of(context);
-
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
+        FutureBuilder<void>(
+          future: _initializeLegendsFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return SizedBox.shrink();
+            } else if (snapshot.hasError) {
+              Sentry.captureException(snapshot.error);
+              return Center(
+                child: Text(
+                  'Error loading user data. Check your internet connection.',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               );
-              navigator.pop();
-              if (widget.playerStats.playerLegendData != null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LegendScreen(
-                      playerStats: widget.playerStats,
-                      playerLegendData: widget.playerStats.playerLegendData!,
+            } else {
+              if (widget.playerStats.playerLegendData != null &&
+                  widget.playerStats.playerLegendData!.legendData.isNotEmpty) {
+                return GestureDetector(
+                  onTap: () async {
+                    final navigator = Navigator.of(context);
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    );
+                    navigator.pop();
+                    if (widget.playerStats.playerLegendData != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LegendScreen(
+                            playerStats: widget.playerStats,
+                            playerLegendData:
+                                widget.playerStats.playerLegendData!,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  child: Chip(
+                    avatar: CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      child: CachedNetworkImage(
+                          imageUrl: widget.playerStats.leagueUrl),
                     ),
+                    labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                    label: Shimmer.fromColors(
+                      period: Duration(seconds: 3),
+                      baseColor: Theme.of(context)
+                          .colorScheme
+                          .onSurface, // Replace with your base color
+                      highlightColor: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(
+                              0.3), // Replace with your highlight color
+                      child: Text(
+                        widget.playerStats.trophies.toString(),
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                return Chip(
+                  avatar: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    child: CachedNetworkImage(
+                        imageUrl: widget.playerStats.leagueUrl),
+                  ),
+                  label: Text(
+                    widget.playerStats.trophies.toString(),
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 );
               }
             }
           },
-          child: Chip(
-            avatar: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(imageUrl: widget.playerStats.leagueUrl),
-            ),
-            labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-            label: Shimmer.fromColors(
-              period: Duration(seconds: 3),
-              baseColor: Theme.of(context)
-                  .colorScheme
-                  .onSurface, // Replace with your base color
-              highlightColor: Theme.of(context)
-                  .colorScheme
-                  .onSurface
-                  .withOpacity(0.3), // Replace with your highlight color
-              child: Text(
-                widget.playerStats.trophies.toString(),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-            ),
-          ),
         ),
         Chip(
           avatar: CircleAvatar(
