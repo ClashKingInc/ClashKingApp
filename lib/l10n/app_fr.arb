@@ -460,6 +460,9 @@
         }
     },
     "joinLeaveLogs": "Historique d'arrivées/départs",
+    "join": "Arrivée",
+    "leave": "Départ",
+    "reset": "Réinitialiser",
     "leaveNumberDescription" : "{number} joueurs ont quitté le clan durant la saison actuelle ({date}).",
     "@leaveNumberDescription": {
         "placeholders": {

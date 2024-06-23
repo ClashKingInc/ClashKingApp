@@ -528,6 +528,9 @@
         }
     },
     "joinLeaveLogs": "Join/Leave Logs",
+    "join" : "Join",
+    "leave" : "Leave",
+    "reset": "Reset",
     "leaveNumberDescription" : "{number} players left the clan during the current season ({date}).",
     "@leaveNumberDescription": {
         "description": "Number of players who left the clan during the current season.",

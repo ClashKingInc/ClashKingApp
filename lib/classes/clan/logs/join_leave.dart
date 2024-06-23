@@ -51,7 +51,7 @@ class JoinLeaveClanService {
   static Future<JoinLeaveClan> fetchJoinLeaveData(String clanTag, String startTime) async {
     clanTag = clanTag.replaceAll('#', '!');
     final response = await http
-        .get(Uri.parse('https://api.clashking.xyz/clan/$clanTag/join-leave?timestamp_start=$startTime&limit=500'));
+        .get(Uri.parse('https://api.clashking.xyz/clan/$clanTag/join-leave?timestamp_start=$startTime&time_stamp_end=9999999999&limit=500'));
     if (response.statusCode == 200) {
       JoinLeaveClan joinLeaveClan =
           JoinLeaveClan.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
