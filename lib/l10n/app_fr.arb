@@ -408,7 +408,7 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription" : "Ton clan a une moyenne de {stars} étoiles pour les guerres enregistrées.",
+    "warHistoryAverageWarStarsDescription" : "Ton clan a une moyenne de {stars} étoiles par attaque pour les guerres enregistrées.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {

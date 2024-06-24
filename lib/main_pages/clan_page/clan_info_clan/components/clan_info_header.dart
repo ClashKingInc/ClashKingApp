@@ -191,7 +191,8 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               runSpacing: 0,
               alignment: WrapAlignment.center,
               children: <Widget>[
-                if (widget.clanInfo.location!.name != 'Unknown country')
+                if (widget.clanInfo.location != null &&
+                    widget.clanInfo.location!.name != 'Unknown country')
                   Chip(
                     avatar: CircleAvatar(
                       backgroundColor: Colors.transparent,
@@ -327,7 +328,8 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                   clanTag: widget.clanInfo.tag,
                                   discordUser: widget.user,
                                   warLogData: warLogDetails,
-                                  warLogStats: widget.clanInfo.warLog.warLogStats,
+                                  warLogStats:
+                                      widget.clanInfo.warLog.warLogStats,
                                   clanName: widget.clanInfo.name,
                                 ),
                               ),
@@ -435,13 +437,13 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               SizedBox(width: 8),
                               Shimmer.fromColors(
                                 period: Duration(seconds: 3),
-                                baseColor:Colors.white,
+                                baseColor: Colors.white,
                                 highlightColor: Colors.white.withOpacity(0.4),
                                 child: Text(
-                                  AppLocalizations.of(context)?.ongoingWar ??
-                                      "Ongoing War",
-                                  style: Theme.of(context).textTheme.bodyMedium
-                                ),
+                                    AppLocalizations.of(context)?.ongoingWar ??
+                                        "Ongoing War",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
                               ),
                             ],
                           ),

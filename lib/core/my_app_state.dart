@@ -105,7 +105,11 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         androidName: 'WarAppWidgetProvider',
       );
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      final hint = Hint.withMap({
+        'clanTag': clanTag,
+        'warInfo': warInfo,
+      });
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
     }
   }
 
@@ -160,13 +164,23 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       } else {
         await prefs.setString('clanTag', '');
       }
-      
+
       selectedTagNotifier.value = accounts?.selectedTag.value;
       updateWidgets();
       notifyListeners();
       return true;
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      final hint = Hint.withMap({
+        'custom_message': 'Error during initializeData execution',
+        'user': user,
+        'accounts': accounts,
+        'selected_account': account,
+      });
+      Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+        hint: hint,
+      );
       return false;
     }
   }

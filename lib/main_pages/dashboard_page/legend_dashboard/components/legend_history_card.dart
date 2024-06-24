@@ -61,7 +61,7 @@ class LegendHistoryCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "${item['clan']['name'] ?? AppLocalizations.of(context)!.noClan}",
+                            "${item.containsKey('clan') && item['clan'] != null ? item['clan']['name'] : AppLocalizations.of(context)!.noClan}",
                             style: Theme.of(context).textTheme.labelMedium,
                           ),
                         ],

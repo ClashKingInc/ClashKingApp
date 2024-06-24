@@ -17,7 +17,14 @@ class Accounts {
       return accounts
           .firstWhere((acc) => acc.profileInfo.tag == selectedTag.value);
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      final hint = Hint.withMap({
+        'custom_message': 'No account found with the selected tag',
+        'selected_tag': selectedTag.value,
+        'accounts_tag': accounts.map((acc) => acc.profileInfo.tag).toList(),
+      });
+
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+
       return null;
     }
   }
@@ -26,7 +33,12 @@ class Accounts {
     try {
       return accounts.firstWhere((acc) => acc.profileInfo.tag == tag);
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      final hint = Hint.withMap({
+        'custom_message': 'No account found with the tag',
+        'selected_tag': selectedTag.value,
+        'accounts_tag': accounts.map((acc) => acc.profileInfo.tag).toList(),
+      });
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
       return null;
     }
   }
@@ -107,8 +119,14 @@ class AccountsService {
       transaction.finish(status: SpanStatus.ok());
       return accounts;
     } catch (exception, stackTrace) {
+      final hint = Hint.withMap({
+        'custom_message': 'Failed to load accounts',
+        'user_tags': user.tags,
+        'user_id': user.id,
+        'user_username': user.globalName
+      });
       transaction.finish(status: SpanStatus.internalError());
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
       throw Exception('Failed to load accounts: $exception');
     }
   }
@@ -123,8 +141,13 @@ class AccountsService {
       clanInfo.clanInitialized = true;
       clanInfo.warInitialized = true;
     } catch (exception, stackTrace) {
+      final hint = Hint.withMap({
+        'custom_message': 'Failed to load clan info',
+        'clan_tag': clanTag,
+        'account_tag': account.profileInfo.tag,
+      });
       clanSpan.finish(status: SpanStatus.internalError());
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
     }
   }
 }
