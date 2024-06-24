@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +8,10 @@ import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/components/clan
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/api/current_league_info.dart';
-import 'package:clashkingapp/api/current_war_info.dart';
-import 'package:clashkingapp/api/war_log.dart';
-import 'package:clashkingapp/api/wars_league_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
+import 'package:clashkingapp/classes/clan/war_league/wars_league_info.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/league/current_league_info_page.dart';
@@ -19,7 +19,7 @@ import 'package:clashkingapp/main_pages/wars_league_page/war_history/war_history
 import 'package:shimmer/shimmer.dart';
 
 class ClanInfoHeaderCard extends StatefulWidget {
-  final ClanInfo clanInfo;
+  final Clan clanInfo;
   final List<String> user;
 
   ClanInfoHeaderCard({required this.clanInfo, required this.user});
@@ -179,10 +179,10 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               avatar: CircleAvatar(
                 backgroundColor: Colors.transparent,
                 child: CachedNetworkImage(
-                    imageUrl: widget.clanInfo.warLeague.imageUrl),
+                    imageUrl: widget.clanInfo.warLeague!.imageUrl),
               ),
               label: Text(
-                widget.clanInfo.warLeague.name,
+                widget.clanInfo.warLeague!.name,
                 style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
@@ -191,17 +191,17 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               runSpacing: 0,
               alignment: WrapAlignment.center,
               children: <Widget>[
-                if (widget.clanInfo.location.name != 'Unknown country')
+                if (widget.clanInfo.location!.name != 'Unknown country')
                   Chip(
                     avatar: CircleAvatar(
                       backgroundColor: Colors.transparent,
                       child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/country-flags/${widget.clanInfo.location.countryCode}.png",
+                            "https://clashkingfiles.b-cdn.net/country-flags/${widget.clanInfo.location!.countryCode}.png",
                       ),
                     ),
                     label: Text(
-                      widget.clanInfo.location.name,
+                      widget.clanInfo.location!.name,
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
@@ -327,7 +327,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                   clanTag: widget.clanInfo.tag,
                                   discordUser: widget.user,
                                   warLogData: warLogDetails,
-                                  warLogStats: warLogStats,
+                                  warLogStats: widget.clanInfo.warLog.warLogStats,
                                   clanName: widget.clanInfo.name,
                                 ),
                               ),
@@ -435,16 +435,12 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               SizedBox(width: 8),
                               Shimmer.fromColors(
                                 period: Duration(seconds: 3),
-                                baseColor:
-                                    Theme.of(context).colorScheme.onSurface,
-                                highlightColor: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(0.3),
+                                baseColor:Colors.white,
+                                highlightColor: Colors.white.withOpacity(0.4),
                                 child: Text(
                                   AppLocalizations.of(context)?.ongoingWar ??
                                       "Ongoing War",
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  style: Theme.of(context).textTheme.bodyMedium
                                 ),
                               ),
                             ],
@@ -487,7 +483,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               children: [
                                 CachedNetworkImage(
                                   width: 20,
-                                  imageUrl: widget.clanInfo.warLeague.imageUrl,
+                                  imageUrl: widget.clanInfo.warLeague!.imageUrl,
                                 ),
                                 SizedBox(width: 8),
                                 Shimmer.fromColors(

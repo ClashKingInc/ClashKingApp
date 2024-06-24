@@ -1,18 +1,15 @@
 import 'package:clashkingapp/main_pages/clan_page/clan_join_leave/clan_join_leave_body.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_join_leave/clan_join_leave_header.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/join_leave.dart';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 
 class ClanJoinLeaveScreen extends StatefulWidget {
   final List<String> user;
-  final JoinLeaveClan joinLeaveClan;
-  final ClanInfo clanInfo;
+  final Clan? clanInfo;
 
   ClanJoinLeaveScreen(
       {super.key,
       required this.user,
-      required this.joinLeaveClan,
       required this.clanInfo});
 
   @override
@@ -36,12 +33,12 @@ class ClanJoinLeaveScreenState extends State<ClanJoinLeaveScreen>
               color: Theme.of(context).colorScheme.surface,
               child : ClanJoinLeaveHeader(
                   user: widget.user,
-                  joinLeaveClan: widget.joinLeaveClan,
+                  joinLeaveClan: widget.clanInfo!.joinLeaveClan,
                   clanInfo: widget.clanInfo),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 8),
             ClanJoinLeaveBody(
-                user: widget.user, joinLeaveClan: widget.joinLeaveClan)
+                user: widget.user, joinLeaveClan: widget.clanInfo!.joinLeaveClan)
           ])
         ]),
       ),

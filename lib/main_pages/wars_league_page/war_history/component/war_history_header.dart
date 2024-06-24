@@ -29,8 +29,8 @@ class WarHistoryHeader extends StatelessWidget {
                 Colors.black.withOpacity(0.5),
                 BlendMode.darken,
               ),
-              child: Image.network(
-                "https://clashkingfiles.b-cdn.net/landscape/war-landscape.jpg",
+              child: CachedNetworkImage(
+                imageUrl: "https://clashkingfiles.b-cdn.net/landscape/war-landscape.jpg",
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),

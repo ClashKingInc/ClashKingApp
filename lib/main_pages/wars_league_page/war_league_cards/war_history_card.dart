@@ -1,16 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/api/war_log.dart';
+import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/war_history_page.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:clashkingapp/components/chip.dart';
 
 class WarHistoryCard extends StatelessWidget {
-  final PlayerAccountInfo playerStats;
+  final ProfileInfo playerStats;
   final List<String> discordUser;
   final List<WarLogDetails> warLogData;
-  final Map<String, String> warLogStats;
+  final WarLogStats warLogStats;
 
   const WarHistoryCard(
       {super.key,
@@ -31,7 +32,7 @@ class WarHistoryCard extends StatelessWidget {
               discordUser: discordUser,
               warLogData: warLogData,
               warLogStats: warLogStats,
-              clanName : playerStats.clan!.name,
+              clanName: playerStats.clan!.name,
             ),
           ),
         );
@@ -68,85 +69,77 @@ class WarHistoryCard extends StatelessWidget {
                         spacing: 7.0,
                         runSpacing: -7.0,
                         children: [
-                          Chip(
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Container(
-                                width: 16,
-                                height: 16,
-                                decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  shape: BoxShape.circle,
-                                ),
+                          CustomChip(
+                            icon: Container(
+                              width: 16,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                shape: BoxShape.circle,
                               ),
                             ),
-                            label: Text(warLogStats['totalWins'] ?? '0',
-                                style: Theme.of(context).textTheme.labelLarge),
+                            labelPadding: 8,
+                            label: warLogStats.totalWins.toString(),
+                            description: AppLocalizations.of(context)!
+                                .warHistoryWinsDescription(
+                                    warLogStats.totalWins),
                           ),
-                          Chip(
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Container(
-                                width: 16,
-                                height: 16,
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  shape: BoxShape.circle,
-                                ),
+                          CustomChip(
+                            icon: Container(
+                              width: 16,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
                               ),
                             ),
-                            label: Text(warLogStats['totalLosses'] ?? '0',
-                                style: Theme.of(context).textTheme.labelLarge),
+                            labelPadding: 8,
+                            label: warLogStats.totalLosses.toString(),
+                            description: AppLocalizations.of(context)!
+                                .warHistoryLossesDescription(
+                                    warLogStats.totalLosses),
                           ),
-                          Chip(
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Container(
-                                width: 16,
-                                height: 16,
-                                decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  shape: BoxShape.circle,
-                                ),
+                          CustomChip(
+                            icon: Container(
+                              width: 16,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                shape: BoxShape.circle,
                               ),
                             ),
-                            label: Text(warLogStats['totalTies'] ?? '0',
-                                style: Theme.of(context).textTheme.labelLarge),
+                            labelPadding: 8,
+                            label: warLogStats.totalTies.toString(),
+                            description: AppLocalizations.of(context)!
+                                .warHistoryDrawsDescription(
+                                    warLogStats.totalTies),
                           ),
-                          Chip(
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Icon(LucideIcons.users,
-                                  size: 16,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
-                            ),
-                            label: Text(warLogStats['averageMembers'] ?? '0',
-                                style: Theme.of(context).textTheme.labelLarge),
+                          ImageChip(
+                            imageUrl:
+                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
+                            label: warLogStats.averageClanStarsPerMember
+                                .toString(),
+                            description: AppLocalizations.of(context)!
+                                .warHistoryAverageWarStarsDescription(
+                                    warLogStats.averageClanStarsPerMember),
                           ),
-                          Chip(
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Icon(LucideIcons.star,
-                                  size: 16,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
-                            ),
-                            label: Text(
-                                warLogStats['averageClanStarsPerMember'] ?? '0',
-                                style: Theme.of(context).textTheme.labelLarge),
+                          IconChip(
+                            icon: LucideIcons.users,
+                            size: 16,
+                            label: warLogStats.averageMembers.toString(),
+                            description: AppLocalizations.of(context)!
+                                .warHistoryAverageMembersDescription(
+                                    warLogStats.averageMembers),
                           ),
-                          Chip(
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Icon(LucideIcons.percent,
-                                  size: 16,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
-                            ),
-                            label: Text(
-                                warLogStats['averageClanDestruction'] ?? '0',
-                                style: Theme.of(context).textTheme.labelLarge),
+                          IconChip(
+                            icon: LucideIcons.percent,
+                            size: 16,
+                            label:
+                                warLogStats.averageClanDestruction.toString(),
+                            description: AppLocalizations.of(context)!
+                                .warHistoryAverageHitRateDescription(warLogStats
+                                    .averageClanDestruction
+                                    .toStringAsFixed(2)),
                           ),
                         ],
                       ),

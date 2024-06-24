@@ -108,6 +108,10 @@
       "url": "https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Apprentice_Warden.png",
       "type": "troop"
     },
+    "Druid": {
+      "url": "https://clashkingfiles.b-cdn.net/home-base/troop-pics/Icon_HV_Druid.png",
+      "type": "troop"
+    },
     "Battle Blimp": {
       "url": "https://clashkingfiles.b-cdn.net/home-base/siege-machine-pics/Icon_HV_Siege_Machine_Battle_Blimp.png",
       "type": "siege-machine"

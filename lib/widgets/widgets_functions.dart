@@ -1,9 +1,9 @@
-import 'package:clashkingapp/api/current_war_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/api/current_league_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
 
 // Get the current war data for a clan
 Future<String> checkCurrentWar(String? clanTag) async {

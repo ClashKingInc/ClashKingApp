@@ -13,6 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/main_pages/login_page/guest_login_page.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 //import 'dart:html' as html;
 
@@ -191,8 +192,8 @@ class LoginPageState extends State<LoginPage> {
       globalNavigatorKey.currentState!.pushReplacement(
         MaterialPageRoute(builder: (context) => StartupWidget()),
       );
-    } catch (e) {
-      throw Exception('Failed to authenticate with Discord: $e');
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
     }
   }
 

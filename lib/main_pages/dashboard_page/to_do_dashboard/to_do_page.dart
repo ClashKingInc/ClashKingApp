@@ -1,21 +1,27 @@
+import 'dart:ui';
+import 'package:clashkingapp/classes/account/accounts.dart';
+import 'package:clashkingapp/classes/profile/to_do.dart';
+import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
-import 'package:lucide_icons/lucide_icons.dart';
-import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/components/player_info_header_card.dart';
-import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
-import 'package:clashkingapp/api/clan_info.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_legend_page.dart';
-import 'package:clashkingapp/api/player_legend.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 
 class ToDoScreen extends StatefulWidget {
-  final PlayerAccountInfo playerStats;
-  final List<String> discordUser;
+  final ProfileInfo playerStats;
+  final List<String> tags;
+  final bool isInTimeFrame;
+  final PlayerToDoData data;
+  final Accounts accounts;
 
-  ToDoScreen({super.key, required this.playerStats, required this.discordUser});
+  ToDoScreen(
+      {super.key,
+      required this.playerStats,
+      required this.tags,
+      required this.isInTimeFrame,
+      required this.data,
+      required this.accounts});
 
   @override
   ToDoScreenState createState() => ToDoScreenState();
@@ -23,662 +29,402 @@ class ToDoScreen extends StatefulWidget {
 
 class ToDoScreenState extends State<ToDoScreen>
     with SingleTickerProviderStateMixin {
-  late TabController tabController;
-  String backgroundImageUrl =
-      "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png";
-  String townHallImageUrl = "";
-  List<Widget> stars = [];
-  Widget hallChips = SizedBox.shrink();
-  List<String> activeEquipmentNames = [];
+  String currentFilter = 'all';
+  String backgroundImageUrl = 'https://clashkingfiles.b-cdn.net/landscape/Villager_HV_Builder_19.png';
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 2, vsync: this);
-    townHallImageUrl = widget.playerStats.townHallPic;
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    stars = _buildStars(widget.playerStats.townHallWeaponLevel);
-    hallChips = buildTownHallChips();
+  void updateFilter(String newFilter) {
+    setState(() {
+      currentFilter = newFilter;
+    });
   }
 
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
+  Widget filterContent() {
+    switch (currentFilter) {
+      case 'all':
+        return _contentForAll();
+      case 'byEvent':
+        return _contentForByEvent();
+      default:
+        return _contentForTag(currentFilter);
+    }
+  }
+
+  String convertToExactTime(int timestamp, BuildContext context) {
+    DateTime now = DateTime.now();
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    Duration diff = now.difference(date);
+
+    int days = diff.inDays;
+    int hours = diff.inHours % 24;
+    int minutes = diff.inMinutes % 60;
+    String finalDiff = '';
+
+    if (days > 0) {
+      finalDiff += AppLocalizations.of(context)?.daysAgo(days) ?? "$days days";
+      if (hours > 0) finalDiff += ' ${hours}h';
+      if (minutes > 0) finalDiff += ' ${minutes}m';
+    } else if (hours > 0) {
+      finalDiff += AppLocalizations.of(context)?.hoursAgo(hours) ?? "$hours hours";
+      if (minutes > 0) finalDiff += ' ${minutes}m';
+    } else if (minutes > 0) {
+      finalDiff += AppLocalizations.of(context)?.minutesAgo(minutes) ?? "$minutes minutes";
+    } else {
+      return AppLocalizations.of(context)?.justNow ?? "Just now";
+    }
+
+    return finalDiff;
   }
 
   @override
   Widget build(BuildContext context) {
+    Map<String, String> filterOptions = {
+      AppLocalizations.of(context)!.all: 'all',
+      //'byEvent': 'byEvent',
+    };
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            PlayerInfoHeaderCard(
-              playerStats: widget.playerStats,
-              backgroundImageUrl: backgroundImageUrl,
-              townHallImageUrl: townHallImageUrl,
-              stars: stars,
-              hallChips: hallChips,
-            ),
-            ScrollableTab(
-              labelColor: Theme.of(context).colorScheme.onBackground,
-              tabBarDecoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-              ),
-              unselectedLabelColor: Theme.of(context).colorScheme.onBackground,
-              onTap: (value) {
-                setState(() {
-                  backgroundImageUrl = value == 0
-                      ? "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png"
-                      : "https://clashkingfiles.b-cdn.net/landscape/builder-landscape.png";
-                  townHallImageUrl = value == 0
-                      ? widget.playerStats.townHallPic
-                      : widget.playerStats.builderHallPic;
-                  stars = value == 0
-                      ? _buildStars(widget.playerStats.townHallWeaponLevel)
-                      : _buildStars(0);
-                  hallChips = value == 0
-                      ? buildTownHallChips()
-                      : buildBuilderHallChips();
-                });
-              },
-              tabs: [
-                Tab(text: AppLocalizations.of(context)!.homeBase),
-                Tab(text: AppLocalizations.of(context)!.builderBase),
-              ],
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10),
-                    buildItemSection(widget.playerStats.heroes, 'hero',
-                        AppLocalizations.of(context)?.heroes ?? 'Heroes'),
-                    buildItemSection(widget.playerStats.equipments, 'gear',
-                        AppLocalizations.of(context)?.equipment ?? 'Gears'),
-                    buildItemSection(widget.playerStats.troops, 'troop',
-                        AppLocalizations.of(context)?.troops ?? 'Troops'),
-                    buildItemSection(
-                        widget.playerStats.troops,
-                        'super-troop',
-                        AppLocalizations.of(context)?.superTroops ??
-                            'Super Troops'),
-                    buildItemSection(widget.playerStats.troops, 'pet',
-                        AppLocalizations.of(context)?.pets ?? 'Pets'),
-                    buildItemSection(
-                        widget.playerStats.troops,
-                        'siege-machine',
-                        AppLocalizations.of(context)?.siegeMachines ??
-                            'Siege Machine'),
-                    buildItemSection(widget.playerStats.spells, 'spell',
-                        AppLocalizations.of(context)?.spells ?? 'Spells'),
-                  ],
+            Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.bottomCenter,
+              children: <Widget>[
+                Container(
+                  height: 220,
+                  width: double.infinity,
+                  color: Colors.black.withOpacity(0.3),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10),
-                    buildItemSection(widget.playerStats.heroes, 'bb-hero',
-                        AppLocalizations.of(context)?.heroes ?? 'Heroes'),
-                    buildItemSection(widget.playerStats.troops, 'bb-troop',
-                        AppLocalizations.of(context)?.troops ?? 'Troops'),
-                  ],
+                SizedBox(
+                  height: 150,
+                  width: double.infinity,
+                  child: ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+                    child: ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0),
+                        BlendMode.darken,
+                      ),
+                      child: CachedNetworkImage(
+                        imageUrl: backgroundImageUrl,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 130,
+                  child: Text(
+                    AppLocalizations.of(context)?.toDoList ?? 'To Do List',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white),
+                  ),
+                ),
+                Positioned(
+                  top: 30,
+                  left: 10,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      size: 32,
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
                 ),
               ],
             ),
+            SizedBox(height: 8),
+            FilterDropdown(
+              sortBy: currentFilter,
+              updateSortBy: updateFilter,
+              sortByOptions: filterOptions,
+            ),
+            filterContent(),
           ],
         ),
       ),
     );
   }
 
-  List<Widget> _buildStars(int count) {
-    return List<Widget>.generate(
-      count,
-      (index) => CachedNetworkImage(
-        imageUrl: 'https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png',
-        width: 22.0,
-        height: 22.0,
-      ),
-    );
-  }
+  Widget _contentForAll() {
+    List<Widget> cards = [];
 
-  double calculateCompletionPercentage(List<dynamic> items, String itemType) {
-    var filteredItems = items.where((item) => item.type == itemType).toList();
+    for (var tag in widget.tags) {
+      for (var playerData in widget.data.items.where((item) => item.playerTag == tag)) {
+        int totalDone = 0;
+        int totalEvent = 0;
+        Account? currentAccount = widget.accounts.findAccountByTag(playerData.playerTag);
+        int time = playerData.lastActive;
+        String timeAgo = convertToExactTime(time, context);
 
-    int totalMaxLevel =
-        filteredItems.fold(0, (prev, item) => (prev) + (item.maxLevel as int));
-    int totalCurrentLevel =
-        filteredItems.fold(0, (prev, item) => (prev) + (item.level as int));
+        //Legend compléted
+        if (playerData.legends != null) {
+          totalEvent++;
+          if (playerData.legends!.numAttacks == 8) {
+            totalDone++;
+          }
+        }
 
-    if (totalMaxLevel == 0) return 0.0;
+        //clan games completed
+        if (playerData.clanGames != null) {
+          totalEvent++;
+          if (playerData.clanGames!.points >= 4000) {
+            totalDone++;
+          }
+        }
 
-    return (totalCurrentLevel / totalMaxLevel) * 100;
-  }
+        //raids completed
+        if (widget.isInTimeFrame) {
+          totalEvent++;
+          if ((playerData.raids.attacksDone == 5 && playerData.raids.attackLimit == 5) || (playerData.raids.attacksDone == 6 && playerData.raids.attackLimit == 6)) {
+            totalDone++;
+          }
+        }
 
-  // Build the section for troops, super troops, pets, and siege machines
-  Widget buildItemSection(List<dynamic> items, String itemType, String title) {
-    List<String> itemNames = items.map((item) => item.name as String).toList();
+        //season pass completed
+        totalEvent++;
+        if (playerData.seasonPass >= 2600) {
+          totalDone++;
+        }
 
-    double completionPercentage =
-        calculateCompletionPercentage(items, itemType);
-
-    List<Widget> missingItems = [];
-
-    return Card(
-      margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-      elevation: 4,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 16, top: 8, left: 8, right: 8),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    if (itemType != 'super-troop') ...[
-                      TextSpan(
-                        text: ' | ',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      TextSpan(
-                        text: completionPercentage % 1 == 0
-                            ? '${completionPercentage.toInt()}%'
-                            : '${completionPercentage.toStringAsFixed(2)}%',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Center(
-              child: Wrap(
-                spacing: 5,
-                runSpacing: 5,
-                children: [
-                  ...items.where((item) => item.type == itemType).map(
-                        (item) => Container(
-                          decoration: BoxDecoration(
-                            color: item.type == 'gear'
-                                ? (item.name == 'Frozen Arrow' ||
-                                        item.name == 'Giant Gauntlet' ||
-                                        item.name == 'Fireball' ||
-                                        item.name == 'Spiky Ball'
-                                    ? Colors.purple
-                                    : Colors.blue)
-                                : null,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: (item.level == item.maxLevel ||
-                                      (item.type == 'super-troop' &&
-                                          item.superTroopIsActive))
-                                  ? Color(0xFFD4AF37)
-                                  : Theme.of(context).colorScheme.onBackground,
-                              width: 2,
-                            ),
+        cards.add(
+          Card(
+            margin: const EdgeInsets.only(top: 8, left: 12, right: 12),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: CachedNetworkImage(imageUrl: currentAccount?.profileInfo.townHallPic ?? widget.playerStats.townHallPic),
                           ),
-                          child: Stack(
-                            children: <Widget>[
-                              GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Dialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        elevation: 6,
-                                        backgroundColor: Colors.transparent,
-                                        child: SingleChildScrollView(
-                                          child: Container(
-                                            height: 200,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              shape: BoxShape.rectangle,
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                            child: Column(
-                                              children: <Widget>[
-                                                Text('${item.name}',
-                                                    style: TextStyle(
-                                                        color: Colors.black)),
-                                                CachedNetworkImage(
-                                                    imageUrl: item.imageUrl,
-                                                    width: 40,
-                                                    height: 40,
-                                                    fit: BoxFit.cover),
-                                                Text(
-                                                  itemType == 'super-troop'
-                                                      ? (item.superTroopIsActive
-                                                          ? 'Actif'
-                                                          : 'Inactif')
-                                                      : 'Level : ${item.level}/${item.maxLevel}',
-                                                  style: TextStyle(
-                                                      color: Colors.black),
-                                                ),
-                                                itemType == 'hero'
-                                                    ? Column(
-                                                        children: [
-                                                          ...item.equipment.map(
-                                                            (equipment) =>
-                                                                Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      vertical:
-                                                                          4.0),
-                                                              child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: [
-                                                                  SizedBox(
-                                                                      width: 8),
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                      equipment
-                                                                          .name,
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.black),
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    'Level : ${equipment.level}/${equipment.maxLevel}',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .black),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )
-                                                    : SizedBox.shrink(),
-                                              ],
-                                            ),
+                          Text(
+                            currentAccount?.profileInfo.name ?? widget.playerStats.name,
+                            style: Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold) ??
+                              TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            tag,
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: <Widget>[
+                                Text(
+                                  'Last Active: ${DateFormat('dd/MM/yy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(playerData.lastActive * 1000))}',
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                                Text(timeAgo, style: Theme.of(context).textTheme.labelLarge),
+                                SizedBox(height: 8),
+                                Wrap(
+                                  alignment: WrapAlignment.start,
+                                  spacing: 7.0,
+                                  runSpacing: -7.0,
+                                  children: <Widget>[
+                                    if (playerData.legends != null || currentAccount?.profileInfo.league == 'Legend League')
+                                      Chip(
+                                        avatar: CircleAvatar(
+                                          backgroundColor: Colors.transparent,
+                                          child: CachedNetworkImage(
+                                            imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_No_Padding.png",
                                           ),
                                         ),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(6),
-                                  child: CachedNetworkImage(
-                                      imageUrl: item.imageUrl,
-                                      width: 40,
-                                      height: 40,
-                                      fit: BoxFit.cover),
-                                ),
-                              ),
-                              (item.type != 'super-troop')
-                                  ? Positioned(
-                                      right: 1,
-                                      bottom: 1,
-                                      child: Container(
-                                        height: 16,
-                                        width: 16,
-                                        padding: EdgeInsets.all(1),
-                                        decoration: BoxDecoration(
-                                          color: item.level == item.maxLevel
-                                              ? Color(0xFFD4AF37) // Or
-                                              : Colors.black, // Noir
-                                          borderRadius:
-                                              BorderRadius.circular(4),
+                                        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                        label: Text(
+                                          "${playerData.legends?.numAttacks ?? 0}/8",
+                                          style: Theme.of(context).textTheme.labelLarge,
                                         ),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              item.level.toString(),
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
+                                        shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                            color: playerData.legends?.numAttacks == 8 ? Colors.green : Colors.red,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: BorderRadius.circular(8.0),
                                         ),
                                       ),
-                                    )
-                                  : SizedBox.shrink()
-                            ],
-                          ),
+                                    //Chip(
+                                    //  avatar: CircleAvatar(
+                                    //    backgroundColor: Colors.transparent,
+                                    //    child: CachedNetworkImage(
+                                    //      imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                                    //    ),
+                                    //  ),
+                                    //  labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                    //  label: Text(
+                                    //    "2/2",
+                                    //    style: Theme.of(context).textTheme.labelLarge,
+                                    //  ),
+                                    //),
+                                    if (playerData.clanGames != null)
+                                      Chip(
+                                        avatar: CircleAvatar(
+                                          backgroundColor: Colors.transparent,
+                                          child: CachedNetworkImage(
+                                            imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_Games_Medal.png",
+                                          ),
+                                        ),
+                                        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                        label: Text(
+                                          playerData.clanGames?.points.toString() ?? '0',
+                                          style: Theme.of(context).textTheme.labelLarge,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                            color: playerData.clanGames?.points == 4000 ? Colors.green : Colors.red,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: BorderRadius.circular(8.0),
+                                        ),
+                                      ),
+                                    if (widget.isInTimeFrame)
+                                      Chip(
+                                        avatar: CircleAvatar(
+                                          backgroundColor: Colors.transparent,
+                                          child: CachedNetworkImage(
+                                            imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Raid_Attack.png",
+                                          ),
+                                        ),
+                                        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                        label: playerData.raids.attackLimit == 0
+                                          ? Text(
+                                              '0/5',
+                                              style: Theme.of(context).textTheme.labelLarge,
+                                            )
+                                          : Text(
+                                              '${playerData.raids.attacksDone}/${playerData.raids.attackLimit}',
+                                              style: Theme.of(context).textTheme.labelLarge,
+                                            ),
+                                        shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                            color: 
+                                              (playerData.raids.attacksDone == 5 && playerData.raids.attackLimit == 5) 
+                                                || (playerData.raids.attacksDone == 6 && playerData.raids.attackLimit == 6)
+                                                ? Colors.green
+                                                : Colors.red,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: BorderRadius.circular(8.0),
+                                        ),
+                                      ),
+                                    //Chip(
+                                    //  avatar: CircleAvatar(
+                                    //    backgroundColor: Colors.transparent,
+                                    //    child: CachedNetworkImage(
+                                    //      imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                                    //    ),
+                                    //  ),
+                                    //  labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                    //  label: Text(
+                                    //    "1/1",
+                                    //    style: Theme.of(context).textTheme.labelLarge,
+                                    //  ),
+                                    //),
+                                    Chip(
+                                      avatar: CircleAvatar(
+                                        backgroundColor: Colors.transparent,
+                                        child: Transform.scale(
+                                          scale: 1.7,
+                                          child: CachedNetworkImage(
+                                            imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Gold_Pass.png",
+                                          ),
+                                        ),
+                                      ),
+                                      labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                      label: Text(
+                                        playerData.seasonPass.toString(),
+                                        style: Theme.of(context).textTheme.labelLarge,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                          color: playerData.seasonPass >= 2600 ? Colors.green : Colors.red,
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                  ...missingItems,
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      SizedBox(width: 8),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width - 104,
+                        height: 8,
+                        child: LinearProgressIndicator(
+                          value: totalDone/totalEvent,
+                            backgroundColor: Color.fromARGB(255, 61, 60, 60),
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        '${((totalDone/totalEvent)*100).toStringAsFixed(0).padLeft(3, ' ')}%',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  List<Widget> buildAllHallChips() {
-    String getRoleText(String role) {
-      switch (role) {
-        case 'leader':
-          return AppLocalizations.of(context)?.leader ?? 'Leader';
-        case 'coLeader':
-          return AppLocalizations.of(context)?.coLeader ?? 'Co-Leader';
-        case 'admin':
-          return AppLocalizations.of(context)?.elder ?? 'Elder';
-        case 'member':
-          return AppLocalizations.of(context)?.member ?? 'Member';
-        default:
-          return 'No clan';
+          ),
+        );
       }
     }
 
-    return [
-      if (widget.playerStats.clan != null)
-        GestureDetector(
-          onTap: () async {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            );
-            ClanInfo clanInfo =
-                await ClanService().fetchClanInfo(widget.playerStats.clan!.tag);
-            if (mounted) {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ClanInfoScreen(
-                      clanInfo: clanInfo, discordUser: widget.discordUser),
-                ),
-              );
-            }
-          },
-          child: Chip(
-            avatar: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(
-                imageUrl: widget.playerStats.clan!.badgeUrls.small,
-              ),
-            ),
-            labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-            label: Text(
-              widget.playerStats.clan!.name,
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-          ),
-        ),
-      Chip(
-        avatar: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(
-              imageUrl:
-                  "https://clashkingfiles.b-cdn.net/home-base/hero-pics/Icon_HV_Hero_Archer_Queen.png"),
-        ),
-        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-        label: Text(
-          getRoleText(widget.playerStats.role),
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-      ),
-      Chip(
-        avatar: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(imageUrl: widget.playerStats.townHallPic),
-        ),
-        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-        label: Text(
-          "${AppLocalizations.of(context)?.th ?? 'TH'}${widget.playerStats.townHallLevel}",
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-      ),
-      Chip(
-        avatar: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(
-              imageUrl:
-                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_XP.png"),
-        ),
-        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-        label: Text(
-          '${widget.playerStats.expLevel}',
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-      ),
-      Chip(
-        avatar: Icon(LucideIcons.chevronUp,
-            color: Color.fromARGB(255, 27, 114, 33)),
-        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-        label: Text(
-          '${widget.playerStats.donations}',
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-      ),
-      Chip(
-        avatar: Icon(LucideIcons.chevronDown,
-            color: Color.fromARGB(255, 155, 4, 4)),
-        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-        label: Text(
-          '${widget.playerStats.donationsReceived}',
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-      ),
-      Chip(
-        avatar: Icon(LucideIcons.chevronsUpDown,
-            color: Color.fromARGB(255, 0, 136, 255)),
-        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-        label: Text(
-          (widget.playerStats.donations /
-                  (widget.playerStats.donationsReceived == 0
-                      ? 1
-                      : widget.playerStats.donationsReceived))
-              .toStringAsFixed(2),
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-      ),
-      Chip(
-        avatar: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(
-              imageUrl:
-                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
-        ),
-        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-        label: Text(
-          '${widget.playerStats.warStars}',
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-      ),
-      Chip(
-        avatar: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(
-              imageUrl:
-                  "https://clashkingfiles.b-cdn.net/icons/Icon_CC_Resource_Capital_Gold_small.png"),
-        ),
-        labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-        label: Text(
-          NumberFormat('#,###', 'fr_FR')
-              .format(widget.playerStats.clanCapitalContributions)
-              .replaceAll(',', ' '),
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-      ),
-    ];
-  }
-
-  Widget buildTownHallChips() {
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 8.0,
-      runSpacing: 0,
-      children: [
-        ...buildAllHallChips(),
-        Chip(
-          avatar: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: widget.playerStats.warPreference == 'in'
-                  ? CachedNetworkImage(
-                      imageUrl:
-                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png")
-                  : CachedNetworkImage(
-                      imageUrl:
-                          'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png')),
-          label: Text(
-            widget.playerStats.warPreference,
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-        ),
-        Chip(
-          avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
-                imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
-          ),
-          labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-          label: Text(
-            widget.playerStats.attackWins.toString(),
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-        ),
-        Chip(
-          avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
-                imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png"),
-          ),
-          labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-          label: Text(
-            widget.playerStats.defenseWins.toString(),
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-        ),
-        GestureDetector(
-          onTap: () async {
-            if (widget.playerStats.league == "Legend League") {
-              final navigator = Navigator.of(context);
-
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              );
-              PlayerLegendData legendData = await PlayerLegendService()
-                  .fetchLegendData(widget.playerStats.tag);
-              navigator.pop();
-              navigator.push(
-                MaterialPageRoute(
-                  builder: (context) => LegendScreen(
-                      playerStats: widget.playerStats,
-                      playerLegendData: legendData),
-                ),
-              );
-            }
-          },
-          child: Chip(
-            avatar: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(imageUrl: widget.playerStats.leagueUrl),
-            ),
-            labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-            label: Text(
-              widget.playerStats.trophies.toString(),
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-          ),
-        ),
-        Chip(
-          avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
-                imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png"),
-          ),
-          labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-          label: Text(
-            widget.playerStats.bestTrophies.toString(),
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-        ),
-      ],
+    return Column(
+      children: cards,
     );
   }
 
-  Widget buildBuilderHallChips() {
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 8.0,
-      runSpacing: 0,
-      children: [
-        ...buildAllHallChips(),
-        Chip(
-          avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child:
-                CachedNetworkImage(imageUrl: widget.playerStats.builderHallPic),
-          ),
-          labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-          label: Text(
-            "${AppLocalizations.of(context)?.bh ?? 'BH'}${widget.playerStats.builderHallLevel}",
-            style: Theme.of(context).textTheme.labelLarge,
+  Widget _contentForByEvent() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6, left: 8, right: 8, bottom: 16),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Center(child: Text('Afficher par événement')),
+        ),
+      ),
+    );
+  }
+
+  Widget _contentForTag(String tag) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6, left: 8, right: 8, bottom: 16),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: Center(
+              child: Text('Afficher pour le tag: $tag'),
+            ),
           ),
         ),
-        Chip(
-          avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
-                imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
-          ),
-          labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-          label: Text(
-            widget.playerStats.builderBaseTrophies.toString(),
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-        ),
-        Chip(
-          avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
-                imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png"),
-          ),
-          labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-          label: Text(
-            widget.playerStats.bestBuilderBaseTrophies.toString(),
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

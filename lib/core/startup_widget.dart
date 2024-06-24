@@ -8,9 +8,10 @@ import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/main_pages/login_page/tag_input_chip.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:clashkingapp/api/cocdiscord_link_functions.dart';
+import 'package:clashkingapp/classes/account/cocdiscord_link_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class StartupWidget extends StatefulWidget {
   @override
@@ -117,43 +118,66 @@ class StartupWidgetState extends State<StartupWidget> {
 
   Future<void> _initializeApp() async {
     final appState = Provider.of<MyAppState>(context, listen: false);
+    final transaction = Sentry.startTransaction(
+      'initializeApp',
+      'task',
+      bindToScope: true,
+    );
 
-    // Check if a user has been registered yet
-    final prefs = await SharedPreferences.getInstance();
-    final userType = prefs.getString('user_type');
+    try {
+      // Start a child span for SharedPreferences
+      final prefsSpan = transaction.startChild('SharedPreferences.getInstance');
+      final prefs = await SharedPreferences.getInstance();
+      prefsSpan.finish(status: SpanStatus.ok());
 
-    // If yes and the user is a guest, initialize the guest user
-    if (userType == "guest") {
-      await appState.initializeGuestUser(); // Initialize guest user
-      if (mounted) {
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (_) => MyHomePage()));
-      }
-    }
-    // If yes and the user is a discord user, initialize the discord user
-    else if (userType == "discord") {
-      bool validToken = await isTokenValid(); // Check if the token is valid
-      if (validToken && mounted) {
-        await appState
-            .initializeDiscordUser(context); // Initialize discord user
+      final userType = prefs.getString('user_type');
 
-        if (mounted && appState.user!.tags.isNotEmpty) {
+      if (userType == "guest") {
+        // Initialize guest user
+        final guestSpan = transaction.startChild('initializeGuestUser');
+        await appState.initializeGuestUser();
+        guestSpan.finish(status: SpanStatus.ok());
+
+        if (mounted) {
+          transaction.finish(status: SpanStatus.ok());
           Navigator.of(context)
               .pushReplacement(MaterialPageRoute(builder: (_) => MyHomePage()));
+        }
+      } else if (userType == "discord") {
+        // Check if the token is valid
+        final tokenSpan = transaction.startChild('isTokenValid');
+        bool validToken = await isTokenValid();
+        tokenSpan.finish(
+            status: validToken ? SpanStatus.ok() : SpanStatus.internalError());
+
+        if (validToken && mounted) {
+          // Initialize discord user
+          final discordSpan = transaction.startChild('initializeDiscordUser');
+          await appState.initializeDiscordUser(context);
+          discordSpan.finish(status: SpanStatus.ok());
+
+          if (mounted && appState.user!.tags.isNotEmpty) {
+            transaction.finish(status: SpanStatus.ok());
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (_) => MyHomePage()));
+          } else {
+            authToken = await login();
+            _showTagDialog();
+          }
         } else {
-          authToken = await login();
-          _showTagDialog();
+          prefs.setString("user_type", "");
         }
       } else {
-        prefs.setString("user_type", "");
+        // Redirect to the login page
+        if (mounted) {
+          transaction.finish(status: SpanStatus.ok());
+          Navigator.of(context)
+              .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+        }
       }
-    }
-    // If no user has been registered yet, redirect to the login page
-    else {
-      if (mounted) {
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
-      }
+    } catch (exception, stackTrace) {
+      transaction.finish(status: SpanStatus.internalError());
+      Sentry.captureException(exception, stackTrace: stackTrace);
     }
   }
 

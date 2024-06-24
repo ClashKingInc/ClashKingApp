@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 
 class WarHeader extends StatelessWidget {
   const WarHeader({
@@ -65,8 +65,8 @@ class WarHeader extends StatelessWidget {
                                 );
                               },
                             );
-                            ClanInfo clanInfo = await ClanService()
-                                .fetchClanInfo(widget.currentWarInfo.clan.tag);
+                            Clan clanInfo = await ClanService()
+                                .fetchClanAndWarInfo(widget.currentWarInfo.clan.tag);
                             if (context.mounted) {
                               Navigator.pop(context);
                               Navigator.push(
@@ -129,8 +129,8 @@ class WarHeader extends StatelessWidget {
                                 );
                               },
                             );
-                            ClanInfo clanInfo = await ClanService()
-                                .fetchClanInfo(
+                            Clan clanInfo = await ClanService()
+                                .fetchClanAndWarInfo(
                                     widget.currentWarInfo.opponent.tag);
                             if (context.mounted) {
                               Navigator.pop(context);

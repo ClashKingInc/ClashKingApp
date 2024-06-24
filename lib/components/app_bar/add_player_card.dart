@@ -1,7 +1,7 @@
-import 'package:clashkingapp/api/user_info.dart';
+import 'package:clashkingapp/classes/account/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/api/cocdiscord_link_functions.dart';
+import 'package:clashkingapp/classes/account/cocdiscord_link_functions.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
@@ -54,8 +54,8 @@ class AddPlayerCardState extends State<AddPlayerCard> {
                   color: Theme.of(context).colorScheme.secondary, width: 2.0),
               borderRadius: BorderRadius.circular(8.0),
             ),
-            prefixIcon: Icon(Icons.tag,
-                color: Theme.of(context).colorScheme.onSurface),
+            prefixIcon:
+                Icon(Icons.tag, color: Theme.of(context).colorScheme.onSurface),
           ),
           inputFormatters: <TextInputFormatter>[
             FilteringTextInputFormatter.allow(
@@ -103,14 +103,14 @@ class AddPlayerCardState extends State<AddPlayerCard> {
             }
           },
           style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all(
-                Theme.of(context).colorScheme.primary),
+            backgroundColor:
+                WidgetStateProperty.all(Theme.of(context).colorScheme.primary),
             foregroundColor: WidgetStateProperty.all(
                 Theme.of(context).colorScheme.onPrimary),
             padding: WidgetStateProperty.all(
                 EdgeInsets.symmetric(vertical: 12, horizontal: 24)),
-            textStyle: WidgetStateProperty.all(
-                Theme.of(context).textTheme.bodyLarge),
+            textStyle:
+                WidgetStateProperty.all(Theme.of(context).textTheme.bodyLarge),
             shape: WidgetStateProperty.all(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),

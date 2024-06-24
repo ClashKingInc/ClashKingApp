@@ -1,20 +1,24 @@
-import 'package:clashkingapp/api/player_account_info.dart';
+import 'package:clashkingapp/classes/account/accounts.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/to_do_card.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/core/my_app_state.dart';
-import 'package:clashkingapp/api/user_info.dart';
+import 'package:clashkingapp/classes/account/user.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/creator_code_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_infos_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_legend_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_search_card.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/to_do_card.dart';
-import 'package:clashkingapp/api/player_legend.dart';
-import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardPage extends StatefulWidget {
-  final PlayerAccountInfo playerStats;
+  final ProfileInfo playerStats;
   final User discordUser;
+  final Accounts accounts;
 
-  DashboardPage({required this.playerStats, required this.discordUser});
+  DashboardPage(
+      {required this.playerStats,
+      required this.discordUser,
+      required this.accounts});
 
   @override
   DashboardPageState createState() => DashboardPageState();
@@ -22,22 +26,39 @@ class DashboardPage extends StatefulWidget {
 
 class DashboardPageState extends State<DashboardPage>
     with SingleTickerProviderStateMixin {
-  late Future<PlayerLegendData> legendData;
+  late Future<void> _initializeProfileFuture;
+  late Future<void> _initializeLegendsFuture;
 
   @override
   void initState() {
     super.initState();
-    PlayerLegendService playerLegendService = PlayerLegendService();
-    legendData = playerLegendService.fetchLegendData(widget.playerStats.tag);
+    _initializeProfileFuture = _checkInitialization();
+    _initializeLegendsFuture = _checkLegendsInitialization();
   }
 
-  @override
-  void didUpdateWidget(DashboardPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.playerStats.tag != oldWidget.playerStats.tag) {
-      PlayerLegendService playerLegendService = PlayerLegendService();
-      legendData = playerLegendService.fetchLegendData(widget.playerStats.tag);
+  Future<void> _checkInitialization() async {
+    while (!widget.playerStats.initialized) {
+      await Future.delayed(Duration(milliseconds: 100));
     }
+  }
+
+  Future<void> _checkLegendsInitialization() async {
+    while (!widget.playerStats.legendsInitialized) {
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+  }
+
+  
+  Future<void> _refreshData() async {
+    // Fetch the updated profile information
+    final profileInfo = await ProfileInfoService().fetchProfileInfo(widget.playerStats.tag);
+
+    setState(() {
+      // Update the player stats with the newly fetched data
+      widget.playerStats.updateFrom(profileInfo);
+      _initializeProfileFuture = _checkInitialization();
+      _initializeLegendsFuture = _checkLegendsInitialization();
+    });
   }
 
   @override
@@ -49,14 +70,7 @@ class DashboardPageState extends State<DashboardPage>
       child: Scaffold(
         body: RefreshIndicator(
           backgroundColor: Theme.of(context).colorScheme.surface,
-          onRefresh: () async {
-            setState(() {
-              final appState = Provider.of<MyAppState>(context, listen: false);
-              appState.refreshData();
-              PlayerLegendService playerLegendService = PlayerLegendService();
-              legendData = playerLegendService.fetchLegendData(widget.playerStats.tag);
-            });
-          },
+          onRefresh: _refreshData,
           child: ListView(
             children: <Widget>[
               // Creator Code Card
@@ -68,39 +82,67 @@ class DashboardPageState extends State<DashboardPage>
                 padding: EdgeInsets.only(left: 8.0, right: 8.0),
                 child: PlayerSearchCard(discordUser: widget.discordUser.tags),
               ),
-              // Player Infos Card
-              Padding(
-                padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                child: PlayerInfosCard(
-                    playerStats: widget.playerStats,
-                    discordUser: widget.discordUser.tags),
+              FutureBuilder<void>(
+                future: _initializeProfileFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SizedBox.shrink();
+                  } else if (snapshot.hasError) {
+                    Sentry.captureException(snapshot.error);
+                    return Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.connectionErrorRelaunch,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    );
+                  } else {
+                    return Padding(
+                      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                      child: PlayerInfosCard(
+                          playerStats: widget.playerStats,
+                          discordUser: widget.discordUser.tags),
+                    );
+                  }
+                },
               ),
-              // Legend Infos Card : Displayed only if data
-              Padding(
-                padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                child: FutureBuilder<PlayerLegendData>(
-                  future: legendData,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<PlayerLegendData> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return SizedBox.shrink();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      if (snapshot.data!.legendData.isNotEmpty) {
-                        return PlayerLegendCard(
-                            playerStats: widget.playerStats,
-                            playerLegendData: snapshot.data!);
-                      } else {
-                        return SizedBox.shrink();
-                      }
-                    }
-                  },
-                ),
+              FutureBuilder<void>(
+                future: _initializeLegendsFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SizedBox.shrink();
+                  } else if (snapshot.hasError) {
+                    Sentry.captureException(snapshot.error);
+                    return Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.connectionErrorRelaunch,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    );
+                  } else {
+                    return Column(
+                      children: [
+                        // Legend Infos Card : Displayed only if data
+                        if (widget.playerStats.playerLegendData != null &&
+                            widget.playerStats.playerLegendData!.isNotEmpty)
+                          Padding(
+                            padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                            child: PlayerLegendCard(
+                              playerStats: widget.playerStats,
+                              playerLegendData:
+                                  widget.playerStats.playerLegendData!,
+                            ),
+                          ),
+                      ],
+                    );
+                  }
+                },
               ),
               Padding(
                 padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 4),
-                child: ToDoCard(discordUser: widget.discordUser.tags, playerStats: widget.playerStats),
+                child: ToDoCard(
+                    tags: widget.discordUser.tags,
+                    playerStats: widget.playerStats,
+                    accounts: widget.accounts),
               ),
             ],
           ),

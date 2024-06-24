@@ -1,186 +1,206 @@
-import 'package:clashkingapp/api/current_league_info.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/access_denied_card.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/current_war_info.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/league/current_league_info_page.dart';
-import 'package:clashkingapp/api/user_info.dart';
-import 'package:clashkingapp/api/player_account_info.dart';
-import 'package:clashkingapp/api/clan_info.dart';
-import 'package:clashkingapp/api/war_log.dart';
+import 'package:clashkingapp/classes/account/user.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/not_in_war_card.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/cwl_card.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/war_card.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_league_cards/war_history_card.dart';
-import 'package:clashkingapp/api/wars_league_info.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
-import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
+import 'package:clashkingapp/classes/account/accounts.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CurrentWarInfoPage extends StatefulWidget {
-  final ClanInfo? clanInfo;
-  final PlayerAccountInfo playerStats;
+  final Account account;
   final User discordUser;
-  @override
-  final Key key;
 
-  CurrentWarInfoPage(
-      {required this.key,
-      required this.discordUser,
-      required this.playerStats,
-      required this.clanInfo});
+  CurrentWarInfoPage({
+    required this.discordUser,
+    required this.account,
+  });
 
   @override
   State<CurrentWarInfoPage> createState() => CurrentWarInfoPageState();
 }
 
 class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
-  LeagueInfoContainer leagueInfoContainer = LeagueInfoContainer();
-  WarInfoContainer warInfoContainer = WarInfoContainer();
-
-  List<Map<int, List<WarLeagueInfo>>> warLeagueInfoByRound = [];
-  late Future<WarLog> warLogData = Future.value(WarLog(items: []));
-  late Map<String, String> warLogStats = {};
-  late Future<String> currentWarFuture;
+  Future<void>? _initializeClanFuture;
 
   @override
   void initState() {
     super.initState();
-    setupData();
+    _initializeClanFuture = _checkInitialization();
   }
 
-  void setupData() {
-    if (widget.clanInfo != null) {
-      currentWarFuture = checkCurrentWar(
-          widget.clanInfo!.tag, leagueInfoContainer, warInfoContainer);
-      warLogData = WarLogService.fetchWarLogData(widget.clanInfo!.tag);
-      warLogData.then((data) {
-        if (data.items.isNotEmpty) {
-          setState(() {
-            warLogStats = analyzeWarLogs(data.items);
-          });
-        }
-      });
+  Future<void> _checkInitialization() async {
+    while (widget.account.clan == null &&
+        !widget.account.clan!.clanInitialized &&
+        !widget.account.clan!.warInitialized) {
+      await Future.delayed(Duration(milliseconds: 100));
     }
-    else {
-      currentWarFuture = Future.value("noClan");
+  }
+
+  Future<void> _refreshData() async {
+    // Fetch the updated profile information
+    if (widget.account.clan != null) {
+      widget.account.clan!.warInitialized = false;
+      final updatedClanInfo =
+          await ClanService().fetchWarLeagueInfo(widget.account.clan!);
+      setState(() {
+        // Update the player stats with the newly fetched data
+        widget.account.clan!.updateWarLeagueFrom(updatedClanInfo);
+        _initializeClanFuture = _checkInitialization();
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: RefreshIndicator(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      onRefresh: () async {
-        setState(() {
-          setupData();
-        });
-      },
-      child: FutureBuilder<String>(
-        future: currentWarFuture,
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            final warState = snapshot.data ?? false;
-            return ListView(
-              children: <Widget>[
-                if (warState == "war")
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CurrentWarInfoScreen(
-                            currentWarInfo: warInfoContainer.currentWarInfo!,
-                            discordUser: widget.discordUser.tags,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 4.0, right: 4.0),
-                      child: CurrentWarInfoCard(
-                          currentWarInfo: warInfoContainer.currentWarInfo!,
-                          clanTag: widget.clanInfo!.tag),
-                    ),
-                  )
-                else if (warState == "accessDenied")
-                  Padding(
-                    padding: EdgeInsets.only(left: 4.0, right: 4.0),
-                    child: AccessDeniedCard(
-                        clanName: widget.playerStats.clan!.name,
-                        clanBadgeUrl: widget.playerStats.clan!.badgeUrls.large),
-                  )
-                else if (warState == "cwl")
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CurrentLeagueInfoScreen(
-                            currentLeagueInfo:
-                                leagueInfoContainer.currentLeagueInfo!,
-                            clanTag: widget.playerStats.clan!.tag,
-                            clanInfo: widget.clanInfo!,
-                            discordUser: widget.discordUser.tags,
-                          ),
-                        ),
-                      );
-                    },
-                    child: CwlCard(
-                      currentLeagueInfo: leagueInfoContainer.currentLeagueInfo!,
-                      clanTag: widget.playerStats.clan!.tag,
-                      clanInfo: widget.clanInfo!,
-                    ),
-                  )
-                else if (warState == "noClan")
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Card(
-                      child: NoClanCard(),
-                    ),
-                  )
-                else
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                    child: NotInWarCard(
-                        clanName: widget.playerStats.clan!.name,
-                        clanBadgeUrl: widget.playerStats.clan!.badgeUrls.large),
-                  ),
-                if (warState != "noClan" && warState != "accessDenied")
-                  buildWarHistorySection()
-              ],
-            );
-          }
-        },
-      ),
-    ));
-  }
+    String warState = "noClan";
+    if (widget.account.clan != null) {
+      warState = widget.account.clan!.warState;
+    }
 
-  Widget buildWarHistorySection() {
-    return FutureBuilder<List<dynamic>>(
-      future: Future.wait([warLogData.then((value) => value.items)]),
-      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+    return FutureBuilder<void>(
+      future: _initializeClanFuture,
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return SizedBox.shrink();
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else if (snapshot.hasData) {
-          List<WarLogDetails> warLogDetails =
-              snapshot.data![0] as List<WarLogDetails>;
-
-          return WarHistoryCard(
-            warLogData: warLogDetails,
-            playerStats: widget.playerStats,
-            discordUser: widget.discordUser.tags,
-            warLogStats: warLogStats,
+          Sentry.captureException(snapshot.error);
+          return Center(
+            child: Text(AppLocalizations.of(context)!.connectionErrorRelaunch,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
           );
         } else {
-          return SizedBox.shrink();
+          return Scaffold(
+            body: RefreshIndicator(
+              onRefresh: _refreshData,
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 4),
+                            warState == "war"
+                                ? GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CurrentWarInfoScreen(
+                                            currentWarInfo: widget
+                                                .account.clan!.currentWarInfo!,
+                                            discordUser:
+                                                widget.discordUser.tags,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child: CurrentWarInfoCard(
+                                          currentWarInfo: widget
+                                              .account.clan!.currentWarInfo!,
+                                          clanTag: widget.account.clan!.tag),
+                                    ),
+                                  )
+                                : warState == "accessDenied"
+                                    ? Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 4.0, right: 4.0),
+                                        child: AccessDeniedCard(
+                                            clanName: widget
+                                                .account.profileInfo.clan!.name,
+                                            clanBadgeUrl: widget
+                                                .account
+                                                .profileInfo
+                                                .clan!
+                                                .badgeUrls
+                                                .large),
+                                      )
+                                    : warState == "cwl"
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CurrentLeagueInfoScreen(
+                                                    currentLeagueInfo: widget
+                                                        .account
+                                                        .clan!
+                                                        .currentLeagueInfo!,
+                                                    clanTag: widget.account
+                                                        .profileInfo.clan!.tag,
+                                                    clanInfo:
+                                                        widget.account.clan!,
+                                                    discordUser:
+                                                        widget.discordUser.tags,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: CwlCard(
+                                              currentLeagueInfo: widget.account
+                                                  .clan!.currentLeagueInfo!,
+                                              clanTag: widget.account
+                                                  .profileInfo.clan!.tag,
+                                              clanInfo: widget.account.clan!,
+                                            ),
+                                          )
+                                        : warState == "noClan"
+                                            ? Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 8.0),
+                                                child: Card(
+                                                  child: NoClanCard(),
+                                                ),
+                                              )
+                                            : Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 8.0),
+                                                child: NotInWarCard(
+                                                    clanName: widget.account
+                                                        .profileInfo.clan!.name,
+                                                    clanBadgeUrl: widget
+                                                        .account
+                                                        .profileInfo
+                                                        .clan!
+                                                        .badgeUrls
+                                                        .large),
+                                              ),
+                            warState != "noClan" && warState != "accessDenied"
+                                ? WarHistoryCard(
+                                    warLogData:
+                                        widget.account.clan!.warLog.items,
+                                    playerStats: widget.account.profileInfo,
+                                    discordUser: widget.discordUser.tags,
+                                    warLogStats:
+                                        widget.account.clan!.warLog.warLogStats,
+                                  )
+                                : SizedBox.shrink(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
         }
       },
     );

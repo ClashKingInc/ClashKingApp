@@ -1,11 +1,11 @@
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/api/current_league_info.dart';
-import 'package:clashkingapp/api/clan_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'dart:ui';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/api/current_war_info.dart';
+import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/league/component/round_clans_card.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/league/component/teams_card.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/league/league_functions.dart';
@@ -15,7 +15,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 class CurrentLeagueInfoScreen extends StatefulWidget {
   final CurrentLeagueInfo currentLeagueInfo;
   final String clanTag;
-  final ClanInfo clanInfo;
+  final Clan clanInfo;
   final List<String> discordUser;
 
   CurrentLeagueInfoScreen(

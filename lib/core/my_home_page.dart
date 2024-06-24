@@ -34,7 +34,7 @@ class MyHomePageState extends State<MyHomePage> {
 
   Future<void> _initializeAccounts() async {
     final appState = Provider.of<MyAppState>(context, listen: false);
-    await appState.fetchPlayerAccounts(appState.user!);
+    await appState.initializeData();
   }
 
   void _onPageChanged(int index) {
@@ -54,84 +54,95 @@ class MyHomePageState extends State<MyHomePage> {
     var appState = Provider.of<MyAppState>(context);
 
     return FutureBuilder(
-        future: _initializeAccountsFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          } else {
-            List<Widget> widgetOptions = [
-              appState.playerAccounts != null && appState.playerStats != null
-                  ? DashboardPage(
-                      playerStats: appState.playerStats!,
-                      discordUser: appState.user!)
-                  : Center(
-                      child:
-                          CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
-              appState.user != null
-                  ? ClanInfoPage(
-                      clanInfo: appState.clanInfo, user: appState.user!)
-                  : Center(
-                      child:
-                          CircularProgressIndicator()), // Wrap CircularProgressIndicator with Center
-              appState.user != null && appState.playerStats != null
-                  ? CurrentWarInfoPage(
-                      key: ValueKey(appState.playerStats!.clan != null
-                          ? appState.playerStats!.clan!.tag
-                          : appState.playerStats!.tag),
-                      discordUser: appState.user!,
-                      playerStats: appState.playerStats!,
-                      clanInfo: appState.clanInfo)
-                  : Center(
-                      child: CircularProgressIndicator(),
-                    ), // Wrap CircularProgressIndicator with Center
-              //WarLeaguePage(currentWarInfo: appState.currentWarInfo,),
-              ManagementPage(),
-            ];
+      future: _initializeAccountsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else {
+          return ValueListenableBuilder<String?>(
+            valueListenable: appState.selectedTagNotifier,
+            builder: (context, selectedTag, child) {
+              if (selectedTag != null && appState.accounts != null) {
+                appState.account = appState.accounts!.accounts.firstWhere(
+                  (account) => account.profileInfo.tag == selectedTag,
+                  orElse: () => appState.accounts!.accounts.first,
+                );
+              }
 
-            return Scaffold(
-              appBar: CustomAppBar(user: appState.user!),
-              body: PageView(
-                controller: _pageController,
-                onPageChanged: _onPageChanged,
-                children: widgetOptions,
-              ),
-              bottomNavigationBar: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                backgroundColor: Theme.of(context).colorScheme.surface,
-                items: <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.dashboard),
-                    label:
-                        AppLocalizations.of(context)?.dashboard ?? 'Dashboard',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.shield),
-                    label: AppLocalizations.of(context)?.clan ?? 'Clan',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(
-                        CustomIcons.swordCross), // Example icon for War/League
-                    label:
-                        AppLocalizations.of(context)?.warLeague ?? 'War/League',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.settings),
-                    label: AppLocalizations.of(context)?.management ??
-                        'Management',
-                  ),
-                ],
-                currentIndex: _selectedIndex,
-                selectedItemColor: Theme.of(context).colorScheme.primary,
-                unselectedItemColor: Theme.of(context).colorScheme.secondary,
-                showUnselectedLabels: true,
-                onTap: _onItemTapped,
-              ),
-            );
-          }
-        });
+              List<Widget> widgetOptions = [
+                appState.account != null
+                    ? DashboardPage(
+                        playerStats: appState.account!.profileInfo,
+                        discordUser: appState.user!,
+                        accounts: appState.accounts!)
+                    : Center(child: CircularProgressIndicator()),
+                appState.account != null && appState.user != null
+                    ? ClanInfoPage(
+                        clanInfo: appState.account!.clan,
+                        user: appState.user!,
+                      )
+                    : Center(child: CircularProgressIndicator()),
+                appState.account != null
+                    ? CurrentWarInfoPage(
+                        discordUser: appState.user!,
+                        account: appState.account!,
+                      )
+                    : Center(child: CircularProgressIndicator()),
+                ManagementPage(),
+              ];
+              return appState.account != null
+                  ? Scaffold(
+                      appBar: CustomAppBar(
+                        user: appState.user!,
+                        accounts: appState.accounts!,
+                      ),
+                      body: PageView(
+                        controller: _pageController,
+                        onPageChanged: _onPageChanged,
+                        children: widgetOptions,
+                      ),
+                      bottomNavigationBar: BottomNavigationBar(
+                        type: BottomNavigationBarType.fixed,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        items: <BottomNavigationBarItem>[
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.dashboard),
+                            label: AppLocalizations.of(context)?.dashboard ??
+                                'Dashboard',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.shield),
+                            label: AppLocalizations.of(context)?.clan ?? 'Clan',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(CustomIcons.swordCross),
+                            label: AppLocalizations.of(context)?.warLeague ??
+                                'War/League',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.settings),
+                            label: AppLocalizations.of(context)?.management ??
+                                'Management',
+                          ),
+                        ],
+                        currentIndex: _selectedIndex,
+                        selectedItemColor:
+                            Theme.of(context).colorScheme.primary,
+                        unselectedItemColor:
+                            Theme.of(context).colorScheme.secondary,
+                        showUnselectedLabels: true,
+                        onTap: _onItemTapped,
+                      ),
+                    )
+                  : Center(child: CircularProgressIndicator());
+            },
+          );
+        }
+      },
+    );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/theme_notifier.dart';
-import 'package:clashkingapp/api/user_info.dart';
+import 'package:clashkingapp/classes/account/user.dart';
 import 'package:clashkingapp/main_pages/login_page/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
