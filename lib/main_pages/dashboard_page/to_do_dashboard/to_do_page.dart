@@ -371,22 +371,33 @@ class ToDoScreenState extends State<ToDoScreen>
                   Row(
                     children: [
                       SizedBox(width: 8),
-                      SizedBox(
+                      Container(
                         width: MediaQuery.of(context).size.width - 104,
                         height: 8,
-                        child: LinearProgressIndicator(
-                          value: totalDone/totalEvent,
-                            backgroundColor: Color.fromARGB(255, 61, 60, 60),
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.black.withOpacity(0.2),
+                              width: 1), // Border color and width
+                          borderRadius: BorderRadius.circular(4), 
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: LinearProgressIndicator(
+                            value: totalDone / totalEvent,
+                            backgroundColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.green),
+                          ),
                         ),
                       ),
                       SizedBox(width: 8),
                       Text(
-                        '${((totalDone/totalEvent)*100).toStringAsFixed(0).padLeft(3, ' ')}%',
+                        '${((totalDone / totalEvent) * 100).toStringAsFixed(0).padLeft(3, ' ')}%',
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ],
-                  ),
+                  )
                 ],
               ),
             ),
