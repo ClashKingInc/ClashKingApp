@@ -182,11 +182,10 @@ class ClanService {
       return await retry(
         () async {
           String tag = clanTag.replaceAll('#', '!');
-          print('Fetching clan info for $tag');
 
           final clanInfoFuture = http.get(
             Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
-          ).timeout(Duration(seconds: 15));
+          ).timeout(Duration(seconds: 10));
 
 
           final now = DateTime.now();
@@ -250,11 +249,10 @@ class ClanService {
       return await retry(
         () async {
           String tag = clanInfo.tag.replaceAll('#', '!');
-          print('Fetching clan info for $tag');
 
           final response = await http.get(
             Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
-          ).timeout(Duration(seconds: 15));
+          ).timeout(Duration(seconds: 10));
 
           if (response.statusCode == 200) {
             String responseBody = utf8.decode(response.bodyBytes);
@@ -264,6 +262,7 @@ class ClanService {
               updatedClan.warLeague!.imageUrl =
                   LeagueDataManager().getLeagueUrl(updatedClan.warLeague!.name);
             }
+
             return updatedClan;
           } else {
             throw Exception('Failed to load clan stats');
@@ -358,7 +357,7 @@ class ClanService {
           final responseWar = await http.get(
             Uri.parse(
                 'https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/currentwar'),
-          ).timeout(Duration(seconds: 15));
+          ).timeout(Duration(seconds: 10));
 
           if (responseWar.statusCode == 200) {
             var decodedResponse =
@@ -394,6 +393,7 @@ class ClanService {
             Uri.parse(
                 'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
           ).timeout(Duration(seconds: 5));
+
           if (responseCwl.statusCode == 200) {
             var decodedResponseCwl =
                 jsonDecode(utf8.decode(responseCwl.bodyBytes));
@@ -411,7 +411,6 @@ class ClanService {
       );
     } catch (e, stackTrace) {
       Sentry.captureException(e, stackTrace: stackTrace);
-      print('Error fetching current league info: $e');
       return null;
     }
   }

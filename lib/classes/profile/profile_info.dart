@@ -160,7 +160,7 @@ class ProfileInfoService {
           final responseSpan = transaction.startChild('http.get');
           final response = await http.get(
             Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
-          ).timeout(Duration(seconds: 15));
+          ).timeout(Duration(seconds: 10));
           responseSpan.finish(
             status: response.statusCode == 200
                 ? SpanStatus.ok()
@@ -182,7 +182,6 @@ class ProfileInfoService {
       String responseBody = utf8.decode(response.bodyBytes);
       ProfileInfo profileInfo =
           ProfileInfo.fromJson(jsonDecode(responseBody));
-      print('Profile info fetched: ${profileInfo.name}');
 
       // Start fetching additional data in the background
       _fetchAdditionalProfileData(profileInfo, transaction);

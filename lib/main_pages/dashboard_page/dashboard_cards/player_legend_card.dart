@@ -20,7 +20,6 @@ class PlayerLegendCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(playerLegendData.legendRanking);
     DateTime selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
     if (!playerLegendData.legendData.containsKey(date)) {

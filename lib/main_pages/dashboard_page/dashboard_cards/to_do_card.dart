@@ -37,8 +37,6 @@ class ToDoCardState extends State<ToDoCard> {
     DateTime nowUtc = DateTime.now().toUtc();
     bool isInTimeFrame = false;
 
-    print('iuazehrfiuzhr${widget.playerStats.tag}');
-
     if (nowUtc.weekday == DateTime.friday && nowUtc.hour >= 6) {
       isInTimeFrame = true;
     } else if (nowUtc.weekday == DateTime.saturday ||
@@ -58,12 +56,6 @@ class ToDoCardState extends State<ToDoCard> {
               'Error: ${snapshot.error}'); // Show error if something went wrong
         } else {
           PlayerToDoData? data = snapshot.data;
-          if (data != null) {
-            for (var item in data.items) {
-              print(item.clanGames?.points);
-              print(item.cwl.attacksDone);
-            }
-          }
 
           return GestureDetector(
             onTap: () {
