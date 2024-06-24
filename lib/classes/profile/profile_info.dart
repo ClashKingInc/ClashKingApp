@@ -137,8 +137,8 @@ class ProfileInfo {
     builderHallPic = profileInfo.builderHallPic;
     leagueUrl = profileInfo.leagueUrl;
     playerLegendData = profileInfo.playerLegendData;
-    initialized = profileInfo.initialized;
-    legendsInitialized = profileInfo.legendsInitialized;
+    initialized = true;
+    legendsInitialized = true;
   }
 }
 

@@ -74,6 +74,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
         } else {
           return Scaffold(
             body: RefreshIndicator(
+              backgroundColor: Theme.of(context).colorScheme.surface,
               onRefresh: _refreshData,
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {

@@ -72,13 +72,15 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
         } else if (snapshot.hasError) {
           Sentry.captureException(snapshot.error);
           return Center(
-            child: Text(AppLocalizations.of(context)!.connectionErrorRelaunch,
+            child: Text(
+              AppLocalizations.of(context)!.connectionErrorRelaunch,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           );
         } else {
           return Scaffold(
             body: RefreshIndicator(
+              backgroundColor: Theme.of(context).colorScheme.surface,
               onRefresh: _refreshData,
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
