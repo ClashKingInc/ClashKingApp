@@ -18,11 +18,11 @@ class ClanJoinLeaveCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final now = DateTime.now();
     DateTime lastMonday = findLastMondayOfMonth(now.year, now.month - 1);
-    String formattedDate =
-        DateFormat.yMMMMd(Localizations.localeOf(context).toString())
-            .format(lastMonday);
-    int joinDifference = clanInfo!.joinLeaveClan.joinNumber -
-        clanInfo!.joinLeaveClan.leaveNumber;
+    String formattedDate = DateFormat.yMMMMd(Localizations.localeOf(context).toString()).format(lastMonday);
+    
+    var joinsAfterLastMonday = clanInfo!.joinLeaveClan.items.where((item) => item.type == "join" && item.time.isAfter(lastMonday)).toList();
+    var leavesAfterLastMonday = clanInfo!.joinLeaveClan.items.where((item) => item.type == "leave" && item.time.isAfter(lastMonday)).toList();
+    int joinDifference = joinsAfterLastMonday.length - leavesAfterLastMonday.length;
 
     return Card(
       child: Padding(
@@ -38,10 +38,9 @@ class ClanJoinLeaveCard extends StatelessWidget {
                   child: Column(
                     children: [
                       CachedNetworkImage(
-                          height: 70,
-                          width: 70,
-                          imageUrl:
-                              "https://clashkingfiles.b-cdn.net/stickers/Troop_HV_Goblin.png"),
+                        height: 70,
+                        width: 70,
+                        imageUrl: "https://clashkingfiles.b-cdn.net/stickers/Troop_HV_Goblin.png"),
                     ],
                   ),
                 ),
@@ -55,6 +54,7 @@ class ClanJoinLeaveCard extends StatelessWidget {
                         textAlign: TextAlign.center,
                         softWrap: true,
                       ),
+                      SizedBox(height: 2.0),
                       Wrap(
                         alignment: WrapAlignment.start,
                         spacing: 7.0,
@@ -65,42 +65,31 @@ class ClanJoinLeaveCard extends StatelessWidget {
                             color: Colors.red,
                             size: 16,
                             labelPadding: 2,
-                            label:
-                                clanInfo!.joinLeaveClan.leaveNumber.toString(),
+                            label: joinsAfterLastMonday.length.toString(),
                             description: AppLocalizations.of(context)!
-                                .leaveNumberDescription(
-                                    clanInfo!.joinLeaveClan.leaveNumber,
-                                    formattedDate),
+                            .leaveNumberDescription(joinsAfterLastMonday.length,formattedDate),
                           ),
                           IconChip(
                             icon: LucideIcons.logIn,
                             color: Colors.green,
                             size: 16,
                             labelPadding: 2,
-                            label:
-                                clanInfo!.joinLeaveClan.joinNumber.toString(),
+                            label: leavesAfterLastMonday.length.toString(),
                             description: AppLocalizations.of(context)!
-                                .joinNumberDescription(
-                                    clanInfo!.joinLeaveClan.joinNumber,
-                                    formattedDate),
+                              .joinNumberDescription(leavesAfterLastMonday.length,formattedDate),
                           ),
                           IconChip(
-                              icon: LucideIcons.arrowUpDown,
-                              color: Colors.blue,
-                              size: 16,
-                              labelPadding: 2,
-                              label: joinDifference.toString(),
-                              description: joinDifference > 0
-                                  ? AppLocalizations.of(context)!
-                                      .joinLeaveDifferenceUpDescription(
-                                          joinDifference, formattedDate)
-                                  : joinDifference < 0
-                                      ? AppLocalizations.of(context)!
-                                          .joinLeaveDifferenceDownDescription(
-                                              -joinDifference, formattedDate)
-                                      : AppLocalizations.of(context)!
-                                          .joinLeaveDifferenceEqualDescription(
-                                              formattedDate)),
+                            icon: LucideIcons.arrowUpDown,
+                            color: Colors.blue,
+                            size: 16,
+                            labelPadding: 2,
+                            label: joinDifference.toString(),
+                            description: joinDifference > 0
+                              ? AppLocalizations.of(context)!.joinLeaveDifferenceUpDescription(joinDifference, formattedDate)
+                              : joinDifference < 0
+                                ? AppLocalizations.of(context)!.joinLeaveDifferenceDownDescription(-joinDifference, formattedDate)
+                                : AppLocalizations.of(context)!.joinLeaveDifferenceEqualDescription(formattedDate)
+                          ),
                         ],
                       ),
                     ],

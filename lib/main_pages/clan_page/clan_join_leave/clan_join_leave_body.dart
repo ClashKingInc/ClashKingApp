@@ -48,14 +48,6 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
     });
   }
 
-  //void printAllNames(int count) {
-  //  for (var item in widget.joinLeaveClan.items) {
-  //    print(item.name);
-  //    count++;
-  //    print(count);
-  //  }
-  //}
-
   @override
   Widget build(BuildContext context) {
     Map<String, String> filterOptions = {
@@ -65,9 +57,11 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
       AppLocalizations.of(context)?.reset ?? "Reset": "reset",
     };
 
-    //int count = 0;
-    //printAllNames(count);
-    //print(widget.joinLeaveClan.items.length);
+    var filteredItems = widget.joinLeaveClan.items.where((item) => 
+      (currentFilter == "all" || item.type == currentFilter) &&
+      (!filterActiveUsers || widget.user.contains(item.tag)) &&
+      (selectedDate == null || DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day).isAtSameMomentAs(DateTime(item.time.year, item.time.month, item.time.day)))
+    ).take(100).toList();
 
     return Column(
       children: [
@@ -109,11 +103,25 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
                 SizedBox(width: 16),
               ],
             ),
-            for (var item in widget.joinLeaveClan.items.where((item) => 
-              (currentFilter == "all" || item.type == currentFilter) &&
-              (!filterActiveUsers || widget.user.contains(item.tag)) &&
-              (selectedDate == null || DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day).isAtSameMomentAs(DateTime(item.time.year, item.time.month, item.time.day))))
+            SizedBox(height: 2),
+          if (filteredItems.isEmpty)
+            Card(
+              margin: EdgeInsets.only(top: 4, left: 16, right: 16),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)?.noDataAvailable ?? "Aucun résultat trouvé.",
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                  ],
+                ),
+              ),
             )
+          else
+            for (var item in filteredItems)
               GestureDetector(
                 onTap: () async {
                   final navigator = Navigator.of(context);
@@ -136,6 +144,13 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
                   );
                 },
                 child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(
+                      color: widget.user.contains(item.tag) ? Colors.green : Colors.transparent, // Vert si présent, sinon transparent
+                      width: 2,
+                    ),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
