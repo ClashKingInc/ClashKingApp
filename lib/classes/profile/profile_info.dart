@@ -160,7 +160,7 @@ class ProfileInfoService {
           final responseSpan = transaction.startChild('http.get');
           final response = await http.get(
             Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
-          ).timeout(Duration(seconds: 7));
+          ).timeout(Duration(seconds: 15));
           responseSpan.finish(
             status: response.statusCode == 200
                 ? SpanStatus.ok()

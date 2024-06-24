@@ -186,7 +186,7 @@ class ClanService {
 
           final clanInfoFuture = http.get(
             Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
-          ).timeout(Duration(seconds: 7));
+          ).timeout(Duration(seconds: 15));
 
 
           final now = DateTime.now();
@@ -254,7 +254,7 @@ class ClanService {
 
           final response = await http.get(
             Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
-          ).timeout(Duration(seconds: 7));
+          ).timeout(Duration(seconds: 15));
 
           if (response.statusCode == 200) {
             String responseBody = utf8.decode(response.bodyBytes);
@@ -358,7 +358,7 @@ class ClanService {
           final responseWar = await http.get(
             Uri.parse(
                 'https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/currentwar'),
-          ).timeout(Duration(seconds: 7));
+          ).timeout(Duration(seconds: 15));
 
           if (responseWar.statusCode == 200) {
             var decodedResponse =

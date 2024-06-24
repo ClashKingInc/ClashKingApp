@@ -80,7 +80,7 @@ class MyHomePageState extends State<MyHomePage> {
                         discordUser: appState.user!,
                         accounts: appState.accounts!)
                     : Center(child: CircularProgressIndicator()),
-                appState.account != null && appState.user != null 
+                appState.account != null && appState.user != null
                     ? ClanInfoPage(
                         clanInfo: appState.account!.clan,
                         user: appState.user!,
@@ -94,45 +94,51 @@ class MyHomePageState extends State<MyHomePage> {
                     : Center(child: CircularProgressIndicator()),
                 ManagementPage(),
               ];
-
-              return Scaffold(
-                appBar: CustomAppBar(
-                  user: appState.user!,
-                  accounts: appState.accounts!,
-                ),
-                body: PageView(
-                  controller: _pageController,
-                  onPageChanged: _onPageChanged,
-                  children: widgetOptions,
-                ),
-                bottomNavigationBar: BottomNavigationBar(
-                  type: BottomNavigationBarType.fixed,
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.dashboard),
-                      label: AppLocalizations.of(context)?.dashboard ?? 'Dashboard',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.shield),
-                      label: AppLocalizations.of(context)?.clan ?? 'Clan',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(CustomIcons.swordCross),
-                      label: AppLocalizations.of(context)?.warLeague ?? 'War/League',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.settings),
-                      label: AppLocalizations.of(context)?.management ?? 'Management',
-                    ),
-                  ],
-                  currentIndex: _selectedIndex,
-                  selectedItemColor: Theme.of(context).colorScheme.primary,
-                  unselectedItemColor: Theme.of(context).colorScheme.secondary,
-                  showUnselectedLabels: true,
-                  onTap: _onItemTapped,
-                ),
-              );
+              return appState.account != null
+                  ? Scaffold(
+                      appBar: CustomAppBar(
+                        user: appState.user!,
+                        accounts: appState.accounts!,
+                      ),
+                      body: PageView(
+                        controller: _pageController,
+                        onPageChanged: _onPageChanged,
+                        children: widgetOptions,
+                      ),
+                      bottomNavigationBar: BottomNavigationBar(
+                        type: BottomNavigationBarType.fixed,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        items: <BottomNavigationBarItem>[
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.dashboard),
+                            label: AppLocalizations.of(context)?.dashboard ??
+                                'Dashboard',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.shield),
+                            label: AppLocalizations.of(context)?.clan ?? 'Clan',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(CustomIcons.swordCross),
+                            label: AppLocalizations.of(context)?.warLeague ??
+                                'War/League',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.settings),
+                            label: AppLocalizations.of(context)?.management ??
+                                'Management',
+                          ),
+                        ],
+                        currentIndex: _selectedIndex,
+                        selectedItemColor:
+                            Theme.of(context).colorScheme.primary,
+                        unselectedItemColor:
+                            Theme.of(context).colorScheme.secondary,
+                        showUnselectedLabels: true,
+                        onTap: _onItemTapped,
+                      ),
+                    )
+                  : Center(child: CircularProgressIndicator());
             },
           );
         }

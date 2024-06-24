@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/clan/logs/join_leave.dart';
@@ -57,6 +58,12 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
       AppLocalizations.of(context)?.reset ?? "Reset": "reset",
     };
 
+    var filteredItems = widget.joinLeaveClan.items.where((item) => 
+      (currentFilter == "all" || item.type == currentFilter) &&
+      (!filterActiveUsers || widget.user.contains(item.tag)) &&
+      (selectedDate == null || DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day).isAtSameMomentAs(DateTime(item.time.year, item.time.month, item.time.day)))
+    ).take(100).toList();
+
     return Column(
       children: [
         Column(
@@ -97,11 +104,25 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
                 SizedBox(width: 16),
               ],
             ),
-            for (var item in widget.joinLeaveClan.items.where((item) => 
-              (currentFilter == "all" || item.type == currentFilter) &&
-              (!filterActiveUsers || widget.user.contains(item.tag)) &&
-              (selectedDate == null || DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day).isAtSameMomentAs(DateTime(item.time.year, item.time.month, item.time.day))))
+            SizedBox(height: 2),
+          if (filteredItems.isEmpty)
+            Card(
+              margin: EdgeInsets.only(top: 4, left: 16, right: 16),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)?.noDataAvailable ?? "Aucun résultat trouvé.",
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                  ],
+                ),
+              ),
             )
+          else
+            for (var item in filteredItems)
               GestureDetector(
                 onTap: () async {
                   final navigator = Navigator.of(context);
@@ -124,6 +145,13 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
                   );
                 },
                 child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(
+                      color: widget.user.contains(item.tag) ? Colors.green : Colors.transparent, // Vert si présent, sinon transparent
+                      width: 2,
+                    ),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -134,8 +162,8 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Image.network(
-                                item.townHallPic,
+                              CachedNetworkImage(
+                                imageUrl: item.townHallPic,
                                 width: 60, height: 60,
                               ),
                             ],
