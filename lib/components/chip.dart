@@ -51,6 +51,7 @@ class _ImageChipState extends State<ImageChip> {
         textAlign: TextAlign.center,
         key: _tooltipKey,
         message: widget.description,
+        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
         showDuration: Duration(seconds: 5),
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
@@ -58,7 +59,7 @@ class _ImageChipState extends State<ImageChip> {
           borderRadius: BorderRadius.circular(4),
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
+              color: Colors.black.withOpacity(0.1),
               spreadRadius:2,
               blurRadius: 2,
               offset: Offset(0, 1),
@@ -141,13 +142,14 @@ class _IconChipState extends State<IconChip> {
         textAlign: TextAlign.center,
         key: _tooltipKey,
         message: widget.description,
+        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
+              color: Colors.black.withOpacity(0.1),
               spreadRadius:2,
               blurRadius: 2,
               offset: Offset(0, 1),
@@ -228,10 +230,19 @@ class _CustomChipState extends State<CustomChip> {
         textAlign: TextAlign.center,
         key: _tooltipKey,
         message: widget.description,
+        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
           borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 2,
+              blurRadius: 2,
+              offset: Offset(0, 1),
+            ),
+          ],
         ),
         child: Chip(
           avatar: CircleAvatar(
