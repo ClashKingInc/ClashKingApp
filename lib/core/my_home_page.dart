@@ -80,7 +80,7 @@ class MyHomePageState extends State<MyHomePage> {
                         discordUser: appState.user!,
                         accounts: appState.accounts!)
                     : Center(child: CircularProgressIndicator()),
-                appState.account != null && appState.user != null
+                appState.account != null && appState.user != null 
                     ? ClanInfoPage(
                         clanInfo: appState.account!.clan,
                         user: appState.user!,

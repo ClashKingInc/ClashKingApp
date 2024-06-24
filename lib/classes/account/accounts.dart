@@ -122,10 +122,9 @@ class AccountsService {
       clanSpan.finish(status: SpanStatus.ok());
       clanInfo.clanInitialized = true;
       clanInfo.warInitialized = true;
-      print("clan Info fetched");
     } catch (exception, stackTrace) {
       clanSpan.finish(status: SpanStatus.internalError());
       Sentry.captureException(exception, stackTrace: stackTrace);
     }
-  }  
+  }
 }

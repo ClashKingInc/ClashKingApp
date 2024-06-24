@@ -164,6 +164,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       } else {
         await prefs.setString('clanTag', '');
       }
+      print(account!.profileInfo.name);
+      selectedTagNotifier.value = accounts?.selectedTag.value;
       updateWidgets();
       notifyListeners();
       return true;

@@ -1,16 +1,14 @@
 import 'package:clashkingapp/classes/account/accounts.dart';
-
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/to_do_card.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/classes/account/user.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/creator_code_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_infos_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_legend_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_search_card.dart';
-import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardPage extends StatefulWidget {
   final ProfileInfo playerStats;
@@ -50,6 +48,19 @@ class DashboardPageState extends State<DashboardPage>
     }
   }
 
+  
+  Future<void> _refreshData() async {
+    // Fetch the updated profile information
+    final profileInfo = await ProfileInfoService().fetchProfileInfo(widget.playerStats.tag);
+
+    setState(() {
+      // Update the player stats with the newly fetched data
+      widget.playerStats.updateFrom(profileInfo);
+      _initializeProfileFuture = _checkInitialization();
+      _initializeLegendsFuture = _checkLegendsInitialization();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -59,12 +70,7 @@ class DashboardPageState extends State<DashboardPage>
       child: Scaffold(
         body: RefreshIndicator(
           backgroundColor: Theme.of(context).colorScheme.surface,
-          onRefresh: () async {
-            setState(() {
-              final appState = Provider.of<MyAppState>(context, listen: false);
-              appState.refreshData();
-            });
-          },
+          onRefresh: _refreshData,
           child: ListView(
             children: <Widget>[
               // Creator Code Card
@@ -85,7 +91,7 @@ class DashboardPageState extends State<DashboardPage>
                     Sentry.captureException(snapshot.error);
                     return Center(
                       child: Text(
-                        'Error loading user data. Check your internet connection.',
+                        AppLocalizations.of(context)!.connectionErrorRelaunch,
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     );
@@ -100,8 +106,7 @@ class DashboardPageState extends State<DashboardPage>
                 },
               ),
               FutureBuilder<void>(
-                future: Future.wait(
-                    [_initializeLegendsFuture, _initializeProfileFuture]),
+                future: _initializeLegendsFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return SizedBox.shrink();
@@ -109,7 +114,7 @@ class DashboardPageState extends State<DashboardPage>
                     Sentry.captureException(snapshot.error);
                     return Center(
                       child: Text(
-                        'Error loading user data. Check your internet connection.',
+                        AppLocalizations.of(context)!.connectionErrorRelaunch,
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     );

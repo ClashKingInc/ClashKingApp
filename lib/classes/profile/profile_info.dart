@@ -10,6 +10,8 @@ import 'package:clashkingapp/classes/functions.dart';
 import 'package:clashkingapp/classes/data/league_data_manager.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:retry/retry.dart';
+import 'dart:io';
 
 class ProfileInfo {
   String name;
@@ -152,31 +154,42 @@ class ProfileInfoService {
     try {
       tag = tag.replaceAll('#', '!');
 
-      // Fetch profile info first
-      final responseSpan = transaction.startChild('http.get');
-      final response = await http.get(
-        Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
+      // Define the retry logic with exponential backoff
+      final response = await retry(
+        () async {
+          final responseSpan = transaction.startChild('http.get');
+          final response = await http.get(
+            Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
+          ).timeout(Duration(seconds: 7));
+          responseSpan.finish(
+            status: response.statusCode == 200
+                ? SpanStatus.ok()
+                : SpanStatus.internalError(),
+          );
+
+          if (response.statusCode == 200) {
+            return response;
+          } else {
+            throw http.ClientException(
+              'Failed to load player stats',
+              Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
+            );
+          }
+        },
+        retryIf: (e) => e is http.ClientException || e is SocketException,
       );
-      responseSpan.finish(
-          status: response.statusCode == 200
-              ? SpanStatus.ok()
-              : SpanStatus.internalError());
 
-      if (response.statusCode == 200) {
-        String responseBody = utf8.decode(response.bodyBytes);
-        ProfileInfo profileInfo =
-            ProfileInfo.fromJson(jsonDecode(responseBody));
-        print('Profile info fetched: ${profileInfo.name}');
+      String responseBody = utf8.decode(response.bodyBytes);
+      ProfileInfo profileInfo =
+          ProfileInfo.fromJson(jsonDecode(responseBody));
+      print('Profile info fetched: ${profileInfo.name}');
 
-        // Start fetching additional data in the background
-        _fetchAdditionalProfileData(profileInfo, transaction);
-        _fetchPlayerLegendData(profileInfo, transaction);
+      // Start fetching additional data in the background
+      _fetchAdditionalProfileData(profileInfo, transaction);
+      _fetchPlayerLegendData(profileInfo, transaction);
 
-        transaction.finish(status: SpanStatus.ok());
-        return profileInfo;
-      } else {
-        throw Exception('Failed to load player stats');
-      }
+      transaction.finish(status: SpanStatus.ok());
+      return profileInfo;
     } catch (exception, stackTrace) {
       transaction.finish(status: SpanStatus.internalError());
       Sentry.captureException(exception, stackTrace: stackTrace);

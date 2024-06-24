@@ -8,6 +8,7 @@ import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_search_card.da
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_join_leave/clan_join_leave.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ClanInfoPage extends StatefulWidget {
   final Clan? clanInfo;
@@ -30,7 +31,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
   }
 
   Future<void> _checkInitialization() async {
-    while (widget.clanInfo == null || !widget.clanInfo!.clanInitialized) {
+    while (widget.clanInfo == null && !widget.clanInfo!.clanInitialized) {
       await Future.delayed(Duration(milliseconds: 100));
     }
   }
@@ -42,8 +43,9 @@ class ClanInfoPageState extends State<ClanInfoPage>
       final updatedClanInfo =
           await ClanService().fetchClanInfo(widget.clanInfo!);
       setState(() {
-        // Update the player stats with the newly fetched data
+        // Update the clan info with the newly fetched data
         widget.clanInfo!.updateClanInfoFrom(updatedClanInfo);
+        widget.clanInfo!.clanInitialized = true;
         _initializeClanFuture = _checkInitialization();
       });
     }
@@ -55,13 +57,18 @@ class ClanInfoPageState extends State<ClanInfoPage>
       future: _initializeClanFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return SizedBox.shrink();
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         } else if (snapshot.hasError) {
           Sentry.captureException(snapshot.error);
           return Center(
             child: Text(
-              'Error loading user data. Check your internet connection.',
+              AppLocalizations.of(context)!.connectionErrorRelaunch,
               style: Theme.of(context).textTheme.bodyLarge,
+              textAlign: TextAlign.center,
             ),
           );
         } else {

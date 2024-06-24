@@ -713,5 +713,7 @@
     "warStats" : "War Stats",
     "noAccountLinkedToYourProfileFound": "No account linked to your profile found",
     "management": "Management",
-    "comingSoon": "Coming soon!"
+    "comingSoon": "Coming soon!",
+    "connectionError" : "An error occurred. Please check your internet connection and try again.",
+    "connectionErrorRelaunch" : "An error occurred. Please check your internet connection and relaunch the app."
 }

@@ -11,6 +11,7 @@ import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CurrentWarInfoPage extends StatefulWidget {
   final Account account;
@@ -71,8 +72,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
         } else if (snapshot.hasError) {
           Sentry.captureException(snapshot.error);
           return Center(
-            child: Text(
-              'Error loading user data. Check your internet connection.',
+            child: Text(AppLocalizations.of(context)!.connectionErrorRelaunch,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           );

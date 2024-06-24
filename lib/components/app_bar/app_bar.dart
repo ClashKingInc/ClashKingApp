@@ -172,7 +172,13 @@ class CustomAppBarState extends State<CustomAppBar> {
                             SizedBox(
                               height: 30,
                               width: 30,
-                              child: CachedNetworkImage(imageUrl: imageUrl),
+                              child: CachedNetworkImage(
+                                imageUrl: imageUrl,
+                                placeholder: (context, url) => 
+                                    CircularProgressIndicator(),
+                                errorWidget: (context, url, error) => 
+                                    Icon(Icons.error),
+                              ),
                             )
                           else
                             SizedBox(height: 30, width: 30),

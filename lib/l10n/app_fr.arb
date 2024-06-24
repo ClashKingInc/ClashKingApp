@@ -630,5 +630,7 @@
     "warStats": "Statistiques de guerre",
     "noAccountLinkedToYourProfileFound": "Aucun compte lié à votre profil trouvé",
     "management": "Gestion",
-    "comingSoon": "Bientôt disponible !"
+    "comingSoon": "Bientôt disponible !",
+    "connectionError" : "Une erreur s'est produite. Veuillez vérifier votre connexion internet et réessayer.",
+    "connectionErrorRelaunch" : "Une erreur est survenue. Veuillez vérifier votre connexion internet et relancer l'application."
 }
