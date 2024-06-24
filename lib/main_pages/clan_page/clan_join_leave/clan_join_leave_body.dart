@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/clan/logs/join_leave.dart';
@@ -161,8 +162,8 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Image.network(
-                                item.townHallPic,
+                              CachedNetworkImage(
+                                imageUrl: item.townHallPic,
                                 width: 60, height: 60,
                               ),
                             ],

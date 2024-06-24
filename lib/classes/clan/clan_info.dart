@@ -185,7 +185,7 @@ class ClanService {
       );
 
       final now = DateTime.now();
-      DateTime lastMonday = findLastMondayOfMonth(now.year, now.month - 3);
+      DateTime lastMonday = findLastMondayOfMonth(now.year, now.month - 6);
       int timestampLastMonday = lastMonday.millisecondsSinceEpoch ~/ 1000;
 
       // Start fetching warState, warLog, and joinLeaveLog in parallel
