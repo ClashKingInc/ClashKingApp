@@ -123,7 +123,7 @@
     "tagOrNamePlayer": "Spelers tag of naam",
     "searchPlayer": "Zoek speler",
     "nameOrTagPlayer": "Spelers-ID of naam",
-    "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+    "playerClanDescription": "Je clan is \"{clan}\" ({tag}).",
     "@playerClanDescription": {
         "placeholders": {
             "clan": {
@@ -134,7 +134,7 @@
             }
         }
     },
-    "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+    "playerRatioDescription": "Je donatieverhouding is {ratio}. Je hebt {donations} troepen gedoneerd en {received} troepen ontvangen.",
     "@playerRatioDescription": {
         "placeholders": {
             "ratio": {
@@ -148,7 +148,7 @@
             }
         }
     },
-    "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+    "playerWarPreferenceDescription": "Je oorlogsvoorkeur is \"{preference}\".",
     "@playerWarPreferenceDescription": {
         "placeholders": {
             "preference": {
@@ -156,7 +156,7 @@
             }
         }
     },
-    "playerWarStarsDescription": "You have {stars} war stars.",
+    "playerWarStarsDescription": "Je hebt {stars} oorlogssterren.",
     "@playerWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -164,7 +164,7 @@
             }
         }
     },
-    "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+    "playerTrophiesDescription": "Je hebt {trophies} trofeeën. Je zit momenteel in {league}.",
     "@playerTrophiesDescription": {
         "placeholders": {
             "trophies": {
@@ -175,7 +175,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription": "Your town hall level is {level}.",
+    "playerTownHallLevelDescription": "Je stadhuisniveau is {level}.",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
@@ -183,7 +183,7 @@
             }
         }
     },
-    "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+    "playerBuilderBaseDescription": "Je Bouwerszaal-niveau is {level} en je hebt {trophies} trofeeën.",
     "@playerBuilderBaseDescription": {
         "placeholders": {
             "level": {
@@ -232,7 +232,7 @@
     "legendLeague": "Legendarische Divisie",
     "notInLegendLeague": "Niet in de Legendarische Divisie",
     "noLegendData": "Geen legendarische gegevens gevonden voor vandaag",
-    "legendStartDescription": "You started the day with {trophies} trophies.",
+    "legendStartDescription": "Je bent de dag begonnen met {trophies} trofeeën.",
     "@legendStartDescription": {
         "placeholders": {
             "trophies": {
@@ -251,7 +251,7 @@
             }
         }
     },
-    "legendRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+    "legendRankLocalDescription": "Je staat momenteel op rang {rank} ({country}) met {trophies} trofeeën.",
     "@legendRankDescription": {
         "placeholders": {
             "rank": {
@@ -265,7 +265,7 @@
             }
         }
     },
-    "legendGainDescription": "You gained {trophies} trophies for now.",
+    "legendGainDescription": "Je hebt voorlopig {trophies} trofeeën verdiend.",
     "@legendGainDescription": {
         "placeholders": {
             "trophies": {
@@ -273,7 +273,7 @@
             }
         }
     },
-    "legendLossDescription": "You lost {trophies} trophies for now.",
+    "legendLossDescription": "Je hebt voorlopig {trophies} trofeeën verloren.",
     "@legendLossDescription": {
         "placeholders": {
             "trophies": {
@@ -315,7 +315,7 @@
         "description": "Remaining attacks or defenses"
     },
     "toDoList": "Takenlijst",
-    "lastActive": "Last active: {date}",
+    "lastActive": "Laatst actief: {date}",
     "@lastActive": {
         "placeholders": {
             "date": {
@@ -472,7 +472,7 @@
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating per war we've tracked.",
+    "warHistoryAverageMembersDescription": "Jouw clan heeft gemiddeld {members} leden die deelnemen aan een oorlog en die we gevolgd hebben.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -480,7 +480,7 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription": "Your clan has an average of {stars} stars per attack at the end of the wars we've tracked.",
+    "warHistoryAverageWarStarsDescription": "Jouw clan heeft gemiddeld {stars} sterren per aanval aan het einde van de oorlogen die we hebben gevolgd.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -559,7 +559,7 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new members this season ({date}).",
+    "joinLeaveDifferenceUpDescription": "Jouw clan heeft {number} nieuwe leden gekregen dit seizoen ({date}).",
     "@joinLeaveDifferenceUpDescription": {
         "description": "Number of new members gained by the clan this season.",
         "placeholders": {
@@ -571,7 +571,7 @@
             }
         }
     },
-    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} members this season ({date}).",
+    "joinLeaveDifferenceDownDescription": "Jouw clan heeft dit seizoen {number} leden verloren ({date}).",
     "@joinLeaveDifferenceDownDescription": {
         "description": "Number of members lost by the clan this season.",
         "placeholders": {
@@ -583,7 +583,7 @@
             }
         }
     },
-    "joinLeaveDifferenceEqualDescription": "Your clan has the same number of members as at the beginning of the season ({date}).",
+    "joinLeaveDifferenceEqualDescription": "Jouw clan heeft hetzelfde aantal leden als aan het begin van het seizoen ({date}).",
     "@joinLeaveDifferenceEqualDescription": {
         "description": "Difference in the number of members between the beginning and the end of the season.",
         "placeholders": {
@@ -718,6 +718,6 @@
     "noAccountLinkedToYourProfileFound": "Geen gekoppeld account aan je profiel gevonden",
     "management": "Beheren",
     "comingSoon": "Binnenkort beschikbaar!",
-    "connectionError": "An error occurred. Please check your internet connection and try again.",
-    "connectionErrorRelaunch": "An error occurred. Please check your internet connection and relaunch the app."
+    "connectionError": "Er is een fout opgetreden. Controleer je internetverbinding en probeer het opnieuw.",
+    "connectionErrorRelaunch": "Er is een fout opgetreden. Controleer je internetverbinding en start de app opnieuw op."
 }
