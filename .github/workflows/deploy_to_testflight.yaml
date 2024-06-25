@@ -24,7 +24,7 @@ jobs:
       run: flutter build ios --release --no-codesign
 
     - name: Install Apple tools
-      uses: apple-actions/setup-xcode@v1
+      uses: macos-actions/setup-xcode@v2
 
     - name: Install Fastlane
       run: gem install fastlane
