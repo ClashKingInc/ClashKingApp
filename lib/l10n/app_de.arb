@@ -315,6 +315,14 @@
         "description": "Remaining attacks or defenses"
     },
     "toDoList": "To-do-Lis­te",
+    "lastActive": "Last active: {date}",
+    "@lastActive": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
     "worst": "Am schlechtesten",
     "@worst": {
         "description": "Worst end of day trophies"
