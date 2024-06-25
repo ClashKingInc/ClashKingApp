@@ -1,4 +1,4 @@
-name: Deploy to TestFlight
+name: Upload app to TestFlight
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: macos-latest
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -23,11 +24,8 @@ jobs:
     - name: Build iOS app
       run: flutter build ios --release --no-codesign
 
-    - name: Install Apple tools
-      uses: actions/setup-xcode@v2
-
     - name: Install Fastlane
-      run: gem install fastlane
+      run: sudo gem install fastlane
 
     - name: Build IPA with Fastlane Gym
       run: |
@@ -35,14 +33,11 @@ jobs:
 
     - name: Create API Key File
       run: |
-        echo "${{ secrets.APPLE_API_KEY }}" > ./AuthKey.p8
+        echo "${{ secrets.APPLE_API_PRIVATE_KEY }}" > ./AuthKey.p8
+
+    - name: Upload to TestFlight
+      run: |
+        xcrun altool --upload-app --type ios --file ./build/ClashKing.ipa --apiKey ${{ secrets.APPLE_API_KEY_ID }} --apiIssuer ${{ secrets.APPLE_API_ISSUER_ID }} --apiPrivateKey ./AuthKey.p8
 
     - name: List output directory contents
       run: ls -la ./build
-
-    - name: Deploy to TestFlight
-      run: |
-        fastlane pilot upload \
-          --api_key_path ./AuthKey.p8 \
-          --app_identifier "com.clashking.clshkingapp" \
-          --ipa "./build/ClashKing.ipa"
