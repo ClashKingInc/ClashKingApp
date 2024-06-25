@@ -48,10 +48,15 @@ class DashboardPageState extends State<DashboardPage>
     }
   }
 
-  
   Future<void> _refreshData() async {
     // Fetch the updated profile information
-    final profileInfo = await ProfileInfoService().fetchProfileInfo(widget.playerStats.tag);
+    widget.playerStats.initialized = false;
+    widget.playerStats.legendsInitialized = false;
+    final profileInfo =
+        await ProfileInfoService().fetchProfileInfo(widget.playerStats.tag);
+    while (profileInfo.initialized != true) {
+      await Future.delayed(Duration(milliseconds: 100));
+    }
 
     setState(() {
       // Update the player stats with the newly fetched data

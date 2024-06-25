@@ -7,6 +7,7 @@ import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/core/theme_notifier.dart';
 import 'package:clashkingapp/classes/data/league_data_manager.dart';
+import 'package:clashkingapp/classes/data/player_league_data_manager.dart';
 import 'package:clashkingapp/classes/data/troop_data_manager.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -27,6 +28,7 @@ Future<void> main() async {
   Workmanager().initialize(callbackDispatcher); // Required by Workmanager to initialize the callback dispatcher
   await LeagueDataManager().loadLeagueData();
   await TroopDataManager().loadTroopData();
+  await PlayerLeagueDataManager().loadLeagueData();
 
   await SentryFlutter.init(
     (options) {

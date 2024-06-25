@@ -7,7 +7,7 @@ import 'package:clashkingapp/classes/profile/description/spell.dart';
 import 'package:clashkingapp/classes/profile/description/troop.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/functions.dart';
-import 'package:clashkingapp/classes/data/league_data_manager.dart';
+import 'package:clashkingapp/classes/data/player_league_data_manager.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:retry/retry.dart';
@@ -137,8 +137,8 @@ class ProfileInfo {
     builderHallPic = profileInfo.builderHallPic;
     leagueUrl = profileInfo.leagueUrl;
     playerLegendData = profileInfo.playerLegendData;
-    initialized = profileInfo.initialized;
-    legendsInitialized = profileInfo.legendsInitialized;
+    initialized = true;
+    legendsInitialized = true;
   }
 }
 
@@ -160,7 +160,7 @@ class ProfileInfoService {
           final responseSpan = transaction.startChild('http.get');
           final response = await http.get(
             Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
-          ).timeout(Duration(seconds: 15));
+          ).timeout(Duration(seconds: 10));
           responseSpan.finish(
             status: response.statusCode == 200
                 ? SpanStatus.ok()
@@ -182,7 +182,6 @@ class ProfileInfoService {
       String responseBody = utf8.decode(response.bodyBytes);
       ProfileInfo profileInfo =
           ProfileInfo.fromJson(jsonDecode(responseBody));
-      print('Profile info fetched: ${profileInfo.name}');
 
       // Start fetching additional data in the background
       _fetchAdditionalProfileData(profileInfo, transaction);
@@ -191,8 +190,11 @@ class ProfileInfoService {
       transaction.finish(status: SpanStatus.ok());
       return profileInfo;
     } catch (exception, stackTrace) {
+      final hint = Hint.withMap({
+        'tag': tag,
+      });
       transaction.finish(status: SpanStatus.internalError());
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
       throw Exception('Failed to load player stats: $exception');
     }
   }
@@ -230,7 +232,7 @@ class ProfileInfoService {
     profileInfo.builderHallPic = results[1] as String;
     profileInfo.league = results[6] as String;
     profileInfo.leagueUrl =
-        LeagueDataManager().getLeagueUrl(profileInfo.league);
+        PlayerLeagueDataManager().getLeagueUrl(profileInfo.league);
     profileInfo.initialized = true; // Set initialized to true
   }
 
@@ -244,7 +246,11 @@ class ProfileInfoService {
       profileInfo.legendsInitialized = true;
 
       playerLegendDataSpan.finish(status: SpanStatus.ok());
-    } catch (e) {
+    } catch (e, stackTrace) {
+      final hint = Hint.withMap({
+        'tag': profileInfo.tag,
+      });
+      Sentry.captureException(e, stackTrace: stackTrace, hint: hint);
       playerLegendDataSpan.finish(status: SpanStatus.internalError());
       rethrow;
     }
@@ -256,7 +262,8 @@ class ProfileInfoService {
       final result = await future();
       span.finish(status: SpanStatus.ok());
       return result;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      Sentry.captureException(e, stackTrace: stackTrace);
       span.finish(status: SpanStatus.internalError());
       rethrow;
     }

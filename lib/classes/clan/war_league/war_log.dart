@@ -128,6 +128,7 @@ class WarLogService {
   static Future<WarLog> fetchWarLogData(String tag) async {
     final response = await http.get(Uri.parse(
         'https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/warlog'));
+
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       Map<String, dynamic> jsonBody = json.decode(body);

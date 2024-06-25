@@ -76,7 +76,12 @@ class PlayerLegendService {
         return null;
       }
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      final hint = Hint.withMap(
+        {
+          'tag': tag,
+        }
+      );
+      Sentry.captureException(exception, stackTrace: stackTrace, hint:hint);
       return null;
     }
   }

@@ -36,7 +36,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   }
 
   Future<void> _checkInitialization() async {
-    while (widget.account.clan == null &&
+    while (widget.account.clan != null &&
         !widget.account.clan!.clanInitialized &&
         !widget.account.clan!.warInitialized) {
       await Future.delayed(Duration(milliseconds: 100));
@@ -72,13 +72,15 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
         } else if (snapshot.hasError) {
           Sentry.captureException(snapshot.error);
           return Center(
-            child: Text(AppLocalizations.of(context)!.connectionErrorRelaunch,
+            child: Text(
+              AppLocalizations.of(context)!.connectionErrorRelaunch,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           );
         } else {
           return Scaffold(
             body: RefreshIndicator(
+              backgroundColor: Theme.of(context).colorScheme.surface,
               onRefresh: _refreshData,
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {

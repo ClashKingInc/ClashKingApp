@@ -31,7 +31,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
   }
 
   Future<void> _checkInitialization() async {
-    while (widget.clanInfo == null && !widget.clanInfo!.clanInitialized) {
+    while (widget.clanInfo != null && !widget.clanInfo!.clanInitialized) {
       await Future.delayed(Duration(milliseconds: 100));
     }
   }
@@ -74,6 +74,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
         } else {
           return Scaffold(
             body: RefreshIndicator(
+              backgroundColor: Theme.of(context).colorScheme.surface,
               onRefresh: _refreshData,
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {

@@ -27,7 +27,7 @@ class PlayerData {
   final int lastActive;
   final RaidData raids;
   final CwlData cwl;
-  final ClanGames? clanGames;
+  final ClanGames clanGames;
   //war
   //clanGames
 
@@ -39,7 +39,7 @@ class PlayerData {
     required this.lastActive,
     required this.raids,
     required this.cwl,
-    this.clanGames,
+    required this.clanGames,
   });
 
   factory PlayerData.fromJson(Map<String, dynamic> json) {
@@ -51,7 +51,7 @@ class PlayerData {
       lastActive: json['last_active'] ?? 0,
       raids: json['raids'] != null && json['raids'].isNotEmpty ? RaidData.fromJson(json['raids']) : RaidData(attacksDone: 0, attackLimit: 0),
       cwl: json['cwl'] != null && json['cwl'].isNotEmpty ? CwlData.fromJson(json['cwl']) : CwlData(attacksDone: 0, attackLimit: 0),
-      clanGames: json['clan_games'] != null && json['clan_games'].isNotEmpty ? ClanGames.fromJson(json['clan_games']) : null,
+      clanGames: json['clan_games'] != null && json['clan_games'].isNotEmpty ? ClanGames.fromJson(json['clan_games']) : ClanGames(clanTag: "#VY2J0LL", points: 0),
     );
   }
 }

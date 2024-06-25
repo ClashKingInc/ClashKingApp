@@ -125,7 +125,8 @@ class Clan {
         clanCapital: json['clanCapital'] ?? {},
       );
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      final hint = Hint.withMap({"json": json});
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
       throw Exception('Failed to load clan stats : $exception');
     }
   }
@@ -182,12 +183,12 @@ class ClanService {
       return await retry(
         () async {
           String tag = clanTag.replaceAll('#', '!');
-          print('Fetching clan info for $tag');
 
-          final clanInfoFuture = http.get(
-            Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
-          ).timeout(Duration(seconds: 15));
-
+          final clanInfoFuture = http
+              .get(
+                Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
+              )
+              .timeout(Duration(seconds: 10));
 
           final now = DateTime.now();
           DateTime lastMonday = findLastMondayOfMonth(now.year, now.month - 1);
@@ -240,7 +241,8 @@ class ClanService {
         retryIf: (e) => e is http.ClientException || e is SocketException,
       );
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      final hint = Hint.withMap({"clanTag": clanTag});
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
       throw Exception('Failed to load clan stats: $exception');
     }
   }
@@ -250,11 +252,12 @@ class ClanService {
       return await retry(
         () async {
           String tag = clanInfo.tag.replaceAll('#', '!');
-          print('Fetching clan info for $tag');
 
-          final response = await http.get(
-            Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
-          ).timeout(Duration(seconds: 15));
+          final response = await http
+              .get(
+                Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
+              )
+              .timeout(Duration(seconds: 10));
 
           if (response.statusCode == 200) {
             String responseBody = utf8.decode(response.bodyBytes);
@@ -264,6 +267,7 @@ class ClanService {
               updatedClan.warLeague!.imageUrl =
                   LeagueDataManager().getLeagueUrl(updatedClan.warLeague!.name);
             }
+
             return updatedClan;
           } else {
             throw Exception('Failed to load clan stats');
@@ -272,7 +276,8 @@ class ClanService {
         retryIf: (e) => e is http.ClientException || e is SocketException,
       );
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      final hint = Hint.withMap({"clanInfo": clanInfo});
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
       throw Exception('Failed to load clan stats: $exception');
     }
   }
@@ -320,7 +325,8 @@ class ClanService {
       clanInfo.joinLeaveClan = joinLeaveLog;
       return clanInfo;
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      final hint = Hint.withMap({"clanInfo": clanInfo});
+      Sentry.captureException(exception, stackTrace: stackTrace, hint : hint);
       throw Exception('Failed to load clan stats: $exception');
     }
   }
@@ -355,10 +361,12 @@ class ClanService {
         () async {
           String tag = clanTag.replaceAll('#', '!');
 
-          final responseWar = await http.get(
-            Uri.parse(
-                'https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/currentwar'),
-          ).timeout(Duration(seconds: 15));
+          final responseWar = await http
+              .get(
+                Uri.parse(
+                    'https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/currentwar'),
+              )
+              .timeout(Duration(seconds: 10));
 
           if (responseWar.statusCode == 200) {
             var decodedResponse =
@@ -380,8 +388,9 @@ class ClanService {
         },
         retryIf: (e) => e is http.ClientException || e is SocketException,
       );
-    } catch (e) {
-      Sentry.captureException(e);
+    } catch (e, stackTrace) {
+      final hint = Hint.withMap({"clanTag": clanTag});
+      Sentry.captureException(e, stackTrace: stackTrace, hint: hint);
       return WarStateInfo(state: "notInWar");
     }
   }
@@ -390,10 +399,13 @@ class ClanService {
     try {
       return await retry(
         () async {
-          final responseCwl = await http.get(
-            Uri.parse(
-                'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
-          ).timeout(Duration(seconds: 5));
+          final responseCwl = await http
+              .get(
+                Uri.parse(
+                    'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
+              )
+              .timeout(Duration(seconds: 5));
+
           if (responseCwl.statusCode == 200) {
             var decodedResponseCwl =
                 jsonDecode(utf8.decode(responseCwl.bodyBytes));
@@ -410,8 +422,8 @@ class ClanService {
         retryIf: (e) => e is http.ClientException || e is SocketException,
       );
     } catch (e, stackTrace) {
-      Sentry.captureException(e, stackTrace: stackTrace);
-      print('Error fetching current league info: $e');
+      final hint = Hint.withMap({"clanTag": clanTag});
+      Sentry.captureException(e, stackTrace: stackTrace, hint: hint);
       return null;
     }
   }

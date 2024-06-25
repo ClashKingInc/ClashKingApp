@@ -24,6 +24,7 @@ class TagInputChip extends StatelessWidget {
         onSelected: (bool value) => onSelected(tag),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         padding: const EdgeInsets.all(2),
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
       ),
     );
   }

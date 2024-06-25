@@ -183,13 +183,8 @@ class LegendScreenState extends State<LegendScreen>
             (firstDefense.trophies + firstDefense.change).toString();
       }
 
-      print("attacksList: $attacksList");
-      print("defensesList: $defensesList");
-
       Map<String, dynamic> attacksStats = calculateStats(attacksList);
-      print("attacksStats: $attacksStats");
       Map<String, dynamic> defensesStats = calculateStats(defensesList);
-      print("defensesStats: $defensesStats");
 
       legendEntries.add(
         Padding(

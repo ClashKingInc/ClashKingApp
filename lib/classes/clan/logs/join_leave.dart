@@ -52,6 +52,7 @@ class JoinLeaveClanService {
     clanTag = clanTag.replaceAll('#', '!');
     final response = await http
         .get(Uri.parse('https://api.clashking.xyz/clan/$clanTag/join-leave?timestamp_start=$startTime&time_stamp_end=9999999999&limit=3000'));
+    
     if (response.statusCode == 200) {
       JoinLeaveClan joinLeaveClan =
           JoinLeaveClan.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
