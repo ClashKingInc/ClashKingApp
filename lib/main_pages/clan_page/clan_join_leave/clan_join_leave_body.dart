@@ -136,6 +136,9 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
                     },
                   );
                   ProfileInfo playerStats = await ProfileInfoService().fetchProfileInfo(item.tag);
+                  while (playerStats.initialized != true) {
+                  await Future.delayed(Duration(milliseconds: 100));
+                }
                   navigator.pop();
                   navigator.push(
                     MaterialPageRoute(
