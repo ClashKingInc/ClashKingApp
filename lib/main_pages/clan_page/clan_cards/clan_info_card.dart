@@ -44,7 +44,7 @@ class ClanInfoCard extends StatelessWidget {
                   children: <Widget>[
                     Row(
                       children: [
-                        if(clanInfo!.location!.countryCode != "No countryCode")
+                        if(clanInfo != null && clanInfo!.location != null && clanInfo!.location!.countryCode != "No countryCode")
                         CachedNetworkImage(
                           imageUrl: "https://clashkingfiles.b-cdn.net/country-flags/${clanInfo!.location!.countryCode}.png",
                           width: 16,

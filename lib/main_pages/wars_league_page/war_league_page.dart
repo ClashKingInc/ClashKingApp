@@ -36,7 +36,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   }
 
   Future<void> _checkInitialization() async {
-    while (widget.account.clan == null &&
+    while (widget.account.clan != null &&
         !widget.account.clan!.clanInitialized &&
         !widget.account.clan!.warInitialized) {
       await Future.delayed(Duration(milliseconds: 100));
