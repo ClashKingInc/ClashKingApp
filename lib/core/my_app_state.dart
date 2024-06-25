@@ -121,30 +121,30 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   /* User management */
 
   // Reload the user accounts
-  Future<void> reloadUsersAccounts(context) async {
-    isLoading = true; // Set the loading state to true
-
-    notifyListeners();
-
-    if (user!.isDiscordUser) {
-      await initializeDiscordUser(context);
-    }
+  Future<void> reloadUsersAccounts(BuildContext context) async {
     if (user != null) {
       if (user!.isDiscordUser) {
+        await initializeDiscordUser(context);
         await fetchDiscordUserTags(user!);
       }
-      accounts!.selectedTag = ValueNotifier<String?>(user!.tags.first);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       accounts = await AccountsService().fetchAccounts(user!);
-      initializeData();
+      account = accounts!.findAccountBySelectedTag();
+
+      if (account != null && account!.profileInfo.clan != null) {
+        await prefs.setString('clanTag', account!.profileInfo.clan!.tag);
+      } else {
+        await prefs.setString('clanTag', '');
+      }
+      await Future.wait(accounts!.list.map((account) async {
+        while (account.profileInfo.initialized != true) {
+          await Future.delayed(Duration(milliseconds: 100));
+        }
+      }));
+
+      selectedTagNotifier.value = accounts?.selectedTag.value;
+      updateWidgets();
     }
-
-    await Future.delayed(Duration(seconds: 1));
-    isLoading = false;
-    notifyListeners();
-  }
-
-  void refreshData() async {
-    await AccountsService().fetchAccounts(user!);
     notifyListeners();
   }
 
@@ -152,13 +152,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       accounts = await AccountsService().fetchAccounts(user!);
-
-      // Check if the selected tag is still valid after fetching new data
-      if (!user!.tags.contains(accounts!.selectedTag.value) ||
-          accounts!.selectedTag.value == null) {
-        accounts!.selectedTag = ValueNotifier<String?>(user!.tags.first);
-      }
       account = accounts!.findAccountBySelectedTag();
+
       if (account != null && account!.profileInfo.clan != null) {
         await prefs.setString('clanTag', account!.profileInfo.clan!.tag);
       } else {

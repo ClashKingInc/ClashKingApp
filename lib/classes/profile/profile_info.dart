@@ -144,7 +144,7 @@ class ProfileInfo {
 
 // Service
 class ProfileInfoService {
-  Future<ProfileInfo> fetchProfileInfo(String tag) async {
+  Future<ProfileInfo?> fetchProfileInfo(String tag) async {
     final transaction = Sentry.startTransaction(
       'fetchProfileInfo',
       'task',
@@ -158,9 +158,11 @@ class ProfileInfoService {
       final response = await retry(
         () async {
           final responseSpan = transaction.startChild('http.get');
-          final response = await http.get(
-            Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
-          ).timeout(Duration(seconds: 10));
+          final response = await http
+              .get(
+                Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
+              )
+              .timeout(Duration(seconds: 10));
           responseSpan.finish(
             status: response.statusCode == 200
                 ? SpanStatus.ok()
@@ -170,25 +172,28 @@ class ProfileInfoService {
           if (response.statusCode == 200) {
             return response;
           } else {
-            throw http.ClientException(
-              'Failed to load player stats',
-              Uri.parse('https://api.clashking.xyz/v1/players/$tag'),
-            );
+            Sentry.captureMessage('Player not found',
+                hint: Hint.withMap({'tag': tag}));
+            return null;
           }
         },
         retryIf: (e) => e is http.ClientException || e is SocketException,
       );
 
-      String responseBody = utf8.decode(response.bodyBytes);
-      ProfileInfo profileInfo =
-          ProfileInfo.fromJson(jsonDecode(responseBody));
+      if (response != null) {
+        String responseBody = utf8.decode(response.bodyBytes);
+        ProfileInfo profileInfo =
+            ProfileInfo.fromJson(jsonDecode(responseBody));
 
-      // Start fetching additional data in the background
-      _fetchAdditionalProfileData(profileInfo, transaction);
-      _fetchPlayerLegendData(profileInfo, transaction);
+        // Start fetching additional data in the background
+        _fetchAdditionalProfileData(profileInfo, transaction);
+        _fetchPlayerLegendData(profileInfo, transaction);
 
-      transaction.finish(status: SpanStatus.ok());
-      return profileInfo;
+        transaction.finish(status: SpanStatus.ok());
+        return profileInfo;
+      } else {
+        return null;
+      }
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({
         'tag': tag,

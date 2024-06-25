@@ -4,12 +4,15 @@ import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Accounts {
   final List<Account> accounts;
   late ValueListenable<String?> selectedTag;
 
   Accounts({required this.accounts});
+
+  List<Account> get list => accounts;
 
   // Method to find the account with the selected tag
   Account? findAccountBySelectedTag() {
@@ -72,23 +75,25 @@ class AccountsService {
       // Step 2: Create a list of futures for each tag
       List<Future<void>> fetchTasks = tags.map((tag) async {
         final profileSpan = transaction.startChild('fetchProfileInfo');
-        ProfileInfo profileInfo =
+        ProfileInfo? profileInfo =
             await ProfileInfoService().fetchProfileInfo(tag);
         profileSpan.finish(status: SpanStatus.ok());
 
-        // Step 4: Create an Account object
-        Account account = Account(
-          profileInfo: profileInfo,
-          clan: null,
-        );
+        if (profileInfo != null) {
+          // Step 4: Create an Account object
+          Account account = Account(
+            profileInfo: profileInfo,
+            clan: null,
+          );
 
-        // Add the account to the list immediately
-        accountsList.add(account);
+          // Add the account to the list immediately
+          accountsList.add(account);
 
-        // Load clanInfo in the background
-        if (profileInfo.clan != null) {
-          fetchClanWarInfoInBackground(
-              profileInfo.clan!.tag, account, transaction);
+          // Load clanInfo in the background
+          if (profileInfo.clan != null) {
+            fetchClanWarInfoInBackground(
+                profileInfo.clan!.tag, account, transaction);
+          }
         }
       }).toList();
 
@@ -98,22 +103,35 @@ class AccountsService {
           fetchTasks); // We don't assign the result to accountsList anymore
       fetchSpan.finish(status: SpanStatus.ok());
 
-      // Sort the accountsList
+// Fetch selectedTag from SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      String? selectedTag = prefs.getString('selectedTag');
+
+      print("Selected Tag: $selectedTag");
+
+      // Step 4: Sort the accountsList with the selectedTag at the top
       final sortSpan = transaction.startChild('sortAccounts');
       accountsList.sort((a, b) {
-        int townHallComparison =
-            b.profileInfo.townHallLevel.compareTo(a.profileInfo.townHallLevel);
-        if (townHallComparison != 0) {
-          return townHallComparison;
+        if (a.profileInfo.tag == selectedTag) {
+          return -1; // Move the account with selectedTag to the top
+        } else if (b.profileInfo.tag == selectedTag) {
+          return 1; // Move the account with selectedTag to the top
         } else {
-          return b.profileInfo.expLevel.compareTo(a.profileInfo.expLevel);
+          int townHallComparison = b.profileInfo.townHallLevel
+              .compareTo(a.profileInfo.townHallLevel);
+          if (townHallComparison != 0) {
+            return townHallComparison;
+          } else {
+            return b.profileInfo.expLevel.compareTo(a.profileInfo.expLevel);
+          }
         }
       });
       sortSpan.finish(status: SpanStatus.ok());
 
       // Step 5: Create an Accounts object
       final accounts = Accounts(accounts: accountsList);
-      accounts.selectedTag = ValueNotifier<String?>(tags.first);
+      accounts.selectedTag =
+          ValueNotifier<String?>(accounts.accounts.first.profileInfo.tag);
 
       // Step 6: Finish the transaction and return the Accounts object
       transaction.finish(status: SpanStatus.ok());

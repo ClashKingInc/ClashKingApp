@@ -70,7 +70,7 @@ class StatsScreenState extends State<StatsScreen>
 
     setState(() {
       // Update the player stats with the newly fetched data
-      widget.playerStats.updateFrom(profileInfo);
+      widget.playerStats.updateFrom(profileInfo!);
       _initializeProfileFuture = _checkInitialization();
       _initializeLegendsFuture = _checkLegendsInitialization();
     });

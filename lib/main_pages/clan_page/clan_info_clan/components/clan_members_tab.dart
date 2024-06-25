@@ -188,9 +188,9 @@ class ClanMembersState extends State<ClanMembers> {
                     );
                   },
                 );
-                ProfileInfo profileInfo =
+                ProfileInfo ? profileInfo =
                     await ProfileInfoService().fetchProfileInfo(member.tag);
-                while (profileInfo.initialized != true) {
+                while (profileInfo!.initialized != true) {
                   await Future.delayed(Duration(milliseconds: 100));
                 }
                 navigator.pop(); // Dismiss the dialog
