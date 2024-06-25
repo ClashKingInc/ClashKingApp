@@ -269,6 +269,14 @@
     "average": "Moyenne",
     "remaining": "Restant",
     "toDoList" : "Tâches du jour",
+    "lastActive": "Dernière activité : {date}",
+    "@lastActive": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
     "worst": "Pire",
     "best": "Meilleur",
     "total": "Total",

@@ -35,25 +35,26 @@ class ToDoCardState extends State<ToDoCard> {
   @override
   Widget build(BuildContext context) {
     DateTime nowUtc = DateTime.now().toUtc();
-    bool isInTimeFrame = false;
+    bool isInTimeFrameForRaid = false;
+    bool isInTimeFrameForClanGames = false;
 
-    if (nowUtc.weekday == DateTime.friday && nowUtc.hour >= 6) {
-      isInTimeFrame = true;
-    } else if (nowUtc.weekday == DateTime.saturday ||
-        nowUtc.weekday == DateTime.sunday) {
-      isInTimeFrame = true;
-    } else if (nowUtc.weekday == DateTime.monday && nowUtc.hour < 6) {
-      isInTimeFrame = true;
-    }
+    isInTimeFrameForRaid = 
+      (nowUtc.weekday == DateTime.friday && nowUtc.hour >= 6) ||
+      (nowUtc.weekday == DateTime.saturday || nowUtc.weekday == DateTime.sunday) ||
+      (nowUtc.weekday == DateTime.monday && nowUtc.hour < 6);
+
+    isInTimeFrameForClanGames = 
+      (nowUtc.day >= 22 && nowUtc.hour >= 8 && nowUtc.day <= 31) ||
+      (nowUtc.day <= 28 && nowUtc.hour < 8);
+
 
     return FutureBuilder<PlayerToDoData>(
       future: futurePlayerToDoData,
       builder: (BuildContext context, AsyncSnapshot<PlayerToDoData> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return SizedBox.shrink(); // Show a loading spinner while waiting
+          return SizedBox.shrink();
         } else if (snapshot.hasError) {
-          return Text(
-              'Error: ${snapshot.error}'); // Show error if something went wrong
+          return Text('Error: ${snapshot.error}');
         } else {
           PlayerToDoData? data = snapshot.data;
 
@@ -66,7 +67,8 @@ class ToDoCardState extends State<ToDoCard> {
                     builder: (context) => ToDoScreen(
                       playerStats: widget.playerStats,
                       tags: widget.tags,
-                      isInTimeFrame: isInTimeFrame,
+                      isInTimeFrameForRaid: isInTimeFrameForRaid,
+                      isInTimeFrameForClanGames: isInTimeFrameForClanGames,
                       data: data,
                       accounts: widget.accounts),
                   ),
@@ -111,52 +113,47 @@ class ToDoCardState extends State<ToDoCard> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Text(
-                                  AppLocalizations.of(context)?.comingSoon ?? 'Coming soon!',
-                                  style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-                                ),
                                 if (data != null) ...{
-                                  for (var playerData in data.items.where(
-                                      (item) =>item.playerTag ==widget.playerStats.tag)) ...[
-                                    Text('Last Active: ${DateFormat('dd/MM/yy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(playerData.lastActive * 1000))}'),
-                                    if (isInTimeFrame)
-                                      if (playerData.raids.attackLimit == 0)
-                                        Text('Raids: 0/5')
-                                      else
-                                        Text('Raids: ${playerData.raids.attacksDone}/${playerData.raids.attackLimit}'),
-                                    if (playerData.cwl.attackLimit != 0)
-                                      Text('CWL: ${playerData.cwl.attacksDone}/${playerData.cwl.attackLimit}'),
-                                  ],
-                                }
-                                //Text(
-                                //  'Legends hits 8/8 - Total 8/16',
-                                //  style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-                                //),
-                                //Text(
-                                //  'Clan Games',
-                                //  style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-                                //),
-                                //Text(
-                                //  'War attacks',
-                                //  style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-                                //),
-                                //Text(
-                                //  'Season pass',
-                                //  style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-                                //),
-                                //Text(
-                                //  'War Castle',
-                                //  style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-                                //),
-                                //Text(
-                                //  'Season pass',
-                                //  style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-                                //),
+                                  iconToDo(data, isInTimeFrameForRaid, isInTimeFrameForClanGames)
+                                } else ...{
+                                  Text(
+                                    AppLocalizations.of(context)?.noDataAvailable ?? 'No data available',
+                                    style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+                                  ),
+                                },
                               ],
                             ),
                           ),
                         ],
                       ),
+                      //Row(
+                      //  children: [
+                      //    SizedBox(width: 8),
+                      //    Container(
+                      //      width: MediaQuery.of(context).size.width - 104,
+                      //      height: 8,
+                      //      decoration: BoxDecoration(
+                      //        border: Border.all(
+                      //          color: Colors.black.withOpacity(0.2),
+                      //          width: 1),
+                      //        borderRadius: BorderRadius.circular(4), 
+                      //      ),
+                      //      child: ClipRRect(
+                      //        borderRadius: BorderRadius.circular(4),
+                      //        child: LinearProgressIndicator(
+                      //          value: totalDone / totalEvent,
+                      //          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                      //          valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                      //        ),
+                      //      ),
+                      //    ),
+                      //    SizedBox(width: 8),
+                      //    Text(
+                      //      '${((totalDone / totalEvent) * 100).toStringAsFixed(0).padLeft(3, ' ')}%',
+                      //      style: Theme.of(context).textTheme.labelLarge,
+                      //    ),
+                      //  ],
+                      //),
                     ],
                   ),
                 ),
@@ -166,5 +163,199 @@ class ToDoCardState extends State<ToDoCard> {
         }
       },
     );
+  }
+
+  Widget iconToDo(PlayerToDoData data, bool isInTimeFrameForRaid, bool isInTimeFrameForClanGames) {
+
+    for (var playerData in data.items.where((item) => item.playerTag == widget.playerStats.tag)) {
+      Account? currentAccount = widget.accounts.findAccountByTag(playerData.playerTag);
+
+      //Legend compléted
+      //if (playerData.legends != null) {
+      //  totalEvent++;
+      //  if (playerData.legends!.numAttacks == 8) {
+      //    totalDone++;
+      //  }
+      //}
+
+      //clan games completed
+      //if (isInTimeFrameForClanGames) {
+      //  totalEvent++;
+      //  if (playerData.clanGames.points >= 4000) {
+      //    totalDone++;
+      //  }
+      //}
+
+      //raids completed
+      //if (isInTimeFrameForRaid) {
+      //  totalEvent++;
+      //  if ((playerData.raids.attacksDone == 5 && playerData.raids.attackLimit == 5) || (playerData.raids.attacksDone == 6 && playerData.raids.attackLimit == 6)) {
+      //    totalDone++;
+      //  }
+      //}
+
+      //season pass completed
+      //totalEvent++;
+      //if (playerData.seasonPass >= 2600) {
+      //  totalDone++;
+      //}
+
+      return Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context)?.lastActive((DateFormat('dd/MM/yy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(playerData.lastActive * 1000))).toString()) ?? 'Last active: ${DateFormat('dd/MM/yy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(playerData.lastActive * 1000)).toString()}',
+                          style: Theme.of(context).textTheme.labelLarge,
+                          textAlign: TextAlign.center,
+                        ),
+                        //Text(timeAgo, style: Theme.of(context).textTheme.labelLarge),
+                        SizedBox(height: 8),
+                        Wrap(
+                          alignment: WrapAlignment.start,
+                          spacing: 7.0,
+                          runSpacing: -7.0,
+                          children: <Widget>[
+                            if (playerData.legends != null || currentAccount?.profileInfo.league == 'Legend League')
+                              Chip(
+                                avatar: CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  child: CachedNetworkImage(
+                                    imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_No_Padding.png",
+                                  ),
+                                ),
+                                labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                label: Text(
+                                  "${playerData.legends?.numAttacks ?? 0}/8",
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    color: playerData.legends?.numAttacks == 8 ? Colors.green : Colors.red,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                            //Chip(
+                            //  avatar: CircleAvatar(
+                            //    backgroundColor: Colors.transparent,
+                            //    child: CachedNetworkImage(
+                            //      imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                            //    ),
+                            //  ),
+                            //  labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                            //  label: Text(
+                            //    "2/2",
+                            //    style: Theme.of(context).textTheme.labelLarge,
+                            //  ),
+                            //),
+                            if (isInTimeFrameForClanGames)
+                              Chip(
+                                avatar: CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  child: CachedNetworkImage(
+                                    imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_Games_Medal.png",
+                                  ),
+                                ),
+                                labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                label: Text(
+                                  playerData.clanGames.points.toString(),
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    color: playerData.clanGames.points == 4000 ? Colors.green : Colors.red,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                            if (isInTimeFrameForRaid)
+                              Chip(
+                                avatar: CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  child: CachedNetworkImage(
+                                    imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Raid_Attack.png",
+                                  ),
+                                ),
+                                labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                                label: playerData.raids.attackLimit == 0
+                                  ? Text(
+                                      '0/5',
+                                      style: Theme.of(context).textTheme.labelLarge,
+                                    )
+                                  : Text(
+                                      '${playerData.raids.attacksDone}/${playerData.raids.attackLimit}',
+                                      style: Theme.of(context).textTheme.labelLarge,
+                                    ),
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    color: 
+                                      (playerData.raids.attacksDone == 5 && playerData.raids.attackLimit == 5) 
+                                        || (playerData.raids.attacksDone == 6 && playerData.raids.attackLimit == 6)
+                                        ? Colors.green
+                                        : Colors.red,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                            //Chip(
+                            //  avatar: CircleAvatar(
+                            //    backgroundColor: Colors.transparent,
+                            //    child: CachedNetworkImage(
+                            //      imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                            //    ),
+                            //  ),
+                            //  labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                            //  label: Text(
+                            //    "1/1",
+                            //    style: Theme.of(context).textTheme.labelLarge,
+                            //  ),
+                            //),
+                            Chip(
+                              avatar: CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                child: Transform.scale(
+                                  scale: 1.7,
+                                  child: CachedNetworkImage(
+                                    imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Gold_Pass.png",
+                                  ),
+                                ),
+                              ),
+                              labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                              label: Text(
+                                playerData.seasonPass.toString(),
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: playerData.seasonPass >= 2600 ? Colors.green : Colors.red,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8),
+        ],
+      );                             
+    }
+    return SizedBox.shrink();
   }
 }
