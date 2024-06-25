@@ -281,7 +281,7 @@
             }
         }
     },
-    "legendNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+    "legendNoGlobalRankDescription": "Je staat op dit moment niet wereldwijd gerangschikt met {trophies} trofeeën.",
     "@legendNoGlobalRankDescription": {
         "placeholders": {
             "trophies": {
