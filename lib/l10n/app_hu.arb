@@ -315,6 +315,14 @@
         "description": "Remaining attacks or defenses"
     },
     "toDoList": "Teendőlista",
+    "lastActive": "Last active: {date}",
+    "@lastActive": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
     "worst": "Legrosszabb",
     "@worst": {
         "description": "Worst end of day trophies"
