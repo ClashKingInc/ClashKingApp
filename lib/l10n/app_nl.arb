@@ -24,7 +24,6 @@
     "username": "Gebruikersnaam",
     "pleaseEnterUsername": "Voer een gebruikersnaam in",
     "playerTags": "Speler Tags",
-    "pleaseEnterPlayerTags": "Voer een speler-ID in",
     "followingTagsDoNotExist": "De volgende labels bestaan niet: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
@@ -54,10 +53,10 @@
     "faqIsThisFromSupercell": "Is deze app van Supercell?",
     "faqFanContentPolicy": "Dit materiaal is onofficieel en wordt niet goedgekeurd door Supercell. Voor meer informatie, zie de Fan Content Policy van Supercell: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Waarom zijn de gegevens soms onnauwkeurig of ontbreken ze?",
-    "faqClanNotTracked": "Clan niet bijgehouden\n",
+    "faqClanNotTracked": "Clan niet gevolgd\n",
     "faqClanNotTrackedAnswer": "ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan ClashKing uit op je Discord server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.",
-    "faqTrackingDown": "Tracking niet beschikbaar",
-    "faqTrackingDownAnswer": "Het tracken kan gedurende een bepaalde periode stoppen met werken. Daarom kunnen er soms gaten in je gegevens zitten. We werken eraan om dit te verbeteren.\n\n",
+    "faqTrackingDown": "Volgen niet beschikbaar\n",
+    "faqTrackingDownAnswer": "Het volgen kan gedurende een bepaalde periode stoppen met werken. Daarom kunnen er soms gaten in je gegevens zitten. We werken eraan om dit te verbeteren.\n\n",
     "faqApiLimitation": "Clash of Clans API limitatie\n",
     "faqApiLimitationAnswer": "Sommige gegevens worden geleverd door Clash of Clans, maar hun API heeft enkele beperkingen. Zo kan het bijvoorbeeld voorkomen dat trofeeënwinst en -verlies in de legendarische divisie worden gestapeld alsof ze afkomstig zijn van één aanval. Dit is ook de reden waarom we geen informatie hebben over het niveau van je gebouwen.",
     "faqSupportWork": "Hoe kan ik je werk ondersteunen?",
@@ -71,17 +70,23 @@
     "faqHowToInviteTheBotAnswer": "Je kan onze bot uitnodigen op uw server door op de onderstaande knop te klikken. Je moet de toestemming \"Server beheren\" hebben om de bot toe te voegen.",
     "faqInviteTheBot": "ClashKing Bot uitnodigen",
     "faqNeedHelp": "Ik heb hulp nodig of ik zou graag een suggestie willen doen. Hoe kan ik contact met u opnemen?",
-    "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server en daar om hulp vragen of feedback te geven, of je kan ons een e-mail sturen naar devs@clashkingbot.com. \\nGraag alleen in het Engels of Frans schrijven.",
+    "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven. Je kunt ons ook een e-mail sturen via devs@clashkingbot.com. Graag alleen in het Engels of Frans communiceren.",
     "faqSendEmail": "Stuur een e-mail",
     "faqJoinDiscord": "Word lid van de Discord server",
     "helpUsTranslate": "Help ons vertalen",
     "copiedToClipboard": "Gekopieerd naar klembord",
     "all": "Alle",
+    "@all": {
+        "description": "all items"
+    },
     "hourIndicator": "u",
     "minIndicator": "m",
     "noDataAvailable": "Geen gegevens beschikbaar.",
     "close": "Sluiten",
     "closed": "Gesloten",
+    "@closed": {
+        "description": "WarLog closed"
+    },
     "error": "Fout",
     "player": "Speler",
     "notFoundOrNotLinkedToOurSystem": "{player} niet gevonden of niet gekoppeld aan ons systeem.",
@@ -98,7 +103,13 @@
     "manage": "Beheren",
     "enterPlayerTag": "Voer een speler-ID in",
     "add": "Toevoegen",
+    "@add": {
+        "description": "Add an account"
+    },
     "delete": "Verwijderen",
+    "@delete": {
+        "description": "Delete an account"
+    },
     "addAccount": "Account toevoegen",
     "deleteAccount": "Account verwijderen",
     "playerTagNotExists": "Het ingevoerde speler-ID bestaat niet.",
@@ -106,9 +117,83 @@
     "failedToAddTryAgain": "Link toevoegen mislukt. Probeer het later opnieuw.",
     "failedToDeleteTryAgain": "Link verwijderen mislukt. Probeer het later opnieuw.",
     "search": "Zoeken",
+    "@search": {
+        "description": "Search for a player or a clan"
+    },
     "tagOrNamePlayer": "Spelers tag of naam",
     "searchPlayer": "Zoek speler",
-    "nameOrTag": "Naam of tag",
+    "nameOrTagPlayer": "Spelers-ID of naam",
+    "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+    "@playerClanDescription": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
+    "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+    "@playerRatioDescription": {
+        "placeholders": {
+            "ratio": {
+                "type": "String"
+            },
+            "donations": {
+                "type": "String"
+            },
+            "received": {
+                "type": "String"
+            }
+        }
+    },
+    "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+    "@playerWarPreferenceDescription": {
+        "placeholders": {
+            "preference": {
+                "type": "String"
+            }
+        }
+    },
+    "playerWarStarsDescription": "You have {stars} war stars.",
+    "@playerWarStarsDescription": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+    "@playerTrophiesDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            },
+            "league": {
+                "type": "String"
+            }
+        }
+    },
+    "playerTownHallLevelDescription": "Your town hall level is {level}.",
+    "@playerTownHallLevelDescription": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+    "@playerBuilderBaseDescription": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            },
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
     "dashboard": "Dashboard",
     "homeBase": "Thuisbasis",
     "th": "SH",
@@ -119,8 +204,14 @@
     "coLeader": "Co-Leider",
     "elder": "Oudste",
     "member": "Lid",
-    "ready": "Gereed",
-    "unready": "Niet klaar",
+    "ready": "Aangemeld",
+    "@ready": {
+        "description": "Opted In for war"
+    },
+    "unready": "Afgemeld",
+    "@unready": {
+        "description": "Opted Out for war"
+    },
     "heroes": "Helden",
     "equipment": "Uitrusting",
     "troops": "Troepen",
@@ -130,19 +221,116 @@
     "spells": "Spreuken",
     "achievements": "Prestaties",
     "byDay": "Per dag",
+    "@byDay": {
+        "description": "Shows stats by day"
+    },
     "charts": "Grafieken",
     "history": "Geschiedenis",
+    "@history": {
+        "description": "Shows EOS trophies history"
+    },
     "legendLeague": "Legendarische Divisie",
-    "notInLegendLeague": "Legendarische Divisie",
+    "notInLegendLeague": "Niet in de Legendarische Divisie",
     "noLegendData": "Geen legendarische gegevens gevonden voor vandaag",
+    "legendStartDescription": "You started the day with {trophies} trophies.",
+    "@legendStartDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "String"
+            }
+        }
+    },
+    "legendNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
+    "@legendNoRankLocalDescription": {
+        "placeholders": {
+            "country": {
+                "type": "String"
+            },
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+    "@legendRankDescription": {
+        "placeholders": {
+            "rank": {
+                "type": "int"
+            },
+            "country": {
+                "type": "String"
+            },
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendGainDescription": "You gained {trophies} trophies for now.",
+    "@legendGainDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendLossDescription": "You lost {trophies} trophies for now.",
+    "@legendLossDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+    "@legendNoGlobalRankDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendGlobalRankDescription": "You are currently ranked {rank} globally.",
+    "@legendGlobalRankDescription": {
+        "placeholders": {
+            "rank": {
+                "type": "int"
+            }
+        }
+    },
     "noRank": "Geen ranking",
     "started": "Gestart",
+    "@started": {
+        "description": "Title for the number of trophies at the beginning of the day"
+    },
     "ended": "Afgelopen",
+    "@ended": {
+        "description": "Title for the number of trophies at the end of the day"
+    },
     "average": "Gemiddelde",
+    "@average": {
+        "description": "Average value of legend trophies (defense and attack)"
+    },
     "remaining": "Resterend",
+    "@remaining": {
+        "description": "Remaining attacks or defenses"
+    },
     "toDoList": "Takenlijst",
+    "lastActive": "Last active: {date}",
+    "@lastActive": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
     "worst": "Slechtste",
+    "@worst": {
+        "description": "Worst end of day trophies"
+    },
     "best": "Beste",
+    "@best": {
+        "description": "Best end of day trophies"
+    },
     "total": "Totaal",
     "heroesEquipments": "Heldenuitrusting",
     "daysAgo": "{days} dagen geleden",
@@ -205,10 +393,21 @@
     "trophiesByMonth": "Trofeeën per maand",
     "eosTrophies": "Einde van Seizoen Trofeeën",
     "searchClan": "Zoek clan",
+    "nameOrTagClan": "Naam of label van de clan",
     "noResult": "Geen resultaat.",
     "filters": "Filters",
     "whatever": "Wat dan ook",
+    "@whatever": {
+        "description": "Whatever the value"
+    },
     "any": "Alle",
+    "@any": {
+        "description": "Any value is accepted"
+    },
+    "notSet": "Niet ingesteld",
+    "@notSet": {
+        "description": "Filter value is not set"
+    },
     "warFrequency": "Oorlog frequentie",
     "minimumMembers": "Minimum aantal leden",
     "maximumMembers": "Maximaal aantal leden",
@@ -219,6 +418,9 @@
     "joinClanToUnlockNewFeatures": "Sluit je aan bij een clan om nieuwe functies te ontgrendelen.",
     "apply": "Toepassen",
     "opened": "Geopend",
+    "@opened": {
+        "description": "Clan is opened"
+    },
     "inviteOnly": "Op uitnodiging",
     "cancel": "Annuleren",
     "clan": "Clan",
@@ -242,18 +444,192 @@
     "war": "Oorlog",
     "league": "Competitie",
     "wars": "Oorlogen",
+    "ongoingWar": "Lopende oorlog",
+    "ongoingCwl": "Lopende CWL",
+    "notInWar": "Niet in oorlog",
     "warHistory": "Oorlogsgeschiedenis",
+    "warHistoryWinsDescription": "We tracked the data of {wins} war wins for your clan.",
+    "@warHistoryWinsDescription": {
+        "placeholders": {
+            "wins": {
+                "type": "int"
+            }
+        }
+    },
+    "warHistoryLossesDescription": "We tracked the data of {losses} war losses for your clan.",
+    "@warHistoryLossesDescription": {
+        "placeholders": {
+            "losses": {
+                "type": "int"
+            }
+        }
+    },
+    "warHistoryDrawsDescription": "We tracked the data of {draws} war draws for your clan.",
+    "@warHistoryDrawsDescription": {
+        "placeholders": {
+            "draws": {
+                "type": "int"
+            }
+        }
+    },
+    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating per war we've tracked.",
+    "@warHistoryAverageMembersDescription": {
+        "placeholders": {
+            "members": {
+                "type": "int"
+            }
+        }
+    },
+    "warHistoryAverageWarStarsDescription": "Your clan has an average of {stars} stars per attack at the end of the wars we've tracked.",
+    "@warHistoryAverageWarStarsDescription": {
+        "placeholders": {
+            "stars": {
+                "type": "double"
+            }
+        }
+    },
+    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of the wars we've tracked.",
+    "@warHistoryAverageHitRateDescription": {
+        "placeholders": {
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
     "warLog": "Oorlogs logboek",
-    "startsIn": "Begint over",
-    "startsAt": "Begint op",
-    "endsIn": "Eindigt in",
-    "endsAt": "Eindigt op",
+    "publicWarLog": "Openbaar Oorlogslogboek",
+    "privateWarLog": "Privé Oorlogslogboek",
+    "startsIn": "Begint over {time}",
+    "@startsIn": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "startsAt": "Begint om {time}",
+    "@startsAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "endsIn": "Eindigt in {time}",
+    "@endsIn": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "endsAt": "Eindigt om {time}",
+    "@endsAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "joinLeaveLogs": "Join/Leave Logs",
+    "join": "Join",
+    "leave": "Leave",
+    "reset": "Reset",
+    "leaveNumberDescription": "{number} players left the clan during the current season ({date}).",
+    "@leaveNumberDescription": {
+        "description": "Number of players who left the clan during the current season.",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinNumberDescription": "{number} players joined the clan during the current season ({date}).",
+    "@joinNumberDescription": {
+        "description": "Number of players who joined the clan during the current season.",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new members this season ({date}).",
+    "@joinLeaveDifferenceUpDescription": {
+        "description": "Number of new members gained by the clan this season.",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} members this season ({date}).",
+    "@joinLeaveDifferenceDownDescription": {
+        "description": "Number of members lost by the clan this season.",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinLeaveDifferenceEqualDescription": "Your clan has the same number of members as at the beginning of the season ({date}).",
+    "@joinLeaveDifferenceEqualDescription": {
+        "description": "Difference in the number of members between the beginning and the end of the season.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "@joinLeaveLogs": {
+        "description": "Logs of players joining or leaving the clan."
+    },
+    "leftOnAt": "Vertrokken op {date} om {time}.",
+    "@leftOnAt": {
+        "description": "[The player] left the clan on 16/06/2024 at 10:35.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "joinedOnAt": "Lid geworden op {date} om {time}.",
+    "@joinedOnAt": {
+        "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
     "statistics": "Statistieken",
     "stars": "Sterren",
-    "starsSmall": "sterren",
     "numberOfStars": "Aantal sterren",
     "destructionRate": "Vernietigingssnelheid",
+    "@destructionRate": {
+        "description": "Percentage of destruction in war"
+    },
     "events": "Events",
+    "@events": {
+        "description": "War events"
+    },
     "team": "Teams",
     "myTeam": "Mijn team",
     "enemiesTeam": "Vijanden",
@@ -261,10 +637,12 @@
     "defenses": "Verdedigingen",
     "attack": "Aanval",
     "attacks": "Aanvallen",
-    "notUsed": "niet gebruikt",
     "victory": "Overwinning",
     "defeat": "Verslagen",
     "draw": "Gelijkspel",
+    "@draw": {
+        "description": "War ended in a draw"
+    },
     "perfectWar": "Perfecte oorlog",
     "newest": "Nieuwste",
     "oldest": "Oudste",
@@ -339,5 +717,7 @@
     "warStats": "Oorlogstatistieken",
     "noAccountLinkedToYourProfileFound": "Geen gekoppeld account aan je profiel gevonden",
     "management": "Beheren",
-    "comingSoon": "Binnenkort beschikbaar!"
+    "comingSoon": "Binnenkort beschikbaar!",
+    "connectionError": "An error occurred. Please check your internet connection and try again.",
+    "connectionErrorRelaunch": "An error occurred. Please check your internet connection and relaunch the app."
 }
