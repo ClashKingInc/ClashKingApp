@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:math'; // Pour Random
 import 'dart:convert'; // Pour ascii
 import 'package:crypto/crypto.dart'; // Pour sha256
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -105,7 +105,11 @@ class LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 8),
                 TextButton(
-                  child: Text(AppLocalizations.of(context)!.needHelpJoinDiscord, style: Theme.of(context).textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline)),
+                  child: Text(AppLocalizations.of(context)!.needHelpJoinDiscord,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(decoration: TextDecoration.underline)),
                   onPressed: () async {
                     launchUrl(Uri.parse('https://discord.gg/clashking'));
                   },
@@ -177,16 +181,14 @@ class LoginPageState extends State<LoginPage> {
       final accessToken = jsonDecode(response.body)['access_token'] as String;
 
       // Save the access token using shared_preferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('user_type', 'discord');
-      await prefs.setString('access_token', accessToken);
+      await storePrefs('user_type', 'discord');
+      await storePrefs('access_token', accessToken);
 
       // Save the expiration date of the access token
       int expiresIn = jsonDecode(response.body)['expires_in'];
       DateTime expirationDate =
           DateTime.now().add(Duration(seconds: expiresIn));
-      await prefs.setString(
-          'expiration_date', expirationDate.toIso8601String());
+      await storePrefs('expiration_date', expirationDate.toIso8601String());
 
       // Navigate to MyHomePage
       globalNavigatorKey.currentState!.pushReplacement(

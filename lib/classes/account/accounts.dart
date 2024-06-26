@@ -4,7 +4,7 @@ import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:clashkingapp/core/functions.dart';
 
 class Accounts {
   final List<Account> accounts;
@@ -104,10 +104,7 @@ class AccountsService {
       fetchSpan.finish(status: SpanStatus.ok());
 
 // Fetch selectedTag from SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      String? selectedTag = prefs.getString('selectedTag');
-
-      print("Selected Tag: $selectedTag");
+      String? selectedTag = await getPrefs('selectedTag');
 
       // Step 4: Sort the accountsList with the selectedTag at the top
       final sortSpan = transaction.startChild('sortAccounts');

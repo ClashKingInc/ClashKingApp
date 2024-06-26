@@ -7,7 +7,7 @@ import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:clashkingapp/core/functions.dart';
 
 class DeletePlayerCard extends StatefulWidget {
   final User user;
@@ -104,8 +104,7 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
                 if (success) {
                   widget.user.tags.remove(playerTag);
                   if (widget.user.tags.isNotEmpty) {
-                    final prefs = await SharedPreferences.getInstance();
-                    prefs.setString('selectedTag', '');
+                    storePrefs('selectedTag', '');
                     if (context.mounted) {
                       myAppState.reloadUsersAccounts(context);
                     }

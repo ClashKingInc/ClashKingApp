@@ -5,7 +5,7 @@ import 'package:clashkingapp/classes/account/cocdiscord_link_functions.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:clashkingapp/core/functions.dart';
 
 class AddPlayerCard extends StatefulWidget {
   final User user;
@@ -90,8 +90,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
                   accountAlreadyLinked,
                   failedToAddTryAgain);
               if (success) {
-                final prefs = await SharedPreferences.getInstance();
-                prefs.setString('selectedTag', playerTag);
+                await storePrefs('selectedTag', playerTag);
                 if (context.mounted) {
                   myAppState.reloadUsersAccounts(context);
                 }
