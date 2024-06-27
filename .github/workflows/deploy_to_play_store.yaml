@@ -22,10 +22,12 @@ jobs:
         run: chmod +x android/gradlew
 
       - name: Build
-        run: android/gradlew build
+        run: ./gradlew build
+        working-directory: android
 
       - name: Assemble Release Bundle
-        run: android/gradlew bundleRelease
+        run: ./gradlew bundleRelease
+        working-directory: android
 
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
