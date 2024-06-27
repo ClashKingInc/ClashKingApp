@@ -3,7 +3,7 @@ name: Deploy to Closed Test
 on:
   push:
     branches:
-      - release/
+      - play-store
 
 jobs:
   deploy:
