@@ -12,7 +12,7 @@ jobs:
     env:
       JAVA_VERSION: 21
       FLUTTER_VERSION: 3.22.2
-      AAB_PATH: android/app/build/outputs/bundle/release/app-release.aab
+      AAB_PATH: build/app/outputs/bundle/release/app-release.aab  # Chemin corrigé
       KEYSTORE_PATH: android/ck_key.jks
       KEY_PROPS_PATH: android/key.properties
       SERVICE_ACCOUNT_PATH: android/app/store_credentials.json
@@ -73,6 +73,21 @@ jobs:
       - name: Build aab & Sign the release
         run: flutter build appbundle --release
 
+      - name: List output files for debugging
+        run: ls -R build/app/outputs/bundle/release/
+
+      # Comment or remove this section if you don't need to tag the release
+      # - name: Tag Release
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+      #   run: |
+      #     version_name=$(date +'%Y%m%d%H%M%S')
+      #     echo "Tagging release with tag $version_name"
+      #     git config --global user.email "actions@github.com"
+      #     git config --global user.name "GitHub Actions"
+      #     git tag $version_name
+      #     git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/ClashKingInc/clashkingapp.git --tags
+
       - name: Upload generated aab to the artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -87,5 +102,6 @@ jobs:
           releaseFile: ${{ env.AAB_PATH }}
           track: closed
           status: inProgress
+          userFraction: 0.1  # Ajouter une fraction d'utilisateurs
           inAppUpdatePriority: 3
           whatsNewDirectory: update-news
