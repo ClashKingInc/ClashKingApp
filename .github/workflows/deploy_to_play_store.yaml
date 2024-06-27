@@ -13,7 +13,7 @@ jobs:
       JAVA_VERSION: 17
       FLUTTER_VERSION: 3.22.2
       AAB_PATH: android/app/build/outputs/bundle/release/app-release.aab
-      KEYSTORE_PATH: android/app/ck_key.jks
+      KEYSTORE_PATH: android/ck_key.jks
       KEY_PROPS_PATH: android/app/key.properties
       SERVICE_ACCOUNT_PATH: android/app/store_credentials.json
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
