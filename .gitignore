@@ -23,7 +23,6 @@ pubspec.lock
 **/android/.gradle
 **/android/captures/
 **/android/key.properties
-**/android/local.properties
 
 
 # iOS/XCode related
