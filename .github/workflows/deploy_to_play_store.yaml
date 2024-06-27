@@ -50,7 +50,7 @@ jobs:
 
       - name: Create key.properties
         run: |
-          echo "storeFile=${{ env.KEYSTORE_PATH }}" > ${{ env.KEY_PROPS_PATH }}
+          echo "storeFile=${{ github.workspace }}/${{ env.KEYSTORE_PATH }}" > ${{ env.KEY_PROPS_PATH }}
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> ${{ env.KEY_PROPS_PATH }}
           echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> ${{ env.KEY_PROPS_PATH }}
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> ${{ env.KEY_PROPS_PATH }}
@@ -72,15 +72,6 @@ jobs:
 
       - name: Build aab
         run: flutter build appbundle --release
-
-      - name: Sign Release
-        uses: r0adkll/sign-android-release@v1
-        with:
-          releaseDirectory: android/app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.KEY_STORE_FILE }}
-          alias: ${{ secrets.KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Tag Release
         run: |
