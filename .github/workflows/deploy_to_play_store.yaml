@@ -70,8 +70,13 @@ jobs:
       # - name: Run all app tests
       #   run: flutter test
 
-      - name: Build aab
+      - name: Build aab & Sign the release
         run: flutter build appbundle --release
+
+      - name: Collect R8 missing rules
+        if: failure()
+        run: |
+          cat build/app/outputs/mapping/release/missing_rules.txt
 
       - name: Tag Release
         run: |
