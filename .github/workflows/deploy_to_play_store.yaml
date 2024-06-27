@@ -48,8 +48,12 @@ jobs:
       - name: Decode Android keystore
         run: echo "${{ secrets.KEY_STORE_FILE }}" | base64 --decode > ${{ env.KEYSTORE_PATH }}
 
-      - name: Decode Android key properties
-        run: echo "${{ secrets.KEY_PROPERTIES }}" | base64 --decode > ${{ env.KEY_PROPS_PATH }}
+      - name: Create key.properties
+        run: |
+          echo "storeFile=${{ env.KEYSTORE_PATH }}" > ${{ env.KEY_PROPS_PATH }}
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> ${{ env.KEY_PROPS_PATH }}
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> ${{ env.KEY_PROPS_PATH }}
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> ${{ env.KEY_PROPS_PATH }}
 
       - name: Decode Android Service Account
         run: echo "${{ secrets.GOOGLE_PLAY_JSON_KEY }}" | base64 --decode > ${{ env.SERVICE_ACCOUNT_PATH }}
