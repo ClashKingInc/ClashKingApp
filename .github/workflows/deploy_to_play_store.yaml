@@ -58,6 +58,9 @@ jobs:
       - name: Decode Android Service Account
         run: echo "${{ secrets.GOOGLE_PLAY_JSON_KEY }}" | base64 --decode > ${{ env.SERVICE_ACCOUNT_PATH }}
 
+      - name: Create .env file
+        run: echo "${{ secrets.ENV_FILE }}" > .env
+
       - name: Run flutter pub get
         run: flutter pub get
 
