@@ -6,57 +6,61 @@ on:
       - play-store
 
 jobs:
-  deploy:
+  store_deploy_android:
+    name: Android Store Release
     runs-on: ubuntu-latest
-
+    env:
+      # Setup env variables that will be used throughout the workflow
+      JAVA_VERSION: 11
+      FLUTTER_VERSION: 3.22.2
+      AAB_PATH: android/app/build/outputs/bundle/release/app-release.aab
+      KEYSTORE_PATH: android/upload-keystore.jks
+      KEY_PROPS_PATH: android/key.properties
+      SERVICE_ACCOUNT_PATH: android/store_credentials.json
     steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
+      # Checkout repository codebase
+      - name: Checkout the code
+        uses: actions/checkout@v3
 
-      - name: Set up JDK 11
+      # Setup Java in the VM
+      - name: Setup Java to compile the Android project
         uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
-          java-version: '11'
-
-      - name: Set up Flutter
+          java-version: ${{ env.JAVA_VERSION }}
+      
+      # Setup Flutter in the VM
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.2'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
 
-      - name: Create local.properties
-        run: |
-          echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
-          echo "flutter.sdk=$FLUTTER_ROOT" >> android/local.properties
-          echo "flutter.buildMode=debug" >> android/local.properties
-          echo "flutter.versionName=1.0.0" >> android/local.properties
-          echo "flutter.versionCode=7" >> android/local.properties
-          echo "flutter.minSdkVersion=21" >> android/local.properties
+      # Decode Android env variables
+      - name: Decode Android keystore
+        run: echo "${{ secrets.KEY_STORE_FILE }}" | base64 --decode > ${{ env.KEYSTORE_PATH }}
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x android/gradlew
+      - name: Decode Android key properties
+        run: echo "${{ secrets.KEY_PROPERTIES }}" | base64 --decode > ${{ env.KEY_PROPS_PATH }}
 
-      - name: Print local.properties
-        run: cat android/local.properties
+      # Decode Android release Service Account
+      - name: Decode Android Service Account
+        run: echo "${{ secrets.GOOGLE_PLAY_JSON_KEY }}" | base64 --decode > ${{ env.SERVICE_ACCOUNT_PATH }}
 
-      - name: Echo FLUTTER_ROOT
-        run: echo $FLUTTER_ROOT
+      # Run flutter commands
+      - name: Run flutter pub get
+        run: flutter pub get
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
+      - name: Analyze to check for bad Dart/Flutter practices
+        run: flutter analyze
 
-      - name: Build with Gradle
-        working-directory: android
-        run: ./gradlew build
-        env:
-          FLUTTER_ROOT: $FLUTTER_ROOT
+      - name: Run all app tests
+        run: flutter test
 
-      - name: Assemble Release Bundle
-        working-directory: android
-        run: ./gradlew bundleRelease
-        env:
-          FLUTTER_ROOT: $FLUTTER_ROOT
+      # Build Android Bundle release file
+      - name: Build aab
+        run: flutter build appbundle --release
 
+      # Sign the release
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
         with:
@@ -66,6 +70,7 @@ jobs:
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
+      # Tag the release
       - name: Tag Release
         run: |
           version_name=$(date +'%Y%m%d%H%M%S')
@@ -73,15 +78,20 @@ jobs:
           git tag $version_name
           git push origin --tags
 
-      - name: Create service_account.json
-        run: echo '${{ secrets.GOOGLE_PLAY_JSON_KEY }}' > service_account.json
+      # Upload generated aab to project artifacts
+      - name: Upload generated aab to the artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: aab-stores
+          path: ${{ env.AAB_PATH }}
 
+      # Deploy to Closed Test
       - name: Deploy to Closed Test
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJson: service_account.json
+          serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
           packageName: ${{ secrets.PACKAGE_NAME }}
-          releaseFile: android/app/build/outputs/bundle/release/app-release.aab
+          releaseFile: ${{ env.AAB_PATH }}
           track: closed
           status: inProgress
           inAppUpdatePriority: 3
