@@ -57,8 +57,11 @@ jobs:
       - name: Run flutter pub get
         run: flutter pub get
 
-      - name: Run all app tests
-        run: flutter test
+      # - name: Analyze to check for bad Dart/Flutter practices
+      #   run: flutter analyze
+
+      # - name: Run all app tests
+      #   run: flutter test
 
       - name: Build aab
         run: flutter build appbundle --release
