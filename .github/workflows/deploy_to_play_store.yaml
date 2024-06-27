@@ -13,7 +13,7 @@ jobs:
       JAVA_VERSION: 21
       FLUTTER_VERSION: 3.22.2
       AAB_PATH: android/app/build/outputs/bundle/release/app-release.aab
-      KEY_PROPS_PATH: android/app/key.properties
+      KEY_PROPS_PATH: android/key.properties
       SERVICE_ACCOUNT_PATH: android/app/store_credentials.json
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
       FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.22.2-x64
