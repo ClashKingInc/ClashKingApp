@@ -48,7 +48,9 @@ jobs:
         run: echo "${{ secrets.KEY_STORE_FILE }}" | base64 --decode > ${{ secrets.KEYSTORE_PATH }}
 
       - name : Check key_store_file
-        run: ls -la
+        run: |
+          cd android
+          ls -la
 
       - name: Create key.properties
         run: |
