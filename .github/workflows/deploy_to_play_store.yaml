@@ -26,10 +26,10 @@ jobs:
       run: echo ${{ secrets.KEY_STORE_FILE }} | base64 --decode > my-upload-key.keystore
 
     - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew
+      run: chmod +x ./android/gradlew
 
     - name: Build with Gradle
-      run: ./gradlew assembleRelease
+      run: ./android/gradlew assembleRelease
       env:
         KEYSTORE_FILE: my-upload-key.keystore
         KEYSTORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
@@ -41,7 +41,7 @@ jobs:
       with:
         serviceAccountJson: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
         packageName: ${{ secrets.PACKAGE_NAME }}
-        releaseFile: app/build/outputs/apk/release/app-release.apk
+        releaseFile: android/app/build/outputs/apk/release/app-release.apk
         track: closed
         inAppUpdatePriority: 3
         whatsnewDirectory: update-news
