@@ -91,6 +91,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   // Update the war widget
   Future<void> updateWarWidget() async {
     clanTag = await getPrefs('clanTag');
+    print("clanTag : $clanTag");
     final warInfo = await checkCurrentWar(clanTag);
     try {
       // Send data to the widget
