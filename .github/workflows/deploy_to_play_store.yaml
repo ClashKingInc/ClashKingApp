@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # Setup env variables that will be used throughout the workflow
-      JAVA_VERSION: 11
+      JAVA_VERSION: 21
       FLUTTER_VERSION: 3.22.2
       AAB_PATH: android/app/build/outputs/bundle/release/app-release.aab
       KEYSTORE_PATH: android/upload-keystore.jks
