@@ -19,13 +19,13 @@ jobs:
           java-version: '11'
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./android/gradlew
+        run: chmod +x android/gradlew
 
       - name: Build
-        run: ./android/gradlew build
+        run: android/gradlew build
 
       - name: Assemble Release Bundle
-        run: ./android/gradlew bundleRelease
+        run: android/gradlew bundleRelease
 
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
@@ -56,4 +56,3 @@ jobs:
           status: inProgress
           inAppUpdatePriority: 3
           whatsNewDirectory: update-news
-          userFraction: 0.33
