@@ -27,7 +27,7 @@ jobs:
       - name: Create local.properties
         run: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
-          echo "flutter.sdk=$HOME/flutter" >> android/local.properties
+          echo "flutter.sdk=$FLUTTER_ROOT" >> android/local.properties
           echo "flutter.buildMode=debug" >> android/local.properties
           echo "flutter.versionName=1.0.0" >> android/local.properties
           echo "flutter.versionCode=7" >> android/local.properties
@@ -43,13 +43,13 @@ jobs:
         working-directory: android
         run: ./gradlew build
         env:
-          FLUTTER_ROOT: $HOME/flutter
+          FLUTTER_ROOT: $FLUTTER_ROOT
 
       - name: Assemble Release Bundle
         working-directory: android
         run: ./gradlew bundleRelease
         env:
-          FLUTTER_ROOT: $HOME/flutter
+          FLUTTER_ROOT: $FLUTTER_ROOT
 
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
