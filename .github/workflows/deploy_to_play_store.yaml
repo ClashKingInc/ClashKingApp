@@ -73,17 +73,16 @@ jobs:
       - name: Build aab & Sign the release
         run: flutter build appbundle --release
 
-      - name: Collect R8 missing rules
-        if: failure()
-        run: |
-          cat build/app/outputs/mapping/release/missing_rules.txt
-
       - name: Tag Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           version_name=$(date +'%Y%m%d%H%M%S')
           echo "Tagging release with tag $version_name"
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
           git tag $version_name
-          git push origin --tags
+          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/ClashKingInc/clashkingapp.git --tags
 
       - name: Upload generated aab to the artifacts
         uses: actions/upload-artifact@v3
