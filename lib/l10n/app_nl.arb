@@ -240,7 +240,7 @@
             }
         }
     },
-    "legendNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
+    "legendNoRankLocalDescription": "Je bent momenteel niet gerangschikt ({country}) met {trophies} trofeeën.",
     "@legendNoRankLocalDescription": {
         "placeholders": {
             "country": {
@@ -289,7 +289,7 @@
             }
         }
     },
-    "legendGlobalRankDescription": "You are currently ranked {rank} globally.",
+    "legendGlobalRankDescription": "Je staat momenteel op rang {rank} wereldwijd.",
     "@legendGlobalRankDescription": {
         "placeholders": {
             "rank": {
@@ -488,7 +488,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of the wars we've tracked.",
+    "warHistoryAverageHitRateDescription": "Jouw clan heeft een gemiddeld vernietigingspercentage van {percent} aan het einde van de oorlogen die we hebben gevolgd.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
@@ -531,11 +531,11 @@
             }
         }
     },
-    "joinLeaveLogs": "Join/Leave Logs",
-    "join": "Join",
-    "leave": "Leave",
+    "joinLeaveLogs": "Deelnemen/Verlaten Logboeken",
+    "join": "Deelnemen",
+    "leave": "Verlaten",
     "reset": "Reset",
-    "leaveNumberDescription": "{number} players left the clan during the current season ({date}).",
+    "leaveNumberDescription": "{number} spelers hebben de clan verlaten tijdens het huidige seizoen ({date}).",
     "@leaveNumberDescription": {
         "description": "Number of players who left the clan during the current season.",
         "placeholders": {
@@ -547,7 +547,7 @@
             }
         }
     },
-    "joinNumberDescription": "{number} players joined the clan during the current season ({date}).",
+    "joinNumberDescription": "{number} spelers zijn lid geworden van de clan tijdens het huidige seizoen ({date}).",
     "@joinNumberDescription": {
         "description": "Number of players who joined the clan during the current season.",
         "placeholders": {
