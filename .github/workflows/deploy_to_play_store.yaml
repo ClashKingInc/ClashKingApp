@@ -3,7 +3,7 @@ name: Publish to Google Play
 on:
   push:
     branches:
-      - play-store  # Adjust this to your main branch
+      - main  # Adjust this to your main branch
 
 jobs:
   build:
@@ -38,3 +38,4 @@ jobs:
         releaseFile: app/build/outputs/apk/release/app-release.apk
         track: closed
         inAppUpdatePriority: 3
+        whatsnewDirectory: update-news
