@@ -10,9 +10,10 @@ jobs:
     name: Android Store Release
     runs-on: ubuntu-latest
     env:
-      JAVA_VERSION: 17
+      JAVA_VERSION: 21
       FLUTTER_VERSION: 3.22.2
       AAB_PATH: android/app/build/outputs/bundle/release/app-release.aab
+      KEYSTORE_PATH: android/ck_key.jks
       KEY_PROPS_PATH: android/app/key.properties
       SERVICE_ACCOUNT_PATH: android/app/store_credentials.json
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
@@ -49,7 +50,7 @@ jobs:
 
       - name: Create key.properties
         run: |
-          echo "storeFile=${{ secrets.KEYSTORE_PATH }}" > ${{ env.KEY_PROPS_PATH }}
+          echo "storeFile=${{ env.KEYSTORE_PATH }}" > ${{ env.KEY_PROPS_PATH }}
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> ${{ env.KEY_PROPS_PATH }}
           echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> ${{ env.KEY_PROPS_PATH }}
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> ${{ env.KEY_PROPS_PATH }}
