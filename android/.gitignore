@@ -1,9 +1,6 @@
-gradle-wrapper.jar
-/.gradle
-/captures/
-/gradlew.bat
-/local.properties
-GeneratedPluginRegistrant.java
+android/.gradle
+android/captures/
+android/local.properties
 
 # Remember to never publicly share your keystore.
 # See https://flutter.dev/docs/deployment/android#reference-the-keystore-from-the-app

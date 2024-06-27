@@ -1,4 +1,4 @@
-name: Publish to Google Play
+name: Deploy to Closed Test
 
 on:
   push:
@@ -6,42 +6,51 @@ on:
       - play-store
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: List directory contents for debugging
-      run: ls -R
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
 
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'zulu'
-        java-version: '11'
+      - name: Build
+        run: ./android/gradlew build
 
-    - name: Decrypt secrets
-      run: echo ${{ secrets.KEY_STORE_FILE }} | base64 --decode > my-upload-key.keystore
+      - name: Assemble Release Bundle
+        run: ./android/gradlew bundleRelease
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x ./android/gradlew
+      - name: Sign Release
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: android/app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.KEY_STORE_FILE }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
 
-    - name: Build with Gradle
-      run: ./android/gradlew assembleRelease
-      env:
-        KEYSTORE_FILE: my-upload-key.keystore
-        KEYSTORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
-        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      - name: Tag Release
+        run: |
+          version_name=$(date +'%Y%m%d%H%M%S')
+          echo "Tagging release with tag $version_name"
+          git tag $version_name
+          git push origin --tags
 
-    - name: Upload to Google Play
-      uses: r0adkll/upload-google-play@v1
-      with:
-        serviceAccountJson: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
-        packageName: ${{ secrets.PACKAGE_NAME }}
-        releaseFile: android/app/build/outputs/apk/release/app-release.apk
-        track: closed
-        inAppUpdatePriority: 3
-        whatsnewDirectory: update-news
+      - name: Create service_account.json
+        run: echo '${{ secrets.GOOGLE_PLAY_JSON_KEY }}' > service_account.json
+
+      - name: Deploy to Closed Test
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: service_account.json
+          packageName: ${{ secrets.PACKAGE_NAME }}
+          releaseFile: android/app/build/outputs/bundle/release/app-release.aab
+          track: closed
+          status: inProgress
+          inAppUpdatePriority: 3
+          whatsNewDirectory: update-news
+          userFraction: 0.33
