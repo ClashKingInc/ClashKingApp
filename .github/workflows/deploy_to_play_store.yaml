@@ -38,10 +38,14 @@ jobs:
       - name: Build
         run: ./gradlew build
         working-directory: android
+        env:
+          FLUTTER_ROOT: $HOME/flutter
 
       - name: Assemble Release Bundle
         run: ./gradlew bundleRelease
         working-directory: android
+        env:
+          FLUTTER_ROOT: $HOME/flutter
 
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
