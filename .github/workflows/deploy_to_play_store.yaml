@@ -12,7 +12,7 @@ jobs:
     env:
       JAVA_VERSION: 21
       FLUTTER_VERSION: 3.22.2
-      AAB_PATH: build/app/outputs/bundle/release/app-release.aab  # Chemin corrigé
+      AAB_PATH: app/build/outputs/bundle/release/app-release.aab
       KEYSTORE_PATH: android/ck_key.jks
       KEY_PROPS_PATH: android/key.properties
       SERVICE_ACCOUNT_PATH: android/app/store_credentials.json
@@ -101,7 +101,6 @@ jobs:
           packageName: ${{ secrets.PACKAGE_NAME }}
           releaseFile: ${{ env.AAB_PATH }}
           track: closed
-          status: inProgress
-          userFraction: 0.1  # Ajouter une fraction d'utilisateurs
+          status: completed
           inAppUpdatePriority: 3
           whatsNewDirectory: update-news
