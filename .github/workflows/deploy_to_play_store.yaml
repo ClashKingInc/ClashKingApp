@@ -18,6 +18,20 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
 
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.0.0'  # Specify your Flutter version
+
+      - name: Create local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
+          echo "flutter.sdk=$HOME/opt/flutter" >> android/local.properties
+          echo "flutter.buildMode=debug" >> android/local.properties
+          echo "flutter.versionName=1.0.0" >> android/local.properties
+          echo "flutter.versionCode=7" >> android/local.properties
+          echo "flutter.minSdkVersion=21" >> android/local.properties
+
       - name: Grant execute permission for gradlew
         run: chmod +x android/gradlew
 
