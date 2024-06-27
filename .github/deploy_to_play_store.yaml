@@ -1,0 +1,40 @@
+name: Publish to Google Play
+
+on:
+  push:
+    branches:
+      - play-store  # Adjust this to your main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'zulu'
+        java-version: '11'
+
+    - name: Decrypt secrets
+      run: echo ${{ secrets.KEY_STORE_FILE }} | base64 --decode > my-upload-key.keystore
+
+    - name: Build with Gradle
+      run: ./gradlew assembleRelease
+      env:
+        KEYSTORE_FILE: my-upload-key.keystore
+        KEYSTORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
+    - name: Upload to Google Play
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJson: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
+        packageName: ${{ secrets.PACKAGE_NAME }}
+        releaseFile: app/build/outputs/apk/release/app-release.apk
+        track: closed
+        inAppUpdatePriority: 3
