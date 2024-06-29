@@ -448,7 +448,7 @@
     "ongoingCwl": "Lopende CWL",
     "notInWar": "Niet in oorlog",
     "warHistory": "Oorlogsgeschiedenis",
-    "warHistoryWinsDescription": "We tracked the data of {wins} war wins for your clan.",
+    "warHistoryWinsDescription": "We hebben de gegevens bijgehouden van {wins} gewonnen oorlogen voor jouw clan.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
@@ -456,7 +456,7 @@
             }
         }
     },
-    "warHistoryLossesDescription": "We tracked the data of {losses} war losses for your clan.",
+    "warHistoryLossesDescription": "We hebben de gegevens bijgehouden van {losses} verloren oorlogen voor jouw clan.",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
@@ -464,7 +464,7 @@
             }
         }
     },
-    "warHistoryDrawsDescription": "We tracked the data of {draws} war draws for your clan.",
+    "warHistoryDrawsDescription": "We hebben de gegevens bijgehouden van {draws} gelijkspel oorlogen voor jouw clan.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
