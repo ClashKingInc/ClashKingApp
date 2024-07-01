@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Color.fromARGB(255, 61, 60, 60),
                 surfaceTintColor: Colors.transparent,
                 headerForegroundColor: Colors.white,
-                headerBackgroundColor:Color(0xFFC98910),
+                headerBackgroundColor: Color.fromARGB(255, 3, 82, 147),
                 dayForegroundColor: WidgetStateProperty.all(Colors.white),
                 yearForegroundColor: WidgetStateProperty.all(Colors.white),
                 todayForegroundColor: WidgetStateProperty.all(Colors.white),
@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
                 labelStyle: TextStyle(
                   fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                   color: Color(0xFFFFFFFF),
-                  decorationColor: Color(0xFFC98910),
+                  decorationColor: Color.fromARGB(255, 3, 82, 147),
                 ),
                 hintStyle: TextStyle(
                     backgroundColor: Colors.transparent,
@@ -98,8 +98,8 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Color.fromARGB(
                     255, 31, 31, 31), // primary color as the seed
-                primary: Color(0xFFC98910),
-                secondary: Color(0xFF9B1F28),
+                primary: Color.fromARGB(255, 2, 108, 194),
+                secondary: Color(0xFFBF0000),
                 tertiary: Colors.grey,
                 surface: Color.fromARGB(255, 31, 31, 31),
                 error: Color.fromARGB(255, 255, 0, 0),
@@ -110,7 +110,9 @@ class MyApp extends StatelessWidget {
                 onSurface:
                     Color(0xFFFFFFFF), // Typically white text for readibility
                 onError: Color(0xFFFFFFFF), // White text on top of error color
+                brightness: Brightness.dark,
               ),
+              brightness: Brightness.dark,
               textTheme: TextTheme(
                 bodyLarge: TextStyle(
                     color: Colors.white,
@@ -162,12 +164,12 @@ class MyApp extends StatelessWidget {
             // Light theme
             theme: ThemeData(
               useMaterial3: true,
-              scaffoldBackgroundColor: Color.fromRGBO(255, 248, 225, 1),
+              scaffoldBackgroundColor: Color.fromARGB(255, 245, 249, 251),
               datePickerTheme: DatePickerThemeData(
                 backgroundColor: Colors.white,
                 surfaceTintColor: Colors.transparent,
                 headerForegroundColor: Colors.white,
-                headerBackgroundColor:Color(0xFFC98910),
+                headerBackgroundColor: Color.fromARGB(255, 3, 82, 147),
                 dayForegroundColor: WidgetStateProperty.all(Colors.black),
                 yearForegroundColor: WidgetStateProperty.all(Colors.black),
                 todayForegroundColor: WidgetStateProperty.all(Colors.black),
@@ -212,10 +214,11 @@ class MyApp extends StatelessWidget {
                     overflow: TextOverflow.ellipsis),
               ),
               canvasColor: Colors.transparent,
+              brightness: Brightness.light,
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Color(0xFFFFFFFF), // primary color as the seed
-                primary: Color(0xFFC98910),
-                secondary: Color(0xFF9B1F28),
+                primary: Color.fromARGB(255, 3, 82, 147),
+                secondary: Color(0xFFBF0000),
                 tertiary: Colors.grey[600],
                 surface: Color(0xFFFFFFFF),
                 error: Color(0xFFB00020),
@@ -226,6 +229,7 @@ class MyApp extends StatelessWidget {
                 onSurface:
                     Color(0xFF000000), // Typically black text for readibility
                 onError: Color(0xFFFFFFFF), // White text on top of error color
+                brightness: Brightness.light,
               ),
               textTheme: TextTheme(
                 bodyLarge: TextStyle(

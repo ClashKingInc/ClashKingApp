@@ -171,13 +171,13 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                   width: 100,
                   child: CachedNetworkImage(
                       imageUrl:
-                          "https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png"),
+                          "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png"),
                 ),
                 SizedBox(
                   width: 200,
                   child: CachedNetworkImage(
                       imageUrl:
-                          "https://clashkingfiles.b-cdn.net/logos/ClashKing-name-logo.png"),
+                          "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/CK-text-white-bg.png"),
                 ),
                 SizedBox(height: 32),
                 Text(AppLocalizations.of(context)!.createGuestProfile,

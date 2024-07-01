@@ -207,7 +207,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     final username = await getPrefs('username');
     user = User(
       id: '0',
-      avatar: 'https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png',
+      avatar: 'https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png',
       globalName: username ?? 'ILoveClashKing',
     );
 
