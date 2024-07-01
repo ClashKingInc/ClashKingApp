@@ -719,5 +719,13 @@
     "management": "Beheren",
     "comingSoon": "Binnenkort beschikbaar!",
     "connectionError": "Er is een fout opgetreden. Controleer je internetverbinding en probeer het opnieuw.",
-    "connectionErrorRelaunch": "Er is een fout opgetreden. Controleer je internetverbinding en start de app opnieuw op."
+    "connectionErrorRelaunch": "Er is een fout opgetreden. Controleer je internetverbinding en start de app opnieuw op.",
+    "updatedAt": "Updated at {time}",
+    "@updatedAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    }
 }
