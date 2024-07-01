@@ -24,6 +24,7 @@ pubspec.lock
 **/android/captures/
 **/android/key.properties
 **/android/local.properties
+**/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
 
 
 # iOS/XCode related
