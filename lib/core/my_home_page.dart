@@ -8,7 +8,6 @@ import 'package:clashkingapp/main_pages/management_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/components/app_bar/app_bar.dart';
-import 'package:clashkingapp/main.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -48,12 +47,6 @@ class MyHomePageState extends State<MyHomePage> {
     if (_pageController.hasClients) {
       _pageController.jumpToPage(index);
     }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    globalContext = context; // Update the global context variable
   }
 
   @override
