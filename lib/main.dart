@@ -15,6 +15,8 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 // CallbackDispatcher for background execution (Android only)
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await dotenv.load(fileName: ".env");
     final myAppState = MyAppState();
     await myAppState.updateWarWidget();
     return Future.value(true);
@@ -22,8 +24,9 @@ void callbackDispatcher() {
 }
 
 
+
 Future<void> main() async {
-  await dotenv.load(); // Load .env file
+  await dotenv.load(fileName: ".env"); // Load .env file
   WidgetsFlutterBinding.ensureInitialized(); // Required by Workmanager to ensure binding is initialized
   Workmanager().initialize(callbackDispatcher); // Required by Workmanager to initialize the callback dispatcher
   await LeagueDataManager().loadLeagueData();

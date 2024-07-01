@@ -6,9 +6,10 @@ import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
-import 'package:clashkingapp/main_pages/login_page/login_page.dart';
+import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   User? user;
@@ -90,8 +91,11 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   // Update the war widget
   Future<void> updateWarWidget() async {
+    await dotenv.load(fileName: ".env");
     clanTag = await getPrefs('clanTag');
-    print("clanTag : $clanTag");
+    if (clanTag != "") {
+      clanTag = clanTag?.replaceAll('#', '%23');
+    }
     final warInfo = await checkCurrentWar(clanTag);
     try {
       // Send data to the widget
@@ -190,12 +194,11 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         notifyListeners();
       } else {
         clearPrefs();
-        navigator
-            .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+        navigator.push(MaterialPageRoute(builder: (_) => StartupWidget()));
       }
     } else {
       clearPrefs();
-      navigator.pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+      navigator.push(MaterialPageRoute(builder: (_) => StartupWidget()));
     }
   }
 

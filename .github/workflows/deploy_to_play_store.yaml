@@ -41,7 +41,7 @@ jobs:
           echo "flutter.versionName=1.0.0" >> android/local.properties
           echo "flutter.versionCode=7" >> android/local.properties
           echo "flutter.minSdkVersion=21" >> android/local.properties
-          echo "flutter.targetSdkVersion=30" >> android/local.properties
+          echo "flutter.targetSdkVersion=34" >> android/local.properties
           echo "compileSdkVersion=34" >> android/local.properties
           echo "ndkVersion=26.1.10909125" >> android/local.properties
 
