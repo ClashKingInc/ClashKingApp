@@ -3,7 +3,6 @@ import 'package:clashkingapp/main_pages/login_page/login_page.dart';
 import 'package:clashkingapp/core/my_home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/main_pages/login_page/tag_input_chip.dart';
 import 'dart:async';
@@ -117,6 +116,7 @@ class StartupWidgetState extends State<StartupWidget> {
   }
 
   Future<void> _initializeApp() async {
+    print('initialize App');
     final appState = Provider.of<MyAppState>(context, listen: false);
     final transaction = Sentry.startTransaction(
       'initializeApp',
@@ -127,10 +127,10 @@ class StartupWidgetState extends State<StartupWidget> {
     try {
       // Start a child span for SharedPreferences
       final prefsSpan = transaction.startChild('SharedPreferences.getInstance');
-      final prefs = await SharedPreferences.getInstance();
       prefsSpan.finish(status: SpanStatus.ok());
 
-      final userType = prefs.getString('user_type');
+      final userType = await getPrefs('user_type');
+      print("userType : $userType");
 
       if (userType == "guest") {
         // Initialize guest user
@@ -146,13 +146,16 @@ class StartupWidgetState extends State<StartupWidget> {
       } else if (userType == "discord") {
         // Check if the token is valid
         final tokenSpan = transaction.startChild('isTokenValid');
+        print("before isTokenValid");
         bool validToken = await isTokenValid();
+        print("after isTokenValid");
         tokenSpan.finish(
             status: validToken ? SpanStatus.ok() : SpanStatus.internalError());
 
         if (validToken && mounted) {
           // Initialize discord user
           final discordSpan = transaction.startChild('initializeDiscordUser');
+          print("before initializeDiscordUser");
           await appState.initializeDiscordUser(context);
           discordSpan.finish(status: SpanStatus.ok());
 
@@ -165,7 +168,7 @@ class StartupWidgetState extends State<StartupWidget> {
             _showTagDialog();
           }
         } else {
-          prefs.setString("user_type", "");
+          storePrefs("user_type", "");
         }
       } else {
         // Redirect to the login page

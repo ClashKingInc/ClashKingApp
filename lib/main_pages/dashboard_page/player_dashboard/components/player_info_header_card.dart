@@ -6,7 +6,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:clashkingapp/core/functions.dart';
 
 class PlayerInfoHeaderCard extends StatefulWidget {
   final ProfileInfo playerStats;
@@ -192,8 +192,7 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                     Icons.sports_esports_rounded,
                     color: Theme.of(context).colorScheme.onSurface, size: 32),
                   onPressed: () async {
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    final languagecode = prefs.getString('languageCode');
+                    final languagecode = getPrefs('languageCode');
                     launchUrl(Uri.parse('https://link.clashofclans.com/$languagecode?action=OpenPlayerProfile&tag=${widget.playerStats.tag}'));
                   },
                 ),

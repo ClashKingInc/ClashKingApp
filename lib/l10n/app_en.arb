@@ -723,5 +723,14 @@
     "management": "Management",
     "comingSoon": "Coming soon!",
     "connectionError" : "An error occurred. Please check your internet connection and try again.",
-    "connectionErrorRelaunch" : "An error occurred. Please check your internet connection and relaunch the app."
+    "connectionErrorRelaunch" : "An error occurred. Please check your internet connection and relaunch the app.",
+    "updatedAt": "Updated at {time}",
+    "@updatedAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    }
+
 }

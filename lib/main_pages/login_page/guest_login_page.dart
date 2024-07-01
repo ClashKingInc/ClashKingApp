@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:clashkingapp/classes/account/cocdiscord_link_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/login_page/tag_input_chip.dart';
+import 'package:clashkingapp/core/functions.dart';
 
 class GuestLoginPage extends StatefulWidget {
   @override
@@ -287,8 +288,8 @@ class GuestLoginPageState extends State<GuestLoginPage> {
 
                                 final prefs =
                                     await SharedPreferences.getInstance();
-                                prefs.setString("user_type", "guest");
-                                prefs.setString('username', globalName);
+                                storePrefs("user_type", "guest");
+                                storePrefs('username', globalName);
                                 prefs.setStringList('tags', tags);
 
                                 // Navigate to the next screen

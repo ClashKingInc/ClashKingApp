@@ -2,14 +2,14 @@ import 'package:clashkingapp/classes/account/user.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/widgets/widgets_functions.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
-import 'package:clashkingapp/main_pages/login_page/login_page.dart';
+import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   User? user;
@@ -59,8 +59,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
 // Load the language from the shared preferences or set to the system locale
   void _loadLanguage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? languageCode = prefs.getString('languageCode');
+    String? languageCode = await getPrefs('languageCode');
 
     if (languageCode != null) {
       // If there is a language code saved, use it if supported
@@ -78,9 +77,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   // Change the language of the app
   void changeLanguage(String languageCode) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     _locale = Locale(languageCode);
-    await prefs.setString('languageCode', languageCode);
+    await storePrefs('languageCode', languageCode);
     notifyListeners();
   }
 
@@ -93,8 +91,11 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   // Update the war widget
   Future<void> updateWarWidget() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    clanTag = prefs.getString('clanTag');
+    await dotenv.load(fileName: ".env");
+    clanTag = await getPrefs('clanTag');
+    if (clanTag != "") {
+      clanTag = clanTag?.replaceAll('#', '%23');
+    }
     final warInfo = await checkCurrentWar(clanTag);
     try {
       // Send data to the widget
@@ -121,48 +122,41 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   /* User management */
 
   // Reload the user accounts
-  Future<void> reloadUsersAccounts(context) async {
-    isLoading = true; // Set the loading state to true
-
-    notifyListeners();
-
-    if (user!.isDiscordUser) {
-      await initializeDiscordUser(context);
-    }
+  Future<void> reloadUsersAccounts(BuildContext context) async {
     if (user != null) {
       if (user!.isDiscordUser) {
+        await initializeDiscordUser(context);
         await fetchDiscordUserTags(user!);
       }
-      accounts!.selectedTag = ValueNotifier<String?>(user!.tags.first);
       accounts = await AccountsService().fetchAccounts(user!);
-      initializeData();
+      account = accounts!.findAccountBySelectedTag();
+
+      if (account != null && account!.profileInfo.clan != null) {
+        await storePrefs('clanTag', account!.profileInfo.clan!.tag);
+      } else {
+        await storePrefs('clanTag', '');
+      }
+      await Future.wait(accounts!.list.map((account) async {
+        while (account.profileInfo.initialized != true) {
+          await Future.delayed(Duration(milliseconds: 100));
+        }
+      }));
+
+      selectedTagNotifier.value = accounts?.selectedTag.value;
+      updateWidgets();
     }
-
-    await Future.delayed(Duration(seconds: 1));
-    isLoading = false;
-    notifyListeners();
-  }
-
-  void refreshData() async {
-    await AccountsService().fetchAccounts(user!);
     notifyListeners();
   }
 
   Future<bool> initializeData() async {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       accounts = await AccountsService().fetchAccounts(user!);
-
-      // Check if the selected tag is still valid after fetching new data
-      if (!user!.tags.contains(accounts!.selectedTag.value) ||
-          accounts!.selectedTag.value == null) {
-        accounts!.selectedTag = ValueNotifier<String?>(user!.tags.first);
-      }
       account = accounts!.findAccountBySelectedTag();
+
       if (account != null && account!.profileInfo.clan != null) {
-        await prefs.setString('clanTag', account!.profileInfo.clan!.tag);
+        await storePrefs('clanTag', account!.profileInfo.clan!.tag);
       } else {
-        await prefs.setString('clanTag', '');
+        await storePrefs('clanTag', '');
       }
 
       selectedTagNotifier.value = accounts?.selectedTag.value;
@@ -189,29 +183,28 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> initializeDiscordUser(BuildContext context) async {
     NavigatorState navigator = Navigator.of(context);
-    final accessToken = await getAccessToken();
+    print("initializeDiscordUser");
+    final accessToken = await getPrefs("access_token");
+    print("getPref token : $accessToken");
     bool tokenValid = await isTokenValid();
     if (accessToken != null && tokenValid) {
       user = await fetchDiscordUser(accessToken);
+      print("user : $user");
       if (user != null) {
         notifyListeners();
       } else {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.clear();
-        navigator
-            .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+        clearPrefs();
+        navigator.push(MaterialPageRoute(builder: (_) => StartupWidget()));
       }
     } else {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.clear();
-      navigator.pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+      clearPrefs();
+      navigator.push(MaterialPageRoute(builder: (_) => StartupWidget()));
     }
   }
 
   // Initialize the user as a guest user
   Future<void> initializeGuestUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final username = prefs.getString('username');
+    final username = await getPrefs('username');
     user = User(
       id: '0',
       avatar: 'https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png',

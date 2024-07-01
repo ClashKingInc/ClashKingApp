@@ -640,5 +640,13 @@
     "management": "Gestion",
     "comingSoon": "Bientôt disponible !",
     "connectionError" : "Une erreur s'est produite. Veuillez vérifier votre connexion internet et réessayer.",
-    "connectionErrorRelaunch" : "Une erreur est survenue. Veuillez vérifier votre connexion internet et relancer l'application."
+    "connectionErrorRelaunch" : "Une erreur est survenue. Veuillez vérifier votre connexion internet et relancer l'application.",
+    "updatedAt": "Mis à jour à {time}",
+    "@updatedAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    }
 }
