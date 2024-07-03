@@ -103,7 +103,7 @@ class AccountsService {
           fetchTasks); // We don't assign the result to accountsList anymore
       fetchSpan.finish(status: SpanStatus.ok());
 
-// Fetch selectedTag from SharedPreferences
+      // Fetch selectedTag from SharedPreferences
       String? selectedTag = await getPrefs('selectedTag');
 
       // Step 4: Sort the accountsList with the selectedTag at the top

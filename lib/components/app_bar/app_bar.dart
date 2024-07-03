@@ -46,7 +46,6 @@ class CustomAppBarState extends State<CustomAppBar> {
 
   Future<void> _saveSelectedTag(String? newValue) async {
     if (newValue != null) {
-      print('Saving selectedTag: $newValue');
       await storePrefs('selectedTag', newValue);
     }
   }

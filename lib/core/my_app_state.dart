@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/widgets/widgets_functions.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
@@ -132,9 +133,13 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       account = accounts!.findAccountBySelectedTag();
 
       if (account != null && account!.profileInfo.clan != null) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
         await storePrefs('clanTag', account!.profileInfo.clan!.tag);
+        await prefs.setString('clanTag', account!.profileInfo.clan!.tag);
       } else {
-        await storePrefs('clanTag', '');
+        await deletePrefs('clanTag');
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.remove('clanTag');
       }
       await Future.wait(accounts!.list.map((account) async {
         while (account.profileInfo.initialized != true) {
@@ -155,8 +160,12 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
       if (account != null && account!.profileInfo.clan != null) {
         await storePrefs('clanTag', account!.profileInfo.clan!.tag);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('clanTag', account!.profileInfo.clan!.tag);
       } else {
-        await storePrefs('clanTag', '');
+        await deletePrefs('clanTag');
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.remove('clanTag');
       }
 
       selectedTagNotifier.value = accounts?.selectedTag.value;

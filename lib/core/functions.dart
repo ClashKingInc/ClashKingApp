@@ -101,6 +101,15 @@ Future<String?> getPrefs(String name) async {
   }
 }
 
+
+Future<void> deletePrefs(String name) async {
+  try {
+    await storage.delete(key: name);
+  } catch (e) {
+    print("Error deleting prefs for $name: $e");
+  }
+}
+
 Future<void> clearPrefs() async {
   await storage.deleteAll();
 }
