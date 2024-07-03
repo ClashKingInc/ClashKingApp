@@ -20,8 +20,6 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
         ? "https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/ClashKing-1.png"
         : "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png";
 
-    print(logoUrl);
-
     return GestureDetector(
       onTap: () async {
         final languagecode = await getPrefs('languageCode');

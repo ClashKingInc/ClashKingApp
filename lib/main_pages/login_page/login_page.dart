@@ -65,7 +65,7 @@ class LoginPageState extends State<LoginPage> {
                 ButtonTheme(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       minimumSize: Size(240, 48),
                     ),
                     child: Row(
@@ -85,7 +85,7 @@ class LoginPageState extends State<LoginPage> {
                 ButtonTheme(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
                       minimumSize: Size(240, 48),
                     ),
                     child: Row(

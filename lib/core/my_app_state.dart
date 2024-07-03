@@ -183,13 +183,10 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> initializeDiscordUser(BuildContext context) async {
     NavigatorState navigator = Navigator.of(context);
-    print("initializeDiscordUser");
     final accessToken = await getPrefs("access_token");
-    print("getPref token : $accessToken");
     bool tokenValid = await isTokenValid();
     if (accessToken != null && tokenValid) {
       user = await fetchDiscordUser(accessToken);
-      print("user : $user");
       if (user != null) {
         notifyListeners();
       } else {

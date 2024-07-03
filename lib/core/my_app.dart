@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Color.fromARGB(255, 61, 60, 60),
                 surfaceTintColor: Colors.transparent,
                 headerForegroundColor: Colors.white,
-                headerBackgroundColor: Color.fromARGB(255, 3, 82, 147),
+                headerBackgroundColor: Color(0xFFBF0000),
                 dayForegroundColor: WidgetStateProperty.all(Colors.white),
                 yearForegroundColor: WidgetStateProperty.all(Colors.white),
                 todayForegroundColor: WidgetStateProperty.all(Colors.white),
@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
                 labelStyle: TextStyle(
                   fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                   color: Color(0xFFFFFFFF),
-                  decorationColor: Color.fromARGB(255, 3, 82, 147),
+                  decorationColor: Color(0xFFBF0000),
                 ),
                 hintStyle: TextStyle(
                     backgroundColor: Colors.transparent,
@@ -98,8 +98,8 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Color.fromARGB(
                     255, 31, 31, 31), // primary color as the seed
-                primary: Color.fromARGB(255, 2, 108, 194),
-                secondary: Color(0xFFBF0000),
+                primary: Color(0xFFBF0000),
+                secondary: Color.fromARGB(255, 2, 108, 194),
                 tertiary: Colors.grey,
                 surface: Color.fromARGB(255, 31, 31, 31),
                 error: Color.fromARGB(255, 255, 0, 0),
@@ -169,7 +169,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.white,
                 surfaceTintColor: Colors.transparent,
                 headerForegroundColor: Colors.white,
-                headerBackgroundColor: Color.fromARGB(255, 3, 82, 147),
+                headerBackgroundColor: Color(0xFFBF0000),
                 dayForegroundColor: WidgetStateProperty.all(Colors.black),
                 yearForegroundColor: WidgetStateProperty.all(Colors.black),
                 todayForegroundColor: WidgetStateProperty.all(Colors.black),
@@ -217,8 +217,8 @@ class MyApp extends StatelessWidget {
               brightness: Brightness.light,
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Color(0xFFFFFFFF), // primary color as the seed
-                primary: Color.fromARGB(255, 3, 82, 147),
-                secondary: Color(0xFFBF0000),
+                primary: Color(0xFFBF0000),
+                secondary:Color.fromARGB(255, 3, 82, 147),
                 tertiary: Colors.grey[600],
                 surface: Color(0xFFFFFFFF),
                 error: Color(0xFFB00020),

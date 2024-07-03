@@ -68,8 +68,6 @@ class DashboardPageState extends State<DashboardPage>
 
   @override
   Widget build(BuildContext context) {
-    print("account : ${widget.playerStats.tag}");
-    print("Initialised : ${widget.playerStats.initialized}");
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();

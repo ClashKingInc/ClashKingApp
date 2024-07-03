@@ -116,7 +116,6 @@ class StartupWidgetState extends State<StartupWidget> {
   }
 
   Future<void> _initializeApp() async {
-    print('initialize App');
     final appState = Provider.of<MyAppState>(context, listen: false);
     final transaction = Sentry.startTransaction(
       'initializeApp',
@@ -130,7 +129,6 @@ class StartupWidgetState extends State<StartupWidget> {
       prefsSpan.finish(status: SpanStatus.ok());
 
       final userType = await getPrefs('user_type');
-      print("userType : $userType");
 
       if (userType == "guest") {
         // Initialize guest user
@@ -146,16 +144,13 @@ class StartupWidgetState extends State<StartupWidget> {
       } else if (userType == "discord") {
         // Check if the token is valid
         final tokenSpan = transaction.startChild('isTokenValid');
-        print("before isTokenValid");
         bool validToken = await isTokenValid();
-        print("after isTokenValid");
         tokenSpan.finish(
             status: validToken ? SpanStatus.ok() : SpanStatus.internalError());
 
         if (validToken && mounted) {
           // Initialize discord user
           final discordSpan = transaction.startChild('initializeDiscordUser');
-          print("before initializeDiscordUser");
           await appState.initializeDiscordUser(context);
           discordSpan.finish(status: SpanStatus.ok());
 
