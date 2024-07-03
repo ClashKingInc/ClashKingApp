@@ -124,9 +124,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                                       },
                                       initialValue: currentSegment,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
+                                        color: Theme.of(context).colorScheme.tertiary.withOpacity(0.5),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       thumbDecoration: BoxDecoration(

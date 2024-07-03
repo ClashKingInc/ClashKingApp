@@ -308,6 +308,8 @@ class ClanService {
       final warLog = responses[1] as WarLog;
       final joinLeaveLog = responses[2] as JoinLeaveClan;
 
+      print(warStateInfo.state);
+
       if (clanInfo.warLeague != null) {
         clanInfo.warLeague!.imageUrl =
             LeagueDataManager().getLeagueUrl(clanInfo.warLeague!.name);
@@ -339,7 +341,7 @@ class ClanService {
   Future<WarStateInfo> fetchWarStateInfo(String clanTag) async {
     final now = DateTime.now();
     final warInfoFuture = fetchCurrentWarInfo(clanTag);
-    final leagueInfoFuture = (now.day > 1 && now.day < 12)
+    final leagueInfoFuture = (now.day >= 1 && now.day <= 12)
         ? fetchCurrentLeagueInfo(clanTag)
         : Future.value(null);
 
@@ -396,6 +398,7 @@ class ClanService {
   }
 
   Future<CurrentLeagueInfo?> fetchCurrentLeagueInfo(String clanTag) async {
+    print("league");
     try {
       return await retry(
         () async {
@@ -405,6 +408,8 @@ class ClanService {
                     'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
               )
               .timeout(Duration(seconds: 5));
+
+          print(responseCwl.statusCode);
 
           if (responseCwl.statusCode == 200) {
             var decodedResponseCwl =

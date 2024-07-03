@@ -93,10 +93,10 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> updateWarWidget() async {
     await dotenv.load(fileName: ".env");
     clanTag = await getPrefs('clanTag');
+    final warInfo = await checkCurrentWar(clanTag);
     if (clanTag != "") {
       clanTag = clanTag?.replaceAll('#', '%23');
     }
-    final warInfo = await checkCurrentWar(clanTag);
     try {
       // Send data to the widget
       await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
@@ -183,13 +183,10 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> initializeDiscordUser(BuildContext context) async {
     NavigatorState navigator = Navigator.of(context);
-    print("initializeDiscordUser");
     final accessToken = await getPrefs("access_token");
-    print("getPref token : $accessToken");
     bool tokenValid = await isTokenValid();
     if (accessToken != null && tokenValid) {
       user = await fetchDiscordUser(accessToken);
-      print("user : $user");
       if (user != null) {
         notifyListeners();
       } else {
@@ -207,7 +204,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     final username = await getPrefs('username');
     user = User(
       id: '0',
-      avatar: 'https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png',
+      avatar: 'https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png',
       globalName: username ?? 'ILoveClashKing',
     );
 

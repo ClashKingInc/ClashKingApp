@@ -1,6 +1,5 @@
 import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
@@ -15,8 +14,6 @@ import 'package:clashkingapp/main_pages/login_page/guest_login_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-//import 'dart:html' as html;
-
 class LoginPage extends StatefulWidget {
   @override
   LoginPageState createState() => LoginPageState();
@@ -27,44 +24,48 @@ class LoginPageState extends State<LoginPage> {
   final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
   final String clientSecret = dotenv.env['DISCORD_CLIENT_SECRET']!;
   final String callbackUrlScheme = dotenv.env['DISCORD_CALLBACK_URL_SCHEME']!;
-  // final String redirectWebUri = dotenv.env['DISCORD_REDIRECT_URI_WEB']!;
-  // Discord n'utilise pas clientSecret dans le flux d'authentification côté client, donc il pourrait ne pas être nécessaire ici
 
   @override
   Widget build(BuildContext context) {
+    // Check if the theme is light or dark
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Set the appropriate image URLs based on the theme
+    final logoUrl = isDarkMode
+        ? "https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/ClashKing-1.png"
+        : "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png";
+    final textLogoUrl = isDarkMode
+        ? "https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/CK-text-dark-bg.png"
+        : "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/CK-text-white-bg.png";
+
     return Scaffold(
       body: SingleChildScrollView(
-        // Permet le défilement
         child: Center(
           child: ConstrainedBox(
             constraints:
                 BoxConstraints(minHeight: MediaQuery.of(context).size.height),
             child: Column(
-              mainAxisAlignment:
-                  MainAxisAlignment.center, // Centre verticalement
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Column(
                   children: [
                     SizedBox(
                       height: 150,
                       width: 150,
-                      child: CachedNetworkImage(
-                          imageUrl:
-                              "https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png"),
+                      child: CachedNetworkImage(imageUrl: logoUrl),
                     ),
+                    SizedBox(height: 8),
                     SizedBox(
                       width: 250,
-                      child: CachedNetworkImage(
-                          imageUrl:
-                              "https://clashkingfiles.b-cdn.net/logos/ClashKing-name-logo.png"),
+                      child: CachedNetworkImage(imageUrl: textLogoUrl),
                     ),
                   ],
                 ),
-                SizedBox(height: 64),
+                SizedBox(height: 48),
                 ButtonTheme(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       minimumSize: Size(240, 48),
                     ),
                     child: Row(
@@ -80,11 +81,11 @@ class LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
-                SizedBox(height: 16), // Espace entre les boutons
+                SizedBox(height: 16),
                 ButtonTheme(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
                       minimumSize: Size(240, 48),
                     ),
                     child: Row(
@@ -122,11 +123,9 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Fonction pour lancer le processus d'authentification
   Future<void> discordSignIn(BuildContext context) async {
     String codeVerifier;
     String codeChallenge;
-    // Construct the URL
     String generateCodeVerifier() {
       const String charset =
           'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
@@ -156,18 +155,12 @@ class LoginPageState extends State<LoginPage> {
       'code_challenge_method': 'S256',
     });
 
-// Present the dialog to the user
     try {
       final result = await FlutterWebAuth2.authenticate(
           url: url.toString(), callbackUrlScheme: callbackUrlScheme);
 
-// Extract code from resulting URL
       final code = Uri.parse(result).queryParameters['code'];
-
-// Construct an Uri to Discord's oauth2 endpoint
       final tokenUrl = Uri.https('discord.com', '/api/oauth2/token');
-
-      // Use this code to get an access token
       final response = await http.post(tokenUrl, body: {
         'client_id': clientId,
         'client_secret': clientSecret,
@@ -177,20 +170,15 @@ class LoginPageState extends State<LoginPage> {
         'code_verifier': codeVerifier
       });
 
-      // Get the access token from the response
       final accessToken = jsonDecode(response.body)['access_token'] as String;
-
-      // Save the access token using shared_preferences
       await storePrefs('user_type', 'discord');
       await storePrefs('access_token', accessToken);
 
-      // Save the expiration date of the access token
       int expiresIn = jsonDecode(response.body)['expires_in'];
       DateTime expirationDate =
           DateTime.now().add(Duration(seconds: expiresIn));
       await storePrefs('expiration_date', expirationDate.toIso8601String());
 
-      // Navigate to MyHomePage
       globalNavigatorKey.currentState!.pushReplacement(
         MaterialPageRoute(builder: (context) => StartupWidget()),
       );
@@ -198,27 +186,4 @@ class LoginPageState extends State<LoginPage> {
       Sentry.captureException(exception, stackTrace: stackTrace);
     }
   }
-
-/*
-  Future<void> signInWithDiscordFromWeb(BuildContext context) async {
-    final url = Uri.https('discord.com', '/api/oauth2/authorize', {
-      'response_type': 'code',
-      'client_id': clientId,
-      'scope': 'identify email',
-      'redirect_uri': redirectWebUri,
-      'prompt': 'consent',
-    });
-
-
-    html.window.console.log(url.toString());
-
-    // Redirigez l'utilisateur vers l'URL d'authentification
-    html.window.location.href = url.toString();
-
-    if (globalNavigatorKey.currentState != null) {
-      globalNavigatorKey.currentState!.pushReplacement(
-        MaterialPageRoute(builder: (context) => StartupWidget()),
-      );
-    }
-  }*/
 }
