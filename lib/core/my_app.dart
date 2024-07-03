@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Color.fromARGB(255, 61, 60, 60),
                 surfaceTintColor: Colors.transparent,
                 headerForegroundColor: Colors.white,
-                headerBackgroundColor: Color(0xFFBF0000),
+                headerBackgroundColor: Color(0xFFD90709),
                 dayForegroundColor: WidgetStateProperty.all(Colors.white),
                 yearForegroundColor: WidgetStateProperty.all(Colors.white),
                 todayForegroundColor: WidgetStateProperty.all(Colors.white),
@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
                 labelStyle: TextStyle(
                   fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
                   color: Color(0xFFFFFFFF),
-                  decorationColor: Color(0xFFBF0000),
+                  decorationColor: Color(0xFFD90709),
                 ),
                 hintStyle: TextStyle(
                     backgroundColor: Colors.transparent,
@@ -98,7 +98,7 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Color.fromARGB(
                     255, 31, 31, 31), // primary color as the seed
-                primary: Color(0xFFBF0000),
+                primary: Color(0xFFD90709),
                 secondary: Color.fromARGB(255, 2, 108, 194),
                 tertiary: Colors.grey,
                 surface: Color.fromARGB(255, 31, 31, 31),
@@ -164,7 +164,7 @@ class MyApp extends StatelessWidget {
             // Light theme
             theme: ThemeData(
               useMaterial3: true,
-              scaffoldBackgroundColor: Color.fromARGB(255, 245, 249, 251),
+              scaffoldBackgroundColor: Color.fromARGB(255, 244, 244, 244),
               datePickerTheme: DatePickerThemeData(
                 backgroundColor: Colors.white,
                 surfaceTintColor: Colors.transparent,

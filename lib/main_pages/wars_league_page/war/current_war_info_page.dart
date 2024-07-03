@@ -120,7 +120,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                   2: Text(AppLocalizations.of(context)?.enemiesTeam ?? 'Enemies'),
                 },
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.tertiary.withOpacity(0.5),
+                  color: Theme.of(context).colorScheme.primary,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 thumbDecoration: BoxDecoration(

@@ -93,10 +93,10 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> updateWarWidget() async {
     await dotenv.load(fileName: ".env");
     clanTag = await getPrefs('clanTag');
+    final warInfo = await checkCurrentWar(clanTag);
     if (clanTag != "") {
       clanTag = clanTag?.replaceAll('#', '%23');
     }
-    final warInfo = await checkCurrentWar(clanTag);
     try {
       // Send data to the widget
       await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
