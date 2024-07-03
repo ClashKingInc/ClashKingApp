@@ -1,5 +1,5 @@
 {
-    "@@locale": "es",
+    "@@locale": "es-ES",
     "creatorCode": "Código de Creador: ClashKing",
     "signInWithDiscord": "Iniciar sesión con Discord",
     "guestMode": "Modo Invitado",
@@ -719,5 +719,13 @@
     "management": "Administración",
     "comingSoon": "¡Próximamente!",
     "connectionError": "An error occurred. Please check your internet connection and try again.",
-    "connectionErrorRelaunch": "An error occurred. Please check your internet connection and relaunch the app."
+    "connectionErrorRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
+    "updatedAt": "Updated at {time}",
+    "@updatedAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    }
 }
