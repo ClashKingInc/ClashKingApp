@@ -123,7 +123,7 @@
     "tagOrNamePlayer": "Spielerkürzel oder Name",
     "searchPlayer": "Spieler suchen",
     "nameOrTagPlayer": "Name oder Spielerkürzel",
-    "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+    "playerClanDescription": "Dein Clan ist \"{clan}\" ({tag}).",
     "@playerClanDescription": {
         "placeholders": {
             "clan": {
@@ -719,5 +719,13 @@
     "management": "Verwaltung",
     "comingSoon": "Bald verfügbar!",
     "connectionError": "An error occurred. Please check your internet connection and try again.",
-    "connectionErrorRelaunch": "An error occurred. Please check your internet connection and relaunch the app."
+    "connectionErrorRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
+    "updatedAt": "Updated at {time}",
+    "@updatedAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    }
 }

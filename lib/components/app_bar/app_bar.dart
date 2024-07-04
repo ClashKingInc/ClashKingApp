@@ -46,7 +46,6 @@ class CustomAppBarState extends State<CustomAppBar> {
 
   Future<void> _saveSelectedTag(String? newValue) async {
     if (newValue != null) {
-      print('Saving selectedTag: $newValue');
       await storePrefs('selectedTag', newValue);
     }
   }
@@ -124,9 +123,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                                       },
                                       initialValue: currentSegment,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
+                                        color: Theme.of(context).colorScheme.tertiary.withOpacity(0.5),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       thumbDecoration: BoxDecoration(

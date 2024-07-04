@@ -50,12 +50,12 @@ class WarHistoryHeader extends StatelessWidget {
               Text(
                 clanName,
                 style: Theme.of(context).textTheme.titleLarge
-                  ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                  ?.copyWith(color: Colors.white),
               ),
               Text(
                 clanTag,
                 style: Theme.of(context).textTheme.bodyMedium
-                  ?.copyWith(color: Theme.of(context).colorScheme.tertiary),
+                  ?.copyWith(color: Colors.white),
               ),
             ],
           ),

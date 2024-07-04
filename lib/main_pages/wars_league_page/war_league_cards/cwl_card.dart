@@ -35,7 +35,8 @@ class CwlCardState extends State<CwlCard> {
       List<CurrentWarInfo> warLeagueInfos = await round.warLeagueInfos;
 
       for (var warInfo in warLeagueInfos) {
-        if (warInfo.clan.tag == widget.clanTag || warInfo.opponent.tag == widget.clanTag) {
+        if (warInfo.clan.tag == widget.clanTag ||
+            warInfo.opponent.tag == widget.clanTag) {
           lastMatchedWarInfo = warInfo;
 
           if (warInfo.state == 'inWar') {
@@ -74,7 +75,12 @@ class CwlCardState extends State<CwlCard> {
           return Text('Error: ${snapshot.error}');
         } else {
           CurrentWarInfo? warInfo = snapshot.data;
-          return CurrentWarInfoCard(currentWarInfo: warInfo!, clanTag: widget.clanTag);
+          if (warInfo != null) {
+            return CurrentWarInfoCard(
+                currentWarInfo: warInfo, clanTag: widget.clanTag);
+          } else {
+            return SizedBox.shrink();
+          }
         }
       },
     );

@@ -143,8 +143,7 @@ class GuestLoginPageState extends State<GuestLoginPage> {
       child: PopScope(
         canPop : true,
       onPopInvoked: (didPop) async {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.remove('access_token');
+        await deletePrefs('access_token');
         navigator.pushReplacement(
           MaterialPageRoute(builder: (_) => StartupWidget()));
       },
@@ -154,8 +153,7 @@ class GuestLoginPageState extends State<GuestLoginPage> {
             leading: IconButton(
               icon: Icon(Icons.arrow_back, size: 32),
               onPressed: () async {
-                final prefs = await SharedPreferences.getInstance();
-                prefs.remove('access_token');
+                await deletePrefs('access_token');
                 globalNavigatorKey.currentState!.pushReplacement(
                   MaterialPageRoute(builder: (context) => StartupWidget()),
                 );
@@ -171,13 +169,13 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                   width: 100,
                   child: CachedNetworkImage(
                       imageUrl:
-                          "https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png"),
+                          "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png"),
                 ),
                 SizedBox(
                   width: 200,
                   child: CachedNetworkImage(
                       imageUrl:
-                          "https://clashkingfiles.b-cdn.net/logos/ClashKing-name-logo.png"),
+                          "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/CK-text-white-bg.png"),
                 ),
                 SizedBox(height: 32),
                 Text(AppLocalizations.of(context)!.createGuestProfile,

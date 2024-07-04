@@ -109,11 +109,16 @@ Future<Map<String, dynamic>> calculateTotalStarsAndPercentageForMember(
   }
 
   for (var member in totalByMember.keys) {
-    totalByMember[member]?['averageStars'] = totalByMember[member]!['stars'] /
-        totalByMember[member]!['warParticipated'];
-    totalByMember[member]?['averagePercentage'] =
-        totalByMember[member]!['percentage'] /
-            totalByMember[member]!['warParticipated'];
+    if (totalByMember[member]!['warParticipated'] == 0) {
+      totalByMember[member]?['averageStars'] = 0;
+      totalByMember[member]?['averagePercentage'] = 0;
+    } else {
+      totalByMember[member]?['averageStars'] = totalByMember[member]!['stars'] /
+          totalByMember[member]!['warParticipated'];
+      totalByMember[member]?['averagePercentage'] =
+          totalByMember[member]!['percentage'] /
+              totalByMember[member]!['warParticipated'];
+    }
   }
 
   // Convert the map to a list of entries

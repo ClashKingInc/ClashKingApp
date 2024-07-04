@@ -148,12 +148,23 @@ class WarLogHistoryCardState extends State<WarLogHistoryCard> {
             child: Column(
               children: List<Widget>.generate(warLogData.length, (index) {
                 final warLogDetail = warLogData[index];
+                final navigator = Navigator.of(context);
 
                 return GestureDetector(
                   onTap: () {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    );
                     CurrentWarService.fetchWarDataFromTime(
                             widget.clanTag, warLogDetail.endTime)
                         .then((currentWarInfo) {
+                      navigator.pop();
                       if (currentWarInfo == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -174,8 +185,7 @@ class WarLogHistoryCardState extends State<WarLogHistoryCard> {
                           ),
                         );
                       } else {
-                        Navigator.push(
-                          context,
+                        navigator.push(
                           MaterialPageRoute(
                             builder: (context) => CurrentWarInfoScreen(
                               currentWarInfo: currentWarInfo,

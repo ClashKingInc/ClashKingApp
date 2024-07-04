@@ -327,7 +327,7 @@ class LegendScreenState extends State<LegendScreen>
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
             margin: EdgeInsets.only(top: 200),
-            child: CircularProgressIndicator(),
+            child: Center(child: CircularProgressIndicator()),
           );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
@@ -353,228 +353,175 @@ class LegendScreenState extends State<LegendScreen>
       buildLegendHistoryChart(seasonLegendData)
     ]);
   }
-Widget buildTrophiesByMonthChart(Map<String, LegendDay> legendData) {
-  Map<String, Map<String, String>> seasonTrophies = {};
 
-  legendData.forEach((date, details) {
-    String dailyTrophies = "0";
+  Widget buildTrophiesByMonthChart(Map<String, LegendDay> legendData) {
+    Map<String, Map<String, String>> seasonTrophies = {};
 
-    List<Attack> attacksList = details.newAttacks.isNotEmpty
-        ? details.newAttacks
-        : details.attacks.map((value) => Attack(change: value, time: 0, trophies: 0, heroGear: [])).toList();
-        
-    List<Defense> defensesList = details.newDefenses.isNotEmpty
-        ? details.newDefenses
-        : details.defenses.map((value) => Defense(change: value, time: 0, trophies: 0)).toList();
+    legendData.forEach((date, details) {
+      String dailyTrophies = "0";
 
-    if (attacksList.isNotEmpty && defensesList.isNotEmpty) {
-      var lastAttack = attacksList.last;
-      var lastDefense = defensesList.last;
-      dailyTrophies = (lastAttack.time > lastDefense.time
-              ? lastAttack.trophies
-              : lastDefense.trophies)
-          .toString();
-    } else if (attacksList.isNotEmpty) {
-      var lastAttack = attacksList.last;
-      dailyTrophies = lastAttack.trophies.toString();
-    } else if (defensesList.isNotEmpty) {
-      var lastDefense = defensesList.last;
-      dailyTrophies = lastDefense.trophies.toString();
+      List<Attack> attacksList = details.newAttacks.isNotEmpty
+          ? details.newAttacks
+          : details.attacks
+              .map((value) =>
+                  Attack(change: value, time: 0, trophies: 0, heroGear: []))
+              .toList();
+
+      List<Defense> defensesList = details.newDefenses.isNotEmpty
+          ? details.newDefenses
+          : details.defenses
+              .map((value) => Defense(change: value, time: 0, trophies: 0))
+              .toList();
+
+      if (attacksList.isNotEmpty && defensesList.isNotEmpty) {
+        var lastAttack = attacksList.last;
+        var lastDefense = defensesList.last;
+        dailyTrophies = (lastAttack.time > lastDefense.time
+                ? lastAttack.trophies
+                : lastDefense.trophies)
+            .toString();
+      } else if (attacksList.isNotEmpty) {
+        var lastAttack = attacksList.last;
+        dailyTrophies = lastAttack.trophies.toString();
+      } else if (defensesList.isNotEmpty) {
+        var lastDefense = defensesList.last;
+        dailyTrophies = lastDefense.trophies.toString();
+      }
+
+      DateTime dateObj = DateTime.parse(date);
+      String season = findSeasonStartDate(dateObj).toString();
+      String day = DateFormat('dd').format(dateObj);
+
+      if (!seasonTrophies.containsKey(season)) {
+        seasonTrophies[season] = {};
+      }
+      seasonTrophies[season]![day] = dailyTrophies;
+    });
+
+    DateTime firstDaySelectedMonth =
+        DateTime(selectedMonth.year, selectedMonth.month, 1);
+    DateTime lastDayPreviousMonth =
+        firstDaySelectedMonth.subtract(Duration(days: 1));
+
+    while (lastDayPreviousMonth.weekday != DateTime.monday) {
+      lastDayPreviousMonth = lastDayPreviousMonth.subtract(Duration(days: 1));
     }
 
-    DateTime dateObj = DateTime.parse(date);
-    String season = findSeasonStartDate(dateObj).toString();
-    String day = DateFormat('dd').format(dateObj);
+    DateTime seasonStart = lastDayPreviousMonth;
+    String seasonKey = lastDayPreviousMonth.toString();
 
-    if (!seasonTrophies.containsKey(season)) {
-      seasonTrophies[season] = {};
-    }
-    seasonTrophies[season]![day] = dailyTrophies;
-  });
+    Map<String, String> seasonData = seasonTrophies[seasonKey] ?? {};
 
-  DateTime firstDaySelectedMonth =
-      DateTime(selectedMonth.year, selectedMonth.month, 1);
-  DateTime lastDayPreviousMonth =
-      firstDaySelectedMonth.subtract(Duration(days: 1));
+    List<FlSpot> spots = convertToContinuousScale(seasonData, seasonStart);
 
-  while (lastDayPreviousMonth.weekday != DateTime.monday) {
-    lastDayPreviousMonth = lastDayPreviousMonth.subtract(Duration(days: 1));
-  }
+    if (spots.isNotEmpty) {
+      double minY = spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b);
+      double maxY = spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b);
+      double minX = spots.first.x;
+      double maxX = spots.first.x + spots.length.toDouble() - 1;
 
-  DateTime seasonStart = lastDayPreviousMonth;
-  String seasonKey = lastDayPreviousMonth.toString();
-
-  Map<String, String> seasonData = seasonTrophies[seasonKey] ?? {};
-
-  List<FlSpot> spots = convertToContinuousScale(seasonData, seasonStart);
-
-  if (spots.isNotEmpty) {
-    double minY = spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b);
-    double maxY = spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b);
-    double minX = spots.first.x;
-    double maxX = spots.first.x + spots.length.toDouble() - 1;
-
-    double rangeY = (maxY - minY) / 10;
-    if (rangeY == 0) rangeY = 1;
-    return SizedBox(
-      width: double.infinity,
-      height: 500,
-      child: Card(
-        margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
-        elevation: 4,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              left: 10.0, right: 20.0, top: 10.0, bottom: 10.0),
-          child: Column(children: [
-            Text(
-                AppLocalizations.of(context)?.trophiesByMonth ??
-                    "Trophies by Month",
-                style: Theme.of(context).textTheme.bodyMedium),
-            SizedBox(height: 16),
-            Expanded(
-              child: LineChart(
-                LineChartData(
-                  gridData: FlGridData(
-                    show: true,
-                    drawHorizontalLine: true,
-                    horizontalInterval: 20,
-                  ),
-                  titlesData: FlTitlesData(
-                    show: true,
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 30,
-                        interval: 3, // Display a label every 3 days
-                        getTitlesWidget: (double value, TitleMeta meta) {
-                          DateTime labelDate =
-                              seasonStart.add(Duration(days: value.toInt()));
-                          return Text(DateFormat('dd').format(labelDate),
-                              style: TextStyle(fontSize: 10));
-                        },
+      double rangeY = (maxY - minY) / 10;
+      if (rangeY == 0) rangeY = 1;
+      return SizedBox(
+        width: double.infinity,
+        height: 500,
+        child: Card(
+          margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
+          elevation: 4,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.only(
+                left: 10.0, right: 20.0, top: 10.0, bottom: 10.0),
+            child: Column(children: [
+              Text(
+                  AppLocalizations.of(context)?.trophiesByMonth ??
+                      "Trophies by Month",
+                  style: Theme.of(context).textTheme.bodyMedium),
+              SizedBox(height: 16),
+              Expanded(
+                child: LineChart(
+                  LineChartData(
+                    gridData: FlGridData(
+                      show: true,
+                      drawHorizontalLine: true,
+                      horizontalInterval: 20,
+                    ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 30,
+                          interval: 3, // Display a label every 3 days
+                          getTitlesWidget: (double value, TitleMeta meta) {
+                            DateTime labelDate =
+                                seasonStart.add(Duration(days: value.toInt()));
+                            return Text(DateFormat('dd').format(labelDate),
+                                style: TextStyle(fontSize: 10));
+                          },
+                        ),
+                      ),
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 40,
+                          interval: rangeY + 1,
+                          getTitlesWidget: (double value, TitleMeta meta) {
+                            return Text('${value.toInt()}');
+                          },
+                        ),
+                      ),
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                      topTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
                       ),
                     ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 40,
-                        interval: rangeY + 1,
-                        getTitlesWidget: (double value, TitleMeta meta) {
-                          return Text('${value.toInt()}');
-                        },
+                    borderData: FlBorderData(
+                      show: true,
+                      border: Border.all(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 1),
+                    ),
+                    lineBarsData: [
+                      LineChartBarData(
+                        spots: spots,
+                        color: Theme.of(context).colorScheme.primary,
+                        isCurved: true,
+                        barWidth: 2,
+                        isStrokeCapRound: true,
+                        dotData: FlDotData(
+                          show: true,
+                        ),
+                        belowBarData: BarAreaData(
+                          show: true,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.2),
+                        ),
                       ),
-                    ),
-                    rightTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    topTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                  ),
-                  borderData: FlBorderData(
-                    show: true,
-                    border: Border.all(
-                        color: Theme.of(context).colorScheme.secondary,
-                        width: 1),
-                  ),
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: spots,
-                      color: Theme.of(context).colorScheme.secondary,
-                      isCurved: true,
-                      barWidth: 2,
-                      isStrokeCapRound: true,
-                      dotData: FlDotData(
-                        show: true,
-                      ),
-                      belowBarData: BarAreaData(
-                        show: true,
-                        color: Theme.of(context)
+                    ],
+                    minX: minX,
+                    maxX: maxX,
+                    minY: minY,
+                    maxY: maxY,
+                    lineTouchData: LineTouchData(
+                      touchTooltipData: LineTouchTooltipData(
+                        getTooltipColor: (spot) => Theme.of(context)
                             .colorScheme
                             .primary
-                            .withOpacity(0.2),
+                            .withOpacity(0.8),
                       ),
+                      touchCallback: (FlTouchEvent touchEvent,
+                          LineTouchResponse? touchResponse) {},
+                      handleBuiltInTouches: true,
                     ),
-                  ],
-                  minX: minX,
-                  maxX: maxX,
-                  minY: minY,
-                  maxY: maxY,
-                  lineTouchData: LineTouchData(
-                    touchTooltipData: LineTouchTooltipData(
-                      getTooltipColor: (spot) => Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withOpacity(0.8),
-                    ),
-                    touchCallback: (FlTouchEvent touchEvent,
-                        LineTouchResponse? touchResponse) {},
-                    handleBuiltInTouches: true,
                   ),
+                  duration: Duration(milliseconds: 250),
                 ),
-                duration: Duration(milliseconds: 250),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back,
-                        color: Theme.of(context).colorScheme.onSurface,
-                        size: 16),
-                    onPressed: decrementMonth,
-                  ),
-                ),
-                Text(
-                  DateFormat('MMMM yyyy',
-                          Localizations.localeOf(context).languageCode)
-                      .format(selectedMonth),
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_forward,
-                        color: Theme.of(context).colorScheme.onSurface,
-                        size: 16),
-                    onPressed: incrementMonth,
-                  ),
-                ),
-              ],
-            ),
-          ]),
-        ),
-      ),
-    );
-  } else {
-    return SizedBox(
-      width: double.infinity,
-      height: 500,
-      child: Card(
-        margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
-        elevation: 4,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              left: 10.0, right: 10.0, top: 20.0, bottom: 10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                  AppLocalizations.of(context)?.noDataAvailable ??
-                      'No data available',
-                  style: Theme.of(context).textTheme.bodyMedium),
-              CachedNetworkImage(
-                imageUrl:
-                    'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
-                height: 300,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -590,7 +537,9 @@ Widget buildTrophiesByMonthChart(Map<String, LegendDay> legendData) {
                     ),
                   ),
                   Text(
-                    DateFormat('MMMM yyyy').format(selectedMonth),
+                    DateFormat('MMMM yyyy',
+                            Localizations.localeOf(context).languageCode)
+                        .format(selectedMonth),
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   SizedBox(
@@ -605,14 +554,70 @@ Widget buildTrophiesByMonthChart(Map<String, LegendDay> legendData) {
                   ),
                 ],
               ),
-            ],
+            ]),
           ),
         ),
-      ),
-    );
+      );
+    } else {
+      return SizedBox(
+        width: double.infinity,
+        height: 500,
+        child: Card(
+          margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
+          elevation: 4,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.only(
+                left: 10.0, right: 10.0, top: 20.0, bottom: 10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                    AppLocalizations.of(context)?.noDataAvailable ??
+                        'No data available',
+                    style: Theme.of(context).textTheme.bodyMedium),
+                CachedNetworkImage(
+                  imageUrl:
+                      'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
+                  height: 300,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            size: 16),
+                        onPressed: decrementMonth,
+                      ),
+                    ),
+                    Text(
+                      DateFormat('MMMM yyyy').format(selectedMonth),
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_forward,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            size: 16),
+                        onPressed: incrementMonth,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
-}
-
 
   Widget buildLegendHistoryChart(Future<List<dynamic>> seasonLegendData) {
     return FutureBuilder<List<dynamic>>(
@@ -724,14 +729,13 @@ Widget buildTrophiesByMonthChart(Map<String, LegendDay> legendData) {
                             borderData: FlBorderData(
                               show: true,
                               border: Border.all(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                                  color: Theme.of(context).colorScheme.primary,
                                   width: 1),
                             ),
                             lineBarsData: [
                               LineChartBarData(
                                 spots: spots,
-                                color: Theme.of(context).colorScheme.secondary,
+                                color: Theme.of(context).colorScheme.primary,
                                 isCurved: true,
                                 barWidth: 2,
                                 isStrokeCapRound: true,
