@@ -20,6 +20,7 @@ final storage = FlutterSecureStorage();
 Future<void> storePrefs(String name, String token) async {
   try {
     // Load the keys from the .env file
+    await dotenv.load(fileName: ".env");
     final encryptionKey = Key.fromBase64(
         dotenv.env['ENCRYPTION_KEY']!); // 32 bytes key for AES-256
     final hmacKey = base64.decode(dotenv.env['HMAC_KEY']!); // Key for HMAC

@@ -36,6 +36,16 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       'simplePeriodicTask',
       frequency: Duration(minutes: 15),
     );
+
+    selectedTagNotifier.addListener(() async {
+      print('Selected tag changed to ${selectedTagNotifier.value}');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await storePrefs('clanTag', account!.profileInfo.clan!.tag);
+      await prefs.setString('clanTag', account!.profileInfo.clan!.tag);
+      print('Clan tag saved to ${account!.profileInfo.clan!.tag}');
+      print('Player tag saved to ${account!.profileInfo.tag}');
+      updateWidgets();
+    });
   }
 
   // This method is called when the app is resumed
@@ -94,6 +104,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> updateWarWidget() async {
     await dotenv.load(fileName: ".env");
     clanTag = await getPrefs('clanTag');
+    print('Updating war widget for clan $clanTag');
     final warInfo = await checkCurrentWar(clanTag);
     if (clanTag != "") {
       clanTag = clanTag?.replaceAll('#', '%23');
@@ -213,7 +224,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     final username = await getPrefs('username');
     user = User(
       id: '0',
-      avatar: 'https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png',
+      avatar:
+          'https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png',
       globalName: username ?? 'ILoveClashKing',
     );
 
