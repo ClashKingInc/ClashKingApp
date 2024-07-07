@@ -5,7 +5,6 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/components/clan_wars_stats_card.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
@@ -17,6 +16,7 @@ import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_pa
 import 'package:clashkingapp/main_pages/wars_league_page/league/current_league_info_page.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/war_history_page.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:clashkingapp/core/functions.dart';
 
 class ClanInfoHeaderCard extends StatefulWidget {
   final Clan clanInfo;
@@ -115,9 +115,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                         color: Theme.of(context).colorScheme.onSurface,
                         size: 32),
                     onPressed: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      final languagecode = prefs.getString('languageCode');
+                      final languagecode = getPrefs('languageCode');
                       launchUrl(Uri.parse(
                           'https://link.clashofclans.com/$languagecode?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
                     },
@@ -490,17 +488,14 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                 SizedBox(width: 8),
                                 Shimmer.fromColors(
                                   period: Duration(seconds: 3),
-                                  baseColor:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  highlightColor: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withOpacity(0.3),
+                                  baseColor: Colors.white,
+                                highlightColor: Colors.white.withOpacity(0.4),
                                   child: Text(
                                     AppLocalizations.of(context)?.ongoingCwl ??
                                         "Ongoing CWL",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
                                   ),
                                 ),
                               ],

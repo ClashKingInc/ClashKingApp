@@ -54,7 +54,7 @@ class DashboardPageState extends State<DashboardPage>
     widget.playerStats.legendsInitialized = false;
     final profileInfo =
         await ProfileInfoService().fetchProfileInfo(widget.playerStats.tag);
-    while (profileInfo.initialized != true) {
+    while (profileInfo!.initialized != true) {
       await Future.delayed(Duration(milliseconds: 100));
     }
 

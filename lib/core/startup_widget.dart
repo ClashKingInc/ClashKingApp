@@ -3,7 +3,6 @@ import 'package:clashkingapp/main_pages/login_page/login_page.dart';
 import 'package:clashkingapp/core/my_home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/main_pages/login_page/tag_input_chip.dart';
 import 'dart:async';
@@ -127,10 +126,9 @@ class StartupWidgetState extends State<StartupWidget> {
     try {
       // Start a child span for SharedPreferences
       final prefsSpan = transaction.startChild('SharedPreferences.getInstance');
-      final prefs = await SharedPreferences.getInstance();
       prefsSpan.finish(status: SpanStatus.ok());
 
-      final userType = prefs.getString('user_type');
+      final userType = await getPrefs('user_type');
 
       if (userType == "guest") {
         // Initialize guest user
@@ -165,7 +163,7 @@ class StartupWidgetState extends State<StartupWidget> {
             _showTagDialog();
           }
         } else {
-          prefs.setString("user_type", "");
+          storePrefs("user_type", "");
         }
       } else {
         // Redirect to the login page
@@ -191,6 +189,17 @@ class StartupWidgetState extends State<StartupWidget> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        // Check if the theme is light or dark
+
+        final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+        // Set the appropriate image URLs based on the theme
+        final logoUrl = isDarkMode
+            ? "https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/ClashKing-1.png"
+            : "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png";
+        final textLogoUrl = isDarkMode
+            ? "https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/CK-text-dark-bg.png"
+            : "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/CK-text-white-bg.png";
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             void localOnSubmit(String text) async {
@@ -225,15 +234,11 @@ class StartupWidgetState extends State<StartupWidget> {
                 SizedBox(
                   height: 50,
                   width: 50,
-                  child: CachedNetworkImage(
-                      imageUrl:
-                          "https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png"),
+                  child: CachedNetworkImage(imageUrl: logoUrl),
                 ),
                 SizedBox(
                   width: 150,
-                  child: CachedNetworkImage(
-                      imageUrl:
-                          "https://clashkingfiles.b-cdn.net/logos/ClashKing-name-logo.png"),
+                  child: CachedNetworkImage(imageUrl: textLogoUrl),
                 ),
                 SizedBox(height: 32),
                 Text(AppLocalizations.of(context)!.welcome,

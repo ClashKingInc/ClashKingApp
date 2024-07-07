@@ -69,9 +69,9 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
               );
             },
           );
-          ProfileInfo playerStats =
+          ProfileInfo? playerStats =
               await ProfileInfoService().fetchProfileInfo(widget.player['tag']);
-          while (playerStats.initialized != true) {
+          while (playerStats!.initialized != true) {
             await Future.delayed(Duration(milliseconds: 100));
           }
           navigator.pop();

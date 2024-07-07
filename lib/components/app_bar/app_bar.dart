@@ -9,6 +9,7 @@ import 'package:custom_sliding_segmented_control/custom_sliding_segmented_contro
 import 'package:clashkingapp/components/app_bar/add_player_card.dart';
 import 'package:clashkingapp/components/app_bar/delete_player_card.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
+import 'package:clashkingapp/core/functions.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final User user;
@@ -41,6 +42,12 @@ class CustomAppBarState extends State<CustomAppBar> {
       }
       _checkInitialization(widget.accounts);
     });
+  }
+
+  Future<void> _saveSelectedTag(String? newValue) async {
+    if (newValue != null) {
+      await storePrefs('selectedTag', newValue);
+    }
   }
 
   void _checkInitialization(Accounts accounts) {
@@ -86,6 +93,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                         );
                       });
                       _checkInitialization(appState.accounts!);
+                      _saveSelectedTag(newValue);
                     });
                   } else {
                     showDialog(
@@ -115,9 +123,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                                       },
                                       initialValue: currentSegment,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
+                                        color: Theme.of(context).colorScheme.tertiary.withOpacity(0.5),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       thumbDecoration: BoxDecoration(

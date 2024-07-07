@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:clashkingapp/classes/account/cocdiscord_link_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/login_page/tag_input_chip.dart';
+import 'package:clashkingapp/core/functions.dart';
 
 class GuestLoginPage extends StatefulWidget {
   @override
@@ -142,8 +143,7 @@ class GuestLoginPageState extends State<GuestLoginPage> {
       child: PopScope(
         canPop : true,
       onPopInvoked: (didPop) async {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.remove('access_token');
+        await deletePrefs('access_token');
         navigator.pushReplacement(
           MaterialPageRoute(builder: (_) => StartupWidget()));
       },
@@ -153,8 +153,7 @@ class GuestLoginPageState extends State<GuestLoginPage> {
             leading: IconButton(
               icon: Icon(Icons.arrow_back, size: 32),
               onPressed: () async {
-                final prefs = await SharedPreferences.getInstance();
-                prefs.remove('access_token');
+                await deletePrefs('access_token');
                 globalNavigatorKey.currentState!.pushReplacement(
                   MaterialPageRoute(builder: (context) => StartupWidget()),
                 );
@@ -170,13 +169,13 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                   width: 100,
                   child: CachedNetworkImage(
                       imageUrl:
-                          "https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png"),
+                          "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png"),
                 ),
                 SizedBox(
                   width: 200,
                   child: CachedNetworkImage(
                       imageUrl:
-                          "https://clashkingfiles.b-cdn.net/logos/ClashKing-name-logo.png"),
+                          "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/CK-text-white-bg.png"),
                 ),
                 SizedBox(height: 32),
                 Text(AppLocalizations.of(context)!.createGuestProfile,
@@ -287,8 +286,8 @@ class GuestLoginPageState extends State<GuestLoginPage> {
 
                                 final prefs =
                                     await SharedPreferences.getInstance();
-                                prefs.setString("user_type", "guest");
-                                prefs.setString('username', globalName);
+                                storePrefs("user_type", "guest");
+                                storePrefs('username', globalName);
                                 prefs.setStringList('tags', tags);
 
                                 // Navigate to the next screen

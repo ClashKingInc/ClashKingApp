@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:clashkingapp/core/functions.dart';
 
 class FaqScreen extends StatefulWidget {
   @override
@@ -125,9 +125,7 @@ class _FaqScreenState extends State<FaqScreen> {
                           ],
                         ),
                         onPressed: () async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          final languagecode = prefs.getString('languageCode');
+                          final languagecode = getPrefs('languageCode');
                           launchUrl(Uri.parse(
                               'https://link.clashofclans.com/$languagecode?action=SupportCreator&id=Clashking'));
                         },

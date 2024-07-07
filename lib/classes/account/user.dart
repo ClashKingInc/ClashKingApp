@@ -18,10 +18,10 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
+      id: json['id'] ?? "0",
       avatar:
           'https://cdn.discordapp.com/avatars/${json['id']}/${json['avatar']}.png',
-      globalName: json['global_name'],
+      globalName: json['global_name'] ?? json['username'] ?? "ClashKing",
     );
   }
 
@@ -49,9 +49,10 @@ Future<User?> fetchDiscordUser(String accessToken) async {
       return null;
     }
   } else {
+    
     User user = User(
       id: '0',
-      avatar: 'https://clashkingfiles.b-cdn.net/logos/ClashKing-crown-logo.png',
+      avatar: 'https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png',
       globalName: 'ILoveClashKing',
     );
     user.isDiscordUser = false;
@@ -73,8 +74,6 @@ Future<User> fetchDiscordUserTags(User user) async {
         (key, value) => value == null); // Remove entries with null value
     if (responseBodyJson.keys.isNotEmpty) {
       user.tags = responseBodyJson.keys.toList(); // Update 'tags' in 'user'
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString('selectedTag', user.tags.first);
     }
 
     return user;

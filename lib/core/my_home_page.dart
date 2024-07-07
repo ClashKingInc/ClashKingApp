@@ -108,6 +108,9 @@ class MyHomePageState extends State<MyHomePage> {
                       bottomNavigationBar: BottomNavigationBar(
                         type: BottomNavigationBarType.fixed,
                         backgroundColor: Theme.of(context).colorScheme.surface,
+                        selectedItemColor: Theme.of(context).colorScheme.primary,
+                        unselectedItemColor:
+                            Theme.of(context).colorScheme.tertiary,
                         items: <BottomNavigationBarItem>[
                           BottomNavigationBarItem(
                             icon: Icon(Icons.dashboard),
@@ -130,10 +133,6 @@ class MyHomePageState extends State<MyHomePage> {
                           ),
                         ],
                         currentIndex: _selectedIndex,
-                        selectedItemColor:
-                            Theme.of(context).colorScheme.primary,
-                        unselectedItemColor:
-                            Theme.of(context).colorScheme.secondary,
                         showUnselectedLabels: true,
                         onTap: _onItemTapped,
                       ),
