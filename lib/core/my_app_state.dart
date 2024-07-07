@@ -200,24 +200,68 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   /* User initialization at the opening of the app : Guest or Discord User */
+  
 
-  Future<void> initializeDiscordUser(BuildContext context) async {
-    NavigatorState navigator = Navigator.of(context);
-    final accessToken = await getPrefs("access_token");
-    bool tokenValid = await isTokenValid();
-    if (accessToken != null && tokenValid) {
-      user = await fetchDiscordUser(accessToken);
-      if (user != null) {
-        notifyListeners();
+Future<void> initializeDiscordUser(BuildContext context) async {
+  NavigatorState navigator = Navigator.of(context);
+  
+  // Retrieve the access token from secure storage
+  String? accessToken = await getPrefs("access_token");
+  
+  // Check if the current token is still valid
+  bool tokenValid = await isTokenValid();
+  print('Token valid: $tokenValid');
+  print('Access token: $accessToken');
+
+  if (accessToken != null && tokenValid) {
+    // Fetch user details from Discord using the access token
+    user = await fetchDiscordUser(accessToken);
+    if (user != null) {
+      // Notify all listeners that the user model has been updated
+      notifyListeners();
+    } else {
+      // If user data could not be fetched, clear preferences and navigate to the startup widget
+      clearPrefs();
+      Sentry.captureMessage('User data is null after token validation');
+      navigator.pushReplacement(MaterialPageRoute(builder: (_) => StartupWidget()));
+    }
+  } else if (accessToken != null && !tokenValid) {
+    // If the token is not valid, attempt to refresh it
+    print('Refreshing token');
+    bool refreshSuccessful = await refreshToken();
+    print('Refresh successful: $refreshSuccessful');
+    if (refreshSuccessful) {
+      // If the refresh is successful, re-fetch the access token and validate again
+      accessToken = await getPrefs("access_token");
+      tokenValid = await isTokenValid();
+      //tokenValid = await isTokenValid();
+      if (tokenValid) {
+        user = await fetchDiscordUser(accessToken!);
+        if (user != null) {
+          notifyListeners();
+        } else {
+          clearPrefs();
+          Sentry.captureMessage('User data is null after token validation');
+          navigator.pushReplacement(MaterialPageRoute(builder: (_) => StartupWidget()));
+        }
       } else {
         clearPrefs();
-        navigator.push(MaterialPageRoute(builder: (_) => StartupWidget()));
+        Sentry.captureMessage('Token is not valid after refresh');
+        navigator.pushReplacement(MaterialPageRoute(builder: (_) => StartupWidget()));
       }
     } else {
+      // If the refresh token process fails, clear preferences and navigate to the startup widget
       clearPrefs();
-      navigator.push(MaterialPageRoute(builder: (_) => StartupWidget()));
+      Sentry.captureMessage('Refresh token process failed');
+      navigator.pushReplacement(MaterialPageRoute(builder: (_) => StartupWidget()));
     }
+  } else {
+    // If no valid access token is found, clear preferences and navigate to the startup widget
+    clearPrefs();
+    navigator.pushReplacement(MaterialPageRoute(builder: (_) => StartupWidget()));
   }
+}
+
 
   // Initialize the user as a guest user
   Future<void> initializeGuestUser() async {

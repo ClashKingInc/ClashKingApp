@@ -48,7 +48,9 @@ class ClanSearchState extends State<ClanSearch> {
           });
         }
         String query = '';
-        if (_controller.text != '') {
+        if (_controller.text != '' && _controller.text.startsWith('#')) {
+          query = "name=${_controller.text.replaceFirst("#", "%23")}";
+        } else if (_controller.text != '') {
           query = "name=${_controller.text}";
         }
         _searchResults = _searchClans("$query$searchFilters");
@@ -69,29 +71,19 @@ class ClanSearchState extends State<ClanSearch> {
     }
     dynamic response;
 
-    if (query.startsWith('#')) {
-      query = query.replaceFirst("#", '!');
-      response = await http
-          .get(Uri.parse('https://api.clashking.xyz/v1/clans/$query'));
+    print(query);
 
-      if (response.statusCode == 200) {
-        var body = utf8.decode(response.bodyBytes);
-        var data = jsonDecode(body);
-        return [data];
-      } else {
-        return [];
-      }
+    response = await http.get(Uri.parse(
+        'https://api.clashking.xyz/v1/clans?$query&limit=20&memberList=false'));
+
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      var body = utf8.decode(response.bodyBytes);
+      var data = jsonDecode(body);
+      return data['items'];
     } else {
-      response = await http.get(Uri.parse(
-          'https://api.clashking.xyz/v1/clans?$query&limit=20&memberList=false'));
-
-      if (response.statusCode == 200) {
-        var body = utf8.decode(response.bodyBytes);
-        var data = jsonDecode(body);
-        return data['items'];
-      } else {
-        throw Exception('Failed to load clans');
-      }
+      throw Exception('Failed to load clans');
     }
   }
 
@@ -130,11 +122,18 @@ class ClanSearchState extends State<ClanSearch> {
                                 setState(() {
                                   String query = '';
                                   if (_controller.text != '') {
-                                    query = "name=${_controller.text}$filters";
+                                    if (_controller.text.startsWith('#')) {
+                                      query =
+                                          "name=${_controller.text.replaceFirst("#", "%23")}$filters";
+                                    } else {
+                                      query =
+                                          "name=${_controller.text}$filters";
+                                    }
                                   } else {
                                     query = filters.replaceFirst('&', '');
                                   }
                                   searchFilters = filters;
+                                  print(query);
                                   _searchResults = _searchClans(query);
                                 });
                               }

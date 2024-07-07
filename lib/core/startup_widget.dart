@@ -130,6 +130,8 @@ class StartupWidgetState extends State<StartupWidget> {
 
       final userType = await getPrefs('user_type');
 
+      print(userType);
+
       if (userType == "guest") {
         // Initialize guest user
         final guestSpan = transaction.startChild('initializeGuestUser');
@@ -142,13 +144,7 @@ class StartupWidgetState extends State<StartupWidget> {
               .pushReplacement(MaterialPageRoute(builder: (_) => MyHomePage()));
         }
       } else if (userType == "discord") {
-        // Check if the token is valid
-        final tokenSpan = transaction.startChild('isTokenValid');
-        bool validToken = await isTokenValid();
-        tokenSpan.finish(
-            status: validToken ? SpanStatus.ok() : SpanStatus.internalError());
-
-        if (validToken && mounted) {
+        if (mounted) {
           // Initialize discord user
           final discordSpan = transaction.startChild('initializeDiscordUser');
           await appState.initializeDiscordUser(context);
@@ -163,7 +159,7 @@ class StartupWidgetState extends State<StartupWidget> {
             _showTagDialog();
           }
         } else {
-          storePrefs("user_type", "");
+          deletePrefs("user_type");
         }
       } else {
         // Redirect to the login page

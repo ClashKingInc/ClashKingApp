@@ -171,8 +171,10 @@ class LoginPageState extends State<LoginPage> {
       });
 
       final accessToken = jsonDecode(response.body)['access_token'] as String;
+      final refreshToken = jsonDecode(response.body)['refresh_token'] as String;
       await storePrefs('user_type', 'discord');
       await storePrefs('access_token', accessToken);
+      await storePrefs('refresh_token', refreshToken);
 
       int expiresIn = jsonDecode(response.body)['expires_in'];
       DateTime expirationDate =
