@@ -38,12 +38,9 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     );
 
     selectedTagNotifier.addListener(() async {
-      print('Selected tag changed to ${selectedTagNotifier.value}');
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await storePrefs('clanTag', account!.profileInfo.clan!.tag);
       await prefs.setString('clanTag', account!.profileInfo.clan!.tag);
-      print('Clan tag saved to ${account!.profileInfo.clan!.tag}');
-      print('Player tag saved to ${account!.profileInfo.tag}');
       updateWidgets();
     });
   }
@@ -104,7 +101,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> updateWarWidget() async {
     await dotenv.load(fileName: ".env");
     clanTag = await getPrefs('clanTag');
-    print('Updating war widget for clan $clanTag');
     final warInfo = await checkCurrentWar(clanTag);
     if (clanTag != "") {
       clanTag = clanTag?.replaceAll('#', '%23');
@@ -210,8 +206,6 @@ Future<void> initializeDiscordUser(BuildContext context) async {
   
   // Check if the current token is still valid
   bool tokenValid = await isTokenValid();
-  print('Token valid: $tokenValid');
-  print('Access token: $accessToken');
 
   if (accessToken != null && tokenValid) {
     // Fetch user details from Discord using the access token
@@ -227,9 +221,7 @@ Future<void> initializeDiscordUser(BuildContext context) async {
     }
   } else if (accessToken != null && !tokenValid) {
     // If the token is not valid, attempt to refresh it
-    print('Refreshing token');
     bool refreshSuccessful = await refreshToken();
-    print('Refresh successful: $refreshSuccessful');
     if (refreshSuccessful) {
       // If the refresh is successful, re-fetch the access token and validate again
       accessToken = await getPrefs("access_token");

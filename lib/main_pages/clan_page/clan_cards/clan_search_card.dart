@@ -71,12 +71,8 @@ class ClanSearchState extends State<ClanSearch> {
     }
     dynamic response;
 
-    print(query);
-
     response = await http.get(Uri.parse(
         'https://api.clashking.xyz/v1/clans?$query&limit=20&memberList=false'));
-
-    print(response.statusCode);
 
     if (response.statusCode == 200) {
       var body = utf8.decode(response.bodyBytes);
@@ -133,7 +129,6 @@ class ClanSearchState extends State<ClanSearch> {
                                     query = filters.replaceFirst('&', '');
                                   }
                                   searchFilters = filters;
-                                  print(query);
                                   _searchResults = _searchClans(query);
                                 });
                               }

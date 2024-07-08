@@ -130,8 +130,6 @@ class StartupWidgetState extends State<StartupWidget> {
 
       final userType = await getPrefs('user_type');
 
-      print(userType);
-
       if (userType == "guest") {
         // Initialize guest user
         final guestSpan = transaction.startChild('initializeGuestUser');
