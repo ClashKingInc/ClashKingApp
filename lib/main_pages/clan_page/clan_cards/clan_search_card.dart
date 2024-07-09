@@ -79,7 +79,7 @@ class ClanSearchState extends State<ClanSearch> {
       var data = jsonDecode(body);
       return data['items'];
     } else {
-      throw Exception('Failed to load clans');
+      throw Exception('Failed to load clans with status code: ${response.statusCode}');
     }
   }
 

@@ -20,9 +20,7 @@ class PlayerLegendCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
-    String date = DateFormat('yyyy-MM-dd').format(selectedDate);
-    if (!playerLegendData.legendData.containsKey(date)) {
+    if (!playerLegendData.isInLegend) {
       return GestureDetector(
         onTap: () {
           Navigator.push(
@@ -169,37 +167,32 @@ class PlayerLegendCard extends StatelessWidget {
                                           playerLegendData.firstTrophies),
                                 ),
                                 if (playerLegendData
-                                        .legendRanking['country_code'] !=
-                                    null)
+                                    .legendRanking.countryCode.isNotEmpty)
                                   ImageChip(
                                     labelPadding: 4,
                                     imageUrl:
-                                        "https://clashkingfiles.b-cdn.net/country-flags/${(playerLegendData.legendRanking['country_code'] ?? 'uk').toLowerCase()}.png",
+                                        "https://clashkingfiles.b-cdn.net/country-flags/${(playerLegendData.legendRanking.countryCode).toLowerCase()}.png",
                                     label: playerLegendData
-                                                .legendRanking['local_rank'] ==
-                                            null
-                                        ? '200+'
-                                        : '${playerLegendData.legendRanking['local_rank']}',
-                                    description: playerLegendData
-                                                .legendRanking['local_rank'] ==
-                                            null
-                                        ? AppLocalizations.of(context)
-                                                ?.legendNoRankLocalDescription(
-                                                    playerLegendData
-                                                            .legendRanking[
-                                                        'country_name'],
-                                                    playerStats.trophies) ??
-                                            "No local rank."
-                                        : AppLocalizations.of(context)
-                                                ?.legendRankLocalDescription(
-                                                    playerLegendData
-                                                            .legendRanking[
-                                                        'country_name'],
-                                                    playerLegendData
-                                                            .legendRanking[
-                                                        'local_rank'],
-                                                    playerStats.trophies) ??
-                                            'No infos on local rank.',
+                                        .legendRanking.localRank,
+                                    description:
+                                        playerLegendData
+                                                .legendRanking.isRankedLocally
+                                            ? AppLocalizations.of(context)
+                                                    ?.legendRankLocalDescription(
+                                                        playerLegendData
+                                                            .legendRanking
+                                                            .countryName,
+                                                        playerLegendData
+                                                            .legendRanking.localRank,
+                                                        playerStats.trophies) ??
+                                                'No infos on local rank.'
+                                            : AppLocalizations.of(context)
+                                                    ?.legendNoRankLocalDescription(
+                                                        playerLegendData
+                                                            .legendRanking
+                                                            .countryName,
+                                                        playerStats.trophies) ??
+                                                "No local rank.",
                                   ),
                                 IconChip(
                                   icon: playerLegendData.diffTrophies >= 0
@@ -224,27 +217,25 @@ class PlayerLegendCard extends StatelessWidget {
                                   imageUrl:
                                       "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png",
                                   label: playerLegendData
-                                              .legendRanking['global_rank'] ==
-                                          null
-                                      ? AppLocalizations.of(context)?.noRank ??
-                                          'No Rank'
-                                      : NumberFormat('#,###', 'fr_FR').format(
-                                          playerLegendData
-                                              .legendRanking['global_rank']),
+                                          .legendRanking.isRankedGlobally
+                                      ? NumberFormat('#,###', 'fr_FR').format(
+                                          int.parse(playerLegendData
+                                              .legendRanking.globalRank))
+                                      : AppLocalizations.of(context)?.noRank ??
+                                          'No Rank',
                                   description: playerLegendData
-                                              .legendRanking['global_rank'] ==
-                                          null
+                                          .legendRanking.isRankedGlobally
                                       ? AppLocalizations.of(context)
+                                              ?.legendGlobalRankDescription(
+                                                  int.parse(playerLegendData
+                                                      .legendRanking
+                                                      .globalRank),
+                                                  playerStats.trophies) ??
+                                          'No infos on global rank.'
+                                      : AppLocalizations.of(context)
                                               ?.legendNoGlobalRankDescription(
                                                   playerStats.trophies) ??
-                                          'No global rank.'
-                                      : AppLocalizations.of(context)
-                                              ?.legendGlobalRankDescription(
-                                                  playerLegendData
-                                                          .legendRanking[
-                                                      'global_rank'],
-                                                  playerStats.trophies) ??
-                                          'No infos on global rank.',
+                                          'No global rank.',
                                 ),
                               ],
                             ),

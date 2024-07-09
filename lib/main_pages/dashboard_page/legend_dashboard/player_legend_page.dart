@@ -31,9 +31,8 @@ class LegendScreenState extends State<LegendScreen>
   DateTime selectedMonth = DateTime.now()
       .toUtc()
       .subtract(Duration(hours: 5)); // Change month in history tab
-  late PlayerLegendData
-      legendData; // Legend days details (result of API fetchLegendData))
-  late Future<List<dynamic>> seasonLegendData; // List of EOS trophies
+  late PlayerLegendData legendData;
+  late Future<List<dynamic>> seasonLegendData;
 
   @override
   void initState() {

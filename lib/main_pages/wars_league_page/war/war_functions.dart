@@ -193,7 +193,7 @@ Future<String> checkCurrentWar(
   } else if (responseWar.statusCode == 403) {
     return "accessDenied";
   } else {
-    throw Exception('Failed to load current war info');
+    throw Exception('Failed to load current war info with status code: ${responseWar.statusCode}');
   }
   return "notInWar";
 }
