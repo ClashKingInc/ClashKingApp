@@ -31,7 +31,6 @@ class HeroesDataManager {
   }
 
   Map<String, String> getHeroInfo(String heroName) {
-    print(heroName);
     return heroUrlsAndTypes[heroName] ?? {'url': 'https://clashkingfiles.b-cdn.net/icons/Unknown_person.jpg', 'type': 'unknown', 'hero': 'unknown'};
   }
 }

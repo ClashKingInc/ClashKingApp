@@ -226,7 +226,7 @@ class LegendScreenState extends State<LegendScreen>
                 ),
               ),
               if (attacksList.isNotEmpty)
-                _buildGearSection("Heroes Gears", attacksList),
+                LegendUsedGearCard(context: context, gearCounts: details.gearCount, heroes: widget.playerStats.heroes, gears: widget.playerStats.equipments),
             ],
           ),
         ),
@@ -302,21 +302,6 @@ class LegendScreenState extends State<LegendScreen>
       else
         ...legendEntries
     ]);
-  }
-
-  Widget _buildGearSection(String title, List<dynamic> list) {
-    Map<String, int> itemCounts = {};
-
-    for (var item in list) {
-      if (item is Attack) {
-        List<HeroGear> heroGear = item.heroGear;
-        for (var gear in heroGear) {
-          String gearName = gear.name;
-          itemCounts.update(gearName, (value) => value + 1, ifAbsent: () => 1);
-        }
-      }
-    }
-    return LegendUsedGearCard(context: context, itemCounts: itemCounts);
   }
 
   Widget buildHistoryTab(Future<List<dynamic>> data) {

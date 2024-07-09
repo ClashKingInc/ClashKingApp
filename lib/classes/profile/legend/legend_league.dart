@@ -226,6 +226,8 @@ class HeroGear {
     return {
       'name': name,
       'level': level,
+      'hero': hero,
+      'url': url,
     };
   }
 }
@@ -294,12 +296,22 @@ class Defense {
   }
 }
 
+class GearDetails {
+  int count;
+  String url;
+  String hero;
+  String name;
+
+  GearDetails(this.count, this.url, this.hero, this.name);
+}
+
 class LegendDay {
   final List<int> defenses;
   final List<Defense> newDefenses;
   final int numAttacks;
   final List<int> attacks;
   final List<Attack> newAttacks;
+  final Map<String, Map<String, GearDetails>> gearCount;
 
   LegendDay({
     required this.defenses,
@@ -307,7 +319,7 @@ class LegendDay {
     required this.numAttacks,
     required this.attacks,
     required this.newAttacks,
-  });
+  }) : gearCount = _calculateGearCount(newAttacks);
 
   factory LegendDay.fromJson(Map<String, dynamic> json) {
     // Handle older format with simple integer lists
@@ -345,5 +357,31 @@ class LegendDay {
       'attacks': attacks,
       'new_attacks': newAttacks.map((v) => v.toJson()).toList(),
     };
+  }
+
+  static Map<String, Map<String, GearDetails>> _calculateGearCount(
+      List<Attack> attacks) {
+    Map<String, Map<String, GearDetails>> heroGearCount = {};
+
+    void countGearInList(List<HeroGear> gearList) {
+      for (var gear in gearList) {
+        if (!heroGearCount.containsKey(gear.hero)) {
+          heroGearCount[gear.hero] = {};
+        }
+        var gearMap = heroGearCount[gear.hero]!;
+
+        if (gearMap.containsKey(gear.name)) {
+          gearMap[gear.name]!.count += 1;
+        } else {
+          gearMap[gear.name] = GearDetails(1, gear.url, gear.hero, gear.name);
+        }
+      }
+    }
+
+    for (var attack in attacks) {
+      countGearInList(attack.heroGear);
+    }
+
+    return heroGearCount;
   }
 }
