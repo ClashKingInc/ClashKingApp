@@ -62,9 +62,12 @@ dependencies:
   cupertino_icons: ^1.0.6
   intl: any
   url_launcher: ^6.2.6
+  mockito: ^5.4.4
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
 
   flutter_launcher_icons: ^0.13.1

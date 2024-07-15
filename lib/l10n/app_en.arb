@@ -219,6 +219,7 @@
     "equipment": "Equipments",
     "troops": "Troops",
     "superTroops": "Super Troops",
+    "activeSuperTroops" : "Active Super Troops",
     "pets": "Pets",
     "siegeMachines": "Siege Machines",
     "spells": "Spells",

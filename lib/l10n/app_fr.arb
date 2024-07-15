@@ -188,6 +188,7 @@
     "equipment": "Équipements",
     "troops": "Troupes",
     "superTroops": "Super Troupes",
+    "activeSuperTroops" : "Super Troupes Actives",
     "pets": "Familiers",
     "siegeMachines": "Engins de siège",
     "spells": "Sorts",

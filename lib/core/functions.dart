@@ -4,6 +4,13 @@ import 'package:encrypt/encrypt.dart';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:collection/collection.dart';
+import 'package:http/http.dart' as http;
+
+final String clientId = dotenv.env['DISCORD_CLIENT_ID']!;
+final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
+final String clientSecret = dotenv.env['DISCORD_CLIENT_SECRET']!;
+final String callbackUrlScheme = dotenv.env['DISCORD_CALLBACK_URL_SCHEME']!;
+final storage = FlutterSecureStorage();
 
 Future<bool> isTokenValid() async {
   String? expirationDateString = await getPrefs('expiration_date');
@@ -15,7 +22,34 @@ Future<bool> isTokenValid() async {
   return false;
 }
 
-final storage = FlutterSecureStorage();
+  Future<bool> refreshToken() async {
+  final refreshToken = await getPrefs("refresh_token");
+  if (refreshToken == null) return false;
+
+  final tokenUrl = Uri.https('discord.com', '/api/oauth2/token');
+  final response = await http.post(tokenUrl, body: {
+    'client_id': clientId,
+    'client_secret': clientSecret,
+    'grant_type': 'refresh_token',
+    'refresh_token': refreshToken,
+    'redirect_uri': redirectUri,
+  });
+
+  if (response.statusCode == 200) {
+    final accessToken = jsonDecode(response.body)['access_token'] as String;
+    final newRefreshToken = jsonDecode(response.body)['refresh_token'] as String;
+    int expiresIn = jsonDecode(response.body)['expires_in'];
+
+    DateTime expirationDate = DateTime.now().add(Duration(seconds: expiresIn));
+    await storePrefs('access_token', accessToken);
+    await storePrefs('refresh_token', newRefreshToken);  // Stocker le nouveau refreshToken
+    await storePrefs('expiration_date', expirationDate.toIso8601String());
+
+    return true;
+  }
+
+  return false;
+}
 
 Future<void> storePrefs(String name, String token) async {
   try {
@@ -49,10 +83,8 @@ Future<void> storePrefs(String name, String token) async {
     // Combine IV, encrypted data, and HMAC for storage
     final combined = base64.encode(combinedData + hmacDigest);
 
-
     // Store the combined data
     await storage.write(key: name, value: combined);
-
   } catch (e) {
     print("Error storing prefs for $name: $e");
   }
@@ -60,13 +92,11 @@ Future<void> storePrefs(String name, String token) async {
 
 Future<String?> getPrefs(String name) async {
   try {
-
     // Retrieve the combined data
     final combined = await storage.read(key: name);
     if (combined == null) {
       return null;
     }
-
 
     final data = base64.decode(combined);
 
@@ -101,7 +131,6 @@ Future<String?> getPrefs(String name) async {
     return null;
   }
 }
-
 
 Future<void> deletePrefs(String name) async {
   try {

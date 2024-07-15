@@ -235,7 +235,7 @@ class ClanService {
             clanInfo.joinLeaveClan = joinLeaveLog;
             return clanInfo;
           } else {
-            throw Exception('Failed to load clan stats');
+            throw Exception('Failed to load clan stats with status code: ${clanInfoResponse.statusCode}');
           }
         },
         retryIf: (e) => e is http.ClientException || e is SocketException,
@@ -270,7 +270,7 @@ class ClanService {
 
             return updatedClan;
           } else {
-            throw Exception('Failed to load clan stats');
+            throw Exception('Failed to load clan stats with status code: ${response.statusCode}');
           }
         },
         retryIf: (e) => e is http.ClientException || e is SocketException,
@@ -382,7 +382,7 @@ class ClanService {
           } else if (responseWar.statusCode == 403) {
             return WarStateInfo(state: "accessDenied");
           } else {
-            throw Exception('Failed to load current war info');
+            throw Exception('Failed to load current war info with status code: ${responseWar.statusCode}');
           }
           return WarStateInfo(state: "notInWar");
         },
@@ -415,7 +415,7 @@ class ClanService {
           } else if (responseCwl.statusCode == 403) {
             return null;
           } else {
-            throw Exception('Failed to load current league info');
+            throw Exception('Failed to load current league info with status code: ${responseCwl.statusCode}');
           }
           return null; // Return null if the response does not contain the expected data
         },

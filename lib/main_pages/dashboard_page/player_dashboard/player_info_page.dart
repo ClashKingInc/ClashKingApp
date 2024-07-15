@@ -4,7 +4,7 @@ import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/classes/data/troop_data_manager.dart';
+import 'package:clashkingapp/classes/data/troops_data_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/components/player_info_header_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
@@ -66,7 +66,8 @@ class StatsScreenState extends State<StatsScreen>
 
   Future<void> _refreshData() async {
     // Fetch the updated profile information
-    final profileInfo = await ProfileInfoService().fetchProfileInfo(widget.playerStats.tag);
+    final profileInfo =
+        await ProfileInfoService().fetchProfileInfo(widget.playerStats.tag);
 
     setState(() {
       // Update the player stats with the newly fetched data
@@ -144,6 +145,10 @@ class StatsScreenState extends State<StatsScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 10),
+                            if (widget.playerStats.getActiveTroops().isNotEmpty)
+                              buildSuperTroopsSection(
+                                  widget.playerStats.getActiveTroops(),
+                                  'super-troop'),
                             buildItemSection(
                                 widget.playerStats.heroes,
                                 'hero',
@@ -163,7 +168,7 @@ class StatsScreenState extends State<StatsScreen>
                                 widget.playerStats.troops,
                                 'super-troop',
                                 AppLocalizations.of(context)?.superTroops ??
-                                    'Super Troops'),
+                                    "Super Troops"),
                             buildItemSection(widget.playerStats.troops, 'pet',
                                 AppLocalizations.of(context)?.pets ?? 'Pets'),
                             buildItemSection(
@@ -530,6 +535,120 @@ class StatsScreenState extends State<StatsScreen>
     );
   }
 
+  Widget buildSuperTroopsSection(List<dynamic> items, String itemType) {
+    return Card(
+      margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      elevation: 4,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 16, top: 8, left: 8, right: 8),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: AppLocalizations.of(context)!.activeSuperTroops,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Center(
+              child: Wrap(
+                spacing: 5,
+                runSpacing: 5,
+                children: [
+                  ...items.where((item) => item.type == itemType).map(
+                        (item) => Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              width: 2,
+                            ),
+                          ),
+                          child: Stack(
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        elevation: 6,
+                                        backgroundColor: Colors.transparent,
+                                        child: SingleChildScrollView(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .scaffoldBackgroundColor,
+                                              shape: BoxShape.rectangle,
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  CachedNetworkImage(
+                                                      imageUrl: item.imageUrl,
+                                                      width: 80,
+                                                      height: 80,
+                                                      fit: BoxFit.cover),
+                                                  Text(
+                                                    '${item.name}',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleSmall
+                                                        ?.copyWith(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onSurface),
+                                                  ),
+                                                  SizedBox(height: 8),
+                                                  Text(
+                                                      "More data coming soon!"),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(6),
+                                  child: CachedNetworkImage(
+                                      imageUrl: item.imageUrl,
+                                      width: 40,
+                                      height: 40,
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   List<Widget> buildAllHallChips() {
     String getRoleText(String role) {
       switch (role) {
@@ -559,8 +678,8 @@ class StatsScreenState extends State<StatsScreen>
                 );
               },
             );
-            Clan? clanInfo =
-                await ClanService().fetchClanAndWarInfo(widget.playerStats.clan!.tag);
+            Clan? clanInfo = await ClanService()
+                .fetchClanAndWarInfo(widget.playerStats.clan!.tag);
             if (mounted) {
               Navigator.pop(context);
               Navigator.push(

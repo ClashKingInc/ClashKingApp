@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/classes/data/troop_data_manager.dart';
+import 'package:clashkingapp/classes/data/troops_data_manager.dart';
 
 class LegendUsedGearCard extends StatelessWidget {
   const LegendUsedGearCard({

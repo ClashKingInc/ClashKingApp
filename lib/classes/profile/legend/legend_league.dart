@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:clashkingapp/classes/data/gears_data_manager.dart';
 
 class PlayerLegendData {
   final Map<String, LegendDay> legendData;
-  final Map<String, dynamic> legendRanking;
+  final LegendRanking legendRanking;
   final String name;
   final String tag;
   final int townHallLevel;
@@ -17,31 +18,35 @@ class PlayerLegendData {
   int diffTrophies = 0;
   List<dynamic> attacksList = [];
   List<dynamic> defensesList = [];
+  final bool isInLegend;
 
-  PlayerLegendData({
-    required this.legendData,
-    required this.legendRanking,
-    required this.name,
-    required this.tag,
-    required this.townHallLevel,
-    required this.rankings,
-    required this.streak,
-  });
+  PlayerLegendData(
+      {required this.legendData,
+      required this.legendRanking,
+      required this.name,
+      required this.tag,
+      required this.townHallLevel,
+      required this.rankings,
+      required this.streak,
+      required this.isInLegend});
 
   factory PlayerLegendData.fromJson(Map<String, dynamic> json) {
     var legendDataJson = json['legends'] as Map<String, dynamic>? ?? {};
     Map<String, LegendDay> legendDataMap = legendDataJson
         .map((key, value) => MapEntry(key, LegendDay.fromJson(value)));
+    DateTime selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
+    String date = DateFormat('yyyy-MM-dd').format(selectedDate);
 
     return PlayerLegendData(
-      legendData: legendDataMap,
-      legendRanking: json['rankings'] ?? {},
-      name: json['name'] ?? '',
-      tag: json['tag'] ?? '',
-      townHallLevel: json['townhall'] ?? 0,
-      rankings: json['rankings'] ?? {},
-      streak: json['streak'] ?? 0,
-    );
+        legendData: legendDataMap,
+        legendRanking: LegendRanking.fromJson(json['rankings'] ?? {}),
+        name: json['name'] ?? '',
+        tag: json['tag'] ?? '',
+        townHallLevel: json['townhall'] ?? 0,
+        rankings: json['rankings'] ?? {},
+        streak: json['streak'] ?? 0,
+        isInLegend:
+            legendDataMap.isNotEmpty && legendDataMap.containsKey(date));
   }
 
   Map<String, dynamic> toJson() {
@@ -60,6 +65,34 @@ class PlayerLegendData {
   bool get isNotEmpty => legendData.isNotEmpty;
 }
 
+class LegendRanking {
+  final String localRank;
+  final String countryName;
+  final String globalRank;
+  final bool isRankedLocally;
+  final String countryCode;
+  final bool isRankedGlobally;
+
+  LegendRanking(
+      {required this.localRank,
+      required this.countryName,
+      required this.globalRank,
+      required this.isRankedLocally,
+      required this.isRankedGlobally,
+      required this.countryCode});
+
+  factory LegendRanking.fromJson(Map<String, dynamic> json) {
+    return LegendRanking(
+        localRank: json['local_rank']?.toString() ?? '200+',
+        isRankedLocally: json['local_rank'] != null,
+        countryName: json['country_name'] ?? '',
+        globalRank:
+            json['global_rank'] == null ? '' : json['global_rank'].toString(),
+        isRankedGlobally: json['global_rank'] != null,
+        countryCode: json['country_code'] ?? '');
+  }
+}
+
 class PlayerLegendService {
   Future<PlayerLegendData?> fetchLegendData(String tag) async {
     try {
@@ -76,12 +109,10 @@ class PlayerLegendService {
         return null;
       }
     } catch (exception, stackTrace) {
-      final hint = Hint.withMap(
-        {
-          'tag': tag,
-        }
-      );
-      Sentry.captureException(exception, stackTrace: stackTrace, hint:hint);
+      final hint = Hint.withMap({
+        'tag': tag,
+      });
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
       return null;
     }
   }
@@ -169,13 +200,25 @@ class PlayerLegendSeasonsService {
 class HeroGear {
   final String name;
   final int level;
+  String hero;
+  String url;
 
-  HeroGear({required this.name, required this.level});
+  HeroGear(
+      {required this.name,
+      required this.level,
+      required this.hero,
+      required this.url});
 
   factory HeroGear.fromJson(Map<String, dynamic> json) {
+    Map<String, String> gears = GearDataManager().getGearInfo(json['name']);
+    String hero = gears['hero'] ?? 'unknown';
+    String url =
+        gears['url'] ?? 'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
     return HeroGear(
       name: json['name'],
       level: json['level'],
+      hero: hero,
+      url: url,
     );
   }
 
@@ -267,22 +310,30 @@ class LegendDay {
   });
 
   factory LegendDay.fromJson(Map<String, dynamic> json) {
-    var defensesJson = json['defenses'] as List<dynamic>? ?? [];
-    var newDefensesJson = json['new_defenses'] as List<dynamic>? ?? [];
-    var attacksJson = json['attacks'] as List<dynamic>? ?? [];
-    var newAttacksJson = json['new_attacks'] as List<dynamic>? ?? [];
+    // Handle older format with simple integer lists
+    List<int> defenses =
+        (json['defenses'] as List<dynamic>?)?.map((e) => e as int).toList() ??
+            [];
+    List<int> attacks =
+        (json['attacks'] as List<dynamic>?)?.map((e) => e as int).toList() ??
+            [];
 
-    List<Defense> newDefensesList =
-        newDefensesJson.map((i) => Defense.fromJson(i)).toList();
-    List<Attack> newAttacksList =
-        newAttacksJson.map((i) => Attack.fromJson(i)).toList();
+    // Handle newer format with more detailed objects
+    List<Defense> newDefenses = (json['new_defenses'] as List<dynamic>?)
+            ?.map((e) => Defense.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [];
+    List<Attack> newAttacks = (json['new_attacks'] as List<dynamic>?)
+            ?.map((e) => Attack.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [];
 
     return LegendDay(
-      defenses: defensesJson.cast<int>(),
-      newDefenses: newDefensesList,
-      numAttacks: json['num_attacks'] ?? 0,
-      attacks: attacksJson.cast<int>(),
-      newAttacks: newAttacksList,
+      defenses: defenses,
+      newDefenses: newDefenses,
+      numAttacks: json['num_attacks'] as int? ?? 0,
+      attacks: attacks,
+      newAttacks: newAttacks,
     );
   }
 

@@ -73,6 +73,10 @@ class ProfileInfo {
     required this.equipments,
   });
 
+  List<Troop> getActiveTroops() {
+    return troops.where((troop) => troop.superTroopIsActive).toList();
+  }
+
   factory ProfileInfo.fromJson(Map<String, dynamic> json) {
     return ProfileInfo(
       name: json['name'] ?? 'No name',
@@ -224,11 +228,14 @@ class ProfileInfoService {
           builderHallPicSpan,
           () => fetchPlayerBuilderHallByTownHallLevel(
               profileInfo.builderHallLevel)),
-      fetchWithSpan(troopsSpan, () => fetchImagesAndTypes(profileInfo.troops)),
-      fetchWithSpan(heroesSpan, () => fetchImagesAndTypes(profileInfo.heroes)),
-      fetchWithSpan(spellsSpan, () => fetchImagesAndTypes(profileInfo.spells)),
       fetchWithSpan(
-          equipmentsSpan, () => fetchImagesAndTypes(profileInfo.equipments)),
+          troopsSpan, () => fetchImagesAndTypes(profileInfo.troops, "troops")),
+      fetchWithSpan(
+          heroesSpan, () => fetchImagesAndTypes(profileInfo.heroes, "heroes")),
+      fetchWithSpan(
+          spellsSpan, () => fetchImagesAndTypes(profileInfo.spells, "spells")),
+      fetchWithSpan(equipmentsSpan,
+          () => fetchImagesAndTypes(profileInfo.equipments, "gears")),
       fetchWithSpan(leagueNameSpan, () => fetchLeagueName(profileInfo.tag)),
     ]);
 
