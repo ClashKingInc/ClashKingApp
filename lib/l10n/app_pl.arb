@@ -1,11 +1,11 @@
 {
     "@@locale": "pl",
-    "creatorCode": "Creator Code : ClashKing",
-    "signInWithDiscord": "Sign In with Discord",
-    "guestMode": "Guest Mode",
-    "needHelpJoinDiscord": "Need help? Join us on Discord.",
-    "createGuestProfile": "Create your guest profile",
-    "doesNotExist": "{tag} does not exist.",
+    "creatorCode": "Kod twórcy: ClashKing",
+    "signInWithDiscord": "Zaloguj się za pomocą Discorda",
+    "guestMode": "Tryb gościa",
+    "needHelpJoinDiscord": "Potrzebujesz pomocy? Dołącz do nas na Discordzie.",
+    "createGuestProfile": "Utwórz swój profil gościa",
+    "doesNotExist": "{tag} nie istnieje.",
     "@doesNotExist": {
         "placeholders": {
             "tag": {
@@ -13,7 +13,7 @@
             }
         }
     },
-    "isAlreadyLinked": "{tag} is already linked to someone.",
+    "isAlreadyLinked": "{tag} jest już powiązany z kimś innym.",
     "@isAlreadyLinked": {
         "placeholders": {
             "tag": {
@@ -21,10 +21,10 @@
             }
         }
     },
-    "username": "Username",
-    "pleaseEnterUsername": "Please enter a username",
-    "playerTags": "Player Tags",
-    "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
+    "username": "Nazwa użytkownika",
+    "pleaseEnterUsername": "Wprowadź nazwę użytkownika",
+    "playerTags": "Tagi gracza",
+    "followingTagsDoNotExist": "Następujące znaczniki nie istnieją: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
             "tags": {
@@ -32,7 +32,7 @@
             }
         }
     },
-    "followingTagsAreAlreadyLinked": "The following tags are already linked to someone: {tags}.",
+    "followingTagsAreAlreadyLinked": "Następujące tagi są już powiązane z kimś innym: {tags}.",
     "@followingTagsAreAlreadyLinked": {
         "placeholders": {
             "tags": {
@@ -40,22 +40,22 @@
             }
         }
     },
-    "welcome": "Welcome!",
-    "welcomeMessage": "Please add one or more Clash Of Clans accounts to your profile. You can add or remove accounts later.",
-    "login": "Login",
-    "logout": "Log out",
-    "language": "Language",
-    "settings": "Settings",
-    "toggleTheme": "Toggle Theme",
-    "selectLanguage": "Select a language",
+    "welcome": "Witamy!",
+    "welcomeMessage": "Proszę dodać jeden lub więcej kont Clash Of Clans do swojego profilu. Możesz później dodać lub usunąć konta.",
+    "login": "Zaloguj się",
+    "logout": "Wyloguj",
+    "language": "Język",
+    "settings": "Ustawienia",
+    "toggleTheme": "Zmień motyw",
+    "selectLanguage": "Wybierz język",
     "faq": "FAQ",
-    "faqSubtitle": "Frequently Asked Questions",
-    "faqIsThisFromSupercell": "Is this App from Supercell?",
-    "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-    "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
-    "faqClanNotTracked": "Clan not tracked\n",
-    "faqClanNotTrackedAnswer": "ClashKing can retrieve this info only if the clan is tracked. If your clan isn't tracked, please invite ClashKing Bot to your Discord server and use the command /addclan. We are working on making this feature available in the app soon.",
-    "faqTrackingDown": "Tracking down\n",
+    "faqSubtitle": "Najczęściej zadawane pytania",
+    "faqIsThisFromSupercell": "Czy ta aplikacja pochodzi od Supercell?",
+    "faqFanContentPolicy": "Ten materiał jest nieoficjalny i nie jest popierany przez Supercell. Aby uzyskać więcej informacji, zobacz Politykę treści twórców Supercell: www.supercell.com/fan-content-policy",
+    "faqWhyNotAccurate": "Dlaczego dane czasami są niedokładne lub brakujące?",
+    "faqClanNotTracked": "Klan nieśledzony\n",
+    "faqClanNotTrackedAnswer": "ClashKing może uzyskać te informacje tylko jeśli klan jest śledzony. Jeśli twój klan nie jest śledzony, zaproś bota ClashKing na swój serwer Discord i użyj komendy /addclan. Pracujemy nad udostępnieniem tej funkcji w aplikacji wkrótce.",
+    "faqTrackingDown": "Śledzenie\n",
     "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.\n\n",
     "faqApiLimitation": "Clash of Clans API limitation\n",
     "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your buildings levels.",
