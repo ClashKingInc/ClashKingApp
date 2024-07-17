@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_header.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_used_gear_card.dart';
@@ -12,6 +12,10 @@ import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/componen
 import 'package:clashkingapp/classes/profile/legend/legend_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_attack.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_defense.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_day.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_seasons_service.dart';
 
 class LegendScreen extends StatefulWidget {
   final ProfileInfo playerStats;
@@ -226,7 +230,11 @@ class LegendScreenState extends State<LegendScreen>
                 ),
               ),
               if (attacksList.isNotEmpty)
-                LegendUsedGearCard(context: context, gearCounts: details.gearCount, heroes: widget.playerStats.heroes, gears: widget.playerStats.equipments),
+                LegendUsedGearCard(
+                    context: context,
+                    gearCounts: details.gearCount,
+                    heroes: widget.playerStats.heroes,
+                    gears: widget.playerStats.equipments),
             ],
           ),
         ),

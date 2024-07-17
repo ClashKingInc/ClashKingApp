@@ -1,4 +1,4 @@
-import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/player_legend_page.dart';
 import 'package:intl/intl.dart';
