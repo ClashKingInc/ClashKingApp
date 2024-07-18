@@ -22,7 +22,6 @@ class LegendUsedGearCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(gearCounts);
     return SizedBox(
       width: double.infinity,
       child: Card(

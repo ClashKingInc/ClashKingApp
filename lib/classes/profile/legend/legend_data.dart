@@ -1,11 +1,13 @@
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_ranking.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_day.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_season.dart';
 
 
 class PlayerLegendData {
   final Map<String, LegendDay> legendData;
   final LegendRanking legendRanking;
+  late final List<LegendSeason> legendSeasons;
   final String name;
   final String tag;
   final int townHallLevel;

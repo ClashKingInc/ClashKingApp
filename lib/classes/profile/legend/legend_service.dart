@@ -6,7 +6,7 @@ import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_attack.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_defense.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_day.dart';
-
+import 'package:clashkingapp/classes/profile/legend/legend_season.dart';
 
 class PlayerLegendService {
   Future<PlayerLegendData?> fetchLegendData(String tag) async {
@@ -18,6 +18,9 @@ class PlayerLegendService {
         String responseBody = utf8.decode(response.bodyBytes);
         PlayerLegendData playerLegendData =
             PlayerLegendData.fromJson(jsonDecode(responseBody));
+
+        playerLegendData.legendSeasons = await fetchSeasonsData(tag);
+
         await calculateLegendData(playerLegendData);
         return playerLegendData;
       } else {
