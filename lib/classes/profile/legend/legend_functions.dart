@@ -1,6 +1,8 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_attack.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_defense.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_day.dart';
 
 
 String convertToTimeAgo(int timestamp, context) {
@@ -58,28 +60,36 @@ Map<String, dynamic> calculateStats(List<dynamic> list) {
 DateTime findSeasonStartDate(DateTime date) {
   int year = date.year;
   int month = date.month;
+  int day = date.day;
+  date = DateTime.utc(year, month, day, 0, 0, 0, 0);
 
-  DateTime firstDayCurrentMonth = DateTime(year, month, 1);
-  DateTime lastDayCurrentMonth =
-      DateTime(year, month + 1, 1).subtract(Duration(days: 1));
+
+  DateTime lastDayCurrentMonth = (month == 12)
+      ? DateTime.utc(year + 1, 1, 1).subtract(Duration(days: 1))
+      : DateTime.utc(year, month + 1, 1).subtract(Duration(days: 1));
 
   int daysToLastMondayOfCurrentMonth =
-      (lastDayCurrentMonth.weekday - DateTime.monday) % 7;
+      (lastDayCurrentMonth.weekday - DateTime.monday + 7) % 7;
   DateTime lastMondayOfCurrentMonth = lastDayCurrentMonth
       .subtract(Duration(days: daysToLastMondayOfCurrentMonth));
 
+
   // Si la date est avant le dernier lundi, alors il faut aller chercher le dernier lundi du mois précédent
   if (date.isBefore(lastMondayOfCurrentMonth)) {
-    DateTime lastDayPreviousMonth =
-        firstDayCurrentMonth.subtract(Duration(days: 1));
+    DateTime lastDayPreviousMonth = (month == 1)
+        ? DateTime.utc(year - 1, 12, 31)
+        : DateTime.utc(year, month - 1, 1)
+            .add(Duration(days: DateTime(year, month, 0).day - 1));
     int daysToLastMondayOfPreviousMonth =
-        (lastDayPreviousMonth.weekday - DateTime.monday) % 7;
+        (lastDayPreviousMonth.weekday - DateTime.monday + 7) % 7;
     return lastDayPreviousMonth
         .subtract(Duration(days: daysToLastMondayOfPreviousMonth));
   }
 
   return lastMondayOfCurrentMonth;
 }
+
+
 
 List<FlSpot> convertToContinuousScale(
     Map<String, String> seasonData, DateTime seasonStart) {
@@ -101,11 +111,14 @@ List<FlSpot> convertToContinuousScale(
 
 DateTime findCurrentSeasonMonth(currentDate) {
   DateTime selectedMonth = DateTime.now().toUtc().subtract(Duration(hours: 5));
+  print(selectedMonth);
 
   DateTime firstDaySelectedMonth =
       DateTime(selectedMonth.year, selectedMonth.month, 1);
+  print(firstDaySelectedMonth);
   DateTime lastDayPreviousMonth =
       firstDaySelectedMonth.subtract(Duration(days: 1));
+  print(lastDayPreviousMonth);
 
   while (lastDayPreviousMonth.weekday != DateTime.monday) {
     lastDayPreviousMonth = lastDayPreviousMonth.subtract(Duration(days: 1));
@@ -113,8 +126,35 @@ DateTime findCurrentSeasonMonth(currentDate) {
 
   // If selectedMonth is after the last Monday of the previous month, move to the next month
   if (selectedMonth.isAfter(lastDayPreviousMonth)) {
+    print("selectedMonth is after last Monday of the previous month");
     selectedMonth = DateTime(selectedMonth.year, selectedMonth.month + 1, 1);
   }
 
+  print(selectedMonth);
+
   return selectedMonth;
+}
+
+
+DateTime getLastMonthWithSeasonData(Map<String, LegendDay> seasonData) {
+  if (seasonData.isEmpty) {
+    throw Exception("No season data available");
+  }
+
+  // Convert the keys of the map to DateTime objects
+  List<DateTime> dates = seasonData.keys.map((date) {
+    List<String> parts = date.split('-');
+    int monthInt = int.parse(parts[0]);
+    int dayInt = int.parse(parts[1]);
+    return DateTime(DateTime.now().year, monthInt, dayInt); // Assuming current year
+  }).toList();
+
+  // Sort the dates in descending order
+  dates.sort((a, b) => b.compareTo(a));
+
+  // Get the most recent date
+  DateTime mostRecentDate = dates.first;
+
+  // Return the first day of the month for the most recent date
+  return DateTime(mostRecentDate.year, mostRecentDate.month, 1);
 }

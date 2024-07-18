@@ -8,10 +8,11 @@ import 'package:clashkingapp/classes/profile/description/troop.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/functions.dart';
 import 'package:clashkingapp/classes/data/player_league_data_manager.dart';
-import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:retry/retry.dart';
 import 'dart:io';
+import 'package:clashkingapp/classes/profile/legend/legend_service.dart';
 
 class ProfileInfo {
   String name;
