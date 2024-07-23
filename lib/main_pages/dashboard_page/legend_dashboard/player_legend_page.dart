@@ -17,6 +17,7 @@ import 'package:clashkingapp/classes/profile/legend/legend_attack.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_defense.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_day.dart';
 import 'package:clashkingapp/classes/profile/legend/spot_data.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_monthly_chart.dart';
 
 class LegendScreen extends StatefulWidget {
   final ProfileInfo playerStats;
@@ -121,7 +122,9 @@ class LegendScreenState extends State<LegendScreen>
                   widget.playerLegendData.legendData.isNotEmpty
                       ? Column(children: [
                           SizedBox(height: 10),
-                          buildTrophiesByMonthChart(),
+                          //buildTrophiesByMonthChart(),
+                          LegendMonthlyChart(
+                              playerLegendData: widget.playerLegendData),
                           LegendHistoryChart(
                               legendSeasons:
                                   widget.playerLegendData.legendSeasons)
@@ -147,171 +150,132 @@ class LegendScreenState extends State<LegendScreen>
   }
 
   Widget buildLegendTab(PlayerLegendData playerLegendData) {
-    List<Widget> legendEntries = [];
-
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
+    LegendDay? legendDay = playerLegendData.legendData[date];
 
-    if (playerLegendData.legendData.containsKey(date)) {
-      LegendDay details = playerLegendData.legendData[date]!;
-
-      String startTrophies = '0';
-      String currentTrophies = "0";
-
-      List<dynamic> attacksList =
-          details.newAttacks.isNotEmpty ? details.newAttacks : details.attacks;
-      List<dynamic> defensesList = details.newDefenses.isNotEmpty
-          ? details.newDefenses
-          : details.defenses;
-
-      if (attacksList.isNotEmpty && defensesList.isNotEmpty) {
-        var lastAttack = attacksList.last as Attack;
-        var lastDefense = defensesList.last as Defense;
-        currentTrophies = (lastAttack.time > lastDefense.time
-            ? lastAttack.trophies.toString()
-            : lastDefense.trophies.toString());
-
-        var firstAttack = attacksList.first as Attack;
-        var firstDefense = defensesList.first as Defense;
-        startTrophies = (firstAttack.time < firstDefense.time
-            ? (firstAttack.trophies - firstAttack.change).toString()
-            : (firstDefense.trophies + firstDefense.change).toString());
-      } else if (attacksList.isNotEmpty) {
-        var lastAttack = attacksList.last as Attack;
-        currentTrophies = lastAttack.trophies.toString();
-        var firstAttack = attacksList.first as Attack;
-        startTrophies = (firstAttack.trophies - firstAttack.change).toString();
-      } else if (defensesList.isNotEmpty) {
-        var lastDefense = defensesList.last as Defense;
-        currentTrophies = lastDefense.trophies.toString();
-        var firstDefense = defensesList.first as Defense;
-        startTrophies =
-            (firstDefense.trophies + firstDefense.change).toString();
-      }
-
-      Map<String, dynamic> attacksStats = calculateStats(attacksList);
-      Map<String, dynamic> defensesStats = calculateStats(defensesList);
-
-      legendEntries.add(
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
-          child: Column(
-            children: [
-              LegendTrophiesStartEndCard(
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SizedBox(width: 16),
+            IconButton(
+              icon: Icon(Icons.calendar_today,
+                  color: Theme.of(context).colorScheme.onSurface, size: 16),
+              onPressed: () async {
+                DateTime? picked = await showDatePicker(
                   context: context,
-                  startTrophies: startTrophies,
-                  currentTrophies: currentTrophies),
-              Container(
-                margin: EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: LegendOffenseDefenseCard(
-                          title: AppLocalizations.of(context)?.attacks ??
-                              "Attacks",
-                          list: attacksList,
-                          context: context,
-                          stats: attacksStats,
-                          plusMinus: "+",
-                          icon:
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
-                    ),
-                    Expanded(
-                      child: LegendOffenseDefenseCard(
-                          title: AppLocalizations.of(context)?.defenses ??
-                              "Defenses",
-                          list: defensesList,
-                          context: context,
-                          stats: defensesStats,
-                          plusMinus: "-",
-                          icon:
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield_Arrow.png"),
-                    ),
-                  ],
-                ),
+                  initialDate: selectedDate,
+                  firstDate: DateTime(2018, 8),
+                  lastDate: DateTime(2200),
+                );
+                if (picked != null && picked != selectedDate) {
+                  setState(() {
+                    selectedDate = picked;
+                  });
+                }
+              },
+            ),
+            Spacer(),
+            SizedBox(
+              width: 30,
+              height: 30,
+              child: IconButton(
+                icon: Icon(Icons.arrow_back,
+                    color: Theme.of(context).colorScheme.onSurface, size: 16),
+                onPressed: decrementDate,
               ),
-              if (attacksList.isNotEmpty)
-                LegendUsedGearCard(
+            ),
+            Text(
+              DateFormat('dd MMMM yyyy',
+                      Localizations.localeOf(context).languageCode)
+                  .format(selectedDate),
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            SizedBox(
+              width: 30,
+              height: 30,
+              child: IconButton(
+                icon: Icon(Icons.arrow_forward,
+                    color: Theme.of(context).colorScheme.onSurface, size: 16),
+                onPressed: incrementDate,
+              ),
+            ),
+            SizedBox(width: 16)
+          ],
+        ),
+        if (legendDay != null &&
+            legendDay.attacksList.isNotEmpty &&
+            legendDay.defensesList.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+            child: Column(
+              children: [
+                LegendTrophiesStartEndCard(
                     context: context,
-                    gearCounts: details.gearCount,
-                    heroes: widget.playerStats.heroes,
-                    gears: widget.playerStats.equipments),
+                    startTrophies: legendDay.startTrophies.toString(),
+                    currentTrophies: legendDay.currentTrophies),
+                Container(
+                  margin: EdgeInsets.only(top: 0, bottom: 0, left: 5, right: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: LegendOffenseDefenseCard(
+                            title: AppLocalizations.of(context)?.attacks ??
+                                "Attacks",
+                            list: legendDay.attacksList,
+                            context: context,
+                            stats: legendDay.attacksStats,
+                            plusMinus: "+",
+                            icon:
+                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
+                      ),
+                      Expanded(
+                        child: LegendOffenseDefenseCard(
+                            title: AppLocalizations.of(context)?.defenses ??
+                                "Defenses",
+                            list: legendDay.defensesList,
+                            context: context,
+                            stats: legendDay.defensesStats,
+                            plusMinus: "-",
+                            icon:
+                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield_Arrow.png"),
+                      ),
+                    ],
+                  ),
+                ),
+                if (legendDay.attacksList.isNotEmpty)
+                  LegendUsedGearCard(
+                      context: context,
+                      gearCounts: legendDay.gearCount,
+                      heroes: widget.playerStats.heroes,
+                      gears: widget.playerStats.equipments),
+              ],
+            ),
+          )
+        else
+          Column(
+            children: [
+              Card(
+                  margin: EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                  child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Text(
+                          AppLocalizations.of(context)?.noDataAvailable ??
+                              'No data available'))),
+              SizedBox(height: 10),
+              CachedNetworkImage(
+                imageUrl:
+                    'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
+                height: 350,
+                width: 200,
+              )
             ],
           ),
-        ),
-      );
-    }
-
-    return Column(children: <Widget>[
-      Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          SizedBox(width: 16),
-          IconButton(
-            icon: Icon(Icons.calendar_today,
-                color: Theme.of(context).colorScheme.onSurface, size: 16),
-            onPressed: () async {
-              DateTime? picked = await showDatePicker(
-                context: context,
-                initialDate: selectedDate,
-                firstDate: DateTime(2018, 8),
-                lastDate: DateTime(2200),
-              );
-              if (picked != null && picked != selectedDate) {
-                setState(() {
-                  selectedDate = picked;
-                });
-              }
-            },
-          ),
-          Spacer(),
-          SizedBox(
-            width: 30,
-            height: 30,
-            child: IconButton(
-              icon: Icon(Icons.arrow_back,
-                  color: Theme.of(context).colorScheme.onSurface, size: 16),
-              onPressed: decrementDate,
-            ),
-          ),
-          Text(
-            DateFormat('dd MMMM yyyy',
-                    Localizations.localeOf(context).languageCode)
-                .format(selectedDate),
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-          SizedBox(
-            width: 30,
-            height: 30,
-            child: IconButton(
-              icon: Icon(Icons.arrow_forward,
-                  color: Theme.of(context).colorScheme.onSurface, size: 16),
-              onPressed: incrementDate,
-            ),
-          ),
-          SizedBox(width: 16)
-        ],
-      ),
-      if (legendEntries.isEmpty)
-        Column(children: [
-          Card(
-              margin: EdgeInsets.only(bottom: 8, left: 16, right: 16),
-              child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Text(AppLocalizations.of(context)?.noDataAvailable ??
-                      'No data available'))),
-          SizedBox(height: 10),
-          CachedNetworkImage(
-            imageUrl:
-                'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
-            height: 350,
-            width: 200,
-          )
-        ])
-      else
-        ...legendEntries
-    ]);
+      ],
+    );
   }
 
   Widget buildTrophiesByMonthChart() {
@@ -376,6 +340,10 @@ class LegendScreenState extends State<LegendScreen>
     if (seasonData.isNotEmpty) {
       ChartData chartData =
           ChartData.fromSeasonTrophies(seasonData, seasonStart);
+
+      print("spotsbuild ${chartData.spots}");
+      print("minXbuild ${chartData.minX}");
+      print("maxXbuild ${chartData.maxX}");
 
       return SizedBox(
         width: double.infinity,

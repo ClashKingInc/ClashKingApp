@@ -14,6 +14,7 @@ class ChartData {
   final double minY;
   final double maxY;
   final double rangeY;
+  final double rangeX;
   final List<FlSpot> spots;
 
   ChartData({
@@ -22,6 +23,7 @@ class ChartData {
     required this.minY,
     required this.maxY,
     required this.rangeY,
+    required this.rangeX,
     required this.spots,
   });
 
@@ -34,16 +36,30 @@ class ChartData {
 
     List<FlSpot> spots =
         spotDataList.map((spot) => FlSpot(spot.x, spot.y)).toList();
-
-    double minY = spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b);
     double maxY = spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b);
-    minY = (minY / 10).floorToDouble() * 10;
-    maxY = (maxY / 10).ceilToDouble() * 10;
+    double minY = spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b);
+
+    int hundredsMaxY = (maxY / 100).floor();
+    if (maxY % 100 < 20) {
+      hundredsMaxY += 1;
+    }
+    maxY = (hundredsMaxY + 1) * 100.0;
+
+    int hundredsMinY = (minY / 100).floor();
+    minY = (hundredsMinY) * 100.0;
 
     double minX = spots.first.x;
     double maxX = spots.last.x;
-    double rangeY = (maxY - minY) / 10;
+    double rangeY = 100;
     if (rangeY == 0) rangeY = 1;
+
+    double rangeX = (maxX - minX) / 60 * 60 * 24 * 30 * 1000;
+
+    if (rangeX == 0) rangeX = 1;
+
+    if (minY == maxY) {
+      maxY += 100;
+    }
 
     return ChartData(
       minX: minX,
@@ -51,6 +67,7 @@ class ChartData {
       minY: minY,
       maxY: maxY,
       rangeY: rangeY,
+      rangeX: rangeX,
       spots: spots,
     );
   }
@@ -88,27 +105,45 @@ class ChartData {
         }
       }
 
-      spots.add(FlSpot(index.toDouble(), double.parse(trophies)));
+      if (double.parse(trophies) > 4900) {
+        spots.add(FlSpot(index.toDouble(), double.parse(trophies)));
+      } else {
+        spots.add(FlSpot(index.toDouble(), double.parse("4900")));
+      }
       index++;
       currentDate = currentDate.add(Duration(days: 1));
     });
 
     double minY = spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b);
     double maxY = spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b);
-    minY = (minY / 10).floorToDouble() * 10;
-    maxY = (maxY / 10).ceilToDouble() * 10;
+    
+    int hundredsMaxY = (maxY / 100).floor();
+    if (maxY % 100 < 20) {
+      hundredsMaxY += 1;
+    }
+    maxY = (hundredsMaxY + 1) * 100.0;
+
+    int hundredsMinY = (minY / 100).floor();
+    minY = (hundredsMinY) * 100.0;
+
+    if (minY == maxY) {
+      maxY += 100;
+    }
 
     double minX = spots.first.x;
     double maxX = spots.last.x;
-    double rangeY = (maxY - minY) / 10;
+    double rangeY = 100;
     if (rangeY == 0) rangeY = 1;
 
+    double rangeX = (maxX - minX) / 10;
+    if (rangeX == 0) rangeX = 1;
 
     return ChartData(
       minX: minX,
       maxX: maxX,
       minY: minY,
       maxY: maxY,
+      rangeX: rangeX,
       rangeY: rangeY,
       spots: spots,
     );
