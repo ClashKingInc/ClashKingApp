@@ -199,8 +199,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                     avatar: CircleAvatar(
                       backgroundColor: Colors.transparent,
                       child: CachedNetworkImage(
-                        imageUrl:
-                            "https://clashkingfiles.b-cdn.net/country-flags/${widget.clanInfo.location!.countryCode}.png",
+                        imageUrl: "https://clashkingfiles.b-cdn.net/country-flags/${widget.clanInfo.location!.countryCode}.png",
                       ),
                     ),
                     label: Text(
