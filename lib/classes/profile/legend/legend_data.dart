@@ -2,7 +2,8 @@ import 'package:intl/intl.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_ranking.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_day.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_season.dart';
-
+import 'package:clashkingapp/classes/profile/legend/legend_functions.dart';
+import 'package:clashkingapp/classes/profile/legend/spot_data.dart';
 
 class PlayerLegendData {
   final Map<String, LegendDay> legendData;
@@ -64,6 +65,42 @@ class PlayerLegendData {
 
   bool get isEmpty => legendData.isEmpty;
   bool get isNotEmpty => legendData.isNotEmpty;
+
+  List<Object> getTrophiesBySeason(DateTime month) {
+    print("month: $month");
+    Map<String, String> trophiesByDay = {};
+    DateTime firstDaySelectedMonth = DateTime(month.year, month.month, 1);
+    DateTime lastDayPreviousMonth =
+        firstDaySelectedMonth.subtract(Duration(days: 1));
+
+    while (lastDayPreviousMonth.weekday != DateTime.monday) {
+      lastDayPreviousMonth = lastDayPreviousMonth.subtract(Duration(days: 1));
+    }
+
+    DateTime seasonStart = lastDayPreviousMonth;
+    String seasonKey = DateFormat('yyyy-MM-dd').format(seasonStart);
+    print("legendData: $legendData");
+
+    legendData.forEach((date, details) {
+      DateTime dateObj = DateTime.parse(date);
+      String season =
+          DateFormat('yyyy-MM-dd').format(findSeasonStartDate(dateObj));
+      if (season == seasonKey) {
+        String day = DateFormat('MM-dd').format(dateObj);
+        String dailyTrophies =
+            details.currentTrophies.isNotEmpty ? details.currentTrophies : "0";
+        trophiesByDay[day] = dailyTrophies;
+      }
+    });
+
+    if (trophiesByDay.isNotEmpty) {
+      ChartData chartData =
+          ChartData.fromSeasonTrophies(trophiesByDay, seasonStart);
+
+      print('spots: ${chartData.spots}');
+      return [seasonStart, chartData];
+    } else {
+      return [seasonStart, {}];
+    }
+  }
 }
-
-

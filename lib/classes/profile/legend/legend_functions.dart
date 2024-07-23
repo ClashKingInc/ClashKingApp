@@ -111,14 +111,10 @@ List<FlSpot> convertToContinuousScale(
 
 DateTime findCurrentSeasonMonth(currentDate) {
   DateTime selectedMonth = DateTime.now().toUtc().subtract(Duration(hours: 5));
-  print(selectedMonth);
-
   DateTime firstDaySelectedMonth =
       DateTime(selectedMonth.year, selectedMonth.month, 1);
-  print(firstDaySelectedMonth);
   DateTime lastDayPreviousMonth =
       firstDaySelectedMonth.subtract(Duration(days: 1));
-  print(lastDayPreviousMonth);
 
   while (lastDayPreviousMonth.weekday != DateTime.monday) {
     lastDayPreviousMonth = lastDayPreviousMonth.subtract(Duration(days: 1));
@@ -126,11 +122,8 @@ DateTime findCurrentSeasonMonth(currentDate) {
 
   // If selectedMonth is after the last Monday of the previous month, move to the next month
   if (selectedMonth.isAfter(lastDayPreviousMonth)) {
-    print("selectedMonth is after last Monday of the previous month");
     selectedMonth = DateTime(selectedMonth.year, selectedMonth.month + 1, 1);
   }
-
-  print(selectedMonth);
 
   return selectedMonth;
 }
