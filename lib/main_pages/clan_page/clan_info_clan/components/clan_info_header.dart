@@ -58,8 +58,13 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
 
   @override
   Widget build(BuildContext context) {
-    String backgroundImageUrl =
-        "https://clashkingfiles.b-cdn.net/landscape/clan-landscape.png";
+    String backgroundImageUrl = "https://clashkingfiles.b-cdn.net/landscape/clan-landscape.png";
+
+    String? extractDiscordCode(String description) {
+      final RegExp discordPattern = RegExp(r"https:\/\/(discord\.com\/invite\/|discord\.gg\/)([^ ]+)");
+      final match = discordPattern.firstMatch(description);
+      return match?.group(2);
+    }
     return Column(
       children: [
         Stack(
@@ -116,8 +121,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                         size: 32),
                     onPressed: () async {
                       final languagecode = getPrefs('languageCode');
-                      launchUrl(Uri.parse(
-                          'https://link.clashofclans.com/$languagecode?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
+                      launchUrl(Uri.parse('https://link.clashofclans.com/$languagecode?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
                     },
                   ),
                 ),
@@ -195,8 +199,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                     avatar: CircleAvatar(
                       backgroundColor: Colors.transparent,
                       child: CachedNetworkImage(
-                        imageUrl:
-                            "https://clashkingfiles.b-cdn.net/country-flags/${widget.clanInfo.location!.countryCode}.png",
+                        imageUrl: "https://clashkingfiles.b-cdn.net/country-flags/${widget.clanInfo.location!.countryCode}.png",
                       ),
                     ),
                     label: Text(
@@ -326,8 +329,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                   clanTag: widget.clanInfo.tag,
                                   discordUser: widget.user,
                                   warLogData: warLogDetails,
-                                  warLogStats:
-                                      widget.clanInfo.warLog.warLogStats,
+                                  warLogStats: widget.clanInfo.warLog.warLogStats,
                                   clanName: widget.clanInfo.name,
                                 ),
                               ),
@@ -384,11 +386,59 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                 widget.clanInfo.description,
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
-                maxLines: 6,
+                maxLines: 7,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            SizedBox(height: 16),
+            widget.clanInfo.description.contains("discord.com/invite/") || widget.clanInfo.description.contains("discord.gg/")
+              ? Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: ButtonTheme(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF5865F2),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.discord, size: 24),
+                          SizedBox(width: 8),
+                          Text(AppLocalizations.of(context)!.faqJoinDiscord),
+                        ],
+                      ),
+                      onPressed: () async {
+                        try {
+                          final String? discordCode = extractDiscordCode(widget.clanInfo.description);
+                          print('Code Discord trouvé : $discordCode');
+                          if (discordCode != null) {
+                            final Uri url = Uri.parse('https://discord.gg/$discordCode');
+                            if (await launchUrl(url)) {
+                              print('Le lien a été ouvert avec succès');
+                            } else {
+                              print('Le lien ne peut pas être ouvert');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("We can't open this link"),
+                                ),
+                              );
+                            }
+                          } else {
+                            print('Aucun code Discord valide trouvé');
+                          }
+                        } catch (e) {
+                          print('Erreur lors de la tentative d\'ouverture du lien : $e');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("We can't open this link"),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                )
+              : SizedBox(height: 12,),
+            SizedBox(height: 4),
             FutureBuilder<String>(
               future: currentWarFuture,
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -447,7 +497,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 16),
+                      SizedBox(height: 8),
                     ]);
                   } else if (warState == "cwl") {
                     return Column(
@@ -502,7 +552,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 16),
+                        SizedBox(height: 8),
                       ],
                     );
                   } else if (warState == "notInWar") {
@@ -537,7 +587,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 16),
+                      SizedBox(height: 8),
                     ]);
                   } else {
                     return SizedBox.shrink();

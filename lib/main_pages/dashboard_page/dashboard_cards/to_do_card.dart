@@ -44,8 +44,7 @@ class ToDoCardState extends State<ToDoCard> {
       (nowUtc.weekday == DateTime.monday && nowUtc.hour < 6);
 
     isInTimeFrameForClanGames = 
-      (nowUtc.day >= 22 && nowUtc.hour >= 8 && nowUtc.day <= 31) ||
-      (nowUtc.day <= 28 && nowUtc.hour < 8);
+      ((nowUtc.day >= 22 && nowUtc.hour >= 8) && (nowUtc.day <= 28 && nowUtc.hour <= 8));
 
 
     return FutureBuilder<PlayerToDoData>(
