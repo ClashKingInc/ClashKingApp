@@ -17,10 +17,9 @@ class LegendHistoryCard extends StatelessWidget {
 
     return Column(
       children: [
-        SizedBox(height: 10),
         ...legendSeasons.map((legendsSeason) {
           return Card(
-            margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
+            margin: EdgeInsets.only(top: 4, bottom: 4, left: 16, right: 16),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(

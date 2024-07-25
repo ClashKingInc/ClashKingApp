@@ -69,7 +69,7 @@ class LegendsTrophiesBySeasonTableState
 
   IconData getSortIcon(String criterion) {
     if (_sortCriterion == criterion) {
-      return _isAscending ? LucideIcons.chevronUp : LucideIcons.chevronDown;
+      return _isAscending ? LucideIcons.chevronDown : LucideIcons.chevronUp;
     } else {
       return LucideIcons.chevronsUpDown;
     }
@@ -92,25 +92,11 @@ class LegendsTrophiesBySeasonTableState
     Locale locale = Localizations.localeOf(context);
     DateFormat displayDateFormat = DateFormat.MMMd(locale.toString());
 
-    IconData getSortIcon(String criterion) {
-      if (_sortCriterion == criterion) {
-        return _isAscending ? LucideIcons.chevronUp : LucideIcons.chevronDown;
-      } else {
-        return LucideIcons.chevronsUpDown;
-      }
-    }
-
-    Color getSortIconColor(String criterion) {
-      return _sortCriterion == criterion
-          ? Colors.blue
-          : Theme.of(context).colorScheme.onSurface;
-    }
-
     if (widget.seasonObject.seasonLegendDays.isNotEmpty) {
       return SizedBox(
         width: double.infinity,
         child: Card(
-          margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
+          margin: EdgeInsets.only(top: 4, bottom: 4, left: 16, right: 16),
           elevation: 4,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

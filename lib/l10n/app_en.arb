@@ -248,6 +248,10 @@
             }
         }
     },
+    "bestTrophies": "Best Trophies",
+    "mostAttacks": "Most Attacks",
+    "lastSeason": "Last Season",
+    "bestRank": "Best Global Rank",
     "daysLeft": "{days} days left",
     "@daysLeft": {
         "placeholders": {

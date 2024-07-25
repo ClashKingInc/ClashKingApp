@@ -210,6 +210,10 @@
             }
         }
     },
+    "bestTrophies": "Plus haut trophées",
+    "mostAttacks": "Plus d'attaques",
+    "lastSeason": "Dernière saison",
+    "bestRank": "Meilleur classement",
     "dayLeft": "{days} jours restants",
     "@dayLeft": {
         "placeholders": {

@@ -26,7 +26,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
       return SizedBox(
         width: double.infinity,
         child: Card(
-          margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
+          margin: EdgeInsets.only(top: 4, bottom: 4, left: 16, right: 16),
           elevation: 4,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -36,10 +36,10 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
               children: [
                 Text(
                   AppLocalizations.of(context)!.seasonStats,
-                  style: Theme.of(context).textTheme.titleSmall,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
                       Column(
@@ -50,16 +50,14 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                             children: [
                               Column(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Icon(
-                                      Icons.calendar_today,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                      size: 16,
-                                    ),
+                                  SizedBox(height: 2),
+                                  Icon(
+                                    Icons.calendar_today,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    size: 16,
                                   ),
+                                  SizedBox(height: 6),
                                   CachedNetworkImage(
                                     imageUrl:
                                         widget.playerLegendData.legendIcon,
@@ -67,7 +65,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 8), // Space between icon and text
+                              SizedBox(width: 8),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -82,6 +80,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
+                                  SizedBox(height: 2),
                                   Text(
                                     widget.seasonData.totalTrophies.toString(),
                                     style:
@@ -102,8 +101,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(AppLocalizations.of(context)!.attacks,
-                                  style:
-                                      Theme.of(context).textTheme.bodyMedium),
+                                  style: Theme.of(context).textTheme.bodyLarge),
                               Row(
                                 children: [
                                   CachedNetworkImage(
@@ -145,8 +143,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(AppLocalizations.of(context)!.defenses,
-                                  style:
-                                      Theme.of(context).textTheme.bodyMedium),
+                                  style: Theme.of(context).textTheme.bodyLarge),
                               Row(
                                 children: [
                                   CachedNetworkImage(
@@ -194,7 +191,34 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
         ),
       );
     } else {
-      return SizedBox.shrink();
+      return SizedBox(
+        width: double.infinity,
+        height: 500,
+        child: Card(
+          margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
+          elevation: 4,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.only(
+                left: 10.0, right: 10.0, top: 20.0, bottom: 10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                    AppLocalizations.of(context)?.noDataAvailable ??
+                        'No data available',
+                    style: Theme.of(context).textTheme.bodyMedium),
+                CachedNetworkImage(
+                  imageUrl:
+                      'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
+                  height: 300,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
     }
   }
 }

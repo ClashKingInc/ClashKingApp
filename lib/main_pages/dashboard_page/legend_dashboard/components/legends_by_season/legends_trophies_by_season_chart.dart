@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class LegendsTrophiesBySeasonChart extends StatefulWidget {
   final PlayerLegendData playerLegendData;
@@ -32,7 +31,7 @@ class LegendsTrophiesBySeasonChartState
         width: double.infinity,
         height: 500,
         child: Card(
-          margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
+          margin: EdgeInsets.only(top: 4, bottom: 4, left: 16, right: 16),
           elevation: 4,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -144,35 +143,10 @@ class LegendsTrophiesBySeasonChartState
           ),
         ),
       );
-    } else {
-      return SizedBox(
-        width: double.infinity,
-        height: 500,
-        child: Card(
-          margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
-          elevation: 4,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Padding(
-            padding: const EdgeInsets.only(
-                left: 10.0, right: 10.0, top: 20.0, bottom: 10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                    AppLocalizations.of(context)?.noDataAvailable ??
-                        'No data available',
-                    style: Theme.of(context).textTheme.bodyMedium),
-                CachedNetworkImage(
-                  imageUrl:
-                      'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
-                  height: 300,
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
     }
+    else {
+      return SizedBox();
+    }
+    
   }
 }
