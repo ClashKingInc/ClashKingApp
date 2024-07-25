@@ -228,6 +228,37 @@
     "@byDay": {
         "description": "Shows stats by day"
     },
+    "bySeason": "By Season",
+    "@byMonth": {
+        "description": "Shows stats by season"
+    },
+    "dayIndex": "Day {index}",
+    "@dayIndex": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            }
+        }
+    },
+    "indexDays": "{index} days",
+    "@indexDays": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            }
+        }
+    },
+    "daysLeft": "{days} days left",
+    "@daysLeft": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "date": "Date",
+    "stats": "Stats",
+    "seasonStats": "Season Stats",
     "charts": "Charts",
     "history": "History",
     "@history": {
@@ -396,6 +427,7 @@
     },
     "justNow": "Just Now",
     "trophiesByMonth": "Trophies by month",
+    "trophiesBySeason": "Trophies by season",
     "eosTrophies": "End Of Season Trophies",
     "searchClan": "Search clan",
     "nameOrTagClan": "Clan's name or tag",

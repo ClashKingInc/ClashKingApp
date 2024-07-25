@@ -5,9 +5,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_offense_defense_card.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_trophies_start_end_card.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legend_used_gear_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legends_by_day/legend_offense_defense_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legends_by_day/legend_trophies_start_end_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legends_by_day/legend_used_gear_card.dart';
 
 
 

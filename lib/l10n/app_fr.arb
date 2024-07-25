@@ -194,6 +194,34 @@
     "spells": "Sorts",
     "achievements": "Succès",
     "byDay": "Par jour",
+    "dayIndex": "Jour {index}",
+    "@dayIndex": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            }
+        }
+    },
+    "indexDays": "{index} jours",
+    "@indexDays": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            }
+        }
+    },
+    "dayLeft": "{days} jours restants",
+    "@dayLeft": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "bySeason": "Par saison",
+    "date": "Date",
+    "stats": "Statistiques",
+    "seasonStats": "Statistiques de saison",
     "charts": "Graphs",
     "history": "Historique",
     "legendLeague": "Ligue légende",
@@ -340,6 +368,7 @@
     },
     "justNow": "À l'instant",
     "trophiesByMonth": "Trophées par mois",
+    "trophiesBySeason": "Trophées par saison",
     "eosTrophies": "Trophées en fin de saison",
     "searchClan": "Rechercher un clan",
     "nameOrTagClan": "Nom ou tag du clan",

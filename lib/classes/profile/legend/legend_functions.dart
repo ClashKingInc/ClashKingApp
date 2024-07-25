@@ -4,7 +4,6 @@ import 'package:clashkingapp/classes/profile/legend/legend_attack.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_defense.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_day.dart';
 
-
 String convertToTimeAgo(int timestamp, context) {
   DateTime now = DateTime.now();
   DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
@@ -63,7 +62,6 @@ DateTime findSeasonStartDate(DateTime date) {
   int day = date.day;
   date = DateTime.utc(year, month, day, 0, 0, 0, 0);
 
-
   DateTime lastDayCurrentMonth = (month == 12)
       ? DateTime.utc(year + 1, 1, 1).subtract(Duration(days: 1))
       : DateTime.utc(year, month + 1, 1).subtract(Duration(days: 1));
@@ -72,7 +70,6 @@ DateTime findSeasonStartDate(DateTime date) {
       (lastDayCurrentMonth.weekday - DateTime.monday + 7) % 7;
   DateTime lastMondayOfCurrentMonth = lastDayCurrentMonth
       .subtract(Duration(days: daysToLastMondayOfCurrentMonth));
-
 
   // Si la date est avant le dernier lundi, alors il faut aller chercher le dernier lundi du mois précédent
   if (date.isBefore(lastMondayOfCurrentMonth)) {
@@ -88,8 +85,6 @@ DateTime findSeasonStartDate(DateTime date) {
 
   return lastMondayOfCurrentMonth;
 }
-
-
 
 List<FlSpot> convertToContinuousScale(
     Map<String, String> seasonData, DateTime seasonStart) {
@@ -121,13 +116,13 @@ DateTime findCurrentSeasonMonth(currentDate) {
   }
 
   // If selectedMonth is after the last Monday of the previous month, move to the next month
-  if (selectedMonth.isAfter(lastDayPreviousMonth)) {
+  if (selectedMonth.isAfter(lastDayPreviousMonth) &&
+      selectedMonth.month == lastDayPreviousMonth.month) {
     selectedMonth = DateTime(selectedMonth.year, selectedMonth.month + 1, 1);
   }
 
   return selectedMonth;
 }
-
 
 DateTime getLastMonthWithSeasonData(Map<String, LegendDay> seasonData) {
   if (seasonData.isEmpty) {
@@ -139,7 +134,8 @@ DateTime getLastMonthWithSeasonData(Map<String, LegendDay> seasonData) {
     List<String> parts = date.split('-');
     int monthInt = int.parse(parts[0]);
     int dayInt = int.parse(parts[1]);
-    return DateTime(DateTime.now().year, monthInt, dayInt); // Assuming current year
+    return DateTime(
+        DateTime.now().year, monthInt, dayInt); // Assuming current year
   }).toList();
 
   // Sort the dates in descending order

@@ -58,7 +58,7 @@ class LegendSeason {
   }
 
   SpotData toSpotData() {
-    double x = DateTime.parse(season + '-01').millisecondsSinceEpoch.toDouble();
+    double x = DateTime.parse('$season-01').millisecondsSinceEpoch.toDouble();
     double y = trophies.toDouble();
     return SpotData(x: x, y: y);
   }

@@ -5,10 +5,10 @@ import 'package:clashkingapp/classes/profile/legend/spot_data.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_season.dart';
 import 'package:flutter/material.dart';
 
-class LegendHistoryChart extends StatelessWidget {
+class LegendEosBySeasonChart extends StatelessWidget {
   final List<LegendSeason> legendSeasons;
 
-  LegendHistoryChart({required this.legendSeasons});
+  LegendEosBySeasonChart({required this.legendSeasons});
 
   @override
   Widget build(BuildContext context) {

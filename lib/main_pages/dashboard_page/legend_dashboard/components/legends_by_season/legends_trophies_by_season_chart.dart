@@ -6,39 +6,28 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class LegendMonthlyChart extends StatefulWidget {
+class LegendsTrophiesBySeasonChart extends StatefulWidget {
   final PlayerLegendData playerLegendData;
+  final DateTime selectedMonth;
+  final SeasonTrophies seasonData;
 
-  LegendMonthlyChart({required this.playerLegendData});
+  LegendsTrophiesBySeasonChart(
+      {required this.playerLegendData,
+      required this.selectedMonth,
+      required this.seasonData});
 
   @override
-  _LegendMonthlyChartState createState() => _LegendMonthlyChartState();
+  LegendsTrophiesBySeasonChartState createState() =>
+      LegendsTrophiesBySeasonChartState();
 }
 
-class _LegendMonthlyChartState extends State<LegendMonthlyChart> {
-  DateTime selectedMonth = DateTime.now();
-
-  void incrementMonth() {
-    setState(() {
-      selectedMonth = DateTime(selectedMonth.year, selectedMonth.month + 1, 1);
-    });
-  }
-
-  void decrementMonth() {
-    setState(() {
-      selectedMonth = DateTime(selectedMonth.year, selectedMonth.month - 1, 1);
-    });
-  }
-
+class LegendsTrophiesBySeasonChartState
+    extends State<LegendsTrophiesBySeasonChart> {
   @override
   Widget build(BuildContext context) {
-    List<Object> seasonObject =
-        widget.playerLegendData.getTrophiesBySeason(selectedMonth);
-
-    if (seasonObject[1] is ChartData) {
-      ChartData chartData = seasonObject[1] as ChartData;
-      DateTime seasonStart = seasonObject[0] as DateTime;
-
+    if (widget.seasonData.seasonLegendDays.isNotEmpty) {
+      ChartData chartData = ChartData.fromSeasonTrophies(
+          widget.seasonData.seasonLegendDays, widget.seasonData.seasonStart);
       return SizedBox(
         width: double.infinity,
         height: 500,
@@ -52,8 +41,8 @@ class _LegendMonthlyChartState extends State<LegendMonthlyChart> {
                 left: 10.0, right: 20.0, top: 10.0, bottom: 10.0),
             child: Column(children: [
               Text(
-                  AppLocalizations.of(context)?.trophiesByMonth ??
-                      "Trophies by Month",
+                  AppLocalizations.of(context)?.trophiesBySeason ??
+                      "Trophies by Season",
                   style: Theme.of(context).textTheme.bodyMedium),
               SizedBox(height: 16),
               Expanded(
@@ -70,10 +59,10 @@ class _LegendMonthlyChartState extends State<LegendMonthlyChart> {
                         sideTitles: SideTitles(
                           showTitles: true,
                           reservedSize: 30,
-                          interval: 3,
+                          interval: chartData.rangeX,
                           getTitlesWidget: (double value, TitleMeta meta) {
-                            DateTime labelDate =
-                                seasonStart.add(Duration(days: value.toInt()));
+                            DateTime labelDate = widget.seasonData.seasonStart
+                                .add(Duration(days: value.toInt()));
                             return Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Text(DateFormat('dd').format(labelDate),
@@ -130,10 +119,18 @@ class _LegendMonthlyChartState extends State<LegendMonthlyChart> {
                     maxY: chartData.maxY,
                     lineTouchData: LineTouchData(
                       touchTooltipData: LineTouchTooltipData(
-                        getTooltipColor: (spot) => Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withOpacity(0.8),
+                        getTooltipColor: (LineBarSpot touchedSpot) =>
+                            Theme.of(context).colorScheme.primary,
+                        getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                          return touchedSpots.map((touchedSpot) {
+                            return LineTooltipItem(
+                              touchedSpot.y.toInt().toString(),
+                              TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
+                            );
+                          }).toList();
+                        },
                       ),
                       touchCallback: (FlTouchEvent touchEvent,
                           LineTouchResponse? touchResponse) {},
@@ -142,36 +139,6 @@ class _LegendMonthlyChartState extends State<LegendMonthlyChart> {
                   ),
                   duration: Duration(milliseconds: 250),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back,
-                          color: Theme.of(context).colorScheme.onSurface,
-                          size: 16),
-                      onPressed: decrementMonth,
-                    ),
-                  ),
-                  Text(
-                      DateFormat('MMMM yyyy',
-                              Localizations.localeOf(context).languageCode)
-                          .format(selectedMonth),
-                      style: Theme.of(context).textTheme.labelLarge),
-                  SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_forward,
-                          color: Theme.of(context).colorScheme.onSurface,
-                          size: 16),
-                      onPressed: incrementMonth,
-                    ),
-                  ),
-                ],
               ),
             ]),
           ),
@@ -200,33 +167,6 @@ class _LegendMonthlyChartState extends State<LegendMonthlyChart> {
                   imageUrl:
                       'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
                   height: 300,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 30,
-                      height: 30,
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back,
-                            color: Theme.of(context).colorScheme.onSurface,
-                            size: 16),
-                        onPressed: decrementMonth,
-                      ),
-                    ),
-                    Text(DateFormat('MMMM yyyy').format(selectedMonth),
-                        style: Theme.of(context).textTheme.labelLarge),
-                    SizedBox(
-                      width: 30,
-                      height: 30,
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_forward,
-                            color: Theme.of(context).colorScheme.onSurface,
-                            size: 16),
-                        onPressed: incrementMonth,
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),

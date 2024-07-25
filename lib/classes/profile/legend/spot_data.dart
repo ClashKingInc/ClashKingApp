@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_season.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_day.dart';
 
 class SpotData {
   final double x;
@@ -73,7 +74,7 @@ class ChartData {
   }
 
   factory ChartData.fromSeasonTrophies(
-      Map<String, String> seasonData, DateTime seasonStart) {
+      List<LegendDay> seasonData, DateTime seasonStart) {
     List<FlSpot> spots = [];
     int index = 0;
     seasonStart = DateTime(
@@ -82,17 +83,12 @@ class ChartData {
     DateTime currentDate = seasonStart;
     DateTime lastDayOfMonth = getLastDayOfMonth(seasonStart);
 
-    seasonData.forEach((day, trophies) {
-      List<String> parts = day.split('-');
+    for (var legendDay in seasonData) {
+      DateTime dateObj = legendDay.date;
+      String trophies = legendDay.currentTrophies;
 
-      // Récupère la deuxième partie (index 1) qui correspond au jour
-      String dayString = parts[1];
-
-      // Convertit la chaîne en entier
-      int dayInt = int.parse(dayString);
-
-      while (currentDate.day != dayInt) {
-        spots.add(FlSpot(index.toDouble(), double.parse("4900")));
+      while (currentDate.isBefore(dateObj)) {
+        spots.add(FlSpot(index.toDouble(), 4900.0));
         index++;
         currentDate = currentDate.add(Duration(days: 1));
 
@@ -105,18 +101,15 @@ class ChartData {
         }
       }
 
-      if (double.parse(trophies) > 4900) {
-        spots.add(FlSpot(index.toDouble(), double.parse(trophies)));
-      } else {
-        spots.add(FlSpot(index.toDouble(), double.parse("4900")));
-      }
+      double trophyValue = double.parse(trophies);
+      spots.add(FlSpot(index.toDouble(), trophyValue > 4900 ? trophyValue : 4900.0));
       index++;
       currentDate = currentDate.add(Duration(days: 1));
-    });
+    }
 
     double minY = spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b);
     double maxY = spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b);
-    
+
     int hundredsMaxY = (maxY / 100).floor();
     if (maxY % 100 < 20) {
       hundredsMaxY += 1;
@@ -149,6 +142,7 @@ class ChartData {
     );
   }
 }
+
 
 DateTime getLastDayOfMonth(DateTime date) {
   // Crée une nouvelle date pour le premier jour du mois suivant

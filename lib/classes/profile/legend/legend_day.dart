@@ -3,6 +3,7 @@ import 'package:clashkingapp/classes/profile/legend/legend_attack.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_defense.dart';
 
 class LegendDay {
+  final DateTime date;
   final List<int> defenses;
   final List<Defense> newDefenses;
   final int numAttacks;
@@ -19,6 +20,7 @@ class LegendDay {
   late LegendDayStats defensesStats;
 
   LegendDay({
+    required this.date,
     required this.defenses,
     required this.newDefenses,
     required this.numAttacks,
@@ -30,7 +32,8 @@ class LegendDay {
     calculateTrophies();
   }
 
-  factory LegendDay.fromJson(Map<String, dynamic> json) {
+  factory LegendDay.fromJson(String key, Map<String, dynamic> json) {
+    DateTime date = DateTime.parse(key);
     // Handle older format with simple integer lists
     List<int> defenses =
         (json['defenses'] as List<dynamic>?)?.map((e) => e as int).toList() ??
@@ -50,6 +53,7 @@ class LegendDay {
         [];
 
     var legendDay = LegendDay(
+      date: date,
       defenses: defenses,
       newDefenses: newDefenses,
       numAttacks: json['num_attacks'] as int? ?? 0,
@@ -100,8 +104,8 @@ class LegendDay {
 
   void calculateTrophies() {
     try {
-      String startTrophies = '0';
-      String currentTrophies = "0";
+      startTrophies = 0;
+      currentTrophies = "0";
 
       if (attacksList.isNotEmpty && defensesList.isNotEmpty) {
         var lastAttack = attacksList.last is Attack
@@ -125,8 +129,8 @@ class LegendDay {
             : Defense(change: defensesList.first, time: 0, trophies: 0);
 
         startTrophies = (firstAttack.time < firstDefense.time
-            ? (firstAttack.trophies - firstAttack.change).toString()
-            : (firstDefense.trophies + firstDefense.change).toString());
+            ? (firstAttack.trophies - firstAttack.change)
+            : (firstDefense.trophies + firstDefense.change));
       } else if (attacksList.isNotEmpty) {
         var lastAttack = attacksList.last is Attack
             ? attacksList.last as Attack
@@ -137,7 +141,7 @@ class LegendDay {
             ? attacksList.first as Attack
             : Attack(
                 change: attacksList.first, time: 0, trophies: 0, heroGear: []);
-        startTrophies = (firstAttack.trophies - firstAttack.change).toString();
+        startTrophies = (firstAttack.trophies - firstAttack.change);
       } else if (defensesList.isNotEmpty) {
         var lastDefense = defensesList.last is Defense
             ? defensesList.last as Defense
@@ -147,15 +151,14 @@ class LegendDay {
             ? defensesList.first as Defense
             : Defense(change: defensesList.first, time: 0, trophies: 0);
         startTrophies =
-            (firstDefense.trophies + firstDefense.change).toString();
+            (firstDefense.trophies + firstDefense.change);
       }
 
-      this.startTrophies = int.parse(startTrophies);
-      this.endTrophies = int.parse(currentTrophies);
-      this.diffTrophies = this.endTrophies - this.startTrophies;
-      this.currentTrophies = currentTrophies;
-      this.attacksStats = calculateStats(attacksList);
-      this.defensesStats = calculateStats(defensesList);
+      endTrophies = int.parse(currentTrophies);
+      diffTrophies = endTrophies - startTrophies;
+      currentTrophies = currentTrophies;
+      attacksStats = calculateStats(attacksList);
+      defensesStats = calculateStats(defensesList);
 
     } catch (e) {
       print(e);
