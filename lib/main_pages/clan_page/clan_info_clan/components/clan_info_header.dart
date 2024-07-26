@@ -17,6 +17,7 @@ import 'package:clashkingapp/main_pages/wars_league_page/league/current_league_i
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/war_history_page.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:clashkingapp/core/functions.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ClanInfoHeaderCard extends StatefulWidget {
   final Clan clanInfo;
@@ -58,13 +59,17 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
 
   @override
   Widget build(BuildContext context) {
-    String backgroundImageUrl = "https://clashkingfiles.b-cdn.net/landscape/clan-landscape.png";
+    String backgroundImageUrl =
+        "https://clashkingfiles.b-cdn.net/landscape/clan-landscape.png";
 
     String? extractDiscordCode(String description) {
-      final RegExp discordPattern = RegExp(r"https:\/\/(discord\.com\/invite\/|discord\.gg\/)([^ ]+)");
+      final RegExp discordPattern = RegExp(
+          r"(https?:\/\/)?(discord\.com\/invite\/|discord\.gg\/)([^ ]+)");
       final match = discordPattern.firstMatch(description);
-      return match?.group(2);
+      print(match);
+      return match?.group(3);
     }
+
     return Column(
       children: [
         Stack(
@@ -109,73 +114,133 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
         ),
         Column(
           children: [
-            SizedBox(height: 20),
-            Stack(
+            SizedBox(
+              height: 24,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Positioned(
-                  top: -8,
-                  right: 24,
-                  child: IconButton(
-                    icon: Icon(Icons.sports_esports_rounded,
-                        color: Theme.of(context).colorScheme.onSurface,
-                        size: 32),
-                    onPressed: () async {
-                      final languagecode = getPrefs('languageCode');
-                      launchUrl(Uri.parse('https://link.clashofclans.com/$languagecode?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
-                    },
-                  ),
+                IconButton(
+                  icon: Icon(Icons.bar_chart_rounded,
+                      color: Theme.of(context).colorScheme.onSurface, size: 32),
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ClanWarsStatsCard(clanInfo: widget.clanInfo);
+                      },
+                    );
+                  },
                 ),
-                Positioned(
-                  top: -8,
-                  left: 24,
-                  child: IconButton(
-                    icon: Icon(Icons.bar_chart_rounded,
-                        color: Theme.of(context).colorScheme.onSurface,
-                        size: 32),
-                    onPressed: () async {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return ClanWarsStatsCard(clanInfo: widget.clanInfo);
-                        },
-                      );
-                    },
-                  ),
-                ),
-                Center(
-                  child: Text(
+                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  Text(
                     widget.clanInfo.name,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorScheme.onSurface),
                   ),
-                ),
-              ],
-            ),
-            InkWell(
-              onTap: () {
-                FlutterClipboard.copy(widget.clanInfo.tag).then((value) {
-                  final snackBar = SnackBar(
-                    content: Center(
+                  InkWell(
+                    onTap: () {
+                      FlutterClipboard.copy(widget.clanInfo.tag).then((value) {
+                        final snackBar = SnackBar(
+                          content: Center(
+                            child: Text(
+                              AppLocalizations.of(context)!.copiedToClipboard,
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
+                            ),
+                          ),
+                          duration: Duration(milliseconds: 1500),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surface,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.only(top: 2.0, bottom: 4.0),
                       child: Text(
-                        AppLocalizations.of(context)!.copiedToClipboard,
+                        widget.clanInfo.tag,
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface),
+                            color: Theme.of(context).colorScheme.tertiary),
                       ),
                     ),
-                    duration: Duration(milliseconds: 1500),
-                    backgroundColor: Theme.of(context).colorScheme.surface,
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.only(top: 2.0, bottom: 4.0),
-                child: Text(
-                  widget.clanInfo.tag,
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                  ),
+                ]),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.sports_esports_rounded,
+                          color: Theme.of(context).colorScheme.onSurface,
+                          size: 32),
+                      onPressed: () async {
+                        final languagecode = getPrefs('languageCode');
+                        launchUrl(Uri.parse(
+                            'https://link.clashofclans.com/$languagecode?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
+                      },
+                    ),
+                    (widget.clanInfo.description
+                                .contains("discord.com/invite/") ||
+                            widget.clanInfo.description.contains("discord.gg/"))
+                        ? IconButton(
+                            icon: Icon(Icons.discord,
+                                color: Theme.of(context).colorScheme.onSurface,
+                                size: 32),
+                            onPressed: () async {
+                              try {
+                                final String? discordCode = extractDiscordCode(
+                                    widget.clanInfo.description);
+                                if (discordCode != null) {
+                                  final Uri url = Uri.parse(
+                                      'https://discord.gg/$discordCode');
+                                  if (!await launchUrl(url)) {
+                                    final hint = Hint.withMap({
+                                      'url': url,
+                                    });
+                                    Sentry.captureMessage(
+                                        'Failed to open Discord invite link',
+                                        hint: hint);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            AppLocalizations.of(context)!
+                                                .cantOpenLink),
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  final hint = Hint.withMap({
+                                    'description': widget.clanInfo.description,
+                                  });
+                                  Sentry.captureMessage(
+                                      'Failed to extract Discord invite link',
+                                      hint: hint);
+                                }
+                              } catch (exception, stackTrace) {
+                                final hint = Hint.withMap({
+                                  'message':
+                                      'Failed to deal with Discord invite link',
+                                  'description': widget.clanInfo.description,
+                                });
+                                Sentry.captureException(exception,
+                                    stackTrace: stackTrace, hint: hint);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(AppLocalizations.of(context)!
+                                        .cantOpenLink),
+                                  ),
+                                );
+                              }
+                            },
+                          )
+                        : SizedBox(
+                            height: 12,
+                          ),
+                  ],
                 ),
-              ),
+              ],
             ),
             Chip(
               avatar: CircleAvatar(
@@ -198,9 +263,14 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                   Chip(
                     avatar: CircleAvatar(
                       backgroundColor: Colors.transparent,
-                      child: CachedNetworkImage(
-                        imageUrl: "https://clashkingfiles.b-cdn.net/country-flags/${widget.clanInfo.location!.countryCode}.png",
-                      ),
+                      child: (widget.clanInfo.location!.countryCode !=
+                              "No countryCode")
+                          ? CachedNetworkImage(
+                              imageUrl:
+                                  "https://clashkingfiles.b-cdn.net/country-flags/${widget.clanInfo.location!.countryCode}.png")
+                          : Icon(Icons.flag,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              size: 16),
                     ),
                     label: Text(
                       widget.clanInfo.location!.name,
@@ -329,7 +399,8 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                   clanTag: widget.clanInfo.tag,
                                   discordUser: widget.user,
                                   warLogData: warLogDetails,
-                                  warLogStats: widget.clanInfo.warLog.warLogStats,
+                                  warLogStats:
+                                      widget.clanInfo.warLog.warLogStats,
                                   clanName: widget.clanInfo.name,
                                 ),
                               ),
@@ -390,54 +461,6 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            widget.clanInfo.description.contains("discord.com/invite/") || widget.clanInfo.description.contains("discord.gg/")
-              ? Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: ButtonTheme(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF5865F2),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.discord, size: 24),
-                          SizedBox(width: 8),
-                          Text(AppLocalizations.of(context)!.faqJoinDiscord),
-                        ],
-                      ),
-                      onPressed: () async {
-                        try {
-                          final String? discordCode = extractDiscordCode(widget.clanInfo.description);
-                          print('Code Discord trouvé : $discordCode');
-                          if (discordCode != null) {
-                            final Uri url = Uri.parse('https://discord.gg/$discordCode');
-                            if (await launchUrl(url)) {
-                              print('Le lien a été ouvert avec succès');
-                            } else {
-                              print('Le lien ne peut pas être ouvert');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("We can't open this link"),
-                                ),
-                              );
-                            }
-                          } else {
-                            print('Aucun code Discord valide trouvé');
-                          }
-                        } catch (e) {
-                          print('Erreur lors de la tentative d\'ouverture du lien : $e');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("We can't open this link"),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                )
-              : SizedBox(height: 12,),
             SizedBox(height: 4),
             FutureBuilder<String>(
               future: currentWarFuture,
@@ -539,14 +562,14 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                 Shimmer.fromColors(
                                   period: Duration(seconds: 3),
                                   baseColor: Colors.white,
-                                highlightColor: Colors.white.withOpacity(0.4),
+                                  highlightColor: Colors.white.withOpacity(0.4),
                                   child: Text(
-                                    AppLocalizations.of(context)?.ongoingCwl ??
-                                        "Ongoing CWL",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                  ),
+                                      AppLocalizations.of(context)
+                                              ?.ongoingCwl ??
+                                          "Ongoing CWL",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium),
                                 ),
                               ],
                             ),

@@ -31,7 +31,6 @@ class GearDataManager {
   }
 
   Map<String, String> getGearInfo(String gearName) {
-    print(gearUrlsAndTypes[gearName]);
     return gearUrlsAndTypes[gearName] ?? {'url': 'https://clashkingfiles.b-cdn.net/icons/Unknown_person.jpg', 'type': 'unknown', 'hero': 'unknown', 'rarity': '1'};
   }
 }

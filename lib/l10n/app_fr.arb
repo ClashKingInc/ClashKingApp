@@ -421,6 +421,7 @@
     "wars": "Guerres",
     "ongoingWar": "Guerre en cours",
     "ongoingCwl": "Ligue en cours",
+    "cantOpenLink": "Impossible d'ouvrir le lien.",
     "notInWar": "Pas en guerre",
     "warHistory": "Historique de guerre",
     "warHistoryWinsDescription" : "Nous avons enregistré les données de {wins} guerres gagnées.",

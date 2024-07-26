@@ -18,7 +18,6 @@ class HeroGear {
 
   factory HeroGear.fromJson(Map<String, dynamic> json) {
     Map<String, String> gears = GearDataManager().getGearInfo(json['name']);
-    print(gears);
     String hero = gears['hero'] ?? 'unknown';
     String url =
         gears['url'] ?? 'https://clashkingfiles.b-cdn.net/clashkinglogo.png';

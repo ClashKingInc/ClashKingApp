@@ -491,6 +491,7 @@
     "wars": "Wars",
     "ongoingWar": "Ongoing war",
     "ongoingCwl": "Ongoing CWL",
+    "cantOpenLink" : "We can't open this link.",
     "notInWar": "Not in war",
     "warHistory": "War History",
     "warHistoryWinsDescription" : "We tracked the data of {wins} war wins for your clan.",
