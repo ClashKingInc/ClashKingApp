@@ -317,11 +317,7 @@ class StatsScreenState extends State<StatsScreen>
                         (item) => Container(
                           decoration: BoxDecoration(
                             color: item.type == 'gear'
-                                ? (item.name == 'Frozen Arrow' ||
-                                        item.name == 'Giant Gauntlet' ||
-                                        item.name == 'Fireball' ||
-                                        item.name == 'Spiky Ball' ||
-                                        item.name == 'Rocket Spear'
+                                ? (item.rarity == '2'
                                     ? Colors.purple
                                     : Colors.blue)
                                 : null,

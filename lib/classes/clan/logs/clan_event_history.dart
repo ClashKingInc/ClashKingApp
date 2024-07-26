@@ -155,7 +155,6 @@ class EventHistoryClanService {
             break;
         }
       }
-      print('Event History Data Loaded');
       return eventHistoryClan;
     } else {
       throw Exception('Failed to load join leave data');

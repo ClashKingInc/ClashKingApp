@@ -19,8 +19,9 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'] ?? "0",
-      avatar:
-          'https://cdn.discordapp.com/avatars/${json['id']}/${json['avatar']}.png',
+      avatar: (json['avatar'] != null)
+          ? 'https://cdn.discordapp.com/avatars/${json['id']}/${json['avatar']}.png'
+          : "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png",
       globalName: json['global_name'] ?? json['username'] ?? "ClashKing",
     );
   }
@@ -32,31 +33,36 @@ class User {
 }
 
 Future<User?> fetchDiscordUser(String accessToken) async {
-  if (accessToken != "inviteMode") {
-    final response = await http.get(
-      Uri.https('discord.com', '/api/users/@me'),
-      headers: {
-        'Authorization': 'Bearer $accessToken',
-      },
-    );
+  try {
+    if (accessToken != "inviteMode") {
+      final response = await http.get(
+        Uri.https('discord.com', '/api/users/@me'),
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
 
-    if (response.statusCode == 200) {
-      User user = User.fromJson(jsonDecode(response.body));
-      user.isDiscordUser = true;
-      user = await fetchDiscordUserTags(user); // Fetch user tags
-      return user;
+      if (response.statusCode == 200) {
+        User user = User.fromJson(jsonDecode(response.body));
+        user.isDiscordUser = true;
+        user = await fetchDiscordUserTags(user); // Fetch user tags
+        return user;
+      } else {
+        return null;
+      }
     } else {
-      return null;
+      User user = User(
+        id: '0',
+        avatar:
+            'https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png',
+        globalName: 'ILoveClashKing',
+      );
+      user.isDiscordUser = false;
+      return user;
     }
-  } else {
-    
-    User user = User(
-      id: '0',
-      avatar: 'https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png',
-      globalName: 'ILoveClashKing',
-    );
-    user.isDiscordUser = false;
-    return user;
+  } catch (e) {
+    Sentry.captureException(e);
+    return null;
   }
 }
 

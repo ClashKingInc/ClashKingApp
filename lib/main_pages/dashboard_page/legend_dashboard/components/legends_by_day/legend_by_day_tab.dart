@@ -44,10 +44,6 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
   Widget build(BuildContext context) {
     String date = DateFormat('yyyy-MM-dd').format(selectedDate);
     LegendDay? legendDay = widget.playerLegendData.legendData[date];
-    print(legendDay != null);
-    print(legendDay?.attacksList.isNotEmpty);
-    print(legendDay?.defensesList.isNotEmpty);
-
     return Column(
       children: <Widget>[
         Row(

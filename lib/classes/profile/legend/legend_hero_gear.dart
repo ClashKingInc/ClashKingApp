@@ -6,23 +6,29 @@ class HeroGear {
   final int level;
   String hero;
   String url;
+  String rarity;
 
   HeroGear(
       {required this.name,
       required this.level,
       required this.hero,
-      required this.url});
+      required this.url,
+      required this.rarity
+      });
 
   factory HeroGear.fromJson(Map<String, dynamic> json) {
     Map<String, String> gears = GearDataManager().getGearInfo(json['name']);
+    print(gears);
     String hero = gears['hero'] ?? 'unknown';
     String url =
         gears['url'] ?? 'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
+    String rarity = gears['rarity'] ?? '1';
     return HeroGear(
       name: json['name'],
       level: json['level'],
       hero: hero,
       url: url,
+      rarity: rarity,
     );
   }
 
@@ -32,6 +38,7 @@ class HeroGear {
       'level': level,
       'hero': hero,
       'url': url,
+      'rarity': rarity,
     };
   }
 }

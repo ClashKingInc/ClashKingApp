@@ -40,7 +40,6 @@ class LegendScreenState extends State<LegendScreen>
     selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
     selectedMonth = findCurrentSeasonMonth(
         DateTime.now().toUtc().subtract(Duration(hours: 5)));
-    print(selectedMonth);
   }
 
   @override

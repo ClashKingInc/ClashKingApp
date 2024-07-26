@@ -56,12 +56,14 @@ class LegendEosBySeasonChart extends StatelessWidget {
                               reservedSize: 40,
                               getTitlesWidget: (value, meta) {
                                 DateTime date =
-                                    DateTime.fromMillisecondsSinceEpoch(value.toInt());
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                        value.toInt());
                                 return Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: Text(
                                     DateFormat('MM/yy').format(date),
-                                    style: Theme.of(context).textTheme.labelSmall,
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall,
                                   ),
                                 );
                               },
@@ -147,8 +149,7 @@ class LegendEosBySeasonChart extends StatelessWidget {
             ),
           ),
         );
-      } catch (e) {
-        print(e);
+      } catch (exception) {
         return SizedBox.shrink();
       }
     }

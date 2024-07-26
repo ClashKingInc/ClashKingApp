@@ -19,7 +19,7 @@ class GearDataManager {
         final data = jsonDecode(response.body);
         if (data['gears'] != null && data['gears'] is Map) {
           var gear = data['gears'] as Map<String, dynamic>;
-          gearUrlsAndTypes = { for (var name in gear.keys) name: {'url': gear[name]['url'], 'type': gear[name]['type'], 'hero': gear[name]['hero']} };
+          gearUrlsAndTypes = { for (var name in gear.keys) name: {'url': gear[name]['url'], 'type': gear[name]['type'], 'hero': gear[name]['hero'], 'rarity': gear[name]['rarity']} };
           _loaded = true;
         } else {
           throw Exception('gear data is missing or not properly formatted');
@@ -31,6 +31,7 @@ class GearDataManager {
   }
 
   Map<String, String> getGearInfo(String gearName) {
-    return gearUrlsAndTypes[gearName] ?? {'url': 'https://clashkingfiles.b-cdn.net/icons/Unknown_person.jpg', 'type': 'unknown', 'hero': 'unknown'};
+    print(gearUrlsAndTypes[gearName]);
+    return gearUrlsAndTypes[gearName] ?? {'url': 'https://clashkingfiles.b-cdn.net/icons/Unknown_person.jpg', 'type': 'unknown', 'hero': 'unknown', 'rarity': '1'};
   }
 }

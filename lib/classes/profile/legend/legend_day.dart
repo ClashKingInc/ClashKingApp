@@ -1,6 +1,7 @@
 import 'package:clashkingapp/classes/profile/legend/legend_hero_gear.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_attack.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_defense.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class LegendDay {
   final DateTime date;
@@ -160,8 +161,19 @@ class LegendDay {
       attacksStats = calculateStats(attacksList);
       defensesStats = calculateStats(defensesList);
 
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      final hint = Hint.withMap({
+        'custom_message': 'Error while calculating legends trophies',
+        'attacksList': attacksList,
+        'defensesList': defensesList,
+        'startTrophies': startTrophies,
+        'endTrophies': endTrophies,
+        'currentTrophies': currentTrophies,
+        'diffTrophies': diffTrophies,
+        'attacksStats': attacksStats,
+        'defensesStats': defensesStats,
+      });
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
     }
   }
 }

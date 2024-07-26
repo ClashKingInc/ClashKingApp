@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 final String clientId = dotenv.env['DISCORD_CLIENT_ID']!;
 final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
@@ -22,7 +23,7 @@ Future<bool> isTokenValid() async {
   return false;
 }
 
-  Future<bool> refreshToken() async {
+Future<bool> refreshToken() async {
   final refreshToken = await getPrefs("refresh_token");
   if (refreshToken == null) return false;
 
@@ -37,12 +38,14 @@ Future<bool> isTokenValid() async {
 
   if (response.statusCode == 200) {
     final accessToken = jsonDecode(response.body)['access_token'] as String;
-    final newRefreshToken = jsonDecode(response.body)['refresh_token'] as String;
+    final newRefreshToken =
+        jsonDecode(response.body)['refresh_token'] as String;
     int expiresIn = jsonDecode(response.body)['expires_in'];
 
     DateTime expirationDate = DateTime.now().add(Duration(seconds: expiresIn));
     await storePrefs('access_token', accessToken);
-    await storePrefs('refresh_token', newRefreshToken);  // Stocker le nouveau refreshToken
+    await storePrefs(
+        'refresh_token', newRefreshToken); // Stocker le nouveau refreshToken
     await storePrefs('expiration_date', expirationDate.toIso8601String());
 
     return true;
@@ -85,8 +88,10 @@ Future<void> storePrefs(String name, String token) async {
 
     // Store the combined data
     await storage.write(key: name, value: combined);
-  } catch (e) {
-    print("Error storing prefs for $name: $e");
+  } catch (exception, stackTrace) {
+    final hint = Hint.withMap(
+        {'message': 'Error storing prefs', 'name': name, 'token': token});
+    Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
   }
 }
 
@@ -126,8 +131,10 @@ Future<String?> getPrefs(String name) async {
     final decrypted = encrypter.decrypt(encrypted, iv: iv);
 
     return decrypted;
-  } catch (e) {
-    print("Error retrieving prefs for $name: $e");
+  } catch (exception, stackTrace) {
+    final hint = Hint.withMap(
+        {'message': 'Error retrieving prefs', 'name': name, 'token': ''});
+    Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
     return null;
   }
 }
@@ -135,8 +142,10 @@ Future<String?> getPrefs(String name) async {
 Future<void> deletePrefs(String name) async {
   try {
     await storage.delete(key: name);
-  } catch (e) {
-    print("Error deleting prefs for $name: $e");
+  } catch (exception, stackTrace) {
+    final hint = Hint.withMap(
+        {'message': 'Error deleting prefs', 'name': name, 'token': ''});
+    Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
   }
 }
 

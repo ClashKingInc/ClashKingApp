@@ -93,6 +93,7 @@ Future<void> fetchImagesAndTypes(List<dynamic> items, String type) async {
     switch (type) {
       case "gears":
         urlAndType = GearDataManager().getGearInfo(item.name);
+        item.rarity = urlAndType['rarity'] ?? '1';
         break;
       case "pets":
         urlAndType = PetsDataManager().getPetInfo(item.name);
