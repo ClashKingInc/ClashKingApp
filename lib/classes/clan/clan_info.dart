@@ -370,13 +370,16 @@ class ClanService {
               )
               .timeout(Duration(seconds: 10));
 
+          print("tag: $tag");
+
           if (responseWar.statusCode == 200) {
             var decodedResponse =
                 jsonDecode(utf8.decode(responseWar.bodyBytes));
+            print(decodedResponse);
             if (decodedResponse["state"] != "notInWar" &&
                 decodedResponse["reason"] != "accessDenied") {
-              final currentWarInfo =
-                  CurrentWarInfo.fromJson(decodedResponse, "war", clanTag, bypass);
+              final currentWarInfo = CurrentWarInfo.fromJson(
+                  decodedResponse, "war", clanTag, bypass);
               return WarStateInfo(state: "war", currentWarInfo: currentWarInfo);
             } else if (decodedResponse["state"] == "notInWar") {
               return WarStateInfo(state: "notInWar");
@@ -402,8 +405,12 @@ class ClanService {
     try {
       WarStateInfo war = await fetchCurrentWarInfo(clanTag, false);
       if (war.state == "accessDenied") {
+        print("Access denied, fetching opponent tag");
         String opponentTag = await fetchWarOpponentTag(clanTag);
-        return await fetchCurrentWarInfo(opponentTag, true);
+        print("Fetching war info for opponent tag: $opponentTag");
+        WarStateInfo warOpponent = await fetchCurrentWarInfo(opponentTag, true);
+        print(warOpponent.state);
+        return warOpponent;
       } else {
         return war;
       }
