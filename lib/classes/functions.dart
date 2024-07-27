@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
-import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/classes/data/league_data_manager.dart';
 import 'package:clashkingapp/classes/data/troops_data_manager.dart';
@@ -67,23 +66,6 @@ Future<String> fetchLeagueName(String tag) async {
     return jsonDecode(responseBody)['league'] ?? "Unranked";
   } else {
     return "Unranked";
-  }
-}
-
-Future<CurrentWarInfo> fetchCurrentWarInfo(String clanTag) async {
-  clanTag = clanTag.replaceAll('#', '!');
-  final response = await http.get(
-    Uri.parse('https://api.clashking.xyz/v1/clans/$clanTag/currentwar'),
-  );
-
-  if (response.statusCode == 200) {
-    String responseBody = utf8.decode(response.bodyBytes);
-    CurrentWarInfo warInfo =
-        CurrentWarInfo.fromJson(jsonDecode(responseBody), "war", clanTag);
-    return warInfo;
-  } else {
-    throw Exception(
-        'Failed to load current war info with status code: ${response.statusCode}');
   }
 }
 

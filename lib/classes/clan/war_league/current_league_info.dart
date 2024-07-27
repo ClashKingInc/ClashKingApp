@@ -137,7 +137,7 @@ class ClanLeagueRounds {
           Map<String, dynamic> json =
               jsonDecode(utf8.decode(response.bodyBytes));
           if (json['state'] != "notInWar") {
-            return CurrentWarInfo.fromJson(json, "cwl", clanTag);
+            return CurrentWarInfo.fromJson(json, "cwl", clanTag, false);
           }
           return null; 
         } else {
