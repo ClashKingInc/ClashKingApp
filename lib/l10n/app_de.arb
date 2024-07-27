@@ -53,14 +53,14 @@
     "faqIsThisFromSupercell": "Ist diese App von Supercell?",
     "faqFanContentPolicy": "Dieses Material ist nicht offiziell und nicht von Supercell bewilligt. Weitere Informationen findest du in Supercells Richtlinien für Fan-Content unter https://supercell.com/en/fan-content-policy/de",
     "faqWhyNotAccurate": "Warum sind die Daten manchmal ungenau oder fehlen?",
-    "faqClanNotTracked": "Clan wird nicht getrackt\n",
+    "faqClanNotTracked": "Clan not tracked",
     "faqClanNotTrackedAnswer": "ClashKing kann diese Informationen nur abrufen, wenn der Clan erfasst ist. Wenn dein Clan nicht erfasst ist, lade bitte den ClashKing Bot auf deinen Discord-Server ein und benutze den Befehl /addclan. Wir arbeiten daran, diese Funktion bald in der App verfügbar zu machen.",
-    "faqTrackingDown": "Tracking nicht aktiv\n",
-    "faqTrackingDownAnswer": "Das Tracking kann für eine gewisse Zeit nicht funktionieren. Deshalb kann es manchmal Lücken in den Daten geben. Wir arbeiten daran, dies zu verbessern.\n\n",
-    "faqApiLimitation": "Clash of Clans API-Einschränkung\n",
+    "faqTrackingDown": "Tracking down",
+    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.",
+    "faqApiLimitation": "Clash of Clans API limitation",
     "faqApiLimitationAnswer": "Einige Daten werden von Clash of Clans bereitgestellt und ihre API hat gewisse Limitierungen. Dies ist der Fall beim Legenden-Tracking, bei dem manchmal Trophäen-Gewinne und -Verluste verrechnet werden, als wäre es ein einzelner Angriff. Das ist auch der Grund, warum wir keine Daten über eure Gebäude-Level haben.",
     "faqSupportWork": "Wie kann ich eure Arbeit unterstützen?",
-    "faqSupportWorkAnswer": "Es gibt mehrere Möglichkeiten, uns zu unterstützen:\n",
+    "faqSupportWorkAnswer": "There are several ways to support us:",
     "faqUseCodeClashKing": "Creator-Code \"ClashKing\" verwenden",
     "faqSupportUsOnPatreon": "Unterstütze uns auf Patreon",
     "faqShareTheApp": "Teile die App mit deinen Freunden",
@@ -74,6 +74,11 @@
     "faqSendEmail": "Sende eine E-Mail",
     "faqJoinDiscord": "Unserem Discord-Server beitreten",
     "helpUsTranslate": "Hilf uns bei der Übersetzung",
+    "thankYou": "Thank you!",
+    "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
+    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
+    "helpTranslateButton": "Help Translate on Crowdin",
+    "currentTranslators": "Current Translators",
     "copiedToClipboard": "In die Zwischenablage kopiert",
     "all": "Alle",
     "@all": {
@@ -216,6 +221,7 @@
     "equipment": "Ausrüstung",
     "troops": "Truppen",
     "superTroops": "Supertruppen",
+    "activeSuperTroops": "Active Super Troops",
     "pets": "Begleiter",
     "siegeMachines": "Belagerungsmaschinen",
     "spells": "Zauber",
@@ -224,6 +230,41 @@
     "@byDay": {
         "description": "Shows stats by day"
     },
+    "bySeason": "By Season",
+    "@byMonth": {
+        "description": "Shows stats by season"
+    },
+    "dayIndex": "Day {index}",
+    "@dayIndex": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            }
+        }
+    },
+    "indexDays": "{index} days",
+    "@indexDays": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            }
+        }
+    },
+    "bestTrophies": "Best Trophies",
+    "mostAttacks": "Most Attacks",
+    "lastSeason": "Last Season",
+    "bestRank": "Best Global Rank",
+    "daysLeft": "{days} days left",
+    "@daysLeft": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "date": "Date",
+    "stats": "Stats",
+    "seasonStats": "Season Stats",
     "charts": "Diagramme",
     "history": "Verlauf",
     "@history": {
@@ -391,6 +432,7 @@
     },
     "justNow": "Gerade eben",
     "trophiesByMonth": "Trophäen pro Monat",
+    "trophiesBySeason": "Trophies by season",
     "eosTrophies": "Trophäen nach Saisonende",
     "searchClan": "Clan suchen",
     "nameOrTagClan": "Name oder Clankürzel",
@@ -446,6 +488,7 @@
     "wars": "Kriege",
     "ongoingWar": "Laufender Krieg",
     "ongoingCwl": "Laufende Clankriegsliga",
+    "cantOpenLink": "We can't open this link.",
     "notInWar": "Nicht im Krieg",
     "warHistory": "Kriegsvergangenheit",
     "warHistoryWinsDescription": "We tracked the data of {wins} war wins for your clan.",
