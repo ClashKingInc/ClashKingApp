@@ -1,2 +1,17 @@
-New Logo & Design !
-FIX CWL not showing on DAY1 & Android War Widget not working.
+What's New in This Update:
+
+New Features:
+- Introducing the Legend Table that showcases the results of the month, similar to the Season Legends Overview from the /legend search.
+- A New Section to Thank Our Translators for their invaluable contributions ! ❤️
+- Enhanced user experience with the ability to Stay Logged In After Updates.
+- War Log Closed Bypass: Now you can view current wars even if your clan has their war log closed.
+- Added a Discord Button for easy access if a basic link is detected in the clan description.
+
+Fixes and Improvements:
+- We've fixed the chart overlapping in the Legend Tab Rework and added more intuitive displays.
+- Updated the display of Super Troops Unlocked in the profile screen for better clarity.
+- Fixed the default Equipment Background Color issue where it was blue by default.
+- Addressed issues with Translation Overlapping on buttons and tabs for better readability.
+- The To-Do List Bar now accurately reflects the percentage of task completion.
+- Ensured a default profile picture for users without a profile picture on Discord.
+

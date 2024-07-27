@@ -35,7 +35,7 @@ Future<String> checkCurrentWar(String? clanTag) async {
     if (decodedResponse["state"] != "notInWar" &&
         decodedResponse["reason"] != "accessDenied") {
       currentWarInfo = CurrentWarInfo.fromJson(
-          jsonDecode(utf8.decode(responseWar.bodyBytes)), "war", clanTag);
+          jsonDecode(utf8.decode(responseWar.bodyBytes)), "war", clanTag, false);
     } else if (decodedResponse["state"] == "notInWar") {
       DateTime now = DateTime.now();
       if (now.day >= 1 && now.day <= 10) {

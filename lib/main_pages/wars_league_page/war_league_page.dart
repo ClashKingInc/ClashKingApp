@@ -119,7 +119,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                                           clanTag: widget.account.clan!.tag),
                                     ),
                                   )
-                                : warState == "accessDenied"
+                                : warState == "accessDenied" 
                                     ? Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0),
@@ -192,7 +192,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                                                         .badgeUrls
                                                         .large),
                                               ),
-                            warState != "noClan" && warState != "accessDenied"
+                            warState != "noClan" && warState != "accessDenied" && widget.account.clan!.isWarLogPublic != false
                                 ? WarHistoryCard(
                                     warLogData:
                                         widget.account.clan!.warLog.items,

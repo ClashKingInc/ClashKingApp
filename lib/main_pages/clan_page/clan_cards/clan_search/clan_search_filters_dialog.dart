@@ -47,7 +47,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
         }
       });
     } else {
-      throw Exception('Failed to load countries');
+      throw Exception('Failed to load countries with status code: ${response.statusCode}');
     }
   }
 

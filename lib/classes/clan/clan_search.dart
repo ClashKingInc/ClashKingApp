@@ -289,7 +289,7 @@ class ClanService {
 
       return clanInfo;
     } else {
-      throw Exception('Failed to load clan stats');
+      throw Exception('Failed to load clan stats with status code: ${response.statusCode}');
     }
   }
 }

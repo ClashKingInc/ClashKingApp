@@ -235,7 +235,8 @@ class ClanService {
             clanInfo.joinLeaveClan = joinLeaveLog;
             return clanInfo;
           } else {
-            throw Exception('Failed to load clan stats');
+            throw Exception(
+                'Failed to load clan stats with status code: ${clanInfoResponse.statusCode}');
           }
         },
         retryIf: (e) => e is http.ClientException || e is SocketException,
@@ -270,7 +271,8 @@ class ClanService {
 
             return updatedClan;
           } else {
-            throw Exception('Failed to load clan stats');
+            throw Exception(
+                'Failed to load clan stats with status code: ${response.statusCode}');
           }
         },
         retryIf: (e) => e is http.ClientException || e is SocketException,
@@ -326,7 +328,7 @@ class ClanService {
       return clanInfo;
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({"clanInfo": clanInfo});
-      Sentry.captureException(exception, stackTrace: stackTrace, hint : hint);
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
       throw Exception('Failed to load clan stats: $exception');
     }
   }
@@ -338,7 +340,7 @@ class ClanService {
 
   Future<WarStateInfo> fetchWarStateInfo(String clanTag) async {
     final now = DateTime.now();
-    final warInfoFuture = fetchCurrentWarInfo(clanTag);
+    final warInfoFuture = fetchCurrentWarInfoBypass(clanTag);
     final leagueInfoFuture = (now.day >= 1 && now.day <= 12)
         ? fetchCurrentLeagueInfo(clanTag)
         : Future.value(null);
@@ -355,7 +357,7 @@ class ClanService {
     return warStateInfo;
   }
 
-  Future<WarStateInfo> fetchCurrentWarInfo(String clanTag) async {
+  Future<WarStateInfo> fetchCurrentWarInfo(String clanTag, bool bypass) async {
     try {
       return await retry(
         () async {
@@ -373,8 +375,8 @@ class ClanService {
                 jsonDecode(utf8.decode(responseWar.bodyBytes));
             if (decodedResponse["state"] != "notInWar" &&
                 decodedResponse["reason"] != "accessDenied") {
-              final currentWarInfo =
-                  CurrentWarInfo.fromJson(decodedResponse, "war", clanTag);
+              final currentWarInfo = CurrentWarInfo.fromJson(
+                  decodedResponse, "war", clanTag, bypass);
               return WarStateInfo(state: "war", currentWarInfo: currentWarInfo);
             } else if (decodedResponse["state"] == "notInWar") {
               return WarStateInfo(state: "notInWar");
@@ -382,7 +384,8 @@ class ClanService {
           } else if (responseWar.statusCode == 403) {
             return WarStateInfo(state: "accessDenied");
           } else {
-            throw Exception('Failed to load current war info');
+            throw Exception(
+                'Failed to load current war info with status code: ${responseWar.statusCode}');
           }
           return WarStateInfo(state: "notInWar");
         },
@@ -392,6 +395,46 @@ class ClanService {
       final hint = Hint.withMap({"clanTag": clanTag});
       Sentry.captureException(e, stackTrace: stackTrace, hint: hint);
       return WarStateInfo(state: "notInWar");
+    }
+  }
+
+  Future<WarStateInfo> fetchCurrentWarInfoBypass(String clanTag) async {
+    try {
+      WarStateInfo war = await fetchCurrentWarInfo(clanTag, false);
+      if (war.state == "accessDenied") {
+        String opponentTag = await fetchWarOpponentTag(clanTag);
+        WarStateInfo warOpponent = await fetchCurrentWarInfo(opponentTag, true);
+        return warOpponent;
+      } else {
+        return war;
+      }
+    } catch (e, stackTrace) {
+      final hint = Hint.withMap({"clanTag": clanTag});
+      Sentry.captureException(e, stackTrace: stackTrace, hint: hint);
+      return WarStateInfo(state: "notInWar");
+    }
+  }
+
+  Future<String> fetchWarOpponentTag(String clanTag) async {
+    final response = await http.get(Uri.parse(
+        'https://api.clashking.xyz/war/${clanTag.substring(1)}/basic'));
+
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      var data = json.decode(body);
+
+      // Access the list of clans
+      List<dynamic> clans = data['clans'];
+
+      // Find the opponent's clan tag
+      for (String tag in clans) {
+        if (tag != clanTag) {
+          return tag; // Return the opponent's clan tag
+        }
+      }
+      throw Exception('Clan tag not found in the response');
+    } else {
+      throw Exception('Failed to load war history data');
     }
   }
 
@@ -415,7 +458,8 @@ class ClanService {
           } else if (responseCwl.statusCode == 403) {
             return null;
           } else {
-            throw Exception('Failed to load current league info');
+            throw Exception(
+                'Failed to load current league info with status code: ${responseCwl.statusCode}');
           }
           return null; // Return null if the response does not contain the expected data
         },

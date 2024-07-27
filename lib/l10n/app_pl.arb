@@ -1,11 +1,11 @@
 {
     "@@locale": "pl",
-    "creatorCode": "Creator Code : ClashKing",
-    "signInWithDiscord": "Sign In with Discord",
-    "guestMode": "Guest Mode",
-    "needHelpJoinDiscord": "Need help? Join us on Discord.",
-    "createGuestProfile": "Create your guest profile",
-    "doesNotExist": "{tag} does not exist.",
+    "creatorCode": "Kod twórcy: ClashKing",
+    "signInWithDiscord": "Zaloguj się za pomocą Discorda",
+    "guestMode": "Tryb gościa",
+    "needHelpJoinDiscord": "Potrzebujesz pomocy? Dołącz do nas na Discordzie.",
+    "createGuestProfile": "Utwórz swój profil gościa",
+    "doesNotExist": "{tag} nie istnieje.",
     "@doesNotExist": {
         "placeholders": {
             "tag": {
@@ -13,7 +13,7 @@
             }
         }
     },
-    "isAlreadyLinked": "{tag} is already linked to someone.",
+    "isAlreadyLinked": "{tag} jest już powiązany z kimś innym.",
     "@isAlreadyLinked": {
         "placeholders": {
             "tag": {
@@ -21,10 +21,10 @@
             }
         }
     },
-    "username": "Username",
-    "pleaseEnterUsername": "Please enter a username",
-    "playerTags": "Player Tags",
-    "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
+    "username": "Nazwa użytkownika",
+    "pleaseEnterUsername": "Wprowadź nazwę użytkownika",
+    "playerTags": "Tagi gracza",
+    "followingTagsDoNotExist": "Następujące znaczniki nie istnieją: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
             "tags": {
@@ -32,7 +32,7 @@
             }
         }
     },
-    "followingTagsAreAlreadyLinked": "The following tags are already linked to someone: {tags}.",
+    "followingTagsAreAlreadyLinked": "Następujące tagi są już powiązane z kimś innym: {tags}.",
     "@followingTagsAreAlreadyLinked": {
         "placeholders": {
             "tags": {
@@ -40,41 +40,46 @@
             }
         }
     },
-    "welcome": "Welcome!",
-    "welcomeMessage": "Please add one or more Clash Of Clans accounts to your profile. You can add or remove accounts later.",
-    "login": "Login",
-    "logout": "Log out",
-    "language": "Language",
-    "settings": "Settings",
-    "toggleTheme": "Toggle Theme",
-    "selectLanguage": "Select a language",
+    "welcome": "Witamy!",
+    "welcomeMessage": "Proszę dodać jeden lub więcej kont Clash Of Clans do swojego profilu. Możesz później dodać lub usunąć konta.",
+    "login": "Zaloguj się",
+    "logout": "Wyloguj",
+    "language": "Język",
+    "settings": "Ustawienia",
+    "toggleTheme": "Zmień motyw",
+    "selectLanguage": "Wybierz język",
     "faq": "FAQ",
-    "faqSubtitle": "Frequently Asked Questions",
-    "faqIsThisFromSupercell": "Is this App from Supercell?",
-    "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-    "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
-    "faqClanNotTracked": "Clan not tracked\n",
-    "faqClanNotTrackedAnswer": "ClashKing can retrieve this info only if the clan is tracked. If your clan isn't tracked, please invite ClashKing Bot to your Discord server and use the command /addclan. We are working on making this feature available in the app soon.",
-    "faqTrackingDown": "Tracking down\n",
-    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.\n\n",
-    "faqApiLimitation": "Clash of Clans API limitation\n",
-    "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your buildings levels.",
-    "faqSupportWork": "How can I support your work?",
-    "faqSupportWorkAnswer": "There are several ways to support us:\n",
-    "faqUseCodeClashKing": "Use code \"ClashKing\"",
-    "faqSupportUsOnPatreon": "Support us on Patreon",
-    "faqShareTheApp": "Share the app with your friends",
-    "faqRateTheApp": "Rate the app on the store",
-    "faqHelpUsTranslate": "Help us translate the app",
-    "faqHowToInviteTheBot": "How can I invite your bot on my Discord server?",
-    "faqHowToInviteTheBotAnswer": "You can invite our bot on your server by clicking on the button below. You will need to have the \"Manage Server\" permission to add the bot.",
-    "faqInviteTheBot": "Invite ClashKing Bot",
-    "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
-    "faqNeedHelpAnswer": "You can join our Discord server to ask for help or provide feedback, or you can email us at devs@clashkingbot.com. Please write in English or French only.",
-    "faqSendEmail": "Send an email",
-    "faqJoinDiscord": "Join our Discord Server",
-    "helpUsTranslate": "Help us translate",
-    "copiedToClipboard": "Copied to clipboard",
+    "faqSubtitle": "Najczęściej zadawane pytania",
+    "faqIsThisFromSupercell": "Czy ta aplikacja pochodzi od Supercell?",
+    "faqFanContentPolicy": "Ten materiał jest nieoficjalny i nie jest popierany przez Supercell. Aby uzyskać więcej informacji, zobacz Politykę treści twórców Supercell: www.supercell.com/fan-content-policy",
+    "faqWhyNotAccurate": "Dlaczego dane czasami są niedokładne lub brakujące?",
+    "faqClanNotTracked": "Clan not tracked",
+    "faqClanNotTrackedAnswer": "ClashKing może uzyskać te informacje tylko jeśli klan jest śledzony. Jeśli twój klan nie jest śledzony, zaproś bota ClashKing na swój serwer Discord i użyj komendy /addclan. Pracujemy nad udostępnieniem tej funkcji w aplikacji wkrótce.",
+    "faqTrackingDown": "Tracking down",
+    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.",
+    "faqApiLimitation": "Clash of Clans API limitation",
+    "faqApiLimitationAnswer": "Niektóre dane są dostarczane przez Clash of Clans, a ich API ma pewne ograniczenia. Tak jest w przypadku śledzenia legend, gdzie czasami zbiera się zysk i stratę pucharów, jakby był to pojedynczy atak. To także dlatego nie mamy żadnych informacji na temat poziomów twoich budynków.",
+    "faqSupportWork": "Jak mogę wesprzeć Twoją pracę?",
+    "faqSupportWorkAnswer": "There are several ways to support us:",
+    "faqUseCodeClashKing": "Użyj kodu \"ClashKing\"",
+    "faqSupportUsOnPatreon": "Wesprzyj nas na Patreonie",
+    "faqShareTheApp": "Udostępnij aplikację znajomym",
+    "faqRateTheApp": "Oceń aplikację w sklepie",
+    "faqHelpUsTranslate": "Pomóż nam przetłumaczyć aplikację",
+    "faqHowToInviteTheBot": "Jak mogę zaprosić twojego bota na mój serwer Discord?",
+    "faqHowToInviteTheBotAnswer": "Możesz zaprosić naszego bota na swój serwer, klikając poniższy przycisk. Będziesz musiał mieć uprawnienie \"Zarządzaj serwerem\", aby dodać bota.",
+    "faqInviteTheBot": "Zaproś Bota ClashKing",
+    "faqNeedHelp": "Potrzebuję pomocy lub chciałbym złożyć sugestię. Jak mogę się z Tobą skontaktować?",
+    "faqNeedHelpAnswer": "Możesz dołączyć do naszego serwera Discord, aby poprosić o pomoc lub przekazać informacje zwrotne, lub możesz napisać do nas e-maila na adres devs@clashkingbot.com. Prosimy pisać tylko po angielsku lub francusku.",
+    "faqSendEmail": "Wyślij wiadomość e-mail",
+    "faqJoinDiscord": "Dołącz do naszego Discorda",
+    "helpUsTranslate": "Pomóż w tłumaczeniu",
+    "thankYou": "Thank you!",
+    "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
+    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
+    "helpTranslateButton": "Help Translate on Crowdin",
+    "currentTranslators": "Current Translators",
+    "copiedToClipboard": "Skopiowano do schowka",
     "all": "All",
     "@all": {
         "description": "all items"
@@ -216,6 +221,7 @@
     "equipment": "Equipments",
     "troops": "Troops",
     "superTroops": "Super Troops",
+    "activeSuperTroops": "Active Super Troops",
     "pets": "Pets",
     "siegeMachines": "Siege Machines",
     "spells": "Spells",
@@ -224,6 +230,41 @@
     "@byDay": {
         "description": "Shows stats by day"
     },
+    "bySeason": "By Season",
+    "@byMonth": {
+        "description": "Shows stats by season"
+    },
+    "dayIndex": "Day {index}",
+    "@dayIndex": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            }
+        }
+    },
+    "indexDays": "{index} days",
+    "@indexDays": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            }
+        }
+    },
+    "bestTrophies": "Best Trophies",
+    "mostAttacks": "Most Attacks",
+    "lastSeason": "Last Season",
+    "bestRank": "Best Global Rank",
+    "daysLeft": "{days} days left",
+    "@daysLeft": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "date": "Date",
+    "stats": "Stats",
+    "seasonStats": "Season Stats",
     "charts": "Charts",
     "history": "History",
     "@history": {
@@ -391,6 +432,7 @@
     },
     "justNow": "Just Now",
     "trophiesByMonth": "Trophies by month",
+    "trophiesBySeason": "Trophies by season",
     "eosTrophies": "End Of Season Trophies",
     "searchClan": "Search clan",
     "nameOrTagClan": "Clan's name or tag",
@@ -446,6 +488,7 @@
     "wars": "Wars",
     "ongoingWar": "Ongoing war",
     "ongoingCwl": "Ongoing CWL",
+    "cantOpenLink": "We can't open this link.",
     "notInWar": "Not in war",
     "warHistory": "War History",
     "warHistoryWinsDescription": "We tracked the data of {wins} war wins for your clan.",

@@ -54,14 +54,14 @@
     "faqIsThisFromSupercell": "Est-ce que cette application a été créée par Supercell ?",
     "faqFanContentPolicy": "Ce matériel n'est pas officiel et n'est pas approuvé par Supercell. Pour plus d'informations, consultez la politique relative au contenu des fans de Supercell : www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Pourquoi les données ne sont-elles pas toujours exactes ou manquantes ?",
-    "faqClanNotTracked": "Clan non suivi\n",
-    "faqClanNotTrackedAnswer": "ClashKing ne peut obtenir ces informations que si le clan est suivi. Si votre clan ne semble pas être suivi, veuillez l'inviter sur un serveur Discord et utiliser la commande /addclan. Nous espérons rendre cette fonctionnalité bientôt disponible dans l'application.\n\n",
-    "faqTrackingDown": "Suivi en panne\n",
-    "faqTrackingDownAnswer": "Le traking peut cesser de fonctionner pendant un certain temps. C'est pourquoi il peut parfois y avoir des trous dans vos données. Nous faisons de notre mieux pour améliorer cela.\n\n",
-    "faqApiLimitation": "Limitation de l'API Clash of Clans\n",
+    "faqClanNotTracked": "Clan non suivi",
+    "faqClanNotTrackedAnswer": "ClashKing ne peut obtenir ces informations que si le clan est suivi. Si votre clan ne semble pas être suivi, veuillez l'inviter sur un serveur Discord et utiliser la commande /addclan. Nous espérons rendre cette fonctionnalité bientôt disponible dans l'application.",
+    "faqTrackingDown": "Suivi en panne",
+    "faqTrackingDownAnswer": "Le traking peut cesser de fonctionner pendant un certain temps. C'est pourquoi il peut parfois y avoir des trous dans vos données. Nous faisons de notre mieux pour améliorer cela.",
+    "faqApiLimitation": "Limitation de l'API Clash of Clans",
     "faqApiLimitationAnswer": "Certaines données sont fournies par Clash of Clans et leur API présente certaines limitations. C'est le cas du suivi des légendes où il regroupe parfois les gains et les pertes de trophées comme s'il s'agissait d'une seule et même attaque. Ou encore, pourquoi nous n'avons aucune informations sur le niveau de vos batiments.",
     "faqSupportWork": "Comment puis-je soutenir votre travail ?",
-    "faqSupportWorkAnswer": "Il existe plusieurs façons de nous soutenir :\n",
+    "faqSupportWorkAnswer": "Il existe plusieurs façons de nous soutenir :",
     "faqUseCodeClashKing": "Utilisez le code \"ClashKing\"",
     "faqSupportUsOnPatreon": "Soutenez nous sur Patreon",
     "faqShareTheApp": "Partagez l'applications avec vos amis",
@@ -71,10 +71,15 @@
     "faqHowToInviteTheBotAnswer": "Vous pouvez inviter notre bot sur votre serveur en cliquant sur le bouton ci-dessous. Vous devrez disposer de l'autorisation \"Gérer le serveur\" pour ajouter le bot.",
     "faqInviteTheBot": "Inviter le bot ClashKing",
     "faqNeedHelp": "J'ai besoin d'aide ou j'aimerais faire une suggestion. Comment puis-je vous contacter?",
-    "faqNeedHelpAnswer": "Vous pouvez rejoindre notre serveur Discord et demander de l'aide, y faire un retour ou nous envoyer un e-mail à devs@clashkingbot.com. \nTu peux nous écrire en français ou en anglais !",
+    "faqNeedHelpAnswer": "Vous pouvez rejoindre notre serveur Discord et demander de l'aide, y faire un retour ou nous envoyer un e-mail à devs@clashkingbot.com. Tu peux nous écrire en français ou en anglais !",
     "faqSendEmail": "Envoyer un e-mail",
     "faqJoinDiscord": "Rejoindre le serveur Discord",
-    "helpUsTranslate": "Aidez-nous à traduire",
+    "helpUsTranslate": "Nous aider à traduire",
+    "thankYou": "Merci !",
+    "thankYouContent": "Un grand merci à tous nos incroyables traducteurs qui nous aident à rendre cette application accessible à plus de personnes à travers le monde !",
+    "helpTranslateContent": "Tu peux nous aider à traduire l'application sur Crowdin. Si ta langue n'est pas disponible sur Crowdin, n'hésite pas à la demander sur notre serveur Discord. Merci beaucoup pour ton aide !",
+    "helpTranslateButton": "Aider à traduire sur Crowdin",
+    "currentTranslators": "Traducteurs actuels",
     "all": "Tous",
     "hourIndicator": "h",
     "minIndicator": "m",
@@ -188,11 +193,44 @@
     "equipment": "Équipements",
     "troops": "Troupes",
     "superTroops": "Super Troupes",
+    "activeSuperTroops" : "Super Troupes Actives",
     "pets": "Familiers",
     "siegeMachines": "Engins de siège",
     "spells": "Sorts",
     "achievements": "Succès",
     "byDay": "Par jour",
+    "dayIndex": "Jour {index}",
+    "@dayIndex": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            }
+        }
+    },
+    "indexDays": "{index} jours",
+    "@indexDays": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            }
+        }
+    },
+    "bestTrophies": "Plus haut trophées",
+    "mostAttacks": "Plus d'attaques",
+    "lastSeason": "Dernière saison",
+    "bestRank": "Meilleur classement",
+    "dayLeft": "{days} jours restants",
+    "@dayLeft": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "bySeason": "Par saison",
+    "date": "Date",
+    "stats": "Statistiques",
+    "seasonStats": "Statistiques de saison",
     "charts": "Graphs",
     "history": "Historique",
     "legendLeague": "Ligue légende",
@@ -339,6 +377,7 @@
     },
     "justNow": "À l'instant",
     "trophiesByMonth": "Trophées par mois",
+    "trophiesBySeason": "Trophées par saison",
     "eosTrophies": "Trophées en fin de saison",
     "searchClan": "Rechercher un clan",
     "nameOrTagClan": "Nom ou tag du clan",
@@ -382,6 +421,7 @@
     "wars": "Guerres",
     "ongoingWar": "Guerre en cours",
     "ongoingCwl": "Ligue en cours",
+    "cantOpenLink": "Impossible d'ouvrir le lien.",
     "notInWar": "Pas en guerre",
     "warHistory": "Historique de guerre",
     "warHistoryWinsDescription" : "Nous avons enregistré les données de {wins} guerres gagnées.",
