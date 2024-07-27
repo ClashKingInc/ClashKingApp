@@ -8,10 +8,11 @@ import 'package:clashkingapp/classes/profile/description/troop.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/functions.dart';
 import 'package:clashkingapp/classes/data/player_league_data_manager.dart';
-import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:retry/retry.dart';
 import 'dart:io';
+import 'package:clashkingapp/classes/profile/legend/legend_service.dart';
 
 class ProfileInfo {
   String name;
@@ -72,6 +73,10 @@ class ProfileInfo {
     required this.spells,
     required this.equipments,
   });
+
+  List<Troop> getActiveTroops() {
+    return troops.where((troop) => troop.superTroopIsActive).toList();
+  }
 
   factory ProfileInfo.fromJson(Map<String, dynamic> json) {
     return ProfileInfo(
@@ -224,11 +229,14 @@ class ProfileInfoService {
           builderHallPicSpan,
           () => fetchPlayerBuilderHallByTownHallLevel(
               profileInfo.builderHallLevel)),
-      fetchWithSpan(troopsSpan, () => fetchImagesAndTypes(profileInfo.troops)),
-      fetchWithSpan(heroesSpan, () => fetchImagesAndTypes(profileInfo.heroes)),
-      fetchWithSpan(spellsSpan, () => fetchImagesAndTypes(profileInfo.spells)),
       fetchWithSpan(
-          equipmentsSpan, () => fetchImagesAndTypes(profileInfo.equipments)),
+          troopsSpan, () => fetchImagesAndTypes(profileInfo.troops, "troops")),
+      fetchWithSpan(
+          heroesSpan, () => fetchImagesAndTypes(profileInfo.heroes, "heroes")),
+      fetchWithSpan(
+          spellsSpan, () => fetchImagesAndTypes(profileInfo.spells, "spells")),
+      fetchWithSpan(equipmentsSpan,
+          () => fetchImagesAndTypes(profileInfo.equipments, "gears")),
       fetchWithSpan(leagueNameSpan, () => fetchLeagueName(profileInfo.tag)),
     ]);
 

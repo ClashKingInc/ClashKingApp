@@ -6,10 +6,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class LegendHistoryCard extends StatelessWidget {
   const LegendHistoryCard({
     super.key,
-    required this.data,
+    required this.legendSeasons,
   });
 
-  final List data;
+  final List legendSeasons;
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +17,9 @@ class LegendHistoryCard extends StatelessWidget {
 
     return Column(
       children: [
-        SizedBox(height: 10),
-        ...data.map((item) {
+        ...legendSeasons.map((legendsSeason) {
           return Card(
-            margin: EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
+            margin: EdgeInsets.only(top: 4, bottom: 4, left: 16, right: 16),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -48,8 +47,8 @@ class LegendHistoryCard extends StatelessWidget {
                                     capitalize(
                                       DateFormat('MMMM\nyyyy', Localizations.localeOf(context).languageCode).format(
                                         DateTime(
-                                          int.parse( item['season'].split('-')[0]),
-                                          int.parse( item['season'].split('-')[1]),
+                                          int.parse( legendsSeason.season.split('-')[0]),
+                                          int.parse( legendsSeason.season.split('-')[1]),
                                         ),
                                       ),
                                     ),
@@ -61,7 +60,7 @@ class LegendHistoryCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "${item.containsKey('clan') && item['clan'] != null ? item['clan']['name'] : AppLocalizations.of(context)!.noClan}",
+                            "${legendsSeason.clan != null ? legendsSeason.clan.name : AppLocalizations.of(context)!.noClan}",
                             style: Theme.of(context).textTheme.labelMedium,
                           ),
                         ],
@@ -82,7 +81,7 @@ class LegendHistoryCard extends StatelessWidget {
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png",),
                                   ),
-                                  label: Text('${item['trophies']}', style: Theme.of(context).textTheme.labelLarge,),
+                                  label: Text('${legendsSeason.trophies}', style: Theme.of(context).textTheme.labelLarge,),
                                 ),
                                 Chip(
                                   avatar: CircleAvatar(
@@ -90,7 +89,7 @@ class LegendHistoryCard extends StatelessWidget {
                                     child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png"),
                                   ),
                                   label: Text(
-                                    NumberFormat('#,###', 'fr_FR').format(item['rank']),
+                                    NumberFormat('#,###', 'fr_FR').format(legendsSeason.rank),
                                     style: Theme.of(context).textTheme.labelLarge,
                                   ),
                                 ),
@@ -99,14 +98,14 @@ class LegendHistoryCard extends StatelessWidget {
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",),
                                   ),
-                                  label: Text('${item['attackWins']}', style: Theme.of(context).textTheme.labelLarge,),
+                                  label: Text('${legendsSeason.attackWins}', style: Theme.of(context).textTheme.labelLarge,),
                                 ),
                                 Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png",),
                                   ),
-                                  label: Text('${item['defenseWins']}', style: Theme.of(context).textTheme.labelLarge,),
+                                  label: Text('${legendsSeason.defenseWins}', style: Theme.of(context).textTheme.labelLarge,),
                                 ),
                               ],
                             ),

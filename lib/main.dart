@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:clashkingapp/classes/data/gears_data_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/core/my_app.dart';
@@ -8,7 +9,10 @@ import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/core/theme_notifier.dart';
 import 'package:clashkingapp/classes/data/league_data_manager.dart';
 import 'package:clashkingapp/classes/data/player_league_data_manager.dart';
-import 'package:clashkingapp/classes/data/troop_data_manager.dart';
+import 'package:clashkingapp/classes/data/troops_data_manager.dart';
+import 'package:clashkingapp/classes/data/pets_data_manager.dart';
+import 'package:clashkingapp/classes/data/heroes_data_manager.dart';
+import 'package:clashkingapp/classes/data/spells_data_manager.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -30,8 +34,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Required by Workmanager to ensure binding is initialized
   Workmanager().initialize(callbackDispatcher); // Required by Workmanager to initialize the callback dispatcher
   await LeagueDataManager().loadLeagueData();
-  await TroopDataManager().loadTroopData();
+  await TroopDataManager().loadTroopsData();
   await PlayerLeagueDataManager().loadLeagueData();
+  await GearDataManager().loadGearsData();
+  await HeroesDataManager().loadHeroesData();
+  await SpellsDataManager().loadSpellsData();
+  await PetsDataManager().loadPetsData();
 
   await SentryFlutter.init(
     (options) {

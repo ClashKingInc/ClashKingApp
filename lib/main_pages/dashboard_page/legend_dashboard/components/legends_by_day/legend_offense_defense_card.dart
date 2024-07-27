@@ -1,8 +1,10 @@
+import 'package:clashkingapp/classes/profile/legend/legend_day.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/classes/profile/legend/legend_league.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_attack.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_defense.dart';
 
 class LegendOffenseDefenseCard extends StatelessWidget {
   const LegendOffenseDefenseCard({
@@ -18,7 +20,7 @@ class LegendOffenseDefenseCard extends StatelessWidget {
   final String title;
   final List<dynamic> list;
   final BuildContext context;
-  final Map<String, dynamic> stats;
+  final LegendDayStats stats;
   final String plusMinus;
   final String icon;
 
@@ -35,7 +37,7 @@ class LegendOffenseDefenseCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(title, style: Theme.of(context).textTheme.titleMedium),
-                  Text(' ($plusMinus${stats["sum"]})',
+                  Text(' ($plusMinus${stats.sum})',
                       style: Theme.of(context).textTheme.labelLarge),
                 ],
               ),
@@ -96,16 +98,16 @@ class LegendOffenseDefenseCard extends StatelessWidget {
               Text(AppLocalizations.of(context)?.statistics ?? "Statistics",
                   style: Theme.of(context).textTheme.bodyLarge),
               Text(
-                  "${AppLocalizations.of(context)?.total ?? "Total"} : ${stats["count"]}/8",
+                  "${AppLocalizations.of(context)?.total ?? "Total"} : ${stats.count}/8",
                   style: Theme.of(context).textTheme.bodySmall),
               Text(
-                  '${AppLocalizations.of(context)?.average ?? "Average"} : ${stats["average"].toStringAsFixed(1)}',
+                  '${AppLocalizations.of(context)?.average ?? "Average"} : ${stats.average.toStringAsFixed(1)}',
                   style: Theme.of(context).textTheme.bodySmall),
               Text(
-                  '${AppLocalizations.of(context)?.remaining ?? "Remaining"} : $plusMinus${stats["remaining"]}',
+                  '${AppLocalizations.of(context)?.remaining ?? "Remaining"} : $plusMinus${stats.remaining}',
                   style: Theme.of(context).textTheme.bodySmall),
               Text(
-                  '${plusMinus == "-" ? AppLocalizations.of(context)?.worst ?? "Worst" : AppLocalizations.of(context)?.best ?? "Best"} : $plusMinus${stats["bestPossibleTrophies"]}',
+                  '${plusMinus == "-" ? AppLocalizations.of(context)?.worst ?? "Worst" : AppLocalizations.of(context)?.best ?? "Best"} : $plusMinus${stats.bestPossibleTrophies}',
                   style: Theme.of(context).textTheme.bodySmall),
             ],
           ),

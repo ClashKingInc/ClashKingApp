@@ -6,6 +6,7 @@ class Equipment {
   final String village;
   late String imageUrl;
   late String type;
+  late String rarity;
 
   Equipment(
       {required this.name,

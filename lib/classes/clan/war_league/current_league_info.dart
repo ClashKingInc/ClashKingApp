@@ -125,24 +125,39 @@ class ClanLeagueRounds {
 
   static Future<CurrentWarInfo?> fetchWarLeagueInfo(
       String warTag, String clanTag) async {
-    final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clanwarleagues/wars/$warTag'),
-    );
+    int retryCount = 0;
+    while (retryCount < 3) {
+      // Attempt the request up to 3 times
+      try {
+        final response = await http.get(
+          Uri.parse('https://api.clashking.xyz/v1/clanwarleagues/wars/$warTag'),
+        );
 
-    if (response.statusCode == 200) {
-      Map<String, dynamic> json = jsonDecode(utf8.decode(response.bodyBytes));
-      if (json['state'] != "notInWar") {
-        return CurrentWarInfo.fromJson(json, "cwl", clanTag);
+        if (response.statusCode == 200) {
+          Map<String, dynamic> json =
+              jsonDecode(utf8.decode(response.bodyBytes));
+          if (json['state'] != "notInWar") {
+            return CurrentWarInfo.fromJson(json, "cwl", clanTag, false);
+          }
+          return null; 
+        } else {
+          // If too many requests, wait before retrying
+          retryCount++;
+          await Future.delayed(
+              Duration(seconds: 1)); // Wait 1 second before retrying
+        }
+      } catch (e) {
+        if (retryCount >= 2) {
+          // Only throw after all retries are exhausted
+          throw Exception(
+              'Failed to load war league after multiple attempts: $e');
+        }
+        retryCount++;
+        await Future.delayed(
+            Duration(seconds: 5)); // Wait 5 seconds before retrying
       }
-    } else if (response.statusCode == 429) {
-      throw Exception(
-          'Too many requests at the same time. Please retry in a few minutes.');
-    } else {
-      throw Exception(
-          'Failed to load war league info with status code: ${response.statusCode}');
     }
-
-    return null;
+    return null; // Return null if all retries fail
   }
 }
 

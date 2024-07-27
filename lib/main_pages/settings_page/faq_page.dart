@@ -44,9 +44,11 @@ class _FaqScreenState extends State<FaqScreen> {
                           decoration: TextDecoration.underline,
                         ),
                       ),
+                      TextSpan(text: '\n'),
                       TextSpan(
                           text: AppLocalizations.of(context)!
                               .faqClanNotTrackedAnswer),
+                      TextSpan(text: '\n\n'),
                       TextSpan(
                         text: AppLocalizations.of(context)!.faqTrackingDown,
                         style: TextStyle(
@@ -54,9 +56,11 @@ class _FaqScreenState extends State<FaqScreen> {
                           decoration: TextDecoration.underline,
                         ),
                       ),
+                      TextSpan(text: '\n'),
                       TextSpan(
                           text: AppLocalizations.of(context)!
                               .faqTrackingDownAnswer),
+                      TextSpan(text: '\n\n'),
                       TextSpan(
                         text: AppLocalizations.of(context)!.faqApiLimitation,
                         style: TextStyle(
@@ -64,6 +68,7 @@ class _FaqScreenState extends State<FaqScreen> {
                           decoration: TextDecoration.underline,
                         ),
                       ),
+                      TextSpan(text: '\n'),
                       TextSpan(
                           text: AppLocalizations.of(context)!
                               .faqApiLimitationAnswer),
@@ -120,8 +125,10 @@ class _FaqScreenState extends State<FaqScreen> {
                           children: [
                             Icon(Icons.gamepad, size: 24),
                             SizedBox(width: 8),
-                            Text(AppLocalizations.of(context)!
-                                .faqUseCodeClashKing),
+                            Text(
+                                AppLocalizations.of(context)!
+                                    .faqUseCodeClashKing,
+                                style: Theme.of(context).textTheme.bodyMedium),
                           ],
                         ),
                         onPressed: () async {
@@ -141,8 +148,10 @@ class _FaqScreenState extends State<FaqScreen> {
                           children: [
                             Icon(Icons.coffee, size: 24),
                             SizedBox(width: 8),
-                            Text(AppLocalizations.of(context)!
-                                .faqSupportUsOnPatreon),
+                            Text(
+                                AppLocalizations.of(context)!
+                                    .faqSupportUsOnPatreon,
+                                style: Theme.of(context).textTheme.bodyMedium),
                           ],
                         ),
                         onPressed: () async {
@@ -161,7 +170,8 @@ class _FaqScreenState extends State<FaqScreen> {
                           children: [
                             Icon(Icons.discord, size: 24),
                             SizedBox(width: 8),
-                            Text(AppLocalizations.of(context)!.faqJoinDiscord),
+                            Text(AppLocalizations.of(context)!.faqJoinDiscord,
+                                style: Theme.of(context).textTheme.bodyMedium),
                           ],
                         ),
                         onPressed: () async {
@@ -182,7 +192,8 @@ class _FaqScreenState extends State<FaqScreen> {
               ListTile(
                 title: Column(
                   children: [
-                    Text(AppLocalizations.of(context)!.faqHowToInviteTheBotAnswer),
+                    Text(AppLocalizations.of(context)!
+                        .faqHowToInviteTheBotAnswer),
                     SizedBox(height: 8),
                   ],
                 ),
@@ -199,7 +210,11 @@ class _FaqScreenState extends State<FaqScreen> {
                           children: [
                             Icon(Icons.discord, size: 24),
                             SizedBox(width: 8),
-                            Text(AppLocalizations.of(context)!.faqInviteTheBot),
+                            Text(
+                              AppLocalizations.of(context)!.faqInviteTheBot,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              overflow: TextOverflow.visible,
+                            ),
                           ],
                         ),
                         onPressed: () async {
@@ -238,7 +253,8 @@ class _FaqScreenState extends State<FaqScreen> {
                           children: [
                             Icon(Icons.email, size: 24),
                             SizedBox(width: 8),
-                            Text(AppLocalizations.of(context)!.faqSendEmail),
+                            Text(AppLocalizations.of(context)!.faqSendEmail,
+                                style: Theme.of(context).textTheme.bodyMedium),
                           ],
                         ),
                         onPressed: () async {
@@ -268,7 +284,9 @@ class _FaqScreenState extends State<FaqScreen> {
                           children: [
                             Icon(Icons.discord, size: 24),
                             SizedBox(width: 8),
-                            Text(AppLocalizations.of(context)!.faqJoinDiscord),
+                            Text(AppLocalizations.of(context)!.faqJoinDiscord,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                overflow: TextOverflow.ellipsis),
                           ],
                         ),
                         onPressed: () async {
