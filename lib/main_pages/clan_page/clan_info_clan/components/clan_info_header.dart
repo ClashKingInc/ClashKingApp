@@ -66,7 +66,6 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
       final RegExp discordPattern = RegExp(
           r"(https?:\/\/)?(discord\.com\/invite\/|discord\.gg\/)([^ ]+)");
       final match = discordPattern.firstMatch(description);
-      print(match);
       return match?.group(3);
     }
 
