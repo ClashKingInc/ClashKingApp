@@ -88,7 +88,7 @@ jobs:
           serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
           packageName: ${{ secrets.PACKAGE_NAME }}
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: internal
+          track: alpha
           status: completed
           inAppUpdatePriority: 3
           whatsNewDirectory: update-news
