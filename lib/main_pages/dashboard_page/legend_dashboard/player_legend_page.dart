@@ -114,6 +114,8 @@ class LegendScreenState extends State<LegendScreen>
                   color: Theme.of(context).colorScheme.surface,
                 ),
                 labelColor: Theme.of(context).colorScheme.onSurface,
+                labelPadding: EdgeInsets.zero,
+                labelStyle: Theme.of(context).textTheme.bodyLarge,
                 unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
                 onTap: (value) {
                   setState(() {});
