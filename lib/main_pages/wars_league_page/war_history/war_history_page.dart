@@ -12,7 +12,13 @@ class WarHistoryScreen extends StatefulWidget {
   final WarLogStats warLogStats;
   final String clanName;
 
-  WarHistoryScreen({super.key, required this.clanTag, required this.discordUser, required this.warLogData, required this.warLogStats, required this.clanName});
+  WarHistoryScreen(
+      {super.key,
+      required this.clanTag,
+      required this.discordUser,
+      required this.warLogData,
+      required this.warLogStats,
+      required this.clanName});
 
   @override
   WarHistoryScreenState createState() => WarHistoryScreenState();
@@ -45,7 +51,7 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
           children: [
             WarHistoryHeader(
               discordUser: widget.discordUser,
-              clanName : widget.clanName,
+              clanName: widget.clanName,
               clanTag: widget.clanTag,
             ),
             ScrollableTab(
@@ -53,11 +59,15 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
                 color: Theme.of(context).colorScheme.surface,
               ),
               labelColor: Theme.of(context).colorScheme.onSurface,
+              labelPadding: EdgeInsets.zero,
+              labelStyle: Theme.of(context).textTheme.bodyLarge,
               unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
               tabs: [
                 Tab(text: AppLocalizations.of(context)?.warLog ?? 'War Log'),
-                Tab(text: AppLocalizations.of(context)?.statistics ?? 'Statistics'),
-              ], 
+                Tab(
+                    text: AppLocalizations.of(context)?.statistics ??
+                        'Statistics'),
+              ],
               children: [
                 Padding(
                   padding: EdgeInsets.all(8),
@@ -72,8 +82,9 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
                   ),
                 ),
                 Center(
-                  child: Text(AppLocalizations.of(context)?.comingSoon ?? 'Coming Soon'),
-                ), 
+                  child: Text(AppLocalizations.of(context)?.comingSoon ??
+                      'Coming Soon'),
+                ),
               ],
             ),
           ],
@@ -82,4 +93,3 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
     );
   }
 }
-          

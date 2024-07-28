@@ -33,10 +33,10 @@ class LegendOffenseDefenseCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(title, style: Theme.of(context).textTheme.titleMedium),
+                  Text(title, style: Theme.of(context).textTheme.titleSmall),
                   Text(' ($plusMinus${stats.sum})',
                       style: Theme.of(context).textTheme.labelLarge),
                 ],
