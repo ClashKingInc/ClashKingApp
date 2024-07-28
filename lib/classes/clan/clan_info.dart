@@ -16,6 +16,7 @@ import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
 import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
 import 'package:clashkingapp/classes/functions.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 
 class Clan {
   String tag;
@@ -402,9 +403,14 @@ class ClanService {
     try {
       WarStateInfo war = await fetchCurrentWarInfo(clanTag, false);
       if (war.state == "accessDenied") {
-        String opponentTag = await fetchWarOpponentTag(clanTag);
-        WarStateInfo warOpponent = await fetchCurrentWarInfo(opponentTag, true);
-        return warOpponent;
+        String? opponentTag = await fetchWarOpponentTag(clanTag);
+        if (opponentTag != null) {
+          WarStateInfo warOpponent =
+              await fetchCurrentWarInfo(opponentTag, true);
+          return warOpponent;
+        } else {
+          return war;
+        }
       } else {
         return war;
       }
@@ -415,28 +421,6 @@ class ClanService {
     }
   }
 
-  Future<String> fetchWarOpponentTag(String clanTag) async {
-    final response = await http.get(Uri.parse(
-        'https://api.clashking.xyz/war/${clanTag.substring(1)}/basic'));
-
-    if (response.statusCode == 200) {
-      String body = utf8.decode(response.bodyBytes);
-      var data = json.decode(body);
-
-      // Access the list of clans
-      List<dynamic> clans = data['clans'];
-
-      // Find the opponent's clan tag
-      for (String tag in clans) {
-        if (tag != clanTag) {
-          return tag; // Return the opponent's clan tag
-        }
-      }
-      throw Exception('Clan tag not found in the response');
-    } else {
-      throw Exception('Failed to load war history data');
-    }
-  }
 
   Future<CurrentLeagueInfo?> fetchCurrentLeagueInfo(String clanTag) async {
     try {

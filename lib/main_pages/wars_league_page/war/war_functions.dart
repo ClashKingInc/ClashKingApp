@@ -7,6 +7,7 @@ import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 Map<int, int> countStars(List<WarMember> members) {
   Map<int, int> starCounts = {0: 0, 1: 0, 2: 0, 3: 0};
@@ -202,15 +203,18 @@ Future<String> checkCurrentWar(
   // Initial check with the provided clan tag
   String initialResult = await fetchWarDetails(clanTag, false);
   if (initialResult == "accessDenied") {
-    String opponentTag = await fetchWarOpponentTag(clanTag);
-
-    return await fetchWarDetails(opponentTag, true);
+    String? opponentTag = await fetchWarOpponentTag(clanTag);
+    if (opponentTag != null) {
+      return await fetchWarDetails(opponentTag, true);
+    } else {
+      return initialResult;
+    }
   } else {
     return initialResult;
   }
 }
 
-Future<String> fetchWarOpponentTag(String clanTag) async {
+Future<String?> fetchWarOpponentTag(String clanTag) async {
   final response = await http.get(
       Uri.parse('https://api.clashking.xyz/war/${clanTag.substring(1)}/basic'));
 
@@ -218,17 +222,23 @@ Future<String> fetchWarOpponentTag(String clanTag) async {
     String body = utf8.decode(response.bodyBytes);
     var data = json.decode(body);
 
-    // Access the list of clans
-    List<dynamic> clans = data['clans'];
+    // Check if 'clans' exists and is a list
+    if (data != null && data.containsKey('clans') && data['clans'] is List) {
+      List<dynamic> clans = data['clans'];
 
-    // Find the opponent's clan tag
-    for (String tag in clans) {
-      if (tag != clanTag) {
-        return tag; // Return the opponent's clan tag
+      // Find the opponent's clan tag
+      for (String tag in clans) {
+        if (tag != clanTag) {
+          return tag; // Return the opponent's clan tag
+        }
       }
     }
-    throw Exception('Clan tag not found in the response');
+
+    // Return null if 'clans' does not exist or no opponent's clan tag found
+    return null;
   } else {
-    throw Exception('Failed to load war history data');
+    Sentry.captureMessage(
+        'Failed to load $clanTag war opponent tag with status code: ${response.statusCode}');
+    return null;
   }
 }
