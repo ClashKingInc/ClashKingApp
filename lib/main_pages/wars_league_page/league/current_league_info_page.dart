@@ -240,6 +240,8 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
             ),
             ScrollableTab(
               labelColor: Theme.of(context).colorScheme.onSurface,
+              labelPadding: EdgeInsets.zero,
+              labelStyle: Theme.of(context).textTheme.bodyLarge,
               tabBarDecoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
               ),

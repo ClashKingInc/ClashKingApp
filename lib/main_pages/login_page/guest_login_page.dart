@@ -10,6 +10,7 @@ import 'package:clashkingapp/classes/account/cocdiscord_link_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/login_page/tag_input_chip.dart';
 import 'package:clashkingapp/core/functions.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class GuestLoginPage extends StatefulWidget {
   @override
@@ -257,6 +258,7 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                             minimumSize: Size(240, 48),
                           ),
                           onPressed: () async {
+                            try{
                             if (_formKey.currentState!.validate() &&
                                 _tags.isNotEmpty) {
                               globalName = _usernameController.text;
@@ -311,6 +313,10 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                                               alreadyLinkedTags.join(', ')));
                                 }
                               }
+                            }
+                            }
+                            catch(exception, stackTrace){
+                              Sentry.captureException(exception, stackTrace: stackTrace);
                             }
                           },
                           child: Text(AppLocalizations.of(context)!.login),
