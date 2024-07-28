@@ -10,7 +10,7 @@ class LegendSeason {
   final int attackWins;
   final int defenseWins;
   final int rank;
-  final Clan clan;
+  final Clan? clan;
   final String season;
   final int? townHallLevel;
 
@@ -36,7 +36,7 @@ class LegendSeason {
       attackWins: json['attackWins'],
       defenseWins: json['defenseWins'],
       rank: json['rank'],
-      clan: Clan.fromJson(json['clan']),
+      clan: json['clan'] != null ? Clan.fromJson(json['clan']) : null,
       season: json['season'],
       townHallLevel: json['townHallLevel'],
     );
@@ -51,7 +51,7 @@ class LegendSeason {
       'attackWins': attackWins,
       'defenseWins': defenseWins,
       'rank': rank,
-      'clan': clan.toJson(),
+      'clan': clan?.toJson(),
       'season': season,
       'townHallLevel': townHallLevel,
     };
