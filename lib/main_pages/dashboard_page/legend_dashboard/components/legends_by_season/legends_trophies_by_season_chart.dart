@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/classes/profile/legend/legends_season_trophies.dart';
 
 class LegendsTrophiesBySeasonChart extends StatefulWidget {
   final PlayerLegendData playerLegendData;
@@ -125,8 +126,7 @@ class LegendsTrophiesBySeasonChartState
                             return LineTooltipItem(
                               touchedSpot.y.toInt().toString(),
                               TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
+                                  color: Colors.white),
                             );
                           }).toList();
                         },

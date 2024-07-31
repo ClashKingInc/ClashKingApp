@@ -129,7 +129,9 @@ class ChartData {
     if (rangeY == 0) rangeY = 1;
 
     double rangeX = (maxX - minX) / 10;
-    if (rangeX == 0) rangeX = 1;
+
+    if (rangeX < 2) rangeX = 1;
+    
 
     return ChartData(
       minX: minX,

@@ -53,8 +53,8 @@ class LegendStatsHistoryCard extends StatelessWidget {
         Row(
           children: <Widget>[
             SizedBox(
-              height: 40,
-              width: 40,
+              height: 60,
+              width: 60,
               child: Stack(
                 children: <Widget>[
                   Center(
@@ -82,7 +82,7 @@ class LegendStatsHistoryCard extends StatelessWidget {
                   children: [
                     CachedNetworkImage(
                       imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png",
-                      height: 16,
+                      height: 20,
                     ),
                     SizedBox(width: 4),
                     Text(
@@ -95,7 +95,7 @@ class LegendStatsHistoryCard extends StatelessWidget {
                   children: [
                     CachedNetworkImage(
                       imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
-                      height: 16,
+                      height: 20,
                     ),
                     SizedBox(width: 4),
                     Text(

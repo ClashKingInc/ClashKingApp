@@ -8,6 +8,7 @@ import 'package:clashkingapp/classes/profile/legend/legend_day.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legends_by_season/legends_offense_defense.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legends_by_season/legends_used_gear.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
+import 'package:clashkingapp/classes/profile/legend/legends_season_trophies.dart';
 
 class LegendsTrophiesBySeasonTable extends StatefulWidget {
   final PlayerLegendData playerLegendData;

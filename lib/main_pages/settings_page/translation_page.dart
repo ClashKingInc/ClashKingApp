@@ -105,8 +105,8 @@ class TranslationScreen extends StatelessWidget {
   }
 
   void launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrl(Uri(path: url))) {
+      await launchUrl(Uri(path:url));
     } else {
       throw 'Could not launch $url';
     }

@@ -3,6 +3,8 @@ import 'package:clashkingapp/classes/profile/legend/legend_ranking.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_day.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_season.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_functions.dart';
+import 'package:clashkingapp/classes/profile/legend/legends_season_trophies.dart';
+import 'package:clashkingapp/classes/functions.dart';
 
 class PlayerLegendData {
   final Map<String, LegendDay> legendData;
@@ -78,16 +80,22 @@ class PlayerLegendData {
     int totalDefensesTrophies = 0;
     int totalTrophies = 0;
     int totalDays = 0;
+    int percentageNoStarsDefenses = 0;
+    int percentageNoStarsAttacks = 0;
+    int percentageOneStarsDefenses = 0;
+    int percentageOneStarsAttacks = 0;
+    int percentageTwoStarsDefenses = 0;
+    int percentageTwoStarsAttacks = 0;
+    int percentageThreeStarsDefenses = 0;
+    int percentageThreeStarsAttacks = 0;
 
     List<LegendDay> seasonLegendDays = [];
     LegendDay? lastLegendDay;
 
-    DateTime seasonStart = findSeasonStartEndDate(month);
+    List<DateTime> seasonDates = findSeasonStartEndDate(month);
 
-    DateTime monthEnd = month.add(Duration(days: 31));
-
-    DateTime seasonEnd =
-        findSeasonStartEndDate(monthEnd).subtract(Duration(days: 1));
+    DateTime seasonStart = seasonDates[0];
+    DateTime seasonEnd = seasonDates[1];
 
     // Calculate the difference
     Duration difference = seasonEnd.difference(seasonStart);
@@ -113,10 +121,44 @@ class PlayerLegendData {
             ? details.defenses.reduce((a, b) => a + b)
             : 0;
 
+        for (int attack in details.attacks) {
+          switch (attack) {
+            case 40:
+              percentageThreeStarsAttacks += 1;
+              break;
+            case (<= 32 && >= 16):
+              percentageTwoStarsAttacks += 1;
+              break;
+            case (<= 15 && >= 5):
+              percentageOneStarsAttacks += 1;
+              break;
+            case (<= 4):
+              percentageNoStarsAttacks += 1;
+              break;
+            default:
+          }
+        }
+
+        for (int defense in details.defenses) {
+          switch (defense) {
+            case 40:
+              percentageThreeStarsDefenses += 1;
+              break;
+            case (<= 32 && >= 16):
+              percentageTwoStarsDefenses += 1;
+              break;
+            case (<= 15 && >= 5):
+              percentageOneStarsDefenses += 1;
+              break;
+            case (<= 4):
+              percentageNoStarsDefenses += 1;
+              break;
+            default:
+          }
+        }
+
         totalAttacksTrophies += attacksTrophies;
         totalDefensesTrophies += defensesTrophies;
-
-        totalDays++;
 
         // Keep track of the last legend day within the season
         lastLegendDay = details;
@@ -128,6 +170,32 @@ class PlayerLegendData {
       totalTrophies = int.parse(lastLegendDay!.currentTrophies);
     }
 
+    if (seasonEnd.isAfter(DateTime.now())) {
+      totalDays = DateTime.now().difference(seasonStart).inDays + 1;
+    } else {
+      totalDays = daysDifference;
+    }
+
+    int averageAttacksTrophies = totalAttacksTrophies ~/ totalAttacks;
+    int averageDefensesTrophies = totalDefensesTrophies ~/ totalDefenses;
+
+    percentageThreeStarsAttacks =
+        (percentageThreeStarsAttacks * 100 ~/ totalAttacks);
+    percentageTwoStarsAttacks =
+        (percentageTwoStarsAttacks * 100 ~/ totalAttacks);
+    percentageOneStarsAttacks =
+        (percentageOneStarsAttacks * 100 ~/ totalAttacks);
+    percentageNoStarsAttacks = (percentageNoStarsAttacks * 100 ~/ totalAttacks);
+
+    percentageThreeStarsDefenses =
+        (percentageThreeStarsDefenses * 100 ~/ totalDefenses);
+    percentageTwoStarsDefenses =
+        (percentageTwoStarsDefenses * 100 ~/ totalDefenses);
+    percentageOneStarsDefenses =
+        (percentageOneStarsDefenses * 100 ~/ totalDefenses);
+    percentageNoStarsDefenses =
+        (percentageNoStarsDefenses * 100 ~/ totalDefenses);
+
     return SeasonTrophies(
         seasonStart: seasonStart,
         seasonEnd: seasonEnd,
@@ -138,48 +206,31 @@ class PlayerLegendData {
         totalAttacksTrophies: totalAttacksTrophies,
         totalDefensesTrophies: totalDefensesTrophies,
         totalTrophies: totalTrophies,
-        totalDays: totalDays);
+        totalDays: totalDays,
+        averageAttacksTrophies: averageAttacksTrophies,
+        averageDefensesTrophies: averageDefensesTrophies,
+        percentageNoStarsAttacks: percentageNoStarsAttacks,
+        percentageNoStarsDefenses: percentageNoStarsDefenses,
+        percentageOneStarsAttacks: percentageOneStarsAttacks,
+        percentageOneStarsDefenses: percentageOneStarsDefenses,
+        percentageTwoStarsAttacks: percentageTwoStarsAttacks,
+        percentageTwoStarsDefenses: percentageTwoStarsDefenses,
+        percentageThreeStarsAttacks: percentageThreeStarsAttacks,
+        percentageThreeStarsDefenses: percentageThreeStarsDefenses);
   }
 
-  DateTime findSeasonStartEndDate(DateTime month) {
-    DateTime firstDaySelectedMonth = DateTime(month.year, month.month, 1);
-    DateTime lastDayPreviousMonth =
-        firstDaySelectedMonth.subtract(Duration(days: 1));
+  List<DateTime> findSeasonStartEndDate(DateTime currentDate) {
+    DateTime seasonStart =
+        findLastMondayOfMonth(currentDate.year, currentDate.month);
 
-    while (lastDayPreviousMonth.weekday != DateTime.monday) {
-      lastDayPreviousMonth = lastDayPreviousMonth.subtract(Duration(days: 1));
+    DateTime seasonEnd =
+        findLastMondayOfMonth(currentDate.year, currentDate.month + 1);
+    if (currentDate.isBefore(seasonStart) || currentDate == seasonStart) {
+      seasonStart =
+          findLastMondayOfMonth(currentDate.year, currentDate.month - 1);
+      seasonEnd = findLastMondayOfMonth(currentDate.year, currentDate.month)
+          .subtract(Duration(days: 1));
     }
-    return lastDayPreviousMonth;
+    return [seasonStart, seasonEnd];
   }
-}
-
-class SeasonTrophies {
-  final DateTime seasonStart;
-  final DateTime seasonEnd;
-  final List<LegendDay> seasonLegendDays;
-  final int totalAttacks;
-  final int totalDefenses;
-  final int totalAttacksTrophies;
-  final int totalDefensesTrophies;
-  final int totalTrophies;
-  final int totalDays;
-  final int seasonDuration;
-
-  SeasonTrophies(
-      {required this.seasonStart,
-      required this.seasonEnd,
-      required this.seasonDuration,
-      required this.seasonLegendDays,
-      required this.totalAttacks,
-      required this.totalDefenses,
-      required this.totalAttacksTrophies,
-      required this.totalDefensesTrophies,
-      required this.totalTrophies,
-      required this.totalDays});
-
-  bool get isEmpty => seasonLegendDays.isEmpty;
-
-  @override
-  String toString() =>
-      'SeasonTrophies(seasonStart: $seasonStart, seasonLegendDays: $seasonLegendDays, totalAttacks: $totalAttacks, totalDefenses: $totalDefenses, totalAttacksTrophies: $totalAttacksTrophies, totalDefensesTrophies: $totalDefensesTrophies, totalTrophies: $totalTrophies)';
 }

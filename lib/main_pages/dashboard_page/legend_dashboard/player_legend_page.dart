@@ -13,6 +13,7 @@ import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/componen
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legends_by_season/legends_trophies_by_season_table.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legends_by_season/legends_stats_by_season.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legends_by_day/legend_by_day_tab.dart';
+import 'package:clashkingapp/classes/profile/legend/legends_season_trophies.dart';
 
 class LegendScreen extends StatefulWidget {
   final ProfileInfo playerStats;
@@ -230,7 +231,7 @@ class LegendScreenState extends State<LegendScreen>
                                 SizedBox(width: 16),
                                 IconButton(
                                   icon: Icon(
-                                    showBySeasonTable
+                                    showHistoryTable
                                         ? Icons.bar_chart
                                         : Icons.table_chart,
                                     color:

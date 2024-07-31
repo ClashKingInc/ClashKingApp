@@ -129,9 +129,7 @@ class LegendEosBySeasonChart extends StatelessWidget {
                                 return LineTooltipItem(
                                   '${dateFormat.format(date)} : ${touchedSpot.y.toInt()}',
                                   TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface),
+                                      color: Colors.white),
                                 );
                               }).toList();
                             },

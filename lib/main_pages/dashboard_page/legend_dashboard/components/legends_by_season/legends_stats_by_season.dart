@@ -1,7 +1,10 @@
+import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/classes/profile/legend/legends_season_trophies.dart';
+import 'package:intl/intl.dart';
 
 class LegendsStatsBySeason extends StatefulWidget {
   final PlayerLegendData playerLegendData;
@@ -20,8 +23,7 @@ class LegendsStatsBySeason extends StatefulWidget {
 class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-
+    final locale = Localizations.localeOf(context).toString();
     if (widget.seasonData.seasonLegendDays.isNotEmpty) {
       return SizedBox(
         width: double.infinity,
@@ -38,6 +40,29 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                   AppLocalizations.of(context)!.seasonStats,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
+                Text(
+                  "(${DateFormat.yMMMd(locale).format(widget.seasonData.seasonStart)} - ${DateFormat.yMMMd(locale).format(widget.seasonData.seasonEnd)})",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.timer,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      size: 16,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      (widget.seasonData.totalDays <
+                              widget.seasonData.seasonDuration)
+                          ? "${AppLocalizations.of(context)!.indexDays(widget.seasonData.seasonDuration)} (${AppLocalizations.of(context)!.dayIndex(widget.seasonData.totalDays)})"
+                          : AppLocalizations.of(context)!
+                              .indexDays(widget.seasonData.seasonDuration),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -45,54 +70,23 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                       Column(
                         children: [
                           Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Column(
-                                children: [
-                                  SizedBox(height: 2),
-                                  Icon(
-                                    Icons.calendar_today,
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                    size: 16,
-                                  ),
-                                  SizedBox(height: 6),
-                                  CachedNetworkImage(
-                                    imageUrl:
-                                        widget.playerLegendData.legendIcon,
-                                    width: 16,
-                                  ),
-                                ],
+                              CachedNetworkImage(
+                                imageUrl: widget.playerLegendData.legendIcon,
+                                width: 40,
                               ),
-                              SizedBox(width: 8),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    (widget.selectedMonth.month == now.month &&
-                                            widget.selectedMonth.year ==
-                                                now.year)
-                                        ? "${AppLocalizations.of(context)!.indexDays(widget.seasonData.seasonDuration)} (${AppLocalizations.of(context)!.dayIndex(widget.seasonData.totalDays)})"
-                                        : AppLocalizations.of(context)!
-                                            .indexDays(widget
-                                                .seasonData.seasonDuration),
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    widget.seasonData.totalTrophies.toString(),
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                ],
+                              SizedBox(width: 4),
+                              Text(
+                                widget.seasonData.totalTrophies.toString(),
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
                             ],
                           ),
+                          SizedBox(height: 8),
                         ],
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -136,6 +130,68 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ),
                                 ],
                               ),
+                              Row(
+                                children: [
+                                  CachedNetworkImage(
+                                    imageUrl:
+                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
+                                    width: 15,
+                                    height: 15,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "${widget.seasonData.averageAttacksTrophies}",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 16),
+                              Row(
+                                children: [
+                                  ...generateStars(3, 20),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "${widget.seasonData.percentageThreeStarsAttacks}%",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  ...generateStars(2, 20),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "${widget.seasonData.percentageTwoStarsAttacks}%",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  ...generateStars(1, 20),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "${widget.seasonData.percentageOneStarsAttacks}%",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  ...generateStars(0, 20),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "${widget.seasonData.percentageNoStarsAttacks}%",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                           Column(
@@ -173,6 +229,68 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   SizedBox(width: 4),
                                   Text(
                                     "${widget.seasonData.totalDefensesTrophies.toString()}/${320 * widget.seasonData.totalDays}",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  CachedNetworkImage(
+                                    imageUrl:
+                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
+                                    width: 15,
+                                    height: 15,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "${widget.seasonData.averageDefensesTrophies}",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 16),
+                              Row(
+                                children: [
+                                  ...generateStars(3, 20),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "${widget.seasonData.percentageThreeStarsDefenses}%",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  ...generateStars(2, 20),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "${widget.seasonData.percentageTwoStarsDefenses}%",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  ...generateStars(1, 20),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "${widget.seasonData.percentageOneStarsDefenses}%",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  ...generateStars(0, 20),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "${widget.seasonData.percentageNoStarsDefenses}%",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
