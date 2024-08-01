@@ -5,13 +5,13 @@ import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/functions.dart';
-import 'package:clashkingapp/classes/profile/todo/player_to_do.dart';
-import 'package:clashkingapp/classes/profile/todo/player_data.dart';
+import 'package:clashkingapp/classes/profile/todo/to_do_list.dart';
+import 'package:clashkingapp/classes/profile/todo/to_do.dart';
 
 class Accounts {
   final List<Account> accounts;
   late ValueListenable<String?> selectedTag;
-  late PlayerToDoData toDoList;
+  late ToDoList toDoList;
   late bool isTodoInitialized = false;
 
   Accounts({required this.accounts});
@@ -54,7 +54,7 @@ class Accounts {
 class Account {
   final ProfileInfo profileInfo;
   Clan? clan;
-  late PlayerToDoData todo;
+  late ToDoList todo;
 
   Account({required this.profileInfo, this.clan});
 }

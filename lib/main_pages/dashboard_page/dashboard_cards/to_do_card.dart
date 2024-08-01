@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/classes/profile/todo/player_to_do.dart';
+import 'package:clashkingapp/classes/profile/todo/to_do_list.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/to_do_page.dart';
 
@@ -26,21 +26,6 @@ class ToDoCard extends StatefulWidget {
 class ToDoCardState extends State<ToDoCard> {
   @override
   Widget build(BuildContext context) {
-    DateTime nowUtc = DateTime.now().toUtc();
-    bool isInTimeFrameForRaid = false;
-    bool isInTimeFrameForClanGames = false;
-
-    isInTimeFrameForRaid =
-        (nowUtc.weekday == DateTime.friday && nowUtc.hour >= 6) ||
-            (nowUtc.weekday == DateTime.saturday ||
-                nowUtc.weekday == DateTime.sunday) ||
-            (nowUtc.weekday == DateTime.monday && nowUtc.hour < 6);
-
-    isInTimeFrameForClanGames = ((nowUtc.day >= 22 && nowUtc.hour >= 8) &&
-        (nowUtc.day <= 28 && nowUtc.hour <= 8));
-
-    PlayerToDoData? data = widget.accounts.toDoList;
-
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -49,9 +34,9 @@ class ToDoCardState extends State<ToDoCard> {
             builder: (context) => ToDoScreen(
                 playerStats: widget.playerStats,
                 tags: widget.tags,
-                isInTimeFrameForRaid: isInTimeFrameForRaid,
-                isInTimeFrameForClanGames: isInTimeFrameForClanGames,
-                data: data,
+                isInTimeFrameForRaid: widget.accounts.toDoList.isInTimeFrameForRaid,
+                isInTimeFrameForClanGames: widget.accounts.toDoList.isInTimeFrameForClanGames,
+                data: widget.accounts.toDoList,
                 accounts: widget.accounts),
           ),
         );
@@ -74,9 +59,7 @@ class ToDoCardState extends State<ToDoCard> {
                               'To Do List',
                           style: (Theme.of(context)
                                   .textTheme
-                                  .labelLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold)) ??
-                              TextStyle(fontWeight: FontWeight.bold),
+                                  .labelLarge)
                         ),
                         SizedBox(height: 12),
                         SizedBox(
@@ -93,8 +76,8 @@ class ToDoCardState extends State<ToDoCard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          iconToDo(data, isInTimeFrameForRaid,
-                              isInTimeFrameForClanGames)
+                          iconToDo(widget.accounts.toDoList, widget.accounts.toDoList.isInTimeFrameForRaid,
+                              widget.accounts.toDoList.isInTimeFrameForClanGames)
                         ],
                       ),
                     ),
@@ -136,7 +119,7 @@ class ToDoCardState extends State<ToDoCard> {
     );
   }
 
-  Widget iconToDo(PlayerToDoData data, bool isInTimeFrameForRaid,
+  Widget iconToDo(ToDoList data, bool isInTimeFrameForRaid,
       bool isInTimeFrameForClanGames) {
     for (var playerData in data.items
         .where((item) => item.playerTag == widget.playerStats.tag)) {

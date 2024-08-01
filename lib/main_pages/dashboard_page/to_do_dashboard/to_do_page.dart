@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 import 'package:clashkingapp/classes/account/accounts.dart';
-import 'package:clashkingapp/classes/profile/todo/player_to_do.dart';
+import 'package:clashkingapp/classes/profile/todo/to_do_list.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -14,7 +14,7 @@ class ToDoScreen extends StatefulWidget {
   final List<String> tags;
   final bool isInTimeFrameForRaid;
   final bool isInTimeFrameForClanGames;
-  final PlayerToDoData data;
+  final ToDoList data;
   final Accounts accounts;
 
   ToDoScreen(

@@ -4,12 +4,10 @@ import 'package:clashkingapp/classes/profile/todo/cwl_data.dart';
 import 'package:clashkingapp/classes/profile/todo/legends_data.dart';
 import 'package:clashkingapp/classes/profile/todo/raids_data.dart';
 import 'package:clashkingapp/classes/profile/todo/clan_games_data.dart';
-import 'package:clashkingapp/classes/profile/todo/player_to_do.dart';
+import 'package:clashkingapp/classes/profile/todo/to_do_list.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
 
-
-
-class PlayerData {
+class ToDo {
   final String playerTag;
   final String currentClan;
   final LegendData? legends;
@@ -19,7 +17,7 @@ class PlayerData {
   final CwlData cwl;
   final ClanGames clanGames;
 
-  PlayerData({
+  ToDo({
     required this.playerTag,
     required this.currentClan,
     this.legends,
@@ -30,20 +28,27 @@ class PlayerData {
     required this.clanGames,
   });
 
-  factory PlayerData.fromJson(Map<String, dynamic> json) {
-    return PlayerData(
+  factory ToDo.fromJson(Map<String, dynamic> json) {
+    return ToDo(
       playerTag: json['player_tag'] ?? '',
       currentClan: json['current_clan'] ?? 'No clan',
-      legends: json['legends'] != null && json['legends'].isNotEmpty ? LegendData.fromJson(json['legends']) : null,
+      legends: json['legends'] != null && json['legends'].isNotEmpty
+          ? LegendData.fromJson(json['legends'])
+          : null,
       seasonPass: json['season_pass'] is int ? json['season_pass'] : 0,
       lastActive: json['last_active'] ?? 0,
-      raids: json['raids'] != null && json['raids'].isNotEmpty ? RaidData.fromJson(json['raids']) : RaidData(attacksDone: 0, attackLimit: 0),
-      cwl: json['cwl'] != null && json['cwl'].isNotEmpty ? CwlData.fromJson(json['cwl']) : CwlData(attacksDone: 0, attackLimit: 0),
-      clanGames: json['clan_games'] != null && json['clan_games'].isNotEmpty ? ClanGames.fromJson(json['clan_games']) : ClanGames(clanTag: "#VY2J0LL", points: 0),
+      raids: json['raids'] != null && json['raids'].isNotEmpty
+          ? RaidData.fromJson(json['raids'])
+          : RaidData(attacksDone: 0, attackLimit: 0),
+      cwl: json['cwl'] != null && json['cwl'].isNotEmpty
+          ? CwlData.fromJson(json['cwl'])
+          : CwlData(attacksDone: 0, attackLimit: 0),
+      clanGames: json['clan_games'] != null && json['clan_games'].isNotEmpty
+          ? ClanGames.fromJson(json['clan_games'])
+          : ClanGames(clanTag: "#VY2J0LL", points: 0),
     );
   }
 }
-
 
 class PlayerDataService {
   static void fetchPlayerToDoData(List<String> tags, Accounts accounts) async {
@@ -51,12 +56,14 @@ class PlayerDataService {
       String encodedTag = entry.value.replaceAll('#', '%23');
       return '${entry.key == 0 ? '' : '&'}player_tags=$encodedTag';
     }).join('');
-    final response = await http.get(Uri.parse('https://api.clashking.xyz/player/to-do?$tagsParameter'));
+    print(tagsParameter);
+    final response = await http.get(
+        Uri.parse('https://api.clashking.xyz/player/to-do?$tagsParameter'));
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       Map<String, dynamic> jsonBody = json.decode(body);
-      accounts.toDoList = PlayerToDoData.fromJson(jsonBody);
+      accounts.toDoList = ToDoList.fromJson(jsonBody);
       accounts.isTodoInitialized = true;
     } else {
       throw Exception('Failed to load player data');
