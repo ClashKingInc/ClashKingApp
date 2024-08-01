@@ -5,6 +5,7 @@ import 'package:clashkingapp/classes/profile/todo/legends_data.dart';
 import 'package:clashkingapp/classes/profile/todo/raids_data.dart';
 import 'package:clashkingapp/classes/profile/todo/clan_games_data.dart';
 import 'package:clashkingapp/classes/profile/todo/player_to_do.dart';
+import 'package:clashkingapp/classes/account/accounts.dart';
 
 
 
@@ -45,7 +46,7 @@ class PlayerData {
 
 
 class PlayerDataService {
-  static Future<PlayerToDoData> fetchPlayerToDoData(List<String> tags) async {
+  static void fetchPlayerToDoData(List<String> tags, Accounts accounts) async {
     final tagsParameter = tags.asMap().entries.map((entry) {
       String encodedTag = entry.value.replaceAll('#', '%23');
       return '${entry.key == 0 ? '' : '&'}player_tags=$encodedTag';
@@ -55,7 +56,8 @@ class PlayerDataService {
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       Map<String, dynamic> jsonBody = json.decode(body);
-      return PlayerToDoData.fromJson(jsonBody);
+      accounts.toDoList = PlayerToDoData.fromJson(jsonBody);
+      accounts.isTodoInitialized = true;
     } else {
       throw Exception('Failed to load player data');
     }

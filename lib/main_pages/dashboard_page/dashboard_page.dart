@@ -28,12 +28,14 @@ class DashboardPageState extends State<DashboardPage>
     with SingleTickerProviderStateMixin {
   late Future<void> _initializeProfileFuture;
   late Future<void> _initializeLegendsFuture;
+  late Future<void> _initializeToDoFuture;
 
   @override
   void initState() {
     super.initState();
     _initializeProfileFuture = _checkInitialization();
     _initializeLegendsFuture = _checkLegendsInitialization();
+    _initializeToDoFuture = _checkToDoInitialization();
   }
 
   Future<void> _checkInitialization() async {
@@ -44,6 +46,12 @@ class DashboardPageState extends State<DashboardPage>
 
   Future<void> _checkLegendsInitialization() async {
     while (!widget.playerStats.legendsInitialized) {
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+  }
+
+  Future<void> _checkToDoInitialization() async {
+    while (!widget.accounts.isTodoInitialized) {
       await Future.delayed(Duration(milliseconds: 100));
     }
   }
@@ -142,12 +150,35 @@ class DashboardPageState extends State<DashboardPage>
                   }
                 },
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 4),
-                child: ToDoCard(
-                    tags: widget.discordUser.tags,
-                    playerStats: widget.playerStats,
-                    accounts: widget.accounts),
+              FutureBuilder<void>(
+                future: _initializeToDoFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SizedBox.shrink();
+                  } else if (snapshot.hasError) {
+                    Sentry.captureException(snapshot.error);
+                    return Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.connectionErrorRelaunch,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    );
+                  } else {
+                    return Column(
+                      children: [
+                        // Legend Infos Card : Displayed only if data
+                        Padding(
+                          padding:
+                              EdgeInsets.only(left: 8.0, right: 8.0, bottom: 4),
+                          child: ToDoCard(
+                              tags: widget.discordUser.tags,
+                              playerStats: widget.playerStats,
+                              accounts: widget.accounts),
+                        ),
+                      ],
+                    );
+                  }
+                },
               ),
             ],
           ),
