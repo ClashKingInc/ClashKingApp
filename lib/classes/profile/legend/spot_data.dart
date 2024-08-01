@@ -41,7 +41,7 @@ class ChartData {
     double minY = spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b);
 
     int hundredsMaxY = (maxY / 100).floor();
-    if (maxY % 100 < 20) {
+    if (maxY % 100 > 80) {
       hundredsMaxY += 1;
     }
     maxY = (hundredsMaxY + 1) * 100.0;
