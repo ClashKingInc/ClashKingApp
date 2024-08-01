@@ -4,7 +4,6 @@ import 'package:clashkingapp/classes/profile/legend/legend_functions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_attack.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_defense.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 class LegendOffenseDefense extends StatelessWidget {
   const LegendOffenseDefense({
@@ -43,7 +42,25 @@ class LegendOffenseDefense extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(LucideIcons.lineChart, size: 16),
+            Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                CachedNetworkImage(
+                  imageUrl:
+                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
+                  width: 16,
+                  height: 16,
+                  fit: BoxFit.cover,
+                ),
+                CachedNetworkImage(
+                  imageUrl:
+                      "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
+                  width: 8,
+                  height: 8,
+                  fit: BoxFit.cover,
+                )
+              ],
+            ),
             SizedBox(width: 4),
             Text("$plusMinus${stats.average.toStringAsFixed(1)}",
                 style: Theme.of(context).textTheme.bodySmall),

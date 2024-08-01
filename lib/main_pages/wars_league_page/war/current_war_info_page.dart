@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
@@ -35,7 +36,8 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
   late TabController subTabController;
   List<PlayerTab> playerTab = [];
   int _currentSegment = 1;
-  bool filterActive = false;
+  bool filterAccountActive = false;
+  String filterBy = "all";
 
   @override
   void initState() {
@@ -120,85 +122,122 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
   Widget buildTeamsTab(BuildContext context, {List<String>? discordUser}) {
     return Column(
       children: [
-        Stack(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Center(
-              child: CustomSlidingSegmentedControl<int>(
-                initialValue: _currentSegment,
-                children: {
-                  1: Text(AppLocalizations.of(context)?.myTeam ?? 'My team'),
-                  2: Text(
-                      AppLocalizations.of(context)?.enemiesTeam ?? 'Enemies'),
-                },
-                decoration: BoxDecoration(
-                  color:
-                      Theme.of(context).colorScheme.tertiary.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                thumbDecoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(6),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 4.0,
-                      spreadRadius: 1.0,
-                      offset: Offset(0.0, 2.0),
-                    ),
-                  ],
-                ),
-                duration: Duration(milliseconds: 300),
-                curve: Curves.easeInToLinear,
-                onValueChanged: (v) {
-                  setState(() {
-                    _currentSegment = v;
-                  });
-                },
-              ),
+            IconButton(
+              icon: Icon(
+                  filterBy == "all"
+                      ? LucideIcons.list
+                      : filterBy == "rattacks"
+                          ? LucideIcons.swords
+                          : LucideIcons.shield,
+                  color: Theme.of(context).colorScheme.tertiary),
+              onPressed: () {
+                setState(() {
+                  switch (filterBy) {
+                    case "all":
+                      filterBy = "rattacks";
+                      break;
+                    case "rattacks":
+                      filterBy = "rdefenses";
+                      break;
+                    default:
+                      filterBy = "all";
+                  }
+                });
+              },
+              tooltip: 'Filter Remaining Attacks',
             ),
-            Positioned(
-              top: -4,
-              right: 12,
-              child: IconButton(
-                icon: Icon(
-                  Icons.link,
-                  color: filterActive ? Colors.green : Colors.grey,
+            Stack(
+              children: [
+                CustomSlidingSegmentedControl<int>(
+                  initialValue: _currentSegment,
+                  children: {
+                    1: Text(AppLocalizations.of(context)?.myTeam ?? 'My team'),
+                    2: Text(
+                        AppLocalizations.of(context)?.enemiesTeam ?? 'Enemies'),
+                  },
+                  decoration: BoxDecoration(
+                    color:
+                        Theme.of(context).colorScheme.tertiary.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  thumbDecoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(6),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 4.0,
+                        spreadRadius: 1.0,
+                        offset: Offset(0.0, 2.0),
+                      ),
+                    ],
+                  ),
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInToLinear,
+                  onValueChanged: (v) {
+                    setState(() {
+                      _currentSegment = v;
+                    });
+                  },
                 ),
-                onPressed: () {
-                  setState(() {
-                    filterActive = !filterActive;
-                  });
-                },
-                tooltip: 'Filter Active Users',
+              ],
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.link,
+                color: filterAccountActive ? Colors.green : Colors.grey,
               ),
+              onPressed: () {
+                setState(() {
+                  filterAccountActive = !filterAccountActive;
+                });
+              },
+              tooltip: 'Filter Active Users',
             ),
           ],
         ),
         SizedBox(height: 4),
         buildMemberListView(
-          _currentSegment == 1
-              ? widget.currentWarInfo.clan.members
-              : widget.currentWarInfo.opponent.members,
-          context,
-          widget.discordUser,
-          filterActive,
-        ),
+            _currentSegment == 1
+                ? widget.currentWarInfo.clan.members
+                : widget.currentWarInfo.opponent.members,
+            context,
+            widget.discordUser,
+            filterAccountActive,
+            filterBy),
       ],
     );
   }
 
   Widget buildMemberListView(List<WarMember> members, BuildContext context,
-      List<String> discordUser, bool filterActive) {
+      List<String> discordUser, bool filterActive, String filterBy) {
     List<WarMember> displayedMembers = filterActive
         ? members.where((member) => discordUser.contains(member.tag)).toList()
         : List.from(members);
 
     displayedMembers.sort((a, b) => a.mapPosition.compareTo(b.mapPosition));
 
+    List<WarMember> filterMembers;
+
+    switch (filterBy) {
+      case "rattacks":
+      filterMembers = displayedMembers.where((member) => (member.attacks != null && member.attacks!.length < 2)).toList();
+      break;
+      case "rdefenses":
+      filterMembers = displayedMembers.where((member) => (member.bestOpponentAttack != null && member.bestOpponentAttack!.stars < 3)).toList();
+      break;
+      default:
+      filterMembers = displayedMembers;
+
+    }
+
     return WarTeamCard(
       playerTab: playerTab,
       widget: widget,
-      members: displayedMembers,
+      members: filterMembers,
       discordUser: discordUser,
       filterActive: filterActive,
     );

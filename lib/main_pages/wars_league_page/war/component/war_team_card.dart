@@ -205,6 +205,7 @@ class WarTeamCard extends StatelessWidget {
                                         widget.currentWarInfo.attacksPerMember
                                     ? "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Tick.png"
                                     : "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Cross.png",
+                                fit: BoxFit.contain,
                               ),
                             ),
                           ),

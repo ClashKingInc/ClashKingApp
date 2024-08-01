@@ -132,12 +132,24 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                               ),
                               Row(
                                 children: [
-                                  CachedNetworkImage(
-                                    imageUrl:
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
-                                    width: 15,
-                                    height: 15,
-                                    fit: BoxFit.cover,
+                                  Stack(
+                                    alignment: Alignment.topCenter,
+                                    children: [
+                                      CachedNetworkImage(
+                                        imageUrl:
+                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
+                                        width: 16,
+                                        height: 16,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      CachedNetworkImage(
+                                        imageUrl:
+                                            "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
+                                        width: 8,
+                                        height: 8,
+                                        fit: BoxFit.cover,
+                                      )
+                                    ],
                                   ),
                                   SizedBox(width: 4),
                                   Text(
@@ -236,12 +248,24 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                               ),
                               Row(
                                 children: [
-                                  CachedNetworkImage(
-                                    imageUrl:
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
-                                    width: 15,
-                                    height: 15,
-                                    fit: BoxFit.cover,
+                                  Stack(
+                                    alignment: Alignment.topCenter,
+                                    children: [
+                                      CachedNetworkImage(
+                                        imageUrl:
+                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
+                                        width: 16,
+                                        height: 16,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      CachedNetworkImage(
+                                        imageUrl:
+                                            "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
+                                        width: 8,
+                                        height: 8,
+                                        fit: BoxFit.cover,
+                                      )
+                                    ],
                                   ),
                                   SizedBox(width: 4),
                                   Text(
