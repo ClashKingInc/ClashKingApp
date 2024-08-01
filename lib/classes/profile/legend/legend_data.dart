@@ -75,6 +75,7 @@ class PlayerLegendData {
 
   SeasonTrophies getTrophiesBySeason(DateTime month) {
     int totalAttacks = 0;
+    int totalStatsAttacks = 0;
     int totalDefenses = 0;
     int totalAttacksTrophies = 0;
     int totalDefensesTrophies = 0;
@@ -112,6 +113,7 @@ class PlayerLegendData {
       if (season == seasonKey) {
         seasonLegendDays.add(details);
         totalAttacks += details.numAttacks;
+        totalStatsAttacks += details.attacks.length;
         totalDefenses += details.defenses.length;
 
         int attacksTrophies = details.attacks.isNotEmpty
@@ -123,12 +125,9 @@ class PlayerLegendData {
 
         for (int attack in details.attacks) {
           switch (attack) {
-            case 40:
+            case (40 || 80):
               percentageThreeStarsAttacks += 1;
-              break;
-            case (<= 32 && >= 16):
-              percentageTwoStarsAttacks += 1;
-              break;
+              break;              
             case (<= 15 && >= 5):
               percentageOneStarsAttacks += 1;
               break;
@@ -136,12 +135,14 @@ class PlayerLegendData {
               percentageNoStarsAttacks += 1;
               break;
             default:
+            percentageTwoStarsAttacks += 1;
+              break;
           }
         }
 
         for (int defense in details.defenses) {
           switch (defense) {
-            case 40:
+            case (40 || 80):
               percentageThreeStarsDefenses += 1;
               break;
             case (<= 32 && >= 16):
@@ -176,25 +177,40 @@ class PlayerLegendData {
       totalDays = daysDifference;
     }
 
-    int averageAttacksTrophies = totalAttacksTrophies ~/ totalAttacks;
-    int averageDefensesTrophies = totalDefensesTrophies ~/ totalDefenses;
+    if (totalStatsAttacks > totalAttacks)
+    {
+      totalAttacks = totalStatsAttacks;
+    }
 
-    percentageThreeStarsAttacks =
-        (percentageThreeStarsAttacks * 100 ~/ totalAttacks);
-    percentageTwoStarsAttacks =
-        (percentageTwoStarsAttacks * 100 ~/ totalAttacks);
-    percentageOneStarsAttacks =
-        (percentageOneStarsAttacks * 100 ~/ totalAttacks);
-    percentageNoStarsAttacks = (percentageNoStarsAttacks * 100 ~/ totalAttacks);
+    int averageAttacksTrophies =
+        totalAttacksTrophies ~/ (totalAttacks != 0 ? totalAttacks : 1);
+    int averageDefensesTrophies =
+        totalDefensesTrophies ~/ (totalDefenses != 0 ? totalDefenses : 1);
+
+    print(percentageThreeStarsAttacks);
+    print(totalStatsAttacks);
+
+    percentageThreeStarsAttacks = (percentageThreeStarsAttacks *
+        100 ~/
+        (totalStatsAttacks != 0 ? totalStatsAttacks : 1));
+    percentageTwoStarsAttacks = (percentageTwoStarsAttacks *
+        100 ~/
+        (totalStatsAttacks != 0 ? totalStatsAttacks : 1));
+    percentageOneStarsAttacks = (percentageOneStarsAttacks *
+        100 ~/
+        (totalStatsAttacks != 0 ? totalStatsAttacks : 1));
+    percentageNoStarsAttacks = (percentageNoStarsAttacks *
+        100 ~/
+        (totalStatsAttacks != 0 ? totalStatsAttacks : 1));
 
     percentageThreeStarsDefenses =
-        (percentageThreeStarsDefenses * 100 ~/ totalDefenses);
+        (percentageThreeStarsDefenses * 100 ~/ (totalDefenses != 0 ? totalDefenses : 1));
     percentageTwoStarsDefenses =
-        (percentageTwoStarsDefenses * 100 ~/ totalDefenses);
+        (percentageTwoStarsDefenses * 100 ~/ (totalDefenses != 0 ? totalDefenses : 1));
     percentageOneStarsDefenses =
-        (percentageOneStarsDefenses * 100 ~/ totalDefenses);
+        (percentageOneStarsDefenses * 100 ~/ (totalDefenses != 0 ? totalDefenses : 1));
     percentageNoStarsDefenses =
-        (percentageNoStarsDefenses * 100 ~/ totalDefenses);
+        (percentageNoStarsDefenses * 100 ~/ (totalDefenses != 0 ? totalDefenses : 1));
 
     return SeasonTrophies(
         seasonStart: seasonStart,
