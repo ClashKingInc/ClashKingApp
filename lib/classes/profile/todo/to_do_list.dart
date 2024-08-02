@@ -10,6 +10,7 @@ class ToDoList {
   late final int totalCwlAttacks;
   late final int totalClanGamesPoints;
   late final int numberAccounts;
+  late final int percentageDone;
 
   ToDoList({required this.items}) {
     final nowUtc = DateTime.now().toUtc();
@@ -34,6 +35,48 @@ class ToDoList {
         items.fold(0, (sum, item) => sum + item.clanGames.points);
 
     numberAccounts = items.length;
+
+    int totalDone = 0;
+    int totalEvent = 0;
+
+    for (ToDo item in items) {
+      // Legend completed
+      if (item.legends != null) {
+        totalEvent += 100;
+        double legendRatio = item.legends!.numAttacks / 8;
+        totalDone += (legendRatio * 100).toInt();
+      }
+
+      // Clan games completed
+      if (isInTimeFrameForClanGames) {
+        totalEvent += 100;
+        double clanGamesRatio = item.clanGames.points / 4000;
+        totalDone += (clanGamesRatio * 100).toInt();
+      }
+
+      // Raids completed
+      if (isInTimeFrameForRaid) {
+        totalEvent += 100;
+        if (item.raids.attackLimit == 0) {
+          item.raids.attackLimit = 5;
+        }
+        double raidRatio = item.raids.attacksDone.toDouble() /
+            item.raids.attackLimit.toDouble();
+        totalDone += (raidRatio * 100).toInt();
+      }
+
+      // Season pass completed
+      totalEvent += 100;
+      double seasonPassRatio = item.seasonPass.toDouble() / 2600;
+      totalDone += (seasonPassRatio * 100).toInt();
+    }
+
+    // Calculate overall percentage done
+    if (totalEvent > 0) {
+      percentageDone = (totalDone / totalEvent * 100).toInt();
+    } else {
+      percentageDone = 0; // No events, so 0% done
+    }
   }
 
   factory ToDoList.fromJson(Map<String, dynamic> json) {

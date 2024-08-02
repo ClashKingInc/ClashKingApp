@@ -9,6 +9,7 @@ import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_le
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_search_card.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/classes/profile/todo/to_do.dart';
 
 class DashboardPage extends StatefulWidget {
   final ProfileInfo playerStats;
@@ -47,12 +48,14 @@ class DashboardPageState extends State<DashboardPage>
   Future<void> _checkLegendsInitialization() async {
     while (!widget.playerStats.legendsInitialized) {
       await Future.delayed(Duration(milliseconds: 100));
+      print("legend");
     }
   }
 
   Future<void> _checkToDoInitialization() async {
     while (!widget.accounts.isTodoInitialized) {
       await Future.delayed(Duration(milliseconds: 100));
+      print("todo");
     }
   }
 
@@ -60,9 +63,15 @@ class DashboardPageState extends State<DashboardPage>
     // Fetch the updated profile information
     widget.playerStats.initialized = false;
     widget.playerStats.legendsInitialized = false;
+    widget.accounts.isTodoInitialized = false;
     final profileInfo =
         await ProfileInfoService().fetchProfileInfo(widget.playerStats.tag);
-    while (profileInfo!.initialized != true) {
+
+    PlayerDataService.fetchPlayerToDoData(
+        widget.accounts.tags, widget.accounts);
+    while (profileInfo!.initialized != true ||
+        profileInfo.legendsInitialized != true ||
+        widget.accounts.isTodoInitialized != true) {
       await Future.delayed(Duration(milliseconds: 100));
     }
 
@@ -71,6 +80,7 @@ class DashboardPageState extends State<DashboardPage>
       widget.playerStats.updateFrom(profileInfo);
       _initializeProfileFuture = _checkInitialization();
       _initializeLegendsFuture = _checkLegendsInitialization();
+      _initializeToDoFuture = _checkToDoInitialization();
     });
   }
 

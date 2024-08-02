@@ -10,11 +10,13 @@ import 'package:clashkingapp/classes/profile/todo/to_do.dart';
 
 class Accounts {
   final List<Account> accounts;
+  final List<String> tags;
   late ValueListenable<String?> selectedTag;
   late ToDoList toDoList;
   late bool isTodoInitialized = false;
 
-  Accounts({required this.accounts});
+
+  Accounts({required this.accounts, required this.tags});
 
   List<Account> get list => accounts;
 
@@ -130,7 +132,7 @@ class AccountsService {
       sortSpan.finish(status: SpanStatus.ok());
 
       // Step 5: Create an Accounts object
-      final accounts = Accounts(accounts: accountsList);
+      final accounts = Accounts(accounts: accountsList, tags : tags);
 
       final todoSpan = transaction.startChild('fetchToDo');
       PlayerDataService.fetchPlayerToDoData(tags, accounts);

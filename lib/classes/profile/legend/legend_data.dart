@@ -75,7 +75,6 @@ class PlayerLegendData {
 
   SeasonTrophies getTrophiesBySeason(DateTime month) {
     int totalAttacks = 0;
-    int totalStatsAttacks = 0;
     int totalDefenses = 0;
     int totalAttacksTrophies = 0;
     int totalDefensesTrophies = 0;
@@ -112,8 +111,7 @@ class PlayerLegendData {
           DateFormat('yyyy-MM-dd').format(findSeasonStartDate(dateObj));
       if (season == seasonKey) {
         seasonLegendDays.add(details);
-        totalAttacks += details.numAttacks;
-        totalStatsAttacks += details.attacks.length;
+        totalAttacks += (details.numAttacks >= details.attacks.length) ? details.numAttacks : details.attacks.length ;
         totalDefenses += details.defenses.length;
 
         int attacksTrophies = details.attacks.isNotEmpty
@@ -177,31 +175,23 @@ class PlayerLegendData {
       totalDays = daysDifference;
     }
 
-    if (totalStatsAttacks > totalAttacks)
-    {
-      totalAttacks = totalStatsAttacks;
-    }
-
     int averageAttacksTrophies =
         totalAttacksTrophies ~/ (totalAttacks != 0 ? totalAttacks : 1);
     int averageDefensesTrophies =
         totalDefensesTrophies ~/ (totalDefenses != 0 ? totalDefenses : 1);
 
-    print(percentageThreeStarsAttacks);
-    print(totalStatsAttacks);
-
     percentageThreeStarsAttacks = (percentageThreeStarsAttacks *
         100 ~/
-        (totalStatsAttacks != 0 ? totalStatsAttacks : 1));
+        (totalAttacks != 0 ? totalAttacks : 1));
     percentageTwoStarsAttacks = (percentageTwoStarsAttacks *
         100 ~/
-        (totalStatsAttacks != 0 ? totalStatsAttacks : 1));
+        (totalAttacks != 0 ? totalAttacks : 1));
     percentageOneStarsAttacks = (percentageOneStarsAttacks *
         100 ~/
-        (totalStatsAttacks != 0 ? totalStatsAttacks : 1));
+        (totalAttacks != 0 ? totalAttacks : 1));
     percentageNoStarsAttacks = (percentageNoStarsAttacks *
         100 ~/
-        (totalStatsAttacks != 0 ? totalStatsAttacks : 1));
+        (totalAttacks != 0 ? totalAttacks : 1));
 
     percentageThreeStarsDefenses =
         (percentageThreeStarsDefenses * 100 ~/ (totalDefenses != 0 ? totalDefenses : 1));

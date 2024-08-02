@@ -34,87 +34,120 @@ class ToDoCardState extends State<ToDoCard> {
             builder: (context) => ToDoScreen(
                 playerStats: widget.playerStats,
                 tags: widget.tags,
-                isInTimeFrameForRaid: widget.accounts.toDoList.isInTimeFrameForRaid,
-                isInTimeFrameForClanGames: widget.accounts.toDoList.isInTimeFrameForClanGames,
+                isInTimeFrameForRaid:
+                    widget.accounts.toDoList.isInTimeFrameForRaid,
+                isInTimeFrameForClanGames:
+                    widget.accounts.toDoList.isInTimeFrameForClanGames,
                 data: widget.accounts.toDoList,
                 accounts: widget.accounts),
           ),
         );
       },
-      child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-        child: Card(
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
+      child: Stack(
+        children: [
+          DefaultTextStyle(
+            style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 16, right: 16, top: 16, bottom: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Column(
+                    Row(
                       children: <Widget>[
-                        Text(
-                          AppLocalizations.of(context)?.toDoList ??
-                              'To Do List',
-                          style: (Theme.of(context)
-                                  .textTheme
-                                  .labelLarge)
+                        Column(
+                          children: <Widget>[
+                            Text(
+                                AppLocalizations.of(context)?.toDoList ??
+                                    'To Do List',
+                                style:
+                                    (Theme.of(context).textTheme.labelLarge)),
+                            SizedBox(height: 12),
+                            SizedBox(
+                              height: 100,
+                              width: 100,
+                              child: CachedNetworkImage(
+                                  imageUrl:
+                                      'https://clashkingfiles.b-cdn.net/icons/Magic_Item_Builder_Potion.png'),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 12),
-                        SizedBox(
-                          height: 100,
-                          width: 100,
-                          child: CachedNetworkImage(
-                              imageUrl:
-                                  'https://clashkingfiles.b-cdn.net/icons/Magic_Item_Builder_Potion.png'),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              iconToDo(
+                                  widget.accounts.toDoList,
+                                  widget.accounts.toDoList.isInTimeFrameForRaid,
+                                  widget.accounts.toDoList
+                                      .isInTimeFrameForClanGames)
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          iconToDo(widget.accounts.toDoList, widget.accounts.toDoList.isInTimeFrameForRaid,
-                              widget.accounts.toDoList.isInTimeFrameForClanGames)
-                        ],
-                      ),
+                    //Row(
+                    //  children: [
+                    //    SizedBox(width: 8),
+                    //    Container(
+                    //      width: MediaQuery.of(context).size.width - 104,
+                    //      height: 8,
+                    //      decoration: BoxDecoration(
+                    //        border: Border.all(
+                    //          color: Colors.black.withOpacity(0.2),
+                    //          width: 1),
+                    //        borderRadius: BorderRadius.circular(4),
+                    //      ),
+                    //      child: ClipRRect(
+                    //        borderRadius: BorderRadius.circular(4),
+                    //        child: LinearProgressIndicator(
+                    //          value: totalDone / totalEvent,
+                    //          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    //          valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                    //        ),
+                    //      ),
+                    //    ),
+                    //    SizedBox(width: 8),
+                    //    Text(
+                    //      '${((totalDone / totalEvent) * 100).toStringAsFixed(0).padLeft(3, ' ')}%',
+                    //      style: Theme.of(context).textTheme.labelLarge,
+                    //    ),
+                    //  ],
+                    //),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 10,
+            right: 10,
+            child: GestureDetector(
+              onTap: () => showBetaPopup(context),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 4,
+                      offset: Offset(0, 2),
                     ),
                   ],
                 ),
-                //Row(
-                //  children: [
-                //    SizedBox(width: 8),
-                //    Container(
-                //      width: MediaQuery.of(context).size.width - 104,
-                //      height: 8,
-                //      decoration: BoxDecoration(
-                //        border: Border.all(
-                //          color: Colors.black.withOpacity(0.2),
-                //          width: 1),
-                //        borderRadius: BorderRadius.circular(4),
-                //      ),
-                //      child: ClipRRect(
-                //        borderRadius: BorderRadius.circular(4),
-                //        child: LinearProgressIndicator(
-                //          value: totalDone / totalEvent,
-                //          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                //          valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                //        ),
-                //      ),
-                //    ),
-                //    SizedBox(width: 8),
-                //    Text(
-                //      '${((totalDone / totalEvent) * 100).toStringAsFixed(0).padLeft(3, ' ')}%',
-                //      style: Theme.of(context).textTheme.labelLarge,
-                //    ),
-                //  ],
-                //),
-              ],
+                child: Text(
+                  'BETA',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -343,4 +376,25 @@ class ToDoCardState extends State<ToDoCard> {
     }
     return SizedBox.shrink();
   }
+}
+
+void showBetaPopup(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Beta Feature'),
+        content: Text(
+            'This feature is in beta and might contain some bugs. It will be improved in the next update. Feel free to suggest features and report bugs to improve it.'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
