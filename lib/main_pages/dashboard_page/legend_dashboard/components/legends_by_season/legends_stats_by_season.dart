@@ -165,7 +165,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ...generateStars(3, 20),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.percentageThreeStarsAttacks}%",
+                                    "${widget.seasonData.percentageThreeStarsAttacks.toStringAsFixed(1)}%",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -176,7 +176,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ...generateStars(2, 20),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.percentageTwoStarsAttacks}%",
+                                    "${widget.seasonData.percentageTwoStarsAttacks.toStringAsFixed(1)}%",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -187,7 +187,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ...generateStars(1, 20),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.percentageOneStarsAttacks}%",
+                                    "${widget.seasonData.percentageOneStarsAttacks.toStringAsFixed(1)}%",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -198,7 +198,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ...generateStars(0, 20),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.percentageNoStarsAttacks}%",
+                                    "${widget.seasonData.percentageNoStarsAttacks.toStringAsFixed(1)}%",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -281,7 +281,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ...generateStars(3, 20),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.percentageThreeStarsDefenses}%",
+                                    "${widget.seasonData.percentageThreeStarsDefenses.toStringAsFixed(1)}%",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -292,7 +292,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ...generateStars(2, 20),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.percentageTwoStarsDefenses}%",
+                                    "${widget.seasonData.percentageTwoStarsDefenses.toStringAsFixed(1)}%",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -303,7 +303,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ...generateStars(1, 20),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.percentageOneStarsDefenses}%",
+                                    "${widget.seasonData.percentageOneStarsDefenses.toStringAsFixed(1)}%",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -314,7 +314,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ...generateStars(0, 20),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.percentageNoStarsDefenses}%",
+                                    "${widget.seasonData.percentageNoStarsDefenses.toStringAsFixed(1)}%",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),

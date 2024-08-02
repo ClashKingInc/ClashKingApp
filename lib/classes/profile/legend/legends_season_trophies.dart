@@ -13,14 +13,14 @@ class SeasonTrophies {
   final int seasonDuration;
   final int averageAttacksTrophies;
   final int averageDefensesTrophies;
-  final int percentageThreeStarsAttacks;
-  final int percentageThreeStarsDefenses;
-  final int percentageTwoStarsAttacks;
-  final int percentageTwoStarsDefenses;
-  final int percentageOneStarsAttacks;
-  final int percentageOneStarsDefenses;
-  final int percentageNoStarsAttacks;
-  final int percentageNoStarsDefenses;
+  final double percentageThreeStarsAttacks;
+  final double percentageThreeStarsDefenses;
+  final double percentageTwoStarsAttacks;
+  final double percentageTwoStarsDefenses;
+  final double percentageOneStarsAttacks;
+  final double percentageOneStarsDefenses;
+  final double percentageNoStarsAttacks;
+  final double percentageNoStarsDefenses;
 
   SeasonTrophies(
       {required this.seasonStart,

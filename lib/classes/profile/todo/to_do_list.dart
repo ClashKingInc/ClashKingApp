@@ -1,4 +1,5 @@
 import 'package:clashkingapp/classes/profile/todo/to_do.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ToDoList {
   final List<ToDo> items;
@@ -11,6 +12,8 @@ class ToDoList {
   late final int totalClanGamesPoints;
   late final int numberAccounts;
   late final int percentageDone;
+  late int totalDone;
+  late int totalEvent;
 
   ToDoList({required this.items}) {
     final nowUtc = DateTime.now().toUtc();
@@ -36,8 +39,8 @@ class ToDoList {
 
     numberAccounts = items.length;
 
-    int totalDone = 0;
-    int totalEvent = 0;
+    totalDone = 0;
+    totalEvent = 0;
 
     for (ToDo item in items) {
       // Legend completed
@@ -91,5 +94,19 @@ class ToDoList {
   @override
   String toString() {
     return 'PlayerToDoData: ${items.toString()}';
+  }
+
+  ToDo? findTodotByTag(String tag) {
+    try {
+      return items.firstWhere((todo) => todo.playerTag == tag);
+    } catch (exception, stackTrace) {
+      final hint = Hint.withMap({
+        'custom_message': 'No to-do found for this tag',
+        'tag': tag,
+      });
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+
+      return null;
+    }
   }
 }

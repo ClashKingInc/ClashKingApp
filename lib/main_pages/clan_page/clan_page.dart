@@ -9,6 +9,7 @@ import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_join_leave/clan_join_leave.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/main_pages/beta_label.dart';
 
 class ClanInfoPage extends StatefulWidget {
   final Clan? clanInfo;
@@ -133,9 +134,14 @@ class ClanInfoPageState extends State<ClanInfoPage>
                                 child: Padding(
                                   padding:
                                       EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: ClanJoinLeaveCard(
-                                    discordUser: widget.user.tags,
-                                    clanInfo: widget.clanInfo!,
+                                  child: Stack(
+                                    children: [
+                                      ClanJoinLeaveCard(
+                                        discordUser: widget.user.tags,
+                                        clanInfo: widget.clanInfo!,
+                                      ),
+                                      BetaLabel(),
+                                    ],
                                   ),
                                 ),
                               ),

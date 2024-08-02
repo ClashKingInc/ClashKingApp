@@ -80,6 +80,12 @@
     "helpTranslateContent": "Tu peux nous aider à traduire l'application sur Crowdin. Si ta langue n'est pas disponible sur Crowdin, n'hésite pas à la demander sur notre serveur Discord. Merci beaucoup pour ton aide !",
     "helpTranslateButton": "Aider à traduire sur Crowdin",
     "currentTranslators": "Traducteurs actuels",
+
+    "betaFeature" : "Fonctionnalité Bêta",
+    "beta" : "BÊTA",
+    "betaDescription" : "Cette fonctionnalité est en version bêta et peut contenir quelques bugs et être incomplète. Elle sera amélioré dans les prochaines mises à jour. N'hésite pas à proposer des idées et à signaler des bugs depuis notre serveur Discord pour nous aider à l'améliorer.",
+    
+
     "all": "Tous",
     "hourIndicator": "h",
     "minIndicator": "m",

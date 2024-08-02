@@ -5,6 +5,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 class LegendDay {
   final DateTime date;
+  final int numDefenses;
   final List<int> defenses;
   final List<Defense> newDefenses;
   final int numAttacks;
@@ -22,6 +23,7 @@ class LegendDay {
 
   LegendDay({
     required this.date,
+    required this.numDefenses,
     required this.defenses,
     required this.newDefenses,
     required this.numAttacks,
@@ -55,9 +57,10 @@ class LegendDay {
 
     var legendDay = LegendDay(
       date: date,
+      numDefenses: countAttacksDefenses(defenses),
       defenses: defenses,
       newDefenses: newDefenses,
-      numAttacks: json['num_attacks'] as int? ?? 0,
+      numAttacks: countAttacksDefenses(attacks),
       attacks: attacks,
       newAttacks: newAttacks,
     );
@@ -65,6 +68,25 @@ class LegendDay {
     legendDay.calculateTrophies();
 
     return legendDay;
+  }
+
+  static int countAttacksDefenses(List<int> list)
+  {
+    int count = 0;
+    for (int value in list) {
+          switch (value) {
+            case (> 80 && < 120):
+              count += 3;
+              break;
+            case (> 40 && < 80):
+              count += 2;
+              break;
+            default:
+              count += 1;
+              break;
+          }
+        }
+    return count;
   }
 
   Map<String, dynamic> toJson() {

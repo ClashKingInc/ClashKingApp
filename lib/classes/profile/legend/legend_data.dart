@@ -80,14 +80,14 @@ class PlayerLegendData {
     int totalDefensesTrophies = 0;
     int totalTrophies = 0;
     int totalDays = 0;
-    int percentageNoStarsDefenses = 0;
-    int percentageNoStarsAttacks = 0;
-    int percentageOneStarsDefenses = 0;
-    int percentageOneStarsAttacks = 0;
-    int percentageTwoStarsDefenses = 0;
-    int percentageTwoStarsAttacks = 0;
-    int percentageThreeStarsDefenses = 0;
-    int percentageThreeStarsAttacks = 0;
+    double percentageNoStarsDefenses = 0;
+    double percentageNoStarsAttacks = 0;
+    double percentageOneStarsDefenses = 0;
+    double percentageOneStarsAttacks = 0;
+    double percentageTwoStarsDefenses = 0;
+    double percentageTwoStarsAttacks = 0;
+    double percentageThreeStarsDefenses = 0;
+    double percentageThreeStarsAttacks = 0;
 
     List<LegendDay> seasonLegendDays = [];
     LegendDay? lastLegendDay;
@@ -111,8 +111,8 @@ class PlayerLegendData {
           DateFormat('yyyy-MM-dd').format(findSeasonStartDate(dateObj));
       if (season == seasonKey) {
         seasonLegendDays.add(details);
-        totalAttacks += (details.numAttacks >= details.attacks.length) ? details.numAttacks : details.attacks.length ;
-        totalDefenses += details.defenses.length;
+        totalAttacks += details.numAttacks;
+        totalDefenses += details.numDefenses;
 
         int attacksTrophies = details.attacks.isNotEmpty
             ? details.attacks.reduce((a, b) => a + b)
@@ -123,9 +123,15 @@ class PlayerLegendData {
 
         for (int attack in details.attacks) {
           switch (attack) {
-            case (40 || 80):
+            case (80):
+              percentageThreeStarsAttacks += 2;
+              break;
+            case (> 40 && < 80):
+              percentageTwoStarsAttacks += 2;
+              break;
+            case (40):
               percentageThreeStarsAttacks += 1;
-              break;              
+              break;
             case (<= 15 && >= 5):
               percentageOneStarsAttacks += 1;
               break;
@@ -133,14 +139,20 @@ class PlayerLegendData {
               percentageNoStarsAttacks += 1;
               break;
             default:
-            percentageTwoStarsAttacks += 1;
+              percentageTwoStarsAttacks += 1;
               break;
           }
         }
 
         for (int defense in details.defenses) {
           switch (defense) {
-            case (40 || 80):
+            case (80):
+              percentageThreeStarsDefenses += 2;
+              break;
+            case (> 40 && < 80):
+              percentageTwoStarsDefenses += 2;
+              break;
+            case (40):
               percentageThreeStarsDefenses += 1;
               break;
             case (<= 32 && >= 16):
@@ -181,26 +193,30 @@ class PlayerLegendData {
         totalDefensesTrophies ~/ (totalDefenses != 0 ? totalDefenses : 1);
 
     percentageThreeStarsAttacks = (percentageThreeStarsAttacks *
-        100 ~/
+        100 /
         (totalAttacks != 0 ? totalAttacks : 1));
     percentageTwoStarsAttacks = (percentageTwoStarsAttacks *
-        100 ~/
+        100 /
         (totalAttacks != 0 ? totalAttacks : 1));
     percentageOneStarsAttacks = (percentageOneStarsAttacks *
-        100 ~/
+        100 /
         (totalAttacks != 0 ? totalAttacks : 1));
     percentageNoStarsAttacks = (percentageNoStarsAttacks *
-        100 ~/
+        100 /
         (totalAttacks != 0 ? totalAttacks : 1));
 
-    percentageThreeStarsDefenses =
-        (percentageThreeStarsDefenses * 100 ~/ (totalDefenses != 0 ? totalDefenses : 1));
-    percentageTwoStarsDefenses =
-        (percentageTwoStarsDefenses * 100 ~/ (totalDefenses != 0 ? totalDefenses : 1));
-    percentageOneStarsDefenses =
-        (percentageOneStarsDefenses * 100 ~/ (totalDefenses != 0 ? totalDefenses : 1));
-    percentageNoStarsDefenses =
-        (percentageNoStarsDefenses * 100 ~/ (totalDefenses != 0 ? totalDefenses : 1));
+    percentageThreeStarsDefenses = (percentageThreeStarsDefenses *
+        100 /
+        (totalDefenses != 0 ? totalDefenses : 1));
+    percentageTwoStarsDefenses = (percentageTwoStarsDefenses *
+        100 /
+        (totalDefenses != 0 ? totalDefenses : 1));
+    percentageOneStarsDefenses = (percentageOneStarsDefenses *
+        100 /
+        (totalDefenses != 0 ? totalDefenses : 1));
+    percentageNoStarsDefenses = (percentageNoStarsDefenses *
+        100 /
+        (totalDefenses != 0 ? totalDefenses : 1));
 
     return SeasonTrophies(
         seasonStart: seasonStart,

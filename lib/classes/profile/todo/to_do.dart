@@ -16,6 +16,12 @@ class ToDo {
   final RaidData raids;
   final CwlData cwl;
   final ClanGames clanGames;
+  late final int percentageDone;
+  late int totalDone;
+  late int totalEvent;
+  late final bool isInTimeFrameForRaid;
+  late final bool isInTimeFrameForClanGames;
+  late final double seasonPassRatio;
 
   ToDo({
     required this.playerTag,
@@ -26,7 +32,17 @@ class ToDo {
     required this.raids,
     required this.cwl,
     required this.clanGames,
-  });
+  }) {
+    final nowUtc = DateTime.now().toUtc();
+    isInTimeFrameForRaid =
+        (nowUtc.weekday == DateTime.friday && nowUtc.hour >= 6) ||
+            (nowUtc.weekday == DateTime.saturday ||
+                nowUtc.weekday == DateTime.sunday) ||
+            (nowUtc.weekday == DateTime.monday && nowUtc.hour < 6);
+    isInTimeFrameForClanGames = (nowUtc.day >= 22 && nowUtc.hour >= 8) &&
+        (nowUtc.day <= 28 && nowUtc.hour <= 8);
+    _calculateTotals();
+  }
 
   factory ToDo.fromJson(Map<String, dynamic> json) {
     return ToDo(
@@ -48,6 +64,61 @@ class ToDo {
           : ClanGames(clanTag: "#VY2J0LL", points: 0),
     );
   }
+
+  void _calculateTotals() {
+    totalDone = 0;
+    totalEvent = 0;
+
+    // Legend completed
+    if (legends != null) {
+      totalEvent += 100;
+      double legendRatio = legends!.numAttacks / 8;
+      totalDone += (legendRatio * 100).toInt();
+    }
+
+    // CWL attacks completed
+    totalEvent += 100;
+    double cwlRatio = cwl.attacksDone.toDouble() / cwl.attackLimit.toDouble();
+    totalDone += (cwlRatio * 100).toInt();
+
+    // Clan games completed
+    if (isInTimeFrameForClanGames) {
+      totalEvent += 100;
+      double clanGamesRatio = clanGames.points / 4000;
+      totalDone += (clanGamesRatio * 100).toInt();
+    }
+
+    // Raids completed
+    if (isInTimeFrameForRaid) {
+      totalEvent += 100;
+      if (raids.attackLimit == 0) {
+        raids.attackLimit = 5;
+      }
+      double raidRatio =
+          raids.attacksDone.toDouble() / raids.attackLimit.toDouble();
+      totalDone += (raidRatio * 100).toInt();
+    }
+
+    // Season pass completed
+    DateTime now = DateTime.now();
+    // Get the total number of days in the current month
+    int totalDaysInMonth = DateTime(now.year, now.month + 1, 0).day;
+    // Get the number of days that have passed in the current month
+    int daysPassed = now.day;
+    double seasonPassDaily = ((daysPassed * 2600) / totalDaysInMonth);
+    totalEvent += 100;
+    seasonPassRatio = (seasonPass.toDouble() / seasonPassDaily) > 1
+        ? 1
+        : (seasonPass.toDouble() / seasonPassDaily);
+    totalDone += (seasonPassRatio * 100).toInt();
+
+    // Calculate overall percentage done
+    if (totalEvent > 0) {
+      percentageDone = (totalDone / totalEvent * 100).toInt();
+    } else {
+      percentageDone = 0; // No events, so 0% done
+    }
+  }
 }
 
 class PlayerDataService {
@@ -58,8 +129,6 @@ class PlayerDataService {
     }).join('');
     final response = await http.get(
         Uri.parse('https://api.clashking.xyz/player/to-do?$tagsParameter'));
-
-    print(response.statusCode);
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);

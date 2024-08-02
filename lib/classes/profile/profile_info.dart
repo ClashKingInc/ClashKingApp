@@ -13,6 +13,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:retry/retry.dart';
 import 'dart:io';
 import 'package:clashkingapp/classes/profile/legend/legend_service.dart';
+import 'package:clashkingapp/classes/profile/todo/to_do.dart';
 
 class ProfileInfo {
   String name;
@@ -46,6 +47,7 @@ class ProfileInfo {
   PlayerLegendData? playerLegendData;
   bool initialized = false;
   bool legendsInitialized = false;
+  late ToDo? toDo;
 
   ProfileInfo({
     required this.name,

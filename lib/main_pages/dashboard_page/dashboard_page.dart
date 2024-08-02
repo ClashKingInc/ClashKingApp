@@ -48,14 +48,12 @@ class DashboardPageState extends State<DashboardPage>
   Future<void> _checkLegendsInitialization() async {
     while (!widget.playerStats.legendsInitialized) {
       await Future.delayed(Duration(milliseconds: 100));
-      print("legend");
     }
   }
 
   Future<void> _checkToDoInitialization() async {
     while (!widget.accounts.isTodoInitialized) {
       await Future.delayed(Duration(milliseconds: 100));
-      print("todo");
     }
   }
 

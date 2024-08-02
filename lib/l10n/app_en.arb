@@ -79,6 +79,10 @@
     "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
     "helpTranslateButton": "Help Translate on Crowdin",
     "currentTranslators": "Current Translators",
+
+    "betaFeature" : "Beta Feature",
+    "beta" : "BETA",
+    "betaDescription" : "This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.",
     
     "copiedToClipboard": "Copied to clipboard",
     "all": "All",
