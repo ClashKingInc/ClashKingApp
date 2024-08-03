@@ -371,6 +371,34 @@
             }
         }
     },
+    "numberAccounts": "{number} accounts",
+    "@numberAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        },
+        "description": "Number of accounts (ex : 4 accounts)"
+    },
+    "numberActiveAccounts": "{number} active accounts",
+    "@numberActiveAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "numberInactiveAccounts": "{number} inactive accounts",
+    "@numberInactiveAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "activeAccounts": "Active accounts",
+    "inactiveAccounts": "Inactive accounts",
+    "noInactiveAccounts": "No inactive accounts.",
     "worst": "Worst",
     "@worst": {
         "description": "Worst end of day trophies"

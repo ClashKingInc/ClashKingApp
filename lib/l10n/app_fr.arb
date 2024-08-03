@@ -321,6 +321,35 @@
             }
         }
     },
+    
+    "numberAccounts": "{number} comptes",
+    "@numberAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "numberActiveAccounts": "{number} comptes actifs",
+    "@numberActiveAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "numberInactiveAccounts": "{number} comptes inactifs",
+    "@numberInactiveAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "activeAccounts": "Comptes actifs",
+    "inactiveAccounts": "Comptes inactifs",
+    "noInactiveAccounts": "Aucun compte inactif.",
+
     "worst": "Pire",
     "best": "Meilleur",
     "total": "Total",

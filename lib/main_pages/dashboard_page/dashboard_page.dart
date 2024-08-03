@@ -55,6 +55,13 @@ class DashboardPageState extends State<DashboardPage>
     while (!widget.accounts.isTodoInitialized) {
       await Future.delayed(Duration(milliseconds: 100));
     }
+     setState(() {
+      for(ProfileInfo profileInfo in widget.accounts.accounts.map((acc) => acc.profileInfo)) {
+        profileInfo.toDo = widget.accounts.toDoList.findTodotByTag(profileInfo.tag);
+        profileInfo.toDo!.calculateTotals(profileInfo);
+      }
+      widget.accounts.toDoList.calculateTotals();
+    });
   }
 
   Future<void> _refreshData() async {

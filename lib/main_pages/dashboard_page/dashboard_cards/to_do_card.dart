@@ -26,8 +26,6 @@ class ToDoCard extends StatefulWidget {
 class ToDoCardState extends State<ToDoCard> {
   @override
   Widget build(BuildContext context) {
-    widget.playerStats.toDo =
-        widget.accounts.toDoList.findTodotByTag(widget.playerStats.tag);
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -36,11 +34,6 @@ class ToDoCardState extends State<ToDoCard> {
             builder: (context) => ToDoScreen(
                 playerStats: widget.playerStats,
                 tags: widget.tags,
-                isInTimeFrameForRaid:
-                    widget.accounts.toDoList.isInTimeFrameForRaid,
-                isInTimeFrameForClanGames:
-                    widget.accounts.toDoList.isInTimeFrameForClanGames,
-                data: widget.accounts.toDoList,
                 accounts: widget.accounts),
           ),
         );
@@ -81,8 +74,8 @@ class ToDoCardState extends State<ToDoCard> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               iconToDo(widget.playerStats),
-                              widget.playerStats.toDo != null
-                                  ? Row(
+                              if (widget.playerStats.toDo != null)
+                                  Row(
                                       children: [
                                         SizedBox(width: 8),
                                         Expanded(
@@ -122,7 +115,6 @@ class ToDoCardState extends State<ToDoCard> {
                                         ),
                                       ],
                                     )
-                                  : SizedBox.shrink(),
                             ],
                           ),
                         ),
@@ -255,7 +247,7 @@ class ToDoCardState extends State<ToDoCard> {
                                           .labelLarge,
                                     )
                                   : Text(
-                                      '${profileInfo.toDo!.raids.attacksDone}/${profileInfo.toDo!.raids.attackLimit}',
+                                      '${profileInfo.toDo! .raids.attacksDone}/${profileInfo.toDo!.raids.attackLimit}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge,
@@ -280,8 +272,8 @@ class ToDoCardState extends State<ToDoCard> {
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
-                          widget.playerStats.toDo!.cwl.attackLimit > 0
-                              ? Chip(
+                          if (widget.playerStats.toDo!.cwl.attackLimit > 0)
+                              Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
@@ -292,7 +284,7 @@ class ToDoCardState extends State<ToDoCard> {
                                   labelPadding:
                                       EdgeInsets.only(left: 2.0, right: 2.0),
                                   label: Text(
-                                    "${widget.playerStats.toDo!.cwl.attacksDone}/${widget.playerStats.toDo!.cwl.attackLimit}",
+                                    '${widget.playerStats.toDo!.cwl.attacksDone}/${widget.playerStats.toDo!.cwl.attackLimit}',
                                     style:
                                         Theme.of(context).textTheme.labelLarge,
                                   ),
@@ -305,8 +297,7 @@ class ToDoCardState extends State<ToDoCard> {
                                     ),
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
-                                )
-                              : SizedBox.shrink(),
+                                ),
                           Chip(
                             avatar: CircleAvatar(
                               backgroundColor: Colors.transparent,

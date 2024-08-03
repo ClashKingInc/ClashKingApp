@@ -6,6 +6,7 @@ import 'package:clashkingapp/classes/profile/todo/raids_data.dart';
 import 'package:clashkingapp/classes/profile/todo/clan_games_data.dart';
 import 'package:clashkingapp/classes/profile/todo/to_do_list.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 
 class ToDo {
   final String playerTag;
@@ -22,6 +23,7 @@ class ToDo {
   late final bool isInTimeFrameForRaid;
   late final bool isInTimeFrameForClanGames;
   late final double seasonPassRatio;
+  late final bool isLegend;
 
   ToDo({
     required this.playerTag,
@@ -41,7 +43,6 @@ class ToDo {
             (nowUtc.weekday == DateTime.monday && nowUtc.hour < 6);
     isInTimeFrameForClanGames = (nowUtc.day >= 22 && nowUtc.hour >= 8) &&
         (nowUtc.day <= 28 && nowUtc.hour <= 8);
-    _calculateTotals();
   }
 
   factory ToDo.fromJson(Map<String, dynamic> json) {
@@ -65,15 +66,19 @@ class ToDo {
     );
   }
 
-  void _calculateTotals() {
+  void calculateTotals(ProfileInfo profileInfo) {
     totalDone = 0;
     totalEvent = 0;
 
     // Legend completed
-    if (legends != null) {
+    if (profileInfo.playerLegendData != null &&
+        profileInfo.playerLegendData!.isInLegend == true) {
       totalEvent += 100;
+      isLegend = true;
       double legendRatio = legends!.numAttacks / 8;
       totalDone += (legendRatio * 100).toInt();
+    } else {
+      isLegend = false;
     }
 
     // CWL attacks completed
@@ -120,7 +125,6 @@ class ToDo {
     } else {
       percentageDone = 0; // No events, so 0% done
     }
-    print(percentageDone);
   }
 }
 
