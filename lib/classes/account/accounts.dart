@@ -56,7 +56,6 @@ class Accounts {
 class Account {
   final ProfileInfo profileInfo;
   Clan? clan;
-  late ToDoList todo;
 
   Account({required this.profileInfo, this.clan});
 }

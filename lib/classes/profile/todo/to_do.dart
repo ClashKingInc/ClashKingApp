@@ -77,9 +77,11 @@ class ToDo {
     }
 
     // CWL attacks completed
-    totalEvent += 100;
-    double cwlRatio = cwl.attacksDone.toDouble() / cwl.attackLimit.toDouble();
-    totalDone += (cwlRatio * 100).toInt();
+    if (cwl.attackLimit != 0) {
+      totalEvent += 100;
+      double cwlRatio = cwl.attacksDone.toDouble() / cwl.attackLimit.toDouble();
+      totalDone += (cwlRatio * 100).toInt();
+    }
 
     // Clan games completed
     if (isInTimeFrameForClanGames) {
@@ -118,6 +120,7 @@ class ToDo {
     } else {
       percentageDone = 0; // No events, so 0% done
     }
+    print(percentageDone);
   }
 }
 
