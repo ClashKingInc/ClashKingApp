@@ -17,13 +17,14 @@ class ToDo {
   final RaidData raids;
   final CwlData cwl;
   final ClanGames clanGames;
-  late final int percentageDone;
+  late int percentageDone;
   late int totalDone;
   late int totalEvent;
   late final bool isInTimeFrameForRaid;
   late final bool isInTimeFrameForClanGames;
   late final double seasonPassRatio;
   late final bool isLegend;
+  late bool isInitialized = false;
 
   ToDo({
     required this.playerTag,
@@ -125,6 +126,7 @@ class ToDo {
     } else {
       percentageDone = 0; // No events, so 0% done
     }
+    isInitialized = true;
   }
 }
 

@@ -21,7 +21,7 @@ class LegendStatsHistoryCard extends StatelessWidget {
   }
 
   LegendSeason getLastSeason() {
-    return legendSeasons.last;
+    return legendSeasons.first;
   }
 
   LegendSeason getBestAttackWinsSeason() {

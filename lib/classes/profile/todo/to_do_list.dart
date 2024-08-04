@@ -13,7 +13,7 @@ class ToDoList {
   late final int numberAccounts;
   late int numberActiveAccounts = 0;
   late int numberInactiveAccounts = 0;
-  late final int percentageDone;
+  late int percentageDone;
   late int totalDone;
   late int totalEvent;
   late int requiredLegendsAttacks = 0;
@@ -21,6 +21,7 @@ class ToDoList {
   late int requiredRaidsAttacks = 0;
   late int requiredSeasonPass = 0;
   late int requiredCwlAttacks = 0;
+  late bool isInitialized = false;
 
   ToDoList({required this.items}) {
     final nowUtc = DateTime.now().toUtc();
@@ -111,6 +112,8 @@ class ToDoList {
     } else {
       percentageDone = 0; // No events, so 0% done
     }
+
+    isInitialized = true;
   }
 
   factory ToDoList.fromJson(Map<String, dynamic> json) {
