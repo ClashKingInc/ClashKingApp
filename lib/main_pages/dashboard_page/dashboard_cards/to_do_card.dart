@@ -75,46 +75,45 @@ class ToDoCardState extends State<ToDoCard> {
                             children: <Widget>[
                               iconToDo(widget.playerStats),
                               if (widget.playerStats.toDo != null)
-                                  Row(
-                                      children: [
-                                        SizedBox(width: 8),
-                                        Expanded(
-                                          child: Container(
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.black
-                                                      .withOpacity(0.2),
-                                                  width: 1),
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              child: LinearProgressIndicator(
-                                                value: widget.playerStats.toDo!
-                                                        .percentageDone /
-                                                    100,
-                                                backgroundColor: Theme.of(
-                                                        context)
-                                                    .scaffoldBackgroundColor,
-                                                valueColor:
-                                                    AlwaysStoppedAnimation<
-                                                        Color>(Colors.green),
-                                              ),
-                                            ),
+                                Row(
+                                  children: [
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: Container(
+                                        height: 8,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color:
+                                                  Colors.black.withOpacity(0.2),
+                                              width: 1),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          child: LinearProgressIndicator(
+                                            value: widget.playerStats.toDo!
+                                                    .percentageDone /
+                                                100,
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    Colors.green),
                                           ),
                                         ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          '${widget.playerStats.toDo!.percentageDone}%',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelLarge,
-                                        ),
-                                      ],
-                                    )
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      '${widget.playerStats.toDo!.percentageDone}%',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    ),
+                                  ],
+                                )
                             ],
                           ),
                         ),
@@ -134,9 +133,8 @@ class ToDoCardState extends State<ToDoCard> {
   Widget iconToDo(ProfileInfo profileInfo) {
     final int lastActiveTimestamp = profileInfo.toDo!.lastActive;
     final Locale userLocale = Localizations.localeOf(context);
-    String formattedDate = DateFormat.yMd(userLocale.toString())
-        .format(
-            DateTime.fromMillisecondsSinceEpoch(lastActiveTimestamp * 1000));
+    String formattedDate = DateFormat.yMd(userLocale.toString()).format(
+        DateTime.fromMillisecondsSinceEpoch(lastActiveTimestamp * 1000));
 
     return Column(
       children: <Widget>[
@@ -189,19 +187,33 @@ class ToDoCardState extends State<ToDoCard> {
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
-                          //Chip(
-                          //  avatar: CircleAvatar(
-                          //    backgroundColor: Colors.transparent,
-                          //    child: CachedNetworkImage(
-                          //      imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
-                          //    ),
-                          //  ),
-                          //  labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-                          //  label: Text(
-                          //    "2/2",
-                          //    style: Theme.of(context).textTheme.labelLarge,
-                          //  ),
-                          //),
+                          if (profileInfo.toDo!.war != null &&
+                              profileInfo.toDo!.war!.attackLimit != 0)
+                            Chip(
+                              avatar: CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                                ),
+                              ),
+                              labelPadding:
+                                  EdgeInsets.only(left: 2.0, right: 2.0),
+                              label: Text(
+                                "${profileInfo.toDo!.war!.attacksDone}/${profileInfo.toDo!.war!.attackLimit}",
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: profileInfo.toDo!.war!.attacksDone ==
+                                          profileInfo.toDo!.war!.attackLimit
+                                      ? Colors.green
+                                      : Colors.red,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
                           if (profileInfo.toDo!.isInTimeFrameForClanGames)
                             Chip(
                               avatar: CircleAvatar(
@@ -247,7 +259,7 @@ class ToDoCardState extends State<ToDoCard> {
                                           .labelLarge,
                                     )
                                   : Text(
-                                      '${profileInfo.toDo! .raids.attacksDone}/${profileInfo.toDo!.raids.attackLimit}',
+                                      '${profileInfo.toDo!.raids.attacksDone}/${profileInfo.toDo!.raids.attackLimit}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge,
@@ -273,31 +285,31 @@ class ToDoCardState extends State<ToDoCard> {
                               ),
                             ),
                           if (widget.playerStats.toDo!.cwl.attackLimit > 0)
-                              Chip(
-                                  avatar: CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_DC_CWL_No_Border.png",
-                                    ),
-                                  ),
-                                  labelPadding:
-                                      EdgeInsets.only(left: 2.0, right: 2.0),
-                                  label: Text(
-                                    '${widget.playerStats.toDo!.cwl.attacksDone}/${widget.playerStats.toDo!.cwl.attackLimit}',
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      color: (profileInfo.toDo!.cwl.attacksDone == profileInfo.toDo!.cwl.attackLimit)
-                                          ? Colors.green
-                                          : Colors.red,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
+                            Chip(
+                              avatar: CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      "https://clashkingfiles.b-cdn.net/icons/Icon_DC_CWL_No_Border.png",
                                 ),
+                              ),
+                              labelPadding:
+                                  EdgeInsets.only(left: 2.0, right: 2.0),
+                              label: Text(
+                                '${widget.playerStats.toDo!.cwl.attacksDone}/${widget.playerStats.toDo!.cwl.attackLimit}',
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: (profileInfo.toDo!.cwl.attacksDone ==
+                                          profileInfo.toDo!.cwl.attackLimit)
+                                      ? Colors.green
+                                      : Colors.red,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
                           Chip(
                             avatar: CircleAvatar(
                               backgroundColor: Colors.transparent,

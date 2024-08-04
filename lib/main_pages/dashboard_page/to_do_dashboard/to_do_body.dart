@@ -81,7 +81,7 @@ class ToDoBodyState extends State<ToDoBody> {
               ),
             ),
           )
-        else if (cards.isEmpty && !widget.active)
+        else if (cards.isEmpty && widget.active)
           Container(
             width: double.infinity, // Prend toute la largeur de l'écran
             margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),

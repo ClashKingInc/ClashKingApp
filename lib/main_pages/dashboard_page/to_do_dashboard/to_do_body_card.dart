@@ -106,19 +106,28 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
                                 ),
-                              //Chip(
-                              //  avatar: CircleAvatar(
-                              //    backgroundColor: Colors.transparent,
-                              //    child: CachedNetworkImage(
-                              //      imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
-                              //    ),
-                              //  ),
-                              //  labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-                              //  label: Text(
-                              //    "2/2",
-                              //    style: Theme.of(context).textTheme.labelLarge,
-                              //  ),
-                              //),
+                              if(widget.toDo.war != null && widget.toDo.war!.attackLimit != 0)
+                              Chip(
+                               avatar: CircleAvatar(
+                                 backgroundColor: Colors.transparent,
+                                 child: CachedNetworkImage(
+                                   imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                                 ),
+                               ),
+                               labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                               label: Text("${widget.toDo.war!.attacksDone}/${widget.toDo.war!.attackLimit}",
+                                 style: Theme.of(context).textTheme.labelLarge,
+                               ),
+                               shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color: widget.toDo.war!.attackLimit == widget.toDo.war!.attacksDone
+                                          ? Colors.green
+                                          : Colors.red,
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                              ),
                               if (widget.toDo.isInTimeFrameForClanGames)
                                 Chip(
                                   avatar: CircleAvatar(

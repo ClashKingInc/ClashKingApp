@@ -67,6 +67,10 @@ class ClanWarDetails {
           json['members']?.map((x) => WarLeagueMember.fromJson(x)) ?? []),
     );
   }
+
+  WarLeagueMember getMemberByTag(String tag) {
+    return members.firstWhere((element) => element.tag == tag);
+  }
 }
 
 class BadgeUrls {

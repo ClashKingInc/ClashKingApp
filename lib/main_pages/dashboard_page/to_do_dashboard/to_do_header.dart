@@ -39,11 +39,17 @@ class ToDoHeaderState extends State<ToDoHeader> {
         ),
         Column(
           children: [
-            Text(AppLocalizations.of(context)!.numberAccounts(widget.accounts.toDoList.numberAccounts),
+            Text(
+                AppLocalizations.of(context)!
+                    .numberAccounts(widget.accounts.toDoList.numberAccounts),
                 style: Theme.of(context).textTheme.titleMedium),
-            Text(AppLocalizations.of(context)!.numberActiveAccounts(widget.accounts.toDoList.numberActiveAccounts),
+            Text(
+                AppLocalizations.of(context)!.numberActiveAccounts(
+                    widget.accounts.toDoList.numberActiveAccounts),
                 style: Theme.of(context).textTheme.labelLarge),
-            Text(AppLocalizations.of(context)!.numberInactiveAccounts(widget.accounts.toDoList.numberInactiveAccounts),
+            Text(
+                AppLocalizations.of(context)!.numberInactiveAccounts(
+                    widget.accounts.toDoList.numberInactiveAccounts),
                 style: Theme.of(context).textTheme.labelLarge),
             SizedBox(height: 16),
             Wrap(
@@ -76,19 +82,31 @@ class ToDoHeaderState extends State<ToDoHeader> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                //Chip(
-                //  avatar: CircleAvatar(
-                //    backgroundColor: Colors.transparent,
-                //    child: CachedNetworkImage(
-                //      imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
-                //    ),
-                //  ),
-                //  labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-                //  label: Text(
-                //    "2/2",
-                //    style: Theme.of(context).textTheme.labelLarge,
-                //  ),
-                //),
+                if (widget.accounts.toDoList.requiredWarAttacks != 0)
+                  Chip(
+                    avatar: CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                      ),
+                    ),
+                    labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
+                    label: Text(
+                      "${widget.accounts.toDoList.totalWarAttacks}/${widget.accounts.toDoList.requiredWarAttacks}",
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: widget.accounts.toDoList.totalWarAttacks ==
+                                widget.accounts.toDoList.requiredWarAttacks
+                            ? Colors.green
+                            : Colors.red,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
                 if (widget.accounts.toDoList.isInTimeFrameForClanGames)
                   Chip(
                     avatar: CircleAvatar(

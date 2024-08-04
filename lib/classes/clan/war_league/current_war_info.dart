@@ -58,6 +58,38 @@ class CurrentWarInfo {
       type: type,
     );
   }
+
+WarMember? fetchClanMemberByTag(String tag) {
+  WarMember? member = clan.members.firstWhere(
+    (element) => element.tag == tag,
+    orElse: () => WarMember(
+      tag: '',
+      name: '',
+      townhallLevel: 0,
+      mapPosition: 0,
+      attacks: [],
+      opponentAttacks: 0,
+      bestOpponentAttack: null,
+    ),
+  );
+  if (member.tag == '') {
+    member = opponent.members.firstWhere(
+      (element) => element.tag == tag,
+      orElse: () => WarMember(
+        tag: '',
+        name: '',
+        townhallLevel: 0,
+        mapPosition: 0,
+        attacks: [],
+        opponentAttacks: 0,
+        bestOpponentAttack: null,
+      ),
+    );
+  }
+  return member.tag == 'No tag' ? null : member;
+}
+
+
 }
 
 class ClanWarDetails {
@@ -93,6 +125,10 @@ class ClanWarDetails {
       members: List<WarMember>.from(
           json['members']?.map((x) => WarMember.fromJson(x)) ?? []),
     );
+  }
+
+  WarMember fetchMemberByTag(String tag) {
+    return members.firstWhere((element) => element.tag == tag);
   }
 }
 

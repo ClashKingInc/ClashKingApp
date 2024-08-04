@@ -60,7 +60,7 @@ class DashboardPageState extends State<DashboardPage>
           in widget.accounts.accounts.map((acc) => acc.profileInfo)) {
         profileInfo.toDo =
             widget.accounts.toDoList.findTodotByTag(profileInfo.tag);
-        if (!profileInfo.toDo!.isInitialized) {
+        if (profileInfo.toDo != null && !profileInfo.toDo!.isInitialized) {
           profileInfo.toDo!.calculateTotals(profileInfo);
         }
       }

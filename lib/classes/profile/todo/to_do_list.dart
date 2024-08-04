@@ -11,6 +11,7 @@ class ToDoList {
   late final int totalCwlAttacks;
   late final int totalClanGamesPoints;
   late final int numberAccounts;
+  late final int totalWarAttacks;
   late int numberActiveAccounts = 0;
   late int numberInactiveAccounts = 0;
   late int percentageDone;
@@ -21,6 +22,7 @@ class ToDoList {
   late int requiredRaidsAttacks = 0;
   late int requiredSeasonPass = 0;
   late int requiredCwlAttacks = 0;
+  late int requiredWarAttacks = 0;
   late bool isInitialized = false;
 
   ToDoList({required this.items}) {
@@ -43,6 +45,8 @@ class ToDoList {
     totalCwlAttacks = items.fold(0, (sum, item) => sum + item.cwl.attacksDone);
     totalClanGamesPoints =
         items.fold(0, (sum, item) => sum + item.clanGames.points);
+    totalWarAttacks =
+        items.fold(0, (sum, item) => sum + (item.war?.attacksDone ?? 0));
 
     numberAccounts = items.length;
 
@@ -74,6 +78,15 @@ class ToDoList {
               item.cwl.attacksDone.toDouble() / item.cwl.attackLimit.toDouble();
           totalDone += (cwlRatio * 100).toInt();
           requiredCwlAttacks += item.cwl.attackLimit;
+        }
+
+        // War attacks completed
+        if (item.war != null && item.war!.attackLimit != 0) {
+          totalEvent += 100;
+          double warRatio = item.war!.attacksDone.toDouble() /
+              item.war!.attackLimit.toDouble();
+          totalDone += (warRatio * 100).toInt();
+          requiredWarAttacks += item.war!.attackLimit;
         }
 
         // Clan games completed
@@ -116,11 +129,13 @@ class ToDoList {
     isInitialized = true;
   }
 
-  factory ToDoList.fromJson(Map<String, dynamic> json) {
+  static Future<ToDoList> fromJson(Map<String, dynamic> json) async {
     var itemList = json['items'] != null
-        ? (json['items'] as List)
-            .map((itemJson) => ToDo.fromJson(itemJson as Map<String, dynamic>))
-            .toList()
+        ? await Future.wait(
+            (json['items'] as List).map((itemJson) async {
+              return await ToDo.createToDoFromJson(itemJson);
+            }).toList(),
+          )
         : [];
     return ToDoList(items: itemList.cast<ToDo>());
   }

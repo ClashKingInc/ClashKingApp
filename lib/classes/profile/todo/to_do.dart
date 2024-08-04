@@ -5,6 +5,7 @@ import 'package:clashkingapp/classes/profile/todo/legends_data.dart';
 import 'package:clashkingapp/classes/profile/todo/raids_data.dart';
 import 'package:clashkingapp/classes/profile/todo/clan_games_data.dart';
 import 'package:clashkingapp/classes/profile/todo/to_do_list.dart';
+import 'package:clashkingapp/classes/profile/todo/war_data.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 
@@ -16,6 +17,7 @@ class ToDo {
   final int lastActive;
   final RaidData raids;
   final CwlData cwl;
+  WarData? war;
   final ClanGames clanGames;
   late int percentageDone;
   late int totalDone;
@@ -26,16 +28,16 @@ class ToDo {
   late final bool isLegend;
   late bool isInitialized = false;
 
-  ToDo({
-    required this.playerTag,
-    required this.currentClan,
-    this.legends,
-    required this.seasonPass,
-    required this.lastActive,
-    required this.raids,
-    required this.cwl,
-    required this.clanGames,
-  }) {
+  ToDo(
+      {required this.playerTag,
+      required this.currentClan,
+      this.legends,
+      required this.seasonPass,
+      required this.lastActive,
+      required this.raids,
+      required this.cwl,
+      required this.clanGames,
+      required this.war}) {
     final nowUtc = DateTime.now().toUtc();
     isInTimeFrameForRaid =
         (nowUtc.weekday == DateTime.friday && nowUtc.hour >= 6) ||
@@ -46,7 +48,7 @@ class ToDo {
         (nowUtc.day <= 28 && nowUtc.hour <= 8);
   }
 
-  factory ToDo.fromJson(Map<String, dynamic> json) {
+  factory ToDo.fromJson(Map<String, dynamic> json, WarData? warData) {
     return ToDo(
       playerTag: json['player_tag'] ?? '',
       currentClan: json['current_clan'] ?? 'No clan',
@@ -64,7 +66,18 @@ class ToDo {
       clanGames: json['clan_games'] != null && json['clan_games'].isNotEmpty
           ? ClanGames.fromJson(json['clan_games'])
           : ClanGames(clanTag: "#VY2J0LL", points: 0),
+      war: warData,
     );
+  }
+
+  static Future<ToDo> createToDoFromJson(Map<String, dynamic> json) async {
+    WarData? warData;
+
+    if (json['war'] != null && json['war'].isNotEmpty) {
+      warData = await WarData.fetchWarData(json);
+    }
+    ToDo toDo = ToDo.fromJson(json, warData);
+    return toDo;
   }
 
   void calculateTotals(ProfileInfo profileInfo) {
@@ -127,11 +140,16 @@ class ToDo {
       percentageDone = 0; // No events, so 0% done
     }
     isInitialized = true;
+    if (war != null) {
+      print('war : ${war!.attacksDone}/${war!.attackLimit}');
+    } else {
+      print('war is null');
+    }
   }
 }
 
 class PlayerDataService {
-  static void fetchPlayerToDoData(List<String> tags, Accounts accounts) async {
+  static Future<void> fetchPlayerToDoData(List<String> tags, Accounts accounts) async {
     final tagsParameter = tags.asMap().entries.map((entry) {
       String encodedTag = entry.value.replaceAll('#', '%23');
       return '${entry.key == 0 ? '' : '&'}player_tags=$encodedTag';
@@ -142,10 +160,11 @@ class PlayerDataService {
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       Map<String, dynamic> jsonBody = json.decode(body);
-      accounts.toDoList = ToDoList.fromJson(jsonBody);
+      accounts.toDoList = await ToDoList.fromJson(jsonBody);
       accounts.isTodoInitialized = true;
     } else {
       throw Exception('Failed to load player data');
     }
   }
 }
+

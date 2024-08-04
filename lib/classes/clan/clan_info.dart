@@ -421,7 +421,6 @@ class ClanService {
     }
   }
 
-
   Future<CurrentLeagueInfo?> fetchCurrentLeagueInfo(String clanTag) async {
     try {
       return await retry(

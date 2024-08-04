@@ -49,6 +49,7 @@ class ProfileInfo {
   bool legendsInitialized = false;
   late ToDo? toDo;
 
+
   ProfileInfo({
     required this.name,
     required this.tag,
