@@ -399,6 +399,7 @@
     "activeAccounts": "Active accounts",
     "inactiveAccounts": "Inactive accounts",
     "noInactiveAccounts": "No inactive accounts.",
+    "noActiveAccounts": "No active accounts.",
     "worst": "Worst",
     "@worst": {
         "description": "Worst end of day trophies"

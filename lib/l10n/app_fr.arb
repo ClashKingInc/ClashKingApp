@@ -349,6 +349,7 @@
     "activeAccounts": "Comptes actifs",
     "inactiveAccounts": "Comptes inactifs",
     "noInactiveAccounts": "Aucun compte inactif.",
+    "noActiveAccounts": "Aucun compte actif.",
 
     "worst": "Pire",
     "best": "Meilleur",
