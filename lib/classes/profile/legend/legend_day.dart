@@ -74,25 +74,25 @@ class LegendDay {
     int count = 0;
     for (int value in list) {
       switch (value) {
-        case 320:
+        case (> 280 && <= 320):
           count += 8;
           break;
-        case (> 280 && < 320):
+        case (> 240 && <= 280):
           count += 7;
           break;
-        case (> 240 && < 280):
+        case (> 200 && <= 240):
           count += 6;
           break;
-        case (> 160 && < 200):
+        case (> 160 && <= 200):
           count += 5;
           break;
-        case (> 120 && < 160):
+        case (> 120 && <= 160):
           count += 4;
           break;
-        case (> 80 && < 120):
+        case (> 80 && <= 120):
           count += 3;
           break;
-        case (> 40 && < 80):
+        case (> 40 && <= 80):
           count += 2;
           break;
         default:

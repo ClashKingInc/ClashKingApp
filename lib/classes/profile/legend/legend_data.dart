@@ -78,13 +78,12 @@ class PlayerLegendData {
 
   static bool isAboveThreshold(
       Map<String, dynamic> legendDataMap, String date) {
-
     if (!legendDataMap.containsKey(date)) {
       return false;
     }
 
     LegendDay dailyData = legendDataMap[date];
-    List<Attack> newAttacks = dailyData.newAttacks ;
+    List<Attack> newAttacks = dailyData.newAttacks;
     List<Defense> newDefenses = dailyData.newDefenses;
 
     int latestAttackTime = 0;
@@ -92,16 +91,14 @@ class PlayerLegendData {
 
     // Find the latest attack
     if (newAttacks.isNotEmpty) {
-      var latestAttack =
-          newAttacks.reduce((a, b) => a.time > b.time ? a : b);
+      var latestAttack = newAttacks.reduce((a, b) => a.time > b.time ? a : b);
       latestAttackTime = latestAttack.time;
       latestTrophies = latestAttack.trophies;
     }
 
     // Find the latest defense
     if (newDefenses.isNotEmpty) {
-      var latestDefense =
-          newDefenses.reduce((a, b) => a.time > b.time ? a : b);
+      var latestDefense = newDefenses.reduce((a, b) => a.time > b.time ? a : b);
       if (latestDefense.time > latestAttackTime) {
         latestTrophies = latestDefense.trophies;
       }
@@ -162,6 +159,42 @@ class PlayerLegendData {
 
         for (int attack in details.attacks) {
           switch (attack) {
+            case (320):
+              percentageThreeStarsAttacks += 8;
+              break;
+            case (> 280 && < 320):
+              percentageTwoStarsAttacks += 8;
+              break;
+            case (280):
+              percentageThreeStarsAttacks += 7;
+              break;
+            case (> 240 && < 280):
+              percentageTwoStarsAttacks += 7;
+              break;
+            case (240):
+              percentageThreeStarsAttacks += 6;
+              break;
+            case (> 200 && < 240):
+              percentageTwoStarsAttacks += 6;
+              break;
+            case (200):
+              percentageThreeStarsAttacks += 5;
+              break;
+            case (> 160 && < 200):
+              percentageTwoStarsAttacks += 5;
+              break;
+            case (160):
+              percentageThreeStarsAttacks += 4;
+              break;
+            case (> 120 && < 160):
+              percentageTwoStarsAttacks += 4;
+              break;
+            case (120):
+              percentageThreeStarsAttacks += 3;
+              break;
+            case (> 80 && < 120):
+              percentageTwoStarsAttacks += 3;
+              break;
             case (80):
               percentageThreeStarsAttacks += 2;
               break;
@@ -185,6 +218,42 @@ class PlayerLegendData {
 
         for (int defense in details.defenses) {
           switch (defense) {
+            case (320):
+              percentageThreeStarsDefenses += 8;
+              break;
+            case (> 280 && < 320):
+              percentageTwoStarsDefenses += 8;
+              break;
+            case (280):
+              percentageThreeStarsDefenses += 7;
+              break;
+            case (> 240 && < 280):
+              percentageTwoStarsDefenses += 7;
+              break;
+            case (240):
+              percentageThreeStarsDefenses += 6;
+              break;
+            case (> 200 && < 240):
+              percentageTwoStarsDefenses += 6;
+              break;
+            case (200):
+              percentageThreeStarsDefenses += 5;
+              break;
+            case (> 160 && < 200):
+              percentageTwoStarsDefenses += 5;
+              break;
+            case (160):
+              percentageThreeStarsDefenses += 4;
+              break;
+            case (> 120 && < 160):
+              percentageTwoStarsDefenses += 4;
+              break;
+            case (120):
+              percentageThreeStarsDefenses += 3;
+              break;
+            case (> 80 && < 120):
+              percentageTwoStarsDefenses += 3;
+              break;
             case (80):
               percentageThreeStarsDefenses += 2;
               break;
@@ -204,6 +273,8 @@ class PlayerLegendData {
               percentageNoStarsDefenses += 1;
               break;
             default:
+              percentageTwoStarsDefenses +=1;
+              break;
           }
         }
 
@@ -270,7 +341,7 @@ class PlayerLegendData {
         totalDefensesTrophies: totalDefensesTrophies,
         totalTrophies: totalTrophies,
         totalDays: totalDays,
-        daysInLegend : daysInLegend,
+        daysInLegend: daysInLegend,
         averageAttacksTrophies: averageAttacksTrophies,
         averageDefensesTrophies: averageDefensesTrophies,
         percentageNoStarsAttacks: percentageNoStarsAttacks,
