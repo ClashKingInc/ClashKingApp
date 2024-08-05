@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/classes/profile/todo/to_do_list.dart';
-import 'package:clashkingapp/classes/profile/todo/to_do.dart';
+import 'package:clashkingapp/classes/profile/todo/to_do_service.dart';
 
 class Accounts {
   final List<Account> accounts;
@@ -134,7 +134,7 @@ class AccountsService {
       final accounts = Accounts(accounts: accountsList, tags : tags);
 
       final todoSpan = transaction.startChild('fetchToDo');
-      PlayerDataService.fetchPlayerToDoData(tags, accounts);
+      ToDoService.fetchPlayerToDoData(tags, accounts);
       todoSpan.finish(status: SpanStatus.ok());
 
       accounts.selectedTag =

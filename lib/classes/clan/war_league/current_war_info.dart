@@ -137,7 +137,7 @@ class WarMember {
   final String name;
   final int townhallLevel;
   final int mapPosition;
-  final List<Attack>? attacks;
+  final List<WarAttack>? attacks;
   final int opponentAttacks;
   final BestOpponentAttack? bestOpponentAttack;
 
@@ -158,7 +158,7 @@ class WarMember {
       townhallLevel: json['townhallLevel'] ?? 0,
       mapPosition: json['mapPosition'] ?? 0,
       attacks:
-          (json['attacks'] as List?)?.map((x) => Attack.fromJson(x)).toList() ??
+          (json['attacks'] as List?)?.map((x) => WarAttack.fromJson(x)).toList() ??
               [],
       opponentAttacks: json['opponentAttacks'] ?? 0,
       bestOpponentAttack: json['bestOpponentAttack'] != null
@@ -168,7 +168,7 @@ class WarMember {
   }
 }
 
-class Attack {
+class WarAttack {
   final String attackerTag;
   final String defenderTag;
   final int stars;
@@ -176,7 +176,7 @@ class Attack {
   final int order;
   final int duration;
 
-  Attack({
+  WarAttack({
     required this.attackerTag,
     required this.defenderTag,
     required this.stars,
@@ -185,8 +185,8 @@ class Attack {
     required this.duration,
   });
 
-  factory Attack.fromJson(Map<String, dynamic> json) {
-    return Attack(
+  factory WarAttack.fromJson(Map<String, dynamic> json) {
+    return WarAttack(
       attackerTag: json['attackerTag'] ?? 'No attackerTag',
       defenderTag: json['defenderTag'] ?? 'No defenderTag',
       stars: json['stars'] ?? 0,

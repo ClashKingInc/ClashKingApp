@@ -107,7 +107,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.totalAttacks.toString()}/${widget.seasonData.totalDays * 8}",
+                                    "${widget.seasonData.totalAttacks.toString()}/${widget.seasonData.daysInLegend * 8}",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -124,7 +124,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.totalAttacksTrophies.toString()}/${320 * widget.seasonData.totalDays}",
+                                    "${widget.seasonData.totalAttacksTrophies.toString()}/${320 * widget.seasonData.daysInLegend}",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -223,7 +223,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.totalDefenses.toString()}/${widget.seasonData.totalDays * 8}",
+                                    "${widget.seasonData.totalDefenses.toString()}/${widget.seasonData.daysInLegend * 8}",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -240,7 +240,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.totalDefensesTrophies.toString()}/${320 * widget.seasonData.totalDays}",
+                                    "${widget.seasonData.totalDefensesTrophies.toString()}/${320 * widget.seasonData.daysInLegend}",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),

@@ -1,12 +1,8 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:clashkingapp/classes/profile/todo/cwl_data.dart';
 import 'package:clashkingapp/classes/profile/todo/legends_data.dart';
 import 'package:clashkingapp/classes/profile/todo/raids_data.dart';
 import 'package:clashkingapp/classes/profile/todo/clan_games_data.dart';
-import 'package:clashkingapp/classes/profile/todo/to_do_list.dart';
 import 'package:clashkingapp/classes/profile/todo/war_data.dart';
-import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 
 class ToDo {
@@ -20,8 +16,8 @@ class ToDo {
   WarData? war;
   final ClanGames clanGames;
   late int percentageDone;
-  late int totalDone;
-  late int totalEvent;
+  late double totalDone;
+  late double totalEvent;
   late final bool isInTimeFrameForRaid;
   late final bool isInTimeFrameForClanGames;
   late final double seasonPassRatio;
@@ -31,7 +27,7 @@ class ToDo {
   ToDo(
       {required this.playerTag,
       required this.currentClan,
-      this.legends,
+      required this.legends,
       required this.seasonPass,
       required this.lastActive,
       required this.raids,
@@ -87,37 +83,47 @@ class ToDo {
     // Legend completed
     if (profileInfo.playerLegendData != null &&
         profileInfo.playerLegendData!.isInLegend == true) {
-      totalEvent += 100;
+      totalEvent += 8;
       isLegend = true;
-      double legendRatio = legends!.numAttacks / 8;
-      totalDone += (legendRatio * 100).toInt();
+      totalDone += legends != null ? legends!.numAttacks ~/ 8 : 0;
     } else {
       isLegend = false;
     }
 
+    // War attacks completed
+    if (war != null && war!.attackLimit != 0) {
+      totalEvent += war!.attackLimit;
+      totalDone += war!.attacksDone.toInt();
+    }
+
     // CWL attacks completed
     if (cwl.attackLimit != 0) {
-      totalEvent += 100;
-      double cwlRatio = cwl.attacksDone.toDouble() / cwl.attackLimit.toDouble();
-      totalDone += (cwlRatio * 100).toInt();
+      totalEvent += cwl.attackLimit;
+      totalDone += cwl.attacksDone.toInt();
     }
 
     // Clan games completed
     if (isInTimeFrameForClanGames) {
-      totalEvent += 100;
-      double clanGamesRatio = clanGames.points / 4000;
-      totalDone += (clanGamesRatio * 100).toInt();
+      DateTime now = DateTime.now();
+      DateTime clanGamesStart =
+          DateTime(now.year, now.month, 22, 8); // Start of Clan Games
+      int daysPassed = now.difference(clanGamesStart).inDays + 1;
+      double clanGamesDaily =
+          (4000 / 8) * daysPassed;
+      double clanGamesRatio = (clanGames.points.toDouble() / clanGamesDaily) > 1
+          ? 1
+          : clanGames.points.toDouble() / clanGamesDaily;
+      totalEvent += 2;
+      totalDone += clanGamesRatio * 2;
     }
 
     // Raids completed
     if (isInTimeFrameForRaid) {
-      totalEvent += 100;
+      totalEvent += raids.attackLimit != 0 ? raids.attackLimit : 5;
       if (raids.attackLimit == 0) {
         raids.attackLimit = 5;
       }
-      double raidRatio =
-          raids.attacksDone.toDouble() / raids.attackLimit.toDouble();
-      totalDone += (raidRatio * 100).toInt();
+      totalDone += raids.attacksDone.toInt();
     }
 
     // Season pass completed
@@ -127,11 +133,11 @@ class ToDo {
     // Get the number of days that have passed in the current month
     int daysPassed = now.day;
     double seasonPassDaily = ((daysPassed * 2600) / totalDaysInMonth);
-    totalEvent += 100;
+    totalEvent += 2;
     seasonPassRatio = (seasonPass.toDouble() / seasonPassDaily) > 1
         ? 1
         : (seasonPass.toDouble() / seasonPassDaily);
-    totalDone += (seasonPassRatio * 100).toInt();
+    totalDone += seasonPassRatio * 2;
 
     // Calculate overall percentage done
     if (totalEvent > 0) {
@@ -140,31 +146,5 @@ class ToDo {
       percentageDone = 0; // No events, so 0% done
     }
     isInitialized = true;
-    if (war != null) {
-      print('war : ${war!.attacksDone}/${war!.attackLimit}');
-    } else {
-      print('war is null');
-    }
   }
 }
-
-class PlayerDataService {
-  static Future<void> fetchPlayerToDoData(List<String> tags, Accounts accounts) async {
-    final tagsParameter = tags.asMap().entries.map((entry) {
-      String encodedTag = entry.value.replaceAll('#', '%23');
-      return '${entry.key == 0 ? '' : '&'}player_tags=$encodedTag';
-    }).join('');
-    final response = await http.get(
-        Uri.parse('https://api.clashking.xyz/player/to-do?$tagsParameter'));
-
-    if (response.statusCode == 200) {
-      String body = utf8.decode(response.bodyBytes);
-      Map<String, dynamic> jsonBody = json.decode(body);
-      accounts.toDoList = await ToDoList.fromJson(jsonBody);
-      accounts.isTodoInitialized = true;
-    } else {
-      throw Exception('Failed to load player data');
-    }
-  }
-}
-

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:ui';
+import 'package:clashkingapp/main_pages/info_button.dart';
 
 class ToDoHeader extends StatefulWidget {
   final Accounts accounts;
@@ -270,6 +271,8 @@ class ToDoHeaderState extends State<ToDoHeader> {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
+        
+        InfoButton(text: "test", title: "Test")
       ],
     );
   }

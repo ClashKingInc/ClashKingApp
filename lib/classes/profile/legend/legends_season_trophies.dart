@@ -10,6 +10,7 @@ class SeasonTrophies {
   final int totalDefensesTrophies;
   final int totalTrophies;
   final int totalDays;
+  final int daysInLegend;
   final int seasonDuration;
   final int averageAttacksTrophies;
   final int averageDefensesTrophies;
@@ -22,6 +23,7 @@ class SeasonTrophies {
   final double percentageNoStarsAttacks;
   final double percentageNoStarsDefenses;
 
+
   SeasonTrophies(
       {required this.seasonStart,
       required this.seasonEnd,
@@ -33,6 +35,7 @@ class SeasonTrophies {
       required this.totalDefensesTrophies,
       required this.totalTrophies,
       required this.totalDays,
+      required this.daysInLegend,
       required this.averageAttacksTrophies,
       required this.averageDefensesTrophies,
       required this.percentageNoStarsAttacks,

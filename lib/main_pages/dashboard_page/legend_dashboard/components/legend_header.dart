@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
+import 'package:clashkingapp/main_pages/info_button.dart';
 
 class LegendHeaderCard extends StatelessWidget {
   const LegendHeaderCard({
@@ -225,6 +226,7 @@ class LegendHeaderCard extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
+        InfoButton(text: "test", title: "Test")
       ],
     );
   }

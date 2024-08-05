@@ -1,5 +1,7 @@
+import 'package:clashkingapp/classes/profile/legend/legend_defense.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_ranking.dart';
+import 'package:clashkingapp/classes/profile/legend/legend_attack.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_day.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_season.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_functions.dart';
@@ -44,7 +46,8 @@ class PlayerLegendData {
     Map<String, LegendDay> legendDataMap = legendDataJson
         .map((key, value) => MapEntry(key, LegendDay.fromJson(key, value)));
     DateTime selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
-    String date = DateFormat('yyyy-MM-dd').format(selectedDate);
+    String date = DateFormat('yyyy-MM-dd')
+        .format(selectedDate.subtract(Duration(days: 1)));
 
     return PlayerLegendData(
         legendData: legendDataMap,
@@ -54,8 +57,8 @@ class PlayerLegendData {
         townHallLevel: json['townhall'] ?? 0,
         rankings: json['rankings'] ?? {},
         streak: json['streak'] ?? 0,
-        isInLegend:
-            legendDataMap.isNotEmpty && legendDataMap.containsKey(date));
+        isInLegend: legendDataMap.isNotEmpty &&
+            PlayerLegendData.isAboveThreshold(legendDataMap, date));
   }
 
   Map<String, dynamic> toJson() {
@@ -73,6 +76,41 @@ class PlayerLegendData {
   bool get isEmpty => legendData.isEmpty;
   bool get isNotEmpty => legendData.isNotEmpty;
 
+  static bool isAboveThreshold(
+      Map<String, dynamic> legendDataMap, String date) {
+
+    if (!legendDataMap.containsKey(date)) {
+      return false;
+    }
+
+    LegendDay dailyData = legendDataMap[date];
+    List<Attack> newAttacks = dailyData.newAttacks ;
+    List<Defense> newDefenses = dailyData.newDefenses;
+
+    int latestAttackTime = 0;
+    int latestTrophies = 0;
+
+    // Find the latest attack
+    if (newAttacks.isNotEmpty) {
+      var latestAttack =
+          newAttacks.reduce((a, b) => a.time > b.time ? a : b);
+      latestAttackTime = latestAttack.time;
+      latestTrophies = latestAttack.trophies;
+    }
+
+    // Find the latest defense
+    if (newDefenses.isNotEmpty) {
+      var latestDefense =
+          newDefenses.reduce((a, b) => a.time > b.time ? a : b);
+      if (latestDefense.time > latestAttackTime) {
+        latestTrophies = latestDefense.trophies;
+      }
+    }
+
+    // Check if the latest trophies are above 4900
+    return latestTrophies > 4900;
+  }
+
   SeasonTrophies getTrophiesBySeason(DateTime month) {
     int totalAttacks = 0;
     int totalDefenses = 0;
@@ -80,6 +118,7 @@ class PlayerLegendData {
     int totalDefensesTrophies = 0;
     int totalTrophies = 0;
     int totalDays = 0;
+    int daysInLegend = 0;
     double percentageNoStarsDefenses = 0;
     double percentageNoStarsAttacks = 0;
     double percentageOneStarsDefenses = 0;
@@ -111,8 +150,8 @@ class PlayerLegendData {
           DateFormat('yyyy-MM-dd').format(findSeasonStartDate(dateObj));
       if (season == seasonKey) {
         seasonLegendDays.add(details);
-        totalAttacks += details.numAttacks;
-        totalDefenses += details.numDefenses;
+        totalAttacks += LegendDay.countAttacksDefenses(details.attacks);
+        totalDefenses += LegendDay.countAttacksDefenses(details.defenses);
 
         int attacksTrophies = details.attacks.isNotEmpty
             ? details.attacks.reduce((a, b) => a + b)
@@ -173,6 +212,8 @@ class PlayerLegendData {
 
         // Keep track of the last legend day within the season
         lastLegendDay = details;
+
+        daysInLegend++;
       }
     });
 
@@ -229,6 +270,7 @@ class PlayerLegendData {
         totalDefensesTrophies: totalDefensesTrophies,
         totalTrophies: totalTrophies,
         totalDays: totalDays,
+        daysInLegend : daysInLegend,
         averageAttacksTrophies: averageAttacksTrophies,
         averageDefensesTrophies: averageDefensesTrophies,
         percentageNoStarsAttacks: percentageNoStarsAttacks,

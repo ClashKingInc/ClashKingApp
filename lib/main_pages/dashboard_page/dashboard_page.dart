@@ -9,7 +9,7 @@ import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_le
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_search_card.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/classes/profile/todo/to_do.dart';
+import 'package:clashkingapp/classes/profile/todo/to_do_service.dart';
 
 class DashboardPage extends StatefulWidget {
   final ProfileInfo playerStats;
@@ -78,8 +78,7 @@ class DashboardPageState extends State<DashboardPage>
     final profileInfo =
         await ProfileInfoService().fetchProfileInfo(widget.playerStats.tag);
 
-    PlayerDataService.fetchPlayerToDoData(
-        widget.accounts.tags, widget.accounts);
+    ToDoService.fetchPlayerToDoData(widget.accounts.tags, widget.accounts);
     while (profileInfo!.initialized != true ||
         profileInfo.legendsInitialized != true ||
         widget.accounts.isTodoInitialized != true) {

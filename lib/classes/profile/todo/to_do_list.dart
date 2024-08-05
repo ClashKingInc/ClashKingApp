@@ -15,8 +15,8 @@ class ToDoList {
   late int numberActiveAccounts = 0;
   late int numberInactiveAccounts = 0;
   late int percentageDone;
-  late int totalDone;
-  late int totalEvent;
+  late double totalDone;
+  late double totalEvent;
   late int requiredLegendsAttacks = 0;
   late int requiredClanGamesPoints = 0;
   late int requiredRaidsAttacks = 0;
@@ -37,6 +37,9 @@ class ToDoList {
   }
 
   void calculateTotals() {
+    totalDone = 0;
+    totalEvent = 0;
+
     totalLegends =
         items.fold(0, (sum, item) => sum + (item.legends?.numAttacks ?? 0));
     totalSeasonPass = items.fold(0, (sum, item) => sum + item.seasonPass);
@@ -50,9 +53,6 @@ class ToDoList {
 
     numberAccounts = items.length;
 
-    totalDone = 0;
-    totalEvent = 0;
-
     for (ToDo item in items) {
       // Active accounts
       DateTime now = DateTime.now().toUtc();
@@ -65,54 +65,65 @@ class ToDoList {
 
         // Legend completed
         if (item.isLegend) {
-          totalEvent += 100;
-          double legendRatio = item.legends!.numAttacks / 8;
-          totalDone += (legendRatio * 100).toInt();
+          totalEvent += 8;
+          totalDone +=
+              item.legends != null ? item.legends!.numAttacks.toDouble() : 0;
           requiredLegendsAttacks += 8;
-        }
-
-        // CWL attacks completed
-        if (item.cwl.attackLimit != 0) {
-          totalEvent += 100;
-          double cwlRatio =
-              item.cwl.attacksDone.toDouble() / item.cwl.attackLimit.toDouble();
-          totalDone += (cwlRatio * 100).toInt();
-          requiredCwlAttacks += item.cwl.attackLimit;
         }
 
         // War attacks completed
         if (item.war != null && item.war!.attackLimit != 0) {
-          totalEvent += 100;
-          double warRatio = item.war!.attacksDone.toDouble() /
-              item.war!.attackLimit.toDouble();
-          totalDone += (warRatio * 100).toInt();
+          totalEvent += item.war!.attackLimit;
+          totalDone += item.war!.attacksDone.toDouble();
           requiredWarAttacks += item.war!.attackLimit;
+        }
+
+        // CWL attacks completed
+        if (item.cwl.attackLimit != 0) {
+          totalEvent += item.cwl.attackLimit;
+          totalDone += item.cwl.attacksDone.toDouble();
+          requiredCwlAttacks += item.cwl.attackLimit;
         }
 
         // Clan games completed
         if (isInTimeFrameForClanGames) {
-          totalEvent += 100;
-          double clanGamesRatio = item.clanGames.points / 4000;
-          totalDone += (clanGamesRatio * 100).toInt();
+          DateTime now = DateTime.now();
+          DateTime clanGamesStart =
+              DateTime(now.year, now.month, 22, 8); // Start of Clan Games
+          int daysPassed = now.difference(clanGamesStart).inDays + 1;
+          double clanGamesDaily =
+              (4000 / 8) * daysPassed; // Total points divided by days
+          double clanGamesRatio =
+              (item.clanGames.points.toDouble() / clanGamesDaily) > 1
+                  ? 1
+                  : item.clanGames.points.toDouble() / clanGamesDaily;
+          totalEvent += 2;
+          totalDone += clanGamesRatio * 2;
           requiredClanGamesPoints += 4000;
         }
 
         // Raids completed
         if (isInTimeFrameForRaid) {
-          totalEvent += 100;
-          if (item.raids.attackLimit == 0) {
-            item.raids.attackLimit = 5;
-          }
-          double raidRatio = item.raids.attacksDone.toDouble() /
-              item.raids.attackLimit.toDouble();
-          totalDone += (raidRatio * 100).toInt();
-          requiredRaidsAttacks += item.raids.attackLimit;
+          totalEvent += item.raids.attackLimit == 0
+              ? 5
+              : item.raids
+                  .attackLimit; // Assuming default raid attacks limit is 5
+          totalDone += item.raids.attacksDone.toDouble();
+          requiredRaidsAttacks +=
+              item.raids.attackLimit == 0 ? 5 : item.raids.attackLimit;
         }
 
         // Season pass completed
-        totalEvent += 100;
-        double seasonPassRatio = item.seasonPass.toDouble() / 2600;
-        totalDone += (seasonPassRatio * 100).toInt();
+        DateTime now = DateTime.now();
+        int totalDaysInMonth = DateTime(now.year, now.month + 1, 0).day;
+        int daysPassed = now.day;
+        double seasonPassDaily = ((daysPassed * 2600) / totalDaysInMonth);
+        double seasonPassRatio =
+            (item.seasonPass.toDouble() / seasonPassDaily) > 1
+                ? 1
+                : (item.seasonPass.toDouble() / seasonPassDaily);
+        totalEvent += 2;
+        totalDone += seasonPassRatio.toDouble() * 2;
         requiredSeasonPass += 2600;
       } else {
         numberInactiveAccounts++;
@@ -121,7 +132,7 @@ class ToDoList {
 
     // Calculate overall percentage done
     if (totalEvent > 0) {
-      percentageDone = (totalDone / totalEvent * 100).toInt();
+      percentageDone = ((totalDone / totalEvent) * 100).toInt();
     } else {
       percentageDone = 0; // No events, so 0% done
     }

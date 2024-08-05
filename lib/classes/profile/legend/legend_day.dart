@@ -70,22 +70,36 @@ class LegendDay {
     return legendDay;
   }
 
-  static int countAttacksDefenses(List<int> list)
-  {
+  static int countAttacksDefenses(List<int> list) {
     int count = 0;
     for (int value in list) {
-          switch (value) {
-            case (> 80 && < 120):
-              count += 3;
-              break;
-            case (> 40 && < 80):
-              count += 2;
-              break;
-            default:
-              count += 1;
-              break;
-          }
-        }
+      switch (value) {
+        case 320:
+          count += 8;
+          break;
+        case (> 280 && < 320):
+          count += 7;
+          break;
+        case (> 240 && < 280):
+          count += 6;
+          break;
+        case (> 160 && < 200):
+          count += 5;
+          break;
+        case (> 120 && < 160):
+          count += 4;
+          break;
+        case (> 80 && < 120):
+          count += 3;
+          break;
+        case (> 40 && < 80):
+          count += 2;
+          break;
+        default:
+          count += 1;
+          break;
+      }
+    }
     return count;
   }
 
@@ -173,8 +187,7 @@ class LegendDay {
         var firstDefense = defensesList.first is Defense
             ? defensesList.first as Defense
             : Defense(change: defensesList.first, time: 0, trophies: 0);
-        startTrophies =
-            (firstDefense.trophies + firstDefense.change);
+        startTrophies = (firstDefense.trophies + firstDefense.change);
       }
 
       endTrophies = int.parse(currentTrophies);
@@ -182,7 +195,6 @@ class LegendDay {
       currentTrophies = currentTrophies;
       attacksStats = calculateStats(attacksList);
       defensesStats = calculateStats(defensesList);
-
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({
         'custom_message': 'Error while calculating legends trophies',
