@@ -53,14 +53,14 @@
     "faqIsThisFromSupercell": "Ist diese App von Supercell?",
     "faqFanContentPolicy": "Dieses Material ist nicht offiziell und nicht von Supercell bewilligt. Weitere Informationen findest du in Supercells Richtlinien für Fan-Content unter https://supercell.com/en/fan-content-policy/de",
     "faqWhyNotAccurate": "Warum sind die Daten manchmal ungenau oder fehlen?",
-    "faqClanNotTracked": "Clan not tracked",
+    "faqClanNotTracked": "Clan wird nicht getrackt",
     "faqClanNotTrackedAnswer": "ClashKing kann diese Informationen nur abrufen, wenn der Clan erfasst ist. Wenn dein Clan nicht erfasst ist, lade bitte den ClashKing Bot auf deinen Discord-Server ein und benutze den Befehl /addclan. Wir arbeiten daran, diese Funktion bald in der App verfügbar zu machen.",
-    "faqTrackingDown": "Tracking down",
-    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.",
-    "faqApiLimitation": "Clash of Clans API limitation",
+    "faqTrackingDown": "Tracking nicht aktiv",
+    "faqTrackingDownAnswer": "Das Tracking kann für eine gewisse Zeit nicht funktionieren. Deshalb kann es manchmal Lücken in den Daten geben. Wir arbeiten daran, dies zu verbessern.",
+    "faqApiLimitation": "Clash of Clans API-Einschränkung",
     "faqApiLimitationAnswer": "Einige Daten werden von Clash of Clans bereitgestellt und ihre API hat gewisse Limitierungen. Dies ist der Fall beim Legenden-Tracking, bei dem manchmal Trophäen-Gewinne und -Verluste verrechnet werden, als wäre es ein einzelner Angriff. Das ist auch der Grund, warum wir keine Daten über eure Gebäude-Level haben.",
     "faqSupportWork": "Wie kann ich eure Arbeit unterstützen?",
-    "faqSupportWorkAnswer": "There are several ways to support us:",
+    "faqSupportWorkAnswer": "Es gibt mehrere Möglichkeiten, uns zu unterstützen:",
     "faqUseCodeClashKing": "Creator-Code \"ClashKing\" verwenden",
     "faqSupportUsOnPatreon": "Unterstütze uns auf Patreon",
     "faqShareTheApp": "Teile die App mit deinen Freunden",
@@ -74,11 +74,14 @@
     "faqSendEmail": "Sende eine E-Mail",
     "faqJoinDiscord": "Unserem Discord-Server beitreten",
     "helpUsTranslate": "Hilf uns bei der Übersetzung",
-    "thankYou": "Thank you!",
-    "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
-    "helpTranslateButton": "Help Translate on Crowdin",
-    "currentTranslators": "Current Translators",
+    "thankYou": "Vielen Dank!",
+    "thankYouContent": "Ein großes Dankeschön an all unsere großartigen Übersetzer, die uns helfen, diese App mehr Menschen auf der ganzen Welt zugänglich zu machen!",
+    "helpTranslateContent": "Du kannst uns helfen, die App auf Crowdin zu übersetzen. Wenn deine Sprache auf Crowdin nicht verfügbar ist, kannst du diese gerne auf unserem Discord-Server anfordern. Vielen Dank für deine Hilfe!",
+    "helpTranslateButton": "Hilf bei der Übersetzung auf Crowdin",
+    "currentTranslators": "Aktuelle Übersetzer",
+    "betaFeature": "Beta Feature",
+    "beta": "BETA",
+    "betaDescription": "This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.",
     "copiedToClipboard": "In die Zwischenablage kopiert",
     "all": "Alle",
     "@all": {
@@ -139,7 +142,7 @@
             }
         }
     },
-    "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+    "playerRatioDescription": "Dein Spendenverhältnis beträgt {ratio}. Du hast {donations} Truppen gespendet und {received} Truppen erhalten.",
     "@playerRatioDescription": {
         "placeholders": {
             "ratio": {
@@ -153,7 +156,7 @@
             }
         }
     },
-    "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+    "playerWarPreferenceDescription": "Deine Kriegspräferenz ist \"{preference}\".",
     "@playerWarPreferenceDescription": {
         "placeholders": {
             "preference": {
@@ -161,7 +164,7 @@
             }
         }
     },
-    "playerWarStarsDescription": "You have {stars} war stars.",
+    "playerWarStarsDescription": "Du hast {stars} Kriegssterne.",
     "@playerWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -169,7 +172,7 @@
             }
         }
     },
-    "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+    "playerTrophiesDescription": "Du hast {trophies} Trophäen. Du bist derzeit in der {league}.",
     "@playerTrophiesDescription": {
         "placeholders": {
             "trophies": {
@@ -180,7 +183,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription": "Your town hall level is {level}.",
+    "playerTownHallLevelDescription": "Dein Rathauslevel ist {level}.",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
@@ -188,7 +191,7 @@
             }
         }
     },
-    "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+    "playerBuilderBaseDescription": "Dein Meisterhütten-Level ist {level} und du hast {trophies} Trophäen.",
     "@playerBuilderBaseDescription": {
         "placeholders": {
             "level": {
@@ -221,7 +224,7 @@
     "equipment": "Ausrüstung",
     "troops": "Truppen",
     "superTroops": "Supertruppen",
-    "activeSuperTroops": "Active Super Troops",
+    "activeSuperTroops": "Aktive Supertruppen",
     "pets": "Begleiter",
     "siegeMachines": "Belagerungsmaschinen",
     "spells": "Zauber",
@@ -230,11 +233,11 @@
     "@byDay": {
         "description": "Shows stats by day"
     },
-    "bySeason": "By Season",
+    "bySeason": "Nach Saison",
     "@byMonth": {
         "description": "Shows stats by season"
     },
-    "dayIndex": "Day {index}",
+    "dayIndex": "Tag {index}",
     "@dayIndex": {
         "placeholders": {
             "index": {
@@ -242,7 +245,7 @@
             }
         }
     },
-    "indexDays": "{index} days",
+    "indexDays": "{index} Tage",
     "@indexDays": {
         "placeholders": {
             "index": {
@@ -250,11 +253,11 @@
             }
         }
     },
-    "bestTrophies": "Best Trophies",
-    "mostAttacks": "Most Attacks",
-    "lastSeason": "Last Season",
-    "bestRank": "Best Global Rank",
-    "daysLeft": "{days} days left",
+    "bestTrophies": "Beste Trophäen",
+    "mostAttacks": "Meiste Angriffe",
+    "lastSeason": "Letzte Saison",
+    "bestRank": "Bester globaler Rang",
+    "daysLeft": "Noch {days} Tage",
     "@daysLeft": {
         "placeholders": {
             "days": {
@@ -262,9 +265,9 @@
             }
         }
     },
-    "date": "Date",
-    "stats": "Stats",
-    "seasonStats": "Season Stats",
+    "date": "Datum",
+    "stats": "Statistiken",
+    "seasonStats": "Saison-Statistiken",
     "charts": "Diagramme",
     "history": "Verlauf",
     "@history": {
@@ -273,7 +276,7 @@
     "legendLeague": "Legenden-Liga",
     "notInLegendLeague": "Nicht in der Legenden-Liga",
     "noLegendData": "Keine Legenden-Liga-Daten für heute gefunden",
-    "legendStartDescription": "You started the day with {trophies} trophies.",
+    "legendStartDescription": "Du hast den Tag mit {trophies} Trophäen begonnen.",
     "@legendStartDescription": {
         "placeholders": {
             "trophies": {
@@ -281,7 +284,7 @@
             }
         }
     },
-    "legendNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
+    "legendNoRankLocalDescription": "Du hast derzeit keinen Rang ({country}) mit {trophies} Trophäen.",
     "@legendNoRankLocalDescription": {
         "placeholders": {
             "country": {
@@ -292,7 +295,7 @@
             }
         }
     },
-    "legendRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+    "legendRankLocalDescription": "Du befindest dich derzeit auf Rang {rank} ({country}) mit {trophies} Trophäen.",
     "@legendRankDescription": {
         "placeholders": {
             "rank": {
@@ -306,7 +309,7 @@
             }
         }
     },
-    "legendGainDescription": "You gained {trophies} trophies for now.",
+    "legendGainDescription": "Du hast bisher {trophies} Trophäen gewonnen.",
     "@legendGainDescription": {
         "placeholders": {
             "trophies": {
@@ -314,7 +317,7 @@
             }
         }
     },
-    "legendLossDescription": "You lost {trophies} trophies for now.",
+    "legendLossDescription": "Du hast bisher {trophies} Trophäen verloren.",
     "@legendLossDescription": {
         "placeholders": {
             "trophies": {
@@ -322,7 +325,7 @@
             }
         }
     },
-    "legendNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+    "legendNoGlobalRankDescription": "Du hast derzeit keinen globalen Rang mit {trophies} Trophäen.",
     "@legendNoGlobalRankDescription": {
         "placeholders": {
             "trophies": {
@@ -330,7 +333,7 @@
             }
         }
     },
-    "legendGlobalRankDescription": "You are currently ranked {rank} globally.",
+    "legendGlobalRankDescription": "Du befindest dich derzeit global auf Rang {rank}.",
     "@legendGlobalRankDescription": {
         "placeholders": {
             "rank": {
@@ -355,8 +358,20 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
+    "legendsTitle": "Inacurate Data ?",
+    "legendsExplanation_intro": "Due to limitations in the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
+    "legendsExplanation_api_delay_title": "1. API Delay: ",
+    "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
+    "legendsExplanation_concurrent_changes_title": "2. Concurrent Changes: \n",
+    "legendsExplanation_multiple_attacks_defenses_title": "- Multiple Attacks/Defenses: ",
+    "legendsExplanation_multiple_attacks_defenses_body": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
+    "legendsExplanation_simultaneous_attack_defense_title": "- Simultaneous Attack and Defense: ",
+    "legendsExplanation_simultaneous_attack_defense_body": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
+    "legendsExplanation_net_gain_loss_title": "3. Net Gain/Loss: ",
+    "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
+    "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
     "toDoList": "To-do-Lis­te",
-    "lastActive": "Last active: {date}",
+    "lastActive": "Zuletzt aktiv: {date}",
     "@lastActive": {
         "placeholders": {
             "date": {
@@ -364,6 +379,48 @@
             }
         }
     },
+    "numberAccounts": "{number} accounts",
+    "@numberAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        },
+        "description": "Number of accounts (ex : 4 accounts)"
+    },
+    "numberActiveAccounts": "{number} active accounts",
+    "@numberActiveAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "numberInactiveAccounts": "{number} inactive accounts",
+    "@numberInactiveAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "activeAccounts": "Active accounts",
+    "inactiveAccounts": "Inactive accounts",
+    "noInactiveAccounts": "No inactive accounts.",
+    "noActiveAccounts": "No active accounts.",
+    "todoExplanation_title": "Task Calculation",
+    "todoExplanation_intro": "The task completion percentage is calculated based on the following activities with specific weightings:",
+    "todoExplanation_legends_title": "Legend League:",
+    "todoExplanation_legends": "Weight of 8 points per account, 1 attack = 1 point.",
+    "todoExplanation_raids_title": "Raids:",
+    "todoExplanation_raids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
+    "todoExplanation_clanWars_title": "Clan Wars:",
+    "todoExplanation_clanWars": "Weight of 2 points per account, 1 attack = 1 point.",
+    "todoExplanation_cwl_title": "Clan War League:",
+    "todoExplanation_cwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
+    "todoExplanation_passAndGames_title": "Season Pass & Clan Games:",
+    "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
+    "todoExplanation_conclusion": "To get the final percentage, The total accumulated actions completed during ongoing events are divided by the total required actions. Accounts inactive for 14 days are not included in the overall calculation.",
     "worst": "Am schlechtesten",
     "@worst": {
         "description": "Worst end of day trophies"
@@ -432,7 +489,7 @@
     },
     "justNow": "Gerade eben",
     "trophiesByMonth": "Trophäen pro Monat",
-    "trophiesBySeason": "Trophies by season",
+    "trophiesBySeason": "Trophäen nach Saison",
     "eosTrophies": "Trophäen nach Saisonende",
     "searchClan": "Clan suchen",
     "nameOrTagClan": "Name oder Clankürzel",
@@ -488,10 +545,10 @@
     "wars": "Kriege",
     "ongoingWar": "Laufender Krieg",
     "ongoingCwl": "Laufende Clankriegsliga",
-    "cantOpenLink": "We can't open this link.",
+    "cantOpenLink": "Wir können diesen Link nicht öffnen.",
     "notInWar": "Nicht im Krieg",
     "warHistory": "Kriegsvergangenheit",
-    "warHistoryWinsDescription": "We tracked the data of {wins} war wins for your clan.",
+    "warHistoryWinsDescription": "Wir haben {wins} Siege im Clankrieg für deinen Clan getrackt.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
@@ -499,7 +556,7 @@
             }
         }
     },
-    "warHistoryLossesDescription": "We tracked the data of {losses} war losses for your clan.",
+    "warHistoryLossesDescription": "Wir haben {losses} Niederlagen im Clankrieg für deinen Clan getrackt.",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
@@ -507,7 +564,7 @@
             }
         }
     },
-    "warHistoryDrawsDescription": "We tracked the data of {draws} war draws for your clan.",
+    "warHistoryDrawsDescription": "Wir haben {draws} Unentschieden im Clankrieg für deinen Clan getrackt.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
@@ -515,7 +572,7 @@
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating per war we've tracked.",
+    "warHistoryAverageMembersDescription": "In deinem Clan haben durchschnittlich {members} Mitglieder an Clankriegen teilgenommen, die wir getrackt haben.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -523,7 +580,7 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription": "Your clan has an average of {stars} stars per attack at the end of the wars we've tracked.",
+    "warHistoryAverageWarStarsDescription": "Dein Clan hat durchschnittlich {stars} Sterne pro Angriff in Clankriegen, die wir getrackt haben.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -531,7 +588,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of the wars we've tracked.",
+    "warHistoryAverageHitRateDescription": "Dein Clan hat eine durchschnittliche Zerstörungsrate von {percent} in Clankriegen, die wir getrackt haben.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
@@ -574,11 +631,11 @@
             }
         }
     },
-    "joinLeaveLogs": "Join/Leave Logs",
-    "join": "Join",
-    "leave": "Leave",
-    "reset": "Reset",
-    "leaveNumberDescription": "{number} players left the clan during the current season ({date}).",
+    "joinLeaveLogs": "Beitritts-/Austrittsprotokoll",
+    "join": "Beigetreten",
+    "leave": "Verlassen",
+    "reset": "Zurücksetzen",
+    "leaveNumberDescription": "{number} Spieler haben den Clan während der aktuellen Saison ({date}) verlassen.",
     "@leaveNumberDescription": {
         "description": "Number of players who left the clan during the current season.",
         "placeholders": {
@@ -590,7 +647,7 @@
             }
         }
     },
-    "joinNumberDescription": "{number} players joined the clan during the current season ({date}).",
+    "joinNumberDescription": "{number} Spieler sind dem Clan in dieser Saison ({date}) beigetreten.",
     "@joinNumberDescription": {
         "description": "Number of players who joined the clan during the current season.",
         "placeholders": {
@@ -602,7 +659,7 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new members this season ({date}).",
+    "joinLeaveDifferenceUpDescription": "Dein Clan hat in dieser Saison {number} neue Mitglieder dazugewonnen ({date}).",
     "@joinLeaveDifferenceUpDescription": {
         "description": "Number of new members gained by the clan this season.",
         "placeholders": {
@@ -614,7 +671,7 @@
             }
         }
     },
-    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} members this season ({date}).",
+    "joinLeaveDifferenceDownDescription": "Dein Clan hat in dieser Saison {number} Mitglieder verloren ({date}).",
     "@joinLeaveDifferenceDownDescription": {
         "description": "Number of members lost by the clan this season.",
         "placeholders": {
@@ -626,7 +683,7 @@
             }
         }
     },
-    "joinLeaveDifferenceEqualDescription": "Your clan has the same number of members as at the beginning of the season ({date}).",
+    "joinLeaveDifferenceEqualDescription": "Dein Clan hat dieselbe Anzahl an Mitgliedern wie zu Beginn der Saison ({date}).",
     "@joinLeaveDifferenceEqualDescription": {
         "description": "Difference in the number of members between the beginning and the end of the season.",
         "placeholders": {
@@ -761,9 +818,9 @@
     "noAccountLinkedToYourProfileFound": "Kein mit deinem Profil verknüpftes Konto gefunden",
     "management": "Verwaltung",
     "comingSoon": "Bald verfügbar!",
-    "connectionError": "An error occurred. Please check your internet connection and try again.",
-    "connectionErrorRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-    "updatedAt": "Updated at {time}",
+    "connectionError": "Es ist ein Fehler aufgetreten. Bitte prüfe deine Internetverbindung und versuche es erneut.",
+    "connectionErrorRelaunch": "Es ist ein Fehler aufgetreten. Bitte prüfe deine Internetverbindung und starte die App erneut.",
+    "updatedAt": "Aktualisiert um {time}",
     "@updatedAt": {
         "placeholders": {
             "time": {

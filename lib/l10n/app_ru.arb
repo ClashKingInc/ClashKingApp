@@ -79,6 +79,9 @@
     "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
     "helpTranslateButton": "Help Translate on Crowdin",
     "currentTranslators": "Current Translators",
+    "betaFeature": "Beta Feature",
+    "beta": "BETA",
+    "betaDescription": "This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.",
     "copiedToClipboard": "Скопировано в буфер обмена",
     "all": "Все",
     "@all": {
@@ -355,6 +358,18 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
+    "legendsTitle": "Inacurate Data ?",
+    "legendsExplanation_intro": "Due to limitations in the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
+    "legendsExplanation_api_delay_title": "1. API Delay: ",
+    "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
+    "legendsExplanation_concurrent_changes_title": "2. Concurrent Changes: \n",
+    "legendsExplanation_multiple_attacks_defenses_title": "- Multiple Attacks/Defenses: ",
+    "legendsExplanation_multiple_attacks_defenses_body": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
+    "legendsExplanation_simultaneous_attack_defense_title": "- Simultaneous Attack and Defense: ",
+    "legendsExplanation_simultaneous_attack_defense_body": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
+    "legendsExplanation_net_gain_loss_title": "3. Net Gain/Loss: ",
+    "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
+    "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
     "toDoList": "Список дел",
     "lastActive": "Last active: {date}",
     "@lastActive": {
@@ -364,6 +379,48 @@
             }
         }
     },
+    "numberAccounts": "{number} accounts",
+    "@numberAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        },
+        "description": "Number of accounts (ex : 4 accounts)"
+    },
+    "numberActiveAccounts": "{number} active accounts",
+    "@numberActiveAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "numberInactiveAccounts": "{number} inactive accounts",
+    "@numberInactiveAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "activeAccounts": "Active accounts",
+    "inactiveAccounts": "Inactive accounts",
+    "noInactiveAccounts": "No inactive accounts.",
+    "noActiveAccounts": "No active accounts.",
+    "todoExplanation_title": "Task Calculation",
+    "todoExplanation_intro": "The task completion percentage is calculated based on the following activities with specific weightings:",
+    "todoExplanation_legends_title": "Legend League:",
+    "todoExplanation_legends": "Weight of 8 points per account, 1 attack = 1 point.",
+    "todoExplanation_raids_title": "Raids:",
+    "todoExplanation_raids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
+    "todoExplanation_clanWars_title": "Clan Wars:",
+    "todoExplanation_clanWars": "Weight of 2 points per account, 1 attack = 1 point.",
+    "todoExplanation_cwl_title": "Clan War League:",
+    "todoExplanation_cwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
+    "todoExplanation_passAndGames_title": "Season Pass & Clan Games:",
+    "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
+    "todoExplanation_conclusion": "To get the final percentage, The total accumulated actions completed during ongoing events are divided by the total required actions. Accounts inactive for 14 days are not included in the overall calculation.",
     "worst": "Наихудший",
     "@worst": {
         "description": "Worst end of day trophies"

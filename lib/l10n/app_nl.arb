@@ -53,14 +53,14 @@
     "faqIsThisFromSupercell": "Is deze app van Supercell?",
     "faqFanContentPolicy": "Dit materiaal is onofficieel en wordt niet goedgekeurd door Supercell. Voor meer informatie, zie de Fan Content Policy van Supercell: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Waarom zijn de gegevens soms onnauwkeurig of ontbreken ze?",
-    "faqClanNotTracked": "Clan not tracked",
+    "faqClanNotTracked": "Clan niet gevolgd",
     "faqClanNotTrackedAnswer": "ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan ClashKing uit op je Discord server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.",
     "faqTrackingDown": "Tracking down",
-    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.",
-    "faqApiLimitation": "Clash of Clans API limitation",
+    "faqTrackingDownAnswer": "Het tracken kan gedurende een bepaalde periode stoppen met werken. Daarom kunnen er soms gaten in je gegevens zitten. We werken eraan om dit te verbeteren.",
+    "faqApiLimitation": "Clash of Clans API limitatie",
     "faqApiLimitationAnswer": "Sommige gegevens worden geleverd door Clash of Clans, maar hun API heeft enkele beperkingen. Zo kan het bijvoorbeeld voorkomen dat trofeeënwinst en -verlies in de legendarische divisie worden gestapeld alsof ze afkomstig zijn van één aanval. Dit is ook de reden waarom we geen informatie hebben over het niveau van je gebouwen.",
     "faqSupportWork": "Hoe kan ik je werk ondersteunen?",
-    "faqSupportWorkAnswer": "There are several ways to support us:",
+    "faqSupportWorkAnswer": "Er zijn verschillende manieren om ons te steunen:",
     "faqUseCodeClashKing": "Gebruik code \"ClashKing\"",
     "faqSupportUsOnPatreon": "Steun ons op Patreon",
     "faqShareTheApp": "Deel deze app met je vrienden",
@@ -73,12 +73,15 @@
     "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven. Je kunt ons ook een e-mail sturen via devs@clashkingbot.com. Graag alleen in het Engels of Frans communiceren.",
     "faqSendEmail": "Stuur een e-mail",
     "faqJoinDiscord": "Word lid van de Discord server",
-    "helpUsTranslate": "Help ons vertalen",
-    "thankYou": "Thank you!",
-    "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
-    "helpTranslateButton": "Help Translate on Crowdin",
-    "currentTranslators": "Current Translators",
+    "helpUsTranslate": "Help ons met vertalen",
+    "thankYou": "Bedankt!",
+    "thankYouContent": "Hartelijk dank aan al onze geweldige vertalers die ons helpen deze app toegankelijk te maken voor meer mensen over de hele wereld!",
+    "helpTranslateContent": "Je kunt ons helpen de app op Crowdin te vertalen. Als je taal niet beschikbaar is op Crowdin, kan je deze aanvragen op onze Discord-server. Heel erg bedankt voor je hulp!",
+    "helpTranslateButton": "Help met vertalen op Crowdin",
+    "currentTranslators": "Huidige vertalers",
+    "betaFeature": "Beta Feature",
+    "beta": "BETA",
+    "betaDescription": "This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.",
     "copiedToClipboard": "Gekopieerd naar klembord",
     "all": "Alle",
     "@all": {
@@ -188,7 +191,7 @@
             }
         }
     },
-    "playerBuilderBaseDescription": "Je Bouwerszaal-niveau is {level} en je hebt {trophies} trofeeën.",
+    "playerBuilderBaseDescription": "Je Bouwerszaal is level {level} en je hebt {trophies} trofeeën.",
     "@playerBuilderBaseDescription": {
         "placeholders": {
             "level": {
@@ -203,7 +206,7 @@
     "homeBase": "Thuisbasis",
     "th": "SH",
     "builderBase": "Bouwerbasis",
-    "bh": "BB",
+    "bh": "BZ",
     "clanCapital": "Clan Hoofdstad",
     "leader": "Leider",
     "coLeader": "Co-Leider",
@@ -221,7 +224,7 @@
     "equipment": "Uitrusting",
     "troops": "Troepen",
     "superTroops": "Supertroepen",
-    "activeSuperTroops": "Active Super Troops",
+    "activeSuperTroops": "Actieve Super Troepen",
     "pets": "Huisdieren",
     "siegeMachines": "Belegeringsmachines",
     "spells": "Spreuken",
@@ -230,11 +233,11 @@
     "@byDay": {
         "description": "Shows stats by day"
     },
-    "bySeason": "By Season",
+    "bySeason": "Per Seizoen",
     "@byMonth": {
         "description": "Shows stats by season"
     },
-    "dayIndex": "Day {index}",
+    "dayIndex": "Dag {index}",
     "@dayIndex": {
         "placeholders": {
             "index": {
@@ -242,7 +245,7 @@
             }
         }
     },
-    "indexDays": "{index} days",
+    "indexDays": "{index} dagen",
     "@indexDays": {
         "placeholders": {
             "index": {
@@ -250,11 +253,11 @@
             }
         }
     },
-    "bestTrophies": "Best Trophies",
-    "mostAttacks": "Most Attacks",
-    "lastSeason": "Last Season",
-    "bestRank": "Best Global Rank",
-    "daysLeft": "{days} days left",
+    "bestTrophies": "Beste Trofeeën",
+    "mostAttacks": "Meeste Aanvallen",
+    "lastSeason": "Laatste Seizoen",
+    "bestRank": "Beste Wereldwijde Positie",
+    "daysLeft": "{days} resterende dagen",
     "@daysLeft": {
         "placeholders": {
             "days": {
@@ -262,9 +265,9 @@
             }
         }
     },
-    "date": "Date",
+    "date": "Datum",
     "stats": "Stats",
-    "seasonStats": "Season Stats",
+    "seasonStats": "Seizoen Stats",
     "charts": "Grafieken",
     "history": "Geschiedenis",
     "@history": {
@@ -355,6 +358,18 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
+    "legendsTitle": "Inacurate Data ?",
+    "legendsExplanation_intro": "Due to limitations in the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
+    "legendsExplanation_api_delay_title": "1. API Delay: ",
+    "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
+    "legendsExplanation_concurrent_changes_title": "2. Concurrent Changes: \n",
+    "legendsExplanation_multiple_attacks_defenses_title": "- Multiple Attacks/Defenses: ",
+    "legendsExplanation_multiple_attacks_defenses_body": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
+    "legendsExplanation_simultaneous_attack_defense_title": "- Simultaneous Attack and Defense: ",
+    "legendsExplanation_simultaneous_attack_defense_body": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
+    "legendsExplanation_net_gain_loss_title": "3. Net Gain/Loss: ",
+    "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
+    "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
     "toDoList": "Takenlijst",
     "lastActive": "Laatst actief: {date}",
     "@lastActive": {
@@ -364,6 +379,48 @@
             }
         }
     },
+    "numberAccounts": "{number} accounts",
+    "@numberAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        },
+        "description": "Number of accounts (ex : 4 accounts)"
+    },
+    "numberActiveAccounts": "{number} active accounts",
+    "@numberActiveAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "numberInactiveAccounts": "{number} inactive accounts",
+    "@numberInactiveAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "activeAccounts": "Active accounts",
+    "inactiveAccounts": "Inactive accounts",
+    "noInactiveAccounts": "No inactive accounts.",
+    "noActiveAccounts": "No active accounts.",
+    "todoExplanation_title": "Task Calculation",
+    "todoExplanation_intro": "The task completion percentage is calculated based on the following activities with specific weightings:",
+    "todoExplanation_legends_title": "Legend League:",
+    "todoExplanation_legends": "Weight of 8 points per account, 1 attack = 1 point.",
+    "todoExplanation_raids_title": "Raids:",
+    "todoExplanation_raids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
+    "todoExplanation_clanWars_title": "Clan Wars:",
+    "todoExplanation_clanWars": "Weight of 2 points per account, 1 attack = 1 point.",
+    "todoExplanation_cwl_title": "Clan War League:",
+    "todoExplanation_cwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
+    "todoExplanation_passAndGames_title": "Season Pass & Clan Games:",
+    "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
+    "todoExplanation_conclusion": "To get the final percentage, The total accumulated actions completed during ongoing events are divided by the total required actions. Accounts inactive for 14 days are not included in the overall calculation.",
     "worst": "Slechtste",
     "@worst": {
         "description": "Worst end of day trophies"
@@ -432,7 +489,7 @@
     },
     "justNow": "Zojuist",
     "trophiesByMonth": "Trofeeën per maand",
-    "trophiesBySeason": "Trophies by season",
+    "trophiesBySeason": "Trofeeën per seizoen",
     "eosTrophies": "Einde van Seizoen Trofeeën",
     "searchClan": "Zoek clan",
     "nameOrTagClan": "Naam of label van de clan",
@@ -488,7 +545,7 @@
     "wars": "Oorlogen",
     "ongoingWar": "Lopende oorlog",
     "ongoingCwl": "Lopende CWL",
-    "cantOpenLink": "We can't open this link.",
+    "cantOpenLink": "We kunnen deze link niet openen.",
     "notInWar": "Niet in oorlog",
     "warHistory": "Oorlogsgeschiedenis",
     "warHistoryWinsDescription": "We hebben de gegevens bijgehouden van {wins} gewonnen oorlogen voor jouw clan.",
