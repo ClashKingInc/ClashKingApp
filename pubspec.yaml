@@ -64,6 +64,7 @@ dependencies:
   intl: any
   url_launcher: ^6.2.6
   mockito: ^5.4.4
+  webview_flutter: ^4.8.0
 
 dev_dependencies:
   flutter_test:

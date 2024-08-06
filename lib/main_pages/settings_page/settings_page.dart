@@ -12,6 +12,8 @@ import 'package:clashkingapp/l10n/locale.dart';
 import 'package:clashkingapp/main_pages/settings_page/faq_page.dart';
 import 'package:clashkingapp/main_pages/settings_page/translation_page.dart';
 import 'package:clashkingapp/core/functions.dart';
+import 'package:clashkingapp/main_pages/settings_page/features_vote.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsInfoScreen extends StatefulWidget {
   final User user;
@@ -82,6 +84,27 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           Divider(),
           _buildListTile(
             context,
+            title: AppLocalizations.of(context)!.suggestFeatures,
+            leadingIcon: Icons.featured_play_list,
+            onTap: () async {
+              // Open Features vote
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => FeatureRequests()),
+              );
+            },
+          ),
+          Divider(),
+          _buildListTile(
+            context,
+            title: AppLocalizations.of(context)!.faqJoinDiscord,
+            leadingIcon: Icons.discord,
+            onTap: () async {
+              launchUrl(Uri.parse('https://discord.gg/clashking'));
+            },
+          ),
+          Divider(),
+          _buildListTile(
+            context,
             title: AppLocalizations.of(context)!.logout,
             leadingIcon: Icons.exit_to_app,
             onTap: _logOut,
@@ -103,8 +126,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
       subtitle: subtitle != null
           ? Text(subtitle,
-              style:
-                  TextStyle(color: Theme.of(context).colorScheme.onSurface))
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface))
           : null,
       leading:
           Icon(leadingIcon, color: Theme.of(context).colorScheme.onSurface),
@@ -118,7 +140,9 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       builder: (BuildContext context) {
         return SafeArea(
           child: Container(
-            color: Theme.of(context).colorScheme.surface, // Replace with your desired color
+            color: Theme.of(context)
+                .colorScheme
+                .surface, // Replace with your desired color
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
