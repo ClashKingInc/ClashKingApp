@@ -225,8 +225,24 @@ class LegendHeaderCard extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onPrimary, size: 32),
             onPressed: () => Navigator.of(context).pop(),
           ),
-        ),
-        InfoButton(text: "test", title: "Test")
+        ),InfoButton(
+            textSpan: TextSpan(
+              children: [
+                TextSpan(text: "${AppLocalizations.of(context)!.legendsExplanation_intro}\n"),
+                TextSpan(text: "${AppLocalizations.of(context)!.legendsExplanation_api_delay_title}\n", style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: "${AppLocalizations.of(context)!.legendsExplanation_api_delay_body}\n"),
+                TextSpan(text: AppLocalizations.of(context)!.legendsExplanation_concurrent_changes_title, style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: AppLocalizations.of(context)!.legendsExplanation_multiple_attacks_defenses_title, style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: AppLocalizations.of(context)!.legendsExplanation_multiple_attacks_defenses_body),
+                TextSpan(text: AppLocalizations.of(context)!.legendsExplanation_simultaneous_attack_defense_title, style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: "${AppLocalizations.of(context)!.legendsExplanation_simultaneous_attack_defense_body}\n"),
+                TextSpan(text: "${AppLocalizations.of(context)!.legendsExplanation_net_gain_loss_title}\n", style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: "${AppLocalizations.of(context)!.legendsExplanation_net_gain_loss_body}\n\n"),
+                TextSpan(text: AppLocalizations.of(context)!.legendsExplanation_conclusion),
+              ],
+            ),
+            title: AppLocalizations.of(context)!.legendsTitle,
+          ),
       ],
     );
   }

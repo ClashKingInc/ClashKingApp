@@ -271,8 +271,54 @@ class ToDoHeaderState extends State<ToDoHeader> {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        
-        InfoButton(text: "test", title: "Test")
+        InfoButton(
+          textSpan: TextSpan(
+            children: [
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.todoExplanation_intro}\n\n"),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.todoExplanation_legends_title}\n",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.todoExplanation_legends}\n\n"),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.todoExplanation_raids_title}\n",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.todoExplanation_raids}\n\n"),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.todoExplanation_clanWars_title}\n",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.todoExplanation_clanWars}\n\n"),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.todoExplanation_cwl_title}\n",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.todoExplanation_cwl}\n\n"),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.todoExplanation_passAndGames_title}\n",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.todoExplanation_passAndGames}\n\n"),
+              TextSpan(
+                  text:
+                      AppLocalizations.of(context)!.todoExplanation_conclusion),
+            ],
+          ),
+          title: AppLocalizations.of(context)!.todoExplanation_title,
+        ),
       ],
     );
   }

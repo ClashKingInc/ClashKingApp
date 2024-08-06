@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class InfoButton extends StatefulWidget {
-  final String text;
+  final TextSpan textSpan;
   final String title;
 
   InfoButton({
-    required this.text,
-    required this.title
+    required this.textSpan,
+    required this.title,
   });
 
   @override
@@ -22,21 +20,25 @@ class InfoButtonState extends State<InfoButton> {
       top: 40,
       right: 15,
       child: GestureDetector(
-        onTap: () => showInfoPopup(context, widget.text, widget.title),
+        onTap: () => showInfoPopup(context, widget.textSpan, widget.title),
         child: Icon(Icons.info_outline,
-                color: Theme.of(context).colorScheme.onPrimary, size: 32),
+            color: Theme.of(context).colorScheme.onPrimary, size: 32),
       ),
     );
   }
 }
 
-void showInfoPopup(BuildContext context, String text, String title) {
+void showInfoPopup(BuildContext context, TextSpan textSpan, String title) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(title),
-        content: Text(text),
+        title: Text(title, style: Theme.of(context).textTheme.titleMedium?.copyWith(color:Theme.of(context).colorScheme.primary), textAlign: TextAlign.center),
+        content: SingleChildScrollView(
+          child: RichText(
+            text: textSpan,
+          ),
+        ),
         actions: <Widget>[
           TextButton(
             child: Text('OK'),

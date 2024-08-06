@@ -199,7 +199,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                         ],
                       ),
                     );
-                  }).toList(),
+                  }),
                   DropdownMenuItem<String>(
                     value: "manageAccounts",
                     child: Row(
