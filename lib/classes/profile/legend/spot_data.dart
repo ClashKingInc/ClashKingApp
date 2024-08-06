@@ -87,16 +87,22 @@ class ChartData {
       DateTime dateObj = legendDay.date;
       String trophies = legendDay.currentTrophies;
 
+      print(dateObj);
+
       while (currentDate.isBefore(dateObj)) {
+        print("${currentDate} is before $dateObj");
         spots.add(FlSpot(index.toDouble(), 4900.0));
         index++;
         currentDate = currentDate.add(Duration(days: 1));
+        print("new current date : $currentDate");
 
         // Arrêter la boucle si le jour actuel dépasse le nombre de jours dans le mois
         if (currentDate.isAfter(lastDayOfMonth)) {
+          print("isAfter");
           // Transition vers le mois suivant
-          seasonStart = DateTime(currentDate.year, currentDate.month + 1, 1);
+          seasonStart = DateTime(currentDate.year, currentDate.month, 1);
           currentDate = seasonStart;
+          print("new currentDate : $currentDate");
           lastDayOfMonth = getLastDayOfMonth(seasonStart);
         }
       }
@@ -132,6 +138,8 @@ class ChartData {
     double rangeX = (maxX - minX) / 10;
 
     if (rangeX < 2) rangeX = 1;
+
+    print(spots);
     
 
     return ChartData(
