@@ -74,6 +74,7 @@
     "faqSendEmail": "Stuur een e-mail",
     "faqJoinDiscord": "Word lid van de Discord server",
     "helpUsTranslate": "Help ons met vertalen",
+    "suggestFeatures": "Suggest features",
     "thankYou": "Bedankt!",
     "thankYouContent": "Hartelijk dank aan al onze geweldige vertalers die ons helpen deze app toegankelijk te maken voor meer mensen over de hele wereld!",
     "helpTranslateContent": "Je kunt ons helpen de app op Crowdin te vertalen. Als je taal niet beschikbaar is op Crowdin, kan je deze aanvragen op onze Discord-server. Heel erg bedankt voor je hulp!",
@@ -358,7 +359,7 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Onjuiste gegevens?",
+    "legendsTitle": "Inacurate Data?",
     "legendsExplanation_intro": "Vanwege beperkingen in de Clash of Clans API is onze data mogelijk niet altijd accuraat. Dit zijn de reden:\n",
     "legendsExplanation_api_delay_title": "1. API Vertraging: ",
     "legendsExplanation_api_delay_body": "De API kan tot 5 minuten duren om bij te werken, wat een vertraging veroorzaakt bij het weergeven van real-time trofee wijzigingen.\n",
@@ -420,7 +421,7 @@
     "todoExplanation_cwl": "Gewicht van 1 punt per account, 1 aanval = 1 punt. CWL (clanoorlogdivisie) kan niet worden gevolgd als de speler niet in zijn divisie clan zit.",
     "todoExplanation_passAndGames_title": "Seizoenspas & Clan Games:",
     "todoExplanation_passAndGames": "Gewicht van 2 punten per account. De verhouding is gebaseerd op het aantal resterende dagen (1 maand voor de pas en 6 dagen voor de spellen). Groen = op schema om de pas of spellen te voltooien, rood = achter op schema.",
-    "todoExplanation_conclusion": "Het uiteindelijke percentage wordt berekend door het totaal aantal voltooide acties tijdens lopende gebeurtenissen te delen door het totaal aantal vereiste acties. Accounts die langer dan 14 dagen inactief zijn worden uitgesloten van de algehele berekening.",
+    "todoExplanation_conclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
     "worst": "Slechtste",
     "@worst": {
         "description": "Worst end of day trophies"
