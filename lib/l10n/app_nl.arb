@@ -74,7 +74,7 @@
     "faqSendEmail": "Stuur een e-mail",
     "faqJoinDiscord": "Word lid van de Discord server",
     "helpUsTranslate": "Help ons met vertalen",
-    "suggestFeatures": "Suggest features",
+    "suggestFeatures": "Een nieuwe functie voorstellen",
     "thankYou": "Bedankt!",
     "thankYouContent": "Hartelijk dank aan al onze geweldige vertalers die ons helpen deze app toegankelijk te maken voor meer mensen over de hele wereld!",
     "helpTranslateContent": "Je kunt ons helpen de app op Crowdin te vertalen. Als je taal niet beschikbaar is op Crowdin, kan je deze aanvragen op onze Discord-server. Heel erg bedankt voor je hulp!",
@@ -359,7 +359,7 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inacurate Data?",
+    "legendsTitle": "Onjuiste gegevens?",
     "legendsExplanation_intro": "Vanwege beperkingen in de Clash of Clans API is onze data mogelijk niet altijd accuraat. Dit zijn de reden:\n",
     "legendsExplanation_api_delay_title": "1. API Vertraging: ",
     "legendsExplanation_api_delay_body": "De API kan tot 5 minuten duren om bij te werken, wat een vertraging veroorzaakt bij het weergeven van real-time trofee wijzigingen.\n",
