@@ -85,7 +85,7 @@ class ToDo {
         profileInfo.playerLegendData!.isInLegend == true) {
       totalEvent += 8;
       isLegend = true;
-      totalDone += legends != null ? legends!.numAttacks ~/ 8 : 0;
+      totalDone += legends != null ? legends!.numAttacks : 0;
     } else {
       isLegend = false;
     }

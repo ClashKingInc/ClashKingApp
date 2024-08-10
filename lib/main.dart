@@ -15,6 +15,7 @@ import 'package:clashkingapp/classes/data/heroes_data_manager.dart';
 import 'package:clashkingapp/classes/data/spells_data_manager.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 // CallbackDispatcher for background execution (Android only)
 void callbackDispatcher() {
@@ -42,6 +43,7 @@ Future<void> main() async {
     SpellsDataManager().loadSpellsData(),
     PetsDataManager().loadPetsData(),
   ]);
+  FlutterNativeSplash.remove();
 
   await SentryFlutter.init(
     (options) {
