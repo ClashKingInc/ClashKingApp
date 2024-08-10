@@ -8,6 +8,7 @@ import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:clashkingapp/classes/profile/todo/to_do_service.dart';
 
 class ClanMembers extends StatefulWidget {
   final Clan clanInfo;
@@ -193,6 +194,8 @@ class ClanMembersState extends State<ClanMembers> {
                 while (profileInfo!.initialized != true) {
                   await Future.delayed(Duration(milliseconds: 100));
                 }
+                await ToDoService.fetchPlayerToDoData(
+                      member.tag, profileInfo);
                 navigator.pop(); // Dismiss the dialog
                 navigator.push(
                   MaterialPageRoute(

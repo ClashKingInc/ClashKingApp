@@ -33,6 +33,31 @@ class CurrentLeagueInfo {
               []),
     );
   }
+
+  
+  Future<CurrentWarInfo?> getActiveWar(String clanTag) async {
+    CurrentWarInfo? inWar;
+    CurrentWarInfo? inPreparation;
+    CurrentWarInfo? lastMatchedWarInfo;
+
+    for (var round in rounds) {
+      List<CurrentWarInfo> warLeagueInfos = await round.warLeagueInfos;
+
+      for (var warInfo in warLeagueInfos) {
+        if (warInfo.clan.tag == clanTag || warInfo.opponent.tag == clanTag) {
+          lastMatchedWarInfo = warInfo;
+
+          if (warInfo.state == 'inWar') {
+            return warInfo;
+          } else if (warInfo.state == 'preparation') {
+            inPreparation = warInfo;
+          }
+        }
+      }
+    }
+
+    return inWar ?? inPreparation ?? lastMatchedWarInfo;
+  }
 }
 
 class ClanLeagueDetails {

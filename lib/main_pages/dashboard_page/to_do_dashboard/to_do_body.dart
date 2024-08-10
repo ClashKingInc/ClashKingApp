@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+
 class ToDoBody extends StatefulWidget {
   final Accounts accounts;
   final Map<String, String> filterOptions;
@@ -38,8 +39,7 @@ class ToDoBodyState extends State<ToDoBody> {
 
         if ((widget.active && daysDiff <= 14) ||
             (!widget.active && daysDiff > 14)) {
-          cards.add(ToDoBodyCard(
-              tag: tag, currentAccount: currentAccount!, toDo: toDo));
+          cards.add(ToDoBodyCard(tag: tag, profileInfo: currentAccount!.profileInfo, toDo: toDo));
         }
       }
     }

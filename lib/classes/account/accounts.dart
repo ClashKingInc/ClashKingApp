@@ -134,7 +134,7 @@ class AccountsService {
       final accounts = Accounts(accounts: accountsList, tags : tags);
 
       final todoSpan = transaction.startChild('fetchToDo');
-      ToDoService.fetchPlayerToDoData(tags, accounts);
+      ToDoService.fetchBulkPlayerToDoData(tags, accounts);
       todoSpan.finish(status: SpanStatus.ok());
 
       accounts.selectedTag =

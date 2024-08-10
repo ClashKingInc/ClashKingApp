@@ -17,12 +17,12 @@ class InfoButtonState extends State<InfoButton> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 40,
+      top: 30,
       right: 15,
       child: GestureDetector(
         onTap: () => showInfoPopup(context, widget.textSpan, widget.title),
         child: Icon(Icons.info_outline,
-            color: Theme.of(context).colorScheme.onPrimary, size: 32),
+            color: Theme.of(context).colorScheme.onPrimary, size: 24),
       ),
     );
   }

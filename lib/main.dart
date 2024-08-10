@@ -27,30 +27,34 @@ void callbackDispatcher() {
   });
 }
 
-
-
 Future<void> main() async {
   await dotenv.load(fileName: ".env"); // Load .env file
-  WidgetsFlutterBinding.ensureInitialized(); // Required by Workmanager to ensure binding is initialized
-  Workmanager().initialize(callbackDispatcher); // Required by Workmanager to initialize the callback dispatcher
-  await LeagueDataManager().loadLeagueData();
-  await TroopDataManager().loadTroopsData();
-  await PlayerLeagueDataManager().loadLeagueData();
-  await GearDataManager().loadGearsData();
-  await HeroesDataManager().loadHeroesData();
-  await SpellsDataManager().loadSpellsData();
-  await PetsDataManager().loadPetsData();
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Required by Workmanager to ensure binding is initialized
+  Workmanager().initialize(
+      callbackDispatcher); // Required by Workmanager to initialize the callback dispatcher
+  Future.wait([
+    LeagueDataManager().loadLeagueData(),
+    TroopDataManager().loadTroopsData(),
+    PlayerLeagueDataManager().loadLeagueData(),
+    GearDataManager().loadGearsData(),
+    HeroesDataManager().loadHeroesData(),
+    SpellsDataManager().loadSpellsData(),
+    PetsDataManager().loadPetsData(),
+  ]);
 
   await SentryFlutter.init(
     (options) {
       options.dsn = dotenv.env['SENTRY_DSN'];
-      options.tracesSampleRate = 1.0; 
+      options.tracesSampleRate = 1.0;
     },
     appRunner: () => runApp(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => ThemeNotifier()), // ThemeNotifier (Theme data)
-          ChangeNotifierProvider(create: (_) => MyAppState()), // MyAppState (User data)
+          ChangeNotifierProvider(
+              create: (_) => ThemeNotifier()), // ThemeNotifier (Theme data)
+          ChangeNotifierProvider(
+              create: (_) => MyAppState()), // MyAppState (User data)
         ],
         child: MyApp(),
       ),

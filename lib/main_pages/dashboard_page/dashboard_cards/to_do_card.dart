@@ -160,7 +160,9 @@ class ToDoCardState extends State<ToDoCard> {
                         spacing: 7.0,
                         runSpacing: -7.0,
                         children: <Widget>[
-                          if (profileInfo.toDo!.isLegend)
+                          if ((profileInfo.toDo != null &&
+                                  profileInfo.toDo!.legends != null) ||
+                              profileInfo.league == 'Legend League')
                             Chip(
                               avatar: CircleAvatar(
                                 backgroundColor: Colors.transparent,
