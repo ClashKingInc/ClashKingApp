@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/classes/data/player_league_data_manager.dart';
 import 'package:clashkingapp/classes/functions.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
+import 'package:clashkingapp/classes/profile/todo/to_do_service.dart';
 
 class PlayerSearchResultTile extends StatefulWidget {
   final dynamic player;
@@ -74,6 +75,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
           while (playerStats!.initialized != true) {
             await Future.delayed(Duration(milliseconds: 100));
           }
+          await ToDoService.fetchPlayerToDoData(widget.player['tag'], playerStats);
           navigator.pop();
           navigator.push(
             MaterialPageRoute(
