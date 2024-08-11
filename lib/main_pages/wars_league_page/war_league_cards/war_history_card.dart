@@ -42,8 +42,7 @@ class WarHistoryCard extends StatelessWidget {
         child: Card(
           margin: EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 4),
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -54,15 +53,14 @@ class WarHistoryCard extends StatelessWidget {
                       imageUrl:
                           "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_War.png"),
                 ),
-                SizedBox(width: 12),
+                SizedBox(width: 24),
                 Expanded(
-                  // Wrap the Column in an Expanded widget
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                          AppLocalizations.of(context)?.warHistory ??
-                              'War History',
-                          textAlign: TextAlign.center,
+                          AppLocalizations.of(context)!.warHistory,
                           style: Theme.of(context).textTheme.labelLarge),
                       Wrap(
                         alignment: WrapAlignment.start,

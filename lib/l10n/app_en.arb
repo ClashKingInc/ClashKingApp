@@ -820,6 +820,55 @@
     "neededOverall": "% Needed overall",
     "calculate": "Calculate",
     "warStats" : "War Stats",
+    "clanWarLeague": "Clan War League",
+    "cwlRank" : "Your clan is currently ranked {rank}.",
+    "@cwlRank": {
+        "placeholders": {
+            "rank": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlStars" : "Your clan has a total of {stars} stars.",
+    "@cwlStars": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlMissingStarsFromNext" : "Your clan is missing {stars} stars to catch up with the next clan.",
+    "@cwlMissingStarsFromNext": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlMissingStarsFromFirst" : "Your clan is missing {stars} stars to catch up with the first clan.",
+    "@cwlMissingStarsFromFirst": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlDestructionPercentage" : "Your clan has a total destruction rate of {percent}%.",
+    "@cwlDestructionPercentage": {
+        "placeholders": {
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "cwlCurrentRound" : "It's currently round {round}.",
+    "@cwlCurrentRound": {
+        "placeholders": {
+            "round": {
+                "type": "int"
+            }
+        }
+    },
     "noAccountLinkedToYourProfileFound": "No account linked to your profile found",
     "management": "Management",
     "comingSoon": "Coming soon!",

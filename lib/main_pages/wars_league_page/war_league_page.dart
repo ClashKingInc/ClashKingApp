@@ -141,6 +141,48 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 8.0),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            CurrentLeagueInfoScreen(
+                                                          currentLeagueInfo: widget
+                                                              .account
+                                                              .clan!
+                                                              .currentLeagueInfo!,
+                                                          clanTag: widget
+                                                              .account
+                                                              .profileInfo
+                                                              .clan!
+                                                              .tag,
+                                                          clanInfo: widget
+                                                              .account.clan!,
+                                                          discordUser: widget
+                                                              .discordUser.tags,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: CwlCard(
+                                                    currentLeagueInfo: widget
+                                                        .account
+                                                        .clan!
+                                                        .currentLeagueInfo!,
+                                                    clanTag: widget.account
+                                                        .profileInfo.clan!.tag,
+                                                    clanInfo:
+                                                        widget.account.clan!,
+                                                    discordUser:
+                                                        widget.discordUser.tags,
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8.0),
                                                 child: FutureBuilder<
                                                     CurrentWarInfo?>(
                                                   future: widget.account.clan!
@@ -193,46 +235,6 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                                                           ));
                                                     }
                                                   },
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            CurrentLeagueInfoScreen(
-                                                          currentLeagueInfo: widget
-                                                              .account
-                                                              .clan!
-                                                              .currentLeagueInfo!,
-                                                          clanTag: widget
-                                                              .account
-                                                              .profileInfo
-                                                              .clan!
-                                                              .tag,
-                                                          clanInfo: widget
-                                                              .account.clan!,
-                                                          discordUser: widget
-                                                              .discordUser.tags,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  child: CwlCard(
-                                                    currentLeagueInfo: widget
-                                                        .account
-                                                        .clan!
-                                                        .currentLeagueInfo!,
-                                                    clanTag: widget.account
-                                                        .profileInfo.clan!.tag,
-                                                    clanInfo:
-                                                        widget.account.clan!,
-                                                  ),
                                                 ),
                                               ),
                                             ],

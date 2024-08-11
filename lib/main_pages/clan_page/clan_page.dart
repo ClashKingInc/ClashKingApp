@@ -9,7 +9,7 @@ import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_join_leave/clan_join_leave.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/main_pages/beta_label.dart';
+import 'package:clashkingapp/components/beta_label.dart';
 
 class ClanInfoPage extends StatefulWidget {
   final Clan? clanInfo;

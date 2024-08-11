@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/clan_info_page.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
@@ -8,19 +7,23 @@ import 'package:cached_network_image/cached_network_image.dart';
 class TeamsCard extends StatelessWidget {
   const TeamsCard({
     super.key,
-    required this.sortedClans,
-    required this.totalByClan,
+    required this.currentLeagueInfo,
     required this.clanTag,
     required this.discordUser,
+    required this.sortBy,
   });
 
-  final List<ClanLeagueDetails> sortedClans;
-  final Map<String, Map<String, dynamic>> totalByClan;
+  final CurrentLeagueInfo currentLeagueInfo;
   final String clanTag;
   final List<String> discordUser;
+  final String sortBy;
 
   @override
   Widget build(BuildContext context) {
+    // Sort the clans based on the selected criteria
+    List<ClanLeagueDetails> sortedClans = List.from(currentLeagueInfo.clans);
+    currentLeagueInfo.sortClans(sortedClans, sortBy);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -69,8 +72,8 @@ class TeamsCard extends StatelessWidget {
                     Card(
                       shape: RoundedRectangleBorder(
                         side: clan.tag == clanTag
-                          ? BorderSide(color: Colors.green, width: 2)
-                          : BorderSide.none,
+                            ? BorderSide(color: Colors.green, width: 2)
+                            : BorderSide.none,
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Padding(
@@ -90,7 +93,9 @@ class TeamsCard extends StatelessWidget {
                                         width: 20,
                                         child: Text(
                                           "${sortedClans.indexOf(clan) + 1}.",
-                                          style: Theme.of(context).textTheme.titleMedium
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium,
                                         ),
                                       ),
                                       SizedBox(width: 20),
@@ -99,14 +104,22 @@ class TeamsCard extends StatelessWidget {
                                           children: [
                                             CachedNetworkImage(
                                               imageUrl: clan.badgeUrls.small,
-                                              width: 40, height: 40,
+                                              width: 40,
+                                              height: 40,
                                             ),
                                             SizedBox(width: 10),
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text(clan.name,style: Theme.of(context).textTheme.bodyMedium),
-                                                Text(clan.tag, style: Theme.of(context).textTheme.labelMedium),
+                                                Text(clan.name,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium),
+                                                Text(clan.tag,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .labelMedium),
                                               ],
                                             ),
                                           ],
@@ -114,14 +127,17 @@ class TeamsCard extends StatelessWidget {
                                       ),
                                       SizedBox(
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Row(
                                               children: [
-                                                Text("  ${totalByClan[clan.tag]?['stars'] ?? 0}"),
+                                                Text(
+                                                    "  ${clan.stars}"),
                                                 SizedBox(
                                                   child: CachedNetworkImage(
-                                                    imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
+                                                    imageUrl:
+                                                        "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
                                                     width: 20,
                                                     height: 20,
                                                   ),
@@ -129,7 +145,7 @@ class TeamsCard extends StatelessWidget {
                                               ],
                                             ),
                                             Text(
-                                              "${totalByClan[clan.tag]?['percentage'].toStringAsFixed(0) ?? 0.0}%",
+                                              "${clan.destructionPercentage.toStringAsFixed(0)}%",
                                             ),
                                           ],
                                         ),
@@ -140,19 +156,23 @@ class TeamsCard extends StatelessWidget {
                                   SizedBox(height: 10),
                                   Wrap(
                                     alignment: WrapAlignment.center,
-                                    children: townHallLevelCounts.entries.map((entry) {
+                                    children: townHallLevelCounts.entries
+                                        .map((entry) {
                                       return Padding(
                                         padding: const EdgeInsets.all(4.0),
                                         child: Wrap(
                                           children: [
                                             CachedNetworkImage(
-                                              imageUrl: 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${entry.key}.png',
+                                              imageUrl:
+                                                  'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${entry.key}.png',
                                               width: 20,
                                             ),
                                             SizedBox(width: 5),
                                             Text(
                                               'x${entry.value}',
-                                              style: Theme.of(context).textTheme.bodyMedium,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
                                             ),
                                           ],
                                         ),
@@ -167,10 +187,8 @@ class TeamsCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-              );
-            }
-          ).toList(),
+                ));
+          }).toList(),
         ),
         SizedBox(height: 10),
       ],

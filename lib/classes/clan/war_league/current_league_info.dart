@@ -19,7 +19,9 @@ class CurrentLeagueInfo {
     required this.season,
     required this.clans,
     required this.rounds,
-  });
+  }) {
+    calculateTotalStarsAndPercentage();
+  }
 
   factory CurrentLeagueInfo.fromJson(
       Map<String, dynamic> json, String clanTag) {
@@ -34,7 +36,6 @@ class CurrentLeagueInfo {
     );
   }
 
-  
   Future<CurrentWarInfo?> getActiveWar(String clanTag) async {
     CurrentWarInfo? inWar;
     CurrentWarInfo? inPreparation;
@@ -58,6 +59,89 @@ class CurrentLeagueInfo {
 
     return inWar ?? inPreparation ?? lastMatchedWarInfo;
   }
+
+  ClanLeagueDetails? getClanDetails(String clanTag) {
+    return clans.firstWhere((clan) => clan.tag == clanTag);
+  }
+
+  void calculateTotalStarsAndPercentage() async {
+    Map<String, Map<String, dynamic>> totalByClan = {};
+
+    // Step 1: Calculate stars and percentage for each clan
+    for (var round in rounds) {
+      var wars = await round.warLeagueInfos;
+      for (var war in wars) {
+        if (!totalByClan.containsKey(war.clan.tag)) {
+          totalByClan[war.clan.tag] = {'stars': 0, 'percentage': 0.0};
+        }
+        if (!totalByClan.containsKey(war.opponent.tag)) {
+          totalByClan[war.opponent.tag] = {'stars': 0, 'percentage': 0.0};
+        }
+
+        bool warEnded = war.endTime.isBefore(DateTime.now());
+        bool clanWon = war.clan.stars > war.opponent.stars ||
+            (war.clan.stars == war.opponent.stars &&
+                war.clan.destructionPercentage >
+                    war.opponent.destructionPercentage);
+
+        totalByClan[war.clan.tag]?['stars'] +=
+            war.clan.stars + (warEnded && clanWon ? 10 : 0);
+        totalByClan[war.opponent.tag]?['stars'] +=
+            war.opponent.stars + (warEnded && !clanWon ? 10 : 0);
+
+        totalByClan[war.clan.tag]?['percentage'] +=
+            war.clan.destructionPercentage * war.teamSize;
+        totalByClan[war.opponent.tag]?['percentage'] +=
+            war.opponent.destructionPercentage * war.teamSize;
+      }
+    }
+
+    // Step 2: Assign stars and percentage to each clan
+    for (ClanLeagueDetails clan in clans) {
+      if (totalByClan.containsKey(clan.tag)) {
+        clan.stars = totalByClan[clan.tag]?['stars'] ?? 0;
+        clan.destructionPercentage =
+            totalByClan[clan.tag]?['percentage'] ?? 0.0;
+      }
+    }
+
+    // Step 3: Sort clans by stars
+    clans.sort((a, b) => b.stars.compareTo(a.stars));
+
+    // Step 4: Assign ranking and calculate star difference with the first-ranked clan
+    for (int i = 0; i < clans.length; i++) {
+      clans[i].rank = i + 1; // Rank starts from 1
+
+      if (i == 0) {
+        // The first-ranked clan has a 0-star difference with itself
+        clans[i].starsDifferenceWithFirst = 0;
+      } else {
+        // Calculate the difference in stars with the first-ranked clan
+        clans[i].starsDifferenceWithFirst = clans[0].stars - clans[i].stars;
+      }
+    }
+
+    // Step 5: Calculate star difference with the previous-ranked clan (for leaderboard purposes)
+    for (int i = clans.length - 1; i >= 0; i--) {
+      if (i == 0) {
+        // The first-ranked clan has 0-star difference (it's the top)
+        clans[i].starsDifferenceWithNext = 0;
+      } else {
+        // Calculate the difference in stars with the previous-ranked clan
+        clans[i].starsDifferenceWithNext = clans[i - 1].stars - clans[i].stars;
+      }
+    }
+  }
+
+  void sortClans(List<ClanLeagueDetails> clans, String sortBy) {
+    // Sort the clans by the specified criterion
+    if (sortBy == "stars") {
+      clans.sort((a, b) => b.stars.compareTo(a.stars));
+    } else if (sortBy == "percentage") {
+      clans.sort(
+          (a, b) => b.destructionPercentage.compareTo(a.destructionPercentage));
+    }
+  }
 }
 
 class ClanLeagueDetails {
@@ -66,6 +150,11 @@ class ClanLeagueDetails {
   final BadgeUrls badgeUrls;
   final int clanLevel;
   final List<LeagueMember> members;
+  late int stars;
+  late double destructionPercentage;
+  late int rank;
+  late int starsDifferenceWithFirst;
+  late int starsDifferenceWithNext;
 
   ClanLeagueDetails({
     required this.tag,
@@ -164,7 +253,7 @@ class ClanLeagueRounds {
           if (json['state'] != "notInWar") {
             return CurrentWarInfo.fromJson(json, "cwl", clanTag, false);
           }
-          return null; 
+          return null;
         } else {
           // If too many requests, wait before retrying
           retryCount++;
