@@ -2,9 +2,9 @@ import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/to_do_header.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/components/to_do_header.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/to_do_body.dart'; 
+import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/components/to_do_body.dart'; 
 
 class ToDoScreen extends StatefulWidget {
   final ProfileInfo playerStats;

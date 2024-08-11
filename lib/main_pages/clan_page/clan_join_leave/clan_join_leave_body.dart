@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
-import 'package:clashkingapp/classes/profile/todo/to_do_service.dart';
 
 class ClanJoinLeaveBody extends StatefulWidget {
   final List<String> user;
@@ -145,18 +144,14 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
                         );
                       },
                     );
-                    ProfileInfo? playerStats =
-                        await ProfileInfoService().fetchProfileInfo(item.tag);
-                    while (playerStats!.initialized != true) {
-                      await Future.delayed(Duration(milliseconds: 100));
-                    }
-                    await ToDoService.fetchPlayerToDoData(
-                        item.tag, playerStats);
+                    ProfileInfo? playerStats = await ProfileInfoService()
+                        .fetchCompleteProfileInfo(item.tag);
                     navigator.pop();
                     navigator.push(
                       MaterialPageRoute(
                         builder: (context) => StatsScreen(
-                            playerStats: playerStats, discordUser: widget.user),
+                            playerStats: playerStats!,
+                            discordUser: widget.user),
                       ),
                     );
                   },

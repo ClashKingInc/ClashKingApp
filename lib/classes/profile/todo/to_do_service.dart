@@ -25,9 +25,8 @@ class ToDoService {
     }
   }
 
-  static Future<void> fetchPlayerToDoData(
-      String tag, ProfileInfo profileInfo) async {
-    tag = tag.replaceAll('#', '%23');
+  static Future<void> fetchPlayerToDoData(ProfileInfo profileInfo) async {
+    String tag = profileInfo.tag.replaceAll('#', '%23');
     final response = await http.get(
         Uri.parse('https://api.clashking.xyz/player/to-do?player_tags=$tag'));
 

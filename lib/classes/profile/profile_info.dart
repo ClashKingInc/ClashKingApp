@@ -14,6 +14,7 @@ import 'package:retry/retry.dart';
 import 'dart:io';
 import 'package:clashkingapp/classes/profile/legend/legend_service.dart';
 import 'package:clashkingapp/classes/profile/todo/to_do.dart';
+import 'package:clashkingapp/classes/profile/todo/to_do_service.dart';
 
 class ProfileInfo {
   String name;
@@ -48,7 +49,6 @@ class ProfileInfo {
   bool initialized = false;
   bool legendsInitialized = false;
   late ToDo? toDo;
-
 
   ProfileInfo({
     required this.name,
@@ -283,5 +283,15 @@ class ProfileInfoService {
       span.finish(status: SpanStatus.internalError());
       rethrow;
     }
+  }
+
+  Future<ProfileInfo?> fetchCompleteProfileInfo(String tag) async {
+    ProfileInfo? profileInfo = await ProfileInfoService().fetchProfileInfo(tag);
+    while (profileInfo!.initialized != true) {
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+    await ToDoService.fetchPlayerToDoData(profileInfo);
+
+    return profileInfo;
   }
 }

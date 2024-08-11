@@ -6,7 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
-import 'package:clashkingapp/classes/profile/todo/to_do_service.dart';
 
 class WarTeamCard extends StatelessWidget {
   WarTeamCard(
@@ -60,16 +59,13 @@ class WarTeamCard extends StatelessWidget {
             },
           );
           ProfileInfo? playerStats =
-              await ProfileInfoService().fetchProfileInfo(member.tag);
-          while (playerStats!.initialized != true) {
-            await Future.delayed(Duration(milliseconds: 100));
-          }
-          await ToDoService.fetchPlayerToDoData(member.tag, playerStats);
+              await ProfileInfoService().fetchCompleteProfileInfo(member.tag);
+        
           navigator.pop();
           navigator.push(
             MaterialPageRoute(
               builder: (context) => StatsScreen(
-                  playerStats: playerStats, discordUser: discordUser),
+                  playerStats: playerStats!, discordUser: discordUser),
             ),
           );
         },

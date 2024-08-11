@@ -431,15 +431,13 @@ Widget buildMembersTab(
                       },
                     );
                     ProfileInfo? playerStats = await ProfileInfoService()
-                        .fetchProfileInfo(memberEntry.key);
-                    while (playerStats!.initialized != true) {
-                      await Future.delayed(Duration(milliseconds: 100));
-                    }
+                        .fetchCompleteProfileInfo(memberEntry.key);
                     navigator.pop();
                     navigator.push(
                       MaterialPageRoute(
                         builder: (context) => StatsScreen(
-                            playerStats: playerStats, discordUser: discordUser),
+                            playerStats: playerStats!,
+                            discordUser: discordUser),
                       ),
                     );
                   },
