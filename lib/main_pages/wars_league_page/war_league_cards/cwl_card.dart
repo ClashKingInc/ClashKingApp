@@ -69,9 +69,6 @@ class CwlCardState extends State<CwlCard> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(AppLocalizations.of(context)!.clanWarLeague,
-                          style: Theme.of(context).textTheme.labelLarge,
-                          textAlign: TextAlign.center),
                       Wrap(
                         alignment: WrapAlignment.start,
                         spacing: 7.0,
