@@ -35,9 +35,9 @@ class LegendDay {
     calculateTrophies();
   }
 
-  factory LegendDay.fromJson(String key, Map<String, dynamic> json) {
+factory LegendDay.fromJson(String key, Map<String, dynamic> json) {
+  try {
     DateTime date = DateTime.parse(key);
-    // Handle older format with simple integer lists
     List<int> defenses =
         (json['defenses'] as List<dynamic>?)?.map((e) => e as int).toList() ??
             [];
@@ -45,7 +45,6 @@ class LegendDay {
         (json['attacks'] as List<dynamic>?)?.map((e) => e as int).toList() ??
             [];
 
-    // Handle newer format avec des objets plus détaillés
     List<Defense> newDefenses = (json['new_defenses'] as List<dynamic>?)
             ?.map((e) => Defense.fromJson(e as Map<String, dynamic>))
             .toList() ??
@@ -68,7 +67,17 @@ class LegendDay {
     legendDay.calculateTrophies();
 
     return legendDay;
+  } catch (exception, stackTrace) {
+    final hint = Hint.withMap({
+      'custom_message': 'Error while parsing legend day from json',
+      'key': key,
+      'json': json,
+    });
+    Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+    throw Exception("Error while parsing LegendDay from JSON: $exception");
   }
+}
+
 
   static int countAttacksDefenses(List<int> list) {
     int count = 0;
