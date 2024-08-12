@@ -816,8 +816,8 @@
     "neededOverall": "% Nodig in totaal",
     "calculate": "Berekenen",
     "warStats": "Oorlogstatistieken",
-    "clanWarLeague": "Clan War League",
-    "cwlRank": "Your clan is currently ranked {rank}.",
+    "clanWarLeague": "Clanoorlogsdivisie",
+    "cwlRank": "Jouw clan staat momenteel op rang {rank}.",
     "@cwlRank": {
         "placeholders": {
             "rank": {
@@ -825,7 +825,7 @@
             }
         }
     },
-    "cwlStars": "Your clan has a total of {stars} stars.",
+    "cwlStars": "Jouw clan heeft een totaal van {stars} sterren.",
     "@cwlStars": {
         "placeholders": {
             "stars": {
@@ -833,7 +833,7 @@
             }
         }
     },
-    "cwlMissingStarsFromNext": "Your clan is missing {stars} stars to catch up with the next clan.",
+    "cwlMissingStarsFromNext": "Je clan mist {stars} sterren om de volgende clans in te halen.",
     "@cwlMissingStarsFromNext": {
         "placeholders": {
             "stars": {
@@ -841,7 +841,7 @@
             }
         }
     },
-    "cwlMissingStarsFromFirst": "Your clan is missing {stars} stars to catch up with the first clan.",
+    "cwlMissingStarsFromFirst": "Je clan mist {stars} sterren om de eerste clan in te halen.",
     "@cwlMissingStarsFromFirst": {
         "placeholders": {
             "stars": {
@@ -849,7 +849,7 @@
             }
         }
     },
-    "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
+    "cwlDestructionPercentage": "Je clan heeft een totaal vernietigingspercentage van {percent}%.",
     "@cwlDestructionPercentage": {
         "placeholders": {
             "percent": {
@@ -857,7 +857,7 @@
             }
         }
     },
-    "cwlCurrentRound": "It's currently round {round}.",
+    "cwlCurrentRound": "Het is momenteel rond {round}.",
     "@cwlCurrentRound": {
         "placeholders": {
             "round": {
