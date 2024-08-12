@@ -74,8 +74,8 @@ class ToDoHeaderState extends State<ToDoHeader> {
                     ),
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
-                        color: widget.accounts.toDoList.totalCwlAttacks ==
-                                widget.accounts.toDoList.requiredCwlAttacks
+                        color: widget.accounts.toDoList.totalLegends ==
+                                widget.accounts.toDoList.requiredLegendsAttacks
                             ? Colors.green
                             : Colors.red,
                         width: 1.0,

@@ -28,9 +28,9 @@ class ToDoBodyState extends State<ToDoBody> {
     DateTime today = DateTime.now();
     List<Widget> cards = [];
 
-    for (var tag in widget.tags) {
+    for (var profile in widget.accounts.accounts) {
       for (var toDo in widget.accounts.toDoList.items
-          .where((item) => item.playerTag == tag)) {
+          .where((item) => item.playerTag == profile.tag)) {
         Account? currentAccount =
             widget.accounts.findAccountByTag(toDo.playerTag);
         DateTime lastActiveDate =
@@ -39,7 +39,7 @@ class ToDoBodyState extends State<ToDoBody> {
 
         if ((widget.active && daysDiff <= 14) ||
             (!widget.active && daysDiff > 14)) {
-          cards.add(ToDoBodyCard(tag: tag, profileInfo: currentAccount!.profileInfo, toDo: toDo));
+          cards.add(ToDoBodyCard(tag: profile.tag, profileInfo: currentAccount!.profileInfo, toDo: toDo));
         }
       }
     }

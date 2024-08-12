@@ -1,3 +1,4 @@
+import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_join_leave_card.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
@@ -12,10 +13,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/components/beta_label.dart';
 
 class ClanInfoPage extends StatefulWidget {
-  final Clan? clanInfo;
+  final Account? account;
   final User user;
 
-  ClanInfoPage({required this.clanInfo, required this.user});
+  ClanInfoPage({required this.account, required this.user});
 
   @override
   ClanInfoPageState createState() => ClanInfoPageState();
@@ -32,21 +33,23 @@ class ClanInfoPageState extends State<ClanInfoPage>
   }
 
   Future<void> _checkInitialization() async {
-    while (widget.clanInfo != null && !widget.clanInfo!.clanInitialized) {
+    while (widget.account!.clan == null || (widget.account!.clan != null && !widget.account!.clan!.clanInitialized)) {
       await Future.delayed(Duration(milliseconds: 100));
+      print('Clan not initialized : ${widget.account!.clan?.clanInitialized}');
     }
+    print('Clan initialized');
   }
 
   Future<void> _refreshData() async {
     // Fetch the updated profile information
-    if (widget.clanInfo != null) {
-      widget.clanInfo!.clanInitialized = false;
+    if (widget.account!.clan != null) {
+      widget.account!.clan!.clanInitialized = false;
       final updatedClanInfo =
-          await ClanService().fetchClanInfo(widget.clanInfo!);
+          await ClanService().fetchClanInfo(widget.account!.clan!);
       setState(() {
         // Update the clan info with the newly fetched data
-        widget.clanInfo!.updateClanInfoFrom(updatedClanInfo);
-        widget.clanInfo!.clanInitialized = true;
+        widget.account!.clan!.updateClanInfoFrom(updatedClanInfo);
+        widget.account!.clan!.clanInitialized = true;
         _initializeClanFuture = _checkInitialization();
       });
     }
@@ -93,14 +96,14 @@ class ClanInfoPageState extends State<ClanInfoPage>
                               padding: EdgeInsets.symmetric(horizontal: 8.0),
                               child: ClanSearch(discordUser: widget.user.tags),
                             ),
-                            if (widget.clanInfo != null)
+                            if (widget.account!.clan != null)
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ClanInfoScreen(
-                                          clanInfo: widget.clanInfo!,
+                                          clanInfo: widget.account!.clan!,
                                           discordUser: widget.user.tags),
                                     ),
                                   );
@@ -109,7 +112,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
                                   padding:
                                       EdgeInsets.symmetric(horizontal: 8.0),
                                   child:
-                                      ClanInfoCard(clanInfo: widget.clanInfo!),
+                                      ClanInfoCard(clanInfo: widget.account!.clan!),
                                 ),
                               )
                             else
@@ -119,7 +122,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
                                   child: NoClanCard(),
                                 ),
                               ),
-                            if (widget.clanInfo != null)
+                            if (widget.account!.clan != null)
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -127,7 +130,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
                                     MaterialPageRoute(
                                       builder: (context) => ClanJoinLeaveScreen(
                                           user: widget.user.tags,
-                                          clanInfo: widget.clanInfo!),
+                                          clanInfo: widget.account!.clan!),
                                     ),
                                   );
                                 },
@@ -138,7 +141,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
                                     children: [
                                       ClanJoinLeaveCard(
                                         discordUser: widget.user.tags,
-                                        clanInfo: widget.clanInfo!,
+                                        clanInfo: widget.account!.clan!,
                                       ),
                                       BetaLabel(),
                                     ],

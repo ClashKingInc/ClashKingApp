@@ -37,9 +37,8 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
   }
 
   Future<void> _checkInitialization() async {
-    while (widget.account.clan != null &&
-        !widget.account.clan!.clanInitialized &&
-        !widget.account.clan!.warInitialized) {
+    while ((widget.account.clan == null) ||
+        (widget.account.clan != null && !widget.account.clan!.warInitialized)) {
       await Future.delayed(Duration(milliseconds: 100));
     }
   }
@@ -60,16 +59,15 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    String warState = "noClan";
-    if (widget.account.clan != null) {
-      warState = widget.account.clan!.warState;
-    }
-
     return FutureBuilder<void>(
       future: _initializeClanFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return SizedBox.shrink();
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         } else if (snapshot.hasError) {
           Sentry.captureException(snapshot.error);
           return Center(
@@ -79,6 +77,10 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
             ),
           );
         } else {
+          String warState = "noClan";
+          if (widget.account.clan != null) {
+            warState = widget.account.clan!.warState;
+          }
           return Scaffold(
             body: RefreshIndicator(
               backgroundColor: Theme.of(context).colorScheme.surface,

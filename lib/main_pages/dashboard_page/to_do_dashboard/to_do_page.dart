@@ -28,6 +28,15 @@ class ToDoScreenState extends State<ToDoScreen>
   @override
   void initState() {
     super.initState();
+    checkToDoIsInitialized();
+  }
+
+  void checkToDoIsInitialized() {
+    while (!widget.accounts.isTodoInitialized) {
+      Future.delayed(Duration(milliseconds: 100), () {
+        checkToDoIsInitialized();
+      });
+    }
   }
 
   void updateFilter(String newFilter) {

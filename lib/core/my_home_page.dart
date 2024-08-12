@@ -82,7 +82,7 @@ class MyHomePageState extends State<MyHomePage> {
                     : Center(child: CircularProgressIndicator()),
                 appState.account != null && appState.user != null
                     ? ClanInfoPage(
-                        clanInfo: appState.account!.clan,
+                        account: appState.account!,
                         user: appState.user!,
                       )
                     : Center(child: CircularProgressIndicator()),
