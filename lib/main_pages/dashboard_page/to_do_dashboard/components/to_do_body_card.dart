@@ -1,4 +1,4 @@
-import 'package:clashkingapp/classes/account/accounts.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,14 +6,14 @@ import 'package:intl/intl.dart';
 import 'package:clashkingapp/classes/profile/todo/to_do.dart';
 
 class ToDoBodyCard extends StatefulWidget {
-  final Account currentAccount;
+  final ProfileInfo profileInfo;
   final ToDo toDo;
   final String tag;
 
   ToDoBodyCard(
       {super.key,
       required this.tag,
-      required this.currentAccount,
+      required this.profileInfo,
       required this.toDo});
 
   @override
@@ -38,10 +38,10 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                       height: 100,
                       width: 100,
                       child: CachedNetworkImage(
-                          imageUrl: widget.currentAccount.profileInfo.townHallPic),
+                          imageUrl: widget.profileInfo.townHallPic),
                     ),
                     Text(
-                      widget.currentAccount.profileInfo.name,
+                      widget.profileInfo.name,
                       style: Theme.of(context)
                               .textTheme
                               .labelLarge
@@ -79,7 +79,7 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                             runSpacing: -7.0,
                             children: <Widget>[
                               if (widget.toDo.legends != null ||
-                                  widget.currentAccount.profileInfo.league ==
+                                  widget.profileInfo.league ==
                                       'Legend League')
                                 Chip(
                                   avatar: CircleAvatar(
@@ -260,7 +260,7 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
               children: [
                 SizedBox(width: 8),
                 Container(
-                  width: MediaQuery.of(context).size.width - 104,
+                  width: MediaQuery.of(context).size.width - 116,
                   height: 8,
                   decoration: BoxDecoration(
                     border: Border.all(

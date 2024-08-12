@@ -111,6 +111,7 @@ class StatsScreenState extends State<StatsScreen>
                       townHallImageUrl: townHallImageUrl,
                       stars: stars,
                       hallChips: hallChips,
+                      user: widget.discordUser,
                     ),
                     ScrollableTab(
                       labelColor: Theme.of(context).colorScheme.onSurface,

@@ -58,6 +58,8 @@ class Account {
   Clan? clan;
 
   Account({required this.profileInfo, this.clan});
+
+  String get tag => profileInfo.tag;
 }
 
 class AccountsService {
@@ -134,7 +136,7 @@ class AccountsService {
       final accounts = Accounts(accounts: accountsList, tags : tags);
 
       final todoSpan = transaction.startChild('fetchToDo');
-      ToDoService.fetchPlayerToDoData(tags, accounts);
+      ToDoService.fetchBulkPlayerToDoData(tags, accounts);
       todoSpan.finish(status: SpanStatus.ok());
 
       accounts.selectedTag =
@@ -163,6 +165,7 @@ class AccountsService {
       Clan clanInfo = await ClanService().fetchClanAndWarInfo(clanTag);
       account.clan = clanInfo;
       clanSpan.finish(status: SpanStatus.ok());
+      print("Clan info loaded for ${account.profileInfo.tag}");
       clanInfo.clanInitialized = true;
       clanInfo.warInitialized = true;
     } catch (exception, stackTrace) {

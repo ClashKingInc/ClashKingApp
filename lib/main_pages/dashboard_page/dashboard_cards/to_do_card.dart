@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/to_do_page.dart';
-import 'package:clashkingapp/main_pages/beta_label.dart';
+import 'package:clashkingapp/components/beta_label.dart';
 
 class ToDoCard extends StatefulWidget {
   const ToDoCard({
@@ -160,7 +160,9 @@ class ToDoCardState extends State<ToDoCard> {
                         spacing: 7.0,
                         runSpacing: -7.0,
                         children: <Widget>[
-                          if (profileInfo.toDo!.isLegend)
+                          if ((profileInfo.toDo != null &&
+                                  profileInfo.toDo!.legends != null) ||
+                              profileInfo.league == 'Legend League')
                             Chip(
                               avatar: CircleAvatar(
                                 backgroundColor: Colors.transparent,

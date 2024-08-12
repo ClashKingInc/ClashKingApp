@@ -69,16 +69,14 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
               );
             },
           );
-          ProfileInfo? playerStats =
-              await ProfileInfoService().fetchProfileInfo(widget.player['tag']);
-          while (playerStats!.initialized != true) {
-            await Future.delayed(Duration(milliseconds: 100));
-          }
+          ProfileInfo? playerStats = await ProfileInfoService()
+              .fetchCompleteProfileInfo(widget.player['tag']);
+
           navigator.pop();
           navigator.push(
             MaterialPageRoute(
               builder: (context) => StatsScreen(
-                  playerStats: playerStats, discordUser: widget.user),
+                  playerStats: playerStats!, discordUser: widget.user),
             ),
           );
         },

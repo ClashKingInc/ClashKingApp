@@ -1,8 +1,9 @@
 import 'package:clashkingapp/classes/account/accounts.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/to_do_body_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/components/to_do_body_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
 
 class ToDoBody extends StatefulWidget {
   final Accounts accounts;
@@ -27,9 +28,9 @@ class ToDoBodyState extends State<ToDoBody> {
     DateTime today = DateTime.now();
     List<Widget> cards = [];
 
-    for (var tag in widget.tags) {
+    for (var profile in widget.accounts.accounts) {
       for (var toDo in widget.accounts.toDoList.items
-          .where((item) => item.playerTag == tag)) {
+          .where((item) => item.playerTag == profile.tag)) {
         Account? currentAccount =
             widget.accounts.findAccountByTag(toDo.playerTag);
         DateTime lastActiveDate =
@@ -38,8 +39,7 @@ class ToDoBodyState extends State<ToDoBody> {
 
         if ((widget.active && daysDiff <= 14) ||
             (!widget.active && daysDiff > 14)) {
-          cards.add(ToDoBodyCard(
-              tag: tag, currentAccount: currentAccount!, toDo: toDo));
+          cards.add(ToDoBodyCard(tag: profile.tag, profileInfo: currentAccount!.profileInfo, toDo: toDo));
         }
       }
     }

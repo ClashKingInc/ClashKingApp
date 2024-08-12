@@ -189,15 +189,13 @@ class ClanMembersState extends State<ClanMembers> {
                   },
                 );
                 ProfileInfo ? profileInfo =
-                    await ProfileInfoService().fetchProfileInfo(member.tag);
-                while (profileInfo!.initialized != true) {
-                  await Future.delayed(Duration(milliseconds: 100));
-                }
+                    await ProfileInfoService().fetchCompleteProfileInfo(member.tag);
+                
                 navigator.pop(); // Dismiss the dialog
                 navigator.push(
                   MaterialPageRoute(
                     builder: (context) => StatsScreen(
-                        playerStats: profileInfo,
+                        playerStats: profileInfo!,
                         discordUser: widget.discordUser),
                   ),
                 );

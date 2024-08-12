@@ -4,8 +4,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class FeatureRequests extends StatelessWidget {
   const FeatureRequests({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

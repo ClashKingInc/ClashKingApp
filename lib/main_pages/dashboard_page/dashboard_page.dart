@@ -78,7 +78,7 @@ class DashboardPageState extends State<DashboardPage>
     final profileInfo =
         await ProfileInfoService().fetchProfileInfo(widget.playerStats.tag);
 
-    ToDoService.fetchPlayerToDoData(widget.accounts.tags, widget.accounts);
+    ToDoService.fetchBulkPlayerToDoData(widget.accounts.tags, widget.accounts);
     while (profileInfo!.initialized != true ||
         profileInfo.legendsInitialized != true ||
         widget.accounts.isTodoInitialized != true) {

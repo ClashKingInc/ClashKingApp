@@ -65,6 +65,7 @@ dependencies:
   url_launcher: ^6.2.6
   mockito: ^5.4.4
   webview_flutter: ^4.8.0
+  flutter_native_splash: ^2.4.1
 
 dev_dependencies:
   flutter_test:
@@ -138,3 +139,21 @@ flutter_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/icons/app-icon.png"
+
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/icons/app_icon_light_mode.png
+  color_dark: "#000000"
+  image_dark: assets/icons/app_icon_dark_mode.png
+  android: true
+  ios: true
+  android_gravity: center
+  ios_content_mode: scaleAspectFit
+  web: false
+  
+  android_12:
+    image: assets/icons/app_icon_light_mode.png
+    icon_background_color: "#ffffff"
+    image_dark: assets/icons/app_icon_dark_mode.png
+    icon_background_color_dark: "#000000"
