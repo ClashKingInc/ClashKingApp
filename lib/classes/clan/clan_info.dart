@@ -438,7 +438,8 @@ class ClanService {
             if (decodedResponseCwl.containsKey("state")) {
               return CurrentLeagueInfo.fromJson(decodedResponseCwl, clanTag);
             }
-          } else if (responseCwl.statusCode == 403) {
+          } else if (responseCwl.statusCode == 403 ||
+              responseCwl.statusCode == 404) {
             return null;
           } else {
             throw Exception(
