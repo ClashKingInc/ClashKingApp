@@ -857,7 +857,7 @@
             }
         }
     },
-    "cwlCurrentRound": "Het is momenteel rond {round}.",
+    "cwlCurrentRound": "Het is momenteel ronde {round}.",
     "@cwlCurrentRound": {
         "placeholders": {
             "round": {
