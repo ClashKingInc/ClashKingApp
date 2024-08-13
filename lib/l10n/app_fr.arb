@@ -793,5 +793,6 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "tools": "Outils"
 }

@@ -1,6 +1,5 @@
 import 'package:clashkingapp/classes/data/gears_data_manager.dart';
 
-
 class HeroGear {
   final String name;
   final int level;
@@ -20,7 +19,7 @@ class HeroGear {
     Map<String, String> gears = GearDataManager().getGearInfo(json['name']);
     String hero = gears['hero'] ?? 'unknown';
     String url =
-        gears['url'] ?? 'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
+        gears['url'] ?? 'https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/ClashKing-1.png';
     String rarity = gears['rarity'] ?? '1';
     return HeroGear(
       name: json['name'],

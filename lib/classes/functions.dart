@@ -90,7 +90,7 @@ Future<void> fetchImagesAndTypes(List<dynamic> items, String type) async {
         urlAndType = TroopDataManager().getTroopInfo(item.name);
     }
     item.imageUrl = urlAndType['url'] ??
-        'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
+        'https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/ClashKing-1.png';
     item.type = urlAndType['type'] ?? 'unknown';
   }
 }

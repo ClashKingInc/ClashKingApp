@@ -20,7 +20,10 @@ class _FaqScreenState extends State<FaqScreen> {
           ExpansionTile(
             iconColor: Theme.of(context).colorScheme.secondary,
             collapsedIconColor: Theme.of(context).colorScheme.primary,
-            title: Text(AppLocalizations.of(context)!.faqIsThisFromSupercell),
+            title: Text(
+              AppLocalizations.of(context)!.faqIsThisFromSupercell,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
             children: <Widget>[
               ListTile(
                 title: Text(AppLocalizations.of(context)!.faqFanContentPolicy),
@@ -30,7 +33,10 @@ class _FaqScreenState extends State<FaqScreen> {
           ExpansionTile(
             iconColor: Theme.of(context).colorScheme.secondary,
             collapsedIconColor: Theme.of(context).colorScheme.primary,
-            title: Text(AppLocalizations.of(context)!.faqWhyNotAccurate),
+            title: Text(
+              AppLocalizations.of(context)!.faqWhyNotAccurate,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
             children: <Widget>[
               ListTile(
                 title: RichText(
@@ -81,7 +87,10 @@ class _FaqScreenState extends State<FaqScreen> {
           ExpansionTile(
             iconColor: Theme.of(context).colorScheme.secondary,
             collapsedIconColor: Theme.of(context).colorScheme.primary,
-            title: Text(AppLocalizations.of(context)!.faqSupportWork),
+            title: Text(
+              AppLocalizations.of(context)!.faqSupportWork,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
             children: <Widget>[
               ListTile(
                 title: Column(
@@ -91,8 +100,8 @@ class _FaqScreenState extends State<FaqScreen> {
                         style: Theme.of(context).textTheme.bodyLarge,
                         children: <TextSpan>[
                           TextSpan(
-                              text: AppLocalizations.of(context)!
-                                  .faqSupportWorkAnswer),
+                              text: "${AppLocalizations.of(context)!
+                                  .faqSupportWorkAnswer}\n"),
                           TextSpan(
                               text:
                                   "\u2022 ${AppLocalizations.of(context)!.faqUseCodeClashKing},\n"),
@@ -187,7 +196,10 @@ class _FaqScreenState extends State<FaqScreen> {
           ExpansionTile(
             iconColor: Theme.of(context).colorScheme.secondary,
             collapsedIconColor: Theme.of(context).colorScheme.primary,
-            title: Text(AppLocalizations.of(context)!.faqHowToInviteTheBot),
+            title: Text(
+              AppLocalizations.of(context)!.faqHowToInviteTheBot,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
             children: <Widget>[
               ListTile(
                 title: Column(
@@ -231,7 +243,10 @@ class _FaqScreenState extends State<FaqScreen> {
           ExpansionTile(
             iconColor: Theme.of(context).colorScheme.secondary,
             collapsedIconColor: Theme.of(context).colorScheme.primary,
-            title: Text(AppLocalizations.of(context)!.faqNeedHelp),
+            title: Text(
+              AppLocalizations.of(context)!.faqNeedHelp,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
             children: <Widget>[
               ListTile(
                 title: Column(

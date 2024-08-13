@@ -41,6 +41,6 @@ class LeagueDataManager {
 
   String getLeagueUrl(String leagueName) {
     return leagueUrls[leagueName] ??
-        'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
+        'https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/ClashKing-1.png';
   }
 }
