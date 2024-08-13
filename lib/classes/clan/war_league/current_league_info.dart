@@ -13,6 +13,7 @@ class CurrentLeagueInfo {
   final String season;
   final List<ClanLeagueDetails> clans;
   final List<ClanLeagueRounds> rounds;
+  late int currentRound;
 
   CurrentLeagueInfo({
     required this.state,
@@ -93,6 +94,10 @@ class CurrentLeagueInfo {
             war.clan.destructionPercentage * war.teamSize;
         totalByClan[war.opponent.tag]?['percentage'] +=
             war.opponent.destructionPercentage * war.teamSize;
+      }
+      // Get current round
+      if (!round.warTags.contains("#0")) {
+        currentRound = rounds.indexOf(round) + 1;
       }
     }
 

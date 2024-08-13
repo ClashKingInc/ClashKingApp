@@ -10,6 +10,7 @@ import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/components/to_do_body_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/components/player_stats_page.dart';
 
 class PlayerInfoHeaderCard extends StatefulWidget {
   final ProfileInfo playerStats;
@@ -194,18 +195,12 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                   icon: Icon(Icons.equalizer_rounded,
                       color: Theme.of(context).colorScheme.onSurface, size: 32),
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Center(
-                          child: Text(
-                            AppLocalizations.of(context)?.comingSoon ??
-                                'Coming soon !',
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface),
-                          ),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PlayerStatsScreen(
+                          profileInfo: widget.playerStats,
                         ),
-                        duration: Duration(milliseconds: 1500),
-                        backgroundColor: Theme.of(context).colorScheme.surface,
                       ),
                     );
                   },

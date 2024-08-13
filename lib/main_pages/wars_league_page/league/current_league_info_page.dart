@@ -153,9 +153,10 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                             description: AppLocalizations.of(context)!
                                 .cwlStars(clan!.stars),
                           ),
-                          ImageChip(
-                            imageUrl:
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Empty_Star.png",
+                          IconChip(
+                            icon: Icons.keyboard_double_arrow_up,
+                            color: Colors.blue,
+                            size: 16,
                             labelPadding: 2,
                             label: clan!.starsDifferenceWithFirst.toString(),
                             description: AppLocalizations.of(context)!

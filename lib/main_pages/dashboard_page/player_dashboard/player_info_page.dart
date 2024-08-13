@@ -252,6 +252,7 @@ class StatsScreenState extends State<StatsScreen>
 
     List<Widget> missingItems = [];
     TroopDataManager().troopUrlsAndTypes.forEach((name, data) {
+      print(name);
       if (!itemNames.contains(name) && data['type'] == itemType) {
         missingItems.add(
           Container(

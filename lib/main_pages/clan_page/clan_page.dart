@@ -35,9 +35,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
   Future<void> _checkInitialization() async {
     while (widget.account!.clan == null || (widget.account!.clan != null && !widget.account!.clan!.clanInitialized)) {
       await Future.delayed(Duration(milliseconds: 100));
-      print('Clan not initialized : ${widget.account!.clan?.clanInitialized}');
     }
-    print('Clan initialized');
   }
 
   Future<void> _refreshData() async {

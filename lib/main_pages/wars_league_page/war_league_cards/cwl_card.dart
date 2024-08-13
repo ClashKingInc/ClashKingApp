@@ -52,7 +52,8 @@ class CwlCardState extends State<CwlCard> {
         style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
         child: Card(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -123,6 +124,17 @@ class CwlCardState extends State<CwlCard> {
                                 .cwlDestructionPercentage(clan!
                                     .destructionPercentage
                                     .toStringAsFixed(0)),
+                          ),
+                          IconChip(
+                            icon: Icons.date_range,
+                            color: Colors.blue,
+                            size: 16,
+                            labelPadding: 2,
+                            label: widget.currentLeagueInfo.currentRound
+                                .toString(),
+                            description: AppLocalizations.of(context)!
+                                .cwlCurrentRound(
+                                    widget.currentLeagueInfo.currentRound),
                           ),
                         ],
                       ),

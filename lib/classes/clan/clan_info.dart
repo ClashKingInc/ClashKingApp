@@ -342,7 +342,7 @@ class ClanService {
   Future<WarStateInfo> fetchWarStateInfo(String clanTag) async {
     final now = DateTime.now();
     final warInfoFuture = fetchCurrentWarInfoBypass(clanTag);
-    final leagueInfoFuture = (now.day >= 1 && now.day <= 12)
+    final leagueInfoFuture = (now.day >= 1 && now.day <= 15)
         ? fetchCurrentLeagueInfo(clanTag)
         : Future.value(null);
 

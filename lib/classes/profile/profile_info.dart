@@ -15,6 +15,8 @@ import 'dart:io';
 import 'package:clashkingapp/classes/profile/legend/legend_service.dart';
 import 'package:clashkingapp/classes/profile/todo/to_do.dart';
 import 'package:clashkingapp/classes/profile/todo/to_do_service.dart';
+import 'package:clashkingapp/classes/profile/stats/player_stats_service.dart';
+import 'package:clashkingapp/classes/profile/stats/player_war_stats.dart';
 
 class ProfileInfo {
   String name;
@@ -49,6 +51,8 @@ class ProfileInfo {
   bool initialized = false;
   bool legendsInitialized = false;
   late ToDo? toDo;
+  late WarStats? warStats;
+  bool warStatsInitialized = false;
 
   ProfileInfo({
     required this.name,
@@ -196,6 +200,7 @@ class ProfileInfoService {
         // Start fetching additional data in the background
         _fetchAdditionalProfileData(profileInfo, transaction);
         _fetchPlayerLegendData(profileInfo, transaction);
+        _fetchPlayerWarStats(profileInfo, transaction);
 
         transaction.finish(status: SpanStatus.ok());
         return profileInfo;
@@ -269,6 +274,20 @@ class ProfileInfoService {
       Sentry.captureException(e, stackTrace: stackTrace, hint: hint);
       playerLegendDataSpan.finish(status: SpanStatus.internalError());
       rethrow;
+    }
+  }
+
+  Future<void> _fetchPlayerWarStats(
+      ProfileInfo profileInfo, ISentrySpan transaction) async {
+    final playerStatsService = PlayerStatsService(playerTag: profileInfo.tag.replaceFirst("#", '%23'));
+
+    try {
+      // Récupérer les données des War Hits
+      WarStats warStats = await playerStatsService.fetchPlayerWarHits();
+      profileInfo.warStats = warStats;
+      profileInfo.warStatsInitialized = true;
+    } catch (e) {
+      print('Error: $e');
     }
   }
 
