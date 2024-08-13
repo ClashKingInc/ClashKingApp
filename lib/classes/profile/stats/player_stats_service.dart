@@ -1,26 +1,19 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/classes/profile/stats/player_war_stats.dart';
-import 'package:clashkingapp/classes/profile/legend/legend_functions.dart';
 
 class PlayerStatsService {
   final String playerTag;
   late int timestampStart;
   late int timestampEnd;
   final int limit;
-  late String season;
 
   PlayerStatsService({
     required this.playerTag,
     this.timestampStart = 0,
     this.timestampEnd = 2527625513,
-    this.limit = 50,
-  }) {
-    timestampStart =
-        findSeasonStartDate(DateTime.now()).millisecondsSinceEpoch ~/ 1000;
-    timestampEnd = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    season = "August 2024";
-  }
+    this.limit = 100,
+  });
   Future<WarStats> fetchPlayerWarHits() async {
     final url =
         'https://api.clashking.xyz/player/${playerTag.replaceFirst("#", "%23")}/warhits?timestamp_start=$timestampStart&timestamp_end=$timestampEnd&limit=$limit';
@@ -32,7 +25,7 @@ class PlayerStatsService {
       final List<dynamic> items = jsonResponse['items'];
 
       WarStats aggregatedStats = WarStats(
-        season: season,
+        numberOfWars: 0,
         timeStampsEnd: 0,
         timeStampsStart: 0,
         playerTag: '',
@@ -97,7 +90,7 @@ class PlayerStatsService {
 
         // Mise à jour des statistiques agrégées
         aggregatedStats = WarStats(
-          season: season,
+          numberOfWars: limit,
           timeStampsStart: aggregatedStats.timeStampsStart,
           timeStampsEnd: aggregatedStats.timeStampsEnd,
           playerTag: memberData['tag'],
@@ -115,7 +108,7 @@ class PlayerStatsService {
 
       // Calcul des moyennes après agrégation
       return WarStats(
-        season: aggregatedStats.season,
+        numberOfWars: aggregatedStats.numberOfWars,
         timeStampsStart: timestampStart,
         timeStampsEnd: timestampEnd,
         playerTag: aggregatedStats.playerTag,

@@ -273,7 +273,7 @@ class PlayerLegendData {
               percentageNoStarsDefenses += 1;
               break;
             default:
-              percentageTwoStarsDefenses +=1;
+              percentageTwoStarsDefenses += 1;
               break;
           }
         }
@@ -353,19 +353,19 @@ class PlayerLegendData {
         percentageThreeStarsAttacks: percentageThreeStarsAttacks,
         percentageThreeStarsDefenses: percentageThreeStarsDefenses);
   }
+}
 
-  List<DateTime> findSeasonStartEndDate(DateTime currentDate) {
-    DateTime seasonStart =
-        findLastMondayOfMonth(currentDate.year, currentDate.month);
+List<DateTime> findSeasonStartEndDate(DateTime currentDate) {
+  DateTime seasonStart =
+      findLastMondayOfMonth(currentDate.year, currentDate.month);
 
-    DateTime seasonEnd =
-        findLastMondayOfMonth(currentDate.year, currentDate.month + 1);
-    if (currentDate.isBefore(seasonStart) || currentDate == seasonStart) {
-      seasonStart =
-          findLastMondayOfMonth(currentDate.year, currentDate.month - 1);
-      seasonEnd = findLastMondayOfMonth(currentDate.year, currentDate.month)
-          .subtract(Duration(days: 1));
-    }
-    return [seasonStart, seasonEnd];
+  DateTime seasonEnd =
+      findLastMondayOfMonth(currentDate.year, currentDate.month + 1);
+  if (currentDate.isBefore(seasonStart) || currentDate == seasonStart) {
+    seasonStart =
+        findLastMondayOfMonth(currentDate.year, currentDate.month - 1);
+    seasonEnd = findLastMondayOfMonth(currentDate.year, currentDate.month)
+        .subtract(Duration(days: 1));
   }
+  return [seasonStart, seasonEnd];
 }

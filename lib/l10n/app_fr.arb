@@ -461,6 +461,38 @@
     "role": "Rôle",
     "expLevel": "Niveau d'expérience",
     "townHallLevel": "Niveau d'HDV",
+    
+    "thLevel": "HDV{level}",
+    "@thLevel":{
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "townHallLevelLevel": "Hôtel de ville {level}",
+    "@townHallLevelLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "byNumberOfWars": "Par nombre de guerres",
+    "ok": "OK",
+    "byDateRange": "Par plage de dates",
+    "selectSeason": "Selectionne une saison",
+    "year": "Année",
+    "month": "Mois",
+    "allTownHalls": "Tous Hôtels de ville",
+    "seasonDate": "Saison {date}",
+    "@seasonDate": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
     "builderBaseTrophies": "Trophées MDO",
     "donations": "Dons",
     "donationsReceived": "Don reçus",
