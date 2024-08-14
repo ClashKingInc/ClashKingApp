@@ -9,6 +9,7 @@ class WarStats {
   final int timeStampsStart;
   final int timeStampsEnd;
   final int numberOfWars;
+  final String warType;
 
   WarStats({
     required this.timeStampsStart,
@@ -21,6 +22,7 @@ class WarStats {
     required this.attacks,
     required this.defenses,
     required this.numberOfWars,
+    required this.warType,
   });
 
   // Moyenne des étoiles sur toutes les attaques
@@ -192,6 +194,7 @@ class Attack {
   final bool fresh;
   final Defender defender;
   final int attackOrder;
+  final String warType;
 
   Attack({
     required this.attackerTag,
@@ -203,6 +206,7 @@ class Attack {
     required this.fresh,
     required this.defender,
     required this.attackOrder,
+    required this.warType,
   });
 }
 
@@ -216,6 +220,7 @@ class Defense {
   final bool fresh;
   final Attacker attacker;
   final int attackOrder;
+  final String warType;
 
   Defense({
     required this.attackerTag,
@@ -227,6 +232,7 @@ class Defense {
     required this.fresh,
     required this.attacker,
     required this.attackOrder,
+    required this.warType,
   });
 }
 

@@ -493,6 +493,10 @@
             }
         }
     },
+    "lastXwars": "Dernières {number} guerres",
+    "friendly" : "Amicale",
+    "cwl" : "LDC",
+    "random" : "Aléatoire",
     "builderBaseTrophies": "Trophées MDO",
     "donations": "Dons",
     "donationsReceived": "Don reçus",

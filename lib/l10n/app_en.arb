@@ -546,19 +546,50 @@
         }
     },
     "byNumberOfWars": "By number of wars",
+    "@byNumberOfWars": {
+        "description": "filter by number of wars"
+    },
     "ok": "OK",
+    "@ok": {
+        "description": "OK button on pop up"
+    },
     "byDateRange": "By date range",
+    "@byDateRange": {
+        "description": "filter by date range"
+    },
     "selectSeason": "Select a season",
+    "@selectSeason": {
+        "description": "Ask player to select a season"
+    },
     "year": "Year",
     "month": "Month",
     "allTownHalls": "All TownHalls",
-    "seasonDate": "Season {date}",
+    "seasonDate": "{date} season",
     "@seasonDate": {
+        "description": "Example : August 2024 season",
         "placeholders": {
             "date": {
                 "type": "String"
             }
         }
+    },
+    "lastXwars": "Last {number} wars",
+    "@lastXwars": {
+        "description": "Example : Shows the last 25 wars",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "friendly": "Friendly",
+    "@friendly": {
+        "description": "Friendly war"
+    },
+    "cwl": "CWL",
+    "random": "Random",
+    "@random": {
+        "description": "Random/basic war (not friendly or cwl)"
     },
     "builderBaseTrophies": "BB Trophies",
     "donations": "Donations",

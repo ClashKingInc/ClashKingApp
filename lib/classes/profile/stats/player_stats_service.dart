@@ -25,19 +25,21 @@ class PlayerStatsService {
       final List<dynamic> items = jsonResponse['items'];
 
       WarStats aggregatedStats = WarStats(
-        numberOfWars: 0,
-        timeStampsEnd: 0,
-        timeStampsStart: 0,
-        playerTag: '',
-        playerName: '',
-        townhallLevel: 0,
-        mapPosition: 0,
-        opponentAttacks: 0,
-        attacks: [],
-        defenses: [],
-      );
+          numberOfWars: 0,
+          timeStampsEnd: 0,
+          timeStampsStart: 0,
+          playerTag: '',
+          playerName: '',
+          townhallLevel: 0,
+          mapPosition: 0,
+          opponentAttacks: 0,
+          attacks: [],
+          defenses: [],
+          warType: '');
 
       for (var warData in items) {
+        final warInfo = warData['war_data'];
+        String warType = warInfo['type'];
         final memberData = warData['member_data'];
         final attacksData = warData['attacks'] as List<dynamic>;
         final defensesData = warData['defenses'] as List<dynamic>;
@@ -62,17 +64,17 @@ class PlayerStatsService {
             fresh: attackData['fresh'],
             defender: defender,
             attackOrder: attackData['attack_order'],
+            warType: warType,
           );
         }).toList();
 
         List<Defense> defenses = defensesData.map((defenseData) {
           final attacker = Attacker(
-            tag: defenseData['attacker']['tag'],
-            name: defenseData['attacker']['name'],
-            townhallLevel: defenseData['attacker']['townhallLevel'],
-            mapPosition: defenseData['attacker']['mapPosition'],
-            opponentAttacks: defenseData['attacker']['opponentAttacks'],
-          );
+              tag: defenseData['attacker']['tag'],
+              name: defenseData['attacker']['name'],
+              townhallLevel: defenseData['attacker']['townhallLevel'],
+              mapPosition: defenseData['attacker']['mapPosition'],
+              opponentAttacks: defenseData['attacker']['opponentAttacks']);
 
           return Defense(
             attackerTag: defenseData['attackerTag'],
@@ -85,43 +87,68 @@ class PlayerStatsService {
             fresh: defenseData['fresh'],
             attacker: attacker,
             attackOrder: defenseData['attack_order'],
+            warType: warType,
           );
         }).toList();
 
         // Mise à jour des statistiques agrégées
         aggregatedStats = WarStats(
-          numberOfWars: limit,
-          timeStampsStart: aggregatedStats.timeStampsStart,
-          timeStampsEnd: aggregatedStats.timeStampsEnd,
-          playerTag: memberData['tag'],
-          playerName: memberData['name'],
-          townhallLevel: memberData['townhallLevel'],
-          mapPosition:
-              (aggregatedStats.mapPosition + memberData['mapPosition']).toInt(),
-          opponentAttacks:
-              (aggregatedStats.opponentAttacks + memberData['opponentAttacks'])
-                  .toInt(),
-          attacks: [...aggregatedStats.attacks, ...attacks],
-          defenses: [...aggregatedStats.defenses, ...defenses],
-        );
+            numberOfWars: limit,
+            timeStampsStart: aggregatedStats.timeStampsStart,
+            timeStampsEnd: aggregatedStats.timeStampsEnd,
+            playerTag: memberData['tag'],
+            playerName: memberData['name'],
+            townhallLevel: memberData['townhallLevel'],
+            mapPosition:
+                (aggregatedStats.mapPosition + memberData['mapPosition'])
+                    .toInt(),
+            opponentAttacks: (aggregatedStats.opponentAttacks +
+                    memberData['opponentAttacks'])
+                .toInt(),
+            attacks: [...aggregatedStats.attacks, ...attacks],
+            defenses: [...aggregatedStats.defenses, ...defenses],
+            warType: aggregatedStats.warType);
       }
 
       // Calcul des moyennes après agrégation
       return WarStats(
-        numberOfWars: aggregatedStats.numberOfWars,
-        timeStampsStart: timestampStart,
-        timeStampsEnd: timestampEnd,
-        playerTag: aggregatedStats.playerTag,
-        playerName: aggregatedStats.playerName,
-        townhallLevel: aggregatedStats.townhallLevel,
-        mapPosition: (aggregatedStats.mapPosition / items.length).round(),
-        opponentAttacks: aggregatedStats.opponentAttacks,
-        attacks: aggregatedStats.attacks,
-        defenses: aggregatedStats.defenses,
-      );
+          numberOfWars: aggregatedStats.numberOfWars,
+          timeStampsStart: timestampStart,
+          timeStampsEnd: timestampEnd,
+          playerTag: aggregatedStats.playerTag,
+          playerName: aggregatedStats.playerName,
+          townhallLevel: aggregatedStats.townhallLevel,
+          mapPosition: (aggregatedStats.mapPosition / items.length).round(),
+          opponentAttacks: aggregatedStats.opponentAttacks,
+          attacks: aggregatedStats.attacks,
+          defenses: aggregatedStats.defenses,
+          warType: aggregatedStats.warType);
     } else {
       throw Exception(
           'Failed to load player war hits. Status code: ${response.statusCode}');
     }
+  }
+
+  WarStats filterWarStats(
+      WarStats originalStats, List<String> warTypesToFilter) {
+    List<Attack> filteredAttacks = originalStats.attacks
+        .where((attack) => warTypesToFilter.contains(attack.warType))
+        .toList();
+    List<Defense> filteredDefenses = originalStats.defenses
+        .where((defense) => warTypesToFilter.contains(defense.warType))
+        .toList();
+
+    return WarStats(
+        numberOfWars: filteredAttacks.length + filteredDefenses.length,
+        timeStampsStart: originalStats.timeStampsStart,
+        timeStampsEnd: originalStats.timeStampsEnd,
+        playerTag: originalStats.playerTag,
+        playerName: originalStats.playerName,
+        townhallLevel: originalStats.townhallLevel,
+        mapPosition: originalStats.mapPosition,
+        opponentAttacks: originalStats.opponentAttacks,
+        attacks: filteredAttacks,
+        defenses: filteredDefenses,
+        warType: warTypesToFilter.join(", "));
   }
 }
