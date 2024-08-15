@@ -337,407 +337,34 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
     String formattedEndDate = DateFormat.yMd(userLocale.toString()).format(
         DateTime.fromMillisecondsSinceEpoch(warStats!.timeStampsEnd * 1000));
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  Text(AppLocalizations.of(context)!.allTownHalls,
-                      style: Theme.of(context).textTheme.titleSmall),
-                  if (filterType == "dateRange")
-                    Text("($formattedStartDate - $formattedEndDate)",
-                        style: Theme.of(context).textTheme.bodyMedium),
-                  if (filterType == "lastXWars")
-                    Text(AppLocalizations.of(context)!.lastXwars(warDataLimit),
-                        style: Theme.of(context).textTheme.bodyMedium),
-                  if (filterType == "season")
-                    Text(
-                        AppLocalizations.of(context)!.seasonDate(
-                            DateFormat.yMMMM(userLocale.toString())
-                                .format(currentSeasonDate)),
-                        style: Theme.of(context).textTheme.bodyMedium),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          Text(AppLocalizations.of(context)!.attacks),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(children: [
-                                CachedNetworkImage(
-                                    imageUrl:
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
-                                    width: 16,
-                                    height: 16,
-                                    fit: BoxFit.cover),
-                                SizedBox(width: 8),
-                                Text(warStats!.averageStars.toStringAsFixed(2))
-                              ]),
-                              Row(
-                                children: [
-                                  CachedNetworkImage(
-                                      imageUrl:
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
-                                      width: 16,
-                                      height: 16,
-                                      fit: BoxFit.cover),
-                                  SizedBox(width: 8),
-                                  Text(warStats!.averageDestructionPercentage
-                                      .toStringAsFixed(2))
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  CachedNetworkImage(
-                                      imageUrl:
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
-                                      width: 16,
-                                      height: 16,
-                                      fit: BoxFit.cover),
-                                  SizedBox(width: 8),
-                                  Text(warStats!.attacks.length.toString())
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  ...generateStars(3, 16),
-                                  SizedBox(width: 8),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              "${(warStats!.numberOfStarsAttacks(3) / (warStats!.attacks.isEmpty ? 1 : warStats!.attacks.length) * 100).toStringAsFixed(0)}%",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium,
-                                        ),
-                                        WidgetSpan(
-                                          child: Transform.translate(
-                                            offset: const Offset(0, -6),
-                                            child: Text(
-                                              "(${warStats!.numberOfStarsAttacks(3)})",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  ...generateStars(2, 16),
-                                  SizedBox(width: 8),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              "${(warStats!.numberOfStarsAttacks(2) / (warStats!.attacks.isEmpty ? 1 : warStats!.attacks.length) * 100).toStringAsFixed(0)}%",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium,
-                                        ),
-                                        WidgetSpan(
-                                          child: Transform.translate(
-                                            offset: const Offset(0, -6),
-                                            child: Text(
-                                              "(${warStats!.numberOfStarsAttacks(2)})",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  ...generateStars(1, 16),
-                                  SizedBox(width: 8),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              "${(warStats!.numberOfStarsAttacks(1) / (warStats!.attacks.isEmpty ? 1 : warStats!.attacks.length) * 100).toStringAsFixed(0)}%",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium,
-                                        ),
-                                        WidgetSpan(
-                                          child: Transform.translate(
-                                            offset: const Offset(0, -6),
-                                            child: Text(
-                                              "(${warStats!.numberOfStarsAttacks(1)})",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  ...generateStars(0, 16),
-                                  SizedBox(width: 8),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              "${(warStats!.numberOfStarsAttacks(0) / (warStats!.attacks.isEmpty ? 1 : warStats!.attacks.length) * 100).toStringAsFixed(0)}%",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium,
-                                        ),
-                                        WidgetSpan(
-                                          child: Transform.translate(
-                                            offset: const Offset(0, -6),
-                                            child: Text(
-                                              "(${warStats!.numberOfStarsAttacks(0)})",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(AppLocalizations.of(context)!.defenses),
-                          Row(
-                            children: [
-                              CachedNetworkImage(
-                                  imageUrl:
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
-                                  width: 16,
-                                  height: 16,
-                                  fit: BoxFit.cover),
-                              SizedBox(width: 8),
-                              Text(warStats!.averageDefenseStars
-                                  .toStringAsFixed(2)),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              CachedNetworkImage(
-                                  imageUrl:
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
-                                  width: 16,
-                                  height: 16,
-                                  fit: BoxFit.cover),
-                              SizedBox(width: 8),
-                              Text(warStats!.averageDefenseDestructionPercentage
-                                  .toStringAsFixed(0)),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              CachedNetworkImage(
-                                  imageUrl:
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png",
-                                  width: 16,
-                                  height: 16,
-                                  fit: BoxFit.cover),
-                              SizedBox(width: 8),
-                              Text(warStats!.defenses.length.toString()),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  ...generateStars(3, 16),
-                                  SizedBox(width: 8),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              "${(warStats!.numberOfStarsDefenses(3) / (warStats!.defenses.isEmpty ? 1 : warStats!.defenses.length) * 100).toStringAsFixed(0)}%",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium,
-                                        ),
-                                        WidgetSpan(
-                                          child: Transform.translate(
-                                            offset: const Offset(0, -6),
-                                            child: Text(
-                                              "(${warStats!.numberOfStarsDefenses(3)})",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  ...generateStars(2, 16),
-                                  SizedBox(width: 8),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              "${(warStats!.numberOfStarsDefenses(2) / (warStats!.defenses.isEmpty ? 1 : warStats!.defenses.length) * 100).toStringAsFixed(0)}%",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium,
-                                        ),
-                                        WidgetSpan(
-                                          child: Transform.translate(
-                                            offset: const Offset(0, -6),
-                                            child: Text(
-                                              "(${warStats!.numberOfStarsDefenses(2)})",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  ...generateStars(1, 16),
-                                  SizedBox(width: 8),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              "${(warStats!.numberOfStarsDefenses(1) / (warStats!.defenses.isEmpty ? 1 : warStats!.defenses.length) * 100).toStringAsFixed(0)}%",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium,
-                                        ),
-                                        WidgetSpan(
-                                          child: Transform.translate(
-                                            offset: const Offset(0, -6),
-                                            child: Text(
-                                              "(${warStats!.numberOfStarsDefenses(1)})",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  ...generateStars(0, 16),
-                                  SizedBox(width: 8),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              "${(warStats!.numberOfStarsDefenses(0) / (warStats!.defenses.isEmpty ? 1 : warStats!.defenses.length) * 100).toStringAsFixed(0)}%",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium,
-                                        ),
-                                        WidgetSpan(
-                                          child: Transform.translate(
-                                            offset: const Offset(0, -6),
-                                            child: Text(
-                                              "(${warStats!.numberOfStarsDefenses(0)})",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        for (TownhallAttackDefenseStats thStats in thStatsList)
+    if (warStats!.attacks.isNotEmpty) {
+      return Column(
+        children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
             child: Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(8),
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: thStats.townHallImageUrl,
-                          width: 30,
-                          height: 30,
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                            AppLocalizations.of(context)!
-                                .townHallLevelLevel(thStats.townhallLevel),
-                            style: Theme.of(context).textTheme.titleSmall),
-                      ],
-                    ),
+                    Text(AppLocalizations.of(context)!.allTownHalls,
+                        style: Theme.of(context).textTheme.titleSmall),
+                    if (filterType == "dateRange")
+                      Text("($formattedStartDate - $formattedEndDate)",
+                          style: Theme.of(context).textTheme.bodyMedium),
+                    if (filterType == "lastXWars")
+                      Text(
+                          AppLocalizations.of(context)!.lastXwars(warDataLimit),
+                          style: Theme.of(context).textTheme.bodyMedium),
+                    if (filterType == "season")
+                      Text(
+                          AppLocalizations.of(context)!.seasonDate(
+                              DateFormat.yMMMM(userLocale.toString())
+                                  .format(currentSeasonDate)),
+                          style: Theme.of(context).textTheme.bodyMedium),
                     SizedBox(height: 16),
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Column(
                           children: [
@@ -753,8 +380,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                       height: 16,
                                       fit: BoxFit.cover),
                                   SizedBox(width: 8),
-                                  Text(thStats.averageAttackStars
-                                      .toStringAsFixed(2))
+                                  Text(
+                                      warStats!.averageStars.toStringAsFixed(2))
                                 ]),
                                 Row(
                                   children: [
@@ -765,8 +392,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                         height: 16,
                                         fit: BoxFit.cover),
                                     SizedBox(width: 8),
-                                    Text(thStats
-                                        .averageAttackDestructionPercentage
+                                    Text(warStats!.averageDestructionPercentage
                                         .toStringAsFixed(2))
                                   ],
                                 ),
@@ -779,7 +405,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                         height: 16,
                                         fit: BoxFit.cover),
                                     SizedBox(width: 8),
-                                    Text(thStats.totalAttacks.toString())
+                                    Text(warStats!.attacks.length.toString())
                                   ],
                                 ),
                               ],
@@ -797,7 +423,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                         children: [
                                           TextSpan(
                                             text:
-                                                "${(thStats.threeStarsAttacks / thStats.totalAttacks * 100).toStringAsFixed(0)}%",
+                                                "${(warStats!.numberOfStarsAttacks(3) / (warStats!.attacks.isEmpty ? 1 : warStats!.attacks.length) * 100).toStringAsFixed(0)}%",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium,
@@ -806,7 +432,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                             child: Transform.translate(
                                               offset: const Offset(0, -6),
                                               child: Text(
-                                                "(${thStats.threeStarsAttacks})",
+                                                "(${warStats!.numberOfStarsAttacks(3)})",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall,
@@ -827,7 +453,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                         children: [
                                           TextSpan(
                                             text:
-                                                "${(thStats.twoStarsAttacks / thStats.totalAttacks * 100).toStringAsFixed(0)}%",
+                                                "${(warStats!.numberOfStarsAttacks(2) / (warStats!.attacks.isEmpty ? 1 : warStats!.attacks.length) * 100).toStringAsFixed(0)}%",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium,
@@ -836,7 +462,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                             child: Transform.translate(
                                               offset: const Offset(0, -6),
                                               child: Text(
-                                                "(${thStats.twoStarsAttacks})",
+                                                "(${warStats!.numberOfStarsAttacks(2)})",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall,
@@ -857,7 +483,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                         children: [
                                           TextSpan(
                                             text:
-                                                "${(thStats.oneStarAttacks / thStats.totalAttacks * 100).toStringAsFixed(0)}%",
+                                                "${(warStats!.numberOfStarsAttacks(1) / (warStats!.attacks.isEmpty ? 1 : warStats!.attacks.length) * 100).toStringAsFixed(0)}%",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium,
@@ -866,7 +492,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                             child: Transform.translate(
                                               offset: const Offset(0, -6),
                                               child: Text(
-                                                "(${thStats.oneStarAttacks})",
+                                                "(${warStats!.numberOfStarsAttacks(1)})",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall,
@@ -887,7 +513,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                         children: [
                                           TextSpan(
                                             text:
-                                                "${(thStats.zeroStarsAttacks / thStats.totalAttacks * 100).toStringAsFixed(0)}%",
+                                                "${(warStats!.numberOfStarsAttacks(0) / (warStats!.attacks.isEmpty ? 1 : warStats!.attacks.length) * 100).toStringAsFixed(0)}%",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium,
@@ -896,7 +522,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                             child: Transform.translate(
                                               offset: const Offset(0, -6),
                                               child: Text(
-                                                "(${thStats.zeroStarsAttacks})",
+                                                "(${warStats!.numberOfStarsAttacks(0)})",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall,
@@ -915,46 +541,43 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                         Column(
                           children: [
                             Text(AppLocalizations.of(context)!.defenses),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                Row(children: [
-                                  CachedNetworkImage(
-                                      imageUrl:
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
-                                      width: 16,
-                                      height: 16,
-                                      fit: BoxFit.cover),
-                                  SizedBox(width: 8),
-                                  Text(thStats.averageDefenseStars
-                                      .toStringAsFixed(2))
-                                ]),
-                                Row(
-                                  children: [
-                                    CachedNetworkImage(
-                                        imageUrl:
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
-                                        width: 16,
-                                        height: 16,
-                                        fit: BoxFit.cover),
-                                    SizedBox(width: 8),
-                                    Text(thStats
-                                        .averageDefenseDestructionPercentage
-                                        .toStringAsFixed(2))
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    CachedNetworkImage(
-                                        imageUrl:
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png",
-                                        width: 16,
-                                        height: 16,
-                                        fit: BoxFit.cover),
-                                    SizedBox(width: 8),
-                                    Text(thStats.totalDefenses.toString())
-                                  ],
-                                ),
+                                CachedNetworkImage(
+                                    imageUrl:
+                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
+                                    width: 16,
+                                    height: 16,
+                                    fit: BoxFit.cover),
+                                SizedBox(width: 8),
+                                Text(warStats!.averageDefenseStars
+                                    .toStringAsFixed(2)),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                CachedNetworkImage(
+                                    imageUrl:
+                                        "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
+                                    width: 16,
+                                    height: 16,
+                                    fit: BoxFit.cover),
+                                SizedBox(width: 8),
+                                Text(warStats!
+                                    .averageDefenseDestructionPercentage
+                                    .toStringAsFixed(0)),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                CachedNetworkImage(
+                                    imageUrl:
+                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png",
+                                    width: 16,
+                                    height: 16,
+                                    fit: BoxFit.cover),
+                                SizedBox(width: 8),
+                                Text(warStats!.defenses.length.toString()),
                               ],
                             ),
                             SizedBox(height: 16),
@@ -970,7 +593,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                         children: [
                                           TextSpan(
                                             text:
-                                                "${(thStats.threeStarsDefenses / (thStats.totalDefenses == 0 ? 1 : thStats.totalDefenses) * 100).toStringAsFixed(0)}%",
+                                                "${(warStats!.numberOfStarsDefenses(3) / (warStats!.defenses.isEmpty ? 1 : warStats!.defenses.length) * 100).toStringAsFixed(0)}%",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium,
@@ -979,7 +602,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                             child: Transform.translate(
                                               offset: const Offset(0, -6),
                                               child: Text(
-                                                "(${thStats.threeStarsDefenses})",
+                                                "(${warStats!.numberOfStarsDefenses(3)})",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall,
@@ -1000,7 +623,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                         children: [
                                           TextSpan(
                                             text:
-                                                "${(thStats.twoStarsDefenses / (thStats.totalDefenses == 0 ? 1 : thStats.totalDefenses) * 100).toStringAsFixed(0)}%",
+                                                "${(warStats!.numberOfStarsDefenses(2) / (warStats!.defenses.isEmpty ? 1 : warStats!.defenses.length) * 100).toStringAsFixed(0)}%",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium,
@@ -1009,7 +632,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                             child: Transform.translate(
                                               offset: const Offset(0, -6),
                                               child: Text(
-                                                "(${thStats.twoStarsDefenses})",
+                                                "(${warStats!.numberOfStarsDefenses(2)})",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall,
@@ -1030,7 +653,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                         children: [
                                           TextSpan(
                                             text:
-                                                "${(thStats.oneStarDefenses / (thStats.totalDefenses == 0 ? 1 : thStats.totalDefenses) * 100).toStringAsFixed(0)}%",
+                                                "${(warStats!.numberOfStarsDefenses(1) / (warStats!.defenses.isEmpty ? 1 : warStats!.defenses.length) * 100).toStringAsFixed(0)}%",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium,
@@ -1039,7 +662,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                             child: Transform.translate(
                                               offset: const Offset(0, -6),
                                               child: Text(
-                                                "(${thStats.oneStarDefenses})",
+                                                "(${warStats!.numberOfStarsDefenses(1)})",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall,
@@ -1060,7 +683,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                         children: [
                                           TextSpan(
                                             text:
-                                                "${(thStats.zeroStarsDefenses / (thStats.totalDefenses == 0 ? 1 : thStats.totalDefenses) * 100).toStringAsFixed(0)}%",
+                                                "${(warStats!.numberOfStarsDefenses(0) / (warStats!.defenses.isEmpty ? 1 : warStats!.defenses.length) * 100).toStringAsFixed(0)}%",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium,
@@ -1069,7 +692,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                             child: Transform.translate(
                                               offset: const Offset(0, -6),
                                               child: Text(
-                                                "(${thStats.zeroStarsDefenses})",
+                                                "(${warStats!.numberOfStarsDefenses(0)})",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall,
@@ -1092,8 +715,408 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
               ),
             ),
           ),
-      ],
-    );
+          for (TownhallAttackDefenseStats thStats in thStatsList)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: thStats.townHallImageUrl,
+                            width: 30,
+                            height: 30,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                              AppLocalizations.of(context)!
+                                  .townHallLevelLevel(thStats.townhallLevel),
+                              style: Theme.of(context).textTheme.titleSmall),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              Text(AppLocalizations.of(context)!.attacks),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(children: [
+                                    CachedNetworkImage(
+                                        imageUrl:
+                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
+                                        width: 16,
+                                        height: 16,
+                                        fit: BoxFit.cover),
+                                    SizedBox(width: 8),
+                                    Text(thStats.averageAttackStars
+                                        .toStringAsFixed(2))
+                                  ]),
+                                  Row(
+                                    children: [
+                                      CachedNetworkImage(
+                                          imageUrl:
+                                              "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
+                                          width: 16,
+                                          height: 16,
+                                          fit: BoxFit.cover),
+                                      SizedBox(width: 8),
+                                      Text(thStats
+                                          .averageAttackDestructionPercentage
+                                          .toStringAsFixed(2))
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      CachedNetworkImage(
+                                          imageUrl:
+                                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
+                                          width: 16,
+                                          height: 16,
+                                          fit: BoxFit.cover),
+                                      SizedBox(width: 8),
+                                      Text(thStats.totalAttacks.toString())
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 16),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      ...generateStars(3, 16),
+                                      SizedBox(width: 8),
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  "${(thStats.threeStarsAttacks / thStats.totalAttacks * 100).toStringAsFixed(0)}%",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                            ),
+                                            WidgetSpan(
+                                              child: Transform.translate(
+                                                offset: const Offset(0, -6),
+                                                child: Text(
+                                                  "(${thStats.threeStarsAttacks})",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      ...generateStars(2, 16),
+                                      SizedBox(width: 8),
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  "${(thStats.twoStarsAttacks / thStats.totalAttacks * 100).toStringAsFixed(0)}%",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                            ),
+                                            WidgetSpan(
+                                              child: Transform.translate(
+                                                offset: const Offset(0, -6),
+                                                child: Text(
+                                                  "(${thStats.twoStarsAttacks})",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      ...generateStars(1, 16),
+                                      SizedBox(width: 8),
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  "${(thStats.oneStarAttacks / thStats.totalAttacks * 100).toStringAsFixed(0)}%",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                            ),
+                                            WidgetSpan(
+                                              child: Transform.translate(
+                                                offset: const Offset(0, -6),
+                                                child: Text(
+                                                  "(${thStats.oneStarAttacks})",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      ...generateStars(0, 16),
+                                      SizedBox(width: 8),
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  "${(thStats.zeroStarsAttacks / thStats.totalAttacks * 100).toStringAsFixed(0)}%",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                            ),
+                                            WidgetSpan(
+                                              child: Transform.translate(
+                                                offset: const Offset(0, -6),
+                                                child: Text(
+                                                  "(${thStats.zeroStarsAttacks})",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(AppLocalizations.of(context)!.defenses),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(children: [
+                                    CachedNetworkImage(
+                                        imageUrl:
+                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
+                                        width: 16,
+                                        height: 16,
+                                        fit: BoxFit.cover),
+                                    SizedBox(width: 8),
+                                    Text(thStats.averageDefenseStars
+                                        .toStringAsFixed(2))
+                                  ]),
+                                  Row(
+                                    children: [
+                                      CachedNetworkImage(
+                                          imageUrl:
+                                              "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
+                                          width: 16,
+                                          height: 16,
+                                          fit: BoxFit.cover),
+                                      SizedBox(width: 8),
+                                      Text(thStats
+                                          .averageDefenseDestructionPercentage
+                                          .toStringAsFixed(2))
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      CachedNetworkImage(
+                                          imageUrl:
+                                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png",
+                                          width: 16,
+                                          height: 16,
+                                          fit: BoxFit.cover),
+                                      SizedBox(width: 8),
+                                      Text(thStats.totalDefenses.toString())
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 16),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      ...generateStars(3, 16),
+                                      SizedBox(width: 8),
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  "${(thStats.threeStarsDefenses / (thStats.totalDefenses == 0 ? 1 : thStats.totalDefenses) * 100).toStringAsFixed(0)}%",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                            ),
+                                            WidgetSpan(
+                                              child: Transform.translate(
+                                                offset: const Offset(0, -6),
+                                                child: Text(
+                                                  "(${thStats.threeStarsDefenses})",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      ...generateStars(2, 16),
+                                      SizedBox(width: 8),
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  "${(thStats.twoStarsDefenses / (thStats.totalDefenses == 0 ? 1 : thStats.totalDefenses) * 100).toStringAsFixed(0)}%",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                            ),
+                                            WidgetSpan(
+                                              child: Transform.translate(
+                                                offset: const Offset(0, -6),
+                                                child: Text(
+                                                  "(${thStats.twoStarsDefenses})",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      ...generateStars(1, 16),
+                                      SizedBox(width: 8),
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  "${(thStats.oneStarDefenses / (thStats.totalDefenses == 0 ? 1 : thStats.totalDefenses) * 100).toStringAsFixed(0)}%",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                            ),
+                                            WidgetSpan(
+                                              child: Transform.translate(
+                                                offset: const Offset(0, -6),
+                                                child: Text(
+                                                  "(${thStats.oneStarDefenses})",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      ...generateStars(0, 16),
+                                      SizedBox(width: 8),
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  "${(thStats.zeroStarsDefenses / (thStats.totalDefenses == 0 ? 1 : thStats.totalDefenses) * 100).toStringAsFixed(0)}%",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                            ),
+                                            WidgetSpan(
+                                              child: Transform.translate(
+                                                offset: const Offset(0, -6),
+                                                child: Text(
+                                                  "(${thStats.zeroStarsDefenses})",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          SizedBox(height: 16),
+          Card(
+              child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(AppLocalizations.of(context)?.noDataAvailable ??
+                      'No data available'))),
+          SizedBox(height: 32),
+          CachedNetworkImage(
+            imageUrl:
+                'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
+            height: 250,
+            width: 200,
+          ),
+        ],
+      );
+    }
   }
 
   Widget buildAttackDetails(BuildContext context) {
