@@ -1,38 +1,44 @@
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class PlayerStatsHeader extends StatefulWidget {
-  final String playerTag;
+class PlayerStatsHeader extends StatelessWidget {
   final String playerName;
-  final int townhallLevel;
-  final int mapPosition;
-  final int opponentAttacks;
-  final String townHallImageUrl;
+  final String playerTag;
+  final String townHallPic;
+  final bool isCWLChecked;
+  final bool isRandomChecked;
+  final bool isFriendlyChecked;
+  final VoidCallback onCWLChanged;
+  final VoidCallback onRandomChanged;
+  final VoidCallback onFriendlyChanged;
+  final VoidCallback onBack;
+  final VoidCallback onFilter;
 
   PlayerStatsHeader({
-    required this.playerTag,
+    super.key,
     required this.playerName,
-    required this.townhallLevel,
-    required this.mapPosition,
-    required this.opponentAttacks,
-    required this.townHallImageUrl,
+    required this.playerTag,
+    required this.townHallPic,
+    required this.isCWLChecked,
+    required this.isRandomChecked,
+    required this.isFriendlyChecked,
+    required this.onCWLChanged,
+    required this.onRandomChanged,
+    required this.onFriendlyChanged,
+    required this.onBack,
+    required this.onFilter,
   });
 
-  @override
-  PlayerStatsHeaderState createState() => PlayerStatsHeaderState();
-}
-
-class PlayerStatsHeaderState extends State<PlayerStatsHeader> {
   @override
   Widget build(BuildContext context) {
     return Stack(
       clipBehavior: Clip.none,
       children: <Widget>[
         SizedBox(
-          height: 220,
+          height: 280,
           width: double.infinity,
           child: ImageFiltered(
             imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
@@ -60,28 +66,62 @@ class PlayerStatsHeaderState extends State<PlayerStatsHeader> {
               Center(
                 child: Column(
                   children: [
-                    Text(AppLocalizations.of(context)!.warStats,
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            color: Colors.white,
-                          ),
+                    Text(
+                      AppLocalizations.of(context)!.warStats,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.copyWith(color: Colors.white),
                     ),
                     SizedBox(height: 8),
                     CachedNetworkImage(
-                      imageUrl: widget.townHallImageUrl,
+                      imageUrl: townHallPic,
                       width: 50,
                     ),
                     SizedBox(height: 8),
                     Text(
-                      widget.playerName,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Colors.white,
-                          ),
+                      playerName,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: Colors.white),
                     ),
                     Text(
-                      widget.playerTag,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: Colors.grey,
-                          ),
+                      playerTag,
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: Colors.grey),
+                    ),
+                    SizedBox(height: 8),
+                    Wrap(
+                      spacing: 0,
+                      runSpacing: 0,
+                      children: [
+                        FilterChip(
+                          visualDensity: VisualDensity.compact,
+                          selectedColor: Theme.of(context).colorScheme.primary,
+                          label: Text(AppLocalizations.of(context)!.cwl),
+                          selected: isCWLChecked,
+                          onSelected: (bool selected) => onCWLChanged(),
+                        ),
+                        SizedBox(width: 8),
+                        FilterChip(
+                          visualDensity: VisualDensity.compact,
+                          selectedColor: Theme.of(context).colorScheme.primary,
+                          label: Text(AppLocalizations.of(context)!.random),
+                          selected: isRandomChecked,
+                          onSelected: (bool selected) => onRandomChanged(),
+                        ),
+                        SizedBox(width: 8),
+                        FilterChip(
+                          visualDensity: VisualDensity.compact,
+                          selectedColor: Theme.of(context).colorScheme.primary,
+                          label: Text(AppLocalizations.of(context)!.friendly),
+                          selected: isFriendlyChecked,
+                          onSelected: (bool selected) => onFriendlyChanged(),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 8),
                   ],
@@ -96,7 +136,15 @@ class PlayerStatsHeaderState extends State<PlayerStatsHeader> {
           child: IconButton(
             icon: Icon(Icons.arrow_back,
                 color: Theme.of(context).colorScheme.onPrimary, size: 32),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: onBack,
+          ),
+        ),
+        Positioned(
+          top: 30,
+          right: 10,
+          child: IconButton(
+            icon: Icon(Icons.filter_list),
+            onPressed: onFilter,
           ),
         ),
       ],

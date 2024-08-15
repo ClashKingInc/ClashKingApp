@@ -195,6 +195,7 @@ class Attack {
   final Defender defender;
   final int attackOrder;
   final String warType;
+  final int warStartTime;
 
   Attack({
     required this.attackerTag,
@@ -207,6 +208,7 @@ class Attack {
     required this.defender,
     required this.attackOrder,
     required this.warType,
+    required this.warStartTime,
   });
 }
 
@@ -221,6 +223,7 @@ class Defense {
   final Attacker attacker;
   final int attackOrder;
   final String warType;
+  final int warStartTime;
 
   Defense({
     required this.attackerTag,
@@ -233,6 +236,7 @@ class Defense {
     required this.attacker,
     required this.attackOrder,
     required this.warType,
+    required this.warStartTime,
   });
 }
 

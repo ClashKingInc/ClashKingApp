@@ -21,7 +21,7 @@ class PlayerStatsService {
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final Map<String, dynamic> jsonResponse = json.decode(utf8.decode(response.bodyBytes));
       final List<dynamic> items = jsonResponse['items'];
 
       WarStats aggregatedStats = WarStats(
@@ -41,6 +41,7 @@ class PlayerStatsService {
         final warInfo = warData['war_data'];
         String warType = warInfo['type'];
         final memberData = warData['member_data'];
+        final warStartTime = DateTime.parse(warInfo['startTime']).millisecondsSinceEpoch;
         final attacksData = warData['attacks'] as List<dynamic>;
         final defensesData = warData['defenses'] as List<dynamic>;
 
@@ -65,6 +66,7 @@ class PlayerStatsService {
             defender: defender,
             attackOrder: attackData['attack_order'],
             warType: warType,
+            warStartTime: warStartTime,
           );
         }).toList();
 
@@ -88,6 +90,7 @@ class PlayerStatsService {
             attacker: attacker,
             attackOrder: defenseData['attack_order'],
             warType: warType,
+            warStartTime: warStartTime,
           );
         }).toList();
 

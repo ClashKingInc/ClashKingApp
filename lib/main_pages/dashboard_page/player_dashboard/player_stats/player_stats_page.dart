@@ -2,18 +2,21 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
 import 'package:clashkingapp/classes/profile/stats/player_stats_service.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_stats/player_stats_header.dart';
+import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:clashkingapp/classes/profile/stats/player_war_stats.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 
 class PlayerStatsScreen extends StatefulWidget {
   final ProfileInfo profileInfo;
+  final List<String> user;
 
-  PlayerStatsScreen({super.key, required this.profileInfo});
+  PlayerStatsScreen({super.key, required this.profileInfo, required this.user});
 
   @override
   PlayerStatsScreenState createState() => PlayerStatsScreenState();
@@ -32,6 +35,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
   late int warDataStartDate;
   late int warDataEndDate;
   late int warDataLimit;
+  int _currentSegment = 1;
 
   @override
   void initState() {
@@ -145,7 +149,9 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
     defaultWarStats = await service.fetchPlayerWarHits();
     warStats = defaultWarStats;
     filterType = "lastXWars";
-    setState(() {});
+    setState(() {
+      applyFilters();
+    });
   }
 
   void selectSeason(int year, int month) async {
@@ -153,6 +159,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
     warDataStartDate = dates[0].millisecondsSinceEpoch ~/ 1000;
     warDataEndDate = dates[1].millisecondsSinceEpoch ~/ 1000;
     warDataLimit = 0;
+    currentSeasonDate = dates[1];
     PlayerStatsService service = PlayerStatsService(
         playerTag: widget.profileInfo.tag,
         timestampStart: warDataStartDate,
@@ -160,7 +167,9 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
     defaultWarStats = await service.fetchPlayerWarHits();
     warStats = defaultWarStats;
     filterType = "season";
-    setState(() {});
+    setState(() {
+      applyFilters();
+    });
   }
 
   void selectDateRange(DateTime startDate, DateTime endDate) async {
@@ -175,7 +184,9 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
     defaultWarStats = await service.fetchPlayerWarHits();
     warStats = defaultWarStats;
     filterType = "dateRange";
-    setState(() {});
+    setState(() {
+      applyFilters();
+    });
   }
 
   void applyFilters() {
@@ -209,12 +220,32 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
         child: Column(
           children: [
             PlayerStatsHeader(
-              playerTag: widget.profileInfo.tag,
               playerName: widget.profileInfo.name,
-              townhallLevel: widget.profileInfo.warStats!.townhallLevel,
-              townHallImageUrl: widget.profileInfo.townHallPic,
-              mapPosition: widget.profileInfo.warStats!.mapPosition,
-              opponentAttacks: widget.profileInfo.warStats!.opponentAttacks,
+              playerTag: widget.profileInfo.tag,
+              townHallPic: widget.profileInfo.townHallPic,
+              isCWLChecked: isCWLChecked,
+              isRandomChecked: isRandomChecked,
+              isFriendlyChecked: isFriendlyChecked,
+              onCWLChanged: () {
+                setState(() {
+                  isCWLChecked = !isCWLChecked;
+                  applyFilters();
+                });
+              },
+              onRandomChanged: () {
+                setState(() {
+                  isRandomChecked = !isRandomChecked;
+                  applyFilters();
+                });
+              },
+              onFriendlyChanged: () {
+                setState(() {
+                  isFriendlyChecked = !isFriendlyChecked;
+                  applyFilters();
+                });
+              },
+              onBack: () => Navigator.of(context).pop(),
+              onFilter: showFilterDialog,
             ),
             ScrollableTab(
               tabBarDecoration: BoxDecoration(
@@ -228,8 +259,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                 setState(() {});
               },
               tabs: [
-                Tab(text: AppLocalizations.of(context)!.war),
-                Tab(text: AppLocalizations.of(context)!.league),
+                Tab(text: AppLocalizations.of(context)!.stats),
+                Tab(text: AppLocalizations.of(context)!.details),
               ],
               children: [
                 Column(
@@ -239,7 +270,52 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                         : buildWarStatsView(context),
                   ],
                 ),
-                Text(AppLocalizations.of(context)!.comingSoon),
+                Column(
+                  children: [
+                    SizedBox(height: 8),
+                    CustomSlidingSegmentedControl<int>(
+                      initialValue: _currentSegment,
+                      children: {
+                        1: Text(AppLocalizations.of(context)!.attack),
+                        2: Text(AppLocalizations.of(context)!.defense),
+                      },
+                      decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .tertiary
+                            .withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      thumbDecoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(6),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 4.0,
+                            spreadRadius: 1.0,
+                            offset: Offset(0.0, 2.0),
+                          ),
+                        ],
+                      ),
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInToLinear,
+                      onValueChanged: (v) {
+                        setState(() {
+                          _currentSegment = v;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 8),
+                    _currentSegment == 1
+                        ? warStats == null
+                            ? Center(child: CircularProgressIndicator())
+                            : buildAttackDetails(context)
+                        : warStats == null
+                            ? Center(child: CircularProgressIndicator())
+                            : buildDefenseDetails(context),
+                  ],
+                )
               ],
             ),
           ],
@@ -263,70 +339,6 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
 
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Wrap(
-                spacing: 0,
-                runSpacing: 0,
-                children: [
-                  Row(mainAxisSize: MainAxisSize.min, children: [
-                    Checkbox(
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      value: isCWLChecked,
-                      onChanged: (value) {
-                        setState(() {
-                          isCWLChecked = value ?? false;
-                          applyFilters();
-                        });
-                      },
-                    ),
-                    Text(AppLocalizations.of(context)!.cwl),
-                    SizedBox(width: 16),
-                  ]),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Checkbox(
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        value: isRandomChecked,
-                        onChanged: (value) {
-                          setState(() {
-                            isRandomChecked = value ?? false;
-                            applyFilters();
-                          });
-                        },
-                      ),
-                      Text(AppLocalizations.of(context)!.random),
-                      SizedBox(width: 16),
-                    ],
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Checkbox(
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        value: isFriendlyChecked,
-                        onChanged: (value) {
-                          setState(() {
-                            isFriendlyChecked = value ?? false;
-                            applyFilters();
-                          });
-                        },
-                      ),
-                      Text(AppLocalizations.of(context)!.friendly),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.filter_list),
-              onPressed: showFilterDialog,
-            ),
-          ],
-        ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
           child: Card(
@@ -1081,6 +1093,220 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
             ),
           ),
       ],
+    );
+  }
+
+  Widget buildAttackDetails(BuildContext context) {
+    if (warStats!.attacks.isEmpty) {
+      return Center(child: Text("No attacks found"));
+    }
+
+    final Locale userLocale = Localizations.localeOf(context);
+
+    return ListView.builder(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: warStats!.attacks.length,
+      itemBuilder: (context, index) {
+        Attack attack = warStats!.attacks[index];
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                          DateFormat.yMd(userLocale.toString()).format(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  attack.warStartTime)),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.tertiary)),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl:
+                                    'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${attack.defender.townhallLevel}.png',
+                                width: 40,
+                                height: 40,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(LucideIcons.hourglass, size: 12),
+                                      SizedBox(width: 4),
+                                      Text("${attack.duration}s",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(LucideIcons.swords, size: 12),
+                                      SizedBox(width: 4),
+                                      Text(attack.warType,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                              "${attack.defender.mapPosition}. ${attack.defender.name}"),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("${attack.destructionPercentage.toString()}%"),
+                          Row(
+                            children: [
+                              ...generateStars(attack.stars, 16),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildDefenseDetails(BuildContext context) {
+    if (warStats!.defenses.isEmpty) {
+      return Center(child: Text("No defenses found"));
+    }
+
+    final Locale userLocale = Localizations.localeOf(context);
+
+    return ListView.builder(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: warStats!.defenses.length,
+      itemBuilder: (context, index) {
+        Defense defense = warStats!.defenses[index];
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                          DateFormat.yMd(userLocale.toString()).format(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  defense.warStartTime)),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.tertiary)),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl:
+                                    'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${defense.attacker.townhallLevel}.png',
+                                width: 40,
+                                height: 40,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(LucideIcons.hourglass, size: 12),
+                                      SizedBox(width: 4),
+                                      Text("${defense.duration}s",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(LucideIcons.swords, size: 12),
+                                      SizedBox(width: 4),
+                                      Text(defense.warType,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                              "${defense.attacker.mapPosition}. ${defense.attacker.name}"),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("${defense.destructionPercentage.toString()}%"),
+                          Row(
+                            children: [
+                              ...generateStars(defense.stars, 16),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

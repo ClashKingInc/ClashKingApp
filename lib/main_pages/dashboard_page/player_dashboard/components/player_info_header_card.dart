@@ -200,6 +200,7 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                       MaterialPageRoute(
                         builder: (context) => PlayerStatsScreen(
                           profileInfo: widget.playerStats,
+                          user: widget.user,
                         ),
                       ),
                     );
