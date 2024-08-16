@@ -129,8 +129,8 @@
     "@search": {
         "description": "Search for a player or a clan"
     },
-    "warning": "Warning",
-    "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
+    "warning": "Waarschuwing",
+    "exitAppToOpenClash": "Je staat op het punt de app te verlaten om Clash of Clans te openen.",
     "tagOrNamePlayer": "Spelers tag of naam",
     "searchPlayer": "Zoek speler",
     "nameOrTagPlayer": "Spelers-ID of naam",
@@ -532,7 +532,7 @@
     "role": "Rol",
     "expLevel": "Ervaringsniveau",
     "townHallLevel": "SH level",
-    "thLevel": "TH{level}",
+    "thLevel": "SH{level}",
     "@thLevel": {
         "placeholders": {
             "level": {
@@ -540,7 +540,7 @@
             }
         }
     },
-    "townHallLevelLevel": "TownHall {level}",
+    "townHallLevelLevel": "Stadhuis {level}",
     "@townHallLevelLevel": {
         "placeholders": {
             "level": {
@@ -548,26 +548,26 @@
             }
         }
     },
-    "byNumberOfWars": "By number of wars",
+    "byNumberOfWars": "Op aantal oorlogen",
     "@byNumberOfWars": {
         "description": "filter by number of wars"
     },
-    "ok": "OK",
+    "ok": "Oké",
     "@ok": {
         "description": "OK button on pop up"
     },
-    "byDateRange": "By date range",
+    "byDateRange": "Op datumbereik",
     "@byDateRange": {
         "description": "filter by date range"
     },
-    "selectSeason": "Select a season",
+    "selectSeason": "Selecteer een seizoen",
     "@selectSeason": {
         "description": "Ask player to select a season"
     },
-    "year": "Year",
-    "month": "Month",
-    "allTownHalls": "All TownHalls",
-    "seasonDate": "{date} season",
+    "year": "Jaar",
+    "month": "Maand",
+    "allTownHalls": "Alle stadhuizen",
+    "seasonDate": "{date} seizoen",
     "@seasonDate": {
         "description": "Example : August 2024 season",
         "placeholders": {
@@ -576,7 +576,7 @@
             }
         }
     },
-    "lastXwars": "Last {number} wars",
+    "lastXwars": "Laatste {number} oorlogen",
     "@lastXwars": {
         "description": "Example : Shows the last 25 wars",
         "placeholders": {
@@ -585,12 +585,12 @@
             }
         }
     },
-    "friendly": "Friendly",
+    "friendly": "Vriendelijk",
     "@friendly": {
         "description": "Friendly war"
     },
     "cwl": "CWL",
-    "random": "Random",
+    "random": "Willekeurig",
     "@random": {
         "description": "Random/basic war (not friendly or cwl)"
     },
