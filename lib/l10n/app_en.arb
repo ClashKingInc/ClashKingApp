@@ -74,20 +74,18 @@
     "faqSendEmail": "Send an email",
     "faqJoinDiscord": "Join our Discord Server",
     "helpUsTranslate": "Help us translate",
-    "suggestFeatures" : "Suggest features",
+    "suggestFeatures": "Suggest features",
     "thankYou": "Thank you!",
     "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
     "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
     "helpTranslateButton": "Help Translate on Crowdin",
     "currentTranslators": "Current Translators",
-
-    "betaFeature" : "Beta Feature",
-    "beta" : "BETA",
-    "betaDescription" : "This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.",
-    
+    "betaFeature": "Beta Feature",
+    "beta": "BETA",
+    "betaDescription": "This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.",
     "copiedToClipboard": "Copied to clipboard",
     "all": "All",
-    "@all":{
+    "@all": {
         "description": "all items"
     },
     "hourIndicator": "h",
@@ -114,7 +112,7 @@
     "manage": "Manage",
     "enterPlayerTag": "Enter a player tag",
     "add": "Add",
-    "@add" : {
+    "@add": {
         "description": "Add an account"
     },
     "delete": "Delete",
@@ -131,10 +129,12 @@
     "@search": {
         "description": "Search for a player or a clan"
     },
+    "warning": "Warning",
+    "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
     "tagOrNamePlayer": "Player's tag or name",
     "searchPlayer": "Search player",
     "nameOrTagPlayer": "Player's name or tag",
-    "playerClanDescription" : "Your clan is \"{clan}\" ({tag}).",
+    "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
     "@playerClanDescription": {
         "placeholders": {
             "clan": {
@@ -143,10 +143,9 @@
             "tag": {
                 "type": "String"
             }
-
         }
     },
-    "playerRatioDescription" : "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+    "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
     "@playerRatioDescription": {
         "placeholders": {
             "ratio": {
@@ -160,7 +159,7 @@
             }
         }
     },
-    "playerWarPreferenceDescription" : "Your war preference is \"{preference}\".",
+    "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
     "@playerWarPreferenceDescription": {
         "placeholders": {
             "preference": {
@@ -168,7 +167,7 @@
             }
         }
     },
-    "playerWarStarsDescription" : "You have {stars} war stars.",
+    "playerWarStarsDescription": "You have {stars} war stars.",
     "@playerWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -176,7 +175,7 @@
             }
         }
     },
-    "playerTrophiesDescription" : "You have {trophies} trophies. You're currently in {league}.",
+    "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
     "@playerTrophiesDescription": {
         "placeholders": {
             "trophies": {
@@ -187,7 +186,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription" : "Your town hall level is {level}.",
+    "playerTownHallLevelDescription": "Your town hall level is {level}.",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
@@ -195,7 +194,7 @@
             }
         }
     },
-    "playerBuilderBaseDescription" : "Your Builder Hall level is {level} and you have {trophies} trophies.",
+    "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
     "@playerBuilderBaseDescription": {
         "placeholders": {
             "level": {
@@ -228,7 +227,7 @@
     "equipment": "Equipments",
     "troops": "Troops",
     "superTroops": "Super Troops",
-    "activeSuperTroops" : "Active Super Troops",
+    "activeSuperTroops": "Active Super Troops",
     "pets": "Pets",
     "siegeMachines": "Siege Machines",
     "spells": "Spells",
@@ -271,6 +270,7 @@
     },
     "date": "Date",
     "stats": "Stats",
+    "details": "Details",
     "seasonStats": "Season Stats",
     "charts": "Charts",
     "history": "History",
@@ -280,7 +280,7 @@
     "legendLeague": "Legend League",
     "notInLegendLeague": "Not in Legend League",
     "noLegendData": "No Legend Data Found for today",
-    "legendStartDescription" : "You started the day with {trophies} trophies.",
+    "legendStartDescription": "You started the day with {trophies} trophies.",
     "@legendStartDescription": {
         "placeholders": {
             "trophies": {
@@ -288,7 +288,7 @@
             }
         }
     },
-    "legendNoRankLocalDescription" : "You are currently not ranked ({country}) with {trophies} trophies.",
+    "legendNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
     "@legendNoRankLocalDescription": {
         "placeholders": {
             "country": {
@@ -299,7 +299,7 @@
             }
         }
     },
-    "legendRankLocalDescription" : "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+    "legendRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
     "@legendRankDescription": {
         "placeholders": {
             "rank": {
@@ -313,7 +313,7 @@
             }
         }
     },
-    "legendGainDescription" : "You gained {trophies} trophies for now.",
+    "legendGainDescription": "You gained {trophies} trophies for now.",
     "@legendGainDescription": {
         "placeholders": {
             "trophies": {
@@ -321,7 +321,7 @@
             }
         }
     },
-    "legendLossDescription" : "You lost {trophies} trophies for now.",
+    "legendLossDescription": "You lost {trophies} trophies for now.",
     "@legendLossDescription": {
         "placeholders": {
             "trophies": {
@@ -329,7 +329,7 @@
             }
         }
     },
-    "legendNoGlobalRankDescription" : "You are currently not ranked globally with {trophies} trophies.",
+    "legendNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
     "@legendNoGlobalRankDescription": {
         "placeholders": {
             "trophies": {
@@ -337,7 +337,7 @@
             }
         }
     },
-    "legendGlobalRankDescription" : "You are currently ranked {rank} globally.",
+    "legendGlobalRankDescription": "You are currently ranked {rank} globally.",
     "@legendGlobalRankDescription": {
         "placeholders": {
             "rank": {
@@ -353,7 +353,6 @@
     "ended": "Ended",
     "@ended": {
         "description": "Title for the number of trophies at the end of the day"
-        
     },
     "average": "Average",
     "@average": {
@@ -363,7 +362,7 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle" : "Inacurate Data?",
+    "legendsTitle": "Inacurate Data?",
     "legendsExplanation_intro": "Due to limitations in the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
     "legendsExplanation_api_delay_title": "1. API Delay: ",
     "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
@@ -500,16 +499,16 @@
     "nameOrTagClan": "Clan's name or tag",
     "noResult": "No result.",
     "filters": "Filters",
-    "whatever" : "Whatever",
+    "whatever": "Whatever",
     "@whatever": {
         "description": "Whatever the value"
     },
-    "any" : "Any",
+    "any": "Any",
     "@any": {
         "description": "Any value is accepted"
     },
     "notSet": "Not set",
-    "@notSet" : {
+    "@notSet": {
         "description": "Filter value is not set"
     },
     "warFrequency": "War frequency",
@@ -533,6 +532,68 @@
     "role": "Role",
     "expLevel": "Experience Level",
     "townHallLevel": "TH Level",
+    "thLevel": "TH{level}",
+    "@thLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "townHallLevelLevel": "TownHall {level}",
+    "@townHallLevelLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "byNumberOfWars": "By number of wars",
+    "@byNumberOfWars": {
+        "description": "filter by number of wars"
+    },
+    "ok": "OK",
+    "@ok": {
+        "description": "OK button on pop up"
+    },
+    "byDateRange": "By date range",
+    "@byDateRange": {
+        "description": "filter by date range"
+    },
+    "selectSeason": "Select a season",
+    "@selectSeason": {
+        "description": "Ask player to select a season"
+    },
+    "year": "Year",
+    "month": "Month",
+    "allTownHalls": "All TownHalls",
+    "seasonDate": "{date} season",
+    "@seasonDate": {
+        "description": "Example : August 2024 season",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "lastXwars": "Last {number} wars",
+    "@lastXwars": {
+        "description": "Example : Shows the last 25 wars",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "friendly": "Friendly",
+    "@friendly": {
+        "description": "Friendly war"
+    },
+    "cwl": "CWL",
+    "random": "Random",
+    "@random": {
+        "description": "Random/basic war (not friendly or cwl)"
+    },
     "builderBaseTrophies": "BB Trophies",
     "donations": "Donations",
     "donationsReceived": "Donations Received",
@@ -550,10 +611,10 @@
     "wars": "Wars",
     "ongoingWar": "Ongoing war",
     "ongoingCwl": "Ongoing CWL",
-    "cantOpenLink" : "We can't open this link.",
+    "cantOpenLink": "We can't open this link.",
     "notInWar": "Not in war",
     "warHistory": "War History",
-    "warHistoryWinsDescription" : "We tracked the data of {wins} war wins for your clan.",
+    "warHistoryWinsDescription": "We tracked the data of {wins} war wins for your clan.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
@@ -561,7 +622,7 @@
             }
         }
     },
-    "warHistoryLossesDescription" : "We tracked the data of {losses} war losses for your clan.",
+    "warHistoryLossesDescription": "We tracked the data of {losses} war losses for your clan.",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
@@ -569,7 +630,7 @@
             }
         }
     },
-    "warHistoryDrawsDescription" : "We tracked the data of {draws} war draws for your clan.",
+    "warHistoryDrawsDescription": "We tracked the data of {draws} war draws for your clan.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
@@ -577,7 +638,7 @@
             }
         }
     },
-    "warHistoryAverageMembersDescription" : "Your clan has an average of {members} members participating per war we've tracked.",
+    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating per war we've tracked.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -585,7 +646,7 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription" : "Your clan has an average of {stars} stars per attack at the end of the wars we've tracked.",
+    "warHistoryAverageWarStarsDescription": "Your clan has an average of {stars} stars per attack at the end of the wars we've tracked.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -593,7 +654,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription" : "Your clan has an average of {percent} destruction rate at the end of the wars we've tracked.",
+    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of the wars we've tracked.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
@@ -637,10 +698,10 @@
         }
     },
     "joinLeaveLogs": "Join/Leave Logs",
-    "join" : "Join",
-    "leave" : "Leave",
+    "join": "Join",
+    "leave": "Leave",
     "reset": "Reset",
-    "leaveNumberDescription" : "{number} players left the clan during the current season ({date}).",
+    "leaveNumberDescription": "{number} players left the clan during the current season ({date}).",
     "@leaveNumberDescription": {
         "description": "Number of players who left the clan during the current season.",
         "placeholders": {
@@ -652,7 +713,7 @@
             }
         }
     },
-    "joinNumberDescription" : "{number} players joined the clan during the current season ({date}).",
+    "joinNumberDescription": "{number} players joined the clan during the current season ({date}).",
     "@joinNumberDescription": {
         "description": "Number of players who joined the clan during the current season.",
         "placeholders": {
@@ -664,7 +725,7 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription" : "Your clan has gained {number} new members this season ({date}).",
+    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new members this season ({date}).",
     "@joinLeaveDifferenceUpDescription": {
         "description": "Number of new members gained by the clan this season.",
         "placeholders": {
@@ -676,7 +737,7 @@
             }
         }
     },
-    "joinLeaveDifferenceDownDescription" : "Your clan has lost {number} members this season ({date}).",
+    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} members this season ({date}).",
     "@joinLeaveDifferenceDownDescription": {
         "description": "Number of members lost by the clan this season.",
         "placeholders": {
@@ -688,7 +749,7 @@
             }
         }
     },
-    "joinLeaveDifferenceEqualDescription" : "Your clan has the same number of members as at the beginning of the season ({date}).",
+    "joinLeaveDifferenceEqualDescription": "Your clan has the same number of members as at the beginning of the season ({date}).",
     "@joinLeaveDifferenceEqualDescription": {
         "description": "Difference in the number of members between the beginning and the end of the season.",
         "placeholders": {
@@ -700,7 +761,7 @@
     "@joinLeaveLogs": {
         "description": "Logs of players joining or leaving the clan."
     },
-    "leftOnAt" : "Left on {date} at {time}.",
+    "leftOnAt": "Left on {date} at {time}.",
     "@leftOnAt": {
         "description": "[The player] left the clan on 16/06/2024 at 10:35.",
         "placeholders": {
@@ -712,7 +773,7 @@
             }
         }
     },
-    "joinedOnAt" : "Joined on {date} at {time}.",
+    "joinedOnAt": "Joined on {date} at {time}.",
     "@joinedOnAt": {
         "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
         "placeholders": {
@@ -805,13 +866,13 @@
     },
     "clanDraw": "The two clans are tied",
     "fastCalculator": "Fast calculator",
-    "fastCalculatorAnswer" : "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
+    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
                 "type": "String"
             },
-            "result" : {
+            "result": {
                 "type": "String"
             }
         }
@@ -819,9 +880,9 @@
     "teamSize": "Team size",
     "neededOverall": "% Needed overall",
     "calculate": "Calculate",
-    "warStats" : "War Stats",
+    "warStats": "War Stats",
     "clanWarLeague": "Clan War League",
-    "cwlRank" : "Your clan is currently ranked {rank}.",
+    "cwlRank": "Your clan is currently ranked {rank}.",
     "@cwlRank": {
         "placeholders": {
             "rank": {
@@ -829,7 +890,7 @@
             }
         }
     },
-    "cwlStars" : "Your clan has a total of {stars} stars.",
+    "cwlStars": "Your clan has a total of {stars} stars.",
     "@cwlStars": {
         "placeholders": {
             "stars": {
@@ -837,7 +898,7 @@
             }
         }
     },
-    "cwlMissingStarsFromNext" : "Your clan is missing {stars} stars to catch up with the next clan.",
+    "cwlMissingStarsFromNext": "Your clan is missing {stars} stars to catch up with the next clan.",
     "@cwlMissingStarsFromNext": {
         "placeholders": {
             "stars": {
@@ -845,7 +906,7 @@
             }
         }
     },
-    "cwlMissingStarsFromFirst" : "Your clan is missing {stars} stars to catch up with the first clan.",
+    "cwlMissingStarsFromFirst": "Your clan is missing {stars} stars to catch up with the first clan.",
     "@cwlMissingStarsFromFirst": {
         "placeholders": {
             "stars": {
@@ -853,7 +914,7 @@
             }
         }
     },
-    "cwlDestructionPercentage" : "Your clan has a total destruction rate of {percent}%.",
+    "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
     "@cwlDestructionPercentage": {
         "placeholders": {
             "percent": {
@@ -861,7 +922,7 @@
             }
         }
     },
-    "cwlCurrentRound" : "It's currently round {round}.",
+    "cwlCurrentRound": "It's currently round {round}.",
     "@cwlCurrentRound": {
         "placeholders": {
             "round": {
@@ -872,8 +933,8 @@
     "noAccountLinkedToYourProfileFound": "No account linked to your profile found",
     "management": "Management",
     "comingSoon": "Coming soon!",
-    "connectionError" : "An error occurred. Please check your internet connection and try again.",
-    "connectionErrorRelaunch" : "An error occurred. Please check your internet connection and relaunch the app.",
+    "connectionError": "An error occurred. Please check your internet connection and try again.",
+    "connectionErrorRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
     "updatedAt": "Updated at {time}",
     "@updatedAt": {
         "placeholders": {
@@ -882,5 +943,4 @@
             }
         }
     }
-
 }
