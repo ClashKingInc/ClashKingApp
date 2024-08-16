@@ -172,8 +172,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                   .contains("discord.gg/"))
                           ? IconButton(
                               icon: Icon(Icons.discord,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
+                                  color: Colors.white,
                                   size: 32),
                               onPressed: () async {
                                 try {

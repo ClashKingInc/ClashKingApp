@@ -127,7 +127,7 @@ class _FaqScreenState extends State<FaqScreen> {
                             Text(
                                 AppLocalizations.of(context)!
                                     .faqUseCodeClashKing,
-                                style: Theme.of(context).textTheme.bodyMedium),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white)),
                           ],
                         ),
                         onPressed: () async {
@@ -152,7 +152,7 @@ class _FaqScreenState extends State<FaqScreen> {
                             Text(
                                 AppLocalizations.of(context)!
                                     .faqSupportUsOnPatreon,
-                                style: Theme.of(context).textTheme.bodyMedium),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white)),
                           ],
                         ),
                         onPressed: () async {
@@ -172,7 +172,7 @@ class _FaqScreenState extends State<FaqScreen> {
                             Icon(Icons.discord, size: 24),
                             SizedBox(width: 8),
                             Text(AppLocalizations.of(context)!.faqJoinDiscord,
-                                style: Theme.of(context).textTheme.bodyMedium),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white)),
                           ],
                         ),
                         onPressed: () async {
@@ -213,7 +213,7 @@ class _FaqScreenState extends State<FaqScreen> {
                             SizedBox(width: 8),
                             Text(
                               AppLocalizations.of(context)!.faqInviteTheBot,
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
                               overflow: TextOverflow.visible,
                             ),
                           ],
@@ -255,7 +255,7 @@ class _FaqScreenState extends State<FaqScreen> {
                             Icon(Icons.email, size: 24),
                             SizedBox(width: 8),
                             Text(AppLocalizations.of(context)!.faqSendEmail,
-                                style: Theme.of(context).textTheme.bodyMedium),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white)),
                           ],
                         ),
                         onPressed: () async {
@@ -286,7 +286,7 @@ class _FaqScreenState extends State<FaqScreen> {
                             Icon(Icons.discord, size: 24),
                             SizedBox(width: 8),
                             Text(AppLocalizations.of(context)!.faqJoinDiscord,
-                                style: Theme.of(context).textTheme.bodyMedium,
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
                                 overflow: TextOverflow.ellipsis),
                           ],
                         ),

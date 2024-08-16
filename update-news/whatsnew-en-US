@@ -1,12 +1,11 @@
 What's New:
-- New Legend Table: Monthly results just like /legend search.
-- Thanks to our Translators! ❤️
-- Stay Logged In post-updates.
-- War Log Closed Bypass: View current wars if opponents' logs are open.
-- Discord Button added for detected links in clan descriptions.
+- Two New CWL Cards: Navigate to Current War & CWL Stats.
+- Enhanced To-Do Screen: Track remaining war and CWL attacks with new progress headers.
+- New Info Buttons: Learn how To-Do and Legends features work.
+- Legends Update: Added stars stats to the Legend Season screen.
+- Feature Suggestion Panel: Suggest and upvote features directly in the app.
 
 Fixes:
-- Legend Tab and chart overlap fixed.
-- Super Troops display improved.
-- Equipment color and translation issues resolved.
-- To-Do List Bar now reflects task progress.
+- Improved UI: Better splash screen support for Android 12+ and dark/light modes.
+- Player Page Update: Ongoing war button now independent of clan affiliation.
+- Design Fixes: Resolved logo, button colors, and legend graph issues.
