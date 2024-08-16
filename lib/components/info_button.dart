@@ -17,7 +17,7 @@ class InfoButtonState extends State<InfoButton> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 30,
+      top: 40,
       right: 15,
       child: GestureDetector(
         onTap: () => showInfoPopup(context, widget.textSpan, widget.title),
