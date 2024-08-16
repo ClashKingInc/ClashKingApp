@@ -1,5 +1,4 @@
 {
-    "@@locale": "ar",
     "creatorCode": "Creator Code : ClashKing",
     "signInWithDiscord": "Sign In with Discord",
     "guestMode": "Guest Mode",
@@ -534,6 +533,14 @@
     "townHallLevel": "TH Level",
     "thLevel": "TH{level}",
     "@thLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "bhLevel": "BH{level}",
+    "@bhLevel": {
         "placeholders": {
             "level": {
                 "type": "int"
