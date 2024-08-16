@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/core/functions.dart';
 
 class FaqScreen extends StatefulWidget {
   @override
@@ -132,9 +131,11 @@ class _FaqScreenState extends State<FaqScreen> {
                           ],
                         ),
                         onPressed: () async {
-                          final languagecode = getPrefs('languageCode');
+                          final languageCode = Localizations.localeOf(context)
+                                .languageCode
+                                .toLowerCase();
                           launchUrl(Uri.parse(
-                              'https://link.clashofclans.com/$languagecode?action=SupportCreator&id=Clashking'));
+                              'https://link.clashofclans.com/$languageCode?action=SupportCreator&id=Clashking'));
                         },
                       ),
                     ),

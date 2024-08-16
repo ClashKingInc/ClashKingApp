@@ -2,11 +2,16 @@ class LocaleInfo {
   final String languageCode;
   final String languageName;
   final String flagUrl;
+  final String? scriptCode;
+  final String? countryCode;
 
-  LocaleInfo(
-      {required this.languageCode,
-      required this.languageName,
-      required this.flagUrl});
+  LocaleInfo({
+    required this.languageCode,
+    required this.languageName,
+    required this.flagUrl,
+    this.scriptCode,
+    this.countryCode,
+  });
 }
 
 final List<LocaleInfo> supportedLocales = [
@@ -47,8 +52,15 @@ final List<LocaleInfo> supportedLocales = [
       ),
   LocaleInfo(
       languageCode: 'en',
-      languageName: 'English',
+      countryCode: 'GB',
+      languageName: 'English (UK)',
       flagUrl: 'https://flagcdn.com/w320/gb.png' // UK flag
+      ),
+  LocaleInfo(
+      languageCode: 'en',
+      countryCode: 'US',
+      languageName: 'English (US)',
+      flagUrl: 'https://flagcdn.com/w320/us.png' // US flag
       ),
   LocaleInfo(
       languageCode: 'es',

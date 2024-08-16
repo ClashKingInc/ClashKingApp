@@ -7,7 +7,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/components/to_do_body_card.dart';
@@ -163,8 +162,9 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                           icon: Icon(Icons.sports_esports_rounded,
                               color: Colors.white, size: 32),
                           onPressed: () async {
-                            final languageCode = await getPrefs(
-                                'languageCode'); // Supposition que getPrefs est asynchrone
+                            final languageCode = Localizations.localeOf(context)
+                                .languageCode
+                                .toLowerCase();
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {

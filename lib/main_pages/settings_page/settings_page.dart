@@ -134,45 +134,52 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     );
   }
 
-  Future<void> _showLanguageSelection(context) async {
-    final selectedLanguage = await showModalBottomSheet<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Container(
-            color: Theme.of(context)
-                .colorScheme
-                .surface, // Replace with your desired color
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: supportedLocales.map((LocaleInfo locale) {
-                  return ListTile(
-                    leading: CachedNetworkImage(
-                      imageUrl: locale.flagUrl,
-                      width: 32,
-                      height: 32,
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    ),
-                    title: Text(locale.languageName),
-                    onTap: () => Navigator.pop(context, locale.languageCode),
-                  );
-                }).toList(),
-              ),
+Future<void> _showLanguageSelection(BuildContext context) async {
+  final selectedLocale = await showModalBottomSheet<Locale>(
+    context: context,
+    builder: (BuildContext context) {
+      return SafeArea(
+        child: Container(
+          color: Theme.of(context).colorScheme.surface,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: supportedLocales.map((LocaleInfo locale) {
+                return ListTile(
+                  leading: CachedNetworkImage(
+                    imageUrl: locale.flagUrl,
+                    width: 32,
+                    height: 32,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                  title: Text(locale.languageName),
+                  onTap: () {
+                    print('Selected language: ${locale.languageCode}_${locale.countryCode}_${locale.scriptCode}');
+                    Navigator.pop(
+                      context,
+                      Locale.fromSubtags(
+                        languageCode: locale.languageCode,
+                        countryCode: locale.countryCode,
+                        scriptCode: locale.scriptCode,
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
             ),
           ),
-        );
-      },
-    );
+        ),
+      );
+    },
+  );
 
-    // Check if the widget is still mounted before trying to use `context`
-    if (selectedLanguage != null && mounted) {
-      Provider.of<MyAppState>(context, listen: false)
-          .changeLanguage(selectedLanguage);
-    }
+  if (selectedLocale != null && mounted) {
+    Provider.of<MyAppState>(context, listen: false)
+        .changeLanguage(selectedLocale);
   }
+}
+
 
   Future<void> _logOut() async {
     await clearPrefs();

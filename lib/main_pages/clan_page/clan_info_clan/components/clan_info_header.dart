@@ -17,7 +17,6 @@ import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_pa
 import 'package:clashkingapp/main_pages/wars_league_page/league/current_league_info_page.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/war_history_page.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:clashkingapp/core/functions.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ClanInfoHeaderCard extends StatefulWidget {
@@ -128,7 +127,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                         icon: Icon(Icons.sports_esports_rounded,
                             color: Colors.white, size: 32),
                         onPressed: () async {
-                          final languageCode = await getPrefs('languageCode');
+                          final languageCode = Localizations.localeOf(context)
+                              .languageCode
+                              .toLowerCase();
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {

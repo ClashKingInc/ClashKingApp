@@ -1,10 +1,10 @@
 {
-    "creatorCode": "Код создателя : ClashKing",
-    "signInWithDiscord": "Вход через Discord",
-    "guestMode": "Режим \"Гость\"",
-    "needHelpJoinDiscord": "Нужна помощь? Присоединяйтесь к нам в Discord.",
-    "createGuestProfile": "Создайте ваш гостевой профиль",
-    "doesNotExist": "{tag} не существует.",
+    "creatorCode": "Creator Code : ClashKing",
+    "signInWithDiscord": "Sign In with Discord",
+    "guestMode": "Guest Mode",
+    "needHelpJoinDiscord": "Need help? Join us on Discord.",
+    "createGuestProfile": "Create your guest profile",
+    "doesNotExist": "{tag} does not exist.",
     "@doesNotExist": {
         "placeholders": {
             "tag": {
@@ -12,7 +12,7 @@
             }
         }
     },
-    "isAlreadyLinked": "{tag} уже связан с кем-то.",
+    "isAlreadyLinked": "{tag} is already linked to someone.",
     "@isAlreadyLinked": {
         "placeholders": {
             "tag": {
@@ -20,10 +20,10 @@
             }
         }
     },
-    "username": "Имя пользователя",
-    "pleaseEnterUsername": "Пожалуйста, введите имя пользователя",
-    "playerTags": "Теги игрока",
-    "followingTagsDoNotExist": "Следующие теги не существуют: {tags}.",
+    "username": "Username",
+    "pleaseEnterUsername": "Please enter a username",
+    "playerTags": "Player Tags",
+    "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
             "tags": {
@@ -31,7 +31,7 @@
             }
         }
     },
-    "followingTagsAreAlreadyLinked": "Следующие теги уже связаны с кем-то: {tags}.",
+    "followingTagsAreAlreadyLinked": "The following tags are already linked to someone: {tags}.",
     "@followingTagsAreAlreadyLinked": {
         "placeholders": {
             "tags": {
@@ -39,40 +39,41 @@
             }
         }
     },
-    "welcome": "Добро пожаловать!",
-    "welcomeMessage": "Пожалуйста, добавьте один или несколько аккаунтов Clash Of Clans в свой профиль. Вы можете добавить или удалить аккаунты позже.",
-    "login": "Вход",
-    "logout": "Выход",
-    "language": "Язык",
-    "settings": "Настройки",
-    "toggleTheme": "Переключить тему",
-    "selectLanguage": "Выберите язык",
-    "faq": "Ответы на частые вопросы",
-    "faqSubtitle": "Часто задаваемые вопросы",
-    "faqIsThisFromSupercell": "Это приложение от Supercell?",
+    "welcome": "Welcome!",
+    "welcomeMessage": "Please add one or more Clash Of Clans accounts to your profile. You can add or remove accounts later.",
+    "login": "Login",
+    "logout": "Log out",
+    "language": "Language",
+    "settings": "Settings",
+    "toggleTheme": "Toggle Theme",
+    "selectLanguage": "Select a language",
+    "faq": "FAQ",
+    "faqSubtitle": "Frequently Asked Questions",
+    "faqIsThisFromSupercell": "Is this App from Supercell?",
     "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-    "faqWhyNotAccurate": "Почему данные иногда неточны или отсутствуют?",
+    "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
     "faqClanNotTracked": "Clan not tracked",
-    "faqClanNotTrackedAnswer": "ClashKing может получить эту информацию только при отслеживании клана. Если ваш клан не отслеживается, пригласите ClashKing Bot на ваш сервер Discord и используйте команду /addclan. Мы работаем над тем, чтобы сделать эту функцию доступной в ближайшее время.",
+    "faqClanNotTrackedAnswer": "ClashKing can retrieve this info only if the clan is tracked. If your clan isn't tracked, please invite ClashKing Bot to your Discord server and use the command /addclan. We are working on making this feature available in the app soon.",
     "faqTrackingDown": "Tracking down",
     "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.",
     "faqApiLimitation": "Clash of Clans API limitation",
-    "faqApiLimitationAnswer": "Некоторые данные предоставляются Clash of Clans и их API имеет некоторые ограничения. Это касается отслеживания легенд, где иногда накапливаются призы и потери трофеев, как если бы это было одним ударом. Вот почему у нас нет информации об уровнях ваших зданий.",
-    "faqSupportWork": "Как я могу поддержать вашу работу?",
+    "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your buildings levels.",
+    "faqSupportWork": "How can I support your work?",
     "faqSupportWorkAnswer": "There are several ways to support us:",
-    "faqUseCodeClashKing": "Используйте код \"ClashKing\"",
-    "faqSupportUsOnPatreon": "Поддержать нас в Patreon",
-    "faqShareTheApp": "Поделитесь этим приложением со своими друзьями",
-    "faqRateTheApp": "Оставить отзыв о приложении",
-    "faqHelpUsTranslate": "Помогите нам перевести это приложение",
-    "faqHowToInviteTheBot": "Как я могу пригласить вашего бота на мой сервер Discord?",
-    "faqHowToInviteTheBotAnswer": "Вы можете пригласить нашего бота на свой сервер, нажав на кнопку ниже. Вам понадобится разрешение \"Управление сервером\", чтобы добавить бота.",
-    "faqInviteTheBot": "Пригласить бота ClashKing",
-    "faqNeedHelp": "Мне нужна помощь или я хотел бы внести предложение. Как я могу связаться с вами?",
-    "faqNeedHelpAnswer": "Вы можете присоединиться к нашему серверу Discord, чтобы попросить помощи или оставить отзыв, либо написать нам по адресу devs@clashkingbot.com. Пожалуйста, пишите только на английском или французском языках.",
-    "faqSendEmail": "Отправить e-mail",
-    "faqJoinDiscord": "Присоединяйтесь к нашему Discord серверу",
-    "helpUsTranslate": "Помогите нам с переводом",
+    "faqUseCodeClashKing": "Use code \"ClashKing\"",
+    "faqSupportUsOnPatreon": "Support us on Patreon",
+    "faqShareTheApp": "Share the app with your friends",
+    "faqRateTheApp": "Rate the app on the store",
+    "faqHelpUsTranslate": "Help us translate the app",
+    "faqHowToInviteTheBot": "How can I invite your bot on my Discord server?",
+    "faqHowToInviteTheBotAnswer": "You can invite our bot on your server by clicking on the button below. You will need to have the \"Manage Server\" permission to add the bot.",
+    "faqInviteTheBot": "Invite ClashKing Bot",
+    "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
+    "faqNeedHelpAnswer": "You can join our Discord server to ask for help or provide feedback, or you can email us at devs@clashkingbot.com. Please write in English or French only.",
+    "faqSendEmail": "Send an email",
+    "faqJoinDiscord": "Join our Discord Server",
+    "helpUsTranslate": "Help us translate",
+    "suggestFeatures": "Suggest features",
     "thankYou": "Thank you!",
     "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
     "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
@@ -81,22 +82,22 @@
     "betaFeature": "Beta Feature",
     "beta": "BETA",
     "betaDescription": "This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.",
-    "copiedToClipboard": "Скопировано в буфер обмена",
-    "all": "Все",
+    "copiedToClipboard": "Copied to clipboard",
+    "all": "All",
     "@all": {
         "description": "all items"
     },
-    "hourIndicator": "ч",
-    "minIndicator": "м",
-    "noDataAvailable": "Данные отсутствуют.",
-    "close": "Закрыть",
-    "closed": "Закрыт",
+    "hourIndicator": "h",
+    "minIndicator": "m",
+    "noDataAvailable": "No data available.",
+    "close": "Close",
+    "closed": "Closed",
     "@closed": {
         "description": "WarLog closed"
     },
-    "error": "Ошибка",
-    "player": "Игрок",
-    "notFoundOrNotLinkedToOurSystem": "{player} не найден или не связан с нашей системой.",
+    "error": "Error",
+    "player": "Player",
+    "notFoundOrNotLinkedToOurSystem": "{player} not found or not linked to our system.",
     "@notFoundOrNotLinkedToOurSystem": {
         "placeholders": {
             "player": {
@@ -104,31 +105,33 @@
             }
         }
     },
-    "tryAnotherNameOrTagOrLinkIt": "Попробуйте другое имя/тег или привяжите его.",
-    "playerNotFound": "Игрок не найден",
-    "noValueEntered": "Значение не введено",
-    "manage": "Управление",
-    "enterPlayerTag": "Введите тег игрока",
-    "add": "Добавить",
+    "tryAnotherNameOrTagOrLinkIt": "Try another name/tag or link it.",
+    "playerNotFound": "Player not found",
+    "noValueEntered": "No value entered",
+    "manage": "Manage",
+    "enterPlayerTag": "Enter a player tag",
+    "add": "Add",
     "@add": {
         "description": "Add an account"
     },
-    "delete": "Удалить",
+    "delete": "Delete",
     "@delete": {
         "description": "Delete an account"
     },
-    "addAccount": "Добавить аккаунт",
-    "deleteAccount": "Удалить аккаунт",
-    "playerTagNotExists": "Введенный тег игрока не существует.",
-    "accountAlreadyLinked": "Тег игрока уже связан с кем-то.",
-    "failedToAddTryAgain": "Не удалось добавить ссылку. Пожалуйста, повторите попытку позже.",
-    "failedToDeleteTryAgain": "Не удалось добавить ссылку. Пожалуйста, повторите попытку позже.",
-    "search": "Поиск",
+    "addAccount": "Add account",
+    "deleteAccount": "Delete account",
+    "playerTagNotExists": "The player tag entered does not exist.",
+    "accountAlreadyLinked": "The player tag is already linked to someone.",
+    "failedToAddTryAgain": "Failed to add link. Please try again later.",
+    "failedToDeleteTryAgain": "Failed to delete link. Please try again later.",
+    "search": "Search",
     "@search": {
         "description": "Search for a player or a clan"
     },
-    "tagOrNamePlayer": "Тег или имя игрока",
-    "searchPlayer": "Найти игрока",
+    "warning": "Warning",
+    "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
+    "tagOrNamePlayer": "Player's tag or name",
+    "searchPlayer": "Search player",
     "nameOrTagPlayer": "Player's name or tag",
     "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
     "@playerClanDescription": {
@@ -201,16 +204,16 @@
             }
         }
     },
-    "dashboard": "Панель управления",
+    "dashboard": "Dashboard",
     "homeBase": "Home Base",
     "th": "TH",
-    "builderBase": "Деревня Строителя",
+    "builderBase": "Builder Base",
     "bh": "BH",
-    "clanCapital": "Столица клана",
-    "leader": "Глава",
-    "coLeader": "Соруководитель",
-    "elder": "Старейшина",
-    "member": "Участник",
+    "clanCapital": "Clan Capital",
+    "leader": "Leader",
+    "coLeader": "Co-Leader",
+    "elder": "Elder",
+    "member": "Member",
     "ready": "Opted In",
     "@ready": {
         "description": "Opted In for war"
@@ -219,16 +222,16 @@
     "@unready": {
         "description": "Opted Out for war"
     },
-    "heroes": "Герои",
-    "equipment": "Снаряжение",
-    "troops": "Войны",
-    "superTroops": "Супервойны",
+    "heroes": "Heroes",
+    "equipment": "Equipments",
+    "troops": "Troops",
+    "superTroops": "Super Troops",
     "activeSuperTroops": "Active Super Troops",
-    "pets": "Животные",
-    "siegeMachines": "Осадные машины",
-    "spells": "Заклинания",
-    "achievements": "Список достижений",
-    "byDay": "За день",
+    "pets": "Pets",
+    "siegeMachines": "Siege Machines",
+    "spells": "Spells",
+    "achievements": "Achievements",
+    "byDay": "By Day",
     "@byDay": {
         "description": "Shows stats by day"
     },
@@ -266,15 +269,16 @@
     },
     "date": "Date",
     "stats": "Stats",
+    "details": "Details",
     "seasonStats": "Season Stats",
-    "charts": "Диаграммы",
-    "history": "Журнал",
+    "charts": "Charts",
+    "history": "History",
     "@history": {
         "description": "Shows EOS trophies history"
     },
-    "legendLeague": "Легендарная лига",
+    "legendLeague": "Legend League",
     "notInLegendLeague": "Not in Legend League",
-    "noLegendData": "Данные о легендах не найдены сегодня",
+    "noLegendData": "No Legend Data Found for today",
     "legendStartDescription": "You started the day with {trophies} trophies.",
     "@legendStartDescription": {
         "placeholders": {
@@ -340,24 +344,24 @@
             }
         }
     },
-    "noRank": "Нет рейтингов",
-    "started": "Запущен",
+    "noRank": "No ranking",
+    "started": "Started",
     "@started": {
         "description": "Title for the number of trophies at the beginning of the day"
     },
-    "ended": "Завершен",
+    "ended": "Ended",
     "@ended": {
         "description": "Title for the number of trophies at the end of the day"
     },
-    "average": "Средний",
+    "average": "Average",
     "@average": {
         "description": "Average value of legend trophies (defense and attack)"
     },
-    "remaining": "Осталось",
+    "remaining": "Remaining",
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inacurate Data ?",
+    "legendsTitle": "Inacurate Data?",
     "legendsExplanation_intro": "Due to limitations in the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
     "legendsExplanation_api_delay_title": "1. API Delay: ",
     "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
@@ -369,7 +373,7 @@
     "legendsExplanation_net_gain_loss_title": "3. Net Gain/Loss: ",
     "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
     "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-    "toDoList": "Список дел",
+    "toDoList": "To do list",
     "lastActive": "Last active: {date}",
     "@lastActive": {
         "placeholders": {
@@ -419,18 +423,18 @@
     "todoExplanation_cwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
     "todoExplanation_passAndGames_title": "Season Pass & Clan Games:",
     "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
-    "todoExplanation_conclusion": "To get the final percentage, The total accumulated actions completed during ongoing events are divided by the total required actions. Accounts inactive for 14 days are not included in the overall calculation.",
-    "worst": "Наихудший",
+    "todoExplanation_conclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
+    "worst": "Worst",
     "@worst": {
         "description": "Worst end of day trophies"
     },
-    "best": "Лучший",
+    "best": "Best",
     "@best": {
         "description": "Best end of day trophies"
     },
-    "total": "Всего",
-    "heroesEquipments": "Снаряжение героя",
-    "daysAgo": "{days} дн. назад",
+    "total": "Total",
+    "heroesEquipments": "Heroes equipments",
+    "daysAgo": "{days} days ago",
     "@daysAgo": {
         "placeholders": {
             "days": {
@@ -438,7 +442,7 @@
             }
         }
     },
-    "dayAgo": "{day} день назад",
+    "dayAgo": "{day} day ago",
     "@dayAgo": {
         "placeholders": {
             "day": {
@@ -446,7 +450,7 @@
             }
         }
     },
-    "hourAgo": "{hour} час назад",
+    "hourAgo": "{hour} hour ago",
     "@hourAgo": {
         "placeholders": {
             "hour": {
@@ -454,7 +458,7 @@
             }
         }
     },
-    "hoursAgo": "{hours} часов назад",
+    "hoursAgo": "{hours} hours ago",
     "@hoursAgo": {
         "placeholders": {
             "hours": {
@@ -462,7 +466,7 @@
             }
         }
     },
-    "minuteAgo": "{minute} минуту назад",
+    "minuteAgo": "{minute} minute ago",
     "@minuteAgo": {
         "placeholders": {
             "minute": {
@@ -470,7 +474,7 @@
             }
         }
     },
-    "minutesAgo": "{minutes} минут назад",
+    "minutesAgo": "{minutes} minutes ago",
     "@minutesAgo": {
         "placeholders": {
             "minutes": {
@@ -478,7 +482,7 @@
             }
         }
     },
-    "secondAgo": "{seconds} сек. назад",
+    "secondAgo": "{seconds}s ago",
     "@secondAgo": {
         "placeholders": {
             "seconds": {
@@ -486,15 +490,15 @@
             }
         }
     },
-    "justNow": "Сейчас",
-    "trophiesByMonth": "Трофеи по месяцам",
+    "justNow": "Just Now",
+    "trophiesByMonth": "Trophies by month",
     "trophiesBySeason": "Trophies by season",
-    "eosTrophies": "Трофеи конца сезона",
-    "searchClan": "Найти клан",
+    "eosTrophies": "End Of Season Trophies",
+    "searchClan": "Search clan",
     "nameOrTagClan": "Clan's name or tag",
-    "noResult": "Нет результатов.",
-    "filters": "Фильтры",
-    "whatever": "Не важно",
+    "noResult": "No result.",
+    "filters": "Filters",
+    "whatever": "Whatever",
     "@whatever": {
         "description": "Whatever the value"
     },
@@ -507,14 +511,14 @@
         "description": "Filter value is not set"
     },
     "warFrequency": "War frequency",
-    "minimumMembers": "Минимум участников",
-    "maximumMembers": "Максимум участников",
-    "location": "Расположение",
-    "minimumClanPoints": "Минимальные очки клана",
-    "minimumClanLevel": "Минимальный уровень клана",
-    "noClan": "Без клана",
-    "joinClanToUnlockNewFeatures": "Присоединитесь к Клану для разблокировки новых функций.",
-    "apply": "Применить",
+    "minimumMembers": "Minimum members",
+    "maximumMembers": "Maximum members",
+    "location": "Location",
+    "minimumClanPoints": "Minimum clan points",
+    "minimumClanLevel": "Minimum clan level",
+    "noClan": "No clan",
+    "joinClanToUnlockNewFeatures": "Join a clan to unlock new features.",
+    "apply": "Apply",
     "opened": "Opened",
     "@opened": {
         "description": "Clan is opened"
@@ -527,6 +531,68 @@
     "role": "Role",
     "expLevel": "Experience Level",
     "townHallLevel": "TH Level",
+    "thLevel": "TH{level}",
+    "@thLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "townHallLevelLevel": "TownHall {level}",
+    "@townHallLevelLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "byNumberOfWars": "By number of wars",
+    "@byNumberOfWars": {
+        "description": "filter by number of wars"
+    },
+    "ok": "OK",
+    "@ok": {
+        "description": "OK button on pop up"
+    },
+    "byDateRange": "By date range",
+    "@byDateRange": {
+        "description": "filter by date range"
+    },
+    "selectSeason": "Select a season",
+    "@selectSeason": {
+        "description": "Ask player to select a season"
+    },
+    "year": "Year",
+    "month": "Month",
+    "allTownHalls": "All TownHalls",
+    "seasonDate": "{date} season",
+    "@seasonDate": {
+        "description": "Example : August 2024 season",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "lastXwars": "Last {number} wars",
+    "@lastXwars": {
+        "description": "Example : Shows the last 25 wars",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "friendly": "Friendly",
+    "@friendly": {
+        "description": "Friendly war"
+    },
+    "cwl": "CWL",
+    "random": "Random",
+    "@random": {
+        "description": "Random/basic war (not friendly or cwl)"
+    },
     "builderBaseTrophies": "BB Trophies",
     "donations": "Donations",
     "donationsReceived": "Donations Received",
@@ -736,13 +802,13 @@
     "defenses": "Defenses",
     "attack": "Attack",
     "attacks": "Attacks",
-    "victory": "Победа",
-    "defeat": "Поражение",
-    "draw": "Ничья",
+    "victory": "Victory",
+    "defeat": "Defeat",
+    "draw": "Draw",
     "@draw": {
         "description": "War ended in a draw"
     },
-    "perfectWar": "Идеальная война",
+    "perfectWar": "Perfect war",
     "newest": "Newest",
     "oldest": "Oldest",
     "warEnded": "War ended",
@@ -814,6 +880,55 @@
     "neededOverall": "% Needed overall",
     "calculate": "Calculate",
     "warStats": "War Stats",
+    "clanWarLeague": "Clan War League",
+    "cwlRank": "Your clan is currently ranked {rank}.",
+    "@cwlRank": {
+        "placeholders": {
+            "rank": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlStars": "Your clan has a total of {stars} stars.",
+    "@cwlStars": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlMissingStarsFromNext": "Your clan is missing {stars} stars to catch up with the next clan.",
+    "@cwlMissingStarsFromNext": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlMissingStarsFromFirst": "Your clan is missing {stars} stars to catch up with the first clan.",
+    "@cwlMissingStarsFromFirst": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
+    "@cwlDestructionPercentage": {
+        "placeholders": {
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "cwlCurrentRound": "It's currently round {round}.",
+    "@cwlCurrentRound": {
+        "placeholders": {
+            "round": {
+                "type": "int"
+            }
+        }
+    },
     "noAccountLinkedToYourProfileFound": "No account linked to your profile found",
     "management": "Management",
     "comingSoon": "Coming soon!",
