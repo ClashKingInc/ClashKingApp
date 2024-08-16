@@ -77,7 +77,7 @@ class CwlCardState extends State<CwlCard> {
                         children: [
                           ImageChip(
                             imageUrl:
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Podium.png",
+                                "https://assets.clashk.ing/icons/Icon_HV_Podium.png",
                             labelPadding: 2,
                             label: widget.currentLeagueInfo
                                 .getClanDetails(widget.clanTag)!
@@ -88,7 +88,7 @@ class CwlCardState extends State<CwlCard> {
                           ),
                           ImageChip(
                             imageUrl:
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
+                                "https://assets.clashk.ing/icons/Icon_BB_Star.png",
                             labelPadding: 2,
                             label: clan!.stars.toString(),
                             description: AppLocalizations.of(context)!
@@ -116,7 +116,7 @@ class CwlCardState extends State<CwlCard> {
                           ),
                           ImageChip(
                             imageUrl:
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
+                                "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                             labelPadding: 2,
                             label:
                                 clan!.destructionPercentage.toInt().toString(),

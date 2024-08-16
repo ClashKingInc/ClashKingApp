@@ -113,15 +113,15 @@ class LegendsTrophiesBySeasonTableState
                       _buildSortButton('date', Icons.calendar_today, 'Date'),
                       _buildSortButton(
                           'attacks',
-                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
+                          "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                           'Attaques'),
                       _buildSortButton(
                           'defenses',
-                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield_Arrow.png",
+                          "https://assets.clashk.ing/icons/Icon_HV_Shield_Arrow.png",
                           'Défenses'),
                       _buildSortButton(
                           'trophies',
-                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border_No_Padding.png",
+                          "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border_No_Padding.png",
                           'Trophées'),
                     ],
                   ),
@@ -341,7 +341,7 @@ class LegendsTrophiesBySeasonTableState
             ),
             CachedNetworkImage(
               imageUrl:
-                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border.png",
+                  "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border.png",
               width: 40,
             ),
             Column(children: [
@@ -366,7 +366,7 @@ class LegendsTrophiesBySeasonTableState
                       stats: legendDay.attacksStats,
                       plusMinus: "+",
                       icon:
-                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png")),
+                          "https://assets.clashk.ing/icons/Icon_HV_Sword.png")),
               Expanded(
                 child: LegendOffenseDefense(
                     title: AppLocalizations.of(context)?.defenses ?? "Defenses",
@@ -375,7 +375,7 @@ class LegendsTrophiesBySeasonTableState
                     stats: legendDay.defensesStats,
                     plusMinus: "-",
                     icon:
-                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield_Arrow.png"),
+                        "https://assets.clashk.ing/icons/Icon_HV_Shield_Arrow.png"),
               ),
             ],
           ),

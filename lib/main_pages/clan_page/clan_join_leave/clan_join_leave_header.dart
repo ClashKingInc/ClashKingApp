@@ -26,7 +26,7 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
   @override
   Widget build(BuildContext context) {
     String backgroundImageUrl =
-        "https://clashkingfiles.b-cdn.net/landscape/join-leave-landscape.png";
+        "https://assets.clashk.ing/landscape/join-leave-landscape.png";
     return Column(children: [
       Stack(
         clipBehavior: Clip.none,

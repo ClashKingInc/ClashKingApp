@@ -85,13 +85,13 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                           Text("${widget.clan['name']} "),
                           (widget.clan.containsKey('location') && widget.clan['location']!.containsKey('countryCode'))
                             ? CachedNetworkImage(
-                              imageUrl: "https://clashkingfiles.b-cdn.net/country-flags/${widget.clan['location']['countryCode'].toLowerCase()}.png",
+                              imageUrl: "https://assets.clashk.ing/country-flags/${widget.clan['location']['countryCode'].toLowerCase()}.png",
                               width: 16)
                             : SizedBox.shrink(),
                           SizedBox(width: 8),
                           CachedNetworkImage(
                             width: 20,
-                            imageUrl: leagueUrl ?? "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
+                            imageUrl: leagueUrl ?? "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                           ),
                         ],
                       ),
@@ -119,7 +119,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                               Chip(
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors.transparent,
-                                  child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
+                                  child: CachedNetworkImage(imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Trophy.png"),
                                 ),
                                 label: Text(
                                   widget.clan['clanPoints'].toString(),

@@ -25,11 +25,11 @@ class PlayerLegendData {
   List<dynamic> defensesList = [];
   final bool isInLegend;
   String attackIcon =
-      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png";
+      "https://assets.clashk.ing/icons/Icon_HV_Sword.png";
   String defenseIcon =
-      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield_Arrow.png";
+      "https://assets.clashk.ing/icons/Icon_HV_Shield_Arrow.png";
   String legendIcon =
-      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border_No_Padding.png";
+      "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border_No_Padding.png";
 
   PlayerLegendData(
       {required this.legendData,

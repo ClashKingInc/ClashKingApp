@@ -137,7 +137,7 @@ class TeamsCard extends StatelessWidget {
                                                 SizedBox(
                                                   child: CachedNetworkImage(
                                                     imageUrl:
-                                                        "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
+                                                        "https://assets.clashk.ing/icons/Icon_BB_Star.png",
                                                     width: 20,
                                                     height: 20,
                                                   ),
@@ -164,7 +164,7 @@ class TeamsCard extends StatelessWidget {
                                           children: [
                                             CachedNetworkImage(
                                               imageUrl:
-                                                  'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${entry.key}.png',
+                                                  'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${entry.key}.png',
                                               width: 20,
                                             ),
                                             SizedBox(width: 5),

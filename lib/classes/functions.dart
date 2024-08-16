@@ -12,10 +12,10 @@ Future<String> fetchPlayerTownHallByTownHallLevel(int townHallLevel) async {
   String townHallPic;
   if (townHallLevel >= 1 && townHallLevel <= 16) {
     townHallPic =
-        'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-$townHallLevel.png';
+        'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-$townHallLevel.png';
   } else {
     townHallPic =
-        'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-16.png';
+        'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-16.png';
   }
   return townHallPic;
 }
@@ -25,10 +25,10 @@ Future<String> fetchPlayerBuilderHallByTownHallLevel(
   String builderHallPic;
   if (builderHallLevel >= 1 && builderHallLevel <= 10) {
     builderHallPic =
-        'https://clashkingfiles.b-cdn.net/builder-base/builder-hall-pics/Building_BB_Builder_Hall_level_$builderHallLevel.png';
+        'https://assets.clashk.ing/builder-base/builder-hall-pics/Building_BB_Builder_Hall_level_$builderHallLevel.png';
   } else {
     builderHallPic =
-        'https://clashkingfiles.b-cdn.net/builder-base/builder-hall-pics/Building_BB_Builder_Hall_level_8.png';
+        'https://assets.clashk.ing/builder-base/builder-hall-pics/Building_BB_Builder_Hall_level_8.png';
   }
 
   return builderHallPic;
@@ -90,7 +90,7 @@ Future<void> fetchImagesAndTypes(List<dynamic> items, String type) async {
         urlAndType = TroopDataManager().getTroopInfo(item.name);
     }
     item.imageUrl = urlAndType['url'] ??
-        'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
+        'https://assets.clashk.ing/clashkinglogo.png';
     item.type = urlAndType['type'] ?? 'unknown';
   }
 }

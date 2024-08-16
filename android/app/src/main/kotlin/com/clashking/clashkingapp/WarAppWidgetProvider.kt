@@ -184,7 +184,7 @@ fun getClanOrOpponentDetails(info: JSONObject): ClanOrOpponentDetails {
         name = info.optString("name", "Unknown"),
         badgeUrl = info.optString(
             "badgeUrlMedium",
-            "https://clashkingfiles.b-cdn.net/clashkinglogo.png"
+            "https://assets.clashk.ing/clashkinglogo.png"
         ),
         percent = info.optString("percent", "0%"),
         attacks = info.optString("attacks", "0/0")

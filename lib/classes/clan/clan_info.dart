@@ -336,7 +336,7 @@ class ClanService {
 
   String fetchLeagueImageUrl(String name) {
     return leagueUrls[name] ??
-        'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
+        'https://assets.clashk.ing/clashkinglogo.png';
   }
 
   Future<WarStateInfo> fetchWarStateInfo(String clanTag) async {

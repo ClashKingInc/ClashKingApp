@@ -21,7 +21,7 @@ class AchievementScreenState extends State<AchievementScreen>
     with SingleTickerProviderStateMixin {
   String currentFilter = 'All';
   String backgroundImageUrl =
-      "https://clashkingfiles.b-cdn.net/landscape/achievement-landscape.png";
+      "https://assets.clashk.ing/landscape/achievement-landscape.png";
   int achievementCompleted = 0;
   int achievementTotal = 0;
   String achievementStringRatio = '';

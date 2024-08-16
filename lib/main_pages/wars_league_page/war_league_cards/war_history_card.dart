@@ -51,7 +51,7 @@ class WarHistoryCard extends StatelessWidget {
                   width: 70,
                   child: CachedNetworkImage(
                       imageUrl:
-                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_War.png"),
+                          "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png"),
                 ),
                 SizedBox(width: 24),
                 Expanded(
@@ -114,7 +114,7 @@ class WarHistoryCard extends StatelessWidget {
                           ),
                           ImageChip(
                             imageUrl:
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
+                                "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
                             label: warLogStats.averageClanStarsPerMember
                                 .toString(),
                             description: AppLocalizations.of(context)!

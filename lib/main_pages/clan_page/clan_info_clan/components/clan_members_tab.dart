@@ -228,7 +228,7 @@ class ClanMembersState extends State<ClanMembers> {
                                   children: [
                                     CachedNetworkImage(
                                       imageUrl:
-                                          'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${member.townHallLevel}.png',
+                                          'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${member.townHallLevel}.png',
                                       width: 40,
                                     ),
                                   ],
@@ -282,7 +282,7 @@ class ClanMembersState extends State<ClanMembers> {
                                     SizedBox(width: 20),
                                     CachedNetworkImage(
                                       imageUrl:
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_XP.png",
+                                          "https://assets.clashk.ing/icons/Icon_HV_XP.png",
                                       width: 24,
                                     ),
                                     SizedBox(width: 8),
@@ -300,7 +300,7 @@ class ClanMembersState extends State<ClanMembers> {
                                       SizedBox(width: 20),
                                       CachedNetworkImage(
                                         imageUrl:
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
+                                            "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                                         width: 24,
                                       ),
                                       SizedBox(width: 8),

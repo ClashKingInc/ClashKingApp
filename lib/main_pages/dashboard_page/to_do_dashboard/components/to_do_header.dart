@@ -32,7 +32,7 @@ class ToDoHeaderState extends State<ToDoHeader> {
                 ),
                 child: CachedNetworkImage(
                   imageUrl:
-                      "https://clashkingfiles.b-cdn.net/landscape/todo-landscape.png",
+                      "https://assets.clashk.ing/landscape/todo-landscape.png",
                   width: double.infinity,
                   fit: BoxFit.cover,
                 )),
@@ -64,7 +64,7 @@ class ToDoHeaderState extends State<ToDoHeader> {
                       backgroundColor: Colors.transparent,
                       child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_No_Padding.png",
+                            "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png",
                       ),
                     ),
                     labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -89,7 +89,7 @@ class ToDoHeaderState extends State<ToDoHeader> {
                       backgroundColor: Colors.transparent,
                       child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                            "https://assets.clashk.ing/icons/Icon_DC_War.png",
                       ),
                     ),
                     labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -114,7 +114,7 @@ class ToDoHeaderState extends State<ToDoHeader> {
                       backgroundColor: Colors.transparent,
                       child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_Games_Medal.png",
+                            "https://assets.clashk.ing/icons/Icon_HV_Clan_Games_Medal.png",
                       ),
                     ),
                     labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -139,7 +139,7 @@ class ToDoHeaderState extends State<ToDoHeader> {
                       backgroundColor: Colors.transparent,
                       child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Raid_Attack.png",
+                            "https://assets.clashk.ing/icons/Icon_HV_Raid_Attack.png",
                       ),
                     ),
                     labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -169,7 +169,7 @@ class ToDoHeaderState extends State<ToDoHeader> {
                       backgroundColor: Colors.transparent,
                       child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_DC_CWL_No_Border.png",
+                            "https://assets.clashk.ing/icons/Icon_DC_CWL_No_Border.png",
                       ),
                     ),
                     labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -195,7 +195,7 @@ class ToDoHeaderState extends State<ToDoHeader> {
                       scale: 1.7,
                       child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Gold_Pass.png",
+                            "https://assets.clashk.ing/icons/Icon_HV_Gold_Pass.png",
                       ),
                     ),
                   ),

@@ -260,7 +260,7 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                       CachedNetworkImage(
                         width: 20,
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                            "https://assets.clashk.ing/icons/Icon_DC_War.png",
                       ),
                       SizedBox(width: 8),
                       Shimmer.fromColors(

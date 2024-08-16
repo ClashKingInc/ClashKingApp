@@ -60,7 +60,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
   @override
   Widget build(BuildContext context) {
     String backgroundImageUrl =
-        "https://clashkingfiles.b-cdn.net/landscape/clan-landscape.png";
+        "https://assets.clashk.ing/landscape/clan-landscape.png";
 
     String? extractDiscordCode(String description) {
       final RegExp discordPattern = RegExp(
@@ -266,7 +266,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               "No countryCode")
                           ? CachedNetworkImage(
                               imageUrl:
-                                  "https://clashkingfiles.b-cdn.net/country-flags/${widget.clanInfo.location!.countryCode}.png")
+                                  "https://assets.clashk.ing/country-flags/${widget.clanInfo.location!.countryCode}.png")
                           : Icon(Icons.flag,
                               color: Theme.of(context).colorScheme.onSurface,
                               size: 16),
@@ -293,7 +293,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                     backgroundColor: Colors.transparent,
                     child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
+                            "https://assets.clashk.ing/icons/Icon_HV_Trophy.png"),
                   ),
                   label: Text(
                     widget.clanInfo.clanPoints.toString(),
@@ -305,7 +305,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                     backgroundColor: Colors.transparent,
                     child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${widget.clanInfo.requiredTownhallLevel}.png"),
+                            "https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${widget.clanInfo.requiredTownhallLevel}.png"),
                   ),
                   label: Text(
                     widget.clanInfo.requiredTownhallLevel.toString(),
@@ -317,7 +317,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                     backgroundColor: Colors.transparent,
                     child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack.png"),
+                            "https://assets.clashk.ing/icons/Icon_HV_Attack.png"),
                   ),
                   label: Text(
                     widget.clanInfo.clanCapitalPoints.toString(),
@@ -352,7 +352,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                     backgroundColor: Colors.transparent,
                     child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png"),
+                            "https://assets.clashk.ing/icons/Icon_DC_War.png"),
                   ),
                   label: Text(
                     () {
@@ -409,7 +409,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                             avatar: CircleAvatar(
                               backgroundColor: Colors.transparent,
                               backgroundImage: NetworkImage(
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_War.png",
+                                "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png",
                               ),
                             ),
                             label: Shimmer.fromColors(
@@ -433,7 +433,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                           avatar: CircleAvatar(
                             backgroundColor: Colors.transparent,
                             backgroundImage: NetworkImage(
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_War.png",
+                              "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png",
                             ),
                           ),
                           label: Text(
@@ -502,7 +502,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               CachedNetworkImage(
                                 width: 20,
                                 imageUrl:
-                                    "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                                    "https://assets.clashk.ing/icons/Icon_DC_War.png",
                               ),
                               SizedBox(width: 8),
                               Shimmer.fromColors(
@@ -597,7 +597,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               CachedNetworkImage(
                                 width: 20,
                                 imageUrl:
-                                    "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                                    "https://assets.clashk.ing/icons/Icon_DC_War.png",
                               ),
                               SizedBox(width: 8),
                               Text(

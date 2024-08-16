@@ -17,8 +17,8 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
 
     // Set the appropriate image URLs based on the theme
     final logoUrl = isDarkMode
-        ? "https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/ClashKing-1.png"
-        : "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png";
+        ? "https://assets.clashk.ing/logos/crown-arrow-dark-bg/ClashKing-1.png"
+        : "https://assets.clashk.ing/logos/crown-arrow-white-bg/ClashKing-2.png";
 
     return GestureDetector(
       onTap: () async {

@@ -23,8 +23,8 @@ class PlayerInfosCard extends StatelessWidget {
             ? 1
             : playerStats.donationsReceived);
     String imageOptInOut = playerStats.warPreference == 'in'
-        ? "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png"
-        : 'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png';
+        ? "https://assets.clashk.ing/icons/Icon_HV_In.png"
+        : 'https://assets.clashk.ing/icons/Icon_HV_Out.png';
     String warPreference = playerStats.warPreference == 'in'
         ? AppLocalizations.of(context)?.ready ?? 'Ready'
         : AppLocalizations.of(context)?.unready ?? 'Unready';
@@ -111,7 +111,7 @@ class PlayerInfosCard extends StatelessWidget {
                               ),
                               ImageChip(
                                   imageUrl:
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
+                                      "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
                                   label: playerStats.warStars.toString(),
                                   description: AppLocalizations.of(context)!
                                       .playerWarStarsDescription(

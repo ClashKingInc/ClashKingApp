@@ -14,7 +14,7 @@ class SpellsDataManager {
 
   Future<void> loadSpellsData() async {
     if (!_loaded) {
-      final response = await http.get(Uri.parse('https://clashkingfiles.b-cdn.net/app-data/spells_data.json'));
+      final response = await http.get(Uri.parse('https://assets.clashk.ing/app-data/spells_data.json'));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['spells'] != null && data['spells'] is Map) {
@@ -31,6 +31,6 @@ class SpellsDataManager {
   }
 
   Map<String, String> getSpellInfo(String spellName) {
-    return spellUrlsAndTypes[spellName] ?? {'url': 'https://clashkingfiles.b-cdn.net/icons/Unknown_person.jpg', 'type': 'unknown', 'hero': 'unknown'};
+    return spellUrlsAndTypes[spellName] ?? {'url': 'https://assets.clashk.ing/icons/Unknown_person.jpg', 'type': 'unknown', 'hero': 'unknown'};
   }
 }

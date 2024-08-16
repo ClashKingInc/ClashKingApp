@@ -16,7 +16,7 @@ class LeagueDataManager {
     try {
       if (!_loaded) {
         final response = await http.get(Uri.parse(
-            'https://clashkingfiles.b-cdn.net/app-data/league_data.json'));
+            'https://assets.clashk.ing/app-data/league_data.json'));
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
           // Check if 'leagues' is not null and is a Map
@@ -41,6 +41,6 @@ class LeagueDataManager {
 
   String getLeagueUrl(String leagueName) {
     return leagueUrls[leagueName] ??
-        'https://clashkingfiles.b-cdn.net/clashkinglogo.png';
+        'https://assets.clashk.ing/clashkinglogo.png';
   }
 }

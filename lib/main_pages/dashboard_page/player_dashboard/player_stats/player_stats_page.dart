@@ -375,7 +375,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                 Row(children: [
                                   CachedNetworkImage(
                                       imageUrl:
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
+                                          "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
                                       width: 16,
                                       height: 16,
                                       fit: BoxFit.cover),
@@ -387,7 +387,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                   children: [
                                     CachedNetworkImage(
                                         imageUrl:
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
+                                            "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                         width: 16,
                                         height: 16,
                                         fit: BoxFit.cover),
@@ -400,7 +400,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                   children: [
                                     CachedNetworkImage(
                                         imageUrl:
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
+                                            "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                                         width: 16,
                                         height: 16,
                                         fit: BoxFit.cover),
@@ -545,7 +545,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                               children: [
                                 CachedNetworkImage(
                                     imageUrl:
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
+                                        "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
                                     width: 16,
                                     height: 16,
                                     fit: BoxFit.cover),
@@ -558,7 +558,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                               children: [
                                 CachedNetworkImage(
                                     imageUrl:
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
+                                        "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                     width: 16,
                                     height: 16,
                                     fit: BoxFit.cover),
@@ -572,7 +572,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                               children: [
                                 CachedNetworkImage(
                                     imageUrl:
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png",
+                                        "https://assets.clashk.ing/icons/Icon_HV_Shield.png",
                                     width: 16,
                                     height: 16,
                                     fit: BoxFit.cover),
@@ -752,7 +752,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                   Row(children: [
                                     CachedNetworkImage(
                                         imageUrl:
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
+                                            "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
                                         width: 16,
                                         height: 16,
                                         fit: BoxFit.cover),
@@ -764,7 +764,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                     children: [
                                       CachedNetworkImage(
                                           imageUrl:
-                                              "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
+                                              "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                           width: 16,
                                           height: 16,
                                           fit: BoxFit.cover),
@@ -778,7 +778,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                     children: [
                                       CachedNetworkImage(
                                           imageUrl:
-                                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
+                                              "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                                           width: 16,
                                           height: 16,
                                           fit: BoxFit.cover),
@@ -925,7 +925,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                   Row(children: [
                                     CachedNetworkImage(
                                         imageUrl:
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png",
+                                            "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
                                         width: 16,
                                         height: 16,
                                         fit: BoxFit.cover),
@@ -937,7 +937,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                     children: [
                                       CachedNetworkImage(
                                           imageUrl:
-                                              "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
+                                              "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                           width: 16,
                                           height: 16,
                                           fit: BoxFit.cover),
@@ -951,7 +951,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                     children: [
                                       CachedNetworkImage(
                                           imageUrl:
-                                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png",
+                                              "https://assets.clashk.ing/icons/Icon_HV_Shield.png",
                                           width: 16,
                                           height: 16,
                                           fit: BoxFit.cover),
@@ -1110,7 +1110,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
           SizedBox(height: 32),
           CachedNetworkImage(
             imageUrl:
-                'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
+                'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
             height: 250,
             width: 200,
           ),
@@ -1121,7 +1121,23 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
 
   Widget buildAttackDetails(BuildContext context) {
     if (warStats!.attacks.isEmpty) {
-      return Center(child: Text("No attacks found"));
+      return Column(
+        children: [
+          SizedBox(height: 16),
+          Card(
+              child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(AppLocalizations.of(context)?.noDataAvailable ??
+                      'No data available'))),
+          SizedBox(height: 32),
+          CachedNetworkImage(
+            imageUrl:
+                'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
+            height: 250,
+            width: 200,
+          ),
+        ],
+      );
     }
 
     final Locale userLocale = Localizations.localeOf(context);
@@ -1169,7 +1185,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                             children: [
                               CachedNetworkImage(
                                 imageUrl:
-                                    'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${attack.defender.townhallLevel}.png',
+                                    'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${attack.defender.townhallLevel}.png',
                                 width: 40,
                                 height: 40,
                               ),
@@ -1228,7 +1244,23 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
 
   Widget buildDefenseDetails(BuildContext context) {
     if (warStats!.defenses.isEmpty) {
-      return Center(child: Text("No defenses found"));
+      return Column(
+        children: [
+          SizedBox(height: 16),
+          Card(
+              child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(AppLocalizations.of(context)?.noDataAvailable ??
+                      'No data available'))),
+          SizedBox(height: 32),
+          CachedNetworkImage(
+            imageUrl:
+                'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
+            height: 250,
+            width: 200,
+          ),
+        ],
+      );
     }
 
     final Locale userLocale = Localizations.localeOf(context);
@@ -1276,7 +1308,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                             children: [
                               CachedNetworkImage(
                                 imageUrl:
-                                    'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${defense.attacker.townhallLevel}.png',
+                                    'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${defense.attacker.townhallLevel}.png',
                                 width: 40,
                                 height: 40,
                               ),

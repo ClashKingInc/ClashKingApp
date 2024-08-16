@@ -126,7 +126,7 @@ TownhallAttackDefenseStats getTownhallAttackDefenseStats(int townhallLevel) {
         ? filteredDefenses.map((defense) => defense.stars).reduce((a, b) => a + b) / totalDefenses
         : 0.0;
 
-    final townHallImageUrl = 'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-$townhallLevel.png';
+    final townHallImageUrl = 'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-$townhallLevel.png';
 
     return TownhallAttackDefenseStats(
       averageAttackStars: averageAttackStars,

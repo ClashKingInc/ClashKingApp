@@ -261,7 +261,7 @@ Future<void> initializeDiscordUser(BuildContext context) async {
     user = User(
       id: '0',
       avatar:
-          'https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png',
+          'https://assets.clashk.ing/logos/crown-arrow-white-bg/ClashKing-2.png',
       globalName: username ?? 'ILoveClashKing',
     );
 

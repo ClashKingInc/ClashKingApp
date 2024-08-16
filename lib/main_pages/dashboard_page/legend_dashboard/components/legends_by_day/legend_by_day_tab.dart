@@ -121,7 +121,7 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
                             stats: legendDay.attacksStats,
                             plusMinus: "+",
                             icon:
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
+                                "https://assets.clashk.ing/icons/Icon_HV_Sword.png"),
                       ),
                       Expanded(
                         child: LegendOffenseDefenseCard(
@@ -132,7 +132,7 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
                             stats: legendDay.defensesStats,
                             plusMinus: "-",
                             icon:
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield_Arrow.png"),
+                                "https://assets.clashk.ing/icons/Icon_HV_Shield_Arrow.png"),
                       ),
                     ],
                   ),
@@ -159,7 +159,7 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
               SizedBox(height: 10),
               CachedNetworkImage(
                 imageUrl:
-                    'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
+                    'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
                 height: 350,
                 width: 200,
               )

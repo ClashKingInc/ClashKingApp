@@ -49,7 +49,7 @@ class PlayerStatsHeader extends StatelessWidget {
                 ),
                 child: CachedNetworkImage(
                   imageUrl:
-                      "https://clashkingfiles.b-cdn.net/landscape/war-stats.png",
+                      "https://assets.clashk.ing/landscape/war-stats.png",
                   width: double.infinity,
                   fit: BoxFit.cover,
                 )),

@@ -37,7 +37,7 @@ class LegendHistoryCard extends StatelessWidget {
                                 Center(
                                   child: CachedNetworkImage(
                                     imageUrl:
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_No_Padding.png",
+                                        "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png",
                                     height: 80,
                                   ),
                                 ),
@@ -79,14 +79,14 @@ class LegendHistoryCard extends StatelessWidget {
                                 Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png",),
+                                    child: CachedNetworkImage(imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Trophy_Best.png",),
                                   ),
                                   label: Text('${legendsSeason.trophies}', style: Theme.of(context).textTheme.labelLarge,),
                                 ),
                                 Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png"),
+                                    child: CachedNetworkImage(imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Planet.png"),
                                   ),
                                   label: Text(
                                     NumberFormat('#,###', 'fr_FR').format(legendsSeason.rank),
@@ -96,14 +96,14 @@ class LegendHistoryCard extends StatelessWidget {
                                 Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",),
+                                    child: CachedNetworkImage(imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Sword.png",),
                                   ),
                                   label: Text('${legendsSeason.attackWins}', style: Theme.of(context).textTheme.labelLarge,),
                                 ),
                                 Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png",),
+                                    child: CachedNetworkImage(imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Shield.png",),
                                   ),
                                   label: Text('${legendsSeason.defenseWins}', style: Theme.of(context).textTheme.labelLarge,),
                                 ),
