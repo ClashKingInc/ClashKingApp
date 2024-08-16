@@ -127,7 +127,7 @@ class WarLogHistoryCardState extends State<WarLogHistoryCard> {
                   SizedBox(height: 32),
                   CachedNetworkImage(
                     imageUrl:
-                        'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_7.png',
+                        'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
                     height: 250,
                     width: 200,
                   ),
@@ -282,7 +282,7 @@ class WarLogHistoryCardState extends State<WarLogHistoryCard> {
                                       children: [
                                         CachedNetworkImage(
                                             imageUrl:
-                                                'https://clashkingfiles.b-cdn.net/icons/Icon_HV_XP.png',
+                                                'https://assets.clashk.ing/icons/Icon_HV_XP.png',
                                             width: 20,
                                             height: 20),
                                         Text(

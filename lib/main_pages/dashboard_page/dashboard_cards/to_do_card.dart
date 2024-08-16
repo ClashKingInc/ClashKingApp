@@ -64,7 +64,7 @@ class ToDoCardState extends State<ToDoCard> {
                               width: 100,
                               child: CachedNetworkImage(
                                   imageUrl:
-                                      'https://clashkingfiles.b-cdn.net/icons/Magic_Item_Builder_Potion.png'),
+                                      'https://assets.clashk.ing/icons/Magic_Item_Builder_Potion.png'),
                             ),
                           ],
                         ),
@@ -168,7 +168,7 @@ class ToDoCardState extends State<ToDoCard> {
                                 backgroundColor: Colors.transparent,
                                 child: CachedNetworkImage(
                                   imageUrl:
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_No_Padding.png",
+                                      "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png",
                                 ),
                               ),
                               labelPadding:
@@ -195,7 +195,7 @@ class ToDoCardState extends State<ToDoCard> {
                                 backgroundColor: Colors.transparent,
                                 child: CachedNetworkImage(
                                   imageUrl:
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                                      "https://assets.clashk.ing/icons/Icon_DC_War.png",
                                 ),
                               ),
                               labelPadding:
@@ -221,7 +221,7 @@ class ToDoCardState extends State<ToDoCard> {
                                 backgroundColor: Colors.transparent,
                                 child: CachedNetworkImage(
                                   imageUrl:
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_Games_Medal.png",
+                                      "https://assets.clashk.ing/icons/Icon_HV_Clan_Games_Medal.png",
                                 ),
                               ),
                               labelPadding:
@@ -247,7 +247,7 @@ class ToDoCardState extends State<ToDoCard> {
                                 backgroundColor: Colors.transparent,
                                 child: CachedNetworkImage(
                                   imageUrl:
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Raid_Attack.png",
+                                      "https://assets.clashk.ing/icons/Icon_HV_Raid_Attack.png",
                                 ),
                               ),
                               labelPadding:
@@ -291,7 +291,7 @@ class ToDoCardState extends State<ToDoCard> {
                                 backgroundColor: Colors.transparent,
                                 child: CachedNetworkImage(
                                   imageUrl:
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_DC_CWL_No_Border.png",
+                                      "https://assets.clashk.ing/icons/Icon_DC_CWL_No_Border.png",
                                 ),
                               ),
                               labelPadding:
@@ -318,7 +318,7 @@ class ToDoCardState extends State<ToDoCard> {
                                 scale: 1.7,
                                 child: CachedNetworkImage(
                                   imageUrl:
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Gold_Pass.png",
+                                      "https://assets.clashk.ing/icons/Icon_HV_Gold_Pass.png",
                                 ),
                               ),
                             ),

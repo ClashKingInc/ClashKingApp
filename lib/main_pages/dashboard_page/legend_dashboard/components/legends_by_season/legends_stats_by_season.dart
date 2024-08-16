@@ -117,7 +117,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                 children: [
                                   CachedNetworkImage(
                                     imageUrl:
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
+                                        "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                                     width: 15,
                                     height: 15,
                                     fit: BoxFit.cover,
@@ -137,14 +137,14 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                     children: [
                                       CachedNetworkImage(
                                         imageUrl:
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
+                                            "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                                         width: 16,
                                         height: 16,
                                         fit: BoxFit.cover,
                                       ),
                                       CachedNetworkImage(
                                         imageUrl:
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
+                                            "https://assets.clashk.ing/icons/Icon_BB_Star.png",
                                         width: 8,
                                         height: 8,
                                         fit: BoxFit.cover,
@@ -233,7 +233,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                 children: [
                                   CachedNetworkImage(
                                     imageUrl:
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
+                                        "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                                     width: 15,
                                     height: 15,
                                     fit: BoxFit.cover,
@@ -253,14 +253,14 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                     children: [
                                       CachedNetworkImage(
                                         imageUrl:
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
+                                            "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                                         width: 16,
                                         height: 16,
                                         fit: BoxFit.cover,
                                       ),
                                       CachedNetworkImage(
                                         imageUrl:
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
+                                            "https://assets.clashk.ing/icons/Icon_BB_Star.png",
                                         width: 8,
                                         height: 8,
                                         fit: BoxFit.cover,
@@ -353,7 +353,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                     style: Theme.of(context).textTheme.bodyMedium),
                 CachedNetworkImage(
                   imageUrl:
-                      'https://clashkingfiles.b-cdn.net/stickers/Villager_HV_Villager_12.png',
+                      'https://assets.clashk.ing/stickers/Villager_HV_Villager_12.png',
                   height: 300,
                 ),
               ],

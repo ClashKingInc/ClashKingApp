@@ -28,7 +28,7 @@ class StatsScreenState extends State<StatsScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   String backgroundImageUrl =
-      "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png";
+      "https://assets.clashk.ing/landscape/home-landscape.png";
   String townHallImageUrl = "";
   List<Widget> stars = [];
   Widget hallChips = SizedBox.shrink();
@@ -88,8 +88,8 @@ class StatsScreenState extends State<StatsScreen>
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     final logoUrl = isDarkMode
-        ? "https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/ClashKing-1.png"
-        : "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png";
+        ? "https://assets.clashk.ing/logos/crown-arrow-dark-bg/ClashKing-1.png"
+        : "https://assets.clashk.ing/logos/crown-arrow-white-bg/ClashKing-2.png";
 
     return FutureBuilder<void>(
       future: _initializeProfileFuture,
@@ -131,8 +131,8 @@ class StatsScreenState extends State<StatsScreen>
                       onTap: (value) {
                         setState(() {
                           backgroundImageUrl = value == 0
-                              ? "https://clashkingfiles.b-cdn.net/landscape/home-landscape.png"
-                              : "https://clashkingfiles.b-cdn.net/landscape/builder-landscape.png";
+                              ? "https://assets.clashk.ing/landscape/home-landscape.png"
+                              : "https://assets.clashk.ing/landscape/builder-landscape.png";
                           townHallImageUrl = value == 0
                               ? widget.playerStats.townHallPic
                               : widget.playerStats.builderHallPic;
@@ -224,7 +224,7 @@ class StatsScreenState extends State<StatsScreen>
     return List<Widget>.generate(
       count,
       (index) => CachedNetworkImage(
-        imageUrl: 'https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png',
+        imageUrl: 'https://assets.clashk.ing/icons/Icon_BB_Star.png',
         width: 22.0,
         height: 22.0,
       ),
@@ -246,7 +246,7 @@ class StatsScreenState extends State<StatsScreen>
 
   String getEquipmentImageUrl(String equipmentName, String logoUrl) {
     return TroopDataManager().getTroopInfo(equipmentName)['url'] ??
-        logoUrl;
+      logoUrl;
   }
 
   // Build the section for troops, super troops, pets, and siege machines
@@ -258,7 +258,6 @@ class StatsScreenState extends State<StatsScreen>
 
     List<Widget> missingItems = [];
     TroopDataManager().troopUrlsAndTypes.forEach((name, data) {
-      print(name);
       if (!itemNames.contains(name) && data['type'] == itemType) {
         missingItems.add(
           Container(
@@ -274,8 +273,7 @@ class StatsScreenState extends State<StatsScreen>
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
               child: CachedNetworkImage(
-                  imageUrl: data['url'] ??
-                      logoUrl,
+                  imageUrl: data['url'] ?? logoUrl,
                   height: 40,
                   width: 40,
                   fit: BoxFit.cover),
@@ -726,7 +724,7 @@ class StatsScreenState extends State<StatsScreen>
           backgroundColor: Colors.transparent,
           child: CachedNetworkImage(
               imageUrl:
-                  "https://clashkingfiles.b-cdn.net/home-base/hero-pics/Icon_HV_Hero_Archer_Queen.png"),
+                  "https://assets.clashk.ing/home-base/hero-pics/Icon_HV_Hero_Archer_Queen.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -750,7 +748,7 @@ class StatsScreenState extends State<StatsScreen>
           backgroundColor: Colors.transparent,
           child: CachedNetworkImage(
               imageUrl:
-                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_XP.png"),
+                  "https://assets.clashk.ing/icons/Icon_HV_XP.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -794,7 +792,7 @@ class StatsScreenState extends State<StatsScreen>
           backgroundColor: Colors.transparent,
           child: CachedNetworkImage(
               imageUrl:
-                  "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack_Star.png"),
+                  "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -807,7 +805,7 @@ class StatsScreenState extends State<StatsScreen>
           backgroundColor: Colors.transparent,
           child: CachedNetworkImage(
               imageUrl:
-                  "https://clashkingfiles.b-cdn.net/icons/Icon_CC_Resource_Capital_Gold_small.png"),
+                  "https://assets.clashk.ing/icons/Icon_CC_Resource_Capital_Gold_small.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -833,10 +831,10 @@ class StatsScreenState extends State<StatsScreen>
               child: widget.playerStats.warPreference == 'in'
                   ? CachedNetworkImage(
                       imageUrl:
-                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_In.png")
+                          "https://assets.clashk.ing/icons/Icon_HV_In.png")
                   : CachedNetworkImage(
                       imageUrl:
-                          'https://clashkingfiles.b-cdn.net/icons/Icon_HV_Out.png')),
+                          'https://assets.clashk.ing/icons/Icon_HV_Out.png')),
           label: Text(
             widget.playerStats.warPreference == 'in'
                 ? AppLocalizations.of(context)?.ready ?? 'Ready'
@@ -849,7 +847,7 @@ class StatsScreenState extends State<StatsScreen>
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
                 imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png"),
+                    "https://assets.clashk.ing/icons/Icon_HV_Sword.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -862,7 +860,7 @@ class StatsScreenState extends State<StatsScreen>
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
                 imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield.png"),
+                    "https://assets.clashk.ing/icons/Icon_HV_Shield.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -957,7 +955,7 @@ class StatsScreenState extends State<StatsScreen>
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
                 imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png"),
+                    "https://assets.clashk.ing/icons/Icon_HV_Trophy_Best.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -993,7 +991,7 @@ class StatsScreenState extends State<StatsScreen>
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
                 imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
+                    "https://assets.clashk.ing/icons/Icon_HV_Trophy.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -1006,7 +1004,7 @@ class StatsScreenState extends State<StatsScreen>
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
                 imageUrl:
-                    "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy_Best.png"),
+                    "https://assets.clashk.ing/icons/Icon_HV_Trophy_Best.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(

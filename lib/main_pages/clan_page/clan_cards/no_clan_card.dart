@@ -17,7 +17,7 @@ class NoClanCard extends StatelessWidget {
                 width: 80,
                 child: CachedNetworkImage(
                     imageUrl:
-                        "https://clashkingfiles.b-cdn.net/builder-base/building-pics/Building_HV_Clan_Castle_level_2_3.png"),
+                        "https://assets.clashk.ing/builder-base/building-pics/Building_HV_Clan_Castle_level_2_3.png"),
               ),
               SizedBox(width: 16),
               Expanded(

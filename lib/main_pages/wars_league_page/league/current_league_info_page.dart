@@ -78,7 +78,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                           Colors.black.withOpacity(0.5), BlendMode.darken),
                       child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/landscape/cwl-landscape.png",
+                            "https://assets.clashk.ing/landscape/cwl-landscape.png",
                         width: double.infinity,
                         fit: BoxFit.cover,
                       ),
@@ -136,7 +136,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                         children: <Widget>[
                           ImageChip(
                             imageUrl:
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Podium.png",
+                                "https://assets.clashk.ing/icons/Icon_HV_Podium.png",
                             labelPadding: 2,
                             label: widget.currentLeagueInfo
                                 .getClanDetails(widget.clanTag)!
@@ -147,7 +147,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                           ),
                           ImageChip(
                             imageUrl:
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
+                                "https://assets.clashk.ing/icons/Icon_BB_Star.png",
                             labelPadding: 2,
                             label: clan!.stars.toString(),
                             description: AppLocalizations.of(context)!
@@ -175,7 +175,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                           ),
                           ImageChip(
                             imageUrl:
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
+                                "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                             labelPadding: 2,
                             label:
                                 clan!.destructionPercentage.toInt().toString(),

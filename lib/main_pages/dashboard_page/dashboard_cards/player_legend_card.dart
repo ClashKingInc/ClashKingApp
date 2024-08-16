@@ -57,7 +57,7 @@ class PlayerLegendCard extends StatelessWidget {
                                 width: 100,
                                 child: CachedNetworkImage(
                                     imageUrl:
-                                        "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png"),
+                                        "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3.png"),
                               ),
                             ],
                           ),
@@ -130,7 +130,7 @@ class PlayerLegendCard extends StatelessWidget {
                               children: <Widget>[
                                 CachedNetworkImage(
                                   imageUrl:
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3.png",
+                                      "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3.png",
                                 ),
                                 Positioned(
                                   right: 30,
@@ -160,7 +160,7 @@ class PlayerLegendCard extends StatelessWidget {
                               children: <Widget>[
                                 ImageChip(
                                   imageUrl:
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Start_Flag.png",
+                                      "https://assets.clashk.ing/icons/Icon_HV_Start_Flag.png",
                                   label: playerLegendData.firstTrophies,
                                   description: AppLocalizations.of(context)!
                                       .legendStartDescription(
@@ -171,7 +171,7 @@ class PlayerLegendCard extends StatelessWidget {
                                   ImageChip(
                                     labelPadding: 4,
                                     imageUrl:
-                                        "https://clashkingfiles.b-cdn.net/country-flags/${(playerLegendData.legendRanking.countryCode).toLowerCase()}.png",
+                                        "https://assets.clashk.ing/country-flags/${(playerLegendData.legendRanking.countryCode).toLowerCase()}.png",
                                     label: playerLegendData
                                         .legendRanking.localRank,
                                     description:
@@ -215,7 +215,7 @@ class PlayerLegendCard extends StatelessWidget {
                                 ),
                                 ImageChip(
                                   imageUrl:
-                                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png",
+                                      "https://assets.clashk.ing/icons/Icon_HV_Planet.png",
                                   label: playerLegendData
                                           .legendRanking.isRankedGlobally
                                       ? NumberFormat('#,###', 'fr_FR').format(

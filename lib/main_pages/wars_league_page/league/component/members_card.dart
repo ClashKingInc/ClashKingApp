@@ -42,7 +42,7 @@ class MembersCard extends StatelessWidget {
                             height: 70,
                             width: 70,
                             child: CachedNetworkImage(imageUrl: 
-                              'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${memberEntry.value['townHallLevel']}.png')),
+                              'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${memberEntry.value['townHallLevel']}.png')),
                         ],
                       ),
                       Text(" ${memberEntry.value['name']}"),
@@ -62,7 +62,7 @@ class MembersCard extends StatelessWidget {
                             height: 20,
                             width: 20,
                             child: CachedNetworkImage(imageUrl: 
-                              'https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png')),
+                              'https://assets.clashk.ing/icons/Icon_BB_Star.png')),
                         ],
                       ),
                       Text('${(memberEntry.value['percentage'] as double).toInt()}%'),
@@ -84,7 +84,7 @@ class MembersCard extends StatelessWidget {
                             height: 20,
                             width: 20,
                             child: CachedNetworkImage(imageUrl: 
-                              'https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png')),
+                              'https://assets.clashk.ing/icons/Icon_BB_Star.png')),
                         ],
                       ),
                       Text('${(memberEntry.value['averagePercentage']).toStringAsFixed(1)}%'),

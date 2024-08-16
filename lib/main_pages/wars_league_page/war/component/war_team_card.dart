@@ -111,7 +111,7 @@ class WarTeamCard extends StatelessWidget {
                       1,
                       (index) {
                         String imageUrlDef =
-                            'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(bestAttack.defenderTag, playerTab)}.png';
+                            'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(bestAttack.defenderTag, playerTab)}.png';
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -140,7 +140,7 @@ class WarTeamCard extends StatelessWidget {
                                 width: 26,
                                 child: CachedNetworkImage(
                                   imageUrl:
-                                      'https://clashkingfiles.b-cdn.net/icons/Icon_DC_ArrowLeft.png',
+                                      'https://assets.clashk.ing/icons/Icon_DC_ArrowLeft.png',
                                 ),
                               ),
                             ),
@@ -201,8 +201,8 @@ class WarTeamCard extends StatelessWidget {
                               child: CachedNetworkImage(
                                 imageUrl: (member.attacks?.length ?? 0) ==
                                         widget.currentWarInfo.attacksPerMember
-                                    ? "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Tick.png"
-                                    : "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Cross.png",
+                                    ? "https://assets.clashk.ing/icons/Icon_DC_Tick.png"
+                                    : "https://assets.clashk.ing/icons/Icon_DC_Cross.png",
                                 fit: BoxFit.contain,
                               ),
                             ),
@@ -223,7 +223,7 @@ class WarTeamCard extends StatelessWidget {
                             height: 70,
                             child: CachedNetworkImage(
                                 imageUrl:
-                                    'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(member.tag, playerTab)}.png'),
+                                    'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(member.tag, playerTab)}.png'),
                           ),
                           Text(
                             '${member.mapPosition}. ${member.name} ',
@@ -241,7 +241,7 @@ class WarTeamCard extends StatelessWidget {
                         height: 26,
                         child: CachedNetworkImage(
                             imageUrl:
-                                'https://clashkingfiles.b-cdn.net/icons/Icon_DC_ArrowRight.png'),
+                                'https://assets.clashk.ing/icons/Icon_DC_ArrowRight.png'),
                       ),
                     ),
                     Expanded(
@@ -269,7 +269,7 @@ class WarTeamCard extends StatelessWidget {
                             } else {
                               final attack = member.attacks![index];
                               String imageUrlDef =
-                                  'https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack.defenderTag, playerTab)}.png';
+                                  'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack.defenderTag, playerTab)}.png';
                               return Padding(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 4, horizontal: 8),

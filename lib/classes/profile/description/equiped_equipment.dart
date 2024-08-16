@@ -12,7 +12,7 @@ class EquipedEquipment {
       required this.level,
       required this.maxLevel,
       required this.village,
-      this.imageUrl = 'https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/ClashKing-1.png'});
+      this.imageUrl = 'https://assets.clashk.ing/clashkinglogo.png'});
 
   factory EquipedEquipment.fromJson(Map<String, dynamic> json) {
     return EquipedEquipment(
@@ -21,7 +21,7 @@ class EquipedEquipment {
       maxLevel: json['maxLevel'] ?? 0,
       village: json['village'] ?? 'home',
       imageUrl: json['imageUrl'] ??
-          'https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/ClashKing-1.png',
+          'https://assets.clashk.ing/clashkinglogo.png',
     );
   }
 }

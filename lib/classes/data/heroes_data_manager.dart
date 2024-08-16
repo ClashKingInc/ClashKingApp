@@ -14,7 +14,7 @@ class HeroesDataManager {
 
   Future<void> loadHeroesData() async {
     if (!_loaded) {
-      final response = await http.get(Uri.parse('https://clashkingfiles.b-cdn.net/app-data/heroes_data.json'));
+      final response = await http.get(Uri.parse('https://assets.clashk.ing/app-data/heroes_data.json'));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['heroes'] != null && data['heroes'] is Map) {
@@ -31,6 +31,6 @@ class HeroesDataManager {
   }
 
   Map<String, String> getHeroInfo(String heroName) {
-    return heroUrlsAndTypes[heroName] ?? {'url': 'https://clashkingfiles.b-cdn.net/icons/Unknown_person.jpg', 'type': 'unknown', 'hero': 'unknown'};
+    return heroUrlsAndTypes[heroName] ?? {'url': 'https://assets.clashk.ing/icons/Unknown_person.jpg', 'type': 'unknown', 'hero': 'unknown'};
   }
 }

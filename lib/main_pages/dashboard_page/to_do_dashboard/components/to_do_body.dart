@@ -73,7 +73,7 @@ class ToDoBodyState extends State<ToDoBody> {
                     SizedBox(height: 10),
                     CachedNetworkImage(
                       imageUrl:
-                          'https://clashkingfiles.b-cdn.net/stickers/Villager_BB_Master_Builder_7.png',
+                          'https://assets.clashk.ing/stickers/Villager_BB_Master_Builder_7.png',
                       width: 200,
                     ),
                   ],
@@ -94,7 +94,7 @@ class ToDoBodyState extends State<ToDoBody> {
                     SizedBox(height: 10),
                     CachedNetworkImage(
                       imageUrl:
-                          'https://clashkingfiles.b-cdn.net/stickers/Villager_BB_Master_Builder_4.png',
+                          'https://assets.clashk.ing/stickers/Villager_BB_Master_Builder_4.png',
                       width: 200,
                     ),
                   ],

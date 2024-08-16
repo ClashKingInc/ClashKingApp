@@ -279,7 +279,14 @@ class ProfileInfoService {
 
   Future<void> _fetchPlayerWarStats(
       ProfileInfo profileInfo, ISentrySpan transaction) async {
-    final playerStatsService = PlayerStatsService(playerTag: profileInfo.tag.replaceFirst("#", '%23'));
+    int timestampStart =
+        DateTime.now().subtract(Duration(days: 90)).millisecondsSinceEpoch ~/
+            1000;
+    int timestampEnd = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    final playerStatsService = PlayerStatsService(
+        playerTag: profileInfo.tag.replaceFirst("#", '%23'),
+        timestampStart: timestampStart,
+        timestampEnd: timestampEnd);
 
     try {
       // Récupérer les données des War Hits

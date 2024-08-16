@@ -31,7 +31,7 @@ class WarHeader extends StatelessWidget {
               ),
               child: CachedNetworkImage(
                 imageUrl:
-                    "https://clashkingfiles.b-cdn.net/landscape/war-landscape.jpg",
+                    "https://assets.clashk.ing/landscape/war-landscape.jpg",
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),

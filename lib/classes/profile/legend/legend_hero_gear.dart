@@ -19,7 +19,7 @@ class HeroGear {
     Map<String, String> gears = GearDataManager().getGearInfo(json['name']);
     String hero = gears['hero'] ?? 'unknown';
     String url =
-        gears['url'] ?? 'https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/ClashKing-1.png';
+        gears['url'] ?? 'https://assets.clashk.ing/clashkinglogo.png';
     String rarity = gears['rarity'] ?? '1';
     return HeroGear(
       name: json['name'],

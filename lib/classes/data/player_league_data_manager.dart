@@ -14,7 +14,7 @@ class PlayerLeagueDataManager {
 
   Future<void> loadLeagueData() async {
     if (!_loaded) {
-      final response = await http.get(Uri.parse('https://clashkingfiles.b-cdn.net/app-data/player_league_data.json'));
+      final response = await http.get(Uri.parse('https://assets.clashk.ing/app-data/player_league_data.json'));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         // Check if 'leagues' is not null and is a Map
@@ -33,6 +33,6 @@ class PlayerLeagueDataManager {
   }
 
   String getLeagueUrl(String leagueName) {
-    return leagueUrls[leagueName] ?? 'https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/ClashKing-1.png';
+    return leagueUrls[leagueName] ?? 'https://assets.clashk.ing/clashkinglogo.png';
   }
 }

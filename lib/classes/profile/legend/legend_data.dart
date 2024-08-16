@@ -25,11 +25,11 @@ class PlayerLegendData {
   List<dynamic> defensesList = [];
   final bool isInLegend;
   String attackIcon =
-      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png";
+      "https://assets.clashk.ing/icons/Icon_HV_Sword.png";
   String defenseIcon =
-      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Shield_Arrow.png";
+      "https://assets.clashk.ing/icons/Icon_HV_Shield_Arrow.png";
   String legendIcon =
-      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border_No_Padding.png";
+      "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border_No_Padding.png";
 
   PlayerLegendData(
       {required this.legendData,
@@ -273,7 +273,7 @@ class PlayerLegendData {
               percentageNoStarsDefenses += 1;
               break;
             default:
-              percentageTwoStarsDefenses +=1;
+              percentageTwoStarsDefenses += 1;
               break;
           }
         }
@@ -353,19 +353,19 @@ class PlayerLegendData {
         percentageThreeStarsAttacks: percentageThreeStarsAttacks,
         percentageThreeStarsDefenses: percentageThreeStarsDefenses);
   }
+}
 
-  List<DateTime> findSeasonStartEndDate(DateTime currentDate) {
-    DateTime seasonStart =
-        findLastMondayOfMonth(currentDate.year, currentDate.month);
+List<DateTime> findSeasonStartEndDate(DateTime currentDate) {
+  DateTime seasonStart =
+      findLastMondayOfMonth(currentDate.year, currentDate.month);
 
-    DateTime seasonEnd =
-        findLastMondayOfMonth(currentDate.year, currentDate.month + 1);
-    if (currentDate.isBefore(seasonStart) || currentDate == seasonStart) {
-      seasonStart =
-          findLastMondayOfMonth(currentDate.year, currentDate.month - 1);
-      seasonEnd = findLastMondayOfMonth(currentDate.year, currentDate.month)
-          .subtract(Duration(days: 1));
-    }
-    return [seasonStart, seasonEnd];
+  DateTime seasonEnd =
+      findLastMondayOfMonth(currentDate.year, currentDate.month + 1);
+  if (currentDate.isBefore(seasonStart) || currentDate == seasonStart) {
+    seasonStart =
+        findLastMondayOfMonth(currentDate.year, currentDate.month - 1);
+    seasonEnd = findLastMondayOfMonth(currentDate.year, currentDate.month)
+        .subtract(Duration(days: 1));
   }
+  return [seasonStart, seasonEnd];
 }

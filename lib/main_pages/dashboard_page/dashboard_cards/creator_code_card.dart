@@ -17,14 +17,40 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
 
     // Set the appropriate image URLs based on the theme
     final logoUrl = isDarkMode
-        ? "https://clashkingfiles.b-cdn.net/logos/crown-arrow-dark-bg/ClashKing-1.png"
-        : "https://clashkingfiles.b-cdn.net/logos/crown-arrow-white-bg/ClashKing-2.png";
+        ? "https://assets.clashk.ing/logos/crown-arrow-dark-bg/ClashKing-1.png"
+        : "https://assets.clashk.ing/logos/crown-arrow-white-bg/ClashKing-2.png";
 
     return GestureDetector(
       onTap: () async {
         final languagecode = await getPrefs('languageCode');
-        launchUrl(Uri.parse(
-            'https://link.clashofclans.com/$languagecode?action=SupportCreator&id=Clashking'));
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(AppLocalizations.of(context)!.warning,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleSmall),
+              content: Text(AppLocalizations.of(context)!.exitAppToOpenClash),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(AppLocalizations.of(context)!.cancel),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text(AppLocalizations.of(context)!.ok),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+
+                    launchUrl(Uri.parse(
+                        'https://link.clashofclans.com/$languagecode?action=SupportCreator&id=Clashking'));
+                  },
+                ),
+              ],
+            );
+          },
+        );
       },
       child: Card(
         child: Padding(
@@ -36,7 +62,8 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
               SizedBox(width: 16),
               Expanded(
                 child: Text(
-                  AppLocalizations.of(context)?.creatorCode ?? 'Creator Code : ClashKing',
+                  AppLocalizations.of(context)?.creatorCode ??
+                      'Creator Code : ClashKing',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,

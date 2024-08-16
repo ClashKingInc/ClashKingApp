@@ -14,7 +14,7 @@ class TroopDataManager {
 
   Future<void> loadTroopsData() async {
     if (!_loaded) {
-      final response = await http.get(Uri.parse('https://clashkingfiles.b-cdn.net/app-data/troops_data.json'));
+      final response = await http.get(Uri.parse('https://assets.clashk.ing/app-data/troops_data.json'));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['troops'] != null && data['troops'] is Map) {
@@ -31,6 +31,6 @@ class TroopDataManager {
   }
 
   Map<String, String> getTroopInfo(String troopName) {
-    return troopUrlsAndTypes[troopName] ?? {'url': 'https://clashkingfiles.b-cdn.net/icons/Unknown_person.jpg', 'type': 'unknown'};
+    return troopUrlsAndTypes[troopName] ?? {'url': 'https://assets.clashk.ing/icons/Unknown_person.jpg', 'type': 'unknown'};
   }
 }

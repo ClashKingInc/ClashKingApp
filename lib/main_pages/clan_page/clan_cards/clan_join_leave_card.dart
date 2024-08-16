@@ -40,7 +40,7 @@ class ClanJoinLeaveCard extends StatelessWidget {
                       CachedNetworkImage(
                         height: 70,
                         width: 70,
-                        imageUrl: "https://clashkingfiles.b-cdn.net/stickers/Troop_HV_Goblin.png"),
+                        imageUrl: "https://assets.clashk.ing/stickers/Troop_HV_Goblin.png"),
                     ],
                   ),
                 ),

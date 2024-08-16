@@ -138,7 +138,7 @@ class ClanWarsStatsCardState extends State<ClanWarsStatsCard> {
                         backgroundColor: Colors.transparent,
                         child: CachedNetworkImage(
                           imageUrl:
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                              "https://assets.clashk.ing/icons/Icon_DC_War.png",
                         ),
                       ),
                       label: Text(

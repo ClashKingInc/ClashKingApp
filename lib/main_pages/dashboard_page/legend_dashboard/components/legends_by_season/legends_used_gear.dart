@@ -58,7 +58,7 @@ class LegendUsedGear extends StatelessWidget {
                         child: CachedNetworkImage(
                             imageUrl: HeroesDataManager()
                                     .getHeroInfo(entry.key)["url"] ??
-                                'https://clashkingfiles.b-cdn.net/icons/Unknown_person.jpg',
+                                'https://assets.clashk.ing/icons/Unknown_person.jpg',
                             width: 25,
                             height: 25,
                             fit: BoxFit.cover),

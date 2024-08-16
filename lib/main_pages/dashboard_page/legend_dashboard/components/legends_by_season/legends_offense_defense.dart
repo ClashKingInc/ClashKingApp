@@ -47,14 +47,14 @@ class LegendOffenseDefense extends StatelessWidget {
               children: [
                 CachedNetworkImage(
                   imageUrl:
-                      "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png",
+                      "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                   width: 16,
                   height: 16,
                   fit: BoxFit.cover,
                 ),
                 CachedNetworkImage(
                   imageUrl:
-                      "https://clashkingfiles.b-cdn.net/icons/Icon_BB_Star.png",
+                      "https://assets.clashk.ing/icons/Icon_BB_Star.png",
                   width: 8,
                   height: 8,
                   fit: BoxFit.cover,

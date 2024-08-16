@@ -60,7 +60,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
   @override
   Widget build(BuildContext context) {
     String backgroundImageUrl =
-        "https://clashkingfiles.b-cdn.net/landscape/clan-landscape.png";
+        "https://assets.clashk.ing/landscape/clan-landscape.png";
 
     String? extractDiscordCode(String description) {
       final RegExp discordPattern = RegExp(
@@ -95,9 +95,141 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
             ),
             Positioned(
               bottom: 0,
-              child: CachedNetworkImage(
-                imageUrl: widget.clanInfo.badgeUrls.large,
-                width: 130,
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.bar_chart_rounded,
+                            color: Colors.white, size: 32),
+                        onPressed: () async {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return ClanWarsStatsCard(
+                                  clanInfo: widget.clanInfo);
+                            },
+                          );
+                        },
+                      ),
+                      SizedBox(height: 48),
+                    ],
+                  ),
+                  SizedBox(width: 16),
+                  CachedNetworkImage(
+                    imageUrl: widget.clanInfo.badgeUrls.large,
+                    width: 130,
+                  ),
+                  SizedBox(width: 16),
+                  Column(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.sports_esports_rounded,
+                            color: Colors.white, size: 32),
+                        onPressed: () async {
+                          final languageCode = await getPrefs('languageCode');
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title:
+                                    Text(AppLocalizations.of(context)!.warning),
+                                content: Text(AppLocalizations.of(context)!
+                                    .exitAppToOpenClash),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text(
+                                        AppLocalizations.of(context)!.cancel),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Ferme la boîte de dialogue
+                                    },
+                                  ),
+                                  TextButton(
+                                    child:
+                                        Text(AppLocalizations.of(context)!.ok),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Ferme la boîte de dialogue
+                                      launchUrl(Uri.parse(
+                                          'https://link.clashofclans.com/$languageCode?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      (widget.clanInfo.description
+                                  .contains("discord.com/invite/") ||
+                              widget.clanInfo.description
+                                  .contains("discord.gg/"))
+                          ? IconButton(
+                              icon: Icon(Icons.discord,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  size: 32),
+                              onPressed: () async {
+                                try {
+                                  final String? discordCode =
+                                      extractDiscordCode(
+                                          widget.clanInfo.description);
+                                  if (discordCode != null) {
+                                    final Uri url = Uri.parse(
+                                        'https://discord.gg/$discordCode');
+                                    if (!await launchUrl(url)) {
+                                      final hint = Hint.withMap({
+                                        'url': url,
+                                      });
+                                      Sentry.captureMessage(
+                                          'Failed to open Discord invite link',
+                                          hint: hint);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              AppLocalizations.of(context)!
+                                                  .cantOpenLink),
+                                        ),
+                                      );
+                                    }
+                                  } else {
+                                    final hint = Hint.withMap({
+                                      'description':
+                                          widget.clanInfo.description,
+                                    });
+                                    Sentry.captureMessage(
+                                        'Failed to extract Discord invite link',
+                                        hint: hint);
+                                  }
+                                } catch (exception, stackTrace) {
+                                  final hint = Hint.withMap({
+                                    'message':
+                                        'Failed to deal with Discord invite link',
+                                    'description': widget.clanInfo.description,
+                                  });
+                                  Sentry.captureException(exception,
+                                      stackTrace: stackTrace, hint: hint);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          AppLocalizations.of(context)!
+                                              .cantOpenLink),
+                                    ),
+                                  );
+                                }
+                              },
+                            )
+                          : SizedBox(
+                              height: 40,
+                            ),
+                    ],
+                  )
+                ],
               ),
             ),
             Positioned(
@@ -120,123 +252,44 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                  icon: Icon(Icons.bar_chart_rounded,
-                      color: Theme.of(context).colorScheme.onSurface, size: 32),
-                  onPressed: () async {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ClanWarsStatsCard(clanInfo: widget.clanInfo);
-                      },
-                    );
-                  },
-                ),
-                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  Text(
-                    widget.clanInfo.name,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      FlutterClipboard.copy(widget.clanInfo.tag).then((value) {
-                        final snackBar = SnackBar(
-                          content: Center(
-                            child: Text(
-                              AppLocalizations.of(context)!.copiedToClipboard,
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
-                            ),
-                          ),
-                          duration: Duration(milliseconds: 1500),
-                          backgroundColor:
-                              Theme.of(context).colorScheme.surface,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.only(top: 2.0, bottom: 4.0),
-                      child: Text(
-                        widget.clanInfo.tag,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary),
-                      ),
-                    ),
-                  ),
-                ]),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    IconButton(
-                      icon: Icon(Icons.sports_esports_rounded,
-                          color: Theme.of(context).colorScheme.onSurface,
-                          size: 32),
-                      onPressed: () async {
-                        final languagecode = getPrefs('languageCode');
-                        launchUrl(Uri.parse(
-                            'https://link.clashofclans.com/$languagecode?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
-                      },
+                    Text(
+                      widget.clanInfo.name,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface),
                     ),
-                    (widget.clanInfo.description
-                                .contains("discord.com/invite/") ||
-                            widget.clanInfo.description.contains("discord.gg/"))
-                        ? IconButton(
-                            icon: Icon(Icons.discord,
-                                color: Theme.of(context).colorScheme.onSurface,
-                                size: 32),
-                            onPressed: () async {
-                              try {
-                                final String? discordCode = extractDiscordCode(
-                                    widget.clanInfo.description);
-                                if (discordCode != null) {
-                                  final Uri url = Uri.parse(
-                                      'https://discord.gg/$discordCode');
-                                  if (!await launchUrl(url)) {
-                                    final hint = Hint.withMap({
-                                      'url': url,
-                                    });
-                                    Sentry.captureMessage(
-                                        'Failed to open Discord invite link',
-                                        hint: hint);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            AppLocalizations.of(context)!
-                                                .cantOpenLink),
-                                      ),
-                                    );
-                                  }
-                                } else {
-                                  final hint = Hint.withMap({
-                                    'description': widget.clanInfo.description,
-                                  });
-                                  Sentry.captureMessage(
-                                      'Failed to extract Discord invite link',
-                                      hint: hint);
-                                }
-                              } catch (exception, stackTrace) {
-                                final hint = Hint.withMap({
-                                  'message':
-                                      'Failed to deal with Discord invite link',
-                                  'description': widget.clanInfo.description,
-                                });
-                                Sentry.captureException(exception,
-                                    stackTrace: stackTrace, hint: hint);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(AppLocalizations.of(context)!
-                                        .cantOpenLink),
-                                  ),
-                                );
-                              }
-                            },
-                          )
-                        : SizedBox(
-                            height: 12,
-                          ),
+                    InkWell(
+                      onTap: () {
+                        FlutterClipboard.copy(widget.clanInfo.tag)
+                            .then((value) {
+                          final snackBar = SnackBar(
+                            content: Center(
+                              child: Text(
+                                AppLocalizations.of(context)!.copiedToClipboard,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
+                            ),
+                            duration: Duration(milliseconds: 1500),
+                            backgroundColor:
+                                Theme.of(context).colorScheme.surface,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        });
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(top: 2.0, bottom: 4.0),
+                        child: Text(
+                          widget.clanInfo.tag,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.tertiary),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -266,7 +319,15 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               "No countryCode")
                           ? CachedNetworkImage(
                               imageUrl:
-                                  "https://clashkingfiles.b-cdn.net/country-flags/${widget.clanInfo.location!.countryCode}.png")
+                                  "https://assets.clashk.ing/country-flags/${widget.clanInfo.location!.countryCode.toLowerCase()}.png",
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(), // Optional: shows a spinner while the image is loading
+                              errorWidget: (context, url, error) => Icon(
+                                Icons.flag,
+                                color: Theme.of(context).colorScheme.onSurface,
+                                size: 16,
+                              ),
+                            )
                           : Icon(Icons.flag,
                               color: Theme.of(context).colorScheme.onSurface,
                               size: 16),
@@ -293,7 +354,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                     backgroundColor: Colors.transparent,
                     child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Trophy.png"),
+                            "https://assets.clashk.ing/icons/Icon_HV_Trophy.png"),
                   ),
                   label: Text(
                     widget.clanInfo.clanPoints.toString(),
@@ -305,7 +366,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                     backgroundColor: Colors.transparent,
                     child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-${widget.clanInfo.requiredTownhallLevel}.png"),
+                            "https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${widget.clanInfo.requiredTownhallLevel}.png"),
                   ),
                   label: Text(
                     widget.clanInfo.requiredTownhallLevel.toString(),
@@ -317,7 +378,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                     backgroundColor: Colors.transparent,
                     child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Attack.png"),
+                            "https://assets.clashk.ing/icons/Icon_HV_Attack.png"),
                   ),
                   label: Text(
                     widget.clanInfo.clanCapitalPoints.toString(),
@@ -352,7 +413,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                     backgroundColor: Colors.transparent,
                     child: CachedNetworkImage(
                         imageUrl:
-                            "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png"),
+                            "https://assets.clashk.ing/icons/Icon_DC_War.png"),
                   ),
                   label: Text(
                     () {
@@ -409,7 +470,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                             avatar: CircleAvatar(
                               backgroundColor: Colors.transparent,
                               backgroundImage: NetworkImage(
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_War.png",
+                                "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png",
                               ),
                             ),
                             label: Shimmer.fromColors(
@@ -433,7 +494,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                           avatar: CircleAvatar(
                             backgroundColor: Colors.transparent,
                             backgroundImage: NetworkImage(
-                              "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_War.png",
+                              "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png",
                             ),
                           ),
                           label: Text(
@@ -502,7 +563,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               CachedNetworkImage(
                                 width: 20,
                                 imageUrl:
-                                    "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                                    "https://assets.clashk.ing/icons/Icon_DC_War.png",
                               ),
                               SizedBox(width: 8),
                               Shimmer.fromColors(
@@ -597,7 +658,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               CachedNetworkImage(
                                 width: 20,
                                 imageUrl:
-                                    "https://clashkingfiles.b-cdn.net/icons/Icon_DC_War.png",
+                                    "https://assets.clashk.ing/icons/Icon_DC_War.png",
                               ),
                               SizedBox(width: 8),
                               Text(

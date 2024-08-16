@@ -14,7 +14,7 @@ class PetsDataManager {
 
   Future<void> loadPetsData() async {
     if (!_loaded) {
-      final response = await http.get(Uri.parse('https://clashkingfiles.b-cdn.net/app-data/pets_data.json'));
+      final response = await http.get(Uri.parse('https://assets.clashk.ing/app-data/pets_data.json'));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['pets'] != null && data['pets'] is Map) {
@@ -31,6 +31,6 @@ class PetsDataManager {
   }
 
   Map<String, String> getPetInfo(String gearName) {
-    return petUrlsAndTypes[gearName] ?? {'url': 'https://clashkingfiles.b-cdn.net/icons/Unknown_person.jpg', 'type': 'unknown', 'hero': 'unknown'};
+    return petUrlsAndTypes[gearName] ?? {'url': 'https://assets.clashk.ing/icons/Unknown_person.jpg', 'type': 'unknown', 'hero': 'unknown'};
   }
 }

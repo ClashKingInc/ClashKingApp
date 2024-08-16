@@ -35,7 +35,7 @@ class LegendHeaderCard extends StatelessWidget {
                 ),
                 child: CachedNetworkImage(
                   imageUrl:
-                      "https://clashkingfiles.b-cdn.net/landscape/legend-landscape.png",
+                      "https://assets.clashk.ing/landscape/legend-landscape.png",
                   width: double.infinity,
                   fit: BoxFit.cover,
                 )),
@@ -69,7 +69,7 @@ class LegendHeaderCard extends StatelessWidget {
                         children: [
                           CachedNetworkImage(
                             imageUrl:
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border.png",
+                                "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border.png",
                             width: 60,
                           ),
                           Text(widget.playerLegendData.currentTrophies,
@@ -106,7 +106,7 @@ class LegendHeaderCard extends StatelessWidget {
                         children: [
                           CachedNetworkImage(
                             imageUrl:
-                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border.png",
+                                "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border.png",
                             width: 60,
                           ),
                           Text(
@@ -135,7 +135,7 @@ class LegendHeaderCard extends StatelessWidget {
                                           backgroundColor: Colors.transparent,
                                           child: CachedNetworkImage(
                                               imageUrl:
-                                                  "https://clashkingfiles.b-cdn.net/country-flags/${legendData.rankings['country_code']!.toLowerCase() ?? 'uk'}.png")),
+                                                  "https://assets.clashk.ing/country-flags/${legendData.rankings['country_code']!.toLowerCase() ?? 'uk'}.png")),
                                       label: Text(
                                         legendData.rankings['country_name'] ==
                                                 null
@@ -159,7 +159,7 @@ class LegendHeaderCard extends StatelessWidget {
                                           backgroundColor: Colors.transparent,
                                           child: CachedNetworkImage(
                                               imageUrl:
-                                                  "https://clashkingfiles.b-cdn.net/country-flags/${legendData.rankings['country_code']!.toLowerCase() ?? 'uk'}.png")),
+                                                  "https://assets.clashk.ing/country-flags/${legendData.rankings['country_code']!.toLowerCase() ?? 'uk'}.png")),
                                       label: Text(
                                         legendData.rankings['local_rank'] ==
                                                 null
@@ -184,7 +184,7 @@ class LegendHeaderCard extends StatelessWidget {
                                             .transparent, // Set to a suitable color for your design.
                                         child: CachedNetworkImage(
                                             imageUrl:
-                                                "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Planet.png")),
+                                                "https://assets.clashk.ing/icons/Icon_HV_Planet.png")),
                                     label: Text(
                                         legendData.rankings['global_rank'] ==
                                                 null

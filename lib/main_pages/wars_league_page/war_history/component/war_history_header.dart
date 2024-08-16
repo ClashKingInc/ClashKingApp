@@ -30,7 +30,7 @@ class WarHistoryHeader extends StatelessWidget {
                 BlendMode.darken,
               ),
               child: CachedNetworkImage(
-                imageUrl: "https://clashkingfiles.b-cdn.net/landscape/war-landscape.jpg",
+                imageUrl: "https://assets.clashk.ing/landscape/war-landscape.jpg",
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
@@ -45,7 +45,7 @@ class WarHistoryHeader extends StatelessWidget {
               SizedBox(
                 height: 100,
                 width: 100,
-                child: CachedNetworkImage(imageUrl: "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Clan_War.png"),
+                child: CachedNetworkImage(imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png"),
               ),
               Text(
                 clanName,

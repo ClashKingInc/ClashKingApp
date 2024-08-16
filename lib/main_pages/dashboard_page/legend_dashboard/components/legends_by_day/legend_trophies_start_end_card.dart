@@ -26,7 +26,7 @@ class LegendTrophiesStartEndCard extends StatelessWidget {
           ],
         ),
         CachedNetworkImage(imageUrl: 
-          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_League_Legend_3_Border.png",
+          "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border.png",
           width: 80,
         ),
         Column(children: [

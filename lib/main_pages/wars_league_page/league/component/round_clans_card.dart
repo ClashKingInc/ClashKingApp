@@ -51,7 +51,7 @@ class RoundClanCard extends StatelessWidget {
                                   SizedBox(
                                     child: CachedNetworkImage(
                                       imageUrl:
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
+                                          "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                                       width: 12,
                                       height: 12,
                                     ),
@@ -66,7 +66,7 @@ class RoundClanCard extends StatelessWidget {
                                   SizedBox(
                                     child: CachedNetworkImage(
                                       imageUrl:
-                                          "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
+                                          "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                       width: 12,
                                       height: 12,
                                     ),
@@ -164,7 +164,7 @@ class RoundClanCard extends StatelessWidget {
                                     SizedBox(
                                       child: CachedNetworkImage(
                                         imageUrl:
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_HV_Sword.png",
+                                            "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                                         width: 12,
                                         height: 12,
                                       ),
@@ -181,7 +181,7 @@ class RoundClanCard extends StatelessWidget {
                                     SizedBox(
                                       child: CachedNetworkImage(
                                         imageUrl:
-                                            "https://clashkingfiles.b-cdn.net/icons/Icon_DC_Hitrate.png",
+                                            "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                         width: 12,
                                         height: 12,
                                       ),

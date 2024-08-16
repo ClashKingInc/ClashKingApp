@@ -92,7 +92,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                       width: 50,
                       child: CachedNetworkImage(
                           imageUrl: townHallUrl ??
-                              "https://clashkingfiles.b-cdn.net/home-base/town-hall-pics/town-hall-16.png"),
+                              "https://assets.clashk.ing/home-base/town-hall-pics/town-hall-16.png"),
                     ),
                   ],
                 ),
@@ -128,7 +128,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                                                   .containsKey('iconUrls')
                                           ? widget.player['league']['iconUrls']
                                               ['tiny']
-                                          : 'https://clashkingfiles.b-cdn.net/home-base/league-icons/Icon_HV_CWL_Unranked.png'),
+                                          : 'https://assets.clashk.ing/home-base/league-icons/Icon_HV_CWL_Unranked.png'),
                                 ),
                               ),
                               label: Text(
