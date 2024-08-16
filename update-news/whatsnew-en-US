@@ -1,11 +1,11 @@
 What's New:
-- Two New CWL Cards: Navigate to Current War & CWL Stats.
-- Enhanced To-Do Screen: Track remaining war and CWL attacks with new progress headers.
-- New Info Buttons: Learn how To-Do and Legends features work.
-- Legends Update: Added stars stats to the Legend Season screen.
-- Feature Suggestion Panel: Suggest and upvote features directly in the app.
+- New CWL Cards: Access Current War & CWL Stats.
+- Enhanced To-Do: Track remaining war and CWL attacks with progress headers.
+- Info Buttons: Learn how features work.
+- Legends: Added stars stats to the Legend Season screen.
+- Feature Suggestions: Suggest and upvote features in-app.
 
 Fixes:
-- Improved UI: Better splash screen support for Android 12+ and dark/light modes.
-- Player Page Update: Ongoing war button now independent of clan affiliation.
-- Design Fixes: Resolved logo, button colors, and legend graph issues.
+- Improved UI: Better splash support for Android 12+ and dark/light modes.
+- Player Page: Ongoing war button.
+- Design: Fixed logo, button colors, and legend graph issues.
