@@ -129,6 +129,8 @@
     "@search": {
         "description": "Search for a player or a clan"
     },
+    "warning": "Warning",
+    "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
     "tagOrNamePlayer": "Тег или имя игрока",
     "searchPlayer": "Найти игрока",
     "nameOrTagPlayer": "Player's name or tag",
@@ -268,6 +270,7 @@
     },
     "date": "Date",
     "stats": "Stats",
+    "details": "Details",
     "seasonStats": "Season Stats",
     "charts": "Диаграммы",
     "history": "Журнал",
@@ -529,6 +532,68 @@
     "role": "Role",
     "expLevel": "Experience Level",
     "townHallLevel": "TH Level",
+    "thLevel": "TH{level}",
+    "@thLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "townHallLevelLevel": "TownHall {level}",
+    "@townHallLevelLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "byNumberOfWars": "By number of wars",
+    "@byNumberOfWars": {
+        "description": "filter by number of wars"
+    },
+    "ok": "OK",
+    "@ok": {
+        "description": "OK button on pop up"
+    },
+    "byDateRange": "By date range",
+    "@byDateRange": {
+        "description": "filter by date range"
+    },
+    "selectSeason": "Select a season",
+    "@selectSeason": {
+        "description": "Ask player to select a season"
+    },
+    "year": "Year",
+    "month": "Month",
+    "allTownHalls": "All TownHalls",
+    "seasonDate": "{date} season",
+    "@seasonDate": {
+        "description": "Example : August 2024 season",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "lastXwars": "Last {number} wars",
+    "@lastXwars": {
+        "description": "Example : Shows the last 25 wars",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "friendly": "Friendly",
+    "@friendly": {
+        "description": "Friendly war"
+    },
+    "cwl": "CWL",
+    "random": "Random",
+    "@random": {
+        "description": "Random/basic war (not friendly or cwl)"
+    },
     "builderBaseTrophies": "BB Trophies",
     "donations": "Donations",
     "donationsReceived": "Donations Received",
