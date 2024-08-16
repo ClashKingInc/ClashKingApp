@@ -14,6 +14,7 @@ import 'package:clashkingapp/classes/clan/description/member.dart';
 import 'package:clashkingapp/classes/clan/description/war_league.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
 import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
+import 'package:clashkingapp/classes/clan/description/clan_capital.dart';
 import 'package:clashkingapp/classes/functions.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
@@ -44,7 +45,7 @@ class Clan {
   List<dynamic> labels;
   int requiredBuilderBaseTrophies;
   int requiredTownhallLevel;
-  Map<String, dynamic> clanCapital;
+  ClanCapital? clanCapital;
   CurrentLeagueInfo? currentLeagueInfo;
   CurrentWarInfo? currentWarInfo;
   String warState = '';
@@ -123,7 +124,10 @@ class Clan {
         labels: json['labels'] ?? [],
         requiredBuilderBaseTrophies: json['requiredBuilderBaseTrophies'] ?? 0,
         requiredTownhallLevel: json['requiredTownhallLevel'] ?? 0,
-        clanCapital: json['clanCapital'] ?? {},
+        clanCapital: json['clanCapital'] != null &&
+                json['clanCapital'].isNotEmpty
+            ? ClanCapital.fromJson(json['clanCapital'])
+            : null,
       );
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({"json": json});

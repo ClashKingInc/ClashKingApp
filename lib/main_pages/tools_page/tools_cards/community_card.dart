@@ -2,6 +2,7 @@ import 'package:clashkingapp/components/beta_label.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/tools_page/community_tools/community_tools_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CommunityCard extends StatelessWidget {
   const CommunityCard({
@@ -33,10 +34,8 @@ class CommunityCard extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CachedNetworkImage(
                           height: 70,
@@ -44,19 +43,16 @@ class CommunityCard extends StatelessWidget {
                           imageUrl: logoUrl,
                         ),
                         SizedBox(width: 8),
-                        Flexible(
-                          fit: FlexFit.loose,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Test',
-                                style: Theme.of(context).textTheme.labelLarge,
-                                textAlign: TextAlign.center,
-                                softWrap: true,
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              AppLocalizations.of(context)?.community ?? 'Community',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
-                            ],
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
                       ],

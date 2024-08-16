@@ -1,4 +1,5 @@
 import 'package:clashkingapp/main_pages/tools_page/tools_cards/community_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ToolsPage extends StatefulWidget {
@@ -29,9 +30,14 @@ class ToolsPageState extends State<ToolsPage> {
           onRefresh: refreshData,
           child: ListView(
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0),
-                child: CommunityCard(),
+              //Padding(
+              //  padding: EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0),
+              //  child: CommunityCard(),
+              //),
+                SizedBox(height: 300),
+                Center(
+                  child: Text(AppLocalizations.of(context)!.comingSoon
+                ),
               ),
             ],
           ),

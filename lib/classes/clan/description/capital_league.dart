@@ -1,4 +1,3 @@
-
 class CapitalLeague {
   final int id;
   final String name;
