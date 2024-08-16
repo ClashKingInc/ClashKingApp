@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
 import 'package:clashkingapp/classes/profile/stats/player_stats_service.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_stats/player_stats_header.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
@@ -276,8 +277,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                     CustomSlidingSegmentedControl<int>(
                       initialValue: _currentSegment,
                       children: {
-                        1: Text(AppLocalizations.of(context)!.attack),
-                        2: Text(AppLocalizations.of(context)!.defense),
+                        1: Text(AppLocalizations.of(context)!.attacks),
+                        2: Text(AppLocalizations.of(context)!.defenses),
                       },
                       decoration: BoxDecoration(
                         color: Theme.of(context)
@@ -1152,88 +1153,112 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                          DateFormat.yMd(userLocale.toString()).format(
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  attack.warStartTime)),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.tertiary)),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              CachedNetworkImage(
-                                imageUrl:
-                                    'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${attack.defender.townhallLevel}.png',
-                                width: 40,
-                                height: 40,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(LucideIcons.hourglass, size: 12),
-                                      SizedBox(width: 4),
-                                      Text("${attack.duration}s",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(LucideIcons.swords, size: 12),
-                                      SizedBox(width: 4),
-                                      Text(attack.warType,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                              "${attack.defender.mapPosition}. ${attack.defender.name}"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text("${attack.destructionPercentage.toString()}%"),
-                          Row(
-                            children: [
-                              ...generateStars(attack.stars, 16),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+          child: GestureDetector(
+            onTap: () async {
+              final navigator = Navigator.of(context);
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              );
+              ProfileInfo? playerStats = await ProfileInfoService()
+                  .fetchCompleteProfileInfo(attack.defenderTag);
+              navigator.pop();
+              navigator.push(
+                MaterialPageRoute(
+                  builder: (context) => StatsScreen(
+                      playerStats: playerStats!, discordUser: widget.user),
+                ),
+              );
+            },
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                            DateFormat.yMd(userLocale.toString()).format(
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    attack.warStartTime)),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .tertiary)),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                CachedNetworkImage(
+                                  imageUrl:
+                                      'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${attack.defender.townhallLevel}.png',
+                                  width: 40,
+                                  height: 40,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(LucideIcons.hourglass, size: 12),
+                                        SizedBox(width: 4),
+                                        Text("${attack.duration}s",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(LucideIcons.swords, size: 12),
+                                        SizedBox(width: 4),
+                                        Text(attack.warType,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                                "${attack.defender.mapPosition}. ${attack.defender.name}"),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text("${attack.destructionPercentage.toString()}%"),
+                            Row(
+                              children: [
+                                ...generateStars(attack.stars, 16),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -1275,88 +1300,113 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                          DateFormat.yMd(userLocale.toString()).format(
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  defense.warStartTime)),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.tertiary)),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              CachedNetworkImage(
-                                imageUrl:
-                                    'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${defense.attacker.townhallLevel}.png',
-                                width: 40,
-                                height: 40,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(LucideIcons.hourglass, size: 12),
-                                      SizedBox(width: 4),
-                                      Text("${defense.duration}s",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(LucideIcons.swords, size: 12),
-                                      SizedBox(width: 4),
-                                      Text(defense.warType,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                              "${defense.attacker.mapPosition}. ${defense.attacker.name}"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text("${defense.destructionPercentage.toString()}%"),
-                          Row(
-                            children: [
-                              ...generateStars(defense.stars, 16),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+          child: GestureDetector(
+            onTap: () async {
+              final navigator = Navigator.of(context);
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              );
+              ProfileInfo? playerStats = await ProfileInfoService()
+                  .fetchCompleteProfileInfo(defense.attackerTag);
+              navigator.pop();
+              navigator.push(
+                MaterialPageRoute(
+                  builder: (context) => StatsScreen(
+                      playerStats: playerStats!, discordUser: widget.user),
+                ),
+              );
+            },
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                            DateFormat.yMd(userLocale.toString()).format(
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    defense.warStartTime)),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .tertiary)),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                CachedNetworkImage(
+                                  imageUrl:
+                                      'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${defense.attacker.townhallLevel}.png',
+                                  width: 40,
+                                  height: 40,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(LucideIcons.hourglass, size: 12),
+                                        SizedBox(width: 4),
+                                        Text("${defense.duration}s",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(LucideIcons.swords, size: 12),
+                                        SizedBox(width: 4),
+                                        Text(defense.warType,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                                "${defense.attacker.mapPosition}. ${defense.attacker.name}"),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                                "${defense.destructionPercentage.toString()}%"),
+                            Row(
+                              children: [
+                                ...generateStars(defense.stars, 16),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

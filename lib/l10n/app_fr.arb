@@ -107,6 +107,8 @@
     "failedToAddTryAgain": "Échec de l'ajout du compte. Veuillez réessayer plus tard.",
     "failedToDeleteTryAgain": "Échec de la suppression du compte. Veuillez réessayer plus tard.",
     "search": "Rechercher",
+    "warning": "Attention",
+    "exitAppToOpenClash": "Tu es sur le point de quitter l'application pour ouvrir Clash of Clans.",
     "tagOrNamePlayer": "Tag ou nom du joueur",
     "searchPlayer": "Rechercher un joueur",
     "nameOrTagPlayer": "Nom ou tag du joueur",
@@ -311,7 +313,7 @@
     "ended": "Fin",
     "average": "Moyenne",
     "remaining": "Restant",
-    "legendsTitle" : "Données erronnées ?",
+    "legendsTitle": "Données erronnées ?",
     "legendsExplanation_intro": "En raison des limitations de l'API de Clash of Clans, nos données peuvent ne pas toujours être parfaitement précises. Voici pourquoi :\n",
     "legendsExplanation_api_delay_title": "1. Délai de l'API : ",
     "legendsExplanation_api_delay_body": "L'API peut prendre jusqu'à 5 minutes pour se mettre à jour, ce qui provoque un décalage dans l'affichage des changements de trophées en temps réel.\n",
@@ -462,9 +464,8 @@
     "role": "Rôle",
     "expLevel": "Niveau d'expérience",
     "townHallLevel": "Niveau d'HDV",
-    
     "thLevel": "HDV{level}",
-    "@thLevel":{
+    "@thLevel": {
         "placeholders": {
             "level": {
                 "type": "int"
@@ -495,9 +496,9 @@
         }
     },
     "lastXwars": "Dernières {number} guerres",
-    "friendly" : "Amicale",
-    "cwl" : "LDC",
-    "random" : "Aléatoire",
+    "friendly": "Amicale",
+    "cwl": "LDC",
+    "random": "Aléatoire",
     "builderBaseTrophies": "Trophées MDO",
     "donations": "Dons",
     "donationsReceived": "Don reçus",
@@ -770,7 +771,7 @@
     "calculate": "Calculer",
     "warStats": "Statistiques de guerre",
     "clanWarLeague": "Ligue de clan",
-    "cwlRank" : "Ton clan est actuellement classé numéro {rank}.",
+    "cwlRank": "Ton clan est actuellement classé numéro {rank}.",
     "@cwlRank": {
         "placeholders": {
             "rank": {
@@ -778,7 +779,7 @@
             }
         }
     },
-    "cwlStars" : "Ton clan a un total de {stars} étoiles.",
+    "cwlStars": "Ton clan a un total de {stars} étoiles.",
     "@cwlStars": {
         "placeholders": {
             "stars": {
@@ -786,7 +787,7 @@
             }
         }
     },
-    "cwlMissingStarsFromNext" : "Ton clan a besoin de {stars} étoiles pour rattraper le clan suivant.",
+    "cwlMissingStarsFromNext": "Ton clan a besoin de {stars} étoiles pour rattraper le clan suivant.",
     "@cwlMissingStarsFromNext": {
         "placeholders": {
             "stars": {
@@ -794,7 +795,7 @@
             }
         }
     },
-    "cwlMissingStarsFromFirst" : "Ton clan a besoin de {stars} étoiles pour rattraper le premier.",
+    "cwlMissingStarsFromFirst": "Ton clan a besoin de {stars} étoiles pour rattraper le premier.",
     "@cwlMissingStarsFromFirst": {
         "placeholders": {
             "stars": {
@@ -802,7 +803,7 @@
             }
         }
     },
-    "cwlDestructionPercentage" : "Ton clan a un taux de destruction de {percent}%.",
+    "cwlDestructionPercentage": "Ton clan a un taux de destruction de {percent}%.",
     "@cwlDestructionPercentage": {
         "placeholders": {
             "percent": {
@@ -810,7 +811,7 @@
             }
         }
     },
-    "cwlCurrentRound" : "Nous sommes actuellement au tour {round}.",
+    "cwlCurrentRound": "Nous sommes actuellement au tour {round}.",
     "@cwlCurrentRound": {
         "placeholders": {
             "round": {

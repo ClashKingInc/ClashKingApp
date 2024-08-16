@@ -23,8 +23,34 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
     return GestureDetector(
       onTap: () async {
         final languagecode = await getPrefs('languageCode');
-        launchUrl(Uri.parse(
-            'https://link.clashofclans.com/$languagecode?action=SupportCreator&id=Clashking'));
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(AppLocalizations.of(context)!.warning,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleSmall),
+              content: Text(AppLocalizations.of(context)!.exitAppToOpenClash),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(AppLocalizations.of(context)!.cancel),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text(AppLocalizations.of(context)!.ok),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+
+                    launchUrl(Uri.parse(
+                        'https://link.clashofclans.com/$languagecode?action=SupportCreator&id=Clashking'));
+                  },
+                ),
+              ],
+            );
+          },
+        );
       },
       child: Card(
         child: Padding(
@@ -36,7 +62,8 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
               SizedBox(width: 16),
               Expanded(
                 child: Text(
-                  AppLocalizations.of(context)?.creatorCode ?? 'Creator Code : ClashKing',
+                  AppLocalizations.of(context)?.creatorCode ??
+                      'Creator Code : ClashKing',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,

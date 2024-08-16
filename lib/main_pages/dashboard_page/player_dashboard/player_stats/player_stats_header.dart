@@ -48,8 +48,7 @@ class PlayerStatsHeader extends StatelessWidget {
                   BlendMode.darken,
                 ),
                 child: CachedNetworkImage(
-                  imageUrl:
-                      "https://assets.clashk.ing/landscape/war-stats.png",
+                  imageUrl: "https://assets.clashk.ing/landscape/war-stats.png",
                   width: double.infinity,
                   fit: BoxFit.cover,
                 )),
@@ -101,7 +100,12 @@ class PlayerStatsHeader extends StatelessWidget {
                         FilterChip(
                           visualDensity: VisualDensity.compact,
                           selectedColor: Theme.of(context).colorScheme.primary,
-                          label: Text(AppLocalizations.of(context)!.cwl),
+                          checkmarkColor: Colors.white,
+                          label: Text(AppLocalizations.of(context)!.cwl,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium
+                                  ?.copyWith(color: Colors.white)),
                           selected: isCWLChecked,
                           onSelected: (bool selected) => onCWLChanged(),
                         ),
@@ -109,7 +113,12 @@ class PlayerStatsHeader extends StatelessWidget {
                         FilterChip(
                           visualDensity: VisualDensity.compact,
                           selectedColor: Theme.of(context).colorScheme.primary,
-                          label: Text(AppLocalizations.of(context)!.random),
+                          checkmarkColor: Colors.white,
+                          label: Text(AppLocalizations.of(context)!.random,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium
+                                  ?.copyWith(color: Colors.white)),
                           selected: isRandomChecked,
                           onSelected: (bool selected) => onRandomChanged(),
                         ),
@@ -117,7 +126,12 @@ class PlayerStatsHeader extends StatelessWidget {
                         FilterChip(
                           visualDensity: VisualDensity.compact,
                           selectedColor: Theme.of(context).colorScheme.primary,
-                          label: Text(AppLocalizations.of(context)!.friendly),
+                          checkmarkColor: Colors.white,
+                          label: Text(AppLocalizations.of(context)!.friendly,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium
+                                  ?.copyWith(color: Colors.white)),
                           selected: isFriendlyChecked,
                           onSelected: (bool selected) => onFriendlyChanged(),
                         ),

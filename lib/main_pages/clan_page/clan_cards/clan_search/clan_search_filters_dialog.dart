@@ -215,7 +215,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                                         item["isCountry"] == true
                                             ? CachedNetworkImage(
                                                 imageUrl:
-                                                    "https://assets.clashk.ing/country-flags/${item['countryCode']}.png",
+                                                    "https://assets.clashk.ing/country-flags/${item['countryCode'].toLowerCase()}.png",
                                                 width: 16,
                                                 height: 20,
                                                 errorWidget: (context, url,

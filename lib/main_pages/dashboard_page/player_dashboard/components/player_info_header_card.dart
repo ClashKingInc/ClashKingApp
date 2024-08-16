@@ -5,6 +5,7 @@ import 'package:clipboard/clipboard.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
@@ -75,10 +76,133 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
               ),
               Positioned(
                 bottom: -72,
-                child: Column(
+                child: Row(
                   children: [
-                    CachedNetworkImage(
-                        imageUrl: widget.townHallImageUrl, width: 170),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.verified_rounded,
+                            color: Colors.white,
+                            size: 32,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AchievementScreen(
+                                    playerStats: widget.playerStats),
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(height: 8),
+                        IconButton(
+                          icon: Icon(LucideIcons.barChart3,
+                              color: Colors.white, size: 32),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PlayerStatsScreen(
+                                  profileInfo: widget.playerStats,
+                                  user: widget.user,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(height: 48),
+                      ],
+                    ),
+                    SizedBox(width: 16),
+                    Column(
+                      children: [
+                        CachedNetworkImage(
+                            imageUrl: widget.townHallImageUrl, width: 170),
+                      ],
+                    ),
+                    SizedBox(width: 16),
+                    Column(
+                      children: [
+                        IconButton(
+                          icon: Icon(LucideIcons.calendarCheck,
+                              color: Colors.white, size: 32),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                insetPadding: EdgeInsets.all(8),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width - 16,
+                                  child: SingleChildScrollView(
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                          maxHeight: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.9),
+                                      child: IntrinsicHeight(
+                                        child: ToDoBodyCard(
+                                          profileInfo: widget.playerStats,
+                                          toDo: widget.playerStats.toDo!,
+                                          tag: widget.playerStats.tag,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(height: 8),
+                        IconButton(
+                          icon: Icon(Icons.sports_esports_rounded,
+                              color: Colors.white, size: 32),
+                          onPressed: () async {
+                            final languageCode = await getPrefs(
+                                'languageCode'); // Supposition que getPrefs est asynchrone
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(
+                                      AppLocalizations.of(context)!.warning,
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall),
+                                  content: Text(AppLocalizations.of(context)!
+                                      .exitAppToOpenClash),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text(
+                                          AppLocalizations.of(context)!.cancel),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text(
+                                          AppLocalizations.of(context)!.ok),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        launchUrl(Uri.parse(
+                                            'https://link.clashofclans.com/$languageCode?action=OpenPlayerProfile&tag=${widget.playerStats.tag}'));
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                        SizedBox(height: 48),
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -132,92 +256,6 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                       ),
                     ),
                   ],
-                ),
-              ),
-              Positioned(
-                top: 0,
-                left: 34,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.verified_rounded,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    size: 32,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            AchievementScreen(playerStats: widget.playerStats),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Positioned(
-                top: 0,
-                right: 34,
-                child: IconButton(
-                  icon: Icon(Icons.check_box_outlined,
-                      color: Theme.of(context).colorScheme.onSurface, size: 32),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => Dialog(
-                        insetPadding: EdgeInsets.all(8),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width -
-                              16, // Full screen width with 8 padding on each side
-                          child: SingleChildScrollView(
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  maxHeight:
-                                      MediaQuery.of(context).size.height * 0.9),
-                              child: IntrinsicHeight(
-                                child: ToDoBodyCard(
-                                  profileInfo: widget.playerStats,
-                                  toDo: widget.playerStats.toDo!,
-                                  tag: widget.playerStats.tag,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Positioned(
-                top: 56,
-                left: 34,
-                child: IconButton(
-                  icon: Icon(Icons.equalizer_rounded,
-                      color: Theme.of(context).colorScheme.onSurface, size: 32),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PlayerStatsScreen(
-                          profileInfo: widget.playerStats,
-                          user: widget.user,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Positioned(
-                top: 56,
-                right: 34,
-                child: IconButton(
-                  icon: Icon(Icons.sports_esports_rounded,
-                      color: Theme.of(context).colorScheme.onSurface, size: 32),
-                  onPressed: () async {
-                    final languagecode = getPrefs('languageCode');
-                    launchUrl(Uri.parse(
-                        'https://link.clashofclans.com/$languagecode?action=OpenPlayerProfile&tag=${widget.playerStats.tag}'));
-                  },
                 ),
               ),
             ],

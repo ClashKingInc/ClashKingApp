@@ -129,6 +129,8 @@
     "@search": {
         "description": "Search for a player or a clan"
     },
+    "warning": "Warning",
+    "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
     "tagOrNamePlayer": "Player's tag or name",
     "searchPlayer": "Search player",
     "nameOrTagPlayer": "Player's name or tag",
