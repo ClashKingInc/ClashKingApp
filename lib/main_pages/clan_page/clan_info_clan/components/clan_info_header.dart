@@ -3,6 +3,7 @@ import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/components/clan_wars_stats_card.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -357,7 +358,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                             "https://assets.clashk.ing/icons/Icon_HV_Trophy.png"),
                   ),
                   label: Text(
-                    widget.clanInfo.clanPoints.toString(),
+                    NumberFormat(
+                            '#,###', Localizations.localeOf(context).toString())
+                        .format(widget.clanInfo.clanPoints),
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
@@ -381,7 +384,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                             "https://assets.clashk.ing/icons/Icon_HV_Attack.png"),
                   ),
                   label: Text(
-                    widget.clanInfo.clanCapitalPoints.toString(),
+                    NumberFormat(
+                            '#,###', Localizations.localeOf(context).toString())
+                        .format(widget.clanInfo.clanCapitalPoints),
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),

@@ -48,8 +48,7 @@ class PlayerLegendCard extends StatelessWidget {
                           Column(
                             children: <Widget>[
                               Text(
-                                AppLocalizations.of(context)?.legendLeague ??
-                                    "Legend League",
+                                AppLocalizations.of(context)!.legendLeague,
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                               SizedBox(
@@ -66,7 +65,11 @@ class PlayerLegendCard extends StatelessWidget {
                               right: 30,
                               bottom: 42,
                               child: Text(
-                                playerStats.trophies.toString(),
+                                NumberFormat(
+                                        '#,###',
+                                        Localizations.localeOf(context)
+                                            .toString())
+                                    .format(playerStats.trophies),
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall!
@@ -78,8 +81,7 @@ class PlayerLegendCard extends StatelessWidget {
                       SizedBox(width: 8),
                       Flexible(
                         child: Text(
-                          AppLocalizations.of(context)?.noLegendData ??
-                              "No Legend Data found for today",
+                          AppLocalizations.of(context)!.noLegendData,
                           style: Theme.of(context).textTheme.labelLarge,
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
@@ -127,16 +129,24 @@ class PlayerLegendCard extends StatelessWidget {
                             height: 100,
                             width: 100,
                             child: Stack(
+                              alignment: Alignment
+                                  .center, // S'assure que les enfants soient centrés
                               children: <Widget>[
                                 CachedNetworkImage(
                                   imageUrl:
                                       "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3.png",
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
                                 ),
-                                Positioned(
-                                  right: 30,
-                                  top: 32,
+                                Align(
+                                  alignment: Alignment.center,
                                   child: Text(
-                                    playerStats.trophies.toString(),
+                                    NumberFormat(
+                                            '#,###',
+                                            Localizations.localeOf(context)
+                                                .toString())
+                                        .format(playerStats.trophies),
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleSmall!
@@ -161,7 +171,12 @@ class PlayerLegendCard extends StatelessWidget {
                                 ImageChip(
                                   imageUrl:
                                       "https://assets.clashk.ing/icons/Icon_HV_Start_Flag.png",
-                                  label: playerLegendData.firstTrophies,
+                                  label: NumberFormat(
+                                          '#,###',
+                                          Localizations.localeOf(context)
+                                              .toString())
+                                      .format(int.parse(
+                                          playerLegendData.firstTrophies)),
                                   description: AppLocalizations.of(context)!
                                       .legendStartDescription(
                                           playerLegendData.firstTrophies),
@@ -203,7 +218,7 @@ class PlayerLegendCard extends StatelessWidget {
                                       : Colors.red,
                                   size: 16,
                                   label:
-                                      "${playerLegendData.diffTrophies >= 0 ? '+' : ''}${playerLegendData.diffTrophies.toString()}",
+                                      "${playerLegendData.diffTrophies >= 0 ? '+' : ''}${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(int.parse(playerLegendData.diffTrophies.toString()))}",
                                   description: playerLegendData.diffTrophies >=
                                           0
                                       ? AppLocalizations.of(context)!
@@ -218,8 +233,11 @@ class PlayerLegendCard extends StatelessWidget {
                                       "https://assets.clashk.ing/icons/Icon_HV_Planet.png",
                                   label: playerLegendData
                                           .legendRanking.isRankedGlobally
-                                      ? NumberFormat('#,###', 'fr_FR').format(
-                                          int.parse(playerLegendData
+                                      ? NumberFormat(
+                                              '#,###',
+                                              Localizations.localeOf(context)
+                                                  .toString())
+                                          .format(int.parse(playerLegendData
                                               .legendRanking.globalRank))
                                       : AppLocalizations.of(context)?.noRank ??
                                           'No Rank',

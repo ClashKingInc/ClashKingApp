@@ -227,7 +227,13 @@ class ToDoCardState extends State<ToDoCard> {
                               labelPadding:
                                   EdgeInsets.only(left: 2.0, right: 2.0),
                               label: Text(
-                                profileInfo.toDo!.clanGames.points.toString(),
+                                NumberFormat(
+                                        '#,###',
+                                        Localizations.localeOf(context)
+                                            .toString())
+                                    .format(int.parse(profileInfo
+                                        .toDo!.clanGames.points
+                                        .toString())),
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                               shape: RoundedRectangleBorder(
@@ -325,7 +331,12 @@ class ToDoCardState extends State<ToDoCard> {
                             labelPadding:
                                 EdgeInsets.only(left: 2.0, right: 2.0),
                             label: Text(
-                              profileInfo.toDo!.seasonPass.toString(),
+                              NumberFormat(
+                                      '#,###',
+                                      Localizations.localeOf(context)
+                                          .toString())
+                                  .format(int.parse(
+                                      profileInfo.toDo!.seasonPass.toString())),
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                             shape: RoundedRectangleBorder(

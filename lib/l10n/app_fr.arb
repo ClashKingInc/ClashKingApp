@@ -472,6 +472,14 @@
             }
         }
     },
+    "bhLevel": "MDO{level}",
+    "@bhLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
     "townHallLevelLevel": "Hôtel de ville {level}",
     "@townHallLevelLevel": {
         "placeholders": {

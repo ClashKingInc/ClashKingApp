@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:intl/intl.dart';
 
 class LegendTrophiesStartEndCard extends StatelessWidget {
   const LegendTrophiesStartEndCard({
@@ -21,20 +22,29 @@ class LegendTrophiesStartEndCard extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Column(
           children: [
-            Text(AppLocalizations.of(context)?.started ?? "Started", style: Theme.of(context).textTheme.titleSmall),
-            Text(startTrophies, style: Theme.of(context).textTheme.titleMedium),
+            Text(AppLocalizations.of(context)?.started ?? "Started",
+                style: Theme.of(context).textTheme.titleSmall),
+            Text(
+                NumberFormat(
+                        '#,###', Localizations.localeOf(context).toString())
+                    .format(int.parse(startTrophies)),
+                style: Theme.of(context).textTheme.titleMedium),
           ],
         ),
-        CachedNetworkImage(imageUrl: 
-          "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border.png",
+        CachedNetworkImage(
+          imageUrl:
+              "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border.png",
           width: 80,
         ),
         Column(children: [
-          Text(AppLocalizations.of(context)?.ended ?? "Ended", style: Theme.of(context).textTheme.titleSmall),
-          Text(currentTrophies, style: Theme.of(context).textTheme.titleMedium),
+          Text(AppLocalizations.of(context)?.ended ?? "Ended",
+              style: Theme.of(context).textTheme.titleSmall),
+          Text(
+              NumberFormat('#,###', Localizations.localeOf(context).toString())
+                  .format(int.parse(currentTrophies)),
+              style: Theme.of(context).textTheme.titleMedium),
         ]),
       ]),
     );
   }
 }
-

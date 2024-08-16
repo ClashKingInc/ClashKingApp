@@ -243,7 +243,13 @@ class LegendsTrophiesBySeasonTableState
                                     TextSpan(
                                       children: [
                                         TextSpan(
-                                            text: legendDay.currentTrophies,
+                                            text: NumberFormat(
+                                                    '#,###',
+                                                    Localizations.localeOf(
+                                                            context)
+                                                        .toString())
+                                                .format(int.parse(
+                                                    legendDay.currentTrophies)),
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium),
@@ -335,7 +341,10 @@ class LegendsTrophiesBySeasonTableState
               children: [
                 Text(AppLocalizations.of(context)?.started ?? "Started",
                     style: Theme.of(context).textTheme.bodySmall),
-                Text(legendDay.startTrophies.toString(),
+                Text(
+                    NumberFormat(
+                            '#,###', Localizations.localeOf(context).toString())
+                        .format(legendDay.startTrophies),
                     style: Theme.of(context).textTheme.bodyMedium),
               ],
             ),
@@ -347,7 +356,10 @@ class LegendsTrophiesBySeasonTableState
             Column(children: [
               Text(AppLocalizations.of(context)?.ended ?? "Ended",
                   style: Theme.of(context).textTheme.bodySmall),
-              Text(legendDay.currentTrophies.toString(),
+              Text(
+                  NumberFormat(
+                          '#,###', Localizations.localeOf(context).toString())
+                      .format(int.parse(legendDay.currentTrophies)),
                   style: Theme.of(context).textTheme.bodyMedium),
             ]),
           ]),

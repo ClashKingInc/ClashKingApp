@@ -61,12 +61,12 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                       Column(
                         children: <Widget>[
                           Text(
-                            AppLocalizations.of(context)?.lastActive(
-                                    (DateFormat.yMd(userLocale.toString())
-                                            .format(DateTime
-                                                .fromMillisecondsSinceEpoch(
-                                                    widget.toDo.lastActive * 1000)))
-                                        .toString()) ??
+                            AppLocalizations.of(context)?.lastActive((DateFormat
+                                            .yMd(userLocale.toString())
+                                        .format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                widget.toDo.lastActive * 1000)))
+                                    .toString()) ??
                                 'Last active: ${DateFormat('dd/MM/yy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(widget.toDo.lastActive * 1000)).toString()}',
                             style: Theme.of(context).textTheme.labelLarge,
                             textAlign: TextAlign.center,
@@ -79,8 +79,7 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                             runSpacing: -7.0,
                             children: <Widget>[
                               if (widget.toDo.legends != null ||
-                                  widget.profileInfo.league ==
-                                      'Legend League')
+                                  widget.profileInfo.league == 'Legend League')
                                 Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
@@ -98,7 +97,36 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                                   ),
                                   shape: RoundedRectangleBorder(
                                     side: BorderSide(
-                                      color: widget.toDo.legends?.numAttacks == 8
+                                      color:
+                                          widget.toDo.legends?.numAttacks == 8
+                                              ? Colors.green
+                                              : Colors.red,
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                ),
+                              if (widget.toDo.war != null &&
+                                  widget.toDo.war!.attackLimit != 0)
+                                Chip(
+                                  avatar: CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          "https://assets.clashk.ing/icons/Icon_DC_War.png",
+                                    ),
+                                  ),
+                                  labelPadding:
+                                      EdgeInsets.only(left: 2.0, right: 2.0),
+                                  label: Text(
+                                    "${widget.toDo.war!.attacksDone}/${widget.toDo.war!.attackLimit}",
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color: widget.toDo.war!.attackLimit ==
+                                              widget.toDo.war!.attacksDone
                                           ? Colors.green
                                           : Colors.red,
                                       width: 1.0,
@@ -106,28 +134,6 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
                                 ),
-                              if(widget.toDo.war != null && widget.toDo.war!.attackLimit != 0)
-                              Chip(
-                               avatar: CircleAvatar(
-                                 backgroundColor: Colors.transparent,
-                                 child: CachedNetworkImage(
-                                   imageUrl: "https://assets.clashk.ing/icons/Icon_DC_War.png",
-                                 ),
-                               ),
-                               labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
-                               label: Text("${widget.toDo.war!.attacksDone}/${widget.toDo.war!.attackLimit}",
-                                 style: Theme.of(context).textTheme.labelLarge,
-                               ),
-                               shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      color: widget.toDo.war!.attackLimit == widget.toDo.war!.attacksDone
-                                          ? Colors.green
-                                          : Colors.red,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                              ),
                               if (widget.toDo.isInTimeFrameForClanGames)
                                 Chip(
                                   avatar: CircleAvatar(
@@ -140,15 +146,20 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                                   labelPadding:
                                       EdgeInsets.only(left: 2.0, right: 2.0),
                                   label: Text(
-                                    widget.toDo.clanGames.points.toString(),
+                                    NumberFormat(
+                                            '#,###',
+                                            Localizations.localeOf(context)
+                                                .toString())
+                                        .format(widget.toDo.clanGames.points),
                                     style:
                                         Theme.of(context).textTheme.labelLarge,
                                   ),
                                   shape: RoundedRectangleBorder(
                                     side: BorderSide(
-                                      color: widget.toDo.clanGames.points == 4000
-                                          ? Colors.green
-                                          : Colors.red,
+                                      color:
+                                          widget.toDo.clanGames.points == 4000
+                                              ? Colors.green
+                                              : Colors.red,
                                       width: 1.0,
                                     ),
                                     borderRadius: BorderRadius.circular(8.0),
@@ -180,11 +191,16 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                                         ),
                                   shape: RoundedRectangleBorder(
                                     side: BorderSide(
-                                      color: (widget.toDo.raids.attacksDone == 5 &&
-                                                  widget.toDo.raids.attackLimit ==
+                                      color: (widget.toDo.raids.attacksDone ==
+                                                      5 &&
+                                                  widget.toDo.raids
+                                                          .attackLimit ==
                                                       5) ||
-                                              (widget.toDo.raids.attacksDone == 6 &&
-                                                  widget.toDo.raids.attackLimit == 6)
+                                              (widget.toDo.raids.attacksDone ==
+                                                      6 &&
+                                                  widget.toDo.raids
+                                                          .attackLimit ==
+                                                      6)
                                           ? Colors.green
                                           : Colors.red,
                                       width: 1.0,
@@ -233,7 +249,11 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                                 labelPadding:
                                     EdgeInsets.only(left: 2.0, right: 2.0),
                                 label: Text(
-                                  widget.toDo.seasonPass.toString(),
+                                  NumberFormat(
+                                          '#,###',
+                                          Localizations.localeOf(context)
+                                              .toString())
+                                      .format(widget.toDo.seasonPass),
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
                                 shape: RoundedRectangleBorder(

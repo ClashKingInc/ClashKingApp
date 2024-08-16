@@ -63,7 +63,7 @@ class LegendEosBySeasonChart extends StatelessWidget {
                                   child: Text(
                                     DateFormat('MM/yy').format(date),
                                     style:
-                                        Theme.of(context).textTheme.labelSmall,
+                                        Theme.of(context).textTheme.labelMedium,
                                   ),
                                 );
                               },
@@ -75,7 +75,14 @@ class LegendEosBySeasonChart extends StatelessWidget {
                               reservedSize: 40,
                               interval: chartData.rangeY,
                               getTitlesWidget: (double value, TitleMeta meta) {
-                                return Text('${value.toInt()}');
+                                return Text(
+                                    NumberFormat(
+                                            '#,###',
+                                            Localizations.localeOf(context)
+                                                .toString())
+                                        .format(value.toInt()),
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall);
                               },
                             ),
                           ),
@@ -128,8 +135,7 @@ class LegendEosBySeasonChart extends StatelessWidget {
 
                                 return LineTooltipItem(
                                   '${dateFormat.format(date)} : ${touchedSpot.y.toInt()}',
-                                  TextStyle(
-                                      color: Colors.white),
+                                  TextStyle(color: Colors.white),
                                 );
                               }).toList();
                             },
