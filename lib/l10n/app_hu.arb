@@ -1,5 +1,4 @@
 {
-    "@@locale": "hu",
     "creatorCode": "Alkotói kód : ClashKing",
     "signInWithDiscord": "Bejelentkezés Discord-dal",
     "guestMode": "Vendég mód",
@@ -534,6 +533,14 @@
     "townHallLevel": "TH szint",
     "thLevel": "TH{level}",
     "@thLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "bhLevel": "BH{level}",
+    "@bhLevel": {
         "placeholders": {
             "level": {
                 "type": "int"
