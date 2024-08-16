@@ -73,14 +73,15 @@
     "faqSendEmail": "Stuur een e-mail",
     "faqJoinDiscord": "Word lid van de Discord server",
     "helpUsTranslate": "Help ons met vertalen",
+    "suggestFeatures": "Een nieuwe functie voorstellen",
     "thankYou": "Bedankt!",
     "thankYouContent": "Hartelijk dank aan al onze geweldige vertalers die ons helpen deze app toegankelijk te maken voor meer mensen over de hele wereld!",
     "helpTranslateContent": "Je kunt ons helpen de app op Crowdin te vertalen. Als je taal niet beschikbaar is op Crowdin, kan je deze aanvragen op onze Discord-server. Heel erg bedankt voor je hulp!",
     "helpTranslateButton": "Help met vertalen op Crowdin",
     "currentTranslators": "Huidige vertalers",
-    "betaFeature": "Beta Feature",
+    "betaFeature": "Beta-functie",
     "beta": "BETA",
-    "betaDescription": "This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.",
+    "betaDescription": "Deze functie bevindt zich in bèta en kan enkele bugs bevatten en onvolledig zijn. Het zal verbeterd worden in de komende updates. Voel je vrij om ideeën voor te stellen in onze Discord server. Ook kan je daar bugs rapporteren om ons te helpen de functie te verbeteren.",
     "copiedToClipboard": "Gekopieerd naar klembord",
     "all": "Alle",
     "@all": {
@@ -127,6 +128,8 @@
     "@search": {
         "description": "Search for a player or a clan"
     },
+    "warning": "Waarschuwing",
+    "exitAppToOpenClash": "Je staat op het punt de app te verlaten om Clash of Clans te openen.",
     "tagOrNamePlayer": "Spelers tag of naam",
     "searchPlayer": "Zoek speler",
     "nameOrTagPlayer": "Spelers-ID of naam",
@@ -266,6 +269,7 @@
     },
     "date": "Datum",
     "stats": "Stats",
+    "details": "Details",
     "seasonStats": "Seizoen Stats",
     "charts": "Grafieken",
     "history": "Geschiedenis",
@@ -357,18 +361,18 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inacurate Data ?",
-    "legendsExplanation_intro": "Due to limitations in the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
-    "legendsExplanation_api_delay_title": "1. API Delay: ",
-    "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
-    "legendsExplanation_concurrent_changes_title": "2. Concurrent Changes: \n",
-    "legendsExplanation_multiple_attacks_defenses_title": "- Multiple Attacks/Defenses: ",
-    "legendsExplanation_multiple_attacks_defenses_body": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
-    "legendsExplanation_simultaneous_attack_defense_title": "- Simultaneous Attack and Defense: ",
-    "legendsExplanation_simultaneous_attack_defense_body": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
-    "legendsExplanation_net_gain_loss_title": "3. Net Gain/Loss: ",
-    "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
-    "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
+    "legendsTitle": "Onjuiste gegevens?",
+    "legendsExplanation_intro": "Vanwege beperkingen in de Clash of Clans API is onze data mogelijk niet altijd accuraat. Dit zijn de reden:\n",
+    "legendsExplanation_api_delay_title": "1. API Vertraging: ",
+    "legendsExplanation_api_delay_body": "De API kan tot 5 minuten duren om bij te werken, wat een vertraging veroorzaakt bij het weergeven van real-time trofee wijzigingen.\n",
+    "legendsExplanation_concurrent_changes_title": "2. Gelijktijdige Veranderingen:\n",
+    "legendsExplanation_multiple_attacks_defenses_title": "- Meerdere Aanvallen/Verdedigingen: ",
+    "legendsExplanation_multiple_attacks_defenses_body": "Als meerdere aanvallen of verdedigingen kort na elkaar plaatsvinden, kan de API gecombineerde resultaten weergeven (bijv. +68 of -68).\n",
+    "legendsExplanation_simultaneous_attack_defense_title": "- Gelijktijdige Aanval en Verdediging: ",
+    "legendsExplanation_simultaneous_attack_defense_body": "Als er op hetzelfde moment een aanval en verdediging plaatsvindt, kan je een gemengd resultaat zien (bijv. +4).\n",
+    "legendsExplanation_net_gain_loss_title": "3. Netto winst/verlies: ",
+    "legendsExplanation_net_gain_loss_body": "Ondanks de timing problemen, is het nettoresultaat van de gehele dag wel correct. ",
+    "legendsExplanation_conclusion": "Deze beperkingen zijn gebruikelijk bij alle tools die de Clash of Clans API gebruiken. Helaas kunnen we dat niet oplossen omdat het in handen van Supercell ligt. We doen ons best om deze limieten te compenseren en resultaten te bieden die zo dicht mogelijk bij de werkelijkheid liggen. Bedankt voor je begrip!",
     "toDoList": "Takenlijst",
     "lastActive": "Laatst actief: {date}",
     "@lastActive": {
@@ -387,7 +391,7 @@
         },
         "description": "Number of accounts (ex : 4 accounts)"
     },
-    "numberActiveAccounts": "{number} active accounts",
+    "numberActiveAccounts": "{number} actieve accounts",
     "@numberActiveAccounts": {
         "placeholders": {
             "number": {
@@ -395,7 +399,7 @@
             }
         }
     },
-    "numberInactiveAccounts": "{number} inactive accounts",
+    "numberInactiveAccounts": "{number} inactieve accounts",
     "@numberInactiveAccounts": {
         "placeholders": {
             "number": {
@@ -403,23 +407,23 @@
             }
         }
     },
-    "activeAccounts": "Active accounts",
-    "inactiveAccounts": "Inactive accounts",
-    "noInactiveAccounts": "No inactive accounts.",
-    "noActiveAccounts": "No active accounts.",
-    "todoExplanation_title": "Task Calculation",
-    "todoExplanation_intro": "The task completion percentage is calculated based on the following activities with specific weightings:",
-    "todoExplanation_legends_title": "Legend League:",
-    "todoExplanation_legends": "Weight of 8 points per account, 1 attack = 1 point.",
-    "todoExplanation_raids_title": "Raids:",
-    "todoExplanation_raids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-    "todoExplanation_clanWars_title": "Clan Wars:",
-    "todoExplanation_clanWars": "Weight of 2 points per account, 1 attack = 1 point.",
-    "todoExplanation_cwl_title": "Clan War League:",
-    "todoExplanation_cwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
-    "todoExplanation_passAndGames_title": "Season Pass & Clan Games:",
-    "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
-    "todoExplanation_conclusion": "To get the final percentage, The total accumulated actions completed during ongoing events are divided by the total required actions. Accounts inactive for 14 days are not included in the overall calculation.",
+    "activeAccounts": "Actieve accounts",
+    "inactiveAccounts": "Inactieve accounts",
+    "noInactiveAccounts": "Geen inactieve accounts.",
+    "noActiveAccounts": "Geen actieve accounts.",
+    "todoExplanation_title": "Taakberekening",
+    "todoExplanation_intro": "Het voltooiingspercentage van de taak wordt berekend op basis van de volgende activiteiten met bepaalde gewichten:",
+    "todoExplanation_legends_title": "Legendarische Divisie:",
+    "todoExplanation_legends": "Gewicht van 8 punten per account, 1 aanval = 1 punt.",
+    "todoExplanation_raids_title": "Rooftochten:",
+    "todoExplanation_raids": "Gewicht van 5 punten per account (of 6 als de laatste aanval is ontgrendeld), 1 aanval = 1 punt.",
+    "todoExplanation_clanWars_title": "Clan Oorlogen:",
+    "todoExplanation_clanWars": "Gewicht van 2 punten per account, 1 aanval = 1 punt.",
+    "todoExplanation_cwl_title": "Clanoorlogsdivisie:",
+    "todoExplanation_cwl": "Gewicht van 1 punt per account, 1 aanval = 1 punt. CWL (clanoorlogdivisie) kan niet worden gevolgd als de speler niet in zijn divisie clan zit.",
+    "todoExplanation_passAndGames_title": "Seizoenspas & Clan Games:",
+    "todoExplanation_passAndGames": "Gewicht van 2 punten per account. De verhouding is gebaseerd op het aantal resterende dagen (1 maand voor de pas en 6 dagen voor de spellen). Groen = op schema om de pas of spellen te voltooien, rood = achter op schema.",
+    "todoExplanation_conclusion": "Het uiteindelijke percentage wordt berekend door het totaal aantal voltooide acties tijdens lopende evenementen te delen door het totaal aantal vereiste acties. Accounts die langer dan 14 dagen inactief zijn worden uitgesloten van de berekening.",
     "worst": "Slechtste",
     "@worst": {
         "description": "Worst end of day trophies"
@@ -527,6 +531,76 @@
     "role": "Rol",
     "expLevel": "Ervaringsniveau",
     "townHallLevel": "SH level",
+    "thLevel": "SH{level}",
+    "@thLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "bhLevel": "BH{level}",
+    "@bhLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "townHallLevelLevel": "Stadhuis {level}",
+    "@townHallLevelLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "byNumberOfWars": "Op aantal oorlogen",
+    "@byNumberOfWars": {
+        "description": "filter by number of wars"
+    },
+    "ok": "Oké",
+    "@ok": {
+        "description": "OK button on pop up"
+    },
+    "byDateRange": "Op datumbereik",
+    "@byDateRange": {
+        "description": "filter by date range"
+    },
+    "selectSeason": "Selecteer een seizoen",
+    "@selectSeason": {
+        "description": "Ask player to select a season"
+    },
+    "year": "Jaar",
+    "month": "Maand",
+    "allTownHalls": "Alle stadhuizen",
+    "seasonDate": "{date} seizoen",
+    "@seasonDate": {
+        "description": "Example : August 2024 season",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "lastXwars": "Laatste {number} oorlogen",
+    "@lastXwars": {
+        "description": "Example : Shows the last 25 wars",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "friendly": "Vriendelijk",
+    "@friendly": {
+        "description": "Friendly war"
+    },
+    "cwl": "CWL",
+    "random": "Willekeurig",
+    "@random": {
+        "description": "Random/basic war (not friendly or cwl)"
+    },
     "builderBaseTrophies": "BB Trofeeën",
     "donations": "Donaties",
     "donationsReceived": "Donaties ontvangen",
@@ -814,6 +888,55 @@
     "neededOverall": "% Nodig in totaal",
     "calculate": "Berekenen",
     "warStats": "Oorlogstatistieken",
+    "clanWarLeague": "Clanoorlogsdivisie",
+    "cwlRank": "Jouw clan staat momenteel op rang {rank}.",
+    "@cwlRank": {
+        "placeholders": {
+            "rank": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlStars": "Jouw clan heeft een totaal van {stars} sterren.",
+    "@cwlStars": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlMissingStarsFromNext": "Je clan mist {stars} sterren om de volgende clans in te halen.",
+    "@cwlMissingStarsFromNext": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlMissingStarsFromFirst": "Je clan mist {stars} sterren om de eerste clan in te halen.",
+    "@cwlMissingStarsFromFirst": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlDestructionPercentage": "Je clan heeft een totaal vernietigingspercentage van {percent}%.",
+    "@cwlDestructionPercentage": {
+        "placeholders": {
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "cwlCurrentRound": "Het is momenteel ronde {round}.",
+    "@cwlCurrentRound": {
+        "placeholders": {
+            "round": {
+                "type": "int"
+            }
+        }
+    },
     "noAccountLinkedToYourProfileFound": "Geen gekoppeld account aan je profiel gevonden",
     "management": "Beheren",
     "comingSoon": "Binnenkort beschikbaar!",

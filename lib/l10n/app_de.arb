@@ -73,6 +73,7 @@
     "faqSendEmail": "Sende eine E-Mail",
     "faqJoinDiscord": "Unserem Discord-Server beitreten",
     "helpUsTranslate": "Hilf uns bei der Übersetzung",
+    "suggestFeatures": "Suggest features",
     "thankYou": "Vielen Dank!",
     "thankYouContent": "Ein großes Dankeschön an all unsere großartigen Übersetzer, die uns helfen, diese App mehr Menschen auf der ganzen Welt zugänglich zu machen!",
     "helpTranslateContent": "Du kannst uns helfen, die App auf Crowdin zu übersetzen. Wenn deine Sprache auf Crowdin nicht verfügbar ist, kannst du diese gerne auf unserem Discord-Server anfordern. Vielen Dank für deine Hilfe!",
@@ -127,6 +128,8 @@
     "@search": {
         "description": "Search for a player or a clan"
     },
+    "warning": "Warning",
+    "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
     "tagOrNamePlayer": "Spielerkürzel oder Name",
     "searchPlayer": "Spieler suchen",
     "nameOrTagPlayer": "Name oder Spielerkürzel",
@@ -266,6 +269,7 @@
     },
     "date": "Datum",
     "stats": "Statistiken",
+    "details": "Details",
     "seasonStats": "Saison-Statistiken",
     "charts": "Diagramme",
     "history": "Verlauf",
@@ -357,7 +361,7 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inacurate Data ?",
+    "legendsTitle": "Inacurate Data?",
     "legendsExplanation_intro": "Due to limitations in the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
     "legendsExplanation_api_delay_title": "1. API Delay: ",
     "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
@@ -419,7 +423,7 @@
     "todoExplanation_cwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
     "todoExplanation_passAndGames_title": "Season Pass & Clan Games:",
     "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
-    "todoExplanation_conclusion": "To get the final percentage, The total accumulated actions completed during ongoing events are divided by the total required actions. Accounts inactive for 14 days are not included in the overall calculation.",
+    "todoExplanation_conclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
     "worst": "Am schlechtesten",
     "@worst": {
         "description": "Worst end of day trophies"
@@ -527,6 +531,76 @@
     "role": "Rolle",
     "expLevel": "Erfahrungslevel",
     "townHallLevel": "RH Level",
+    "thLevel": "TH{level}",
+    "@thLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "bhLevel": "BH{level}",
+    "@bhLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "townHallLevelLevel": "TownHall {level}",
+    "@townHallLevelLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "byNumberOfWars": "By number of wars",
+    "@byNumberOfWars": {
+        "description": "filter by number of wars"
+    },
+    "ok": "OK",
+    "@ok": {
+        "description": "OK button on pop up"
+    },
+    "byDateRange": "By date range",
+    "@byDateRange": {
+        "description": "filter by date range"
+    },
+    "selectSeason": "Select a season",
+    "@selectSeason": {
+        "description": "Ask player to select a season"
+    },
+    "year": "Year",
+    "month": "Month",
+    "allTownHalls": "All TownHalls",
+    "seasonDate": "{date} season",
+    "@seasonDate": {
+        "description": "Example : August 2024 season",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "lastXwars": "Last {number} wars",
+    "@lastXwars": {
+        "description": "Example : Shows the last 25 wars",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "friendly": "Friendly",
+    "@friendly": {
+        "description": "Friendly war"
+    },
+    "cwl": "CWL",
+    "random": "Random",
+    "@random": {
+        "description": "Random/basic war (not friendly or cwl)"
+    },
     "builderBaseTrophies": "BB-Trophäen",
     "donations": "Gespendet",
     "donationsReceived": "Spenden erhalten",
@@ -814,6 +888,55 @@
     "neededOverall": "Benötigte %",
     "calculate": "Berechnen",
     "warStats": "Kriegsstatistiken",
+    "clanWarLeague": "Clan War League",
+    "cwlRank": "Your clan is currently ranked {rank}.",
+    "@cwlRank": {
+        "placeholders": {
+            "rank": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlStars": "Your clan has a total of {stars} stars.",
+    "@cwlStars": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlMissingStarsFromNext": "Your clan is missing {stars} stars to catch up with the next clan.",
+    "@cwlMissingStarsFromNext": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlMissingStarsFromFirst": "Your clan is missing {stars} stars to catch up with the first clan.",
+    "@cwlMissingStarsFromFirst": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
+    "@cwlDestructionPercentage": {
+        "placeholders": {
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "cwlCurrentRound": "It's currently round {round}.",
+    "@cwlCurrentRound": {
+        "placeholders": {
+            "round": {
+                "type": "int"
+            }
+        }
+    },
     "noAccountLinkedToYourProfileFound": "Kein mit deinem Profil verknüpftes Konto gefunden",
     "management": "Verwaltung",
     "comingSoon": "Bald verfügbar!",
