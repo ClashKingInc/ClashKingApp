@@ -3,6 +3,7 @@ import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_info_clan/components/clan_wars_stats_card.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,7 +17,6 @@ import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_pa
 import 'package:clashkingapp/main_pages/wars_league_page/league/current_league_info_page.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/war_history_page.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:clashkingapp/core/functions.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ClanInfoHeaderCard extends StatefulWidget {
@@ -129,7 +129,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                         icon: Icon(Icons.sports_esports_rounded,
                             color: Colors.white, size: 32),
                         onPressed: () async {
-                          final languageCode = await getPrefs('languageCode');
+                          final languageCode = Localizations.localeOf(context)
+                              .languageCode
+                              .toLowerCase();
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -172,8 +174,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                   .contains("discord.gg/"))
                           ? IconButton(
                               icon: Icon(Icons.discord,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
+                                  color: Colors.white,
                                   size: 32),
                               onPressed: () async {
                                 try {
@@ -359,7 +360,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                             "https://assets.clashk.ing/icons/Icon_HV_Trophy.png"),
                   ),
                   label: Text(
-                    widget.clanInfo.clanPoints.toString(),
+                    NumberFormat(
+                            '#,###', Localizations.localeOf(context).toString())
+                        .format(widget.clanInfo.clanPoints),
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
@@ -383,7 +386,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                             "https://assets.clashk.ing/icons/Icon_HV_Attack.png"),
                   ),
                   label: Text(
-                    widget.clanInfo.clanCapitalPoints.toString(),
+                    NumberFormat(
+                            '#,###', Localizations.localeOf(context).toString())
+                        .format(widget.clanInfo.clanCapitalPoints),
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),

@@ -1142,6 +1142,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
     }
 
     final Locale userLocale = Localizations.localeOf(context);
+    print(userLocale);
 
     return ListView.builder(
       padding: EdgeInsets.zero,

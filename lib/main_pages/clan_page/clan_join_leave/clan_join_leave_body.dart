@@ -208,24 +208,20 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
                                                 .tertiary),
                                   ),
                                 ),
-                                Text(
-                                  item.type == "join"
-                                      ? AppLocalizations.of(context)
-                                              ?.joinedOnAt(
-                                                  DateFormat('dd/MM/yyyy')
-                                                      .format(
-                                                          item.time.toLocal()),
-                                                  DateFormat('HH:mm').format(
-                                                      item.time.toLocal())) ??
-                                          "Joined on ${DateFormat('dd/MM/yyyy').format(item.time.toLocal())} at ${DateFormat('HH:mm').format(item.time.toLocal())}."
-                                      : AppLocalizations.of(context)?.leftOnAt(
-                                              DateFormat('dd/MM/yyyy')
-                                                  .format(item.time.toLocal()),
-                                              DateFormat('HH:mm').format(
-                                                  item.time.toLocal())) ??
-                                          "Left on ${DateFormat('dd/MM/yyyy').format(item.time.toLocal())} at ${DateFormat('HH:mm').format(item.time.toLocal())}.",
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
+                                Text(item.type == "join"
+                                    ? AppLocalizations.of(context)!.joinedOnAt(
+                                        DateFormat.yMd(Localizations.localeOf(context).toString())
+                                            .format(item.time.toLocal()),
+                                        DateFormat.Hm(Localizations.localeOf(context).toString())
+                                            .format(item.time.toLocal()))
+                                    : AppLocalizations.of(context)!.leftOnAt(
+                                        DateFormat.yMd(
+                                                Localizations.localeOf(context)
+                                                    .toString())
+                                            .format(item.time.toLocal()),
+                                        DateFormat.Hm(
+                                                Localizations.localeOf(context).toString())
+                                            .format(item.time.toLocal()))),
                               ],
                             ),
                           ),

@@ -45,14 +45,23 @@ class LegendHistoryCard extends StatelessWidget {
                                   alignment: Alignment(0, -0.1),
                                   child: Text(
                                     capitalize(
-                                      DateFormat('MMMM\nyyyy', Localizations.localeOf(context).languageCode).format(
+                                      DateFormat(
+                                              'MMMM\nyyyy',
+                                              Localizations.localeOf(context)
+                                                  .languageCode)
+                                          .format(
                                         DateTime(
-                                          int.parse( legendsSeason.season.split('-')[0]),
-                                          int.parse( legendsSeason.season.split('-')[1]),
+                                          int.parse(legendsSeason.season
+                                              .split('-')[0]),
+                                          int.parse(legendsSeason.season
+                                              .split('-')[1]),
                                         ),
                                       ),
                                     ),
-                                    style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Colors.white),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium!
+                                        .copyWith(color: Colors.white),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -79,33 +88,73 @@ class LegendHistoryCard extends StatelessWidget {
                                 Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Trophy_Best.png",),
-                                  ),
-                                  label: Text('${legendsSeason.trophies}', style: Theme.of(context).textTheme.labelLarge,),
-                                ),
-                                Chip(
-                                  avatar: CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Planet.png"),
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          "https://assets.clashk.ing/icons/Icon_HV_Trophy_Best.png",
+                                    ),
                                   ),
                                   label: Text(
-                                    NumberFormat('#,###', 'fr_FR').format(legendsSeason.rank),
-                                    style: Theme.of(context).textTheme.labelLarge,
+                                    NumberFormat(
+                                            '#,###',
+                                            Localizations.localeOf(context)
+                                                .toString())
+                                        .format(legendsSeason.trophies),
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
                                   ),
                                 ),
                                 Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Sword.png",),
+                                    child: CachedNetworkImage(
+                                        imageUrl:
+                                            "https://assets.clashk.ing/icons/Icon_HV_Planet.png"),
                                   ),
-                                  label: Text('${legendsSeason.attackWins}', style: Theme.of(context).textTheme.labelLarge,),
+                                  label: Text(
+                                    NumberFormat(
+                                            '#,###',
+                                            Localizations.localeOf(context)
+                                                .toString())
+                                        .format(legendsSeason.rank),
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
                                 ),
                                 Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Shield.png",),
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
+                                    ),
                                   ),
-                                  label: Text('${legendsSeason.defenseWins}', style: Theme.of(context).textTheme.labelLarge,),
+                                  label: Text(
+                                    NumberFormat(
+                                            '#,###',
+                                            Localizations.localeOf(context)
+                                                .toString())
+                                        .format(legendsSeason.attackWins),
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                ),
+                                Chip(
+                                  avatar: CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          "https://assets.clashk.ing/icons/Icon_HV_Shield.png",
+                                    ),
+                                  ),
+                                  label: Text(
+                                    NumberFormat(
+                                            '#,###',
+                                            Localizations.localeOf(context)
+                                                .toString())
+                                        .format(legendsSeason.defenseWins),
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
                                 ),
                               ],
                             ),

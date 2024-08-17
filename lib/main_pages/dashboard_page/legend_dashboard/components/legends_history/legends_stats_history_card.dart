@@ -30,7 +30,8 @@ class LegendStatsHistoryCard extends StatelessWidget {
 
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
-  Widget buildSeasonInfo(LegendSeason legendsSeason, BuildContext context, String title) {
+  Widget buildSeasonInfo(
+      LegendSeason legendsSeason, BuildContext context, String title) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -40,7 +41,9 @@ class LegendStatsHistoryCard extends StatelessWidget {
         ),
         Text(
           capitalize(
-            DateFormat('MMMM yyyy', Localizations.localeOf(context).languageCode).format(
+            DateFormat(
+                    'MMMM yyyy', Localizations.localeOf(context).languageCode)
+                .format(
               DateTime(
                 int.parse(legendsSeason.season.split('-')[0]),
                 int.parse(legendsSeason.season.split('-')[1]),
@@ -59,15 +62,21 @@ class LegendStatsHistoryCard extends StatelessWidget {
                 children: <Widget>[
                   Center(
                     child: CachedNetworkImage(
-                      imageUrl: "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png",
+                      imageUrl:
+                          "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png",
                       height: 80,
                     ),
                   ),
                   Align(
                     alignment: Alignment(0, -0.1),
                     child: Text(
-                      NumberFormat('#,###', 'fr_FR').format(legendsSeason.rank),
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Colors.white),
+                      NumberFormat('#,###',
+                              Localizations.localeOf(context).toString())
+                          .format(legendsSeason.rank),
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelMedium!
+                          .copyWith(color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -81,12 +90,15 @@ class LegendStatsHistoryCard extends StatelessWidget {
                 Row(
                   children: [
                     CachedNetworkImage(
-                      imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Trophy_Best.png",
+                      imageUrl:
+                          "https://assets.clashk.ing/icons/Icon_HV_Trophy_Best.png",
                       height: 20,
                     ),
                     SizedBox(width: 4),
                     Text(
-                      '${legendsSeason.trophies}',
+                      NumberFormat('#,###',
+                              Localizations.localeOf(context).toString())
+                          .format(legendsSeason.trophies),
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                   ],
@@ -94,12 +106,15 @@ class LegendStatsHistoryCard extends StatelessWidget {
                 Row(
                   children: [
                     CachedNetworkImage(
-                      imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
+                      imageUrl:
+                          "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                       height: 20,
                     ),
                     SizedBox(width: 4),
                     Text(
-                      '${legendsSeason.attackWins}',
+                      NumberFormat('#,###',
+                              Localizations.localeOf(context).toString())
+                          .format(legendsSeason.attackWins),
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                   ],
@@ -122,17 +137,37 @@ class LegendStatsHistoryCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Expanded(child: buildSeasonInfo(getLastSeason(), context, AppLocalizations.of(context)?.lastSeason ?? "Last Season")),
+                Expanded(
+                    child: buildSeasonInfo(
+                        getLastSeason(),
+                        context,
+                        AppLocalizations.of(context)?.lastSeason ??
+                            "Last Season")),
                 SizedBox(width: 16),
-                Expanded(child: buildSeasonInfo(getBestGlobalRankSeason(), context, AppLocalizations.of(context)?.bestRank ?? "Best Global Rank")),
+                Expanded(
+                    child: buildSeasonInfo(
+                        getBestGlobalRankSeason(),
+                        context,
+                        AppLocalizations.of(context)?.bestRank ??
+                            "Best Global Rank")),
               ],
             ),
             SizedBox(height: 16),
             Row(
               children: [
-                Expanded(child: buildSeasonInfo(getBestTrophiesSeason(), context, AppLocalizations.of(context)?.bestTrophies ?? "Best Trophies")),
+                Expanded(
+                    child: buildSeasonInfo(
+                        getBestTrophiesSeason(),
+                        context,
+                        AppLocalizations.of(context)?.bestTrophies ??
+                            "Best Trophies")),
                 SizedBox(width: 16),
-                Expanded(child: buildSeasonInfo(getBestAttackWinsSeason(), context, AppLocalizations.of(context)?.mostAttacks ?? "Most Attacks")),
+                Expanded(
+                    child: buildSeasonInfo(
+                        getBestAttackWinsSeason(),
+                        context,
+                        AppLocalizations.of(context)?.mostAttacks ??
+                            "Most Attacks")),
               ],
             ),
           ],

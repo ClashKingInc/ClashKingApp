@@ -175,7 +175,7 @@ Future<String> checkCurrentWar(
         return "war";
       } else if (decodedResponse["state"] == "notInWar") {
         DateTime now = DateTime.now();
-        if (now.day >= 1 && now.day <= 14) {
+        if (now.day >= 1 && now.day <= 12) {
           final responseCwl = await http.get(
             Uri.parse(
                 'https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/currentwar/leaguegroup'),

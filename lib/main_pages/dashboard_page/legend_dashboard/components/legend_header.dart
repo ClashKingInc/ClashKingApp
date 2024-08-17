@@ -17,7 +17,6 @@ class LegendHeaderCard extends StatelessWidget {
   final LegendScreen widget;
   final PlayerLegendData legendData;
 
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -72,7 +71,13 @@ class LegendHeaderCard extends StatelessWidget {
                                 "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border.png",
                             width: 60,
                           ),
-                          Text(widget.playerLegendData.currentTrophies,
+                          Text(
+                              NumberFormat(
+                                      '#,###',
+                                      Localizations.localeOf(context)
+                                          .toString())
+                                  .format(int.parse(
+                                      widget.playerLegendData.currentTrophies)),
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge
@@ -191,7 +196,11 @@ class LegendHeaderCard extends StatelessWidget {
                                             ? AppLocalizations.of(context)
                                                     ?.noRank ??
                                                 'No rank'
-                                            : NumberFormat('#,###', 'fr_FR')
+                                            : NumberFormat(
+                                                    '#,###',
+                                                    Localizations.localeOf(
+                                                            context)
+                                                        .toString())
                                                 .format(legendData
                                                     .rankings['global_rank']),
                                         style: Theme.of(context)
@@ -225,24 +234,52 @@ class LegendHeaderCard extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onPrimary, size: 32),
             onPressed: () => Navigator.of(context).pop(),
           ),
-        ),InfoButton(
-            textSpan: TextSpan(
-              children: [
-                TextSpan(text: "${AppLocalizations.of(context)!.legendsExplanation_intro}\n"),
-                TextSpan(text: "${AppLocalizations.of(context)!.legendsExplanation_api_delay_title}\n", style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(text: "${AppLocalizations.of(context)!.legendsExplanation_api_delay_body}\n"),
-                TextSpan(text: AppLocalizations.of(context)!.legendsExplanation_concurrent_changes_title, style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(text: AppLocalizations.of(context)!.legendsExplanation_multiple_attacks_defenses_title, style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(text: AppLocalizations.of(context)!.legendsExplanation_multiple_attacks_defenses_body),
-                TextSpan(text: AppLocalizations.of(context)!.legendsExplanation_simultaneous_attack_defense_title, style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(text: "${AppLocalizations.of(context)!.legendsExplanation_simultaneous_attack_defense_body}\n"),
-                TextSpan(text: "${AppLocalizations.of(context)!.legendsExplanation_net_gain_loss_title}\n", style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(text: "${AppLocalizations.of(context)!.legendsExplanation_net_gain_loss_body}\n\n"),
-                TextSpan(text: AppLocalizations.of(context)!.legendsExplanation_conclusion),
-              ],
-            ),
-            title: AppLocalizations.of(context)!.legendsTitle,
+        ),
+        InfoButton(
+          textSpan: TextSpan(
+            children: [
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.legendsExplanation_intro}\n"),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.legendsExplanation_api_delay_title}\n",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.legendsExplanation_api_delay_body}\n"),
+              TextSpan(
+                  text: AppLocalizations.of(context)!
+                      .legendsExplanation_concurrent_changes_title,
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text: AppLocalizations.of(context)!
+                      .legendsExplanation_multiple_attacks_defenses_title,
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text: AppLocalizations.of(context)!
+                      .legendsExplanation_multiple_attacks_defenses_body),
+              TextSpan(
+                  text: AppLocalizations.of(context)!
+                      .legendsExplanation_simultaneous_attack_defense_title,
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.legendsExplanation_simultaneous_attack_defense_body}\n"),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.legendsExplanation_net_gain_loss_title}\n",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.legendsExplanation_net_gain_loss_body}\n\n"),
+              TextSpan(
+                  text: AppLocalizations.of(context)!
+                      .legendsExplanation_conclusion),
+            ],
           ),
+          title: AppLocalizations.of(context)!.legendsTitle,
+        ),
       ],
     );
   }

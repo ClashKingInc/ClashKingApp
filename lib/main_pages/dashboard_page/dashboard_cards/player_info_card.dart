@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -111,7 +112,11 @@ class PlayerInfosCard extends StatelessWidget {
                               ImageChip(
                                   imageUrl:
                                       "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
-                                  label: playerStats.warStars.toString(),
+                                  label: NumberFormat(
+                                          '#,###',
+                                          Localizations.localeOf(context)
+                                              .toString())
+                                      .format(int.parse(playerStats.warStars.toString())),
                                   description: AppLocalizations.of(context)!
                                       .playerWarStarsDescription(
                                           playerStats.warStars)),
@@ -123,7 +128,11 @@ class PlayerInfosCard extends StatelessWidget {
                                           playerStats.townHallLevel)),
                               ImageChip(
                                   imageUrl: playerStats.leagueUrl,
-                                  label: playerStats.trophies.toString(),
+                                  label: NumberFormat(
+                                          '#,###',
+                                          Localizations.localeOf(context)
+                                              .toString())
+                                      .format(int.parse(playerStats.trophies.toString())),
                                   description: AppLocalizations.of(context)!
                                       .playerTrophiesDescription(
                                           playerStats.trophies,

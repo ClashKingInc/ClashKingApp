@@ -78,7 +78,11 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                               ),
                               SizedBox(width: 4),
                               Text(
-                                widget.seasonData.totalTrophies.toString(),
+                                NumberFormat(
+                                        '#,###',
+                                        Localizations.localeOf(context)
+                                            .toString())
+                                    .format(widget.seasonData.totalTrophies),
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
                             ],
@@ -107,7 +111,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.totalAttacks.toString()}/${widget.seasonData.daysInLegend * 8}",
+                                    "${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(widget.seasonData.totalAttacks)}/${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(widget.seasonData.daysInLegend * 8)}",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -124,7 +128,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.totalAttacksTrophies.toString()}/${320 * widget.seasonData.daysInLegend}",
+                                    "${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(widget.seasonData.totalAttacksTrophies)}/${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(320 * widget.seasonData.daysInLegend)}",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -223,7 +227,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.totalDefenses.toString()}/${widget.seasonData.daysInLegend * 8}",
+                                    "${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(widget.seasonData.totalDefenses)}/${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(widget.seasonData.daysInLegend * 8)}",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -240,7 +244,7 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${widget.seasonData.totalDefensesTrophies.toString()}/${320 * widget.seasonData.daysInLegend}",
+                                    "${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(widget.seasonData.totalDefensesTrophies)}/${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(320 * widget.seasonData.daysInLegend)}",
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),

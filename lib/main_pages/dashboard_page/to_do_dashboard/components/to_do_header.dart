@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:ui';
 import 'package:clashkingapp/components/info_button.dart';
+import 'package:intl/intl.dart';
 
 class ToDoHeader extends StatefulWidget {
   final Accounts accounts;
@@ -43,15 +44,24 @@ class ToDoHeaderState extends State<ToDoHeader> {
             Text(
                 AppLocalizations.of(context)!
                     .numberAccounts(widget.accounts.toDoList.numberAccounts),
-                style: Theme.of(context).textTheme.titleMedium),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: Colors.white)),
             Text(
                 AppLocalizations.of(context)!.numberActiveAccounts(
                     widget.accounts.toDoList.numberActiveAccounts),
-                style: Theme.of(context).textTheme.labelLarge),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: Colors.white)),
             Text(
                 AppLocalizations.of(context)!.numberInactiveAccounts(
                     widget.accounts.toDoList.numberInactiveAccounts),
-                style: Theme.of(context).textTheme.labelLarge),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: Colors.white)),
             SizedBox(height: 16),
             Wrap(
               alignment: WrapAlignment.start,
@@ -70,7 +80,10 @@ class ToDoHeaderState extends State<ToDoHeader> {
                     labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
                     label: Text(
                       "${widget.accounts.toDoList.totalLegends}/${widget.accounts.toDoList.requiredLegendsAttacks}",
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: Colors.white),
                     ),
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
@@ -95,7 +108,10 @@ class ToDoHeaderState extends State<ToDoHeader> {
                     labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
                     label: Text(
                       "${widget.accounts.toDoList.totalWarAttacks}/${widget.accounts.toDoList.requiredWarAttacks}",
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: Colors.white),
                     ),
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
@@ -120,7 +136,10 @@ class ToDoHeaderState extends State<ToDoHeader> {
                     labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
                     label: Text(
                       widget.accounts.toDoList.totalClanGamesPoints.toString(),
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: Colors.white),
                     ),
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
@@ -146,7 +165,10 @@ class ToDoHeaderState extends State<ToDoHeader> {
                     label: widget.accounts.toDoList.requiredRaidsAttacks != 0
                         ? Text(
                             '${widget.accounts.toDoList.totalRaidsAttacks}/${widget.accounts.toDoList.requiredRaidsAttacks}',
-                            style: Theme.of(context).textTheme.labelLarge,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: Colors.white),
                           )
                         : Text(
                             '0/?',
@@ -175,7 +197,10 @@ class ToDoHeaderState extends State<ToDoHeader> {
                     labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
                     label: Text(
                       '${widget.accounts.toDoList.totalCwlAttacks}/${widget.accounts.toDoList.requiredCwlAttacks}',
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: Colors.white),
                     ),
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
@@ -201,8 +226,13 @@ class ToDoHeaderState extends State<ToDoHeader> {
                   ),
                   labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
                   label: Text(
-                    widget.accounts.toDoList.totalSeasonPass.toString(),
-                    style: Theme.of(context).textTheme.labelLarge,
+                    NumberFormat(
+                            '#,###', Localizations.localeOf(context).toString())
+                        .format(widget.accounts.toDoList.totalSeasonPass),
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelLarge
+                        ?.copyWith(color: Colors.white),
                   ),
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
@@ -252,7 +282,10 @@ class ToDoHeaderState extends State<ToDoHeader> {
                   SizedBox(width: 8),
                   Text(
                     '${widget.accounts.toDoList.percentageDone}%',
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelLarge
+                        ?.copyWith(color: Colors.white),
                   ),
                 ],
               )

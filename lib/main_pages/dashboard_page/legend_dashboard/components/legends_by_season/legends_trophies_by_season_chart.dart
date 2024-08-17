@@ -66,7 +66,8 @@ class LegendsTrophiesBySeasonChartState
                             return Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Text(DateFormat('dd').format(labelDate),
-                                  style: TextStyle(fontSize: 10)),
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium),
                             );
                           },
                         ),
@@ -77,7 +78,13 @@ class LegendsTrophiesBySeasonChartState
                           reservedSize: 40,
                           interval: chartData.rangeY,
                           getTitlesWidget: (double value, TitleMeta meta) {
-                            return Text('${value.toInt()}');
+                            return Text(
+                                NumberFormat(
+                                        '#,###',
+                                        Localizations.localeOf(context)
+                                            .toString())
+                                    .format(value.toInt()),
+                                style: Theme.of(context).textTheme.bodySmall);
                           },
                         ),
                       ),
@@ -125,8 +132,7 @@ class LegendsTrophiesBySeasonChartState
                           return touchedSpots.map((touchedSpot) {
                             return LineTooltipItem(
                               touchedSpot.y.toInt().toString(),
-                              TextStyle(
-                                  color: Colors.white),
+                              TextStyle(color: Colors.white),
                             );
                           }).toList();
                         },
@@ -143,10 +149,8 @@ class LegendsTrophiesBySeasonChartState
           ),
         ),
       );
-    }
-    else {
+    } else {
       return SizedBox();
     }
-    
   }
 }

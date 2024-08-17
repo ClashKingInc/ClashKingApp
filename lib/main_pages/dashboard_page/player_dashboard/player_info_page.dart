@@ -739,7 +739,7 @@ class StatsScreenState extends State<StatsScreen>
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          "${AppLocalizations.of(context)?.th ?? 'TH'}${widget.playerStats.townHallLevel}",
+          "${AppLocalizations.of(context)?.thLevel(widget.playerStats.townHallLevel)}",
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -747,12 +747,12 @@ class StatsScreenState extends State<StatsScreen>
         avatar: CircleAvatar(
           backgroundColor: Colors.transparent,
           child: CachedNetworkImage(
-              imageUrl:
-                  "https://assets.clashk.ing/icons/Icon_HV_XP.png"),
+              imageUrl: "https://assets.clashk.ing/icons/Icon_HV_XP.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          '${widget.playerStats.expLevel}',
+          NumberFormat('#,###', Localizations.localeOf(context).toString())
+              .format(widget.playerStats.expLevel),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -761,7 +761,8 @@ class StatsScreenState extends State<StatsScreen>
             color: Color.fromARGB(255, 27, 114, 33)),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          '${widget.playerStats.donations}',
+          NumberFormat('#,###', Localizations.localeOf(context).toString())
+              .format(widget.playerStats.donations),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -770,7 +771,8 @@ class StatsScreenState extends State<StatsScreen>
             color: Color.fromARGB(255, 155, 4, 4)),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          '${widget.playerStats.donationsReceived}',
+          NumberFormat('#,###', Localizations.localeOf(context).toString())
+              .format(widget.playerStats.donationsReceived),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -796,7 +798,8 @@ class StatsScreenState extends State<StatsScreen>
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          '${widget.playerStats.warStars}',
+          NumberFormat('#,###', Localizations.localeOf(context).toString())
+              .format(widget.playerStats.warStars),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -809,9 +812,8 @@ class StatsScreenState extends State<StatsScreen>
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
-          NumberFormat('#,###', 'fr_FR')
-              .format(widget.playerStats.clanCapitalContributions)
-              .replaceAll(',', ' '),
+          NumberFormat('#,###', Localizations.localeOf(context).toString())
+              .format(widget.playerStats.clanCapitalContributions),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -846,12 +848,12 @@ class StatsScreenState extends State<StatsScreen>
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
-                imageUrl:
-                    "https://assets.clashk.ing/icons/Icon_HV_Sword.png"),
+                imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Sword.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
-            widget.playerStats.attackWins.toString(),
+            NumberFormat('#,###', Localizations.localeOf(context).toString())
+                .format(widget.playerStats.attackWins),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
@@ -859,12 +861,12 @@ class StatsScreenState extends State<StatsScreen>
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
-                imageUrl:
-                    "https://assets.clashk.ing/icons/Icon_HV_Shield.png"),
+                imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Shield.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
-            widget.playerStats.defenseWins.toString(),
+            NumberFormat('#,###', Localizations.localeOf(context).toString())
+                .format(widget.playerStats.defenseWins),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
@@ -919,16 +921,15 @@ class StatsScreenState extends State<StatsScreen>
                     labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
                     label: Shimmer.fromColors(
                       period: Duration(seconds: 3),
-                      baseColor: Theme.of(context)
-                          .colorScheme
-                          .onSurface, // Replace with your base color
+                      baseColor: Theme.of(context).colorScheme.onSurface,
                       highlightColor: Theme.of(context)
                           .colorScheme
                           .onSurface
-                          .withOpacity(
-                              0.3), // Replace with your highlight color
+                          .withOpacity(0.3),
                       child: Text(
-                        widget.playerStats.trophies.toString(),
+                        NumberFormat('#,###',
+                                Localizations.localeOf(context).toString())
+                            .format(widget.playerStats.trophies),
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ),
@@ -942,7 +943,9 @@ class StatsScreenState extends State<StatsScreen>
                         imageUrl: widget.playerStats.leagueUrl),
                   ),
                   label: Text(
-                    widget.playerStats.trophies.toString(),
+                    NumberFormat(
+                            '#,###', Localizations.localeOf(context).toString())
+                        .format(widget.playerStats.trophies),
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                 );
@@ -959,7 +962,8 @@ class StatsScreenState extends State<StatsScreen>
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
-            widget.playerStats.bestTrophies.toString(),
+            NumberFormat('#,###', Localizations.localeOf(context).toString())
+                .format(widget.playerStats.bestTrophies),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
@@ -982,7 +986,7 @@ class StatsScreenState extends State<StatsScreen>
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
-            "${AppLocalizations.of(context)?.bh ?? 'BH'}${widget.playerStats.builderHallLevel}",
+            AppLocalizations.of(context)!.bhLevel(widget.playerStats.builderHallLevel),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
@@ -990,12 +994,12 @@ class StatsScreenState extends State<StatsScreen>
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
-                imageUrl:
-                    "https://assets.clashk.ing/icons/Icon_HV_Trophy.png"),
+                imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Trophy.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
-            widget.playerStats.builderBaseTrophies.toString(),
+            NumberFormat('#,###', Localizations.localeOf(context).toString())
+                .format(widget.playerStats.builderBaseTrophies),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
@@ -1008,7 +1012,8 @@ class StatsScreenState extends State<StatsScreen>
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
-            widget.playerStats.bestBuilderBaseTrophies.toString(),
+            NumberFormat('#,###', Localizations.localeOf(context).toString())
+                .format(widget.playerStats.bestBuilderBaseTrophies),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),

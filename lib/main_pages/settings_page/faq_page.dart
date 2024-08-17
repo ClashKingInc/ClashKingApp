@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/core/functions.dart';
 
 class FaqScreen extends StatefulWidget {
   @override
@@ -137,13 +136,15 @@ class _FaqScreenState extends State<FaqScreen> {
                             Text(
                                 AppLocalizations.of(context)!
                                     .faqUseCodeClashKing,
-                                style: Theme.of(context).textTheme.bodyMedium),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white)),
                           ],
                         ),
                         onPressed: () async {
-                          final languagecode = getPrefs('languageCode');
+                          final languageCode = Localizations.localeOf(context)
+                                .languageCode
+                                .toLowerCase();
                           launchUrl(Uri.parse(
-                              'https://link.clashofclans.com/$languagecode?action=SupportCreator&id=Clashking'));
+                              'https://link.clashofclans.com/$languageCode?action=SupportCreator&id=Clashking'));
                         },
                       ),
                     ),
@@ -160,7 +161,7 @@ class _FaqScreenState extends State<FaqScreen> {
                             Text(
                                 AppLocalizations.of(context)!
                                     .faqSupportUsOnPatreon,
-                                style: Theme.of(context).textTheme.bodyMedium),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white)),
                           ],
                         ),
                         onPressed: () async {
@@ -180,7 +181,7 @@ class _FaqScreenState extends State<FaqScreen> {
                             Icon(Icons.discord, size: 24),
                             SizedBox(width: 8),
                             Text(AppLocalizations.of(context)!.faqJoinDiscord,
-                                style: Theme.of(context).textTheme.bodyMedium),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white)),
                           ],
                         ),
                         onPressed: () async {
@@ -224,7 +225,7 @@ class _FaqScreenState extends State<FaqScreen> {
                             SizedBox(width: 8),
                             Text(
                               AppLocalizations.of(context)!.faqInviteTheBot,
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
                               overflow: TextOverflow.visible,
                             ),
                           ],
@@ -269,7 +270,7 @@ class _FaqScreenState extends State<FaqScreen> {
                             Icon(Icons.email, size: 24),
                             SizedBox(width: 8),
                             Text(AppLocalizations.of(context)!.faqSendEmail,
-                                style: Theme.of(context).textTheme.bodyMedium),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white)),
                           ],
                         ),
                         onPressed: () async {
@@ -300,7 +301,7 @@ class _FaqScreenState extends State<FaqScreen> {
                             Icon(Icons.discord, size: 24),
                             SizedBox(width: 8),
                             Text(AppLocalizations.of(context)!.faqJoinDiscord,
-                                style: Theme.of(context).textTheme.bodyMedium,
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
                                 overflow: TextOverflow.ellipsis),
                           ],
                         ),

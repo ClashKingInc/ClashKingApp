@@ -58,10 +58,30 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   // This method checks if the locale is supported, if not, it falls back to English
   Locale _getLocaleFallback(Locale locale) {
     for (LocaleInfo supportedLocaleInfo in supportedLocales) {
-      if (supportedLocaleInfo.languageCode == locale.languageCode) {
-        return Locale(supportedLocaleInfo.languageCode); // Return if supported
+      if (supportedLocaleInfo.languageCode == locale.languageCode &&
+          (supportedLocaleInfo.scriptCode == locale.scriptCode ||
+              supportedLocaleInfo.scriptCode == null) &&
+          (supportedLocaleInfo.countryCode == locale.countryCode ||
+              supportedLocaleInfo.countryCode == null)) {
+        return Locale.fromSubtags(
+          languageCode: supportedLocaleInfo.languageCode,
+          scriptCode: supportedLocaleInfo.scriptCode,
+          countryCode: supportedLocaleInfo.countryCode,
+        ); // Return if supported
       }
     }
+
+    // If no exact match, try matching only by language code
+    for (LocaleInfo supportedLocaleInfo in supportedLocales) {
+      if (supportedLocaleInfo.languageCode == locale.languageCode) {
+        return Locale.fromSubtags(
+          languageCode: supportedLocaleInfo.languageCode,
+          scriptCode: supportedLocaleInfo.scriptCode,
+          countryCode: supportedLocaleInfo.countryCode,
+        );
+      }
+    }
+
     return Locale('en'); // Fallback to English
   }
 
@@ -70,23 +90,30 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     String? languageCode = await getPrefs('languageCode');
 
     if (languageCode != null) {
-      // If there is a language code saved, use it if supported
       Locale userLocale = Locale(languageCode);
       _locale = _getLocaleFallback(userLocale);
+      print('Loaded Locale from Preferences: $_locale');
     } else {
-      // No saved language code, so use the system locale if supported
       Locale systemLocale = Locale(WidgetsBinding
           .instance.platformDispatcher.locales.first.languageCode);
       _locale = _getLocaleFallback(systemLocale);
+      print('Loaded System Locale: $_locale');
     }
 
     notifyListeners();
   }
 
   // Change the language of the app
-  void changeLanguage(String languageCode) async {
-    _locale = Locale(languageCode);
-    await storePrefs('languageCode', languageCode);
+  void changeLanguage(Locale locale) async {
+    _locale = locale;
+    await storePrefs('languageCode', locale.languageCode);
+    if(locale.countryCode != null) {
+      await storePrefs('countryCode', locale.countryCode!);
+    }
+    if(locale.scriptCode != null) {
+      await storePrefs('scriptCode', locale.scriptCode!);
+    }
+    print('Changed Locale: $_locale');
     notifyListeners();
   }
 
@@ -196,64 +223,67 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   /* User initialization at the opening of the app : Guest or Discord User */
-  
 
-Future<void> initializeDiscordUser(BuildContext context) async {
-  NavigatorState navigator = Navigator.of(context);
-  
-  // Retrieve the access token from secure storage
-  String? accessToken = await getPrefs("access_token");
-  
-  // Check if the current token is still valid
-  bool tokenValid = await isTokenValid();
+  Future<void> initializeDiscordUser(BuildContext context) async {
+    NavigatorState navigator = Navigator.of(context);
 
-  if (accessToken != null && tokenValid) {
-    // Fetch user details from Discord using the access token
-    user = await fetchDiscordUser(accessToken);
-    if (user != null) {
-      // Notify all listeners that the user model has been updated
-      notifyListeners();
-    } else {
-      // If user data could not be fetched, clear preferences and navigate to the startup widget
-      clearPrefs();
-      Sentry.captureMessage('User data is null after token validation');
-      navigator.pushReplacement(MaterialPageRoute(builder: (_) => StartupWidget()));
-    }
-  } else if (accessToken != null && !tokenValid) {
-    // If the token is not valid, attempt to refresh it
-    bool refreshSuccessful = await refreshToken();
-    if (refreshSuccessful) {
-      // If the refresh is successful, re-fetch the access token and validate again
-      accessToken = await getPrefs("access_token");
-      tokenValid = await isTokenValid();
-      //tokenValid = await isTokenValid();
-      if (tokenValid) {
-        user = await fetchDiscordUser(accessToken!);
-        if (user != null) {
-          notifyListeners();
+    // Retrieve the access token from secure storage
+    String? accessToken = await getPrefs("access_token");
+
+    // Check if the current token is still valid
+    bool tokenValid = await isTokenValid();
+
+    if (accessToken != null && tokenValid) {
+      // Fetch user details from Discord using the access token
+      user = await fetchDiscordUser(accessToken);
+      if (user != null) {
+        // Notify all listeners that the user model has been updated
+        notifyListeners();
+      } else {
+        // If user data could not be fetched, clear preferences and navigate to the startup widget
+        clearPrefs();
+        Sentry.captureMessage('User data is null after token validation');
+        navigator.pushReplacement(
+            MaterialPageRoute(builder: (_) => StartupWidget()));
+      }
+    } else if (accessToken != null && !tokenValid) {
+      // If the token is not valid, attempt to refresh it
+      bool refreshSuccessful = await refreshToken();
+      if (refreshSuccessful) {
+        // If the refresh is successful, re-fetch the access token and validate again
+        accessToken = await getPrefs("access_token");
+        tokenValid = await isTokenValid();
+        //tokenValid = await isTokenValid();
+        if (tokenValid) {
+          user = await fetchDiscordUser(accessToken!);
+          if (user != null) {
+            notifyListeners();
+          } else {
+            clearPrefs();
+            Sentry.captureMessage('User data is null after token validation');
+            navigator.pushReplacement(
+                MaterialPageRoute(builder: (_) => StartupWidget()));
+          }
         } else {
           clearPrefs();
-          Sentry.captureMessage('User data is null after token validation');
-          navigator.pushReplacement(MaterialPageRoute(builder: (_) => StartupWidget()));
+          Sentry.captureMessage('Token is not valid after refresh');
+          navigator.pushReplacement(
+              MaterialPageRoute(builder: (_) => StartupWidget()));
         }
       } else {
+        // If the refresh token process fails, clear preferences and navigate to the startup widget
         clearPrefs();
-        Sentry.captureMessage('Token is not valid after refresh');
-        navigator.pushReplacement(MaterialPageRoute(builder: (_) => StartupWidget()));
+        Sentry.captureMessage('Refresh token process failed');
+        navigator.pushReplacement(
+            MaterialPageRoute(builder: (_) => StartupWidget()));
       }
     } else {
-      // If the refresh token process fails, clear preferences and navigate to the startup widget
+      // If no valid access token is found, clear preferences and navigate to the startup widget
       clearPrefs();
-      Sentry.captureMessage('Refresh token process failed');
-      navigator.pushReplacement(MaterialPageRoute(builder: (_) => StartupWidget()));
+      navigator
+          .pushReplacement(MaterialPageRoute(builder: (_) => StartupWidget()));
     }
-  } else {
-    // If no valid access token is found, clear preferences and navigate to the startup widget
-    clearPrefs();
-    navigator.pushReplacement(MaterialPageRoute(builder: (_) => StartupWidget()));
   }
-}
-
 
   // Initialize the user as a guest user
   Future<void> initializeGuestUser() async {
