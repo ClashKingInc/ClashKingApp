@@ -16,16 +16,16 @@ class LegendByDayTab extends StatefulWidget {
   final ProfileInfo playerStats;
 
   const LegendByDayTab({
-    Key? key,
+    super.key,
     required this.playerLegendData,
     required this.playerStats,
-  }) : super(key: key);
+  });
 
   @override
-  _LegendByDayTabState createState() => _LegendByDayTabState();
+  LegendByDayTabState createState() => LegendByDayTabState();
 }
 
-class _LegendByDayTabState extends State<LegendByDayTab> {
+class LegendByDayTabState extends State<LegendByDayTab> {
   DateTime selectedDate = DateTime.now();
 
   void incrementDate() {

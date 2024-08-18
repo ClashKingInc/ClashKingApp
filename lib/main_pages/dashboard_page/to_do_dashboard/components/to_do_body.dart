@@ -63,7 +63,7 @@ class ToDoBodyState extends State<ToDoBody> {
         if (cards.isEmpty && !widget.active)
           Container(
             width: double.infinity, // Prend toute la largeur de l'écran
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
             child: Card(
               child: Padding(
                 padding: EdgeInsets.all(16),
@@ -83,8 +83,8 @@ class ToDoBodyState extends State<ToDoBody> {
           )
         else if (cards.isEmpty && widget.active)
           Container(
-            width: double.infinity, // Prend toute la largeur de l'écran
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
             child: Card(
               child: Padding(
                 padding: EdgeInsets.all(16),
