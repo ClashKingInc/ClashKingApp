@@ -951,5 +951,6 @@
         }
     },
     "tools": "Tools",
-    "community": "Community"
+    "community": "Community",
+    "lastRaids": "Last raids"
 }

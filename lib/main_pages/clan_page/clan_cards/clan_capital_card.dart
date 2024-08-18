@@ -1,6 +1,6 @@
 import 'package:clashkingapp/classes/clan/clan_info.dart';
+import 'package:clashkingapp/main_pages/clan_page/clan_capital/clan_capital_page.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/main_pages/tools_page/community_tools/community_tools_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -15,13 +15,15 @@ class ClanCapitaleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    print('Clan Capital Card: ${clanInfo?.clanCapital}');
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CommunityScreen(),
+            builder: (context) => CapitalScreen(
+              discordUser: discordUser,
+              clanInfo: clanInfo,
+            ),
           ),
         );
       },

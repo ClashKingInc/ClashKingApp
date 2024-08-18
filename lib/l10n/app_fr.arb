@@ -840,5 +840,6 @@
         }
     },
     "tools": "Outils",
-    "community": "Communauté"
+    "community": "Communauté",
+    "lastRaids": "Derniers raids"
 }

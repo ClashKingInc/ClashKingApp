@@ -1,3 +1,4 @@
+import 'package:clashkingapp/classes/clan/capital/raids_history.dart';
 import 'package:clashkingapp/classes/clan/description/badge_urls.dart';
 import 'package:clashkingapp/classes/clan/logs/join_leave.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
@@ -51,6 +52,7 @@ class Clan {
   String warState = '';
   late WarLog warLog;
   late JoinLeaveClan joinLeaveClan;
+  late CapitalHistoryItems clanCapitalRaid;
   bool clanInitialized = false;
   bool warInitialized = false;
 
@@ -202,8 +204,8 @@ class ClanService {
           // Start fetching warState, warLog, and joinLeaveLog in parallel
           final warStateFuture = fetchWarStateInfo(clanTag);
           final warLogFuture = WarLogService.fetchWarLogData(tag);
-          final joinLeaveLogFuture = JoinLeaveClanService.fetchJoinLeaveData(
-              tag, timestampLastMonday.toString());
+          final joinLeaveLogFuture = JoinLeaveClanService.fetchJoinLeaveData(tag, timestampLastMonday.toString());
+          final capitaleFuture = CapitalHistoryService.fetchCapitalData(clanTag, 10);
 
           // Wait for all futures to complete
           final responses = await Future.wait([
@@ -211,6 +213,7 @@ class ClanService {
             warStateFuture,
             warLogFuture,
             joinLeaveLogFuture,
+            capitaleFuture,
           ]);
 
           // Extract responses
@@ -218,6 +221,7 @@ class ClanService {
           final warStateInfo = responses[1] as WarStateInfo;
           final warLog = responses[2] as WarLog;
           final joinLeaveLog = responses[3] as JoinLeaveClan;
+          final capital = responses[4] as CapitalHistoryItems;
 
           if (clanInfoResponse.statusCode == 200) {
             String responseBody = utf8.decode(clanInfoResponse.bodyBytes);
@@ -238,6 +242,7 @@ class ClanService {
             clanInfo.currentLeagueInfo = warStateInfo.currentLeagueInfo;
             clanInfo.warLog = warLog;
             clanInfo.joinLeaveClan = joinLeaveLog;
+            clanInfo.clanCapitalRaid = capital;
             return clanInfo;
           } else {
             throw Exception(

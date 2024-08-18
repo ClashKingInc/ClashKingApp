@@ -101,6 +101,7 @@ class AccountsService {
           if (profileInfo.clan != null) {
             fetchClanWarInfoInBackground(
                 profileInfo.clan!.tag, account, transaction);
+            //fetchClanCapitalInfoInBackground(profileInfo.clan!.tag, account, transaction);
           }
         }
       }).toList();
