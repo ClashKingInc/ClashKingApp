@@ -87,8 +87,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       setState(() {
                         appState.selectedTagNotifier.value = newValue;
-                        appState.account =
-                            appState.accounts!.accounts.firstWhere(
+                        appState.account = widget.accounts.accounts.firstWhere(
                           (element) => element.profileInfo.tag == newValue,
                         );
                       });
@@ -123,7 +122,10 @@ class CustomAppBarState extends State<CustomAppBar> {
                                       },
                                       initialValue: currentSegment,
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.tertiary.withOpacity(0.5),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiary
+                                            .withOpacity(0.5),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       thumbDecoration: BoxDecoration(
@@ -165,6 +167,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                   }
                 },
                 items: [
+                  // Ajouter les comptes de l'utilisateur
                   ...widget.accounts.accounts
                       .map<DropdownMenuItem<String>>((Account account) {
                     String tag = account.profileInfo.tag;
@@ -180,9 +183,9 @@ class CustomAppBarState extends State<CustomAppBar> {
                               width: 30,
                               child: CachedNetworkImage(
                                 imageUrl: imageUrl,
-                                placeholder: (context, url) => 
+                                placeholder: (context, url) =>
                                     CircularProgressIndicator(),
-                                errorWidget: (context, url, error) => 
+                                errorWidget: (context, url, error) =>
                                     Icon(Icons.error),
                               ),
                             )
@@ -199,7 +202,8 @@ class CustomAppBarState extends State<CustomAppBar> {
                         ],
                       ),
                     );
-                  }),
+                  }).toList(),
+                  // Ajouter l'option "Manage Accounts" à la fin de la liste
                   DropdownMenuItem<String>(
                     value: "manageAccounts",
                     child: Row(
@@ -226,19 +230,26 @@ class CustomAppBarState extends State<CustomAppBar> {
             ),
             Padding(padding: EdgeInsets.all(5)),
             GestureDetector(
-              onTap: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          SettingsInfoScreen(user: widget.user)),
-                );
-              },
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(widget.user.avatar),
-                backgroundColor: Colors.transparent,
-              ),
-            ),
+                onTap: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SettingsInfoScreen(user: widget.user)),
+                  );
+                },
+                child: ClipOval(
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    child: CachedNetworkImage(
+                      imageUrl: widget.user.avatar,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
+                  ),
+                )),
           ],
         ),
         SizedBox(width: 16),

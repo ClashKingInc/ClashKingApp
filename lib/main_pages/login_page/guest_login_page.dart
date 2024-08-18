@@ -130,24 +130,32 @@ class GuestLoginPageState extends State<GuestLoginPage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     String globalName = '';
     List<String> tags = [];
     final navigator = Navigator.of(context);
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Set the appropriate image URLs based on the theme
+    final logoUrl = isDarkMode
+        ? "https://assets.clashk.ing/logos/crown-arrow-dark-bg/ClashKing-1.png"
+        : "https://assets.clashk.ing/logos/crown-arrow-white-bg/ClashKing-2.png";
+    final textLogoUrl = isDarkMode
+        ? "https://assets.clashk.ing/logos/crown-arrow-dark-bg/CK-text-dark-bg.png"
+        : "https://assets.clashk.ing/logos/crown-arrow-white-bg/CK-text-white-bg.png";
 
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: PopScope(
-        canPop : true,
-      onPopInvoked: (didPop) async {
-        await deletePrefs('access_token');
-        navigator.pushReplacement(
-          MaterialPageRoute(builder: (_) => StartupWidget()));
-      },
+        canPop: true,
+        onPopInvoked: (didPop) async {
+          await deletePrefs('access_token');
+          navigator.pushReplacement(
+              MaterialPageRoute(builder: (_) => StartupWidget()));
+        },
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -169,14 +177,12 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                   height: 100,
                   width: 100,
                   child: CachedNetworkImage(
-                      imageUrl:
-                          "https://assets.clashk.ing/logos/crown-arrow-white-bg/ClashKing-2.png"),
+                      imageUrl: logoUrl),
                 ),
                 SizedBox(
                   width: 200,
                   child: CachedNetworkImage(
-                      imageUrl:
-                          "https://assets.clashk.ing/logos/crown-arrow-white-bg/CK-text-white-bg.png"),
+                      imageUrl: textLogoUrl),
                 ),
                 SizedBox(height: 32),
                 Text(AppLocalizations.of(context)!.createGuestProfile,
@@ -258,65 +264,65 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                             minimumSize: Size(240, 48),
                           ),
                           onPressed: () async {
-                            try{
-                            if (_formKey.currentState!.validate() &&
-                                _tags.isNotEmpty) {
-                              globalName = _usernameController.text;
+                            try {
+                              if (_formKey.currentState!.validate() &&
+                                  _tags.isNotEmpty) {
+                                globalName = _usernameController.text;
 
-                              String authToken = await login();
+                                String authToken = await login();
 
-                              bool allTagsExist = true;
-                              bool allTagsNotLinked = true;
-                              List<String> nonExistentTags = [];
-                              List<String> alreadyLinkedTags = [];
-                              String status = '';
+                                bool allTagsExist = true;
+                                bool allTagsNotLinked = true;
+                                List<String> nonExistentTags = [];
+                                List<String> alreadyLinkedTags = [];
+                                String status = '';
 
-                              for (int i = 0; i < _tags.length; i++) {
-                                status = await checkIfPlayerTagExists(
-                                    _tags[i], authToken);
-                                if (status == 'notExist') {
-                                  nonExistentTags.add(_tags[i]);
-                                  allTagsExist = false;
-                                } else if (status == 'alreadyLinked') {
-                                  alreadyLinkedTags.add(_tags[i]);
-                                  allTagsNotLinked = false;
+                                for (int i = 0; i < _tags.length; i++) {
+                                  status = await checkIfPlayerTagExists(
+                                      _tags[i], authToken);
+                                  if (status == 'notExist') {
+                                    nonExistentTags.add(_tags[i]);
+                                    allTagsExist = false;
+                                  } else if (status == 'alreadyLinked') {
+                                    alreadyLinkedTags.add(_tags[i]);
+                                    allTagsNotLinked = false;
+                                  }
+                                }
+                                if (allTagsExist && allTagsNotLinked) {
+                                  // Save the tags to the user object (assuming user is DiscordUser object)
+                                  tags = _tags;
+
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
+                                  storePrefs("user_type", "guest");
+                                  storePrefs('username', globalName);
+                                  prefs.setStringList('tags', tags);
+
+                                  // Navigate to the next screen
+                                  globalNavigatorKey.currentState!
+                                      .pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => StartupWidget(),
+                                    ),
+                                  );
+                                } else {
+                                  if (!allTagsExist && context.mounted) {
+                                    updateErrorMessage(
+                                        AppLocalizations.of(context)!
+                                            .followingTagsDoNotExist(
+                                                nonExistentTags.join(', ')));
+                                  }
+                                  if (!allTagsNotLinked && context.mounted) {
+                                    updateErrorMessage(
+                                        AppLocalizations.of(context)!
+                                            .followingTagsAreAlreadyLinked(
+                                                alreadyLinkedTags.join(', ')));
+                                  }
                                 }
                               }
-                              if (allTagsExist && allTagsNotLinked) {
-                                // Save the tags to the user object (assuming user is DiscordUser object)
-                                tags = _tags;
-
-                                final prefs =
-                                    await SharedPreferences.getInstance();
-                                storePrefs("user_type", "guest");
-                                storePrefs('username', globalName);
-                                prefs.setStringList('tags', tags);
-
-                                // Navigate to the next screen
-                                globalNavigatorKey.currentState!
-                                    .pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) => StartupWidget(),
-                                  ),
-                                );
-                              } else {
-                                if (!allTagsExist && context.mounted) {
-                                  updateErrorMessage(
-                                      AppLocalizations.of(context)!
-                                          .followingTagsDoNotExist(
-                                              nonExistentTags.join(', ')));
-                                }
-                                if (!allTagsNotLinked && context.mounted) {
-                                  updateErrorMessage(
-                                      AppLocalizations.of(context)!
-                                          .followingTagsAreAlreadyLinked(
-                                              alreadyLinkedTags.join(', ')));
-                                }
-                              }
-                            }
-                            }
-                            catch(exception, stackTrace){
-                              Sentry.captureException(exception, stackTrace: stackTrace);
+                            } catch (exception, stackTrace) {
+                              Sentry.captureException(exception,
+                                  stackTrace: stackTrace);
                             }
                           },
                           child: Text(AppLocalizations.of(context)!.login),

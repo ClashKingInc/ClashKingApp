@@ -106,7 +106,7 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
                   if (widget.user.tags.isNotEmpty) {
                     storePrefs('selectedTag', '');
                     if (context.mounted) {
-                      myAppState.reloadUsersAccounts(context);
+                      myAppState.deleteAccountByTag(playerTag, myAppState);
                     }
                     if (errorMessage.isEmpty) {
                       navigator.pop();

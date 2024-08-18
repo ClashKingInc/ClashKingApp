@@ -290,11 +290,14 @@ class ProfileInfoService {
 
     try {
       // Récupérer les données des War Hits
-      WarStats warStats = await playerStatsService.fetchPlayerWarHits();
+      WarStats? warStats = await playerStatsService.fetchPlayerWarHits();
       profileInfo.warStats = warStats;
       profileInfo.warStatsInitialized = true;
-    } catch (e) {
-      print('Error: $e');
+    } catch (exception, stackTrace) {
+      final hint = Hint.withMap({
+        'tag': profileInfo.tag,
+      });
+      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
     }
   }
 

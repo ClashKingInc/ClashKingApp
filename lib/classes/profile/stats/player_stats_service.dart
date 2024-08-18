@@ -23,6 +23,22 @@ class PlayerStatsService {
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = json.decode(utf8.decode(response.bodyBytes));
       final List<dynamic> items = jsonResponse['items'];
+      
+      if(items.isEmpty) {
+        return WarStats(
+          numberOfWars: 0,
+          timeStampsEnd: 0,
+          timeStampsStart: 0,
+          playerTag: '',
+          playerName: '',
+          townhallLevel: 0,
+          mapPosition: 0,
+          opponentAttacks: 0,
+          attacks: [],
+          defenses: [],
+          warType: ''
+        );
+      }
 
       WarStats aggregatedStats = WarStats(
           numberOfWars: 0,
