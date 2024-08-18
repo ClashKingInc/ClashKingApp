@@ -157,7 +157,7 @@ class PlayerStatsHeader extends StatelessWidget {
           top: 30,
           right: 10,
           child: IconButton(
-            icon: Icon(Icons.filter_list),
+            icon: Icon(Icons.filter_list, color: Colors.white),
             onPressed: onFilter,
           ),
         ),

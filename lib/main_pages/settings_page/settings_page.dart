@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/components/dialogs/logout_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -107,7 +108,16 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
             context,
             title: AppLocalizations.of(context)!.logout,
             leadingIcon: Icons.exit_to_app,
-            onTap: _logOut,
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return ConfirmLogoutDialog(
+                    onConfirm: _logOut,
+                  );
+                },
+              );
+            },
           ),
         ],
       ),

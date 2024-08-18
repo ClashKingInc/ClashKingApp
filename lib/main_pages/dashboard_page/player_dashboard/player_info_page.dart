@@ -29,7 +29,7 @@ class StatsScreenState extends State<StatsScreen>
   late TabController tabController;
   String backgroundImageUrl =
       "https://assets.clashk.ing/landscape/home-landscape.png";
-  String townHallImageUrl = "";
+  String townHallImageUrl = "https://assets.clashk.ing/home-base/town-hall-pics/town-hall-16.png";
   List<Widget> stars = [];
   Widget hallChips = SizedBox.shrink();
   List<String> activeEquipmentNames = [];

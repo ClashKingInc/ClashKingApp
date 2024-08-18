@@ -9,7 +9,7 @@ class JoinLeaveItem {
   final DateTime time;
   final String clan;
   final String type;
-  String townHallPic = "";
+  String townHallPic = "https://assets.clashk.ing/home-base/town-hall-pics/town-hall-16.png";
 
   JoinLeaveItem({
     required this.name,

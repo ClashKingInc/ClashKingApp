@@ -6,7 +6,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:clashkingapp/components/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/components/to_do_body_card.dart';
@@ -168,33 +168,9 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text(
-                                      AppLocalizations.of(context)!.warning,
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall),
-                                  content: Text(AppLocalizations.of(context)!
-                                      .exitAppToOpenClash),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: Text(
-                                          AppLocalizations.of(context)!.cancel),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: Text(
-                                          AppLocalizations.of(context)!.ok),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        launchUrl(Uri.parse(
-                                            'https://link.clashofclans.com/$languageCode?action=OpenPlayerProfile&tag=${widget.playerStats.tag}'));
-                                      },
-                                    ),
-                                  ],
+                                return OpenClashDialog(
+                                  url:
+                                      'https://link.clashofclans.com/$languageCode?action=OpenPlayerProfile&tag=${widget.playerStats.tag}',
                                 );
                               },
                             );

@@ -59,7 +59,7 @@ class DashboardPageState extends State<DashboardPage>
       for (ProfileInfo profileInfo
           in widget.accounts.accounts.map((acc) => acc.profileInfo)) {
         profileInfo.toDo =
-            widget.accounts.toDoList.findTodotByTag(profileInfo.tag);
+            widget.accounts.toDoList.findTodoByTag(profileInfo.tag);
         if (profileInfo.toDo != null && !profileInfo.toDo!.isInitialized) {
           profileInfo.toDo!.calculateTotals(profileInfo);
         }
@@ -184,19 +184,21 @@ class DashboardPageState extends State<DashboardPage>
                       ),
                     );
                   } else {
-                    return Column(
-                      children: [
-                        // Legend Infos Card : Displayed only if data
-                        Padding(
-                          padding:
-                              EdgeInsets.only(left: 8.0, right: 8.0, bottom: 4),
-                          child: ToDoCard(
-                              tags: widget.discordUser.tags,
-                              playerStats: widget.playerStats,
-                              accounts: widget.accounts),
-                        ),
-                      ],
-                    );
+                    // Check if toDo data is initialized before rendering the ToDoCard
+                    if (widget.playerStats.toDo != null &&
+                        widget.playerStats.toDo!.isInitialized) {
+                      return Padding(
+                        padding:
+                            EdgeInsets.only(left: 8.0, right: 8.0, bottom: 4),
+                        child: ToDoCard(
+                            tags: widget.discordUser.tags,
+                            playerStats: widget.playerStats,
+                            accounts: widget.accounts),
+                      );
+                    } else {
+                      // Return a placeholder or an empty widget until toDo is ready
+                      return SizedBox.shrink();
+                    }
                   }
                 },
               ),

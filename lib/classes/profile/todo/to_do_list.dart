@@ -173,7 +173,7 @@ class ToDoList {
     return 'PlayerToDoData: ${items.toString()}';
   }
 
-  ToDo? findTodotByTag(String tag) {
+  ToDo? findTodoByTag(String tag) {
     try {
       return items.firstWhere((todo) => todo.playerTag == tag);
     } catch (exception, stackTrace) {

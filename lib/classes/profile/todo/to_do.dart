@@ -70,7 +70,12 @@ class ToDo {
     WarData? warData;
 
     if (json['war'] != null && json['war'].isNotEmpty) {
-      warData = await WarData.fetchWarData(json);
+      DateTime warTime = DateTime.parse(json['war']['time']);
+      DateTime now = DateTime.now().toUtc();
+      Duration difference = warTime.difference(now);
+      if (difference.inMinutes < (24 * 60)) {
+        warData = await WarData.fetchWarData(json);
+      }
     }
     ToDo toDo = ToDo.fromJson(json, warData);
     return toDo;
@@ -108,8 +113,7 @@ class ToDo {
       DateTime clanGamesStart =
           DateTime(now.year, now.month, 22, 8); // Start of Clan Games
       int daysPassed = now.difference(clanGamesStart).inDays + 1;
-      double clanGamesDaily =
-          (4000 / 8) * daysPassed;
+      double clanGamesDaily = (4000 / 8) * daysPassed;
       double clanGamesRatio = (clanGames.points.toDouble() / clanGamesDaily) > 1
           ? 1
           : clanGames.points.toDouble() / clanGamesDaily;

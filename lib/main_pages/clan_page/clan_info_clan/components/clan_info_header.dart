@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/components/dialogs/open_clash_dialog.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -133,32 +134,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return AlertDialog(
-                                title:
-                                    Text(AppLocalizations.of(context)!.warning),
-                                content: Text(AppLocalizations.of(context)!
-                                    .exitAppToOpenClash),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text(
-                                        AppLocalizations.of(context)!.cancel),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Ferme la boîte de dialogue
-                                    },
-                                  ),
-                                  TextButton(
-                                    child:
-                                        Text(AppLocalizations.of(context)!.ok),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Ferme la boîte de dialogue
-                                      launchUrl(Uri.parse(
-                                          'https://link.clashofclans.com/$languageCode?action=OpenClanProfile&tag=${widget.clanInfo.tag}'));
-                                    },
-                                  ),
-                                ],
-                              );
+                              return OpenClashDialog(
+                                  url:
+                                      'https://link.clashofclans.com/$languageCode?action=OpenClanProfile&tag=${widget.clanInfo.tag}');
                             },
                           );
                         },
@@ -172,8 +150,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                   .contains("discord.gg/"))
                           ? IconButton(
                               icon: Icon(Icons.discord,
-                                  color: Colors.white,
-                                  size: 32),
+                                  color: Colors.white, size: 32),
                               onPressed: () async {
                                 try {
                                   final String? discordCode =
