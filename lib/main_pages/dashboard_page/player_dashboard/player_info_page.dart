@@ -1,3 +1,7 @@
+import 'package:clashkingapp/classes/data/gears_data_manager.dart';
+import 'package:clashkingapp/classes/data/heroes_data_manager.dart';
+import 'package:clashkingapp/classes/data/pets_data_manager.dart';
+import 'package:clashkingapp/classes/data/spells_data_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
@@ -29,7 +33,8 @@ class StatsScreenState extends State<StatsScreen>
   late TabController tabController;
   String backgroundImageUrl =
       "https://assets.clashk.ing/landscape/home-landscape.png";
-  String townHallImageUrl = "";
+  String townHallImageUrl =
+      "https://assets.clashk.ing/home-base/town-hall-pics/town-hall-16.png";
   List<Widget> stars = [];
   Widget hallChips = SizedBox.shrink();
   List<String> activeEquipmentNames = [];
@@ -257,8 +262,28 @@ class StatsScreenState extends State<StatsScreen>
         calculateCompletionPercentage(items, itemType);
 
     List<Widget> missingItems = [];
-    TroopDataManager().troopUrlsAndTypes.forEach((name, data) {
+    var dataManager;
+
+    switch (itemType) {
+      case 'gear':
+        dataManager = GearDataManager().gearUrlsAndTypes;
+        break;
+      case 'hero':
+        dataManager = HeroesDataManager().heroUrlsAndTypes;
+        break;
+      case 'pet':
+        dataManager = PetsDataManager().petUrlsAndTypes;
+        break;
+      case 'spell':
+        dataManager = SpellsDataManager().spellUrlsAndTypes;
+        break;
+      default:
+        dataManager = TroopDataManager().troopUrlsAndTypes;
+    }
+    dataManager.forEach((name, data) {
+      print(data['type']);
       if (!itemNames.contains(name) && data['type'] == itemType) {
+        print('Missing item: $name');
         missingItems.add(
           Container(
             decoration: BoxDecoration(
@@ -986,7 +1011,8 @@ class StatsScreenState extends State<StatsScreen>
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
-            AppLocalizations.of(context)!.bhLevel(widget.playerStats.builderHallLevel),
+            AppLocalizations.of(context)!
+                .bhLevel(widget.playerStats.builderHallLevel),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),

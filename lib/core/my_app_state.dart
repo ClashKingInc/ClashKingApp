@@ -1,4 +1,6 @@
 import 'package:clashkingapp/classes/account/user.dart';
+import 'package:clashkingapp/classes/profile/profile_info.dart';
+import 'package:clashkingapp/classes/profile/todo/to_do_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/widgets/widgets_functions.dart';
@@ -92,12 +94,10 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     if (languageCode != null) {
       Locale userLocale = Locale(languageCode);
       _locale = _getLocaleFallback(userLocale);
-      print('Loaded Locale from Preferences: $_locale');
     } else {
       Locale systemLocale = Locale(WidgetsBinding
           .instance.platformDispatcher.locales.first.languageCode);
       _locale = _getLocaleFallback(systemLocale);
-      print('Loaded System Locale: $_locale');
     }
 
     notifyListeners();
@@ -107,10 +107,10 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   void changeLanguage(Locale locale) async {
     _locale = locale;
     await storePrefs('languageCode', locale.languageCode);
-    if(locale.countryCode != null) {
+    if (locale.countryCode != null) {
       await storePrefs('countryCode', locale.countryCode!);
     }
-    if(locale.scriptCode != null) {
+    if (locale.scriptCode != null) {
       await storePrefs('scriptCode', locale.scriptCode!);
     }
     print('Changed Locale: $_locale');
@@ -155,6 +155,87 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   /* User management */
+
+  void deleteAccountByTag(String tag, MyAppState myAppState) {
+    accounts!.accounts.removeWhere((account) => account.profileInfo.tag == tag);
+    accounts!.selectedTag =
+        ValueNotifier<String?>(accounts!.accounts.first.profileInfo.tag);
+    accounts!.toDoList.deleteToDoByTag(tag);
+
+    myAppState.selectedTagNotifier.value = accounts!.selectedTag.value;
+    notifyListeners();
+  }
+
+  Future<void> addAccount(String tag, MyAppState appState) async {
+    // Vérifiez si le compte existe déjà
+    if (accounts!.tags.contains(tag)) {
+      throw Exception('Account with this tag already exists');
+    }
+
+    if (!tag.startsWith('#')) {
+      tag = '#$tag';
+    }
+
+    final transaction = Sentry.startTransaction(
+      'addAccount',
+      'task',
+      bindToScope: true,
+    );
+
+    // Récupérez les informations de profil pour le tag donné
+    ProfileInfo? profileInfo = await ProfileInfoService().fetchProfileInfo(tag);
+
+    if (profileInfo != null) {
+      // Créez un nouvel objet Account
+      Account newAccount = Account(profileInfo: profileInfo, clan: null);
+
+      // Ajoutez le compte à la liste des comptes
+      accounts!.accounts.add(newAccount);
+      accounts!.tags.add(tag);
+      var accountsService = AccountsService();
+
+      // Load clanInfo in the background
+      if (profileInfo.clan != null) {
+        accountsService.fetchClanWarInfoInBackground(
+            profileInfo.clan!.tag, newAccount, transaction);
+      }
+
+      // Attendez que le To-Do associé à ce compte soit complètement chargé
+      await ToDoService.fetchPlayerToDoData(profileInfo);
+
+      accounts!.toDoList.addToDo(profileInfo.toDo!);
+      accounts!.toDoList.calculateTotals();
+
+      // Définissez le nouveau compte comme étant sélectionné
+      accounts!.selectedTag = ValueNotifier<String?>(profileInfo.tag);
+
+      // Triez les comptes selon le critère de tri initial
+      accounts!.accounts.sort((a, b) {
+        if (a.profileInfo.tag == tag) {
+          return -1;
+        } else if (b.profileInfo.tag == tag) {
+          return 1;
+        } else {
+          int townHallComparison = b.profileInfo.townHallLevel
+              .compareTo(a.profileInfo.townHallLevel);
+          if (townHallComparison != 0) {
+            return townHallComparison;
+          } else {
+            return b.profileInfo.expLevel.compareTo(a.profileInfo.expLevel);
+          }
+        }
+      });
+
+      // Sauvegardez le nouveau tag sélectionné
+      await storePrefs('selectedTag', tag);
+
+      // Notifiez les auditeurs du changement
+      selectedTagNotifier.value = accounts?.selectedTag.value;
+      notifyListeners();
+    } else {
+      throw Exception('Failed to fetch profile information for tag: $tag');
+    }
+  }
 
   // Reload the user accounts
   Future<void> reloadUsersAccounts(BuildContext context) async {
@@ -291,7 +372,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     user = User(
       id: '0',
       avatar:
-          'https://assets.clashk.ing/logos/crown-arrow-white-bg/ClashKing-2.png',
+          'https://assets.clashk.ing/logos/crown-red/CK-crown-red.png',
       globalName: username ?? 'ILoveClashKing',
     );
 

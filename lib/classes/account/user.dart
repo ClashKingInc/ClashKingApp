@@ -21,7 +21,7 @@ class User {
       id: json['id'] ?? "0",
       avatar: (json['avatar'] != null)
           ? 'https://cdn.discordapp.com/avatars/${json['id']}/${json['avatar']}.png'
-          : "https://assets.clashk.ing/logos/crown-arrow-white-bg/ClashKing-2.png",
+          : "https://assets.clashk.ing/logos/crown-red/CK-crown-red.png",
       globalName: json['global_name'] ?? json['username'] ?? "ClashKing",
     );
   }
@@ -53,8 +53,7 @@ Future<User?> fetchDiscordUser(String accessToken) async {
     } else {
       User user = User(
         id: '0',
-        avatar:
-            'https://assets.clashk.ing/logos/crown-arrow-white-bg/ClashKing-2.png',
+        avatar: 'https://assets.clashk.ing/logos/crown-red/CK-crown-red.png',
         globalName: 'ILoveClashKing',
       );
       user.isDiscordUser = false;

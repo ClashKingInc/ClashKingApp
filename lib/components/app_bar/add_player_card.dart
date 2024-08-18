@@ -92,7 +92,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
               if (success) {
                 await storePrefs('selectedTag', playerTag);
                 if (context.mounted) {
-                  myAppState.reloadUsersAccounts(context);
+                  await myAppState.addAccount(playerTag, myAppState);
                 }
               }
               if (errorMessage.isEmpty) {
@@ -108,7 +108,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
           },
           style: ButtonStyle(
             backgroundColor:
-                WidgetStateProperty.all(Theme.of(context).colorScheme.primary),
+                WidgetStateProperty.all(Theme.of(context).colorScheme.secondary),
             foregroundColor: WidgetStateProperty.all(
                 Theme.of(context).colorScheme.onPrimary),
             padding: WidgetStateProperty.all(

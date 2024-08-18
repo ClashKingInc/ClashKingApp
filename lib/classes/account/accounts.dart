@@ -15,7 +15,6 @@ class Accounts {
   late ToDoList toDoList;
   late bool isTodoInitialized = false;
 
-
   Accounts({required this.accounts, required this.tags});
 
   List<Account> get list => accounts;
@@ -134,7 +133,7 @@ class AccountsService {
       sortSpan.finish(status: SpanStatus.ok());
 
       // Step 5: Create an Accounts object
-      final accounts = Accounts(accounts: accountsList, tags : tags);
+      final accounts = Accounts(accounts: accountsList, tags: tags);
 
       final todoSpan = transaction.startChild('fetchToDo');
       ToDoService.fetchBulkPlayerToDoData(tags, accounts);

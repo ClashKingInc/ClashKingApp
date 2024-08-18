@@ -40,7 +40,7 @@
         }
     },
     "welcome": "Bienvenue !",
-    "welcomeMessage": "Pour commencer, ajoutez un ou plusieurs compte Clash of clans à votre profil. Vous pourrez en ajouter ou en supprimer à tout moment.",
+    "welcomeMessage": "Pour commencer, ajoute un ou plusieurs compte Clash of clans à ton profil. Tu pourras en ajouter ou en supprimer à tout moment.",
     "login": "Connexion",
     "logout": "Déconnexion",
     "language": "Langue",
@@ -108,6 +108,7 @@
     "search": "Rechercher",
     "warning": "Attention",
     "exitAppToOpenClash": "Tu es sur le point de quitter l'application pour ouvrir Clash of Clans.",
+    "confirmLogout": "Es-tu sûr de vouloir te déconnecter ?",
     "tagOrNamePlayer": "Tag ou nom du joueur",
     "searchPlayer": "Rechercher un joueur",
     "nameOrTagPlayer": "Nom ou tag du joueur",

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/components/dialogs/open_clash_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class CreatorCodeCard extends StatefulWidget {
   @override
@@ -26,29 +26,9 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(AppLocalizations.of(context)!.warning,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleSmall),
-              content: Text(AppLocalizations.of(context)!.exitAppToOpenClash),
-              actions: <Widget>[
-                TextButton(
-                  child: Text(AppLocalizations.of(context)!.cancel),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                TextButton(
-                  child: Text(AppLocalizations.of(context)!.ok),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-
-                    launchUrl(Uri.parse(
-                        'https://link.clashofclans.com/$languageCode?action=SupportCreator&id=Clashking'));
-                  },
-                ),
-              ],
-            );
+            return OpenClashDialog(
+                url:
+                    'https://link.clashofclans.com/$languageCode?action=SupportCreator&id=Clashking');
           },
         );
       },

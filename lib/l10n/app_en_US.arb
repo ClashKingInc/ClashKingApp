@@ -130,6 +130,10 @@
     },
     "warning": "Warning",
     "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
+    "confirmLogout": "Are you sure you want to log out?",
+    "@confirmLogout": {
+        "description": "Prompt asking the user to confirm logout"
+    },
     "tagOrNamePlayer": "Player's tag or name",
     "searchPlayer": "Search player",
     "nameOrTagPlayer": "Player's name or tag",

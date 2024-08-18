@@ -148,7 +148,9 @@ class StartupWidgetState extends State<StartupWidget> {
           await appState.initializeDiscordUser(context);
           discordSpan.finish(status: SpanStatus.ok());
 
-          if (mounted && appState.user != null && appState.user!.tags.isNotEmpty) {
+          if (mounted &&
+              appState.user != null &&
+              appState.user!.tags.isNotEmpty) {
             transaction.finish(status: SpanStatus.ok());
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (_) => MyHomePage()));
@@ -182,6 +184,7 @@ class StartupWidgetState extends State<StartupWidget> {
   void _showTagDialog() {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         // Check if the theme is light or dark
 
@@ -281,7 +284,19 @@ class StartupWidgetState extends State<StartupWidget> {
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text('OK'),
+                    child: Text(AppLocalizations.of(context)!.cancel,
+                        style: Theme.of(context).textTheme.bodyMedium),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      deletePrefs('user_type');
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (_) => StartupWidget()));
+                    }),
+                TextButton(
+                  child: Text(AppLocalizations.of(context)!.ok,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium),
                   onPressed: () {
                     if (_tags.isNotEmpty) {
                       Navigator.of(context).pop();
