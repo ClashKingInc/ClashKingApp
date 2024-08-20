@@ -1,10 +1,10 @@
 {
-    "creatorCode": "Creator Code : ClashKing",
+    "creatorCode": "Código de criador de conteúdo: ClashKing",
     "signInWithDiscord": "Sign In with Discord",
     "guestMode": "Guest Mode",
     "needHelpJoinDiscord": "Need help? Join us on Discord.",
     "createGuestProfile": "Create your guest profile",
-    "doesNotExist": "{tag} does not exist.",
+    "doesNotExist": "{tag} não existe.",
     "@doesNotExist": {
         "placeholders": {
             "tag": {
@@ -12,7 +12,7 @@
             }
         }
     },
-    "isAlreadyLinked": "{tag} is already linked to someone.",
+    "isAlreadyLinked": "{tag} já está vinculada a alguém.",
     "@isAlreadyLinked": {
         "placeholders": {
             "tag": {
@@ -20,8 +20,8 @@
             }
         }
     },
-    "username": "Username",
-    "pleaseEnterUsername": "Please enter a username",
+    "username": "Nome de utilizador",
+    "pleaseEnterUsername": "Por favor, insira um nome de utilizador",
     "playerTags": "Player Tags",
     "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
     "@followingTagsDoNotExist": {
@@ -39,18 +39,18 @@
             }
         }
     },
-    "welcome": "Welcome!",
-    "welcomeMessage": "Please add one or more Clash Of Clans accounts to your profile. You can add or remove accounts later.",
+    "welcome": "Bem-vindo!",
+    "welcomeMessage": "Por favor, adicione uma ou mais contas de Clash Of Clans para o seu perfil. Pode adicionar ou remover contas depois.",
     "login": "Login",
     "logout": "Log out",
-    "language": "Language",
-    "settings": "Settings",
+    "language": "Linguagem",
+    "settings": "Definições",
     "toggleTheme": "Toggle Theme",
-    "selectLanguage": "Select a language",
+    "selectLanguage": "Seleciona a linguagem",
     "faq": "FAQ",
     "faqSubtitle": "Frequently Asked Questions",
-    "faqIsThisFromSupercell": "Is this App from Supercell?",
-    "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
+    "faqIsThisFromSupercell": "Esta aplicação é da Supercell?",
+    "faqFanContentPolicy": "Este material não é oficial e não é endossado pela Supercell. Para obter mais informações, consulte a Política de Conteúdo de Fãs da Supercell: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
     "faqClanNotTracked": "Clan not tracked",
     "faqClanNotTrackedAnswer": "ClashKing can retrieve this info only if the clan is tracked. If your clan isn't tracked, please invite ClashKing Bot to your Discord server and use the command /addclan. We are working on making this feature available in the app soon.",
@@ -58,7 +58,7 @@
     "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.",
     "faqApiLimitation": "Clash of Clans API limitation",
     "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your buildings levels.",
-    "faqSupportWork": "How can I support your work?",
+    "faqSupportWork": "Como posso ajudar o seu trabalho?",
     "faqSupportWorkAnswer": "There are several ways to support us:",
     "faqUseCodeClashKing": "Use code \"ClashKing\"",
     "faqSupportUsOnPatreon": "Support us on Patreon",
