@@ -54,7 +54,7 @@
     "faqWhyNotAccurate": "Waarom zijn de gegevens soms onnauwkeurig of ontbreken ze?",
     "faqClanNotTracked": "Clan niet gevolgd",
     "faqClanNotTrackedAnswer": "ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan ClashKing uit op je Discord server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.",
-    "faqTrackingDown": "Tracking down",
+    "faqTrackingDown": "Tracking niet beschikbaar",
     "faqTrackingDownAnswer": "Het tracken kan gedurende een bepaalde periode stoppen met werken. Daarom kunnen er soms gaten in je gegevens zitten. We werken eraan om dit te verbeteren.",
     "faqApiLimitation": "Clash of Clans API limitatie",
     "faqApiLimitationAnswer": "Sommige gegevens worden geleverd door Clash of Clans, maar hun API heeft enkele beperkingen. Zo kan het bijvoorbeeld voorkomen dat trofeeënwinst en -verlies in de legendarische divisie worden gestapeld alsof ze afkomstig zijn van één aanval. Dit is ook de reden waarom we geen informatie hebben over het niveau van je gebouwen.",
