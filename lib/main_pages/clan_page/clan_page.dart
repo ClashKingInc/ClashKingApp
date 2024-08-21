@@ -163,7 +163,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
                                   child: Stack(
                                     children: [
                                       ClanCapitaleCard(
-                                        discordUser: widget.user.tags,
+                                        user: widget.user.tags,
                                         clanInfo: widget.account!.clan!,
                                       ),
                                       BetaLabel(),

@@ -6,10 +6,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ClanCapitaleCard extends StatelessWidget {
   const ClanCapitaleCard({
-    super.key, required this.discordUser, required this.clanInfo
+    super.key, required this.user, required this.clanInfo
   });
 
-  final List<String> discordUser;
+  final List<String> user;
   final Clan? clanInfo;
 
   @override
@@ -21,7 +21,7 @@ class ClanCapitaleCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => CapitalScreen(
-              discordUser: discordUser,
+              user: user,
               clanInfo: clanInfo,
             ),
           ),
