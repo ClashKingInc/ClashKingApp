@@ -57,7 +57,7 @@
     "faqTrackingDown": "Rastreando",
     "faqTrackingDownAnswer": "O rastreio pode parar de funcionar por um certo período. Esta é a razão ao qual pode existir falhas nos seus dados. Estamos a trabalhar para melhorar esta situação.",
     "faqApiLimitation": "Limitação da API do Clash of Clans",
-    "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your buildings levels.",
+    "faqApiLimitationAnswer": "Alguns dados providenciados pelo Clash of Clans e a sua API têm algumas limitações. Este é o caso de rastreamento da liga lendária, onde às vezes acumulam ganho e perda de troféus como se fosse um único ataque. É também por isso que não temos nenhuma informação dos níveis das suas construções.",
     "faqSupportWork": "Como posso ajudar o seu trabalho?",
     "faqSupportWorkAnswer": "Existem várias maneiras de nos suportar:",
     "faqUseCodeClashKing": "Usa o código \"ClashKing\"",
@@ -67,7 +67,7 @@
     "faqHelpUsTranslate": "Ajude-nos a traduzir a aplicação",
     "faqHowToInviteTheBot": "Como posso convidar o seu ‘bot’ no meu servidor de Discord?",
     "faqHowToInviteTheBotAnswer": "Pode convidar o nosso bot para o seu servidor de Discord, clicando no botão abaixo. É preciso ter a permissão \"Gerir Servidor\" para adicionar o bot.",
-    "faqInviteTheBot": "Convide o 'bot' ClashKing",
+    "faqInviteTheBot": "Convide o bot ClashKing",
     "faqNeedHelp": "Preciso de ajuda ou queria fazer uma sugestão. Como posso contactar-vos?",
     "faqNeedHelpAnswer": "Pode entrar no nosso servidor de Discord para pedir ajuda ou fornecer opiniões, ou pode enviar um e-mail para devs@clashkingbot.com. Por favor, escreva apenas em Inglês ou Francês.",
     "faqSendEmail": "Envie um e-mail",
@@ -81,7 +81,7 @@
     "currentTranslators": "Atuais tradutores",
     "betaFeature": "Recurso Beta",
     "beta": "BETA",
-    "betaDescription": "This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.",
+    "betaDescription": "Este recurso está em beta e pode conter alguns erros e estar incompleto. Será melhorado nas atualizações seguintes. Sinta-se à vontade para propor ideias e comunicar erros no nosso servidor Discord para nos ajudar a melhorá-lo.",
     "copiedToClipboard": "Copiado para a área de transferência",
     "all": "Tudo",
     "@all": {
@@ -97,7 +97,7 @@
     },
     "error": "Erro",
     "player": "Jogador",
-    "notFoundOrNotLinkedToOurSystem": "{player} não foi encontrado ou não está vinculado no nosso sistema.",
+    "notFoundOrNotLinkedToOurSystem": "{player} não foi encontrado ou não está vinculado ao nosso sistema.",
     "@notFoundOrNotLinkedToOurSystem": {
         "placeholders": {
             "player": {
@@ -256,7 +256,7 @@
         }
     },
     "bestTrophies": "Melhores troféus",
-    "mostAttacks": "Most Attacks",
+    "mostAttacks": "Maior número de ataques",
     "lastSeason": "Última temporada",
     "bestRank": "Melhor Rank Global",
     "daysLeft": "{days} dias restantes",
@@ -370,9 +370,9 @@
     "legendsExplanation_multiple_attacks_defenses_body": "Se múltiplos ataques ou defesas acontecerem em rápida sucessão, a API pode mostrar resultados combinados (Ex., +68 ou -68).\n",
     "legendsExplanation_simultaneous_attack_defense_title": "Ataques e Defesas simultâneas: ",
     "legendsExplanation_simultaneous_attack_defense_body": "Se um ataque e uma defesa ocorrerem em simultâneo, poderá ver um resultado misto (Ex., +4).\n",
-    "legendsExplanation_net_gain_loss_title": "3. Net Gain/Loss: ",
-    "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
-    "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
+    "legendsExplanation_net_gain_loss_title": "Ganho/Perda Líquida: ",
+    "legendsExplanation_net_gain_loss_body": "Apesar dos problemas de tempo, o ganho ou perda líquida geral do dia é precisa. ",
+    "legendsExplanation_conclusion": "Estas limitações são comuns em todas as ferramentas que usam a API do Clash of Clans. Nós, infelizmente, não podemos arrumar o que está nas mãos da Supercell. Nós fazemos o nosso melhor para compensar estes limites e providenciar os resultados mais próximos possíveis da realidade. Obrigado pela sua compreensão!",
     "toDoList": "Lista para fazer",
     "lastActive": "Última vez ativo: {date}",
     "@lastActive": {
@@ -415,7 +415,7 @@
     "todoExplanation_intro": "A percentagem de conclusão da tarefa é calculada com base nas seguintes atividades com ponderações específicas:",
     "todoExplanation_legends_title": "Liga Lendária:",
     "todoExplanation_legends": "Peso de 8 pontos por conta, 1 ataque = 1 ponto.",
-    "todoExplanation_raids_title": "Raids:",
+    "todoExplanation_raids_title": "Raides:",
     "todoExplanation_raids": "Peso de 5 pontos por conta (ou 6 se o último ataque foi desbloqueado), 1 ataque = 1 ponto.",
     "todoExplanation_clanWars_title": "Guerras de clã:",
     "todoExplanation_clanWars": "Peso de 2 pontos por conta, 1 ataque = 1 ponto.",
