@@ -527,31 +527,40 @@
     "cantOpenLink": "Impossible d'ouvrir le lien.",
     "notInWar": "Pas en guerre",
     "warHistory": "Historique de guerre",
-    "warHistoryWinsDescription": "Nous avons enregistré les données de {wins} guerres gagnées.",
+    "warHistoryWinsDescription": "Ton clan a gagné {wins} guerres ({percent}%) parmi les 50 dernières guerres.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
                 "type": "int"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryLossesDescription": "Nous avons enregistré les données de {losses} guerres perdues.",
+    "warHistoryLossesDescription": "Ton clan a perdu {losses} guerres ({percent}%) parmi les 50 dernières guerres.",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
                 "type": "int"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryDrawsDescription": "Nous avons enregistré les données de {draws} guerres nulles.",
+    "warHistoryDrawsDescription": "Ton clan a fait {draws} égalités ({percent}%) parmi les 50 dernières guerres.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
                 "type": "int"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Ton clan a une moyenne de {members} membres participants pour les guerres enregistrées.",
+    "warHistoryAverageMembersDescription": "Ton clan a une moyenne de {members} membres participants pour les 50 dernières guerres.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -559,7 +568,7 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription": "Ton clan a une moyenne de {stars} étoiles par attaque pour les guerres enregistrées.",
+    "warHistoryAverageWarStarsDescription": "Ton clan a une moyenne de {stars} étoiles par attaque pour les 50 dernières guerres. Ca représente {percent} % des étoiles possibles.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -567,7 +576,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Ton clan a une moyenne de {percent} % de taux de destruction pour les guerres enregistrées.",
+    "warHistoryAverageHitRateDescription": "Ton clan a une moyenne de {percent} % de taux de destruction pour les 50 dernières guerres.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
@@ -575,269 +584,278 @@
             }
         }
     },
-    "warLog": "Journal",
-    "publicWarLog": "Journal de guerre public",
-    "privateWarLog": "Journal de guerre privé",
-    "startsIn": "Début dans {time}",
-    "@startsIn": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "startsAt": "Débute à {time}",
-    "@startsAt": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "endsIn": "Fin dans {time}",
-    "@endsIn": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "endsAt": "Se termine à {time}",
-    "@endsAt": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "joinLeaveLogs": "Historique d'arrivées/départs",
-    "join": "Arrivée",
-    "leave": "Départ",
-    "reset": "Réinitialiser",
-    "leaveNumberDescription": "{number} joueurs ont quitté le clan durant la saison actuelle ({date}).",
-    "@leaveNumberDescription": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            },
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "joinNumberDescription": "{number} joueurs ont rejoint le clan durant la saison actuelle ({date}).",
-    "@joinNumberDescription": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            },
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "joinLeaveDifferenceUpDescription": "Ton clan a gagné {number} nouveaux membres durant la saison actuelle ({date}).",
-    "@joinLeaveDifferenceUpDescription": {
-        "description": "Number of new members gained by the clan this season.",
-        "placeholders": {
-            "number": {
-                "type": "int"
-            },
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "joinLeaveDifferenceDownDescription": "Ton clan a perdu {number} membres durant la saison actuelle ({date}).",
-    "@joinLeaveDifferenceDownDescription": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            },
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "joinLeaveDifferenceEqualDescription": "Ton clan a maintenu son nombre de membres durant la saison actuelle ({date}).",
-    "@joinLeaveDifferenceEqualDescription": {
-        "placeholders": {
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "leftOnAt": "Est parti le {date} à {time}.",
-    "@leftOnAt": {
-        "placeholders": {
-            "date": {
-                "type": "String"
-            },
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "joinedOnAt": "A rejoint le {date} à {time}.",
-    "@joinedOnAt": {
-        "placeholders": {
-            "date": {
-                "type": "String"
-            },
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "statistics": "Statistiques",
-    "stars": "Étoiles",
-    "starsSmall": "étoiles",
-    "numberOfStars": "Nombre d'étoiles",
-    "destructionRate": "Taux de destruction",
-    "events": "Attaques",
-    "team": "Équipes",
-    "myTeam": "Mon équipe",
-    "enemiesTeam": "Ennemis",
-    "defense": "Défense",
-    "defenses": "Défenses",
-    "attack": "Attaque",
-    "attacks": "Attaques",
-    "notUsed": "non faite",
-    "victory": "Victoire",
-    "defeat": "Défaite",
-    "draw": "Égalité",
-    "perfectWar": "Perf map",
-    "newest": "Plus récente",
-    "oldest": "Plus ancienne",
-    "warEnded": "Terminée",
-    "preparation": "Préparation",
-    "isNotInWar": "{clan} n'est pas en guerre.",
-    "@isNotInWar": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            }
-        }
-    },
-    "warLogIsClosed": "{clan} a son journal de guerre privé.",
-    "@warLogIsClosed": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            }
-        }
-    },
-    "askForWar": "Contactez le chef ou un adjoint pour lancer une guerre.",
-    "askForWarLogOpening": "Contactez un chef ou un adjoint pour ouvrir le journal de guerre.",
-    "warLogClosed": "Le journal de guerre est privé.",
-    "rounds": "Tours",
-    "noDataAvailableForThisWar": "Aucune donnée disponible pour cette guerre",
-    "stateOfTheWar": "État de la guerre",
-    "starsNeededToTakeTheLead": "{clan} a besoin de {star} étoile(s) supplémentaire(s) ou {star2} étoiles et {percent}% pour prendre l'avantage.",
-    "@starsNeededToTakeTheLead": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            },
-            "star": {
-                "type": "int"
-            },
-            "star2": {
-                "type": "int"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "starsAndPercentNeededToTakeTheLead": "{clan} a besoin de {percent}% ou 1 étoile supplémentaire pour prendre l'avantage",
-    "@starsAndPercentNeededToTakeTheLead": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "clanDraw": "Les deux clans sont à égalité",
-    "fastCalculator": "Calculatrice rapide",
-    "fastCalculatorAnswer": "Pour obtenir un taux de destruction de {percentNeeded}%, un total de {result}% est nécessaire.",
-    "@fastCalculatorAnswer": {
-        "placeholders": {
-            "percentNeedeed": {
-                "type": "String"
-            },
-            "result": {
-                "type": "String"
-            }
-        }
-    },
-    "teamSize": "Taille de l'équipe",
-    "neededOverall": "% total nécessaire",
-    "calculate": "Calculer",
-    "warStats": "Statistiques de guerre",
-    "clanWarLeague": "Ligue de clan",
-    "cwlRank": "Ton clan est actuellement classé numéro {rank}.",
-    "@cwlRank": {
-        "placeholders": {
-            "rank": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlStars": "Ton clan a un total de {stars} étoiles.",
-    "@cwlStars": {
-        "placeholders": {
-            "stars": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlMissingStarsFromNext": "Ton clan a besoin de {stars} étoiles pour rattraper le clan suivant.",
-    "@cwlMissingStarsFromNext": {
-        "placeholders": {
-            "stars": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlMissingStarsFromFirst": "Ton clan a besoin de {stars} étoiles pour rattraper le premier.",
-    "@cwlMissingStarsFromFirst": {
-        "placeholders": {
-            "stars": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlDestructionPercentage": "Ton clan a un taux de destruction de {percent}%.",
-    "@cwlDestructionPercentage": {
-        "placeholders": {
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "cwlCurrentRound": "Nous sommes actuellement au tour {round}.",
-    "@cwlCurrentRound": {
-        "placeholders": {
-            "round": {
-                "type": "int"
-            }
-        }
-    },
-    "noAccountLinkedToYourProfileFound": "Aucun compte lié à votre profil trouvé",
-    "management": "Gestion",
-    "comingSoon": "Bientôt disponible !",
-    "connectionError": "Une erreur s'est produite. Veuillez vérifier votre connexion internet et réessayer.",
-    "connectionErrorRelaunch": "Une erreur est survenue. Veuillez vérifier votre connexion internet et relancer l'application.",
-    "updatedAt": "Mis à jour à {time}",
-    "@updatedAt": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
+    "warHistoryAverageMembers" : "~{members} membres par guerre",
+"@warHistoryAverageMembers" : {
+    "placeholders": {
+        "members": {
+            "type": "int"
         }
     }
+},
+"warLog": "Journal",
+"publicWarLog": "Journal de guerre public",
+"privateWarLog": "Journal de guerre privé",
+"startsIn": "Début dans {time}",
+"@startsIn": {
+    "placeholders": {
+        "time": {
+            "type": "String"
+        }
+    }
+},
+"startsAt": "Débute à {time}",
+"@startsAt": {
+    "placeholders": {
+        "time": {
+            "type": "String"
+        }
+    }
+},
+"endsIn": "Fin dans {time}",
+"@endsIn": {
+    "placeholders": {
+        "time": {
+            "type": "String"
+        }
+    }
+},
+"endsAt": "Se termine à {time}",
+"@endsAt": {
+    "placeholders": {
+        "time": {
+            "type": "String"
+        }
+    }
+},
+"joinLeaveLogs": "Historique d'arrivées/départs",
+"join": "Arrivée",
+"leave": "Départ",
+"reset": "Réinitialiser",
+"leaveNumberDescription": "{number} joueurs ont quitté le clan durant la saison actuelle ({date}).",
+"@leaveNumberDescription": {
+    "placeholders": {
+        "number": {
+            "type": "int"
+        },
+        "date": {
+            "type": "String"
+        }
+    }
+},
+"joinNumberDescription": "{number} joueurs ont rejoint le clan durant la saison actuelle ({date}).",
+"@joinNumberDescription": {
+    "placeholders": {
+        "number": {
+            "type": "int"
+        },
+        "date": {
+            "type": "String"
+        }
+    }
+},
+"joinLeaveDifferenceUpDescription": "Ton clan a gagné {number} nouveaux membres durant la saison actuelle ({date}).",
+"@joinLeaveDifferenceUpDescription": {
+    "description": "Number of new members gained by the clan this season.",
+    "placeholders": {
+        "number": {
+            "type": "int"
+        },
+        "date": {
+            "type": "String"
+        }
+    }
+},
+"joinLeaveDifferenceDownDescription": "Ton clan a perdu {number} membres durant la saison actuelle ({date}).",
+"@joinLeaveDifferenceDownDescription": {
+    "placeholders": {
+        "number": {
+            "type": "int"
+        },
+        "date": {
+            "type": "String"
+        }
+    }
+},
+"joinLeaveDifferenceEqualDescription": "Ton clan a maintenu son nombre de membres durant la saison actuelle ({date}).",
+"@joinLeaveDifferenceEqualDescription": {
+    "placeholders": {
+        "date": {
+            "type": "String"
+        }
+    }
+},
+"leftOnAt": "Est parti le {date} à {time}.",
+"@leftOnAt": {
+    "placeholders": {
+        "date": {
+            "type": "String"
+        },
+        "time": {
+            "type": "String"
+        }
+    }
+},
+"joinedOnAt": "A rejoint le {date} à {time}.",
+"@joinedOnAt": {
+    "placeholders": {
+        "date": {
+            "type": "String"
+        },
+        "time": {
+            "type": "String"
+        }
+    }
+},
+"statistics": "Statistiques",
+"stars": "Étoiles",
+"starsSmall": "étoiles",
+"numberOfStars": "Nombre d'étoiles",
+"destructionRate": "Taux de destruction",
+"events": "Attaques",
+"team": "Équipes",
+"myTeam": "Mon équipe",
+"enemiesTeam": "Ennemis",
+"defense": "Défense",
+"defenses": "Défenses",
+"attack": "Attaque",
+"attacks": "Attaques",
+"notUsed": "non faite",
+"victory": "Victoire",
+"defeat": "Défaite",
+"draw": "Égalité",
+"perfectWar": "Perf map",
+"newest": "Plus récente",
+"oldest": "Plus ancienne",
+"warEnded": "Terminée",
+"preparation": "Préparation",
+"isNotInWar": "{clan} n'est pas en guerre.",
+"@isNotInWar": {
+    "placeholders": {
+        "clan": {
+            "type": "String"
+        }
+    }
+},
+"warLogIsClosed": "{clan} a son journal de guerre privé.",
+"@warLogIsClosed": {
+    "placeholders": {
+        "clan": {
+            "type": "String"
+        }
+    }
+},
+"askForWar": "Contactez le chef ou un adjoint pour lancer une guerre.",
+"askForWarLogOpening": "Contactez un chef ou un adjoint pour ouvrir le journal de guerre.",
+"warLogClosed": "Le journal de guerre est privé.",
+"rounds": "Tours",
+"noDataAvailableForThisWar": "Aucune donnée disponible pour cette guerre",
+"stateOfTheWar": "État de la guerre",
+"starsNeededToTakeTheLead": "{clan} a besoin de {star} étoile(s) supplémentaire(s) ou {star2} étoiles et {percent}% pour prendre l'avantage.",
+"@starsNeededToTakeTheLead": {
+    "placeholders": {
+        "clan": {
+            "type": "String"
+        },
+        "star": {
+            "type": "int"
+        },
+        "star2": {
+            "type": "int"
+        },
+        "percent": {
+            "type": "String"
+        }
+    }
+},
+"starsAndPercentNeededToTakeTheLead": "{clan} a besoin de {percent}% ou 1 étoile supplémentaire pour prendre l'avantage",
+"@starsAndPercentNeededToTakeTheLead": {
+    "placeholders": {
+        "clan": {
+            "type": "String"
+        },
+        "percent": {
+            "type": "String"
+        }
+    }
+},
+"clanDraw": "Les deux clans sont à égalité",
+"fastCalculator": "Calculatrice rapide",
+"fastCalculatorAnswer": "Pour obtenir un taux de destruction de {percentNeeded}%, un total de {result}% est nécessaire.",
+"@fastCalculatorAnswer": {
+    "placeholders": {
+        "percentNeedeed": {
+            "type": "String"
+        },
+        "result": {
+            "type": "String"
+        }
+    }
+},
+"teamSize": "Taille de l'équipe",
+"neededOverall": "% total nécessaire",
+"calculate": "Calculer",
+"warStats": "Statistiques de guerre",
+"membersStats": "Statistiques des membres",
+"clanWarLeague": "Ligue de clan",
+"cwlRank": "Ton clan est actuellement classé numéro {rank}.",
+"@cwlRank": {
+    "placeholders": {
+        "rank": {
+            "type": "int"
+        }
+    }
+},
+"cwlStars": "Ton clan a un total de {stars} étoiles.",
+"@cwlStars": {
+    "placeholders": {
+        "stars": {
+            "type": "int"
+        }
+    }
+},
+"cwlMissingStarsFromNext": "Ton clan a besoin de {stars} étoiles pour rattraper le clan suivant.",
+"@cwlMissingStarsFromNext": {
+    "placeholders": {
+        "stars": {
+            "type": "int"
+        }
+    }
+},
+"cwlMissingStarsFromFirst": "Ton clan a besoin de {stars} étoiles pour rattraper le premier.",
+"@cwlMissingStarsFromFirst": {
+    "placeholders": {
+        "stars": {
+            "type": "int"
+        }
+    }
+},
+"cwlDestructionPercentage": "Ton clan a un taux de destruction de {percent}%.",
+"@cwlDestructionPercentage": {
+    "placeholders": {
+        "percent": {
+            "type": "String"
+        }
+    }
+},
+"cwlCurrentRound": "Nous sommes actuellement au tour {round}.",
+"@cwlCurrentRound": {
+    "placeholders": {
+        "round": {
+            "type": "int"
+        }
+    }
+},
+"noAccountLinkedToYourProfileFound": "Aucun compte lié à votre profil trouvé",
+"management": "Gestion",
+"comingSoon": "Bientôt disponible !",
+"connectionError": "Une erreur s'est produite. Veuillez vérifier votre connexion internet et réessayer.",
+"connectionErrorRelaunch": "Une erreur est survenue. Veuillez vérifier votre connexion internet et relancer l'application.",
+"updatedAt": "Mis à jour à {time}",
+"@updatedAt": {
+    "placeholders": {
+        "time": {
+            "type": "String"
+        }
+    }
+}
 }

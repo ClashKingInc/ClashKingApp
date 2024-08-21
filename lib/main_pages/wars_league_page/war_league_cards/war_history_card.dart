@@ -28,11 +28,10 @@ class WarHistoryCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => WarHistoryScreen(
-              clanTag: playerStats.clan!.tag,
+              clan: playerStats.clan!,
               discordUser: discordUser,
               warLogData: warLogData,
               warLogStats: warLogStats,
-              clanName: playerStats.clan!.name,
             ),
           ),
         );
@@ -56,8 +55,6 @@ class WarHistoryCard extends StatelessWidget {
                 SizedBox(width: 24),
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                           AppLocalizations.of(context)!.warHistory,
@@ -80,7 +77,7 @@ class WarHistoryCard extends StatelessWidget {
                             label: warLogStats.totalWins.toString(),
                             description: AppLocalizations.of(context)!
                                 .warHistoryWinsDescription(
-                                    warLogStats.totalWins),
+                                    warLogStats.totalWins, warLogStats.winPercentage),
                           ),
                           CustomChip(
                             icon: Container(
@@ -95,7 +92,7 @@ class WarHistoryCard extends StatelessWidget {
                             label: warLogStats.totalLosses.toString(),
                             description: AppLocalizations.of(context)!
                                 .warHistoryLossesDescription(
-                                    warLogStats.totalLosses),
+                                    warLogStats.totalLosses, warLogStats.lossPercentage),
                           ),
                           CustomChip(
                             icon: Container(
@@ -110,7 +107,7 @@ class WarHistoryCard extends StatelessWidget {
                             label: warLogStats.totalTies.toString(),
                             description: AppLocalizations.of(context)!
                                 .warHistoryDrawsDescription(
-                                    warLogStats.totalTies),
+                                    warLogStats.totalTies, warLogStats.tiePercentage),
                           ),
                           ImageChip(
                             imageUrl:
@@ -119,7 +116,7 @@ class WarHistoryCard extends StatelessWidget {
                                 .toString(),
                             description: AppLocalizations.of(context)!
                                 .warHistoryAverageWarStarsDescription(
-                                    warLogStats.averageClanStarsPerMember),
+                                    warLogStats.averageClanStarsPerMember, warLogStats.averageClanStarsPercentage.toStringAsFixed(2)),
                           ),
                           IconChip(
                             icon: LucideIcons.users,

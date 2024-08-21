@@ -5,7 +5,7 @@ class MembersWarStats {
   final Map<String, MemberWarStats> _membersMap;
 
   MembersWarStats({required List<MemberWarStats> items})
-      : _membersMap = {for (var member in items) member.tag: member};
+      : _membersMap = {for (var member in items) member.tag: member}; 
 
   MemberWarStats? getMemberByTag(String tag) {
     return _membersMap[tag];
@@ -164,6 +164,7 @@ class MembersWarStatsService {
   final String baseUrl = "https://api.clashking.xyz/war";
 
   Future<MembersWarStats> fetchWarLogsAndAnalyzeStats(String clanTag) async {
+    clanTag = clanTag.replaceFirst("#", "!");
     final response = await http.get(Uri.parse('$baseUrl/$clanTag/previous'));
 
     if (response.statusCode == 200) {

@@ -8,12 +8,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-class WarLogHistoryCard extends StatefulWidget {
+class WarLogHistoryTab extends StatefulWidget {
   final List<String> discordUser;
   final String clanTag;
   final List<WarLogDetails> warLogData;
 
-  const WarLogHistoryCard({
+  const WarLogHistoryTab({
     super.key,
     required this.discordUser,
     required this.clanTag,
@@ -21,10 +21,10 @@ class WarLogHistoryCard extends StatefulWidget {
   });
 
   @override
-  WarLogHistoryCardState createState() => WarLogHistoryCardState();
+  WarLogHistoryTabState createState() => WarLogHistoryTabState();
 }
 
-class WarLogHistoryCardState extends State<WarLogHistoryCard> {
+class WarLogHistoryTabState extends State<WarLogHistoryTab> {
   String? selectedFilter;
   String formatDate(DateTime date, BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
