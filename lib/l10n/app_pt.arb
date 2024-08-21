@@ -213,7 +213,7 @@
     "leader": "Líder",
     "coLeader": "Colíder",
     "elder": "Elder",
-    "member": "Member",
+    "member": "Membro",
     "ready": "Opted In",
     "@ready": {
         "description": "Opted In for war"
@@ -222,14 +222,14 @@
     "@unready": {
         "description": "Opted Out for war"
     },
-    "heroes": "Heroes",
-    "equipment": "Equipments",
-    "troops": "Troops",
+    "heroes": "Heróis",
+    "equipment": "Equipamentos",
+    "troops": "Tropas",
     "superTroops": "Super Troops",
     "activeSuperTroops": "Active Super Troops",
     "pets": "Pets",
     "siegeMachines": "Siege Machines",
-    "spells": "Spells",
+    "spells": "Feitiços",
     "achievements": "Achievements",
     "byDay": "By Day",
     "@byDay": {
@@ -239,7 +239,7 @@
     "@byMonth": {
         "description": "Shows stats by season"
     },
-    "dayIndex": "Day {index}",
+    "dayIndex": "Dia {index}",
     "@dayIndex": {
         "placeholders": {
             "index": {
@@ -247,7 +247,7 @@
             }
         }
     },
-    "indexDays": "{index} days",
+    "indexDays": "{index} dias",
     "@indexDays": {
         "placeholders": {
             "index": {
@@ -255,10 +255,10 @@
             }
         }
     },
-    "bestTrophies": "Best Trophies",
+    "bestTrophies": "Melhores troféus",
     "mostAttacks": "Most Attacks",
-    "lastSeason": "Last Season",
-    "bestRank": "Best Global Rank",
+    "lastSeason": "Última temporada",
+    "bestRank": "Melhor Rank Global",
     "daysLeft": "{days} days left",
     "@daysLeft": {
         "placeholders": {
@@ -374,7 +374,7 @@
     "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
     "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
     "toDoList": "To do list",
-    "lastActive": "Last active: {date}",
+    "lastActive": "Última vez ativo: {date}",
     "@lastActive": {
         "placeholders": {
             "date": {
@@ -382,7 +382,7 @@
             }
         }
     },
-    "numberAccounts": "{number} accounts",
+    "numberAccounts": "{number} contas",
     "@numberAccounts": {
         "placeholders": {
             "number": {
@@ -391,7 +391,7 @@
         },
         "description": "Number of accounts (ex : 4 accounts)"
     },
-    "numberActiveAccounts": "{number} active accounts",
+    "numberActiveAccounts": "{number} contas ativas",
     "@numberActiveAccounts": {
         "placeholders": {
             "number": {
@@ -399,7 +399,7 @@
             }
         }
     },
-    "numberInactiveAccounts": "{number} inactive accounts",
+    "numberInactiveAccounts": "{number} contas inativas",
     "@numberInactiveAccounts": {
         "placeholders": {
             "number": {
@@ -407,10 +407,10 @@
             }
         }
     },
-    "activeAccounts": "Active accounts",
-    "inactiveAccounts": "Inactive accounts",
-    "noInactiveAccounts": "No inactive accounts.",
-    "noActiveAccounts": "No active accounts.",
+    "activeAccounts": "Contas ativas",
+    "inactiveAccounts": "Contas inativas",
+    "noInactiveAccounts": "Sem contas inativas.",
+    "noActiveAccounts": "Sem contas ativas.",
     "todoExplanation_title": "Task Calculation",
     "todoExplanation_intro": "The task completion percentage is calculated based on the following activities with specific weightings:",
     "todoExplanation_legends_title": "Legend League:",
@@ -424,17 +424,17 @@
     "todoExplanation_passAndGames_title": "Season Pass & Clan Games:",
     "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
     "todoExplanation_conclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
-    "worst": "Worst",
+    "worst": "Pior",
     "@worst": {
         "description": "Worst end of day trophies"
     },
-    "best": "Best",
+    "best": "Melhor",
     "@best": {
         "description": "Best end of day trophies"
     },
     "total": "Total",
-    "heroesEquipments": "Heroes equipments",
-    "daysAgo": "{days} days ago",
+    "heroesEquipments": "Equipamentos dos heróis",
+    "daysAgo": "{days} dias atrás",
     "@daysAgo": {
         "placeholders": {
             "days": {
@@ -442,7 +442,7 @@
             }
         }
     },
-    "dayAgo": "{day} day ago",
+    "dayAgo": "{day} dia atrás",
     "@dayAgo": {
         "placeholders": {
             "day": {
@@ -450,7 +450,7 @@
             }
         }
     },
-    "hourAgo": "{hour} hour ago",
+    "hourAgo": "{hour} hora atrás",
     "@hourAgo": {
         "placeholders": {
             "hour": {
@@ -458,7 +458,7 @@
             }
         }
     },
-    "hoursAgo": "{hours} hours ago",
+    "hoursAgo": "{hours} horas atrás",
     "@hoursAgo": {
         "placeholders": {
             "hours": {
@@ -466,7 +466,7 @@
             }
         }
     },
-    "minuteAgo": "{minute} minute ago",
+    "minuteAgo": "{minute} minuto atrás",
     "@minuteAgo": {
         "placeholders": {
             "minute": {
@@ -474,7 +474,7 @@
             }
         }
     },
-    "minutesAgo": "{minutes} minutes ago",
+    "minutesAgo": "{minutes} minutos atrás",
     "@minutesAgo": {
         "placeholders": {
             "minutes": {
@@ -482,7 +482,7 @@
             }
         }
     },
-    "secondAgo": "{seconds}s ago",
+    "secondAgo": "{seconds}s atrás",
     "@secondAgo": {
         "placeholders": {
             "seconds": {
@@ -490,13 +490,13 @@
             }
         }
     },
-    "justNow": "Just Now",
-    "trophiesByMonth": "Trophies by month",
-    "trophiesBySeason": "Trophies by season",
+    "justNow": "Agora mesmo",
+    "trophiesByMonth": "Troféus por mês",
+    "trophiesBySeason": "Troféus por temporada",
     "eosTrophies": "End Of Season Trophies",
-    "searchClan": "Search clan",
+    "searchClan": "Procurar clã",
     "nameOrTagClan": "Clan's name or tag",
-    "noResult": "No result.",
+    "noResult": "Sem resultado.",
     "filters": "Filters",
     "whatever": "Whatever",
     "@whatever": {
@@ -547,7 +547,7 @@
             }
         }
     },
-    "townHallLevelLevel": "TownHall {level}",
+    "townHallLevelLevel": "Centro de vila {level}",
     "@townHallLevelLevel": {
         "placeholders": {
             "level": {
@@ -555,7 +555,7 @@
             }
         }
     },
-    "byNumberOfWars": "By number of wars",
+    "byNumberOfWars": "Por número de guerras",
     "@byNumberOfWars": {
         "description": "filter by number of wars"
     },
@@ -567,14 +567,14 @@
     "@byDateRange": {
         "description": "filter by date range"
     },
-    "selectSeason": "Select a season",
+    "selectSeason": "Selecione a temporada",
     "@selectSeason": {
         "description": "Ask player to select a season"
     },
-    "year": "Year",
-    "month": "Month",
-    "allTownHalls": "All TownHalls",
-    "seasonDate": "{date} season",
+    "year": "Ano",
+    "month": "Mês",
+    "allTownHalls": "Todos os centros de vila",
+    "seasonDate": "Temporada {date}",
     "@seasonDate": {
         "description": "Example : August 2024 season",
         "placeholders": {
@@ -583,7 +583,7 @@
             }
         }
     },
-    "lastXwars": "Last {number} wars",
+    "lastXwars": "Últimas {number} guerras",
     "@lastXwars": {
         "description": "Example : Shows the last 25 wars",
         "placeholders": {
@@ -592,30 +592,30 @@
             }
         }
     },
-    "friendly": "Friendly",
+    "friendly": "Amigável",
     "@friendly": {
         "description": "Friendly war"
     },
     "cwl": "CWL",
-    "random": "Random",
+    "random": "Aleatório",
     "@random": {
         "description": "Random/basic war (not friendly or cwl)"
     },
     "builderBaseTrophies": "BB Trophies",
-    "donations": "Donations",
-    "donationsReceived": "Donations Received",
+    "donations": "Doações",
+    "donationsReceived": "Doações recebidas",
     "donationsRatio": "Donation Ratio",
-    "trophies": "Trophies",
-    "always": "Always",
-    "never": "Never",
-    "unknown": "Unknown",
-    "oncePerWeek": "1/week",
-    "twicePerWeek": "2/week",
-    "rarely": "Rarely",
-    "warLeague": "War/League",
-    "war": "War",
-    "league": "League",
-    "wars": "Wars",
+    "trophies": "Troféus",
+    "always": "Sempre",
+    "never": "Nunca",
+    "unknown": "Desconhecido",
+    "oncePerWeek": "1/semana",
+    "twicePerWeek": "2/semana",
+    "rarely": "Raramente",
+    "warLeague": "Guerra/Liga",
+    "war": "Guerra",
+    "league": "Liga",
+    "wars": "Guerras",
     "ongoingWar": "Ongoing war",
     "ongoingCwl": "Ongoing CWL",
     "cantOpenLink": "We can't open this link.",
@@ -688,7 +688,7 @@
             }
         }
     },
-    "endsIn": "Ends in {time}",
+    "endsIn": "Termina em {time}",
     "@endsIn": {
         "placeholders": {
             "time": {
@@ -696,7 +696,7 @@
             }
         }
     },
-    "endsAt": "Ends at {time}",
+    "endsAt": "Termina a {time}",
     "@endsAt": {
         "placeholders": {
             "time": {
@@ -705,8 +705,8 @@
         }
     },
     "joinLeaveLogs": "Join/Leave Logs",
-    "join": "Join",
-    "leave": "Leave",
+    "join": "Entrar",
+    "leave": "Sair",
     "reset": "Reset",
     "leaveNumberDescription": "{number} players left the clan during the current season ({date}).",
     "@leaveNumberDescription": {
