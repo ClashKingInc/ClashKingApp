@@ -1,7 +1,7 @@
 {
     "creatorCode": "Creator Code : ClashKing",
     "signInWithDiscord": "Logga in med Discord",
-    "guestMode": "Guest Mode",
+    "guestMode": "Gäst Läge",
     "needHelpJoinDiscord": "Need help? Join us on Discord.",
     "createGuestProfile": "Create your guest profile",
     "doesNotExist": "{tag} does not exist.",
