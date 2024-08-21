@@ -113,7 +113,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     if (locale.scriptCode != null) {
       await storePrefs('scriptCode', locale.scriptCode!);
     }
-    print('Changed Locale: $_locale');
     notifyListeners();
   }
 

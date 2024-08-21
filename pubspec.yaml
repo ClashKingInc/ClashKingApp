@@ -148,6 +148,10 @@ flutter_native_splash:
   image_dark: assets/icons/app_icon_dark_mode.png
   android: true
   ios: true
+  image_ios: assets/icons/splashIOSlight.png
+  color_ios: "#ffffff"
+  image_dark_ios: assets/icons/splashIOSdark.png
+  color_dark_ios: "#000000"
   android_gravity: center
   ios_content_mode: scaleAspectFit
   web: false

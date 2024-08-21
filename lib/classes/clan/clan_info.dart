@@ -1,4 +1,5 @@
 import 'package:clashkingapp/classes/clan/description/badge_urls.dart';
+import 'package:clashkingapp/classes/clan/description/member_war_stats.dart';
 import 'package:clashkingapp/classes/clan/logs/join_leave.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
 import 'dart:io';
@@ -50,6 +51,7 @@ class Clan {
   String warState = '';
   late WarLog warLog;
   late JoinLeaveClan joinLeaveClan;
+  late MembersWarStats membersWarStats;
   bool clanInitialized = false;
   bool warInitialized = false;
 
@@ -218,6 +220,7 @@ class ClanService {
           if (clanInfoResponse.statusCode == 200) {
             String responseBody = utf8.decode(clanInfoResponse.bodyBytes);
             Clan clanInfo = Clan.fromJson(jsonDecode(responseBody));
+            clanInfo.membersWarStats = await MembersWarStatsService().fetchWarLogsAndAnalyzeStats(tag);
 
             if (clanInfo.warLeague != null) {
               clanInfo.warLeague!.imageUrl =
@@ -264,7 +267,7 @@ class ClanService {
           if (response.statusCode == 200) {
             String responseBody = utf8.decode(response.bodyBytes);
             Clan updatedClan = Clan.fromJson(jsonDecode(responseBody));
-
+            updatedClan.membersWarStats = await MembersWarStatsService().fetchWarLogsAndAnalyzeStats(tag);
             if (updatedClan.warLeague != null) {
               updatedClan.warLeague!.imageUrl =
                   LeagueDataManager().getLeagueUrl(updatedClan.warLeague!.name);
