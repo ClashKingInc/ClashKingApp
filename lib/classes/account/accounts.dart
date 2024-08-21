@@ -65,7 +65,6 @@ class AccountsService {
   Future<void> initEnv() async {
     await dotenv.load(fileName: ".env");
   }
-
   Future<Accounts> fetchAccounts(User user) async {
     final transaction = Sentry.startTransaction(
       'fetchAccounts',
@@ -79,7 +78,10 @@ class AccountsService {
       // Step 1: Initialize an empty list for Account objects
       List<Account> accountsList = [];
 
-      // Step 2: Create a list of futures for each tag
+      // Step 2: Initialize a cache for clan information
+      Map<String, Clan> clanCache = {};
+
+      // Step 3: Create a list of futures for each tag
       List<Future<void>> fetchTasks = tags.map((tag) async {
         final profileSpan = transaction.startChild('fetchProfileInfo');
         ProfileInfo? profileInfo =
@@ -87,7 +89,7 @@ class AccountsService {
         profileSpan.finish(status: SpanStatus.ok());
 
         if (profileInfo != null) {
-          // Step 4: Create an Account object
+          // Create an Account object
           Account account = Account(
             profileInfo: profileInfo,
             clan: null,
@@ -96,16 +98,23 @@ class AccountsService {
           // Add the account to the list immediately
           accountsList.add(account);
 
-          // Load clanInfo in the background
+          // Check if the clan information is already in the cache
           if (profileInfo.clan != null) {
-            fetchClanWarInfoInBackground(
-                profileInfo.clan!.tag, account, transaction);
-            //fetchClanCapitalInfoInBackground(profileInfo.clan!.tag, account, transaction);
+            String clanTag = profileInfo.clan!.tag;
+            if (clanCache.containsKey(clanTag)) {
+              // If cached, use the cached clan info
+              account.clan = clanCache[clanTag];
+            } else {
+              // If not cached, fetch the clan info and store it in the cache
+              Clan clanInfo = await fetchClanWarInfoInBackground(
+                  clanTag, account, transaction);
+              clanCache[clanTag] = clanInfo;
+            }
           }
         }
       }).toList();
 
-      // Step 3: Use Future.wait to run all fetch tasks concurrently
+      // Step 4: Use Future.wait to run all fetch tasks concurrently
       final fetchSpan = transaction.startChild('Future.wait');
       await Future.wait(fetchTasks);
       fetchSpan.finish(status: SpanStatus.ok());
@@ -113,7 +122,7 @@ class AccountsService {
       // Fetch selectedTag from SharedPreferences
       String? selectedTag = await getPrefs('selectedTag');
 
-      // Step 4: Sort the accountsList with the selectedTag at the top
+      // Step 5: Sort the accountsList with the selectedTag at the top
       final sortSpan = transaction.startChild('sortAccounts');
       accountsList.sort((a, b) {
         if (a.profileInfo.tag == selectedTag) {
@@ -132,7 +141,7 @@ class AccountsService {
       });
       sortSpan.finish(status: SpanStatus.ok());
 
-      // Step 5: Create an Accounts object
+      // Step 6: Create an Accounts object
       final accounts = Accounts(accounts: accountsList, tags: tags);
 
       final todoSpan = transaction.startChild('fetchToDo');
@@ -142,7 +151,7 @@ class AccountsService {
       accounts.selectedTag =
           ValueNotifier<String?>(accounts.accounts.first.profileInfo.tag);
 
-      // Step 6: Finish the transaction and return the Accounts object
+      // Step 7: Finish the transaction and return the Accounts object
       transaction.finish(status: SpanStatus.ok());
       return accounts;
     } catch (exception, stackTrace) {
@@ -158,7 +167,7 @@ class AccountsService {
     }
   }
 
-  void fetchClanWarInfoInBackground(
+  Future<Clan> fetchClanWarInfoInBackground(
       String clanTag, Account account, ISentrySpan transaction) async {
     final clanSpan = transaction.startChild('fetchClanInfo');
     try {
@@ -167,6 +176,7 @@ class AccountsService {
       clanSpan.finish(status: SpanStatus.ok());
       clanInfo.clanInitialized = true;
       clanInfo.warInitialized = true;
+      return clanInfo;
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({
         'custom_message': 'Failed to load clan info',
@@ -175,6 +185,7 @@ class AccountsService {
       });
       clanSpan.finish(status: SpanStatus.internalError());
       Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+      rethrow;
     }
   }
 }

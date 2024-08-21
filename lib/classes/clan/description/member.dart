@@ -49,4 +49,9 @@ class Member {
       builderBaseLeague: BuilderBaseLeague.fromJson(json['builderBaseLeague']),
     );
   }
+
+  Member createMemberFromJson(Map<String, dynamic> json) {
+    Member member = Member.fromJson(json);
+    return member;
+  }
 }

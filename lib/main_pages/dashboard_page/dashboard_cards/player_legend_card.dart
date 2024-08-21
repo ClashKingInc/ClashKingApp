@@ -20,7 +20,7 @@ class PlayerLegendCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!playerLegendData.isInLegend) {
+    if (!playerLegendData.isInLegend || playerLegendData.firstTrophies == "0") {
       return GestureDetector(
         onTap: () {
           Navigator.push(

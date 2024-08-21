@@ -176,6 +176,8 @@ class ClanMembersState extends State<ClanMembers> {
           ...filteredMembers.asMap().entries.map((entry) {
             int index = entry.key + 1;
             Member member = entry.value;
+            var memberWarStats = widget.clanInfo.membersWarStats.getMemberByTag(member.tag);
+            if(memberWarStats != null) print(memberWarStats.toString());
             return GestureDetector(
               onTap: () async {
                 final navigator = Navigator.of(context);

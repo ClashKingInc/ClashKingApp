@@ -54,6 +54,17 @@ factory LegendDay.fromJson(String key, Map<String, dynamic> json) {
             .toList() ??
         [];
 
+    // Vérifiez si "num_attacks" est en dehors de l'intervalle 0-8
+    if (json["num_attacks"] is int && (json["num_attacks"] < 0 || json["num_attacks"] > 8)) {
+      // Supprimez la première attaque si la condition est remplie
+      if (attacks.isNotEmpty) {
+        attacks.removeAt(0);
+      }
+      if (newAttacks.isNotEmpty) {
+        newAttacks.removeAt(0);
+      }
+    }
+
     var legendDay = LegendDay(
       date: date,
       numDefenses: countAttacksDefenses(defenses),

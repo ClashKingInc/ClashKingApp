@@ -15,8 +15,7 @@ class WarLog {
                 WarLogDetails.fromJson(itemJson as Map<String, dynamic>))
             .toList()
         : [];
-    return WarLog(
-        items: itemList.cast<WarLogDetails>()); // Placeholder for warLogStats
+    return WarLog(items: itemList.cast<WarLogDetails>());
   }
 }
 
@@ -29,6 +28,13 @@ class WarLogStats {
   final double averageClanStarsPerMember;
   final double averageOpponentDestruction;
   final double averageOpponentStarsPerMember;
+  final double averageAttacksPerMember;
+  final double winPercentage;
+  final double lossPercentage;
+  final double tiePercentage;
+  final double averageDestructionDifference;
+  final double averageClanStarsPercentage;
+  final double averageOpponentStarsPercentage;
 
   WarLogStats({
     required this.totalWins,
@@ -39,24 +45,37 @@ class WarLogStats {
     required this.averageClanStarsPerMember,
     required this.averageOpponentDestruction,
     required this.averageOpponentStarsPerMember,
+    required this.averageAttacksPerMember,
+    required this.winPercentage,
+    required this.lossPercentage,
+    required this.tiePercentage,
+    required this.averageDestructionDifference,
+    required this.averageClanStarsPercentage,
+    required this.averageOpponentStarsPercentage,
   });
 
-  factory WarLogStats.fromJson(Map<String, dynamic> json) {
-    return WarLogStats(
-      totalWins: int.parse(json['totalWins'] ?? '0'),
-      totalLosses: int.parse(json['totalLosses'] ?? '0'),
-      totalTies: int.parse(json['totalTies'] ?? '0'),
-      averageMembers: int.parse(json['averageMembers'] ?? '0'),
-      averageClanDestruction:
-          double.parse(json['averageClanDestruction'] ?? '0'),
-      averageClanStarsPerMember:
-          double.parse(json['averageClanStarsPerMember'] ?? '0'),
-      averageOpponentDestruction:
-          double.parse(json['averageOpponentDestruction'] ?? '0'),
-      averageOpponentStarsPerMember:
-          double.parse(json['averageOpponentStarsPerMember'] ?? '0'),
-    );
+  // toString method to print the object as a string
+  @override
+  String toString() {
+    return 'WarLogStats: {'
+        'totalWins: $totalWins, '
+        'totalLosses: $totalLosses, '
+        'totalTies: $totalTies, '
+        'averageMembers: $averageMembers, '
+        'averageClanDestruction: $averageClanDestruction, '
+        'averageClanStarsPerMember: $averageClanStarsPerMember, '
+        'averageOpponentDestruction: $averageOpponentDestruction, '
+        'averageOpponentStarsPerMember: $averageOpponentStarsPerMember, '
+        'averageAttacksPerMember: $averageAttacksPerMember, '
+        'winPercentage: $winPercentage, '
+        'lossPercentage: $lossPercentage, '
+        'tiePercentage: $tiePercentage, '
+        'averageDestructionDifference: $averageDestructionDifference, '
+        'averageClanStarsPercentage: $averageClanStarsPercentage, '
+        'averageOpponentStarsPercentage: $averageOpponentStarsPercentage'
+        '}';
   }
+
 }
 
 class WarLogDetails {
@@ -150,10 +169,12 @@ class WarLogStatsService {
     int totalLosses = 0;
     int totalTies = 0;
     int totalMembers = 0;
+    int totalAttacks = 0;
     double clanTotalDestruction = 0;
     int clanTotalStars = 0;
     double opponentTotalDestruction = 0;
     int opponentTotalStars = 0;
+    int maxPossibleStars = 0;
 
     for (var log in warLogs) {
       if (log.attacksPerMember == 2) {
@@ -168,7 +189,10 @@ class WarLogStatsService {
             totalTies++;
             break;
         }
+        int possibleStarsForThisWar = log.teamSize * 3;
+        maxPossibleStars += possibleStarsForThisWar;
         totalMembers += log.teamSize;
+        totalAttacks += log.clan.attacks;
         clanTotalDestruction += log.clan.destructionPercentage;
         clanTotalStars += log.clan.stars;
         opponentTotalDestruction += log.opponent.destructionPercentage;
@@ -186,6 +210,17 @@ class WarLogStatsService {
         logCount > 0 ? opponentTotalDestruction / logCount : 0;
     double averageOpponentStarsPerMember =
         totalMembers > 0 ? opponentTotalStars / totalMembers : 0;
+    double averageClanStarsPercentage =
+        maxPossibleStars > 0 ? (clanTotalStars / maxPossibleStars) * 100 : 0;
+    double averageOpponentStarsPercentage =
+        maxPossibleStars > 0 ? (opponentTotalStars / maxPossibleStars) * 100 : 0;
+    double averageAttacksPerMember =
+        totalMembers > 0 ? totalAttacks / totalMembers : 0;
+    double winPercentage = logCount > 0 ? (totalWins / logCount) * 100 : 0;
+    double lossPercentage = logCount > 0 ? (totalLosses / logCount) * 100 : 0;
+    double tiePercentage = logCount > 0 ? (totalTies / logCount) * 100 : 0;
+    double averageDestructionDifference =
+        averageClanDestruction - averageOpponentDestruction;
 
     return WarLogStats(
       totalWins: totalWins,
@@ -200,6 +235,17 @@ class WarLogStatsService {
           double.parse(averageOpponentDestruction.toStringAsFixed(0)),
       averageOpponentStarsPerMember:
           double.parse(averageOpponentStarsPerMember.toStringAsFixed(1)),
+      averageClanStarsPercentage:
+          double.parse(averageClanStarsPercentage.toStringAsFixed(1)),
+      averageOpponentStarsPercentage:
+          double.parse(averageOpponentStarsPercentage.toStringAsFixed(1)),
+      averageAttacksPerMember:
+          double.parse(averageAttacksPerMember.toStringAsFixed(1)),
+      winPercentage: double.parse(winPercentage.toStringAsFixed(1)),
+      lossPercentage: double.parse(lossPercentage.toStringAsFixed(1)),
+      tiePercentage: double.parse(tiePercentage.toStringAsFixed(1)),
+      averageDestructionDifference:
+          double.parse(averageDestructionDifference.toStringAsFixed(1)),
     );
   }
 }
