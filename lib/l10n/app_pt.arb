@@ -51,12 +51,12 @@
     "faqSubtitle": "Perguntas frequentes",
     "faqIsThisFromSupercell": "Esta aplicação é da Supercell?",
     "faqFanContentPolicy": "Este material não é oficial e não é endossado pela Supercell. Para obter mais informações, consulte a Política de Conteúdo de Fãs da Supercell: www.supercell.com/fan-content-policy",
-    "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
+    "faqWhyNotAccurate": "Por que razão os dados são por vezes imprecisos ou inexistentes?",
     "faqClanNotTracked": "Clã não rastreado",
     "faqClanNotTrackedAnswer": "ClashKing can retrieve this info only if the clan is tracked. If your clan isn't tracked, please invite ClashKing Bot to your Discord server and use the command /addclan. We are working on making this feature available in the app soon.",
     "faqTrackingDown": "Tracking down",
-    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.",
-    "faqApiLimitation": "Clash of Clans API limitation",
+    "faqTrackingDownAnswer": "O rastreio pode parar de funcionar por um certo período. Esta é a razão ao qual pode existir falhas nos seus dados. Estamos a trabalhar para melhorar esta situação.",
+    "faqApiLimitation": "Limitação da API do Clash of Clans",
     "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your buildings levels.",
     "faqSupportWork": "Como posso ajudar o seu trabalho?",
     "faqSupportWorkAnswer": "Existem várias maneiras de nos suportar:",
@@ -421,9 +421,9 @@
     "todoExplanation_clanWars": "Weight of 2 points per account, 1 attack = 1 point.",
     "todoExplanation_cwl_title": "Liga de Guerra de Clãs:",
     "todoExplanation_cwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
-    "todoExplanation_passAndGames_title": "Season Pass & Clan Games:",
+    "todoExplanation_passAndGames_title": "Passe de temporada & Jogos do Clã:",
     "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
-    "todoExplanation_conclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
+    "todoExplanation_conclusion": "A percentagem final é calculada a dividir o total de ações concluídas durante os eventos em curso pelo total de ações necessárias. As contas inativas por mais de 14 dias são excluídas do cálculo.",
     "worst": "Pior",
     "@worst": {
         "description": "Worst end of day trophies"
@@ -495,10 +495,10 @@
     "trophiesBySeason": "Troféus por temporada",
     "eosTrophies": "Troféus de fim de temporada",
     "searchClan": "Procurar clã",
-    "nameOrTagClan": "Clan's name or tag",
+    "nameOrTagClan": "Nome do clã ou tag",
     "noResult": "Sem resultado.",
     "filters": "Filtros",
-    "whatever": "Whatever",
+    "whatever": "Qualquer que seja",
     "@whatever": {
         "description": "Whatever the value"
     },
@@ -506,14 +506,14 @@
     "@any": {
         "description": "Any value is accepted"
     },
-    "notSet": "Not set",
+    "notSet": "Não definido",
     "@notSet": {
         "description": "Filter value is not set"
     },
-    "warFrequency": "War frequency",
+    "warFrequency": "Frequência de guerra",
     "minimumMembers": "Membros mínimos",
     "maximumMembers": "Membros máximos",
-    "location": "Location",
+    "location": "Localização",
     "minimumClanPoints": "Pontos de clã mínimos",
     "minimumClanLevel": "Nível mínimo de clã",
     "noClan": "Sem clã",
@@ -523,12 +523,12 @@
     "@opened": {
         "description": "Clan is opened"
     },
-    "inviteOnly": "Invite Only",
+    "inviteOnly": "Convite apenas",
     "cancel": "Cancelar",
     "clan": "Clã",
     "clans": "Clãs",
     "members": "Membros",
-    "role": "Role",
+    "role": "Cargo",
     "expLevel": "Nível de experiência",
     "townHallLevel": "Nível do CV",
     "thLevel": "CV{level}",
@@ -616,12 +616,12 @@
     "war": "Guerra",
     "league": "Liga",
     "wars": "Guerras",
-    "ongoingWar": "Ongoing war",
-    "ongoingCwl": "Ongoing CWL",
+    "ongoingWar": "Guerra em curso",
+    "ongoingCwl": "LGC em curso",
     "cantOpenLink": "Não podemos abrir este link.",
-    "notInWar": "Not in war",
+    "notInWar": "Não está em guerra",
     "warHistory": "Histórico de guerra",
-    "warHistoryWinsDescription": "We tracked the data of {wins} war wins for your clan.",
+    "warHistoryWinsDescription": "Nós rastreamos os dados de {wins} vitórias de guerras para o seu clã.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
@@ -629,7 +629,7 @@
             }
         }
     },
-    "warHistoryLossesDescription": "We tracked the data of {losses} war losses for your clan.",
+    "warHistoryLossesDescription": "Nós rastreamos os dados de {losses} derrotas de guerras para o seu clã.",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
@@ -637,7 +637,7 @@
             }
         }
     },
-    "warHistoryDrawsDescription": "We tracked the data of {draws} war draws for your clan.",
+    "warHistoryDrawsDescription": "Nós rastreamos os dados de {draws} empates de guerras para o seu clã.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
@@ -645,7 +645,7 @@
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating per war we've tracked.",
+    "warHistoryAverageMembersDescription": "O seu clã tem uma média de {members} membros participantes por guerra que rastreamos.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -653,7 +653,7 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription": "Your clan has an average of {stars} stars per attack at the end of the wars we've tracked.",
+    "warHistoryAverageWarStarsDescription": "O seu clã tem uma média de {stars} estrelas por ataque no final das guerras que rastreamos.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -661,7 +661,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of the wars we've tracked.",
+    "warHistoryAverageHitRateDescription": "O seu clã tem uma taxa média de destruição de {percent} no final das guerras que rastreamos.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
@@ -669,8 +669,8 @@
             }
         }
     },
-    "warLog": "War Log",
-    "publicWarLog": "Public War Log",
+    "warLog": "Registo de guerra",
+    "publicWarLog": "Registo de Guerra Público",
     "privateWarLog": "Registo de Guerra privado",
     "startsIn": "Começa em {time}",
     "@startsIn": {
