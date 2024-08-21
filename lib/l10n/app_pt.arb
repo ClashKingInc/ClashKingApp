@@ -71,10 +71,10 @@
     "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
     "faqNeedHelpAnswer": "You can join our Discord server to ask for help or provide feedback, or you can email us at devs@clashkingbot.com. Please write in English or French only.",
     "faqSendEmail": "Send an email",
-    "faqJoinDiscord": "Join our Discord Server",
+    "faqJoinDiscord": "Entra no nosso servidor de Discord",
     "helpUsTranslate": "Help us translate",
     "suggestFeatures": "Suggest features",
-    "thankYou": "Thank you!",
+    "thankYou": "Obrigado!",
     "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
     "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
     "helpTranslateButton": "Help Translate on Crowdin",
@@ -90,12 +90,12 @@
     "hourIndicator": "h",
     "minIndicator": "m",
     "noDataAvailable": "No data available.",
-    "close": "Close",
-    "closed": "Closed",
+    "close": "Fechar",
+    "closed": "Fechado",
     "@closed": {
         "description": "WarLog closed"
     },
-    "error": "Error",
+    "error": "Erro",
     "player": "Player",
     "notFoundOrNotLinkedToOurSystem": "{player} not found or not linked to our system.",
     "@notFoundOrNotLinkedToOurSystem": {
@@ -110,30 +110,30 @@
     "noValueEntered": "No value entered",
     "manage": "Manage",
     "enterPlayerTag": "Enter a player tag",
-    "add": "Add",
+    "add": "Adicionar",
     "@add": {
         "description": "Add an account"
     },
-    "delete": "Delete",
+    "delete": "Apagar",
     "@delete": {
         "description": "Delete an account"
     },
-    "addAccount": "Add account",
-    "deleteAccount": "Delete account",
+    "addAccount": "Adicionar conta",
+    "deleteAccount": "Apagar conta",
     "playerTagNotExists": "The player tag entered does not exist.",
     "accountAlreadyLinked": "The player tag is already linked to someone.",
     "failedToAddTryAgain": "Failed to add link. Please try again later.",
     "failedToDeleteTryAgain": "Failed to delete link. Please try again later.",
-    "search": "Search",
+    "search": "Procurar",
     "@search": {
         "description": "Search for a player or a clan"
     },
-    "warning": "Warning",
-    "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
+    "warning": "Aviso",
+    "exitAppToOpenClash": "Está prestes a sair da aplicação para abrir Clash of Clans.",
     "tagOrNamePlayer": "Player's tag or name",
     "searchPlayer": "Search player",
     "nameOrTagPlayer": "Player's name or tag",
-    "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+    "playerClanDescription": "O seu clã é \"{clan}\" ({tag}).",
     "@playerClanDescription": {
         "placeholders": {
             "clan": {
@@ -166,7 +166,7 @@
             }
         }
     },
-    "playerWarStarsDescription": "You have {stars} war stars.",
+    "playerWarStarsDescription": "Tem {stars} estrelas de guerra.",
     "@playerWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -174,7 +174,7 @@
             }
         }
     },
-    "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+    "playerTrophiesDescription": "Tem {trophies} troféus. Está atualmente em {league}.",
     "@playerTrophiesDescription": {
         "placeholders": {
             "trophies": {
@@ -185,7 +185,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription": "Your town hall level is {level}.",
+    "playerTownHallLevelDescription": "O seu centro de vila é {level}.",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
@@ -206,12 +206,12 @@
     },
     "dashboard": "Dashboard",
     "homeBase": "Home Base",
-    "th": "TH",
+    "th": "CV",
     "builderBase": "Builder Base",
     "bh": "BH",
     "clanCapital": "Clan Capital",
-    "leader": "Leader",
-    "coLeader": "Co-Leader",
+    "leader": "Líder",
+    "coLeader": "Colíder",
     "elder": "Elder",
     "member": "Member",
     "ready": "Opted In",
