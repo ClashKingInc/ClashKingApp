@@ -1,9 +1,8 @@
 import 'package:clashkingapp/classes/clan/capital/raids_history.dart';
 import 'package:clashkingapp/classes/clan/description/badge_urls.dart';
-import 'package:clashkingapp/classes/clan/description/member_war_stats.dart';
+import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
 import 'package:clashkingapp/classes/clan/logs/join_leave.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
-import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:retry/retry.dart';
