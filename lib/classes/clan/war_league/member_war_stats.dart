@@ -161,11 +161,13 @@ class Attacks {
   final String warType;
   final int attacksExpected;
   final List<Attack> attacks;
+  int missedAttacks;
 
   Attacks({
     required this.warType,
     required this.attacksExpected,
     required this.attacks,
+    required this.missedAttacks,
   });
 }
 
@@ -262,6 +264,11 @@ class MembersWarStatsService {
     }
   }
 
+  MemberWarStats? findOpponentByTag(
+      String tag, MembersWarStats opponentWarStats) {
+    return opponentWarStats.getMemberByTag(tag);
+  }
+
   MembersWarStats _analyzeMemberStats(String clanTag, List<dynamic> wars) {
     MembersWarStats membersWarStats = MembersWarStats(items: []);
     clanTag = clanTag.replaceFirst("!", "#");
@@ -284,11 +291,14 @@ class MembersWarStatsService {
     try {
       for (var war in wars) {
         var clanData;
+        var opponentClan;
 
         if (war['clan']['tag'] == clanTag) {
           clanData = war['clan'];
+          opponentClan = war['opponent'];
         } else if (war['opponent']['tag'] == clanTag) {
           clanData = war['opponent'];
+          opponentClan = war['clan'];
         } else {
           continue;
         }
@@ -332,14 +342,30 @@ class MembersWarStatsService {
                   : int.parse(war["attacksPerMember"].toString()))
               : 1;
 
+          var opponentStats = MembersWarStats(
+              items:
+                  opponentClan['members'].map<MemberWarStats>((opponentMember) {
+            return MemberWarStats(
+              tag: opponentMember['tag'],
+              name: opponentMember['name'],
+              townhallLevel: opponentMember['townhallLevel'],
+              mapPosition: opponentMember['mapPosition'],
+              opponentAttacks: opponentMember['opponentAttacks'] ?? 0,
+            );
+          }).toList());
+
           var attacksList =
               (member['attacks'] as List<dynamic>?)?.map<Attack>((attack) {
+                    var opponentMemberStats =
+                        findOpponentByTag(attack['defenderTag'], opponentStats);
+
                     var defender = Defender(
                       tag: attack['defenderTag'],
-                      name: 'Unknown', // Replace with actual data if available
-                      townhallLevel: 0, // Replace with actual data if available
-                      mapPosition: 0, // Replace with actual data if available
+                      name: opponentMemberStats?.name ?? 'Unknown',
+                      townhallLevel: opponentMemberStats?.townhallLevel ?? 0,
+                      mapPosition: opponentMemberStats?.mapPosition ?? 0,
                     );
+
                     return Attack(
                       attackerTag: attack['attackerTag'],
                       defenderTag: attack['defenderTag'],
@@ -358,6 +384,7 @@ class MembersWarStatsService {
             warType: type,
             attacksExpected: expectedAttacks,
             attacks: attacksList,
+            missedAttacks: expectedAttacks - attacksList.length,
           );
 
           memberStats.addWarAttacks(attacksObject);

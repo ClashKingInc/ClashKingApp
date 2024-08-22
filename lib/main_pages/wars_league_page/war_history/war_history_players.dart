@@ -131,75 +131,213 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
   }
 
   void showFilterDialog() {
-    final TextEditingController _textController = TextEditingController();
+    // Track selected Town Hall levels for members and enemies
+    final Map<int, bool> memberThSelection = {
+      for (int i = 6; i <= 16; i++) i: false
+    };
+    final Map<int, bool> enemyThSelection = {
+      for (int i = 6; i <= 16; i++) i: false
+    };
+    bool equalThSelected = false;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(AppLocalizations.of(context)!.filters,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleSmall),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                title: Text(AppLocalizations.of(context)!.byNumberOfWars,
-                    style: Theme.of(context).textTheme.bodyMedium),
-                onTap: () async {
-                  Navigator.of(context).pop();
-                  await showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text(
-                            AppLocalizations.of(context)!.byNumberOfWars,
-                            style: Theme.of(context).textTheme.bodyMedium),
-                        content: TextField(
-                          controller: _textController,
-                          decoration: InputDecoration(hintText: "e.g., 5"),
-                          keyboardType:
-                              TextInputType.numberWithOptions(decimal: false),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text(AppLocalizations.of(context)!.ok),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return SingleChildScrollView(
+              child: AlertDialog(
+                title: Text(AppLocalizations.of(context)!.filters,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleSmall),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(AppLocalizations.of(context)!.selectMembersThLevel,
+                        style: Theme.of(context).textTheme.bodyMedium),
+                    Wrap(
+                      spacing: 5.0,
+                      children: memberThSelection.keys.map((thLevel) {
+                        return FilterChip(
+                          label: Text('TH $thLevel'),
+                          selected: memberThSelection[thLevel]!,
+                          onSelected: (bool selected) {
+                            setState(() {
+                              memberThSelection[thLevel] = selected;
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(height: 10),
+                    Text(AppLocalizations.of(context)!.selectOpponentsThLevel,
+                        style: Theme.of(context).textTheme.bodyMedium),
+                    Wrap(
+                      spacing: 5.0,
+                      children: enemyThSelection.keys.map((thLevel) {
+                        return FilterChip(
+                          label: Text('TH $thLevel'),
+                          selected: enemyThSelection[thLevel]!,
+                          onSelected: (bool selected) {
+                            setState(() {
+                              enemyThSelection[thLevel] = selected;
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(height: 10),
+                    CheckboxListTile(
+                      title: Text(AppLocalizations.of(context)!.equalThLevel,
+                          style: Theme.of(context).textTheme.bodyMedium),
+                      value: equalThSelected,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          equalThSelected = value ?? false;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text(AppLocalizations.of(context)!.cancel),
+                    onPressed: () {
+                      Navigator.of(context).pop();
                     },
-                  );
-                },
+                  ),
+                  TextButton(
+                    child: Text(AppLocalizations.of(context)!.apply),
+                    onPressed: () {
+                      // Logic to filter based on selected Town Hall levels
+                      applyThFilters(
+                        memberThSelection,
+                        enemyThSelection,
+                        equalThSelected,
+                      );
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
               ),
-              ListTile(
-                title: Text(AppLocalizations.of(context)!.bySeason,
-                    style: Theme.of(context).textTheme.bodyMedium),
-                onTap: () async {
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                title: Text(AppLocalizations.of(context)!.byDateRange,
-                    style: Theme.of(context).textTheme.bodyMedium),
-                onTap: () async {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(AppLocalizations.of(context)!.cancel),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+            );
+          },
         );
       },
     );
+  }
+
+  void applyThFilters(
+    Map<int, bool> memberThSelection,
+    Map<int, bool> enemyThSelection,
+    bool equalThSelected,
+  ) {
+    setState(() {
+      // Retrieve selected Town Hall levels for members and enemies
+      List<int> selectedMemberThLevels = memberThSelection.entries
+          .where((entry) => entry.value)
+          .map((entry) => entry.key)
+          .toList();
+
+      List<int> selectedEnemyThLevels = enemyThSelection.entries
+          .where((entry) => entry.value)
+          .map((entry) => entry.key)
+          .toList();
+
+      // Filter members based on selected Town Hall levels and "Equal TH" option
+      warStats = MembersWarStats(
+        items: defaultWarStats!.allMembers.where((member) {
+          // Check if the member's TH level matches the selected levels
+          bool matchesMemberTh = selectedMemberThLevels.isEmpty ||
+              selectedMemberThLevels.contains(member.townhallLevel);
+
+          if (!matchesMemberTh) {
+            return false;
+          }
+
+          // Filter each member's attacks based on the enemy TH level and "Equal TH" option
+          var filteredWarAttacks = member.warAttacks
+              .map((warAttacks) {
+                // Filter the attacks based on enemy TH level and "Equal TH"
+                var filteredAttacks = warAttacks.attacks.where((attack) {
+                  bool matchesEnemyTh = selectedEnemyThLevels.isEmpty ||
+                      selectedEnemyThLevels
+                          .contains(attack.defender.townhallLevel);
+
+                  bool matchesEqualTh = !equalThSelected ||
+                      member.townhallLevel == attack.defender.townhallLevel;
+
+                  return matchesEnemyTh && matchesEqualTh;
+                }).toList();
+
+                // Preserve the original number of missed attacks by not altering it
+                return Attacks(
+                  warType: warAttacks.warType,
+                  attacksExpected: warAttacks.attacksExpected,
+                  attacks: filteredAttacks,
+                  missedAttacks: warAttacks
+                      .missedAttacks, // Use the original missedAttacks value
+                );
+              })
+              .where((war) => war.attacks.isNotEmpty)
+              .toList();
+
+          return filteredWarAttacks.isNotEmpty;
+        }).map((member) {
+          // Build the MemberWarStats object after filtering attacks
+          var filteredWarAttacks = member.warAttacks
+              .map((warAttacks) {
+                // Filter the attacks based on enemy TH level and "Equal TH"
+                var filteredAttacks = warAttacks.attacks.where((attack) {
+                  bool matchesEnemyTh = selectedEnemyThLevels.isEmpty ||
+                      selectedEnemyThLevels
+                          .contains(attack.defender.townhallLevel);
+
+                  bool matchesEqualTh = !equalThSelected ||
+                      member.townhallLevel == attack.defender.townhallLevel;
+
+                  return matchesEnemyTh && matchesEqualTh;
+                }).toList();
+
+                return Attacks(
+                  warType: warAttacks.warType,
+                  attacksExpected: warAttacks.attacksExpected,
+                  attacks: filteredAttacks,
+                  missedAttacks: warAttacks
+                      .missedAttacks, // Retain the original missedAttacks
+                );
+              })
+              .where((war) => war.attacks.isNotEmpty)
+              .toList();
+
+          var filteredMember = MemberWarStats(
+            tag: member.tag,
+            name: member.name,
+            townhallLevel: member.townhallLevel,
+            mapPosition: member.mapPosition,
+            opponentAttacks: member.opponentAttacks,
+          )
+            ..warAttacks = filteredWarAttacks
+            ..defenses = member.defenses;
+
+          // Recalculate statistics based on the filtered attacks
+          filteredMember.calculatePercentages();
+
+          // Retain the original missed attacks count from the unfiltered data
+          filteredMember.missedAttacks = member.missedAttacks;
+
+          // Recalculate war participation and expected attacks based on filtered attacks
+          filteredMember.warsParticipated = member.warsParticipated;
+          filteredMember.expectedAttacks = filteredWarAttacks.fold(
+              0, (sum, war) => sum + war.attacksExpected);
+
+          return filteredMember;
+        }).toList(),
+      );
+
+      // Sort members after filtering
+      _sortMembers();
+    });
   }
 
   @override
@@ -257,8 +395,6 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
               if (memberWarStats?.warsParticipated == null) {
                 return Container();
               }
-
-              //print("${memberWarStats?.name} : ${memberWarStats?.expectedAttacks}, ${memberWarStats?.missedAttacks}, ${memberWarStats?.warsParticipated} ");
 
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),

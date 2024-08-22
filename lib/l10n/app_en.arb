@@ -605,6 +605,9 @@
 "@random": {
     "description": "Random/basic war (not friendly or cwl)"
 },
+"selectMembersThLevel" : "Select Members TH Level",
+"selectOpponentsThLevel" : "Select Opponents TH Level",
+"equalThLevel" : "Equal TH",
 "builderBaseTrophies": "BB Trophies",
 "donations": "Donations",
 "donationsReceived": "Donations Received",
