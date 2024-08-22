@@ -29,12 +29,14 @@ class TranslationScreen extends StatelessWidget {
               ),
               SizedBox(height: 16),
               Center(
-                child: CachedNetworkImage(
-                  imageUrl:
-                      "https://www.icegif.com/wp-content/uploads/2023/06/icegif-202.gif", // replace with your image url
-                  height: 200,
-                  width: 200,
-                  fit: BoxFit.cover,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16.0),
+                  child: CachedNetworkImage(
+                    imageUrl: "https://www.icegif.com/wp-content/uploads/2023/06/icegif-202.gif", // remplacez par votre URL d'image
+                    height: 200,
+                    width: 200,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               SizedBox(height: 24),

@@ -40,7 +40,7 @@ class StatsScreenState extends State<StatsScreen>
   List<String> activeEquipmentNames = [];
   Future<void>? _initializeProfileFuture;
   Future<void>? _initializeLegendsFuture;
-
+ 
   @override
   void initState() {
     super.initState();
@@ -90,6 +90,12 @@ class StatsScreenState extends State<StatsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    final logoUrl = isDarkMode
+        ? "https://assets.clashk.ing/logos/crown-arrow-dark-bg/ClashKing-1.png"
+        : "https://assets.clashk.ing/logos/crown-arrow-white-bg/ClashKing-2.png";
+
     return FutureBuilder<void>(
       future: _initializeProfileFuture,
       builder: (context, snapshot) {
@@ -161,34 +167,34 @@ class StatsScreenState extends State<StatsScreen>
                                 widget.playerStats.heroes,
                                 'hero',
                                 AppLocalizations.of(context)?.heroes ??
-                                    'Heroes'),
+                                    'Heroes', logoUrl),
                             buildItemSection(
                                 widget.playerStats.equipments,
                                 'gear',
                                 AppLocalizations.of(context)?.equipment ??
-                                    'Gears'),
+                                    'Gears', logoUrl),
                             buildItemSection(
                                 widget.playerStats.troops,
                                 'troop',
                                 AppLocalizations.of(context)?.troops ??
-                                    'Troops'),
+                                    'Troops', logoUrl),
                             buildItemSection(
                                 widget.playerStats.troops,
                                 'super-troop',
                                 AppLocalizations.of(context)?.superTroops ??
-                                    "Super Troops"),
+                                    "Super Troops", logoUrl),
                             buildItemSection(widget.playerStats.troops, 'pet',
-                                AppLocalizations.of(context)?.pets ?? 'Pets'),
+                                AppLocalizations.of(context)?.pets ?? 'Pets', logoUrl),
                             buildItemSection(
                                 widget.playerStats.troops,
                                 'siege-machine',
                                 AppLocalizations.of(context)?.siegeMachines ??
-                                    'Siege Machine'),
+                                    'Siege Machine', logoUrl),
                             buildItemSection(
                                 widget.playerStats.spells,
                                 'spell',
                                 AppLocalizations.of(context)?.spells ??
-                                    'Spells'),
+                                    'Spells', logoUrl),
                           ],
                         ),
                         Column(
@@ -199,12 +205,12 @@ class StatsScreenState extends State<StatsScreen>
                                 widget.playerStats.heroes,
                                 'bb-hero',
                                 AppLocalizations.of(context)?.heroes ??
-                                    'Heroes'),
+                                    'Heroes', logoUrl),
                             buildItemSection(
                                 widget.playerStats.troops,
                                 'bb-troop',
                                 AppLocalizations.of(context)?.troops ??
-                                    'Troops'),
+                                    'Troops', logoUrl),
                           ],
                         ),
                       ],
@@ -243,13 +249,13 @@ class StatsScreenState extends State<StatsScreen>
     return (totalCurrentLevel / totalMaxLevel) * 100;
   }
 
-  String getEquipmentImageUrl(String equipmentName) {
+  String getEquipmentImageUrl(String equipmentName, String logoUrl) {
     return TroopDataManager().getTroopInfo(equipmentName)['url'] ??
-        'https://assets.clashk.ing/clashkinglogo.png';
+      logoUrl;
   }
 
   // Build the section for troops, super troops, pets, and siege machines
-  Widget buildItemSection(List<dynamic> items, String itemType, String title) {
+  Widget buildItemSection(List<dynamic> items, String itemType, String title, String logoUrl) {
     List<String> itemNames = items.map((item) => item.name as String).toList();
 
     double completionPercentage =
@@ -290,8 +296,7 @@ class StatsScreenState extends State<StatsScreen>
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
               child: CachedNetworkImage(
-                  imageUrl: data['url'] ??
-                      "https://assets.clashk.ing/clashkinglogo.png",
+                  imageUrl: data['url'] ?? logoUrl,
                   height: 40,
                   width: 40,
                   fit: BoxFit.cover),
@@ -435,7 +440,7 @@ class StatsScreenState extends State<StatsScreen>
                                                                     CachedNetworkImage(
                                                                       imageUrl:
                                                                           getEquipmentImageUrl(
-                                                                              equipment.name),
+                                                                              equipment.name, logoUrl),
                                                                       width: 40,
                                                                       height:
                                                                           40,

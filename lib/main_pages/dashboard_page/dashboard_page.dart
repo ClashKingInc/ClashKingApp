@@ -4,7 +4,7 @@ import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/account/user.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/creator_code_card.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_infos_card.dart';
+import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_info_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_legend_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_search_card.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';

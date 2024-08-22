@@ -100,6 +100,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                 children: [
                   Column(
                     children: [
+                      SizedBox(height: 48),
                       IconButton(
                         icon: Icon(Icons.bar_chart_rounded,
                             color: Colors.white, size: 32),
@@ -124,6 +125,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                   SizedBox(width: 16),
                   Column(
                     children: [
+                      SizedBox(height: 48),
                       IconButton(
                         icon: Icon(Icons.sports_esports_rounded,
                             color: Colors.white, size: 32),

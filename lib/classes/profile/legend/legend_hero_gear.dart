@@ -1,6 +1,5 @@
 import 'package:clashkingapp/classes/data/gears_data_manager.dart';
 
-
 class HeroGear {
   final String name;
   final int level;

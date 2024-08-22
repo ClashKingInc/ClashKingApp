@@ -1,7 +1,8 @@
+import 'package:clashkingapp/classes/clan/capital/raids_history.dart';
 import 'package:clashkingapp/classes/clan/description/badge_urls.dart';
+import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
 import 'package:clashkingapp/classes/clan/logs/join_leave.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
-import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:retry/retry.dart';
@@ -15,6 +16,7 @@ import 'package:clashkingapp/classes/clan/description/member.dart';
 import 'package:clashkingapp/classes/clan/description/war_league.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
 import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
+import 'package:clashkingapp/classes/clan/description/clan_capital.dart';
 import 'package:clashkingapp/classes/functions.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
@@ -45,12 +47,13 @@ class Clan {
   List<dynamic> labels;
   int requiredBuilderBaseTrophies;
   int requiredTownhallLevel;
-  Map<String, dynamic> clanCapital;
+  ClanCapital? clanCapital;
   CurrentLeagueInfo? currentLeagueInfo;
   CurrentWarInfo? currentWarInfo;
   String warState = '';
   late WarLog warLog;
   late JoinLeaveClan joinLeaveClan;
+  late CapitalHistoryItems clanCapitalRaid;
   MembersWarStats? membersWarStats;
   bool clanInitialized = false;
   bool warInitialized = false;
@@ -125,7 +128,10 @@ class Clan {
         labels: json['labels'] ?? [],
         requiredBuilderBaseTrophies: json['requiredBuilderBaseTrophies'] ?? 0,
         requiredTownhallLevel: json['requiredTownhallLevel'] ?? 0,
-        clanCapital: json['clanCapital'] ?? {},
+        clanCapital: json['clanCapital'] != null &&
+                json['clanCapital'].isNotEmpty
+            ? ClanCapital.fromJson(json['clanCapital'])
+            : null,
       );
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({"json": json});
@@ -200,8 +206,8 @@ class ClanService {
           // Start fetching warState, warLog, and joinLeaveLog in parallel
           final warStateFuture = fetchWarStateInfo(clanTag);
           final warLogFuture = WarLogService.fetchWarLogData(tag);
-          final joinLeaveLogFuture = JoinLeaveClanService.fetchJoinLeaveData(
-              tag, timestampLastMonday.toString());
+          final joinLeaveLogFuture = JoinLeaveClanService.fetchJoinLeaveData(tag, timestampLastMonday.toString());
+          final capitaleFuture = CapitalHistoryService.fetchCapitalData(clanTag, 10);
 
           // Wait for all futures to complete
           final responses = await Future.wait([
@@ -209,6 +215,7 @@ class ClanService {
             warStateFuture,
             warLogFuture,
             joinLeaveLogFuture,
+            capitaleFuture,
           ]);
 
           // Extract responses
@@ -216,10 +223,12 @@ class ClanService {
           final warStateInfo = responses[1] as WarStateInfo;
           final warLog = responses[2] as WarLog;
           final joinLeaveLog = responses[3] as JoinLeaveClan;
+          final capital = responses[4] as CapitalHistoryItems;
 
           if (clanInfoResponse.statusCode == 200) {
             String responseBody = utf8.decode(clanInfoResponse.bodyBytes);
             Clan clanInfo = Clan.fromJson(jsonDecode(responseBody));
+            clanInfo.membersWarStats = await MembersWarStatsService().fetchWarLogsAndAnalyzeStats(tag);
 
             if (clanInfo.warLeague != null) {
               clanInfo.warLeague!.imageUrl =
@@ -236,6 +245,7 @@ class ClanService {
             clanInfo.currentLeagueInfo = warStateInfo.currentLeagueInfo;
             clanInfo.warLog = warLog;
             clanInfo.joinLeaveClan = joinLeaveLog;
+            clanInfo.clanCapitalRaid = capital;
             return clanInfo;
           } else {
             throw Exception(
@@ -266,15 +276,13 @@ class ClanService {
           if (response.statusCode == 200) {
             String responseBody = utf8.decode(response.bodyBytes);
             Clan updatedClan = Clan.fromJson(jsonDecode(responseBody));
+            updatedClan.membersWarStats = await MembersWarStatsService().fetchWarLogsAndAnalyzeStats(tag);
             if (updatedClan.warLeague != null) {
-              updatedClan.warLeague!.imageUrl =
-                  LeagueDataManager().getLeagueUrl(updatedClan.warLeague!.name);
+              updatedClan.warLeague!.imageUrl = LeagueDataManager().getLeagueUrl(updatedClan.warLeague!.name);
             }
-
             return updatedClan;
           } else {
-            throw Exception(
-                'Failed to load clan stats with status code: ${response.statusCode}');
+            throw Exception('Failed to load clan stats with status code: ${response.statusCode}');
           }
         },
         retryIf: (e) => e is http.ClientException || e is SocketException,

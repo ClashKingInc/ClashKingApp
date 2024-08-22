@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_page.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_page.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_league_page.dart';
-import 'package:clashkingapp/main_pages/management_page.dart';
+import 'package:clashkingapp/main_pages/tools_page/tools_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/components/app_bar/app_bar.dart';
@@ -92,7 +92,7 @@ class MyHomePageState extends State<MyHomePage> {
                         account: appState.account!,
                       )
                     : Center(child: CircularProgressIndicator()),
-                ManagementPage(),
+                ToolsPage(),
               ];
               return appState.account != null
                   ? Scaffold(
@@ -128,8 +128,8 @@ class MyHomePageState extends State<MyHomePage> {
                           ),
                           BottomNavigationBarItem(
                             icon: Icon(Icons.settings),
-                            label: AppLocalizations.of(context)?.management ??
-                                'Management',
+                            label: AppLocalizations.of(context)?.tools ??
+                                'Tools',
                           ),
                         ],
                         currentIndex: _selectedIndex,

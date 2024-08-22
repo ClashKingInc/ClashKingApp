@@ -8,6 +8,7 @@ import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_info_card.dart
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_search_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_join_leave/clan_join_leave.dart';
+import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_capital_card.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/components/beta_label.dart';
@@ -101,16 +102,14 @@ class ClanInfoPageState extends State<ClanInfoPage>
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ClanInfoScreen(
-                                          clanInfo: widget.account!.clan!,
-                                          discordUser: widget.user.tags),
+                                        clanInfo: widget.account!.clan!,
+                                        discordUser: widget.user.tags),
                                     ),
                                   );
                                 },
                                 child: Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child:
-                                      ClanInfoCard(clanInfo: widget.account!.clan!),
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: ClanInfoCard(clanInfo: widget.account!.clan!),
                                 ),
                               )
                             else
@@ -139,6 +138,32 @@ class ClanInfoPageState extends State<ClanInfoPage>
                                     children: [
                                       ClanJoinLeaveCard(
                                         discordUser: widget.user.tags,
+                                        clanInfo: widget.account!.clan!,
+                                      ),
+                                      BetaLabel(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            if (widget.account!.clan != null)
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ClanJoinLeaveScreen(
+                                          user: widget.user.tags,
+                                          clanInfo: widget.account!.clan!),
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Stack(
+                                    children: [
+                                      ClanCapitaleCard(
+                                        user: widget.user.tags,
                                         clanInfo: widget.account!.clan!,
                                       ),
                                       BetaLabel(),
