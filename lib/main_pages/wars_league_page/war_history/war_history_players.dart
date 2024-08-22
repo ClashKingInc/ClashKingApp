@@ -4,7 +4,9 @@ import 'package:clashkingapp/classes/clan/description/member.dart';
 import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_history/component/war_history_players_header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlayersWarHistoryScreen extends StatefulWidget {
   final Clan clan;
@@ -19,12 +21,25 @@ class PlayersWarHistoryScreen extends StatefulWidget {
 
 class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
     with TickerProviderStateMixin {
-  String _sortBy = "Average Stars"; // Default sort by average stars
+  String _sortBy = "Three Stars Attacks";
   List<Member> sortedMembers = [];
+  late DateTime currentSeasonDate;
+  String filterType = "dateRange";
+  bool isCWLChecked = true;
+  bool isRandomChecked = true;
+  bool isFriendlyChecked = true;
+  List<String> filters = ["cwl", "random", "friendly"];
+  late int warDataStartDate;
+  late int warDataEndDate;
+  late int warDataLimit;
+  MembersWarStats? warStats;
+  MembersWarStats? defaultWarStats;
 
   @override
   void initState() {
     super.initState();
+    warStats = widget.clan.membersWarStats!;
+    defaultWarStats = warStats;
     _sortMembers();
   }
 
@@ -36,15 +51,15 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
   }
 
   void _sortMembers() {
-    if (widget.clan.membersWarStats != null) {
+    if (warStats != null) {
       sortedMembers = List.from(widget.clan.memberList!);
       switch (_sortBy) {
         case "Average Destruction":
           sortedMembers.sort((a, b) =>
-              widget.clan.membersWarStats!
+              warStats!
                   .getMemberByTag(b.tag)
                   ?.averageDestructionPercentage
-                  .compareTo(widget.clan.membersWarStats!
+                  .compareTo(warStats!
                           .getMemberByTag(a.tag)
                           ?.averageDestructionPercentage ??
                       0) ??
@@ -52,21 +67,16 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
           break;
         case "Average Stars":
           sortedMembers.sort((a, b) =>
-              widget.clan.membersWarStats!
-                  .getMemberByTag(b.tag)
-                  ?.averageStars
-                  .compareTo(widget.clan.membersWarStats!
-                          .getMemberByTag(a.tag)
-                          ?.averageStars ??
-                      0) ??
+              warStats!.getMemberByTag(b.tag)?.averageStars.compareTo(
+                  warStats!.getMemberByTag(a.tag)?.averageStars ?? 0) ??
               0);
           break;
         case "No Star Attacks":
           sortedMembers.sort((a, b) =>
-              widget.clan.membersWarStats!
+              warStats!
                   .getMemberByTag(b.tag)
                   ?.percentageNoStarsAttacks
-                  .compareTo(widget.clan.membersWarStats!
+                  .compareTo(warStats!
                           .getMemberByTag(a.tag)
                           ?.percentageNoStarsAttacks ??
                       0) ??
@@ -74,10 +84,10 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
           break;
         case "One Star Attacks":
           sortedMembers.sort((a, b) =>
-              widget.clan.membersWarStats!
+              warStats!
                   .getMemberByTag(b.tag)
                   ?.percentageOneStarsAttacks
-                  .compareTo(widget.clan.membersWarStats!
+                  .compareTo(warStats!
                           .getMemberByTag(a.tag)
                           ?.percentageOneStarsAttacks ??
                       0) ??
@@ -85,10 +95,10 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
           break;
         case "Two Stars Attacks":
           sortedMembers.sort((a, b) =>
-              widget.clan.membersWarStats!
+              warStats!
                   .getMemberByTag(b.tag)
                   ?.percentageTwoStarsAttacks
-                  .compareTo(widget.clan.membersWarStats!
+                  .compareTo(warStats!
                           .getMemberByTag(a.tag)
                           ?.percentageTwoStarsAttacks ??
                       0) ??
@@ -96,10 +106,10 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
           break;
         case "Three Stars Attacks":
           sortedMembers.sort((a, b) =>
-              widget.clan.membersWarStats!
+              warStats!
                   .getMemberByTag(b.tag)
                   ?.percentageThreeStarsAttacks
-                  .compareTo(widget.clan.membersWarStats!
+                  .compareTo(warStats!
                           .getMemberByTag(a.tag)
                           ?.percentageThreeStarsAttacks ??
                       0) ??
@@ -107,10 +117,8 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
           break;
         case "War Participation":
           sortedMembers.sort((a, b) {
-            MemberWarStats? memberA =
-                widget.clan.membersWarStats!.getMemberByTag(a.tag);
-            MemberWarStats? memberB =
-                widget.clan.membersWarStats!.getMemberByTag(b.tag);
+            MemberWarStats? memberA = warStats!.getMemberByTag(a.tag);
+            MemberWarStats? memberB = warStats!.getMemberByTag(b.tag);
             return memberB?.totalAttacks
                     .compareTo(memberA?.totalAttacks ?? 0) ??
                 0;
@@ -122,13 +130,110 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
     }
   }
 
+  void showFilterDialog() {
+    final TextEditingController _textController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.filters,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleSmall),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.byNumberOfWars,
+                    style: Theme.of(context).textTheme.bodyMedium),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text(
+                            AppLocalizations.of(context)!.byNumberOfWars,
+                            style: Theme.of(context).textTheme.bodyMedium),
+                        content: TextField(
+                          controller: _textController,
+                          decoration: InputDecoration(hintText: "e.g., 5"),
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: false),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text(AppLocalizations.of(context)!.ok),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.bySeason,
+                    style: Theme.of(context).textTheme.bodyMedium),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.byDateRange,
+                    style: Theme.of(context).textTheme.bodyMedium),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.cancel),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 120),
+            WarHistoryPlayersStatsHeader(
+                clan: widget.clan,
+                isCWLChecked: isCWLChecked,
+                isRandomChecked: isRandomChecked,
+                isFriendlyChecked: isFriendlyChecked,
+                onCWLChanged: () {
+                  setState(() {
+                    isCWLChecked = !isCWLChecked;
+                    applyFilters();
+                  });
+                },
+                onRandomChanged: () {
+                  setState(() {
+                    isRandomChecked = !isRandomChecked;
+                    applyFilters();
+                  });
+                },
+                onFriendlyChanged: () {
+                  setState(() {
+                    isFriendlyChecked = !isFriendlyChecked;
+                    applyFilters();
+                  });
+                },
+                onBack: () => Navigator.of(context).pop(),
+                onFilter: showFilterDialog),
+            SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: FilterDropdown(
@@ -147,7 +252,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
             ),
             ...sortedMembers.map((member) {
               MemberWarStats? memberWarStats =
-                  widget.clan.membersWarStats?.getMemberByTag(member.tag);
+                  warStats?.getMemberByTag(member.tag);
 
               if (memberWarStats?.warsParticipated == null) {
                 return Container();
@@ -291,5 +396,59 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
         ),
       ),
     );
+  }
+
+  void applyFilters() {
+    setState(() {
+      List<String> activeFilters = [];
+      if (isCWLChecked) activeFilters.add("cwl");
+      if (isRandomChecked) activeFilters.add("random");
+      if (isFriendlyChecked) activeFilters.add("friendly");
+
+      if (activeFilters.isNotEmpty) {
+        warStats = MembersWarStats(
+          items: defaultWarStats!.allMembers
+              .map((member) {
+                // Filter the warAttacks within each member
+                var filteredWarAttacks = member.warAttacks
+                    .where((war) => activeFilters.contains(war.warType))
+                    .toList();
+
+                // Create a new MemberWarStats object with the filtered warAttacks
+                var filteredMember = MemberWarStats(
+                  tag: member.tag,
+                  name: member.name,
+                  townhallLevel: member.townhallLevel,
+                  mapPosition: member.mapPosition,
+                  opponentAttacks: member.opponentAttacks,
+                )
+                  ..warAttacks = filteredWarAttacks
+                  ..defenses = member.defenses;
+
+                // Recalculate stats based on filtered warAttacks
+                filteredMember.calculatePercentages();
+
+                // Recalculate warsParticipated, expectedAttacks, and missedAttacks
+                filteredMember.warsParticipated = filteredWarAttacks.length;
+                filteredMember.expectedAttacks = filteredWarAttacks.fold(
+                    0, (sum, war) => sum + war.attacksExpected);
+                filteredMember.missedAttacks = filteredWarAttacks.fold(
+                    0,
+                    (sum, war) =>
+                        sum + (war.attacksExpected - war.attacks.length));
+
+                return filteredMember;
+              })
+              .where((member) => member.warAttacks.isNotEmpty)
+              .toList(),
+        );
+        print("Filtered Members: ${warStats!.allMembers.length}");
+      } else {
+        warStats = defaultWarStats;
+        print("No filters selected, using default stats.");
+      }
+
+      _sortMembers();
+    });
   }
 }

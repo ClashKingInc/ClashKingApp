@@ -45,8 +45,6 @@ Future<void> main() async {
   ]);
   FlutterNativeSplash.remove();
 
-  print("SENTRY_DSN: ${dotenv.env['SENTRY_DSN']}");
-
   await SentryFlutter.init(
     (options) {
       options.dsn = dotenv.env['SENTRY_DSN'];
