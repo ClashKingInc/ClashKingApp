@@ -290,6 +290,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                                     warState != "accessDenied" &&
                                     widget.account.clan!.isWarLogPublic != false
                                 ? WarHistoryCard(
+                                    clan: widget.account.clan!,
                                     warLogData:
                                         widget.account.clan!.warLog.items,
                                     playerStats: widget.account.profileInfo,

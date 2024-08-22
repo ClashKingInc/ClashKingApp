@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +10,14 @@ import 'package:clashkingapp/components/chip.dart';
 
 class WarHistoryCard extends StatelessWidget {
   final ProfileInfo playerStats;
+  final Clan clan;
   final List<String> discordUser;
   final List<WarLogDetails> warLogData;
   final WarLogStats warLogStats;
 
   const WarHistoryCard(
       {super.key,
+      required this.clan,
       required this.warLogStats,
       required this.playerStats,
       required this.discordUser,
@@ -28,7 +31,7 @@ class WarHistoryCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => WarHistoryScreen(
-              clan: playerStats.clan!,
+              clan: clan,
               discordUser: discordUser,
               warLogData: warLogData,
               warLogStats: warLogStats,

@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class MembersWarStats {
   final Map<String, MemberWarStats> _membersMap;
 
   MembersWarStats({required List<MemberWarStats> items})
-      : _membersMap = {for (var member in items) member.tag: member}; 
+      : _membersMap = {for (var member in items) member.tag: member};
 
   MemberWarStats? getMemberByTag(String tag) {
     return _membersMap[tag];
@@ -32,6 +33,23 @@ class MemberWarStats {
   List<Attack> attacks = [];
   List<Defense> defenses = [];
 
+  // New fields for percentages
+  double percentageNoStarsDefenses = 0;
+  double percentageNoStarsAttacks = 0;
+  double percentageOneStarsDefenses = 0;
+  double percentageOneStarsAttacks = 0;
+  double percentageTwoStarsDefenses = 0;
+  double percentageTwoStarsAttacks = 0;
+  double percentageThreeStarsDefenses = 0;
+  double percentageThreeStarsAttacks = 0;
+  int totalAttacks = 0;
+  int totalDefenses = 0;
+
+  // New fields for war participation and expected attacks
+  int warsParticipated = 0;
+  int expectedAttacks = 0;
+  int missedAttacks = 0;
+
   MemberWarStats({
     required this.tag,
     required this.name,
@@ -46,6 +64,56 @@ class MemberWarStats {
 
   void addDefense(Defense defense) {
     defenses.add(defense);
+  }
+
+  void incrementWarsParticipated() {
+    warsParticipated++;
+  }
+
+  void calculatePercentages() {
+    totalAttacks = attacks.length;
+    if (totalAttacks > 0) {
+      percentageNoStarsAttacks =
+          attacks.where((a) => a.stars == 0).length / totalAttacks * 100;
+      percentageOneStarsAttacks =
+          attacks.where((a) => a.stars == 1).length / totalAttacks * 100;
+      percentageTwoStarsAttacks =
+          attacks.where((a) => a.stars == 2).length / totalAttacks * 100;
+      percentageThreeStarsAttacks =
+          attacks.where((a) => a.stars == 3).length / totalAttacks * 100;
+    }
+
+    totalDefenses = defenses.length;
+    if (totalDefenses > 0) {
+      percentageNoStarsDefenses =
+          defenses.where((d) => d.stars == 0).length / totalDefenses * 100;
+      percentageOneStarsDefenses =
+          defenses.where((d) => d.stars == 1).length / totalDefenses * 100;
+      percentageTwoStarsDefenses =
+          defenses.where((d) => d.stars == 2).length / totalDefenses * 100;
+      percentageThreeStarsDefenses =
+          defenses.where((d) => d.stars == 3).length / totalDefenses * 100;
+    }
+  }
+
+  @override
+  String toString() {
+    return '$name ($tag) - TH$townhallLevel\n'
+        'Wars Participated: $warsParticipated\n'
+        'Expected Attacks: $expectedAttacks\n'
+        'Missed Attacks: $missedAttacks\n'
+        'Average stars: $averageStars\n'
+        'Average destruction: $averageDestructionPercentage%\n'
+        'Average defense stars: $averageDefenseStars\n'
+        'Average defense destruction: $averageDefenseDestructionPercentage%\n'
+        'No Stars Attacks: $percentageNoStarsAttacks%\n'
+        'One Star Attacks: $percentageOneStarsAttacks%\n'
+        'Two Stars Attacks: $percentageTwoStarsAttacks%\n'
+        'Three Stars Attacks: $percentageThreeStarsAttacks%\n'
+        'No Stars Defenses: $percentageNoStarsDefenses%\n'
+        'One Star Defenses: $percentageOneStarsDefenses%\n'
+        'Two Stars Defenses: $percentageTwoStarsDefenses%\n'
+        'Three Stars Defenses: $percentageThreeStarsDefenses%\n';
   }
 
   double get averageStars => attacks.isNotEmpty
@@ -72,13 +140,8 @@ class MemberWarStats {
           defenses.length
       : 0.0;
 
-  @override
-  String toString() {
-    return '$name ($tag) - TH$townhallLevel\n'
-        'Average stars: $averageStars\n'
-        'Average destruction: $averageDestructionPercentage%\n'
-        'Average defense stars: $averageDefenseStars\n'
-        'Average defense destruction: $averageDefenseDestructionPercentage%\n';
+  int numberOfStarsAttacks(int numberOfStars) {
+    return attacks.where((attack) => attack.stars == numberOfStars).length;
   }
 }
 
@@ -130,7 +193,6 @@ class Defense {
             : destructionPercentage;
 }
 
-
 class Defender {
   final String tag;
   final String name;
@@ -157,7 +219,6 @@ class Attacker {
     required this.townhallLevel,
     required this.mapPosition,
   });
-  
 }
 
 class MembersWarStatsService {
@@ -178,11 +239,11 @@ class MembersWarStatsService {
   MembersWarStats _analyzeMemberStats(String clanTag, List<dynamic> wars) {
     MembersWarStats membersWarStats = MembersWarStats(items: []);
     clanTag = clanTag.replaceFirst("!", "#");
+
     try {
       for (var war in wars) {
         var clanData;
 
-        // Identifier si le clan est dans "clan" ou "opponent"
         if (war['clan']['tag'] == clanTag) {
           clanData = war['clan'];
         } else if (war['opponent']['tag'] == clanTag) {
@@ -191,7 +252,6 @@ class MembersWarStatsService {
           continue;
         }
 
-        // Parcourir chaque membre du clan
         for (var member in clanData['members']) {
           var memberTag = member['tag'];
           var memberName = member['name'];
@@ -212,14 +272,29 @@ class MembersWarStatsService {
             membersWarStats.addMemberStat(memberStats);
           }
 
-          // Ajouter les stats d'attaque si elles existent
+          int expectedAttacks = 1;
+          memberStats.warsParticipated++;
+          if (war["attacksPerMember"] != null) {
+            expectedAttacks = (war["attacksPerMember"] is int)
+                ? war["attacksPerMember"] as int
+                : int.parse(war["attacksPerMember"].toString());
+            memberStats.expectedAttacks += expectedAttacks;
+          } else {
+            memberStats.expectedAttacks += expectedAttacks;
+          }
+
           if (member['attacks'] != null) {
+            if (expectedAttacks != member['attacks'].length) {
+              memberStats.missedAttacks +=
+                  (expectedAttacks - member['attacks'].length).toInt();
+            }
+
             for (var attack in member['attacks']) {
               var defender = Defender(
                 tag: attack['defenderTag'],
-                name: 'Unknown', 
-                townhallLevel: 0,  
-                mapPosition: 0,  
+                name: 'Unknown',
+                townhallLevel: 0,
+                mapPosition: 0,
               );
               var attackObj = Attack(
                 attackerTag: attack['attackerTag'],
@@ -228,37 +303,44 @@ class MembersWarStatsService {
                 destructionPercentage: attack['destructionPercentage'],
                 order: attack['order'],
                 duration: attack['duration'],
-                fresh: false,  
+                fresh: false,
                 defender: defender,
               );
               memberStats.addAttack(attackObj);
             }
+          } else {
+            memberStats.missedAttacks += expectedAttacks;
           }
 
-          // Ajouter les stats de défense si elles existent
           if (member['bestOpponentAttack'] != null) {
             var attacker = Attacker(
               tag: member['bestOpponentAttack']['attackerTag'],
-              name: 'Unknown', 
-              townhallLevel: 0,  
-              mapPosition: 0,  
+              name: 'Unknown',
+              townhallLevel: 0,
+              mapPosition: 0,
             );
             var defenseObj = Defense(
               attackerTag: member['bestOpponentAttack']['attackerTag'],
               defenderTag: member['tag'],
               stars: member['bestOpponentAttack']['stars'],
-              destructionPercentage: member['bestOpponentAttack']['destructionPercentage'],
+              destructionPercentage: member['bestOpponentAttack']
+                  ['destructionPercentage'],
               order: member['bestOpponentAttack']['order'],
               duration: member['bestOpponentAttack']['duration'],
-              fresh: false,  
+              fresh: false,
               attacker: attacker,
             );
             memberStats.addDefense(defenseObj);
           }
         }
       }
-    } catch (e) {
-      print(e);
+
+      // Calculate percentages for all members
+      for (var memberStats in membersWarStats.allMembers) {
+        memberStats.calculatePercentages();
+      }
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
     }
 
     return membersWarStats;

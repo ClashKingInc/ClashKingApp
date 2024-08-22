@@ -54,4 +54,8 @@ class Member {
     Member member = Member.fromJson(json);
     return member;
   }
+
+  String getTownHallPicture() {
+    return 'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${townHallLevel}.png';
+  }
 }

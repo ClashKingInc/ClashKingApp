@@ -232,11 +232,8 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                   },
                 );
                 try {
-                  if (widget.clan.membersWarStats == null) {
-                    print("Fetching members war stats");
-                    widget.clan.membersWarStats = await MembersWarStatsService()
+                  widget.clan.membersWarStats ??= await MembersWarStatsService()
                         .fetchWarLogsAndAnalyzeStats(widget.clan.tag);
-                  }
                   navigator.pop();
                   navigator.push(
                     MaterialPageRoute(
