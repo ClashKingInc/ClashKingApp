@@ -139,7 +139,7 @@ class AchievementScreenState extends State<AchievementScreen>
                       ),
                     ),
                     Positioned(
-                      top: 30,
+                      top: 40,
                       left: 10,
                       child: IconButton(
                         icon: Icon(Icons.arrow_back,

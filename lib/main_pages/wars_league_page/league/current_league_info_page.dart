@@ -86,7 +86,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                   ),
                 ),
                 Positioned(
-                  top: 30,
+                  top: 40,
                   left: 10,
                   child: IconButton(
                     icon: Icon(Icons.arrow_back,

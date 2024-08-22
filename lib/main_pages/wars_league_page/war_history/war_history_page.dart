@@ -1,24 +1,24 @@
+import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_history/component/war_log_history_stats_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/component/war_history_header.dart';
-import 'package:clashkingapp/main_pages/wars_league_page/war_history/component/war_log_history_card.dart';
+import 'package:clashkingapp/main_pages/wars_league_page/war_history/component/war_log_history_tab.dart';
 
 class WarHistoryScreen extends StatefulWidget {
-  final String clanTag;
+  final Clan clan;
   final List<String> discordUser;
   final List<WarLogDetails> warLogData;
   final WarLogStats warLogStats;
-  final String clanName;
 
   WarHistoryScreen(
       {super.key,
-      required this.clanTag,
+      required this.clan,
       required this.discordUser,
       required this.warLogData,
-      required this.warLogStats,
-      required this.clanName});
+      required this.warLogStats});
 
   @override
   WarHistoryScreenState createState() => WarHistoryScreenState();
@@ -51,8 +51,8 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
           children: [
             WarHistoryHeader(
               discordUser: widget.discordUser,
-              clanName: widget.clanName,
-              clanTag: widget.clanTag,
+              clan: widget.clan,
+              warLogStats: widget.warLogStats,
             ),
             ScrollableTab(
               tabBarDecoration: BoxDecoration(
@@ -73,17 +73,26 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
                   padding: EdgeInsets.all(8),
                   child: Column(
                     children: [
-                      WarLogHistoryCard(
+                      WarLogHistoryTab(
                         discordUser: widget.discordUser,
-                        clanTag: widget.clanTag,
+                        clanTag: widget.clan.tag,
                         warLogData: widget.warLogData,
                       ),
                     ],
                   ),
                 ),
-                Center(
-                  child: Text(AppLocalizations.of(context)?.comingSoon ??
-                      'Coming Soon'),
+                 Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      WarLogHistoryStats(
+                        clan: widget.clan,
+                        discordUser: widget.discordUser,
+                        warLogData: widget.warLogData,
+                        warLogStats: widget.warLogStats,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

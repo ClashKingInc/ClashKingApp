@@ -145,7 +145,7 @@ class PlayerStatsHeader extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 30,
+          top: 40,
           left: 10,
           child: IconButton(
             icon: Icon(Icons.arrow_back,
@@ -154,7 +154,7 @@ class PlayerStatsHeader extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 30,
+          top: 40,
           right: 10,
           child: IconButton(
             icon: Icon(Icons.filter_list, color: Colors.white),

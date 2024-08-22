@@ -11,27 +11,36 @@ class WarLog {
   factory WarLog.fromJson(Map<String, dynamic> json) {
     var itemList = json['items'] != null
         ? (json['items'] as List)
+            .where((itemJson) {
+              // Extract the endTime and parse it to DateTime
+              DateTime endTime = DateTime.parse(itemJson['endTime']);
+              // Keep items where the endTime is in 2022 or later
+              return endTime.year >= 2022;
+            })
             .map((itemJson) =>
                 WarLogDetails.fromJson(itemJson as Map<String, dynamic>))
             .toList()
         : [];
     return WarLog(items: itemList.cast<WarLogDetails>());
+    return WarLog(items: itemList.cast<WarLogDetails>());
   }
 }
+
 
 class WarLogStats {
   final int totalWins;
   final int totalLosses;
   final int totalTies;
-  final int averageMembers;
+  final int totalWars;
+  final int averageMembers; 
   final double averageClanDestruction;
   final double averageClanStarsPerMember;
   final double averageOpponentDestruction;
   final double averageOpponentStarsPerMember;
   final double averageAttacksPerMember;
-  final double winPercentage;
-  final double lossPercentage;
-  final double tiePercentage;
+  final String winPercentage;
+  final String lossPercentage;
+  final String tiePercentage;
   final double averageDestructionDifference;
   final double averageClanStarsPercentage;
   final double averageOpponentStarsPercentage;
@@ -40,6 +49,7 @@ class WarLogStats {
     required this.totalWins,
     required this.totalLosses,
     required this.totalTies,
+    required this.totalWars,
     required this.averageMembers,
     required this.averageClanDestruction,
     required this.averageClanStarsPerMember,
@@ -61,6 +71,7 @@ class WarLogStats {
         'totalWins: $totalWins, '
         'totalLosses: $totalLosses, '
         'totalTies: $totalTies, '
+        'totalWars: $totalWars, '
         'averageMembers: $averageMembers, '
         'averageClanDestruction: $averageClanDestruction, '
         'averageClanStarsPerMember: $averageClanStarsPerMember, '
@@ -168,6 +179,7 @@ class WarLogStatsService {
     int totalWins = 0;
     int totalLosses = 0;
     int totalTies = 0;
+    int totalWars = 0;
     int totalMembers = 0;
     int totalAttacks = 0;
     double clanTotalDestruction = 0;
@@ -178,6 +190,7 @@ class WarLogStatsService {
 
     for (var log in warLogs) {
       if (log.attacksPerMember == 2) {
+        totalWars++;
         switch (log.result) {
           case 'win':
             totalWins++;
@@ -200,14 +213,13 @@ class WarLogStatsService {
       }
     }
 
-    int logCount = warLogs.length;
-    double averageMembers = logCount > 0 ? totalMembers / logCount : 0;
+    double averageMembers = totalWars > 0 ? totalMembers / totalWars : 0;
     double averageClanDestruction =
-        logCount > 0 ? clanTotalDestruction / logCount : 0;
+        totalWars > 0 ? clanTotalDestruction / totalWars : 0;
     double averageClanStarsPerMember =
         totalMembers > 0 ? clanTotalStars / totalMembers : 0;
     double averageOpponentDestruction =
-        logCount > 0 ? opponentTotalDestruction / logCount : 0;
+        totalWars > 0 ? opponentTotalDestruction / totalWars : 0;
     double averageOpponentStarsPerMember =
         totalMembers > 0 ? opponentTotalStars / totalMembers : 0;
     double averageClanStarsPercentage =
@@ -216,9 +228,9 @@ class WarLogStatsService {
         maxPossibleStars > 0 ? (opponentTotalStars / maxPossibleStars) * 100 : 0;
     double averageAttacksPerMember =
         totalMembers > 0 ? totalAttacks / totalMembers : 0;
-    double winPercentage = logCount > 0 ? (totalWins / logCount) * 100 : 0;
-    double lossPercentage = logCount > 0 ? (totalLosses / logCount) * 100 : 0;
-    double tiePercentage = logCount > 0 ? (totalTies / logCount) * 100 : 0;
+    double winPercentage = totalWars > 0 ? (totalWins / totalWars) * 100 : 0;
+    double lossPercentage = totalWars > 0 ? (totalLosses / totalWars) * 100 : 0;
+    double tiePercentage = totalWars > 0 ? (totalTies / totalWars) * 100 : 0;
     double averageDestructionDifference =
         averageClanDestruction - averageOpponentDestruction;
 
@@ -226,6 +238,7 @@ class WarLogStatsService {
       totalWins: totalWins,
       totalLosses: totalLosses,
       totalTies: totalTies,
+      totalWars: totalWars,
       averageMembers: int.parse(averageMembers.toStringAsFixed(0)),
       averageClanDestruction:
           double.parse(averageClanDestruction.toStringAsFixed(0)),
@@ -241,9 +254,9 @@ class WarLogStatsService {
           double.parse(averageOpponentStarsPercentage.toStringAsFixed(1)),
       averageAttacksPerMember:
           double.parse(averageAttacksPerMember.toStringAsFixed(1)),
-      winPercentage: double.parse(winPercentage.toStringAsFixed(1)),
-      lossPercentage: double.parse(lossPercentage.toStringAsFixed(1)),
-      tiePercentage: double.parse(tiePercentage.toStringAsFixed(1)),
+      winPercentage: winPercentage.toStringAsFixed(0),
+      lossPercentage: lossPercentage.toStringAsFixed(0),
+      tiePercentage: tiePercentage.toStringAsFixed(0),
       averageDestructionDifference:
           double.parse(averageDestructionDifference.toStringAsFixed(1)),
     );

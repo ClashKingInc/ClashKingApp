@@ -213,7 +213,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               ),
             ),
             Positioned(
-              top: 30,
+              top: 40,
               left: 10,
               child: IconButton(
                 icon: Icon(Icons.arrow_back,
@@ -440,12 +440,11 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => WarHistoryScreen(
-                                  clanTag: widget.clanInfo.tag,
+                                  clan: widget.clanInfo,
                                   discordUser: widget.user,
                                   warLogData: warLogDetails,
                                   warLogStats:
                                       widget.clanInfo.warLog.warLogStats,
-                                  clanName: widget.clanInfo.name,
                                 ),
                               ),
                             );
