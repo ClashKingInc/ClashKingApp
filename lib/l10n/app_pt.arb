@@ -59,13 +59,13 @@
     "faqApiLimitation": "Limitação da API do Clash of Clans",
     "faqApiLimitationAnswer": "Alguns dados providenciados pelo Clash of Clans e a sua API têm algumas limitações. Este é o caso de rastreamento da liga lendária, onde às vezes acumulam ganho e perda de troféus como se fosse um único ataque. É também por isso que não temos nenhuma informação dos níveis das suas construções.",
     "faqSupportWork": "Como posso ajudar o seu trabalho?",
-    "faqSupportWorkAnswer": "Existem várias maneiras de nos suportar:",
+    "faqSupportWorkAnswer": "Existem várias maneiras de nos apoiar:",
     "faqUseCodeClashKing": "Usa o código \"ClashKing\"",
     "faqSupportUsOnPatreon": "Apoie-nos no Patreon",
     "faqShareTheApp": "Compartilha a aplicação com os seus amigos",
     "faqRateTheApp": "Avalia a aplicação na loja",
     "faqHelpUsTranslate": "Ajude-nos a traduzir a aplicação",
-    "faqHowToInviteTheBot": "Como posso convidar o seu ‘bot’ no meu servidor de Discord?",
+    "faqHowToInviteTheBot": "Como posso convidar o seu bot no meu servidor de Discord?",
     "faqHowToInviteTheBotAnswer": "Pode convidar o nosso bot para o seu servidor de Discord, clicando no botão abaixo. É preciso ter a permissão \"Gerir Servidor\" para adicionar o bot.",
     "faqInviteTheBot": "Convide o bot ClashKing",
     "faqNeedHelp": "Preciso de ajuda ou queria fazer uma sugestão. Como posso contactar-vos?",
@@ -218,7 +218,7 @@
     "@ready": {
         "description": "Opted In for war"
     },
-    "unready": "Desistiu",
+    "unready": "Optou fora",
     "@unready": {
         "description": "Opted Out for war"
     },
@@ -563,7 +563,7 @@
     "@ok": {
         "description": "OK button on pop up"
     },
-    "byDateRange": "Por intervalo de dados",
+    "byDateRange": "Por data",
     "@byDateRange": {
         "description": "filter by date range"
     },
@@ -617,7 +617,7 @@
     "league": "Liga",
     "wars": "Guerras",
     "ongoingWar": "Guerra em curso",
-    "ongoingCwl": "LGC em curso",
+    "ongoingCwl": "CWL em curso",
     "cantOpenLink": "Não podemos abrir este link.",
     "notInWar": "Não está em guerra",
     "warHistory": "Histórico de guerra",
@@ -696,7 +696,7 @@
             }
         }
     },
-    "endsAt": "Termina a {time}",
+    "endsAt": "Termina às {time}",
     "@endsAt": {
         "placeholders": {
             "time": {
@@ -942,7 +942,7 @@
     "comingSoon": "Em breve!",
     "connectionError": "Ocorreu um erro. Por favor, verifique a sua conexão de internet e tente novamente.",
     "connectionErrorRelaunch": "Ocorreu um erro. Por favor, verifique a sua conexão de internet e reinicie a aplicação.",
-    "updatedAt": "Atualizado em {time}",
+    "updatedAt": "Atualizado às {time}",
     "@updatedAt": {
         "placeholders": {
             "time": {
