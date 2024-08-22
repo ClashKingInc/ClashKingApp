@@ -22,7 +22,6 @@ class WarLog {
             .toList()
         : [];
     return WarLog(items: itemList.cast<WarLogDetails>());
-    return WarLog(items: itemList.cast<WarLogDetails>());
   }
 }
 

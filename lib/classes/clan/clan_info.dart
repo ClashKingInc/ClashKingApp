@@ -279,14 +279,11 @@ class ClanService {
             Clan updatedClan = Clan.fromJson(jsonDecode(responseBody));
             updatedClan.membersWarStats = await MembersWarStatsService().fetchWarLogsAndAnalyzeStats(tag);
             if (updatedClan.warLeague != null) {
-              updatedClan.warLeague!.imageUrl =
-                  LeagueDataManager().getLeagueUrl(updatedClan.warLeague!.name);
+              updatedClan.warLeague!.imageUrl = LeagueDataManager().getLeagueUrl(updatedClan.warLeague!.name);
             }
-
             return updatedClan;
           } else {
-            throw Exception(
-                'Failed to load clan stats with status code: ${response.statusCode}');
+            throw Exception('Failed to load clan stats with status code: ${response.statusCode}');
           }
         },
         retryIf: (e) => e is http.ClientException || e is SocketException,
