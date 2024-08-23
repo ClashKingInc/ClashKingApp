@@ -236,6 +236,10 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
 
   void applyFilters() {
     setState(() {
+      // Start with the original, unfiltered data
+      var membersToFilter =
+          List<MemberWarStats>.from(defaultWarStats!.allMembers);
+
       // Retrieve selected Town Hall levels for members and enemies
       List<int> selectedMemberThLevels = memberThSelection.entries
           .where((entry) => entry.value)
@@ -248,77 +252,104 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
           .toList();
 
       // Apply TH filters first
-      var filteredMembers = defaultWarStats!.allMembers.where((member) {
-        bool matchesMemberTh = selectedMemberThLevels.isEmpty ||
-            selectedMemberThLevels.contains(member.townhallLevel);
+      var filteredMembers = membersToFilter
+          .map((member) {
+            // Filter attacks based on TH levels
+            var filteredWarAttacks = member.warAttacks
+                .map((warAttacks) {
+                  var filteredAttacks = warAttacks.attacks.where((attack) {
+                    bool matchesEnemyTh = selectedEnemyThLevels.isEmpty ||
+                        selectedEnemyThLevels
+                            .contains(attack.defender.townhallLevel);
 
-        if (!matchesMemberTh) {
-          return false;
-        }
+                    bool matchesEqualTh = !equalThSelected ||
+                        member.townhallLevel == attack.defender.townhallLevel;
 
-        var filteredWarAttacks = member.warAttacks
-            .map((warAttacks) {
-              var filteredAttacks = warAttacks.attacks.where((attack) {
-                bool matchesEnemyTh = selectedEnemyThLevels.isEmpty ||
-                    selectedEnemyThLevels
-                        .contains(attack.defender.townhallLevel);
+                    return matchesEnemyTh && matchesEqualTh;
+                  }).toList();
 
-                bool matchesEqualTh = !equalThSelected ||
-                    member.townhallLevel == attack.defender.townhallLevel;
+                  return Attacks(
+                    warType: warAttacks.warType,
+                    attacksExpected: warAttacks.attacksExpected,
+                    attacks: filteredAttacks,
+                    missedAttacks: warAttacks.missedAttacks,
+                  );
+                })
+                .where((war) => war.attacks.isNotEmpty)
+                .toList();
 
-                return matchesEnemyTh && matchesEqualTh;
-              }).toList();
+            if (filteredWarAttacks.isEmpty) {
+              return null;
+            }
 
-              return Attacks(
-                warType: warAttacks.warType,
-                attacksExpected: warAttacks.attacksExpected,
-                attacks: filteredAttacks,
-                missedAttacks: warAttacks.missedAttacks,
-              );
-            })
-            .where((war) => war.attacks.isNotEmpty)
-            .toList();
+            // Recalculate stats based on filtered attacks
+            var filteredMember = MemberWarStats(
+              tag: member.tag,
+              name: member.name,
+              townhallLevel: member.townhallLevel,
+              mapPosition: member.mapPosition,
+              opponentAttacks: member.opponentAttacks,
+            )
+              ..warAttacks = filteredWarAttacks
+              ..defenses = member.defenses;
 
-        return filteredWarAttacks.isNotEmpty;
-      }).toList();
+            filteredMember.calculatePercentages();
+            filteredMember.warsParticipated = filteredWarAttacks.length;
+            filteredMember.expectedAttacks = filteredWarAttacks.fold(
+                0, (sum, war) => sum + war.attacksExpected);
+            filteredMember.missedAttacks = member.missedAttacks;
 
-      // Apply war type filters on the TH filtered members
+            return filteredMember;
+          })
+          .where((member) => member != null)
+          .cast<MemberWarStats>()
+          .toList();
+
+      // Apply war type filters on the TH-filtered members
       List<String> activeFilters = [];
       if (isCWLChecked) activeFilters.add("cwl");
       if (isRandomChecked) activeFilters.add("random");
       if (isFriendlyChecked) activeFilters.add("friendly");
 
       if (activeFilters.isNotEmpty) {
+        var filteredWarMembers = filteredMembers
+            .map((member) {
+              var filteredWarAttacks = member.warAttacks
+                  .where((war) => activeFilters.contains(war.warType))
+                  .toList();
+
+              if (filteredWarAttacks.isEmpty) {
+                return null;
+              }
+
+              // Recalculate stats based on filtered attacks
+              var filteredMember = MemberWarStats(
+                tag: member.tag,
+                name: member.name,
+                townhallLevel: member.townhallLevel,
+                mapPosition: member.mapPosition,
+                opponentAttacks: member.opponentAttacks,
+              )
+                ..warAttacks = filteredWarAttacks
+                ..defenses = member.defenses;
+
+              filteredMember.calculatePercentages();
+              filteredMember.warsParticipated = filteredWarAttacks.length;
+              filteredMember.expectedAttacks = filteredWarAttacks.fold(
+                  0, (sum, war) => sum + war.attacksExpected);
+              filteredMember.missedAttacks = member.missedAttacks;
+
+              return filteredMember;
+            })
+            .where((member) => member != null)
+            .cast<MemberWarStats>()
+            .toList();
+
         warStats = MembersWarStats(
-          items: filteredMembers
-              .map((member) {
-                var filteredWarAttacks = member.warAttacks
-                    .where((war) => activeFilters.contains(war.warType))
-                    .toList();
-
-                var filteredMember = MemberWarStats(
-                  tag: member.tag,
-                  name: member.name,
-                  townhallLevel: member.townhallLevel,
-                  mapPosition: member.mapPosition,
-                  opponentAttacks: member.opponentAttacks,
-                )
-                  ..warAttacks = filteredWarAttacks
-                  ..defenses = member.defenses;
-
-                filteredMember.calculatePercentages();
-                filteredMember.warsParticipated = member.warsParticipated;
-                filteredMember.expectedAttacks = filteredWarAttacks.fold(
-                    0, (sum, war) => sum + war.attacksExpected);
-                filteredMember.missedAttacks = member.missedAttacks;
-
-                return filteredMember;
-              })
-              .where((member) => member.warAttacks.isNotEmpty)
-              .toList(),
+          items: filteredWarMembers,
         );
       } else {
-        // If no war type filters are selected, just use the TH-filtered members
+        // If no war type filters are selected, use only the TH-filtered members
         warStats = MembersWarStats(items: filteredMembers);
       }
 
