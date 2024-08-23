@@ -592,6 +592,13 @@
         }
     }
 },
+"averageStars": "Moyenne d'étoiles",
+"averageDestruction": "Moyenne de destruction",
+"noStars": "0 étoile",
+"oneStar": "1 étoile",
+"twoStars": "2 étoiles",
+"threeStars": "3 étoiles",
+"warParticipation": "Participation à la guerre",
 "warLog": "Journal",
 "publicWarLog": "Journal de guerre public",
 "privateWarLog": "Journal de guerre privé",

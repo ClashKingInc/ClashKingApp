@@ -7,6 +7,7 @@ import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart'
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/component/war_history_players_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class PlayersWarHistoryScreen extends StatefulWidget {
   final Clan clan;
@@ -40,6 +41,26 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
     warStats = widget.clan.membersWarStats!;
     defaultWarStats = warStats;
     _sortMembers();
+  }
+
+  void _resetFilters() {
+    setState(() {
+      // Réinitialiser les filtres de type de guerre
+      isCWLChecked = true;
+      isRandomChecked = true;
+      isFriendlyChecked = true;
+
+      // Réinitialiser les sélections de niveaux TH
+      memberThSelection = {for (int i = 6; i <= 16; i++) i: false};
+      enemyThSelection = {for (int i = 6; i <= 16; i++) i: false};
+      equalThSelected = false;
+
+      // Réinitialiser les données affichées
+      warStats = defaultWarStats;
+
+      // Trier les membres après la réinitialisation
+      _sortMembers();
+    });
   }
 
   void _updateSortBy(String newValue) {
@@ -235,25 +256,28 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
           return false;
         }
 
-        var filteredWarAttacks = member.warAttacks.map((warAttacks) {
-          var filteredAttacks = warAttacks.attacks.where((attack) {
-            bool matchesEnemyTh = selectedEnemyThLevels.isEmpty ||
-                selectedEnemyThLevels
-                    .contains(attack.defender.townhallLevel);
+        var filteredWarAttacks = member.warAttacks
+            .map((warAttacks) {
+              var filteredAttacks = warAttacks.attacks.where((attack) {
+                bool matchesEnemyTh = selectedEnemyThLevels.isEmpty ||
+                    selectedEnemyThLevels
+                        .contains(attack.defender.townhallLevel);
 
-            bool matchesEqualTh = !equalThSelected ||
-                member.townhallLevel == attack.defender.townhallLevel;
+                bool matchesEqualTh = !equalThSelected ||
+                    member.townhallLevel == attack.defender.townhallLevel;
 
-            return matchesEnemyTh && matchesEqualTh;
-          }).toList();
+                return matchesEnemyTh && matchesEqualTh;
+              }).toList();
 
-          return Attacks(
-            warType: warAttacks.warType,
-            attacksExpected: warAttacks.attacksExpected,
-            attacks: filteredAttacks,
-            missedAttacks: warAttacks.missedAttacks,
-          );
-        }).where((war) => war.attacks.isNotEmpty).toList();
+              return Attacks(
+                warType: warAttacks.warType,
+                attacksExpected: warAttacks.attacksExpected,
+                attacks: filteredAttacks,
+                missedAttacks: warAttacks.missedAttacks,
+              );
+            })
+            .where((war) => war.attacks.isNotEmpty)
+            .toList();
 
         return filteredWarAttacks.isNotEmpty;
       }).toList();
@@ -334,163 +358,180 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                 },
                 onBack: () => Navigator.of(context).pop(),
                 onFilter: showFilterDialog),
-            SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: FilterDropdown(
-                sortBy: _sortBy,
-                updateSortBy: _updateSortBy,
-                sortByOptions: {
-                  "Average Stars": "Average Stars",
-                  "Average Destruction": "Average Destruction",
-                  "No Star Attacks": "No Star Attacks",
-                  "One Star Attacks": "One Star Attacks",
-                  "Two Stars Attacks": "Two Stars Attacks",
-                  "Three Stars Attacks": "Three Stars Attacks",
-                  "War Participation": "War Participation",
-                },
-              ),
+            SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(width: 8),
+                FilterDropdown(
+                  sortBy: _sortBy,
+                  updateSortBy: _updateSortBy,
+                  sortByOptions: {
+                    AppLocalizations.of(context)!.threeStars:
+                        "Three Stars Attacks",
+                    AppLocalizations.of(context)!.twoStars: "Two Stars Attacks",
+                    AppLocalizations.of(context)!.oneStar: "One Star Attacks",
+                    AppLocalizations.of(context)!.noStars: "No Star Attacks",
+                    AppLocalizations.of(context)!.averageDestruction:
+                        "Average Destruction",
+                    AppLocalizations.of(context)!.averageStars: "Average Stars",
+                    AppLocalizations.of(context)!.warParticipation:
+                        "War Participation",
+                  },
+                ),
+                IconButton(
+                  icon: Icon(LucideIcons.listRestart),
+                  onPressed: () {
+                    _resetFilters();
+                  },
+                  tooltip: AppLocalizations.of(context)!.reset,
+                ),
+              ],
             ),
-            ...sortedMembers.map((member) {
-              MemberWarStats? memberWarStats =
-                  warStats?.getMemberByTag(member.tag);
+            SizedBox(height: 8),
+            ...sortedMembers.map(
+              (member) {
+                MemberWarStats? memberWarStats =
+                    warStats?.getMemberByTag(member.tag);
 
-              if (memberWarStats?.warsParticipated == null) {
-                return Container();
-              }
+                if (memberWarStats?.warsParticipated == null) {
+                  return Container();
+                }
 
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                child: Card(
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                CachedNetworkImage(
-                                  imageUrl: member.getTownHallPicture(),
-                                  height: 50,
-                                ),
-                                SizedBox(width: 16),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(member.name),
-                                    Text(member.tag),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(memberWarStats?.warsParticipated
-                                            .toString() ??
-                                        ""),
-                                    SizedBox(width: 8),
-                                    CachedNetworkImage(
-                                        imageUrl:
-                                            "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png",
-                                        height: 16,
-                                        width: 16),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(memberWarStats?.missedAttacks
-                                            .toString() ??
-                                        ""),
-                                    SizedBox(width: 8),
-                                    CachedNetworkImage(
-                                        imageUrl:
-                                            "https://assets.clashk.ing/bot/icons/broken_sword.png",
-                                        height: 16,
-                                        width: 16),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.percent, size: 16),
-                                    Icon(Icons.star, size: 16),
-                                  ],
-                                ),
-                                Text(memberWarStats
-                                        ?.averageDestructionPercentage
-                                        .toStringAsFixed(2) ??
-                                    ""),
-                                Text(memberWarStats?.averageStars
-                                        .toStringAsFixed(2) ??
-                                    ""),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [...generateStars(0, 16)],
-                                ),
-                                Text(
-                                    "${memberWarStats?.percentageNoStarsAttacks.toStringAsFixed(2)}%"),
-                                Text(
-                                    "${memberWarStats?.numberOfStarsAttacks(0)}/${memberWarStats?.totalAttacks}"),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [...generateStars(1, 16)],
-                                ),
-                                Text(
-                                    "${memberWarStats?.percentageOneStarsAttacks.toStringAsFixed(2)}%"),
-                                Text(
-                                    "${memberWarStats?.numberOfStarsAttacks(1)}/${memberWarStats?.totalAttacks}"),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [...generateStars(2, 16)],
-                                ),
-                                Text(
-                                    "${memberWarStats?.percentageTwoStarsAttacks.toStringAsFixed(2)}%"),
-                                Text(
-                                    "${memberWarStats?.numberOfStarsAttacks(2)}/${memberWarStats?.totalAttacks}"),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [...generateStars(3, 16)],
-                                ),
-                                Text(
-                                    "${memberWarStats?.percentageThreeStarsAttacks.toStringAsFixed(2)}%"),
-                                Text(
-                                    "${memberWarStats?.numberOfStarsAttacks(3)}/${memberWarStats?.totalAttacks}"),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  CachedNetworkImage(
+                                    imageUrl: member.getTownHallPicture(),
+                                    height: 50,
+                                  ),
+                                  SizedBox(width: 16),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(member.name),
+                                      Text(member.tag),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(memberWarStats?.warsParticipated
+                                              .toString() ??
+                                          ""),
+                                      SizedBox(width: 8),
+                                      CachedNetworkImage(
+                                          imageUrl:
+                                              "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png",
+                                          height: 16,
+                                          width: 16),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(memberWarStats?.missedAttacks
+                                              .toString() ??
+                                          ""),
+                                      SizedBox(width: 8),
+                                      CachedNetworkImage(
+                                          imageUrl:
+                                              "https://assets.clashk.ing/bot/icons/broken_sword.png",
+                                          height: 16,
+                                          width: 16),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.percent, size: 16),
+                                      Icon(Icons.star, size: 16),
+                                    ],
+                                  ),
+                                  Text(memberWarStats
+                                          ?.averageDestructionPercentage
+                                          .toStringAsFixed(2) ??
+                                      ""),
+                                  Text(memberWarStats?.averageStars
+                                          .toStringAsFixed(2) ??
+                                      ""),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [...generateStars(0, 16)],
+                                  ),
+                                  Text(
+                                      "${memberWarStats?.percentageNoStarsAttacks.toStringAsFixed(2)}%"),
+                                  Text(
+                                      "${memberWarStats?.numberOfStarsAttacks(0)}/${memberWarStats?.totalAttacks}"),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [...generateStars(1, 16)],
+                                  ),
+                                  Text(
+                                      "${memberWarStats?.percentageOneStarsAttacks.toStringAsFixed(2)}%"),
+                                  Text(
+                                      "${memberWarStats?.numberOfStarsAttacks(1)}/${memberWarStats?.totalAttacks}"),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [...generateStars(2, 16)],
+                                  ),
+                                  Text(
+                                      "${memberWarStats?.percentageTwoStarsAttacks.toStringAsFixed(2)}%"),
+                                  Text(
+                                      "${memberWarStats?.numberOfStarsAttacks(2)}/${memberWarStats?.totalAttacks}"),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [...generateStars(3, 16)],
+                                  ),
+                                  Text(
+                                      "${memberWarStats?.percentageThreeStarsAttacks.toStringAsFixed(2)}%"),
+                                  Text(
+                                      "${memberWarStats?.numberOfStarsAttacks(3)}/${memberWarStats?.totalAttacks}"),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            }).toList(),
+                );
+              },
+            ).toList(),
           ],
         ),
       ),

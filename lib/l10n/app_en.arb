@@ -603,7 +603,7 @@
 "cwl": "CWL",
 "random": "Random",
 "@random": {
-    "description": "Random/basic war (not friendly or cwl)"
+    "description": "Random/bFasic war (not friendly or cwl)"
 },
 "selectMembersThLevel" : "Select Members TH Level",
 "selectOpponentsThLevel" : "Select Opponents TH Level",
@@ -698,6 +698,13 @@
         }
     }
 },
+"averageStars": "Average stars",
+"averageDestruction": "Average destruction",
+"noStars": "0 star",
+"oneStar": "1 star",
+"twoStars": "2 stars",
+"threeStars": "3 stars",
+"warParticipation": "War Participation",
 "warLog": "War Log",
 "publicWarLog": "Public War Log",
 "privateWarLog": "Private War Log",
