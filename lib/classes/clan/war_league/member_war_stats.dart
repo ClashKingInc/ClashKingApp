@@ -181,6 +181,7 @@ class Attack {
   final bool fresh;
   final Defender defender;
   final String type;
+  final int memberTownHallLevel;
 
   Attack({
     required this.attackerTag,
@@ -192,6 +193,7 @@ class Attack {
     required this.fresh,
     required this.defender,
     required this.type,
+    required this.memberTownHallLevel,
   }) : destructionPercentage = destructionPercentage is int
             ? destructionPercentage.toDouble()
             : destructionPercentage;
@@ -375,7 +377,9 @@ class MembersWarStatsService {
                       duration: attack['duration'],
                       fresh: false,
                       defender: defender,
-                      type: type, // This is the war type determined earlier
+                      type: type,
+                      memberTownHallLevel:
+                          townhallLevel, // This is the war type determined earlier
                     );
                   }).toList() ??
                   [];

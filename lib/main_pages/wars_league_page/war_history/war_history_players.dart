@@ -34,6 +34,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
   Map<int, bool> memberThSelection = {for (int i = 6; i <= 16; i++) i: false};
   Map<int, bool> enemyThSelection = {for (int i = 6; i <= 16; i++) i: false};
   bool equalThSelected = false;
+  bool showUppedTownHall = true;
 
   @override
   void initState() {
@@ -263,9 +264,15 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                             .contains(attack.defender.townhallLevel);
 
                     bool matchesEqualTh = !equalThSelected ||
-                        member.townhallLevel == attack.defender.townhallLevel;
+                        attack.memberTownHallLevel ==
+                            attack.defender.townhallLevel;
 
-                    return matchesEnemyTh && matchesEqualTh;
+                    bool matchesMemberTh = selectedMemberThLevels.isEmpty ||
+                        selectedMemberThLevels.contains(showUppedTownHall
+                            ? attack.memberTownHallLevel
+                            : member.townhallLevel);
+
+                    return matchesEnemyTh && matchesEqualTh && matchesMemberTh;
                   }).toList();
 
                   return Attacks(
@@ -358,6 +365,13 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
     });
   }
 
+  void toggleTownHallVisibility() {
+    setState(() {
+      showUppedTownHall = !showUppedTownHall;
+      applyFilters();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -393,7 +407,13 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SizedBox(width: 8),
+                IconButton(
+                  icon: Icon(
+                    showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
+                    size: 20,
+                  ),
+                  onPressed: toggleTownHallVisibility,
+                ),
                 FilterDropdown(
                   sortBy: _sortBy,
                   updateSortBy: _updateSortBy,
