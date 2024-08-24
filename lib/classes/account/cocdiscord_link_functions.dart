@@ -32,6 +32,7 @@ Future<bool> addLink(
     String playerTagNotExists,
     String accountAlreadyLinked,
     String failedToAddTryAgain) async {
+  playerTag = playerTag.replaceAll('#', '').replaceAll('!', '');
   final url = Uri.parse('https://cocdiscord.link/links');
   final response = await http.post(
     url,
@@ -59,9 +60,62 @@ Future<bool> addLink(
   return false;
 }
 
+Future<bool> addLinkWithAPIToken(
+    String playerTag,
+    String discordId,
+    String authToken,
+    Function updateErrorMessage,
+    String playerTagNotExists,
+    String accountAlreadyLinked,
+    String failedToAddTryAgain,
+    String apiToken,
+    String failedToDeleteTryAgain,
+    String wrongApiToken) async {
+  playerTag = "!$playerTag";
+  final url =
+      Uri.parse('https://api.clashking.xyz/v1/players/$playerTag/verifytoken');
+
+  print("apiToken: $apiToken");
+  final response = await http.post(
+    url,
+    body: jsonEncode(<String, dynamic>{
+      'token': apiToken,
+    }),
+  );
+
+  print(response.body);
+
+  if (response.statusCode == 200) {
+    var data = jsonDecode(response.body);
+    if (data['status'] == 'ok') {
+      bool deleted = await deleteLink(
+          playerTag, authToken, updateErrorMessage, failedToDeleteTryAgain);
+      print(deleted);
+      bool added = await addLink(
+          playerTag,
+          discordId,
+          authToken,
+          updateErrorMessage,
+          playerTagNotExists,
+          accountAlreadyLinked,
+          failedToAddTryAgain);
+      print(added);
+      return deleted && added;
+    } else {
+      print('wrongApiToken');
+      updateErrorMessage(wrongApiToken);
+      return false;
+    }
+  } else {
+    print('wrongApiToken');
+    updateErrorMessage(wrongApiToken);
+    return false;
+  }
+}
+
 Future<bool> deleteLink(String playerTag, String authToken,
     Function updateErrorMessage, String failedToDeleteTryAgain) async {
-  playerTag = playerTag.replaceAll('#', '');
+  playerTag = playerTag.replaceAll('#', '').replaceAll('!', '');
   final url = Uri.parse('https://cocdiscord.link/links/$playerTag');
   final response = await http.delete(
     url,
@@ -93,7 +147,6 @@ Future<bool> getLinks(String playerTag, String authToken) async {
       'Authorization': 'Bearer $authToken',
     },
   );
-
 
   if (response.statusCode == 404) {
     return true;

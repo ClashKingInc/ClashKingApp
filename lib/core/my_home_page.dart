@@ -108,7 +108,8 @@ class MyHomePageState extends State<MyHomePage> {
                       bottomNavigationBar: BottomNavigationBar(
                         type: BottomNavigationBarType.fixed,
                         backgroundColor: Theme.of(context).colorScheme.surface,
-                        selectedItemColor: Theme.of(context).colorScheme.primary,
+                        selectedItemColor:
+                            Theme.of(context).colorScheme.primary,
                         unselectedItemColor:
                             Theme.of(context).colorScheme.tertiary,
                         items: <BottomNavigationBarItem>[
@@ -128,8 +129,8 @@ class MyHomePageState extends State<MyHomePage> {
                           ),
                           BottomNavigationBarItem(
                             icon: Icon(Icons.settings),
-                            label: AppLocalizations.of(context)?.tools ??
-                                'Tools',
+                            label:
+                                AppLocalizations.of(context)?.tools ?? 'Tools',
                           ),
                         ],
                         currentIndex: _selectedIndex,
@@ -137,7 +138,11 @@ class MyHomePageState extends State<MyHomePage> {
                         onTap: _onItemTapped,
                       ),
                     )
-                  : Center(child: CircularProgressIndicator());
+                  : Scaffold(
+                      body: Center(
+                          child: Text(AppLocalizations.of(context)!
+                              .connectionErrorRelaunch)),
+                    );
             },
           );
         }
