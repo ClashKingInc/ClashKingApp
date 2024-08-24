@@ -100,8 +100,8 @@ class _FaqScreenState extends State<FaqScreen> {
                         style: Theme.of(context).textTheme.bodyLarge,
                         children: <TextSpan>[
                           TextSpan(
-                              text: "${AppLocalizations.of(context)!
-                                  .faqSupportWorkAnswer}\n"),
+                              text:
+                                  "${AppLocalizations.of(context)!.faqSupportWorkAnswer}\n"),
                           TextSpan(
                               text:
                                   "\u2022 ${AppLocalizations.of(context)!.faqUseCodeClashKing},\n"),
@@ -150,9 +150,12 @@ class _FaqScreenState extends State<FaqScreen> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return OpenClashDialog(
-                                  url:
-                                      'https://link.clashofclans.com/$languageCode?action=SupportCreator&id=Clashking');
+                              final url = Uri.https(
+                                  'link.clashofclans.com', '/$languageCode', {
+                                'action': 'SupportCreator',
+                                'id': 'Clashking',
+                              });
+                              return OpenClashDialog(url: url);
                             },
                           );
                         },

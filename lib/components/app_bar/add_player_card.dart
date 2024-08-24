@@ -29,8 +29,8 @@ class AddPlayerCardState extends State<AddPlayerCard> {
   @override
   Widget build(BuildContext context) {
     final playerTagNotExists = AppLocalizations.of(context)!.playerTagNotExists;
-    final accountAlreadyLinked =
-        AppLocalizations.of(context)!.accountAlreadyLinked;
+    String accountAlreadyLinked =
+        AppLocalizations.of(context)!.accountAlreadyLinked("");
     final failedToAddTryAgain =
         AppLocalizations.of(context)!.failedToAddTryAgain;
     return Column(

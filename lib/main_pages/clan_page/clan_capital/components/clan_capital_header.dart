@@ -150,14 +150,20 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                           icon: Icon(Icons.sports_esports_rounded,
                               color: Colors.white, size: 32),
                           onPressed: () async {
-                            final languageCode = Localizations.localeOf(context).languageCode.toLowerCase();
+                            final languageCode = Localizations.localeOf(context)
+                                .languageCode
+                                .toLowerCase();
                             showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return OpenClashDialog(
-                                  url: 'https://link.clashofclans.com/$languageCode?action=OpenClanProfile&tag=${widget.clanInfo?.tag}');
-                              }
-                            );
+                                context: context,
+                                builder: (BuildContext context) {
+                                  final url = Uri.https('link.clashofclans.com',
+                                      '/$languageCode', {
+                                    'action': 'OpenClanProfile',
+                                    'tag': widget.clanInfo?.tag,
+                                  });
+
+                                  return OpenClashDialog(url: url);
+                                });
                           },
                         ),
                         SizedBox(height: 8),

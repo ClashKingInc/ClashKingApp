@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class OpenClashDialog extends StatelessWidget {
-  final String url;
+  final Uri url;
 
   const OpenClashDialog({super.key, required this.url});
 
@@ -31,7 +31,7 @@ class OpenClashDialog extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium),
           onPressed: () {
             Navigator.of(context).pop();
-            launchUrl(Uri.parse(url));
+            launchUrl(url);
           },
         ),
       ],

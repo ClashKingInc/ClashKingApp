@@ -76,7 +76,7 @@ class StartupWidgetState extends State<StartupWidget> {
           String playerTagNotExists =
               AppLocalizations.of(context)!.playerTagNotExists;
           String accountAlreadyLinked =
-              AppLocalizations.of(context)!.accountAlreadyLinked;
+              AppLocalizations.of(context)!.accountAlreadyLinked("");
           String failedToAddTryAgain =
               AppLocalizations.of(context)!.failedToAddTryAgain;
           text = text.replaceFirst('#', '');
