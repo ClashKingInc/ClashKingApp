@@ -130,6 +130,10 @@
     },
     "warning": "Waarschuwing",
     "exitAppToOpenClash": "Je staat op het punt de app te verlaten om Clash of Clans te openen.",
+    "confirmLogout": "Are you sure you want to log out?",
+    "@confirmLogout": {
+        "description": "Prompt asking the user to confirm logout"
+    },
     "tagOrNamePlayer": "Spelers tag of naam",
     "searchPlayer": "Zoek speler",
     "nameOrTagPlayer": "Spelers-ID of naam",
@@ -601,6 +605,9 @@
     "@random": {
         "description": "Random/basic war (not friendly or cwl)"
     },
+    "selectMembersThLevel": "Members TH Level",
+    "selectOpponentsThLevel": "Opponents TH Level",
+    "equalThLevel": "Equal TH",
     "builderBaseTrophies": "BB Trofeeën",
     "donations": "Donaties",
     "donationsReceived": "Donaties ontvangen",
@@ -621,31 +628,40 @@
     "cantOpenLink": "We kunnen deze link niet openen.",
     "notInWar": "Niet in oorlog",
     "warHistory": "Oorlogsgeschiedenis",
-    "warHistoryWinsDescription": "We hebben de gegevens bijgehouden van {wins} gewonnen oorlogen voor jouw clan.",
+    "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) in the last 50 wars.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
                 "type": "int"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryLossesDescription": "We hebben de gegevens bijgehouden van {losses} verloren oorlogen voor jouw clan.",
+    "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) in the last 50 wars.",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
                 "type": "int"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryDrawsDescription": "We hebben de gegevens bijgehouden van {draws} gelijkspel oorlogen voor jouw clan.",
+    "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) in the last 50 wars.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
                 "type": "int"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Jouw clan heeft gemiddeld {members} leden die deelnemen aan een oorlog en die we gevolgd hebben.",
+    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating in the last 50 wars.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -653,21 +669,44 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription": "Jouw clan heeft gemiddeld {stars} sterren per aanval aan het einde van de oorlogen die we hebben gevolgd.",
+    "warHistoryAverageWarStarsDescription": "Your clan has an average of {stars} stars at the end of the last 50 wars. It represents {percent} of the total stars.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
                 "type": "double"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Jouw clan heeft een gemiddeld vernietigingspercentage van {percent} aan het einde van de oorlogen die we hebben gevolgd.",
+    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of th last 50 wars.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
                 "type": "String"
             }
         }
+    },
+    "warHistoryAverageClanStarsPerMember": "Your clan has an average of {stars} stars per member in the last 50 wars.",
+    "warHistoryAverageMembers": "~{members} members per war",
+    "@warHistoryAverageMembers": {
+        "placeholders": {
+            "members": {
+                "type": "int"
+            }
+        }
+    },
+    "averageStars": "Average stars",
+    "averageDestruction": "Average destruction",
+    "noStars": "0 star",
+    "oneStar": "1 star",
+    "twoStars": "2 stars",
+    "threeStars": "3 stars",
+    "warParticipation": "War Participation",
+    "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
+    "@toggleTownHallVisibility": {
+        "description": "For example, hide stats from TH15 and below if the player is now TH16"
     },
     "warLog": "Oorlogs logboek",
     "publicWarLog": "Openbaar Oorlogslogboek",
@@ -888,6 +927,7 @@
     "neededOverall": "% Nodig in totaal",
     "calculate": "Berekenen",
     "warStats": "Oorlogstatistieken",
+    "membersStats": "Members Stats",
     "clanWarLeague": "Clanoorlogsdivisie",
     "cwlRank": "Jouw clan staat momenteel op rang {rank}.",
     "@cwlRank": {
@@ -949,5 +989,8 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "tools": "Tools",
+    "community": "Community",
+    "lastRaids": "Last raids"
 }
