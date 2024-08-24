@@ -225,7 +225,7 @@
     "mostAttacks": "Plus d'attaques",
     "lastSeason": "Dernière saison",
     "bestRank": "Meilleur classement",
-    "dayLeft": "{days} jours restants",
+    "daysLeft": "{days} jours restants",
     "@dayLeft": {
         "placeholders": {
             "days": {
@@ -506,7 +506,11 @@
     "lastXwars": "Dernières {number} guerres",
     "friendly": "Amicale",
     "cwl": "LDC",
-    "random": "Aléatoire",
+    "random": "Classique",
+    "selectMembersThLevel" : "Niveau d'HDV des membres",
+    "selectOpponentsThLevel" : "Niveau d'HDV des adversaires",
+    "equalThLevel" : "Niveau d'HDV égal",
+    "warHistoryAverageClanStarsPerMember" : "Moyenne d'étoiles par membre",
     "builderBaseTrophies": "Trophées MDO",
     "donations": "Dons",
     "donationsReceived": "Don reçus",

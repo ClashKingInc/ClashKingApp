@@ -1,212 +1,212 @@
 {
-    "creatorCode": "Creator Code : ClashKing",
-    "signInWithDiscord": "Sign In with Discord",
-    "guestMode": "Guest Mode",
-    "needHelpJoinDiscord": "Need help? Join us on Discord.",
-    "createGuestProfile": "Create your guest profile",
-    "doesNotExist": "{tag} does not exist.",
-    "@doesNotExist": {
-        "placeholders": {
-            "tag": {
-                "type": "String"
-            }
-        }
-    },
-    "isAlreadyLinked": "{tag} is already linked to someone.",
-    "@isAlreadyLinked": {
-        "placeholders": {
-            "tag": {
-                "type": "String"
-            }
-        }
-    },
-    "username": "Username",
-    "pleaseEnterUsername": "Please enter a username",
-    "playerTags": "Player Tags",
-    "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
-    "@followingTagsDoNotExist": {
-        "placeholders": {
-            "tags": {
-                "type": "String"
-            }
-        }
-    },
-    "followingTagsAreAlreadyLinked": "The following tags are already linked to someone: {tags}.",
-    "@followingTagsAreAlreadyLinked": {
-        "placeholders": {
-            "tags": {
-                "type": "String"
-            }
-        }
-    },
-    "welcome": "Welcome!",
-    "welcomeMessage": "Please add one or more Clash Of Clans accounts to your profile. You can add or remove accounts later.",
-    "login": "Login",
-    "logout": "Log out",
-    "language": "Language",
-    "settings": "Settings",
-    "toggleTheme": "Toggle Theme",
-    "selectLanguage": "Select a language",
-    "faq": "FAQ",
-    "faqSubtitle": "Frequently Asked Questions",
-    "faqIsThisFromSupercell": "Is this App from Supercell?",
-    "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-    "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
-    "faqClanNotTracked": "Clan not tracked",
-    "faqClanNotTrackedAnswer": "ClashKing can retrieve this info only if the clan is tracked. If your clan isn't tracked, please invite ClashKing Bot to your Discord server and use the command /addclan. We are working on making this feature available in the app soon.",
-    "faqTrackingDown": "Tracking down",
-    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.",
-    "faqApiLimitation": "Clash of Clans API limitation",
-    "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your buildings levels.",
-    "faqSupportWork": "How can I support your work?",
-    "faqSupportWorkAnswer": "There are several ways to support us:",
-    "faqUseCodeClashKing": "Use code \"ClashKing\"",
-    "faqSupportUsOnPatreon": "Support us on Patreon",
-    "faqShareTheApp": "Share the app with your friends",
-    "faqRateTheApp": "Rate the app on the store",
-    "faqHelpUsTranslate": "Help us translate the app",
-    "faqHowToInviteTheBot": "How can I invite your bot on my Discord server?",
-    "faqHowToInviteTheBotAnswer": "You can invite our bot on your server by clicking on the button below. You will need to have the \"Manage Server\" permission to add the bot.",
-    "faqInviteTheBot": "Invite ClashKing Bot",
-    "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
-    "faqNeedHelpAnswer": "You can join our Discord server to ask for help or provide feedback, or you can email us at devs@clashkingbot.com. Please write in English or French only.",
-    "faqSendEmail": "Send an email",
-    "faqJoinDiscord": "Join our Discord Server",
-    "helpUsTranslate": "Help us translate",
-    "suggestFeatures": "Suggest features",
-    "thankYou": "Thank you!",
-    "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
-    "helpTranslateButton": "Help Translate on Crowdin",
-    "currentTranslators": "Current Translators",
-    "betaFeature": "Beta Feature",
-    "beta": "BETA",
-    "betaDescription": "This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.",
-    "copiedToClipboard": "Copied to clipboard",
-    "all": "All",
-    "@all": {
-        "description": "all items"
-    },
-    "hourIndicator": "h",
-    "minIndicator": "m",
-    "noDataAvailable": "No data available.",
-    "close": "Close",
-    "closed": "Closed",
-    "@closed": {
-        "description": "WarLog closed"
-    },
-    "error": "Error",
-    "player": "Player",
-    "notFoundOrNotLinkedToOurSystem": "{player} not found or not linked to our system.",
-    "@notFoundOrNotLinkedToOurSystem": {
-        "placeholders": {
-            "player": {
-                "type": "String"
-            }
-        }
-    },
-    "tryAnotherNameOrTagOrLinkIt": "Try another name/tag or link it.",
-    "playerNotFound": "Player not found",
-    "noValueEntered": "No value entered",
-    "manage": "Manage",
-    "enterPlayerTag": "Enter a player tag",
-    "add": "Add",
-    "@add": {
-        "description": "Add an account"
-    },
-    "delete": "Delete",
-    "@delete": {
-        "description": "Delete an account"
-    },
-    "addAccount": "Add account",
-    "deleteAccount": "Delete account",
-    "playerTagNotExists": "The player tag entered does not exist.",
-    "accountAlreadyLinked": "The player tag is already linked to someone.",
-    "failedToAddTryAgain": "Failed to add link. Please try again later.",
-    "failedToDeleteTryAgain": "Failed to delete link. Please try again later.",
-    "search": "Search",
-    "@search": {
-        "description": "Search for a player or a clan"
-    },
-    "warning": "Warning",
-    "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-    "confirmLogout": "Are you sure you want to log out?",
-    "@confirmLogout": {
-        "description": "Prompt asking the user to confirm logout"
-    },
-    "tagOrNamePlayer": "Player's tag or name",
+  "creatorCode": "Creator Code : ClashKing",
+  "signInWithDiscord": "Sign In with Discord",
+  "guestMode": "Guest Mode",
+  "needHelpJoinDiscord": "Need help? Join us on Discord.",
+  "createGuestProfile": "Create your guest profile",
+  "doesNotExist": "{tag} does not exist.",
+  "@doesNotExist": {
+      "placeholders": {
+          "tag": {
+              "type": "String"
+          }
+      }
+  },
+  "isAlreadyLinked": "{tag} is already linked to someone.",
+  "@isAlreadyLinked": {
+      "placeholders": {
+          "tag": {
+              "type": "String"
+          }
+      }
+  },
+  "username": "Username",
+  "pleaseEnterUsername": "Please enter a username",
+  "playerTags": "Player Tags",
+  "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
+  "@followingTagsDoNotExist": {
+      "placeholders": {
+          "tags": {
+              "type": "String"
+          }
+      }
+  },
+  "followingTagsAreAlreadyLinked": "The following tags are already linked to someone: {tags}.",
+  "@followingTagsAreAlreadyLinked": {
+      "placeholders": {
+          "tags": {
+              "type": "String"
+          }
+      }
+  },
+  "welcome": "Welcome!",
+  "welcomeMessage": "Please add one or more Clash Of Clans accounts to your profile. You can add or remove accounts later.",
+  "login": "Login",
+  "logout": "Log out",
+  "language": "Language",
+  "settings": "Settings",
+  "toggleTheme": "Toggle Theme",
+  "selectLanguage": "Select a language",
+  "faq": "FAQ",
+  "faqSubtitle": "Frequently Asked Questions",
+  "faqIsThisFromSupercell": "Is this App from Supercell?",
+  "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
+  "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
+  "faqClanNotTracked": "Clan not tracked",
+  "faqClanNotTrackedAnswer": "ClashKing can retrieve this info only if the clan is tracked. If your clan isn't tracked, please invite ClashKing Bot to your Discord server and use the command /addclan. We are working on making this feature available in the app soon.",
+  "faqTrackingDown": "Tracking down",
+  "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.",
+  "faqApiLimitation": "Clash of Clans API limitation",
+  "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your buildings levels.",
+  "faqSupportWork": "How can I support your work?",
+  "faqSupportWorkAnswer": "There are several ways to support us:",
+  "faqUseCodeClashKing": "Use code \"ClashKing\"",
+  "faqSupportUsOnPatreon": "Support us on Patreon",
+  "faqShareTheApp": "Share the app with your friends",
+  "faqRateTheApp": "Rate the app on the store",
+  "faqHelpUsTranslate": "Help us translate the app",
+  "faqHowToInviteTheBot": "How can I invite your bot on my Discord server?",
+  "faqHowToInviteTheBotAnswer": "You can invite our bot on your server by clicking on the button below. You will need to have the \"Manage Server\" permission to add the bot.",
+  "faqInviteTheBot": "Invite ClashKing Bot",
+  "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
+  "faqNeedHelpAnswer": "You can join our Discord server to ask for help or provide feedback, or you can email us at devs@clashkingbot.com. Please write in English or French only.",
+  "faqSendEmail": "Send an email",
+  "faqJoinDiscord": "Join our Discord Server",
+  "helpUsTranslate": "Help us translate",
+  "suggestFeatures": "Suggest features",
+  "thankYou": "Thank you!",
+  "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
+  "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
+  "helpTranslateButton": "Help Translate on Crowdin",
+  "currentTranslators": "Current Translators",
+  "betaFeature": "Beta Feature",
+  "beta": "BETA",
+  "betaDescription": "This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.",
+  "copiedToClipboard": "Copied to clipboard",
+  "all": "All",
+  "@all": {
+      "description": "all items"
+  },
+  "hourIndicator": "h",
+  "minIndicator": "m",
+  "noDataAvailable": "No data available.",
+  "close": "Close",
+  "closed": "Closed",
+  "@closed": {
+      "description": "WarLog closed"
+  },
+  "error": "Error",
+  "player": "Player",
+  "notFoundOrNotLinkedToOurSystem": "{player} not found or not linked to our system.",
+  "@notFoundOrNotLinkedToOurSystem": {
+      "placeholders": {
+          "player": {
+              "type": "String"
+          }
+      }
+  },
+  "tryAnotherNameOrTagOrLinkIt": "Try another name/tag or link it.",
+  "playerNotFound": "Player not found",
+  "noValueEntered": "No value entered",
+  "manage": "Manage",
+  "enterPlayerTag": "Enter a player tag",
+  "add": "Add",
+  "@add": {
+      "description": "Add an account"
+  },
+  "delete": "Delete",
+  "@delete": {
+      "description": "Delete an account"
+  },
+  "addAccount": "Add account",
+  "deleteAccount": "Delete account",
+  "playerTagNotExists": "The player tag entered does not exist.",
+  "accountAlreadyLinked": "The player tag is already linked to someone.",
+  "failedToAddTryAgain": "Failed to add link. Please try again later.",
+  "failedToDeleteTryAgain": "Failed to delete link. Please try again later.",
+  "search": "Search",
+  "@search": {
+      "description": "Search for a player or a clan"
+  },
+  "warning": "Warning",
+  "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
+  "confirmLogout": "Are you sure you want to log out?",
+  "@confirmLogout": {
+      "description": "Prompt asking the user to confirm logout"
+  },
+  "tagOrNamePlayer": "Player's tag or name",
 "searchPlayer": "Search player",
 "nameOrTagPlayer": "Player's name or tag",
 "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
 "@playerClanDescription": {
-    "placeholders": {
-        "clan": {
-            "type": "String"
-        },
-        "tag": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "clan": {
+          "type": "String"
+      },
+      "tag": {
+          "type": "String"
+      }
+  }
 },
 "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
 "@playerRatioDescription": {
-    "placeholders": {
-        "ratio": {
-            "type": "String"
-        },
-        "donations": {
-            "type": "String"
-        },
-        "received": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "ratio": {
+          "type": "String"
+      },
+      "donations": {
+          "type": "String"
+      },
+      "received": {
+          "type": "String"
+      }
+  }
 },
 "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
 "@playerWarPreferenceDescription": {
-    "placeholders": {
-        "preference": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "preference": {
+          "type": "String"
+      }
+  }
 },
 "playerWarStarsDescription": "You have {stars} war stars.",
 "@playerWarStarsDescription": {
-    "placeholders": {
-        "stars": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "stars": {
+          "type": "int"
+      }
+  }
 },
 "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
 "@playerTrophiesDescription": {
-    "placeholders": {
-        "trophies": {
-            "type": "int"
-        },
-        "league": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "trophies": {
+          "type": "int"
+      },
+      "league": {
+          "type": "String"
+      }
+  }
 },
 "playerTownHallLevelDescription": "Your town hall level is {level}.",
 "@playerTownHallLevelDescription": {
-    "placeholders": {
-        "level": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "level": {
+          "type": "int"
+      }
+  }
 },
 "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
 "@playerBuilderBaseDescription": {
-    "placeholders": {
-        "level": {
-            "type": "int"
-        },
-        "trophies": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "level": {
+          "type": "int"
+      },
+      "trophies": {
+          "type": "int"
+      }
+  }
 },
 "dashboard": "Dashboard",
 "homeBase": "Home Base",
@@ -220,11 +220,11 @@
 "member": "Member",
 "ready": "Opted In",
 "@ready": {
-    "description": "Opted In for war"
+  "description": "Opted In for war"
 },
 "unready": "Opted Out",
 "@unready": {
-    "description": "Opted Out for war"
+  "description": "Opted Out for war"
 },
 "heroes": "Heroes",
 "equipment": "Equipments",
@@ -237,27 +237,27 @@
 "achievements": "Achievements",
 "byDay": "By Day",
 "@byDay": {
-    "description": "Shows stats by day"
+  "description": "Shows stats by day"
 },
 "bySeason": "By Season",
 "@byMonth": {
-    "description": "Shows stats by season"
+  "description": "Shows stats by season"
 },
 "dayIndex": "Day {index}",
 "@dayIndex": {
-    "placeholders": {
-        "index": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "index": {
+          "type": "int"
+      }
+  }
 },
 "indexDays": "{index} days",
 "@indexDays": {
-    "placeholders": {
-        "index": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "index": {
+          "type": "int"
+      }
+  }
 },
 "bestTrophies": "Best Trophies",
 "mostAttacks": "Most Attacks",
@@ -265,11 +265,11 @@
 "bestRank": "Best Global Rank",
 "daysLeft": "{days} days left",
 "@daysLeft": {
-    "placeholders": {
-        "days": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "days": {
+          "type": "int"
+      }
+  }
 },
 "date": "Date",
 "stats": "Stats",
@@ -278,92 +278,92 @@
 "charts": "Charts",
 "history": "History",
 "@history": {
-    "description": "Shows EOS trophies history"
+  "description": "Shows EOS trophies history"
 },
 "legendLeague": "Legend League",
 "notInLegendLeague": "Not in Legend League",
 "noLegendData": "No Legend Data Found for today",
 "legendStartDescription": "You started the day with {trophies} trophies.",
 "@legendStartDescription": {
-    "placeholders": {
-        "trophies": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "trophies": {
+          "type": "String"
+      }
+  }
 },
 "legendNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
 "@legendNoRankLocalDescription": {
-    "placeholders": {
-        "country": {
-            "type": "String"
-        },
-        "trophies": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "country": {
+          "type": "String"
+      },
+      "trophies": {
+          "type": "int"
+      }
+  }
 },
 "legendRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
 "@legendRankDescription": {
-    "placeholders": {
-        "rank": {
-            "type": "int"
-        },
-        "country": {
-            "type": "String"
-        },
-        "trophies": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "rank": {
+          "type": "int"
+      },
+      "country": {
+          "type": "String"
+      },
+      "trophies": {
+          "type": "int"
+      }
+  }
 },
 "legendGainDescription": "You gained {trophies} trophies for now.",
 "@legendGainDescription": {
-    "placeholders": {
-        "trophies": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "trophies": {
+          "type": "int"
+      }
+  }
 },
 "legendLossDescription": "You lost {trophies} trophies for now.",
 "@legendLossDescription": {
-    "placeholders": {
-        "trophies": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "trophies": {
+          "type": "int"
+      }
+  }
 },
 "legendNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
 "@legendNoGlobalRankDescription": {
-    "placeholders": {
-        "trophies": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "trophies": {
+          "type": "int"
+      }
+  }
 },
 "legendGlobalRankDescription": "You are currently ranked {rank} globally.",
 "@legendGlobalRankDescription": {
-    "placeholders": {
-        "rank": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "rank": {
+          "type": "int"
+      }
+  }
 },
 "noRank": "No ranking",
 "started": "Started",
 "@started": {
-    "description": "Title for the number of trophies at the beginning of the day"
+  "description": "Title for the number of trophies at the beginning of the day"
 },
 "ended": "Ended",
 "@ended": {
-    "description": "Title for the number of trophies at the end of the day"
+  "description": "Title for the number of trophies at the end of the day"
 },
 "average": "Average",
 "@average": {
-    "description": "Average value of legend trophies (defense and attack)"
+  "description": "Average value of legend trophies (defense and attack)"
 },
 "remaining": "Remaining",
 "@remaining": {
-    "description": "Remaining attacks or defenses"
+  "description": "Remaining attacks or defenses"
 },
 "legendsTitle": "Inacurate Data?",
 "legendsExplanation_intro": "Due to limitations in the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
@@ -380,36 +380,36 @@
 "toDoList": "To do list",
 "lastActive": "Last active: {date}",
 "@lastActive": {
-    "placeholders": {
-        "date": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "date": {
+          "type": "String"
+      }
+  }
 },
 "numberAccounts": "{number} accounts",
 "@numberAccounts": {
-    "placeholders": {
-        "number": {
-            "type": "int"
-        }
-    },
-    "description": "Number of accounts (ex : 4 accounts)"
+  "placeholders": {
+      "number": {
+          "type": "int"
+      }
+  },
+  "description": "Number of accounts (ex : 4 accounts)"
 },
 "numberActiveAccounts": "{number} active accounts",
 "@numberActiveAccounts": {
-    "placeholders": {
-        "number": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "number": {
+          "type": "int"
+      }
+  }
 },
 "numberInactiveAccounts": "{number} inactive accounts",
 "@numberInactiveAccounts": {
-    "placeholders": {
-        "number": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "number": {
+          "type": "int"
+      }
+  }
 },
 "activeAccounts": "Active accounts",
 "inactiveAccounts": "Inactive accounts",
@@ -430,69 +430,69 @@
 "todoExplanation_conclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
 "worst": "Worst",
 "@worst": {
-    "description": "Worst end of day trophies"
+  "description": "Worst end of day trophies"
 },
 "best": "Best",
 "@best": {
-    "description": "Best end of day trophies"
+  "description": "Best end of day trophies"
 },
 "total": "Total",
 "heroesEquipments": "Heroes equipments",
 "daysAgo": "{days} days ago",
 "@daysAgo": {
-    "placeholders": {
-        "days": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "days": {
+          "type": "int"
+      }
+  }
 },
 "dayAgo": "{day} day ago",
 "@dayAgo": {
-    "placeholders": {
-        "day": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "day": {
+          "type": "int"
+      }
+  }
 },
 "hourAgo": "{hour} hour ago",
 "@hourAgo": {
-    "placeholders": {
-        "hour": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "hour": {
+          "type": "int"
+      }
+  }
 },
 "hoursAgo": "{hours} hours ago",
 "@hoursAgo": {
-    "placeholders": {
-        "hours": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "hours": {
+          "type": "int"
+      }
+  }
 },
 "minuteAgo": "{minute} minute ago",
 "@minuteAgo": {
-    "placeholders": {
-        "minute": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "minute": {
+          "type": "int"
+      }
+  }
 },
 "minutesAgo": "{minutes} minutes ago",
 "@minutesAgo": {
-    "placeholders": {
-        "minutes": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "minutes": {
+          "type": "int"
+      }
+  }
 },
 "secondAgo": "{seconds}s ago",
 "@secondAgo": {
-    "placeholders": {
-        "seconds": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "seconds": {
+          "type": "int"
+      }
+  }
 },
 "justNow": "Just Now",
 "trophiesByMonth": "Trophies by month",
@@ -504,15 +504,15 @@
 "filters": "Filters",
 "whatever": "Whatever",
 "@whatever": {
-    "description": "Whatever the value"
+  "description": "Whatever the value"
 },
 "any": "Any",
 "@any": {
-    "description": "Any value is accepted"
+  "description": "Any value is accepted"
 },
 "notSet": "Not set",
 "@notSet": {
-    "description": "Filter value is not set"
+  "description": "Filter value is not set"
 },
 "warFrequency": "War frequency",
 "minimumMembers": "Minimum members",
@@ -525,7 +525,7 @@
 "apply": "Apply",
 "opened": "Opened",
 "@opened": {
-    "description": "Clan is opened"
+  "description": "Clan is opened"
 },
 "inviteOnly": "Invite Only",
 "cancel": "Cancel",
@@ -537,74 +537,77 @@
 "townHallLevel": "TH Level",
 "thLevel": "TH{level}",
 "@thLevel": {
-    "placeholders": {
-        "level": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "level": {
+          "type": "int"
+      }
+  }
 },
 "bhLevel": "BH{level}",
 "@bhLevel": {
-    "placeholders": {
-        "level": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "level": {
+          "type": "int"
+      }
+  }
 },
 "townHallLevelLevel": "TownHall {level}",
 "@townHallLevelLevel": {
-    "placeholders": {
-        "level": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "level": {
+          "type": "int"
+      }
+  }
 },
 "byNumberOfWars": "By number of wars",
 "@byNumberOfWars": {
-    "description": "filter by number of wars"
+  "description": "filter by number of wars"
 },
 "ok": "OK",
 "@ok": {
-    "description": "OK button on pop up"
+  "description": "OK button on pop up"
 },
 "byDateRange": "By date range",
 "@byDateRange": {
-    "description": "filter by date range"
+  "description": "filter by date range"
 },
 "selectSeason": "Select a season",
 "@selectSeason": {
-    "description": "Ask player to select a season"
+  "description": "Ask player to select a season"
 },
 "year": "Year",
 "month": "Month",
 "allTownHalls": "All TownHalls",
 "seasonDate": "{date} season",
 "@seasonDate": {
-    "description": "Example : August 2024 season",
-    "placeholders": {
-        "date": {
-            "type": "String"
-        }
-    }
+  "description": "Example : August 2024 season",
+  "placeholders": {
+      "date": {
+          "type": "String"
+      }
+  }
 },
 "lastXwars": "Last {number} wars",
 "@lastXwars": {
-    "description": "Example : Shows the last 25 wars",
-    "placeholders": {
-        "number": {
-            "type": "int"
-        }
-    }
+  "description": "Example : Shows the last 25 wars",
+  "placeholders": {
+      "number": {
+          "type": "int"
+      }
+  }
 },
 "friendly": "Friendly",
 "@friendly": {
-    "description": "Friendly war"
+  "description": "Friendly war"
 },
 "cwl": "CWL",
 "random": "Random",
 "@random": {
-    "description": "Random/basic war (not friendly or cwl)"
+  "description": "Random/basic war (not friendly or cwl)"
 },
+"selectMembersThLevel" : "Members TH Level",
+"selectOpponentsThLevel" : "Opponents TH Level",
+"equalThLevel" : "Equal TH",
 "builderBaseTrophies": "BB Trophies",
 "donations": "Donations",
 "donationsReceived": "Donations Received",
@@ -627,108 +630,119 @@
 "warHistory": "War History",
 "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) in the last 50 wars.",
 "@warHistoryWinsDescription": {
-    "placeholders": {
-        "wins": {
-            "type": "int"
-        },
-        "percent": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "wins": {
+          "type": "int"
+      },
+      "percent": {
+          "type": "String"
+      }
+  }
 },
 "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) in the last 50 wars.",
 "@warHistoryLossesDescription": {
-    "placeholders": {
-        "losses": {
-            "type": "int"
-        },
-        "percent": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "losses": {
+          "type": "int"
+      },
+      "percent": {
+          "type": "String"
+      }
+  }
 },
 "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) in the last 50 wars.",
 "@warHistoryDrawsDescription": {
-    "placeholders": {
-        "draws": {
-            "type": "int"
-        },
-        "percent": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "draws": {
+          "type": "int"
+      },
+      "percent": {
+          "type": "String"
+      }
+  }
 },
 "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating in the last 50 wars.",
 "@warHistoryAverageMembersDescription": {
-    "placeholders": {
-        "members": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "members": {
+          "type": "int"
+      }
+  }
 },
 "warHistoryAverageWarStarsDescription": "Your clan has an average of {stars} stars at the end of the last 50 wars. It represents {percent} of the total stars.",
 "@warHistoryAverageWarStarsDescription": {
-    "placeholders": {
-        "stars": {
-            "type": "double"
-        },
-        "percent": {
-            "type": "String"
-        }
-    }
-    
+  "placeholders": {
+      "stars": {
+          "type": "double"
+      },
+      "percent": {
+          "type": "String"
+      }
+  }
+  
 },
 "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of th last 50 wars.",
 "@warHistoryAverageHitRateDescription": {
-    "placeholders": {
-        "percent": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "percent": {
+          "type": "String"
+      }
+  }
 },
 "warHistoryAverageClanStarsPerMember" : "Your clan has an average of {stars} stars per member in the last 50 wars.",
 "warHistoryAverageMembers" : "~{members} members per war",
 "@warHistoryAverageMembers" : {
-    "placeholders": {
-        "members": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "members": {
+          "type": "int"
+      }
+  }
+},
+"averageStars": "Average stars",
+"averageDestruction": "Average destruction",
+"noStars": "0 star",
+"oneStar": "1 star",
+"twoStars": "2 stars",
+"threeStars": "3 stars",
+"warParticipation": "War Participation",
+"toggleTownHallVisibility" : "Hide/Show stats from former TH levels",
+"@toggleTownHallVisibility" : {
+  "description": "For example, hide stats from TH15 and below if the player is now TH16"
 },
 "warLog": "War Log",
 "publicWarLog": "Public War Log",
 "privateWarLog": "Private War Log",
 "startsIn": "Starts in {time}",
 "@startsIn": {
-    "placeholders": {
-        "time": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "time": {
+          "type": "String"
+      }
+  }
 },
 "startsAt": "Starts at {time}",
 "@startsAt": {
-    "placeholders": {
-        "time": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "time": {
+          "type": "String"
+      }
+  }
 },
 "endsIn": "Ends in {time}",
 "@endsIn": {
-    "placeholders": {
-        "time": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "time": {
+          "type": "String"
+      }
+  }
 },
 "endsAt": "Ends at {time}",
 "@endsAt": {
-    "placeholders": {
-        "time": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "time": {
+          "type": "String"
+      }
+  }
 },
 "joinLeaveLogs": "Join/Leave Logs",
 "join": "Join",
@@ -736,98 +750,98 @@
 "reset": "Reset",
 "leaveNumberDescription": "{number} players left the clan during the current season ({date}).",
 "@leaveNumberDescription": {
-    "description": "Number of players who left the clan during the current season.",
-    "placeholders": {
-        "number": {
-            "type": "int"
-        },
-        "date": {
-            "type": "String"
-        }
-    }
+  "description": "Number of players who left the clan during the current season.",
+  "placeholders": {
+      "number": {
+          "type": "int"
+      },
+      "date": {
+          "type": "String"
+      }
+  }
 },
 "joinNumberDescription": "{number} players joined the clan during the current season ({date}).",
 "@joinNumberDescription": {
-    "description": "Number of players who joined the clan during the current season.",
-    "placeholders": {
-        "number": {
-            "type": "int"
-        },
-        "date": {
-            "type": "String"
-        }
-    }
+  "description": "Number of players who joined the clan during the current season.",
+  "placeholders": {
+      "number": {
+          "type": "int"
+      },
+      "date": {
+          "type": "String"
+      }
+  }
 },
 "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new members this season ({date}).",
 "@joinLeaveDifferenceUpDescription": {
-    "description": "Number of new members gained by the clan this season.",
-    "placeholders": {
-        "number": {
-            "type": "int"
-        },
-        "date": {
-            "type": "String"
-        }
-    }
+  "description": "Number of new members gained by the clan this season.",
+  "placeholders": {
+      "number": {
+          "type": "int"
+      },
+      "date": {
+          "type": "String"
+      }
+  }
 },
 "joinLeaveDifferenceDownDescription": "Your clan has lost {number} members this season ({date}).",
 "@joinLeaveDifferenceDownDescription": {
-    "description": "Number of members lost by the clan this season.",
-    "placeholders": {
-        "number": {
-            "type": "int"
-        },
-        "date": {
-            "type": "String"
-        }
-    }
+  "description": "Number of members lost by the clan this season.",
+  "placeholders": {
+      "number": {
+          "type": "int"
+      },
+      "date": {
+          "type": "String"
+      }
+  }
 },
 "joinLeaveDifferenceEqualDescription": "Your clan has the same number of members as at the beginning of the season ({date}).",
 "@joinLeaveDifferenceEqualDescription": {
-    "description": "Difference in the number of members between the beginning and the end of the season.",
-    "placeholders": {
-        "date": {
-            "type": "String"
-        }
-    }
+  "description": "Difference in the number of members between the beginning and the end of the season.",
+  "placeholders": {
+      "date": {
+          "type": "String"
+      }
+  }
 },
 "@joinLeaveLogs": {
-    "description": "Logs of players joining or leaving the clan."
+  "description": "Logs of players joining or leaving the clan."
 },
 "leftOnAt": "Left on {date} at {time}.",
 "@leftOnAt": {
-    "description": "[The player] left the clan on 16/06/2024 at 10:35.",
-    "placeholders": {
-        "date": {
-            "type": "String"
-        },
-        "time": {
-            "type": "String"
-        }
-    }
+  "description": "[The player] left the clan on 16/06/2024 at 10:35.",
+  "placeholders": {
+      "date": {
+          "type": "String"
+      },
+      "time": {
+          "type": "String"
+      }
+  }
 },
 "joinedOnAt": "Joined on {date} at {time}.",
 "@joinedOnAt": {
-    "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
-    "placeholders": {
-        "date": {
-            "type": "String"
-        },
-        "time": {
-            "type": "String"
-        }
-    }
+  "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
+  "placeholders": {
+      "date": {
+          "type": "String"
+      },
+      "time": {
+          "type": "String"
+      }
+  }
 },
 "statistics": "Statistics",
 "stars": "Stars",
 "numberOfStars": "Number of stars",
 "destructionRate": "Destruction rate",
 "@destructionRate": {
-    "description": "Percentage of destruction in war"
+  "description": "Percentage of destruction in war"
 },
 "events": "Events",
 "@events": {
-    "description": "War events"
+  "description": "War events"
 },
 "team": "Teams",
 "myTeam": "My team",
@@ -840,7 +854,7 @@
 "defeat": "Defeat",
 "draw": "Draw",
 "@draw": {
-    "description": "War ended in a draw"
+  "description": "War ended in a draw"
 },
 "perfectWar": "Perfect war",
 "newest": "Newest",
@@ -849,19 +863,19 @@
 "preparation": "Preparation",
 "isNotInWar": "{clan} is not in war.",
 "@isNotInWar": {
-    "placeholders": {
-        "clan": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "clan": {
+          "type": "String"
+      }
+  }
 },
 "warLogIsClosed": "{clan}'s war log is closed.",
 "@warLogIsClosed": {
-    "placeholders": {
-        "clan": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "clan": {
+          "type": "String"
+      }
+  }
 },
 "askForWar": "Contact the leader or a co-leader to start a war.",
 "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
@@ -871,44 +885,44 @@
 "stateOfTheWar": "State of the war",
 "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
 "@starsNeededToTakeTheLead": {
-    "placeholders": {
-        "clan": {
-            "type": "String"
-        },
-        "star": {
-            "type": "int"
-        },
-        "star2": {
-            "type": "int"
-        },
-        "percent": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "clan": {
+          "type": "String"
+      },
+      "star": {
+          "type": "int"
+      },
+      "star2": {
+          "type": "int"
+      },
+      "percent": {
+          "type": "String"
+      }
+  }
 },
 "starsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
 "@starsAndPercentNeededToTakeTheLead": {
-    "placeholders": {
-        "clan": {
-            "type": "String"
-        },
-        "percent": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "clan": {
+          "type": "String"
+      },
+      "percent": {
+          "type": "String"
+      }
+  }
 },
 "clanDraw": "The two clans are tied",
 "fastCalculator": "Fast calculator",
 "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
 "@fastCalculatorAnswer": {
-    "placeholders": {
-        "percentNeedeed": {
-            "type": "String"
-        },
-        "result": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "percentNeedeed": {
+          "type": "String"
+      },
+      "result": {
+          "type": "String"
+      }
+  }
 },
 "teamSize": "Team size",
 "neededOverall": "% Needed overall",
@@ -918,51 +932,51 @@
 "clanWarLeague": "Clan War League",
 "cwlRank": "Your clan is currently ranked {rank}.",
 "@cwlRank": {
-    "placeholders": {
-        "rank": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "rank": {
+          "type": "int"
+      }
+  }
 },
 "cwlStars": "Your clan has a total of {stars} stars.",
 "@cwlStars": {
-    "placeholders": {
-        "stars": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "stars": {
+          "type": "int"
+      }
+  }
 },
 "cwlMissingStarsFromNext": "Your clan is missing {stars} stars to catch up with the next clan.",
 "@cwlMissingStarsFromNext": {
-    "placeholders": {
-        "stars": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "stars": {
+          "type": "int"
+      }
+  }
 },
 "cwlMissingStarsFromFirst": "Your clan is missing {stars} stars to catch up with the first clan.",
 "@cwlMissingStarsFromFirst": {
-    "placeholders": {
-        "stars": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "stars": {
+          "type": "int"
+      }
+  }
 },
 "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
 "@cwlDestructionPercentage": {
-    "placeholders": {
-        "percent": {
-            "type": "String"
-        }
-    }
+  "placeholders": {
+      "percent": {
+          "type": "String"
+      }
+  }
 },
 "cwlCurrentRound": "It's currently round {round}.",
 "@cwlCurrentRound": {
-    "placeholders": {
-        "round": {
-            "type": "int"
-        }
-    }
+  "placeholders": {
+      "round": {
+          "type": "int"
+      }
+  }
 },
 "noAccountLinkedToYourProfileFound": "No account linked to your profile found",
 "management": "Management",
@@ -971,10 +985,13 @@
 "connectionErrorRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
 "updatedAt": "Updated at {time}",
 "@updatedAt": {
-    "placeholders": {
-        "time": {
-            "type": "String"
-        }
-    }
-}
+  "placeholders": {
+      "time": {
+          "type": "String"
+      }
+  }
+},
+  "tools": "Tools",
+  "community": "Community",
+  "lastRaids": "Last raids"
 }

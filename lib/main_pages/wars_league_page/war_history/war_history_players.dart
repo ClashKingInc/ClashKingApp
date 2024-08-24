@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/clan/description/member.dart';
 import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
-import 'package:clashkingapp/components/chip.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/component/war_history_players_header.dart';

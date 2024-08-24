@@ -603,10 +603,10 @@
 "cwl": "CWL",
 "random": "Random",
 "@random": {
-    "description": "Random/bFasic war (not friendly or cwl)"
+    "description": "Random/basic war (not friendly or cwl)"
 },
-"selectMembersThLevel" : "Select Members TH Level",
-"selectOpponentsThLevel" : "Select Opponents TH Level",
+"selectMembersThLevel" : "Members TH Level",
+"selectOpponentsThLevel" : "Opponents TH Level",
 "equalThLevel" : "Equal TH",
 "builderBaseTrophies": "BB Trophies",
 "donations": "Donations",

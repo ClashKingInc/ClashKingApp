@@ -1,0 +1,22 @@
+name: Run Dart Script on Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-dart-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      - name: Set up Dart environment
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable 
+
+      - name: Run Dart script
+        run: dart lib/l10n/update_arb.dart
