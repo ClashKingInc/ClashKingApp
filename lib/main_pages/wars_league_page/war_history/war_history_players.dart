@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/clan/description/member.dart';
 import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
+import 'package:clashkingapp/components/chip.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/component/war_history_players_header.dart';
@@ -29,6 +32,34 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
   bool isFriendlyChecked = true;
   MembersWarStats? warStats;
   MembersWarStats? defaultWarStats;
+
+  final GlobalKey<TooltipState> _tooltipKey = GlobalKey<TooltipState>();
+  bool _isTooltipVisible = false;
+  Timer? _timer;
+
+  void _toggleTooltip() {
+    final tooltip = _tooltipKey.currentState;
+    if (_isTooltipVisible) {
+      tooltip?.deactivate();
+      _timer?.cancel();
+    } else {
+      tooltip?.ensureTooltipVisible();
+      _timer?.cancel();
+      _timer = Timer(Duration(seconds: 5), () {
+        if (_isTooltipVisible) {
+          tooltip?.deactivate();
+          if (mounted) {
+            setState(() {
+              _isTooltipVisible = false;
+            });
+          }
+        }
+      });
+    }
+    setState(() {
+      _isTooltipVisible = !_isTooltipVisible;
+    });
+  }
 
   // Track selected Town Hall levels for members and enemies
   Map<int, bool> memberThSelection = {for (int i = 6; i <= 16; i++) i: false};
@@ -73,7 +104,21 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
 
   void _sortMembers() {
     if (warStats != null) {
-      sortedMembers = List.from(widget.clan.memberList!);
+      // Populate sortedMembers from the filtered warStats
+      sortedMembers = warStats!.allMembers
+          .map((memberStats) {
+            // Find the original member details from the clan list using the member tag
+            Member? matchingMember = widget.clan.memberList!.firstWhere(
+                (clanMember) => clanMember.tag == memberStats.tag,
+                orElse: () => Member.defaultMember());
+
+            return matchingMember;
+          })
+          .where((member) => member.name != "") // Filter out nulls
+          .cast<Member>() // Cast the list to the correct type
+          .toList();
+
+      // Sort the members based on the selected sorting criteria
       switch (_sortBy) {
         case "Average Destruction":
           sortedMembers.sort((a, b) =>
@@ -408,12 +453,15 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
-                  icon: Icon(
-                    showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
-                    size: 20,
+                    icon: Icon(
+                      showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
+                      size: 20,
+                    ),
+                    tooltip:
+                        AppLocalizations.of(context)!.toggleTownHallVisibility,
+                    onPressed: toggleTownHallVisibility,
                   ),
-                  onPressed: toggleTownHallVisibility,
-                ),
+                
                 FilterDropdown(
                   sortBy: _sortBy,
                   updateSortBy: _updateSortBy,

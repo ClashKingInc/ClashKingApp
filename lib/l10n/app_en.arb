@@ -705,6 +705,10 @@
 "twoStars": "2 stars",
 "threeStars": "3 stars",
 "warParticipation": "War Participation",
+"toggleTownHallVisibility" : "Hide/Show stats from former TH levels",
+"@toggleTownHallVisibility" : {
+    "description": "For example, hide stats from TH15 and below if the player is now TH16"
+},
 "warLog": "War Log",
 "publicWarLog": "Public War Log",
 "privateWarLog": "Private War Log",

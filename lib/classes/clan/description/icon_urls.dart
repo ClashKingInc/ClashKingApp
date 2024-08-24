@@ -16,4 +16,12 @@ class IconUrls {
       medium: json['medium'] ?? 'No medium image URL',
     );
   }
+
+  static IconUrls defaultIconUrls() {
+    return IconUrls(
+      small: '',
+      tiny: '',
+      medium: '',
+    );
+  }
 }
