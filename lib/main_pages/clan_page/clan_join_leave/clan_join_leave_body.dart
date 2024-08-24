@@ -32,13 +32,9 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
   }
 
   void updateFilter(String newFilter) {
-    if (newFilter == "reset") {
-      resetDateFilter();
-    } else {
-      setState(() {
-        currentFilter = newFilter;
-      });
-    }
+    setState(() {
+      currentFilter = newFilter;
+    });
   }
 
   void resetDateFilter() {
@@ -55,7 +51,6 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
       AppLocalizations.of(context)?.all ?? "All": "all",
       AppLocalizations.of(context)?.join ?? "Join": "join",
       AppLocalizations.of(context)?.leave ?? "Leave": "leave",
-      AppLocalizations.of(context)?.reset ?? "Reset": "reset",
     };
 
     var filteredItems = widget.joinLeaveClan.items
@@ -75,41 +70,52 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
         Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                SizedBox(width: 16),
-                IconButton(
-                  icon: Icon(Icons.calendar_today,
-                      color: Theme.of(context).colorScheme.onSurface, size: 16),
-                  onPressed: () async {
-                    DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: selectedDate ?? DateTime.now(),
-                      firstDate: DateTime(2018, 8),
-                      lastDate: DateTime(2200),
-                    );
-                    if (picked != null && picked != selectedDate) {
-                      setState(() {
-                        selectedDate = picked;
-                      });
-                    }
-                  },
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.calendar_today, size: 16),
+                      onPressed: () async {
+                        DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: selectedDate ?? DateTime.now(),
+                          firstDate: DateTime(2018, 8),
+                          lastDate: DateTime(2200),
+                        );
+                        if (picked != null && picked != selectedDate) {
+                          setState(() {
+                            selectedDate = picked;
+                          });
+                        }
+                      },
+                    ),
+                    SizedBox(width: 40),
+                  ],
                 ),
-                Spacer(),
                 FilterDropdown(
                   sortBy: currentFilter,
                   updateSortBy: updateFilter,
                   sortByOptions: filterOptions,
                 ),
-                Spacer(),
-                IconButton(
-                  icon: Icon(Icons.link,
-                      color: filterActiveUsers ? Colors.green : null),
-                  onPressed: toggleFilterActiveUsers,
-                  color: filterActiveUsers ? Colors.green : Colors.grey,
-                  tooltip: 'Filter Active Users',
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.link,
+                          color: filterActiveUsers ? Colors.green : null),
+                      onPressed: toggleFilterActiveUsers,
+                      color: filterActiveUsers ? Colors.green : null,
+                      tooltip: 'Filter Active Users',
+                    ),
+                    IconButton(
+                      icon: Icon(LucideIcons.listRestart),
+                      onPressed: () {
+                        resetDateFilter();
+                      },
+                      tooltip: AppLocalizations.of(context)!.reset,
+                    ),
+                  ],
                 ),
-                SizedBox(width: 16),
               ],
             ),
             SizedBox(height: 2),
