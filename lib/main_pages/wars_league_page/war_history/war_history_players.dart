@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/clan/description/member.dart';
 import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
+import 'package:clashkingapp/classes/functions.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/component/war_history_players_header.dart';
@@ -61,8 +62,8 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
   }
 
   // Track selected Town Hall levels for members and enemies
-  Map<int, bool> memberThSelection = {for (int i = 6; i <= 16; i++) i: false};
-  Map<int, bool> enemyThSelection = {for (int i = 6; i <= 16; i++) i: false};
+  Map<int, bool> memberThSelection = {for (int i = 1; i <= 16; i++) i: false};
+  Map<int, bool> enemyThSelection = {for (int i = 1; i <= 16; i++) i: false};
   bool equalThSelected = false;
   bool showUppedTownHall = true;
 
@@ -212,10 +213,18 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                     Text(AppLocalizations.of(context)!.selectMembersThLevel,
                         style: Theme.of(context).textTheme.bodyMedium),
                     Wrap(
-                      spacing: 5.0,
+                      spacing: 0.0,
                       children: memberThSelection.keys.map((thLevel) {
                         return FilterChip(
-                          label: Text('TH $thLevel'),
+                          showCheckmark: false,
+                          selectedColor: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.7),
+                          labelPadding: EdgeInsets.all(0),
+                          label: CachedNetworkImage(
+                              imageUrl: getTownHallPicture(thLevel),
+                              height: 24),
                           selected: memberThSelection[thLevel]!,
                           onSelected: (bool selected) {
                             setState(() {
@@ -232,7 +241,15 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                       spacing: 5.0,
                       children: enemyThSelection.keys.map((thLevel) {
                         return FilterChip(
-                          label: Text('TH $thLevel'),
+                          showCheckmark: false,
+                          selectedColor: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.7),
+                          labelPadding: EdgeInsets.all(0),
+                          label: CachedNetworkImage(
+                              imageUrl: getTownHallPicture(thLevel),
+                              height: 24),
                           selected: enemyThSelection[thLevel]!,
                           onSelected: (bool selected) {
                             setState(() {
@@ -452,15 +469,14 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
-                    icon: Icon(
-                      showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
-                      size: 20,
-                    ),
-                    tooltip:
-                        AppLocalizations.of(context)!.toggleTownHallVisibility,
-                    onPressed: toggleTownHallVisibility,
+                  icon: Icon(
+                    showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
+                    size: 20,
                   ),
-                
+                  tooltip:
+                      AppLocalizations.of(context)!.toggleTownHallVisibility,
+                  onPressed: toggleTownHallVisibility,
+                ),
                 FilterDropdown(
                   sortBy: _sortBy,
                   updateSortBy: _updateSortBy,

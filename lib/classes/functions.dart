@@ -109,3 +109,7 @@ DateTime findLastMondayOfMonth(int year, int month) {
 
   return lastMondayOfMonth;
 }
+
+  String getTownHallPicture(townHallLevel) {
+    return 'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-$townHallLevel.png';
+  }
