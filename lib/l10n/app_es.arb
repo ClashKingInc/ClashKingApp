@@ -122,8 +122,13 @@
     "deleteAccount": "Eliminar cuenta",
     "playerTagNotExists": "La etiqueta de jugador ingresada no existe.",
     "accountAlreadyLinked": "La etiqueta del jugador ya está vinculada a alguien.",
+    "enterApiToken": "Please enter the account API token to confirm its yours. You can find it in Clash of Clans Settings > More Settings > API Token",
+    "wrongApiToken": "The API token entered is incorrect",
+    "accountAlreadyLinkedToYou": "The player tag is already linked to you.",
+    "apiToken": "Account API Token",
     "failedToAddTryAgain": "Error al añadir el enlace. Inténtalo de nuevo más tarde.",
     "failedToDeleteTryAgain": "Error al eliminar el enlace. Inténtalo de nuevo más tarde.",
+    "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
     "search": "Busca",
     "@search": {
         "description": "Search for a player or a clan"
