@@ -62,7 +62,7 @@ class ToDoBodyState extends State<ToDoBody> {
         SizedBox(height: 8),*/
         if (cards.isEmpty && !widget.active)
           Container(
-            width: double.infinity, // Prend toute la largeur de l'écran
+            width: double.infinity,
             margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
             child: Card(
               child: Padding(
@@ -90,7 +90,9 @@ class ToDoBodyState extends State<ToDoBody> {
                 padding: EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    Text(AppLocalizations.of(context)!.noActiveAccounts),
+                    Text(
+                      AppLocalizations.of(context)!.noActiveAccounts,
+                    ),
                     SizedBox(height: 10),
                     CachedNetworkImage(
                       imageUrl:

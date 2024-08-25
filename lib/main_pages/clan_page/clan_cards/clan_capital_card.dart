@@ -1,4 +1,5 @@
 import 'package:clashkingapp/classes/clan/clan_info.dart';
+import 'package:clashkingapp/components/chip.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_capital/clan_capital_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -57,16 +58,35 @@ class ClanCapitaleCard extends StatelessWidget {
                   SizedBox(width: 8),
                   Expanded(
                     flex : 7,
-                    child: Center(
-                      child: Text(
-                        AppLocalizations.of(context)?.clanCapital ?? 'Clan Capital',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context)!.clanCapital,
+                          style: Theme.of(context).textTheme.labelLarge,
+                          textAlign: TextAlign.center,
+                          softWrap: true,
                         ),
-                        textAlign: TextAlign.center,
-                        softWrap: true,
-                      ),
+                        SizedBox(height: 2.0),
+                        Wrap(
+                          alignment: WrapAlignment.start,
+                          spacing: 7.0,
+                          runSpacing: -7.0,
+                          children: <Widget>[
+                            ImageChip(
+                              imageUrl: 'https://assets.clashk.ing/capital-base/capital-hall-pics/Building_CC_Capital_Hall_level_${clanInfo?.clanCapital?.capitalHallLevel}.png',
+                              labelPadding: 2,
+                              label: clanInfo!.clanCapital!.capitalHallLevel.toString(),
+                              //description: AppLocalizations.of(context)!.comingSoon,
+                            ),
+                            ImageChip(
+                              imageUrl: 'https://assets.clashk.ing/bot/icons/capital_trophy.png',
+                              labelPadding: 2,
+                              label: clanInfo!.clanCapitalPoints.toString(),
+                              //description: AppLocalizations.of(context)!.comingSoon,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],

@@ -35,13 +35,15 @@ class ToDo {
       required this.clanGames,
       required this.war}) {
     final nowUtc = DateTime.now().toUtc();
+    DateTime start = DateTime(nowUtc.year, nowUtc.month, 22, 8, 0, 0).toUtc();
+    DateTime end = DateTime(nowUtc.year, nowUtc.month, 28, 8, 0, 0).toUtc();
+
     isInTimeFrameForRaid =
         (nowUtc.weekday == DateTime.friday && nowUtc.hour >= 6) ||
             (nowUtc.weekday == DateTime.saturday ||
                 nowUtc.weekday == DateTime.sunday) ||
             (nowUtc.weekday == DateTime.monday && nowUtc.hour < 6);
-    isInTimeFrameForClanGames = (nowUtc.day >= 22 && nowUtc.hour >= 8) &&
-        (nowUtc.day <= 28 && nowUtc.hour <= 8);
+    isInTimeFrameForClanGames = nowUtc.isAfter(start) && nowUtc.isBefore(end);
   }
 
   factory ToDo.fromJson(Map<String, dynamic> json, WarData? warData) {

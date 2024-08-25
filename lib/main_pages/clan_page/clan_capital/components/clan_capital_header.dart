@@ -3,9 +3,6 @@ import 'package:clashkingapp/components/dialogs/open_clash_dialog.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
-//import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-//import 'package:lucide_icons/lucide_icons.dart';
-//import 'package:url_launcher/url_launcher.dart';
 
 class ClanCapitalHeader extends StatefulWidget {
   final List<String> user;
@@ -72,31 +69,19 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         SizedBox(height: 10),
-                        IconButton(
-                          icon: Icon(
-                            Icons.question_mark,
-                            color: Colors.white,
-                            size: 32,
-                          ),
-                          onPressed: () {},
+                        SizedBox(
+                          width: 48,
+                          height: 32,
                         ),
                         SizedBox(height: 8),
-                        IconButton(
-                          icon: Icon(
-                            Icons.question_mark,
-                            color: Colors.white,
-                            size: 32,
-                          ),
-                          onPressed: () {},
+                        SizedBox(
+                          width: 32,
+                          height: 32,
                         ),
                         SizedBox(height: 8),
-                        IconButton(
-                          icon: Icon(
-                            Icons.question_mark,
-                            color: Colors.white,
-                            size: 32,
-                          ),
-                          onPressed: () {},
+                        SizedBox(
+                          width: 32,
+                          height: 32,
                         ),
                         SizedBox(height: 8),
                       ],
@@ -113,11 +98,13 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                                       8)
                                   ? 0.91
                                   : 1.3,
-                              child: CachedNetworkImage(
+                              child: InteractiveViewer(
+                                child: CachedNetworkImage(
                                 width: 170,
                                 fit: BoxFit.cover,
                                 imageUrl:
-                                    'https://assets.clashk.ing/capital-base/capital-hall-pics/Building_CC_Capital_Hall_level_${widget.clanInfo?.clanCapital?.capitalHallLevel}.png',
+                                  'https://assets.clashk.ing/capital-base/capital-hall-pics/Building_CC_Capital_Hall_level_${widget.clanInfo?.clanCapital?.capitalHallLevel}.png',
+                                ),
                               ),
                             ),
                           ),
@@ -128,22 +115,9 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                     Column(
                       children: [
                         SizedBox(height: 10),
-                        IconButton(
-                          icon: Icon(
-                            Icons.question_mark,
-                            color: Colors.white,
-                            size: 32,
-                          ),
-                          onPressed: () {},
-                        ),
-                        SizedBox(height: 8),
-                        IconButton(
-                          icon: Icon(
-                            Icons.question_mark,
-                            color: Colors.white,
-                            size: 32,
-                          ),
-                          onPressed: () {},
+                        SizedBox(
+                          width: 32,
+                          height: 32,
                         ),
                         SizedBox(height: 8),
                         IconButton(
@@ -160,6 +134,11 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                               }
                             );
                           },
+                        ),
+                        SizedBox(height: 8),
+                        SizedBox(
+                          width: 32,
+                          height: 32,
                         ),
                         SizedBox(height: 8),
                       ],

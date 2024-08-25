@@ -28,10 +28,10 @@ class ToDoList {
   ToDoList({required this.items}) {
     final nowUtc = DateTime.now().toUtc();
     isInTimeFrameForRaid =
-        (nowUtc.weekday == DateTime.friday && nowUtc.hour >= 6) ||
+        (nowUtc.weekday == DateTime.friday && nowUtc.hour >= 7) ||
             (nowUtc.weekday == DateTime.saturday ||
                 nowUtc.weekday == DateTime.sunday) ||
-            (nowUtc.weekday == DateTime.monday && nowUtc.hour < 6);
+            (nowUtc.weekday == DateTime.monday && nowUtc.hour < 7);
     isInTimeFrameForClanGames = (nowUtc.day >= 22 && nowUtc.hour >= 8) &&
         (nowUtc.day <= 28 && nowUtc.hour <= 8);
   }

@@ -198,12 +198,16 @@ class WarTeamCard extends StatelessWidget {
                             child: SizedBox(
                               width: 20,
                               height: 20,
-                              child: CachedNetworkImage(
-                                imageUrl: (member.attacks?.length ?? 0) ==
-                                        widget.currentWarInfo.attacksPerMember
-                                    ? "https://assets.clashk.ing/icons/Icon_DC_Tick.png"
-                                    : "https://assets.clashk.ing/icons/Icon_DC_Cross.png",
-                                fit: BoxFit.contain,
+                              child: ClipRect(
+                                child: Transform.scale(
+                                  scale: 0.92,
+                                  child:CachedNetworkImage(
+                                    imageUrl: (member.attacks?.length ?? 0) == widget.currentWarInfo.attacksPerMember
+                                      ? "https://assets.clashk.ing/icons/Icon_DC_Tick.png"
+                                      : "https://assets.clashk.ing/icons/Icon_DC_Cross.png",
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
