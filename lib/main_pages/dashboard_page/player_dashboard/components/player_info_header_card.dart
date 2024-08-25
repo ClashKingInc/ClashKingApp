@@ -168,10 +168,12 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return OpenClashDialog(
-                                  url:
-                                      'https://link.clashofclans.com/$languageCode?action=OpenPlayerProfile&tag=${widget.playerStats.tag}',
-                                );
+                                final url = Uri.https(
+                                    'link.clashofclans.com', '/$languageCode', {
+                                  'action': 'OpenPlayerProfile',
+                                  'tag': widget.playerStats.tag,
+                                });
+                                return OpenClashDialog(url: url);
                               },
                             );
                           },

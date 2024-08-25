@@ -26,9 +26,12 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return OpenClashDialog(
-                url:
-                    'https://link.clashofclans.com/$languageCode?action=SupportCreator&id=Clashking');
+            final url = Uri.https('link.clashofclans.com', '/$languageCode', {
+              'action': 'SupportCreator',
+              'id': 'Clashking',
+            });
+
+            return OpenClashDialog(url: url);
           },
         );
       },

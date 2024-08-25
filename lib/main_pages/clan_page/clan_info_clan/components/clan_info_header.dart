@@ -136,9 +136,13 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return OpenClashDialog(
-                                  url:
-                                      'https://link.clashofclans.com/$languageCode?action=OpenClanProfile&tag=${widget.clanInfo.tag}');
+                              final url = Uri.https(
+                                  'link.clashofclans.com', '/$languageCode', {
+                                'action': 'OpenClanProfile',
+                                'tag': widget.clanInfo.tag,
+                              });
+
+                              return OpenClashDialog(url: url);
                             },
                           );
                         },
