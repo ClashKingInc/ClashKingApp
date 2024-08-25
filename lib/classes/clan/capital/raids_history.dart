@@ -41,8 +41,6 @@ class CapitalHistoryItem {
   });
 
   factory CapitalHistoryItem.fromJson(Map<String, dynamic> json) {
-    print(json);
-    print(json['members']);
     return CapitalHistoryItem(
       state: json['state'],
       startTime: DateTime.parse(json['startTime']),
@@ -207,7 +205,6 @@ class CapitalHistoryService {
       Uri.parse('https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/capitalraidseasons?limit=$limit'),
     );
 
-    print(response.statusCode);
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);

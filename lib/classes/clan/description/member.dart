@@ -54,4 +54,27 @@ class Member {
     Member member = Member.fromJson(json);
     return member;
   }
+
+  String getTownHallPicture() {
+    return 'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${townHallLevel}.png';
+  }
+
+static Member defaultMember() {
+    return Member(
+      tag: "",
+      name: "",
+      role: "",
+      townHallLevel: 0,
+      expLevel: 0,
+      league: League.defaultLeague(),
+      trophies: 0,
+      builderBaseTrophies: 0,
+      clanRank: 0,
+      previousClanRank: 0,
+      donations: 0,
+      donationsReceived: 0,
+      builderBaseLeague: BuilderBaseLeague.defaultBuilderBaseLeague(),
+    );
+  }
+  
 }

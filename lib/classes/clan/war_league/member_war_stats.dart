@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class MembersWarStats {
   final Map<String, MemberWarStats> _membersMap;
 
   MembersWarStats({required List<MemberWarStats> items})
-      : _membersMap = {for (var member in items) member.tag: member}; 
+      : _membersMap = {for (var member in items) member.tag: member};
 
   MemberWarStats? getMemberByTag(String tag) {
     return _membersMap[tag];
@@ -29,8 +30,25 @@ class MemberWarStats {
   int townhallLevel;
   int mapPosition;
   int opponentAttacks;
-  List<Attack> attacks = [];
+  List<Attacks> warAttacks = [];
   List<Defense> defenses = [];
+
+  // New fields for percentages
+  double percentageNoStarsDefenses = 0;
+  double percentageNoStarsAttacks = 0;
+  double percentageOneStarsDefenses = 0;
+  double percentageOneStarsAttacks = 0;
+  double percentageTwoStarsDefenses = 0;
+  double percentageTwoStarsAttacks = 0;
+  double percentageThreeStarsDefenses = 0;
+  double percentageThreeStarsAttacks = 0;
+
+  // Other fields for stats calculation
+  int totalAttacks = 0;
+  int totalDefenses = 0;
+  int warsParticipated = 0;
+  int expectedAttacks = 0;
+  int missedAttacks = 0;
 
   MemberWarStats({
     required this.tag,
@@ -40,24 +58,80 @@ class MemberWarStats {
     this.opponentAttacks = 0,
   });
 
-  void addAttack(Attack attack) {
-    attacks.add(attack);
+  void addWarAttacks(Attacks warAttacks) {
+    this.warAttacks.add(warAttacks);
+    warsParticipated++;
+    expectedAttacks += warAttacks.attacksExpected;
+    totalAttacks += warAttacks.attacks.length;
+    missedAttacks += warAttacks.attacksExpected - warAttacks.attacks.length;
   }
 
   void addDefense(Defense defense) {
     defenses.add(defense);
   }
 
-  double get averageStars => attacks.isNotEmpty
-      ? attacks.map((attack) => attack.stars).reduce((a, b) => a + b) /
-          attacks.length
+  void calculatePercentages() {
+    totalAttacks = warAttacks.fold(0, (sum, war) => sum + war.attacks.length);
+    if (totalAttacks > 0) {
+      percentageNoStarsAttacks = warAttacks.fold(
+              0,
+              (sum, war) =>
+                  sum + war.attacks.where((a) => a.stars == 0).length) /
+          totalAttacks *
+          100;
+      percentageOneStarsAttacks = warAttacks.fold(
+              0,
+              (sum, war) =>
+                  sum + war.attacks.where((a) => a.stars == 1).length) /
+          totalAttacks *
+          100;
+      percentageTwoStarsAttacks = warAttacks.fold(
+              0,
+              (sum, war) =>
+                  sum + war.attacks.where((a) => a.stars == 2).length) /
+          totalAttacks *
+          100;
+      percentageThreeStarsAttacks = warAttacks.fold(
+              0,
+              (sum, war) =>
+                  sum + war.attacks.where((a) => a.stars == 3).length) /
+          totalAttacks *
+          100;
+    }
+
+    totalDefenses = defenses.length;
+    if (totalDefenses > 0) {
+      percentageNoStarsDefenses =
+          defenses.where((d) => d.stars == 0).length / totalDefenses * 100;
+      percentageOneStarsDefenses =
+          defenses.where((d) => d.stars == 1).length / totalDefenses * 100;
+      percentageTwoStarsDefenses =
+          defenses.where((d) => d.stars == 2).length / totalDefenses * 100;
+      percentageThreeStarsDefenses =
+          defenses.where((d) => d.stars == 3).length / totalDefenses * 100;
+    }
+  }
+
+  double get averageStars => totalAttacks > 0
+      ? warAttacks.fold(
+              0,
+              (sum, war) =>
+                  sum +
+                  war.attacks
+                      .fold(0, (subSum, attack) => subSum + attack.stars)) /
+          totalAttacks
       : 0.0;
 
-  double get averageDestructionPercentage => attacks.isNotEmpty
-      ? attacks
-              .map((attack) => attack.destructionPercentage)
-              .reduce((a, b) => a + b) /
-          attacks.length
+  double get averageDestructionPercentage => totalAttacks > 0
+      ? warAttacks.fold(
+              0,
+              (sum, war) =>
+                  sum +
+                  war.attacks.fold(
+                      0,
+                      (subSum, attack) =>
+                          (subSum + attack.destructionPercentage).toInt())) /
+          totalAttacks
       : 0.0;
 
   double get averageDefenseStars => defenses.isNotEmpty
@@ -72,14 +146,29 @@ class MemberWarStats {
           defenses.length
       : 0.0;
 
-  @override
-  String toString() {
-    return '$name ($tag) - TH$townhallLevel\n'
-        'Average stars: $averageStars\n'
-        'Average destruction: $averageDestructionPercentage%\n'
-        'Average defense stars: $averageDefenseStars\n'
-        'Average defense destruction: $averageDefenseDestructionPercentage%\n';
+  int numberOfStarsAttacks(int numberOfStars) {
+    return warAttacks.fold(
+        0,
+        (sum, war) =>
+            sum +
+            war.attacks
+                .where((attack) => attack.stars == numberOfStars)
+                .length);
   }
+}
+
+class Attacks {
+  final String warType;
+  final int attacksExpected;
+  final List<Attack> attacks;
+  int missedAttacks;
+
+  Attacks({
+    required this.warType,
+    required this.attacksExpected,
+    required this.attacks,
+    required this.missedAttacks,
+  });
 }
 
 class Attack {
@@ -91,6 +180,8 @@ class Attack {
   final int duration;
   final bool fresh;
   final Defender defender;
+  final String type;
+  final int memberTownHallLevel;
 
   Attack({
     required this.attackerTag,
@@ -101,6 +192,8 @@ class Attack {
     required this.duration,
     required this.fresh,
     required this.defender,
+    required this.type,
+    required this.memberTownHallLevel,
   }) : destructionPercentage = destructionPercentage is int
             ? destructionPercentage.toDouble()
             : destructionPercentage;
@@ -130,7 +223,6 @@ class Defense {
             : destructionPercentage;
 }
 
-
 class Defender {
   final String tag;
   final String name;
@@ -157,7 +249,6 @@ class Attacker {
     required this.townhallLevel,
     required this.mapPosition,
   });
-  
 }
 
 class MembersWarStatsService {
@@ -175,23 +266,58 @@ class MembersWarStatsService {
     }
   }
 
+  MemberWarStats? findOpponentByTag(
+      String tag, MembersWarStats opponentWarStats) {
+    return opponentWarStats.getMemberByTag(tag);
+  }
+
   MembersWarStats _analyzeMemberStats(String clanTag, List<dynamic> wars) {
     MembersWarStats membersWarStats = MembersWarStats(items: []);
     clanTag = clanTag.replaceFirst("!", "#");
+
+    List<int> prepList = [
+      5 * 60,
+      15 * 60,
+      30 * 60,
+      60 * 60,
+      2 * 60,
+      4 * 60,
+      6 * 60,
+      8 * 60,
+      12 * 60,
+      16 * 60,
+      20 * 60,
+      24 * 60,
+    ];
+
     try {
       for (var war in wars) {
         var clanData;
+        var opponentClan;
 
-        // Identifier si le clan est dans "clan" ou "opponent"
         if (war['clan']['tag'] == clanTag) {
           clanData = war['clan'];
+          opponentClan = war['opponent'];
         } else if (war['opponent']['tag'] == clanTag) {
           clanData = war['opponent'];
+          opponentClan = war['clan'];
         } else {
           continue;
         }
 
-        // Parcourir chaque membre du clan
+        var preparationStartTime = DateTime.parse(war['startTime'])
+            .difference(DateTime.parse(war['preparationStartTime']));
+        var preparationStartTimeInMinutes = preparationStartTime.inMinutes;
+
+        String type;
+        if (prepList.contains(preparationStartTimeInMinutes)) {
+          type = "friendly";
+        } else if (war["attacksPerMember"] == null) {
+          type = "cwl";
+        } else {
+          type = "random";
+        }
+
         for (var member in clanData['members']) {
           var memberTag = member['tag'];
           var memberName = member['name'];
@@ -212,53 +338,90 @@ class MembersWarStatsService {
             membersWarStats.addMemberStat(memberStats);
           }
 
-          // Ajouter les stats d'attaque si elles existent
-          if (member['attacks'] != null) {
-            for (var attack in member['attacks']) {
-              var defender = Defender(
-                tag: attack['defenderTag'],
-                name: 'Unknown', 
-                townhallLevel: 0,  
-                mapPosition: 0,  
-              );
-              var attackObj = Attack(
-                attackerTag: attack['attackerTag'],
-                defenderTag: attack['defenderTag'],
-                stars: attack['stars'],
-                destructionPercentage: attack['destructionPercentage'],
-                order: attack['order'],
-                duration: attack['duration'],
-                fresh: false,  
-                defender: defender,
-              );
-              memberStats.addAttack(attackObj);
-            }
-          }
+          int expectedAttacks = war["attacksPerMember"] != null
+              ? (war["attacksPerMember"] is int
+                  ? war["attacksPerMember"] as int
+                  : int.parse(war["attacksPerMember"].toString()))
+              : 1;
 
-          // Ajouter les stats de défense si elles existent
+          var opponentStats = MembersWarStats(
+              items:
+                  opponentClan['members'].map<MemberWarStats>((opponentMember) {
+            return MemberWarStats(
+              tag: opponentMember['tag'],
+              name: opponentMember['name'],
+              townhallLevel: opponentMember['townhallLevel'],
+              mapPosition: opponentMember['mapPosition'],
+              opponentAttacks: opponentMember['opponentAttacks'] ?? 0,
+            );
+          }).toList());
+
+          var attacksList =
+              (member['attacks'] as List<dynamic>?)?.map<Attack>((attack) {
+                    var opponentMemberStats =
+                        findOpponentByTag(attack['defenderTag'], opponentStats);
+
+                    var defender = Defender(
+                      tag: attack['defenderTag'],
+                      name: opponentMemberStats?.name ?? 'Unknown',
+                      townhallLevel: opponentMemberStats?.townhallLevel ?? 0,
+                      mapPosition: opponentMemberStats?.mapPosition ?? 0,
+                    );
+
+                    return Attack(
+                      attackerTag: attack['attackerTag'],
+                      defenderTag: attack['defenderTag'],
+                      stars: attack['stars'],
+                      destructionPercentage: attack['destructionPercentage'],
+                      order: attack['order'],
+                      duration: attack['duration'],
+                      fresh: false,
+                      defender: defender,
+                      type: type,
+                      memberTownHallLevel:
+                          townhallLevel, // This is the war type determined earlier
+                    );
+                  }).toList() ??
+                  [];
+
+          var attacksObject = Attacks(
+            warType: type,
+            attacksExpected: expectedAttacks,
+            attacks: attacksList,
+            missedAttacks: expectedAttacks - attacksList.length,
+          );
+
+          memberStats.addWarAttacks(attacksObject);
+
           if (member['bestOpponentAttack'] != null) {
             var attacker = Attacker(
               tag: member['bestOpponentAttack']['attackerTag'],
-              name: 'Unknown', 
-              townhallLevel: 0,  
-              mapPosition: 0,  
+              name: 'Unknown',
+              townhallLevel: 0,
+              mapPosition: 0,
             );
             var defenseObj = Defense(
               attackerTag: member['bestOpponentAttack']['attackerTag'],
               defenderTag: member['tag'],
               stars: member['bestOpponentAttack']['stars'],
-              destructionPercentage: member['bestOpponentAttack']['destructionPercentage'],
+              destructionPercentage: member['bestOpponentAttack']
+                  ['destructionPercentage'],
               order: member['bestOpponentAttack']['order'],
               duration: member['bestOpponentAttack']['duration'],
-              fresh: false,  
+              fresh: false,
               attacker: attacker,
             );
             memberStats.addDefense(defenseObj);
           }
         }
       }
-    } catch (e) {
-      print(e);
+
+      // Calculate percentages for all members
+      for (var memberStats in membersWarStats.allMembers) {
+        memberStats.calculatePercentages();
+      }
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
     }
 
     return membersWarStats;

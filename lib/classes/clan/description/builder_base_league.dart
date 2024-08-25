@@ -14,4 +14,11 @@ class BuilderBaseLeague {
       name: json['name'] ?? 'No name',
     );
   }
+
+  static BuilderBaseLeague defaultBuilderBaseLeague() {
+    return BuilderBaseLeague(
+      id: 0,
+      name: '',
+    );
+  }
 }

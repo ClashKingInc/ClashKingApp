@@ -89,7 +89,7 @@ class ToDo {
 
     // Legend completed
     if (profileInfo.playerLegendData != null &&
-        profileInfo.playerLegendData!.isInLegend == true) {
+        profileInfo.playerLegendData!.isInLegend == true && profileInfo.league == "Legend League") {
       totalEvent += 8;
       isLegend = true;
       totalDone += legends != null ? legends!.numAttacks : 0;

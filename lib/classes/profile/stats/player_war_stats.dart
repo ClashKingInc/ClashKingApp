@@ -83,6 +83,7 @@ class WarStats {
     return defenses.where((defense) => defense.stars == numberOfStars).length;
 
   }
+  
 TownhallAttackDefenseStats getTownhallAttackDefenseStats(int townhallLevel) {
     final filteredAttacks = attacks
         .where((attack) => attack.defender.townhallLevel == townhallLevel)

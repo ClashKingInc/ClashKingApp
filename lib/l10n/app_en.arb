@@ -605,6 +605,9 @@
 "@random": {
     "description": "Random/basic war (not friendly or cwl)"
 },
+"selectMembersThLevel" : "Members TH Level",
+"selectOpponentsThLevel" : "Opponents TH Level",
+"equalThLevel" : "Equal TH",
 "builderBaseTrophies": "BB Trophies",
 "donations": "Donations",
 "donationsReceived": "Donations Received",
@@ -694,6 +697,17 @@
             "type": "int"
         }
     }
+},
+"averageStars": "Average stars",
+"averageDestruction": "Average destruction",
+"noStars": "0 star",
+"oneStar": "1 star",
+"twoStars": "2 stars",
+"threeStars": "3 stars",
+"warParticipation": "War Participation",
+"toggleTownHallVisibility" : "Hide/Show stats from former TH levels",
+"@toggleTownHallVisibility" : {
+    "description": "For example, hide stats from TH15 and below if the player is now TH16"
 },
 "warLog": "War Log",
 "publicWarLog": "Public War Log",

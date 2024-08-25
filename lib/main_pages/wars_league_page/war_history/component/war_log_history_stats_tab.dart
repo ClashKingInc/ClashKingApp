@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
 import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
+import 'package:clashkingapp/components/beta_label.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/war_history_players.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -232,11 +233,8 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                   },
                 );
                 try {
-                  if (widget.clan.membersWarStats == null) {
-                    print("Fetching members war stats");
-                    widget.clan.membersWarStats = await MembersWarStatsService()
-                        .fetchWarLogsAndAnalyzeStats(widget.clan.tag);
-                  }
+                  widget.clan.membersWarStats ??= await MembersWarStatsService()
+                      .fetchWarLogsAndAnalyzeStats(widget.clan.tag);
                   navigator.pop();
                   navigator.push(
                     MaterialPageRoute(
@@ -249,34 +247,40 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                   print("An error occurred: $error");
                 }
               },
-              child: Card(
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
-                          height: 90,
-                          width: 90,
-                        ),
+              child: Stack(
+                children: [
+                  Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
+                              height: 90,
+                              width: 90,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 6,
+                            child: Text(
+                                AppLocalizations.of(context)!.membersStats,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                                textAlign: TextAlign.center),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Icon(LucideIcons.chevronRight, size: 24),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 6,
-                        child: Text(AppLocalizations.of(context)!.membersStats,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                            textAlign: TextAlign.center),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Icon(LucideIcons.chevronRight, size: 24),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  BetaLabel(),
+                ],
               ),
             ),
           ),

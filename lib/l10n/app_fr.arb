@@ -225,7 +225,7 @@
     "mostAttacks": "Plus d'attaques",
     "lastSeason": "Dernière saison",
     "bestRank": "Meilleur classement",
-    "dayLeft": "{days} jours restants",
+    "daysLeft": "{days} jours restants",
     "@dayLeft": {
         "placeholders": {
             "days": {
@@ -506,7 +506,11 @@
     "lastXwars": "Dernières {number} guerres",
     "friendly": "Amicale",
     "cwl": "LDC",
-    "random": "Aléatoire",
+    "random": "Classique",
+    "selectMembersThLevel" : "Niveau d'HDV des membres",
+    "selectOpponentsThLevel" : "Niveau d'HDV des adversaires",
+    "equalThLevel" : "Niveau d'HDV égal",
+    "warHistoryAverageClanStarsPerMember" : "Moyenne d'étoiles par membre",
     "builderBaseTrophies": "Trophées MDO",
     "donations": "Dons",
     "donationsReceived": "Don reçus",
@@ -592,6 +596,14 @@
         }
     }
 },
+"averageStars": "Moyenne d'étoiles",
+"averageDestruction": "Moyenne de destruction",
+"noStars": "0 étoile",
+"oneStar": "1 étoile",
+"twoStars": "2 étoiles",
+"threeStars": "3 étoiles",
+"warParticipation": "Participation à la guerre",
+"toggleTownHallVisibility" : "Cacher/Afficher les stats des anciens niveaux d'HDV",
 "warLog": "Journal",
 "publicWarLog": "Journal de guerre public",
 "privateWarLog": "Journal de guerre privé",

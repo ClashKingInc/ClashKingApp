@@ -124,7 +124,6 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                           icon: Icon(Icons.sports_esports_rounded,
                               color: Colors.white, size: 32),
                           onPressed: () async {
-                            print("test");
                             final languageCode = Localizations.localeOf(context).languageCode.toLowerCase();
                             showDialog(
                               context: context,

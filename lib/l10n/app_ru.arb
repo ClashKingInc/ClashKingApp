@@ -130,6 +130,10 @@
     },
     "warning": "Warning",
     "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
+    "confirmLogout": "Are you sure you want to log out?",
+    "@confirmLogout": {
+        "description": "Prompt asking the user to confirm logout"
+    },
     "tagOrNamePlayer": "Тег или имя игрока",
     "searchPlayer": "Найти игрока",
     "nameOrTagPlayer": "Player's name or tag",
@@ -601,6 +605,9 @@
     "@random": {
         "description": "Random/basic war (not friendly or cwl)"
     },
+    "selectMembersThLevel": "Members TH Level",
+    "selectOpponentsThLevel": "Opponents TH Level",
+    "equalThLevel": "Equal TH",
     "builderBaseTrophies": "BB Trophies",
     "donations": "Donations",
     "donationsReceived": "Donations Received",
@@ -621,31 +628,40 @@
     "cantOpenLink": "We can't open this link.",
     "notInWar": "Not in war",
     "warHistory": "War History",
-    "warHistoryWinsDescription": "We tracked the data of {wins} war wins for your clan.",
+    "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) in the last 50 wars.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
                 "type": "int"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryLossesDescription": "We tracked the data of {losses} war losses for your clan.",
+    "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) in the last 50 wars.",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
                 "type": "int"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryDrawsDescription": "We tracked the data of {draws} war draws for your clan.",
+    "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) in the last 50 wars.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
                 "type": "int"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating per war we've tracked.",
+    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating in the last 50 wars.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -653,21 +669,44 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription": "Your clan has an average of {stars} stars per attack at the end of the wars we've tracked.",
+    "warHistoryAverageWarStarsDescription": "Your clan has an average of {stars} stars at the end of the last 50 wars. It represents {percent} of the total stars.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
                 "type": "double"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of the wars we've tracked.",
+    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of th last 50 wars.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
                 "type": "String"
             }
         }
+    },
+    "warHistoryAverageClanStarsPerMember": "Your clan has an average of {stars} stars per member in the last 50 wars.",
+    "warHistoryAverageMembers": "~{members} members per war",
+    "@warHistoryAverageMembers": {
+        "placeholders": {
+            "members": {
+                "type": "int"
+            }
+        }
+    },
+    "averageStars": "Average stars",
+    "averageDestruction": "Average destruction",
+    "noStars": "0 star",
+    "oneStar": "1 star",
+    "twoStars": "2 stars",
+    "threeStars": "3 stars",
+    "warParticipation": "War Participation",
+    "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
+    "@toggleTownHallVisibility": {
+        "description": "For example, hide stats from TH15 and below if the player is now TH16"
     },
     "warLog": "War Log",
     "publicWarLog": "Public War Log",
@@ -888,6 +927,7 @@
     "neededOverall": "% Needed overall",
     "calculate": "Calculate",
     "warStats": "War Stats",
+    "membersStats": "Members Stats",
     "clanWarLeague": "Clan War League",
     "cwlRank": "Your clan is currently ranked {rank}.",
     "@cwlRank": {
@@ -949,5 +989,8 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "tools": "Tools",
+    "community": "Community",
+    "lastRaids": "Last raids"
 }

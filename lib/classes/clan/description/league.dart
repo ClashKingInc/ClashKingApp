@@ -18,4 +18,12 @@ class League {
       imageUrl: IconUrls.fromJson(json['iconUrls']),
     );
   }
+
+  static League defaultLeague() {
+    return League(
+      id: 0,
+      name: '',
+      imageUrl: IconUrls.defaultIconUrls(),
+    );
+  }
 }
