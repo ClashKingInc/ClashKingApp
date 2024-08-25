@@ -118,10 +118,15 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
                 }
               } else {
                 widget.user.tags.remove(playerTag);
-                if (context.mounted) {
-                  myAppState.reloadUsersAccounts(context);
+                if (widget.user.tags.isNotEmpty) {
+                  storePrefs('selectedTag', '');
+                  if (context.mounted) {
+                    myAppState.deleteAccountByTag(playerTag, myAppState);
+                  }
+                  if (errorMessage.isEmpty) {
+                    navigator.pop();
+                  }
                 }
-                navigator.pop();
               }
             },
             style: ButtonStyle(

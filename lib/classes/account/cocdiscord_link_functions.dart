@@ -60,6 +60,35 @@ Future<bool> addLink(
   return false;
 }
 
+Future<bool> checkApiToken(String apiToken, String playerTag, Function updateErrorMessage, String wrongApiToken) async {
+  if (playerTag.startsWith('#')) {
+    playerTag = playerTag.replaceAll('#', '!');
+  } else if (!playerTag.startsWith('!')) {
+    playerTag = '!$playerTag';
+  }
+
+  final url =
+      Uri.parse('https://api.clashking.xyz/v1/players/$playerTag/verifytoken');
+  final response = await http.post(
+    url,
+    body: jsonEncode(<String, dynamic>{
+      'token': apiToken,
+    }),
+  );
+
+  print(response.body);
+  if (response.statusCode == 200) {
+    var data = jsonDecode(response.body);
+    if (data['status'] == 'ok') {
+      print('true');
+      return true;
+    }
+  }
+  print('false');
+  updateErrorMessage(wrongApiToken);
+  return false;
+}
+
 Future<bool> addLinkWithAPIToken(
     String playerTag,
     String discordId,
@@ -71,43 +100,22 @@ Future<bool> addLinkWithAPIToken(
     String apiToken,
     String failedToDeleteTryAgain,
     String wrongApiToken) async {
-  playerTag = "!$playerTag";
-  final url =
-      Uri.parse('https://api.clashking.xyz/v1/players/$playerTag/verifytoken');
+  bool isApiTokenValid = await checkApiToken(apiToken, playerTag, updateErrorMessage, wrongApiToken);
 
-  print("apiToken: $apiToken");
-  final response = await http.post(
-    url,
-    body: jsonEncode(<String, dynamic>{
-      'token': apiToken,
-    }),
-  );
-
-  print(response.body);
-
-  if (response.statusCode == 200) {
-    var data = jsonDecode(response.body);
-    if (data['status'] == 'ok') {
-      bool deleted = await deleteLink(
-          playerTag, authToken, updateErrorMessage, failedToDeleteTryAgain);
-      print(deleted);
-      bool added = await addLink(
-          playerTag,
-          discordId,
-          authToken,
-          updateErrorMessage,
-          playerTagNotExists,
-          accountAlreadyLinked,
-          failedToAddTryAgain);
-      print(added);
-      return deleted && added;
-    } else {
-      print('wrongApiToken');
-      updateErrorMessage(wrongApiToken);
-      return false;
-    }
+  if (isApiTokenValid) {
+    bool deleted = await deleteLink(
+        playerTag, authToken, updateErrorMessage, failedToDeleteTryAgain);
+    bool added = await addLink(
+        playerTag,
+        discordId,
+        authToken,
+        updateErrorMessage,
+        playerTagNotExists,
+        accountAlreadyLinked,
+        failedToAddTryAgain);
+    print(added);
+    return deleted && added;
   } else {
-    print('wrongApiToken');
     updateErrorMessage(wrongApiToken);
     return false;
   }

@@ -93,7 +93,10 @@ class StartupWidgetState extends State<StartupWidget> {
     final appState = Provider.of<MyAppState>(context, listen: false);
     if (isLoading) return;
 
-    setState(() => isLoading = true);
+    setState(() {
+      isLoading = true;
+    });
+    print('isLoading: $isLoading');
 
     String playerTag = playerTagController.text;
     if (playerTag.trim().isNotEmpty) {
@@ -129,7 +132,9 @@ class StartupWidgetState extends State<StartupWidget> {
       }
     }
 
-    setState(() => isLoading = false);
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> _submitApiToken() async {
@@ -244,18 +249,51 @@ class StartupWidgetState extends State<StartupWidget> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.secondary,
+                              color: Theme.of(context).colorScheme.primary,
                               width: 2.0),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         prefixIcon: Icon(Icons.tag,
                             color: Theme.of(context).colorScheme.onSurface),
+                        suffixIcon: IconButton(
+                          icon: isLoading && !showApiTokenInput
+                              ? CircularProgressIndicator()
+                              : showApiTokenInput
+                                  ? SizedBox.shrink()
+                                  : Icon(Icons.add,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                          onPressed: () async {
+                            await _addAccount();
+                            setState(() {});
+                          },
+                        ),
                       ),
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(
                             RegExp(r'[a-zA-Z0-9]')),
                       ],
                     ),
+                    if (_tags.isNotEmpty)
+                      Wrap(
+                        spacing: 8.0,
+                        children: _tags.map((tag) {
+                          return Chip(
+                            label: Text(tag),
+                            onDeleted: () async {
+                              String failedToDeleteTryAgain =
+                                  AppLocalizations.of(context)!
+                                      .failedToDeleteTryAgain;
+                              await deleteLink(tag, authToken,
+                                  updateErrorMessage, failedToDeleteTryAgain);
+                              setState(() {
+                                _tags.remove(tag);
+                              });
+                            },
+                          );
+                        }).toList(),
+                      ),
                     if (errorMessage.isNotEmpty)
                       Column(children: [
                         SizedBox(height: 16),
@@ -272,6 +310,7 @@ class StartupWidgetState extends State<StartupWidget> {
                           SizedBox(height: 16),
                           Text(AppLocalizations.of(context)!.enterApiToken,
                               style: Theme.of(context).textTheme.bodySmall),
+                          SizedBox(height: 16),
                           TextField(
                             style: Theme.of(context).textTheme.bodySmall,
                             controller: apiTokenController,
@@ -298,9 +337,19 @@ class StartupWidgetState extends State<StartupWidget> {
                                     width: 2.0),
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
-                              prefixIcon: Icon(Icons.lock,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
+                              suffixIcon: IconButton(
+                                icon: isLoading && showApiTokenInput
+                                    ? CircularProgressIndicator()
+                                    : Icon(Icons.add,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                onPressed: () async {
+                                  await _submitApiToken();
+
+                                  setState(() {});
+                                },
+                              ),
                             ),
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(
@@ -323,54 +372,7 @@ class StartupWidgetState extends State<StartupWidget> {
                             ),
                         ],
                       ),
-                    if (_tags.isNotEmpty)
-                      Wrap(
-                        spacing: 8.0,
-                        children: _tags.map((tag) {
-                          return Chip(
-                            label: Text(tag),
-                            onDeleted: () async {
-                              String failedToDeleteTryAgain =
-                                  AppLocalizations.of(context)!
-                                      .failedToDeleteTryAgain;
-                              await deleteLink(tag, authToken,
-                                  updateErrorMessage, failedToDeleteTryAgain);
-                              setState(() {
-                                _tags.remove(tag);
-                              });
-                            },
-                          );
-                        }).toList(),
-                      ),
                     SizedBox(height: 16),
-                    TextButton(
-                      onPressed: () async {
-                        if (showApiTokenInput) {
-                          await _submitApiToken();
-                        } else {
-                          await _addAccount();
-                        }
-                        setState(() {});
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondary),
-                        foregroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.onPrimary),
-                        padding: MaterialStateProperty.all(
-                            EdgeInsets.symmetric(vertical: 2, horizontal: 8)),
-                        textStyle: MaterialStateProperty.all(
-                            Theme.of(context).textTheme.bodySmall),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                        ),
-                        elevation: MaterialStateProperty.all(4),
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.addAccount,
-                      ),
-                    ),
                   ],
                 ),
                 actions: <Widget>[
