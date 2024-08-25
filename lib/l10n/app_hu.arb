@@ -122,8 +122,13 @@
     "deleteAccount": "Fiók törlése",
     "playerTagNotExists": "A megadott játékos tag nem létezik.",
     "accountAlreadyLinked": "A játékos tag-je már csatolva van valakihez.",
+    "enterApiToken": "Please enter the account API token to confirm its yours. You can find it in Clash of Clans Settings > More Settings > API Token",
+    "wrongApiToken": "The API token entered is incorrect",
+    "accountAlreadyLinkedToYou": "The player tag is already linked to you.",
+    "apiToken": "Account API Token",
     "failedToAddTryAgain": "Nem sikerült hozzákapcsolni. Kérjük, próbálja újra később.",
     "failedToDeleteTryAgain": "A kapcsolat törlése nem sikerült. Kérjük, próbálja meg később újra.",
+    "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
     "search": "Keresés",
     "@search": {
         "description": "Search for a player or a clan"
