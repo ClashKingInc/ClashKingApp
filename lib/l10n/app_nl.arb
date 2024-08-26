@@ -81,7 +81,7 @@
     "currentTranslators": "Huidige vertalers",
     "betaFeature": "Beta-functie",
     "beta": "BETA",
-    "betaDescription": "Deze functie bevindt zich in bèta en kan enkele bugs bevatten en onvolledig zijn. Het zal verbeterd worden in de komende updates. Voel je vrij om ideeën voor te stellen in onze Discord server. Ook kan je daar bugs rapporteren om ons te helpen de functie te verbeteren.",
+    "betaDescription": "This feature is currently in beta, so it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues on our Discord server to help us make it better.",
     "copiedToClipboard": "Gekopieerd naar klembord",
     "all": "Alle",
     "@all": {
@@ -370,8 +370,8 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Onjuiste gegevens?",
-    "legendsExplanation_intro": "Vanwege beperkingen in de Clash of Clans API is onze data mogelijk niet altijd accuraat. Dit zijn de reden:\n",
+    "legendsTitle": "Innacurate data?",
+    "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
     "legendsExplanation_api_delay_title": "1. API Vertraging: ",
     "legendsExplanation_api_delay_body": "De API kan tot 5 minuten duren om bij te werken, wat een vertraging veroorzaakt bij het weergeven van real-time trofee wijzigingen.\n",
     "legendsExplanation_concurrent_changes_title": "2. Gelijktijdige Veranderingen:\n",
