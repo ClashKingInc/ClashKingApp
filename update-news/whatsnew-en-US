@@ -1,11 +1,12 @@
 What's New:
-- New CWL Cards: Access Current War & CWL Stats.
-- Enhanced To-Do: Track remaining war and CWL attacks with progress headers.
-- Info Buttons: Learn how features work.
-- Legends: Added stars stats to the Legend Season screen.
-- Feature Suggestions: Suggest and upvote features in-app.
+- New Capital Screen: Raid stats and raid history.
+- War History by Members: Stats for the last 50 wars by player and clan.
+- Clan War Log: Basic stats for the last 50 wars.
+- Account Handling: Improved account management, including API token option and a cancel button.
+- New Language: Portuguese.
+- QoL Improvements: Dark mode support, reset button in logs, and more.
 
-Fixes:
-- Improved UI: Better splash support for Android 12+ and dark/light modes.
-- Player Page: Ongoing war button.
-- Design: Fixed logo, button colors, and legend graph issues.
+Bug Fixes: 
+Improved stability for war stats, Legends, and iOS links.
+
+See the full notes on our Discord server.

@@ -81,7 +81,7 @@
     "currentTranslators": "Aktualni tłumacze",
     "betaFeature": "Funkcja Beta",
     "beta": "BETA",
-    "betaDescription": "Ta funkcja jest w fazie beta i może zawierać pewne błędy oraz być niekompletna. Zostanie poprawiona w nadchodzących aktualizacjach. Zachęcamy do zgłaszania pomysłów i raportowania błędów z naszego serwera Discord, aby nam pomóc ją ulepszyć.",
+    "betaDescription": "This feature is currently in beta, so it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues on our Discord server to help us make it better.",
     "copiedToClipboard": "Skopiowano do schowka",
     "all": "Wszystkie",
     "@all": {
@@ -122,8 +122,13 @@
     "deleteAccount": "Usuń konto",
     "playerTagNotExists": "Wprowadzony tag gracza nie istnieje.",
     "accountAlreadyLinked": "{tag} jest już powiązany z kimś innym.",
+    "enterApiToken": "Please enter the account API token to confirm its yours. You can find it in Clash of Clans Settings > More Settings > API Token",
+    "wrongApiToken": "The API token entered is incorrect",
+    "accountAlreadyLinkedToYou": "The player tag is already linked to you.",
+    "apiToken": "Account API Token",
     "failedToAddTryAgain": "Nie udało się dodać linku. Spróbuj ponownie później.",
     "failedToDeleteTryAgain": "Nie udało się usunąć linku. Spróbuj ponownie później.",
+    "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
     "search": "Wyszukaj",
     "@search": {
         "description": "Search for a player or a clan"
@@ -365,8 +370,8 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Nieprecyzyjne dane?",
-    "legendsExplanation_intro": "Ze względu na ograniczenia w API Clash of Clans, nasze dane mogą czasami nie być całkowicie dokładne. Dlaczego tak się dzieje:\n",
+    "legendsTitle": "Innacurate data?",
+    "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
     "legendsExplanation_api_delay_title": "1. Opóźnienie interfejsu API: ",
     "legendsExplanation_api_delay_body": "API może zaktualizować się maksymalnie do 5 minut, co powoduje opóźnienie w odzwierciedleniu zmian w czasie rzeczywistym w puszkach.\n",
     "legendsExplanation_concurrent_changes_title": "2. Zmiany jednoczesne: \n",

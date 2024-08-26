@@ -55,6 +55,7 @@ class Accounts {
 class Account {
   final ProfileInfo profileInfo;
   Clan? clan;
+  bool hasClan = true;
 
   Account({required this.profileInfo, this.clan});
 
@@ -65,6 +66,7 @@ class AccountsService {
   Future<void> initEnv() async {
     await dotenv.load(fileName: ".env");
   }
+
   Future<Accounts> fetchAccounts(User user) async {
     final transaction = Sentry.startTransaction(
       'fetchAccounts',
@@ -110,6 +112,8 @@ class AccountsService {
                   clanTag, account, transaction);
               clanCache[clanTag] = clanInfo;
             }
+          } else {
+            account.hasClan = false;
           }
         }
       }).toList();

@@ -156,7 +156,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
                   });
                 }
               } else if (!widget.user.tags.contains("#$playerTag")) {
-                print("playerTag: $playerTag");
+                
                 bool success = await addLink(
                   playerTag,
                   widget.user.id,
@@ -184,11 +184,51 @@ class AddPlayerCardState extends State<AddPlayerCard> {
                     AppLocalizations.of(context)!.accountAlreadyLinkedToYou);
               }
             } else {
-              widget.user.tags.add("#$playerTag");
-              if (context.mounted) {
-                myAppState.reloadUsersAccounts(context);
+              if (showApiTokenInput) {
+                String apiToken = apiTokenController.text;
+                bool success = await checkApiToken(apiToken, playerTag, updateErrorMessage, wrongApiToken);
+                if (success) {
+                  await storePrefs('selectedTag', playerTag);
+                  if (context.mounted) {
+                    await myAppState.addAccount(playerTag, myAppState);
+                  }
+                }
+                if (apiErrorMessage.isEmpty) {
+                  navigator.pop();
+                } else if (errorMessage == accountAlreadyLinked) {
+                  setState(() {
+                    showApiTokenInput = true; // Show API token input on error
+                  });
+                }
+              } else if (!widget.user.tags.contains("#$playerTag")) {
+                
+                bool success = await addLink(
+                  playerTag,
+                  widget.user.id,
+                  token,
+                  updateErrorMessage,
+                  playerTagNotExists,
+                  accountAlreadyLinked,
+                  failedToAddTryAgain,
+                );
+                if (success) {
+                  await storePrefs('selectedTag', playerTag);
+                  if (context.mounted) {
+                    await myAppState.addAccount(playerTag, myAppState);
+                  }
+                }
+                if (errorMessage.isEmpty) {
+                  navigator.pop();
+                } else if (errorMessage == accountAlreadyLinked) {
+                  setState(() {
+                    showApiTokenInput = true; // Show API token input on error
+                  });
+                }
+              } else {
+                updateErrorMessage(
+                    AppLocalizations.of(context)!.accountAlreadyLinkedToYou);
               }
-              navigator.pop();
+             
             }
           },
           style: ButtonStyle(

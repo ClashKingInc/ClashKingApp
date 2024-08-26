@@ -37,8 +37,8 @@ class ToDoBodyState extends State<ToDoBody> {
             DateTime.fromMillisecondsSinceEpoch(toDo.lastActive * 1000);
         int daysDiff = today.difference(lastActiveDate).inDays;
 
-        if ((widget.active && daysDiff <= 14) ||
-            (!widget.active && daysDiff > 14)) {
+        if ((widget.active && daysDiff < 14) ||
+            (!widget.active && daysDiff >= 14)) {
           cards.add(ToDoBodyCard(tag: profile.tag, profileInfo: currentAccount!.profileInfo, toDo: toDo));
         }
       }

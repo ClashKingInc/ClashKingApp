@@ -101,3 +101,6 @@ untranslated_messages.json
 
 # release
 android/app/release/*
+
+# extension
+.VsCodeCounter/*
