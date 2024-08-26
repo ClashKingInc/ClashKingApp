@@ -41,8 +41,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
     selectedTagNotifier.addListener(() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await storePrefs('clanTag', account!.profileInfo.clan!.tag);
-      await prefs.setString('clanTag', account!.profileInfo.clan!.tag);
+      await storePrefs('clanTag', account!.profileInfo.clan?.tag ?? '');
+      await prefs.setString('clanTag', account!.profileInfo.clan?.tag ?? '');
       updateWidgets();
     });
   }
