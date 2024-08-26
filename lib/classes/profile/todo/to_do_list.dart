@@ -194,4 +194,21 @@ class ToDoList {
   void addToDo(ToDo todo) {
     items.add(todo);
   }
+
+  void reinitializeTotals() {
+    totalLegends = 0;
+    totalSeasonPass = 0;
+    totalRaidsAttacks = 0;
+    totalCwlAttacks = 0;
+    totalClanGamesPoints = 0;
+    totalWarAttacks = 0;
+    numberActiveAccounts = 0;
+    numberInactiveAccounts = 0;
+    requiredLegendsAttacks = 0;
+    requiredClanGamesPoints = 0;
+    requiredRaidsAttacks = 0;
+    requiredSeasonPass = 0;
+    requiredCwlAttacks = 0;
+    requiredWarAttacks = 0;
+  }
 }

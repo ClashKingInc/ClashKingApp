@@ -160,6 +160,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     accounts!.selectedTag =
         ValueNotifier<String?>(accounts!.accounts.first.profileInfo.tag);
     accounts!.toDoList.deleteToDoByTag(tag);
+    accounts!.toDoList.reinitializeTotals();
+    accounts!.toDoList.calculateTotals();
 
     myAppState.selectedTagNotifier.value = accounts!.selectedTag.value;
     notifyListeners();
@@ -203,6 +205,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       await ToDoService.fetchPlayerToDoData(profileInfo);
 
       accounts!.toDoList.addToDo(profileInfo.toDo!);
+      accounts!.toDoList.reinitializeTotals();
       accounts!.toDoList.calculateTotals();
 
       // Définissez le nouveau compte comme étant sélectionné
