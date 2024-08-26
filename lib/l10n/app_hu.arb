@@ -81,7 +81,7 @@
     "currentTranslators": "Current Translators",
     "betaFeature": "Beta Feature",
     "beta": "BETA",
-    "betaDescription": "This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.",
+    "betaDescription": "This feature is currently in beta, so it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues on our Discord server to help us make it better.",
     "copiedToClipboard": "Vágólapra másolva",
     "all": "Összes",
     "@all": {
@@ -122,8 +122,13 @@
     "deleteAccount": "Fiók törlése",
     "playerTagNotExists": "A megadott játékos tag nem létezik.",
     "accountAlreadyLinked": "A játékos tag-je már csatolva van valakihez.",
+    "enterApiToken": "Please enter the account API token to confirm its yours. You can find it in Clash of Clans Settings > More Settings > API Token",
+    "wrongApiToken": "The API token entered is incorrect",
+    "accountAlreadyLinkedToYou": "The player tag is already linked to you.",
+    "apiToken": "Account API Token",
     "failedToAddTryAgain": "Nem sikerült hozzákapcsolni. Kérjük, próbálja újra később.",
     "failedToDeleteTryAgain": "A kapcsolat törlése nem sikerült. Kérjük, próbálja meg később újra.",
+    "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
     "search": "Keresés",
     "@search": {
         "description": "Search for a player or a clan"
@@ -365,8 +370,8 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inacurate Data?",
-    "legendsExplanation_intro": "Due to limitations in the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
+    "legendsTitle": "Innacurate data?",
+    "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
     "legendsExplanation_api_delay_title": "1. API Delay: ",
     "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
     "legendsExplanation_concurrent_changes_title": "2. Concurrent Changes: \n",

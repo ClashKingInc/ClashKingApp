@@ -81,7 +81,7 @@
     "currentTranslators": "Huidige vertalers",
     "betaFeature": "Beta-functie",
     "beta": "BETA",
-    "betaDescription": "Deze functie bevindt zich in bèta en kan enkele bugs bevatten en onvolledig zijn. Het zal verbeterd worden in de komende updates. Voel je vrij om ideeën voor te stellen in onze Discord server. Ook kan je daar bugs rapporteren om ons te helpen de functie te verbeteren.",
+    "betaDescription": "This feature is currently in beta, so it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues on our Discord server to help us make it better.",
     "copiedToClipboard": "Gekopieerd naar klembord",
     "all": "Alle",
     "@all": {
@@ -122,15 +122,20 @@
     "deleteAccount": "Account verwijderen",
     "playerTagNotExists": "Het ingevoerde speler-ID bestaat niet.",
     "accountAlreadyLinked": "Het speler-ID is al aan iemand gekoppeld.",
+    "enterApiToken": "Voer de account API-token in om te bevestigen dat deze van jou is. Je vindt deze in Clash of Clans Instellingen > Meer instellingen > API-token",
+    "wrongApiToken": "De ingevoerde API-token is onjuist",
+    "accountAlreadyLinkedToYou": "Het speler-ID is al aan jou gekoppeld.",
+    "apiToken": "Account API Token",
     "failedToAddTryAgain": "Link toevoegen mislukt. Probeer het later opnieuw.",
     "failedToDeleteTryAgain": "Link verwijderen mislukt. Probeer het later opnieuw.",
+    "enterPlayerTagWarning": "Je moet een spelertag invoeren en op de \"+\" klikken om door te gaan.",
     "search": "Zoeken",
     "@search": {
         "description": "Search for a player or a clan"
     },
     "warning": "Waarschuwing",
     "exitAppToOpenClash": "Je staat op het punt de app te verlaten om Clash of Clans te openen.",
-    "confirmLogout": "Are you sure you want to log out?",
+    "confirmLogout": "Weet je zeker dat je wilt uitloggen?",
     "@confirmLogout": {
         "description": "Prompt asking the user to confirm logout"
     },
@@ -365,8 +370,8 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Onjuiste gegevens?",
-    "legendsExplanation_intro": "Vanwege beperkingen in de Clash of Clans API is onze data mogelijk niet altijd accuraat. Dit zijn de reden:\n",
+    "legendsTitle": "Innacurate data?",
+    "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
     "legendsExplanation_api_delay_title": "1. API Vertraging: ",
     "legendsExplanation_api_delay_body": "De API kan tot 5 minuten duren om bij te werken, wat een vertraging veroorzaakt bij het weergeven van real-time trofee wijzigingen.\n",
     "legendsExplanation_concurrent_changes_title": "2. Gelijktijdige Veranderingen:\n",
@@ -605,9 +610,9 @@
     "@random": {
         "description": "Random/basic war (not friendly or cwl)"
     },
-    "selectMembersThLevel": "Members TH Level",
-    "selectOpponentsThLevel": "Opponents TH Level",
-    "equalThLevel": "Equal TH",
+    "selectMembersThLevel": "Leden SH level",
+    "selectOpponentsThLevel": "Tegenstanders SH level",
+    "equalThLevel": "Hetzelfde SH",
     "builderBaseTrophies": "BB Trofeeën",
     "donations": "Donaties",
     "donationsReceived": "Donaties ontvangen",
@@ -628,7 +633,7 @@
     "cantOpenLink": "We kunnen deze link niet openen.",
     "notInWar": "Niet in oorlog",
     "warHistory": "Oorlogsgeschiedenis",
-    "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) in the last 50 wars.",
+    "warHistoryWinsDescription": "Je clan heeft {wins} oorlogen gewonnen ({percent}%) in de laatste 50 oorlogen.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
@@ -639,7 +644,7 @@
             }
         }
     },
-    "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) in the last 50 wars.",
+    "warHistoryLossesDescription": "Je clan heeft {losses} oorlogen verloren ({percent}%) in de laatste 50 oorlogen.",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
@@ -650,7 +655,7 @@
             }
         }
     },
-    "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) in the last 50 wars.",
+    "warHistoryDrawsDescription": "Jouw clan had {draws} gelijkspel ({percent}%) in de laatste 50 oorlogen.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
@@ -661,7 +666,7 @@
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating in the last 50 wars.",
+    "warHistoryAverageMembersDescription": "Je clan heeft gemiddeld {members} leden die deelnemen aan de laatste 50 oorlogen.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -669,7 +674,7 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription": "Your clan has an average of {stars} stars at the end of the last 50 wars. It represents {percent} of the total stars.",
+    "warHistoryAverageWarStarsDescription": "Je clan heeft gemiddeld {stars} sterren aan het einde van de laatste 50 oorlogen. Dit vertegenwoordigt {percent} van de totale sterren.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -680,7 +685,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of th last 50 wars.",
+    "warHistoryAverageHitRateDescription": "Je clan heeft gemiddeld {percent} vernietigingspercentage aan het einde van de laatste 50 oorlogen.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
@@ -688,8 +693,8 @@
             }
         }
     },
-    "warHistoryAverageClanStarsPerMember": "Your clan has an average of {stars} stars per member in the last 50 wars.",
-    "warHistoryAverageMembers": "~{members} members per war",
+    "warHistoryAverageClanStarsPerMember": "Je clan heeft gemiddeld {stars} sterren per lid in de laatste 50 oorlogen.",
+    "warHistoryAverageMembers": "~{members} leden per oorlog",
     "@warHistoryAverageMembers": {
         "placeholders": {
             "members": {
@@ -697,14 +702,14 @@
             }
         }
     },
-    "averageStars": "Average stars",
-    "averageDestruction": "Average destruction",
-    "noStars": "0 star",
-    "oneStar": "1 star",
-    "twoStars": "2 stars",
-    "threeStars": "3 stars",
-    "warParticipation": "War Participation",
-    "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
+    "averageStars": "Gemiddelde sterren",
+    "averageDestruction": "Gemiddelde vernietiging",
+    "noStars": "0 ster",
+    "oneStar": "1 ster",
+    "twoStars": "2 sterren",
+    "threeStars": "3 sterren",
+    "warParticipation": "Oorlogsdeelname",
+    "toggleTownHallVisibility": "Verberg/Toon statistieken van voormalige SH-levels",
     "@toggleTownHallVisibility": {
         "description": "For example, hide stats from TH15 and below if the player is now TH16"
     },
@@ -927,7 +932,7 @@
     "neededOverall": "% Nodig in totaal",
     "calculate": "Berekenen",
     "warStats": "Oorlogstatistieken",
-    "membersStats": "Members Stats",
+    "membersStats": "Ledenstatistieken",
     "clanWarLeague": "Clanoorlogsdivisie",
     "cwlRank": "Jouw clan staat momenteel op rang {rank}.",
     "@cwlRank": {
@@ -990,7 +995,7 @@
             }
         }
     },
-    "tools": "Tools",
-    "community": "Community",
-    "lastRaids": "Last raids"
+    "tools": "Hulpmiddelen",
+    "community": "Gemeenschap",
+    "lastRaids": "Laatste raids"
 }
