@@ -81,7 +81,7 @@
     "currentTranslators": "Atuais tradutores",
     "betaFeature": "Recurso Beta",
     "beta": "BETA",
-    "betaDescription": "Este recurso está em beta e pode conter alguns erros e estar incompleto. Será melhorado nas atualizações seguintes. Sinta-se à vontade para propor ideias e comunicar erros no nosso servidor Discord para nos ajudar a melhorá-lo.",
+    "betaDescription": "This feature is currently in beta, so it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues on our Discord server to help us make it better.",
     "copiedToClipboard": "Copiado para a área de transferência",
     "all": "Tudo",
     "@all": {
@@ -370,8 +370,8 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Dados imprecisos?",
-    "legendsExplanation_intro": "Devido a limitações no API do Clash of Clans, os nossos dados podem não estar perfeitamente precisos. Aqui está o porquê:\n",
+    "legendsTitle": "Innacurate data?",
+    "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
     "legendsExplanation_api_delay_title": "1. Atraso da API: ",
     "legendsExplanation_api_delay_body": "A API pode demorar até 5 minutos para atualizar, causando um atraso na reflexão das mudanças de troféus em tempo real.\n",
     "legendsExplanation_concurrent_changes_title": "2. Alterações simultâneas: \n",
