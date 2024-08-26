@@ -873,5 +873,11 @@
             "type": "String"
         }
     }
-}
+},
+"tools": "Outils",
+"community": "Communauté",
+"lastRaids": "Derniers raids",
+"ongoingRaids": "Raids en cours",
+"districtsDestroyed": "Districts détruits",
+"raidsCompleted": "Raids complétés"
 }

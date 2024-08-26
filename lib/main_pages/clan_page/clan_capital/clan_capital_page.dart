@@ -1,7 +1,7 @@
 import 'package:clashkingapp/classes/clan/capital/raids_history.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-//import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -23,6 +23,8 @@ class CapitalScreenState extends State<CapitalScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   late DateTime selectedWeek;
+  bool filterAccountActive = false;
+  String filterBy = "all";
  
   @override
   void initState() {
@@ -49,7 +51,6 @@ class CapitalScreenState extends State<CapitalScreen>
     });
   }
 
-
   Future<void> _refreshData() async {
     // Fetch the updated profile information
     //final profileInfo =
@@ -74,6 +75,8 @@ class CapitalScreenState extends State<CapitalScreen>
     if (widget.clanInfo?.clanCapitalRaid != null && widget.clanInfo!.clanCapitalRaid.items.isNotEmpty) {
       var firstRaid = widget.clanInfo!.clanCapitalRaid.items.first;
       List<Member> nonParticipants = getNonParticipatingMembers(firstRaid);
+
+      bool isOngoing = firstRaid.state == 'ongoing';
 
       return Scaffold(
         body: RefreshIndicator(
@@ -102,10 +105,54 @@ class CapitalScreenState extends State<CapitalScreen>
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 4),
-                        buildLastRaids(firstRaid, locale),
-                        buildLastRaidsMembers(firstRaid),
-                        ...buildNonParticipantWidgets(nonParticipants),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8, right: 8, top: 2),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  filterBy == "all"
+                                    ? LucideIcons.list
+                                    : filterBy == "done"
+                                      ? LucideIcons.check
+                                      : LucideIcons.x,
+                                  color: Theme.of(context).colorScheme.tertiary),
+                                onPressed: () {
+                                  setState(() {
+                                    switch (filterBy) {
+                                      case "all":
+                                        filterBy = "done";
+                                        break;
+                                      case "done":
+                                        filterBy = "notDone";
+                                        break;
+                                      default:
+                                        filterBy = "all";
+                                    }
+                                  });
+                                },
+                                tooltip: 'Filter Remaining Attacks',
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.link,
+                                  color: filterAccountActive ? Colors.green : Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    filterAccountActive = !filterAccountActive;
+                                  });
+                                },
+                                tooltip: 'Filter Active Users',
+                              ),
+                            ],
+                          ),
+                        ),
+                        buildLastRaids(firstRaid, locale, isOngoing),
+                        if (filterBy == "all" || filterBy == "done") buildLastRaidsMembers(firstRaid),
+                        //if ((filterBy == "all" || filterBy == "notDone") && isOngoing) ...buildNonParticipantWidgets(nonParticipants) else SizedBox.shrink(),
+                        if ((filterBy == "all" || filterBy == "notDone")) ...buildNonParticipantWidgets(nonParticipants),
                         SizedBox(height: 10),
                       ],
                     ),
@@ -164,8 +211,7 @@ class CapitalScreenState extends State<CapitalScreen>
   }
 
   List<Widget> buildNonParticipantWidgets(List<Member> nonParticipants) {
-    int townHallLevel = 16;
-    return nonParticipants.map((member) {
+    return nonParticipants.where((member) => !filterAccountActive || widget.user.contains(member.tag)).map((member) {
       return Card(
         margin: EdgeInsets.only(left: 12, right: 12, bottom: 4, top: 4),
         elevation: 4,
@@ -182,7 +228,7 @@ class CapitalScreenState extends State<CapitalScreen>
                 height: 40,
                 width: 40,
                 child: CachedNetworkImage(
-                  imageUrl: 'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-$townHallLevel.png',
+                  imageUrl: 'https://assets.clashk.ing/capital-base/clan-houses/Building_CC_Vacant_House.png',
                   placeholder: (context, url) => CircularProgressIndicator(),
                 ),
               ),
@@ -222,9 +268,7 @@ class CapitalScreenState extends State<CapitalScreen>
   //  );
   //}
 
-  Widget buildLastRaids(firstRaid, locale) {
-    bool isOngoing = firstRaid.state == 'ongoing';
-    
+  Widget buildLastRaids(firstRaid, locale, isOngoing) {
     return Column(
       children: [
         SizedBox(
@@ -242,8 +286,8 @@ class CapitalScreenState extends State<CapitalScreen>
                     children: [
                       Text(
                         isOngoing
-                          ? 'Raids en cours' 
-                          : 'Dernier raids',
+                          ? AppLocalizations.of(context)!.ongoingRaids
+                          : AppLocalizations.of(context)!.lastRaids,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       SizedBox(width: 4),
@@ -312,7 +356,7 @@ class CapitalScreenState extends State<CapitalScreen>
                                   ),
                                   SizedBox(width: 2),
                                   Text(
-                                    "${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(firstRaid.raidsCompleted)} Raids completed",
+                                    "${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(firstRaid.raidsCompleted)} ${AppLocalizations.of(context)!.raidsCompleted}",
                                   ),
                                 ],
                               ),
@@ -348,7 +392,7 @@ class CapitalScreenState extends State<CapitalScreen>
                                     ),
                                   ),
                                   SizedBox(width: 2),
-                                  Text("${firstRaid.enemyDistrictsDestroyed} Districts destroyed"),
+                                  Text("${firstRaid.enemyDistrictsDestroyed} ${AppLocalizations.of(context)!.districtsDestroyed}"),
                                 ],
                               ),
                               Row(
@@ -406,9 +450,8 @@ class CapitalScreenState extends State<CapitalScreen>
 
   List<Widget> buildMemberWidgets(List<RaidMember> raidMembers) {
     raidMembers.sort((a, b) => b.capitalResourcesLooted.compareTo(a.capitalResourcesLooted));
-    int townHallLevel = 16;
 
-    return raidMembers.map((member) {
+    return raidMembers.where((member) => !filterAccountActive || widget.user.contains(member.tag)).map((member) {
       bool isInDiscord = widget.user.contains(member.tag);
 
       return Card(
@@ -432,7 +475,7 @@ class CapitalScreenState extends State<CapitalScreen>
                 height: 40,
                 width: 40,
                 child: CachedNetworkImage(
-                  imageUrl: 'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-$townHallLevel.png',
+                  imageUrl: 'https://assets.clashk.ing/capital-base/clan-houses/Building_CC_Clan_House.png',
                   placeholder: (context, url) => CircularProgressIndicator(),
                 ),
               ),
