@@ -262,7 +262,6 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                                                 .colorScheme
                                                 .primary),
                                 onPressed: () {
-                                  print("pressed");
                                   _addTag();
                                 },
                               ),

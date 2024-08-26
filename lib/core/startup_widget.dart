@@ -96,7 +96,6 @@ class StartupWidgetState extends State<StartupWidget> {
     setState(() {
       isLoading = true;
     });
-    print('isLoading: $isLoading');
 
     String playerTag = playerTagController.text;
     if (playerTag.trim().isNotEmpty) {
@@ -120,7 +119,6 @@ class StartupWidgetState extends State<StartupWidget> {
               AppLocalizations.of(context)!.playerTagNotExists,
               AppLocalizations.of(context)!.accountAlreadyLinked(""),
               AppLocalizations.of(context)!.failedToAddTryAgain);
-          print(success);
 
           if (success && !_tags.contains(playerTag)) {
             setState(() {

@@ -76,15 +76,13 @@ Future<bool> checkApiToken(String apiToken, String playerTag, Function updateErr
     }),
   );
 
-  print(response.body);
   if (response.statusCode == 200) {
     var data = jsonDecode(response.body);
     if (data['status'] == 'ok') {
-      print('true');
       return true;
     }
   }
-  print('false');
+
   updateErrorMessage(wrongApiToken);
   return false;
 }
@@ -113,7 +111,6 @@ Future<bool> addLinkWithAPIToken(
         playerTagNotExists,
         accountAlreadyLinked,
         failedToAddTryAgain);
-    print(added);
     return deleted && added;
   } else {
     updateErrorMessage(wrongApiToken);

@@ -156,7 +156,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
                   });
                 }
               } else if (!widget.user.tags.contains("#$playerTag")) {
-                print("playerTag: $playerTag");
+                
                 bool success = await addLink(
                   playerTag,
                   widget.user.id,
@@ -201,7 +201,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
                   });
                 }
               } else if (!widget.user.tags.contains("#$playerTag")) {
-                print("playerTag: $playerTag");
+                
                 bool success = await addLink(
                   playerTag,
                   widget.user.id,
