@@ -998,5 +998,8 @@
 },
     "tools": "Tools",
     "community": "Community",
-    "lastRaids": "Last raids"
+    "lastRaids": "Last raids",
+    "ongoingRaids": "Ongoing raids",
+    "districtsDestroyed": "Districts destroyed",
+    "raidsCompleted": "Raids completed"
 }
