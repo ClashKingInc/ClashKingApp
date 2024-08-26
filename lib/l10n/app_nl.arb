@@ -122,13 +122,13 @@
     "deleteAccount": "Account verwijderen",
     "playerTagNotExists": "Het ingevoerde speler-ID bestaat niet.",
     "accountAlreadyLinked": "Het speler-ID is al aan iemand gekoppeld.",
-    "enterApiToken": "Please enter the account API token to confirm its yours. You can find it in Clash of Clans Settings > More Settings > API Token",
-    "wrongApiToken": "The API token entered is incorrect",
-    "accountAlreadyLinkedToYou": "The player tag is already linked to you.",
+    "enterApiToken": "Voer de account API-token in om te bevestigen dat deze van jou is. Je vindt deze in Clash of Clans Instellingen > Meer instellingen > API-token",
+    "wrongApiToken": "De ingevoerde API-token is onjuist",
+    "accountAlreadyLinkedToYou": "Het speler-ID is al aan jou gekoppeld.",
     "apiToken": "Account API Token",
     "failedToAddTryAgain": "Link toevoegen mislukt. Probeer het later opnieuw.",
     "failedToDeleteTryAgain": "Link verwijderen mislukt. Probeer het later opnieuw.",
-    "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
+    "enterPlayerTagWarning": "Je moet een spelertag invoeren en op de \"+\" klikken om door te gaan.",
     "search": "Zoeken",
     "@search": {
         "description": "Search for a player or a clan"
