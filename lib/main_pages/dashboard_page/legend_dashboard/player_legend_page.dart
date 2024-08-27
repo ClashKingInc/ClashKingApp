@@ -222,7 +222,8 @@ class LegendScreenState extends State<LegendScreen>
                           child: Text(
                               AppLocalizations.of(context)?.noDataAvailable ??
                                   'No data available')),
-                  widget.playerLegendData.legendData.isNotEmpty
+                  widget.playerLegendData.legendData.isNotEmpty &&
+                          widget.playerLegendData.legendSeasons.isNotEmpty
                       ? Column(
                           children: [
                             Row(
