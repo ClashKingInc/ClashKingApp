@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/components/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/components/to_do_body_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_stats/player_stats_page.dart';
@@ -36,6 +37,21 @@ class PlayerInfoHeaderCard extends StatefulWidget {
 
 class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
     with SingleTickerProviderStateMixin {
+  late Future<void> _initializeToDoFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeToDoFuture = _checkToDoInitialization();
+  }
+
+  Future<void> _checkToDoInitialization() async {
+    while (widget.playerStats.toDo == null ||
+        !widget.playerStats.toDo!.isInitialized) {
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -127,36 +143,48 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                     Column(
                       children: [
                         IconButton(
-                          icon: Icon(LucideIcons.calendarCheck,
-                              color: Colors.white, size: 32),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => Dialog(
-                                insetPadding: EdgeInsets.all(8),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width - 16,
-                                  child: SingleChildScrollView(
-                                    child: ConstrainedBox(
-                                      constraints: BoxConstraints(
-                                          maxHeight: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.9),
-                                      child: IntrinsicHeight(
-                                        child: ToDoBodyCard(
-                                          profileInfo: widget.playerStats,
-                                          toDo: widget.playerStats.toDo!,
-                                          tag: widget.playerStats.tag,
+                            icon: Icon(LucideIcons.calendarCheck,
+                                color: Colors.white, size: 32),
+                            onPressed: () async {
+                              final navigator = Navigator.of(context);
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                },
+                              );
+                              await _checkToDoInitialization();
+                              navigator.pop();
+                              showDialog(
+                                context: context,
+                                builder: (context) => Dialog(
+                                  insetPadding: EdgeInsets.all(8),
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 16,
+                                    child: SingleChildScrollView(
+                                      child: ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                            maxHeight: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.9),
+                                        child: IntrinsicHeight(
+                                          child: ToDoBodyCard(
+                                            profileInfo: widget.playerStats,
+                                            toDo: widget.playerStats.toDo!,
+                                            tag: widget.playerStats.tag,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
+                              );
+                            }),
                         SizedBox(height: 8),
                         IconButton(
                           icon: Icon(Icons.sports_esports_rounded,
@@ -242,58 +270,81 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: widget.hallChips,
           ),
-          if (widget.playerStats.toDo != null &&
-              widget.playerStats.toDo!.war != null &&
-              widget.playerStats.toDo!.war!.warStateInfo.currentWarInfo != null)
-            Column(children: [
-              SizedBox(height: 8),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                  shadowColor: Theme.of(context).colorScheme.secondary,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CurrentWarInfoScreen(
-                        currentWarInfo: widget.playerStats.toDo!.war!
-                            .warStateInfo.currentWarInfo!,
-                        discordUser: widget.user,
-                      ),
+          FutureBuilder<void>(
+              future: _initializeToDoFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SizedBox.shrink();
+                } else if (snapshot.hasError) {
+                  Sentry.captureException(snapshot.error);
+                  return Center(
+                    child: Text(
+                      AppLocalizations.of(context)!.connectionErrorRelaunch,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   );
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CachedNetworkImage(
-                        width: 20,
-                        imageUrl:
-                            "https://assets.clashk.ing/icons/Icon_DC_War.png",
+                } else {
+                  if (widget.playerStats.toDo != null &&
+                      widget.playerStats.toDo!.war != null &&
+                      widget.playerStats.toDo!.war!.warStateInfo
+                              .currentWarInfo !=
+                          null) {
+                    return Column(children: [
+                      SizedBox(height: 8),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          shadowColor: Theme.of(context).colorScheme.secondary,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CurrentWarInfoScreen(
+                                currentWarInfo: widget.playerStats.toDo!.war!
+                                    .warStateInfo.currentWarInfo!,
+                                discordUser: widget.user,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 16),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CachedNetworkImage(
+                                width: 20,
+                                imageUrl:
+                                    "https://assets.clashk.ing/icons/Icon_DC_War.png",
+                              ),
+                              SizedBox(width: 8),
+                              Shimmer.fromColors(
+                                period: Duration(seconds: 3),
+                                baseColor: Colors.white,
+                                highlightColor: Colors.white.withOpacity(0.4),
+                                child: Text(
+                                    AppLocalizations.of(context)?.ongoingWar ??
+                                        "Ongoing War",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      SizedBox(width: 8),
-                      Shimmer.fromColors(
-                        period: Duration(seconds: 3),
-                        baseColor: Colors.white,
-                        highlightColor: Colors.white.withOpacity(0.4),
-                        child: Text(
-                            AppLocalizations.of(context)?.ongoingWar ??
-                                "Ongoing War",
-                            style: Theme.of(context).textTheme.bodyMedium),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 8),
-            ])
+                      SizedBox(height: 8),
+                    ]);
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                }
+              }),
         ],
       ),
     );

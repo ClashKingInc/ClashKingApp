@@ -50,7 +50,7 @@ class ProfileInfo {
   PlayerLegendData? playerLegendData;
   bool initialized = false;
   bool legendsInitialized = false;
-  late ToDo? toDo;
+  ToDo? toDo;
   late WarStats? warStats;
   bool warStatsInitialized = false;
 

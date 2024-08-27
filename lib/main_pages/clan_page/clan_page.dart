@@ -41,7 +41,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
 
   Future<void> _refreshData() async {
     // Fetch the updated profile information
-    if (widget.account!.clan != null) {
+    if (widget.account!.clan != null && widget.account!.hasClan) {
       widget.account!.clan!.clanInitialized = false;
       final updatedClanInfo =
           await ClanService().fetchClanInfo(widget.account!.clan!);
