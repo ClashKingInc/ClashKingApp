@@ -998,7 +998,7 @@
     "tools": "Hulpmiddelen",
     "community": "Gemeenschap",
     "lastRaids": "Laatste raids",
-    "ongoingRaids": "Ongoing raids",
-    "districtsDestroyed": "Districts destroyed",
-    "raidsCompleted": "Raids completed"
+    "ongoingRaids": "Lopende rooftocht",
+    "districtsDestroyed": "Districten vernietigd",
+    "raidsCompleted": "Rooftochten voltooid"
 }
