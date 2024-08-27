@@ -540,8 +540,7 @@ class CapitalScreenState extends State<CapitalScreen>
     child: Text(
       AppLocalizations.of(context)!.comingSoon,
       style: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
+        fontSize: 16,
       ),
     ),
   );
