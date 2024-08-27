@@ -536,91 +536,101 @@ class CapitalScreenState extends State<CapitalScreen>
   }
 
   Widget buildHistory(locale) {
-    return Card(
-      margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-      elevation: 4,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 16, top: 8, left: 8, right: 8),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: AppLocalizations.of(context)!.activeSuperTroops,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 16),
-                    IconButton(
-                      icon: Icon(
-                        Icons.filter_list,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface,
-                        size: 24,
-                      ),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      width: 30,
-                      height: 30,
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface,
-                            size: 16),
-                        onPressed: decrementWeek,
-                      ),
-                    ),
-                    Text(
-                        DateFormat(
-                                'dd MMMM yyyy',
-                                Localizations.localeOf(context)
-                                    .languageCode)
-                            .format(selectedWeek),
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge),
-                    SizedBox(
-                      width: 30,
-                      height: 30,
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_forward,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface,
-                            size: 16),
-                        onPressed: incrementWeek,
-                      ),
-                    ),
-                    SizedBox(width: 16)
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
+    return Center(
+    child: Text(
+      AppLocalizations.of(context)!.comingSoon,
+      style: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
       ),
-    );
+    ),
+  );
+    
+    //Card(
+    //  margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+    //  elevation: 4,
+    //  child: Padding(
+    //    padding: EdgeInsets.only(bottom: 16, top: 8, left: 8, right: 8),
+    //    child: Column(
+    //      children: [
+    //        Align(
+    //          alignment: Alignment.center,
+    //          child: RichText(
+    //            text: TextSpan(
+    //              children: [
+    //                TextSpan(
+    //                  text: AppLocalizations.of(context)!.activeSuperTroops,
+    //                  style: Theme.of(context).textTheme.titleMedium,
+    //                ),
+    //              ],
+    //            ),
+    //          ),
+    //        ),
+    //        SizedBox(height: 10),
+    //        Row(
+    //          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //          children: [
+    //            Row(
+    //              mainAxisAlignment: MainAxisAlignment.start,
+    //              children: [
+    //                SizedBox(width: 16),
+    //                IconButton(
+    //                  icon: Icon(
+    //                    Icons.filter_list,
+    //                    color: Theme.of(context)
+    //                        .colorScheme
+    //                        .onSurface,
+    //                    size: 24,
+    //                  ),
+    //                  onPressed: () {},
+    //                ),
+    //              ],
+    //            ),
+    //            Row(
+    //              mainAxisAlignment: MainAxisAlignment.end,
+    //              children: [
+    //                SizedBox(
+    //                  width: 30,
+    //                  height: 30,
+    //                  child: IconButton(
+    //                    icon: Icon(Icons.arrow_back,
+    //                        color: Theme.of(context)
+    //                            .colorScheme
+    //                            .onSurface,
+    //                        size: 16),
+    //                    onPressed: decrementWeek,
+    //                  ),
+    //                ),
+    //                Text(
+    //                    DateFormat(
+    //                            'dd MMMM yyyy',
+    //                            Localizations.localeOf(context)
+    //                                .languageCode)
+    //                        .format(selectedWeek),
+    //                    style: Theme.of(context)
+    //                        .textTheme
+    //                        .labelLarge),
+    //                SizedBox(
+    //                  width: 30,
+    //                  height: 30,
+    //                  child: IconButton(
+    //                    icon: Icon(Icons.arrow_forward,
+    //                        color: Theme.of(context)
+    //                            .colorScheme
+    //                            .onSurface,
+    //                        size: 16),
+    //                    onPressed: incrementWeek,
+    //                  ),
+    //                ),
+    //                SizedBox(width: 16)
+    //              ],
+    //            ),
+    //          ],
+    //        ),
+    //      ],
+    //    ),
+    //  ),
+    //);
   }
 
 }
