@@ -81,7 +81,7 @@
     "currentTranslators": "Aktualni tłumacze",
     "betaFeature": "Funkcja Beta",
     "beta": "BETA",
-    "betaDescription": "This feature is currently in beta, so it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues on our Discord server to help us make it better.",
+    "betaDescription": "Ta funkcja jest obecnie w wersji beta, więc może zawierać pewne błędy lub być niekompletna. Aktywnie pracujemy nad ulepszeniami i z przyjemnością przyjmujemy opinie. Prosimy o dzielenie się pomysłami oraz zgłaszanie wszelkich problemów na naszym serwerze Discord, aby pomóc nam ją udoskonalić.",
     "copiedToClipboard": "Skopiowano do schowka",
     "all": "Wszystkie",
     "@all": {
@@ -122,20 +122,20 @@
     "deleteAccount": "Usuń konto",
     "playerTagNotExists": "Wprowadzony tag gracza nie istnieje.",
     "accountAlreadyLinked": "{tag} jest już powiązany z kimś innym.",
-    "enterApiToken": "Please enter the account API token to confirm its yours. You can find it in Clash of Clans Settings > More Settings > API Token",
-    "wrongApiToken": "The API token entered is incorrect",
-    "accountAlreadyLinkedToYou": "The player tag is already linked to you.",
-    "apiToken": "Account API Token",
+    "enterApiToken": "Proszę wprowadzić token API konta, aby potwierdzić, że należy do Ciebie. Możesz znaleźć go w ustawieniach Clash of Clans > Więcej ustawień > Token API",
+    "wrongApiToken": "Wprowadzony token API jest nieprawidłowy",
+    "accountAlreadyLinkedToYou": "Tag gracza jest już z tobą powiązany.",
+    "apiToken": "Token API konta",
     "failedToAddTryAgain": "Nie udało się dodać linku. Spróbuj ponownie później.",
     "failedToDeleteTryAgain": "Nie udało się usunąć linku. Spróbuj ponownie później.",
-    "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
+    "enterPlayerTagWarning": "Musisz wpisać tag gracza i kliknąć na \"+\", aby kontynuować.",
     "search": "Wyszukaj",
     "@search": {
         "description": "Search for a player or a clan"
     },
     "warning": "Ostrzeżenie",
     "exitAppToOpenClash": "Zamierzasz opuścić aplikację, aby otworzyć Clash of Clans.",
-    "confirmLogout": "Are you sure you want to log out?",
+    "confirmLogout": "Czy na pewno chcesz się wylogować?",
     "@confirmLogout": {
         "description": "Prompt asking the user to confirm logout"
     },
@@ -370,8 +370,8 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Innacurate data?",
-    "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
+    "legendsTitle": "Nieprecyzyjne dane?",
+    "legendsExplanation_intro": "Ze względu na ograniczenia w API Clash of Clans, nasze dane mogą czasami nie być całkowicie dokładne. Dlaczego tak się dzieje:\n",
     "legendsExplanation_api_delay_title": "1. Opóźnienie interfejsu API: ",
     "legendsExplanation_api_delay_body": "API może zaktualizować się maksymalnie do 5 minut, co powoduje opóźnienie w odzwierciedleniu zmian w czasie rzeczywistym w puszkach.\n",
     "legendsExplanation_concurrent_changes_title": "2. Zmiany jednoczesne: \n",
@@ -610,9 +610,9 @@
     "@random": {
         "description": "Random/basic war (not friendly or cwl)"
     },
-    "selectMembersThLevel": "Members TH Level",
-    "selectOpponentsThLevel": "Opponents TH Level",
-    "equalThLevel": "Equal TH",
+    "selectMembersThLevel": "Poziomy TH członków",
+    "selectOpponentsThLevel": "Poziomy TH przeciwnika",
+    "equalThLevel": "Równy TH",
     "builderBaseTrophies": "BB Puszki",
     "donations": "Dotacje",
     "donationsReceived": "Otrzymane Dotacje",
@@ -633,7 +633,7 @@
     "cantOpenLink": "Nie możemy otworzyć tego linku.",
     "notInWar": "Nie jest na wojnie",
     "warHistory": "Historia wojen",
-    "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) in the last 50 wars.",
+    "warHistoryWinsDescription": "Twój klan wygrał {wins} wojen ({percent}%) w ostatnich 50 wojnach.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
@@ -644,7 +644,7 @@
             }
         }
     },
-    "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) in the last 50 wars.",
+    "warHistoryLossesDescription": "Twój klan przegrał {losses} wojen ({percent}%) w ostatnich 50 wojnach.",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
@@ -655,7 +655,7 @@
             }
         }
     },
-    "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) in the last 50 wars.",
+    "warHistoryDrawsDescription": "Twój klan miał {draws} remisów ({percent} proc.) w ostatnich 50 wojnach.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
@@ -666,7 +666,7 @@
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating in the last 50 wars.",
+    "warHistoryAverageMembersDescription": "Twój klan ma średnio {members} członków uczestniczących w ostatnich 50 wojnach.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -674,7 +674,7 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription": "Your clan has an average of {stars} stars at the end of the last 50 wars. It represents {percent} of the total stars.",
+    "warHistoryAverageWarStarsDescription": "Twój klan ma średnio {stars} gwiazdek na końcu ostatnich 50 wojen. Odpowiada to {percent} wszystkich gwiazdek.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -685,7 +685,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of th last 50 wars.",
+    "warHistoryAverageHitRateDescription": "Twój klan ma średni wskaźnik zniszczenia {percent} na koniec ostatnich 50 wojen.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
@@ -693,8 +693,8 @@
             }
         }
     },
-    "warHistoryAverageClanStarsPerMember": "Your clan has an average of {stars} stars per member in the last 50 wars.",
-    "warHistoryAverageMembers": "~{members} members per war",
+    "warHistoryAverageClanStarsPerMember": "Twój klan ma średnio {stars} gwiazdek na członka w ostatnich 50 wojnach.",
+    "warHistoryAverageMembers": "~{members} członków na wojnę",
     "@warHistoryAverageMembers": {
         "placeholders": {
             "members": {
@@ -702,14 +702,14 @@
             }
         }
     },
-    "averageStars": "Average stars",
-    "averageDestruction": "Average destruction",
-    "noStars": "0 star",
-    "oneStar": "1 star",
-    "twoStars": "2 stars",
-    "threeStars": "3 stars",
-    "warParticipation": "War Participation",
-    "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
+    "averageStars": "Średnie gwiazdki",
+    "averageDestruction": "Średnie zniszczenia",
+    "noStars": "0 gwiazdek",
+    "oneStar": "1 gwiazdka",
+    "twoStars": "2 gwiazdki",
+    "threeStars": "3 gwiazdki",
+    "warParticipation": "Udział w wojnie",
+    "toggleTownHallVisibility": "Ukryj/pokaż statystyki z poprzednich poziomów TH",
     "@toggleTownHallVisibility": {
         "description": "For example, hide stats from TH15 and below if the player is now TH16"
     },
@@ -932,7 +932,7 @@
     "neededOverall": "% Potrzebne ogółem",
     "calculate": "Oblicz",
     "warStats": "Statystyki wojenne",
-    "membersStats": "Members Stats",
+    "membersStats": "Statystyki członków",
     "clanWarLeague": "Wojna Ligowa",
     "cwlRank": "Twój klan jest obecnie sklasyfikowany jako {rank}.",
     "@cwlRank": {
@@ -995,7 +995,10 @@
             }
         }
     },
-    "tools": "Tools",
-    "community": "Community",
-    "lastRaids": "Last raids"
+    "tools": "Narzędzia",
+    "community": "Społeczność",
+    "lastRaids": "Ostatnie rajdy",
+    "ongoingRaids": "Ongoing raids",
+    "districtsDestroyed": "Districts destroyed",
+    "raidsCompleted": "Raids completed"
 }

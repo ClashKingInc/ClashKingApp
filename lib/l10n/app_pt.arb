@@ -997,5 +997,8 @@
     },
     "tools": "Ferramentas",
     "community": "Comunidade",
-    "lastRaids": "Últimas raides"
+    "lastRaids": "Últimas raides",
+    "ongoingRaids": "Ongoing raids",
+    "districtsDestroyed": "Districts destroyed",
+    "raidsCompleted": "Raids completed"
 }
