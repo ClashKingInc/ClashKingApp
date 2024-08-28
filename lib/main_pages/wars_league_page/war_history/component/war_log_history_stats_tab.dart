@@ -108,7 +108,7 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                                 SizedBox(width: 8),
                                 Text(
                                     widget
-                                        .warLogStats.averageClanStarsPercentage
+                                        .warLogStats.averageClanDestruction
                                         .toStringAsFixed(2),
                                     style:
                                         Theme.of(context).textTheme.bodyMedium),

@@ -79,12 +79,14 @@ class WarHistoryHeader extends StatelessWidget {
               runSpacing: -7.0,
               children: <Widget>[
                 ImageChip(
+                    textColor: Colors.white,
                     imageUrl:
                         "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png",
                     label: warLogStats.totalWars.toString()),
                 IconChip(
                     icon: Icons.circle,
                     color: Colors.green,
+                    textColor: Colors.white,
                     size: 16,
                     labelPadding: 2,
                     label: warLogStats.totalWins.toString(),
@@ -94,6 +96,7 @@ class WarHistoryHeader extends StatelessWidget {
                 IconChip(
                     icon: Icons.circle,
                     color: Colors.red,
+                    textColor: Colors.white,
                     size: 16,
                     labelPadding: 2,
                     label: warLogStats.totalLosses.toString(),
@@ -103,6 +106,7 @@ class WarHistoryHeader extends StatelessWidget {
                 IconChip(
                     icon: Icons.circle,
                     color: Colors.blue,
+                    textColor: Colors.white,
                     size: 16,
                     labelPadding: 2,
                     label: warLogStats.totalTies.toString(),
