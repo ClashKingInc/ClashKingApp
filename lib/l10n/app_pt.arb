@@ -41,8 +41,8 @@
     },
     "welcome": "Bem-vindo!",
     "welcomeMessage": "Por favor, adicione uma ou mais contas de Clash Of Clans para o seu perfil. Pode adicionar ou remover contas depois.",
-    "login": "Entrar",
-    "logout": "Sair",
+    "login": "Iniciar Sessão",
+    "logout": "Terminar sessão",
     "language": "Linguagem",
     "settings": "Definições",
     "toggleTheme": "Alternar tema",
@@ -81,7 +81,7 @@
     "currentTranslators": "Atuais tradutores",
     "betaFeature": "Recurso Beta",
     "beta": "BETA",
-    "betaDescription": "This feature is currently in beta, so it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues on our Discord server to help us make it better.",
+    "betaDescription": "Este recurso está atualmente em versão beta, então pode ter alguns bugs ou estar incompleta. Estamos a trabalhar ativamente em melhorias e agradecemos os seus comentários. Por favor, compartilhe as suas ideias e relate qualquer problema no nosso servidor do Discord para nos ajudar a melhorá-lo.",
     "copiedToClipboard": "Copiado para a área de transferência",
     "all": "Tudo",
     "@all": {
@@ -370,8 +370,8 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Innacurate data?",
-    "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
+    "legendsTitle": "Dados imprecisos?",
+    "legendsExplanation_intro": "Devido às limitações da API do Clash of Clãs, nossos dados nem sempre podem ser perfeitamente precisos. Veja o porque:\n",
     "legendsExplanation_api_delay_title": "1. Atraso da API: ",
     "legendsExplanation_api_delay_body": "A API pode demorar até 5 minutos para atualizar, causando um atraso na reflexão das mudanças de troféus em tempo real.\n",
     "legendsExplanation_concurrent_changes_title": "2. Alterações simultâneas: \n",
@@ -997,8 +997,8 @@
     },
     "tools": "Ferramentas",
     "community": "Comunidade",
-    "lastRaids": "Últimas raides",
-    "ongoingRaids": "Ongoing raids",
-    "districtsDestroyed": "Districts destroyed",
-    "raidsCompleted": "Raids completed"
+    "lastRaids": "Últimos raides",
+    "ongoingRaids": "Raides em curso",
+    "districtsDestroyed": "Distritos destruídos",
+    "raidsCompleted": "Raides finalizados"
 }
