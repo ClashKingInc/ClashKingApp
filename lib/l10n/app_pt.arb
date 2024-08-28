@@ -73,7 +73,7 @@
     "faqSendEmail": "Envie um e-mail",
     "faqJoinDiscord": "Entra no nosso servidor de Discord",
     "helpUsTranslate": "Ajude-nos a traduzir",
-    "suggestFeatures": "Sugerir recursos",
+    "suggestFeatures": "Sugerir funcionalidades",
     "thankYou": "Obrigado!",
     "thankYouContent": "Um enorme obrigado a todos os nossos incríveis tradutores que nos ajudam a tornar este aplicativo acessível a mais pessoas ao redor do mundo!",
     "helpTranslateContent": "Pode ajudar-nos a traduzir a aplicação no Crowdin. Se a sua linguagem não está disponível no Crowdin, sinta-se à vontade para pedi-la no nosso servidor de Discord. Muito obrigado pela sua ajuda!",
@@ -107,7 +107,7 @@
     },
     "tryAnotherNameOrTagOrLinkIt": "Tente outro nome/tag ou vincule.",
     "playerNotFound": "Jogador não encontrado",
-    "noValueEntered": "Nenhum valor foi introduzido",
+    "noValueEntered": "Nenhum valor introduzido",
     "manage": "Gerir",
     "enterPlayerTag": "Introduza a tag de jogador",
     "add": "Adicionar",
@@ -133,7 +133,7 @@
     "@search": {
         "description": "Search for a player or a clan"
     },
-    "warning": "Aviso",
+    "warning": "Atenção",
     "exitAppToOpenClash": "Está prestes a sair da aplicação para abrir Clash of Clans.",
     "confirmLogout": "Tem a certeza de que pretende terminar a sessão?",
     "@confirmLogout": {
@@ -375,9 +375,9 @@
     "legendsExplanation_api_delay_title": "1. Atraso da API: ",
     "legendsExplanation_api_delay_body": "A API pode demorar até 5 minutos para atualizar, causando um atraso na reflexão das mudanças de troféus em tempo real.\n",
     "legendsExplanation_concurrent_changes_title": "2. Alterações simultâneas: \n",
-    "legendsExplanation_multiple_attacks_defenses_title": "— Múltiplos Ataques/Defesas: ",
+    "legendsExplanation_multiple_attacks_defenses_title": "- Múltiplos Ataques/Defesas: ",
     "legendsExplanation_multiple_attacks_defenses_body": "Se múltiplos ataques ou defesas acontecerem em rápida sucessão, a API pode mostrar resultados combinados (Ex., +68 ou -68).\n",
-    "legendsExplanation_simultaneous_attack_defense_title": "Ataques e Defesas simultâneas: ",
+    "legendsExplanation_simultaneous_attack_defense_title": "- Ataques e Defesas simultâneas: ",
     "legendsExplanation_simultaneous_attack_defense_body": "Se um ataque e uma defesa ocorrerem em simultâneo, poderá ver um resultado misto (Ex., +4).\n",
     "legendsExplanation_net_gain_loss_title": "Ganho/Perda Líquida: ",
     "legendsExplanation_net_gain_loss_body": "Apesar dos problemas de tempo, o ganho ou perda líquida geral do dia é precisa. ",
