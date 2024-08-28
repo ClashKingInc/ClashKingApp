@@ -1,3 +1,4 @@
+import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_attack.dart';
@@ -105,22 +106,8 @@ List<FlSpot> convertToContinuousScale(
 }
 
 DateTime findCurrentSeasonMonth(currentDate) {
-  DateTime selectedMonth = DateTime.now().toUtc().subtract(Duration(hours: 5));
-  DateTime firstDaySelectedMonth =
-      DateTime(selectedMonth.year, selectedMonth.month, 1);
-  DateTime lastDayPreviousMonth =
-      firstDaySelectedMonth.subtract(Duration(days: 1));
-
-  while (lastDayPreviousMonth.weekday != DateTime.monday) {
-    lastDayPreviousMonth = lastDayPreviousMonth.subtract(Duration(days: 1));
-  }
-
-  // If selectedMonth is after the last Monday of the previous month, move to the next month
-  if (selectedMonth.isAfter(lastDayPreviousMonth) &&
-      selectedMonth.month == lastDayPreviousMonth.month) {
-    selectedMonth = DateTime(selectedMonth.year, selectedMonth.month + 1, 1);
-  }
-
+  List<DateTime> test = findSeasonStartEndDate(currentDate);
+  DateTime selectedMonth = DateTime(test[1].year, test[1].month, 1);
   return selectedMonth;
 }
 

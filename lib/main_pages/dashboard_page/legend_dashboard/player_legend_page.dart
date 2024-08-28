@@ -41,6 +41,7 @@ class LegendScreenState extends State<LegendScreen>
     selectedDate = DateTime.now().toUtc().subtract(Duration(hours: 5));
     selectedMonth = findCurrentSeasonMonth(
         DateTime.now().toUtc().subtract(Duration(hours: 5)));
+    print('selectedMonth: $selectedMonth');
   }
 
   @override
@@ -64,10 +65,10 @@ class LegendScreenState extends State<LegendScreen>
   void incrementMonth() {
     setState(() {
       if (selectedMonth.month == 12) {
-        selectedMonth = DateTime(selectedMonth.year + 1, 1, selectedMonth.day);
+        selectedMonth = DateTime(selectedMonth.year + 1, 1, 1);
       } else {
         selectedMonth = DateTime(
-            selectedMonth.year, selectedMonth.month + 1, selectedMonth.day);
+            selectedMonth.year, selectedMonth.month + 1, 1);
       }
     });
   }
@@ -75,10 +76,10 @@ class LegendScreenState extends State<LegendScreen>
   void decrementMonth() {
     setState(() {
       if (selectedMonth.month == 1) {
-        selectedMonth = DateTime(selectedMonth.year - 1, 12, selectedMonth.day);
+        selectedMonth = DateTime(selectedMonth.year - 1, 12, 1);
       } else {
         selectedMonth = DateTime(
-            selectedMonth.year, selectedMonth.month - 1, selectedMonth.day);
+            selectedMonth.year, selectedMonth.month - 1, 1);
       }
     });
   }
