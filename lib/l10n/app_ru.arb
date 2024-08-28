@@ -80,7 +80,7 @@
     "helpTranslateButton": "Help Translate on Crowdin",
     "currentTranslators": "Current Translators",
     "betaFeature": "Beta Feature",
-    "beta": "BETA",
+    "beta": "Бета",
     "betaDescription": "This feature is currently in beta, so it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues on our Discord server to help us make it better.",
     "copiedToClipboard": "Скопировано в буфер обмена",
     "all": "Все",
@@ -133,9 +133,9 @@
     "@search": {
         "description": "Search for a player or a clan"
     },
-    "warning": "Warning",
-    "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-    "confirmLogout": "Are you sure you want to log out?",
+    "warning": "Внимание",
+    "exitAppToOpenClash": "Вам следует выйти из приложения, чтобы открыть Clash of Clans.",
+    "confirmLogout": "Вы уверены, что хотите выйти?",
     "@confirmLogout": {
         "description": "Prompt asking the user to confirm logout"
     },
@@ -215,7 +215,7 @@
     },
     "dashboard": "Панель управления",
     "homeBase": "Home Base",
-    "th": "TH",
+    "th": "ТХ",
     "builderBase": "Деревня Строителя",
     "bh": "BH",
     "clanCapital": "Столица клана",
@@ -266,7 +266,7 @@
     },
     "bestTrophies": "Best Trophies",
     "mostAttacks": "Most Attacks",
-    "lastSeason": "Last Season",
+    "lastSeason": "Последний сезон",
     "bestRank": "Best Global Rank",
     "daysLeft": "{days} days left",
     "@daysLeft": {
@@ -276,10 +276,10 @@
             }
         }
     },
-    "date": "Date",
-    "stats": "Stats",
-    "details": "Details",
-    "seasonStats": "Season Stats",
+    "date": "Дата",
+    "stats": "Статистика",
+    "details": "Детали",
+    "seasonStats": "Статистика сезона",
     "charts": "Диаграммы",
     "history": "Журнал",
     "@history": {
