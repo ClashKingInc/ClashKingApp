@@ -129,34 +129,35 @@ class AddPlayerCardState extends State<AddPlayerCard> {
             String playerTag = controller.text;
             if (widget.user.isDiscordUser) {
               if (showApiTokenInput) {
-                String apiToken = apiTokenController.text;
-                bool success = await addLinkWithAPIToken(
-                  playerTag,
-                  widget.user.id,
-                  token,
-                  updateApiErrorToken,
-                  playerTagNotExists,
-                  accountAlreadyLinked,
-                  failedToAddTryAgain,
-                  apiToken,
-                  failedToDeleteTryAgain,
-                  wrongApiToken,
-                );
-                if (success) {
-                  await storePrefs('selectedTag', playerTag);
-                  if (context.mounted) {
-                    await myAppState.addAccount(playerTag, myAppState);
+                if (apiTokenController.text.isNotEmpty) {
+                  String apiToken = apiTokenController.text;
+                  bool success = await addLinkWithAPIToken(
+                    playerTag,
+                    widget.user.id,
+                    token,
+                    updateApiErrorToken,
+                    playerTagNotExists,
+                    accountAlreadyLinked,
+                    failedToAddTryAgain,
+                    apiToken,
+                    failedToDeleteTryAgain,
+                    wrongApiToken,
+                  );
+                  if (success) {
+                    await storePrefs('selectedTag', playerTag);
+                    if (context.mounted) {
+                      await myAppState.addAccount(playerTag, myAppState);
+                    }
+                  }
+                  if (apiErrorMessage.isEmpty) {
+                    navigator.pop();
+                  } else if (errorMessage == accountAlreadyLinked) {
+                    setState(() {
+                      showApiTokenInput = true; // Show API token input on error
+                    });
                   }
                 }
-                if (apiErrorMessage.isEmpty) {
-                  navigator.pop();
-                } else if (errorMessage == accountAlreadyLinked) {
-                  setState(() {
-                    showApiTokenInput = true; // Show API token input on error
-                  });
-                }
               } else if (!widget.user.tags.contains("#$playerTag")) {
-                
                 bool success = await addLink(
                   playerTag,
                   widget.user.id,
@@ -186,7 +187,8 @@ class AddPlayerCardState extends State<AddPlayerCard> {
             } else {
               if (showApiTokenInput) {
                 String apiToken = apiTokenController.text;
-                bool success = await checkApiToken(apiToken, playerTag, updateErrorMessage, wrongApiToken);
+                bool success = await checkApiToken(
+                    apiToken, playerTag, updateErrorMessage, wrongApiToken);
                 if (success) {
                   await storePrefs('selectedTag', playerTag);
                   if (context.mounted) {
@@ -201,7 +203,6 @@ class AddPlayerCardState extends State<AddPlayerCard> {
                   });
                 }
               } else if (!widget.user.tags.contains("#$playerTag")) {
-                
                 bool success = await addLink(
                   playerTag,
                   widget.user.id,
@@ -228,7 +229,6 @@ class AddPlayerCardState extends State<AddPlayerCard> {
                 updateErrorMessage(
                     AppLocalizations.of(context)!.accountAlreadyLinkedToYou);
               }
-             
             }
           },
           style: ButtonStyle(

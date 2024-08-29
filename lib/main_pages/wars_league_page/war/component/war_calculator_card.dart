@@ -17,6 +17,16 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
   final _percentNeededController = TextEditingController();
   double _result = 0;
 
+// Helper function to safely parse a string to a double
+  double parseDouble(String value, {double defaultValue = 0.0}) {
+    try {
+      return double.parse(value);
+    } catch (e) {
+      // Return the default value if parsing fails
+      return defaultValue;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -128,9 +138,9 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
-                            _result =
-                                (double.parse(_percentNeededController.text)) *
-                                    double.parse(_teamSizeController.text);
+                            _result = _result =
+                                parseDouble(_percentNeededController.text) *
+                                    parseDouble(_teamSizeController.text);
                           });
                         },
                         style: OutlinedButton.styleFrom(

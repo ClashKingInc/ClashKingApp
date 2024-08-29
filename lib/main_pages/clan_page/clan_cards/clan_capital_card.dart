@@ -75,7 +75,7 @@ class ClanCapitaleCard extends StatelessWidget {
                             ImageChip(
                               imageUrl: 'https://assets.clashk.ing/capital-base/capital-hall-pics/Building_CC_Capital_Hall_level_${clanInfo?.clanCapital?.capitalHallLevel}.png',
                               labelPadding: 2,
-                              label: clanInfo!.clanCapital!.capitalHallLevel.toString(),
+                              label:  clanInfo!.clanCapital?.capitalHallLevel.toString() ?? '0',
                               //description: AppLocalizations.of(context)!.comingSoon,
                             ),
                             ImageChip(

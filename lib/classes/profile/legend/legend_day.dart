@@ -84,8 +84,17 @@ factory LegendDay.fromJson(String key, Map<String, dynamic> json) {
       'key': key,
       'json': json,
     });
-    Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
-    throw Exception("Error while parsing LegendDay from JSON: $exception");
+    Sentry.captureException(exception, stackTrace: stackTrace);
+    Sentry.captureMessage('Error while parsing legend day from json', hint: hint);
+    return LegendDay(
+      date: DateTime.parse(key),
+      numDefenses: 0,
+      defenses: [],
+      newDefenses: [],
+      numAttacks: 0,
+      attacks: [],
+      newAttacks: [],
+    );
   }
 }
 
@@ -227,7 +236,8 @@ factory LegendDay.fromJson(String key, Map<String, dynamic> json) {
         'attacksStats': attacksStats,
         'defensesStats': defensesStats,
       });
-      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureMessage('Error while calculating legends trophies', hint: hint);
     }
   }
 }

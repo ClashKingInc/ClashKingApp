@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<String> login() async {
   final url = Uri.parse('https://cocdiscord.link/login');
@@ -33,6 +34,7 @@ Future<bool> addLink(
     String accountAlreadyLinked,
     String failedToAddTryAgain) async {
   playerTag = playerTag.replaceAll('#', '').replaceAll('!', '');
+  try{
   final url = Uri.parse('https://cocdiscord.link/links');
   final response = await http.post(
     url,
@@ -56,6 +58,16 @@ Future<bool> addLink(
     updateErrorMessage(accountAlreadyLinked);
   } else {
     updateErrorMessage(failedToAddTryAgain);
+  }
+  }
+  catch(exceptions, stackTrace){
+    var hint = Hint.withMap({
+      'playerTag': playerTag,
+      'discordId': discordId,
+      'authToken': authToken,
+    });
+    Sentry.captureException(exceptions, stackTrace: stackTrace);
+    Sentry.captureMessage('Failed to add link', hint: hint);
   }
   return false;
 }

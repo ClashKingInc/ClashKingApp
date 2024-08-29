@@ -30,7 +30,8 @@ class PlayerLegendService {
       final hint = Hint.withMap({
         'tag': tag,
       });
-      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureMessage('Failed to fetch Legend Data', hint: hint);
       return null;
     }
   }

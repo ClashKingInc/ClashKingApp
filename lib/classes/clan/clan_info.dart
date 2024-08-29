@@ -135,7 +135,8 @@ class Clan {
       );
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({"json": json});
-      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureMessage('Failed to parse Clan from json', hint: hint);
       throw Exception('Failed to load clan stats : $exception');
     }
   }
@@ -197,7 +198,7 @@ class ClanService {
               .get(
                 Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
               )
-              .timeout(Duration(seconds: 10));
+              .timeout(Duration(seconds: 15));
 
           final now = DateTime.now();
           DateTime lastMonday = findLastMondayOfMonth(now.year, now.month - 1);
@@ -256,7 +257,8 @@ class ClanService {
       );
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({"clanTag": clanTag});
-      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureMessage('Failed to load clan stats', hint: hint);
       throw Exception('Failed to load clan stats: $exception');
     }
   }
@@ -271,7 +273,7 @@ class ClanService {
               .get(
                 Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
               )
-              .timeout(Duration(seconds: 10));
+              .timeout(Duration(seconds: 15));
 
           if (response.statusCode == 200) {
             String responseBody = utf8.decode(response.bodyBytes);
@@ -289,7 +291,8 @@ class ClanService {
       );
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({"clanInfo": clanInfo});
-      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureMessage('Failed to load clan stats', hint: hint);
       throw Exception('Failed to load clan stats: $exception');
     }
   }
@@ -338,7 +341,8 @@ class ClanService {
       return clanInfo;
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({"clanInfo": clanInfo});
-      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureMessage('Failed to load clan stats', hint: hint);
       throw Exception('Failed to load clan stats: $exception');
     }
   }
@@ -378,7 +382,7 @@ class ClanService {
                 Uri.parse(
                     'https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/currentwar'),
               )
-              .timeout(Duration(seconds: 10));
+              .timeout(Duration(seconds: 15));
 
           if (responseWar.statusCode == 200) {
             var decodedResponse =
@@ -403,7 +407,8 @@ class ClanService {
       );
     } catch (e, stackTrace) {
       final hint = Hint.withMap({"clanTag": clanTag});
-      Sentry.captureException(e, stackTrace: stackTrace, hint: hint);
+      Sentry.captureException(e, stackTrace: stackTrace);
+      Sentry.captureMessage('Failed to load current war info', hint: hint);
       return WarStateInfo(state: "notInWar");
     }
   }
@@ -425,7 +430,8 @@ class ClanService {
       }
     } catch (e, stackTrace) {
       final hint = Hint.withMap({"clanTag": clanTag});
-      Sentry.captureException(e, stackTrace: stackTrace, hint: hint);
+      Sentry.captureException(e, stackTrace: stackTrace);
+      Sentry.captureMessage('Failed to load current war info', hint: hint);
       return WarStateInfo(state: "notInWar");
     }
   }
@@ -460,7 +466,8 @@ class ClanService {
       );
     } catch (e, stackTrace) {
       final hint = Hint.withMap({"clanTag": clanTag});
-      Sentry.captureException(e, stackTrace: stackTrace, hint: hint);
+      Sentry.captureException(e, stackTrace: stackTrace);
+      Sentry.captureMessage('Failed to load current league info', hint: hint);
       return null;
     }
   }

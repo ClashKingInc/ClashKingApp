@@ -32,7 +32,7 @@ class ToDoScreenState extends State<ToDoScreen>
   }
 
   void checkToDoIsInitialized() {
-    while (!widget.accounts.isTodoInitialized) {
+    while (!widget.accounts.isTodoInitialized && widget.accounts.toDoList.numberAccounts > 0) {
       Future.delayed(Duration(milliseconds: 100), () {
         checkToDoIsInitialized();
       });

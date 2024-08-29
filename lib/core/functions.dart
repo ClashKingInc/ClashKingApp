@@ -71,6 +71,10 @@ Future<void> storePrefs(String name, String token) async {
       throw Exception('Invalid HMAC key length: ${hmacKey.length}');
     }
 
+    if (token.isEmpty) {
+      throw Exception('Token is empty or invalid.');
+    }
+
     // Encrypt the token
     final iv = IV.fromLength(16); // Initialization vector
     final encrypter = Encrypter(AES(encryptionKey, mode: AESMode.cbc));
@@ -91,7 +95,10 @@ Future<void> storePrefs(String name, String token) async {
   } catch (exception, stackTrace) {
     final hint = Hint.withMap(
         {'message': 'Error storing prefs', 'name': name, 'token': token});
-    Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+    Sentry.captureException(exception, stackTrace: stackTrace,
+        withScope: (scope) {
+      scope.setContexts('Encryption Context', hint);
+    });
   }
 }
 
@@ -134,7 +141,8 @@ Future<String?> getPrefs(String name) async {
   } catch (exception, stackTrace) {
     final hint = Hint.withMap(
         {'message': 'Error retrieving prefs', 'name': name, 'token': ''});
-    Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+    Sentry.captureException(exception, stackTrace: stackTrace);
+    Sentry.captureMessage('Error retrieving prefs', hint: hint);
     return null;
   }
 }
@@ -145,7 +153,8 @@ Future<void> deletePrefs(String name) async {
   } catch (exception, stackTrace) {
     final hint = Hint.withMap(
         {'message': 'Error deleting prefs', 'name': name, 'token': ''});
-    Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+    Sentry.captureException(exception, stackTrace: stackTrace);
+    Sentry.captureMessage('Error deleting prefs', hint: hint);
   }
 }
 

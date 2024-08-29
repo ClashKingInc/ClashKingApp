@@ -34,23 +34,34 @@ class ClanInfoPageState extends State<ClanInfoPage>
   }
 
   Future<void> _checkInitialization() async {
-    while ((widget.account!.clan == null && widget.account!.hasClan) || (widget.account!.clan != null && !widget.account!.clan!.clanInitialized)) {
+    while ((widget.account!.clan == null && widget.account!.hasClan) ||
+        (widget.account!.clan != null &&
+            !widget.account!.clan!.clanInitialized)) {
       await Future.delayed(Duration(milliseconds: 100));
     }
   }
 
   Future<void> _refreshData() async {
-    // Fetch the updated profile information
-    if (widget.account!.clan != null && widget.account!.hasClan) {
-      widget.account!.clan!.clanInitialized = false;
-      final updatedClanInfo =
-          await ClanService().fetchClanInfo(widget.account!.clan!);
-      setState(() {
-        // Update the clan info with the newly fetched data
-        widget.account!.clan!.updateClanInfoFrom(updatedClanInfo);
-        widget.account!.clan!.clanInitialized = true;
-        _initializeClanFuture = _checkInitialization();
+    try {
+      // Fetch the updated profile information
+      if (widget.account!.clan != null && widget.account!.hasClan) {
+        widget.account!.clan!.clanInitialized = false;
+        Clan updatedClanInfo =
+            await ClanService().fetchClanInfo(widget.account!.clan!);
+        setState(() {
+          // Update the clan info with the newly fetched data
+          widget.account!.clan!.updateClanInfoFrom(updatedClanInfo);
+          widget.account!.clan!.clanInitialized = true;
+          _initializeClanFuture = _checkInitialization();
+        });
+      }
+    } catch (error, stackTrace) {
+      var hint = Hint.withMap({
+        'user': widget.user.tags,
+        'clan': widget.account!.clan?.tag,
       });
+      Sentry.captureException(error, stackTrace: stackTrace);
+      Sentry.captureMessage('Error while refreshing clan info', hint: hint);
     }
   }
 
@@ -102,14 +113,16 @@ class ClanInfoPageState extends State<ClanInfoPage>
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ClanInfoScreen(
-                                        clanInfo: widget.account!.clan!,
-                                        discordUser: widget.user.tags),
+                                          clanInfo: widget.account!.clan!,
+                                          discordUser: widget.user.tags),
                                     ),
                                   );
                                 },
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: ClanInfoCard(clanInfo: widget.account!.clan!),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: ClanInfoCard(
+                                      clanInfo: widget.account!.clan!),
                                 ),
                               )
                             else

@@ -144,7 +144,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         'clanTag': clanTag,
         'warInfo': warInfo,
       });
-      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureMessage('Failed to update war widget', hint: hint);
     }
   }
 
@@ -298,9 +299,9 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       });
       Sentry.captureException(
         exception,
-        stackTrace: stackTrace,
-        hint: hint,
+        stackTrace: stackTrace
       );
+      Sentry.captureMessage('Error during initializeData execution', hint: hint);
       return false;
     }
   }

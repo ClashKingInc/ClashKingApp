@@ -212,7 +212,8 @@ class ProfileInfoService {
         'tag': tag,
       });
       transaction.finish(status: SpanStatus.internalError());
-      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureMessage('Failed to load player stats', hint: hint);
       throw Exception('Failed to load player stats: $exception');
     }
   }
@@ -271,7 +272,8 @@ class ProfileInfoService {
       final hint = Hint.withMap({
         'tag': profileInfo.tag,
       });
-      Sentry.captureException(e, stackTrace: stackTrace, hint: hint);
+      Sentry.captureException(e, stackTrace: stackTrace);
+      Sentry.captureMessage('Failed to load player legend data', hint: hint);
       playerLegendDataSpan.finish(status: SpanStatus.internalError());
       rethrow;
     }
@@ -297,7 +299,8 @@ class ProfileInfoService {
       final hint = Hint.withMap({
         'tag': profileInfo.tag,
       });
-      Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureMessage('Failed to load player war stats', hint: hint);
     }
   }
 

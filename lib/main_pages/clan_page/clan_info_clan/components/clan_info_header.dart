@@ -197,7 +197,10 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                     'description': widget.clanInfo.description,
                                   });
                                   Sentry.captureException(exception,
-                                      stackTrace: stackTrace, hint: hint);
+                                      stackTrace: stackTrace);
+                                  Sentry.captureMessage(
+                                      'Failed to deal with Discord invite link',
+                                      hint: hint);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
