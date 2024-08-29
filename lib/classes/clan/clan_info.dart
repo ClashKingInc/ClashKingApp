@@ -445,7 +445,7 @@ class ClanService {
                 Uri.parse(
                     'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
               )
-              .timeout(Duration(seconds: 5));
+              .timeout(Duration(seconds: 15));
 
           if (responseCwl.statusCode == 200) {
             var decodedResponseCwl =
