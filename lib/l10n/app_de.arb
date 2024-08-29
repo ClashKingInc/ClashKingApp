@@ -81,7 +81,7 @@
     "currentTranslators": "Aktuelle Übersetzer",
     "betaFeature": "Beta-Funktion",
     "beta": "BETA",
-    "betaDescription": "This feature is currently in beta, so it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues on our Discord server to help us make it better.",
+    "betaDescription": "Diese Option ist aktuell in der Beta, es kann also zu Fehlern kommen oder unvollständig sein. Wir arbeiten aktiv an den Verbesserungen und sind für dein Feedback dankbar. Bitte teile uns deine Ideen sowie Fragen und Probleme auf unserem Discord Server mit, damit wir es besser machen können.",
     "copiedToClipboard": "In die Zwischenablage kopiert",
     "all": "Alle",
     "@all": {
@@ -124,18 +124,18 @@
     "accountAlreadyLinked": "Dieses Spielerkürzel ist bereits mit jemand anderem verknüpft.",
     "enterApiToken": "Please enter the account API token to confirm its yours. You can find it in Clash of Clans Settings > More Settings > API Token",
     "wrongApiToken": "The API token entered is incorrect",
-    "accountAlreadyLinkedToYou": "The player tag is already linked to you.",
+    "accountAlreadyLinkedToYou": "Der Spielerkürzel ist schon mit dir verlinkt.",
     "apiToken": "Account API Token",
     "failedToAddTryAgain": "Fehler bei der Verknüpfung. Bitte versuche es später erneut.",
     "failedToDeleteTryAgain": "Fehler beim Löschen der Verknüpfung. Bitte versuche es später erneut.",
-    "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
+    "enterPlayerTagWarning": "Du musst ein Spielerkürzel eingeben und auf \"+\" klicken um fortzufahren.",
     "search": "Suchen",
     "@search": {
         "description": "Search for a player or a clan"
     },
     "warning": "Warnung",
     "exitAppToOpenClash": "Du bist dabei, die App zu verlassen, um Clash of Clans zu öffnen.",
-    "confirmLogout": "Are you sure you want to log out?",
+    "confirmLogout": "Bist du dir sicher, dass du dich abmelden möchtest?",
     "@confirmLogout": {
         "description": "Prompt asking the user to confirm logout"
     },
@@ -610,9 +610,9 @@
     "@random": {
         "description": "Random/basic war (not friendly or cwl)"
     },
-    "selectMembersThLevel": "Members TH Level",
-    "selectOpponentsThLevel": "Opponents TH Level",
-    "equalThLevel": "Equal TH",
+    "selectMembersThLevel": "Mitglieder Rathauslevel",
+    "selectOpponentsThLevel": "Gegnerische Rathauslevel",
+    "equalThLevel": "Gleiches Rathaus",
     "builderBaseTrophies": "BB-Trophäen",
     "donations": "Gespendet",
     "donationsReceived": "Spenden erhalten",
@@ -702,14 +702,14 @@
             }
         }
     },
-    "averageStars": "Average stars",
-    "averageDestruction": "Average destruction",
-    "noStars": "0 star",
-    "oneStar": "1 star",
-    "twoStars": "2 stars",
-    "threeStars": "3 stars",
+    "averageStars": "Durchschnittliche Sterne",
+    "averageDestruction": "Durchschnittliche Zerstörung",
+    "noStars": "0 Sterne",
+    "oneStar": "1 Stern",
+    "twoStars": "2 Sterne",
+    "threeStars": "3 Sterne",
     "warParticipation": "War Participation",
-    "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
+    "toggleTownHallVisibility": "Statistik früherer Rathauslevel",
     "@toggleTownHallVisibility": {
         "description": "For example, hide stats from TH15 and below if the player is now TH16"
     },
@@ -932,7 +932,7 @@
     "neededOverall": "Benötigte %",
     "calculate": "Berechnen",
     "warStats": "Kriegsstatistiken",
-    "membersStats": "Members Stats",
+    "membersStats": "Mitglieder Statistik",
     "clanWarLeague": "Clankriegsliga",
     "cwlRank": "Dein Clan ist aktuell auf Rang {rank}.",
     "@cwlRank": {
@@ -995,10 +995,10 @@
             }
         }
     },
-    "tools": "Tools",
+    "tools": "Werkzeuge",
     "community": "Community",
-    "lastRaids": "Last raids",
-    "ongoingRaids": "Ongoing raids",
-    "districtsDestroyed": "Districts destroyed",
-    "raidsCompleted": "Raids completed"
+    "lastRaids": "Letzte Überfälle",
+    "ongoingRaids": "Aktuelle Überfälle",
+    "districtsDestroyed": "Zerstörte Bezirke",
+    "raidsCompleted": "Abgeschlossene Überfälle"
 }
