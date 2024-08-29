@@ -1,10 +1,10 @@
 {
-    "creatorCode": "Creator Code : ClashKing",
-    "signInWithDiscord": "Sign In with Discord",
-    "guestMode": "Guest Mode",
-    "needHelpJoinDiscord": "Need help? Join us on Discord.",
-    "createGuestProfile": "Create your guest profile",
-    "doesNotExist": "{tag} does not exist.",
+    "creatorCode": "Κωδικός Δημιουργού : ClashKing",
+    "signInWithDiscord": "Είσοδος με Discord",
+    "guestMode": "Συνέχεια ως Επισκέπτης",
+    "needHelpJoinDiscord": "Χρειάζεστε βοήθεια; Βρείτε μας στο Discord.",
+    "createGuestProfile": "Δημιουργήστε το προφίλ επισκέπτη σας",
+    "doesNotExist": "Ο χρήστης {tag} δεν υπάρχει.",
     "@doesNotExist": {
         "placeholders": {
             "tag": {
@@ -12,7 +12,7 @@
             }
         }
     },
-    "isAlreadyLinked": "{tag} is already linked to someone.",
+    "isAlreadyLinked": "Ο χρήστης {tag} είναι ήδη συνδεδεμένος σε κάποιον.",
     "@isAlreadyLinked": {
         "placeholders": {
             "tag": {
@@ -20,10 +20,10 @@
             }
         }
     },
-    "username": "Username",
-    "pleaseEnterUsername": "Please enter a username",
-    "playerTags": "Player Tags",
-    "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
+    "username": "Όνομα Χρήστη",
+    "pleaseEnterUsername": "Παρακαλώ εισάγετε το όνομα χρήστη σας",
+    "playerTags": "Λογαριασμοί Παίχτη",
+    "followingTagsDoNotExist": "Οι ακόλουθοι λογαριασμοί δεν υπάρχουν: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
             "tags": {
@@ -31,7 +31,7 @@
             }
         }
     },
-    "followingTagsAreAlreadyLinked": "The following tags are already linked to someone: {tags}.",
+    "followingTagsAreAlreadyLinked": "Οι ακόλουθοι λογαριασμοί είναι ήδη συνδεδεμένοι σε κάποιον: {tags}.",
     "@followingTagsAreAlreadyLinked": {
         "placeholders": {
             "tags": {
@@ -39,21 +39,21 @@
             }
         }
     },
-    "welcome": "Welcome!",
-    "welcomeMessage": "Please add one or more Clash Of Clans accounts to your profile. You can add or remove accounts later.",
-    "login": "Login",
-    "logout": "Log out",
-    "language": "Language",
-    "settings": "Settings",
-    "toggleTheme": "Toggle Theme",
-    "selectLanguage": "Select a language",
+    "welcome": "Καλώς Ήλθατε!",
+    "welcomeMessage": "Παρακαλώ προσθέστε έναν ή περισσότερους λογαριασμούς \"Clash Of Clans\" στο προφίλ σας. Μπορείτε να προσθέσετε ή να αφαιρέσετε λογαριασμούς αργότερα.",
+    "login": "Είσοδος",
+    "logout": "Έξοδος",
+    "language": "Γλώσσα",
+    "settings": "Ρυθμίσεις",
+    "toggleTheme": "Εμφάνιση",
+    "selectLanguage": "Επιλέξτε μία γλώσσα",
     "faq": "FAQ",
-    "faqSubtitle": "Frequently Asked Questions",
-    "faqIsThisFromSupercell": "Is this App from Supercell?",
-    "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-    "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
-    "faqClanNotTracked": "Clan not tracked",
-    "faqClanNotTrackedAnswer": "ClashKing can retrieve this info only if the clan is tracked. If your clan isn't tracked, please invite ClashKing Bot to your Discord server and use the command /addclan. We are working on making this feature available in the app soon.",
+    "faqSubtitle": "Συχνές Ερωτήσεις",
+    "faqIsThisFromSupercell": "Η εφαρμογή ανήκει στη Supercell;",
+    "faqFanContentPolicy": "Η εφαρμογή είναι ανεπίσημη και δεν υποστηρίζεται από τη Supercell. Για περισσότερες πληροφορίες δείτε την Πολιτική Δημιουργίας για Θαυμαστές της Supercell: www.supercell.com/fan-content-policy",
+    "faqWhyNotAccurate": "Γιατί τα δεδομένα είναι μερικές φορές ανακριβή ή ελλιπή;",
+    "faqClanNotTracked": "Δεν εμφανίζει την ομάδα",
+    "faqClanNotTrackedAnswer": "Το ClashKing μπορεί να καταγράφει αυτές τις πληροφορίες μόνο όταν η ομάδα είναι ήδη καταγεγραμμένη. Εάν η ομάδα δεν είναι καταγεγραμμένη, παρακαλώ προσθέστε το εργαλείο ClashKing στη σελίδα του Discord σας και χρησιμοποιείστε την εντολή /addclan. Δουλεύουμε για να φέρουμε αυτό το χαρακτηριστικό στην εφαρμογή σύντομα.",
     "faqTrackingDown": "Tracking down",
     "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.",
     "faqApiLimitation": "Clash of Clans API limitation",
