@@ -292,8 +292,8 @@ class MembersWarStatsService {
 
     try {
       for (var war in wars) {
-        var clanData;
-        var opponentClan;
+        dynamic clanData;
+        dynamic opponentClan;
 
         if (war['clan']['tag'] == clanTag) {
           clanData = war['clan'];

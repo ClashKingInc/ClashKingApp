@@ -70,7 +70,9 @@ class StartupWidgetState extends State<StartupWidget> {
           final discordSpan = transaction.startChild('initializeDiscordUser');
           await appState.initializeDiscordUser(context);
           discordSpan.finish();
-          if (appState.user != null && appState.user!.tags.isNotEmpty) {
+          if (appState.user != null &&
+              appState.user!.tags.isNotEmpty &&
+              mounted) {
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (_) => MyHomePage()));
           } else {

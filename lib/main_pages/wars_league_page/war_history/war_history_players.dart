@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
@@ -33,33 +32,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
   MembersWarStats? warStats;
   MembersWarStats? defaultWarStats;
 
-  final GlobalKey<TooltipState> _tooltipKey = GlobalKey<TooltipState>();
-  bool _isTooltipVisible = false;
-  Timer? _timer;
 
-  void _toggleTooltip() {
-    final tooltip = _tooltipKey.currentState;
-    if (_isTooltipVisible) {
-      tooltip?.deactivate();
-      _timer?.cancel();
-    } else {
-      tooltip?.ensureTooltipVisible();
-      _timer?.cancel();
-      _timer = Timer(Duration(seconds: 5), () {
-        if (_isTooltipVisible) {
-          tooltip?.deactivate();
-          if (mounted) {
-            setState(() {
-              _isTooltipVisible = false;
-            });
-          }
-        }
-      });
-    }
-    setState(() {
-      _isTooltipVisible = !_isTooltipVisible;
-    });
-  }
 
   // Track selected Town Hall levels for members and enemies
   Map<int, bool> memberThSelection = {for (int i = 1; i <= 16; i++) i: false};
@@ -645,7 +618,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                   ),
                 );
               },
-            ).toList(),
+            ),
           ],
         ),
       ),

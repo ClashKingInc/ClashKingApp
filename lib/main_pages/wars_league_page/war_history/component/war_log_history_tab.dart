@@ -166,24 +166,26 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                         .then((currentWarInfo) {
                       navigator.pop();
                       if (currentWarInfo == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Center(
-                              child: Text(
-                                AppLocalizations.of(context)
-                                        ?.noDataAvailableForThisWar ??
-                                    'No data available for this war',
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface),
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Center(
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                          ?.noDataAvailableForThisWar ??
+                                      'No data available for this war',
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface),
+                                ),
                               ),
+                              duration: Duration(seconds: 1),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.surface,
                             ),
-                            duration: Duration(seconds: 1),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.surface,
-                          ),
-                        );
+                          );
+                        }
                       } else {
                         navigator.push(
                           MaterialPageRoute(

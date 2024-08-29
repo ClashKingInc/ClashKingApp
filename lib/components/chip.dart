@@ -7,7 +7,7 @@ class ImageChip extends StatefulWidget {
   final String label;
   final double labelPadding;
   final String description;
-  Color? textColor;
+  final Color? textColor; // Mark as final
 
   ImageChip({
     required this.imageUrl,
@@ -18,10 +18,10 @@ class ImageChip extends StatefulWidget {
   });
 
   @override
-  _ImageChipState createState() => _ImageChipState();
+  ImageChipState createState() => ImageChipState();
 }
 
-class _ImageChipState extends State<ImageChip> {
+class ImageChipState extends State<ImageChip> {
   final GlobalKey<TooltipState> _tooltipKey = GlobalKey<TooltipState>();
   bool _isTooltipVisible = false;
   Timer? _timer;
@@ -47,14 +47,18 @@ class _ImageChipState extends State<ImageChip> {
 
   @override
   Widget build(BuildContext context) {
-    widget.textColor ??= Theme.of(context).colorScheme.onSurface;
+    final textColor =
+        widget.textColor ?? Theme.of(context).colorScheme.onSurface;
     return GestureDetector(
       onTap: _toggleTooltip,
       child: Tooltip(
         textAlign: TextAlign.center,
         key: _tooltipKey,
         message: widget.description,
-        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+        textStyle: Theme.of(context)
+            .textTheme
+            .bodyMedium
+            ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
         showDuration: Duration(seconds: 5),
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
@@ -63,7 +67,7 @@ class _ImageChipState extends State<ImageChip> {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
-              spreadRadius:2,
+              spreadRadius: 2,
               blurRadius: 2,
               offset: Offset(0, 1),
             ),
@@ -78,8 +82,11 @@ class _ImageChipState extends State<ImageChip> {
             ),
           ),
           labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
-          label:
-              Text(widget.label, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: widget.textColor)),
+          label: Text(widget.label,
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(color: textColor)),
         ),
       ),
     );
@@ -93,7 +100,7 @@ class IconChip extends StatefulWidget {
   final Color? color;
   final double labelPadding;
   final String description;
-  Color? textColor;
+  final Color? textColor; // Mark as final
 
   IconChip({
     required this.icon,
@@ -106,10 +113,10 @@ class IconChip extends StatefulWidget {
   });
 
   @override
-  _IconChipState createState() => _IconChipState();
+  IconChipState createState() => IconChipState();
 }
 
-class _IconChipState extends State<IconChip> {
+class IconChipState extends State<IconChip> {
   final GlobalKey<TooltipState> _tooltipKey = GlobalKey<TooltipState>();
   bool _isTooltipVisible = false;
   Timer? _timer;
@@ -141,14 +148,18 @@ class _IconChipState extends State<IconChip> {
   @override
   Widget build(BuildContext context) {
     final actualColor = widget.color ?? Theme.of(context).colorScheme.onSurface;
-    widget.textColor ??= Theme.of(context).colorScheme.onSurface;
+    final textColor =
+        widget.textColor ?? Theme.of(context).colorScheme.onSurface;
     return GestureDetector(
       onTap: _toggleTooltip,
       child: Tooltip(
         textAlign: TextAlign.center,
         key: _tooltipKey,
         message: widget.description,
-        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+        textStyle: Theme.of(context)
+            .textTheme
+            .bodyMedium
+            ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
@@ -156,7 +167,7 @@ class _IconChipState extends State<IconChip> {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
-              spreadRadius:2,
+              spreadRadius: 2,
               blurRadius: 2,
               offset: Offset(0, 1),
             ),
@@ -169,14 +180,16 @@ class _IconChipState extends State<IconChip> {
                 size: widget.size.toDouble(), color: actualColor),
           ),
           labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
-          label:
-              Text(widget.label, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: widget.textColor)),
+          label: Text(widget.label,
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(color: textColor)),
         ),
       ),
     );
   }
 }
-
 
 class CustomChip extends StatefulWidget {
   final Widget icon;
@@ -196,10 +209,10 @@ class CustomChip extends StatefulWidget {
   });
 
   @override
-  _CustomChipState createState() => _CustomChipState();
+  CustomChipState createState() => CustomChipState();
 }
 
-class _CustomChipState extends State<CustomChip> {
+class CustomChipState extends State<CustomChip> {
   final GlobalKey<TooltipState> _tooltipKey = GlobalKey<TooltipState>();
   bool _isTooltipVisible = false;
   Timer? _timer;
@@ -236,7 +249,10 @@ class _CustomChipState extends State<CustomChip> {
         textAlign: TextAlign.center,
         key: _tooltipKey,
         message: widget.description,
-        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+        textStyle: Theme.of(context)
+            .textTheme
+            .bodyMedium
+            ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
@@ -252,9 +268,7 @@ class _CustomChipState extends State<CustomChip> {
         ),
         child: Chip(
           avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: widget.icon
-          ),
+              backgroundColor: Colors.transparent, child: widget.icon),
           labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
           label:
               Text(widget.label, style: Theme.of(context).textTheme.labelLarge),

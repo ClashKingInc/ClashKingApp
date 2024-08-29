@@ -202,7 +202,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                         ],
                       ),
                     );
-                  }).toList(),
+                  }),
                   // Ajouter l'option "Manage Accounts" à la fin de la liste
                   DropdownMenuItem<String>(
                     value: "manageAccounts",

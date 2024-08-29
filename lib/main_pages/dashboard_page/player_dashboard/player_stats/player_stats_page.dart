@@ -50,7 +50,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
   }
 
   void showFilterDialog() {
-    final TextEditingController _textController = TextEditingController();
+    final TextEditingController textController = TextEditingController();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -74,7 +74,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                             AppLocalizations.of(context)!.byNumberOfWars,
                             style: Theme.of(context).textTheme.bodyMedium),
                         content: TextField(
-                          controller: _textController,
+                          controller: textController,
                           decoration: InputDecoration(hintText: "e.g., 5"),
                           keyboardType:
                               TextInputType.numberWithOptions(decimal: false),
@@ -86,7 +86,7 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                               Navigator.of(context)
                                   .pop(); // Fermer le dialogue interne
                               int numberOfWars =
-                                  int.tryParse(_textController.text) ?? 0;
+                                  int.tryParse(textController.text) ?? 0;
                               loadLastXWars(numberOfWars);
                             },
                           ),

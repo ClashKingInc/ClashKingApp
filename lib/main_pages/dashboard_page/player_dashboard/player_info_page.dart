@@ -262,7 +262,7 @@ class StatsScreenState extends State<StatsScreen>
         calculateCompletionPercentage(items, itemType);
 
     List<Widget> missingItems = [];
-    var dataManager;
+    dynamic dataManager;
 
     switch (itemType) {
       case 'gear':

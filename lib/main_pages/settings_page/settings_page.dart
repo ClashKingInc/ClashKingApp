@@ -184,7 +184,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       },
     );
 
-    if (selectedLocale != null && mounted) {
+    if (selectedLocale != null && context.mounted) {
       Provider.of<MyAppState>(context, listen: false)
           .changeLanguage(selectedLocale);
     }

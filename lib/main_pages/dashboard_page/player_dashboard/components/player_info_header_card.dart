@@ -158,32 +158,34 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                               );
                               await _checkToDoInitialization();
                               navigator.pop();
-                              showDialog(
-                                context: context,
-                                builder: (context) => Dialog(
-                                  insetPadding: EdgeInsets.all(8),
-                                  child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width - 16,
-                                    child: SingleChildScrollView(
-                                      child: ConstrainedBox(
-                                        constraints: BoxConstraints(
-                                            maxHeight: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.9),
-                                        child: IntrinsicHeight(
-                                          child: ToDoBodyCard(
-                                            profileInfo: widget.playerStats,
-                                            toDo: widget.playerStats.toDo!,
-                                            tag: widget.playerStats.tag,
+                              if (context.mounted) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => Dialog(
+                                    insetPadding: EdgeInsets.all(8),
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width -
+                                          16,
+                                      child: SingleChildScrollView(
+                                        child: ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                              maxHeight: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.9),
+                                          child: IntrinsicHeight(
+                                            child: ToDoBodyCard(
+                                              profileInfo: widget.playerStats,
+                                              toDo: widget.playerStats.toDo!,
+                                              tag: widget.playerStats.tag,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
+                                );
+                              }
                             }),
                         SizedBox(height: 8),
                         IconButton(
@@ -237,21 +239,25 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                       onTap: () {
                         FlutterClipboard.copy(widget.playerStats.tag)
                             .then((value) {
-                          final snackBar = SnackBar(
-                            content: Center(
-                              child: Text(
-                                AppLocalizations.of(context)!.copiedToClipboard,
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface),
+                          if (context.mounted) {
+                            final snackBar = SnackBar(
+                              content: Center(
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .copiedToClipboard,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface),
+                                ),
                               ),
-                            ),
-                            duration: Duration(milliseconds: 1500),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.surface,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              duration: Duration(milliseconds: 1500),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.surface,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
                         });
                       },
                       child: Container(

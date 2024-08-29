@@ -56,7 +56,7 @@ class Member {
   }
 
   String getTownHallPicture() {
-    return 'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${townHallLevel}.png';
+    return 'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-$townHallLevel.png';
   }
 
 static Member defaultMember() {

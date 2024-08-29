@@ -165,7 +165,8 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                   if (discordCode != null) {
                                     final Uri url = Uri.parse(
                                         'https://discord.gg/$discordCode');
-                                    if (!await launchUrl(url)) {
+                                    if (!await launchUrl(url) &&
+                                        context.mounted) {
                                       final hint = Hint.withMap({
                                         'url': url,
                                       });
@@ -251,21 +252,25 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                       onTap: () {
                         FlutterClipboard.copy(widget.clanInfo.tag)
                             .then((value) {
-                          final snackBar = SnackBar(
-                            content: Center(
-                              child: Text(
-                                AppLocalizations.of(context)!.copiedToClipboard,
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface),
+                          if (context.mounted) {
+                            final snackBar = SnackBar(
+                              content: Center(
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .copiedToClipboard,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface),
+                                ),
                               ),
-                            ),
-                            duration: Duration(milliseconds: 1500),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.surface,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              duration: Duration(milliseconds: 1500),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.surface,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
                         });
                       },
                       child: Container(

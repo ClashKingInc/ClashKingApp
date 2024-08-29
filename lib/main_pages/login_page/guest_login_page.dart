@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/global_keys.dart';
@@ -7,7 +6,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
 import 'package:clashkingapp/classes/account/cocdiscord_link_functions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/main_pages/login_page/tag_input_chip.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -23,7 +21,6 @@ class GuestLoginPageState extends State<GuestLoginPage> {
   final FocusNode _chipFocusNode = FocusNode();
   List<String> _tags = [];
   bool isLoading = false;
-  String _tag = '';
   String errorMessage = '';
   bool showApiTokenInput = false;
   String apiErrorMessage = '';
@@ -47,20 +44,6 @@ class GuestLoginPageState extends State<GuestLoginPage> {
     _chipFocusNode.dispose();
     apiTokenController.dispose(); // Dispose API token controller
     super.dispose();
-  }
-
-  Future<void> _onSearchChanged(String value) async {
-    setState(() {
-      _tag = value;
-    });
-  }
-
-  Widget _chipBuilder(BuildContext context, String tag) {
-    return TagInputChip(
-      tag: tag,
-      onDeleted: _onChipDeleted,
-      onSelected: _onChipTapped,
-    );
   }
 
   // Appelée lorsque le bouton pour ajouter un tag est pressé
@@ -91,7 +74,7 @@ class GuestLoginPageState extends State<GuestLoginPage> {
         setState(() {
           if (!_tags.contains(formattedTag) && status == 'Ok') {
             _tags.add(formattedTag.trim());
-            _tag = ''; // Clear the current tag input after adding
+// Clear the current tag input after adding
           }
         });
         updateErrorMessage('');
@@ -106,7 +89,6 @@ class GuestLoginPageState extends State<GuestLoginPage> {
 
         if (!_tags.contains(formattedTag) && isApiTokenValid) {
           _tags.add(formattedTag.trim());
-          _tag = '';
           apiTokenController.clear();
           updateApiErrorToken('');
           updateErrorMessage('');
@@ -117,14 +99,6 @@ class GuestLoginPageState extends State<GuestLoginPage> {
     }
     setState(() {
       isLoading = false;
-    });
-  }
-
-  void _onChipTapped(String tag) {}
-
-  void _onChipDeleted(String tag) {
-    setState(() {
-      _tags.remove(tag);
     });
   }
 

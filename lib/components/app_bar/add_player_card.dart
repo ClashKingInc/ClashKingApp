@@ -181,8 +181,10 @@ class AddPlayerCardState extends State<AddPlayerCard> {
                   });
                 }
               } else {
-                updateErrorMessage(
-                    AppLocalizations.of(context)!.accountAlreadyLinkedToYou);
+                if (context.mounted) {
+                  updateErrorMessage(
+                      AppLocalizations.of(context)!.accountAlreadyLinkedToYou);
+                }
               }
             } else {
               if (showApiTokenInput) {
@@ -226,8 +228,10 @@ class AddPlayerCardState extends State<AddPlayerCard> {
                   });
                 }
               } else {
-                updateErrorMessage(
-                    AppLocalizations.of(context)!.accountAlreadyLinkedToYou);
+                if (context.mounted) {
+                  updateErrorMessage(
+                      AppLocalizations.of(context)!.accountAlreadyLinkedToYou);
+                }
               }
             }
           },

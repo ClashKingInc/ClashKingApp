@@ -60,33 +60,36 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
               Center(
                 child: Text(
                   widget.clanInfo!.name,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Colors.white),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: Colors.white),
                 ),
               ),
               InkWell(
                 onTap: () {
                   FlutterClipboard.copy(widget.clanInfo!.tag).then((value) {
-                    final snackBar = SnackBar(
-                      content: Center(
-                        child: Text(
-                          AppLocalizations.of(context)!.copiedToClipboard,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface),
+                    if (context.mounted) {
+                      final snackBar = SnackBar(
+                        content: Center(
+                          child: Text(
+                            AppLocalizations.of(context)!.copiedToClipboard,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface),
+                          ),
                         ),
-                      ),
-                      duration: Duration(milliseconds: 1500),
-                      backgroundColor: Theme.of(context).colorScheme.surface,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        duration: Duration(milliseconds: 1500),
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
                   });
                 },
                 child: Container(
                   padding: EdgeInsets.only(top: 2.0, bottom: 4.0),
                   child: Text(
                     widget.clanInfo!.tag,
-                    style: TextStyle(
-                        color: Colors.white),
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
