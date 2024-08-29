@@ -1,12 +1,11 @@
 What's New:
-- New Capital Screen: Raid stats and raid history.
-- War History by Members: Stats for the last 50 wars by player and clan.
-- Clan War Log: Basic stats for the last 50 wars.
-- Account Handling: Improved account management, including API token option and a cancel button.
-- New Language: Portuguese.
-- QoL Improvements: Dark mode support, reset button in logs, and more.
 
-Bug Fixes: 
-Improved stability for war stats, Legends, and iOS links.
+- Added Greek language support.
+- Improved Portuguese and Russian translations.
+- Enhanced error-catching for better issue identification.
+
+Bug Fixes:
+- Resolved various issues related to button clicks, display sizes, and text inputs.
+- Fixed errors in account management, legends league, and translation features.
 
 See the full notes on our Discord server.
