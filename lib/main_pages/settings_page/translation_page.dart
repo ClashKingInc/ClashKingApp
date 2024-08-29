@@ -32,7 +32,8 @@ class TranslationScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16.0),
                   child: CachedNetworkImage(
-                    imageUrl: "https://www.icegif.com/wp-content/uploads/2023/06/icegif-202.gif", // remplacez par votre URL d'image
+                    imageUrl:
+                        "https://www.icegif.com/wp-content/uploads/2023/06/icegif-202.gif", // remplacez par votre URL d'image
                     height: 200,
                     width: 200,
                     fit: BoxFit.cover,
@@ -55,9 +56,14 @@ class TranslationScreen extends StatelessWidget {
               SizedBox(height: 16),
               Center(
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    launchURL(
-                        "https://crowdin.com/project/clashkingapp/invite?h=87a407268713f1cb79724a2e0c00a5d52098842");
+                  onPressed: () async {
+                    const url =
+                        "https://crowdin.com/project/clashkingapp/invite?h=87a407268713f1cb79724a2e0c00a5d52098842";
+                    if (await canLaunchUrl(Uri.parse(url))) {
+                      await launchUrl(Uri.parse(url));
+                    } else {
+                      print('Could not launch $url');
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
@@ -72,8 +78,13 @@ class TranslationScreen extends StatelessWidget {
               SizedBox(height: 8),
               Center(
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    launchURL("https://discord.gg/clashking");
+                  onPressed: () async {
+                    const url = "https://discord.gg/clashking";
+                    if (await canLaunchUrl(Uri.parse(url))) {
+                      await launchUrl(Uri.parse(url));
+                    } else {
+                      print('Could not launch $url');
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF5865F2),
@@ -96,7 +107,7 @@ class TranslationScreen extends StatelessWidget {
               SizedBox(height: 16),
               // Replace the following with actual translator names
               Text(
-                "• Joelsuperstar \n• niklas312 \n• ColinSchmale \n• athype \n• Nemo_64\n• Dinki/Krakakus \n• SudetiZ \n• MRocha01 \n• MixxStar \n• SamGo \n• AlejandroMoc ",
+                "• Joelsuperstar \n• niklas312 \n• ColinSchmale \n• athype \n• Nemo_64\n• Dinki/Krakakus \n• SudetiZ \n• MRocha01 \n• GodOfGos \n• Wraxu \n• MixxStar \n• SamGo \n• AlejandroMoc ",
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
@@ -108,7 +119,7 @@ class TranslationScreen extends StatelessWidget {
 
   void launchURL(String url) async {
     if (await canLaunchUrl(Uri(path: url))) {
-      await launchUrl(Uri(path:url));
+      await launchUrl(Uri(path: url));
     } else {
       throw 'Could not launch $url';
     }

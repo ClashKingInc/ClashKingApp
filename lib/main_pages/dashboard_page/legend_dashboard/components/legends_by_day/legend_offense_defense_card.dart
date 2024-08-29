@@ -43,7 +43,7 @@ class LegendOffenseDefenseCard extends StatelessWidget {
               ),
               SizedBox(height: 8),
               SizedBox(
-                height: 160,
+                height: 180,
                 child: Align(
                   alignment: Alignment.topCenter,
                   child: Column(

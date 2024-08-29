@@ -305,11 +305,11 @@ class _FaqScreenState extends State<FaqScreen> {
                             query: 'subject=App%20Inquiry',
                           );
 
-                          String url = params.toString();
-                          if (await canLaunchUrl(Uri.parse(url))) {
-                            await launchUrl(Uri.parse(url));
+                          if (await canLaunchUrl(params)) {
+                            await launchUrl(params);
                           } else {
-                            throw 'Could not launch $url';
+                            print('Could not launch $params');
+                            throw 'Could not launch $params';
                           }
                         },
                       ),
