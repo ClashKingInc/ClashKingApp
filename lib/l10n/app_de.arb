@@ -370,8 +370,8 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Innacurate data?",
-    "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
+    "legendsTitle": "Falsche Daten?",
+    "legendsExplanation_intro": "Durch die limitierten Clash of Clans API könnten unsere Daten nicht immer akkurat sein. Warum siehst du hier:\n",
     "legendsExplanation_api_delay_title": "1. API-Verzögerung: ",
     "legendsExplanation_api_delay_body": "Die API kann bis zu 5 Minuten für die Aktualisierung benötigen, was zu einer Verzögerung bei der Abbildung von Echtzeit-Trophäenänderungen führt.\n",
     "legendsExplanation_concurrent_changes_title": "2. Gleichzeitige Änderungen: \n",
@@ -996,7 +996,7 @@
         }
     },
     "tools": "Werkzeuge",
-    "community": "Community",
+    "community": "Gemeinschaft",
     "lastRaids": "Letzte Überfälle",
     "ongoingRaids": "Aktuelle Überfälle",
     "districtsDestroyed": "Zerstörte Bezirke",
