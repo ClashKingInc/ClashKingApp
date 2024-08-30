@@ -633,7 +633,7 @@
     "cantOpenLink": "Wir können diesen Link nicht öffnen.",
     "notInWar": "Nicht im Krieg",
     "warHistory": "Kriegsvergangenheit",
-    "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) in the last 50 wars.",
+    "warHistoryWinsDescription": "Dein Clan hat {wins} gewonnene Kriege ({Prozent%}) in den letzten 50 Kriegen.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
@@ -666,7 +666,7 @@
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating in the last 50 wars.",
+    "warHistoryAverageMembersDescription": "Dein Clan ist mit durchschnittlich {members} in den Krieg gezogen.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -685,7 +685,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of th last 50 wars.",
+    "warHistoryAverageHitRateDescription": "Dein Clan hat eine durschnittliche Zerstörungsrate von {percent} in den letzten 50 Kriegen.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
@@ -694,7 +694,7 @@
         }
     },
     "warHistoryAverageClanStarsPerMember": "Your clan has an average of {stars} stars per member in the last 50 wars.",
-    "warHistoryAverageMembers": "~{members} members per war",
+    "warHistoryAverageMembers": "{members} Mitglieder pro Krieg",
     "@warHistoryAverageMembers": {
         "placeholders": {
             "members": {
