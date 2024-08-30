@@ -1,5 +1,5 @@
 {
-    "creatorCode": "Kod twórcy: ClashKing",
+    "creatorCode": "Creator Code: ClashKing",
     "signInWithDiscord": "Zaloguj się za pomocą Discorda",
     "guestMode": "Tryb gościa",
     "needHelpJoinDiscord": "Potrzebujesz pomocy? Dołącz do nas na Discordzie.",
@@ -40,7 +40,7 @@
         }
     },
     "welcome": "Witamy!",
-    "welcomeMessage": "Proszę dodać jeden lub więcej kont Clash Of Clans do swojego profilu. Możesz później dodać lub usunąć konta.",
+    "welcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
     "login": "Zaloguj się",
     "logout": "Wyloguj",
     "language": "Język",
@@ -53,35 +53,44 @@
     "faqFanContentPolicy": "Ten materiał jest nieoficjalny i nie jest popierany przez Supercell. Aby uzyskać więcej informacji, zobacz Politykę treści twórców Supercell: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Dlaczego dane czasami są niedokładne lub brakujące?",
     "faqClanNotTracked": "Klan nieśledzony",
-    "faqClanNotTrackedAnswer": "ClashKing może uzyskać te informacje tylko jeśli klan jest śledzony. Jeśli twój klan nie jest śledzony, zaproś bota ClashKing na swój serwer Discord i użyj komendy /addclan. Pracujemy nad udostępnieniem tej funkcji w aplikacji wkrótce.",
+    "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
     "faqTrackingDown": "Śledzenie",
-    "faqTrackingDownAnswer": "Śledzenie może przestać działać przez pewien okres czasu. Dlatego czasami możesz mieć dziury w swoich danych. Pracujemy nad ich poprawą.",
+    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
     "faqApiLimitation": "Ograniczenie interfejsu API Clash of Clans",
-    "faqApiLimitationAnswer": "Niektóre dane są dostarczane przez Clash of Clans, a ich API ma pewne ograniczenia. Tak jest w przypadku śledzenia legend, gdzie czasami zbiera się zysk i stratę pucharów, jakby był to pojedynczy atak. To także dlatego nie mamy żadnych informacji na temat poziomów twoich budynków.",
+    "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
     "faqSupportWork": "Jak mogę wesprzeć Twoją pracę?",
     "faqSupportWorkAnswer": "Istnieje kilka sposobów, aby nas wesprzeć:",
     "faqUseCodeClashKing": "Użyj kodu \"ClashKing\"",
     "faqSupportUsOnPatreon": "Wesprzyj nas na Patreonie",
     "faqShareTheApp": "Udostępnij aplikację znajomym",
-    "faqRateTheApp": "Oceń aplikację w sklepie",
+    "faqRateTheApp": "Rate the app in the store",
     "faqHelpUsTranslate": "Pomóż nam przetłumaczyć aplikację",
-    "faqHowToInviteTheBot": "Jak mogę zaprosić twojego bota na mój serwer Discord?",
-    "faqHowToInviteTheBotAnswer": "Możesz zaprosić naszego bota na swój serwer, klikając poniższy przycisk. Będziesz musiał mieć uprawnienie \"Zarządzaj serwerem\", aby dodać bota.",
+    "faqHowToInviteTheBot": "How can I invite your bot to my Discord Server?",
+    "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
     "faqInviteTheBot": "Zaproś Bota ClashKing",
     "faqNeedHelp": "Potrzebuję pomocy lub chciałbym złożyć sugestię. Jak mogę się z Tobą skontaktować?",
-    "faqNeedHelpAnswer": "Możesz dołączyć do naszego serwera Discord, aby poprosić o pomoc lub przekazać informacje zwrotne, lub możesz napisać do nas e-maila na adres devs@clashkingbot.com. Prosimy pisać tylko po angielsku lub francusku.",
+    "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.",
     "faqSendEmail": "Wyślij wiadomość e-mail",
     "faqJoinDiscord": "Dołącz do naszego Discorda",
     "helpUsTranslate": "Pomóż w tłumaczeniu",
     "suggestFeatures": "Zaproponuj funkcje",
     "thankYou": "Dziękujemy!",
     "thankYouContent": "Wielkie dzięki dla wszystkich naszych niesamowitych tłumaczy, którzy pomagają nam uczynić tę aplikację dostępną dla większej liczby ludzi na całym świecie!",
-    "helpTranslateContent": "Możesz nam pomóc przetłumaczyć aplikację na Crowdin. Jeśli Twojego języka nie ma na Crowdin, śmiało poproś o niego na naszym serwerze Discord. Bardzo dziękujemy za pomoc!",
+    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
     "helpTranslateButton": "Pomóż przetłumaczyć na Crowdin",
+    "versionDevice": "Version & Device",
+    "@version": {
+        "description": "Version of the app and device information"
+    },
+    "loading": "Loading...",
+    "errorLoadingVersion": "Error loading version",
+    "@errorLoadingVersion": {
+        "description": "Error message when the app version cannot be loaded"
+    },
     "currentTranslators": "Aktualni tłumacze",
     "betaFeature": "Funkcja Beta",
     "beta": "BETA",
-    "betaDescription": "Ta funkcja jest obecnie w wersji beta, więc może zawierać pewne błędy lub być niekompletna. Aktywnie pracujemy nad ulepszeniami i z przyjemnością przyjmujemy opinie. Prosimy o dzielenie się pomysłami oraz zgłaszanie wszelkich problemów na naszym serwerze Discord, aby pomóc nam ją udoskonalić.",
+    "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
     "copiedToClipboard": "Skopiowano do schowka",
     "all": "Wszystkie",
     "@all": {
@@ -122,7 +131,7 @@
     "deleteAccount": "Usuń konto",
     "playerTagNotExists": "Wprowadzony tag gracza nie istnieje.",
     "accountAlreadyLinked": "{tag} jest już powiązany z kimś innym.",
-    "enterApiToken": "Proszę wprowadzić token API konta, aby potwierdzić, że należy do Ciebie. Możesz znaleźć go w ustawieniach Clash of Clans > Więcej ustawień > Token API",
+    "enterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
     "wrongApiToken": "Wprowadzony token API jest nieprawidłowy",
     "accountAlreadyLinkedToYou": "Tag gracza jest już z tobą powiązany.",
     "apiToken": "Token API konta",
@@ -194,7 +203,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription": "Twój poziom ratusza to {level}.",
+    "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
@@ -370,7 +379,7 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Nieprecyzyjne dane?",
+    "legendsTitle": "Inaccurate data?",
     "legendsExplanation_intro": "Ze względu na ograniczenia w API Clash of Clans, nasze dane mogą czasami nie być całkowicie dokładne. Dlaczego tak się dzieje:\n",
     "legendsExplanation_api_delay_title": "1. Opóźnienie interfejsu API: ",
     "legendsExplanation_api_delay_body": "API może zaktualizować się maksymalnie do 5 minut, co powoduje opóźnienie w odzwierciedleniu zmian w czasie rzeczywistym w puszkach.\n",
@@ -382,7 +391,7 @@
     "legendsExplanation_net_gain_loss_title": "3. Zysk/Strata: ",
     "legendsExplanation_net_gain_loss_body": "Mimo problemów z czasem ogólny zysk lub strata netto za dzień są dokładne. ",
     "legendsExplanation_conclusion": "Te ograniczenia są powszechne we wszystkich narzędziach korzystających z API Clash of Clans. Niestety nie możemy tego naprawić, ponieważ znajduje się to w rękach Supercell. Robimy wszystko, aby zrekompensować te ograniczenia i dostarczyć wyniki możliwie najbliższe rzeczywistości. Dziękujemy za zrozumienie!",
-    "toDoList": "Lista rzeczy do zrobienia",
+    "toDoList": "To-do list",
     "lastActive": "Ostatnio aktywny: {date}",
     "@lastActive": {
         "placeholders": {
@@ -398,7 +407,7 @@
                 "type": "int"
             }
         },
-        "description": "Number of accounts (ex : 4 accounts)"
+        "description": "Number of accounts (ex: 4 accounts)"
     },
     "numberActiveAccounts": "{number} aktywnych kont",
     "@numberActiveAccounts": {
@@ -442,7 +451,7 @@
         "description": "Best end of day trophies"
     },
     "total": "Ogółem",
-    "heroesEquipments": "Wyposażenie bohaterów",
+    "heroesEquipments": "Hero equipments",
     "daysAgo": "{days} dni temu",
     "@daysAgo": {
         "placeholders": {
@@ -556,7 +565,7 @@
             }
         }
     },
-    "townHallLevelLevel": "Ratusz {level}",
+    "townHallLevelLevel": "Town Hall {level}",
     "@townHallLevelLevel": {
         "placeholders": {
             "level": {
@@ -582,10 +591,10 @@
     },
     "year": "Rok",
     "month": "Miesiąc",
-    "allTownHalls": "Wszystkie Ratusze",
+    "allTownHalls": "All Town Halls",
     "seasonDate": "sezon {date}",
     "@seasonDate": {
-        "description": "Example : August 2024 season",
+        "description": "Example: August 2024 season",
         "placeholders": {
             "date": {
                 "type": "String"
@@ -594,7 +603,7 @@
     },
     "lastXwars": "Ostatnie {number} wojen",
     "@lastXwars": {
-        "description": "Example : Shows the last 25 wars",
+        "description": "Example: Shows the last 25 wars",
         "placeholders": {
             "number": {
                 "type": "int"
@@ -633,7 +642,7 @@
     "cantOpenLink": "Nie możemy otworzyć tego linku.",
     "notInWar": "Nie jest na wojnie",
     "warHistory": "Historia wojen",
-    "warHistoryWinsDescription": "Twój klan wygrał {wins} wojen ({percent}%) w ostatnich 50 wojnach.",
+    "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
@@ -685,7 +694,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Twój klan ma średni wskaźnik zniszczenia {percent} na koniec ostatnich 50 wojen.",
+    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of the last 50 wars.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
