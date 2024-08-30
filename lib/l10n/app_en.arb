@@ -78,9 +78,9 @@
     "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
     "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
     "helpTranslateButton": "Help Translate on Crowdin",
-    "version": "Version",
+    "versionDevice": "Version & Device",
     "@version": {
-        "description": "Version of the app"
+        "description": "Version of the app and device information"
     },
     "loading": "Loading...",
     "errorLoadingVersion": "Error loading version",

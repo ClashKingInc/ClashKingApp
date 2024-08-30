@@ -7,6 +7,8 @@ import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'dart:io' show Platform;
 
 final String clientId = dotenv.env['DISCORD_CLIENT_ID']!;
 final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
@@ -160,10 +162,27 @@ Future<void> clearPrefs() async {
 }
 
 
-// Fetch the app version and build number
-Future<String> getAppVersionInfo() async {
+
+Future<String> getAppAndDeviceInfo() async {
+  // Fetch app version and build number
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String version = packageInfo.version;
   String buildNumber = packageInfo.buildNumber;
-  return 'Version: $version (Build $buildNumber)';
+
+  // Fetch device information
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  String deviceData;
+
+  if (Platform.isAndroid) {
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    deviceData =
+        'Device: ${androidInfo.model}, OS: Android ${androidInfo.version.release} (SDK ${androidInfo.version.sdkInt})';
+  } else if (Platform.isIOS) {
+    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    deviceData = 'Device: ${iosInfo.utsname.machine}, OS: iOS ${iosInfo.systemVersion}';
+  } else {
+    deviceData = 'Unknown Platform';
+  }
+
+  return 'Version: $version (Build $buildNumber)\n$deviceData';
 }

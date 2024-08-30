@@ -80,7 +80,7 @@
     "helpTranslateContent": "Tu peux nous aider à traduire l'application sur Crowdin. Si ta langue n'est pas disponible sur Crowdin, n'hésite pas à la demander sur notre serveur Discord. Merci beaucoup pour ton aide !",
     "helpTranslateButton": "Aider à traduire sur Crowdin",
     "currentTranslators": "Traducteurs actuels",
-    "version": "Version",
+    "versionDevice": "Version & Appareil",
     "loading": "Chargement...",
     "errorLoadingVersion": "Erreur du chargement de la version",
     "betaFeature": "Fonctionnalité Bêta",

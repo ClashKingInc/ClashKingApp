@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/components/dialogs/logout_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/theme_notifier.dart';
@@ -15,6 +16,7 @@ import 'package:clashkingapp/main_pages/settings_page/translation_page.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/main_pages/settings_page/features_vote.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 
 class SettingsInfoScreen extends StatefulWidget {
   final User user;
@@ -205,22 +207,30 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
 
 Widget _buildVersionInfoTile(BuildContext context) {
   return FutureBuilder<String>(
-    future: getAppVersionInfo(),
+    future: getAppAndDeviceInfo(),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return ListTile(
-          title: Text(AppLocalizations.of(context)!.version),
+          title: Text(AppLocalizations.of(context)!.versionDevice),
           subtitle: Text(AppLocalizations.of(context)!.loading),
         );
       } else if (snapshot.hasError) {
         return ListTile(
-          title: Text(AppLocalizations.of(context)!.version),
+          title: Text(AppLocalizations.of(context)!.versionDevice),
           subtitle: Text(AppLocalizations.of(context)!.errorLoadingVersion),
         );
       } else {
         return ListTile(
-          title: Text(AppLocalizations.of(context)!.version),
+          title: Text(AppLocalizations.of(context)!.versionDevice),
           subtitle: Text(snapshot.data ?? ''),
+          onTap: () {
+            Clipboard.setData(ClipboardData(text: snapshot.data ?? ''));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(AppLocalizations.of(context)!.copiedToClipboard),
+              ),
+            );
+          },
         );
       }
     },
