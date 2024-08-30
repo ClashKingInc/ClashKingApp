@@ -119,6 +119,8 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
               );
             },
           ),
+          Divider(),
+          _buildVersionInfoTile(context),
         ],
       ),
     );
@@ -198,4 +200,29 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       );
     }
   }
+}
+
+
+Widget _buildVersionInfoTile(BuildContext context) {
+  return FutureBuilder<String>(
+    future: getAppVersionInfo(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return ListTile(
+          title: Text(AppLocalizations.of(context)!.version),
+          subtitle: Text(AppLocalizations.of(context)!.loading),
+        );
+      } else if (snapshot.hasError) {
+        return ListTile(
+          title: Text(AppLocalizations.of(context)!.version),
+          subtitle: Text(AppLocalizations.of(context)!.errorLoadingVersion),
+        );
+      } else {
+        return ListTile(
+          title: Text(AppLocalizations.of(context)!.version),
+          subtitle: Text(snapshot.data ?? ''),
+        );
+      }
+    },
+  );
 }

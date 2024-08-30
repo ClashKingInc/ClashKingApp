@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 final String clientId = dotenv.env['DISCORD_CLIENT_ID']!;
 final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
@@ -156,4 +157,13 @@ Future<void> deletePrefs(String name) async {
 
 Future<void> clearPrefs() async {
   await storage.deleteAll();
+}
+
+
+// Fetch the app version and build number
+Future<String> getAppVersionInfo() async {
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  String version = packageInfo.version;
+  String buildNumber = packageInfo.buildNumber;
+  return 'Version: $version (Build $buildNumber)';
 }

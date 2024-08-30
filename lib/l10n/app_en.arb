@@ -78,6 +78,15 @@
     "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
     "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
     "helpTranslateButton": "Help Translate on Crowdin",
+    "version": "Version",
+    "@version": {
+        "description": "Version of the app"
+    },
+    "loading": "Loading...",
+    "errorLoadingVersion": "Error loading version",
+    "@errorLoadingVersion": {
+        "description": "Error message when the app version cannot be loaded"
+    },
     "currentTranslators": "Current Translators",
     "betaFeature": "Beta Feature",
     "beta": "BETA",
@@ -633,7 +642,7 @@
 "cantOpenLink": "We can't open this link.",
 "notInWar": "Not in war",
 "warHistory": "War History",
-"warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) in the last 50 wars.",
+"warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
 "@warHistoryWinsDescription": {
     "placeholders": {
         "wins": {
@@ -686,7 +695,7 @@
     }
     
 },
-"warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of th last 50 wars.",
+"warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of the last 50 wars.",
 "@warHistoryAverageHitRateDescription": {
     "placeholders": {
         "percent": {
