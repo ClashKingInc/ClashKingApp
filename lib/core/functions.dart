@@ -71,10 +71,6 @@ Future<void> storePrefs(String name, String token) async {
       throw Exception('Invalid HMAC key length: ${hmacKey.length}');
     }
 
-    if (token.isEmpty) {
-      throw Exception('Token is empty or invalid.');
-    }
-
     // Encrypt the token
     final iv = IV.fromLength(16); // Initialization vector
     final encrypter = Encrypter(AES(encryptionKey, mode: AESMode.cbc));

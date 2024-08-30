@@ -104,7 +104,7 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
                 if (success) {
                   widget.user.tags.remove(playerTag);
                   if (widget.user.tags.isNotEmpty) {
-                    storePrefs('selectedTag', '');
+                    deletePrefs('selectedTag');
                     if (context.mounted) {
                       myAppState.deleteAccountByTag(playerTag, myAppState);
                     }
@@ -119,7 +119,7 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
               } else {
                 widget.user.tags.remove(playerTag);
                 if (widget.user.tags.isNotEmpty) {
-                  storePrefs('selectedTag', '');
+                  deletePrefs('selectedTag');
                   if (context.mounted) {
                     myAppState.deleteAccountByTag(playerTag, myAppState);
                   }
