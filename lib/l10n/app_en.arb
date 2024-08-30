@@ -1,5 +1,5 @@
 {
-    "creatorCode": "Creator Code : ClashKing",
+    "creatorCode": "Creator Code: ClashKing",
     "signInWithDiscord": "Sign In with Discord",
     "guestMode": "Guest Mode",
     "needHelpJoinDiscord": "Need help? Join us on Discord.",
@@ -407,7 +407,7 @@
             "type": "int"
         }
     },
-    "description": "Number of accounts (ex : 4 accounts)"
+    "description": "Number of accounts (ex: 4 accounts)"
 },
 "numberActiveAccounts": "{number} active accounts",
 "@numberActiveAccounts": {
@@ -594,7 +594,7 @@
 "allTownHalls": "All TownHalls",
 "seasonDate": "{date} season",
 "@seasonDate": {
-    "description": "Example : August 2024 season",
+    "description": "Example: August 2024 season",
     "placeholders": {
         "date": {
             "type": "String"
@@ -603,7 +603,7 @@
 },
 "lastXwars": "Last {number} wars",
 "@lastXwars": {
-    "description": "Example : Shows the last 25 wars",
+    "description": "Example: Shows the last 25 wars",
     "placeholders": {
         "number": {
             "type": "int"
@@ -619,9 +619,9 @@
 "@random": {
     "description": "Random/basic war (not friendly or cwl)"
 },
-"selectMembersThLevel" : "Members TH Level",
-"selectOpponentsThLevel" : "Opponents TH Level",
-"equalThLevel" : "Equal TH",
+"selectMembersThLevel": "Members TH Level",
+"selectOpponentsThLevel": "Opponents TH Level",
+"equalThLevel": "Equal TH",
 "builderBaseTrophies": "BB Trophies",
 "donations": "Donations",
 "donationsReceived": "Donations Received",
@@ -703,9 +703,9 @@
         }
     }
 },
-"warHistoryAverageClanStarsPerMember" : "Your clan has an average of {stars} stars per member in the last 50 wars.",
-"warHistoryAverageMembers" : "~{members} members per war",
-"@warHistoryAverageMembers" : {
+"warHistoryAverageClanStarsPerMember": "Your clan has an average of {stars} stars per member in the last 50 wars.",
+"warHistoryAverageMembers": "~{members} members per war",
+"@warHistoryAverageMembers": {
     "placeholders": {
         "members": {
             "type": "int"
@@ -719,8 +719,8 @@
 "twoStars": "2 stars",
 "threeStars": "3 stars",
 "warParticipation": "War Participation",
-"toggleTownHallVisibility" : "Hide/Show stats from former TH levels",
-"@toggleTownHallVisibility" : {
+"toggleTownHallVisibility": "Hide/Show stats from former TH levels",
+"@toggleTownHallVisibility": {
     "description": "For example, hide stats from TH15 and below if the player is now TH16"
 },
 "warLog": "War Log",
