@@ -1,5 +1,5 @@
 {
-    "creatorCode": "Creator Code: ClashKing",
+    "creatorCode": "Makerscode: ClashKing",
     "signInWithDiscord": "Inloggen met Discord",
     "guestMode": "Gastmodus",
     "needHelpJoinDiscord": "Hulp nodig? Doe mee op Discord.",
@@ -40,7 +40,7 @@
         }
     },
     "welcome": "Welkom!",
-    "welcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
+    "welcomeMessage": "Voeg alsjeblieft één of meer Clash Of Clans accounts toe aan je profiel. Je kan later accounts toevoegen of verwijderen.",
     "login": "Inloggen",
     "logout": "Uitloggen",
     "language": "Taal",
@@ -53,44 +53,44 @@
     "faqFanContentPolicy": "Dit materiaal is onofficieel en wordt niet goedgekeurd door Supercell. Voor meer informatie, zie de Fan Content Policy van Supercell: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Waarom zijn de gegevens soms onnauwkeurig of ontbreken ze?",
     "faqClanNotTracked": "Clan niet gevolgd",
-    "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
+    "faqClanNotTrackedAnswer": "ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan ClashKing uit op je Discord server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.",
     "faqTrackingDown": "Tracking niet beschikbaar",
-    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
+    "faqTrackingDownAnswer": "Het volgen kan gedurende een bepaalde periode stoppen met werken. Daarom kunnen er soms gaten in je gegevens zitten. We werken eraan om dit te verbeteren.",
     "faqApiLimitation": "Clash of Clans API limitatie",
-    "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
+    "faqApiLimitationAnswer": "Sommige gegevens worden geleverd door Clash of Clans en hun API heeft enkele beperkingen. Dit is het geval bij het volgen van de legendarisch divisie. De API stapelt soms een trofeeënwimst en -verlies, alsof het één aanval was. Daarom hebben we ook geen informatie over het niveau van je gebouwen.",
     "faqSupportWork": "Hoe kan ik je werk ondersteunen?",
     "faqSupportWorkAnswer": "Er zijn verschillende manieren om ons te steunen:",
     "faqUseCodeClashKing": "Gebruik code \"ClashKing\"",
     "faqSupportUsOnPatreon": "Steun ons op Patreon",
     "faqShareTheApp": "Deel deze app met je vrienden",
-    "faqRateTheApp": "Rate the app in the store",
+    "faqRateTheApp": "Beoordeel de app in de winkel",
     "faqHelpUsTranslate": "Help ons de app te vertalen",
-    "faqHowToInviteTheBot": "How can I invite your bot to my Discord Server?",
-    "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
+    "faqHowToInviteTheBot": "Hoe kan ik je bot uitnodigen voor mijn Discord Server?",
+    "faqHowToInviteTheBotAnswer": "Je kan onze bot uitnodigen op je server door op de onderstaande knop te klikken. Je moet de toestemming \"Server Beheren\" hebben om de bot toe te voegen.",
     "faqInviteTheBot": "ClashKing Bot uitnodigen",
     "faqNeedHelp": "Ik heb hulp nodig of ik zou graag een suggestie willen doen. Hoe kan ik contact met u opnemen?",
-    "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.",
+    "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven, of je kan ons een e-mail sturen naar devs@clashkingbot.com. Graag alleen in het Engels of Frans schrijven.",
     "faqSendEmail": "Stuur een e-mail",
     "faqJoinDiscord": "Word lid van de Discord server",
     "helpUsTranslate": "Help ons met vertalen",
     "suggestFeatures": "Een nieuwe functie voorstellen",
     "thankYou": "Bedankt!",
     "thankYouContent": "Hartelijk dank aan al onze geweldige vertalers die ons helpen deze app toegankelijk te maken voor meer mensen over de hele wereld!",
-    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
+    "helpTranslateContent": "Je kunt ons helpen de app op Crowdin te vertalen. Als je taal niet beschikbaar is op Crowdin, kan je deze aanvragen in onze Discord Server. Heel erg bedankt voor je hulp!",
     "helpTranslateButton": "Help met vertalen op Crowdin",
-    "versionDevice": "Version & Device",
+    "versionDevice": "Versie & Apparaat",
     "@version": {
         "description": "Version of the app and device information"
     },
-    "loading": "Loading...",
-    "errorLoadingVersion": "Error loading version",
+    "loading": "Laden...",
+    "errorLoadingVersion": "Fout bij het laden van de versie",
     "@errorLoadingVersion": {
         "description": "Error message when the app version cannot be loaded"
     },
     "currentTranslators": "Huidige vertalers",
     "betaFeature": "Beta-functie",
     "beta": "BETA",
-    "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
+    "betaDescription": "Deze functie bevindt zich momenteel in bèta, het kan wat bugs bevatten of onvolledig zijn. We werken actief aan verbeteringen en verwelkomen je feedback. Deel alstublieft je ideeën en meld eventuele problemen op onze Discord-server om ons te helpen de app te verbeteren.",
     "copiedToClipboard": "Gekopieerd naar klembord",
     "all": "Alle",
     "@all": {
@@ -131,7 +131,7 @@
     "deleteAccount": "Account verwijderen",
     "playerTagNotExists": "Het ingevoerde speler-ID bestaat niet.",
     "accountAlreadyLinked": "Het speler-ID is al aan iemand gekoppeld.",
-    "enterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
+    "enterApiToken": "Voer je account API-token in om te bevestigen dat deze van jou is. Je vindt deze in Clash of Clans Instellingen > Meer instellingen > API Token.",
     "wrongApiToken": "De ingevoerde API-token is onjuist",
     "accountAlreadyLinkedToYou": "Het speler-ID is al aan jou gekoppeld.",
     "apiToken": "Account API Token",
@@ -203,7 +203,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+    "playerTownHallLevelDescription": "Je stadhuisniveau is {level}.",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
@@ -379,7 +379,7 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inaccurate data?",
+    "legendsTitle": "Onjuiste gegevens?",
     "legendsExplanation_intro": "Vanwege beperkingen in de Clash of Clans API is onze data mogelijk niet altijd accuraat. Dit zijn de reden:\n",
     "legendsExplanation_api_delay_title": "1. API Vertraging: ",
     "legendsExplanation_api_delay_body": "De API kan tot 5 minuten duren om bij te werken, wat een vertraging veroorzaakt bij het weergeven van real-time trofee wijzigingen.\n",
@@ -391,7 +391,7 @@
     "legendsExplanation_net_gain_loss_title": "3. Netto winst/verlies: ",
     "legendsExplanation_net_gain_loss_body": "Ondanks de timing problemen, is het nettoresultaat van de gehele dag wel correct. ",
     "legendsExplanation_conclusion": "Deze beperkingen zijn gebruikelijk bij alle tools die de Clash of Clans API gebruiken. Helaas kunnen we dat niet oplossen omdat het in handen van Supercell ligt. We doen ons best om deze limieten te compenseren en resultaten te bieden die zo dicht mogelijk bij de werkelijkheid liggen. Bedankt voor je begrip!",
-    "toDoList": "To-do list",
+    "toDoList": "Takenlijst",
     "lastActive": "Laatst actief: {date}",
     "@lastActive": {
         "placeholders": {
@@ -451,7 +451,7 @@
         "description": "Best end of day trophies"
     },
     "total": "Totaal",
-    "heroesEquipments": "Hero equipments",
+    "heroesEquipments": "Heldenuitrusting",
     "daysAgo": "{days} dagen geleden",
     "@daysAgo": {
         "placeholders": {
@@ -565,7 +565,7 @@
             }
         }
     },
-    "townHallLevelLevel": "Town Hall {level}",
+    "townHallLevelLevel": "Stadhuis {level}",
     "@townHallLevelLevel": {
         "placeholders": {
             "level": {
@@ -591,7 +591,7 @@
     },
     "year": "Jaar",
     "month": "Maand",
-    "allTownHalls": "All Town Halls",
+    "allTownHalls": "Alle stadhuizen",
     "seasonDate": "{date} seizoen",
     "@seasonDate": {
         "description": "Example: August 2024 season",
@@ -642,7 +642,7 @@
     "cantOpenLink": "We kunnen deze link niet openen.",
     "notInWar": "Niet in oorlog",
     "warHistory": "Oorlogsgeschiedenis",
-    "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
+    "warHistoryWinsDescription": "Je clan heeft {wins} oorlogen gewonnen ({percent}%) van de laatste 50 oorlogen.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
@@ -694,7 +694,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of the last 50 wars.",
+    "warHistoryAverageHitRateDescription": "Jouw clan heeft een gemiddeld vernietigingspercentage van {percent} aan het einde van de laatste 50 oorlogen.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
