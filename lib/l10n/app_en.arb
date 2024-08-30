@@ -1,5 +1,5 @@
 {
-    "creatorCode": "Creator Code : ClashKing",
+    "creatorCode": "Creator Code: ClashKing",
     "signInWithDiscord": "Sign In with Discord",
     "guestMode": "Guest Mode",
     "needHelpJoinDiscord": "Need help? Join us on Discord.",
@@ -40,7 +40,7 @@
         }
     },
     "welcome": "Welcome!",
-    "welcomeMessage": "Please add one or more Clash Of Clans accounts to your profile. You can add or remove accounts later.",
+    "welcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
     "login": "Login",
     "logout": "Log out",
     "language": "Language",
@@ -53,35 +53,44 @@
     "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
     "faqClanNotTracked": "Clan not tracked",
-    "faqClanNotTrackedAnswer": "ClashKing can retrieve this info only if the clan is tracked. If your clan isn't tracked, please invite ClashKing Bot to your Discord server and use the command /addclan. We are working on making this feature available in the app soon.",
+    "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
     "faqTrackingDown": "Tracking down",
-    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why sometimes you can have holes in your data. We are working on improving this.",
+    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
     "faqApiLimitation": "Clash of Clans API limitation",
-    "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your buildings levels.",
+    "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
     "faqSupportWork": "How can I support your work?",
     "faqSupportWorkAnswer": "There are several ways to support us:",
     "faqUseCodeClashKing": "Use code \"ClashKing\"",
     "faqSupportUsOnPatreon": "Support us on Patreon",
     "faqShareTheApp": "Share the app with your friends",
-    "faqRateTheApp": "Rate the app on the store",
+    "faqRateTheApp": "Rate the app in the store",
     "faqHelpUsTranslate": "Help us translate the app",
-    "faqHowToInviteTheBot": "How can I invite your bot on my Discord server?",
-    "faqHowToInviteTheBotAnswer": "You can invite our bot on your server by clicking on the button below. You will need to have the \"Manage Server\" permission to add the bot.",
+    "faqHowToInviteTheBot": "How can I invite your bot to my Discord Server?",
+    "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
     "faqInviteTheBot": "Invite ClashKing Bot",
     "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
-    "faqNeedHelpAnswer": "You can join our Discord server to ask for help or provide feedback, or you can email us at devs@clashkingbot.com. Please write in English or French only.",
+    "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.",
     "faqSendEmail": "Send an email",
     "faqJoinDiscord": "Join our Discord Server",
     "helpUsTranslate": "Help us translate",
     "suggestFeatures": "Suggest features",
     "thankYou": "Thank you!",
     "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it on our Discord server. Thank you very much for your help!",
+    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
     "helpTranslateButton": "Help Translate on Crowdin",
+    "versionDevice": "Version & Device",
+    "@version": {
+        "description": "Version of the app and device information"
+    },
+    "loading": "Loading...",
+    "errorLoadingVersion": "Error loading version",
+    "@errorLoadingVersion": {
+        "description": "Error message when the app version cannot be loaded"
+    },
     "currentTranslators": "Current Translators",
     "betaFeature": "Beta Feature",
     "beta": "BETA",
-    "betaDescription": "This feature is currently in beta, so it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues on our Discord server to help us make it better.",
+    "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
     "copiedToClipboard": "Copied to clipboard",
     "all": "All",
     "@all": {
@@ -122,7 +131,7 @@
     "deleteAccount": "Delete account",
     "playerTagNotExists": "The player tag entered does not exist.",
     "accountAlreadyLinked": "The player tag is already linked to someone.",
-    "enterApiToken": "Please enter the account API token to confirm its yours. You can find it in Clash of Clans Settings > More Settings > API Token",
+    "enterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
     "wrongApiToken": "The API token entered is incorrect",
     "accountAlreadyLinkedToYou": "The player tag is already linked to you.",
     "apiToken": "Account API Token",
@@ -194,7 +203,7 @@
         }
     }
 },
-"playerTownHallLevelDescription": "Your town hall level is {level}.",
+"playerTownHallLevelDescription": "Your Town Hall level is {level}.",
 "@playerTownHallLevelDescription": {
     "placeholders": {
         "level": {
@@ -370,7 +379,7 @@
 "@remaining": {
     "description": "Remaining attacks or defenses"
 },
-"legendsTitle": "Innacurate data?",
+"legendsTitle": "Inaccurate data?",
 "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
 "legendsExplanation_api_delay_title": "1. API Delay: ",
 "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
@@ -382,7 +391,7 @@
 "legendsExplanation_net_gain_loss_title": "3. Net Gain/Loss: ",
 "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
 "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-"toDoList": "To do list",
+"toDoList": "To-do list",
 "lastActive": "Last active: {date}",
 "@lastActive": {
     "placeholders": {
@@ -398,7 +407,7 @@
             "type": "int"
         }
     },
-    "description": "Number of accounts (ex : 4 accounts)"
+    "description": "Number of accounts (ex: 4 accounts)"
 },
 "numberActiveAccounts": "{number} active accounts",
 "@numberActiveAccounts": {
@@ -442,7 +451,7 @@
     "description": "Best end of day trophies"
 },
 "total": "Total",
-"heroesEquipments": "Heroes equipments",
+"heroesEquipments": "Hero equipments",
 "daysAgo": "{days} days ago",
 "@daysAgo": {
     "placeholders": {
@@ -556,7 +565,7 @@
         }
     }
 },
-"townHallLevelLevel": "TownHall {level}",
+"townHallLevelLevel": "Town Hall {level}",
 "@townHallLevelLevel": {
     "placeholders": {
         "level": {
@@ -582,10 +591,10 @@
 },
 "year": "Year",
 "month": "Month",
-"allTownHalls": "All TownHalls",
+"allTownHalls": "All Town Halls",
 "seasonDate": "{date} season",
 "@seasonDate": {
-    "description": "Example : August 2024 season",
+    "description": "Example: August 2024 season",
     "placeholders": {
         "date": {
             "type": "String"
@@ -594,7 +603,7 @@
 },
 "lastXwars": "Last {number} wars",
 "@lastXwars": {
-    "description": "Example : Shows the last 25 wars",
+    "description": "Example: Shows the last 25 wars",
     "placeholders": {
         "number": {
             "type": "int"
@@ -610,9 +619,9 @@
 "@random": {
     "description": "Random/basic war (not friendly or cwl)"
 },
-"selectMembersThLevel" : "Members TH Level",
-"selectOpponentsThLevel" : "Opponents TH Level",
-"equalThLevel" : "Equal TH",
+"selectMembersThLevel": "Members TH Level",
+"selectOpponentsThLevel": "Opponents TH Level",
+"equalThLevel": "Equal TH",
 "builderBaseTrophies": "BB Trophies",
 "donations": "Donations",
 "donationsReceived": "Donations Received",
@@ -633,7 +642,7 @@
 "cantOpenLink": "We can't open this link.",
 "notInWar": "Not in war",
 "warHistory": "War History",
-"warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) in the last 50 wars.",
+"warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
 "@warHistoryWinsDescription": {
     "placeholders": {
         "wins": {
@@ -686,7 +695,7 @@
     }
     
 },
-"warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of th last 50 wars.",
+"warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of the last 50 wars.",
 "@warHistoryAverageHitRateDescription": {
     "placeholders": {
         "percent": {
@@ -694,9 +703,9 @@
         }
     }
 },
-"warHistoryAverageClanStarsPerMember" : "Your clan has an average of {stars} stars per member in the last 50 wars.",
-"warHistoryAverageMembers" : "~{members} members per war",
-"@warHistoryAverageMembers" : {
+"warHistoryAverageClanStarsPerMember": "Your clan has an average of {stars} stars per member in the last 50 wars.",
+"warHistoryAverageMembers": "~{members} members per war",
+"@warHistoryAverageMembers": {
     "placeholders": {
         "members": {
             "type": "int"
@@ -710,8 +719,8 @@
 "twoStars": "2 stars",
 "threeStars": "3 stars",
 "warParticipation": "War Participation",
-"toggleTownHallVisibility" : "Hide/Show stats from former TH levels",
-"@toggleTownHallVisibility" : {
+"toggleTownHallVisibility": "Hide/Show stats from former TH levels",
+"@toggleTownHallVisibility": {
     "description": "For example, hide stats from TH15 and below if the player is now TH16"
 },
 "warLog": "War Log",
