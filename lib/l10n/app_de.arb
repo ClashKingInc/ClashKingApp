@@ -66,10 +66,10 @@
     "faqRateTheApp": "Bewerte die App im Store",
     "faqHelpUsTranslate": "Hilf uns, die App zu übersetzen",
     "faqHowToInviteTheBot": "Wie kann ich euren Bot zu meinem Discord-Server einladen?",
-    "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
+    "faqHowToInviteTheBotAnswer": "Du kannst unseren Bot auf deinen Server einladen, indem du auf den unten stehenden Button klickst. Du benötigst die Berechtigung \"Server verwalten\", um den Bot hinzuzufügen.",
     "faqInviteTheBot": "ClashKing Bot einladen",
     "faqNeedHelp": "Ich brauche Hilfe oder möchte einen Vorschlag machen. Wie kann ich euch erreichen?",
-    "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.",
+    "faqNeedHelpAnswer": "Kannst unserem Discord-Server beitreten und dort um Hilfe bitten, oder Feedback geben oder uns eine E-Mail an devs@clashkingbot.com senden. Bitte schreib uns, wenn möglich nur auf Englisch oder Französisch.",
     "faqSendEmail": "Sende eine E-Mail",
     "faqJoinDiscord": "Unserem Discord-Server beitreten",
     "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
@@ -77,7 +77,7 @@
     "suggestFeatures": "Funktion vorschlagen",
     "thankYou": "Vielen Dank!",
     "thankYouContent": "Ein großes Dankeschön an all unsere großartigen Übersetzer, die uns helfen, diese App mehr Menschen auf der ganzen Welt zugänglich zu machen!",
-    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
+    "helpTranslateContent": "Du kannst uns helfen, die App auf Crowdin zu übersetzen. Wenn deine Sprache auf Crowdin nicht verfügbar ist, kannst du diese gerne auf unserem Discord-Server anfordern. Vielen Dank für deine Hilfe!",
     "helpTranslateButton": "Hilf bei der Übersetzung auf Crowdin",
     "versionDevice": "Version & Device",
     "@version": {
@@ -204,7 +204,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+    "playerTownHallLevelDescription": "Dein Rathauslevel ist {level}.",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
@@ -380,7 +380,7 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inaccurate data?",
+    "legendsTitle": "Falsche Daten?",
     "legendsExplanation_intro": "Durch die limitierten Clash of Clans API könnten unsere Daten nicht immer akkurat sein. Warum siehst du hier:\n",
     "legendsExplanation_api_delay_title": "1. API-Verzögerung: ",
     "legendsExplanation_api_delay_body": "Die API kann bis zu 5 Minuten für die Aktualisierung benötigen, was zu einer Verzögerung bei der Abbildung von Echtzeit-Trophäenänderungen führt.\n",
@@ -392,7 +392,7 @@
     "legendsExplanation_net_gain_loss_title": "3. Netto-Gewinn/Verlust: ",
     "legendsExplanation_net_gain_loss_body": "Trotz zeitlicher Probleme ist der Netto-Gewinn/Verlust des Tages korrekt. ",
     "legendsExplanation_conclusion": "Diese Einschränkungen sind bei allen Tools, die die Clash of Clans API verwenden, üblich. Leider können wir das nicht beheben, da es in den Händen von Supercell liegt. Wir tun unser Bestes, um diese Grenzen auszugleichen und Ergebnisse so nah wie möglich an der Realität zu liefern. Vielen Dank für dein Verständnis!",
-    "toDoList": "To-do list",
+    "toDoList": "To-do-Lis­te",
     "lastActive": "Zuletzt aktiv: {date}",
     "@lastActive": {
         "placeholders": {
@@ -452,7 +452,7 @@
         "description": "Best end of day trophies"
     },
     "total": "Insgesamt",
-    "heroesEquipments": "Hero equipments",
+    "heroesEquipments": "Heldenausrüstung",
     "daysAgo": "vor {days} Tagen",
     "@daysAgo": {
         "placeholders": {
@@ -566,7 +566,7 @@
             }
         }
     },
-    "townHallLevelLevel": "Town Hall {level}",
+    "townHallLevelLevel": "Rathaus {level}",
     "@townHallLevelLevel": {
         "placeholders": {
             "level": {
@@ -592,7 +592,7 @@
     },
     "year": "Jahr",
     "month": "Monat",
-    "allTownHalls": "All Town Halls",
+    "allTownHalls": "Alle Rathäuser",
     "seasonDate": "{date} Saison",
     "@seasonDate": {
         "description": "Example: August 2024 season",
