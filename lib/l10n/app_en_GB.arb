@@ -72,6 +72,7 @@
     "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.",
     "faqSendEmail": "Send an email",
     "faqJoinDiscord": "Join our Discord Server",
+    "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
     "helpUsTranslate": "Help us translate",
     "suggestFeatures": "Suggest features",
     "thankYou": "Thank you!",
@@ -694,7 +695,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of the last 50 wars.",
+    "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
@@ -702,7 +703,7 @@
             }
         }
     },
-    "warHistoryAverageClanStarsPerMember": "Your clan has an average of {stars} star(s) per member from the last 50 wars.",
+    "warHistoryAverageClanStarsPerMember": "Your clan had an average of {stars} stars per member from the last 50 wars.",
     "warHistoryAverageMembers": "~{members} members per war",
     "@warHistoryAverageMembers": {
         "placeholders": {
