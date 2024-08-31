@@ -40,7 +40,7 @@
         }
     },
     "welcome": "Welkom!",
-    "welcomeMessage": "Voeg alstublieft één of meer Clash Of Clans accounts toe aan je profiel. Je kan later accounts toevoegen of verwijderen.",
+    "welcomeMessage": "Voeg alsjeblieft één of meer Clash Of Clans accounts toe aan je profiel. Je kan later accounts toevoegen of verwijderen.",
     "login": "Inloggen",
     "logout": "Uitloggen",
     "language": "Taal",
@@ -55,9 +55,9 @@
     "faqClanNotTracked": "Clan niet gevolgd",
     "faqClanNotTrackedAnswer": "ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan ClashKing uit op je Discord server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.",
     "faqTrackingDown": "Tracking niet beschikbaar",
-    "faqTrackingDownAnswer": "Het tracken kan gedurende een bepaalde periode stoppen met werken. Daarom kunnen er soms gaten in je gegevens zitten. We werken eraan om dit te verbeteren.",
+    "faqTrackingDownAnswer": "Het volgen kan gedurende een bepaalde periode stoppen met werken. Daarom kunnen er soms gaten in je gegevens zitten. We werken eraan om dit te verbeteren.",
     "faqApiLimitation": "Clash of Clans API limitatie",
-    "faqApiLimitationAnswer": "Sommige gegevens worden geleverd door Clash of Clans, maar hun API heeft enkele beperkingen. Zo kan het bijvoorbeeld voorkomen dat trofeeënwinst en -verlies in de legendarische divisie worden gestapeld alsof ze afkomstig zijn van één aanval. Dit is ook de reden waarom we geen informatie hebben over het niveau van je gebouwen.",
+    "faqApiLimitationAnswer": "Sommige gegevens worden geleverd door Clash of Clans en hun API heeft enkele beperkingen. Dit is het geval bij het volgen van de legendarisch divisie. De API stapelt soms een trofeeënwimst en -verlies, alsof het één aanval was. Daarom hebben we ook geen informatie over het niveau van je gebouwen.",
     "faqSupportWork": "Hoe kan ik je werk ondersteunen?",
     "faqSupportWorkAnswer": "Er zijn verschillende manieren om ons te steunen:",
     "faqUseCodeClashKing": "Gebruik code \"ClashKing\"",
@@ -65,23 +65,33 @@
     "faqShareTheApp": "Deel deze app met je vrienden",
     "faqRateTheApp": "Beoordeel de app in de winkel",
     "faqHelpUsTranslate": "Help ons de app te vertalen",
-    "faqHowToInviteTheBot": "Hoe kan ik uw bot uitnodigen op mijn Discord server?",
-    "faqHowToInviteTheBotAnswer": "Je kan onze bot uitnodigen op uw server door op de onderstaande knop te klikken. Je moet de toestemming \"Server beheren\" hebben om de bot toe te voegen.",
+    "faqHowToInviteTheBot": "Hoe kan ik je bot uitnodigen voor mijn Discord Server?",
+    "faqHowToInviteTheBotAnswer": "Je kan onze bot uitnodigen op je server door op de onderstaande knop te klikken. Je moet de toestemming \"Server Beheren\" hebben om de bot toe te voegen.",
     "faqInviteTheBot": "ClashKing Bot uitnodigen",
     "faqNeedHelp": "Ik heb hulp nodig of ik zou graag een suggestie willen doen. Hoe kan ik contact met u opnemen?",
-    "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven. Je kunt ons ook een e-mail sturen via devs@clashkingbot.com. Graag alleen in het Engels of Frans communiceren.",
+    "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven, of je kan ons een e-mail sturen naar devs@clashkingbot.com. Graag alleen in het Engels of Frans schrijven.",
     "faqSendEmail": "Stuur een e-mail",
     "faqJoinDiscord": "Word lid van de Discord server",
+    "faqCannotOpenMailClient": "Om wat voor reden dan ook kunnen we je mailclient niet openen. We hebben het e-mailadres voor je gekopieerd. Je kan een e-mail schrijven en het adres plakken in het ontvanger-veld.",
     "helpUsTranslate": "Help ons met vertalen",
     "suggestFeatures": "Een nieuwe functie voorstellen",
     "thankYou": "Bedankt!",
     "thankYouContent": "Hartelijk dank aan al onze geweldige vertalers die ons helpen deze app toegankelijk te maken voor meer mensen over de hele wereld!",
-    "helpTranslateContent": "Je kunt ons helpen de app op Crowdin te vertalen. Als je taal niet beschikbaar is op Crowdin, kan je deze aanvragen op onze Discord-server. Heel erg bedankt voor je hulp!",
+    "helpTranslateContent": "Je kunt ons helpen de app op Crowdin te vertalen. Als je taal niet beschikbaar is op Crowdin, kan je deze aanvragen in onze Discord Server. Heel erg bedankt voor je hulp!",
     "helpTranslateButton": "Help met vertalen op Crowdin",
+    "versionDevice": "Versie & Apparaat",
+    "@version": {
+        "description": "Version of the app and device information"
+    },
+    "loading": "Laden...",
+    "errorLoadingVersion": "Fout bij het laden van de versie",
+    "@errorLoadingVersion": {
+        "description": "Error message when the app version cannot be loaded"
+    },
     "currentTranslators": "Huidige vertalers",
     "betaFeature": "Beta-functie",
     "beta": "BETA",
-    "betaDescription": "Deze functie bevindt zich momenteel in bèta, dus het kan wat bugs bevatten of onvolledig zijn. We werken actief aan verbeteringen en verwelkomen je feedback. Deel alstublieft je ideeën en meld eventuele problemen op onze Discord-server, om ons te helpen de app te verbeteren.",
+    "betaDescription": "Deze functie bevindt zich momenteel in bèta, het kan wat bugs bevatten of onvolledig zijn. We werken actief aan verbeteringen en verwelkomen je feedback. Deel alstublieft je ideeën en meld eventuele problemen op onze Discord-server om ons te helpen de app te verbeteren.",
     "copiedToClipboard": "Gekopieerd naar klembord",
     "all": "Alle",
     "@all": {
@@ -122,7 +132,7 @@
     "deleteAccount": "Account verwijderen",
     "playerTagNotExists": "Het ingevoerde speler-ID bestaat niet.",
     "accountAlreadyLinked": "Het speler-ID is al aan iemand gekoppeld.",
-    "enterApiToken": "Voer de account API-token in om te bevestigen dat deze van jou is. Je vindt deze in Clash of Clans Instellingen > Meer instellingen > API-token",
+    "enterApiToken": "Voer je account API-token in om te bevestigen dat deze van jou is. Je vindt deze in Clash of Clans Instellingen > Meer instellingen > API Token.",
     "wrongApiToken": "De ingevoerde API-token is onjuist",
     "accountAlreadyLinkedToYou": "Het speler-ID is al aan jou gekoppeld.",
     "apiToken": "Account API Token",
@@ -398,7 +408,7 @@
                 "type": "int"
             }
         },
-        "description": "Number of accounts (ex : 4 accounts)"
+        "description": "Number of accounts (ex: 4 accounts)"
     },
     "numberActiveAccounts": "{number} actieve accounts",
     "@numberActiveAccounts": {
@@ -585,7 +595,7 @@
     "allTownHalls": "Alle stadhuizen",
     "seasonDate": "{date} seizoen",
     "@seasonDate": {
-        "description": "Example : August 2024 season",
+        "description": "Example: August 2024 season",
         "placeholders": {
             "date": {
                 "type": "String"
@@ -594,7 +604,7 @@
     },
     "lastXwars": "Laatste {number} oorlogen",
     "@lastXwars": {
-        "description": "Example : Shows the last 25 wars",
+        "description": "Example: Shows the last 25 wars",
         "placeholders": {
             "number": {
                 "type": "int"
@@ -633,7 +643,7 @@
     "cantOpenLink": "We kunnen deze link niet openen.",
     "notInWar": "Niet in oorlog",
     "warHistory": "Oorlogsgeschiedenis",
-    "warHistoryWinsDescription": "Je clan heeft {wins} oorlogen gewonnen ({percent}%) in de laatste 50 oorlogen.",
+    "warHistoryWinsDescription": "Je clan heeft {wins} oorlogen gewonnen ({percent}%) van de laatste 50 oorlogen.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
@@ -752,7 +762,7 @@
     "join": "Deelnemen",
     "leave": "Verlaten",
     "reset": "Reset",
-    "leaveNumberDescription": "{number} spelers hebben de clan verlaten tijdens het huidige seizoen ({date}).",
+    "leaveNumberDescription": "{number} speler(s) hebben de clan verlaten tijdens het huidige seizoen ({date}).",
     "@leaveNumberDescription": {
         "description": "Number of players who left the clan during the current season.",
         "placeholders": {
@@ -764,7 +774,7 @@
             }
         }
     },
-    "joinNumberDescription": "{number} spelers zijn lid geworden van de clan tijdens het huidige seizoen ({date}).",
+    "joinNumberDescription": "{number} speler(s) zijn lid geworden van de clan tijdens het huidige seizoen ({date}).",
     "@joinNumberDescription": {
         "description": "Number of players who joined the clan during the current season.",
         "placeholders": {
@@ -776,7 +786,7 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription": "Jouw clan heeft {number} nieuwe leden gekregen dit seizoen ({date}).",
+    "joinLeaveDifferenceUpDescription": "Jouw clan heeft {number} nieuwe leden gekregen tijdens dit seizoen ({date}).",
     "@joinLeaveDifferenceUpDescription": {
         "description": "Number of new members gained by the clan this season.",
         "placeholders": {

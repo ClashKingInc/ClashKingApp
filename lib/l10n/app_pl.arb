@@ -72,12 +72,22 @@
     "faqNeedHelpAnswer": "Możesz dołączyć do naszego serwera Discord, aby poprosić o pomoc lub przekazać informacje zwrotne, lub możesz napisać do nas e-maila na adres devs@clashkingbot.com. Prosimy pisać tylko po angielsku lub francusku.",
     "faqSendEmail": "Wyślij wiadomość e-mail",
     "faqJoinDiscord": "Dołącz do naszego Discorda",
+    "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
     "helpUsTranslate": "Pomóż w tłumaczeniu",
     "suggestFeatures": "Zaproponuj funkcje",
     "thankYou": "Dziękujemy!",
     "thankYouContent": "Wielkie dzięki dla wszystkich naszych niesamowitych tłumaczy, którzy pomagają nam uczynić tę aplikację dostępną dla większej liczby ludzi na całym świecie!",
     "helpTranslateContent": "Możesz nam pomóc przetłumaczyć aplikację na Crowdin. Jeśli Twojego języka nie ma na Crowdin, śmiało poproś o niego na naszym serwerze Discord. Bardzo dziękujemy za pomoc!",
     "helpTranslateButton": "Pomóż przetłumaczyć na Crowdin",
+    "versionDevice": "Version & Device",
+    "@version": {
+        "description": "Version of the app and device information"
+    },
+    "loading": "Loading...",
+    "errorLoadingVersion": "Error loading version",
+    "@errorLoadingVersion": {
+        "description": "Error message when the app version cannot be loaded"
+    },
     "currentTranslators": "Aktualni tłumacze",
     "betaFeature": "Funkcja Beta",
     "beta": "BETA",
@@ -122,7 +132,7 @@
     "deleteAccount": "Usuń konto",
     "playerTagNotExists": "Wprowadzony tag gracza nie istnieje.",
     "accountAlreadyLinked": "{tag} jest już powiązany z kimś innym.",
-    "enterApiToken": "Proszę wprowadzić token API konta, aby potwierdzić, że należy do Ciebie. Możesz znaleźć go w ustawieniach Clash of Clans > Więcej ustawień > Token API",
+    "enterApiToken": "Proszę wprowadzić token API konta, aby potwierdzić, że należy do Ciebie. Możesz znaleźć go w ustawieniach Clash of Clans > Więcej ustawień > Token API.",
     "wrongApiToken": "Wprowadzony token API jest nieprawidłowy",
     "accountAlreadyLinkedToYou": "Tag gracza jest już z tobą powiązany.",
     "apiToken": "Token API konta",
@@ -398,7 +408,7 @@
                 "type": "int"
             }
         },
-        "description": "Number of accounts (ex : 4 accounts)"
+        "description": "Number of accounts (ex: 4 accounts)"
     },
     "numberActiveAccounts": "{number} aktywnych kont",
     "@numberActiveAccounts": {
@@ -585,7 +595,7 @@
     "allTownHalls": "Wszystkie Ratusze",
     "seasonDate": "sezon {date}",
     "@seasonDate": {
-        "description": "Example : August 2024 season",
+        "description": "Example: August 2024 season",
         "placeholders": {
             "date": {
                 "type": "String"
@@ -594,7 +604,7 @@
     },
     "lastXwars": "Ostatnie {number} wojen",
     "@lastXwars": {
-        "description": "Example : Shows the last 25 wars",
+        "description": "Example: Shows the last 25 wars",
         "placeholders": {
             "number": {
                 "type": "int"
@@ -752,7 +762,7 @@
     "join": "Dołącz",
     "leave": "Opuść",
     "reset": "Zresetuj",
-    "leaveNumberDescription": "{number} graczy opuściło klan w trakcie obecnego sezonu ({date}).",
+    "leaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
     "@leaveNumberDescription": {
         "description": "Number of players who left the clan during the current season.",
         "placeholders": {
@@ -764,7 +774,7 @@
             }
         }
     },
-    "joinNumberDescription": "{number} graczy dołączyło do klanu w trakcie obecnego sezonu ({date}).",
+    "joinNumberDescription": "{number} player(s) joined the clan during the current season ({date}).",
     "@joinNumberDescription": {
         "description": "Number of players who joined the clan during the current season.",
         "placeholders": {
@@ -776,7 +786,7 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription": "Twój klan zyskał {number} nowych członków w tym sezonie ({date}).",
+    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new member(s) this season ({date}).",
     "@joinLeaveDifferenceUpDescription": {
         "description": "Number of new members gained by the clan this season.",
         "placeholders": {
@@ -788,7 +798,7 @@
             }
         }
     },
-    "joinLeaveDifferenceDownDescription": "Twój klan stracił {number} członków w tym sezonie ({date}).",
+    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} member(s) this season ({date}).",
     "@joinLeaveDifferenceDownDescription": {
         "description": "Number of members lost by the clan this season.",
         "placeholders": {
