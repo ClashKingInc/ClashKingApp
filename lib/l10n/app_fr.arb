@@ -73,7 +73,7 @@
     "faqNeedHelpAnswer": "Vous pouvez rejoindre notre serveur Discord et demander de l'aide, y faire un retour ou nous envoyer un e-mail à devs@clashkingbot.com. Tu peux nous écrire en français ou en anglais !",
     "faqSendEmail": "Envoyer un e-mail",
     "faqJoinDiscord": "Rejoindre le serveur Discord",
-    "faqCannotOpenMailClient": "Pour une raison quelconque, nous ne pouvons pas ouvrir ton client de messagerie. Nous avons copié l'adresse e-mail dans le presse-papiers. Tu peux rédiger un e-mail et de coller l'adresse dans le champ du destinataire.",
+    "faqCannotOpenMailClient": "Pour une raison quelconque, nous ne pouvons pas ouvrir ton client de messagerie. Nous avons copié l'adresse e-mail pour toi. Tu peux rédiger un e-mail et de coller l'adresse dans le champ du destinataire.",
     "helpUsTranslate": "Nous aider à traduire",
     "suggestFeatures": "Proposer des fonctionnalités",
     "thankYou": "Merci !",

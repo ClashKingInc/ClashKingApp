@@ -1,6 +1,7 @@
 import 'package:clashkingapp/components/dialogs/open_clash_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -308,11 +309,12 @@ class _FaqScreenState extends State<FaqScreen> {
                           );
 
                           // Check if the device can launch the mailto scheme
-                          if (await canLaunchUrl(params)) {
+                          try {
                             await launchUrl(params);
-                          } else {
+                          } catch (exception, stackTrace) {
                             // Provide feedback to the user if email client can't be opened
-                            print('Could not launch $params');
+                            Sentry.captureException(exception,
+                                stackTrace: stackTrace);
 
                             // Optionally, show an alert dialog or snackbar
                             if (context.mounted) {
