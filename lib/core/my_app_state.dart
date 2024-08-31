@@ -148,7 +148,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         'warInfo': warInfo,
       });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to update war widget, hint: $hint');
+      Sentry.captureMessage('Failed to update war widget, hint: ${hint.toString()}');
     }
   }
 
@@ -304,7 +304,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       });
       Sentry.captureException(exception, stackTrace: stackTrace);
       Sentry.captureMessage(
-          'Error during initializeData execution, hint: $hint');
+          'Error during initializeData execution, hint: ${hint.toString()}');
       return false;
     }
   }

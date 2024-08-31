@@ -213,7 +213,7 @@ class ProfileInfoService {
       });
       transaction.finish(status: SpanStatus.internalError());
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load player stats, hint: $hint');
+      Sentry.captureMessage('Failed to load player stats, hint: ${hint.toString()}');
       throw Exception('Failed to load player stats: $exception');
     }
   }
@@ -273,7 +273,7 @@ class ProfileInfoService {
         'tag': profileInfo.tag,
       });
       Sentry.captureException(e, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load player legend data, hint: $hint');
+      Sentry.captureMessage('Failed to load player legend data, hint: ${hint.toString()}');
       playerLegendDataSpan.finish(status: SpanStatus.internalError());
       rethrow;
     }
@@ -300,7 +300,7 @@ class ProfileInfoService {
         'tag': profileInfo.tag,
       });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load player war stats, hint: $hint');
+      Sentry.captureMessage('Failed to load player war stats, hint: ${hint.toString()}');
     }
   }
 

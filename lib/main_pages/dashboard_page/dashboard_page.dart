@@ -72,7 +72,7 @@ class DashboardPageState extends State<DashboardPage>
           });
           Sentry.captureException(exception, stackTrace: stackTrace);
           Sentry.captureMessage(
-              'Error while calculating toDo totals, hint: $hint');
+              'Error while calculating toDo totals, hint: ${hint.toString()}');
         }
       }
       if (!widget.accounts.toDoList.isInitialized) {

@@ -166,7 +166,7 @@ class EventHistoryClanService {
         'clan_tag': clanTag,
       });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load join leave data, hint: $hint');
+      Sentry.captureMessage('Failed to load join leave data, hint: ${hint.toString()}');
       return EventHistoryClan(items: []);
     }
   }

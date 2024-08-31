@@ -61,7 +61,7 @@ class ClanInfoPageState extends State<ClanInfoPage>
         'clan': widget.account!.clan?.tag,
       });
       Sentry.captureException(error, stackTrace: stackTrace);
-      Sentry.captureMessage('Error while refreshing clan info, hint: $hint');
+      Sentry.captureMessage('Error while refreshing clan info, hint: ${hint.toString()}');
     }
   }
 
