@@ -72,6 +72,7 @@
     "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.",
     "faqSendEmail": "Wyślij wiadomość e-mail",
     "faqJoinDiscord": "Dołącz do naszego Discorda",
+    "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
     "helpUsTranslate": "Pomóż w tłumaczeniu",
     "suggestFeatures": "Zaproponuj funkcje",
     "thankYou": "Dziękujemy!",
@@ -653,7 +654,7 @@
             }
         }
     },
-    "warHistoryLossesDescription": "Twój klan przegrał {losses} wojen ({percent}%) w ostatnich 50 wojnach.",
+    "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) out of the last 50 wars.",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
@@ -664,7 +665,7 @@
             }
         }
     },
-    "warHistoryDrawsDescription": "Twój klan miał {draws} remisów ({percent} proc.) w ostatnich 50 wojnach.",
+    "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) out of the last 50 wars.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
@@ -675,7 +676,7 @@
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Twój klan ma średnio {members} członków uczestniczących w ostatnich 50 wojnach.",
+    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -683,7 +684,7 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription": "Twój klan ma średnio {stars} gwiazdek na końcu ostatnich 50 wojen. Odpowiada to {percent} wszystkich gwiazdek.",
+    "warHistoryAverageWarStarsDescription": "Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -694,7 +695,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Your clan has an average of {percent} destruction rate at the end of the last 50 wars.",
+    "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
@@ -702,7 +703,7 @@
             }
         }
     },
-    "warHistoryAverageClanStarsPerMember": "Twój klan ma średnio {stars} gwiazdek na członka w ostatnich 50 wojnach.",
+    "warHistoryAverageClanStarsPerMember": "Your clan had an average of {stars} stars per member from the last 50 wars.",
     "warHistoryAverageMembers": "~{members} członków na wojnę",
     "@warHistoryAverageMembers": {
         "placeholders": {
@@ -761,7 +762,7 @@
     "join": "Dołącz",
     "leave": "Opuść",
     "reset": "Zresetuj",
-    "leaveNumberDescription": "{number} graczy opuściło klan w trakcie obecnego sezonu ({date}).",
+    "leaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
     "@leaveNumberDescription": {
         "description": "Number of players who left the clan during the current season.",
         "placeholders": {
@@ -773,7 +774,7 @@
             }
         }
     },
-    "joinNumberDescription": "{number} graczy dołączyło do klanu w trakcie obecnego sezonu ({date}).",
+    "joinNumberDescription": "{number} player(s) joined the clan during the current season ({date}).",
     "@joinNumberDescription": {
         "description": "Number of players who joined the clan during the current season.",
         "placeholders": {
@@ -785,7 +786,7 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription": "Twój klan zyskał {number} nowych członków w tym sezonie ({date}).",
+    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new member(s) this season ({date}).",
     "@joinLeaveDifferenceUpDescription": {
         "description": "Number of new members gained by the clan this season.",
         "placeholders": {
@@ -797,7 +798,7 @@
             }
         }
     },
-    "joinLeaveDifferenceDownDescription": "Twój klan stracił {number} członków w tym sezonie ({date}).",
+    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} member(s) this season ({date}).",
     "@joinLeaveDifferenceDownDescription": {
         "description": "Number of members lost by the clan this season.",
         "placeholders": {
