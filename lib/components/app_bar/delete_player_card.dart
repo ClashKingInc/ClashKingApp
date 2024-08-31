@@ -144,7 +144,8 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
               elevation: WidgetStateProperty.all(4),
             ),
             child: Text(AppLocalizations.of(context)!.deleteAccount,
-                style: Theme.of(context).textTheme.bodyMedium),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary)),
           ),
         ]));
   }

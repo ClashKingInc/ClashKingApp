@@ -250,7 +250,8 @@ class AddPlayerCardState extends State<AddPlayerCard> {
             elevation: MaterialStateProperty.all(4),
           ),
           child: Text(AppLocalizations.of(context)!.addAccount,
-              style: Theme.of(context).textTheme.bodyMedium),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSecondary)),
         ),
       ],
     );
