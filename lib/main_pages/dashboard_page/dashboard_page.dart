@@ -58,10 +58,21 @@ class DashboardPageState extends State<DashboardPage>
     setState(() {
       for (ProfileInfo profileInfo
           in widget.accounts.accounts.map((acc) => acc.profileInfo)) {
-        profileInfo.toDo =
-            widget.accounts.toDoList.findTodoByTag(profileInfo.tag);
-        if (profileInfo.toDo != null && !profileInfo.toDo!.isInitialized) {
-          profileInfo.toDo!.calculateTotals(profileInfo);
+        try {
+          profileInfo.toDo =
+              widget.accounts.toDoList.findTodoByTag(profileInfo.tag);
+          if (profileInfo.toDo != null && !profileInfo.toDo!.isInitialized) {
+            profileInfo.toDo!.calculateTotals(profileInfo);
+          }
+        } catch (exception, stackTrace) {
+          final hint = Hint.withMap({
+            'custom_message': 'Error while calculating toDo totals',
+            'profile_info_tag': profileInfo.tag,
+            'toDo': profileInfo.toDo?.toString(),
+          });
+          Sentry.captureException(exception, stackTrace: stackTrace);
+          Sentry.captureMessage(
+              'Error while calculating toDo totals, hint: $hint');
         }
       }
       if (!widget.accounts.toDoList.isInitialized) {
@@ -75,23 +86,26 @@ class DashboardPageState extends State<DashboardPage>
     widget.playerStats.initialized = false;
     widget.playerStats.legendsInitialized = false;
     widget.accounts.isTodoInitialized = false;
-    final profileInfo =
+    ProfileInfo? profileInfo =
         await ProfileInfoService().fetchProfileInfo(widget.playerStats.tag);
 
-    ToDoService.fetchBulkPlayerToDoData(widget.accounts.tags, widget.accounts);
-    while (profileInfo!.initialized != true ||
-        profileInfo.legendsInitialized != true ||
-        widget.accounts.isTodoInitialized != true) {
-      await Future.delayed(Duration(milliseconds: 100));
-    }
+    if (profileInfo != null) {
+      ToDoService.fetchBulkPlayerToDoData(
+          widget.accounts.tags, widget.accounts);
+      while (profileInfo.initialized != true ||
+          profileInfo.legendsInitialized != true ||
+          widget.accounts.isTodoInitialized != true) {
+        await Future.delayed(Duration(milliseconds: 100));
+      }
 
-    setState(() {
-      // Update the player stats with the newly fetched data
-      widget.playerStats.updateFrom(profileInfo);
-      _initializeProfileFuture = _checkInitialization();
-      _initializeLegendsFuture = _checkLegendsInitialization();
-      _initializeToDoFuture = _checkToDoInitialization();
-    });
+      setState(() {
+        // Update the player stats with the newly fetched data
+        widget.playerStats.updateFrom(profileInfo);
+        _initializeProfileFuture = _checkInitialization();
+        _initializeLegendsFuture = _checkLegendsInitialization();
+        _initializeToDoFuture = _checkToDoInitialization();
+      });
+    }
   }
 
   @override

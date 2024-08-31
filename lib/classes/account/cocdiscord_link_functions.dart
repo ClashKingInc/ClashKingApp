@@ -67,7 +67,7 @@ Future<bool> addLink(
       'authToken': authToken,
     });
     Sentry.captureException(exceptions, stackTrace: stackTrace);
-    Sentry.captureMessage('Failed to add link', hint: hint);
+    Sentry.captureMessage('Failed to add link, hint: $hint');
   }
   return false;
 }

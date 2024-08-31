@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
+import 'package:sentry_flutter/sentry_flutter.dart';
+
 class PlayerSearchCard extends StatefulWidget {
   final List<String> discordUser;
 
@@ -34,26 +36,35 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
   }
 
   void _onSearchChanged() {
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    try {
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
 
-    isEmpty = _controller.text.isEmpty;
+      isEmpty = _controller.text.isEmpty;
 
-    _debounce = Timer(const Duration(seconds: 1), () {
-      if (_controller.text != lastSearch) {
-        if (!isEmpty) {
-          setState(() {
-            isSearching = true;
+      _debounce = Timer(const Duration(seconds: 1), () {
+        if (_controller.text != lastSearch) {
+          if (!isEmpty) {
+            setState(() {
+              isSearching = true;
+            });
+          }
+          _searchResults = _searchPlayerByTag(_controller.text);
+          _searchResults!.whenComplete(() {
+            setState(() {
+              isSearching = false;
+            });
           });
+          lastSearch = _controller.text;
         }
-        _searchResults = _searchPlayerByTag(_controller.text);
-        _searchResults!.whenComplete(() {
-          setState(() {
-            isSearching = false;
-          });
-        });
-        lastSearch = _controller.text;
-      }
-    });
+      });
+    } catch (exception, stackTrace) {
+      final hint = Hint.withMap({
+        'search': _controller.text,
+        '_searchResults': _searchResults,
+      });
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureMessage('Error in search, hint: $hint');
+    }
   }
 
   Future<List<dynamic>> _searchPlayerByTag(String query) async {
@@ -61,9 +72,11 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
     if (RegExp(r'^#[PYLQGRJCUV0289]{3,9}$').hasMatch(query) ||
         RegExp(r'^[PYLQGRJCUV0289]{3,9}$').hasMatch(query)) {
       query = query.replaceFirst('#', '!');
-      response = await http.get(Uri.parse('https://api.clashking.xyz/v1/players/$query'));
+      response = await http
+          .get(Uri.parse('https://api.clashking.xyz/v1/players/$query'));
     } else {
-      response = await http.get(Uri.parse('https://api.clashking.xyz/player/search/$query'));
+      response = await http
+          .get(Uri.parse('https://api.clashking.xyz/player/search/$query'));
     }
 
     if (query.isEmpty || query.length < 3) {
@@ -107,28 +120,30 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       isSearching
-                        ? SizedBox(
-                          width: 20.0,
-                          height: 20.0,
-                          child: CircularProgressIndicator(),
-                        )
-                        : !isEmpty
-                          ? IconButton(
-                            icon: Icon(
-                              Icons.clear,
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                            onPressed: () {
-                              _controller.clear();
-                              setState(() {
-                                isSearching = false;
-                              });
-                            },
-                          )
-                          : Icon(
-                            Icons.search,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
+                          ? SizedBox(
+                              width: 20.0,
+                              height: 20.0,
+                              child: CircularProgressIndicator(),
+                            )
+                          : !isEmpty
+                              ? IconButton(
+                                  icon: Icon(
+                                    Icons.clear,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  onPressed: () {
+                                    _controller.clear();
+                                    setState(() {
+                                      isSearching = false;
+                                    });
+                                  },
+                                )
+                              : Icon(
+                                  Icons.search,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
                       SizedBox(width: 8.0),
                     ],
                   ),
@@ -143,14 +158,17 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                 return SizedBox.shrink();
               } else if (snapshot.hasError) {
                 return Center(child: Text("No results found."));
-              } else if (snapshot.hasData && snapshot.data != null && snapshot.data != [] && snapshot.data!.isNotEmpty) {
+              } else if (snapshot.hasData &&
+                  snapshot.data != null &&
+                  snapshot.data != [] &&
+                  snapshot.data!.isNotEmpty) {
                 return SingleChildScrollView(
-                  child: Column(
-                    children: snapshot.data!.map<Widget>((player) {
-                      return PlayerSearchResultTile(player: player, user: widget.discordUser);
-                    }).toList(),
-                  )
-                );
+                    child: Column(
+                  children: snapshot.data!.map<Widget>((player) {
+                    return PlayerSearchResultTile(
+                        player: player, user: widget.discordUser);
+                  }).toList(),
+                ));
               } else {
                 if (_controller.text.length >= 2) {
                   return Column(

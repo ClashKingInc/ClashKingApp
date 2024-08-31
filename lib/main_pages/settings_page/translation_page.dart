@@ -49,21 +49,14 @@ class TranslationScreen extends StatelessWidget {
                     ),
               ),
               SizedBox(height: 16),
-              Text(
-                AppLocalizations.of(context)!.helpTranslateContent,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              Text(AppLocalizations.of(context)!.helpTranslateContent,
+                  style: Theme.of(context).textTheme.bodyMedium),
               SizedBox(height: 16),
               Center(
                 child: ElevatedButton.icon(
                   onPressed: () async {
-                    const url =
-                        "https://crowdin.com/project/clashkingapp/invite?h=87a407268713f1cb79724a2e0c00a5d52098842";
-                    if (await canLaunchUrl(Uri.parse(url))) {
-                      await launchUrl(Uri.parse(url));
-                    } else {
-                      print('Could not launch $url');
-                    }
+                    await launchUrl(Uri.parse(
+                        "https://crowdin.com/project/clashkingapp/invite?h=87a407268713f1cb79724a2e0c00a5d52098842"));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
@@ -71,7 +64,10 @@ class TranslationScreen extends StatelessWidget {
                   icon: Icon(Icons.language),
                   label: Text(
                     AppLocalizations.of(context)!.helpTranslateButton,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: Colors.white),
                   ),
                 ),
               ),
@@ -79,12 +75,7 @@ class TranslationScreen extends StatelessWidget {
               Center(
                 child: ElevatedButton.icon(
                   onPressed: () async {
-                    const url = "https://discord.gg/clashking";
-                    if (await canLaunchUrl(Uri.parse(url))) {
-                      await launchUrl(Uri.parse(url));
-                    } else {
-                      print('Could not launch $url');
-                    }
+                    await launchUrl(Uri.parse("https://discord.gg/clashking"));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF5865F2),
@@ -92,7 +83,10 @@ class TranslationScreen extends StatelessWidget {
                   icon: Icon(Icons.discord),
                   label: Text(
                     AppLocalizations.of(context)!.faqJoinDiscord,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: Colors.white),
                   ),
                 ),
               ),

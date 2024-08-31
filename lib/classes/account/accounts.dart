@@ -32,7 +32,7 @@ class Accounts {
       });
 
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('No account found with the selected tag', hint: hint);
+      Sentry.captureMessage('No account found with the selected tag, hint: $hint');
 
       return null;
     }
@@ -48,7 +48,7 @@ class Accounts {
         'accounts_tag': accounts.map((acc) => acc.profileInfo.tag).toList(),
       });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('No account found with the tag', hint: hint);
+      Sentry.captureMessage('No account found with the tag, hint: $hint');
       return null;
     }
   }
@@ -169,7 +169,7 @@ class AccountsService {
       });
       transaction.finish(status: SpanStatus.internalError());
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load accounts', hint: hint);
+      Sentry.captureMessage('Failed to load accounts, hint: $hint');
       throw Exception('Failed to load accounts: $exception');
     }
   }
@@ -192,7 +192,7 @@ class AccountsService {
       });
       clanSpan.finish(status: SpanStatus.internalError());
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load clan info', hint: hint);
+      Sentry.captureMessage('Failed to load clan info, hint: $hint');
       rethrow;
     }
   }

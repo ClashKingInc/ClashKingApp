@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:clashkingapp/classes/account/user.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:clashkingapp/classes/profile/todo/to_do_service.dart';
@@ -31,13 +33,14 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     _loadLanguage(); // Load the language from the shared preferences
-
-    // Initialize the refresh of the war widget every 15 minutes
-    Workmanager().registerPeriodicTask(
-      '1',
-      'simplePeriodicTask',
-      frequency: Duration(minutes: 15),
-    );
+    if (Platform.isAndroid) {
+      // Initialize the refresh of the war widget every 15 minutes
+      Workmanager().registerPeriodicTask(
+        '1',
+        'simplePeriodicTask',
+        frequency: Duration(minutes: 15),
+      );
+    }
 
     selectedTagNotifier.addListener(() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -145,13 +148,15 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         'warInfo': warInfo,
       });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to update war widget', hint: hint);
+      Sentry.captureMessage('Failed to update war widget, hint: $hint');
     }
   }
 
   // Update the widgets
   void updateWidgets() async {
-    await updateWarWidget();
+    if (Platform.isAndroid) {
+      await updateWarWidget();
+    }
   }
 
   /* User management */
@@ -297,11 +302,9 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         'accounts': accounts,
         'selected_account': account,
       });
-      Sentry.captureException(
-        exception,
-        stackTrace: stackTrace
-      );
-      Sentry.captureMessage('Error during initializeData execution', hint: hint);
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureMessage(
+          'Error during initializeData execution, hint: $hint');
       return false;
     }
   }
@@ -374,8 +377,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     final username = await getPrefs('username');
     user = User(
       id: '0',
-      avatar:
-          'https://assets.clashk.ing/logos/crown-red/CK-crown-red.png',
+      avatar: 'https://assets.clashk.ing/logos/crown-red/CK-crown-red.png',
       globalName: username ?? 'ILoveClashKing',
     );
 

@@ -40,7 +40,7 @@ class StatsScreenState extends State<StatsScreen>
   List<String> activeEquipmentNames = [];
   Future<void>? _initializeProfileFuture;
   Future<void>? _initializeLegendsFuture;
- 
+
   @override
   void initState() {
     super.initState();
@@ -167,34 +167,43 @@ class StatsScreenState extends State<StatsScreen>
                                 widget.playerStats.heroes,
                                 'hero',
                                 AppLocalizations.of(context)?.heroes ??
-                                    'Heroes', logoUrl),
+                                    'Heroes',
+                                logoUrl),
                             buildItemSection(
                                 widget.playerStats.equipments,
                                 'gear',
                                 AppLocalizations.of(context)?.equipment ??
-                                    'Gears', logoUrl),
+                                    'Gears',
+                                logoUrl),
                             buildItemSection(
                                 widget.playerStats.troops,
                                 'troop',
                                 AppLocalizations.of(context)?.troops ??
-                                    'Troops', logoUrl),
+                                    'Troops',
+                                logoUrl),
                             buildItemSection(
                                 widget.playerStats.troops,
                                 'super-troop',
                                 AppLocalizations.of(context)?.superTroops ??
-                                    "Super Troops", logoUrl),
-                            buildItemSection(widget.playerStats.troops, 'pet',
-                                AppLocalizations.of(context)?.pets ?? 'Pets', logoUrl),
+                                    "Super Troops",
+                                logoUrl),
+                            buildItemSection(
+                                widget.playerStats.troops,
+                                'pet',
+                                AppLocalizations.of(context)?.pets ?? 'Pets',
+                                logoUrl),
                             buildItemSection(
                                 widget.playerStats.troops,
                                 'siege-machine',
                                 AppLocalizations.of(context)?.siegeMachines ??
-                                    'Siege Machine', logoUrl),
+                                    'Siege Machine',
+                                logoUrl),
                             buildItemSection(
                                 widget.playerStats.spells,
                                 'spell',
                                 AppLocalizations.of(context)?.spells ??
-                                    'Spells', logoUrl),
+                                    'Spells',
+                                logoUrl),
                           ],
                         ),
                         Column(
@@ -205,12 +214,14 @@ class StatsScreenState extends State<StatsScreen>
                                 widget.playerStats.heroes,
                                 'bb-hero',
                                 AppLocalizations.of(context)?.heroes ??
-                                    'Heroes', logoUrl),
+                                    'Heroes',
+                                logoUrl),
                             buildItemSection(
                                 widget.playerStats.troops,
                                 'bb-troop',
                                 AppLocalizations.of(context)?.troops ??
-                                    'Troops', logoUrl),
+                                    'Troops',
+                                logoUrl),
                           ],
                         ),
                       ],
@@ -250,12 +261,12 @@ class StatsScreenState extends State<StatsScreen>
   }
 
   String getEquipmentImageUrl(String equipmentName, String logoUrl) {
-    return TroopDataManager().getTroopInfo(equipmentName)['url'] ??
-      logoUrl;
+    return GearDataManager().getGearInfo(equipmentName)['url'] ?? logoUrl;
   }
 
   // Build the section for troops, super troops, pets, and siege machines
-  Widget buildItemSection(List<dynamic> items, String itemType, String title, String logoUrl) {
+  Widget buildItemSection(
+      List<dynamic> items, String itemType, String title, String logoUrl) {
     List<String> itemNames = items.map((item) => item.name as String).toList();
 
     double completionPercentage =
@@ -267,6 +278,10 @@ class StatsScreenState extends State<StatsScreen>
     switch (itemType) {
       case 'gear':
         dataManager = GearDataManager().gearUrlsAndTypes;
+        items = dataManager.keys
+            .where((name) => itemNames.contains(name))
+            .map((name) => items.firstWhere((item) => item.name == name))
+            .toList();
         break;
       case 'hero':
         dataManager = HeroesDataManager().heroUrlsAndTypes;
@@ -276,10 +291,19 @@ class StatsScreenState extends State<StatsScreen>
         break;
       case 'spell':
         dataManager = SpellsDataManager().spellUrlsAndTypes;
+        items = dataManager.keys
+            .where((name) => itemNames.contains(name))
+            .map((name) => items.firstWhere((item) => item.name == name))
+            .toList();
         break;
       default:
         dataManager = TroopDataManager().troopUrlsAndTypes;
+        items = dataManager.keys
+            .where((name) => itemNames.contains(name))
+            .map((name) => items.firstWhere((item) => item.name == name))
+            .toList();
     }
+
     dataManager.forEach((name, data) {
       if (!itemNames.contains(name) && data['type'] == itemType) {
         missingItems.add(
@@ -409,8 +433,8 @@ class StatsScreenState extends State<StatsScreen>
                                                   Text(
                                                     itemType == 'super-troop'
                                                         ? (item.superTroopIsActive
-                                                            ? 'Actif'
-                                                            : 'Inactif')
+                                                            ? 'Active'
+                                                            : 'Inactive')
                                                         : 'Level : ${item.level}/${item.maxLevel}',
                                                     style: Theme.of(context)
                                                         .textTheme
@@ -438,9 +462,10 @@ class StatsScreenState extends State<StatsScreen>
                                                                           .min,
                                                                   children: [
                                                                     CachedNetworkImage(
-                                                                      imageUrl:
-                                                                          getEquipmentImageUrl(
-                                                                              equipment.name, logoUrl),
+                                                                      imageUrl: getEquipmentImageUrl(
+                                                                          equipment
+                                                                              .name,
+                                                                          logoUrl),
                                                                       width: 40,
                                                                       height:
                                                                           40,
@@ -476,9 +501,6 @@ class StatsScreenState extends State<StatsScreen>
                                                           ],
                                                         )
                                                       : SizedBox.shrink(),
-                                                  SizedBox(height: 8),
-                                                  Text(
-                                                      "More data coming soon!"),
                                                 ],
                                               ),
                                             ),
@@ -503,7 +525,7 @@ class StatsScreenState extends State<StatsScreen>
                                       bottom: 1,
                                       child: Container(
                                         height: 16,
-                                        width: 16,
+                                        width: 18,
                                         padding: EdgeInsets.all(1),
                                         decoration: BoxDecoration(
                                           color: item.level == item.maxLevel
@@ -538,7 +560,10 @@ class StatsScreenState extends State<StatsScreen>
                                                 item.level.toString(),
                                                 style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 10,
+                                                  fontSize: Theme.of(context)
+                                                      .textTheme
+                                                      .labelMedium!
+                                                      .fontSize,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),

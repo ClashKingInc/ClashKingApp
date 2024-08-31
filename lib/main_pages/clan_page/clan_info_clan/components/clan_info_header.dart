@@ -46,6 +46,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
   }
 
   void setupData() {
+    try{
     currentWarFuture = checkCurrentWar(
         widget.clanInfo.tag, leagueInfoContainer, warInfoContainer);
     warLogData = WarLogService.fetchWarLogData(widget.clanInfo.tag);
@@ -56,6 +57,12 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
         });
       }
     });
+    } catch (error, stackTrace) {
+      final hint = Hint.withMap({
+        'clanTag': widget.clanInfo.tag,
+      });
+      Sentry.captureException(error, stackTrace: stackTrace, hint: hint);
+    }
   }
 
   @override

@@ -160,7 +160,7 @@ class ToDoList {
         'json': json,
       });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to parse to-do list', hint: hint);
+      Sentry.captureMessage('Failed to parse to-do list, hint: $hint');
 
       return ToDoList(items: []);
     }
@@ -179,7 +179,7 @@ class ToDoList {
         'tag': tag,
       });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('No to-do found for this tag', hint: hint);
+      Sentry.captureMessage('No to-do found for this tag, hint: $hint');
       return null;
     }
   }

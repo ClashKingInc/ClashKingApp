@@ -1,10 +1,13 @@
-What's New:
-- Added Greek language support.
-- Improved Portuguese and Russian translations.
-- Enhanced error-catching for better issue identification.
+- **What's New:**
+  - Improved spell and troop display by elixir type.
+  - Added new translations for German and UK English.
+  - Enhanced error handling and various quality of life improvements.
 
-Bug Fixes:
-- Resolved various issues related to button clicks, display sizes, and text inputs.
-- Fixed errors in account management, legends league, and translation features.
+- **Bug Fixes:**
+  - Fixed hero equipment level display on profiles.
+  - Resolved button issues on the email and translation pages.
+  - Prevented background tasks on iOS.
+  - Corrected troop level display on certain devices.
+  - Fixed encryption for null values.
 
 See the full notes on our Discord server.

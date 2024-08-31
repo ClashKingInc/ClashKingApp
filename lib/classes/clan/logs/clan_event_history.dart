@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/classes/functions.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class EventHistoryItem {
   final String tag;
@@ -82,6 +83,7 @@ class EventHistoryClan {
 
 class EventHistoryClanService {
   static Future<EventHistoryClan> fetcheventHistoryData(String clanTag) async {
+    try{
     clanTag = clanTag.replaceAll('#', '!');
     final response = await http.get(Uri.parse('https://api.clashking.xyz/clan/$clanTag/historical'));
     
@@ -157,7 +159,15 @@ class EventHistoryClanService {
       }
       return eventHistoryClan;
     } else {
-      throw Exception('Failed to load join leave data');
+      return EventHistoryClan(items: []);
+    }
+    } catch (exception, stackTrace) {
+      final hint = Hint.withMap({
+        'clan_tag': clanTag,
+      });
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureMessage('Failed to load join leave data, hint: $hint');
+      return EventHistoryClan(items: []);
     }
   }
 }

@@ -265,8 +265,10 @@ class StartupWidgetState extends State<StartupWidget> {
                                           .colorScheme
                                           .primary),
                           onPressed: () async {
-                            await _addAccount();
-                            setState(() {});
+                            if (playerTagController.text.isNotEmpty) {
+                              await _addAccount();
+                              setState(() {});
+                            }
                           },
                         ),
                       ),
@@ -345,9 +347,11 @@ class StartupWidgetState extends State<StartupWidget> {
                                             .colorScheme
                                             .primary),
                                 onPressed: () async {
-                                  await _submitApiToken();
-
-                                  setState(() {});
+                                  if (apiTokenController.text.isNotEmpty &&
+                                      playerTagController.text.isNotEmpty) {
+                                    await _submitApiToken();
+                                    setState(() {});
+                                  }
                                 },
                               ),
                             ),

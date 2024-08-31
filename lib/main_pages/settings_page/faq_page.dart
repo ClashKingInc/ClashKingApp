@@ -1,5 +1,6 @@
 import 'package:clashkingapp/components/dialogs/open_clash_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -302,14 +303,48 @@ class _FaqScreenState extends State<FaqScreen> {
                           final Uri params = Uri(
                             scheme: 'mailto',
                             path: 'devs@clashkingbot.com',
-                            query: 'subject=App%20Inquiry',
+                            query:
+                                'subject=App%20Inquiry', // Add additional query parameters if needed
                           );
 
+                          // Check if the device can launch the mailto scheme
                           if (await canLaunchUrl(params)) {
                             await launchUrl(params);
                           } else {
+                            // Provide feedback to the user if email client can't be opened
                             print('Could not launch $params');
-                            throw 'Could not launch $params';
+
+                            // Optionally, show an alert dialog or snackbar
+                            if (context.mounted) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    content: Text(AppLocalizations.of(context)!
+                                        .faqCannotOpenMailClient),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text(
+                                            AppLocalizations.of(context)!.ok),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+
+                              // Copy the email to the clipboard or show a Snackbar message
+                              Clipboard.setData(
+                                  ClipboardData(text: 'devs@clashkingbot.com'));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text('Email address copied to clipboard'),
+                                ),
+                              );
+                            }
                           }
                         },
                       ),

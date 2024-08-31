@@ -141,7 +141,7 @@ Future<String?> getPrefs(String name) async {
     final hint = Hint.withMap(
         {'message': 'Error retrieving prefs', 'name': name, 'token': ''});
     Sentry.captureException(exception, stackTrace: stackTrace);
-    Sentry.captureMessage('Error retrieving prefs', hint: hint);
+    Sentry.captureMessage('Error retrieving prefs, hint: $hint');
     return null;
   }
 }
@@ -153,7 +153,7 @@ Future<void> deletePrefs(String name) async {
     final hint = Hint.withMap(
         {'message': 'Error deleting prefs', 'name': name, 'token': ''});
     Sentry.captureException(exception, stackTrace: stackTrace);
-    Sentry.captureMessage('Error deleting prefs', hint: hint);
+    Sentry.captureMessage('Error deleting prefs, hint: $hint');
   }
 }
 

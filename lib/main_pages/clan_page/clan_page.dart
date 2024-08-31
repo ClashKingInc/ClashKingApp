@@ -57,11 +57,11 @@ class ClanInfoPageState extends State<ClanInfoPage>
       }
     } catch (error, stackTrace) {
       var hint = Hint.withMap({
-        'user': widget.user.tags,
+        'user': widget.account!.tag,
         'clan': widget.account!.clan?.tag,
       });
       Sentry.captureException(error, stackTrace: stackTrace);
-      Sentry.captureMessage('Error while refreshing clan info', hint: hint);
+      Sentry.captureMessage('Error while refreshing clan info, hint: $hint');
     }
   }
 

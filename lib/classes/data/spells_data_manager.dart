@@ -19,7 +19,7 @@ class SpellsDataManager {
         final data = jsonDecode(response.body);
         if (data['spells'] != null && data['spells'] is Map) {
           var spell = data['spells'] as Map<String, dynamic>;
-          spellUrlsAndTypes = { for (var name in spell.keys) name: {'url': spell[name]['url'], 'type': spell[name]['type']} };
+          spellUrlsAndTypes = { for (var name in spell.keys) name: {'url': spell[name]['url'], 'type': spell[name]['type'], 'elixir': spell[name]['elixir']} };
           _loaded = true;
         } else {
           throw Exception('sell data is missing or not properly formatted');

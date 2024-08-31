@@ -31,7 +31,7 @@ class Attack {
         'json': json,
       });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to parse Legend Attack', hint: hint);
+      Sentry.captureMessage('Failed to parse Legend Attack, hint: $hint');
       return Attack(change: 0, time: 0, trophies: 0, heroGear: []);
     }
   }
