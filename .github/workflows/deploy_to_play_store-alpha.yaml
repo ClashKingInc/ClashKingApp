@@ -1,9 +1,9 @@
-name: Deploy to Opend Test
+name: Deploy to Closed Test
 
 on:
   push:
     branches:
-      - play-store
+      - play-store-alpha
 
 jobs:
   store_deploy_android:
@@ -82,13 +82,13 @@ jobs:
           name: aab-stores
           path: build/app/outputs/bundle/release/app-release.aab
 
-      - name: Deploy to Opened Test
+      - name: Deploy to Closed Test
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
           packageName: ${{ secrets.PACKAGE_NAME }}
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: beta
+          track: alpha
           status: completed
-          inAppUpdatePriority: 4
+          inAppUpdatePriority: 3
           whatsNewDirectory: update-news
