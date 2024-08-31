@@ -1,10 +1,10 @@
 {
-    "creatorCode": "Creator Code: ClashKing",
-    "signInWithDiscord": "Sign In with Discord",
-    "guestMode": "Guest Mode",
-    "needHelpJoinDiscord": "Need help? Join us on Discord.",
-    "createGuestProfile": "Create your guest profile",
-    "doesNotExist": "{tag} does not exist.",
+    "creatorCode": "Codice Creatore: ClashKing",
+    "signInWithDiscord": "Accedi tramite Discord",
+    "guestMode": "Modalità Ospite",
+    "needHelpJoinDiscord": "Hai bisogno di aiuto? Unisciti a noi su Discord.",
+    "createGuestProfile": "Crea il tuo profilo ospite",
+    "doesNotExist": "{tag} non esiste.",
     "@doesNotExist": {
         "placeholders": {
             "tag": {
