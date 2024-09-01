@@ -132,27 +132,27 @@
     "deleteAccount": "Διαγράψτε λογαριασμό",
     "playerTagNotExists": "Ο αριθμός λογαριασμού που καταγράψατε δεν υπάρχει.",
     "accountAlreadyLinked": "Ο αριθμός λογαριασμού είναι ήδη συνδεδεμένος σε κάποιον.",
-    "enterApiToken": "Παρακαλώ εισάγετε το κλειδί API του λογαριασμού σας για να επιβεβαιώσετε ότι είναι δικός σας. Μπορείτε να το βρείτε στο Clash Of Clans > Settings > More Settings > API Token.",
+    "enterApiToken": "Παρακαλώ εισάγετε το κλειδί API του λογαριασμού σας για να επιβεβαιώσετε ότι είναι δικός σας. Μπορείτε να το βρείτε στο Clash of Clans > Settings > More Settings > API Token.",
     "wrongApiToken": "Το κλειδί API που εισάγατε είναι λάθος",
     "accountAlreadyLinkedToYou": "Ο αριθμός λογαριασμού είναι ήδη συνδεδεμένος σε εσάς.",
     "apiToken": "Κλειδί API λογαριασμού",
     "failedToAddTryAgain": "Σφάλμα στην προσθήκη της σύνδεσης. Παρακαλώ προσπαθήστε ξανά αργότερα.",
     "failedToDeleteTryAgain": "Σφάλμα στη διαγραφή της σύνδεσης. Παρακαλώ προσπαθήστε ξανά αργότερα.",
     "enterPlayerTagWarning": "Εισάγετε έναν αριθμό λογαριασμού και πιέσετε το κουμπί \"+\" για να συνεχίσετε.",
-    "search": "Search",
+    "search": "Αναζήτηση",
     "@search": {
         "description": "Search for a player or a clan"
     },
-    "warning": "Warning",
-    "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-    "confirmLogout": "Are you sure you want to log out?",
+    "warning": "Προειδοποίηση",
+    "exitAppToOpenClash": "Πρόκειται να βγείτε από την εφαρμογή για να ανοίξετε το Clash of Clans.",
+    "confirmLogout": "Είστε σίγουροι ότι θέλετε να κάνετε έξοδο από τον λογαριασμό σας;",
     "@confirmLogout": {
         "description": "Prompt asking the user to confirm logout"
     },
-    "tagOrNamePlayer": "Player's tag or name",
-    "searchPlayer": "Search player",
-    "nameOrTagPlayer": "Player's name or tag",
-    "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+    "tagOrNamePlayer": "Αριθμός λογαριασμού ή όνομα",
+    "searchPlayer": "Αναζήτηση παίχτη",
+    "nameOrTagPlayer": "Όνομα παίχτη ή αριθμός λογαριασμού",
+    "playerClanDescription": "Η ομάδα σας είναι η \"{clan}\" ({tag}).",
     "@playerClanDescription": {
         "placeholders": {
             "clan": {
