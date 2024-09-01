@@ -128,15 +128,16 @@ class Clan {
         labels: json['labels'] ?? [],
         requiredBuilderBaseTrophies: json['requiredBuilderBaseTrophies'] ?? 0,
         requiredTownhallLevel: json['requiredTownhallLevel'] ?? 0,
-        clanCapital: json['clanCapital'] != null &&
-                json['clanCapital'].isNotEmpty
-            ? ClanCapital.fromJson(json['clanCapital'])
-            : null,
+        clanCapital:
+            json['clanCapital'] != null && json['clanCapital'].isNotEmpty
+                ? ClanCapital.fromJson(json['clanCapital'])
+                : null,
       );
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({"json": json});
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to parse Clan from json, hint: ${hint.toString()}');
+      Sentry.captureMessage(
+          'Failed to parse Clan from json, hint: ${hint.toString()}');
       throw Exception('Failed to load clan stats : $exception');
     }
   }
@@ -207,8 +208,10 @@ class ClanService {
           // Start fetching warState, warLog, and joinLeaveLog in parallel
           final warStateFuture = fetchWarStateInfo(clanTag);
           final warLogFuture = WarLogService.fetchWarLogData(tag);
-          final joinLeaveLogFuture = JoinLeaveClanService.fetchJoinLeaveData(tag, timestampLastMonday.toString());
-          final capitaleFuture = CapitalHistoryService.fetchCapitalData(clanTag, 10);
+          final joinLeaveLogFuture = JoinLeaveClanService.fetchJoinLeaveData(
+              tag, timestampLastMonday.toString());
+          final capitaleFuture =
+              CapitalHistoryService.fetchCapitalData(clanTag, 10);
 
           // Wait for all futures to complete
           final responses = await Future.wait([
@@ -229,7 +232,8 @@ class ClanService {
           if (clanInfoResponse.statusCode == 200) {
             String responseBody = utf8.decode(clanInfoResponse.bodyBytes);
             Clan clanInfo = Clan.fromJson(jsonDecode(responseBody));
-            clanInfo.membersWarStats = await MembersWarStatsService().fetchWarLogsAndAnalyzeStats(tag);
+            clanInfo.membersWarStats =
+                await MembersWarStatsService().fetchWarLogsAndAnalyzeStats(tag);
 
             if (clanInfo.warLeague != null) {
               clanInfo.warLeague!.imageUrl =
@@ -258,7 +262,8 @@ class ClanService {
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({"clanTag": clanTag});
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load clan stats, hint: ${hint.toString()}');
+      Sentry.captureMessage(
+          'Failed to load clan stats, hint: ${hint.toString()}');
       throw Exception('Failed to load clan stats: $exception');
     }
   }
@@ -278,13 +283,16 @@ class ClanService {
           if (response.statusCode == 200) {
             String responseBody = utf8.decode(response.bodyBytes);
             Clan updatedClan = Clan.fromJson(jsonDecode(responseBody));
-            updatedClan.membersWarStats = await MembersWarStatsService().fetchWarLogsAndAnalyzeStats(tag);
+            updatedClan.membersWarStats =
+                await MembersWarStatsService().fetchWarLogsAndAnalyzeStats(tag);
             if (updatedClan.warLeague != null) {
-              updatedClan.warLeague!.imageUrl = LeagueDataManager().getLeagueUrl(updatedClan.warLeague!.name);
+              updatedClan.warLeague!.imageUrl =
+                  LeagueDataManager().getLeagueUrl(updatedClan.warLeague!.name);
             }
             return updatedClan;
           } else {
-            throw Exception('Failed to load clan stats with status code: ${response.statusCode}');
+            throw Exception(
+                'Failed to load clan stats with status code: ${response.statusCode}');
           }
         },
         retryIf: (e) => e is http.ClientException || e is SocketException,
@@ -292,7 +300,8 @@ class ClanService {
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({"clanInfo": clanInfo});
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load clan stats, hint: ${hint.toString()}');
+      Sentry.captureMessage(
+          'Failed to load clan stats, hint: ${hint.toString()}');
       throw Exception('Failed to load clan stats: $exception');
     }
   }
@@ -342,14 +351,14 @@ class ClanService {
     } catch (exception, stackTrace) {
       final hint = Hint.withMap({"clanInfo": clanInfo});
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load clan stats, hint: ${hint.toString()}');
+      Sentry.captureMessage(
+          'Failed to load clan stats, hint: ${hint.toString()}');
       throw Exception('Failed to load clan stats: $exception');
     }
   }
 
   String fetchLeagueImageUrl(String name) {
-    return leagueUrls[name] ??
-        'https://assets.clashk.ing/clashkinglogo.png';
+    return leagueUrls[name] ?? 'https://assets.clashk.ing/clashkinglogo.png';
   }
 
   Future<WarStateInfo> fetchWarStateInfo(String clanTag) async {
@@ -365,6 +374,9 @@ class ClanService {
     final leagueInfo = responses[1] as CurrentLeagueInfo?;
 
     if (warStateInfo.state == "notInWar" && leagueInfo != null) {
+      print(clanTag);
+      print('cwl');
+      print(leagueInfo.clans.length);
       return WarStateInfo(state: "cwl", currentLeagueInfo: leagueInfo);
     }
 
@@ -408,7 +420,8 @@ class ClanService {
     } catch (e, stackTrace) {
       final hint = Hint.withMap({"clanTag": clanTag});
       Sentry.captureException(e, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load current war info, hint: ${hint.toString()}');
+      Sentry.captureMessage(
+          'Failed to load current war info, hint: ${hint.toString()}');
       return WarStateInfo(state: "notInWar");
     }
   }
@@ -431,7 +444,8 @@ class ClanService {
     } catch (e, stackTrace) {
       final hint = Hint.withMap({"clanTag": clanTag});
       Sentry.captureException(e, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load current war info, hint: ${hint.toString()}');
+      Sentry.captureMessage(
+          'Failed to load current war info, hint: ${hint.toString()}');
       return WarStateInfo(state: "notInWar");
     }
   }
@@ -451,7 +465,11 @@ class ClanService {
             var decodedResponseCwl =
                 jsonDecode(utf8.decode(responseCwl.bodyBytes));
             if (decodedResponseCwl.containsKey("state")) {
-              return CurrentLeagueInfo.fromJson(decodedResponseCwl, clanTag);
+              if (decodedResponseCwl["state"] == "notInWar") {
+                return null;
+              } else {
+                return CurrentLeagueInfo.fromJson(decodedResponseCwl, clanTag);
+              }
             }
           } else if (responseCwl.statusCode == 403 ||
               responseCwl.statusCode == 404) {
@@ -467,7 +485,8 @@ class ClanService {
     } catch (e, stackTrace) {
       final hint = Hint.withMap({"clanTag": clanTag});
       Sentry.captureException(e, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load current league info, hint: ${hint.toString()}');
+      Sentry.captureMessage(
+          'Failed to load current league info, hint: ${hint.toString()}');
       return null;
     }
   }
