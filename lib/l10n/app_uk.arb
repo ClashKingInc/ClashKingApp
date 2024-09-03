@@ -53,61 +53,61 @@
     "faqFanContentPolicy": "Цей матеріал є неофіційним і не є схваленим Supercell. Для отримання більш докладної інформації перегляньте політику відносно вмісту фан-сайтів Supercell: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Чому дані іноді невірні або відсутні?",
     "faqClanNotTracked": "Клан не відстежується",
-    "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
+    "faqClanNotTrackedAnswer": "ClashKing може отримати цю інформацію лише у випадку, якщо клан відстежується. Якщо ваш клан не відстежується, будь ласка, запросіть ClashKing Bot на свій сервер Discord і використовуйте команду /addclan. Ми працюємо над тим, щоб незабаром цю функцію було доступно у додатку.",
     "faqTrackingDown": "Відстеження",
-    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
-    "faqApiLimitation": "Clash of Clans API limitation",
-    "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
+    "faqTrackingDownAnswer": "Відстеження може припинити працювати в певний період часу. Ось чому іноді у вас є дірки у ваших даних. Ми працюємо над удосконаленням цього.",
+    "faqApiLimitation": "Обмеження Clash of Clans API",
+    "faqApiLimitationAnswer": "Деякі дані надаються Clash of Clans, а їх API має деякі обмеження. Це стосується відстеження легенд, де іноді накопичується приріст і втрата кубків, ніби це був один напад. Це також пояснює, чому ми не маємо жодної інформації про ваші рівні будівель.",
     "faqSupportWork": "Як я можу підтримати вашу роботу?",
     "faqSupportWorkAnswer": "Існує декілька способів підтримати нас:",
-    "faqUseCodeClashKing": "Use code \"ClashKing\"",
-    "faqSupportUsOnPatreon": "Support us on Patreon",
-    "faqShareTheApp": "Share the app with your friends",
-    "faqRateTheApp": "Rate the app in the store",
-    "faqHelpUsTranslate": "Help us translate the app",
-    "faqHowToInviteTheBot": "How can I invite your bot to my Discord Server?",
-    "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
-    "faqInviteTheBot": "Invite ClashKing Bot",
-    "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
-    "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.",
-    "faqSendEmail": "Send an email",
-    "faqJoinDiscord": "Join our Discord Server",
-    "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
-    "helpUsTranslate": "Help us translate",
-    "suggestFeatures": "Suggest features",
-    "thankYou": "Thank you!",
-    "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
-    "helpTranslateButton": "Help Translate on Crowdin",
-    "versionDevice": "Version & Device",
+    "faqUseCodeClashKing": "Використовуйте код \"ClashKing\"",
+    "faqSupportUsOnPatreon": "Підтримайте нас на Patreon",
+    "faqShareTheApp": "Поділитися додатком зі своїми друзями",
+    "faqRateTheApp": "Оцініть додаток в магазині",
+    "faqHelpUsTranslate": "Допоможіть нам перекласти додаток",
+    "faqHowToInviteTheBot": "Як я можу запросити вашого бота на мій сервер Discord?",
+    "faqHowToInviteTheBotAnswer": "Ви можете запросити нашого бота на свій сервер, натиснувши на кнопку нижче. Вам знадобиться дозвіл \"Керування сервером\", щоб додати бота.",
+    "faqInviteTheBot": "Запросити бота ClashKing",
+    "faqNeedHelp": "Мені потрібна допомога або я хочу зробити пропозицію. Як я можу з вами зв'язатися?",
+    "faqNeedHelpAnswer": "Ви можете приєднатися до нашого Discord-серверу, щоб попросити допомоги або надати відгук, або ви можете написати нам за адресою devs@clashkingbot.com. Будь ласка, пишіть тільки англійською або французькою.",
+    "faqSendEmail": "Відправити електронний лист",
+    "faqJoinDiscord": "Приєднуйтеся до нашого сервера Discord",
+    "faqCannotOpenMailClient": "З деяких причин ми не можемо відкрити клієнт вашої пошти. Ми скопіювали адресу електронної пошти для вас. Ви можете написати лист і вставити адресу у поле одержувача.",
+    "helpUsTranslate": "Допомогти з перекладом",
+    "suggestFeatures": "Запропонувати можливості",
+    "thankYou": "Дякуємо!",
+    "thankYouContent": "Величезна подяка всім нашим неймовірним перекладачам, які допомагають нам зробити цей додаток доступним для більшої кількості людей по всьому світу!",
+    "helpTranslateContent": "Ви можете допомогти нам перекласти додаток на Crowdin. Якщо вашої мови немає на Crowdin, не соромтеся запитати її на нашому сервері Discord. Дуже вдячні за вашу допомогу!",
+    "helpTranslateButton": "Допоможіть перекласти на Crowdin",
+    "versionDevice": "Версія та пристрій",
     "@version": {
         "description": "Version of the app and device information"
     },
-    "loading": "Loading...",
-    "errorLoadingVersion": "Error loading version",
+    "loading": "Завантаження...",
+    "errorLoadingVersion": "Помилка при завантаженні версії",
     "@errorLoadingVersion": {
         "description": "Error message when the app version cannot be loaded"
     },
-    "currentTranslators": "Current Translators",
-    "betaFeature": "Beta Feature",
-    "beta": "BETA",
-    "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
-    "copiedToClipboard": "Copied to clipboard",
-    "all": "All",
+    "currentTranslators": "Поточні перекладачі",
+    "betaFeature": "Бета-функції",
+    "beta": "БЕТА",
+    "betaDescription": "Ця функція наразі знаходиться в бета-версії, може містити деякі помилки або бути неповною. Ми активно працюємо над удосконаленнями і раді вашому зворотному зв'язку. Будь ласка, поділіться своїми ідеями та повідомте про будь-які проблеми на нашому сервері Discord, щоб допомогти нам зробити це краще.",
+    "copiedToClipboard": "Скопійовано в буфер обміну",
+    "all": "Всі",
     "@all": {
         "description": "all items"
     },
-    "hourIndicator": "h",
-    "minIndicator": "m",
-    "noDataAvailable": "No data available.",
-    "close": "Close",
-    "closed": "Closed",
+    "hourIndicator": "год.",
+    "minIndicator": "хв.",
+    "noDataAvailable": "Дані відсутні.",
+    "close": "Закрити",
+    "closed": "Закрито",
     "@closed": {
         "description": "WarLog closed"
     },
-    "error": "Error",
-    "player": "Player",
-    "notFoundOrNotLinkedToOurSystem": "{player} not found or not linked to our system.",
+    "error": "Помилка",
+    "player": "Гравець",
+    "notFoundOrNotLinkedToOurSystem": "{player} Не знайдено або не пов'язано з нашою системою.",
     "@notFoundOrNotLinkedToOurSystem": {
         "placeholders": {
             "player": {
@@ -115,44 +115,44 @@
             }
         }
     },
-    "tryAnotherNameOrTagOrLinkIt": "Try another name/tag or link it.",
-    "playerNotFound": "Player not found",
-    "noValueEntered": "No value entered",
-    "manage": "Manage",
-    "enterPlayerTag": "Enter a player tag",
-    "add": "Add",
+    "tryAnotherNameOrTagOrLinkIt": "Спробуйте інше ім'я/тег або посилання на нього.",
+    "playerNotFound": "Гравця не знайдено",
+    "noValueEntered": "Не введено жодного значення",
+    "manage": "Керувати",
+    "enterPlayerTag": "Введіть тег гравця",
+    "add": "Додати",
     "@add": {
         "description": "Add an account"
     },
-    "delete": "Delete",
+    "delete": "Видалити",
     "@delete": {
         "description": "Delete an account"
     },
-    "addAccount": "Add account",
-    "deleteAccount": "Delete account",
-    "playerTagNotExists": "The player tag entered does not exist.",
-    "accountAlreadyLinked": "The player tag is already linked to someone.",
-    "enterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
-    "wrongApiToken": "The API token entered is incorrect",
-    "accountAlreadyLinkedToYou": "The player tag is already linked to you.",
-    "apiToken": "Account API Token",
-    "failedToAddTryAgain": "Failed to add link. Please try again later.",
-    "failedToDeleteTryAgain": "Failed to delete link. Please try again later.",
-    "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
-    "search": "Search",
+    "addAccount": "Додати обліковий запис",
+    "deleteAccount": "Видалити обліковий запис",
+    "playerTagNotExists": "Тег гравця, який був введений, не існує.",
+    "accountAlreadyLinked": "Тег гравця вже зв'язаний з кимось.",
+    "enterApiToken": "Будь ласка, введіть ключ API для облікового запису. Його можна знайти у налаштуваннях Clash of Clans > Додаткові Налаштування > Токен API.",
+    "wrongApiToken": "Введений токен API невірний",
+    "accountAlreadyLinkedToYou": "Тег гравця вже прив'язаний до вас.",
+    "apiToken": "API-токен облікового запису",
+    "failedToAddTryAgain": "Не вдалося додати посилання. Будь ласка, повторіть спробу пізніше.",
+    "failedToDeleteTryAgain": "Не вдалося видалити посилання. Будь ласка, повторіть спробу пізніше.",
+    "enterPlayerTagWarning": "Вам потрібно ввести тег гравця та натиснути на знак \"+\", щоб продовжити.",
+    "search": "Пошук",
     "@search": {
         "description": "Search for a player or a clan"
     },
-    "warning": "Warning",
-    "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-    "confirmLogout": "Are you sure you want to log out?",
+    "warning": "Попередження",
+    "exitAppToOpenClash": "Ви збираєтеся вийти з програми для відкриття Clash of Clans.",
+    "confirmLogout": "Впевнені, що хочете вийти?",
     "@confirmLogout": {
         "description": "Prompt asking the user to confirm logout"
     },
-    "tagOrNamePlayer": "Player's tag or name",
-    "searchPlayer": "Search player",
-    "nameOrTagPlayer": "Player's name or tag",
-    "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+    "tagOrNamePlayer": "Тег гравця або ім'я",
+    "searchPlayer": "Пошук гравця",
+    "nameOrTagPlayer": "Ім'я гравця або тег",
+    "playerClanDescription": "Ваш клан \"{clan}\" ({tag}).",
     "@playerClanDescription": {
         "placeholders": {
             "clan": {
@@ -163,7 +163,7 @@
             }
         }
     },
-    "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+    "playerRatioDescription": "Ваш коефіцієнт підкріплення {ratio}. Ви пожертвували війська {donations} та отримали {received} військ.",
     "@playerRatioDescription": {
         "placeholders": {
             "ratio": {
@@ -177,7 +177,7 @@
             }
         }
     },
-    "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+    "playerWarPreferenceDescription": "Ваші налаштування війни \"{preference}\".",
     "@playerWarPreferenceDescription": {
         "placeholders": {
             "preference": {
@@ -185,7 +185,7 @@
             }
         }
     },
-    "playerWarStarsDescription": "You have {stars} war stars.",
+    "playerWarStarsDescription": "У вас {stars} військових зірок.",
     "@playerWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -193,7 +193,7 @@
             }
         }
     },
-    "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+    "playerTrophiesDescription": "У вас {trophies} трофеїв. Ви зараз у {league}.",
     "@playerTrophiesDescription": {
         "placeholders": {
             "trophies": {
@@ -204,7 +204,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+    "playerTownHallLevelDescription": "Ваш рівень ратуші – {level}.",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
@@ -223,16 +223,16 @@
             }
         }
     },
-    "dashboard": "Dashboard",
-    "homeBase": "Home Base",
-    "th": "TH",
-    "builderBase": "Builder Base",
-    "bh": "BH",
-    "clanCapital": "Clan Capital",
-    "leader": "Leader",
-    "coLeader": "Co-Leader",
-    "elder": "Elder",
-    "member": "Member",
+    "dashboard": "Панель керування",
+    "homeBase": "Домашнє селище",
+    "th": "ТХ",
+    "builderBase": "Селище будівельника",
+    "bh": "БХ",
+    "clanCapital": "Столиця клану",
+    "leader": "Лідер",
+    "coLeader": "Спів-лідер",
+    "elder": "Старійшина",
+    "member": "Учасник",
     "ready": "Opted In",
     "@ready": {
         "description": "Opted In for war"
@@ -241,24 +241,24 @@
     "@unready": {
         "description": "Opted Out for war"
     },
-    "heroes": "Heroes",
-    "equipment": "Equipments",
-    "troops": "Troops",
-    "superTroops": "Super Troops",
-    "activeSuperTroops": "Active Super Troops",
-    "pets": "Pets",
-    "siegeMachines": "Siege Machines",
-    "spells": "Spells",
-    "achievements": "Achievements",
-    "byDay": "By Day",
+    "heroes": "Герої",
+    "equipment": "Спорядження",
+    "troops": "Війська",
+    "superTroops": "Супер Війська",
+    "activeSuperTroops": "Активні Супер Війська",
+    "pets": "Тварини ",
+    "siegeMachines": "Облогові машини",
+    "spells": "Заклинання",
+    "achievements": "Досягнення",
+    "byDay": "За день",
     "@byDay": {
         "description": "Shows stats by day"
     },
-    "bySeason": "By Season",
+    "bySeason": "За сезон",
     "@byMonth": {
         "description": "Shows stats by season"
     },
-    "dayIndex": "Day {index}",
+    "dayIndex": "День {index}",
     "@dayIndex": {
         "placeholders": {
             "index": {
@@ -266,7 +266,7 @@
             }
         }
     },
-    "indexDays": "{index} days",
+    "indexDays": "{index} Днів",
     "@indexDays": {
         "placeholders": {
             "index": {
@@ -274,11 +274,11 @@
             }
         }
     },
-    "bestTrophies": "Best Trophies",
+    "bestTrophies": "Кращі Трофеї",
     "mostAttacks": "Most Attacks",
-    "lastSeason": "Last Season",
-    "bestRank": "Best Global Rank",
-    "daysLeft": "{days} days left",
+    "lastSeason": "Минулий сезон",
+    "bestRank": "Найкращий глобальний ранг",
+    "daysLeft": "Лишилось днів {days}",
     "@daysLeft": {
         "placeholders": {
             "days": {
@@ -286,16 +286,16 @@
             }
         }
     },
-    "date": "Date",
-    "stats": "Stats",
-    "details": "Details",
-    "seasonStats": "Season Stats",
-    "charts": "Charts",
-    "history": "History",
+    "date": "Дата",
+    "stats": "Статистика",
+    "details": "Детальніше",
+    "seasonStats": "Статистика сезону",
+    "charts": "Графіки",
+    "history": "Історія",
     "@history": {
         "description": "Shows EOS trophies history"
     },
-    "legendLeague": "Legend League",
+    "legendLeague": "Легендарна Ліга",
     "notInLegendLeague": "Not in Legend League",
     "noLegendData": "No Legend Data Found for today",
     "legendStartDescription": "You started the day with {trophies} trophies.",
