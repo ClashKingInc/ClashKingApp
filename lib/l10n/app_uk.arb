@@ -233,11 +233,11 @@
     "coLeader": "Спів-лідер",
     "elder": "Старійшина",
     "member": "Учасник",
-    "ready": "Погодився",
+    "ready": "Готов",
     "@ready": {
         "description": "Opted In for war"
     },
-    "unready": "Відмовився",
+    "unready": "Не готов",
     "@unready": {
         "description": "Opted Out for war"
     },
@@ -275,7 +275,7 @@
         }
     },
     "bestTrophies": "Кращі Трофеї",
-    "mostAttacks": "Кількість атак",
+    "mostAttacks": "Найбільша кількість атак",
     "lastSeason": "Минулий сезон",
     "bestRank": "Найкращий глобальний ранг",
     "daysLeft": "Лишилось днів {days}",
@@ -433,16 +433,16 @@
     "todoExplanation_title": "Розрахунок завдання",
     "todoExplanation_intro": "Відсоток завершення завдання обчислюється на основі наступних дій з конкретними ваговими коефіцієнтами:",
     "todoExplanation_legends_title": "Легендарна Ліга:",
-    "todoExplanation_legends": "Weight of 8 points per account, 1 attack = 1 point.",
+    "todoExplanation_legends": "Вага 8 очок за обліковий запис, 1 атака = 1 очко.",
     "todoExplanation_raids_title": "Рейди:",
-    "todoExplanation_raids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
+    "todoExplanation_raids": "Вага 5 балів за обліковий запис (або 6, якщо останню атаку розблоковано), 1 атака = 1 бал.",
     "todoExplanation_clanWars_title": "Кланові Війни:",
-    "todoExplanation_clanWars": "Weight of 2 points per account, 1 attack = 1 point.",
+    "todoExplanation_clanWars": "Вага 2 бали на рахунок, 1 атака = 1 бал.",
     "todoExplanation_cwl_title": "Ліга Кланових Війн:",
-    "todoExplanation_cwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
+    "todoExplanation_cwl": "Вага 1 бал за обліковий запис, 1 напад = 1 бал. CWL не може бути відстежено, якщо гравець не перебуває у своєму клані ліги.",
     "todoExplanation_passAndGames_title": "Сезонний пропуск та кланові ігри:",
-    "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
-    "todoExplanation_conclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
+    "todoExplanation_passAndGames": "Вага по 2 бали кожен на рахунок. Співвідношення ґрунтується на залишку днів (1 місяць на пропуск і 6 днів на ігри). Зелений = на шляху до завершення пропуску або ігор, червоний = позаду графіка.",
+    "todoExplanation_conclusion": "Загальний відсоток обчислюється шляхом ділення загальної кількості виконаних дій під час поточних подій на загальну кількість необхідних дій. Обліковий запис, неактивний протягом більш як 14 днів, виключаються з розрахунку.",
     "worst": "Найгірший",
     "@worst": {
         "description": "Worst end of day trophies"
@@ -620,10 +620,10 @@
     "@random": {
         "description": "Random/basic war (not friendly or cwl)"
     },
-    "selectMembersThLevel": "Members TH Level",
-    "selectOpponentsThLevel": "Opponents TH Level",
-    "equalThLevel": "Equal TH",
-    "builderBaseTrophies": "BB Trophies",
+    "selectMembersThLevel": "Рівень ТХ учасників",
+    "selectOpponentsThLevel": "Рівень ТХ противників",
+    "equalThLevel": "Рівний ТХ",
+    "builderBaseTrophies": "ББ Трофеї",
     "donations": "Пожертви",
     "donationsReceived": "Пожертв отримано",
     "donationsRatio": "Співвідношення пожертв",
@@ -634,12 +634,12 @@
     "oncePerWeek": "1/тиждень",
     "twicePerWeek": "2/тиждень",
     "rarely": "Рідко",
-    "warLeague": "Ліга Війн",
+    "warLeague": "Війна/Ліга",
     "war": "Війна",
     "league": "Ліга",
     "wars": "Війни",
-    "ongoingWar": "Ongoing war",
-    "ongoingCwl": "Ongoing CWL",
+    "ongoingWar": "Поточна війна",
+    "ongoingCwl": "Поточна ЛКВ",
     "cantOpenLink": "Ми не можемо відкрити це посилання.",
     "notInWar": "Не в стані війни",
     "warHistory": "Історія війн",
@@ -719,7 +719,7 @@
     "twoStars": "2 зірки",
     "threeStars": "3 зірки",
     "warParticipation": "Участь у війні",
-    "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
+    "toggleTownHallVisibility": "Приховати/Показати Статистику з колишніх рівнів Ратуші",
     "@toggleTownHallVisibility": {
         "description": "For example, hide stats from TH15 and below if the player is now TH16"
     },
@@ -762,7 +762,7 @@
     "join": "Приєднатися",
     "leave": "Залишити",
     "reset": "Скинути",
-    "leaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
+    "leaveNumberDescription": "{number} Гравців покинули клан під час поточного сезону ({date}).",
     "@leaveNumberDescription": {
         "description": "Number of players who left the clan during the current season.",
         "placeholders": {
@@ -774,7 +774,7 @@
             }
         }
     },
-    "joinNumberDescription": "{number} player(s) joined the clan during the current season ({date}).",
+    "joinNumberDescription": "{number} Гравців приєдналися до клану під час поточного сезону ({date}).",
     "@joinNumberDescription": {
         "description": "Number of players who joined the clan during the current season.",
         "placeholders": {
@@ -786,7 +786,7 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new member(s) this season ({date}).",
+    "joinLeaveDifferenceUpDescription": "Ваш клан отримав {number} нових учасників цього сезону ({date}).",
     "@joinLeaveDifferenceUpDescription": {
         "description": "Number of new members gained by the clan this season.",
         "placeholders": {
@@ -798,7 +798,7 @@
             }
         }
     },
-    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} member(s) this season ({date}).",
+    "joinLeaveDifferenceDownDescription": "Ваш клан втратив учасників {number} в цьому сезоні ({date}).",
     "@joinLeaveDifferenceDownDescription": {
         "description": "Number of members lost by the clan this season.",
         "placeholders": {
@@ -810,7 +810,7 @@
             }
         }
     },
-    "joinLeaveDifferenceEqualDescription": "Your clan has the same number of members as at the beginning of the season ({date}).",
+    "joinLeaveDifferenceEqualDescription": "У вашому клані стільки ж учасників, що на початку сезону ({date}).",
     "@joinLeaveDifferenceEqualDescription": {
         "description": "Difference in the number of members between the beginning and the end of the season.",
         "placeholders": {
@@ -897,7 +897,7 @@
     "rounds": "Раундів",
     "noDataAvailableForThisWar": "Дані недоступні для цієї війни",
     "stateOfTheWar": "Стан війни",
-    "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+    "starsNeededToTakeTheLead": "{clan} Все ще потребує {star} ще одну зірку або {stars2} зірки та {percent}%, щоб вийти вперед.",
     "@starsNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -914,7 +914,7 @@
             }
         }
     },
-    "starsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+    "starsAndPercentNeededToTakeTheLead": "{clan} Все ще потребує {percent}% або ще 1 зірки, щоб взяти на себе ініціативу",
     "@starsAndPercentNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -927,7 +927,7 @@
     },
     "clanDraw": "Два клани зв'язані",
     "fastCalculator": "Швидкий калькулятор",
-    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
+    "fastCalculatorAnswer": "Для досягнення рівня руйнування {percentNeeded}%, необхідно підсумок {result}%.",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
