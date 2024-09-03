@@ -616,7 +616,7 @@
         "description": "Friendly war"
     },
     "cwl": "ЛКВ",
-    "random": "Випадкова",
+    "random": "Глобальні",
     "@random": {
         "description": "Random/basic war (not friendly or cwl)"
     },
