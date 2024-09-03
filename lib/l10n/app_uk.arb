@@ -1,10 +1,10 @@
 {
-    "creatorCode": "Creator Code: ClashKing",
-    "signInWithDiscord": "Sign In with Discord",
-    "guestMode": "Guest Mode",
-    "needHelpJoinDiscord": "Need help? Join us on Discord.",
-    "createGuestProfile": "Create your guest profile",
-    "doesNotExist": "{tag} does not exist.",
+    "creatorCode": "Код Творця: ClashKing",
+    "signInWithDiscord": "Увійти за допомогою Discord",
+    "guestMode": "Режим гостя",
+    "needHelpJoinDiscord": "Потрібна допомога? Приєднуйтесь до нас у Discord.",
+    "createGuestProfile": "Створити свій гостьовий профіль",
+    "doesNotExist": "{tag} Не існує.",
     "@doesNotExist": {
         "placeholders": {
             "tag": {
@@ -12,7 +12,7 @@
             }
         }
     },
-    "isAlreadyLinked": "{tag} is already linked to someone.",
+    "isAlreadyLinked": "{tag} Вже зв'язаний з кимось.",
     "@isAlreadyLinked": {
         "placeholders": {
             "tag": {
@@ -20,10 +20,10 @@
             }
         }
     },
-    "username": "Username",
-    "pleaseEnterUsername": "Please enter a username",
-    "playerTags": "Player Tags",
-    "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
+    "username": "Ім'я користувача",
+    "pleaseEnterUsername": "Будь ласка, введіть ім'я користувача",
+    "playerTags": "Тег гравця",
+    "followingTagsDoNotExist": "Наступні теги не існують: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
             "tags": {
@@ -31,7 +31,7 @@
             }
         }
     },
-    "followingTagsAreAlreadyLinked": "The following tags are already linked to someone: {tags}.",
+    "followingTagsAreAlreadyLinked": "Наступні теги вже з'єднані з кимось: {tags}.",
     "@followingTagsAreAlreadyLinked": {
         "placeholders": {
             "tags": {
@@ -39,27 +39,27 @@
             }
         }
     },
-    "welcome": "Welcome!",
-    "welcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
-    "login": "Login",
-    "logout": "Log out",
-    "language": "Language",
-    "settings": "Settings",
-    "toggleTheme": "Toggle Theme",
-    "selectLanguage": "Select a language",
-    "faq": "FAQ",
-    "faqSubtitle": "Frequently Asked Questions",
-    "faqIsThisFromSupercell": "Is this App from Supercell?",
-    "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-    "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
-    "faqClanNotTracked": "Clan not tracked",
+    "welcome": "Вітаємо!",
+    "welcomeMessage": "Будь ласка, додайте один або кілька облікових записів Clash of Clans до свого профілю. Ви можете додати або видалити облікові записи пізніше.",
+    "login": "Увійти",
+    "logout": "Вийти",
+    "language": "Мова",
+    "settings": "Налаштування",
+    "toggleTheme": "Перемкнути тему",
+    "selectLanguage": "Оберіть мову",
+    "faq": "Питання та відповіді",
+    "faqSubtitle": "Найбільш поширенні питання",
+    "faqIsThisFromSupercell": "Чи це додаток від Supercell?",
+    "faqFanContentPolicy": "Цей матеріал є неофіційним і не є схваленим Supercell. Для отримання більш докладної інформації перегляньте політику відносно вмісту фан-сайтів Supercell: www.supercell.com/fan-content-policy",
+    "faqWhyNotAccurate": "Чому дані іноді невірні або відсутні?",
+    "faqClanNotTracked": "Клан не відстежується",
     "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
-    "faqTrackingDown": "Tracking down",
+    "faqTrackingDown": "Відстеження",
     "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
     "faqApiLimitation": "Clash of Clans API limitation",
     "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
-    "faqSupportWork": "How can I support your work?",
-    "faqSupportWorkAnswer": "There are several ways to support us:",
+    "faqSupportWork": "Як я можу підтримати вашу роботу?",
+    "faqSupportWorkAnswer": "Існує декілька способів підтримати нас:",
     "faqUseCodeClashKing": "Use code \"ClashKing\"",
     "faqSupportUsOnPatreon": "Support us on Patreon",
     "faqShareTheApp": "Share the app with your friends",
