@@ -91,14 +91,14 @@
     "currentTranslators": "Поточні перекладачі",
     "betaFeature": "Бета-функції",
     "beta": "БЕТА",
-    "betaDescription": "Ця функція наразі знаходиться в бета-версії, може містити деякі помилки або бути неповною. Ми активно працюємо над удосконаленнями і раді вашому зворотному зв'язку. Будь ласка, поділіться своїми ідеями та повідомте про будь-які проблеми на нашому сервері Discord, щоб допомогти нам зробити це краще.",
+    "betaDescription": "Ця функція наразі знаходиться в бета-версії, може містити деякі помилки або бути неповною. Ми активно працюємо над удосконаленнями й раді вашому зворотному зв'язку. Будь ласка, поділіться своїми ідеями та повідомте про будь-які проблеми на нашому сервері Discord, щоб допомогти нам зробити це краще.",
     "copiedToClipboard": "Скопійовано в буфер обміну",
     "all": "Всі",
     "@all": {
         "description": "all items"
     },
-    "hourIndicator": "год.",
-    "minIndicator": "хв.",
+    "hourIndicator": "год",
+    "minIndicator": "хв",
     "noDataAvailable": "Дані відсутні.",
     "close": "Закрити",
     "closed": "Закрито",
@@ -212,7 +212,7 @@
             }
         }
     },
-    "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+    "playerBuilderBaseDescription": "Ваша ратуша будівельника {level} рівня, і ви маєте {trophies} трофеїв.",
     "@playerBuilderBaseDescription": {
         "placeholders": {
             "level": {
@@ -224,20 +224,20 @@
         }
     },
     "dashboard": "Панель керування",
-    "homeBase": "Домашнє селище",
+    "homeBase": "Домашня база",
     "th": "ТХ",
-    "builderBase": "Селище будівельника",
+    "builderBase": "База будівельника",
     "bh": "БХ",
     "clanCapital": "Столиця клану",
     "leader": "Лідер",
     "coLeader": "Спів-лідер",
     "elder": "Старійшина",
     "member": "Учасник",
-    "ready": "Opted In",
+    "ready": "Погодився",
     "@ready": {
         "description": "Opted In for war"
     },
-    "unready": "Opted Out",
+    "unready": "Відмовився",
     "@unready": {
         "description": "Opted Out for war"
     },
@@ -246,7 +246,7 @@
     "troops": "Війська",
     "superTroops": "Супер Війська",
     "activeSuperTroops": "Активні Супер Війська",
-    "pets": "Тварини ",
+    "pets": "Тварини",
     "siegeMachines": "Облогові машини",
     "spells": "Заклинання",
     "achievements": "Досягнення",
@@ -275,7 +275,7 @@
         }
     },
     "bestTrophies": "Кращі Трофеї",
-    "mostAttacks": "Most Attacks",
+    "mostAttacks": "Кількість атак",
     "lastSeason": "Минулий сезон",
     "bestRank": "Найкращий глобальний ранг",
     "daysLeft": "Лишилось днів {days}",
@@ -296,9 +296,9 @@
         "description": "Shows EOS trophies history"
     },
     "legendLeague": "Легендарна Ліга",
-    "notInLegendLeague": "Not in Legend League",
-    "noLegendData": "No Legend Data Found for today",
-    "legendStartDescription": "You started the day with {trophies} trophies.",
+    "notInLegendLeague": "Не в Легендарній Лізі",
+    "noLegendData": "Дані легенди не знайдено на сьогодні",
+    "legendStartDescription": "Ви розпочали день з {trophies} трофеїв.",
     "@legendStartDescription": {
         "placeholders": {
             "trophies": {
@@ -306,7 +306,7 @@
             }
         }
     },
-    "legendNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
+    "legendNoRankLocalDescription": "Наразі вас немає в рейтингу ({country}) з {trophies} трофеями.",
     "@legendNoRankLocalDescription": {
         "placeholders": {
             "country": {
@@ -317,7 +317,7 @@
             }
         }
     },
-    "legendRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+    "legendRankLocalDescription": "Зараз ви займаєте {rank} місце в топі ({country}) з {trophies} трофеями.",
     "@legendRankDescription": {
         "placeholders": {
             "rank": {
@@ -331,7 +331,7 @@
             }
         }
     },
-    "legendGainDescription": "You gained {trophies} trophies for now.",
+    "legendGainDescription": "Зараз ви отримали {trophies} трофеїв.",
     "@legendGainDescription": {
         "placeholders": {
             "trophies": {
@@ -339,7 +339,7 @@
             }
         }
     },
-    "legendLossDescription": "You lost {trophies} trophies for now.",
+    "legendLossDescription": "Зараз ви втратили {trophies} трофеїв.",
     "@legendLossDescription": {
         "placeholders": {
             "trophies": {
@@ -347,7 +347,7 @@
             }
         }
     },
-    "legendNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+    "legendNoGlobalRankDescription": "Наразі ви не в глобальному рейтингу з {trophies} трофеями.",
     "@legendNoGlobalRankDescription": {
         "placeholders": {
             "trophies": {
@@ -355,7 +355,7 @@
             }
         }
     },
-    "legendGlobalRankDescription": "You are currently ranked {rank} globally.",
+    "legendGlobalRankDescription": "Ви знаходитесь на {rank} місці в глобальному рейтингу.",
     "@legendGlobalRankDescription": {
         "placeholders": {
             "rank": {
@@ -363,37 +363,37 @@
             }
         }
     },
-    "noRank": "No ranking",
-    "started": "Started",
+    "noRank": "Немає рейтингу",
+    "started": "Почато",
     "@started": {
         "description": "Title for the number of trophies at the beginning of the day"
     },
-    "ended": "Ended",
+    "ended": "Завершено",
     "@ended": {
         "description": "Title for the number of trophies at the end of the day"
     },
-    "average": "Average",
+    "average": "Середнє значення",
     "@average": {
         "description": "Average value of legend trophies (defense and attack)"
     },
-    "remaining": "Remaining",
+    "remaining": "Залишилося",
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inaccurate data?",
-    "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
-    "legendsExplanation_api_delay_title": "1. API Delay: ",
-    "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
-    "legendsExplanation_concurrent_changes_title": "2. Concurrent Changes: \n",
-    "legendsExplanation_multiple_attacks_defenses_title": "- Multiple Attacks/Defenses: ",
-    "legendsExplanation_multiple_attacks_defenses_body": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
-    "legendsExplanation_simultaneous_attack_defense_title": "- Simultaneous Attack and Defense: ",
-    "legendsExplanation_simultaneous_attack_defense_body": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
-    "legendsExplanation_net_gain_loss_title": "3. Net Gain/Loss: ",
-    "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
-    "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-    "toDoList": "To-do list",
-    "lastActive": "Last active: {date}",
+    "legendsTitle": "Некоректні дані?",
+    "legendsExplanation_intro": "Через обмеження Clash of Clans API, наші дані можуть бути не завжди точними. Ось чому:\n",
+    "legendsExplanation_api_delay_title": "1. Затримка API: ",
+    "legendsExplanation_api_delay_body": "API може оновлюватися до 5 хвилин, що спричиняє затримку у відображенні змін трофеїв в реальному часі.\n",
+    "legendsExplanation_concurrent_changes_title": "2. Можливі зміни: \n",
+    "legendsExplanation_multiple_attacks_defenses_title": "- Кілька нападів/Захистів: ",
+    "legendsExplanation_multiple_attacks_defenses_body": "Якщо декілька атак або захистів відбуваються одна за одною швидко, API може показати комбіновані результати (наприклад, +68 або -68).\n",
+    "legendsExplanation_simultaneous_attack_defense_title": "- Одночасна атака та оборона: ",
+    "legendsExplanation_simultaneous_attack_defense_body": "Якщо напад та захист відбуваються одночасно, ви можете побачити змішаний результат (наприклад, +4).\n",
+    "legendsExplanation_net_gain_loss_title": "3. Чистий прибуток/збиток: ",
+    "legendsExplanation_net_gain_loss_body": "Всупереч проблемі з часом, загальний чистий приріст або втрата за день точні. ",
+    "legendsExplanation_conclusion": "Ці обмеження поширені у всіх інструментах, які використовують API гри Clash of Clans. Нам дуже шкода, що ми не можемо це виправити, оскільки це у руках Supercell. Ми робимо все можливе, щоб компенсувати ці обмеження та надати результати якомога ближчі до реальності. Дякуємо за розуміння!",
+    "toDoList": "Список справ",
+    "lastActive": "Остання активність: {date}",
     "@lastActive": {
         "placeholders": {
             "date": {
@@ -401,7 +401,7 @@
             }
         }
     },
-    "numberAccounts": "{number} accounts",
+    "numberAccounts": "{number} Облікових записів",
     "@numberAccounts": {
         "placeholders": {
             "number": {
@@ -410,7 +410,7 @@
         },
         "description": "Number of accounts (ex: 4 accounts)"
     },
-    "numberActiveAccounts": "{number} active accounts",
+    "numberActiveAccounts": "{number} Активних облікових записів",
     "@numberActiveAccounts": {
         "placeholders": {
             "number": {
@@ -418,7 +418,7 @@
             }
         }
     },
-    "numberInactiveAccounts": "{number} inactive accounts",
+    "numberInactiveAccounts": "{number} Неактивних облікових записів",
     "@numberInactiveAccounts": {
         "placeholders": {
             "number": {
@@ -426,34 +426,34 @@
             }
         }
     },
-    "activeAccounts": "Active accounts",
-    "inactiveAccounts": "Inactive accounts",
-    "noInactiveAccounts": "No inactive accounts.",
-    "noActiveAccounts": "No active accounts.",
-    "todoExplanation_title": "Task Calculation",
-    "todoExplanation_intro": "The task completion percentage is calculated based on the following activities with specific weightings:",
-    "todoExplanation_legends_title": "Legend League:",
+    "activeAccounts": "Активні облікові записи",
+    "inactiveAccounts": "Неактивні облікові записи",
+    "noInactiveAccounts": "Немає неактивних облікових записів.",
+    "noActiveAccounts": "Немає активних облікових записів.",
+    "todoExplanation_title": "Розрахунок завдання",
+    "todoExplanation_intro": "Відсоток завершення завдання обчислюється на основі наступних дій з конкретними ваговими коефіцієнтами:",
+    "todoExplanation_legends_title": "Легендарна Ліга:",
     "todoExplanation_legends": "Weight of 8 points per account, 1 attack = 1 point.",
-    "todoExplanation_raids_title": "Raids:",
+    "todoExplanation_raids_title": "Рейди:",
     "todoExplanation_raids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-    "todoExplanation_clanWars_title": "Clan Wars:",
+    "todoExplanation_clanWars_title": "Кланові Війни:",
     "todoExplanation_clanWars": "Weight of 2 points per account, 1 attack = 1 point.",
-    "todoExplanation_cwl_title": "Clan War League:",
+    "todoExplanation_cwl_title": "Ліга Кланових Війн:",
     "todoExplanation_cwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
     "todoExplanation_passAndGames_title": "Season Pass & Clan Games:",
     "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
     "todoExplanation_conclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
-    "worst": "Worst",
+    "worst": "Найгірший",
     "@worst": {
         "description": "Worst end of day trophies"
     },
-    "best": "Best",
+    "best": "Найкращий",
     "@best": {
         "description": "Best end of day trophies"
     },
-    "total": "Total",
-    "heroesEquipments": "Hero equipments",
-    "daysAgo": "{days} days ago",
+    "total": "Всього",
+    "heroesEquipments": "Спорядження героя",
+    "daysAgo": "{days} Днів тому",
     "@daysAgo": {
         "placeholders": {
             "days": {
@@ -461,7 +461,7 @@
             }
         }
     },
-    "dayAgo": "{day} day ago",
+    "dayAgo": "{day} День тому",
     "@dayAgo": {
         "placeholders": {
             "day": {
@@ -469,7 +469,7 @@
             }
         }
     },
-    "hourAgo": "{hour} hour ago",
+    "hourAgo": "{hour} Годину тому",
     "@hourAgo": {
         "placeholders": {
             "hour": {
@@ -477,7 +477,7 @@
             }
         }
     },
-    "hoursAgo": "{hours} hours ago",
+    "hoursAgo": "{hour} Годин тому",
     "@hoursAgo": {
         "placeholders": {
             "hours": {
@@ -485,7 +485,7 @@
             }
         }
     },
-    "minuteAgo": "{minute} minute ago",
+    "minuteAgo": "{minute} Хвилину тому",
     "@minuteAgo": {
         "placeholders": {
             "minute": {
@@ -493,7 +493,7 @@
             }
         }
     },
-    "minutesAgo": "{minutes} minutes ago",
+    "minutesAgo": "{minutes} Хвилин тому",
     "@minutesAgo": {
         "placeholders": {
             "minutes": {
@@ -501,7 +501,7 @@
             }
         }
     },
-    "secondAgo": "{seconds}s ago",
+    "secondAgo": "{seconds} Секунд тому",
     "@secondAgo": {
         "placeholders": {
             "seconds": {
@@ -509,7 +509,7 @@
             }
         }
     },
-    "justNow": "Just Now",
+    "justNow": "Щойно",
     "trophiesByMonth": "Trophies by month",
     "trophiesBySeason": "Trophies by season",
     "eosTrophies": "End Of Season Trophies",
