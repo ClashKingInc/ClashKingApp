@@ -163,7 +163,7 @@
             }
         }
     },
-    "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+    "playerRatioDescription": "Η αναλογία δωρεάς σας είναι {ratio}. Έχετε δωρίσει {donations} στρατιώτες και έχετε λάβει {received}.",
     "@playerRatioDescription": {
         "placeholders": {
             "ratio": {
@@ -177,7 +177,7 @@
             }
         }
     },
-    "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+    "playerWarPreferenceDescription": "Η προτίμηση πολέμου σας είναι \"{preference}\".",
     "@playerWarPreferenceDescription": {
         "placeholders": {
             "preference": {
@@ -185,7 +185,7 @@
             }
         }
     },
-    "playerWarStarsDescription": "You have {stars} war stars.",
+    "playerWarStarsDescription": "Έχετε {stars} αστέρια πολέμου.",
     "@playerWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -193,7 +193,7 @@
             }
         }
     },
-    "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+    "playerTrophiesDescription": "Διαθέτετε {trophies} τρόπαια. Βρίσκεστε στο επίπεδο {league}.",
     "@playerTrophiesDescription": {
         "placeholders": {
             "trophies": {
@@ -204,7 +204,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+    "playerTownHallLevelDescription": "Το επίπεδο του Δημαρχείου σας είναι {level}.",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
@@ -212,7 +212,7 @@
             }
         }
     },
-    "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+    "playerBuilderBaseDescription": "Το επίπεδο του Δημαρχείου Χτίστη σας είναι {level} και διαθέτετε {trophies} τρόπαια.",
     "@playerBuilderBaseDescription": {
         "placeholders": {
             "level": {
@@ -223,16 +223,16 @@
             }
         }
     },
-    "dashboard": "Dashboard",
-    "homeBase": "Home Base",
-    "th": "TH",
-    "builderBase": "Builder Base",
-    "bh": "BH",
-    "clanCapital": "Clan Capital",
-    "leader": "Leader",
-    "coLeader": "Co-Leader",
-    "elder": "Elder",
-    "member": "Member",
+    "dashboard": "Πίνακας Ελέγχου",
+    "homeBase": "Κύρια Βάση",
+    "th": "Δ",
+    "builderBase": "Βάση Χτίστη",
+    "bh": "ΔΧ",
+    "clanCapital": "Πρωτεύουσα Ομάδας",
+    "leader": "Αρχηγός",
+    "coLeader": "Συν-Αρχηγός",
+    "elder": "Επίτιμο Μέλος",
+    "member": "Μέλος",
     "ready": "Opted In",
     "@ready": {
         "description": "Opted In for war"
