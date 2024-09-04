@@ -233,32 +233,32 @@
     "coLeader": "Συν-Αρχηγός",
     "elder": "Επίτιμο Μέλος",
     "member": "Μέλος",
-    "ready": "Opted In",
+    "ready": "Θέλω να συμμετέχω",
     "@ready": {
         "description": "Opted In for war"
     },
-    "unready": "Opted Out",
+    "unready": "Δε θέλω να συμμετέχω",
     "@unready": {
         "description": "Opted Out for war"
     },
-    "heroes": "Heroes",
-    "equipment": "Equipments",
-    "troops": "Troops",
-    "superTroops": "Super Troops",
-    "activeSuperTroops": "Active Super Troops",
-    "pets": "Pets",
-    "siegeMachines": "Siege Machines",
-    "spells": "Spells",
-    "achievements": "Achievements",
-    "byDay": "By Day",
+    "heroes": "Ήρωες",
+    "equipment": "Εξοπλισμός",
+    "troops": "Στρατός",
+    "superTroops": "Σούπερ Στρατός",
+    "activeSuperTroops": "Ενεργός Σούπερ Στρατός",
+    "pets": "Κατοικίδια",
+    "siegeMachines": "Μηχανές Πολιορκίας",
+    "spells": "Ξόρκια",
+    "achievements": "Επιτεύγματα",
+    "byDay": "Με τη μέρα",
     "@byDay": {
         "description": "Shows stats by day"
     },
-    "bySeason": "By Season",
+    "bySeason": "Με τη σεζόν",
     "@byMonth": {
         "description": "Shows stats by season"
     },
-    "dayIndex": "Day {index}",
+    "dayIndex": "Μέρα {index}",
     "@dayIndex": {
         "placeholders": {
             "index": {
@@ -266,7 +266,7 @@
             }
         }
     },
-    "indexDays": "{index} days",
+    "indexDays": "{index} Μέρες",
     "@indexDays": {
         "placeholders": {
             "index": {
