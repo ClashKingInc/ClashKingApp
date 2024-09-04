@@ -532,7 +532,7 @@
     "warFrequency": "Частота війн",
     "minimumMembers": "Мінімальна кількість учасників",
     "maximumMembers": "Максимальна кількість учасників",
-    "location": "Місце розташування",
+    "location": "Розташування",
     "minimumClanPoints": "Мінімальні очки клану",
     "minimumClanLevel": "Мінімальний рівень клану",
     "noClan": "Без клану",
@@ -724,8 +724,8 @@
         "description": "For example, hide stats from TH15 and below if the player is now TH16"
     },
     "warLog": "Журнал війн",
-    "publicWarLog": "Публічний журнал війн",
-    "privateWarLog": "Приватний журнал війн",
+    "publicWarLog": "Відкритий журнал війн",
+    "privateWarLog": "Закритий журнал війн",
     "startsIn": "Розпочнеться через {time}",
     "@startsIn": {
         "placeholders": {
@@ -758,7 +758,7 @@
             }
         }
     },
-    "joinLeaveLogs": "Журнал приєднання/виходу",
+    "joinLeaveLogs": "Журнал вступу/виходу",
     "join": "Приєднатися",
     "leave": "Залишити",
     "reset": "Скинути",
@@ -926,7 +926,7 @@
         }
     },
     "clanDraw": "Два клани зв'язані",
-    "fastCalculator": "Швидкий калькулятор",
+    "fastCalculator": "Розрахунок %",
     "fastCalculatorAnswer": "Для досягнення рівня руйнування {percentNeeded}%, необхідно підсумок {result}%.",
     "@fastCalculatorAnswer": {
         "placeholders": {
