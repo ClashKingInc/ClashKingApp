@@ -72,19 +72,19 @@
     "faqNeedHelpAnswer": "Możesz dołączyć do naszego serwera Discord, aby poprosić o pomoc lub przekazać informacje zwrotne, lub możesz napisać do nas e-maila na adres devs@clashkingbot.com. Prosimy pisać tylko po angielsku lub francusku.",
     "faqSendEmail": "Wyślij wiadomość e-mail",
     "faqJoinDiscord": "Dołącz do naszego Discorda",
-    "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
+    "faqCannotOpenMailClient": "Z jakiegoś powodu nie możemy otworzyć twojego klienta poczty. Skopiowaliśmy dla ciebie adres e-mail. Możesz napisać e-mail i wkleić adres w polu odbiorcy.",
     "helpUsTranslate": "Pomóż w tłumaczeniu",
     "suggestFeatures": "Zaproponuj funkcje",
     "thankYou": "Dziękujemy!",
     "thankYouContent": "Wielkie dzięki dla wszystkich naszych niesamowitych tłumaczy, którzy pomagają nam uczynić tę aplikację dostępną dla większej liczby ludzi na całym świecie!",
     "helpTranslateContent": "Możesz nam pomóc przetłumaczyć aplikację na Crowdin. Jeśli Twojego języka nie ma na Crowdin, śmiało poproś o niego na naszym serwerze Discord. Bardzo dziękujemy za pomoc!",
     "helpTranslateButton": "Pomóż przetłumaczyć na Crowdin",
-    "versionDevice": "Version & Device",
+    "versionDevice": "Wersja i Urządzenie",
     "@version": {
         "description": "Version of the app and device information"
     },
-    "loading": "Loading...",
-    "errorLoadingVersion": "Error loading version",
+    "loading": "Wczytywanie...",
+    "errorLoadingVersion": "Błąd ładowania wersji",
     "@errorLoadingVersion": {
         "description": "Error message when the app version cannot be loaded"
     },
@@ -762,7 +762,7 @@
     "join": "Dołącz",
     "leave": "Opuść",
     "reset": "Zresetuj",
-    "leaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
+    "leaveNumberDescription": "{number} graczy opuściło klan w trakcie obecnego sezonu ({date}).",
     "@leaveNumberDescription": {
         "description": "Number of players who left the clan during the current season.",
         "placeholders": {
@@ -774,7 +774,7 @@
             }
         }
     },
-    "joinNumberDescription": "{number} player(s) joined the clan during the current season ({date}).",
+    "joinNumberDescription": "{number} graczy dołączyło do klanu w trakcie obecnego sezonu ({date}).",
     "@joinNumberDescription": {
         "description": "Number of players who joined the clan during the current season.",
         "placeholders": {
@@ -786,7 +786,7 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new member(s) this season ({date}).",
+    "joinLeaveDifferenceUpDescription": "Twój klan zyskał {number} nowych członków w tym sezonie ({date}).",
     "@joinLeaveDifferenceUpDescription": {
         "description": "Number of new members gained by the clan this season.",
         "placeholders": {
@@ -798,7 +798,7 @@
             }
         }
     },
-    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} member(s) this season ({date}).",
+    "joinLeaveDifferenceDownDescription": "Twój klan stracił {number} członków w tym sezonie ({date}).",
     "@joinLeaveDifferenceDownDescription": {
         "description": "Number of members lost by the clan this season.",
         "placeholders": {
@@ -1008,7 +1008,7 @@
     "tools": "Narzędzia",
     "community": "Społeczność",
     "lastRaids": "Ostatnie rajdy",
-    "ongoingRaids": "Ongoing raids",
-    "districtsDestroyed": "Districts destroyed",
-    "raidsCompleted": "Raids completed"
+    "ongoingRaids": "Trwające rajdy",
+    "districtsDestroyed": "Dzielnice zniszczone",
+    "raidsCompleted": "Ukończone rajdy"
 }
