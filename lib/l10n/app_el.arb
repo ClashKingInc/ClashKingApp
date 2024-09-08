@@ -54,60 +54,60 @@
     "faqWhyNotAccurate": "Γιατί τα δεδομένα είναι μερικές φορές ανακριβή ή ελλιπή;",
     "faqClanNotTracked": "Δεν εμφανίζει την ομάδα",
     "faqClanNotTrackedAnswer": "Το ClashKing μπορεί να καταγράφει αυτές τις πληροφορίες μόνο όταν η ομάδα είναι ήδη καταγεγραμμένη. Εάν η ομάδα δεν είναι καταγεγραμμένη, παρακαλώ προσθέστε το εργαλείο ClashKing στη σελίδα του Discord σας και χρησιμοποιείστε την εντολή /addclan. Δουλεύουμε για να φέρουμε αυτό το χαρακτηριστικό στην εφαρμογή σύντομα.",
-    "faqTrackingDown": "Tracking down",
-    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
-    "faqApiLimitation": "Clash of Clans API limitation",
+    "faqTrackingDown": "Σταμάτησε η καταγραφή",
+    "faqTrackingDownAnswer": "Η καταγραφή μπορεί να σταματήσει για ένα συγκεκριμένο χρονικό διάστημα. Για αυτόν τον λόγο μπορεί μερικές φορές να μην είναι ολοκληρωμένα τα δεδομένα σας. Δουλεύουμε για να το βελτιώσουμε.",
+    "faqApiLimitation": "Όρια του Clash Of Clans API",
     "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was one attack. It is also why we do not have any information on your buildings levels.",
-    "faqSupportWork": "How can I support your work?",
-    "faqSupportWorkAnswer": "There are several ways to support us:",
-    "faqUseCodeClashKing": "Use code \"ClashKing\"",
-    "faqSupportUsOnPatreon": "Support us on Patreon",
-    "faqShareTheApp": "Share the app with your friends",
-    "faqRateTheApp": "Rate the app in the store",
-    "faqHelpUsTranslate": "Help us translate the app",
-    "faqHowToInviteTheBot": "How can I invite your bot to my Discord Server?",
-    "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
-    "faqInviteTheBot": "Invite ClashKing Bot",
-    "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
-    "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.",
-    "faqSendEmail": "Send an email",
-    "faqJoinDiscord": "Join our Discord Server",
-    "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
-    "helpUsTranslate": "Help us translate",
-    "suggestFeatures": "Suggest features",
-    "thankYou": "Thank you!",
-    "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
-    "helpTranslateButton": "Help Translate on Crowdin",
-    "versionDevice": "Version & Device",
+    "faqSupportWork": "Πώς μπορώ να υποστηρίξω το έργο σας;",
+    "faqSupportWorkAnswer": "Υπάρχουν αρκετοί τρόποι για να μας υποστηρίξετε:",
+    "faqUseCodeClashKing": "Χρησιμοποιήστε τον κωδικό δημιουργού \"ClashKing\"",
+    "faqSupportUsOnPatreon": "Υποστηρίξτε μας στο Patreon",
+    "faqShareTheApp": "Μοιραστείτε την εφαρμογή με τους φίλους σας",
+    "faqRateTheApp": "Αξιολογείστε την εφαρμογή",
+    "faqHelpUsTranslate": "Βοηθήστε μας να μεταφράσουμε την εφαρμογή",
+    "faqHowToInviteTheBot": "Πώς μπορώ να προσθέσω το εργαλείο ClashKing στην ομάδα μου στο Discord;",
+    "faqHowToInviteTheBotAnswer": "Μπορείτε να προσθέσετε το εργαλείο Clashking στην ομάδα σας πατώντας το παρακάτω κουμπί. Θα χρειαστεί να επιτρέψετε την άδεια \"Διαχείριση Ομάδας\" για να προσθέσετε το εργαλείο.",
+    "faqInviteTheBot": "Προσθέστε το εργαλείο Clashking",
+    "faqNeedHelp": "Χρειάζομαι βοήθεια ή θα ήθελα να κάνω μία πρόταση. Πώς μπορώ να επικοινωνήσω μαζί σας;",
+    "faqNeedHelpAnswer": "Μπορείτε να μας βρείτε στην ομάδα μας στο Discord για να ζητήσετε βοήθεια ή να μας μεταφέρετε τα σχόλιά σας, αλλιώς μπορείτε να μας στείλετε ένα email στο devs@clashkingbot.com. Σας παρακαλούμε να γράφετε μόνο στα Αγγλικά ή στα Γαλλικά.",
+    "faqSendEmail": "Στείλτε μας ένα email",
+    "faqJoinDiscord": "Εισέλθετε στην ομάδα μας στο Discord",
+    "faqCannotOpenMailClient": "Για κάποιους λόγους δεν μπορέσαμε να ανοίξουμε το mail σας. Έχουμε αντιγράψει τη διεύθυνση ηλεκτρονικού ταχυδρομείου για εσάς. Μπορείτε να γράψετε ένα email και να αποκολλήσετε τη διεύθυνση στο πεδίο του παραλήπτη.",
+    "helpUsTranslate": "Βοηθήστε μας να μεταφράσουμε",
+    "suggestFeatures": "Προτείνετε χαρακτηριστικά",
+    "thankYou": "Σας ευχαριστούμε!",
+    "thankYouContent": "Ένα τεράστιο ευχαριστώ σε όλους τους εξαιρετικούς μεταφραστές μας που μας βοηθάνε να κάνουμε την εφαρμογή προσβάσιμη σε περισσότερους ανθρώπους σε όλο τον κόσμο!",
+    "helpTranslateContent": "Μπορείτε να μας βοηθήσετε να μεταφράσουμε την εφαρμογή στο Crowdin. Εάν η γλώσσα σας δεν είναι διαθέσιμη στο Crowdin, παρακαλώ ζητείστε το στην ομάδα μας στο Discord. Σας ευχαριστούμε πολύ για τη βοήθεια!",
+    "helpTranslateButton": "Βοηθήστε μας στη μετάφραση στο Crowdin",
+    "versionDevice": "Εκδοχή & Συσκευή",
     "@version": {
         "description": "Version of the app and device information"
     },
-    "loading": "Loading...",
-    "errorLoadingVersion": "Error loading version",
+    "loading": "Φορτώνει...",
+    "errorLoadingVersion": "Σφάλμα στη φόρτωσης της εκδοχής",
     "@errorLoadingVersion": {
         "description": "Error message when the app version cannot be loaded"
     },
-    "currentTranslators": "Current Translators",
-    "betaFeature": "Beta Feature",
+    "currentTranslators": "Τωρινοί μεταφραστές",
+    "betaFeature": "Χαρακτηριστικό εκδοχής Beta",
     "beta": "BETA",
-    "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
-    "copiedToClipboard": "Copied to clipboard",
-    "all": "All",
+    "betaDescription": "Αυτό το χαρακτηριστικό βρίσκεται ακόμη στην εκδοχή beta, οπότε μπορεί να αντιμετωπίσετε μερικά σφάλματα ή να μην είναι ολοκληρωμένο. Δουλεύουμε ενεργά για τη βελτίωση της εφαρμογής και σας προσκαλούμε, να μοιραστείτε τις ιδέες σας και να αναφέρετε οποιαδήποτε σφάλματα αντιμετωπίζετε, στην ομάδα μας στο Discord.",
+    "copiedToClipboard": "Αντιγράφηκε στο πρόχειρο",
+    "all": "Όλα",
     "@all": {
         "description": "all items"
     },
-    "hourIndicator": "h",
-    "minIndicator": "m",
-    "noDataAvailable": "No data available.",
-    "close": "Close",
-    "closed": "Closed",
+    "hourIndicator": "ω",
+    "minIndicator": "λ",
+    "noDataAvailable": "Δεν υπάρχουν διαθέσιμα δεδομένα.",
+    "close": "Κλείσιμο",
+    "closed": "Έκλεισε",
     "@closed": {
         "description": "WarLog closed"
     },
-    "error": "Error",
-    "player": "Player",
-    "notFoundOrNotLinkedToOurSystem": "{player} not found or not linked to our system.",
+    "error": "Σφάλμα",
+    "player": "Παίχτης",
+    "notFoundOrNotLinkedToOurSystem": "{player} δε βρέθηκε ή δεν έχει συνδεθεί στο σύστημά μας.",
     "@notFoundOrNotLinkedToOurSystem": {
         "placeholders": {
             "player": {
@@ -115,44 +115,44 @@
             }
         }
     },
-    "tryAnotherNameOrTagOrLinkIt": "Try another name/tag or link it.",
-    "playerNotFound": "Player not found",
-    "noValueEntered": "No value entered",
-    "manage": "Manage",
-    "enterPlayerTag": "Enter a player tag",
-    "add": "Add",
+    "tryAnotherNameOrTagOrLinkIt": "Δοκιμάστε διαφορετικό όνομα/αριθμό λογαριασμού ή συνδέστε το.",
+    "playerNotFound": "Παίχτης δε βρέθηκε",
+    "noValueEntered": "Δεν εντοπίστηκε αξία",
+    "manage": "Διαχείριση",
+    "enterPlayerTag": "Εισάγετε έναν αριθμό λογαριασμού",
+    "add": "Προσθέσετε",
     "@add": {
         "description": "Add an account"
     },
-    "delete": "Delete",
+    "delete": "Διαγράψτε",
     "@delete": {
         "description": "Delete an account"
     },
-    "addAccount": "Add account",
-    "deleteAccount": "Delete account",
-    "playerTagNotExists": "The player tag entered does not exist.",
-    "accountAlreadyLinked": "The player tag is already linked to someone.",
-    "enterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
-    "wrongApiToken": "The API token entered is incorrect",
-    "accountAlreadyLinkedToYou": "The player tag is already linked to you.",
-    "apiToken": "Account API Token",
-    "failedToAddTryAgain": "Failed to add link. Please try again later.",
-    "failedToDeleteTryAgain": "Failed to delete link. Please try again later.",
-    "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
-    "search": "Search",
+    "addAccount": "Προσθέστε λογαριασμό",
+    "deleteAccount": "Διαγράψτε λογαριασμό",
+    "playerTagNotExists": "Ο αριθμός λογαριασμού που καταγράψατε δεν υπάρχει.",
+    "accountAlreadyLinked": "Ο αριθμός λογαριασμού είναι ήδη συνδεδεμένος σε κάποιον.",
+    "enterApiToken": "Παρακαλώ εισάγετε το κλειδί API του λογαριασμού σας για να επιβεβαιώσετε ότι είναι δικός σας. Μπορείτε να το βρείτε στο Clash of Clans > Settings > More Settings > API Token.",
+    "wrongApiToken": "Το κλειδί API που εισάγατε είναι λάθος",
+    "accountAlreadyLinkedToYou": "Ο αριθμός λογαριασμού είναι ήδη συνδεδεμένος σε εσάς.",
+    "apiToken": "Κλειδί API λογαριασμού",
+    "failedToAddTryAgain": "Σφάλμα στην προσθήκη της σύνδεσης. Παρακαλώ προσπαθήστε ξανά αργότερα.",
+    "failedToDeleteTryAgain": "Σφάλμα στη διαγραφή της σύνδεσης. Παρακαλώ προσπαθήστε ξανά αργότερα.",
+    "enterPlayerTagWarning": "Εισάγετε έναν αριθμό λογαριασμού και πιέσετε το κουμπί \"+\" για να συνεχίσετε.",
+    "search": "Αναζήτηση",
     "@search": {
         "description": "Search for a player or a clan"
     },
-    "warning": "Warning",
-    "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-    "confirmLogout": "Are you sure you want to log out?",
+    "warning": "Προειδοποίηση",
+    "exitAppToOpenClash": "Πρόκειται να βγείτε από την εφαρμογή για να ανοίξετε το Clash of Clans.",
+    "confirmLogout": "Είστε σίγουροι ότι θέλετε να κάνετε έξοδο από τον λογαριασμό σας;",
     "@confirmLogout": {
         "description": "Prompt asking the user to confirm logout"
     },
-    "tagOrNamePlayer": "Player's tag or name",
-    "searchPlayer": "Search player",
-    "nameOrTagPlayer": "Player's name or tag",
-    "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+    "tagOrNamePlayer": "Αριθμός λογαριασμού ή όνομα",
+    "searchPlayer": "Αναζήτηση παίχτη",
+    "nameOrTagPlayer": "Όνομα παίχτη ή αριθμός λογαριασμού",
+    "playerClanDescription": "Η ομάδα σας είναι η \"{clan}\" ({tag}).",
     "@playerClanDescription": {
         "placeholders": {
             "clan": {
@@ -163,7 +163,7 @@
             }
         }
     },
-    "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+    "playerRatioDescription": "Η αναλογία δωρεάς σας είναι {ratio}. Έχετε δωρίσει {donations} στρατιώτες και έχετε λάβει {received}.",
     "@playerRatioDescription": {
         "placeholders": {
             "ratio": {
@@ -177,7 +177,7 @@
             }
         }
     },
-    "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+    "playerWarPreferenceDescription": "Η προτίμηση πολέμου σας είναι \"{preference}\".",
     "@playerWarPreferenceDescription": {
         "placeholders": {
             "preference": {
@@ -185,7 +185,7 @@
             }
         }
     },
-    "playerWarStarsDescription": "You have {stars} war stars.",
+    "playerWarStarsDescription": "Έχετε {stars} αστέρια πολέμου.",
     "@playerWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -193,7 +193,7 @@
             }
         }
     },
-    "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+    "playerTrophiesDescription": "Διαθέτετε {trophies} τρόπαια. Βρίσκεστε στο επίπεδο {league}.",
     "@playerTrophiesDescription": {
         "placeholders": {
             "trophies": {
@@ -204,7 +204,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+    "playerTownHallLevelDescription": "Το επίπεδο του Δημαρχείου σας είναι {level}.",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
@@ -212,7 +212,7 @@
             }
         }
     },
-    "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+    "playerBuilderBaseDescription": "Το επίπεδο του Δημαρχείου Χτίστη σας είναι {level} και διαθέτετε {trophies} τρόπαια.",
     "@playerBuilderBaseDescription": {
         "placeholders": {
             "level": {
@@ -223,42 +223,42 @@
             }
         }
     },
-    "dashboard": "Dashboard",
-    "homeBase": "Home Base",
-    "th": "TH",
-    "builderBase": "Builder Base",
-    "bh": "BH",
-    "clanCapital": "Clan Capital",
-    "leader": "Leader",
-    "coLeader": "Co-Leader",
-    "elder": "Elder",
-    "member": "Member",
-    "ready": "Opted In",
+    "dashboard": "Πίνακας Ελέγχου",
+    "homeBase": "Κύρια Βάση",
+    "th": "Δ",
+    "builderBase": "Βάση Χτίστη",
+    "bh": "ΔΧ",
+    "clanCapital": "Πρωτεύουσα Ομάδας",
+    "leader": "Αρχηγός",
+    "coLeader": "Συν-Αρχηγός",
+    "elder": "Επίτιμο Μέλος",
+    "member": "Μέλος",
+    "ready": "Θέλω να συμμετέχω",
     "@ready": {
         "description": "Opted In for war"
     },
-    "unready": "Opted Out",
+    "unready": "Δε θέλω να συμμετέχω",
     "@unready": {
         "description": "Opted Out for war"
     },
-    "heroes": "Heroes",
-    "equipment": "Equipments",
-    "troops": "Troops",
-    "superTroops": "Super Troops",
-    "activeSuperTroops": "Active Super Troops",
-    "pets": "Pets",
-    "siegeMachines": "Siege Machines",
-    "spells": "Spells",
-    "achievements": "Achievements",
-    "byDay": "By Day",
+    "heroes": "Ήρωες",
+    "equipment": "Εξοπλισμός",
+    "troops": "Στρατός",
+    "superTroops": "Σούπερ Στρατός",
+    "activeSuperTroops": "Ενεργός Σούπερ Στρατός",
+    "pets": "Κατοικίδια",
+    "siegeMachines": "Μηχανές Πολιορκίας",
+    "spells": "Ξόρκια",
+    "achievements": "Επιτεύγματα",
+    "byDay": "Με τη μέρα",
     "@byDay": {
         "description": "Shows stats by day"
     },
-    "bySeason": "By Season",
+    "bySeason": "Με τη σεζόν",
     "@byMonth": {
         "description": "Shows stats by season"
     },
-    "dayIndex": "Day {index}",
+    "dayIndex": "Μέρα {index}",
     "@dayIndex": {
         "placeholders": {
             "index": {
@@ -266,7 +266,7 @@
             }
         }
     },
-    "indexDays": "{index} days",
+    "indexDays": "{index} Μέρες",
     "@indexDays": {
         "placeholders": {
             "index": {
@@ -394,6 +394,7 @@
     "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
     "toDoList": "To-do list",
     "lastActive": "Last active: {date}",
+    "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
     "@lastActive": {
         "placeholders": {
             "date": {

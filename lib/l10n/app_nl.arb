@@ -394,6 +394,7 @@
     "legendsExplanation_conclusion": "Deze beperkingen zijn gebruikelijk bij alle tools die de Clash of Clans API gebruiken. Helaas kunnen we dat niet oplossen omdat het in handen van Supercell ligt. We doen ons best om deze limieten te compenseren en resultaten te bieden die zo dicht mogelijk bij de werkelijkheid liggen. Bedankt voor je begrip!",
     "toDoList": "Takenlijst",
     "lastActive": "Laatst actief: {date}",
+    "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
     "@lastActive": {
         "placeholders": {
             "date": {
@@ -665,7 +666,7 @@
             }
         }
     },
-    "warHistoryDrawsDescription": "Jouw clan had {draws} gelijkspel ({percent}%) in de laatste 50 oorlogen.",
+    "warHistoryDrawsDescription": "Je clan had {draws} gelijkspel ({percent}%) in de laatste 50 oorlogen.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
@@ -786,7 +787,7 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription": "Jouw clan heeft {number} nieuwe leden gekregen tijdens dit seizoen ({date}).",
+    "joinLeaveDifferenceUpDescription": "Je clan heeft {number} nieuwe leden gekregen tijdens dit seizoen ({date}).",
     "@joinLeaveDifferenceUpDescription": {
         "description": "Number of new members gained by the clan this season.",
         "placeholders": {
@@ -798,7 +799,7 @@
             }
         }
     },
-    "joinLeaveDifferenceDownDescription": "Jouw clan heeft dit seizoen {number} leden verloren ({date}).",
+    "joinLeaveDifferenceDownDescription": "Je clan heeft dit seizoen {number} leden verloren ({date}).",
     "@joinLeaveDifferenceDownDescription": {
         "description": "Number of members lost by the clan this season.",
         "placeholders": {
@@ -810,7 +811,7 @@
             }
         }
     },
-    "joinLeaveDifferenceEqualDescription": "Jouw clan heeft hetzelfde aantal leden als aan het begin van het seizoen ({date}).",
+    "joinLeaveDifferenceEqualDescription": "Je clan heeft hetzelfde aantal leden als aan het begin van het seizoen ({date}).",
     "@joinLeaveDifferenceEqualDescription": {
         "description": "Difference in the number of members between the beginning and the end of the season.",
         "placeholders": {
@@ -849,7 +850,7 @@
     "statistics": "Statistieken",
     "stars": "Sterren",
     "numberOfStars": "Aantal sterren",
-    "destructionRate": "Vernietigingssnelheid",
+    "destructionRate": "Totale vernietiging",
     "@destructionRate": {
         "description": "Percentage of destruction in war"
     },
@@ -944,7 +945,7 @@
     "warStats": "Oorlogstatistieken",
     "membersStats": "Ledenstatistieken",
     "clanWarLeague": "Clanoorlogsdivisie",
-    "cwlRank": "Jouw clan staat momenteel op rang {rank}.",
+    "cwlRank": "Je clan staat momenteel op rang {rank}.",
     "@cwlRank": {
         "placeholders": {
             "rank": {
@@ -952,7 +953,7 @@
             }
         }
     },
-    "cwlStars": "Jouw clan heeft een totaal van {stars} sterren.",
+    "cwlStars": "Je clan heeft een totaal van {stars} sterren.",
     "@cwlStars": {
         "placeholders": {
             "stars": {

@@ -72,26 +72,26 @@
     "faqNeedHelpAnswer": "Kannst unserem Discord-Server beitreten und dort um Hilfe bitten, oder Feedback geben oder uns eine E-Mail an devs@clashkingbot.com senden. Bitte schreib uns, wenn möglich nur auf Englisch oder Französisch.",
     "faqSendEmail": "Sende eine E-Mail",
     "faqJoinDiscord": "Unserem Discord-Server beitreten",
-    "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
+    "faqCannotOpenMailClient": "Aus irgendeinem Grund können wir deinen E-Mail-Client nicht öffnen. Wir haben die E-Mail-Adresse für dich kopiert. Du kannst eine E-Mail schreiben und die Adresse im Empfängerfeld einfügen.",
     "helpUsTranslate": "Hilf uns bei der Übersetzung",
     "suggestFeatures": "Funktion vorschlagen",
     "thankYou": "Vielen Dank!",
     "thankYouContent": "Ein großes Dankeschön an all unsere großartigen Übersetzer, die uns helfen, diese App mehr Menschen auf der ganzen Welt zugänglich zu machen!",
     "helpTranslateContent": "Du kannst uns helfen, die App auf Crowdin zu übersetzen. Wenn deine Sprache auf Crowdin nicht verfügbar ist, kannst du diese gerne auf unserem Discord-Server anfordern. Vielen Dank für deine Hilfe!",
     "helpTranslateButton": "Hilf bei der Übersetzung auf Crowdin",
-    "versionDevice": "Version & Device",
+    "versionDevice": "Version & Gerät",
     "@version": {
         "description": "Version of the app and device information"
     },
-    "loading": "Loading...",
-    "errorLoadingVersion": "Error loading version",
+    "loading": "Laden...",
+    "errorLoadingVersion": "Fehler beim Laden der Version",
     "@errorLoadingVersion": {
         "description": "Error message when the app version cannot be loaded"
     },
     "currentTranslators": "Aktuelle Übersetzer",
     "betaFeature": "Beta-Funktion",
     "beta": "BETA",
-    "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
+    "betaDescription": "Diese Option ist aktuell in der Beta, es kann also zu Fehlern kommen oder unvollständig sein. Wir arbeiten aktiv an Verbesserungen und sind dankbar für dein Feedback. Bitte teile uns deine Ideen sowie Fragen und Probleme auf unserem Discord Server mit, damit wir es besser machen können.",
     "copiedToClipboard": "In die Zwischenablage kopiert",
     "all": "Alle",
     "@all": {
@@ -132,10 +132,10 @@
     "deleteAccount": "Account löschen",
     "playerTagNotExists": "Das eingegebene Spielerkürzel existiert nicht.",
     "accountAlreadyLinked": "Dieses Spielerkürzel ist bereits mit jemand anderem verknüpft.",
-    "enterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
-    "wrongApiToken": "The API token entered is incorrect",
+    "enterApiToken": "Bitte gib einen API-Token ein, um zu bestätigen, dass der Account dir gehört. Du findest ihn in Clash of Clans unter Einstellungen > Weitere Einstellungen > API-Token.",
+    "wrongApiToken": "Der eingegebene API-Token ist falsch",
     "accountAlreadyLinkedToYou": "Der Spielerkürzel ist schon mit dir verlinkt.",
-    "apiToken": "Account API Token",
+    "apiToken": "Account API-Token",
     "failedToAddTryAgain": "Fehler bei der Verknüpfung. Bitte versuche es später erneut.",
     "failedToDeleteTryAgain": "Fehler beim Löschen der Verknüpfung. Bitte versuche es später erneut.",
     "enterPlayerTagWarning": "Du musst ein Spielerkürzel eingeben und auf \"+\" klicken um fortzufahren.",
@@ -394,6 +394,7 @@
     "legendsExplanation_conclusion": "Diese Einschränkungen sind bei allen Tools, die die Clash of Clans API verwenden, üblich. Leider können wir das nicht beheben, da es in den Händen von Supercell liegt. Wir tun unser Bestes, um diese Grenzen auszugleichen und Ergebnisse so nah wie möglich an der Realität zu liefern. Vielen Dank für dein Verständnis!",
     "toDoList": "To-do-Lis­te",
     "lastActive": "Zuletzt aktiv: {date}",
+    "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
     "@lastActive": {
         "placeholders": {
             "date": {
@@ -643,7 +644,7 @@
     "cantOpenLink": "Wir können diesen Link nicht öffnen.",
     "notInWar": "Nicht im Krieg",
     "warHistory": "Kriegsvergangenheit",
-    "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
+    "warHistoryWinsDescription": "Dein Clan hat {wins} Kriege ({percent}%) der letzten 50 Kriege gewonnen.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
@@ -654,7 +655,7 @@
             }
         }
     },
-    "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) out of the last 50 wars.",
+    "warHistoryLossesDescription": "Dein Clan hat {losses} Kriege ({percent}%) der letzten 50 Kriege verloren.",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
@@ -665,7 +666,7 @@
             }
         }
     },
-    "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) out of the last 50 wars.",
+    "warHistoryDrawsDescription": "Dein Clan hat {draws} Kriege ({percent}%) der letzten 50 Kriege unentschieden gespielt.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
@@ -676,7 +677,7 @@
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
+    "warHistoryAverageMembersDescription": "In deinem Clan haben durchschnittlich {members} Mitglieder an den letzten 50 Kriegen teilgenommen.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -684,7 +685,7 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription": "Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.",
+    "warHistoryAverageWarStarsDescription": "Dein Clan hatte im Durchschnitt {stars} Sterne pro Krieg in den letzten 50 Kriegen. Das entspricht {percent}% der Gesamtsterne.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -695,7 +696,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
+    "warHistoryAverageHitRateDescription": "Dein Clan hatte eine durchschnittliche Zerstörungsrate von {percent}% in den letzten 50 Kriegen.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
@@ -703,7 +704,7 @@
             }
         }
     },
-    "warHistoryAverageClanStarsPerMember": "Your clan had an average of {stars} stars per member from the last 50 wars.",
+    "warHistoryAverageClanStarsPerMember": "Dein Clan hatte durchschnittlich {stars} Sterne pro Mitglied in den letzten 50 Kriegen.",
     "warHistoryAverageMembers": "{members} Mitglieder pro Krieg",
     "@warHistoryAverageMembers": {
         "placeholders": {
@@ -718,7 +719,7 @@
     "oneStar": "1 Stern",
     "twoStars": "2 Sterne",
     "threeStars": "3 Sterne",
-    "warParticipation": "War Participation",
+    "warParticipation": "Kriegsbeteiligung",
     "toggleTownHallVisibility": "Statistik früherer Rathauslevel",
     "@toggleTownHallVisibility": {
         "description": "For example, hide stats from TH15 and below if the player is now TH16"
@@ -762,7 +763,7 @@
     "join": "Beigetreten",
     "leave": "Verlassen",
     "reset": "Zurücksetzen",
-    "leaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
+    "leaveNumberDescription": "{number} Spieler haben den Clan in der aktuellen Saison ({date}) verlassen.",
     "@leaveNumberDescription": {
         "description": "Number of players who left the clan during the current season.",
         "placeholders": {
@@ -774,7 +775,7 @@
             }
         }
     },
-    "joinNumberDescription": "{number} player(s) joined the clan during the current season ({date}).",
+    "joinNumberDescription": "{number} Spieler sind dem Clan in dieser Saison ({date}) beigetreten.",
     "@joinNumberDescription": {
         "description": "Number of players who joined the clan during the current season.",
         "placeholders": {
@@ -786,7 +787,7 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new member(s) this season ({date}).",
+    "joinLeaveDifferenceUpDescription": "Dein Clan hat in dieser Saison {number} neue Mitglieder dazugewonnen ({date}).",
     "@joinLeaveDifferenceUpDescription": {
         "description": "Number of new members gained by the clan this season.",
         "placeholders": {
@@ -798,7 +799,7 @@
             }
         }
     },
-    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} member(s) this season ({date}).",
+    "joinLeaveDifferenceDownDescription": "Dein Clan hat in dieser Saison {number} Mitglieder verloren ({date}).",
     "@joinLeaveDifferenceDownDescription": {
         "description": "Number of members lost by the clan this season.",
         "placeholders": {
