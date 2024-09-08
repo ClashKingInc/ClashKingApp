@@ -79,13 +79,8 @@ factory LegendDay.fromJson(String key, Map<String, dynamic> json) {
 
     return legendDay;
   } catch (exception, stackTrace) {
-    final hint = Hint.withMap({
-      'custom_message': 'Error while parsing legend day from json',
-      'key': key,
-      'json': json,
-    });
     Sentry.captureException(exception, stackTrace: stackTrace);
-    Sentry.captureMessage('Error while parsing legend day from json, hint: ${hint.toString()}');
+    Sentry.captureMessage('Error while parsing legend day from json, key $key, json: $json');
     return LegendDay(
       date: DateTime.parse(key),
       numDefenses: 0,
@@ -225,19 +220,8 @@ factory LegendDay.fromJson(String key, Map<String, dynamic> json) {
       attacksStats = calculateStats(attacksList);
       defensesStats = calculateStats(defensesList);
     } catch (exception, stackTrace) {
-      final hint = Hint.withMap({
-        'custom_message': 'Error while calculating legends trophies',
-        'attacksList': attacksList,
-        'defensesList': defensesList,
-        'startTrophies': startTrophies,
-        'endTrophies': endTrophies,
-        'currentTrophies': currentTrophies,
-        'diffTrophies': diffTrophies,
-        'attacksStats': attacksStats,
-        'defensesStats': defensesStats,
-      });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Error while calculating legends trophies, hint: ${hint.toString()}');
+      Sentry.captureMessage('Error while calculating legends trophies, attacksList: $attacksList, defensesList: $defensesList, startTrophies: $startTrophies, endTrophies: $endTrophies, currentTrophies: $currentTrophies, diffTrophies: $diffTrophies, attacksStats: $attacksStats, defensesStats: $defensesStats');
     }
   }
 }

@@ -283,7 +283,7 @@ class StatsScreenState extends State<StatsScreen>
             .map((name) => items.firstWhere((item) => item.name == name))
             .toList();
         break;
-      case 'hero':
+      case 'hero' || 'bb-hero':
         dataManager = HeroesDataManager().heroUrlsAndTypes;
         break;
       case 'pet':
@@ -525,7 +525,7 @@ class StatsScreenState extends State<StatsScreen>
                                       bottom: 1,
                                       child: Container(
                                         height: 16,
-                                        width: 18,
+                                        width: 20,
                                         padding: EdgeInsets.all(1),
                                         decoration: BoxDecoration(
                                           color: item.level == item.maxLevel

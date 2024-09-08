@@ -336,6 +336,7 @@
     "legendsExplanation_conclusion": "Ces limitations sont communes à tous les outils utilisant l'API de Clash of Clans. Nous ne pouvons malheureusement pas résoudre ce problème car cela dépend de Supercell. Nous faisons de notre mieux pour compenser ces limites et fournir des résultats les plus proches de la réalité possible. Merci de votre compréhension !",
     "toDoList": "Tâches du jour",
     "lastActive": "Dernière activité : {date}",
+    "playerNotTracked": "Ce joueur n'est pas suivi. Les données peuvent être inexactes.",
     "@lastActive": {
         "placeholders": {
             "date": {

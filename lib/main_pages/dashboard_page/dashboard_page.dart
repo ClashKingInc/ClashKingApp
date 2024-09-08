@@ -65,14 +65,9 @@ class DashboardPageState extends State<DashboardPage>
             profileInfo.toDo!.calculateTotals(profileInfo);
           }
         } catch (exception, stackTrace) {
-          final hint = Hint.withMap({
-            'custom_message': 'Error while calculating toDo totals',
-            'profile_info_tag': profileInfo.tag,
-            'toDo': profileInfo.toDo?.toString(),
-          });
           Sentry.captureException(exception, stackTrace: stackTrace);
           Sentry.captureMessage(
-              'Error while calculating toDo totals, hint: ${hint.toString()}');
+              'Error while calculating toDo totals, profile_info_tag: ${profileInfo.tag}, toDo: ${profileInfo.toDo?.toString()}');
         }
       }
       if (!widget.accounts.toDoList.isInitialized) {

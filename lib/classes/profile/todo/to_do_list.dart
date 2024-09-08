@@ -156,11 +156,8 @@ class ToDoList {
           : [];
       return ToDoList(items: itemList.cast<ToDo>());
     } catch (exception, stackTrace) {
-      final hint = Hint.withMap({
-        'json': json,
-      });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to parse to-do list', hint: hint);
+      Sentry.captureMessage('Failed to parse to-do list from json, json: $json');
 
       return ToDoList(items: []);
     }
@@ -175,11 +172,8 @@ class ToDoList {
     try {
       return items.firstWhere((todo) => todo.playerTag == tag);
     } catch (exception, stackTrace) {
-      final hint = Hint.withMap({
-        'tag': tag,
-      });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('No to-do found for this tag', hint: hint);
+      Sentry.captureMessage('No to-do found for this tag, tag: $tag');
       return null;
     }
   }

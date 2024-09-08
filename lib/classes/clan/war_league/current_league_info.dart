@@ -9,10 +9,10 @@ class LeagueInfoContainer {
 }
 
 class CurrentLeagueInfo {
-  final String state;
-  final String season;
-  final List<ClanLeagueDetails> clans;
-  final List<ClanLeagueRounds> rounds;
+  String state;
+  String season;
+  List<ClanLeagueDetails> clans;
+  List<ClanLeagueRounds> rounds;
   late int currentRound;
 
   CurrentLeagueInfo({
@@ -97,7 +97,7 @@ class CurrentLeagueInfo {
       }
       // Get current round
       if (!round.warTags.contains("#0")) {
-        currentRound = rounds.indexOf(round) + 1;
+        currentRound = rounds.indexOf(round);
       }
     }
 

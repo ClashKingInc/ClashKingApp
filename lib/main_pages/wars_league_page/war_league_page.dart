@@ -47,15 +47,11 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
     // Fetch the updated profile information
     if (widget.account.clan != null) {
       widget.account.clan!.warInitialized = false;
+      setState(() async {
       Clan updatedClanInfo =
           await ClanService().fetchWarLeagueInfo(widget.account.clan!);
-      setState(() {
         // Update the player stats with the newly fetched data
         widget.account.clan!.updateWarLeagueFrom(updatedClanInfo);
-        if (widget.account.clan != null && widget.account.clan!.currentLeagueInfo != null) {
-          widget.account.clan!.currentLeagueInfo!
-              .calculateTotalStarsAndPercentage();
-        }
         _initializeClanFuture = _checkInitialization();
       });
     }

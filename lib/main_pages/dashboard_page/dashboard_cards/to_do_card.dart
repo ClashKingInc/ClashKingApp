@@ -146,6 +146,13 @@ class ToDoCardState extends State<ToDoCard> {
                 children: [
                   Column(
                     children: <Widget>[
+                      profileInfo.toDo!.lastActive == 0
+                          ? Text(
+                              AppLocalizations.of(context)!.playerNotTracked,
+                              style: Theme.of(context).textTheme.labelLarge,
+                              textAlign: TextAlign.center,
+                            )
+                          :
                       Text(
                         AppLocalizations.of(context)
                                 ?.lastActive((formattedDate)) ??

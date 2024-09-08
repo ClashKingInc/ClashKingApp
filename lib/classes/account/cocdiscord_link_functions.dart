@@ -61,13 +61,8 @@ Future<bool> addLink(
   }
   }
   catch(exceptions, stackTrace){
-    var hint = Hint.withMap({
-      'playerTag': playerTag,
-      'discordId': discordId,
-      'authToken': authToken,
-    });
     Sentry.captureException(exceptions, stackTrace: stackTrace);
-    Sentry.captureMessage('Failed to add link, hint: ${hint.toString()}');
+    Sentry.captureMessage('Failed to add link, playerTag: $playerTag, discordId: $discordId');
   }
   return false;
 }

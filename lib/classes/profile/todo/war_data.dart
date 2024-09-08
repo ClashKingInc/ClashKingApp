@@ -68,9 +68,8 @@ class WarData {
         return war;
       }
     } catch (e, stackTrace) {
-      final hint = Hint.withMap({"clanTag": clanTag});
       Sentry.captureException(e, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to fetch war data, hint: ${hint.toString()}');
+      Sentry.captureMessage('Failed to fetch war data, clanTag: $clanTag');
       return WarStateInfo(state: "notInWar");
     }
   }

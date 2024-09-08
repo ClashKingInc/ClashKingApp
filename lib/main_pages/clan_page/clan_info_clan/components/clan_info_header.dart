@@ -174,12 +174,8 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                         'https://discord.gg/$discordCode');
                                     if (!await launchUrl(url) &&
                                         context.mounted) {
-                                      final hint = Hint.withMap({
-                                        'url': url,
-                                      });
                                       Sentry.captureMessage(
-                                          'Failed to open Discord invite link',
-                                          hint: hint);
+                                          'Failed to open Discord invite link, url: $url');
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
@@ -190,25 +186,14 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                       );
                                     }
                                   } else {
-                                    final hint = Hint.withMap({
-                                      'description':
-                                          widget.clanInfo.description,
-                                    });
                                     Sentry.captureMessage(
-                                        'Failed to extract Discord invite link',
-                                        hint: hint);
+                                        'Failed to extract Discord invite link, description: ${widget.clanInfo.description}');
                                   }
                                 } catch (exception, stackTrace) {
-                                  final hint = Hint.withMap({
-                                    'message':
-                                        'Failed to deal with Discord invite link',
-                                    'description': widget.clanInfo.description,
-                                  });
                                   Sentry.captureException(exception,
                                       stackTrace: stackTrace);
                                   Sentry.captureMessage(
-                                      'Failed to deal with Discord invite link',
-                                      hint: hint);
+                                      'Failed to deal with Discord invite link, description: ${widget.clanInfo.description}');
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(

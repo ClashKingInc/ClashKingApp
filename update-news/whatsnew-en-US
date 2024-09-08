@@ -1,13 +1,13 @@
-- **What's New:**
-  - Improved spell and troop display by elixir type.
-  - Added new translations for German and UK English.
-  - Enhanced error handling and various QoL improvements.
+QoL: Indication added when player clan is not tracked for to-do info.
+Design: Improved text color readability for task calculation & legends.
+Language: Added Ukrainian; new translations for Polish, Dutch, Greek, and Portuguese.
 
-- **Bug Fixes:**
-  - Fixed hero equipment level display on profiles.
-  - Resolved button issues on the email and translation pages.
-  - Prevented background tasks on iOS.
-  - Corrected troop level display on certain devices.
-  - Fixed encryption for null values.
+Bug Fixes:
+- Builder base heroes now display correctly.
+- CWL refresh issue fixed.
+- Corrected CWL day display.
+- Hero level digits now visible on iOS.
+- Legends parsing issue resolved for December 2023.
 
 See the full notes on our Discord server.
+

@@ -101,7 +101,7 @@ class TranslationScreen extends StatelessWidget {
               SizedBox(height: 16),
               // Replace the following with actual translator names
               Text(
-                "• Joelsuperstar \n• niklas312 \n• ColinSchmale \n• athype \n• Nemo_64\n• Dinki/Krakakus \n• SudetiZ \n• MRocha01 \n• GodOfGos \n• DeafToDeath \n• Wraxu \n• MixxStar \n• SamGo \n• AlejandroMoc ",
+                "• Joelsuperstar \n• niklas312 \n• ColinSchmale \n• athype \n• Nemo_64\n• Dinki/Krakakus \n• SudetiZ \n• MRocha01 \n• GodOfGods \n• DeafToDeath \n• Wraxu \n• MixxStar \n• SamGo \n• AlejandroMoc ",
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],

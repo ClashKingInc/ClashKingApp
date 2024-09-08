@@ -19,7 +19,7 @@ class ToDoBodyCard extends StatefulWidget {
   @override
   ToDoBodyCardState createState() => ToDoBodyCardState();
 }
-
+ 
 class ToDoBodyCardState extends State<ToDoBodyCard> {
   @override
   Widget build(BuildContext context) {
@@ -60,6 +60,13 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                     children: [
                       Column(
                         children: <Widget>[
+                          widget.toDo.lastActive == 0
+                              ? Text(
+                                  AppLocalizations.of(context)!.playerNotTracked,
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                  textAlign: TextAlign.center,
+                                )
+                              :
                           Text(
                             AppLocalizations.of(context)?.lastActive((DateFormat
                                             .yMd(userLocale.toString())

@@ -135,6 +135,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                         runSpacing: -7.0,
                         children: <Widget>[
                           ImageChip(
+                            textColor: Colors.white,
                             imageUrl:
                                 "https://assets.clashk.ing/icons/Icon_HV_Podium.png",
                             labelPadding: 2,
@@ -146,6 +147,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                                 .cwlRank(clan!.rank),
                           ),
                           ImageChip(
+                            textColor: Colors.white,
                             imageUrl:
                                 "https://assets.clashk.ing/icons/Icon_BB_Star.png",
                             labelPadding: 2,
@@ -154,6 +156,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                                 .cwlStars(clan!.stars),
                           ),
                           IconChip(
+                            textColor: Colors.white,
                             icon: Icons.keyboard_double_arrow_up,
                             color: Colors.blue,
                             size: 16,
@@ -164,6 +167,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                                     clan!.starsDifferenceWithFirst),
                           ),
                           IconChip(
+                            textColor: Colors.white,
                             icon: Icons.arrow_upward,
                             color: Colors.blue,
                             size: 16,
@@ -174,6 +178,7 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                                     clan!.starsDifferenceWithNext),
                           ),
                           ImageChip(
+                            textColor: Colors.white,
                             imageUrl:
                                 "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                             labelPadding: 2,

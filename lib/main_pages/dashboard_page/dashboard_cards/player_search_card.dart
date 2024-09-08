@@ -58,12 +58,8 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
         }
       });
     } catch (exception, stackTrace) {
-      final hint = Hint.withMap({
-        'search': _controller.text,
-        '_searchResults': _searchResults,
-      });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Error in search, hint: ${hint.toString()}');
+      Sentry.captureMessage('Error in search, search: ${_controller.text}, searchResults: $_searchResults');
     }
   }
 

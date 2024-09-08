@@ -306,6 +306,9 @@ class ToDoHeaderState extends State<ToDoHeader> {
         ),
         InfoButton(
           textSpan: TextSpan(
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
             children: [
               TextSpan(
                   text:

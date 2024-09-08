@@ -184,8 +184,7 @@ class ProfileInfoService {
           if (response.statusCode == 200) {
             return response;
           } else {
-            Sentry.captureMessage('Player not found',
-                hint: Hint.withMap({'tag': tag}));
+            Sentry.captureMessage('Player not found, tag: $tag');
             return null;
           }
         },
@@ -208,12 +207,9 @@ class ProfileInfoService {
         return null;
       }
     } catch (exception, stackTrace) {
-      final hint = Hint.withMap({
-        'tag': tag,
-      });
       transaction.finish(status: SpanStatus.internalError());
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load player stats, hint: ${hint.toString()}');
+      Sentry.captureMessage('Failed to load player stats, tag: $tag');
       throw Exception('Failed to load player stats: $exception');
     }
   }
@@ -269,11 +265,8 @@ class ProfileInfoService {
 
       playerLegendDataSpan.finish(status: SpanStatus.ok());
     } catch (e, stackTrace) {
-      final hint = Hint.withMap({
-        'tag': profileInfo.tag,
-      });
       Sentry.captureException(e, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load player legend data, hint: ${hint.toString()}');
+      Sentry.captureMessage('Failed to load player legend data, tag: ${profileInfo.tag}');
       playerLegendDataSpan.finish(status: SpanStatus.internalError());
       rethrow;
     }
@@ -296,11 +289,8 @@ class ProfileInfoService {
       profileInfo.warStats = warStats;
       profileInfo.warStatsInitialized = true;
     } catch (exception, stackTrace) {
-      final hint = Hint.withMap({
-        'tag': profileInfo.tag,
-      });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load player war stats, hint: ${hint.toString()}');
+      Sentry.captureMessage('Failed to load player war stats, tag: ${profileInfo.tag}');
     }
   }
 

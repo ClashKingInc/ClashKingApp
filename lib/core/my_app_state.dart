@@ -143,12 +143,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         androidName: 'WarAppWidgetProvider',
       );
     } catch (exception, stackTrace) {
-      final hint = Hint.withMap({
-        'clanTag': clanTag,
-        'warInfo': warInfo,
-      });
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to update war widget, hint: ${hint.toString()}');
+      Sentry.captureMessage('Failed to update war widget, clanTag: $clanTag, warInfo: $warInfo');
     }
   }
 
@@ -296,15 +292,9 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       notifyListeners();
       return true;
     } catch (exception, stackTrace) {
-      final hint = Hint.withMap({
-        'custom_message': 'Error during initializeData execution',
-        'user': user,
-        'accounts': accounts,
-        'selected_account': account,
-      });
       Sentry.captureException(exception, stackTrace: stackTrace);
       Sentry.captureMessage(
-          'Error during initializeData execution, hint: ${hint.toString()}');
+          'Error during initializeData execution, user: $user, accounts: $accounts, selected_account: $account',);
       return false;
     }
   }
