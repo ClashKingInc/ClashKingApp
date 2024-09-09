@@ -394,7 +394,7 @@
     "legendsExplanation_conclusion": "Diese Einschränkungen sind bei allen Tools, die die Clash of Clans API verwenden, üblich. Leider können wir das nicht beheben, da es in den Händen von Supercell liegt. Wir tun unser Bestes, um diese Grenzen auszugleichen und Ergebnisse so nah wie möglich an der Realität zu liefern. Vielen Dank für dein Verständnis!",
     "toDoList": "To-do-Lis­te",
     "lastActive": "Zuletzt aktiv: {date}",
-    "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
+    "playerNotTracked": "Spieler wurde nicht erfasst. Die Daten könnten falsch sein.",
     "@lastActive": {
         "placeholders": {
             "date": {
