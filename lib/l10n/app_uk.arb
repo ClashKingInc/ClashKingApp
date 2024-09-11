@@ -969,7 +969,7 @@
             }
         }
     },
-    "cwlMissingStarsFromFirst": "У вашому клані не вистачає {stars}, щоб догнати перший клан.",
+    "cwlMissingStarsFromFirst": "Ваш клан відстає на {stars} зірок, щоб наздогнати перший клан.",
     "@cwlMissingStarsFromFirst": {
         "placeholders": {
             "stars": {
