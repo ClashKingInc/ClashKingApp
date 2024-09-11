@@ -1,5 +1,5 @@
 {
-    "creatorCode": "Creator Code: ClashKing",
+    "creatorCode": "Код Создателя: ClashKing",
     "signInWithDiscord": "Вход через Discord",
     "guestMode": "Режим \"Гость\"",
     "needHelpJoinDiscord": "Нужна помощь? Присоединяйтесь к нам в Discord.",
@@ -40,7 +40,7 @@
         }
     },
     "welcome": "Добро пожаловать!",
-    "welcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
+    "welcomeMessage": "Пожалуйста, добавьте один или несколько аккаунтов Clash of Clans в свой профиль. Вы сможете добавлять или удалять аккаунты позже.",
     "login": "Вход",
     "logout": "Выход",
     "language": "Язык",
@@ -50,48 +50,48 @@
     "faq": "Ответы на частые вопросы",
     "faqSubtitle": "Часто задаваемые вопросы",
     "faqIsThisFromSupercell": "Это приложение от Supercell?",
-    "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
+    "faqFanContentPolicy": "Этот материал неофициальный и не одобрен Supercell. Для получения дополнительной информации просмотрите Политику Supercell в отношении контента для фанатов: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Почему данные иногда неточны или отсутствуют?",
-    "faqClanNotTracked": "Clan not tracked",
-    "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
-    "faqTrackingDown": "Tracking down",
-    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
-    "faqApiLimitation": "Clash of Clans API limitation",
-    "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
+    "faqClanNotTracked": "Клан не отслеживается",
+    "faqClanNotTrackedAnswer": "ClashKing может получить эту информацию только если клан отслеживается. Если ваш клан не отслеживается, пригласите бота ClashKing на свой сервер Discord и используйте команду /addclan. Мы работаем над тем, чтобы сделать эту функцию доступной в приложении в ближайшее время.",
+    "faqTrackingDown": "Отслеживаем",
+    "faqTrackingDownAnswer": "Отслеживание может перестать работать на определенный период времени. Вот почему иногда в ваших данных могут быть дыры. Мы работаем над улучшением этого.",
+    "faqApiLimitation": "Clash of Clans API ограничение",
+    "faqApiLimitationAnswer": "Некоторые данные предоставлены Clash of Clans, и их API имеет некоторые ограничения. Это касается отслеживания легенд, иногда оно суммирует получение и потерю трофеев, как если бы это была одна атака. Вот почему у нас нет никакой информации об уровнях ваших зданий.",
     "faqSupportWork": "Как я могу поддержать вашу работу?",
-    "faqSupportWorkAnswer": "There are several ways to support us:",
+    "faqSupportWorkAnswer": "Есть несколько способов поддержать нас:",
     "faqUseCodeClashKing": "Используйте код \"ClashKing\"",
     "faqSupportUsOnPatreon": "Поддержать нас в Patreon",
     "faqShareTheApp": "Поделитесь этим приложением со своими друзьями",
-    "faqRateTheApp": "Rate the app in the store",
+    "faqRateTheApp": "Предложить особенности",
     "faqHelpUsTranslate": "Помогите нам перевести это приложение",
-    "faqHowToInviteTheBot": "How can I invite your bot to my Discord Server?",
-    "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
+    "faqHowToInviteTheBot": "Как мне пригласить вашего бота на мой сервер Discord?",
+    "faqHowToInviteTheBotAnswer": "Вы можете пригласить нашего бота на свой сервер, нажав на кнопку ниже. Вам понадобится разрешение «Управление сервером», чтобы добавить бота.",
     "faqInviteTheBot": "Пригласить бота ClashKing",
     "faqNeedHelp": "Мне нужна помощь или я хотел бы внести предложение. Как я могу связаться с вами?",
-    "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.",
+    "faqNeedHelpAnswer": "Вы можете присоединиться к нашему Discord-серверу, чтобы попросить о помощи или оставить отзыв, или вы можете написать нам по адресу devs@clashkingbot.com. Пожалуйста, пишите только на английском или французском языке.",
     "faqSendEmail": "Отправить e-mail",
     "faqJoinDiscord": "Присоединяйтесь к нашему Discord серверу",
-    "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
+    "faqCannotOpenMailClient": "По некоторым причинам мы не можем открыть ваш почтовый клиент. Мы скопировали адрес электронной почты для вас. Вы можете написать письмо и вставить адрес в поле получателя.",
     "helpUsTranslate": "Помогите нам с переводом",
-    "suggestFeatures": "Suggest features",
+    "suggestFeatures": "Предложить особенности",
     "thankYou": "Спасибо!",
-    "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
+    "thankYouContent": "Огромное спасибо всем нашим замечательным переводчикам, которые помогают нам сделать это приложение доступным для большего количества людей по всему миру!",
+    "helpTranslateContent": "Вы можете помочь нам перевести приложение на Crowdin. Если ваш язык недоступен на Crowdin, смело запрашивайте его на нашем сервере Discord. Большое спасибо за вашу помощь!",
     "helpTranslateButton": "Помогите с переводом на Crowdin",
-    "versionDevice": "Version & Device",
+    "versionDevice": "Версия и устройство",
     "@version": {
         "description": "Version of the app and device information"
     },
-    "loading": "Loading...",
-    "errorLoadingVersion": "Error loading version",
+    "loading": "Загрузка...",
+    "errorLoadingVersion": "Ошибка загрузки версии",
     "@errorLoadingVersion": {
         "description": "Error message when the app version cannot be loaded"
     },
-    "currentTranslators": "Current Translators",
-    "betaFeature": "Beta Feature",
+    "currentTranslators": "Текущие Переводчики",
+    "betaFeature": "Бета-Функция",
     "beta": "Бета",
-    "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
+    "betaDescription": "Эта функция в настоящее время находится в стадии бета-тестирования, она может содержать некоторые ошибки или быть неполной. Мы активно работаем над улучшениями и приветствуем ваши отзывы. Пожалуйста, делитесь своими идеями и сообщайте о любых проблемах на нашем сервере Дискорд, чтобы помочь нам сделать его лучше.",
     "copiedToClipboard": "Скопировано в буфер обмена",
     "all": "Все",
     "@all": {
@@ -132,13 +132,13 @@
     "deleteAccount": "Удалить аккаунт",
     "playerTagNotExists": "Введенный тег игрока не существует.",
     "accountAlreadyLinked": "Тег игрока уже связан с кем-то.",
-    "enterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
-    "wrongApiToken": "The API token entered is incorrect",
-    "accountAlreadyLinkedToYou": "The player tag is already linked to you.",
-    "apiToken": "Account API Token",
+    "enterApiToken": "Введите API-токен учетной записи, чтобы подтвердить, что он ваш. Вы можете найти его в настройках Clash of Clans > Дополнительные настройки > API-токен.",
+    "wrongApiToken": "Тег игрока уже привязан к вм.",
+    "accountAlreadyLinkedToYou": "Тег игрока уже привязан к вам.",
+    "apiToken": "Аккаунт API Токен",
     "failedToAddTryAgain": "Не удалось добавить ссылку. Пожалуйста, повторите попытку позже.",
     "failedToDeleteTryAgain": "Не удалось добавить ссылку. Пожалуйста, повторите попытку позже.",
-    "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
+    "enterPlayerTagWarning": "Вам необходимо ввести тег игрока и нажать «+», чтобы продолжить.",
     "search": "Поиск",
     "@search": {
         "description": "Search for a player or a clan"
@@ -151,8 +151,8 @@
     },
     "tagOrNamePlayer": "Тег или имя игрока",
     "searchPlayer": "Найти игрока",
-    "nameOrTagPlayer": "Player's name or tag",
-    "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+    "nameOrTagPlayer": "Имя или тег игрока",
+    "playerClanDescription": "Ваш клан — «{clan}» ({tag}).",
     "@playerClanDescription": {
         "placeholders": {
             "clan": {
@@ -163,7 +163,7 @@
             }
         }
     },
-    "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+    "playerRatioDescription": "Ваш коэффициент пожертвования составляет {ratio}. Вы пожертвовали {donations} войск и получили {received} войск.",
     "@playerRatioDescription": {
         "placeholders": {
             "ratio": {
@@ -177,7 +177,7 @@
             }
         }
     },
-    "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+    "playerWarPreferenceDescription": "Ваши военные предпочтения: \"{preference}\".",
     "@playerWarPreferenceDescription": {
         "placeholders": {
             "preference": {
@@ -185,7 +185,7 @@
             }
         }
     },
-    "playerWarStarsDescription": "You have {stars} war stars.",
+    "playerWarStarsDescription": "У вас есть {stars} боевых звезд.",
     "@playerWarStarsDescription": {
         "placeholders": {
             "stars": {
