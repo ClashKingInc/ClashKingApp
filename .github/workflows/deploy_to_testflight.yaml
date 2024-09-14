@@ -35,7 +35,7 @@ jobs:
           echo "BUILD_NUMBER=$BUILD_NUM" >> $GITHUB_ENV
 
       - name: Build iOS app
-        run: flutter build ios --release --no-codesign
+        run: flutter build ios --release --no-codesign -- -allowProvisioningUpdates
 
       - name: Install Fastlane
         run: sudo gem install fastlane
@@ -51,6 +51,6 @@ jobs:
           api_issuer: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           api_key: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
           ipa_path: ./build/ClashKing.ipa
-          app_identifier: 'com.clashking.clashkingapp'
+          app_identifier: 'com.clashking.clashkingapps'
           bundle_version: ${{ env.BUILD_NUMBER }}
           bundle_short_version: ${{ env.VERSION }}
