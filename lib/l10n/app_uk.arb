@@ -898,7 +898,7 @@
     "rounds": "Раундів",
     "noDataAvailableForThisWar": "Дані недоступні для цієї війни",
     "stateOfTheWar": "Стан війни",
-    "starsNeededToTakeTheLead": "{clan} Все ще потребує {star} ще одну зірку або {stars2} зірки та {percent}%, щоб вийти вперед.",
+    "starsNeededToTakeTheLead": "{clan} Все ще потребує {star} зірок або {stars2} зірки та {percent}%, щоб вийти вперед.",
     "@starsNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -915,7 +915,7 @@
             }
         }
     },
-    "starsAndPercentNeededToTakeTheLead": "{clan} Все ще потребує {percent}% або ще 1 зірки, щоб взяти на себе ініціативу",
+    "starsAndPercentNeededToTakeTheLead": "{clan} Все ще потребує {percent}% або ще 1 зірку, щоб взяти на себе ініціативу",
     "@starsAndPercentNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
