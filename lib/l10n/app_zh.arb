@@ -1,10 +1,10 @@
 {
-    "creatorCode": "Creator Code: ClashKing",
-    "signInWithDiscord": "Sign In with Discord",
-    "guestMode": "Guest Mode",
-    "needHelpJoinDiscord": "Need help? Join us on Discord.",
-    "createGuestProfile": "Create your guest profile",
-    "doesNotExist": "{tag} does not exist.",
+    "creatorCode": "创作者代码：ClashKing",
+    "signInWithDiscord": "使用Discord登录",
+    "guestMode": "访客模式",
+    "needHelpJoinDiscord": "需要帮助？请加入我们的Discord频道。",
+    "createGuestProfile": "创建您的访客形象",
+    "doesNotExist": "{tag}不存在。",
     "@doesNotExist": {
         "placeholders": {
             "tag": {
@@ -12,7 +12,7 @@
             }
         }
     },
-    "isAlreadyLinked": "{tag} is already linked to someone.",
+    "isAlreadyLinked": "{tag}此标签已被绑定。",
     "@isAlreadyLinked": {
         "placeholders": {
             "tag": {
@@ -20,10 +20,10 @@
             }
         }
     },
-    "username": "Username",
-    "pleaseEnterUsername": "Please enter a username",
-    "playerTags": "Player Tags",
-    "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
+    "username": "用户名",
+    "pleaseEnterUsername": "请输入用户名",
+    "playerTags": "玩家标签",
+    "followingTagsDoNotExist": "以下标签不存在：{tags}。",
     "@followingTagsDoNotExist": {
         "placeholders": {
             "tags": {
@@ -31,7 +31,7 @@
             }
         }
     },
-    "followingTagsAreAlreadyLinked": "The following tags are already linked to someone: {tags}.",
+    "followingTagsAreAlreadyLinked": "以下标签已被绑定：{tags}。",
     "@followingTagsAreAlreadyLinked": {
         "placeholders": {
             "tags": {
@@ -39,75 +39,75 @@
             }
         }
     },
-    "welcome": "Welcome!",
-    "welcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
-    "login": "Login",
-    "logout": "Log out",
-    "language": "Language",
-    "settings": "Settings",
-    "toggleTheme": "Toggle Theme",
-    "selectLanguage": "Select a language",
+    "welcome": "欢迎！",
+    "welcomeMessage": "请将一个或多个部落冲突帐户添加到您的个人资料中。您可以稍后添加或删除帐户。",
+    "login": "登录",
+    "logout": "注销",
+    "language": "语言",
+    "settings": "设置",
+    "toggleTheme": "切换主题",
+    "selectLanguage": "搜索语言",
     "faq": "FAQ",
-    "faqSubtitle": "Frequently Asked Questions",
-    "faqIsThisFromSupercell": "Is this App from Supercell?",
-    "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-    "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
-    "faqClanNotTracked": "Clan not tracked",
-    "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
-    "faqTrackingDown": "Tracking down",
-    "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
-    "faqApiLimitation": "Clash of Clans API limitation",
-    "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
-    "faqSupportWork": "How can I support your work?",
-    "faqSupportWorkAnswer": "There are several ways to support us:",
-    "faqUseCodeClashKing": "Use code \"ClashKing\"",
-    "faqSupportUsOnPatreon": "Support us on Patreon",
-    "faqShareTheApp": "Share the app with your friends",
-    "faqRateTheApp": "Rate the app in the store",
-    "faqHelpUsTranslate": "Help us translate the app",
-    "faqHowToInviteTheBot": "How can I invite your bot to my Discord Server?",
-    "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
-    "faqInviteTheBot": "Invite ClashKing Bot",
-    "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
-    "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.",
-    "faqSendEmail": "Send an email",
-    "faqJoinDiscord": "Join our Discord Server",
-    "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
-    "helpUsTranslate": "Help us translate",
-    "suggestFeatures": "Suggest features",
-    "thankYou": "Thank you!",
-    "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
-    "helpTranslateButton": "Help Translate on Crowdin",
-    "versionDevice": "Version & Device",
+    "faqSubtitle": "常见问题回答",
+    "faqIsThisFromSupercell": "这个应用程序是Supercell的吗？",
+    "faqFanContentPolicy": "此材料是非官方的，未得到Supercell的认可。有关更多信息，请参阅Supercell的粉丝内容政策：www.Supercell.com/Fan-Content-Policy",
+    "faqWhyNotAccurate": "为什么数据有时不准确或缺失？",
+    "faqClanNotTracked": "部落未被追踪",
+    "faqClanNotTrackedAnswer": "只有当部落被追踪时，ClashKing才能检索此信息。如果你的部落没有被追踪，请邀请ClashKing机器人到你的Discord服务器，并使用命令/addclan。我们正在努力尽快在应用程序中提供此功能。",
+    "faqTrackingDown": "跟踪",
+    "faqTrackingDownAnswer": "跟踪可以在一段时间内停止工作。这就是为什么你的数据有时会有漏洞。我们正在努力改进这一点。",
+    "faqApiLimitation": "部落冲突API限制",
+    "faqApiLimitationAnswer": "一些数据是由部落冲突提供的，他们的API有一些限制。传奇杯追踪就是这种情况，它有时会像一次攻击一样叠加奖杯的得失。这也是为什么我们没有关于您基地的任何信息。",
+    "faqSupportWork": "我如何支持你的工作？",
+    "faqSupportWorkAnswer": "有几种方法可以支持我们：",
+    "faqUseCodeClashKing": "使用创作者代码“ClashKing”",
+    "faqSupportUsOnPatreon": "在Patreon上支持我们",
+    "faqShareTheApp": "与朋友分享应用程序",
+    "faqRateTheApp": "对商店中的应用程序进行评分",
+    "faqHelpUsTranslate": "帮助我们翻译应用程序",
+    "faqHowToInviteTheBot": "我如何邀请您的机器人加入我的Discord服务器？",
+    "faqHowToInviteTheBotAnswer": "您可以通过单击下面的按钮邀请我们的机器人到您的服务器。您需要“管理服务器”权限才能添加机器人。",
+    "faqInviteTheBot": "邀请ClashKing机器人",
+    "faqNeedHelp": "我需要帮助，或者我想提个建议。我怎样才能联系到你？",
+    "faqNeedHelpAnswer": "您可以加入我们的Discord服务器以寻求帮助或提供反馈，也可以发送电子邮件至devs@clashkingbot.com.请用英语或法语书写。",
+    "faqSendEmail": "发送电子邮件",
+    "faqJoinDiscord": "加入我们的Discord服务器",
+    "faqCannotOpenMailClient": "由于某些原因，我们无法打开您的邮件客户端。我们为您复制了电子邮件地址。您可以编写电子邮件并将地址粘贴到收件人字段中。",
+    "helpUsTranslate": "帮助我们翻译",
+    "suggestFeatures": "建议功能",
+    "thankYou": "感谢您！",
+    "thankYouContent": "非常感谢我们所有出色的翻译人员，他们帮助我们让世界各地的更多人可以访问这个应用程序！",
+    "helpTranslateContent": "您可以在Crowdin上帮助我们翻译应用程序。如果您的语言在Crowdin上不可用，请随时在我们的Discord服务器上请求。非常感谢你的帮助！",
+    "helpTranslateButton": "在Crowdin上帮助翻译",
+    "versionDevice": "版本&设备",
     "@version": {
         "description": "Version of the app and device information"
     },
-    "loading": "Loading...",
-    "errorLoadingVersion": "Error loading version",
+    "loading": "加载中...",
+    "errorLoadingVersion": "加载版本时出错",
     "@errorLoadingVersion": {
         "description": "Error message when the app version cannot be loaded"
     },
-    "currentTranslators": "Current Translators",
-    "betaFeature": "Beta Feature",
+    "currentTranslators": "当前翻译员",
+    "betaFeature": "Beta功能",
     "beta": "BETA",
-    "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
-    "copiedToClipboard": "Copied to clipboard",
-    "all": "All",
+    "betaDescription": "此功能目前处于测试阶段，可能存在一些错误或不完整。我们正在积极改进，欢迎您的反馈。请在我们的Discord服务器中分享您的想法并报告任何问题，以帮助我们做得更好。",
+    "copiedToClipboard": "复制到剪贴板",
+    "all": "所有",
     "@all": {
         "description": "all items"
     },
-    "hourIndicator": "h",
-    "minIndicator": "m",
-    "noDataAvailable": "No data available.",
-    "close": "Close",
-    "closed": "Closed",
+    "hourIndicator": "小时",
+    "minIndicator": "分钟",
+    "noDataAvailable": "没有可用数据",
+    "close": "关闭",
+    "closed": "已关闭",
     "@closed": {
         "description": "WarLog closed"
     },
-    "error": "Error",
-    "player": "Player",
-    "notFoundOrNotLinkedToOurSystem": "{player} not found or not linked to our system.",
+    "error": "出错",
+    "player": "玩家",
+    "notFoundOrNotLinkedToOurSystem": "{player}未被找到或未链接到我们的系统。",
     "@notFoundOrNotLinkedToOurSystem": {
         "placeholders": {
             "player": {
@@ -115,44 +115,44 @@
             }
         }
     },
-    "tryAnotherNameOrTagOrLinkIt": "Try another name/tag or link it.",
-    "playerNotFound": "Player not found",
-    "noValueEntered": "No value entered",
-    "manage": "Manage",
-    "enterPlayerTag": "Enter a player tag",
-    "add": "Add",
+    "tryAnotherNameOrTagOrLinkIt": "尝试其他名称/标签或链接它。",
+    "playerNotFound": "未找到玩家",
+    "noValueEntered": "未输入有效值",
+    "manage": "管理",
+    "enterPlayerTag": "输入一个玩家标签",
+    "add": "添加",
     "@add": {
         "description": "Add an account"
     },
-    "delete": "Delete",
+    "delete": "删除",
     "@delete": {
         "description": "Delete an account"
     },
-    "addAccount": "Add account",
-    "deleteAccount": "Delete account",
-    "playerTagNotExists": "The player tag entered does not exist.",
-    "accountAlreadyLinked": "The player tag is already linked to someone.",
-    "enterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
-    "wrongApiToken": "The API token entered is incorrect",
-    "accountAlreadyLinkedToYou": "The player tag is already linked to you.",
-    "apiToken": "Account API Token",
-    "failedToAddTryAgain": "Failed to add link. Please try again later.",
-    "failedToDeleteTryAgain": "Failed to delete link. Please try again later.",
-    "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
-    "search": "Search",
+    "addAccount": "添加账户",
+    "deleteAccount": "删除账户",
+    "playerTagNotExists": "输入的村庄标签不存在。",
+    "accountAlreadyLinked": "村庄标签已经链接到某人。",
+    "enterApiToken": "请输入帐户API令牌以确认您的身份。您可以在部落冲突设置>更多设置>API令牌中找到它。",
+    "wrongApiToken": "输入的 API 令牌不正确",
+    "accountAlreadyLinkedToYou": "您已连接玩家标签",
+    "apiToken": "帐户 API 令牌",
+    "failedToAddTryAgain": "无法添加链接。请稍后再试。",
+    "failedToDeleteTryAgain": "删除链接失败。请稍后再试。",
+    "enterPlayerTagWarning": "您必须输入村庄标签，然后点击“+”继续。",
+    "search": "搜索",
     "@search": {
         "description": "Search for a player or a clan"
     },
-    "warning": "Warning",
-    "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-    "confirmLogout": "Are you sure you want to log out?",
+    "warning": "警告",
+    "exitAppToOpenClash": "您即将离开应用程序打开部落冲突",
+    "confirmLogout": "确定要退出登录吗？",
     "@confirmLogout": {
         "description": "Prompt asking the user to confirm logout"
     },
-    "tagOrNamePlayer": "Player's tag or name",
-    "searchPlayer": "Search player",
-    "nameOrTagPlayer": "Player's name or tag",
-    "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+    "tagOrNamePlayer": "村庄的标签或村庄名称",
+    "searchPlayer": "搜索玩家",
+    "nameOrTagPlayer": "村庄名称或标签",
+    "playerClanDescription": "您的部落是“{clan}”（{tag}）",
     "@playerClanDescription": {
         "placeholders": {
             "clan": {
@@ -163,7 +163,7 @@
             }
         }
     },
-    "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+    "playerRatioDescription": "您的捐兵比例为{ratio}。你们已经捐赠了{donations}人口的部队，并接收了{received}人口的部队。",
     "@playerRatioDescription": {
         "placeholders": {
             "ratio": {
@@ -177,7 +177,7 @@
             }
         }
     },
-    "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+    "playerWarPreferenceDescription": "您的部落对战偏好是“{preference}”。",
     "@playerWarPreferenceDescription": {
         "placeholders": {
             "preference": {
@@ -185,7 +185,7 @@
             }
         }
     },
-    "playerWarStarsDescription": "You have {stars} war stars.",
+    "playerWarStarsDescription": "您拥有{stars}胜利之星。",
     "@playerWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -193,7 +193,7 @@
             }
         }
     },
-    "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+    "playerTrophiesDescription": "您拥有{trophies}奖杯。你目前在{league}杯段。",
     "@playerTrophiesDescription": {
         "placeholders": {
             "trophies": {
@@ -204,7 +204,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+    "playerTownHallLevelDescription": "您的大本营等级是{level}",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
@@ -212,7 +212,7 @@
             }
         }
     },
-    "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+    "playerBuilderBaseDescription": "您的大本等级为{level}，您的奖杯数为：{trophies}。",
     "@playerBuilderBaseDescription": {
         "placeholders": {
             "level": {
@@ -223,11 +223,11 @@
             }
         }
     },
-    "dashboard": "Dashboard",
-    "homeBase": "Home Base",
-    "th": "TH",
-    "builderBase": "Builder Base",
-    "bh": "BH",
+    "dashboard": "主页",
+    "homeBase": "家乡",
+    "th": "大本营等级",
+    "builderBase": "夜世界",
+    "bh": "",
     "clanCapital": "Clan Capital",
     "leader": "Leader",
     "coLeader": "Co-Leader",
