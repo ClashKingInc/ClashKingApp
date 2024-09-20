@@ -225,36 +225,36 @@
     },
     "dashboard": "主页",
     "homeBase": "家乡",
-    "th": "大本营等级",
+    "th": "大本等级",
     "builderBase": "夜世界",
-    "bh": "",
-    "clanCapital": "Clan Capital",
-    "leader": "Leader",
-    "coLeader": "Co-Leader",
-    "elder": "Elder",
-    "member": "Member",
-    "ready": "Opted In",
+    "bh": "夜本等级",
+    "clanCapital": "部落都城",
+    "leader": "首领",
+    "coLeader": "副首领",
+    "elder": "长老",
+    "member": "成员",
+    "ready": "参战",
     "@ready": {
         "description": "Opted In for war"
     },
-    "unready": "Opted Out",
+    "unready": "退出",
     "@unready": {
         "description": "Opted Out for war"
     },
-    "heroes": "Heroes",
-    "equipment": "Equipments",
-    "troops": "Troops",
-    "superTroops": "Super Troops",
-    "activeSuperTroops": "Active Super Troops",
-    "pets": "Pets",
-    "siegeMachines": "Siege Machines",
-    "spells": "Spells",
-    "achievements": "Achievements",
-    "byDay": "By Day",
+    "heroes": "英雄",
+    "equipment": "装备",
+    "troops": "部队",
+    "superTroops": "超级部队",
+    "activeSuperTroops": "已启用的超级部队",
+    "pets": "宠物",
+    "siegeMachines": "攻城机器",
+    "spells": "法术",
+    "achievements": "成就",
+    "byDay": "按天",
     "@byDay": {
         "description": "Shows stats by day"
     },
-    "bySeason": "By Season",
+    "bySeason": "按赛季",
     "@byMonth": {
         "description": "Shows stats by season"
     },
@@ -274,10 +274,10 @@
             }
         }
     },
-    "bestTrophies": "Best Trophies",
-    "mostAttacks": "Most Attacks",
-    "lastSeason": "Last Season",
-    "bestRank": "Best Global Rank",
+    "bestTrophies": "最高奖杯",
+    "mostAttacks": "最多进攻次数",
+    "lastSeason": "上一赛季",
+    "bestRank": "最佳全球等级",
     "daysLeft": "{days} days left",
     "@daysLeft": {
         "placeholders": {
@@ -286,19 +286,19 @@
             }
         }
     },
-    "date": "Date",
-    "stats": "Stats",
-    "details": "Details",
-    "seasonStats": "Season Stats",
-    "charts": "Charts",
-    "history": "History",
+    "date": "日期",
+    "stats": "统计数据",
+    "details": "详细信息",
+    "seasonStats": "赛季数据",
+    "charts": "统计图",
+    "history": "历史记录",
     "@history": {
         "description": "Shows EOS trophies history"
     },
-    "legendLeague": "Legend League",
-    "notInLegendLeague": "Not in Legend League",
-    "noLegendData": "No Legend Data Found for today",
-    "legendStartDescription": "You started the day with {trophies} trophies.",
+    "legendLeague": "传奇联赛",
+    "notInLegendLeague": "不在传奇联赛中",
+    "noLegendData": "未找到今日传奇联赛数据",
+    "legendStartDescription": "您以{trophies}奖杯开始了新的一天。",
     "@legendStartDescription": {
         "placeholders": {
             "trophies": {
@@ -306,7 +306,7 @@
             }
         }
     },
-    "legendNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
+    "legendNoRankLocalDescription": "您目前没有获得{trophies}奖杯的排名（{country}）。",
     "@legendNoRankLocalDescription": {
         "placeholders": {
             "country": {
@@ -317,7 +317,7 @@
             }
         }
     },
-    "legendRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+    "legendRankLocalDescription": "您目前拥有{trophies}奖杯，排名{rank}（{country}）。",
     "@legendRankDescription": {
         "placeholders": {
             "rank": {
@@ -331,7 +331,7 @@
             }
         }
     },
-    "legendGainDescription": "You gained {trophies} trophies for now.",
+    "legendGainDescription": "您获得了{trophies}奖杯。",
     "@legendGainDescription": {
         "placeholders": {
             "trophies": {
@@ -339,7 +339,7 @@
             }
         }
     },
-    "legendLossDescription": "You lost {trophies} trophies for now.",
+    "legendLossDescription": "您失去了{trophies}奖杯。",
     "@legendLossDescription": {
         "placeholders": {
             "trophies": {
@@ -347,7 +347,7 @@
             }
         }
     },
-    "legendNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+    "legendNoGlobalRankDescription": "您目前没有在全国范围内获得排名（{trophies}）。",
     "@legendNoGlobalRankDescription": {
         "placeholders": {
             "trophies": {
@@ -355,7 +355,7 @@
             }
         }
     },
-    "legendGlobalRankDescription": "You are currently ranked {rank} globally.",
+    "legendGlobalRankDescription": "您目前在全球排名{rank}。",
     "@legendGlobalRankDescription": {
         "placeholders": {
             "rank": {
@@ -363,38 +363,38 @@
             }
         }
     },
-    "noRank": "No ranking",
-    "started": "Started",
+    "noRank": "暂无排名",
+    "started": "已激活",
     "@started": {
         "description": "Title for the number of trophies at the beginning of the day"
     },
-    "ended": "Ended",
+    "ended": "已结束",
     "@ended": {
         "description": "Title for the number of trophies at the end of the day"
     },
-    "average": "Average",
+    "average": "平均水平",
     "@average": {
         "description": "Average value of legend trophies (defense and attack)"
     },
-    "remaining": "Remaining",
+    "remaining": "剩余时间",
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inaccurate data?",
-    "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
-    "legendsExplanation_api_delay_title": "1. API Delay: ",
-    "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
-    "legendsExplanation_concurrent_changes_title": "2. Concurrent Changes: \n",
-    "legendsExplanation_multiple_attacks_defenses_title": "- Multiple Attacks/Defenses: ",
-    "legendsExplanation_multiple_attacks_defenses_body": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
-    "legendsExplanation_simultaneous_attack_defense_title": "- Simultaneous Attack and Defense: ",
-    "legendsExplanation_simultaneous_attack_defense_body": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
-    "legendsExplanation_net_gain_loss_title": "3. Net Gain/Loss: ",
-    "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
-    "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-    "toDoList": "To-do list",
-    "lastActive": "Last active: {date}",
-    "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
+    "legendsTitle": "数据不准确？",
+    "legendsExplanation_intro": "由于Clans API分类的限制，我们的数据可能并不总是完全准确。可能有以下原因：",
+    "legendsExplanation_api_delay_title": "1. API 延迟： ",
+    "legendsExplanation_api_delay_body": "API可能需要长达5分钟的时间进行更新，从而导致反映实时奖杯变化的滞后。",
+    "legendsExplanation_concurrent_changes_title": "2.合并奖杯：",
+    "legendsExplanation_multiple_attacks_defenses_title": "- 多次攻击/防御： ",
+    "legendsExplanation_multiple_attacks_defenses_body": "如果连续发生多次攻击或防御，API可能会显示合并结果(如+68 或 -68)。\n",
+    "legendsExplanation_simultaneous_attack_defense_title": "- 同时攻击和防御： ",
+    "legendsExplanation_simultaneous_attack_defense_body": "如果同时发生攻击和防御，你可能会看到好坏参半的结果(例如+4。\n",
+    "legendsExplanation_net_gain_loss_title": "3. 净增益： ",
+    "legendsExplanation_net_gain_loss_body": "尽管时间安排有问题，但这一天的净损益总额是准确的。 ",
+    "legendsExplanation_conclusion": "这些限制在使用部落冲突API的所有工具上都很常见。遗憾的是，我们无法修复这个问题，因为它的所有权是在Supercell的手中。 我们尽最大努力弥补这些限制，提供尽可能接近现实的结果。谢谢你们的理解！",
+    "toDoList": "待办事宜列表",
+    "lastActive": "上次活跃：{date}",
+    "playerNotTracked": "该玩家未被跟踪。数据可能不准确。",
     "@lastActive": {
         "placeholders": {
             "date": {
@@ -402,7 +402,7 @@
             }
         }
     },
-    "numberAccounts": "{number} accounts",
+    "numberAccounts": "{number}账户",
     "@numberAccounts": {
         "placeholders": {
             "number": {
@@ -411,7 +411,7 @@
         },
         "description": "Number of accounts (ex: 4 accounts)"
     },
-    "numberActiveAccounts": "{number} active accounts",
+    "numberActiveAccounts": "{number}活账户",
     "@numberActiveAccounts": {
         "placeholders": {
             "number": {
@@ -419,7 +419,7 @@
             }
         }
     },
-    "numberInactiveAccounts": "{number} inactive accounts",
+    "numberInactiveAccounts": "{number}不活跃账户",
     "@numberInactiveAccounts": {
         "placeholders": {
             "number": {
@@ -427,34 +427,34 @@
             }
         }
     },
-    "activeAccounts": "Active accounts",
-    "inactiveAccounts": "Inactive accounts",
-    "noInactiveAccounts": "No inactive accounts.",
-    "noActiveAccounts": "No active accounts.",
-    "todoExplanation_title": "Task Calculation",
-    "todoExplanation_intro": "The task completion percentage is calculated based on the following activities with specific weightings:",
-    "todoExplanation_legends_title": "Legend League:",
-    "todoExplanation_legends": "Weight of 8 points per account, 1 attack = 1 point.",
-    "todoExplanation_raids_title": "Raids:",
-    "todoExplanation_raids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-    "todoExplanation_clanWars_title": "Clan Wars:",
-    "todoExplanation_clanWars": "Weight of 2 points per account, 1 attack = 1 point.",
-    "todoExplanation_cwl_title": "Clan War League:",
-    "todoExplanation_cwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
-    "todoExplanation_passAndGames_title": "Season Pass & Clan Games:",
-    "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
-    "todoExplanation_conclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
-    "worst": "Worst",
+    "activeAccounts": "活跃帐户",
+    "inactiveAccounts": "不活跃账户",
+    "noInactiveAccounts": "没有不活跃的帐户。",
+    "noActiveAccounts": "没有活跃的帐户。",
+    "todoExplanation_title": "任务计算方法",
+    "todoExplanation_intro": "任务完成率是根据下列具有特定权重的活动计算出来的：",
+    "todoExplanation_legends_title": "传奇联赛",
+    "todoExplanation_legends": "每个账户的权重为8分，1次攻击=1分。",
+    "todoExplanation_raids_title": "突袭：",
+    "todoExplanation_raids": "每个账户的权重为5分（如果上次攻击已解锁，则为6分），1次攻击=1分。",
+    "todoExplanation_clanWars_title": "部落战：",
+    "todoExplanation_clanWars": "每个账户2分的权重，1次攻击=1分。",
+    "todoExplanation_cwl_title": "部落联赛",
+    "todoExplanation_cwl": "每个账户的权重为1分，1次攻击=1分。如果玩家不在他们的部落中，则无法跟踪部落联赛。",
+    "todoExplanation_passAndGames_title": "月卡和部落游戏",
+    "todoExplanation_passAndGames": "每个账户的权重为2分。该比率基于剩余天数（通行证为1个月，比赛为6天）。绿色=按计划完成传球或比赛，红色=落后于计划。",
+    "todoExplanation_conclusion": "最终百分比是通过将正在进行的事件中完成的总操作除以所需的总操作来计算的。超过14天未活动的帐户不在计算范围内。",
+    "worst": "最差",
     "@worst": {
         "description": "Worst end of day trophies"
     },
-    "best": "Best",
+    "best": "最佳",
     "@best": {
         "description": "Best end of day trophies"
     },
-    "total": "Total",
-    "heroesEquipments": "Hero equipments",
-    "daysAgo": "{days} days ago",
+    "total": "总计",
+    "heroesEquipments": "英雄装备",
+    "daysAgo": "{days} 天前",
     "@daysAgo": {
         "placeholders": {
             "days": {
@@ -462,7 +462,7 @@
             }
         }
     },
-    "dayAgo": "{day} day ago",
+    "dayAgo": "{day}天之前",
     "@dayAgo": {
         "placeholders": {
             "day": {
@@ -470,7 +470,7 @@
             }
         }
     },
-    "hourAgo": "{hour} hour ago",
+    "hourAgo": "{hour}小时之前",
     "@hourAgo": {
         "placeholders": {
             "hour": {
@@ -478,7 +478,7 @@
             }
         }
     },
-    "hoursAgo": "{hours} hours ago",
+    "hoursAgo": "{Hours} 小时前",
     "@hoursAgo": {
         "placeholders": {
             "hours": {
@@ -486,7 +486,7 @@
             }
         }
     },
-    "minuteAgo": "{minute} minute ago",
+    "minuteAgo": "{minute}分钟之前",
     "@minuteAgo": {
         "placeholders": {
             "minute": {
@@ -494,7 +494,7 @@
             }
         }
     },
-    "minutesAgo": "{minutes} minutes ago",
+    "minutesAgo": "{minutes}分钟之前",
     "@minutesAgo": {
         "placeholders": {
             "minutes": {
@@ -502,7 +502,7 @@
             }
         }
     },
-    "secondAgo": "{seconds}s ago",
+    "secondAgo": "{seconds}秒之前",
     "@secondAgo": {
         "placeholders": {
             "seconds": {
@@ -510,48 +510,48 @@
             }
         }
     },
-    "justNow": "Just Now",
-    "trophiesByMonth": "Trophies by month",
-    "trophiesBySeason": "Trophies by season",
-    "eosTrophies": "End Of Season Trophies",
-    "searchClan": "Search clan",
-    "nameOrTagClan": "Clan's name or tag",
-    "noResult": "No result.",
-    "filters": "Filters",
-    "whatever": "Whatever",
+    "justNow": "刚刚",
+    "trophiesByMonth": "每月奖杯",
+    "trophiesBySeason": "每赛季的奖杯数",
+    "eosTrophies": "赛季结束前的奖杯数",
+    "searchClan": "搜索部落",
+    "nameOrTagClan": "村庄名称或标签",
+    "noResult": "没有找到该查询的结果",
+    "filters": "筛选器",
+    "whatever": "任何",
     "@whatever": {
         "description": "Whatever the value"
     },
-    "any": "Any",
+    "any": "任何 ",
     "@any": {
         "description": "Any value is accepted"
     },
-    "notSet": "Not set",
+    "notSet": "未设置",
     "@notSet": {
         "description": "Filter value is not set"
     },
-    "warFrequency": "War frequency",
-    "minimumMembers": "Minimum members",
-    "maximumMembers": "Maximum members",
-    "location": "Location",
-    "minimumClanPoints": "Minimum clan points",
-    "minimumClanLevel": "Minimum clan level",
-    "noClan": "No clan",
-    "joinClanToUnlockNewFeatures": "Join a clan to unlock new features.",
-    "apply": "Apply",
-    "opened": "Opened",
+    "warFrequency": "对战频率",
+    "minimumMembers": "最小成员数",
+    "maximumMembers": "最大成员数",
+    "location": "位置",
+    "minimumClanPoints": "最低部落奖杯总数",
+    "minimumClanLevel": "最低部落等级",
+    "noClan": "无部落信息",
+    "joinClanToUnlockNewFeatures": "加入一个部落来解锁新功能。",
+    "apply": "需要申请",
+    "opened": "开放",
     "@opened": {
         "description": "Clan is opened"
     },
-    "inviteOnly": "Invite Only",
-    "cancel": "Cancel",
-    "clan": "Clan",
-    "clans": "Clans",
-    "members": "Members",
-    "role": "Role",
-    "expLevel": "Experience Level",
-    "townHallLevel": "TH Level",
-    "thLevel": "TH{level}",
+    "inviteOnly": "仅限邀请",
+    "cancel": "取消",
+    "clan": "部落",
+    "clans": "部落",
+    "members": "成员",
+    "role": "职位",
+    "expLevel": "经验等级",
+    "townHallLevel": "大本等级",
+    "thLevel": "{level}级大本",
     "@thLevel": {
         "placeholders": {
             "level": {
@@ -559,7 +559,7 @@
             }
         }
     },
-    "bhLevel": "BH{level}",
+    "bhLevel": "{level}级夜本",
     "@bhLevel": {
         "placeholders": {
             "level": {
@@ -567,7 +567,7 @@
             }
         }
     },
-    "townHallLevelLevel": "Town Hall {level}",
+    "townHallLevelLevel": "大本营 {level}",
     "@townHallLevelLevel": {
         "placeholders": {
             "level": {
@@ -575,26 +575,26 @@
             }
         }
     },
-    "byNumberOfWars": "By number of wars",
+    "byNumberOfWars": "按进攻次数排序",
     "@byNumberOfWars": {
         "description": "filter by number of wars"
     },
-    "ok": "OK",
+    "ok": "确定",
     "@ok": {
         "description": "OK button on pop up"
     },
-    "byDateRange": "By date range",
+    "byDateRange": "按日期范围",
     "@byDateRange": {
         "description": "filter by date range"
     },
-    "selectSeason": "Select a season",
+    "selectSeason": "选择一个赛季",
     "@selectSeason": {
         "description": "Ask player to select a season"
     },
-    "year": "Year",
-    "month": "Month",
-    "allTownHalls": "All Town Halls",
-    "seasonDate": "{date} season",
+    "year": "年",
+    "month": "月",
+    "allTownHalls": "所有大本营",
+    "seasonDate": "{date}赛季",
     "@seasonDate": {
         "description": "Example: August 2024 season",
         "placeholders": {
@@ -603,7 +603,7 @@
             }
         }
     },
-    "lastXwars": "Last {number} wars",
+    "lastXwars": "最后{number}场战争",
     "@lastXwars": {
         "description": "Example: Shows the last 25 wars",
         "placeholders": {
@@ -612,17 +612,17 @@
             }
         }
     },
-    "friendly": "Friendly",
+    "friendly": "友好",
     "@friendly": {
         "description": "Friendly war"
     },
-    "cwl": "CWL",
-    "random": "Random",
+    "cwl": "部落联赛",
+    "random": "随机",
     "@random": {
         "description": "Random/basic war (not friendly or cwl)"
     },
-    "selectMembersThLevel": "Members TH Level",
-    "selectOpponentsThLevel": "Opponents TH Level",
+    "selectMembersThLevel": "成员大本等级",
+    "selectOpponentsThLevel": "队友大本等级",
     "equalThLevel": "Equal TH",
     "builderBaseTrophies": "BB Trophies",
     "donations": "Donations",
