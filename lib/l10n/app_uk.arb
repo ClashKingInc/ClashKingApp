@@ -895,7 +895,7 @@
     "askForWar": "Звертайтеся до лідера або спів-лідера, щоб розпочати війну.",
     "askForWarLogOpening": "Звертайтеся до лідера або спів-лідера, аби відкрити журнал бою.",
     "warLogClosed": "Журнал війн закритий.",
-    "rounds": "Раундів",
+    "rounds": "Раунди",
     "noDataAvailableForThisWar": "Дані недоступні для цієї війни",
     "stateOfTheWar": "Стан війни",
     "starsNeededToTakeTheLead": "{clan} Все ще потребує {star} зірок або {stars2} зірки та {percent}%, щоб вийти вперед.",
