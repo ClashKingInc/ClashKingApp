@@ -439,7 +439,7 @@
     "todoExplanation_raids": "Вага 5 балів за обліковий запис (або 6, якщо останню атаку розблоковано), 1 атака = 1 бал.",
     "todoExplanation_clanWars_title": "Кланові Війни:",
     "todoExplanation_clanWars": "Вага 2 бали на рахунок, 1 атака = 1 бал.",
-    "todoExplanation_cwl_title": "Ліга Кланових Війн:",
+    "todoExplanation_cwl_title": "Ліга Війни Кланів:",
     "todoExplanation_cwl": "Вага 1 бал за обліковий запис, 1 напад = 1 бал. CWL не може бути відстежено, якщо гравець не перебуває у своєму клані ліги.",
     "todoExplanation_passAndGames_title": "Сезонний пропуск та кланові ігри:",
     "todoExplanation_passAndGames": "Вага по 2 бали кожен на рахунок. Співвідношення ґрунтується на залишку днів (1 місяць на пропуск і 6 днів на ігри). Зелений = на шляху до завершення пропуску або ігор, червоний = позаду графіка.",
@@ -616,7 +616,7 @@
     "@friendly": {
         "description": "Friendly war"
     },
-    "cwl": "ЛКВ",
+    "cwl": "ЛВК",
     "random": "Глобальні",
     "@random": {
         "description": "Random/basic war (not friendly or cwl)"
@@ -640,7 +640,7 @@
     "league": "Ліга",
     "wars": "Війни",
     "ongoingWar": "Поточна війна",
-    "ongoingCwl": "Поточна ЛКВ",
+    "ongoingCwl": "Поточна ЛВК",
     "cantOpenLink": "Ми не можемо відкрити це посилання.",
     "notInWar": "Не в стані війни",
     "warHistory": "Історія війн",
@@ -944,7 +944,7 @@
     "calculate": "Розрахувати",
     "warStats": "Статистика війни",
     "membersStats": "Статистика учасників",
-    "clanWarLeague": "Ліга Кланових Війн",
+    "clanWarLeague": "Ліга Війн Кланів",
     "cwlRank": "Ваш клан наразі займає {rank} місце.",
     "@cwlRank": {
         "placeholders": {
