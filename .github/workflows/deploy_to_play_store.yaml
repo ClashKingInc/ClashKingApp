@@ -3,7 +3,7 @@ name: Deploy to Opened Test
 on:
   push:
     tags:
-      - '*'
+      - 'v*'
 
 jobs:
   store_deploy_android:
@@ -25,11 +25,12 @@ jobs:
       - name: Extract version from tag and generate build number
         id: extract_version
         run: |
-          TAG=${GITHUB_REF#refs/tags/}          # Extrait le tag (ex: 1.0.0)
+          TAG=${GITHUB_REF#refs/tags/}          # Extrait "v1.0.0"
+          VERSION_NAME=${TAG#v}                # Retire "v" pour obtenir "1.0.0"
           BUILD_NUMBER=$(date +%s)             # Génère un numéro de build basé sur le timestamp
-          echo "VERSION_NAME=$TAG" >> $GITHUB_ENV
+          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
           echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-
+          
       - name: Update version in pubspec.yaml
         run: |
           sed -i "s/^version: .*/version: ${{ env.VERSION_NAME }}+${{ env.BUILD_NUMBER }}/" pubspec.yaml
