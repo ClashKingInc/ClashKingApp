@@ -1,9 +1,9 @@
-name: Deploy to Opend Test
+name: Deploy to Opened Test
 
 on:
   push:
-    branches:
-      - play-store
+    tags:
+      - '*'
 
 jobs:
   store_deploy_android:
@@ -22,6 +22,22 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v3
 
+      - name: Extract version from tag and generate build number
+        id: extract_version
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}          # Extrait le tag (ex: 1.0.0)
+          BUILD_NUMBER=$(date +%s)             # Génère un numéro de build basé sur le timestamp
+          echo "VERSION_NAME=$TAG" >> $GITHUB_ENV
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+
+      - name: Update version in pubspec.yaml
+        run: |
+          sed -i "s/^version: .*/version: ${{ env.VERSION_NAME }}+${{ env.BUILD_NUMBER }}/" pubspec.yaml
+          echo "Updated pubspec.yaml with version ${{ env.VERSION_NAME }}+${{ env.BUILD_NUMBER }}"
+      
+      - name: Verify updated pubspec.yaml
+        run: cat pubspec.yaml
+
       - name: Setup Java to compile the Android project
         uses: actions/setup-java@v2
         with:
@@ -37,9 +53,9 @@ jobs:
         run: |
           echo "sdk.dir=${{ env.ANDROID_SDK_ROOT }}" > android/local.properties
           echo "flutter.sdk=${{ env.FLUTTER_ROOT }}" >> android/local.properties
-          echo "flutter.buildMode=debug" >> android/local.properties
-          echo "flutter.versionName=1.0.0" >> android/local.properties
-          echo "flutter.versionCode=7" >> android/local.properties
+          echo "flutter.buildMode=release" >> android/local.properties
+          echo "flutter.versionName=${{ env.VERSION_NAME }}" >> android/local.properties
+          echo "flutter.versionCode=${{ env.BUILD_NUMBER }}" >> android/local.properties
           echo "flutter.minSdkVersion=21" >> android/local.properties
           echo "flutter.targetSdkVersion=34" >> android/local.properties
           echo "compileSdkVersion=34" >> android/local.properties
@@ -76,19 +92,19 @@ jobs:
       - name: List output files for debugging
         run: ls -R build/app/outputs/bundle/release/
 
-      - name: Upload generated aab to the artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: aab-stores
-          path: build/app/outputs/bundle/release/app-release.aab
+      # - name: Upload generated aab to the artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: aab-stores
+      #     path: build/app/outputs/bundle/release/app-release.aab
 
-      - name: Deploy to Opened Test
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
-          packageName: ${{ secrets.PACKAGE_NAME }}
-          releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: beta
-          status: completed
-          inAppUpdatePriority: 4
-          whatsNewDirectory: update-news
+      # - name: Deploy to Opened Test
+      #   uses: r0adkll/upload-google-play@v1
+      #   with:
+      #     serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
+      #     packageName: ${{ secrets.PACKAGE_NAME }}
+      #     releaseFiles: build/app/outputs/bundle/release/app-release.aab
+      #     track: beta
+      #     status: completed
+      #     inAppUpdatePriority: 4
+      #     whatsNewDirectory: update-news
