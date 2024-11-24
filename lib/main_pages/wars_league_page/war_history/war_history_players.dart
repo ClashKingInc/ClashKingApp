@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/clan/description/member.dart';
 import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
+import 'package:clashkingapp/classes/data/game_data_manager.dart';
 import 'package:clashkingapp/classes/functions.dart';
 import 'package:clashkingapp/components/filter_dropdown.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
@@ -35,8 +36,8 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
 
 
   // Track selected Town Hall levels for members and enemies
-  Map<int, bool> memberThSelection = {for (int i = 1; i <= 16; i++) i: false};
-  Map<int, bool> enemyThSelection = {for (int i = 1; i <= 16; i++) i: false};
+  Map<int, bool> memberThSelection = {for (int i = 1; i <= GameDataManager().getMaxTownHallLevel(); i++) i: false};
+  Map<int, bool> enemyThSelection = {for (int i = 1; i <= GameDataManager().getMaxTownHallLevel(); i++) i: false};
   bool equalThSelected = false;
   bool showUppedTownHall = true;
 
@@ -56,8 +57,8 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
       isFriendlyChecked = true;
 
       // Réinitialiser les sélections de niveaux TH
-      memberThSelection = {for (int i = 6; i <= 16; i++) i: false};
-      enemyThSelection = {for (int i = 6; i <= 16; i++) i: false};
+      memberThSelection = {for (int i = 6; i <= GameDataManager().getMaxTownHallLevel(); i++) i: false};
+      enemyThSelection = {for (int i = 6; i <= GameDataManager().getMaxTownHallLevel(); i++) i: false};
       equalThSelected = false;
 
       // Réinitialiser les données affichées

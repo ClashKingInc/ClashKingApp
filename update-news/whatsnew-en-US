@@ -1,13 +1,3 @@
-QoL: Indication added when player clan is not tracked for to-do info.
-Design: Improved text color readability for task calculation & legends.
-Language: Added Ukrainian; new translations for Polish, Dutch, Greek, and Portuguese.
-
-Bug Fixes:
-- Builder base heroes now display correctly.
-- CWL refresh issue fixed.
-- Corrected CWL day display.
-- Hero level digits now visible on iOS.
-- Legends parsing issue resolved for December 2023.
-
-See the full notes on our Discord server.
+We've made the Town Hall level dynamic! No more updates needed when a new Town Hall is released.
+Everything has been updated to fully support the exciting features of Town Hall 17
 

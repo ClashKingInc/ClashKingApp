@@ -1,4 +1,5 @@
 import 'dart:convert' as convert;
+import 'package:clashkingapp/classes/data/game_data_manager.dart';
 import 'package:http/http.dart' as http;
 
 class PlayerNameInfo {
@@ -27,7 +28,7 @@ class PlayerNameInfo {
       clanName: json['clan_name'] ?? 'No clan',
       league: json['league'] ?? 'Unranked',
       name: json['name'] ?? 'ILoveClashKing',
-      th: json['th'] ?? 16,
+      th: json['th'] ?? GameDataManager().getMaxTownHallLevel(),
       trophies: json['trophies'] ?? 1,
     );
   }
