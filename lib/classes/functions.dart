@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
+import 'package:clashkingapp/classes/data/game_data_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/classes/data/league_data_manager.dart';
 import 'package:clashkingapp/classes/data/troops_data_manager.dart';
@@ -10,12 +11,13 @@ import 'package:clashkingapp/classes/data/gears_data_manager.dart';
 
 Future<String> fetchPlayerTownHallByTownHallLevel(int townHallLevel) async {
   String townHallPic;
-  if (townHallLevel >= 1 && townHallLevel <= 16) {
+  if (townHallLevel >= 1 &&
+      townHallLevel <= GameDataManager().getMaxTownHallLevel()) {
     townHallPic =
         'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-$townHallLevel.png';
   } else {
     townHallPic =
-        'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-16.png';
+        'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-17.png';
   }
   return townHallPic;
 }
@@ -89,8 +91,8 @@ Future<void> fetchImagesAndTypes(List<dynamic> items, String type) async {
       default:
         urlAndType = TroopDataManager().getTroopInfo(item.name);
     }
-    item.imageUrl = urlAndType['url'] ??
-        'https://assets.clashk.ing/clashkinglogo.png';
+    item.imageUrl =
+        urlAndType['url'] ?? 'https://assets.clashk.ing/clashkinglogo.png';
     item.type = urlAndType['type'] ?? 'unknown';
   }
 }
@@ -110,6 +112,6 @@ DateTime findLastMondayOfMonth(int year, int month) {
   return lastMondayOfMonth;
 }
 
-  String getTownHallPicture(townHallLevel) {
-    return 'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-$townHallLevel.png';
-  }
+String getTownHallPicture(townHallLevel) {
+  return 'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-$townHallLevel.png';
+}
