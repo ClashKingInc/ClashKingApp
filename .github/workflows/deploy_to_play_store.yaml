@@ -93,11 +93,11 @@ jobs:
       - name: List output files for debugging
         run: ls -R build/app/outputs/bundle/release/
 
-      # - name: Upload generated aab to the artifacts
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: aab-stores
-      #     path: build/app/outputs/bundle/release/app-release.aab
+      - name: Upload generated aab to the artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: aab-stores
+          path: build/app/outputs/bundle/release/app-release.aab
 
       - name: Deploy to Opened Test
         uses: r0adkll/upload-google-play@v1
