@@ -274,11 +274,11 @@
             }
         }
     },
-    "bestTrophies": "Best Trophies",
-    "mostAttacks": "Most Attacks",
-    "lastSeason": "Last Season",
-    "bestRank": "Best Global Rank",
-    "daysLeft": "{days} days left",
+    "bestTrophies": "Υψηλότερα Τρόπαια",
+    "mostAttacks": "Περισσότερες Επιθέσεις",
+    "lastSeason": "Τελευταία Σεζόν",
+    "bestRank": "Υψηλότερη Παγκόσμια Θέση",
+    "daysLeft": "{days} ημέρες ακόμη",
     "@daysLeft": {
         "placeholders": {
             "days": {
@@ -286,16 +286,16 @@
             }
         }
     },
-    "date": "Date",
-    "stats": "Stats",
-    "details": "Details",
-    "seasonStats": "Season Stats",
-    "charts": "Charts",
-    "history": "History",
+    "date": "Ημερομηνία",
+    "stats": "Στατιστικά",
+    "details": "Λεπτομέρειες",
+    "seasonStats": "Στατιστικά Σεζόν",
+    "charts": "Διαγράμματα",
+    "history": "Ιστορικό",
     "@history": {
         "description": "Shows EOS trophies history"
     },
-    "legendLeague": "Legend League",
+    "legendLeague": "Επίπεδο Θρύλων",
     "notInLegendLeague": "Not in Legend League",
     "noLegendData": "No Legend Data Found for today",
     "legendStartDescription": "You started the day with {trophies} trophies.",

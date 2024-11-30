@@ -53,7 +53,7 @@
     "faqFanContentPolicy": "Цей матеріал є неофіційним і не є схваленим Supercell. Для отримання більш докладної інформації перегляньте політику відносно вмісту фан-сайтів Supercell: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Чому дані іноді невірні або відсутні?",
     "faqClanNotTracked": "Клан не відстежується",
-    "faqClanNotTrackedAnswer": "ClashKing може отримати цю інформацію лише у випадку, якщо клан відстежується. Якщо ваш клан не відстежується, будь ласка, запросіть ClashKing Bot на свій сервер Discord і використовуйте команду /addclan. Ми працюємо над тим, щоб незабаром цю функцію було доступно у додатку.",
+    "faqClanNotTrackedAnswer": "ClashKing може отримати цю інформацію лише у випадку, якщо клан відстежується. Якщо ваш клан не відстежується, будь ласка, запросіть ClashKing Bot на свій сервер Discord і використовуйте команду /addclan. Ми працюємо над тим, щоб ця функція була доступна у додатку.",
     "faqTrackingDown": "Відстеження",
     "faqTrackingDownAnswer": "Відстеження може припинити працювати в певний проміжок часу. Ось чому іноді у вас є дірки у ваших даних. Ми працюємо над удосконаленням цього.",
     "faqApiLimitation": "Обмеження Clash of Clans API",
@@ -70,7 +70,7 @@
     "faqInviteTheBot": "Запросити бота ClashKing",
     "faqNeedHelp": "Мені потрібна допомога або я хочу зробити пропозицію. Як я можу з вами зв'язатися?",
     "faqNeedHelpAnswer": "Ви можете приєднатися до нашого Discord-серверу, щоб попросити допомоги або надати відгук, або ви можете написати нам за адресою devs@clashkingbot.com. Будь ласка, пишіть тільки англійською або французькою.",
-    "faqSendEmail": "Відправити електронний лист",
+    "faqSendEmail": "Відправити e-mail",
     "faqJoinDiscord": "Приєднуйтеся до нашого сервера Discord",
     "faqCannotOpenMailClient": "З деяких причин ми не можемо відкрити клієнт вашої пошти. Ми скопіювали адресу електронної пошти для вас. Ви можете написати лист і вставити адресу у поле одержувача.",
     "helpUsTranslate": "Допомогти з перекладом",
@@ -90,7 +90,7 @@
     },
     "currentTranslators": "Поточні перекладачі",
     "betaFeature": "Бета-функції",
-    "beta": "БЕТА",
+    "beta": "Бета",
     "betaDescription": "Ця функція наразі знаходиться в бета-версії, може містити деякі помилки або бути неповною. Ми активно працюємо над удосконаленнями й раді вашому зворотному зв'язку. Будь ласка, поділіться своїми ідеями та повідомте про будь-які проблеми на нашому сервері Discord, щоб допомогти нам зробити це краще.",
     "copiedToClipboard": "Скопійовано в буфер обміну",
     "all": "Всі",
@@ -227,7 +227,7 @@
     "homeBase": "Домашня база",
     "th": "ТХ",
     "builderBase": "База будівельника",
-    "bh": "БХ",
+    "bh": "ББ",
     "clanCapital": "Столиця клану",
     "leader": "Лідер",
     "coLeader": "Спів-лідер",
@@ -394,7 +394,7 @@
     "legendsExplanation_conclusion": "Ці обмеження поширені у всіх інструментах, які використовують API гри Clash of Clans. Нам дуже шкода, що ми не можемо це виправити, оскільки це у руках Supercell. Ми робимо все можливе, щоб компенсувати ці обмеження та надати результати якомога ближчі до реальності. Дякуємо за розуміння!",
     "toDoList": "Список справ",
     "lastActive": "Остання активність: {date}",
-    "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
+    "playerNotTracked": "Цей гравець не відстежується. Дані можуть бути неточні.",
     "@lastActive": {
         "placeholders": {
             "date": {
@@ -439,7 +439,7 @@
     "todoExplanation_raids": "Вага 5 балів за обліковий запис (або 6, якщо останню атаку розблоковано), 1 атака = 1 бал.",
     "todoExplanation_clanWars_title": "Кланові Війни:",
     "todoExplanation_clanWars": "Вага 2 бали на рахунок, 1 атака = 1 бал.",
-    "todoExplanation_cwl_title": "Ліга Кланових Війн:",
+    "todoExplanation_cwl_title": "Ліга Війни Кланів:",
     "todoExplanation_cwl": "Вага 1 бал за обліковий запис, 1 напад = 1 бал. CWL не може бути відстежено, якщо гравець не перебуває у своєму клані ліги.",
     "todoExplanation_passAndGames_title": "Сезонний пропуск та кланові ігри:",
     "todoExplanation_passAndGames": "Вага по 2 бали кожен на рахунок. Співвідношення ґрунтується на залишку днів (1 місяць на пропуск і 6 днів на ігри). Зелений = на шляху до завершення пропуску або ігор, червоний = позаду графіка.",
@@ -559,7 +559,7 @@
             }
         }
     },
-    "bhLevel": "БХ{level}",
+    "bhLevel": "ББ{level}",
     "@bhLevel": {
         "placeholders": {
             "level": {
@@ -616,7 +616,7 @@
     "@friendly": {
         "description": "Friendly war"
     },
-    "cwl": "ЛКВ",
+    "cwl": "ЛВК",
     "random": "Глобальні",
     "@random": {
         "description": "Random/basic war (not friendly or cwl)"
@@ -640,7 +640,7 @@
     "league": "Ліга",
     "wars": "Війни",
     "ongoingWar": "Поточна війна",
-    "ongoingCwl": "Поточна ЛКВ",
+    "ongoingCwl": "Поточна ЛВК",
     "cantOpenLink": "Ми не можемо відкрити це посилання.",
     "notInWar": "Не в стані війни",
     "warHistory": "Історія війн",
@@ -895,10 +895,10 @@
     "askForWar": "Звертайтеся до лідера або спів-лідера, щоб розпочати війну.",
     "askForWarLogOpening": "Звертайтеся до лідера або спів-лідера, аби відкрити журнал бою.",
     "warLogClosed": "Журнал війн закритий.",
-    "rounds": "Раундів",
+    "rounds": "Раунди",
     "noDataAvailableForThisWar": "Дані недоступні для цієї війни",
     "stateOfTheWar": "Стан війни",
-    "starsNeededToTakeTheLead": "{clan} Все ще потребує {star} ще одну зірку або {stars2} зірки та {percent}%, щоб вийти вперед.",
+    "starsNeededToTakeTheLead": "{clan} Все ще потребує {star} зірок або {stars2} зірки та {percent}%, щоб вийти вперед.",
     "@starsNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -915,7 +915,7 @@
             }
         }
     },
-    "starsAndPercentNeededToTakeTheLead": "{clan} Все ще потребує {percent}% або ще 1 зірки, щоб взяти на себе ініціативу",
+    "starsAndPercentNeededToTakeTheLead": "{clan} Все ще потребує {percent}% або ще 1 зірку, щоб взяти на себе ініціативу",
     "@starsAndPercentNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -944,7 +944,7 @@
     "calculate": "Розрахувати",
     "warStats": "Статистика війни",
     "membersStats": "Статистика учасників",
-    "clanWarLeague": "Ліга Кланових Війн",
+    "clanWarLeague": "Ліга Війн Кланів",
     "cwlRank": "Ваш клан наразі займає {rank} місце.",
     "@cwlRank": {
         "placeholders": {
@@ -969,7 +969,7 @@
             }
         }
     },
-    "cwlMissingStarsFromFirst": "У вашому клані не вистачає {stars}, щоб догнати перший клан.",
+    "cwlMissingStarsFromFirst": "Ваш клан відстає на {stars} зірок, щоб наздогнати перший клан.",
     "@cwlMissingStarsFromFirst": {
         "placeholders": {
             "stars": {
