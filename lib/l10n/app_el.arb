@@ -80,7 +80,7 @@
     "helpTranslateContent": "Μπορείτε να μας βοηθήσετε να μεταφράσουμε την εφαρμογή στο Crowdin. Εάν η γλώσσα σας δεν είναι διαθέσιμη στο Crowdin, παρακαλώ ζητείστε το στην ομάδα μας στο Discord. Σας ευχαριστούμε πολύ για τη βοήθεια!",
     "helpTranslateButton": "Βοηθήστε μας στη μετάφραση στο Crowdin",
     "versionDevice": "Εκδοχή & Συσκευή",
-    "@version": {
+    "@versionDevice": {
         "description": "Version of the app and device information"
     },
     "loading": "Φορτώνει...",
@@ -255,7 +255,7 @@
         "description": "Shows stats by day"
     },
     "bySeason": "Με τη σεζόν",
-    "@byMonth": {
+    "@bySeason": {
         "description": "Shows stats by season"
     },
     "dayIndex": "Μέρα {index}",
@@ -318,10 +318,10 @@
         }
     },
     "legendRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
-    "@legendRankDescription": {
+    "@legendRankLocalDescription": {
         "placeholders": {
             "rank": {
-                "type": "int"
+                "type": "String"
             },
             "country": {
                 "type": "String"

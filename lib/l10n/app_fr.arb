@@ -272,10 +272,10 @@
         }
     },
     "legendRankLocalDescription": "Tu es actuellement classé {rank} ({country}) avec {trophies} trophées.",
-    "@legendRankDescription": {
+    "@legendRankLocalDescription": {
         "placeholders": {
             "rank": {
-                "type": "int"
+                "type": "String"
             },
             "country": {
                 "type": "String"

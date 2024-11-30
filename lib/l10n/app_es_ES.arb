@@ -236,7 +236,7 @@
         "description": "Shows stats by day"
     },
     "bySeason": "Por Temporada",
-    "@byMonth": {
+    "@bySeason": {
         "description": "Shows stats by season"
     },
     "dayIndex": "Día {index}",
@@ -299,10 +299,10 @@
         }
     },
     "legendRankLocalDescription": "Actualmente estás clasificado {rank} ({country}) con {trophies} trofeos.",
-    "@legendRankDescription": {
+    "@legendRankLocalDescription": {
         "placeholders": {
             "rank": {
-                "type": "int"
+                "type": "String"
             },
             "country": {
                 "type": "String"

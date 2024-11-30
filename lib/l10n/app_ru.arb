@@ -80,7 +80,7 @@
     "helpTranslateContent": "Вы можете помочь нам перевести приложение на Crowdin. Если ваш язык недоступен на Crowdin, смело запрашивайте его на нашем сервере Discord. Большое спасибо за вашу помощь!",
     "helpTranslateButton": "Помогите с переводом на Crowdin",
     "versionDevice": "Версия и устройство",
-    "@version": {
+    "@versionDevice": {
         "description": "Version of the app and device information"
     },
     "loading": "Загрузка...",
@@ -255,7 +255,7 @@
         "description": "Shows stats by day"
     },
     "bySeason": "By Season",
-    "@byMonth": {
+    "@bySeason": {
         "description": "Shows stats by season"
     },
     "dayIndex": "Day {index}",
@@ -318,10 +318,10 @@
         }
     },
     "legendRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
-    "@legendRankDescription": {
+    "@legendRankLocalDescription": {
         "placeholders": {
             "rank": {
-                "type": "int"
+                "type": "String"
             },
             "country": {
                 "type": "String"

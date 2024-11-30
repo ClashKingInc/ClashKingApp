@@ -80,7 +80,7 @@
     "helpTranslateContent": "Ви можете допомогти нам перекласти додаток на Crowdin. Якщо вашої мови немає на Crowdin, не соромтеся запитати її на нашому сервері Discord. Дуже вдячні за вашу допомогу!",
     "helpTranslateButton": "Допоможіть перекласти на Crowdin",
     "versionDevice": "Версія та пристрій",
-    "@version": {
+    "@versionDevice": {
         "description": "Version of the app and device information"
     },
     "loading": "Завантаження...",
@@ -255,7 +255,7 @@
         "description": "Shows stats by day"
     },
     "bySeason": "За сезон",
-    "@byMonth": {
+    "@bySeason": {
         "description": "Shows stats by season"
     },
     "dayIndex": "День {index}",
@@ -318,10 +318,10 @@
         }
     },
     "legendRankLocalDescription": "Зараз ви займаєте {rank} місце в топі ({country}) з {trophies} трофеями.",
-    "@legendRankDescription": {
+    "@legendRankLocalDescription": {
         "placeholders": {
             "rank": {
-                "type": "int"
+                "type": "String"
             },
             "country": {
                 "type": "String"

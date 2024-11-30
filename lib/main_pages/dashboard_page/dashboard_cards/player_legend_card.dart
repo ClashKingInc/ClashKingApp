@@ -194,11 +194,10 @@ class PlayerLegendCard extends StatelessWidget {
                                                 .legendRanking.isRankedLocally
                                             ? AppLocalizations.of(context)
                                                     ?.legendRankLocalDescription(
+                                                        playerLegendData.legendRanking.localRank,
                                                         playerLegendData
                                                             .legendRanking
                                                             .countryName,
-                                                        playerLegendData
-                                                            .legendRanking.localRank,
                                                         playerStats.trophies) ??
                                                 'No infos on local rank.'
                                             : AppLocalizations.of(context)

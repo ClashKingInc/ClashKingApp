@@ -80,7 +80,7 @@
     "helpTranslateContent": "您可以在Crowdin上帮助我们翻译应用程序。如果您的语言在Crowdin上不可用，请随时在我们的Discord服务器上请求。非常感谢你的帮助！",
     "helpTranslateButton": "在Crowdin上帮助翻译",
     "versionDevice": "版本&设备",
-    "@version": {
+    "@versionDevice": {
         "description": "Version of the app and device information"
     },
     "loading": "加载中...",
@@ -255,7 +255,7 @@
         "description": "Shows stats by day"
     },
     "bySeason": "按赛季",
-    "@byMonth": {
+    "@bySeason": {
         "description": "Shows stats by season"
     },
     "dayIndex": "Day {index}",
@@ -318,10 +318,10 @@
         }
     },
     "legendRankLocalDescription": "您目前拥有{trophies}奖杯，排名{rank}（{country}）。",
-    "@legendRankDescription": {
+    "@legendRankLocalDescription": {
         "placeholders": {
             "rank": {
-                "type": "int"
+                "type": "String"
             },
             "country": {
                 "type": "String"
