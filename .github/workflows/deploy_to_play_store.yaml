@@ -99,13 +99,13 @@ jobs:
       #     name: aab-stores
       #     path: build/app/outputs/bundle/release/app-release.aab
 
-      # - name: Deploy to Opened Test
-      #   uses: r0adkll/upload-google-play@v1
-      #   with:
-      #     serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
-      #     packageName: ${{ secrets.PACKAGE_NAME }}
-      #     releaseFiles: build/app/outputs/bundle/release/app-release.aab
-      #     track: beta
-      #     status: completed
-      #     inAppUpdatePriority: 4
-      #     whatsNewDirectory: update-news
+      - name: Deploy to Opened Test
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
+          packageName: ${{ secrets.PACKAGE_NAME }}
+          releaseFiles: build/app/outputs/bundle/release/app-release.aab
+          track: beta
+          status: completed
+          inAppUpdatePriority: 4
+          whatsNewDirectory: update-news
