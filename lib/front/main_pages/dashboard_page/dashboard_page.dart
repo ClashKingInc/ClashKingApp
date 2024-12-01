@@ -1,4 +1,5 @@
 import 'package:clashkingapp/classes/account/accounts.dart';
+import 'package:clashkingapp/classes/events/wrapped/clash_wrapped.dart';
 import 'package:clashkingapp/front/events/wrapped/wrapped_card.dart';
 import 'package:clashkingapp/front/main_pages/dashboard_page/dashboard_cards/to_do_card.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
@@ -16,6 +17,7 @@ class DashboardPage extends StatefulWidget {
   final ProfileInfo playerStats;
   final User discordUser;
   final Accounts accounts;
+  late ClashWrappedData clashWrappedData;
 
   DashboardPage(
       {required this.playerStats,
@@ -31,6 +33,7 @@ class DashboardPageState extends State<DashboardPage>
   late Future<void> _initializeProfileFuture;
   late Future<void> _initializeLegendsFuture;
   late Future<void> _initializeToDoFuture;
+  late Future<ClashWrappedData> _initializeWrappedFuture;
 
   @override
   void initState() {
@@ -38,6 +41,7 @@ class DashboardPageState extends State<DashboardPage>
     _initializeProfileFuture = _checkInitialization();
     _initializeLegendsFuture = _checkLegendsInitialization();
     _initializeToDoFuture = _checkToDoInitialization();
+    _initializeWrappedFuture = initializeWrapped();
   }
 
   Future<void> _checkInitialization() async {
@@ -75,6 +79,18 @@ class DashboardPageState extends State<DashboardPage>
         widget.accounts.toDoList.calculateTotals();
       }
     });
+  }
+
+  Future<ClashWrappedData> initializeWrapped() async {
+    try {
+      final data = await fetchWrappedData();
+      print('Wrapped data initialized');
+      showWrappedData(data);
+      return data;
+    } catch (error, stackTrace) {
+      Sentry.captureException(error, stackTrace: stackTrace);
+      throw Exception('Failed to initialize wrapped data: $error');
+    }
   }
 
   Future<void> _refreshData() async {
@@ -121,9 +137,36 @@ class DashboardPageState extends State<DashboardPage>
                 padding: EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0),
                 child: CreatorCodeCard(),
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0),
-                child: WrappedCard()
+              FutureBuilder<ClashWrappedData>(
+                future: _initializeWrappedFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    Sentry.captureException(snapshot.error);
+                    return Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.connectionErrorRelaunch,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    final wrappedData = snapshot.data!;
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: WrappedCard(wrappedData: wrappedData),
+                    );
+                  } else {
+                    return Center(
+                      child: Text(
+                        "No data available for Wrapped.",
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    );
+                  }
+                },
               ),
               Padding(
                 padding: EdgeInsets.only(left: 8.0, right: 8.0),

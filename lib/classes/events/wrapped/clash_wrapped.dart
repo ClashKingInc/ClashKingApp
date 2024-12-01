@@ -165,3 +165,22 @@ Future<ClashWrappedData> fetchWrappedData() async {
   final jsonData = jsonDecode(jsonString);
   return ClashWrappedData.fromJson(jsonData);
 }
+
+// Show data
+void showWrappedData(ClashWrappedData data) {
+  print("Player Info: ${data.playerInfo.player}");
+  print("Comparison Percentage: ${data.playerInfo.comparisonPercentage}");
+  print("Wars Data: ${data.wars.player}");
+  print("Comparison Percentage: ${data.wars.comparisonPercentage}");
+  print("CWL Data: ${data.cwl.player}");
+  print("Comparison Percentage: ${data.cwl.comparisonPercentage}");
+  print("Capital Data: ${data.capital.player}");
+  print("Comparison Percentage: ${data.capital.comparisonPercentage}");
+  print("Clan Activity Data: ${data.clanActivity.player}");
+  print("Comparison Percentage: ${data.clanActivity.comparisonPercentage}");
+  print("Progression Data: ${data.progression.player}");
+  print("Comparison Percentage: ${data.progression.comparisonPercentage}");
+  print("Discord Data: ${data.discord.player}");
+  print("Comparison Percentage: ${data.discord.comparisonPercentage}");
+  print("Current Clan Comparison Data: ${data.currentClanComparison.player}");
+}
