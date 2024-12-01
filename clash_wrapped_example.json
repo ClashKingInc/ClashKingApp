@@ -1,0 +1,134 @@
+{
+    "player_info": {
+        "player": {
+            "name": "ClashMaster",
+            "tag": "#ABC123",
+            "trophies": 4500,
+            "legend_stats": {
+                "hits_done": 300,
+                "avg_offense": 32,
+                "avg_defense": 16,
+                "top_daily_finish": 320,
+                "top_200_count": 1,
+                "most_used_equipment": "Puppet"
+            }
+        },
+        "comparison_percentage": {
+            "trophies": 80,
+            "hits_done": 93,
+            "avg_offense": 25,
+            "avg_defense": 12,
+            "top_daily_finish": 90,
+            "top_200_count": 90,
+            "most_used_equipment": 80
+        }
+    },
+    "wars": {
+        "player": {
+            "total_wars": 50,
+            "total_attacks": 150,
+            "total_missed_attacks": 10,
+            "stars": 420,
+            "hit_rate": 85.0,
+            "defense_rate": 70.0,
+            "clean_up_rate": 30.0,
+            "fresh_attack_rate": 70.0
+        },
+        "comparison_percentage": {
+            "total_wars": 80,
+            "total_attacks": 90,
+            "total_missed_attacks": 10,
+            "stars": 70,
+            "hit_rate": 90,
+            "defense_rate": 80,
+            "clean_up_rate": 20,
+            "fresh_attack_rate": 80
+        }
+    },
+    "cwl": {
+        "player": {
+            "leagues_played": [
+                "Crystal II",
+                "Master III"
+            ],
+            "wars_played": 10,
+            "attacks": 40,
+            "stars": 120,
+            "perfect_cwls": 2
+        },
+        "comparison_percentage": {
+            "wars_played": 90,
+            "attacks": 80,
+            "stars": 70,
+            "perfect_cwls": 90
+        }
+    },
+    "capital": {
+        "player": {
+            "donations": 50000,
+            "attacks": 100,
+            "gold_average": 21000,
+            "contributions": 6500000
+        },
+        "comparison_percentage": {
+            "donations": 80,
+            "attacks": 90,
+            "gold_average": 70,
+            "contributions": 90
+        }
+    },
+    "clan_activity": {
+        "player": {
+            "clans_joined": 5,
+            "donations": 15000,
+            "clan_games_points": 30000,
+            "favorite_clan": "Clashers"
+        },
+        "comparison_percentage": {
+            "clans_joined": 80,
+            "donations": 90,
+            "clan_games_points": 70
+        }
+    },
+    "progression": {
+        "player": {
+            "super_troops_boosted": {
+                "Super Barbarian": 10,
+                "Super Archer": 5
+            },
+            "upgrades_completed": {
+                "troops": 50,
+                "heroes": 10,
+                "equipment": 20
+            },
+            "equipment_swaps": 15
+        },
+        "comparison_percentage": {
+            "super_troops_boosted": "Super Barbarian",
+            "upgrades_completed": 90,
+            "equipment_swaps": 70
+        }
+    },
+    "discord": {
+        "player": {
+            "accounts_owned": 3,
+            "commands_ran": 150
+        },
+        "comparison_percentage": {
+            "accounts_owned": 80,
+            "commands_ran": 90
+        }
+    },
+    "current_clan_comparison": {
+        "player": {
+            "members_joined": 700,
+            "your_rank": 10,
+            "donations_rank": 5
+        },
+        "comparison_percentage": {
+            "members_joined": 80,
+            "your_rank": 90,
+            "donations_rank": 70
+        }
+    }
+}

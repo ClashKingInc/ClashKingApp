@@ -1,0 +1,35 @@
+import 'package:flutter/material.dart';
+import 'package:clashkingapp/classes/clan/clan_info.dart';
+import 'package:clashkingapp/front/main_pages/clan_page/clan_info_clan/components/clan_members_tab.dart';
+import 'package:clashkingapp/front/main_pages/clan_page/clan_info_clan/components/clan_info_header.dart';
+
+class ClanInfoScreen extends StatefulWidget {
+  final Clan clanInfo;
+  final List<String> discordUser;
+
+  ClanInfoScreen({super.key, required this.clanInfo, required this.discordUser});
+
+  @override
+  ClanInfoScreenState createState() => ClanInfoScreenState();
+}
+
+class ClanInfoScreenState extends State<ClanInfoScreen>
+    with SingleTickerProviderStateMixin {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              color: Theme.of(context).colorScheme.surface,
+              child: ClanInfoHeaderCard(clanInfo: widget.clanInfo, user : widget.discordUser),
+            ),
+            SizedBox(height: 8),
+            ClanMembers(clanInfo: widget.clanInfo, discordUser: widget.discordUser),
+          ],
+        ),
+      ),
+    );
+  }
+}

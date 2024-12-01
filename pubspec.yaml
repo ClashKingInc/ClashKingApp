@@ -59,6 +59,7 @@ dependencies:
   package_info_plus: ^8.0.2
   device_info_plus: ^10.1.2
   mailto: ^2.0.0
+  marquee: ^2.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -105,6 +106,7 @@ flutter:
     - assets/icons/
     - .env
     - shorebird.yaml
+    - clash_wrapped_example.json
 
 
   # To add assets to your application, add an assets section, like this:

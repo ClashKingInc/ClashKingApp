@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:clashkingapp/classes/data/events_data_manager.dart';
 import 'package:clashkingapp/classes/data/gears_data_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -37,6 +38,7 @@ Future<void> main() async {
       callbackDispatcher); // Required by Workmanager to initialize the callback dispatcher
   Future.wait([
     GameDataManager().loadGameData(),
+    EventsDataManager().loadEventsData(),
     LeagueDataManager().loadLeagueData(),
     TroopDataManager().loadTroopsData(),
     PlayerLeagueDataManager().loadLeagueData(),

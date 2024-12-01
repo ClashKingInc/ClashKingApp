@@ -1,10 +1,10 @@
 import 'package:clashkingapp/custom_icons_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/dashboard_page.dart';
-import 'package:clashkingapp/main_pages/clan_page/clan_page.dart';
-import 'package:clashkingapp/main_pages/wars_league_page/war_league_page.dart';
-import 'package:clashkingapp/main_pages/tools_page/tools_page.dart';
+import 'package:clashkingapp/front/main_pages/dashboard_page/dashboard_page.dart';
+import 'package:clashkingapp/front/main_pages/clan_page/clan_page.dart';
+import 'package:clashkingapp/front/main_pages/wars_league_page/war_league_page.dart';
+import 'package:clashkingapp/front/main_pages/tools_page/tools_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/components/app_bar/app_bar.dart';

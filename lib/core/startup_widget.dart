@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/main_pages/login_page/login_page.dart';
+import 'package:clashkingapp/front/main_pages/login_page/login_page.dart';
 import 'package:clashkingapp/core/my_home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/my_app_state.dart';

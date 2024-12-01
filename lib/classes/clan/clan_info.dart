@@ -19,7 +19,7 @@ import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
 import 'package:clashkingapp/classes/clan/description/clan_capital.dart';
 import 'package:clashkingapp/classes/functions.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
+import 'package:clashkingapp/front/main_pages/wars_league_page/war/war_functions.dart';
 
 class Clan {
   String tag;
