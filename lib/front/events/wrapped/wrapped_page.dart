@@ -30,9 +30,9 @@ class WrappedScreen extends StatelessWidget {
         scrollDirection: Axis.vertical,
         children: [
           IntroPage(),
-          LegendsPage(data: wrappedData.playerInfo),
-          /*WarsPage(data: wrappedData.wars),
-          CWLPage(data: wrappedData.cwl),
+          // LegendsPage(data: wrappedData.playerInfo),
+          // WarsPage(data: wrappedData.wars),
+          /*CWLPage(data: wrappedData.cwl),
           CapitalPage(data: wrappedData.capital),
           ClanActivityPage(data: wrappedData.clanActivity),
           DiscordPage(data: wrappedData.discord),

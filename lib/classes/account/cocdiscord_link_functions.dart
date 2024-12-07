@@ -21,6 +21,7 @@ Future<String> login() async {
     var data = jsonDecode(response.body);
     return data['token'];
   } else {
+    Sentry.captureMessage('Failed to login with status code: ${response.statusCode}, reason: ${response.body}');
     throw Exception('Failed to login with status code: ${response.statusCode}');
   }
 }
@@ -34,40 +35,41 @@ Future<bool> addLink(
     String accountAlreadyLinked,
     String failedToAddTryAgain) async {
   playerTag = playerTag.replaceAll('#', '').replaceAll('!', '');
-  try{
-  final url = Uri.parse('https://cocdiscord.link/links');
-  final response = await http.post(
-    url,
-    headers: <String, String>{
-      'Content-Type': 'application/json',
-      'Accept': 'application',
-      'Authorization': 'Bearer $authToken',
-    },
-    body: jsonEncode(<String, dynamic>{
-      'playerTag': playerTag,
-      'discordId': discordId,
-    }),
-  );
+  try {
+    final url = Uri.parse('https://cocdiscord.link/links');
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept': 'application',
+        'Authorization': 'Bearer $authToken',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'playerTag': playerTag,
+        'discordId': discordId,
+      }),
+    );
 
-  if (response.statusCode == 200) {
-    updateErrorMessage('');
-    return true;
-  } else if (response.statusCode == 400) {
-    updateErrorMessage(playerTagNotExists);
-  } else if (response.statusCode == 409) {
-    updateErrorMessage(accountAlreadyLinked);
-  } else {
-    updateErrorMessage(failedToAddTryAgain);
-  }
-  }
-  catch(exceptions, stackTrace){
+    if (response.statusCode == 200) {
+      updateErrorMessage('');
+      return true;
+    } else if (response.statusCode == 400) {
+      updateErrorMessage(playerTagNotExists);
+    } else if (response.statusCode == 409) {
+      updateErrorMessage(accountAlreadyLinked);
+    } else {
+      updateErrorMessage(failedToAddTryAgain);
+    }
+  } catch (exceptions, stackTrace) {
     Sentry.captureException(exceptions, stackTrace: stackTrace);
-    Sentry.captureMessage('Failed to add link, playerTag: $playerTag, discordId: $discordId');
+    Sentry.captureMessage(
+        'Failed to add link, playerTag: $playerTag, discordId: $discordId');
   }
   return false;
 }
 
-Future<bool> checkApiToken(String apiToken, String playerTag, Function updateErrorMessage, String wrongApiToken) async {
+Future<bool> checkApiToken(String apiToken, String playerTag,
+    Function updateErrorMessage, String wrongApiToken) async {
   if (playerTag.startsWith('#')) {
     playerTag = playerTag.replaceAll('#', '!');
   } else if (!playerTag.startsWith('!')) {
@@ -105,7 +107,8 @@ Future<bool> addLinkWithAPIToken(
     String apiToken,
     String failedToDeleteTryAgain,
     String wrongApiToken) async {
-  bool isApiTokenValid = await checkApiToken(apiToken, playerTag, updateErrorMessage, wrongApiToken);
+  bool isApiTokenValid = await checkApiToken(
+      apiToken, playerTag, updateErrorMessage, wrongApiToken);
 
   if (isApiTokenValid) {
     bool deleted = await deleteLink(

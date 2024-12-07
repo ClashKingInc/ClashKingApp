@@ -17,7 +17,7 @@ class DashboardPage extends StatefulWidget {
   final ProfileInfo playerStats;
   final User discordUser;
   final Accounts accounts;
-  late ClashWrappedData clashWrappedData;
+  late final ClashWrappedData clashWrappedData;
 
   DashboardPage(
       {required this.playerStats,

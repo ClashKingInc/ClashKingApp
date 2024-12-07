@@ -16,6 +16,7 @@ class WrappedCard extends StatefulWidget {
 class WrappedCardState extends State<WrappedCard> {
   @override
   Widget build(BuildContext context) {
+    showWrappedData(widget.wrappedData);
     return GestureDetector(
       onTap: () {
         Navigator.push(

@@ -40,6 +40,7 @@ class StatsScreenState extends State<StatsScreen>
   List<String> activeEquipmentNames = [];
   Future<void>? _initializeProfileFuture;
   Future<void>? _initializeLegendsFuture;
+  
 
   @override
   void initState() {
