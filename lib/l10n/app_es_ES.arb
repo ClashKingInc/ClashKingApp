@@ -72,16 +72,26 @@
     "faqNeedHelpAnswer": "Puedes unirte a nuestro servidor de Discord y pedir ayuda o hacer un comentario allí, o enviarnos un correo a devs@clashkingbot.com. Por favor, escribe solo en inglés o francés.",
     "faqSendEmail": "Enviar un correo",
     "faqJoinDiscord": "Unirse al Servidor de Discord",
+    "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
     "helpUsTranslate": "Ayúdanos a traducir",
     "suggestFeatures": "Suggest features",
     "thankYou": "¡Gracias!",
     "thankYouContent": "¡Un enorme agradecimiento a todos nuestros increíbles traductores que nos ayudan a hacer que esta aplicación sea accesible para más personas en todo el mundo!",
-    "helpTranslateContent": "Puedes ayudarnos a traducir la aplicación en Crowdin. Si tu idioma no está disponible en Crowdin, no dudes en solicitarlo en nuestro servidor de Discord. ¡Muchas gracias por tu ayuda!",
+    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
     "helpTranslateButton": "Ayuda a traducir en Crowdin",
+    "versionDevice": "Versión y dispositivo",
+    "@version": {
+        "description": "Version of the app and device information"
+    },
+    "loading": "Cargando...",
+    "errorLoadingVersion": "Error al cargar la versión",
+    "@errorLoadingVersion": {
+        "description": "Error message when the app version cannot be loaded"
+    },
     "currentTranslators": "Traductores Actuales",
-    "betaFeature": "Beta Feature",
+    "betaFeature": "Función beta",
     "beta": "BETA",
-    "betaDescription": "This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.",
+    "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
     "copiedToClipboard": "Copiado al portapapeles",
     "all": "Todo",
     "@all": {
@@ -122,14 +132,23 @@
     "deleteAccount": "Eliminar cuenta",
     "playerTagNotExists": "La etiqueta de jugador ingresada no existe.",
     "accountAlreadyLinked": "La etiqueta del jugador ya está vinculada a alguien.",
+    "enterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
+    "wrongApiToken": "The API token entered is incorrect",
+    "accountAlreadyLinkedToYou": "La etiqueta del jugador ya está vinculada a alguien.",
+    "apiToken": "Account API Token",
     "failedToAddTryAgain": "Error al añadir el enlace. Inténtalo de nuevo más tarde.",
     "failedToDeleteTryAgain": "Error al eliminar el enlace. Inténtalo de nuevo más tarde.",
+    "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
     "search": "Busca",
     "@search": {
         "description": "Search for a player or a clan"
     },
-    "warning": "Warning",
+    "warning": "Advertencia",
     "exitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
+    "confirmLogout": "Are you sure you want to log out?",
+    "@confirmLogout": {
+        "description": "Prompt asking the user to confirm logout"
+    },
     "tagOrNamePlayer": "Etiqueta o nombre del jugador",
     "searchPlayer": "Buscar jugador",
     "nameOrTagPlayer": "Nombre o etiqueta del jugador",
@@ -185,7 +204,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription": "Tu nivel de ayuntamiento es {level}.",
+    "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
@@ -361,8 +380,8 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inacurate Data?",
-    "legendsExplanation_intro": "Due to limitations in the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
+    "legendsTitle": "Inaccurate data?",
+    "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
     "legendsExplanation_api_delay_title": "1. API Delay: ",
     "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
     "legendsExplanation_concurrent_changes_title": "2. Concurrent Changes: \n",
@@ -373,8 +392,9 @@
     "legendsExplanation_net_gain_loss_title": "3. Net Gain/Loss: ",
     "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
     "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-    "toDoList": "Lista de tareas pendientes",
+    "toDoList": "To-do list",
     "lastActive": "Última actividad: {date}",
+    "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
     "@lastActive": {
         "placeholders": {
             "date": {
@@ -389,7 +409,7 @@
                 "type": "int"
             }
         },
-        "description": "Number of accounts (ex : 4 accounts)"
+        "description": "Number of accounts (ex: 4 accounts)"
     },
     "numberActiveAccounts": "{number} active accounts",
     "@numberActiveAccounts": {
@@ -433,7 +453,7 @@
         "description": "Best end of day trophies"
     },
     "total": "Total",
-    "heroesEquipments": "Equipo heroico",
+    "heroesEquipments": "Hero equipments",
     "daysAgo": "hace {days} días",
     "@daysAgo": {
         "placeholders": {
@@ -539,7 +559,15 @@
             }
         }
     },
-    "townHallLevelLevel": "TownHall {level}",
+    "bhLevel": "BH{level}",
+    "@bhLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "townHallLevelLevel": "Town Hall {level}",
     "@townHallLevelLevel": {
         "placeholders": {
             "level": {
@@ -547,15 +575,15 @@
             }
         }
     },
-    "byNumberOfWars": "By number of wars",
+    "byNumberOfWars": "Por número de guerras",
     "@byNumberOfWars": {
         "description": "filter by number of wars"
     },
-    "ok": "OK",
+    "ok": "Ok",
     "@ok": {
         "description": "OK button on pop up"
     },
-    "byDateRange": "By date range",
+    "byDateRange": "Por rango de fechas",
     "@byDateRange": {
         "description": "filter by date range"
     },
@@ -563,12 +591,12 @@
     "@selectSeason": {
         "description": "Ask player to select a season"
     },
-    "year": "Year",
-    "month": "Month",
-    "allTownHalls": "All TownHalls",
-    "seasonDate": "{date} season",
+    "year": "Año",
+    "month": "Mes",
+    "allTownHalls": "All Town Halls",
+    "seasonDate": "Temporada {date}",
     "@seasonDate": {
-        "description": "Example : August 2024 season",
+        "description": "Example: August 2024 season",
         "placeholders": {
             "date": {
                 "type": "String"
@@ -577,22 +605,25 @@
     },
     "lastXwars": "Last {number} wars",
     "@lastXwars": {
-        "description": "Example : Shows the last 25 wars",
+        "description": "Example: Shows the last 25 wars",
         "placeholders": {
             "number": {
                 "type": "int"
             }
         }
     },
-    "friendly": "Friendly",
+    "friendly": "Amistoso",
     "@friendly": {
         "description": "Friendly war"
     },
     "cwl": "CWL",
-    "random": "Random",
+    "random": "Aleatorio",
     "@random": {
         "description": "Random/basic war (not friendly or cwl)"
     },
+    "selectMembersThLevel": "Members TH Level",
+    "selectOpponentsThLevel": "Opponents TH Level",
+    "equalThLevel": "Equal TH",
     "builderBaseTrophies": "Trofeos BB",
     "donations": "Donaciones",
     "donationsReceived": "Donaciones recibidas",
@@ -613,31 +644,40 @@
     "cantOpenLink": "No podemos abrir este enlace.",
     "notInWar": "No está en guerra",
     "warHistory": "Curso de Guerra",
-    "warHistoryWinsDescription": "Hemos seguido los datos de {wins} victorias en guerra de tu clan.",
+    "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
                 "type": "int"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryLossesDescription": "Hemos seguido los datos de {losses} derrotas en guerra de tu clan.",
+    "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) out of the last 50 wars.",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
                 "type": "int"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryDrawsDescription": "Hemos seguido los datos de {draws} empates en guerra de tu clan.",
+    "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) out of the last 50 wars.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
                 "type": "int"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Tu clan tiene un promedio de {members} miembros participando por guerra que hemos seguido.",
+    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -645,21 +685,44 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription": "Tu clan tiene un promedio de {stars} estrellas por ataque al final de las guerras que hemos seguido.",
+    "warHistoryAverageWarStarsDescription": "Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
                 "type": "double"
+            },
+            "percent": {
+                "type": "String"
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Tu clan tiene un promedio de {percent} de destrucción por ataque al final de las guerras que hemos seguido.",
+    "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
                 "type": "String"
             }
         }
+    },
+    "warHistoryAverageClanStarsPerMember": "Your clan had an average of {stars} stars per member from the last 50 wars.",
+    "warHistoryAverageMembers": "~{members} members per war",
+    "@warHistoryAverageMembers": {
+        "placeholders": {
+            "members": {
+                "type": "int"
+            }
+        }
+    },
+    "averageStars": "Average stars",
+    "averageDestruction": "Average destruction",
+    "noStars": "0 estrellas",
+    "oneStar": "1 estrella",
+    "twoStars": "2 estrellas",
+    "threeStars": "3 estrellas",
+    "warParticipation": "Participación en guerra",
+    "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
+    "@toggleTownHallVisibility": {
+        "description": "For example, hide stats from TH15 and below if the player is now TH16"
     },
     "warLog": "Registro de guerra",
     "publicWarLog": "Registro de guerra pública",
@@ -700,7 +763,7 @@
     "join": "Unirse",
     "leave": "Abandonar",
     "reset": "Restablecer",
-    "leaveNumberDescription": "{number} jugadores abandonaron el clan durante la temporada actual ({date}).",
+    "leaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
     "@leaveNumberDescription": {
         "description": "Number of players who left the clan during the current season.",
         "placeholders": {
@@ -712,7 +775,7 @@
             }
         }
     },
-    "joinNumberDescription": "{number} jugadores se unieron al clan durante la temporada actual ({date}).",
+    "joinNumberDescription": "{number} player(s) joined the clan during the current season ({date}).",
     "@joinNumberDescription": {
         "description": "Number of players who joined the clan during the current season.",
         "placeholders": {
@@ -724,7 +787,7 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription": "Tu clan ha ganado {number} nuevos miembros esta temporada ({date}).",
+    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new member(s) this season ({date}).",
     "@joinLeaveDifferenceUpDescription": {
         "description": "Number of new members gained by the clan this season.",
         "placeholders": {
@@ -736,7 +799,7 @@
             }
         }
     },
-    "joinLeaveDifferenceDownDescription": "Tu clan ha perdido {number} miembros esta temporada ({date}).",
+    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} member(s) this season ({date}).",
     "@joinLeaveDifferenceDownDescription": {
         "description": "Number of members lost by the clan this season.",
         "placeholders": {
@@ -880,6 +943,7 @@
     "neededOverall": "% Total necesario",
     "calculate": "Calcular",
     "warStats": "Estadísticas de Guerra",
+    "membersStats": "Members Stats",
     "clanWarLeague": "Clan War League",
     "cwlRank": "Your clan is currently ranked {rank}.",
     "@cwlRank": {
@@ -941,5 +1005,11 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "tools": "Herramientas",
+    "community": "Comunidad",
+    "lastRaids": "Last raids",
+    "ongoingRaids": "Ongoing raids",
+    "districtsDestroyed": "Districts destroyed",
+    "raidsCompleted": "Raids completed"
 }
