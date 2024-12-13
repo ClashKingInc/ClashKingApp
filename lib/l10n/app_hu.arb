@@ -91,7 +91,7 @@
     "currentTranslators": "Jelenlegi Fordítók",
     "betaFeature": "Béta Funkció",
     "beta": "BÉTA",
-    "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
+    "betaDescription": "Ez a funkció jelenleg báta fázisban van, lehetnek benne hibák vagy lehet nincs befejezve. Aktívan dolgozunk a javításokon és szívesen fogadunk megjegyzéseket. Kérjük oszd meg az ötleteided vagy jelentsd a hibákat a Discord szerverünkön hogy segíts minket.",
     "copiedToClipboard": "Vágólapra másolva",
     "all": "Összes",
     "@all": {
@@ -1011,5 +1011,5 @@
     "lastRaids": "Last raids",
     "ongoingRaids": "Ongoing raids",
     "districtsDestroyed": "Districts destroyed",
-    "raidsCompleted": "Raids completed"
+    "raidsCompleted": "Sikeres portyázások"
 }
