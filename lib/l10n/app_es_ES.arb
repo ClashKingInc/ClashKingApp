@@ -74,7 +74,7 @@
     "faqJoinDiscord": "Unirse al Servidor de Discord",
     "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
     "helpUsTranslate": "Ayúdanos a traducir",
-    "suggestFeatures": "Suggest features",
+    "suggestFeatures": "Sugerir características",
     "thankYou": "¡Gracias!",
     "thankYouContent": "¡Un enorme agradecimiento a todos nuestros increíbles traductores que nos ayudan a hacer que esta aplicación sea accesible para más personas en todo el mundo!",
     "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
@@ -288,7 +288,7 @@
     },
     "date": "Fecha",
     "stats": "Estadísticas",
-    "details": "Details",
+    "details": "Detalles",
     "seasonStats": "Estadísticas de la Temporada",
     "charts": "Gráficos",
     "history": "Curso",
@@ -380,7 +380,7 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inaccurate data?",
+    "legendsTitle": "¿Datos inexactos?",
     "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
     "legendsExplanation_api_delay_title": "1. API Delay: ",
     "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
@@ -402,7 +402,7 @@
             }
         }
     },
-    "numberAccounts": "{number} accounts",
+    "numberAccounts": "{number} cuentas",
     "@numberAccounts": {
         "placeholders": {
             "number": {
@@ -411,7 +411,7 @@
         },
         "description": "Number of accounts (ex: 4 accounts)"
     },
-    "numberActiveAccounts": "{number} active accounts",
+    "numberActiveAccounts": "{number} cuentas activas",
     "@numberActiveAccounts": {
         "placeholders": {
             "number": {
@@ -419,7 +419,7 @@
             }
         }
     },
-    "numberInactiveAccounts": "{number} inactive accounts",
+    "numberInactiveAccounts": "{number} cuentas inactivas",
     "@numberInactiveAccounts": {
         "placeholders": {
             "number": {
@@ -427,10 +427,10 @@
             }
         }
     },
-    "activeAccounts": "Active accounts",
-    "inactiveAccounts": "Inactive accounts",
-    "noInactiveAccounts": "No inactive accounts.",
-    "noActiveAccounts": "No active accounts.",
+    "activeAccounts": "Cuentas activas",
+    "inactiveAccounts": "Cuentas inactivas",
+    "noInactiveAccounts": "No hay cuentas inactivas.",
+    "noActiveAccounts": "No hay cuentas activas.",
     "todoExplanation_title": "Task Calculation",
     "todoExplanation_intro": "The task completion percentage is calculated based on the following activities with specific weightings:",
     "todoExplanation_legends_title": "Legend League:",
