@@ -22,7 +22,7 @@
     },
     "username": "Username",
     "pleaseEnterUsername": "Please enter a username",
-    "playerTags": "Player Tags",
+    "playerTags": "खिलाड़ी टैग",
     "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
@@ -76,7 +76,7 @@
     "helpUsTranslate": "Help us translate",
     "suggestFeatures": "Suggest features",
     "thankYou": "Thank you!",
-    "thankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
+    "thankYouContent": "हमारे सभी अद्भुत अनुवादकों को बहुत-बहुत धन्यवाद, जो इस ऐप को दुनिया भर के अधिक लोगों तक पहुंचाने में हमारी मदद करते हैं!",
     "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
     "helpTranslateButton": "Help Translate on Crowdin",
     "versionDevice": "Version & Device",
