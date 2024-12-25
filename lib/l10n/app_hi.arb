@@ -204,7 +204,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+    "playerTownHallLevelDescription": "आपका टाउन हॉल स्तर {level} है.",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
