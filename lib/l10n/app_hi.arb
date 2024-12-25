@@ -1,6 +1,6 @@
 {
-    "creatorCode": "क्रिएटर कोड: क्लैशकिंग",
-    "signInWithDiscord": "Discord के साथ साइन इन करें",
+    "creatorCode": "क्रिएटर कोड: ClashKing",
+    "signInWithDiscord": "Discord के साथ साइन इन करें.",
     "guestMode": "अतिथि मोड",
     "needHelpJoinDiscord": "मदद चाहिए? डिस्कॉर्ड पर हमसे जुड़ें।",
     "createGuestProfile": "मदद चाहिए? डिस्कॉर्ड पर हमसे जुड़ें।",
@@ -43,7 +43,7 @@
     "welcomeMessage": "कृपया अपनी प्रोफ़ाइल में एक या अधिक Clash of Clans खाते जोड़ें। आप बाद में खाते जोड़ या हटा सकते हैं।",
     "login": "लॉग इन करें",
     "logout": "लॉग आउट",
-    "language": "भाषा ",
+    "language": "भाषा",
     "settings": "सेटिंग्स",
     "toggleTheme": "थीम टॉगल करें",
     "selectLanguage": "भाषा चुनें",
