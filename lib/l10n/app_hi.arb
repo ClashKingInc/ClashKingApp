@@ -368,7 +368,7 @@
     "@started": {
         "description": "Title for the number of trophies at the beginning of the day"
     },
-    "ended": "Ended",
+    "ended": "समाप्त",
     "@ended": {
         "description": "Title for the number of trophies at the end of the day"
     },
@@ -511,7 +511,7 @@
         }
     },
     "justNow": "Just Now",
-    "trophiesByMonth": "Trophies by month",
+    "trophiesByMonth": "महीने के अनुसार ट्रॉफियां",
     "trophiesBySeason": "Trophies by season",
     "eosTrophies": "End Of Season Trophies",
     "searchClan": "Search clan",
@@ -628,7 +628,7 @@
     "donations": "Donations",
     "donationsReceived": "Donations Received",
     "donationsRatio": "Donation Ratio",
-    "trophies": "Trophies",
+    "trophies": "ट्राफी",
     "always": "Always",
     "never": "Never",
     "unknown": "Unknown",
@@ -847,7 +847,7 @@
             }
         }
     },
-    "statistics": "Statistics",
+    "statistics": "आंकड़े",
     "stars": "Stars",
     "numberOfStars": "Number of stars",
     "destructionRate": "Destruction rate",
