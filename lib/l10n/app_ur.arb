@@ -2,9 +2,9 @@
     "creatorCode": "خالق کوڈ: ClashKing",
     "signInWithDiscord": "Discord کے ساتھ سائن ان کریں۔",
     "guestMode": "گیسٹ موڈ",
-    "needHelpJoinDiscord": "مدد کی ضرورت ہے؟ Discord پر ہمارے ساتھ شامل ہوں۔",
-    "createGuestProfile": "اپنا مہمان پروفائل بنائیں۔ ",
-    "doesNotExist": "{tag} موجود نہیں ہے۔",
+    "needHelpJoinDiscord": "مدد کی ضرورت ہے؟ Discord پر ہمارے ساتھ شامل ہوں.",
+    "createGuestProfile": "اپنا مہمان پروفائل بنائیں",
+    "doesNotExist": "{tag} موجود نہیں ہے.",
     "@doesNotExist": {
         "placeholders": {
             "tag": {
@@ -12,7 +12,7 @@
             }
         }
     },
-    "isAlreadyLinked": "{tag} پہلے ہی کسی سے منسلک ہے۔",
+    "isAlreadyLinked": "{tag} پہلے ہی کسی سے منسلک ہے.",
     "@isAlreadyLinked": {
         "placeholders": {
             "tag": {
@@ -21,9 +21,9 @@
         }
     },
     "username": "صارف نام",
-    "pleaseEnterUsername": "براہ کرم ایک صارف نام درج کریں۔ ",
+    "pleaseEnterUsername": "براہ کرم ایک صارف نام درج کریں",
     "playerTags": "پلیئر ٹیگز",
-    "followingTagsDoNotExist": "درج ذیل ٹیگز موجود نہیں ہیں: {tags}۔",
+    "followingTagsDoNotExist": "درج ذیل ٹیگز موجود نہیں ہیں: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
             "tags": {
@@ -31,7 +31,7 @@
             }
         }
     },
-    "followingTagsAreAlreadyLinked": "درج ذیل ٹیگز پہلے ہی کسی سے منسلک ہیں: {tags}۔",
+    "followingTagsAreAlreadyLinked": "درج ذیل ٹیگز پہلے ہی کسی سے منسلک ہیں: {tags}.",
     "@followingTagsAreAlreadyLinked": {
         "placeholders": {
             "tags": {
@@ -40,44 +40,44 @@
         }
     },
     "welcome": "خوش آمدید!",
-    "welcomeMessage": "براہ کرم اپنے پروفائل میں ایک یا زیادہ Clash of Clans اکاؤنٹس شامل کریں۔ آپ بعد میں اکاؤنٹس کو شامل یا ہٹا سکتے ہیں۔",
+    "welcomeMessage": "براہ کرم اپنے پروفائل میں ایک یا زیادہ Clash of Clans اکاؤنٹس شامل کریں۔ آپ بعد میں اکاؤنٹس کو شامل یا ہٹا سکتے ہیں.",
     "login": "لاگ ان",
     "logout": "لاگ آؤٹ کریں۔",
     "language": "زبان",
     "settings": "ترتیبات",
     "toggleTheme": "تھیم کو ٹوگل کریں۔",
-    "selectLanguage": "ایک زبان منتخب کریں۔ ",
+    "selectLanguage": "ایک زبان منتخب کریں",
     "faq": "FAQ",
     "faqSubtitle": "اکثر پوچھے گئے سوالات",
     "faqIsThisFromSupercell": "کیا یہ ایپ سپر سیل کی ہے؟",
     "faqFanContentPolicy": "یہ مواد غیر سرکاری ہے اور سپر سیل کی طرف سے اس کی توثیق نہیں کی گئی ہے۔ مزید معلومات کے لیے سپر سیل کی مداحوں کے مواد کی پالیسی دیکھیں: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "ڈیٹا بعض اوقات غلط یا غائب کیوں ہوتا ہے؟",
     "faqClanNotTracked": "قبیلہ کو ٹریک نہیں کیا گیا۔",
-    "faqClanNotTrackedAnswer": "ClashKing یہ معلومات صرف اس صورت میں بازیافت کر سکتا ہے جب قبیلہ کو ٹریک کیا جائے۔ اگر آپ کے قبیلے کو ٹریک نہیں کیا گیا ہے، تو براہ کرم ClashKing Bot کو اپنے Discord Server میں مدعو کریں اور کمانڈ /addclan استعمال کریں۔ ہم جلد ہی اس فیچر کو ایپ میں دستیاب کرنے پر کام کر رہے ہیں۔",
+    "faqClanNotTrackedAnswer": "ClashKing یہ معلومات صرف اس صورت میں بازیافت کر سکتا ہے جب قبیلہ کو ٹریک کیا جائے۔ اگر آپ کے قبیلے کو ٹریک نہیں کیا گیا ہے، تو براہ کرم ClashKing Bot کو اپنے Discord Server میں مدعو کریں اور کمانڈ /addclan استعمال کریں۔ ہم جلد ہی اس فیچر کو ایپ میں دستیاب کرنے پر کام کر رہے ہیں.",
     "faqTrackingDown": "ٹریکنگ ڈاؤن",
-    "faqTrackingDownAnswer": "ٹریکنگ ایک خاص مدت کے لیے کام کرنا بند کر سکتی ہے۔ یہی وجہ ہے کہ بعض اوقات آپ کے ڈیٹا میں سوراخ ہو سکتے ہیں۔ ہم اسے بہتر بنانے پر کام کر رہے ہیں۔",
+    "faqTrackingDownAnswer": "ٹریکنگ ایک خاص مدت کے لیے کام کرنا بند کر سکتی ہے۔ یہی وجہ ہے کہ بعض اوقات آپ کے ڈیٹا میں سوراخ ہو سکتے ہیں۔ ہم اسے بہتر بنانے پر کام کر رہے ہیں.",
     "faqApiLimitation": "Clash of Clans API کی حد",
-    "faqApiLimitationAnswer": "کچھ ڈیٹا Clash of Clans کے ذریعے فراہم کیا جاتا ہے اور ان کے API کی کچھ حدود ہیں۔ یہ معاملہ لیجنڈز سے باخبر رہنے کا ہے، یہ کبھی کبھی ٹرافی کے فائدے اور نقصان کو اس طرح کھڑا کر دیتا ہے جیسے یہ ایک ہی حملہ ہو۔ یہی وجہ ہے کہ ہمارے پاس آپ کی عمارت کی سطح کے بارے میں کوئی معلومات نہیں ہیں۔",
+    "faqApiLimitationAnswer": "کچھ ڈیٹا Clash of Clans کے ذریعے فراہم کیا جاتا ہے اور ان کے API کی کچھ حدود ہیں۔ یہ معاملہ لیجنڈز سے باخبر رہنے کا ہے، یہ کبھی کبھی ٹرافی کے فائدے اور نقصان کو اس طرح کھڑا کر دیتا ہے جیسے یہ ایک ہی حملہ ہو۔ یہی وجہ ہے کہ ہمارے پاس آپ کی عمارت کی سطح کے بارے میں کوئی معلومات نہیں ہیں.",
     "faqSupportWork": "میں آپ کے کام کی حمایت کیسے کر سکتا ہوں؟",
     "faqSupportWorkAnswer": "ہماری مدد کرنے کے کئی طریقے ہیں:",
     "faqUseCodeClashKing": "ہمارا کوڈ \"ClashKing\" k استعمال کریں۔",
     "faqSupportUsOnPatreon": "پیٹریون پر ہمارا ساتھ دیں۔",
     "faqShareTheApp": "اپنے دوستوں کے ساتھ ایپ کا اشتراک کریں۔",
-    "faqRateTheApp": "اسٹور میں ایپ کی درجہ بندی کریں۔ ",
+    "faqRateTheApp": "اسٹور میں ایپ کی درجہ بندی کریں",
     "faqHelpUsTranslate": "ایپ کا ترجمہ کرنے میں ہماری مدد کریں۔",
-    "faqHowToInviteTheBot": "میں آپ کے بوٹ کو اپنے ڈسکارڈ سرور میں کیسے مدعو کرسکتا ہوں؟ ",
-    "faqHowToInviteTheBotAnswer": "آپ نیچے دیئے گئے بٹن پر کلک کر کے ہمارے بوٹ کو اپنے سرور پر مدعو کر سکتے ہیں۔ بوٹ کو شامل کرنے کے لیے آپ کو \"سرور کا نظم کریں\" کی اجازت درکار ہوگی۔",
+    "faqHowToInviteTheBot": "میں آپ کے بوٹ کو اپنے ڈسکارڈ سرور میں کیسے مدعو کرسکتا ہوں؟",
+    "faqHowToInviteTheBotAnswer": "آپ نیچے دیئے گئے بٹن پر کلک کر کے ہمارے بوٹ کو اپنے سرور پر مدعو کر سکتے ہیں۔ بوٹ کو شامل کرنے کے لیے آپ کو \"سرور کا نظم کریں\" کی اجازت درکار ہوگی.",
     "faqInviteTheBot": "ClashKing Bot کو مدعو کریں۔",
     "faqNeedHelp": "مجھے مدد کی ضرورت ہے یا میں کوئی تجویز دینا چاہوں گا۔ میں آپ سے کیسے رابطہ کر سکتا ہوں؟",
-    "faqNeedHelpAnswer": "آپ مدد طلب کرنے یا رائے دینے کے لیے ہمارے Discord سرور میں شامل ہو سکتے ہیں، یا آپ ہمیں devs@clashkingbot.com پر ای میل کر سکتے ہیں۔ براہ کرم صرف انگریزی یا فرانسیسی میں لکھیں۔",
+    "faqNeedHelpAnswer": "آپ مدد طلب کرنے یا رائے دینے کے لیے ہمارے Discord سرور میں شامل ہو سکتے ہیں، یا آپ ہمیں devs@clashkingbot.com پر ای میل کر سکتے ہیں۔ براہ کرم صرف انگریزی یا فرانسیسی میں لکھیں.",
     "faqSendEmail": "ای میل بھیجیں۔",
     "faqJoinDiscord": "ہمارے ڈسکارڈ سرور میں شامل ہوں۔",
-    "faqCannotOpenMailClient": "کچھ وجوہات کی بنا پر ہم آپ کے میل کلائنٹ کو نہیں کھول سکتے۔ ہم نے آپ کے لیے ای میل ایڈریس کاپی کیا ہے۔ آپ ایک ای میل لکھ سکتے ہیں اور وصول کنندہ کے خانے میں پتہ چسپاں کر سکتے ہیں۔",
+    "faqCannotOpenMailClient": "کچھ وجوہات کی بنا پر ہم آپ کے میل کلائنٹ کو نہیں کھول سکتے۔ ہم نے آپ کے لیے ای میل ایڈریس کاپی کیا ہے۔ آپ ایک ای میل لکھ سکتے ہیں اور وصول کنندہ کے خانے میں پتہ چسپاں کر سکتے ہیں.",
     "helpUsTranslate": "ترجمہ کرنے میں ہماری مدد کریں۔",
     "suggestFeatures": "خصوصیات تجویز کریں۔",
     "thankYou": "شکریہ!",
     "thankYouContent": "ہمارے تمام حیرت انگیز مترجمین کا بہت بہت شکریہ جنہوں نے اس ایپ کو دنیا بھر کے مزید لوگوں تک قابل رسائی بنانے میں ہماری مدد کی!",
-    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
+    "helpTranslateContent": "آپ Crowdin پر ایپ کا ترجمہ کرنے میں ہماری مدد کر سکتے ہیں۔ اگر آپ کی زبان Crowdin پر دستیاب نہیں ہے تو بلا جھجھک ہمارے Discord Server میں اس کی درخواست کریں۔ آپ کی مدد کے لیے آپ کا بہت بہت شکریہ!",
     "helpTranslateButton": "Crowdin پر ترجمہ میں مدد کریں۔",
     "versionDevice": "ورژن اور ڈیوائس",
     "@version": {
@@ -88,10 +88,10 @@
     "@errorLoadingVersion": {
         "description": "Error message when the app version cannot be loaded"
     },
-    "currentTranslators": "موجودہ مترجم ",
+    "currentTranslators": "موجودہ مترجم",
     "betaFeature": "بیٹا فیچر",
     "beta": "BETA",
-    "betaDescription": "یہ فیچر فی الحال بیٹا میں ہے، اس میں کچھ کیڑے ہو سکتے ہیں یا نامکمل ہیں۔ ہم بہتری پر سرگرمی سے کام کر رہے ہیں اور آپ کے تاثرات کا خیرمقدم کرتے ہیں۔ براہ کرم اپنے خیالات کا اشتراک کریں اور اسے بہتر بنانے میں ہماری مدد کرنے کے لیے ہمارے Discord Server میں کسی بھی مسئلے کی اطلاع دیں۔",
+    "betaDescription": "یہ فیچر فی الحال بیٹا میں ہے، اس میں کچھ کیڑے ہو سکتے ہیں یا نامکمل ہیں۔ ہم بہتری پر سرگرمی سے کام کر رہے ہیں اور آپ کے تاثرات کا خیرمقدم کرتے ہیں۔ براہ کرم اپنے خیالات کا اشتراک کریں اور اسے بہتر بنانے میں ہماری مدد کرنے کے لیے ہمارے Discord Server میں کسی بھی مسئلے کی اطلاع دیں.",
     "copiedToClipboard": "کلپ بورڈ پر کاپی ہو گیا۔",
     "all": "تمام",
     "@all": {
@@ -99,7 +99,7 @@
     },
     "hourIndicator": "ایچ",
     "minIndicator": "ایم",
-    "noDataAvailable": "کوئی ڈیٹا دستیاب نہیں ہے۔",
+    "noDataAvailable": "کوئی ڈیٹا دستیاب نہیں ہے.",
     "close": "بند",
     "closed": "بند",
     "@closed": {
@@ -107,7 +107,7 @@
     },
     "error": "خرابی",
     "player": "کھلاڑی",
-    "notFoundOrNotLinkedToOurSystem": "{player} نہیں ملا یا ہمارے سسٹم سے منسلک نہیں ہے۔",
+    "notFoundOrNotLinkedToOurSystem": "{player} نہیں ملا یا ہمارے سسٹم سے منسلک نہیں ہے.",
     "@notFoundOrNotLinkedToOurSystem": {
         "placeholders": {
             "player": {
@@ -115,7 +115,7 @@
             }
         }
     },
-    "tryAnotherNameOrTagOrLinkIt": "دوسرا نام/ٹیگ آزمائیں یا اسے لنک کریں۔",
+    "tryAnotherNameOrTagOrLinkIt": "دوسرا نام/ٹیگ آزمائیں یا اسے لنک کریں.",
     "playerNotFound": "کھلاڑی نہیں ملا",
     "noValueEntered": "کوئی قدر درج نہیں کی گئی۔",
     "manage": "انتظام کریں۔",
@@ -130,21 +130,21 @@
     },
     "addAccount": "اکاؤنٹ شامل کریں۔",
     "deleteAccount": "اکاؤنٹ حذف کریں۔",
-    "playerTagNotExists": "درج کردہ پلیئر ٹیگ موجود نہیں ہے۔",
-    "accountAlreadyLinked": "کھلاڑی کا ٹیگ پہلے ہی کسی سے منسلک ہے۔",
-    "enterApiToken": "یہ تصدیق کرنے کے لیے کہ یہ آپ کا اکاؤنٹ API ٹوکن درج کریں۔ آپ اسے Clash of Clans Settings > More Settings > API Token میں تلاش کر سکتے ہیں۔",
-    "wrongApiToken": "درج کردہ API ٹوکن غلط ہے۔ ",
-    "accountAlreadyLinkedToYou": "پلیئر ٹیگ پہلے ہی آپ سے منسلک ہے۔",
+    "playerTagNotExists": "درج کردہ پلیئر ٹیگ موجود نہیں ہے.",
+    "accountAlreadyLinked": "کھلاڑی کا ٹیگ پہلے ہی کسی سے منسلک ہے.",
+    "enterApiToken": "یہ تصدیق کرنے کے لیے کہ یہ آپ کا اکاؤنٹ API ٹوکن درج کریں۔ آپ اسے Clash of Clans Settings > More Settings > API Token میں تلاش کر سکتے ہیں.",
+    "wrongApiToken": "درج کردہ API ٹوکن غلط ہے.",
+    "accountAlreadyLinkedToYou": "پلیئر ٹیگ پہلے ہی آپ سے منسلک ہے.",
     "apiToken": "اکاؤنٹ API ٹوکن",
-    "failedToAddTryAgain": "لنک شامل کرنے میں ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں۔",
-    "failedToDeleteTryAgain": "لنک کو حذف کرنے میں ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں۔",
-    "enterPlayerTagWarning": "آپ کو پلیئر ٹیگ درج کرنا ہوگا اور جاری رکھنے کے لیے \"+\" پر کلک کرنا ہوگا۔",
+    "failedToAddTryAgain": "لنک شامل کرنے میں ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں.",
+    "failedToDeleteTryAgain": "لنک کو حذف کرنے میں ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں.",
+    "enterPlayerTagWarning": "آپ کو پلیئر ٹیگ درج کرنا ہوگا اور جاری رکھنے کے لیے \"+\" پر کلک کرنا ہوگا.",
     "search": "تلاش کریں۔",
     "@search": {
         "description": "Search for a player or a clan"
     },
     "warning": "وارننگ",
-    "exitAppToOpenClash": "آپ Clash of Clans کھولنے کے لیے ایپ چھوڑنے والے ہیں۔",
+    "exitAppToOpenClash": "آپ Clash of Clans کھولنے کے لیے ایپ چھوڑنے والے ہیں.",
     "confirmLogout": "کیا آپ واقعی لاگ آؤٹ کرنا چاہتے ہیں؟",
     "@confirmLogout": {
         "description": "Prompt asking the user to confirm logout"
@@ -152,7 +152,7 @@
     "tagOrNamePlayer": "کھلاڑی کا ٹیگ یا نام",
     "searchPlayer": "پلیئر تلاش کریں۔",
     "nameOrTagPlayer": "کھلاڑی کا نام یا ٹیگ",
-    "playerClanDescription": "آپ کا قبیلہ \"{clan}\" ({tag}) ہے۔",
+    "playerClanDescription": "آپ کا قبیلہ \"{clan}\" ({tag}) ہے.",
     "@playerClanDescription": {
         "placeholders": {
             "clan": {
@@ -163,7 +163,7 @@
             }
         }
     },
-    "playerRatioDescription": "آپ کے عطیہ کا تناسب {ratio} ہے۔ آپ نے {عطیات} دستے عطیہ کیے ہیں اور {received} دستے حاصل کیے ہیں۔",
+    "playerRatioDescription": "آپ کے عطیہ کا تناسب {ratio} ہے۔ آپ نے {عطیات} دستے عطیہ کیے ہیں اور {received} دستے حاصل کیے ہیں.",
     "@playerRatioDescription": {
         "placeholders": {
             "ratio": {
@@ -177,7 +177,7 @@
             }
         }
     },
-    "playerWarPreferenceDescription": "آپ کی جنگ کی ترجیح \"{preference}\" ہے۔",
+    "playerWarPreferenceDescription": "آپ کی جنگ کی ترجیح \"{preference}\" ہے.",
     "@playerWarPreferenceDescription": {
         "placeholders": {
             "preference": {
@@ -185,7 +185,7 @@
             }
         }
     },
-    "playerWarStarsDescription": "آپ کے پاس {stars} جنگی ستارے ہیں۔",
+    "playerWarStarsDescription": "آپ کے پاس {stars} جنگی ستارے ہیں.",
     "@playerWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -193,7 +193,7 @@
             }
         }
     },
-    "playerTrophiesDescription": "آپ کے پاس {trophies} ٹرافیاں ہیں۔ آپ فی الحال {league} میں ہیں۔",
+    "playerTrophiesDescription": "آپ کے پاس {trophies} ٹرافیاں ہیں۔ آپ فی الحال {league} میں ہیں.",
     "@playerTrophiesDescription": {
         "placeholders": {
             "trophies": {
@@ -204,7 +204,7 @@
             }
         }
     },
-    "playerTownHallLevelDescription": "آپ کا ٹاؤن ہال لیول {level} ہے۔",
+    "playerTownHallLevelDescription": "آپ کا ٹاؤن ہال لیول {level} ہے.",
     "@playerTownHallLevelDescription": {
         "placeholders": {
             "level": {
