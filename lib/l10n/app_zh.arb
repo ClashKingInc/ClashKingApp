@@ -760,8 +760,8 @@
         }
     },
     "joinLeaveLogs": "Join/Leave Logs",
-    "join": "Join",
-    "leave": "Leave",
+    "join": "加入",
+    "leave": "退出",
     "reset": "Reset",
     "leaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
     "@leaveNumberDescription": {
