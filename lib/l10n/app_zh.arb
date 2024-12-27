@@ -643,8 +643,8 @@
     "ongoingCwl": "Ongoing CWL",
     "cantOpenLink": "我们无法打开此链接",
     "notInWar": "不在战争中",
-    "warHistory": "War History",
-    "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
+    "warHistory": "部落对战历史",
+    "warHistoryWinsDescription": "在过去50场部落战中，您的部落赢得{wins}场({percent}%)",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
@@ -655,7 +655,7 @@
             }
         }
     },
-    "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) out of the last 50 wars.",
+    "warHistoryLossesDescription": "在过去的50 场部落战中，您的部落失败{losses}场({percent}%)",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
@@ -666,7 +666,7 @@
             }
         }
     },
-    "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) out of the last 50 wars.",
+    "warHistoryDrawsDescription": "在过去50场部落战中，您的部落平局{draws}场({percent}%)",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
@@ -677,7 +677,7 @@
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
+    "warHistoryAverageMembersDescription": "在过去50场部落战中，您的部落平均有{members}人参战",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -685,7 +685,7 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription": "Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.",
+    "warHistoryAverageWarStarsDescription": "在过去 50 场战争中，您的部落平均每场战争获得 {stars} 颗星星，占比 {percent}",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -696,7 +696,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
+    "warHistoryAverageHitRateDescription": "您的部落在过去 50 场战争中的平均摧毁率为 {percent}%",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
@@ -704,8 +704,8 @@
             }
         }
     },
-    "warHistoryAverageClanStarsPerMember": "Your clan had an average of {stars} stars per member from the last 50 wars.",
-    "warHistoryAverageMembers": "~{members} members per war",
+    "warHistoryAverageClanStarsPerMember": "在过去 50 场战争中，您的部落平均每位成员获得 {stars} 胜利之星",
+    "warHistoryAverageMembers": "每场部落战有 ~{members} 名成员",
     "@warHistoryAverageMembers": {
         "placeholders": {
             "members": {
@@ -713,20 +713,20 @@
             }
         }
     },
-    "averageStars": "Average stars",
-    "averageDestruction": "Average destruction",
-    "noStars": "0 star",
-    "oneStar": "1 star",
-    "twoStars": "2 stars",
-    "threeStars": "3 stars",
-    "warParticipation": "War Participation",
+    "averageStars": "平均胜利之星",
+    "averageDestruction": "平均摧毁",
+    "noStars": "0 胜利之星",
+    "oneStar": "1 胜利之星",
+    "twoStars": "2 胜利之星",
+    "threeStars": "3 胜利之星",
+    "warParticipation": "参战",
     "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
     "@toggleTownHallVisibility": {
         "description": "For example, hide stats from TH15 and below if the player is now TH16"
     },
-    "warLog": "War Log",
-    "publicWarLog": "Public War Log",
-    "privateWarLog": "Private War Log",
+    "warLog": "对战日志",
+    "publicWarLog": "公开对战日志",
+    "privateWarLog": "私人对战日志",
     "startsIn": "Starts in {time}",
     "@startsIn": {
         "placeholders": {
