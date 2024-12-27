@@ -258,7 +258,7 @@
     "@byMonth": {
         "description": "Shows stats by season"
     },
-    "dayIndex": "Day {index}",
+    "dayIndex": "第{index}天",
     "@dayIndex": {
         "placeholders": {
             "index": {
@@ -266,7 +266,7 @@
             }
         }
     },
-    "indexDays": "{index} days",
+    "indexDays": "{index}天",
     "@indexDays": {
         "placeholders": {
             "index": {
@@ -278,7 +278,7 @@
     "mostAttacks": "最多进攻次数",
     "lastSeason": "上一赛季",
     "bestRank": "最佳全球等级",
-    "daysLeft": "{days} days left",
+    "daysLeft": "剩余{days}天",
     "@daysLeft": {
         "placeholders": {
             "days": {
@@ -624,25 +624,25 @@
     "selectMembersThLevel": "成员大本等级",
     "selectOpponentsThLevel": "队友大本等级",
     "equalThLevel": "Equal TH",
-    "builderBaseTrophies": "BB Trophies",
-    "donations": "Donations",
-    "donationsReceived": "Donations Received",
-    "donationsRatio": "Donation Ratio",
-    "trophies": "Trophies",
-    "always": "Always",
-    "never": "Never",
-    "unknown": "Unknown",
-    "oncePerWeek": "1/week",
-    "twicePerWeek": "2/week",
-    "rarely": "Rarely",
+    "builderBaseTrophies": "建筑大师奖杯",
+    "donations": "增援",
+    "donationsReceived": "收到的增援",
+    "donationsRatio": "捐收比例",
+    "trophies": "奖杯",
+    "always": "总是",
+    "never": "从不",
+    "unknown": "未知",
+    "oncePerWeek": "1次/周",
+    "twicePerWeek": "2次/周",
+    "rarely": "很少",
     "warLeague": "War/League",
     "war": "War",
-    "league": "League",
+    "league": "部落",
     "wars": "Wars",
     "ongoingWar": "Ongoing war",
     "ongoingCwl": "Ongoing CWL",
-    "cantOpenLink": "We can't open this link.",
-    "notInWar": "Not in war",
+    "cantOpenLink": "我们无法打开此链接",
+    "notInWar": "不在战争中",
     "warHistory": "War History",
     "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
     "@warHistoryWinsDescription": {
