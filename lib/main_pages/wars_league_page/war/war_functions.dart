@@ -163,7 +163,7 @@ Future<String> checkCurrentWar(
   Future<String> fetchWarDetails(String tag, bool bypass) async {
     final responseWar = await http.get(
       Uri.parse(
-          'https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/currentwar'),
+          'https://proxy.clashk.ing/v1/clans/${tag.replaceAll('#', '%23')}/currentwar'),
     );
 
     if (responseWar.statusCode == 200) {
@@ -178,7 +178,7 @@ Future<String> checkCurrentWar(
         if (now.day >= 1 && now.day <= 12) {
           final responseCwl = await http.get(
             Uri.parse(
-                'https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
+                'https://proxy.clashk.ing/v1/clans/${tag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
           );
           if (responseCwl.statusCode == 200) {
             var decodedResponseCwl =

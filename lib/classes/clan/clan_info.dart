@@ -196,7 +196,7 @@ class ClanService {
 
           final clanInfoFuture = http
               .get(
-                Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
+                Uri.parse('https://proxy.clashk.ing/v1/clans/$tag'),
               )
               .timeout(Duration(seconds: 15));
 
@@ -274,7 +274,7 @@ class ClanService {
 
           final response = await http
               .get(
-                Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
+                Uri.parse('https://proxy.clashk.ing/v1/clans/$tag'),
               )
               .timeout(Duration(seconds: 15));
 
@@ -385,7 +385,7 @@ class ClanService {
           final responseWar = await http
               .get(
                 Uri.parse(
-                    'https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/currentwar'),
+                    'https://proxy.clashk.ing/v1/clans/${tag.replaceAll('#', '%23')}/currentwar'),
               )
               .timeout(Duration(seconds: 15));
 
@@ -448,7 +448,7 @@ class ClanService {
           final responseCwl = await http
               .get(
                 Uri.parse(
-                    'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
+                    'https://proxy.clashk.ing/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
               )
               .timeout(Duration(seconds: 15));
 

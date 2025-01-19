@@ -69,7 +69,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
         RegExp(r'^[PYLQGRJCUV0289]{3,9}$').hasMatch(query)) {
       query = query.replaceFirst('#', '!');
       response = await http
-          .get(Uri.parse('https://api.clashking.xyz/v1/players/$query'));
+          .get(Uri.parse('https://proxy.clashk.ing/v1/players/$query'));
     } else {
       response = await http
           .get(Uri.parse('https://api.clashking.xyz/player/search/$query'));
