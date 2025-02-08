@@ -192,7 +192,7 @@ class WarLeagueService {
   Future<WarLeagueInfo> fetchWarLeagueInfo(String warTag) async {
     warTag = warTag.replaceAll('#', '%23');
     final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clanwarleagues/wars/$warTag'),
+      Uri.parse('https://proxy.clashk.ing/v1/clanwarleagues/wars/$warTag'),
     );
 
     if (response.statusCode == 200) {

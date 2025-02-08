@@ -202,7 +202,7 @@ class Attack {
 class CapitalHistoryService {
   static Future<CapitalHistoryItems> fetchCapitalData(String tag, int limit) async {
     final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/v1/clans/${tag.replaceAll('#', '%23')}/capitalraidseasons?limit=$limit'),
+      Uri.parse('https://proxy.clashk.ing/v1/clans/${tag.replaceAll('#', '%23')}/capitalraidseasons?limit=$limit'),
     );
 
 

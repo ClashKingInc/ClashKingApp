@@ -22,12 +22,12 @@ Future<String> checkCurrentWar(String? clanTag) async {
 
   final responseWar = await http.get(
     Uri.parse(
-        'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar'),
+        'https://proxy.clashk.ing/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar'),
   );
 
   final responseCwl = await http.get(
     Uri.parse(
-        'https://api.clashking.xyz/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
+        'https://proxy.clashk.ing/v1/clans/${clanTag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
   );
 
   if (responseWar.statusCode == 200) {

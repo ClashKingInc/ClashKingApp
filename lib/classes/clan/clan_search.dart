@@ -279,7 +279,7 @@ class ClanService {
 
   Future<ClanSearch> fetchClanInfo(String tag) async {
     tag = tag.replaceAll('#', '!');
-    final response = await http.get(Uri.parse('https://api.clashking.xyz/v1/clans/$tag'));
+    final response = await http.get(Uri.parse('https://proxy.clashk.ing/v1/clans/$tag'));
 
     if (response.statusCode == 200) {
       String responseBody = utf8.decode(response.bodyBytes);
