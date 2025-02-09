@@ -1,106 +1,51 @@
-# Created by https://www.toptal.com/developers/gitignore/api/flutter,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=flutter,visualstudiocode
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
 
-### Flutter ###
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
 # Flutter/Dart/Pub related
 **/doc/api/
+**/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
-.fvm/flutter_sdk
-.packages
 .pub-cache/
 .pub/
-build/
-coverage/
-lib/generated_plugin_registrant.dart
-# For library packages, don’t commit the pubspec.lock file.
-# Regenerating the pubspec.lock file lets you test your package against the latest compatible versions of its dependencies.
-# See https://dart.dev/guides/libraries/private-files#pubspeclock
-pubspec.lock
+/build/
 
-# Android related
-**/android/.gradle
-**/android/captures/
-**/android/key.properties
-**/android/local.properties
-**/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+# Symbolication related
+app.*.symbols
 
+# Obfuscation related
+app.*.map.json
 
-# iOS/XCode related
-**/ios/**/*.mode1v3
-**/ios/**/*.mode2v3
-**/ios/**/*.moved-aside
-**/ios/**/*.pbxuser
-**/ios/**/*.perspectivev3
-**/ios/**/*sync/
-**/ios/**/.sconsign.dblite
-**/ios/**/.tags*
-**/ios/**/.vagrant/
-**/ios/**/DerivedData/
-**/ios/**/Icon?
-**/ios/**/Pods/
-**/ios/**/.symlinks/
-**/ios/**/profile
-**/ios/**/xcuserdata
-**/ios/.generated/
-**/ios/Flutter/.last_build_id
-**/ios/Flutter/App.framework
-**/ios/Flutter/Flutter.framework
-**/ios/Flutter/Flutter.podspec
-**/ios/Flutter/Generated.xcconfig
-**/ios/Flutter/app.flx
-**/ios/Flutter/app.zip
-**/ios/Flutter/flutter_assets/
-**/ios/Flutter/flutter_export_environment.sh
-**/ios/ServiceDefinitions.json
-**/ios/Runner/GeneratedPluginRegistrant.*
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
 
-# Exceptions to above rules.
-!**/ios/**/default.mode1v3
-!**/ios/**/default.mode2v3
-!**/ios/**/default.pbxuser
-!**/ios/**/default.perspectivev3
-!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+# VS Code related
+.vscode/settings.json
 
-### VisualStudioCode ###
-.vscode/*
-.vscode/
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
+# ENV (DO NOT INCLUDE SECRETS)
+config.json
 
-# Local History for Visual Studio Code
-.history/
-
-# Built Visual Studio Code Extensions
-*.vsix
-
-### VisualStudioCode Patch ###
-# Ignore all local history of files
-.history
-.ionide
-
-# End of https://www.toptal.com/developers/gitignore/api/flutter,visualstudiocode
-
-.env
-.idea/
-
-#Linux
-**/flutter/generated_plugin_registrant.cc
-**/flutter/generated_plugin_registrant.h
-**/flutter/generated_plugin.cmake
-**/Flutter/GeneratedPluginRegistrant.swift
-
-**/flutter/generated_plugins.cmake
-
-# Localization
 untranslated_messages.json
-
-# release
-android/app/release/*
-
-# extension
-.VsCodeCounter/*
