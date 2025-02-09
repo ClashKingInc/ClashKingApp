@@ -14,7 +14,6 @@ import 'package:clashkingapp/l10n/locale.dart';
 import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   User? user;
@@ -128,7 +127,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   // Update the war widget
   Future<void> updateWarWidget() async {
-    await dotenv.load(fileName: ".env");
     clanTag = await getPrefs('clanTag');
     final warInfo = await checkCurrentWar(clanTag);
     if (clanTag != "") {
@@ -144,7 +142,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       );
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to update war widget, clanTag: $clanTag, warInfo: $warInfo');
+      Sentry.captureMessage(
+          'Failed to update war widget, clanTag: $clanTag, warInfo: $warInfo');
     }
   }
 
@@ -294,7 +293,8 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
       Sentry.captureMessage(
-          'Error during initializeData execution, user: $user, accounts: $accounts, selected_account: $account',);
+        'Error during initializeData execution, user: $user, accounts: $accounts, selected_account: $account',
+      );
       return false;
     }
   }

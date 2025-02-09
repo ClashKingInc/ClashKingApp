@@ -104,3 +104,5 @@ android/app/release/*
 
 # extension
 .VsCodeCounter/*
+
+config.json

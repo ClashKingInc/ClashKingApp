@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:clashkingapp/classes/data/gears_data_manager.dart';
+import 'package:clashkingapp/env.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/core/my_app.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
@@ -22,7 +22,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     WidgetsFlutterBinding.ensureInitialized();
-    await dotenv.load(fileName: ".env");
     final myAppState = MyAppState();
     await myAppState.updateWarWidget();
     return Future.value(true);
@@ -30,7 +29,6 @@ void callbackDispatcher() {
 }
 
 Future<void> main() async {
-  await dotenv.load(fileName: ".env"); // Load .env file
   WidgetsFlutterBinding
       .ensureInitialized(); // Required by Workmanager to ensure binding is initialized
   Workmanager().initialize(
@@ -49,7 +47,7 @@ Future<void> main() async {
 
   await SentryFlutter.init(
     (options) {
-      options.dsn = dotenv.env['SENTRY_DSN'];
+      options.dsn = Env.sentryDsn;
       options.tracesSampleRate = 1.0;
     },
     appRunner: () => runApp(

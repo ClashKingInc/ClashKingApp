@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/classes/clan/description/badge_urls.dart';
 
 class WarInfoContainer {
@@ -59,21 +58,8 @@ class CurrentWarInfo {
     );
   }
 
-WarMember? fetchClanMemberByTag(String tag) {
-  WarMember? member = clan.members.firstWhere(
-    (element) => element.tag == tag,
-    orElse: () => WarMember(
-      tag: '',
-      name: '',
-      townhallLevel: 0,
-      mapPosition: 0,
-      attacks: [],
-      opponentAttacks: 0,
-      bestOpponentAttack: null,
-    ),
-  );
-  if (member.tag == '') {
-    member = opponent.members.firstWhere(
+  WarMember? fetchClanMemberByTag(String tag) {
+    WarMember? member = clan.members.firstWhere(
       (element) => element.tag == tag,
       orElse: () => WarMember(
         tag: '',
@@ -85,11 +71,22 @@ WarMember? fetchClanMemberByTag(String tag) {
         bestOpponentAttack: null,
       ),
     );
+    if (member.tag == '') {
+      member = opponent.members.firstWhere(
+        (element) => element.tag == tag,
+        orElse: () => WarMember(
+          tag: '',
+          name: '',
+          townhallLevel: 0,
+          mapPosition: 0,
+          attacks: [],
+          opponentAttacks: 0,
+          bestOpponentAttack: null,
+        ),
+      );
+    }
+    return member.tag == 'No tag' ? null : member;
   }
-  return member.tag == 'No tag' ? null : member;
-}
-
-
 }
 
 class ClanWarDetails {
@@ -157,9 +154,10 @@ class WarMember {
       name: json['name'] ?? 'No name',
       townhallLevel: json['townhallLevel'] ?? 0,
       mapPosition: json['mapPosition'] ?? 0,
-      attacks:
-          (json['attacks'] as List?)?.map((x) => WarAttack.fromJson(x)).toList() ??
-              [],
+      attacks: (json['attacks'] as List?)
+              ?.map((x) => WarAttack.fromJson(x))
+              .toList() ??
+          [],
       opponentAttacks: json['opponentAttacks'] ?? 0,
       bestOpponentAttack: json['bestOpponentAttack'] != null
           ? BestOpponentAttack.fromJson(json['bestOpponentAttack'])
@@ -228,10 +226,6 @@ class BestOpponentAttack {
 
 // Service
 class CurrentWarService {
-  Future<void> initEnv() async {
-    await dotenv.load(fileName: ".env");
-  }
-
   static Future<CurrentWarInfo?> fetchWarDataFromTime(
       String tag, DateTime end) async {
     String endTime = end.toIso8601String();

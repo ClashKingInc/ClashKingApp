@@ -1,8 +1,8 @@
+import 'package:clashkingapp/env.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -10,10 +10,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:io' show Platform;
 
-final String clientId = dotenv.env['DISCORD_CLIENT_ID']!;
-final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
-final String clientSecret = dotenv.env['DISCORD_CLIENT_SECRET']!;
-final String callbackUrlScheme = dotenv.env['DISCORD_CALLBACK_URL_SCHEME']!;
 final storage = FlutterSecureStorage();
 
 Future<bool> isTokenValid() async {
@@ -32,11 +28,11 @@ Future<bool> refreshToken() async {
 
   final tokenUrl = Uri.https('discord.com', '/api/oauth2/token');
   final response = await http.post(tokenUrl, body: {
-    'client_id': clientId,
-    'client_secret': clientSecret,
+    'client_id': Env.discordClientId,
+    'client_secret': Env.discordClientSecret,
     'grant_type': 'refresh_token',
     'refresh_token': refreshToken,
-    'redirect_uri': redirectUri,
+    'redirect_uri': Env.discordRedirectUri,
   });
 
   if (response.statusCode == 200) {
@@ -59,11 +55,9 @@ Future<bool> refreshToken() async {
 
 Future<void> storePrefs(String name, String token) async {
   try {
-    // Load the keys from the .env file
-    await dotenv.load(fileName: ".env");
-    final encryptionKey = Key.fromBase64(
-        dotenv.env['ENCRYPTION_KEY']!); // 32 bytes key for AES-256
-    final hmacKey = base64.decode(dotenv.env['HMAC_KEY']!); // Key for HMAC
+    final encryptionKey =
+        Key.fromBase64(Env.encryptionKey); // 32 bytes key for AES-256
+    final hmacKey = base64.decode(Env.hmacKey); // Key for HMAC
 
     if (encryptionKey.bytes.length != 32) {
       throw Exception(
@@ -119,7 +113,7 @@ Future<String?> getPrefs(String name) async {
     final combinedData = iv.bytes + encryptedData;
 
     // Verify HMAC
-    final hmacKey = base64.decode(dotenv.env['HMAC_KEY']!); // Key for HMAC
+    final hmacKey = base64.decode(Env.hmacKey); // Key for HMAC
     final hmac = Hmac(sha256, hmacKey);
     final newHmacDigest =
         hmac.convert(combinedData).bytes; // Use IV + encryptedData
@@ -129,8 +123,8 @@ Future<String?> getPrefs(String name) async {
     }
 
     // Decrypt the access token
-    final encryptionKey = Key.fromBase64(
-        dotenv.env['ENCRYPTION_KEY']!); // 32 bytes key for AES-256
+    final encryptionKey =
+        Key.fromBase64(Env.encryptionKey); // 32 bytes key for AES-256
     final encrypter = Encrypter(AES(encryptionKey, mode: AESMode.cbc));
     final encrypted = Encrypted(encryptedData);
 
@@ -157,8 +151,6 @@ Future<void> clearPrefs() async {
   await storage.deleteAll();
 }
 
-
-
 Future<String> getAppAndDeviceInfo() async {
   // Fetch app version and build number
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -175,7 +167,8 @@ Future<String> getAppAndDeviceInfo() async {
         'Device: ${androidInfo.model}, OS: Android ${androidInfo.version.release} (SDK ${androidInfo.version.sdkInt})';
   } else if (Platform.isIOS) {
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    deviceData = 'Device: ${iosInfo.utsname.machine}, OS: iOS ${iosInfo.systemVersion}';
+    deviceData =
+        'Device: ${iosInfo.utsname.machine}, OS: iOS ${iosInfo.systemVersion}';
   } else {
     deviceData = 'Unknown Platform';
   }

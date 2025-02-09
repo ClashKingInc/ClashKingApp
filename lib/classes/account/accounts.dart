@@ -1,5 +1,4 @@
 import 'package:clashkingapp/classes/account/user.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:flutter/foundation.dart';
@@ -26,7 +25,8 @@ class Accounts {
           .firstWhere((acc) => acc.profileInfo.tag == selectedTag.value);
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('No account found with the selected tag, selectedTag: ${selectedTag.value}, accounts: ${accounts.map((acc) => acc.profileInfo.tag).toList()}');
+      Sentry.captureMessage(
+          'No account found with the selected tag, selectedTag: ${selectedTag.value}, accounts: ${accounts.map((acc) => acc.profileInfo.tag).toList()}');
 
       return null;
     }
@@ -37,7 +37,8 @@ class Accounts {
       return accounts.firstWhere((acc) => acc.profileInfo.tag == tag);
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('No account found with the tag, selectedTag: ${selectedTag.value}, accounts: ${accounts.map((acc) => acc.profileInfo.tag).toList()}');
+      Sentry.captureMessage(
+          'No account found with the tag, selectedTag: ${selectedTag.value}, accounts: ${accounts.map((acc) => acc.profileInfo.tag).toList()}');
       return null;
     }
   }
@@ -54,10 +55,6 @@ class Account {
 }
 
 class AccountsService {
-  Future<void> initEnv() async {
-    await dotenv.load(fileName: ".env");
-  }
-
   Future<Accounts> fetchAccounts(User user) async {
     final transaction = Sentry.startTransaction(
       'fetchAccounts',
@@ -152,7 +149,8 @@ class AccountsService {
     } catch (exception, stackTrace) {
       transaction.finish(status: SpanStatus.internalError());
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load accounts, user_tags: ${user.tags}, user_id: ${user.id}, user_username: ${user.globalName}');
+      Sentry.captureMessage(
+          'Failed to load accounts, user_tags: ${user.tags}, user_id: ${user.id}, user_username: ${user.globalName}');
       throw Exception('Failed to load accounts: $exception');
     }
   }
@@ -170,7 +168,8 @@ class AccountsService {
     } catch (exception, stackTrace) {
       clanSpan.finish(status: SpanStatus.internalError());
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to load clan info, clan_tag: $clanTag, account_tag: ${account.profileInfo.tag}');
+      Sentry.captureMessage(
+          'Failed to load clan info, clan_tag: $clanTag, account_tag: ${account.profileInfo.tag}');
       rethrow;
     }
   }

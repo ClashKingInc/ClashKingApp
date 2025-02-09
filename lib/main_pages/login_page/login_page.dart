@@ -1,6 +1,6 @@
 import 'package:clashkingapp/core/startup_widget.dart';
+import 'package:clashkingapp/env.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math'; // Pour Random
@@ -20,10 +20,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  final String clientId = dotenv.env['DISCORD_CLIENT_ID']!;
-  final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
-  final String clientSecret = dotenv.env['DISCORD_CLIENT_SECRET']!;
-  final String callbackUrlScheme = dotenv.env['DISCORD_CALLBACK_URL_SCHEME']!;
+  final String clientId = Env.discordClientId;
+  final String redirectUri = Env.discordRedirectUri;
+  final String clientSecret = Env.discordClientSecret;
+  final String callbackUrlScheme = Env.discordCallbackUrlScheme;
 
   @override
   Widget build(BuildContext context) {

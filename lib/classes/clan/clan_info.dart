@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:retry/retry.dart';
 
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/classes/data/league_data_manager.dart';
 import 'package:clashkingapp/classes/clan/description/capital_league.dart';
 import 'package:clashkingapp/classes/clan/description/location.dart';
@@ -135,8 +134,7 @@ class Clan {
       );
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage(
-          'Failed to parse Clan from json : $json');
+      Sentry.captureMessage('Failed to parse Clan from json : $json');
       throw Exception('Failed to load clan stats : $exception');
     }
   }
@@ -183,10 +181,6 @@ class Clan {
 
 class ClanService {
   Map<String, String> leagueUrls = {};
-
-  Future<void> initEnv() async {
-    await dotenv.load(fileName: ".env");
-  }
 
   Future<Clan> fetchClanAndWarInfo(String clanTag) async {
     try {
@@ -260,8 +254,7 @@ class ClanService {
       );
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage(
-          'Failed to load clan stats, clanTag: $clanTag');
+      Sentry.captureMessage('Failed to load clan stats, clanTag: $clanTag');
       throw Exception('Failed to load clan stats: $exception');
     }
   }
