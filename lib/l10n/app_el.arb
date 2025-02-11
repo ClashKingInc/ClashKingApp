@@ -228,9 +228,9 @@
     "th": "Δ",
     "builderBase": "Βάση Χτίστη",
     "bh": "ΔΧ",
-    "clanCapital": "Πρωτεύουσα Ομάδας",
+    "clanCapital": "Πρωτεύουσα Φυλής",
     "leader": "Αρχηγός",
-    "coLeader": "Συν-Αρχηγός",
+    "coLeader": "Υπ-Αρχηγός",
     "elder": "Επίτιμο Μέλος",
     "member": "Μέλος",
     "ready": "Θέλω να συμμετέχω",
@@ -441,20 +441,20 @@
     "todoExplanation_clanWars": "Βάρος έως και 2 πόντους για κάθε λογαριασμό, 1 επίθεση = 1 πόντος.",
     "todoExplanation_cwl_title": "Πρωτάθλημα Πολέμου Φυλής:",
     "todoExplanation_cwl": "Βάρος έως και 1 πόντο για κάθε λογαριασμό, 1 επίθεση = 1 πόντος. Το «CWL» δεν μπορεί να καταγραφεί εάν ο παίχτης δεν βρίσκεται μέσα στην ομάδα του πρωταθλήματος.",
-    "todoExplanation_passAndGames_title": "Season Pass & Clan Games:",
-    "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
-    "todoExplanation_conclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
-    "worst": "Worst",
+    "todoExplanation_passAndGames_title": "Πάσο σεζόν & Παιχνίδια Φυλής:",
+    "todoExplanation_passAndGames": "Βάρος έως και 2 πόντους για κάθε λογαριασμό. Η αναλογία βασίζεται στον αριθμό ημερών που απομένουν (1 μήνα για το πάσο σεζόν και 6 ημέρες για τα παιχνίδια). Πράσινο = σε τροχιά να ολοκληρωθεί το πάσο ή τα παιχνίδια, κόκκινο = πίσω από το πρόγραμμα.",
+    "todoExplanation_conclusion": "Το τελικό ποσοστό υπολογίζεται διαιρώντας το σύνολο των ολοκληρωμένων ενεργειών στο χρόνο διάρκειας των «events» με το σύνολο των απαιτούμενων ενεργειών. Ανενεργού λογαριασμοί για περισσότερο από 14 ημέρες εξαιρούνται από τον υπολογισμό.",
+    "worst": "Χειρότερο",
     "@worst": {
         "description": "Worst end of day trophies"
     },
-    "best": "Best",
+    "best": "Καλύτερο",
     "@best": {
         "description": "Best end of day trophies"
     },
-    "total": "Total",
-    "heroesEquipments": "Hero equipments",
-    "daysAgo": "{days} days ago",
+    "total": "Σύνολο",
+    "heroesEquipments": "Εξοπλισμοί ηρώων",
+    "daysAgo": "πριν από {days} ημέρες",
     "@daysAgo": {
         "placeholders": {
             "days": {
@@ -462,7 +462,7 @@
             }
         }
     },
-    "dayAgo": "{day} day ago",
+    "dayAgo": "πριν από {day} ημέρα",
     "@dayAgo": {
         "placeholders": {
             "day": {
@@ -470,7 +470,7 @@
             }
         }
     },
-    "hourAgo": "{hour} hour ago",
+    "hourAgo": "πριν από {hour} ώρα",
     "@hourAgo": {
         "placeholders": {
             "hour": {
@@ -478,7 +478,7 @@
             }
         }
     },
-    "hoursAgo": "{hours} hours ago",
+    "hoursAgo": "πριν από {hours} ώρες",
     "@hoursAgo": {
         "placeholders": {
             "hours": {
@@ -486,7 +486,7 @@
             }
         }
     },
-    "minuteAgo": "{minute} minute ago",
+    "minuteAgo": "πριν από {minute} λεπτό",
     "@minuteAgo": {
         "placeholders": {
             "minute": {
@@ -494,7 +494,7 @@
             }
         }
     },
-    "minutesAgo": "{minutes} minutes ago",
+    "minutesAgo": "πριν από {minutes} λεπτά",
     "@minutesAgo": {
         "placeholders": {
             "minutes": {
@@ -502,7 +502,7 @@
             }
         }
     },
-    "secondAgo": "{seconds}s ago",
+    "secondAgo": "πριν από {seconds} δευτερόλεπτα",
     "@secondAgo": {
         "placeholders": {
             "seconds": {
@@ -510,8 +510,8 @@
             }
         }
     },
-    "justNow": "Just Now",
-    "trophiesByMonth": "Trophies by month",
+    "justNow": "Μόλις Τώρα",
+    "trophiesByMonth": "Τρόπαια ανά μήνα",
     "trophiesBySeason": "Trophies by season",
     "eosTrophies": "End Of Season Trophies",
     "searchClan": "Search clan",
