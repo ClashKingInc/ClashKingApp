@@ -296,8 +296,8 @@
         "description": "Shows EOS trophies history"
     },
     "legendLeague": "Επίπεδο Θρύλων",
-    "notInLegendLeague": "Not in Legend League",
-    "noLegendData": "No Legend Data Found for today",
+    "notInLegendLeague": "Εκτός επιπέδου Θρύλου",
+    "noLegendData": "Δε βρέθηκαν δεδομένα Θρύλου για σήμερα",
     "legendStartDescription": "You started the day with {trophies} trophies.",
     "@legendStartDescription": {
         "placeholders": {
