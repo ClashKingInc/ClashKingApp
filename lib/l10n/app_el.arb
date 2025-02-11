@@ -22,7 +22,7 @@
     },
     "username": "Όνομα Χρήστη",
     "pleaseEnterUsername": "Παρακαλώ εισάγετε το όνομα χρήστη σας",
-    "playerTags": "Λογαριασμοί Παίχτη",
+    "playerTags": "Ετικέτα Παίχτη",
     "followingTagsDoNotExist": "Οι ακόλουθοι λογαριασμοί δεν υπάρχουν: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
@@ -45,19 +45,19 @@
     "logout": "Έξοδος",
     "language": "Γλώσσα",
     "settings": "Ρυθμίσεις",
-    "toggleTheme": "Εμφάνιση",
+    "toggleTheme": "Αλλαγή Εμφάνισης",
     "selectLanguage": "Επιλέξτε μία γλώσσα",
     "faq": "FAQ",
     "faqSubtitle": "Συχνές Ερωτήσεις",
     "faqIsThisFromSupercell": "Η εφαρμογή ανήκει στη Supercell;",
     "faqFanContentPolicy": "Η εφαρμογή είναι ανεπίσημη και δεν υποστηρίζεται από τη Supercell. Για περισσότερες πληροφορίες δείτε την Πολιτική Δημιουργίας για Θαυμαστές της Supercell: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Γιατί τα δεδομένα είναι μερικές φορές ανακριβή ή ελλιπή;",
-    "faqClanNotTracked": "Δεν εμφανίζει την ομάδα",
+    "faqClanNotTracked": "Η ομάδα δεν καταγράφεται",
     "faqClanNotTrackedAnswer": "Το ClashKing μπορεί να καταγράφει αυτές τις πληροφορίες μόνο όταν η ομάδα είναι ήδη καταγεγραμμένη. Εάν η ομάδα δεν είναι καταγεγραμμένη, παρακαλώ προσθέστε το εργαλείο ClashKing στη σελίδα του Discord σας και χρησιμοποιείστε την εντολή /addclan. Δουλεύουμε για να φέρουμε αυτό το χαρακτηριστικό στην εφαρμογή σύντομα.",
     "faqTrackingDown": "Σταμάτησε η καταγραφή",
     "faqTrackingDownAnswer": "Η καταγραφή μπορεί να σταματήσει για ένα συγκεκριμένο χρονικό διάστημα. Για αυτόν τον λόγο μπορεί μερικές φορές να μην είναι ολοκληρωμένα τα δεδομένα σας. Δουλεύουμε για να το βελτιώσουμε.",
     "faqApiLimitation": "Όρια του Clash Of Clans API",
-    "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was one attack. It is also why we do not have any information on your buildings levels.",
+    "faqApiLimitationAnswer": "Μερικά δεδομένα που παρέχει το Clash of Clans και το «API» τους έχουνε μερικούς περιορισμούς. Αυτή είναι η περίπτωση για το επίπεδο θρύλου και την καταγραφή του, όπου μερικές φορές αθροίζει το κέρδος τρόπαιων με την απώλεια σαν να ήταν μία επίθεση. Αυτός είναι επίσης ο λόγος για τον οποίο δε διαθέτουμε πληροφορίες στα επίπεδα των κτηρίων σας.",
     "faqSupportWork": "Πώς μπορώ να υποστηρίξω το έργο σας;",
     "faqSupportWorkAnswer": "Υπάρχουν αρκετοί τρόποι για να μας υποστηρίξετε:",
     "faqUseCodeClashKing": "Χρησιμοποιήστε τον κωδικό δημιουργού \"ClashKing\"",
@@ -89,9 +89,9 @@
         "description": "Error message when the app version cannot be loaded"
     },
     "currentTranslators": "Τωρινοί μεταφραστές",
-    "betaFeature": "Χαρακτηριστικό εκδοχής Beta",
-    "beta": "BETA",
-    "betaDescription": "Αυτό το χαρακτηριστικό βρίσκεται ακόμη στην εκδοχή beta, οπότε μπορεί να αντιμετωπίσετε μερικά σφάλματα ή να μην είναι ολοκληρωμένο. Δουλεύουμε ενεργά για τη βελτίωση της εφαρμογής και σας προσκαλούμε, να μοιραστείτε τις ιδέες σας και να αναφέρετε οποιαδήποτε σφάλματα αντιμετωπίζετε, στην ομάδα μας στο Discord.",
+    "betaFeature": "Χαρακτηριστικό εκδοχής Βήτα",
+    "beta": "ΒΗΤΑ",
+    "betaDescription": "Αυτό το χαρακτηριστικό βρίσκεται ακόμη στην εκδοχή βήτα, οπότε μπορεί να αντιμετωπίσετε μερικά σφάλματα ή να μην είναι ολοκληρωμένο. Δουλεύουμε ενεργά για τη βελτίωση της εφαρμογής και σας προσκαλούμε, να μοιραστείτε τις ιδέες σας και να αναφέρετε οποιαδήποτε σφάλματα αντιμετωπίζετε, στην ομάδα μας στο Discord.",
     "copiedToClipboard": "Αντιγράφηκε στο πρόχειρο",
     "all": "Όλα",
     "@all": {
@@ -115,24 +115,24 @@
             }
         }
     },
-    "tryAnotherNameOrTagOrLinkIt": "Δοκιμάστε διαφορετικό όνομα/αριθμό λογαριασμού ή συνδέστε το.",
-    "playerNotFound": "Παίχτης δε βρέθηκε",
+    "tryAnotherNameOrTagOrLinkIt": "Δοκιμάστε διαφορετικό όνομα/ετικέτα λογαριασμού ή συνδέστε τον.",
+    "playerNotFound": "Δε βρέθηκε παίχτης",
     "noValueEntered": "Δεν εντοπίστηκε αξία",
     "manage": "Διαχείριση",
-    "enterPlayerTag": "Εισάγετε έναν αριθμό λογαριασμού",
-    "add": "Προσθέσετε",
+    "enterPlayerTag": "Εισάγετε ετικέτα λογαριασμού",
+    "add": "Προσθήκη",
     "@add": {
         "description": "Add an account"
     },
-    "delete": "Διαγράψτε",
+    "delete": "Διαγραφή",
     "@delete": {
         "description": "Delete an account"
     },
-    "addAccount": "Προσθέστε λογαριασμό",
-    "deleteAccount": "Διαγράψτε λογαριασμό",
+    "addAccount": "Προσθήκη λογαριασμού",
+    "deleteAccount": "Διαγραφή λογαριασμού",
     "playerTagNotExists": "Ο αριθμός λογαριασμού που καταγράψατε δεν υπάρχει.",
     "accountAlreadyLinked": "Ο αριθμός λογαριασμού είναι ήδη συνδεδεμένος σε κάποιον.",
-    "enterApiToken": "Παρακαλώ εισάγετε το κλειδί API του λογαριασμού σας για να επιβεβαιώσετε ότι είναι δικός σας. Μπορείτε να το βρείτε στο Clash of Clans > Settings > More Settings > API Token.",
+    "enterApiToken": "Παρακαλώ εισάγετε το κλειδί «API» του λογαριασμού σας για να επιβεβαιώσετε ότι είναι δικός σας. Μπορείτε να το βρείτε στο Clash of Clans > Ρυθμίσεις > Περισσότερες Ρυθμίσεις > Κλειδί API.",
     "wrongApiToken": "Το κλειδί API που εισάγατε είναι λάθος",
     "accountAlreadyLinkedToYou": "Ο αριθμός λογαριασμού είναι ήδη συνδεδεμένος σε εσάς.",
     "apiToken": "Κλειδί API λογαριασμού",
@@ -298,7 +298,7 @@
     "legendLeague": "Επίπεδο Θρύλων",
     "notInLegendLeague": "Εκτός επιπέδου Θρύλου",
     "noLegendData": "Δε βρέθηκαν δεδομένα Θρύλου για σήμερα",
-    "legendStartDescription": "You started the day with {trophies} trophies.",
+    "legendStartDescription": "Ξεκινήσατε τη μέρα με {trophies} τρόπαια.",
     "@legendStartDescription": {
         "placeholders": {
             "trophies": {
@@ -306,7 +306,7 @@
             }
         }
     },
-    "legendNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
+    "legendNoRankLocalDescription": "Δε βρίσκεστε στην κατάταξη κορυφαίων παιχτών της χώρας ({country}) με {trophies} τρόπαια.",
     "@legendNoRankLocalDescription": {
         "placeholders": {
             "country": {
@@ -317,7 +317,7 @@
             }
         }
     },
-    "legendRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+    "legendRankLocalDescription": "Βρίσκεστε στη θέση {rank} κορυφαίων παιχτών της χώρας ({country}) με {trophies} τρόπαια.",
     "@legendRankDescription": {
         "placeholders": {
             "rank": {
@@ -331,7 +331,7 @@
             }
         }
     },
-    "legendGainDescription": "You gained {trophies} trophies for now.",
+    "legendGainDescription": "Κερδίσατε {trophies} τρόπαια μέχρι τώρα.",
     "@legendGainDescription": {
         "placeholders": {
             "trophies": {
@@ -339,7 +339,7 @@
             }
         }
     },
-    "legendLossDescription": "You lost {trophies} trophies for now.",
+    "legendLossDescription": "Χάσατε {trophies} τρόπαια μέχρι τώρα.",
     "@legendLossDescription": {
         "placeholders": {
             "trophies": {
@@ -347,7 +347,7 @@
             }
         }
     },
-    "legendNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+    "legendNoGlobalRankDescription": "Δε βρίσκεστε στην κατάταξη κορυφαίων παιχτών του κόσμου με {trophies} τρόπαια.",
     "@legendNoGlobalRankDescription": {
         "placeholders": {
             "trophies": {
@@ -355,7 +355,7 @@
             }
         }
     },
-    "legendGlobalRankDescription": "You are currently ranked {rank} globally.",
+    "legendGlobalRankDescription": "Βρίσκεστε στη θέση {rank} κορυφαίων παιχτών του κόσμου.",
     "@legendGlobalRankDescription": {
         "placeholders": {
             "rank": {
@@ -363,38 +363,38 @@
             }
         }
     },
-    "noRank": "No ranking",
-    "started": "Started",
+    "noRank": "Δεν υπάρχει κατάταξη",
+    "started": "Ξεκίνησε",
     "@started": {
         "description": "Title for the number of trophies at the beginning of the day"
     },
-    "ended": "Ended",
+    "ended": "Έληξε",
     "@ended": {
         "description": "Title for the number of trophies at the end of the day"
     },
-    "average": "Average",
+    "average": "Μέσος όρος",
     "@average": {
         "description": "Average value of legend trophies (defense and attack)"
     },
-    "remaining": "Remaining",
+    "remaining": "Απομένει",
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inaccurate data?",
-    "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
-    "legendsExplanation_api_delay_title": "1. API Delay: ",
-    "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
-    "legendsExplanation_concurrent_changes_title": "2. Concurrent Changes: \n",
-    "legendsExplanation_multiple_attacks_defenses_title": "- Multiple Attacks/Defenses: ",
-    "legendsExplanation_multiple_attacks_defenses_body": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
-    "legendsExplanation_simultaneous_attack_defense_title": "- Simultaneous Attack and Defense: ",
-    "legendsExplanation_simultaneous_attack_defense_body": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
-    "legendsExplanation_net_gain_loss_title": "3. Net Gain/Loss: ",
-    "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
-    "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-    "toDoList": "To-do list",
-    "lastActive": "Last active: {date}",
-    "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
+    "legendsTitle": "Ανακριβή δεδομένα;",
+    "legendsExplanation_intro": "Λόγω περιορισμών από τον προγραμματισμό του Clash of Clans τα δεδομένα μας ενδέχεται να μην είναι πάντα ακριβή. Αυτός είναι ο λόγος:\n",
+    "legendsExplanation_api_delay_title": "1. Καθυστερήσεις του «API»: ",
+    "legendsExplanation_api_delay_body": "Το «API» ενδέχεται να χρειαστεί μέχρι και 5 λεπτά να ενημερωθεί, δημιουργώντας καθυστέρηση στην αναγραφή των αλλαγών στα τρόπαια σε πραγματικό χρόνο.\n",
+    "legendsExplanation_concurrent_changes_title": "2. Συνεχείς Αλλαγές:\n",
+    "legendsExplanation_multiple_attacks_defenses_title": "- Πολλαπλές Επιθέσεις/Άμυνες: ",
+    "legendsExplanation_multiple_attacks_defenses_body": "Εάν πολλαπλές επιθέσεις ή άμυνες λάβουν μέρος σε γρήγορη διαδοχή, το «API» ενδέχεται να δείξει το άθροισμα του αποτελέσματος (π.χ. +68 ή -68).\n",
+    "legendsExplanation_simultaneous_attack_defense_title": "- Ταυτόχρονη Επίθεση και άμυνα: ",
+    "legendsExplanation_simultaneous_attack_defense_body": "Εάν μία επίθεση ή άμυνα λάβουν μέρος ταυτόχρονα, τότε θα δείτε το άθροισμα του αποτελέσματος (π.χ. +4).\n",
+    "legendsExplanation_net_gain_loss_title": "3. Συνολικό Κέρδος/Απώλεια: ",
+    "legendsExplanation_net_gain_loss_body": "Παρά τα προβλήματα χρονισμού, το συνολικό κέρδος ή απώλεια για τη μέρα είναι ακριβές. ",
+    "legendsExplanation_conclusion": "Αυτοί οι περιορισμοί είναι κοινοί σε όλα τα εργαλεία που χρησιμοποιούν τον προγραμματισμό του Clash of Clans. Προσπαθούμε το καλύτερο που μπορούμε για να αντισταθμίσουμε αυτούς τους περιορισμούς και να παράσχουμε αποτελέσματα όσο το δυνατόν πιο κοντά στην πραγματικότητα. Σας ευχαριστούμε για την κατανόηση!",
+    "toDoList": "Λίστα εργασιών",
+    "lastActive": "Τελευταία ενεργός: {date}",
+    "playerNotTracked": "Αυτός ο παίχτης δεν καταγράφεται. Τα δεδομένα ενδέχεται να είναι ανακριβή.",
     "@lastActive": {
         "placeholders": {
             "date": {
@@ -402,7 +402,7 @@
             }
         }
     },
-    "numberAccounts": "{number} accounts",
+    "numberAccounts": "{number} λογαριασμοί",
     "@numberAccounts": {
         "placeholders": {
             "number": {
@@ -411,7 +411,7 @@
         },
         "description": "Number of accounts (ex: 4 accounts)"
     },
-    "numberActiveAccounts": "{number} active accounts",
+    "numberActiveAccounts": "{number} ενεργοί λογαριασμοί",
     "@numberActiveAccounts": {
         "placeholders": {
             "number": {
@@ -419,7 +419,7 @@
             }
         }
     },
-    "numberInactiveAccounts": "{number} inactive accounts",
+    "numberInactiveAccounts": "{number} ανενεργοί λογαριασμοί",
     "@numberInactiveAccounts": {
         "placeholders": {
             "number": {
@@ -427,20 +427,20 @@
             }
         }
     },
-    "activeAccounts": "Active accounts",
-    "inactiveAccounts": "Inactive accounts",
-    "noInactiveAccounts": "No inactive accounts.",
-    "noActiveAccounts": "No active accounts.",
-    "todoExplanation_title": "Task Calculation",
-    "todoExplanation_intro": "The task completion percentage is calculated based on the following activities with specific weightings:",
-    "todoExplanation_legends_title": "Legend League:",
-    "todoExplanation_legends": "Weight of 8 points per account, 1 attack = 1 point.",
-    "todoExplanation_raids_title": "Raids:",
-    "todoExplanation_raids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-    "todoExplanation_clanWars_title": "Clan Wars:",
-    "todoExplanation_clanWars": "Weight of 2 points per account, 1 attack = 1 point.",
-    "todoExplanation_cwl_title": "Clan War League:",
-    "todoExplanation_cwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
+    "activeAccounts": "Ενεργοί λογαριασμοί",
+    "inactiveAccounts": "Ανενεργοί λογαριασμοί",
+    "noInactiveAccounts": "Κανένας ανενεργός λογαριασμός.",
+    "noActiveAccounts": "Κανένας ενεργός λογαριασμός.",
+    "todoExplanation_title": "Υπολογισμός εργασιών",
+    "todoExplanation_intro": "Το ποσοστό ολοκλήρωσης των εργασιών υπολογίζεται βασισμένο στις ακόλουθες ενέργειες με συγκεκριμένο βάρος:",
+    "todoExplanation_legends_title": "Επίπεδο Θρύλου:",
+    "todoExplanation_legends": "Βάρος έως και 8 πόντους για κάθε λογαριασμό, 1 επίθεση = 1 πόντος.",
+    "todoExplanation_raids_title": "Επιδρομές:",
+    "todoExplanation_raids": "Βάρος έως και 5 πόντους για κάθε λογαριασμό (ή έως και 6 εάν η τελευταία επίθεση έχει ξεκλειδωθεί), 1 επίθεση = 1 πόντος.",
+    "todoExplanation_clanWars_title": "Πόλεμος Φυλής:",
+    "todoExplanation_clanWars": "Βάρος έως και 2 πόντους για κάθε λογαριασμό, 1 επίθεση = 1 πόντος.",
+    "todoExplanation_cwl_title": "Πρωτάθλημα Πολέμου Φυλής:",
+    "todoExplanation_cwl": "Βάρος έως και 1 πόντο για κάθε λογαριασμό, 1 επίθεση = 1 πόντος. Το «CWL» δεν μπορεί να καταγραφεί εάν ο παίχτης δεν βρίσκεται μέσα στην ομάδα του πρωταθλήματος.",
     "todoExplanation_passAndGames_title": "Season Pass & Clan Games:",
     "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
     "todoExplanation_conclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
