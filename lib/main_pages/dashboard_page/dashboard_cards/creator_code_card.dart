@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/components/dialogs/open_clash_dialog.dart';
+import 'package:clashkingapp/common/dialogs/open_clash_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

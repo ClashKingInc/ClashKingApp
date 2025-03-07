@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
 import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
-import 'package:clashkingapp/components/beta_label.dart';
+import 'package:clashkingapp/common/beta_label.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/war_history_players.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

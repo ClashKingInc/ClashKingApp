@@ -2,7 +2,7 @@ import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/league/current_league_info_page.dart';
-import 'package:clashkingapp/components/chip.dart';
+import 'package:clashkingapp/common/chip.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

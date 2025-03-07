@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/war_history_page.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:clashkingapp/components/chip.dart';
+import 'package:clashkingapp/common/chip.dart';
 
 class WarHistoryCard extends StatelessWidget {
   final ProfileInfo playerStats;

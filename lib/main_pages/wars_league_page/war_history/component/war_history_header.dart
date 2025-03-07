@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
-import 'package:clashkingapp/components/chip.dart';
+import 'package:clashkingapp/common/chip.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

@@ -1,8 +1,12 @@
 {
     "creatorCode": "Creator Code: ClashKing",
+    "errorTitle" : "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
+    "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
+    "retry": "Retry",
     "signInWithDiscord": "Sign In with Discord",
     "guestMode": "Guest Mode",
     "needHelpJoinDiscord": "Need help? Join us on Discord.",
+    "loginError": "An error occurred while logging in. Please try again later.",
     "createGuestProfile": "Create your guest profile",
     "doesNotExist": "{tag} does not exist.",
     "@doesNotExist": {
@@ -22,7 +26,9 @@
     },
     "username": "Username",
     "pleaseEnterUsername": "Please enter a username",
+    "playerTag": "Player Tag (#ABC123)",
     "playerTags": "Player Tags",
+    "linkedAccounts": "Linked Accounts",
     "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
     "@followingTagsDoNotExist": {
         "placeholders": {
@@ -136,9 +142,12 @@
     "wrongApiToken": "The API token entered is incorrect",
     "accountAlreadyLinkedToYou": "The player tag is already linked to you.",
     "apiToken": "Account API Token",
-    "failedToAddTryAgain": "Failed to add link. Please try again later.",
+    "failedToAddTryAgain": "Failed to add the account. Please try again later.",
+    "fillAllFields": "Please fill all fields.",
     "failedToDeleteTryAgain": "Failed to delete link. Please try again later.",
     "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
+    "failedToLoadAccountData": "Failed to load accounts data.",
+    "loadAccountData": "Load accounts data",
     "search": "Search",
     "@search": {
         "description": "Search for a player or a clan"

@@ -1,4 +1,4 @@
-import 'package:clashkingapp/custom_icons_icons.dart';
+import 'package:clashkingapp/core/theme/custom_icons_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_page.dart';
@@ -7,7 +7,7 @@ import 'package:clashkingapp/main_pages/wars_league_page/war_league_page.dart';
 import 'package:clashkingapp/main_pages/tools_page/tools_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
-import 'package:clashkingapp/components/app_bar/app_bar.dart';
+import 'package:clashkingapp/common/widgets/app_bar/app_bar.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -22,7 +22,6 @@ class MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _initializeAccountsFuture = _initializeAccounts();
     _pageController = PageController(initialPage: _selectedIndex);
   }
 
@@ -30,11 +29,6 @@ class MyHomePageState extends State<MyHomePage> {
   void dispose() {
     _pageController.dispose();
     super.dispose();
-  }
-
-  Future<void> _initializeAccounts() async {
-    final appState = Provider.of<MyAppState>(context, listen: false);
-    await appState.initializeData();
   }
 
   void _onPageChanged(int index) {

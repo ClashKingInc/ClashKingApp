@@ -867,7 +867,7 @@
         }
     }
 },
-"noAccountLinkedToYourProfileFound": "Aucun compte lié à votre profil trouvé",
+"noAccountLinkedToYourProfileFound": "Aucun compte lié à votre profil n'a été trouvé.",
 "management": "Gestion",
 "comingSoon": "Bientôt disponible !",
 "connectionError": "Une erreur s'est produite. Veuillez vérifier votre connexion internet et réessayer.",

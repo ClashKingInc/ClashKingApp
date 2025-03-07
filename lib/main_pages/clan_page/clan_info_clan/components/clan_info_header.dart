@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/components/dialogs/open_clash_dialog.dart';
+import 'package:clashkingapp/common/dialogs/open_clash_dialog.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

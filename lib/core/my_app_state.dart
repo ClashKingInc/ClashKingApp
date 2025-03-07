@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
-import 'package:clashkingapp/core/startup_widget.dart';
+import 'package:clashkingapp/features/auth/presentation/startup_widget.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
