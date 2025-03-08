@@ -8,9 +8,14 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 class CocAccountService extends ChangeNotifier {
   List<Map<String, dynamic>> _cocAccounts = [];
   bool _isLoading = false;
+  String? _selectedTag;
+
+  ValueNotifier<String?> selectedTagNotifier = ValueNotifier(null);
 
   List<Map<String, dynamic>> get cocAccounts => _cocAccounts;
   bool get isLoading => _isLoading;
+
+  String? get selectedTag => _selectedTag;
 
   /// Fetches the user's linked Clash of Clans accounts from the backend.
   Future<void> fetchCocAccounts() async {
@@ -96,7 +101,8 @@ class CocAccountService extends ChangeNotifier {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
         },
-        body: jsonEncode({"player_tag": playerTag, "player_token": playerToken}),
+        body:
+            jsonEncode({"player_tag": playerTag, "player_token": playerToken}),
       );
 
       final data = jsonDecode(response.body);
@@ -139,7 +145,7 @@ class CocAccountService extends ChangeNotifier {
     }
   }
 
-  /// Reorder accounts and send the updated order to the API 
+  /// Reorder accounts and send the updated order to the API
   Future<void> updateAccountOrder(List<String> playerTags) async {
     final token = await TokenService().getAccessToken();
     if (token == null) throw Exception("User not authenticated");
@@ -157,6 +163,18 @@ class CocAccountService extends ChangeNotifier {
       Sentry.captureMessage(
           "Failed to update account order, status code: ${response.statusCode}, body: ${response.body}",
           level: SentryLevel.error);
+    }
+  }
+
+  void setSelectedTag(String? tag) {
+    _selectedTag = tag;
+    selectedTagNotifier.value = tag;
+    notifyListeners();
+  }
+
+  void initializeSelectedTag() {
+    if (_cocAccounts.isNotEmpty && selectedTagNotifier.value == null) {
+      setSelectedTag(_cocAccounts.first["player_tag"]);
     }
   }
 }

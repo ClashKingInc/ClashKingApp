@@ -57,11 +57,12 @@ class ProfileService extends ChangeNotifier {
 
   Future<void> loadClanData(List<String> clanTags) async {
     try {
+      print("Loading clan data for tags: $clanTags");
       final token = await TokenService().getAccessToken();
       if (token == null) throw Exception("User not authenticated");
 
       final response = await http.post(
-        Uri.parse("${ApiService.apiUrl}/v2/clans/full-stats"),
+        Uri.parse("${ApiService.apiUrl}/clans/full-stats"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
@@ -106,6 +107,7 @@ class ProfileService extends ChangeNotifier {
       if (clanTags.isNotEmpty) {
         await loadClanData(clanTags.toList());
       }
+      cocService.initializeSelectedTag();
     }
   }
 }

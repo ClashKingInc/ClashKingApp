@@ -27,20 +27,24 @@ class _AddCocAccountPageState extends State<AddCocAccountPage> {
   void _loadAllAccountData() async {
     final profileService = context.read<ProfileService>();
     final cocService = context.read<CocAccountService>();
-
-    final List<String> playerTags = context
-        .read<CocAccountService>()
-        .cocAccounts
-        .map((account) => account["tag"].toString())
-        .toList();
-
-    if (playerTags.isEmpty) return;
+    List<String> playerTags = [];
 
     // Save the new order
     if (_isOrderChanged) {
+      playerTags = _tempUserAccounts
+          .map((account) => account["tag"].toString())
+          .toList();
       await cocService.updateAccountOrder(playerTags);
       _isOrderChanged = false;
+    } else {
+      playerTags = context
+          .read<CocAccountService>()
+          .cocAccounts
+          .map((account) => account["tag"].toString())
+          .toList();
     }
+
+    if (playerTags.isEmpty) return;
 
     // Load all account stats
     await profileService.loadPlayerAndClanData(cocService);
@@ -178,8 +182,7 @@ class _AddCocAccountPageState extends State<AddCocAccountPage> {
                                   final item =
                                       _tempUserAccounts.removeAt(oldIndex);
                                   _tempUserAccounts.insert(newIndex, item);
-                                  _isOrderChanged =
-                                      true; // Indicate that the order has changed
+                                  _isOrderChanged = true;
                                 });
                               },
                               children: [

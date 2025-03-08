@@ -59,7 +59,7 @@ class ProfileInfo {
         townHallLevel: json["townHallLevel"] ?? 0,
         townHallWeaponLevel: json["townHallWeaponLevel"] ?? 0,
         expLevel: json["expLevel"] ?? 0,
-        trophies: json["season_trophies"] ?? 0,
+        trophies: json["trophies"] ?? 0,
         bestTrophies: json["bestTrophies"] ?? 0,
         warStars: json["warStars"] ?? 0,
         attackWins: json["attackWins"] ?? 0,
