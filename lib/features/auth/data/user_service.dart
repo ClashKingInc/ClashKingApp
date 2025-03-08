@@ -1,4 +1,4 @@
-import 'package:clashkingapp/services/api_service.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 
 class UserService {
   final ApiService _apiService = ApiService();

@@ -1,4 +1,4 @@
-import 'package:clashkingapp/common/filter_dropdown.dart';
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
@@ -13,7 +13,7 @@ import 'package:clashkingapp/main_pages/wars_league_page/league/component/member
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
-import 'package:clashkingapp/common/chip.dart';
+import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 
 class CurrentLeagueInfoScreen extends StatefulWidget {
   final CurrentLeagueInfo currentLeagueInfo;

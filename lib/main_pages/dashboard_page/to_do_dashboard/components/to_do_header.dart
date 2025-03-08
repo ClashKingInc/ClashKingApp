@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:ui';
-import 'package:clashkingapp/common/info_button.dart';
+import 'package:clashkingapp/common/widgets/buttons/info_button.dart';
 import 'package:intl/intl.dart';
 
 class ToDoHeader extends StatefulWidget {

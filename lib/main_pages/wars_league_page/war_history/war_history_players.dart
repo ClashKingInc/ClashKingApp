@@ -5,7 +5,7 @@ import 'package:clashkingapp/classes/clan/description/member.dart';
 import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
 import 'package:clashkingapp/classes/data/game_data_manager.dart';
 import 'package:clashkingapp/classes/functions.dart';
-import 'package:clashkingapp/common/filter_dropdown.dart';
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/component/war_history_players_header.dart';
 import 'package:flutter/material.dart';

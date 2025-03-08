@@ -1,7 +1,7 @@
-import 'package:clashkingapp/features/home/presentation/my_home_page.dart';
-import 'package:clashkingapp/services/api_service.dart';
+import 'package:clashkingapp/core/app/my_home_page.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
-import 'package:clashkingapp/services/token_service.dart';
+import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/login_page/guest_login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

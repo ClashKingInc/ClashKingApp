@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:clashkingapp/services/token_service.dart';
+import 'package:clashkingapp/core/services/token_service.dart';
 
 class ApiService {
   static const String apiUrl = "https://dev.api.clashk.ing/v2";

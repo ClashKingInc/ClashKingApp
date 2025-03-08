@@ -1,4 +1,4 @@
-import 'package:clashkingapp/common/dialogs/open_clash_dialog.dart';
+import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';

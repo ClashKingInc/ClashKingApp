@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/classes/account/cocdiscord_link_functions.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:clashkingapp/core/my_app_state.dart';
+import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/functions.dart';
 
 class AddPlayerCard extends StatefulWidget {

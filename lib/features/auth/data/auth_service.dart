@@ -1,8 +1,8 @@
-import 'package:clashkingapp/models/user.dart';
+import 'package:clashkingapp/core/models/user.dart';
 import 'package:clashkingapp/core/utils/discord_auth_helper.dart';
-import 'package:clashkingapp/services/api_service.dart';
-import 'package:clashkingapp/services/token_service.dart';
-import 'package:clashkingapp/global_keys.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/services/token_service.dart';
+import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';

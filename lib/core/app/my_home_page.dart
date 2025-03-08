@@ -1,13 +1,12 @@
-import 'package:clashkingapp/core/theme/custom_icons_icons.dart';
+import 'package:clashkingapp/common/widgets/icons/custom_icons_icons.dart';
+import 'package:clashkingapp/features/dashboard/presentation/dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/dashboard_page.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_page.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_league_page.dart';
 import 'package:clashkingapp/main_pages/tools_page/tools_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/app_bar/app_bar.dart';
-import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -48,7 +47,7 @@ class MyHomePageState extends State<MyHomePage> {
         controller: _pageController,
         onPageChanged: _onPageChanged,
         children: [
-          //DashboardPage(),
+          DashboardPage(),
           //ClanInfoPage(),
           //CurrentWarInfoPage(),
           ToolsPage(),

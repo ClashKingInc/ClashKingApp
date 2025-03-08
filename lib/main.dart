@@ -1,17 +1,18 @@
 import 'dart:async';
 import 'package:clashkingapp/classes/data/gears_data_manager.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
-import 'package:clashkingapp/features/coc_accounts/data/profile_info_service.dart';
-import 'package:clashkingapp/services/api_service.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
-import 'package:clashkingapp/services/token_service.dart';
+import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/auth/data/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:clashkingapp/core/my_app.dart';
+import 'package:clashkingapp/core/app/my_app.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
-import 'package:clashkingapp/core/my_app_state.dart';
+import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
 import 'package:clashkingapp/classes/data/game_data_manager.dart';
 import 'package:clashkingapp/classes/data/league_data_manager.dart';
@@ -67,7 +68,8 @@ Future<void> main() async {
               create: (_) => MyAppState()), // MyAppState (User data)
           ChangeNotifierProvider(create: (_) => AuthService()),
           ChangeNotifierProvider(create: (context) => CocAccountService()),
-          ChangeNotifierProvider(create: (context) => ProfileService()),
+          ChangeNotifierProvider(create: (context) => PlayerService()),
+          ChangeNotifierProvider(create: (context) => ClanService()),
           Provider(create: (_) => ApiService()),
           Provider(create: (_) => UserService()),
           Provider(create: (_) => TokenService()),

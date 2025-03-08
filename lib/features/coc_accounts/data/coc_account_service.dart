@@ -1,21 +1,24 @@
 import 'dart:convert';
-import 'package:clashkingapp/services/api_service.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:clashkingapp/services/token_service.dart';
+import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class CocAccountService extends ChangeNotifier {
   List<Map<String, dynamic>> _cocAccounts = [];
   bool _isLoading = false;
   String? _selectedTag;
-
   ValueNotifier<String?> selectedTagNotifier = ValueNotifier(null);
-
   List<Map<String, dynamic>> get cocAccounts => _cocAccounts;
   bool get isLoading => _isLoading;
-
   String? get selectedTag => _selectedTag;
+  List<Player> profiles = [];
+  List<String> get accounts =>
+      _cocAccounts.map((account) => account["player_tag"].toString()).toList();
 
   /// Fetches the user's linked Clash of Clans accounts from the backend.
   Future<void> fetchCocAccounts() async {
@@ -175,6 +178,49 @@ class CocAccountService extends ChangeNotifier {
   void initializeSelectedTag() {
     if (_cocAccounts.isNotEmpty && selectedTagNotifier.value == null) {
       setSelectedTag(_cocAccounts.first["player_tag"]);
+    }
+  }
+
+  Future<void> refreshSelectedAccountData() async {
+    // To Do: Implement
+  }
+
+  List<String> getAccountTags() {
+    return _cocAccounts
+        .map((account) => account["player_tag"].toString())
+        .toList();
+  }
+
+  Future<void> loadApiData(
+      PlayerService playerService, ClanService clanService) async {
+    // Get the CoC accounts
+    await fetchCocAccounts();
+
+    if (cocAccounts.isNotEmpty) {
+      // Extract the player tags
+      final List<String> playerTags = cocAccounts
+          .map((account) => account["player_tag"].toString())
+          .toList();
+
+      // Load all player stats
+      await playerService.loadPlayerData(playerTags);
+
+      print(
+          "📋 Profiles list from PlayerService: ${playerService.profiles.map((p) => p.tag).toList()}");
+
+      final Set<String> clanTags = playerService.profiles
+          .map((profile) => profile.clanTag)
+          .where((tag) => tag.isNotEmpty)
+          .toSet();
+
+      if (clanTags.isNotEmpty) {
+        await clanService.loadClanData(clanTags.toList());
+      }
+
+      playerService.linkProfilesToClans(
+          playerService.profiles, clanService.clans.values.toList());
+
+      initializeSelectedTag();
     }
   }
 }

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:clashkingapp/services/api_service.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';

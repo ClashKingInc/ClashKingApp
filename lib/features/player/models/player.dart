@@ -1,6 +1,7 @@
-import 'package:clashkingapp/services/api_service.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/features/clan/models/clan.dart';
 
-class ProfileInfo {
+class Player {
   String name;
   String tag;
   int townHallLevel;
@@ -15,6 +16,7 @@ class ProfileInfo {
   int builderBaseTrophies;
   int bestBuilderBaseTrophies;
   String clanTag;
+  Clan? clan;
   String role;
   String warPreference;
   int donations;
@@ -25,7 +27,7 @@ class ProfileInfo {
   String builderHallPic;
   String leagueUrl;
 
-  ProfileInfo({
+  Player({
     required this.name,
     required this.tag,
     required this.townHallLevel,
@@ -51,9 +53,9 @@ class ProfileInfo {
     required this.leagueUrl,
   });
 
-  factory ProfileInfo.fromJson(Map<String, dynamic> json) {
+  factory Player.fromJson(Map<String, dynamic> json) {
     try {
-      ProfileInfo profile = ProfileInfo(
+      Player profile = Player(
         name: json["name"] ?? "Unknown",
         tag: json["tag"] ?? "Unknown",
         townHallLevel: json["townHallLevel"] ?? 0,
@@ -85,7 +87,7 @@ class ProfileInfo {
     } catch (e, stacktrace) {
       print("❌ Exception in ProfileInfo.fromJson: $e");
       print(stacktrace);
-      return ProfileInfo(
+      return Player(
         name: "Unknown",
         tag: "Unknown",
         townHallLevel: 0,

@@ -1,4 +1,4 @@
-import 'package:clashkingapp/common/beta_label.dart';
+import 'package:clashkingapp/common/widgets/labels/beta_label.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/tools_page/community_tools/community_tools_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';

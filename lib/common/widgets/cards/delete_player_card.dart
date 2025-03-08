@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:clashkingapp/classes/account/cocdiscord_link_functions.dart';
 import 'package:clashkingapp/classes/account/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/core/my_app_state.dart';
+import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/auth/presentation/startup_widget.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';

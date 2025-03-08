@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/common/filter_dropdown.dart';
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/clan/logs/join_leave.dart';
 import 'package:lucide_icons/lucide_icons.dart';

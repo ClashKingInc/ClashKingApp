@@ -1,20 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/common/dialogs/logout_dialog.dart';
+import 'package:clashkingapp/common/widgets/dialogs/logout_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
-import 'package:clashkingapp/models/user.dart';
+import 'package:clashkingapp/core/models/user.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
-import 'package:clashkingapp/global_keys.dart';
+import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:clashkingapp/core/my_app_state.dart';
+import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/l10n/locale.dart';
-import 'package:clashkingapp/main_pages/settings_page/faq_page.dart';
-import 'package:clashkingapp/main_pages/settings_page/translation_page.dart';
+import 'package:clashkingapp/features/settings/presentation/faq_page.dart';
+import 'package:clashkingapp/features/settings/presentation/translation_page.dart';
 import 'package:clashkingapp/core/functions.dart';
-import 'package:clashkingapp/main_pages/settings_page/features_vote.dart';
+import 'package:clashkingapp/features/settings/presentation/features_vote.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 

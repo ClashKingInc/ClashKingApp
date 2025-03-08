@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/app_bar/coc_accounts_app_bar.dart';
-import 'package:clashkingapp/common/widgets/error_page.dart';
+import 'package:clashkingapp/common/widgets/error/error_page.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
-import 'package:clashkingapp/features/coc_accounts/data/profile_info_service.dart';
-import 'package:clashkingapp/features/home/presentation/my_home_page.dart';
-import 'package:clashkingapp/services/api_service.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/core/app/my_home_page.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,8 @@ class _AddCocAccountPageState extends State<AddCocAccountPage> {
   bool _isOrderChanged = false;
 
   void _loadAllAccountData() async {
-    final profileService = context.read<ProfileService>();
+    final playerService = context.read<PlayerService>();
+    final clanService = context.read<ClanService>();
     final cocService = context.read<CocAccountService>();
     List<String> playerTags = [];
 
@@ -47,7 +49,7 @@ class _AddCocAccountPageState extends State<AddCocAccountPage> {
     if (playerTags.isEmpty) return;
 
     // Load all account stats
-    await profileService.loadPlayerAndClanData(cocService);
+    await cocService.loadApiData(playerService, clanService);
 
     // Navigate to the home page
     Navigator.of(context).pushReplacement(

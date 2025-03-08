@@ -1,5 +1,5 @@
 import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
-import 'package:clashkingapp/common/filter_dropdown.dart';
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

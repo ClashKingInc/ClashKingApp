@@ -1,5 +1,5 @@
 import 'package:clashkingapp/common/widgets/app_bar/coc_accounts_app_bar.dart';
-import 'package:clashkingapp/services/api_service.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';

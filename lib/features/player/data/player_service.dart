@@ -1,0 +1,79 @@
+import 'dart:convert';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/core/services/token_service.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/features/player/models/player.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+
+class PlayerService extends ChangeNotifier {
+  bool _isLoading = false;
+  List<Player> _profiles = [];
+  List<Map<String, dynamic>> _clans = [];
+
+  bool get isLoading => _isLoading;
+  List<Player> get profiles => _profiles;
+  List<Map<String, dynamic>> get clans => _clans;
+
+  Player? getSelectedProfile(CocAccountService cocAccountService) {
+    String? selectedTag = cocAccountService.selectedTag;
+    print("🔍 SelectedTag: $selectedTag");
+    print("📊 Available profiles: ${profiles.map((p) => p.tag).toList()}");
+
+    if (selectedTag == null) return null;
+    return profiles.firstWhere(
+      (profile) => profile.tag == selectedTag,
+    );
+  }
+
+  /// Loads all stats for the saved accounts.
+  Future<void> loadPlayerData(List<String> playerTags) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final token = await TokenService().getAccessToken();
+    if (token == null) throw Exception("User not authenticated");
+
+    final response = await http.post(
+      Uri.parse("${ApiService.apiUrl}/players/full-stats"),
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({"player_tags": playerTags}),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        _profiles = (data["items"] as List)
+            .whereType<Map<String, dynamic>>() // Filtre les éléments valides
+            .map((account) => Player.fromJson(account))
+            .toList();
+        print("✅ Loaded profiles: ${profiles.map((p) => p.tag).toList()}");
+      } else {
+        Sentry.captureMessage("Error loading accounts data",
+            level: SentryLevel.error);
+        throw Exception("Error loading accounts data");
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+      print("❌ Error loading accounts data: $e");
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  void linkProfilesToClans(List<Player> profiles, List<Clan> clans) {
+    for (var profile in profiles) {
+      if (profile.clanTag.isEmpty) continue;
+      profile.clan = clans.firstWhere((clan) => clan.tag == profile.clanTag);
+      print("🔗 Linked ${profile.tag} to ${profile.clan?.name}");
+    }
+  }
+}

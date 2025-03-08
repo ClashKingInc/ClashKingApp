@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:clashkingapp/global_keys.dart';
+import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/features/auth/presentation/startup_widget.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:home_widget/home_widget.dart';
 import 'dart:async';
-import 'package:clashkingapp/core/my_app_state.dart';
+import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
 
 @pragma("vm:entry-point")

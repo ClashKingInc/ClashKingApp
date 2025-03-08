@@ -1,5 +1,5 @@
 import 'package:clashkingapp/classes/clan/clan_info.dart';
-import 'package:clashkingapp/common/chip.dart';
+import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_capital/clan_capital_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';

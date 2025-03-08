@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
-import 'package:clashkingapp/features/coc_accounts/data/profile_info_service.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
-import 'package:clashkingapp/common/widgets/coc_account/add_player_card.dart';
-import 'package:clashkingapp/common/widgets/coc_account/delete_player_card.dart';
+import 'package:clashkingapp/common/widgets/cards/add_player_card.dart';
+import 'package:clashkingapp/common/widgets/cards/delete_player_card.dart';
 import 'package:clashkingapp/features/settings/presentation/settings_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -17,7 +17,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final cocService = context.watch<CocAccountService>();
-    final profileService = context.watch<ProfileService>();
+    final playerService = context.watch<PlayerService>();
     final authService = context.watch<AuthService>();
 
     return AppBar(
@@ -36,7 +36,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           }
         },
         items: [
-          ...profileService.profiles.map<DropdownMenuItem<String>>((profile) {
+          ...playerService.profiles.map<DropdownMenuItem<String>>((profile) {
             return DropdownMenuItem<String>(
               value: profile.tag,
               child: Row(
