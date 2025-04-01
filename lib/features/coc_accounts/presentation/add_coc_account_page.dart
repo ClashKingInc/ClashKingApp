@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/app_bar/coc_accounts_app_bar.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
-import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -65,14 +65,11 @@ class _AddCocAccountPageState extends State<AddCocAccountPage> {
     final userAccounts = cocService.cocAccounts;
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    final logoUrl = ApiService.assetUrl +
-        (isDarkMode
-            ? "/logos/crown-arrow-dark-bg/ClashKing-1.png"
-            : "/logos/crown-arrow-white-bg/ClashKing-2.png");
-    final textLogoUrl = ApiService.assetUrl +
-        (isDarkMode
-            ? "/logos/crown-arrow-dark-bg/CK-text-dark-bg.png"
-            : "/logos/crown-arrow-white-bg/CK-text-white-bg.png");
+    final logoUrl =
+        (isDarkMode ? ImageAssets.darkModeLogo : ImageAssets.lightModeLogo);
+    final textLogoUrl = (isDarkMode
+        ? ImageAssets.darkModeTextLogo
+        : ImageAssets.lightModeTextLogo);
 
     if (_tempUserAccounts.length != userAccounts.length) {
       _tempUserAccounts = List.from(userAccounts);
@@ -198,8 +195,9 @@ class _AddCocAccountPageState extends State<AddCocAccountPage> {
                                     leading: CircleAvatar(
                                       backgroundColor: Colors.transparent,
                                       child: CachedNetworkImage(
-                                        imageUrl:
-                                            "${ApiService.assetUrl}/home-base/town-hall-pics/town-hall-${_tempUserAccounts[index]["townHallLevel"]}.png",
+                                        imageUrl: ImageAssets.townHall(
+                                            _tempUserAccounts[index]
+                                                ["townHallLevel"]),
                                       ),
                                     ),
                                     title:

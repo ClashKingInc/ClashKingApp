@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
@@ -8,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlayerService extends ChangeNotifier {
   bool _isLoading = false;
@@ -48,13 +48,19 @@ class PlayerService extends ChangeNotifier {
 
     try {
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+        final responseBody = utf8.decode(response.bodyBytes);
+        final data = jsonDecode(responseBody);
 
-        _profiles = (data["items"] as List)
-            .whereType<Map<String, dynamic>>() // Filtre les éléments valides
-            .map((account) => Player.fromJson(account))
-            .toList();
-        print("✅ Loaded profiles: ${profiles.map((p) => p.tag).toList()}");
+        if (data.containsKey("items") && data["items"] is List) {
+          _profiles = (data["items"] as List)
+              .whereType<Map<String, dynamic>>()
+              .map((account) => Player.fromJson(account))
+              .toList();
+          print("✅ Loaded profiles: ${profiles.map((p) => p.tag).toList()}");
+        } else {
+          Sentry.captureMessage("Error loading player data: $data",
+              level: SentryLevel.error);
+        }
       } else {
         Sentry.captureMessage("Error loading accounts data",
             level: SentryLevel.error);
@@ -74,6 +80,21 @@ class PlayerService extends ChangeNotifier {
       if (profile.clanTag.isEmpty) continue;
       profile.clan = clans.firstWhere((clan) => clan.tag == profile.clanTag);
       print("🔗 Linked ${profile.tag} to ${profile.clan?.name}");
+    }
+  }
+
+  String getRoleText(String role, BuildContext context) {
+    switch (role) {
+      case 'leader':
+        return AppLocalizations.of(context)?.leader ?? 'Leader';
+      case 'coLeader':
+        return AppLocalizations.of(context)?.coLeader ?? 'Co-Leader';
+      case 'admin':
+        return AppLocalizations.of(context)?.elder ?? 'Elder';
+      case 'member':
+        return AppLocalizations.of(context)?.member ?? 'Member';
+      default:
+        return 'No clan';
     }
   }
 }

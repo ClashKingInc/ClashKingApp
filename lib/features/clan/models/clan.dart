@@ -70,14 +70,18 @@ class Clan {
       name: json["name"],
       type: json["type"],
       description: json["description"] ?? "",
-      location: json["location"] != null ? ClanLocation.fromJson(json["location"]) : null,
+      location: json["location"] != null
+          ? ClanLocation.fromJson(json["location"])
+          : null,
       isFamilyFriendly: json["isFamilyFriendly"] ?? false,
       badgeUrls: ClanBadgeUrls.fromJson(json["badgeUrls"]),
       clanLevel: json["clanLevel"],
       clanPoints: json["clanPoints"],
       clanBuilderBasePoints: json["clanBuilderBasePoints"],
       clanCapitalPoints: json["clanCapitalPoints"],
-      capitalLeague: json["capitalLeague"] != null ? ClanLeague.fromJson(json["capitalLeague"]) : null,
+      capitalLeague: json["capitalLeague"] != null
+          ? ClanLeague.fromJson(json["capitalLeague"])
+          : null,
       requiredTrophies: json["requiredTrophies"],
       warFrequency: json["warFrequency"],
       warWinStreak: json["warWinStreak"],
@@ -85,14 +89,23 @@ class Clan {
       warTies: json["warTies"],
       warLosses: json["warLosses"],
       isWarLogPublic: json["isWarLogPublic"] ?? true,
-      warLeague: json["warLeague"] != null ? ClanLeague.fromJson(json["warLeague"]) : null,
+      warLeague: json["warLeague"] != null
+          ? ClanLeague.fromJson(json["warLeague"])
+          : null,
       members: json["members"],
-      memberList: (json["memberList"] as List).map((m) => ClanMember.fromJson(m)).toList(),
-      labels: (json["labels"] as List).map((l) => ClanLeague.fromJson(l)).toList(),
+      memberList: (json["memberList"] as List)
+          .map((m) => ClanMember.fromJson(m))
+          .toList(),
+      labels:
+          (json["labels"] as List).map((l) => ClanLeague.fromJson(l)).toList(),
       requiredBuilderBaseTrophies: json["requiredBuilderBaseTrophies"],
       requiredTownhallLevel: json["requiredTownhallLevel"],
-      clanCapital: json["clanCapital"] != null ? ClanCapital.fromJson(json["clanCapital"]) : null,
-      chatLanguage: json["chatLanguage"] != null ? ClanChatLanguage.fromJson(json["chatLanguage"]) : null,
+      clanCapital: json["clanCapital"] != null
+          ? ClanCapital.fromJson(json["clanCapital"])
+          : null,
+      chatLanguage: json["chatLanguage"] != null
+          ? ClanChatLanguage.fromJson(json["chatLanguage"])
+          : null,
     );
   }
 }

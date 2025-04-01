@@ -1,7 +1,10 @@
 import 'package:clashkingapp/core/app/my_home_page.dart';
-import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/login_page/guest_login_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -21,15 +24,12 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final authService = Provider.of<AuthService>(context, listen: false);
-    
-    final logoUrl = ApiService.assetUrl +
-        (isDarkMode
-            ? "/logos/crown-arrow-dark-bg/ClashKing-1.png"
-            : "/logos/crown-arrow-white-bg/ClashKing-2.png");
-    final textLogoUrl = ApiService.assetUrl +
-        (isDarkMode
-            ? "/logos/crown-arrow-dark-bg/CK-text-dark-bg.png"
-            : "/logos/crown-arrow-white-bg/CK-text-white-bg.png");
+
+    final logoUrl =
+        (isDarkMode ? ImageAssets.darkModeLogo : ImageAssets.lightModeLogo);
+    final textLogoUrl = (isDarkMode
+        ? ImageAssets.darkModeTextLogo
+        : ImageAssets.lightModeTextLogo);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -51,7 +51,7 @@ class LoginPageState extends State<LoginPage> {
                       child: CachedNetworkImage(imageUrl: textLogoUrl)),
                 ]),
                 SizedBox(height: 48),
-                
+
                 // Bouton Connexion Discord
                 ElevatedButton(
                   onPressed: _isLoading
@@ -60,16 +60,27 @@ class LoginPageState extends State<LoginPage> {
                           setState(() => _isLoading = true);
                           try {
                             await authService.signInWithDiscord();
-                            final accessToken = await TokenService().getAccessToken();
-                            
+                            final accessToken =
+                                await TokenService().getAccessToken();
+
                             if (accessToken != null && context.mounted) {
+                              final cocService =
+                                  context.read<CocAccountService>();
+                              final playerService =
+                                  context.read<PlayerService>();
+                              final clanService = context.read<ClanService>();
+                              await cocService.loadApiData(
+                                  playerService, clanService);
                               Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(builder: (context) => MyHomePage()),
+                                MaterialPageRoute(
+                                    builder: (context) => MyHomePage()),
                               );
                             }
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(AppLocalizations.of(context)!.loginError)),
+                              SnackBar(
+                                  content: Text(AppLocalizations.of(context)!
+                                      .loginError)),
                             );
                           }
                           setState(() => _isLoading = false);
@@ -78,7 +89,6 @@ class LoginPageState extends State<LoginPage> {
                       ? CircularProgressIndicator(color: Colors.white)
                       : Row(mainAxisSize: MainAxisSize.min, children: [
                           Icon(Icons.discord, size: 24, color: Colors.white),
-                          
                           SizedBox(width: 8),
                           Text(AppLocalizations.of(context)!.signInWithDiscord),
                         ]),
@@ -97,7 +107,7 @@ class LoginPageState extends State<LoginPage> {
                     Text(AppLocalizations.of(context)!.guestMode),
                   ]),
                 ),
-                
+
                 SizedBox(height: 8),
 
                 // Lien vers le Discord pour support
@@ -106,8 +116,10 @@ class LoginPageState extends State<LoginPage> {
                       launchUrl(Uri.parse('https://discord.gg/clashking')),
                   child: Text(
                     AppLocalizations.of(context)!.needHelpJoinDiscord,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        decoration: TextDecoration.underline),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(decoration: TextDecoration.underline),
                   ),
                 ),
               ],

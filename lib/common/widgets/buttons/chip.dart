@@ -5,14 +5,16 @@ import 'dart:async';
 class ImageChip extends StatefulWidget {
   final String imageUrl;
   final String label;
+  final Widget labelWidget;
   final double labelPadding;
   final String description;
-  final Color? textColor; // Mark as final
+  final Color? textColor;
 
   ImageChip({
     required this.imageUrl,
-    required this.label,
-    this.labelPadding = 2,
+    this.label = '',
+    this.labelWidget = const SizedBox(),
+    this.labelPadding = 4,
     this.description = '',
     this.textColor,
   });
@@ -82,11 +84,13 @@ class ImageChipState extends State<ImageChip> {
             ),
           ),
           labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
-          label: Text(widget.label,
-              style: Theme.of(context)
-                  .textTheme
-                  .labelLarge
-                  ?.copyWith(color: textColor)),
+          label: widget.label.isNotEmpty
+              ? Text(widget.label,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge
+                      ?.copyWith(color: textColor))
+              : widget.labelWidget,
         ),
       ),
     );

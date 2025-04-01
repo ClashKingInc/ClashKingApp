@@ -1,0 +1,97 @@
+import 'package:clashkingapp/core/services/game_data_service.dart';
+
+class ImageAssets {
+  static const String baseUrl = "https://assets.clashk.ing";
+  static const String defaultImage = "$baseUrl/default-pics/Icon_Unknown_Troop.png";
+
+  // 👑 Logos
+  static const String darkModeLogo = "$baseUrl/logos/crown-arrow-dark-bg/ClashKing-1.png";
+  static const String lightModeLogo = "$baseUrl/logos/crown-arrow-white-bg/ClashKing-2.png";
+  static const String darkModeTextLogo = "$baseUrl/logos/crown-arrow-dark-bg/CK-text-dark-bg.png";
+  static const String lightModeTextLogo = "$baseUrl/logos/crown-arrow-white-bg/CK-text-white-bg.png";
+
+  // 🏰 Town Hall & Builder Hall
+  static String townHall(int level) => "$baseUrl/home-base/town-hall-pics/town-hall-$level.png";
+  static String builderHall(int level) => "$baseUrl/builder-base/builder-hall-pics/Building_BB_Builder_Hall_level_$level.png";
+
+  // 🏆 Wars & Trophies
+  static const String warPreferenceIn = "$baseUrl/icons/Icon_HV_In.png";
+  static const String warPreferenceOut = "$baseUrl/icons/Icon_HV_Out.png";
+  static const String attackStar = "$baseUrl/icons/Icon_HV_Attack_Star.png";
+  static const String builderBaseStar = "$baseUrl/icons/Icon_BB_Star.png";
+  static const String sword = "$baseUrl/icons/Icon_HV_Sword.png";
+  static const String shield = "$baseUrl/icons/Icon_HV_Shield.png";
+  static const String shieldWithArrow = "$baseUrl/icons/Icon_HV_Shield_Arrow.png";
+  static const String xp = "$baseUrl/icons/Icon_HV_XP.png";
+  static const String trophies = "$baseUrl/icons/Icon_HV_Trophy.png";
+  static const String bestTrophies = "$baseUrl/icons/Icon_HV_Trophy_Best.png";
+
+  // 🎖️ Legend League
+  static const String legendStartFlag = "$baseUrl/icons/Icon_HV_Start_Flag.png";
+  static const String legendBlazon = "$baseUrl/icons/Icon_HV_League_Legend_3.png";
+  static const String legendBlazonBorders = "$baseUrl/icons/Icon_HV_League_Legend_3_Border.png"; 
+  static const String legendBlazonBordersNoPadding = "$baseUrl/icons/Icon_HV_League_Legend_3_Border_No_Padding.png"; 
+  static String flag(String countryCode) => "$baseUrl/country-flags/${countryCode.toLowerCase()}.png";
+  static const String planet = "$baseUrl/icons/Icon_HV_Planet.png";
+
+  // 🛡️ Clan
+  static String clanBadge(String badgeUrl) => badgeUrl.isNotEmpty ? badgeUrl : "$baseUrl/icons/default_clan_badge.png";
+  static String getClanBadgeImage(String url) => url.isNotEmpty ? url : defaultImage;
+
+  // ⭐ Clan Capital
+  static const String capitalGold = "$baseUrl/icons/Icon_CC_Resource_Capital_Gold_small.png";
+
+  // ✨ Defaults
+  static const String defaultProfile = "$baseUrl/icons/default_profile.png";
+
+  // 🖼️ Backgrounds
+  static const String homeBaseBackground = "$baseUrl/landscape/home-landscape.png";
+  static const String builderBaseBackground = "$baseUrl/landscape/builder-landscape.png";
+  static const String legendPageBackground = "$baseUrl/landscape/legend-landscape.png";
+
+  // 🎭 Heroes & Troops & Others
+  static String getHeroImage(String heroName) {
+    return GameDataService.heroesData["heroes"]?[heroName]?['url'] ?? defaultImage;
+  }
+
+  static String getBuilderBaseHeroImage(String heroName) => getHeroImage(heroName);
+
+  static String getTroopImage(String troopName) {
+    return GameDataService.troopsData["troops"]?[troopName]?['url'] ?? defaultImage;
+  }
+
+  static String getSuperTroopImage(String superTroopName) => getTroopImage(superTroopName);
+  static String getBuilderBaseTroopImage(String troopName) => getTroopImage(troopName);
+
+  static String getSiegeMachineImage(String siegeMachineName) => getTroopImage(siegeMachineName);
+
+  static String getSpellImage(String spellName) {
+    return GameDataService.spellsData["spells"]?[spellName]?['url'] ?? defaultImage;
+  }
+
+  static String getPetImage(String petName) {
+    return GameDataService.petsData["pets"]?[petName]?['url'] ?? defaultImage;
+  }
+
+  static String getGearImage(String gearName) {
+    return GameDataService.gearsData["gears"]?[gearName]?['url'] ?? defaultImage;
+  }
+
+  // 🏆 League
+  static String getLeagueImage(String leagueName) {
+    return "$baseUrl/leagues/${_normalizeName(leagueName)}.png";
+  }
+
+  // Stickers
+  static const String villager = "$baseUrl/stickers/Villager_HV_Villager_7.png";
+
+
+  // 🔄 Normalize
+  static String _normalizeName(String name) {
+    return name
+        .replaceAll(" ", "_")
+        .replaceAll("-", "_")
+        .replaceAll("'", "")
+        .replaceAll("&", "and");
+  }
+}

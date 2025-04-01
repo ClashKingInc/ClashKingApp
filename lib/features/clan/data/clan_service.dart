@@ -8,11 +8,11 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ClanService extends ChangeNotifier {
   final Map<String, Clan> _clans = {};
+  List<Clan> fetchedClans = [];
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
   Map<String, Clan> get clans => _clans;
-
 
   Future<void> loadClanData(List<String> clanTags) async {
     if (clanTags.isEmpty) return;
@@ -35,11 +35,17 @@ class ClanService extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        List<Clan> fetchedClans = (data["clans"] as List)
-            .whereType<Map<String, dynamic>>()
-            .map((clan) => Clan.fromJson(clan))
-            .toList();
+        final responseBody = utf8.decode(response.bodyBytes);
+        final data = jsonDecode(responseBody);
+        if (data.containsKey("items") && data["items"] is List) {
+          fetchedClans = (data["items"] as List)
+              .whereType<Map<String, dynamic>>()
+              .map((clan) => Clan.fromJson(clan))
+              .toList();
+        } else {
+          Sentry.captureMessage("Error loading clan data: $data",
+              level: SentryLevel.error);
+        }
 
         for (var clan in fetchedClans) {
           _clans[clan.tag] = clan;
@@ -47,7 +53,8 @@ class ClanService extends ChangeNotifier {
 
         print("✅ Loaded clans: ${_clans.keys.toList()}");
       } else {
-        throw Exception("Error loading clan data");
+        Sentry.captureMessage("Error loading clan data",
+            level: SentryLevel.error);
       }
     } catch (e) {
       Sentry.captureException(e);

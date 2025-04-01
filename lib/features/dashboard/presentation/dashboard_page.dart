@@ -1,9 +1,10 @@
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/dashboard/widgets/creator_code_card.dart';
-import 'package:clashkingapp/features/dashboard/widgets/player_info_card.dart';
 import 'package:clashkingapp/features/dashboard/widgets/player_search_card.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
+import 'package:clashkingapp/features/player/presentation/widgets/player_card.dart';
+import 'package:clashkingapp/features/player/presentation/widgets/player_legend_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
@@ -50,19 +51,14 @@ class DashboardPage extends StatelessWidget {
                   child: PlayerSearchCard(
                       discordUser: cocService.getAccountTags()),
                 ),
-                 /* Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: PlayerInfosCard(),
+                  child: PlayerCard(),
                 ),
-               if (selectedProfile.playerLegendData != null &&
-                    selectedProfile.playerLegendData!.isNotEmpty)
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: PlayerLegendCard(
-                      playerStats: selectedProfile,
-                      playerLegendData: selectedProfile.playerLegendData!,
-                    ),
-                  ),*/
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: PlayerLegendCard(),
+                 )
               ],
             );
           },

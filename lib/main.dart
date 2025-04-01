@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:clashkingapp/classes/data/gears_data_manager.dart';
+import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
@@ -36,6 +37,7 @@ void callbackDispatcher() {
   });
 }
 
+
 Future<void> main() async {
   await dotenv.load(fileName: ".env"); // Load .env file
   WidgetsFlutterBinding
@@ -51,6 +53,7 @@ Future<void> main() async {
     HeroesDataManager().loadHeroesData(),
     SpellsDataManager().loadSpellsData(),
     PetsDataManager().loadPetsData(),
+    GameDataService.loadGameData(),
   ]);
   FlutterNativeSplash.remove();
 

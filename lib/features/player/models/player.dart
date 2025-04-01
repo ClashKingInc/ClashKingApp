@@ -1,5 +1,19 @@
-import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/features/player/models/player_bb_hero.dart';
+import 'package:clashkingapp/features/player/models/player_bb_troop.dart';
+import 'package:clashkingapp/features/player/models/player_equipment.dart';
+import 'package:clashkingapp/features/player/models/player_hero.dart';
+import 'package:clashkingapp/features/player/models/player_legend_ranking.dart';
+import 'package:clashkingapp/features/player/models/player_legend_season.dart';
+import 'package:clashkingapp/features/player/models/player_legend_stats.dart';
+import 'package:clashkingapp/features/player/models/player_pet.dart';
+import 'package:clashkingapp/features/player/models/player_rankings.dart';
+import 'package:clashkingapp/features/player/models/player_siege_machine.dart';
+import 'package:clashkingapp/features/player/models/player_spell.dart';
+import 'package:clashkingapp/features/player/models/player_super_troop.dart';
+import 'package:clashkingapp/features/player/models/player_troop.dart';
 
 class Player {
   String name;
@@ -26,6 +40,18 @@ class Player {
   String townHallPic;
   String builderHallPic;
   String leagueUrl;
+  List<PlayerHero> heroes;
+  List<PlayerBuilderBaseHero> bbHeroes;
+  List<PlayerTroop> troops;
+  List<PlayerSuperTroop> superTroops;
+  List<PlayerBuilderBaseTroop> bbTroops;
+  List<PlayerSpell> spells;
+  List<PlayerEquipment> equipments;
+  List<PlayerSiegeMachine> siegeMachines;
+  List<PlayerPet> pets;
+  PlayerLegendStats? legendsBySeason;
+  final List<PlayerLegendRanking> legendRanking;
+  final PlayerRankings? rankings;
 
   Player({
     required this.name,
@@ -51,10 +77,61 @@ class Player {
     required this.townHallPic,
     required this.builderHallPic,
     required this.leagueUrl,
+    required this.heroes,
+    required this.bbHeroes,
+    required this.troops,
+    required this.superTroops,
+    required this.bbTroops,
+    required this.spells,
+    required this.equipments,
+    required this.siegeMachines,
+    required this.pets,
+    required this.legendsBySeason,
+    required this.rankings,
+    required this.legendRanking,
   });
+
+  String get donationRatio => donationsReceived == 0
+      ? "0.0"
+      : (donations / donationsReceived).toStringAsFixed(2);
+
+  String get warPreferenceImage => warPreference == "in"
+      ? ImageAssets.warPreferenceIn
+      : ImageAssets.warPreferenceOut;
+
+  PlayerLegendSeason? get currentLegendSeason => legendsBySeason?.currentSeason;
 
   factory Player.fromJson(Map<String, dynamic> json) {
     try {
+      List<PlayerTroop> troops = [];
+      List<PlayerSuperTroop> superTroops = [];
+      List<PlayerSiegeMachine> siegeMachines = [];
+      List<PlayerPet> pets = [];
+      List<PlayerBuilderBaseTroop> bbTroops = [];
+
+      if (json['troops'] is List) {
+        for (var troop in json['troops']) {
+          if (troop is Map<String, dynamic>) {
+            String troopName = troop['name'] ?? "";
+            String village = troop['village'] ?? "";
+
+            if (village == "home") {
+              if (GameDataService.isSuperTroop(troopName)) {
+                superTroops.add(PlayerSuperTroop.fromJson(troop));
+              } else if (GameDataService.isSiegeMachine(troopName)) {
+                siegeMachines.add(PlayerSiegeMachine.fromJson(troop));
+              } else if (GameDataService.isPet(troopName)) {
+                pets.add(PlayerPet.fromJson(troop));
+              } else {
+                troops.add(PlayerTroop.fromJson(troop));
+              }
+            } else if (village == "builderBase") {
+              bbTroops.add(PlayerBuilderBaseTroop.fromJson(troop));
+            }
+          }
+        }
+      }
+
       Player profile = Player(
         name: json["name"] ?? "Unknown",
         tag: json["tag"] ?? "Unknown",
@@ -76,11 +153,40 @@ class Player {
         donationsReceived: json["donationsReceived"] ?? 0,
         clanCapitalContributions: json["clanCapitalContributions"] ?? 0,
         league: json["league"]?["name"] ?? "",
-        townHallPic:
-            "${ApiService.assetUrl}/home-base/town-hall-pics/town-hall-${json["townHallLevel"] ?? 0}.png",
-        builderHallPic:
-            "${ApiService.assetUrl}/home-base/builder-hall-pics/builder-hall-${json["builderHallLevel"] ?? 0}.png",
+        townHallPic: ImageAssets.townHall(json["townHallLevel"] ?? 0),
+        builderHallPic: ImageAssets.builderHall(json["builderHallLevel"] ?? 0),
         leagueUrl: json["league"]?["iconUrls"]?["medium"] ?? "",
+        heroes: (json['heroes'] as List)
+            .where((x) => x['village'] == 'home')
+            .map((x) => PlayerHero.fromJson(x))
+            .toList(),
+        bbHeroes: (json['heroes'] as List)
+            .where((x) => x['village'] == 'builderBase')
+            .map((x) => PlayerBuilderBaseHero.fromJson(x))
+            .toList(),
+        troops: troops,
+        superTroops: superTroops,
+        siegeMachines: siegeMachines,
+        pets: pets,
+        bbTroops: bbTroops,
+        spells: (json['spells'] as List<dynamic>?)
+                ?.map((x) => PlayerSpell.fromJson(x ?? {}))
+                .toList() ??
+            [],
+        equipments: (json['heroEquipment'] as List<dynamic>?)
+                ?.map((x) => PlayerEquipment.fromJson(x ?? {}))
+                .toList() ??
+            [],
+        legendsBySeason: json['legends_by_season'] != null
+            ? PlayerLegendStats.fromJson(json['legends_by_season'])
+            : null,
+        legendRanking: (json['legend_eos_ranking'] as List<dynamic>?)
+                ?.map((x) => PlayerLegendRanking.fromJson(x ?? {}))
+                .toList() ??
+            [],
+        rankings: json['rankings'] != null
+            ? PlayerRankings.fromJson(json['rankings'])
+            : null,
       );
 
       return profile;
@@ -111,6 +217,18 @@ class Player {
         townHallPic: "",
         builderHallPic: "",
         leagueUrl: "",
+        heroes: [],
+        bbHeroes: [],
+        troops: [],
+        superTroops: [],
+        bbTroops: [],
+        siegeMachines: [],
+        pets: [],
+        spells: [],
+        equipments: [],
+        legendsBySeason: null,
+        legendRanking: [],
+        rankings: null
       );
     }
   }
