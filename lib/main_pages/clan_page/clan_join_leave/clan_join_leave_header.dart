@@ -39,7 +39,7 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
               imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.6),
+                  Colors.black.withValues(alpha : 0.6),
                   BlendMode.darken,
                 ),
                 child: CachedNetworkImage(

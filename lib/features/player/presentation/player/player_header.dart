@@ -15,8 +15,7 @@ import 'package:shimmer/shimmer.dart';
 
 class PlayerInfoHeader extends StatefulWidget {
   final int selectedTab;
-  const PlayerInfoHeader({Key? key, required this.selectedTab})
-      : super(key: key);
+  const PlayerInfoHeader({super.key, required this.selectedTab});
 
   @override
   PlayerInfoHeaderState createState() => PlayerInfoHeaderState();
@@ -89,7 +88,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
         child: ColorFiltered(
           colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.3),
+            Colors.black.withValues(alpha : 0.3),
             BlendMode.darken,
           ),
           child: CachedNetworkImage(
@@ -286,7 +285,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
               period: const Duration(seconds: 3),
               baseColor: Theme.of(context).colorScheme.onSurface,
               highlightColor:
-                  Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+                  Theme.of(context).colorScheme.onSurface.withValues(alpha : 0.3),
               child: Text(
                 player!.clan!.name,
                 style: Theme.of(context).textTheme.labelLarge,
@@ -453,7 +452,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                     highlightColor: Theme.of(context)
                         .colorScheme
                         .onSurface
-                        .withOpacity(0.3),
+                        .withValues(alpha : 0.3),
                     child: Text(
                       NumberFormat('#,###', locale).format(player!.trophies),
                       style: Theme.of(context).textTheme.labelLarge,

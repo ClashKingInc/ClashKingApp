@@ -40,7 +40,7 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                   imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                   child: ColorFiltered(
                     colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.3),
+                      Colors.black.withValues(alpha : 0.3),
                       BlendMode.darken,
                     ),
                     child: CachedNetworkImage(

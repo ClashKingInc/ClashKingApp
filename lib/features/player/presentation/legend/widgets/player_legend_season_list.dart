@@ -157,7 +157,7 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                         child: Transform.translate(
                           offset: const Offset(2, -6),
                           child: Text("(${day.totalAttacks})",
-                              textScaleFactor: 0.7,
+                              textScaler: TextScaler.linear(0.7),
                               style: Theme.of(context).textTheme.labelSmall),
                         ),
                       ),
@@ -173,7 +173,7 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                         child: Transform.translate(
                           offset: const Offset(2, -6),
                           child: Text("(${day.totalDefenses})",
-                              textScaleFactor: 0.7,
+                              textScaler: TextScaler.linear(0.7),
                               style: Theme.of(context).textTheme.labelSmall),
                         ),
                       ),
@@ -195,7 +195,7 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                             day.trophiesTotal > 0
                                 ? "(+${day.trophiesTotal})"
                                 : "(${day.trophiesTotal})",
-                            textScaleFactor: 0.7,
+                            textScaler: TextScaler.linear(0.7),
                             style: Theme.of(context)
                                 .textTheme
                                 .labelSmall

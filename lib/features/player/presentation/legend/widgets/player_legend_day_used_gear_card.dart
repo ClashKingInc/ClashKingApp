@@ -55,7 +55,7 @@ class LegendUsedGearCard extends StatelessWidget {
                             child: Container(
                               padding: const EdgeInsets.all(2),
                               decoration: BoxDecoration(
-                                color: isMaxLevel ? const Color(0xFFD4AF37) : Colors.black.withOpacity(0.7),
+                                color: isMaxLevel ? const Color(0xFFD4AF37) : Colors.black.withValues(alpha : 0.7),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(

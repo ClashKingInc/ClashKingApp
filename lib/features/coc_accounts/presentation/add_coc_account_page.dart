@@ -13,10 +13,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddCocAccountPage extends StatefulWidget {
   @override
-  _AddCocAccountPageState createState() => _AddCocAccountPageState();
+  AddCocAccountPageState createState() => AddCocAccountPageState();
 }
 
-class _AddCocAccountPageState extends State<AddCocAccountPage> {
+class AddCocAccountPageState extends State<AddCocAccountPage> {
   final TextEditingController _playerTagController = TextEditingController();
   final TextEditingController _apiTokenController = TextEditingController();
   bool _showApiTokenInput = false;
@@ -52,11 +52,13 @@ class _AddCocAccountPageState extends State<AddCocAccountPage> {
     await cocService.loadApiData(playerService, clanService);
 
     // Navigate to the home page
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => MyHomePage(),
-      ),
-    );
+    if (mounted) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => MyHomePage(),
+        ),
+      );
+    }
   }
 
   @override
@@ -174,8 +176,9 @@ class _AddCocAccountPageState extends State<AddCocAccountPage> {
                             )
                           : ReorderableListView(
                               onReorder: (oldIndex, newIndex) {
-                                if (oldIndex < newIndex)
-                                  newIndex--; // Adjust the index
+                                if (oldIndex < newIndex) {
+                                  newIndex--;
+                                }
 
                                 setState(() {
                                   final item =

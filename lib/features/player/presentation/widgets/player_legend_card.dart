@@ -160,7 +160,7 @@ class PlayerLegendCard extends StatelessWidget {
                                       description: "",
                                     ),
                                     ImageChip(
-                                      imageUrl: ImageAssets.shield,
+                                      imageUrl: ImageAssets.shieldWithArrow,
                                       labelWidget: RichText(
                                         text: TextSpan(
                                           style: Theme.of(context)

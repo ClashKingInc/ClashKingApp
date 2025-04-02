@@ -194,7 +194,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                           selectedColor: Theme.of(context)
                               .colorScheme
                               .primary
-                              .withOpacity(0.7),
+                              .withValues(alpha : 0.7),
                           labelPadding: EdgeInsets.all(0),
                           label: CachedNetworkImage(
                               imageUrl: getTownHallPicture(thLevel),
@@ -219,7 +219,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                           selectedColor: Theme.of(context)
                               .colorScheme
                               .primary
-                              .withOpacity(0.7),
+                              .withValues(alpha : 0.7),
                           labelPadding: EdgeInsets.all(0),
                           label: CachedNetworkImage(
                               imageUrl: getTownHallPicture(thLevel),

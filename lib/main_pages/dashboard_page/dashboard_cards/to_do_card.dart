@@ -84,7 +84,7 @@ class ToDoCardState extends State<ToDoCard> {
                                         decoration: BoxDecoration(
                                           border: Border.all(
                                               color:
-                                                  Colors.black.withOpacity(0.2),
+                                                  Colors.black.withValues(alpha: 0.2),
                                               width: 1),
                                           borderRadius:
                                               BorderRadius.circular(4),

@@ -71,17 +71,21 @@ class LoginPageState extends State<LoginPage> {
                               final clanService = context.read<ClanService>();
                               await cocService.loadApiData(
                                   playerService, clanService);
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => MyHomePage()),
-                              );
+                              if (context.mounted) {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => MyHomePage()),
+                                );
+                              }
                             }
                           } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text(AppLocalizations.of(context)!
-                                      .loginError)),
-                            );
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(AppLocalizations.of(context)!
+                                        .loginError)),
+                              );
+                            }
                           }
                           setState(() => _isLoading = false);
                         },

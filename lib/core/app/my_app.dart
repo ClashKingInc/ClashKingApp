@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
               cardTheme: CardTheme(
                 surfaceTintColor: Colors.transparent,
                 color: Color.fromARGB(255, 31, 31, 31)
-                    .withOpacity(1.0), // 1.0 means 100% opacity
+                    .withValues(alpha : 1.0), // 1.0 means 100% opacity
                 elevation: 2.0,
               ),
               canvasColor: Colors.transparent,
@@ -177,7 +177,7 @@ class MyApp extends StatelessWidget {
               cardTheme: CardTheme(
                 surfaceTintColor: Colors.transparent,
                 color: Color(0xFFFFFFFF)
-                    .withOpacity(1.0), // 1.0 means 100% opacity
+                    .withValues(alpha : 1.0), // 1.0 means 100% opacity
                 elevation: 2.0,
               ),
               elevatedButtonTheme: ElevatedButtonThemeData(

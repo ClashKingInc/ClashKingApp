@@ -5,16 +5,13 @@ class PlayerBuilderBaseHero extends PlayerItem {
   final String village;
 
   PlayerBuilderBaseHero({
-    required String name,
-    required int level,
-    required int maxLevel,
+    required super.name,
+    required super.level,
+    required super.maxLevel,
     required this.village,
   }) : super(
-          name: name,
           type: 'hero',
           imageUrl: ImageAssets.getBuilderBaseHeroImage(name),
-          level: level,
-          maxLevel: maxLevel,
         );
 
   factory PlayerBuilderBaseHero.fromJson(Map<String, dynamic> json) {

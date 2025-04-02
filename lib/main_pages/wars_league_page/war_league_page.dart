@@ -144,7 +144,7 @@ class CurrentWarInfoPageState extends State<CurrentWarInfoPage> {
                                               color: Theme.of(context)
                                                   .colorScheme
                                                   .surface
-                                                  .withOpacity(0.1),
+                                                  .withValues(alpha : 0.1),
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(

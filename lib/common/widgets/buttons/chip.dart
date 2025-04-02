@@ -64,11 +64,11 @@ class ImageChipState extends State<ImageChip> {
         showDuration: Duration(seconds: 5),
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
+          color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha : 0.9),
           borderRadius: BorderRadius.circular(4),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha : 0.1),
               spreadRadius: 2,
               blurRadius: 2,
               offset: Offset(0, 1),
@@ -166,11 +166,11 @@ class IconChipState extends State<IconChip> {
             ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
+          color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha : 0.9),
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha : 0.1),
               spreadRadius: 2,
               blurRadius: 2,
               offset: Offset(0, 1),
@@ -259,11 +259,11 @@ class CustomChipState extends State<CustomChip> {
             ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
+          color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha : 0.9),
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha : 0.1),
               spreadRadius: 2,
               blurRadius: 2,
               offset: Offset(0, 1),

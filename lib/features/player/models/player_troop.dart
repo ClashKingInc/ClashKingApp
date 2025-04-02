@@ -6,17 +6,14 @@ class PlayerTroop extends PlayerItem {
   final bool superTroopIsActive;
 
   PlayerTroop(
-      {required String name,
-      required int level,
-      required int maxLevel,
+      {required super.name,
+      required super.level,
+      required super.maxLevel,
       required this.superTroopIsActive,
       required this.village})
       : super(
-          name: name,
           type: 'troop',
           imageUrl: ImageAssets.getTroopImage(name),
-          level: level,
-          maxLevel: maxLevel,
         );
 
   factory PlayerTroop.fromJson(Map<String, dynamic> json) {

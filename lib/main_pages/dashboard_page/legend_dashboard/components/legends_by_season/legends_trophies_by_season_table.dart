@@ -180,7 +180,7 @@ class LegendsTrophiesBySeasonTableState
                                             offset: const Offset(0, -6),
                                             child: Text(
                                               "(${legendDay.attacksStats.count.toString()})",
-                                              textScaleFactor: 0.7,
+                                              textScaler: TextScaler.linear(0.7),
                                               style: (legendDay
                                                           .attacksStats.count ==
                                                       8)
@@ -217,7 +217,7 @@ class LegendsTrophiesBySeasonTableState
                                             offset: const Offset(0, -6),
                                             child: Text(
                                               "(${legendDay.defensesStats.count.toString()})",
-                                              textScaleFactor: 0.7,
+                                              textScaler: TextScaler.linear(0.7),
                                               style: (legendDay.defensesStats
                                                           .count ==
                                                       8)
@@ -263,7 +263,7 @@ class LegendsTrophiesBySeasonTableState
                                                         ? "(${legendDay.diffTrophies})"
                                                             .toString()
                                                         : "",
-                                                textScaleFactor: 0.7,
+                                                textScaler: TextScaler.linear(0.7),
                                                 style: (legendDay.diffTrophies <
                                                         0)
                                                     ? Theme.of(context)

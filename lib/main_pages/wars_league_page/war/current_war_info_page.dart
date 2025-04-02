@@ -160,7 +160,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                   },
                   decoration: BoxDecoration(
                     color:
-                        Theme.of(context).colorScheme.tertiary.withOpacity(0.5),
+                        Theme.of(context).colorScheme.tertiary.withValues(alpha : 0.5),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   thumbDecoration: BoxDecoration(
@@ -168,7 +168,7 @@ class CurrentWarInfoScreenState extends State<CurrentWarInfoScreen>
                     borderRadius: BorderRadius.circular(6),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha : 0.3),
                         blurRadius: 4.0,
                         spreadRadius: 1.0,
                         offset: Offset(0.0, 2.0),

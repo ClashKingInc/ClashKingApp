@@ -130,7 +130,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       },
                       initialValue: currentSegment,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.tertiary.withOpacity(0.5),
+                        color: Theme.of(context).colorScheme.tertiary.withValues(alpha : 0.5),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       thumbDecoration: BoxDecoration(
@@ -138,7 +138,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(.3),
+                            color: Colors.black.withValues(alpha : .3),
                             blurRadius: 4.0,
                             spreadRadius: 1.0,
                             offset: Offset(0.0, 2.0),

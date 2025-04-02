@@ -1,6 +1,4 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
-import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
-import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -8,19 +6,24 @@ import 'package:intl/intl.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/buttons/info_button.dart';
-import 'package:provider/provider.dart';
 
-class LegendHeaderCard extends StatelessWidget {
-  Player? player;
+class LegendHeaderCard extends StatefulWidget {
+  final Player player;
+
+  const LegendHeaderCard({super.key, required this.player});
+
+  @override
+  State<LegendHeaderCard> createState() => _LegendHeaderCardState();
+}
+
+class _LegendHeaderCardState extends State<LegendHeaderCard> {
+
+
   @override
   Widget build(BuildContext context) {
-    final player = context.read<PlayerService>().getSelectedProfile(
-          context.read<CocAccountService>(),
-        );
     final currentTrophies =
-        player?.legendsBySeason?.currentSeason?.endTrophies ?? 0;
-    final diffTrophies =
-        player?.legendsBySeason?.currentSeason?.endTrophies ?? 0 - 5000;
+        widget.player.legendsBySeason?.currentSeason?.endTrophies ?? 0;
+    final diffTrophies = currentTrophies - 5000;
 
     return Stack(
       clipBehavior: Clip.none,
@@ -32,7 +35,7 @@ class LegendHeaderCard extends StatelessWidget {
             imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.7),
+                Colors.black.withValues(alpha: 0.7),
                 BlendMode.darken,
               ),
               child: CachedNetworkImage(
@@ -55,12 +58,12 @@ class LegendHeaderCard extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      player?.name ?? '',
+                      widget.player.name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: Colors.white,
                           ),
                     ),
-                    Text(player?.tag ?? '',
+                    Text(widget.player.tag,
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
                               color: Colors.grey,
                             )),
@@ -131,16 +134,16 @@ class LegendHeaderCard extends StatelessWidget {
                                 spacing: 8,
                                 runSpacing: 0,
                                 children: <Widget>[
-                                  if (player?.rankings?.countryCode != null)
+                                  if (widget.player.rankings?.countryCode != null)
                                     Chip(
                                       avatar: CircleAvatar(
                                           backgroundColor: Colors.transparent,
                                           child: CachedNetworkImage(
-                                              imageUrl: ImageAssets.flag(player
-                                                      ?.rankings?.countryCode ??
+                                              imageUrl: ImageAssets.flag(widget.player
+                                                      .rankings?.countryCode ??
                                                   ''))),
                                       label: Text(
-                                        player?.rankings?.countryName ??
+                                        widget.player.rankings?.countryName ??
                                             'No Country',
                                         style: Theme.of(context)
                                             .textTheme
@@ -153,17 +156,17 @@ class LegendHeaderCard extends StatelessWidget {
                                             color: Colors.white, width: 1),
                                       ),
                                     ),
-                                  if (player?.rankings?.countryCode != null)
+                                  if (widget.player.rankings?.countryCode != null)
                                     Chip(
                                       avatar: CircleAvatar(
                                           backgroundColor: Colors.transparent,
                                           child: CachedNetworkImage(
-                                              imageUrl: ImageAssets.flag(player
-                                                      ?.rankings?.countryCode ??
+                                              imageUrl: ImageAssets.flag(widget.player
+                                                      .rankings?.countryCode ??
                                                   ''))),
-                                      label: player?.rankings?.localRank != 0
+                                      label: widget.player.rankings?.localRank != 0
                                           ? Text(
-                                              player?.rankings?.localRank
+                                              widget.player.rankings?.localRank
                                                       ?.toString() ??
                                                   AppLocalizations.of(context)
                                                       ?.noRank ??
@@ -197,14 +200,14 @@ class LegendHeaderCard extends StatelessWidget {
                                           imageUrl: ImageAssets.planet),
                                     ),
                                     label: Text(
-                                        player?.rankings?.globalRank != null
+                                        widget.player.rankings?.globalRank != null
                                             ? NumberFormat(
                                                     '#,###',
                                                     Localizations.localeOf(
                                                             context)
                                                         .toString())
-                                                .format(player
-                                                    ?.rankings?.globalRank)
+                                                .format(widget.player
+                                                    .rankings?.globalRank)
                                             : AppLocalizations.of(context)
                                                     ?.noRank ??
                                                 'No rank',

@@ -96,7 +96,7 @@ class LegendSeason extends StatelessWidget {
                             trophiesPossible: season!.gainedLostPossible,
                             percentages:
                                 season!.defenseStarsDistributionPercentages,
-                            icon: ImageAssets.shield,
+                            icon: ImageAssets.shieldWithArrow,
                           ),
                         ],
                       )
@@ -173,7 +173,7 @@ class LegendSeason extends StatelessWidget {
             ),
             const SizedBox(width: 4),
             Text(
-                "${NumberFormat('#,###', locale).format(trophies)}/${trophiesPossible}",
+                "${NumberFormat('#,###', locale).format(trophies)}/$trophiesPossible",
                 style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
@@ -197,7 +197,7 @@ class LegendSeason extends StatelessWidget {
               ],
             ),
             const SizedBox(width: 4),
-            Text("${average.toStringAsFixed(1)}",
+            Text(average.toStringAsFixed(1),
                 style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),

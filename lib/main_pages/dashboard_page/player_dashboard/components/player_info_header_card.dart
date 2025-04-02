@@ -69,7 +69,7 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                   imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                   child: ColorFiltered(
                     colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.3),
+                      Colors.black.withValues(alpha : 0.3),
                       BlendMode.darken,
                     ),
                     child: CachedNetworkImage(
@@ -333,7 +333,7 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                               Shimmer.fromColors(
                                 period: Duration(seconds: 3),
                                 baseColor: Colors.white,
-                                highlightColor: Colors.white.withOpacity(0.4),
+                                highlightColor: Colors.white.withValues(alpha : 0.4),
                                 child: Text(
                                     AppLocalizations.of(context)?.ongoingWar ??
                                         "Ongoing War",

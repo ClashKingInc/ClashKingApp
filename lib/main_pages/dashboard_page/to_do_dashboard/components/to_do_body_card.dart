@@ -291,7 +291,7 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                   height: 8,
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: Colors.black.withOpacity(0.2), width: 1),
+                        color: Colors.black.withValues(alpha: 0.2), width: 1),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: ClipRRect(

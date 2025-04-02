@@ -121,7 +121,7 @@ class PlayerItemSection extends StatelessWidget {
                         Shimmer.fromColors(
                           baseColor: const Color(0xFFD4AF37),
                           highlightColor:
-                              const Color(0xFFD4AF37).withOpacity(0.7),
+                              const Color(0xFFD4AF37).withValues(alpha : 0.7),
                           child: Container(
                             decoration: BoxDecoration(
                               color: const Color(0xFFD4AF37),

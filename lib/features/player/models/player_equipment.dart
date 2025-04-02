@@ -7,17 +7,14 @@ class PlayerEquipment extends PlayerItem {
   final String rarity;
 
   PlayerEquipment(
-      {required String name,
-      required int level,
-      required int maxLevel,
+      {required super.name,
+      required super.level,
+      required super.maxLevel,
       required this.rarity,
       required this.village})
       : super(
-          name: name,
           type: 'gear',
           imageUrl: ImageAssets.getGearImage(name),
-          level: level,
-          maxLevel: maxLevel,
         );
 
   factory PlayerEquipment.fromJson(Map<String, dynamic> json) {

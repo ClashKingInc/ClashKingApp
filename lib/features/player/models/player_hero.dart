@@ -7,17 +7,14 @@ class PlayerHero extends PlayerItem {
   final List<PlayerEquipedEquipment> equipment;
 
   PlayerHero({
-    required String name,
-    required int level,
-    required int maxLevel,
+    required super.name,
+    required super.level,
+    required super.maxLevel,
     required this.village,
     required this.equipment,
   }) : super(
-          name: name,
           type: 'hero',
           imageUrl: ImageAssets.getHeroImage(name),
-          level: level,
-          maxLevel: maxLevel,
         );
 
   factory PlayerHero.fromJson(Map<String, dynamic> json) {

@@ -90,7 +90,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                 imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                 child: ColorFiltered(
                   colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.6),
+                    Colors.black.withValues(alpha : 0.6),
                     BlendMode.darken,
                   ),
                   child: CachedNetworkImage(
@@ -467,7 +467,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               highlightColor: Theme.of(context)
                                   .colorScheme
                                   .onSurface
-                                  .withOpacity(0.3),
+                                  .withValues(alpha : 0.3),
                               child: Text(
                                 AppLocalizations.of(context)?.publicWarLog ??
                                     'Public War Log',
@@ -556,7 +556,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               Shimmer.fromColors(
                                 period: Duration(seconds: 3),
                                 baseColor: Colors.white,
-                                highlightColor: Colors.white.withOpacity(0.4),
+                                highlightColor: Colors.white.withValues(alpha : 0.4),
                                 child: Text(
                                     AppLocalizations.of(context)?.ongoingWar ??
                                         "Ongoing War",
@@ -609,7 +609,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                 Shimmer.fromColors(
                                   period: Duration(seconds: 3),
                                   baseColor: Colors.white,
-                                  highlightColor: Colors.white.withOpacity(0.4),
+                                  highlightColor: Colors.white.withValues(alpha : 0.4),
                                   child: Text(
                                       AppLocalizations.of(context)
                                               ?.ongoingCwl ??

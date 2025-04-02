@@ -40,7 +40,7 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
             const SizedBox(width: 16),
             IconButton(
               icon: Icon(Icons.calendar_today,
-                  color: Theme.of(context).colorScheme.onSurface, size: 16),
+                  color: Theme.of(context).colorScheme.onSurface, size: 24),
               onPressed: () async {
                 final picked = await showDatePicker(
                   context: context,

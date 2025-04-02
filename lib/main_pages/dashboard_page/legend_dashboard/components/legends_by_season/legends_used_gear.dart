@@ -71,7 +71,7 @@ class LegendUsedGear extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: isHeroMaxLevel
                                 ? Color(0xFFD4AF37)
-                                : Colors.black.withOpacity(0.7),
+                                : Colors.black.withValues(alpha : 0.7),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
@@ -113,7 +113,7 @@ class LegendUsedGear extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   color: isGearMaxLevel
                                       ? Color(0xFFD4AF37)
-                                      : Colors.black.withOpacity(0.7),
+                                      : Colors.black.withValues(alpha : 0.7),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Text(

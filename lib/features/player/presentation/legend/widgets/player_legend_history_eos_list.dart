@@ -53,7 +53,7 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                                       DateFormat(
                                               'MMMM\nyyyy',
                                               Localizations.localeOf(context).languageCode)
-                                          .format(DateTime.parse(legendSeason.season + "-01")),
+                                          .format(DateTime.parse("${legendSeason.season}-01")),
                                     ),
                                     style: Theme.of(context)
                                         .textTheme

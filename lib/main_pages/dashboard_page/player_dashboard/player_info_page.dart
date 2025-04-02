@@ -542,7 +542,7 @@ class StatsScreenState extends State<StatsScreen>
                                                         Color(0xFFD4AF37),
                                                     highlightColor:
                                                         Color(0xFFD4AF37)
-                                                            .withOpacity(0.7),
+                                                            .withValues(alpha : 0.7),
                                                     child: Container(
                                                       decoration: BoxDecoration(
                                                         color:
@@ -759,7 +759,7 @@ class StatsScreenState extends State<StatsScreen>
               highlightColor: Theme.of(context)
                   .colorScheme
                   .onSurface
-                  .withOpacity(0.3), // Replace with your highlight color
+                  .withValues(alpha : 0.3), // Replace with your highlight color
               child: Text(
                 widget.playerStats.clan!.name,
                 style: Theme.of(context).textTheme.labelLarge,
@@ -973,7 +973,7 @@ class StatsScreenState extends State<StatsScreen>
                       highlightColor: Theme.of(context)
                           .colorScheme
                           .onSurface
-                          .withOpacity(0.3),
+                          .withValues(alpha : 0.3),
                       child: Text(
                         NumberFormat('#,###',
                                 Localizations.localeOf(context).toString())

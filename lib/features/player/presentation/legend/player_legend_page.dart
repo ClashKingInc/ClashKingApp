@@ -86,7 +86,7 @@ class _LegendScreenState extends State<LegendScreen>
         child: SingleChildScrollView(
           child: Column(
             children: [
-              LegendHeaderCard(),
+              LegendHeaderCard(player: player),
               ScrollableTab(
                 tabBarDecoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,

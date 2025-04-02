@@ -103,7 +103,7 @@ class PlayerLegendHistoryEosChart extends StatelessWidget {
                         LineChartBarData(
                           spots: chartData.spots,
                           color: Theme.of(context).colorScheme.primary,
-                          isCurved: true,
+                          isCurved: false,
                           barWidth: 2,
                           isStrokeCapRound: true,
                           dotData: FlDotData(show: true),
@@ -112,7 +112,7 @@ class PlayerLegendHistoryEosChart extends StatelessWidget {
                             color: Theme.of(context)
                                 .colorScheme
                                 .primary
-                                .withOpacity(0.2),
+                                .withValues(alpha: 0.2),
                           ),
                         ),
                       ],

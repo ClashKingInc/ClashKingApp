@@ -6,17 +6,14 @@ class PlayerPet extends PlayerItem {
   final bool superTroopIsActive;
 
   PlayerPet(
-      {required String name,
-      required int level,
-      required int maxLevel,
+      {required super.name,
+      required super.level,
+      required super.maxLevel,
       required this.superTroopIsActive,
       required this.village})
       : super(
-          name: name,
           type: 'pet',
           imageUrl: ImageAssets.getPetImage(name),
-          level: level,
-          maxLevel: maxLevel,
         );
 
   factory PlayerPet.fromJson(Map<String, dynamic> json) {

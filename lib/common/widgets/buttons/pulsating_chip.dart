@@ -37,7 +37,7 @@ class PulsatingChipState extends State<PulsatingChip> with SingleTickerProviderS
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Theme.of(context).scaffoldBackgroundColor.withOpacity(_controller.value * 0.9),
+                color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha : _controller.value * 0.9),
                 spreadRadius: 0,
                 blurRadius: 7,
               ),

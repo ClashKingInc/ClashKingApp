@@ -10,10 +10,10 @@ import 'package:clashkingapp/features/auth/data/auth_service.dart';
 
 class StartupWidget extends StatefulWidget {
   @override
-  _StartupWidgetState createState() => _StartupWidgetState();
+  StartupWidgetState createState() => StartupWidgetState();
 }
 
-class _StartupWidgetState extends State<StartupWidget> {
+class StartupWidgetState extends State<StartupWidget> {
   bool _isInitializing = true;
 
   @override
@@ -45,7 +45,7 @@ class _StartupWidgetState extends State<StartupWidget> {
   void _navigateToNextScreen(AuthService authService) {
     Future.microtask(() {
       Widget nextPage;
-      if (authService.isAuthenticated) {
+      if (authService.isAuthenticated && mounted) {
         if (context.read<CocAccountService>().cocAccounts.isNotEmpty) {
           // ✅ User connected and has CoC account → Go to home page
           nextPage = MyHomePage();

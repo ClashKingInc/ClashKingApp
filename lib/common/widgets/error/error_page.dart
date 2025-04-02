@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 class ErrorPage extends StatelessWidget {
   final VoidCallback onRetry;
 
-  ErrorPage({required this.onRetry, Key? key}) : super(key: key);
+  ErrorPage({super.key, required this.onRetry,});
 
   @override
   Widget build(BuildContext context) {

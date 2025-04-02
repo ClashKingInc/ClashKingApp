@@ -44,7 +44,7 @@ class PlayerStatsHeader extends StatelessWidget {
             imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
             child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.7),
+                  Colors.black.withValues(alpha : 0.7),
                   BlendMode.darken,
                 ),
                 child: CachedNetworkImage(

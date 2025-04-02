@@ -13,10 +13,10 @@ class PlayerScreen extends StatefulWidget {
   const PlayerScreen({super.key});
 
   @override
-  _PlayerScreenState createState() => _PlayerScreenState();
+  PlayerScreenState createState() => PlayerScreenState();
 }
 
-class _PlayerScreenState extends State<PlayerScreen>
+class PlayerScreenState extends State<PlayerScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   int selectedTab = 0;
@@ -60,7 +60,7 @@ class _PlayerScreenState extends State<PlayerScreen>
               ScrollableTab(
                 labelColor: Theme.of(context).colorScheme.onSurface,
                 unselectedLabelColor:
-                    Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                    Theme.of(context).colorScheme.onSurface.withValues(alpha : 0.6),
                 tabBarDecoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                 ),

@@ -5,16 +5,13 @@ class PlayerSpell extends PlayerItem {
   final String village;
 
   PlayerSpell(
-      {required String name,
-      required int level,
-      required int maxLevel,
+      {required super.name,
+      required super.level,
+      required super.maxLevel,
       required this.village})
       : super(
-          name: name,
           type: 'spell',
           imageUrl: ImageAssets.getSpellImage(name),
-          level: level,
-          maxLevel: maxLevel,
         );
 
   factory PlayerSpell.fromJson(Map<String, dynamic> json) {
