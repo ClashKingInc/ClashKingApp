@@ -76,12 +76,12 @@ class PlayerLegendSeason {
       daysInLegend: json['season_days_in_legend'] ?? 0,
       dayOfSeason: DateTime.now()
                   .difference(DateTime.parse(json['season_start']))
-                  .inDays >
+                  .inDays + 1>
               json['season_duration']
           ? json['season_duration']
           : DateTime.now()
               .difference(DateTime.parse(json['season_start']))
-              .inDays,
+              .inDays + 1,
       endTrophies: json['season_end_trophies'] ?? 0,
       trophiesGainedTotal: json['season_trophies_gained_total'] ?? 0,
       trophiesLostTotal: json['season_trophies_lost_total'] ?? 0,

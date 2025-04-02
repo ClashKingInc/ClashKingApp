@@ -24,11 +24,6 @@ class PlayerLegendCard extends StatelessWidget {
     final currentSeason = player.currentLegendSeason;
     final currentDay = currentSeason?.currentDay;
 
-    if (currentDay != null) {
-      print(
-          "📊 Trophées gagnés aujourd'hui : ${currentDay.trophiesGainedTotal}");
-    }
-
     return GestureDetector(
       onTap: () {
         if (player.legendsBySeason != null) {

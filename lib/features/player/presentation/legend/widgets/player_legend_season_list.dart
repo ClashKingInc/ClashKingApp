@@ -4,25 +4,26 @@ import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_legend_day.dart';
 import 'package:clashkingapp/features/player/models/player_legend_season.dart';
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_season_offense_defense.dart';
+import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_season_used_gear.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
-class LegendSeasonTable extends StatefulWidget {
+class PlayerLegendSeasonList extends StatefulWidget {
   final PlayerLegendSeason? season;
-  final Player playerStats;
+  final Player player;
 
-  const LegendSeasonTable({
+  const PlayerLegendSeasonList({
     super.key,
     required this.season,
-    required this.playerStats,
+    required this.player,
   });
 
   @override
-  State<LegendSeasonTable> createState() => _LegendSeasonTableState();
+  State<PlayerLegendSeasonList> createState() => _PlayerLegendSeasonListState();
 }
 
-class _LegendSeasonTableState extends State<LegendSeasonTable> {
+class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
   String _sortCriterion = 'date';
   bool _isAscending = true;
   String? _selectedDay;
@@ -44,13 +45,16 @@ class _LegendSeasonTableState extends State<LegendSeasonTable> {
       int compare;
       switch (_sortCriterion) {
         case 'attacks':
-          compare = a.value.trophiesGainedTotal.compareTo(b.value.trophiesGainedTotal);
+          compare = a.value.trophiesGainedTotal
+              .compareTo(b.value.trophiesGainedTotal);
           break;
         case 'defenses':
-          compare = a.value.trophiesLostTotal.compareTo(b.value.trophiesLostTotal);
+          compare =
+              a.value.trophiesLostTotal.compareTo(b.value.trophiesLostTotal);
           break;
         case 'trophies':
-          compare = (a.value.endTrophies ?? 0).compareTo(b.value.endTrophies ?? 0);
+          compare =
+              (a.value.endTrophies ?? 0).compareTo(b.value.endTrophies ?? 0);
           break;
         case 'date':
         default:
@@ -86,11 +90,13 @@ class _LegendSeasonTableState extends State<LegendSeasonTable> {
                   _buildSortHeader('date', Icons.calendar_today),
                   _buildSortHeader('attacks', ImageAssets.sword),
                   _buildSortHeader('defenses', ImageAssets.shieldWithArrow),
-                  _buildSortHeader('trophies', ImageAssets.legendBlazonBordersNoPadding),
+                  _buildSortHeader(
+                      'trophies', ImageAssets.legendBlazonBordersNoPadding),
                 ],
               ),
               const Divider(),
-              for (final entry in days) _buildDayRow(context, entry, displayDateFormat),
+              for (final entry in days)
+                _buildDayRow(context, entry, displayDateFormat),
             ],
           ),
         ),
@@ -119,7 +125,8 @@ class _LegendSeasonTableState extends State<LegendSeasonTable> {
     );
   }
 
-  Widget _buildDayRow(BuildContext context, MapEntry<String, PlayerLegendDay> entry, DateFormat formatter) {
+  Widget _buildDayRow(BuildContext context,
+      MapEntry<String, PlayerLegendDay> entry, DateFormat formatter) {
     final day = entry.value;
     final dayKey = entry.key;
     final isSelected = _selectedDay == dayKey;
@@ -127,7 +134,8 @@ class _LegendSeasonTableState extends State<LegendSeasonTable> {
     return Column(
       children: [
         InkWell(
-          onTap: () => setState(() => _selectedDay = isSelected ? null : dayKey),
+          onTap: () =>
+              setState(() => _selectedDay = isSelected ? null : dayKey),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -136,7 +144,8 @@ class _LegendSeasonTableState extends State<LegendSeasonTable> {
                 Row(
                   children: [
                     Text(formatter.format(DateTime.parse(dayKey))),
-                    Icon(isSelected ? Icons.expand_less : Icons.expand_more, size: 16),
+                    Icon(isSelected ? Icons.expand_less : Icons.expand_more,
+                        size: 16),
                   ],
                 ),
                 RichText(
@@ -147,7 +156,9 @@ class _LegendSeasonTableState extends State<LegendSeasonTable> {
                       WidgetSpan(
                         child: Transform.translate(
                           offset: const Offset(2, -6),
-                          child: Text("(${day.totalAttacks})", textScaleFactor: 0.7, style: Theme.of(context).textTheme.labelSmall),
+                          child: Text("(${day.totalAttacks})",
+                              textScaleFactor: 0.7,
+                              style: Theme.of(context).textTheme.labelSmall),
                         ),
                       ),
                     ],
@@ -161,7 +172,9 @@ class _LegendSeasonTableState extends State<LegendSeasonTable> {
                       WidgetSpan(
                         child: Transform.translate(
                           offset: const Offset(2, -6),
-                          child: Text("(${day.totalDefenses})", textScaleFactor: 0.7, style: Theme.of(context).textTheme.labelSmall),
+                          child: Text("(${day.totalDefenses})",
+                              textScaleFactor: 0.7,
+                              style: Theme.of(context).textTheme.labelSmall),
                         ),
                       ),
                     ],
@@ -171,7 +184,10 @@ class _LegendSeasonTableState extends State<LegendSeasonTable> {
                   text: TextSpan(
                     style: Theme.of(context).textTheme.bodyMedium,
                     children: [
-                      TextSpan(text: NumberFormat('#,###', Localizations.localeOf(context).toString()).format(day.endTrophies ?? 0)),
+                      TextSpan(
+                          text: NumberFormat('#,###',
+                                  Localizations.localeOf(context).toString())
+                              .format(day.endTrophies ?? 0)),
                       WidgetSpan(
                         child: Transform.translate(
                           offset: const Offset(2, -6),
@@ -180,9 +196,16 @@ class _LegendSeasonTableState extends State<LegendSeasonTable> {
                                 ? "(+${day.trophiesTotal})"
                                 : "(${day.trophiesTotal})",
                             textScaleFactor: 0.7,
-                            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: day.trophiesTotal > 0 ? Colors.green : (day.trophiesTotal < 0 ? Colors.red : null),
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall
+                                ?.copyWith(
+                                  color: day.trophiesTotal > 0
+                                      ? Colors.green
+                                      : (day.trophiesTotal < 0
+                                          ? Colors.red
+                                          : null),
+                                ),
                           ),
                         ),
                       ),
@@ -194,34 +217,65 @@ class _LegendSeasonTableState extends State<LegendSeasonTable> {
           ),
         ),
         AnimatedCrossFade(
-          crossFadeState: isSelected ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          crossFadeState:
+              isSelected ? CrossFadeState.showSecond : CrossFadeState.showFirst,
           duration: const Duration(milliseconds: 300),
-          firstChild: const SizedBox.shrink(),
-          secondChild: Row(
-            children: [
-              Expanded(
-                child: PlayerLegendOffenseDefense(
-                  title: AppLocalizations.of(context)?.attacks ?? "Attacks",
-                  list: day.newAttacks,
-                  context: context,
-                  sum: day.trophiesGainedTotal,
-                  average: day.totalAttacks > 0 ? day.trophiesGainedTotal / day.totalAttacks : 0,
-                  plusMinus: "+",
-                  icon: ImageAssets.sword,
+          firstChild: Divider(height: 1, indent: 16, endIndent: 16),
+          secondChild: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: PlayerLegendOffenseDefense(
+                        title:
+                            AppLocalizations.of(context)?.attacks ?? "Attacks",
+                        list: day.newAttacks,
+                        context: context,
+                        sum: day.trophiesGainedTotal,
+                        average: day.totalAttacks > 0
+                            ? day.trophiesGainedTotal / day.totalAttacks
+                            : 0,
+                        plusMinus: "+",
+                        icon: ImageAssets.sword,
+                      ),
+                    ),
+                    Expanded(
+                      child: PlayerLegendOffenseDefense(
+                        title: AppLocalizations.of(context)?.defenses ??
+                            "Defenses",
+                        list: day.newDefenses,
+                        context: context,
+                        sum: day.trophiesLostTotal,
+                        average: day.totalDefenses > 0
+                            ? day.trophiesLostTotal / day.totalDefenses
+                            : 0,
+                        plusMinus: "-",
+                        icon: ImageAssets.shieldWithArrow,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Expanded(
-                child: PlayerLegendOffenseDefense(
-                  title: AppLocalizations.of(context)?.defenses ?? "Defenses",
-                  list: day.newDefenses,
-                  context: context,
-                  sum: day.trophiesLostTotal,
-                  average: day.totalDefenses > 0 ? day.trophiesLostTotal / day.totalDefenses : 0,
-                  plusMinus: "-",
-                  icon: ImageAssets.shieldWithArrow,
-                ),
-              ),
-            ],
+                if (day.usageCount.isNotEmpty) ...[
+                  SizedBox(height: 12),
+                  Divider(height: 1, indent: 32, endIndent: 32),
+                  SizedBox(height: 12),
+                  PlayerLegendSeasonUsedGear(
+                      context: context,
+                      gears: day
+                          .gearCountsFlatFromProfile(widget.player.equipments)
+                          .values
+                          .toList(),
+                      usageCount: day.usageCount),
+                ],
+                SizedBox(height: 16),
+                Divider(height: 1, indent: 16, endIndent: 16),
+              ],
+            ),
           ),
         ),
       ],

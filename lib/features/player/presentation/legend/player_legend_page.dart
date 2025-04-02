@@ -1,10 +1,13 @@
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/legend/player_legend_by_day.dart';
+import 'package:clashkingapp/features/player/presentation/legend/player_legend_history.dart';
 import 'package:clashkingapp/features/player/presentation/legend/player_legend_season.dart';
-import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_header.dart';
+import 'package:clashkingapp/features/player/presentation/legend/player_legend_header.dart';
+import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_history_eos_chart.dart';
+import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_history_eos_list.dart';
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_season_chart.dart';
-import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_season_table.dart';
+import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_season_list.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:intl/intl.dart';
@@ -166,8 +169,8 @@ class _LegendScreenState extends State<LegendScreen>
                           player: player,
                           season: legends.getSpecificSeason(selectedMonth)),
                       showBySeasonTable
-                          ? LegendSeasonTable(
-                              playerStats: player,
+                          ? PlayerLegendSeasonList(
+                              player: player,
                               season: legends.getSpecificSeason(selectedMonth))
                           : LegendSeasonChart(
                               season: legends.getSpecificSeason(selectedMonth))
@@ -190,10 +193,12 @@ class _LegendScreenState extends State<LegendScreen>
                           ),
                         ],
                       ),
-                      /*LegendStatsHistoryCard(player: player),
+                      PlayerLegendHistory(rankings: player.legendRanking),
                       showHistoryTable
-                          ? LegendHistoryCard(player: player)
-                          : LegendEosBySeasonChart(player: player),*/
+                          ? PlayerLegendHistoryEosList(
+                              rankings: player.legendRanking)
+                          : PlayerLegendHistoryEosChart(
+                              rankings: player.legendRanking),
                     ],
                   ),
                 ],

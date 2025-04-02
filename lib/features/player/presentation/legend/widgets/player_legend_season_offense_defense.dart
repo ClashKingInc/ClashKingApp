@@ -26,7 +26,7 @@ class PlayerLegendOffenseDefense extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Row(
@@ -53,8 +53,7 @@ class PlayerLegendOffenseDefense extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
                 CachedNetworkImage(
-                  imageUrl:
-                      "https://assets.clashk.ing/icons/Icon_BB_Star.png",
+                  imageUrl: "https://assets.clashk.ing/icons/Icon_BB_Star.png",
                   width: 8,
                   height: 8,
                   fit: BoxFit.cover,
@@ -75,7 +74,8 @@ class PlayerLegendOffenseDefense extends StatelessWidget {
               children: list.map((attack) {
                 final int change = attack.change;
                 final int time = attack.time;
-                final String timeAgo = PlayerLegendStats.convertToTimeAgo(time, context);
+                final String timeAgo =
+                    PlayerLegendStats.convertToTimeAgo(time, context);
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,

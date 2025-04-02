@@ -29,6 +29,7 @@ class ImageAssets {
   // 🎖️ Legend League
   static const String legendStartFlag = "$baseUrl/icons/Icon_HV_Start_Flag.png";
   static const String legendBlazon = "$baseUrl/icons/Icon_HV_League_Legend_3.png";
+  static const String legendBlazonNoPadding = "$baseUrl/icons/Icon_HV_League_Legend_3_No_Padding.png";
   static const String legendBlazonBorders = "$baseUrl/icons/Icon_HV_League_Legend_3_Border.png"; 
   static const String legendBlazonBordersNoPadding = "$baseUrl/icons/Icon_HV_League_Legend_3_Border_No_Padding.png"; 
   static String flag(String countryCode) => "$baseUrl/country-flags/${countryCode.toLowerCase()}.png";
