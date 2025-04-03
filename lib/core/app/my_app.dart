@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/features/auth/presentation/startup_widget.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:clashkingapp/core/app/my_app_state.dart';

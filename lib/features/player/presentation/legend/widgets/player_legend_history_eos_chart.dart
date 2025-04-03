@@ -2,7 +2,7 @@ import 'package:clashkingapp/features/player/models/player_legend_ranking.dart';
 import 'package:clashkingapp/features/player/models/player_legend_spot_data.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class PlayerLegendHistoryEosChart extends StatelessWidget {

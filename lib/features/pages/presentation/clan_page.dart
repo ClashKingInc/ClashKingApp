@@ -1,0 +1,112 @@
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_page.dart';
+import 'package:clashkingapp/features/pages/widgets/clan_info_card.dart';
+import 'package:clashkingapp/features/pages/widgets/clan_no_clan_card.dart';
+import 'package:clashkingapp/features/pages/widgets/clan_search_card.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+
+class ClanInfoPage extends StatelessWidget {
+  const ClanInfoPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final cocService = context.watch<CocAccountService>();
+    final clanService = context.watch<ClanService>();
+    final playerService = context.watch<PlayerService>();
+
+    final clanInfo = clanService.getClanByTag(
+        playerService.getSelectedProfile(cocService)?.clanTag ?? "");
+    final hasClan = clanInfo != null && clanInfo.tag.isNotEmpty;
+
+    return Scaffold(
+      body: RefreshIndicator(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        onRefresh: () async {
+          await cocService.loadApiData(playerService, clanService);
+        },
+        child:
+            Consumer<PlayerService>(builder: (context, playerService, child) {
+          return ListView(children: <Widget>[
+            const SizedBox(height: 4),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: ClanSearchCard(),
+            ),
+            if (hasClan)
+              GestureDetector(
+                  onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ClanInfoScreen(
+                            clanInfo: clanInfo,
+                          ),
+                        ),
+                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ClanInfoCard(clanInfo: clanInfo),
+                  ))
+            else
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Card(child: NoClanCard()),
+              ),
+            /*if (hasClan)
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          /*ClanJoinLeaveScreen(
+                      user: cocService.getAccountTags(),
+                      clanInfo: clanInfo,
+                    ),*/
+                          SizedBox.shrink()),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Stack(
+                    children: [
+                      /*ClanJoinLeaveCard(
+                        discordUser: cocService.getAccountTags(),
+                        clanInfo: clanInfo,
+                      ),*/
+                      BetaLabel(),
+                    ],
+                  ),
+                ),
+              ),
+            if (hasClan)
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          /*ClanJoinLeaveScreen(
+                      user: cocService.getAccountTags(),
+                      clanInfo: clanInfo,
+                    ),*/
+                          SizedBox.shrink()),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Stack(
+                    children: [
+                      /*ClanCapitalCard(
+                        user: cocService.getAccountTags(),
+                        clanInfo: clanInfo,
+                      ),*/
+                      BetaLabel(),
+                    ],
+                  ),
+                ),
+              ),*/
+          ]);
+        }),
+      ),
+    );
+  }
+}

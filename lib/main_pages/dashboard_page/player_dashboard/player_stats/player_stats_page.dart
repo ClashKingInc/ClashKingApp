@@ -6,7 +6,7 @@ import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_s
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:clashkingapp/classes/profile/stats/player_war_stats.dart';
 import 'package:intl/intl.dart';

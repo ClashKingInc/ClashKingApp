@@ -4,7 +4,7 @@ import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/componen
 import 'package:clipboard/clipboard.dart';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';

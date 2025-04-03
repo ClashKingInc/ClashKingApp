@@ -9,7 +9,7 @@ import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/component/war_history_players_header.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class PlayersWarHistoryScreen extends StatefulWidget {

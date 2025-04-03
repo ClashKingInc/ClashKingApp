@@ -1,16 +1,15 @@
-import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_super_troop_section.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_header.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_item_section.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class PlayerScreen extends StatefulWidget {
-  const PlayerScreen({super.key});
+  final Player selectedPlayer;
+
+  const PlayerScreen({super.key, required this.selectedPlayer});
 
   @override
   PlayerScreenState createState() => PlayerScreenState();
@@ -35,21 +34,6 @@ class PlayerScreenState extends State<PlayerScreen>
 
   @override
   Widget build(BuildContext context) {
-    final playerService = context.watch<PlayerService>();
-    final cocAccountService = context.read<CocAccountService>();
-    final selectedPlayer = playerService.getSelectedProfile(cocAccountService);
-
-    if (selectedPlayer == null) {
-      return Scaffold(
-        body: Center(
-          child: Text(
-            AppLocalizations.of(context)?.connectionErrorRelaunch ??
-                "Error, please restart",
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-        ),
-      );
-    }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -78,8 +62,8 @@ class PlayerScreenState extends State<PlayerScreen>
                           'Builder Base'),
                 ],
                 children: [
-                  _buildPlayerContent(selectedPlayer),
-                  _buildBuilderContent(selectedPlayer),
+                  _buildPlayerContent(widget.selectedPlayer),
+                  _buildBuilderContent(widget.selectedPlayer),
                 ],
               ),
             ],

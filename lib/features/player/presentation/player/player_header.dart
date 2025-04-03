@@ -1,10 +1,13 @@
 import 'dart:ui';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clipboard/clipboard.dart';
@@ -88,7 +91,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
         child: ColorFiltered(
           colorFilter: ColorFilter.mode(
-            Colors.black.withValues(alpha : 0.3),
+            Colors.black.withValues(alpha: 0.3),
             BlendMode.darken,
           ),
           child: CachedNetworkImage(
@@ -259,8 +262,8 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
               barrierDismissible: false,
               builder: (_) => const Center(child: CircularProgressIndicator()),
             );
-            /*final clanInfo =
-                await ClanService().fetchClanAndWarInfo(player!.clan!.tag);
+            final Clan clanInfo =
+                await ClanService().loadClanData(player!.clan!.tag);
             if (mounted) {
               Navigator.pop(context);
               Navigator.push(
@@ -268,11 +271,10 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                 MaterialPageRoute(
                   builder: (context) => ClanInfoScreen(
                     clanInfo: clanInfo,
-                    discordUser: widget.discordUser,
                   ),
                 ),
               );
-            }*/
+            }
           },
           child: Chip(
             avatar: CircleAvatar(
@@ -284,8 +286,10 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
             label: Shimmer.fromColors(
               period: const Duration(seconds: 3),
               baseColor: Theme.of(context).colorScheme.onSurface,
-              highlightColor:
-                  Theme.of(context).colorScheme.onSurface.withValues(alpha : 0.3),
+              highlightColor: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.3),
               child: Text(
                 player!.clan!.name,
                 style: Theme.of(context).textTheme.labelLarge,

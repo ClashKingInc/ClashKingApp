@@ -2,7 +2,7 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/player/models/player_legend_ranking.dart';
 
 class PlayerLegendHistoryEosList extends StatelessWidget {

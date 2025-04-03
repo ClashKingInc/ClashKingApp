@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class PlayerService extends ChangeNotifier {
   bool _isLoading = false;
@@ -73,6 +73,49 @@ class PlayerService extends ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future<Player> getPlayerData(String playerTag) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final token = await TokenService().getAccessToken();
+    if (token == null) throw Exception("User not authenticated");
+
+    final response = await http.post(
+      Uri.parse("${ApiService.apiUrl}/players/full-stats"),
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({"player_tags": [playerTag]}),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final responseBody = utf8.decode(response.bodyBytes);
+        final data = jsonDecode(responseBody);
+
+        if (data.containsKey("items") && data["items"] is List) {
+          return Player.fromJson(data["items"][0]);
+        } else {
+          Sentry.captureMessage("Error loading player data: $data",
+              level: SentryLevel.error);
+          throw Exception("Error loading player data");
+        }
+      } else {
+        Sentry.captureMessage("Error loading player data",
+            level: SentryLevel.error);
+        throw Exception("Error loading player data");
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+      print("❌ Error loading player data: $e");
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   void linkProfilesToClans(List<Player> profiles, List<Clan> clans) {

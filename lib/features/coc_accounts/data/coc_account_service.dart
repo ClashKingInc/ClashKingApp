@@ -214,7 +214,7 @@ class CocAccountService extends ChangeNotifier {
           .toSet();
 
       if (clanTags.isNotEmpty) {
-        await clanService.loadClanData(clanTags.toList());
+        await clanService.loadAllClanData(clanTags.toList());
       }
 
       playerService.linkProfilesToClans(

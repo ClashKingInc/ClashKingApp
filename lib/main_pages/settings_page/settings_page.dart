@@ -8,7 +8,7 @@ import 'package:clashkingapp/core/theme/theme_notifier.dart';
 import 'package:clashkingapp/classes/account/user.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/l10n/locale.dart';
 import 'package:clashkingapp/features/settings/presentation/faq_page.dart';

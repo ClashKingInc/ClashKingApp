@@ -1,6 +1,6 @@
 import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:ui';
 import 'package:clashkingapp/common/widgets/buttons/info_button.dart';

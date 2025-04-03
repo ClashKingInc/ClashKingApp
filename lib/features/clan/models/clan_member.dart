@@ -1,3 +1,5 @@
+import 'package:clashkingapp/features/clan/models/clan_league.dart';
+
 class ClanMember {
   final String tag;
   final String name;
@@ -7,6 +9,8 @@ class ClanMember {
   final int trophies;
   final int donations;
   final int donationsReceived;
+  final int builderBaseTrophies;
+  final ClanLeague league;
 
   ClanMember({
     required this.tag,
@@ -17,6 +21,8 @@ class ClanMember {
     required this.trophies,
     required this.donations,
     required this.donationsReceived,
+    required this.builderBaseTrophies,
+    required this.league,
   });
 
   factory ClanMember.fromJson(Map<String, dynamic> json) {
@@ -29,6 +35,10 @@ class ClanMember {
       trophies: json["trophies"],
       donations: json["donations"],
       donationsReceived: json["donationsReceived"],
+      builderBaseTrophies: json["builderBaseTrophies"],
+      league: json["league"] != null
+          ? ClanLeague.fromJson(json["league"] as Map<String, dynamic>)
+          : ClanLeague.unranked()
     );
   }
 }

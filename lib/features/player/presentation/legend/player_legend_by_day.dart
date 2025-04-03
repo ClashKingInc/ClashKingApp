@@ -4,7 +4,7 @@ import 'package:clashkingapp/features/player/presentation/legend/widgets/player_
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_day_offense_defense_card.dart';
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_day_used_gear_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 

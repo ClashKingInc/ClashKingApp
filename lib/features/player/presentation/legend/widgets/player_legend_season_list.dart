@@ -6,7 +6,7 @@ import 'package:clashkingapp/features/player/models/player_legend_season.dart';
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_season_offense_defense.dart';
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_season_used_gear.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 class PlayerLegendSeasonList extends StatefulWidget {

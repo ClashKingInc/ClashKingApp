@@ -14,7 +14,7 @@ class ClanService extends ChangeNotifier {
   bool get isLoading => _isLoading;
   Map<String, Clan> get clans => _clans;
 
-  Future<void> loadClanData(List<String> clanTags) async {
+  Future<void> loadAllClanData(List<String> clanTags) async {
     if (clanTags.isEmpty) return;
 
     _isLoading = true;
@@ -63,6 +63,50 @@ class ClanService extends ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future<Clan> loadClanData(String clanTag) async {
+    if (_clans.containsKey(clanTag)) {
+      return _clans[clanTag]!;
+    }
+
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      print("🏰 Loading clan data for tag: $clanTag");
+      final token = await TokenService().getAccessToken();
+      if (token == null) throw Exception("User not authenticated");
+
+      final response = await http.get(
+        Uri.parse("${ApiService.apiUrl}/clans/$clanTag"),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = utf8.decode(response.bodyBytes);
+        final data = jsonDecode(responseBody);
+        final clan = Clan.fromJson(data);
+
+        _clans[clan.tag] = clan;
+        print("✅ Loaded clan: ${clan.tag}");
+        return clan;
+      } else {
+        Sentry.captureMessage("Error loading clan data",
+            level: SentryLevel.error);
+        throw Exception("Failed to load clan data");
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+      print("❌ Error loading clan data: $e");
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Clan? getClanByTag(String clanTag) {

@@ -5,7 +5,7 @@ import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
 import 'package:clashkingapp/common/widgets/labels/beta_label.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_history/war_history_players.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class WarLogHistoryStats extends StatefulWidget {

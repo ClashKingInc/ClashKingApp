@@ -5,7 +5,7 @@ import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_pa
 import 'package:clashkingapp/common/widgets/shapes/right_pointing_triangle.dart';
 import 'package:clashkingapp/common/widgets/shapes/left_pointing_triangle.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class WarEventsCard extends StatefulWidget {

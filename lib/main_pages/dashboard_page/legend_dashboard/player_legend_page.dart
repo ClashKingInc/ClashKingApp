@@ -8,7 +8,7 @@ import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/componen
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legends_history/legend_history_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legends_history/legends_stats_history_card.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_functions.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legends_by_season/legends_trophies_by_season_chart.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legends_by_season/legends_trophies_by_season_table.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/legend_dashboard/components/legends_by_season/legends_stats_by_season.dart';

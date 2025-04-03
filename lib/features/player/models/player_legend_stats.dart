@@ -1,5 +1,5 @@
 import 'package:clashkingapp/features/player/models/player_legend_season.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class PlayerLegendStats {
   final Map<String, PlayerLegendSeason> seasons;

@@ -1,5 +1,5 @@
 import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_attack.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_defense.dart';
