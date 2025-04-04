@@ -1,6 +1,6 @@
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_search/player_search_results_tiles.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:async';

@@ -5,6 +5,7 @@ import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/login_page/guest_login_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -69,8 +70,9 @@ class LoginPageState extends State<LoginPage> {
                               final playerService =
                                   context.read<PlayerService>();
                               final clanService = context.read<ClanService>();
+                              final warCwlService = context.read<WarCwlService>();
                               await cocService.loadApiData(
-                                  playerService, clanService);
+                                  playerService, clanService, warCwlService);
                               if (context.mounted) {
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(

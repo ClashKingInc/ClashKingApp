@@ -1009,6 +1009,17 @@
         }
     }
 },
+"cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+"@cwlTotalAttacks": {
+    "placeholders": {
+        "attacks": {
+            "type": "int"
+        },
+        "totalAttacks": {
+            "type": "int"
+        }
+    }
+},
 "cwlCurrentRound": "It's currently round {round}.",
 "@cwlCurrentRound": {
     "placeholders": {

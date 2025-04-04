@@ -4,18 +4,20 @@ import 'package:clashkingapp/features/pages/widgets/clan_info_card.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_no_clan_card.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_search_card.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 
-class ClanInfoPage extends StatelessWidget {
-  const ClanInfoPage({super.key});
+class ClanPage extends StatelessWidget {
+  const ClanPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final cocService = context.watch<CocAccountService>();
     final clanService = context.watch<ClanService>();
     final playerService = context.watch<PlayerService>();
+    final warCwlService = context.read<WarCwlService>();
 
     final clanInfo = clanService.getClanByTag(
         playerService.getSelectedProfile(cocService)?.clanTag ?? "");
@@ -25,7 +27,11 @@ class ClanInfoPage extends StatelessWidget {
       body: RefreshIndicator(
         backgroundColor: Theme.of(context).colorScheme.surface,
         onRefresh: () async {
-          await cocService.loadApiData(playerService, clanService);
+          await cocService.loadApiData(
+            playerService,
+            clanService,
+            warCwlService,
+          );
         },
         child:
             Consumer<PlayerService>(builder: (context, playerService, child) {

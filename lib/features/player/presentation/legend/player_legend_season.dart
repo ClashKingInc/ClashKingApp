@@ -84,6 +84,7 @@ class LegendSeason extends StatelessWidget {
                             trophiesPossible: season!.gainedLostPossible,
                             percentages:
                                 season!.attackStarsDistributionPercentages,
+                            attacksdefs: season!.attackStarsDistribution,
                             icon: ImageAssets.sword,
                           ),
                           _buildStatsBlock(
@@ -96,6 +97,7 @@ class LegendSeason extends StatelessWidget {
                             trophiesPossible: season!.gainedLostPossible,
                             percentages:
                                 season!.defenseStarsDistributionPercentages,
+                            attacksdefs: season!.defenseStarsDistribution,
                             icon: ImageAssets.shieldWithArrow,
                           ),
                         ],
@@ -145,6 +147,7 @@ class LegendSeason extends StatelessWidget {
       required int trophies,
       required double average,
       required Map<int, double> percentages,
+      required Map<int, int> attacksdefs,
       required int attacksPossible,
       required int trophiesPossible,
       required String icon}) {
@@ -207,7 +210,7 @@ class LegendSeason extends StatelessWidget {
             children: [
               ...generateStars(star, 20),
               const SizedBox(width: 4),
-              Text("${percentages[star]?.toStringAsFixed(1) ?? '0.0'}%",
+              Text("${percentages[star]?.toStringAsFixed(1) ?? '0.0'}% (${attacksdefs[star] ?? 0})",
                   style: Theme.of(context).textTheme.bodyMedium),
             ],
           )

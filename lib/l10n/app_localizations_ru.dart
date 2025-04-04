@@ -1215,6 +1215,11 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String cwlTotalAttacks(int attacks, int totalAttacks) {
+    return 'Your clan has a total of $attacks attacks out of $totalAttacks possible attacks.';
+  }
+
+  @override
   String cwlCurrentRound(int round) {
     return 'It\'s currently round $round.';
   }

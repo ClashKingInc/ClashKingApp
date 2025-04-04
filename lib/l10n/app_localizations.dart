@@ -2288,6 +2288,12 @@ abstract class AppLocalizations {
   /// **'Your clan has a total destruction rate of {percent}%.'**
   String cwlDestructionPercentage(String percent);
 
+  /// No description provided for @cwlTotalAttacks.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.'**
+  String cwlTotalAttacks(int attacks, int totalAttacks);
+
   /// No description provided for @cwlCurrentRound.
   ///
   /// In en, this message translates to:

@@ -6,6 +6,7 @@ import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
   void _loadAllAccountData() async {
     final playerService = context.read<PlayerService>();
     final clanService = context.read<ClanService>();
+    final warCwlService = context.read<WarCwlService>();
     final cocService = context.read<CocAccountService>();
     List<String> playerTags = [];
 
@@ -49,7 +51,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     if (playerTags.isEmpty) return;
 
     // Load all account stats
-    await cocService.loadApiData(playerService, clanService);
+    await cocService.loadApiData(playerService, clanService, warCwlService);
 
     // Navigate to the home page
     if (mounted) {

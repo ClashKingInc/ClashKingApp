@@ -2,6 +2,7 @@ import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/add_coc_account_page.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
@@ -32,7 +33,8 @@ class StartupWidgetState extends State<StartupWidget> {
       final cocService = context.read<CocAccountService>();
       final playerService = context.read<PlayerService>();
       final clanService = context.read<ClanService>();
-      await cocService.loadApiData(playerService, clanService);
+      final warService = context.read<WarCwlService>();
+      await cocService.loadApiData(playerService, clanService, warService);
     }
 
     setState(() {

@@ -3,6 +3,7 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/token_service.dart';
@@ -191,8 +192,8 @@ class CocAccountService extends ChangeNotifier {
         .toList();
   }
 
-  Future<void> loadApiData(
-      PlayerService playerService, ClanService clanService) async {
+  Future<void> loadApiData(PlayerService playerService, ClanService clanService,
+      WarCwlService warCwlService) async {
     // Get the CoC accounts
     await fetchCocAccounts();
 
@@ -214,11 +215,17 @@ class CocAccountService extends ChangeNotifier {
           .toSet();
 
       if (clanTags.isNotEmpty) {
-        await clanService.loadAllClanData(clanTags.toList());
+        await Future.wait([
+          clanService.loadAllClanData(clanTags.toList()),
+          warCwlService.loadAllWarData(clanTags.toList()),
+        ]);
       }
 
       playerService.linkProfilesToClans(
           playerService.profiles, clanService.clans.values.toList());
+
+      clanService.linkWarsToClans(clanService.clans.values.toList(),
+          warCwlService.summaries.values.toList());
 
       initializeSelectedTag();
     }

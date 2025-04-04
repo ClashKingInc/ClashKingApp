@@ -1,5 +1,6 @@
 import 'package:clashkingapp/common/widgets/icons/custom_icons_icons.dart';
 import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
+import 'package:clashkingapp/features/pages/presentation/war_cwl_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/main_pages/tools_page/tools_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -47,8 +48,8 @@ class MyHomePageState extends State<MyHomePage> {
         onPageChanged: _onPageChanged,
         children: [
           DashboardPage(),
-          ClanInfoPage(),
-          //CurrentWarInfoPage(),
+          ClanPage(),
+          WarCwlPage(),
           ToolsPage(),
         ],
       ),

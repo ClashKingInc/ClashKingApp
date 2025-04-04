@@ -1,7 +1,7 @@
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/player_dashboard/player_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/classes/data/player_league_data_manager.dart';
 import 'package:clashkingapp/classes/functions.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';

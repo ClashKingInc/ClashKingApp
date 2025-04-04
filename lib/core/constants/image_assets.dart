@@ -87,6 +87,7 @@ class ImageAssets {
   static const String warPreferenceIn = "$baseUrl/icons/Icon_HV_In.png";
   static const String warPreferenceOut = "$baseUrl/icons/Icon_HV_Out.png";
   static const String attackStar = "$baseUrl/icons/Icon_HV_Attack_Star.png";
+  static const String war = "$baseUrl/icons/Icon_DC_War.png";
   static const String builderBaseStar = "$baseUrl/icons/Icon_BB_Star.png";
   static const String sword = "$baseUrl/icons/Icon_HV_Sword.png";
   static const String shield = "$baseUrl/icons/Icon_HV_Shield.png";
@@ -96,6 +97,8 @@ class ImageAssets {
   static const String trophies = "$baseUrl/icons/Icon_HV_Trophy.png";
   static const String bestTrophies = "$baseUrl/icons/Icon_HV_Trophy_Best.png";
   static const String attacks = "$baseUrl/icons/Icon_HV_Attack.png";
+  static const String hitrate = "$baseUrl/icons/Icon_DC_Hitrate.png";
+  static const String podium = "$baseUrl/icons/Icon_HV_Podium.png";
 
   // 🎖️ Legend League
   static const String legendStartFlag = "$baseUrl/icons/Icon_HV_Start_Flag.png";

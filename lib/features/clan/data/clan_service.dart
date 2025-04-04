@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/api_service.dart';
@@ -106,6 +107,19 @@ class ClanService extends ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  void linkWarsToClans(List<Clan> clans, List<WarCwl> warCwls) {
+    for (final warCwl in warCwls) {
+      try {
+        final clan = clans.firstWhere((clan) => clan.tag == warCwl.tag);
+
+        clan.warCwl = warCwl;
+        print("🔗 Linked ${clan.name} to war info (${warCwl.tag})");
+      } catch (e) {
+        print("❌ Error linking clan ${warCwl.tag} to war info: $e");
+      }
     }
   }
 

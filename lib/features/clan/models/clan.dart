@@ -1,3 +1,5 @@
+import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
+
 import 'clan_location.dart';
 import 'clan_badge.dart';
 import 'clan_league.dart';
@@ -33,6 +35,7 @@ class Clan {
   final int requiredTownhallLevel;
   final ClanCapital? clanCapital;
   final ClanChatLanguage? chatLanguage;
+  WarCwl? warCwl;
 
   Clan({
     required this.tag,
@@ -107,5 +110,9 @@ class Clan {
           ? ClanChatLanguage.fromJson(json["chatLanguage"])
           : null,
     );
+  }
+
+  void linkWar(WarCwl s) {
+    warCwl = s;
   }
 }

@@ -148,8 +148,8 @@ class ClanInfoHeaderCard extends StatelessWidget {
                 if (clanInfo.warLeague != null)
                   Chip(
                     avatar: CachedNetworkImage(
-                      imageUrl: clanInfo.warLeague!.smallIconUrl ??
-                          ImageAssets.defaultImage,
+                      imageUrl:
+                          ImageAssets.leagues[clanInfo.warLeague?.name ?? "Unranked"]!,
                       width: 20,
                     ),
                     label: Text(clanInfo.warLeague!.name),
@@ -168,7 +168,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
                     label: Text(clanInfo.location!.name),
                   ),
                 Chip(
-                  avatar: const Icon(Icons.groups, size: 16),
+                  avatar: Icon(Icons.groups, size: 16, color: Theme.of(context).colorScheme.onSurface),
                   label: Text("${clanInfo.members}/50"),
                 ),
                 Chip(
@@ -191,44 +191,43 @@ class ClanInfoHeaderCard extends StatelessWidget {
                         width: 20),
                     label: Text(clanInfo.requiredTownhallLevel.toString()),
                   ),
-                  Chip(
-                    avatar: const Icon(Icons.mail, size: 16),
-                    label: Text(() {
-                      switch (clanInfo.type) {
-                        case 'inviteOnly':
-                          return loc.inviteOnly;
-                        case 'open':
-                          return loc.opened;
-                        case 'closed':
-                          return loc.closed;
-                        default:
-                          return clanInfo.type;
-                      }
-                    }()),
+                Chip(
+                  avatar: Icon(Icons.mail, size: 16, color: Theme.of(context).colorScheme.onSurface),
+                  label: Text(() {
+                    switch (clanInfo.type) {
+                      case 'inviteOnly':
+                        return loc.inviteOnly;
+                      case 'open':
+                        return loc.opened;
+                      case 'closed':
+                        return loc.closed;
+                      default:
+                        return clanInfo.type;
+                    }
+                  }()),
+                ),
+                Chip(
+                  avatar: CachedNetworkImage(
+                    imageUrl: ImageAssets.war,
+                    width: 20,
                   ),
-                  Chip(
-                    avatar: CachedNetworkImage(
-                      imageUrl:
-                          "https://assets.clashk.ing/icons/Icon_DC_War.png",
-                      width: 20,
-                    ),
-                    label: Text(() {
-                      switch (clanInfo.warFrequency) {
-                        case 'always':
-                          return loc.always;
-                        case 'never':
-                          return loc.never;
-                        case 'oncePerWeek':
-                          return loc.oncePerWeek;
-                        case 'moreThanOncePerWeek':
-                          return loc.twicePerWeek;
-                        case 'lessThanOncePerWeek':
-                          return loc.rarely;
-                        default:
-                          return loc.unknown;
-                      }
-                    }()),
-                  ),
+                  label: Text(() {
+                    switch (clanInfo.warFrequency) {
+                      case 'always':
+                        return loc.always;
+                      case 'never':
+                        return loc.never;
+                      case 'oncePerWeek':
+                        return loc.oncePerWeek;
+                      case 'moreThanOncePerWeek':
+                        return loc.twicePerWeek;
+                      case 'lessThanOncePerWeek':
+                        return loc.rarely;
+                      default:
+                        return loc.unknown;
+                    }
+                  }()),
+                ),
               ],
             ),
             const SizedBox(height: 8),

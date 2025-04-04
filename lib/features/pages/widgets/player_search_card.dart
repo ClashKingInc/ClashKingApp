@@ -1,4 +1,4 @@
-import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_search/player_search_results_tiles.dart';
+import 'package:clashkingapp/features/pages/widgets/player_search_result_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'dart:convert';
@@ -8,9 +8,8 @@ import 'dart:async';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class PlayerSearchCard extends StatefulWidget {
-  final List<String> discordUser;
 
-  PlayerSearchCard({required this.discordUser});
+  PlayerSearchCard({super.key});
   @override
   PlayerSearchCardState createState() => PlayerSearchCardState();
 }
@@ -162,7 +161,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                     child: Column(
                   children: snapshot.data!.map<Widget>((player) {
                     return PlayerSearchResultTile(
-                        player: player, user: widget.discordUser);
+                        player: player);
                   }).toList(),
                 ));
               } else {

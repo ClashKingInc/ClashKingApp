@@ -8,6 +8,7 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/auth/data/user_service.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/core/app/my_app.dart';
@@ -73,6 +74,7 @@ Future<void> main() async {
           ChangeNotifierProvider(create: (context) => CocAccountService()),
           ChangeNotifierProvider(create: (context) => PlayerService()),
           ChangeNotifierProvider(create: (context) => ClanService()),
+          ChangeNotifierProvider(create: (context) => WarCwlService()),
           Provider(create: (_) => ApiService()),
           Provider(create: (_) => UserService()),
           Provider(create: (_) => TokenService()),
