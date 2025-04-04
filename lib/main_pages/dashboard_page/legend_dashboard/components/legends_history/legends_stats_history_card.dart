@@ -62,6 +62,8 @@ class LegendStatsHistoryCard extends StatelessWidget {
                 children: <Widget>[
                   Center(
                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl:
                           "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png",
                       height: 80,
@@ -90,6 +92,8 @@ class LegendStatsHistoryCard extends StatelessWidget {
                 Row(
                   children: [
                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl:
                           "https://assets.clashk.ing/icons/Icon_HV_Trophy_Best.png",
                       height: 20,
@@ -106,6 +110,8 @@ class LegendStatsHistoryCard extends StatelessWidget {
                 Row(
                   children: [
                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl:
                           "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                       height: 20,

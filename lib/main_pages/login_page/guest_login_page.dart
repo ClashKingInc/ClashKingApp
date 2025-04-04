@@ -158,11 +158,15 @@ class GuestLoginPageState extends State<GuestLoginPage> {
                 SizedBox(
                   height: 100,
                   width: 100,
-                  child: CachedNetworkImage(imageUrl: logoUrl),
+                  child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: logoUrl),
                 ),
                 SizedBox(
                   width: 200,
-                  child: CachedNetworkImage(imageUrl: textLogoUrl),
+                  child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: textLogoUrl),
                 ),
                 SizedBox(height: 32),
                 Text(AppLocalizations.of(context)!.createGuestProfile,

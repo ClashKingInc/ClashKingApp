@@ -10,7 +10,8 @@ class PlayerSuperTroopSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeTroops = superTroops.where((t) => t.superTroopIsActive).toList();
+    final activeTroops =
+        superTroops.where((t) => t.superTroopIsActive).toList();
 
     if (activeTroops.isEmpty) return const SizedBox.shrink();
 
@@ -35,6 +36,10 @@ class PlayerSuperTroopSection extends StatelessWidget {
                     .map((troop) => ClipRRect(
                           borderRadius: BorderRadius.circular(6),
                           child: CachedNetworkImage(
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                             imageUrl: troop.imageUrl,
                             width: 50,
                             height: 50,

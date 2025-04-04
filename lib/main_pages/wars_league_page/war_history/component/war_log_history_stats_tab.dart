@@ -120,6 +120,8 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                             Row(
                               children: [
                                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl:
                                         "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
                                     height: 16),
@@ -134,6 +136,8 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                             Row(
                               children: [
                                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl:
                                         "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                                     height: 16),
@@ -187,6 +191,8 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                             Row(
                               children: [
                                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl:
                                         "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
                                     height: 16),
@@ -258,6 +264,8 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                           Expanded(
                             flex: 2,
                             child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                               imageUrl:
                                   'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
                               height: 90,

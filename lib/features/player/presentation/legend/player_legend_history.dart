@@ -63,6 +63,8 @@ class PlayerLegendHistory extends StatelessWidget {
                 children: <Widget>[
                   Center(
                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: ImageAssets.legendBlazonBordersNoPadding,
                       height: 80,
                     ),
@@ -89,6 +91,8 @@ class PlayerLegendHistory extends StatelessWidget {
                 Row(
                   children: [
                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: ImageAssets.bestTrophies,
                       height: 20,
                     ),
@@ -103,6 +107,8 @@ class PlayerLegendHistory extends StatelessWidget {
                 Row(
                   children: [
                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: ImageAssets.sword,
                       height: 20,
                     ),

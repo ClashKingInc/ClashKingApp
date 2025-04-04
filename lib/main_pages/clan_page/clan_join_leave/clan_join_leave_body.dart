@@ -183,6 +183,8 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                   imageUrl: item.townHallPic,
                                   width: 60,
                                   height: 60,

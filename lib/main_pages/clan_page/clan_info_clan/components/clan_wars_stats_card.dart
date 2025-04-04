@@ -38,6 +38,8 @@ class ClanWarsStatsCardState extends State<ClanWarsStatsCard> {
         title: Row(
           children: [
             CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
               imageUrl: widget.clanInfo.badgeUrls.medium,
               width: 64,
               height: 64,
@@ -137,6 +139,8 @@ class ClanWarsStatsCardState extends State<ClanWarsStatsCard> {
                       avatar: CircleAvatar(
                         backgroundColor: Colors.transparent,
                         child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                           imageUrl:
                               "https://assets.clashk.ing/icons/Icon_DC_War.png",
                         ),

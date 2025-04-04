@@ -1,4 +1,5 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/player/models/player_bb_hero.dart';
@@ -155,7 +156,7 @@ class Player {
         league: json["league"]?["name"] ?? "",
         townHallPic: ImageAssets.townHall(json["townHallLevel"] ?? 0),
         builderHallPic: ImageAssets.builderHall(json["builderHallLevel"] ?? 0),
-        leagueUrl: json["league"]?["iconUrls"]?["medium"] ?? "",
+        leagueUrl: ApiService.cocAssetsProxyUrl(json["league"]?["iconUrls"]?["medium"] ?? ""),
         heroes: (json['heroes'] as List)
             .where((x) => x['village'] == 'home')
             .map((x) => PlayerHero.fromJson(x))

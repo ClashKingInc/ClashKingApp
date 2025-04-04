@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:clashkingapp/classes/account/user.dart';
 import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:clashkingapp/classes/profile/todo/to_do_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/widgets/widgets_functions.dart';
@@ -32,7 +33,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     _loadLanguage(); // Load the language from the shared preferences
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       // Initialize the refresh of the war widget every 15 minutes
       Workmanager().registerPeriodicTask(
         '1',
@@ -149,7 +150,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   // Update the widgets
   void updateWidgets() async {
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       await updateWarWidget();
     }
   }

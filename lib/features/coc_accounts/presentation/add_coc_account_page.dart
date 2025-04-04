@@ -97,12 +97,16 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                       SizedBox(
                         height: 100,
                         width: 100,
-                        child: CachedNetworkImage(imageUrl: logoUrl),
+                        child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: logoUrl),
                       ),
                       SizedBox(height: 16),
                       SizedBox(
                         width: 200,
-                        child: CachedNetworkImage(imageUrl: textLogoUrl),
+                        child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: textLogoUrl),
                       ),
                       SizedBox(height: 32),
                       Text(AppLocalizations.of(context)!.welcome,
@@ -200,6 +204,8 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                     leading: CircleAvatar(
                                       backgroundColor: Colors.transparent,
                                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl: ImageAssets.townHall(
                                             _tempUserAccounts[index]
                                                 ["townHallLevel"]),

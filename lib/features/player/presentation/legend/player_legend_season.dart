@@ -59,6 +59,8 @@ class LegendSeason extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl: ImageAssets.legendBlazon,
                             width: 40,
                           ),
@@ -129,6 +131,8 @@ class LegendSeason extends StatelessWidget {
                         'No data available',
                     style: Theme.of(context).textTheme.bodyMedium),
                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl:
                       'https://assets.clashk.ing/stickers/Villager_HV_Villager_12.png',
                   height: 300,
@@ -159,7 +163,9 @@ class LegendSeason extends StatelessWidget {
         Text(title, style: Theme.of(context).textTheme.bodyLarge),
         Row(
           children: [
-            CachedNetworkImage(imageUrl: icon, width: 15, height: 15),
+            CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: icon, width: 15, height: 15),
             const SizedBox(width: 4),
             Text(
                 "${NumberFormat('#,###', locale).format(count)}/$attacksPossible",
@@ -169,6 +175,8 @@ class LegendSeason extends StatelessWidget {
         Row(
           children: [
             CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
               imageUrl: ImageAssets.trophies,
               width: 15,
               height: 15,
@@ -186,12 +194,16 @@ class LegendSeason extends StatelessWidget {
               alignment: Alignment.topCenter,
               children: [
                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: ImageAssets.trophies,
                   width: 16,
                   height: 16,
                   fit: BoxFit.cover,
                 ),
                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: ImageAssets.builderBaseStar,
                   width: 8,
                   height: 8,

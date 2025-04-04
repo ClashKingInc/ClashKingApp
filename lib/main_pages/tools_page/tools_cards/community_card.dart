@@ -38,6 +38,8 @@ class CommunityCard extends StatelessWidget {
                     Row(
                       children: [
                         CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                           height: 70,
                           width: 70,
                           imageUrl: logoUrl,

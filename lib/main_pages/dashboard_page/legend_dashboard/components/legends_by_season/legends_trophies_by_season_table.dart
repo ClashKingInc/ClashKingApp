@@ -319,7 +319,9 @@ class LegendsTrophiesBySeasonTableState
             if (icon is IconData)
               Icon(icon)
             else if (icon is String)
-              CachedNetworkImage(imageUrl: icon, height: 24),
+              CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: icon, height: 24),
             SizedBox(width: 4),
             Icon(getSortIcon(criterion),
                 size: 16, color: getSortIconColor(criterion)),
@@ -349,6 +351,8 @@ class LegendsTrophiesBySeasonTableState
               ],
             ),
             CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
               imageUrl:
                   "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border.png",
               width: 40,

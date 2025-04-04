@@ -38,21 +38,33 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> signInWithDiscord() async {
-    final result = await DiscordAuthHelper.getDiscordAuthCode();
-    if (result == null) throw Exception("User cancelled Discord login.");
+    try {
+      print("🔄 Starting Discord login process...");
+      final result = await DiscordAuthHelper.getDiscordAuthCode();
+      print("🔄 Discord auth result: $result");
+      if (result == null) throw Exception("User cancelled Discord login.");
 
-    final deviceId = await _tokenService.getDeviceId();
-    final deviceName = await _tokenService.getDeviceName();
-    final response = await _apiService.post('/auth/discord', {
-      'code': result['code']!,
-      'code_verifier': result['code_verifier']!,
-      'device_id': deviceId,
-      'device_name': deviceName,
-    });
+      final deviceId = await _tokenService.getDeviceId();
+      print("🔄 Device ID: $deviceId");
+      final deviceName = await _tokenService.getDeviceName();
+      print("🔄 Device Name: $deviceName");
+      final response = await _apiService.post('/auth/discord', {
+        'code': result['code']!,
+        'redirect_uri': DiscordAuthHelper.getRedirectUri(),
+        'code_verifier': result['code_verifier']!,
+        'device_id': deviceId,
+        'device_name': deviceName,
+      });
+      print("🔄 Discord login response: $response");
 
-    await _tokenService.saveTokens(
-        response['access_token'], response['refresh_token']);
-    notifyListeners();
+      await _tokenService.saveTokens(
+          response['access_token'], response['refresh_token']);
+      print("🔄 Tokens saved successfully.");
+      notifyListeners();
+    } catch (e) {
+      print("❌ Discord login error: $e");
+      throw Exception("Discord login failed. Please try again.");
+    }
   }
 
   Future<void> signInWithClashKing(String email, String password) async {

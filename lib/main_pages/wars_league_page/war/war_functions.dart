@@ -32,6 +32,8 @@ Map<int, int> countStars(List<WarMember> members) {
 List<Widget> generateStars(int numberOfStars, double size) {
   return List<Widget>.generate(3, (index) {
     return CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
       imageUrl: index < numberOfStars
           ? "https://assets.clashk.ing/icons/Icon_BB_Star.png"
           : "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png",

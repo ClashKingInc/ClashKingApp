@@ -52,6 +52,8 @@ class WarHistoryCard extends StatelessWidget {
                   height: 70,
                   width: 70,
                   child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl:
                           "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png"),
                 ),

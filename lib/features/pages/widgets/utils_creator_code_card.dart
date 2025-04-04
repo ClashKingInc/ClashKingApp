@@ -41,7 +41,9 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              CachedNetworkImage(imageUrl: logoUrl, height: 80),
+              CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: logoUrl, height: 80),
               SizedBox(width: 16),
               Expanded(
                 child: Text(

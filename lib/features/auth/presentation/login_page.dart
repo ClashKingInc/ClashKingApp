@@ -45,11 +45,15 @@ class LoginPageState extends State<LoginPage> {
                   SizedBox(
                       height: 150,
                       width: 150,
-                      child: CachedNetworkImage(imageUrl: logoUrl)),
+                      child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: logoUrl)),
                   SizedBox(height: 8),
                   SizedBox(
                       width: 250,
-                      child: CachedNetworkImage(imageUrl: textLogoUrl)),
+                      child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: textLogoUrl)),
                 ]),
                 SizedBox(height: 48),
 
@@ -60,7 +64,9 @@ class LoginPageState extends State<LoginPage> {
                       : () async {
                           setState(() => _isLoading = true);
                           try {
+                            print("Discord login started");
                             await authService.signInWithDiscord();
+                            print("Discord login completed");
                             final accessToken =
                                 await TokenService().getAccessToken();
 

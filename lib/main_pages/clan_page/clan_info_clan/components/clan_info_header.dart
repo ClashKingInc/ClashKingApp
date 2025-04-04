@@ -46,17 +46,17 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
   }
 
   void setupData() {
-    try{
-    currentWarFuture = checkCurrentWar(
-        widget.clanInfo.tag, leagueInfoContainer, warInfoContainer);
-    warLogData = WarLogService.fetchWarLogData(widget.clanInfo.tag);
-    warLogData.then((data) {
-      if (data.items.isNotEmpty) {
-        setState(() {
-          warLogStats = analyzeWarLogs(data.items);
-        });
-      }
-    });
+    try {
+      currentWarFuture = checkCurrentWar(
+          widget.clanInfo.tag, leagueInfoContainer, warInfoContainer);
+      warLogData = WarLogService.fetchWarLogData(widget.clanInfo.tag);
+      warLogData.then((data) {
+        if (data.items.isNotEmpty) {
+          setState(() {
+            warLogStats = analyzeWarLogs(data.items);
+          });
+        }
+      });
     } catch (error, stackTrace) {
       final hint = Hint.withMap({
         'clanTag': widget.clanInfo.tag,
@@ -90,10 +90,12 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                 imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                 child: ColorFiltered(
                   colorFilter: ColorFilter.mode(
-                    Colors.black.withValues(alpha : 0.6),
+                    Colors.black.withValues(alpha: 0.6),
                     BlendMode.darken,
                   ),
                   child: CachedNetworkImage(
+                    
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl: backgroundImageUrl,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -126,6 +128,8 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                   ),
                   SizedBox(width: 16),
                   CachedNetworkImage(
+                    
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl: widget.clanInfo.badgeUrls.large,
                     width: 130,
                   ),
@@ -282,6 +286,8 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               avatar: CircleAvatar(
                 backgroundColor: Colors.transparent,
                 child: CachedNetworkImage(
+                    
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl: widget.clanInfo.warLeague!.imageUrl),
               ),
               label: Text(
@@ -337,6 +343,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                   avatar: CircleAvatar(
                     backgroundColor: Colors.transparent,
                     child: CachedNetworkImage(
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl:
                             "https://assets.clashk.ing/icons/Icon_HV_Trophy.png"),
                   ),
@@ -351,6 +360,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                   avatar: CircleAvatar(
                     backgroundColor: Colors.transparent,
                     child: CachedNetworkImage(
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl:
                             "https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${widget.clanInfo.requiredTownhallLevel}.png"),
                   ),
@@ -363,6 +375,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                   avatar: CircleAvatar(
                     backgroundColor: Colors.transparent,
                     child: CachedNetworkImage(
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl:
                             "https://assets.clashk.ing/icons/Icon_HV_Attack.png"),
                   ),
@@ -400,6 +415,9 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                   avatar: CircleAvatar(
                     backgroundColor: Colors.transparent,
                     child: CachedNetworkImage(
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl:
                             "https://assets.clashk.ing/icons/Icon_DC_War.png"),
                   ),
@@ -467,7 +485,7 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               highlightColor: Theme.of(context)
                                   .colorScheme
                                   .onSurface
-                                  .withValues(alpha : 0.3),
+                                  .withValues(alpha: 0.3),
                               child: Text(
                                 AppLocalizations.of(context)?.publicWarLog ??
                                     'Public War Log',
@@ -548,6 +566,10 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CachedNetworkImage(
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
                                 width: 20,
                                 imageUrl:
                                     "https://assets.clashk.ing/icons/Icon_DC_War.png",
@@ -556,7 +578,8 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               Shimmer.fromColors(
                                 period: Duration(seconds: 3),
                                 baseColor: Colors.white,
-                                highlightColor: Colors.white.withValues(alpha : 0.4),
+                                highlightColor:
+                                    Colors.white.withValues(alpha: 0.4),
                                 child: Text(
                                     AppLocalizations.of(context)?.ongoingWar ??
                                         "Ongoing War",
@@ -602,6 +625,10 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 CachedNetworkImage(
+                                  placeholder: (context, url) =>
+                                      CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
                                   width: 20,
                                   imageUrl: widget.clanInfo.warLeague!.imageUrl,
                                 ),
@@ -609,7 +636,8 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                                 Shimmer.fromColors(
                                   period: Duration(seconds: 3),
                                   baseColor: Colors.white,
-                                  highlightColor: Colors.white.withValues(alpha : 0.4),
+                                  highlightColor:
+                                      Colors.white.withValues(alpha: 0.4),
                                   child: Text(
                                       AppLocalizations.of(context)
                                               ?.ongoingCwl ??
@@ -643,6 +671,10 @@ class ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CachedNetworkImage(
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
                                 width: 20,
                                 imageUrl:
                                     "https://assets.clashk.ing/icons/Icon_DC_War.png",

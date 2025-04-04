@@ -40,6 +40,8 @@ class PlayerLegendSeasonUsedGear extends StatelessWidget {
                   Stack(
                     children: [
                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl: gear.imageUrl,
                         width: 35,
                         height: 35,

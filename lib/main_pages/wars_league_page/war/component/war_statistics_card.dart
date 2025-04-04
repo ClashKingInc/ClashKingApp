@@ -114,6 +114,8 @@ class WarStatisticsCard extends StatelessWidget {
                 SizedBox(
                     width: 25,
                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl:
                             "https://assets.clashk.ing/icons/Icon_BB_Star.png")),
                 Expanded(
@@ -174,6 +176,8 @@ class WarStatisticsCard extends StatelessWidget {
                 SizedBox(
                     width: 25,
                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl:
                             "https://assets.clashk.ing/icons/Icon_HV_Sword.png")),
                 Expanded(
@@ -281,16 +285,22 @@ class WarStatisticsCard extends StatelessWidget {
                       SizedBox(
                           width: 25,
                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                               imageUrl:
                                   "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png")),
                       SizedBox(
                           width: 25,
                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                               imageUrl:
                                   "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png")),
                       SizedBox(
                           width: 25,
                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                               imageUrl:
                                   "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png")),
                     ]),
@@ -308,16 +318,22 @@ class WarStatisticsCard extends StatelessWidget {
                       SizedBox(
                           width: 25,
                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                               imageUrl:
                                   "https://assets.clashk.ing/icons/Icon_BB_Star.png")),
                       SizedBox(
                           width: 25,
                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                               imageUrl:
                                   "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png")),
                       SizedBox(
                           width: 25,
                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                               imageUrl:
                                   "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png")),
                     ]),
@@ -334,18 +350,24 @@ class WarStatisticsCard extends StatelessWidget {
                     SizedBox(
                       width: 25,
                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                           imageUrl:
                               "https://assets.clashk.ing/icons/Icon_BB_Star.png"),
                     ),
                     SizedBox(
                       width: 25,
                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                           imageUrl:
                               "https://assets.clashk.ing/icons/Icon_BB_Star.png"),
                     ),
                     SizedBox(
                         width: 25,
                         child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl:
                                 "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png")),
                   ],
@@ -362,18 +384,24 @@ class WarStatisticsCard extends StatelessWidget {
                   SizedBox(
                     width: 25,
                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl:
                             "https://assets.clashk.ing/icons/Icon_BB_Star.png"),
                   ),
                   SizedBox(
                     width: 25,
                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl:
                             "https://assets.clashk.ing/icons/Icon_BB_Star.png"),
                   ),
                   SizedBox(
                     width: 25,
                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl:
                             "https://assets.clashk.ing/icons/Icon_BB_Star.png"),
                   ),

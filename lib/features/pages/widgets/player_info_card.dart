@@ -1,10 +1,11 @@
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 import 'package:provider/provider.dart';
 
@@ -64,7 +65,7 @@ class PlayerInfosCard extends StatelessWidget {
                         SizedBox(
                           height: 100,
                           width: 100,
-                          child: CachedNetworkImage(
+                          child: MobileWebImage(
                               imageUrl: selectedProfile.townHallPic),
                         ),
                         Text(
@@ -121,8 +122,7 @@ class PlayerInfosCard extends StatelessWidget {
                                         warPreference),
                               ),
                               ImageChip(
-                                  imageUrl:
-                                      "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
+                                  imageUrl: ImageAssets.attackStar,
                                   label: NumberFormat(
                                           '#,###',
                                           Localizations.localeOf(context)

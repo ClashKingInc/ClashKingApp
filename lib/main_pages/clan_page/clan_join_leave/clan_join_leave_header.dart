@@ -43,6 +43,8 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
                   BlendMode.darken,
                 ),
                 child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: backgroundImageUrl,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -54,6 +56,8 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
             bottom: 10,
             child: Column(children: [
               CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl: widget.clanInfo!.badgeUrls.large,
                 width: 100,
               ),

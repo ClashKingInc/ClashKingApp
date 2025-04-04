@@ -56,6 +56,8 @@ class LegendUsedGear extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl: HeroesDataManager()
                                     .getHeroInfo(entry.key)["url"] ??
                                 'https://assets.clashk.ing/icons/Unknown_person.jpg',
@@ -101,6 +103,8 @@ class LegendUsedGear extends StatelessWidget {
                         Stack(
                           children: [
                             CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                 imageUrl: entry.value[key]!.url,
                                 width: 25,
                                 height: 25,

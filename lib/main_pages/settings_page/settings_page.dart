@@ -17,7 +17,6 @@ import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/features/settings/presentation/features_vote.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class SettingsInfoScreen extends StatefulWidget {
   final User user;
 
@@ -203,7 +202,6 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     }
   }
 }
-
 
 Widget _buildVersionInfoTile(BuildContext context) {
   return FutureBuilder<String>(

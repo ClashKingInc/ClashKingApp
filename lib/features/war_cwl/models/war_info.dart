@@ -27,7 +27,7 @@ class WarInfo {
 
   factory WarInfo.fromJson(Map<String, dynamic> json) {
     return WarInfo(
-      tag: json['tag'],
+      tag: json['war_tag'],
       state: json['state'] ?? 'unknown',
       teamSize: json['teamSize'],
       attacksPerMember: json['attacksPerMember'],

@@ -16,6 +16,8 @@ class NoClanCard extends StatelessWidget {
                 height: 80,
                 width: 80,
                 child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl:
                         "https://assets.clashk.ing/builder-base/building-pics/Building_HV_Clan_Castle_level_2_3.png"),
               ),

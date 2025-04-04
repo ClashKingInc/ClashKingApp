@@ -1,10 +1,12 @@
 import 'dart:ui';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/player/presentation/legend/player_legend_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -95,6 +97,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
             BlendMode.darken,
           ),
           child: CachedNetworkImage(
+            errorWidget: (context, url, error) => Icon(Icons.error),
             imageUrl: imageUrl,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -125,7 +128,10 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         children: [
           _buildPlayerActions(),
           SizedBox(width: 16),
-          CachedNetworkImage(imageUrl: hallImageUrl, width: 170),
+          CachedNetworkImage(
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              imageUrl: hallImageUrl,
+              width: 170),
           SizedBox(width: 16),
           _buildExternalActions(),
         ],
@@ -243,6 +249,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
     return List<Widget>.generate(
       count,
       (index) => CachedNetworkImage(
+        errorWidget: (context, url, error) => Icon(Icons.error),
         imageUrl: ImageAssets.builderBaseStar,
         width: 22.0,
         height: 22.0,
@@ -280,6 +287,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
             avatar: CircleAvatar(
               backgroundColor: Colors.transparent,
               child: CachedNetworkImage(
+                errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl: player!.clan!.badgeUrls.small,
               ),
             ),
@@ -301,6 +309,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         avatar: CircleAvatar(
           backgroundColor: Colors.transparent,
           child: CachedNetworkImage(
+            errorWidget: (context, url, error) => Icon(Icons.error),
             imageUrl: ImageAssets.getHeroImage("Archer Queen"),
           ),
         ),
@@ -312,7 +321,9 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
       Chip(
         avatar: CircleAvatar(
           backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(imageUrl: player!.townHallPic),
+          child: CachedNetworkImage(
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              imageUrl: player!.townHallPic),
         ),
         label: Text(
           AppLocalizations.of(context)?.thLevel(player!.townHallLevel) ??
@@ -323,7 +334,9 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
       Chip(
         avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(imageUrl: ImageAssets.xp)),
+            child: CachedNetworkImage(
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                imageUrl: ImageAssets.xp)),
         label: Text(
           NumberFormat('#,###', locale).format(player!.expLevel),
           style: Theme.of(context).textTheme.labelLarge,
@@ -360,7 +373,9 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
       Chip(
         avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(imageUrl: ImageAssets.attackStar)),
+            child: CachedNetworkImage(
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                imageUrl: ImageAssets.attackStar)),
         label: Text(
           NumberFormat('#,###', locale).format(player!.warStars),
           style: Theme.of(context).textTheme.labelLarge,
@@ -369,7 +384,9 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
       Chip(
         avatar: CircleAvatar(
           backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(imageUrl: ImageAssets.capitalGold),
+          child: CachedNetworkImage(
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              imageUrl: ImageAssets.capitalGold),
         ),
         label: Text(
           NumberFormat('#,###', locale)
@@ -393,6 +410,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
+              errorWidget: (context, url, error) => Icon(Icons.error),
               imageUrl: player!.warPreference == 'in'
                   ? ImageAssets.warPreferenceIn
                   : ImageAssets.warPreferenceOut,
@@ -408,7 +426,9 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         Chip(
           avatar: CircleAvatar(
               backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(imageUrl: ImageAssets.sword)),
+              child: CachedNetworkImage(
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  imageUrl: ImageAssets.sword)),
           label: Text(
             NumberFormat('#,###', locale).format(player!.attackWins),
             style: Theme.of(context).textTheme.labelLarge,
@@ -417,15 +437,17 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         Chip(
           avatar: CircleAvatar(
               backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(imageUrl: ImageAssets.shield)),
+              child: CachedNetworkImage(
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  imageUrl: ImageAssets.shield)),
           label: Text(
             NumberFormat('#,###', locale).format(player!.defenseWins),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
         // Legend trophies + optional shimmer
-        /*player!.playerLegendData != null &&
-                player!.playerLegendData!.legendData.isNotEmpty
+        player!.legendsBySeason != null &&
+                player!.legendsBySeason!.allSeasons.isNotEmpty
             ? GestureDetector(
                 onTap: () {
                   showDialog(
@@ -438,17 +460,14 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LegendScreen(
-                        playerStats: player!,
-                        playerLegendData: player!.playerLegendData!,
-                      ),
+                      builder: (context) => LegendScreen(),
                     ),
                   );
                 },
                 child: Chip(
                   avatar: CircleAvatar(
                     backgroundColor: Colors.transparent,
-                    child: CachedNetworkImage(imageUrl: player!.leagueUrl),
+                    child: MobileWebImage(imageUrl: player!.leagueUrl),
                   ),
                   label: Shimmer.fromColors(
                     period: const Duration(seconds: 3),
@@ -456,7 +475,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                     highlightColor: Theme.of(context)
                         .colorScheme
                         .onSurface
-                        .withValues(alpha : 0.3),
+                        .withValues(alpha: 0.3),
                     child: Text(
                       NumberFormat('#,###', locale).format(player!.trophies),
                       style: Theme.of(context).textTheme.labelLarge,
@@ -467,17 +486,21 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
             : Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: CachedNetworkImage(imageUrl: player!.leagueUrl),
+                  child: CachedNetworkImage(
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      imageUrl: player!.leagueUrl),
                 ),
                 label: Text(
                   NumberFormat('#,###', locale).format(player!.trophies),
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
-              ),*/
+              ),
         Chip(
           avatar: CircleAvatar(
               backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(imageUrl: ImageAssets.bestTrophies)),
+              child: CachedNetworkImage(
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  imageUrl: ImageAssets.bestTrophies)),
           label: Text(
             NumberFormat('#,###', locale).format(player!.bestTrophies),
             style: Theme.of(context).textTheme.labelLarge,
@@ -499,7 +522,9 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         Chip(
           avatar: CircleAvatar(
               backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(imageUrl: ImageAssets.trophies)),
+              child: CachedNetworkImage(
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  imageUrl: ImageAssets.trophies)),
           label: Text(
             NumberFormat('#,###', locale).format(player!.builderBaseTrophies),
             style: Theme.of(context).textTheme.labelLarge,
@@ -508,7 +533,9 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         Chip(
           avatar: CircleAvatar(
               backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(imageUrl: ImageAssets.trophies)),
+              child: CachedNetworkImage(
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  imageUrl: ImageAssets.trophies)),
           label: Text(
             NumberFormat('#,###', locale)
                 .format(player!.bestBuilderBaseTrophies),

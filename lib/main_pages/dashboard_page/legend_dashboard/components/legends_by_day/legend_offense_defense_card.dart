@@ -65,6 +65,8 @@ class LegendOffenseDefenseCard extends StatelessWidget {
                                   Padding(
                                     padding: EdgeInsets.only(left: 8.0),
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl: icon,
                                       width: 20,
                                     ),

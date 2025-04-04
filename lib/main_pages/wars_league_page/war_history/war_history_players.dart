@@ -197,6 +197,8 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                               .withValues(alpha : 0.7),
                           labelPadding: EdgeInsets.all(0),
                           label: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                               imageUrl: getTownHallPicture(thLevel),
                               height: 24),
                           selected: memberThSelection[thLevel]!,
@@ -222,6 +224,8 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                               .withValues(alpha : 0.7),
                           labelPadding: EdgeInsets.all(0),
                           label: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                               imageUrl: getTownHallPicture(thLevel),
                               height: 24),
                           selected: enemyThSelection[thLevel]!,
@@ -499,6 +503,8 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                               Row(
                                 children: [
                                   CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl: member.getTownHallPicture(),
                                     height: 50,
                                   ),
@@ -523,6 +529,8 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                                           ""),
                                       SizedBox(width: 8),
                                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                           imageUrl:
                                               "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png",
                                           height: 16,
@@ -536,6 +544,8 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                                           ""),
                                       SizedBox(width: 8),
                                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                           imageUrl:
                                               "https://assets.clashk.ing/bot/icons/broken_sword.png",
                                           height: 16,

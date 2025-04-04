@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Authentification Discord</title>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code");
+
+        if (window.opener && code) {
+            window.opener.postMessage({ type: "discord-auth", code: code }, window.location.origin);
+            window.close();
+        }
+    </script>
+</head>
+
+<body>
+    <p>Connexion en cours...</p>
+</body>
+
+</html>

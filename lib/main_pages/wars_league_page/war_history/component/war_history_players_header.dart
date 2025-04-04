@@ -45,6 +45,8 @@ class WarHistoryPlayersStatsHeader extends StatelessWidget {
                   BlendMode.darken,
                 ),
                 child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: "https://assets.clashk.ing/landscape/war-stats.png",
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -71,6 +73,8 @@ class WarHistoryPlayersStatsHeader extends StatelessWidget {
                     ),
                     SizedBox(height: 8),
                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: clan.badgeUrls.medium,
                       width: 50,
                     ),

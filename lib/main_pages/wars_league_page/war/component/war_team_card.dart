@@ -139,6 +139,8 @@ class WarTeamCard extends StatelessWidget {
                                 height: 26,
                                 width: 26,
                                 child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                   imageUrl:
                                       'https://assets.clashk.ing/icons/Icon_DC_ArrowLeft.png',
                                 ),
@@ -152,6 +154,8 @@ class WarTeamCard extends StatelessWidget {
                                   SizedBox(
                                     width: 30,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl: imageUrlDef),
                                   ),
                                   Expanded(
@@ -202,6 +206,8 @@ class WarTeamCard extends StatelessWidget {
                                 child: Transform.scale(
                                   scale: 0.92,
                                   child:CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl: (member.attacks?.length ?? 0) == widget.currentWarInfo.attacksPerMember
                                       ? "https://assets.clashk.ing/icons/Icon_DC_Tick.png"
                                       : "https://assets.clashk.ing/icons/Icon_DC_Cross.png",
@@ -226,6 +232,8 @@ class WarTeamCard extends StatelessWidget {
                             width: 70,
                             height: 70,
                             child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                 imageUrl:
                                     'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(member.tag, playerTab)}.png'),
                           ),
@@ -244,6 +252,8 @@ class WarTeamCard extends StatelessWidget {
                         width: 26,
                         height: 26,
                         child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl:
                                 'https://assets.clashk.ing/icons/Icon_DC_ArrowRight.png'),
                       ),
@@ -282,6 +292,8 @@ class WarTeamCard extends StatelessWidget {
                                     SizedBox(
                                       width: 30,
                                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                           imageUrl: imageUrlDef),
                                     ),
                                     Expanded(

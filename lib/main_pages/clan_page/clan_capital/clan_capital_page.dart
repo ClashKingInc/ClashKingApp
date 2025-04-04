@@ -184,6 +184,8 @@ class CapitalScreenState extends State<CapitalScreen>
           ),
           SizedBox(height: 32),
           CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
             imageUrl: 'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
             height: 250,
             width: 200,
@@ -227,8 +229,9 @@ class CapitalScreenState extends State<CapitalScreen>
                 height: 40,
                 width: 40,
                 child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: 'https://assets.clashk.ing/capital-base/clan-houses/Building_CC_Vacant_House.png',
-                  placeholder: (context, url) => CircularProgressIndicator(),
                 ),
               ),
               SizedBox(width: 8),
@@ -292,6 +295,8 @@ class CapitalScreenState extends State<CapitalScreen>
                       SizedBox(width: 4),
                       isOngoing
                         ? CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             height: 24,
                             width: 24,
                             imageUrl: 'https://assets.clashk.ing/bot/icons/animated_clash_swords.gif',
@@ -317,6 +322,8 @@ class CapitalScreenState extends State<CapitalScreen>
                                     height: 32,
                                     width: 32,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl: 'https://assets.clashk.ing/bot/icons/raid_medal.png',
                                     ),
                                   ),
@@ -350,6 +357,8 @@ class CapitalScreenState extends State<CapitalScreen>
                                     height: 24,
                                     width: 24,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl: 'https://assets.clashk.ing/icons/Icon_HV_Raid_Attack.png',
                                     ),
                                   ),
@@ -367,6 +376,8 @@ class CapitalScreenState extends State<CapitalScreen>
                                     height: 24,
                                     width: 24,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl: 'https://assets.clashk.ing/icons/Icon_CC_Resource_Capital_Gold_small.png',
                                     ),
                                   ),
@@ -383,6 +394,8 @@ class CapitalScreenState extends State<CapitalScreen>
                                     child: Transform.scale(
                                       scale: 1.3,
                                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         height: 24,
                                         width: 24,
                                         fit: BoxFit.cover,
@@ -402,6 +415,8 @@ class CapitalScreenState extends State<CapitalScreen>
                                     child: Transform.scale(
                                       scale: 0.8,
                                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         height: 24,
                                         width: 24,
                                         fit: BoxFit.cover,
@@ -474,8 +489,9 @@ class CapitalScreenState extends State<CapitalScreen>
                 height: 40,
                 width: 40,
                 child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: 'https://assets.clashk.ing/capital-base/clan-houses/Building_CC_Clan_House.png',
-                  placeholder: (context, url) => CircularProgressIndicator(),
                 ),
               ),
               SizedBox(width: 8),
@@ -516,6 +532,8 @@ class CapitalScreenState extends State<CapitalScreen>
                     height: 24,
                     width: 24,
                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: 'https://assets.clashk.ing/icons/Icon_HV_Raid_Attack.png',
                     ),
                   ),
@@ -523,6 +541,8 @@ class CapitalScreenState extends State<CapitalScreen>
                     height: 24,
                     width: 24,
                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: 'https://assets.clashk.ing/icons/Icon_CC_Resource_Capital_Gold_small.png',
                     ),
                   ),

@@ -45,6 +45,8 @@ class ClanCapitaleCard extends StatelessWidget {
                           child: Transform.scale(
                             scale: (clanInfo?.clanCapital?.capitalHallLevel == 8) ? 0.98 : 1.4,
                             child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                               height: 70,
                               width: 70,
                               fit: BoxFit.cover,

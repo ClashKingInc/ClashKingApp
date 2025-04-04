@@ -158,6 +158,8 @@ class LegendByDayTabState extends State<LegendByDayTab> {
                               'No data available'))),
               SizedBox(height: 10),
               CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl:
                     'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
                 height: 350,

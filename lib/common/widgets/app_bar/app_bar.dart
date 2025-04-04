@@ -46,7 +46,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     width: 30,
                     child: CachedNetworkImage(
                       imageUrl: profile.townHallPic,
-                      placeholder: (context, url) => CircularProgressIndicator(),
+                      
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
                   ),
@@ -96,7 +96,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: CachedNetworkImage(
                     imageUrl: authService.currentUser?.avatarUrl ?? "",
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => CircularProgressIndicator(),
+                    
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),

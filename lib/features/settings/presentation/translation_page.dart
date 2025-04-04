@@ -32,6 +32,8 @@ class TranslationScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16.0),
                   child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl:
                         "https://www.icegif.com/wp-content/uploads/2023/06/icegif-202.gif", // remplacez par votre URL d'image
                     height: 200,

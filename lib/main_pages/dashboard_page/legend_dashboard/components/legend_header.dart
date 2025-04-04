@@ -33,6 +33,8 @@ class LegendHeaderCard extends StatelessWidget {
                   BlendMode.darken,
                 ),
                 child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl:
                       "https://assets.clashk.ing/landscape/legend-landscape.png",
                   width: double.infinity,
@@ -67,6 +69,8 @@ class LegendHeaderCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl:
                                 "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border.png",
                             width: 60,
@@ -110,6 +114,8 @@ class LegendHeaderCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl:
                                 "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border.png",
                             width: 60,
@@ -139,6 +145,8 @@ class LegendHeaderCard extends StatelessWidget {
                                       avatar: CircleAvatar(
                                           backgroundColor: Colors.transparent,
                                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                               imageUrl:
                                                   "https://assets.clashk.ing/country-flags/${legendData.rankings['country_code']!.toLowerCase() ?? 'uk'}.png")),
                                       label: Text(
@@ -163,6 +171,8 @@ class LegendHeaderCard extends StatelessWidget {
                                       avatar: CircleAvatar(
                                           backgroundColor: Colors.transparent,
                                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                               imageUrl:
                                                   "https://assets.clashk.ing/country-flags/${legendData.rankings['country_code']!.toLowerCase() ?? 'uk'}.png")),
                                       label: Text(
@@ -188,6 +198,8 @@ class LegendHeaderCard extends StatelessWidget {
                                         backgroundColor: Colors
                                             .transparent, // Set to a suitable color for your design.
                                         child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                             imageUrl:
                                                 "https://assets.clashk.ing/icons/Icon_HV_Planet.png")),
                                     label: Text(

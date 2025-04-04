@@ -39,6 +39,8 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                 BlendMode.darken,
               ),
               child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl: ImageAssets.legendPageBackground,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -73,6 +75,8 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl: ImageAssets.legendBlazon,
                             width: 60,
                           ),
@@ -112,6 +116,8 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl: ImageAssets.legendBlazonBorders,
                             width: 60,
                           ),
@@ -139,6 +145,8 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                       avatar: CircleAvatar(
                                           backgroundColor: Colors.transparent,
                                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                               imageUrl: ImageAssets.flag(widget.player
                                                       .rankings?.countryCode ??
                                                   ''))),
@@ -161,6 +169,8 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                       avatar: CircleAvatar(
                                           backgroundColor: Colors.transparent,
                                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                               imageUrl: ImageAssets.flag(widget.player
                                                       .rankings?.countryCode ??
                                                   ''))),
@@ -197,6 +207,8 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                     avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
                                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                           imageUrl: ImageAssets.planet),
                                     ),
                                     label: Text(

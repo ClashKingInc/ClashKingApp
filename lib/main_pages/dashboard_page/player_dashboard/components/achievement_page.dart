@@ -89,6 +89,8 @@ class AchievementScreenState extends State<AchievementScreen>
                             BlendMode.darken,
                           ),
                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl: backgroundImageUrl,
                             width: double.infinity,
                             fit: BoxFit.cover,

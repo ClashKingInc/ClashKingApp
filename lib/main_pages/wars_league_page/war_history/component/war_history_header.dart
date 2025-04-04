@@ -34,6 +34,8 @@ class WarHistoryHeader extends StatelessWidget {
                 BlendMode.darken,
               ),
               child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl:
                     "https://assets.clashk.ing/landscape/war-landscape.jpg",
                 width: double.infinity,
@@ -50,7 +52,9 @@ class WarHistoryHeader extends StatelessWidget {
                 SizedBox(
                   height: 60,
                   width: 60,
-                  child: CachedNetworkImage(imageUrl: clan.badgeUrls.medium),
+                  child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: clan.badgeUrls.medium),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

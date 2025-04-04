@@ -28,6 +28,8 @@ class ClanInfoCard extends StatelessWidget {
                       height: 70,
                       width: 70,
                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                           imageUrl: clanInfo!.badgeUrls.large),
                     ),
                     Text(
@@ -46,6 +48,8 @@ class ClanInfoCard extends StatelessWidget {
                             clanInfo!.location != null &&
                             clanInfo!.location!.countryCode != "No countryCode")
                           CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl:
                                 "https://assets.clashk.ing/country-flags/${clanInfo!.location!.countryCode.toLowerCase()}.png",
                             width: 16,
@@ -75,6 +79,8 @@ class ClanInfoCard extends StatelessWidget {
                           height: 16,
                           width: 16,
                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                               imageUrl:
                                   "https://assets.clashk.ing/icons/Icon_HV_Trophy.png"),
                         ),
@@ -92,6 +98,8 @@ class ClanInfoCard extends StatelessWidget {
                           height: 20,
                           width: 20,
                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                               imageUrl: clanInfo!.warLeague!.imageUrl),
                         ),
                         SizedBox(width: 8),

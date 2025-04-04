@@ -73,6 +73,8 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                       BlendMode.darken,
                     ),
                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: widget.backgroundImageUrl,
                       width: double.infinity,
                       fit: BoxFit.cover,
@@ -136,6 +138,8 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                     Column(
                       children: [
                         CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl: widget.townHallImageUrl, width: 170),
                       ],
                     ),
@@ -325,6 +329,8 @@ class PlayerInfoHeaderCardState extends State<PlayerInfoHeaderCard>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                 width: 20,
                                 imageUrl:
                                     "https://assets.clashk.ing/icons/Icon_DC_War.png",

@@ -142,6 +142,8 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
                 ),
               ),
               CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl: ImageAssets.villager,
                 height: 350,
                 width: 200,

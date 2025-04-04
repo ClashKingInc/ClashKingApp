@@ -52,7 +52,7 @@ dependencies:
       url: https://github.com/fluttercommunity/flutter_workmanager.git
       path: workmanager
       ref: main
-  cached_network_image: ^3.3.1
+  cached_network_image: ^3.4.1
   shimmer: ^3.0.0
   sentry_flutter: ^8.3.0
   retry: ^3.1.0
@@ -161,7 +161,7 @@ flutter_native_splash:
   color_dark_ios: "#000000"
   android_gravity: center
   ios_content_mode: scaleAspectFit
-  web: false
+  web: true
   
   android_12:
     image: assets/icons/splash12light.png

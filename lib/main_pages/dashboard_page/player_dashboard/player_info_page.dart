@@ -240,6 +240,8 @@ class StatsScreenState extends State<StatsScreen>
     return List<Widget>.generate(
       count,
       (index) => CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
         imageUrl: 'https://assets.clashk.ing/icons/Icon_BB_Star.png',
         width: 22.0,
         height: 22.0,
@@ -320,6 +322,8 @@ class StatsScreenState extends State<StatsScreen>
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
               child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: data['url'] ?? logoUrl,
                   height: 40,
                   width: 40,
@@ -415,6 +419,8 @@ class StatsScreenState extends State<StatsScreen>
                                               child: Column(
                                                 children: <Widget>[
                                                   CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                                       imageUrl: item.imageUrl,
                                                       width: 80,
                                                       height: 80,
@@ -462,6 +468,8 @@ class StatsScreenState extends State<StatsScreen>
                                                                           .min,
                                                                   children: [
                                                                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                                                       imageUrl: getEquipmentImageUrl(
                                                                           equipment
                                                                               .name,
@@ -513,6 +521,8 @@ class StatsScreenState extends State<StatsScreen>
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(6),
                                   child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl: item.imageUrl,
                                       width: 40,
                                       height: 40,
@@ -652,6 +662,8 @@ class StatsScreenState extends State<StatsScreen>
                                               child: Column(
                                                 children: <Widget>[
                                                   CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                                       imageUrl: item.imageUrl,
                                                       width: 80,
                                                       height: 80,
@@ -682,6 +694,8 @@ class StatsScreenState extends State<StatsScreen>
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(6),
                                   child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl: item.imageUrl,
                                       width: 40,
                                       height: 40,
@@ -747,6 +761,8 @@ class StatsScreenState extends State<StatsScreen>
             avatar: CircleAvatar(
               backgroundColor: Colors.transparent,
               child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl: widget.playerStats.clan!.badgeUrls.small,
               ),
             ),
@@ -771,6 +787,8 @@ class StatsScreenState extends State<StatsScreen>
         avatar: CircleAvatar(
           backgroundColor: Colors.transparent,
           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
               imageUrl:
                   "https://assets.clashk.ing/home-base/hero-pics/Icon_HV_Hero_Archer_Queen.png"),
         ),
@@ -783,7 +801,9 @@ class StatsScreenState extends State<StatsScreen>
       Chip(
         avatar: CircleAvatar(
           backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(imageUrl: widget.playerStats.townHallPic),
+          child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: widget.playerStats.townHallPic),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
         label: Text(
@@ -795,6 +815,8 @@ class StatsScreenState extends State<StatsScreen>
         avatar: CircleAvatar(
           backgroundColor: Colors.transparent,
           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
               imageUrl: "https://assets.clashk.ing/icons/Icon_HV_XP.png"),
         ),
         labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -841,6 +863,8 @@ class StatsScreenState extends State<StatsScreen>
         avatar: CircleAvatar(
           backgroundColor: Colors.transparent,
           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
               imageUrl:
                   "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png"),
         ),
@@ -855,6 +879,8 @@ class StatsScreenState extends State<StatsScreen>
         avatar: CircleAvatar(
           backgroundColor: Colors.transparent,
           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
               imageUrl:
                   "https://assets.clashk.ing/icons/Icon_CC_Resource_Capital_Gold_small.png"),
         ),
@@ -880,9 +906,13 @@ class StatsScreenState extends State<StatsScreen>
               backgroundColor: Colors.transparent,
               child: widget.playerStats.warPreference == 'in'
                   ? CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl:
                           "https://assets.clashk.ing/icons/Icon_HV_In.png")
                   : CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl:
                           'https://assets.clashk.ing/icons/Icon_HV_Out.png')),
           label: Text(
@@ -896,6 +926,8 @@ class StatsScreenState extends State<StatsScreen>
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Sword.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -909,6 +941,8 @@ class StatsScreenState extends State<StatsScreen>
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Shield.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -964,6 +998,8 @@ class StatsScreenState extends State<StatsScreen>
                     avatar: CircleAvatar(
                       backgroundColor: Colors.transparent,
                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                           imageUrl: widget.playerStats.leagueUrl),
                     ),
                     labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -988,6 +1024,8 @@ class StatsScreenState extends State<StatsScreen>
                   avatar: CircleAvatar(
                     backgroundColor: Colors.transparent,
                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl: widget.playerStats.leagueUrl),
                   ),
                   label: Text(
@@ -1005,6 +1043,8 @@ class StatsScreenState extends State<StatsScreen>
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl:
                     "https://assets.clashk.ing/icons/Icon_HV_Trophy_Best.png"),
           ),
@@ -1030,7 +1070,9 @@ class StatsScreenState extends State<StatsScreen>
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
             child:
-                CachedNetworkImage(imageUrl: widget.playerStats.builderHallPic),
+                CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: widget.playerStats.builderHallPic),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
           label: Text(
@@ -1043,6 +1085,8 @@ class StatsScreenState extends State<StatsScreen>
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Trophy.png"),
           ),
           labelPadding: EdgeInsets.only(left: 2.0, right: 2.0),
@@ -1056,6 +1100,8 @@ class StatsScreenState extends State<StatsScreen>
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl:
                     "https://assets.clashk.ing/icons/Icon_HV_Trophy_Best.png"),
           ),

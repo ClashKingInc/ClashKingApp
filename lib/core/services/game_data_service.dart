@@ -30,7 +30,7 @@ class GameDataService {
       final response = await http.get(Uri.parse("$_baseUrl/$fileName"));
       if (response.statusCode == 200) {
         storage.addAll(jsonDecode(response.body));
-        print("✅ Chargé : $fileName");
+        print("✅ Loaded : $fileName");
       } else {
         print("❌ Erreur ${response.statusCode} lors du chargement de $fileName");
       }

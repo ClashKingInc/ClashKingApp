@@ -55,6 +55,8 @@ class PlayerLegendCard extends StatelessWidget {
                                 height: 100,
                                 width: 100,
                                 child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl:
                                         "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3.png"),
                               ),
@@ -133,6 +135,8 @@ class PlayerLegendCard extends StatelessWidget {
                                   .center, // S'assure que les enfants soient centrés
                               children: <Widget>[
                                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                   imageUrl:
                                       "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3.png",
                                   width: 100,

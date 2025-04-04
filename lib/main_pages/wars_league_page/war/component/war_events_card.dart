@@ -149,7 +149,9 @@ class WarEventsCardState extends State<WarEventsCard> {
                                             SizedBox(
                                               height: 40,
                                               width: 40,
-                                              child: CachedNetworkImage(imageUrl: 
+                                              child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: 
                                                 'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["attackerTag"], widget.playerTab)}.png'),
                                             ),
                                             Expanded(
@@ -244,7 +246,9 @@ class WarEventsCardState extends State<WarEventsCard> {
                                           SizedBox(
                                             height: 40,
                                             width: 40,
-                                            child: CachedNetworkImage(imageUrl: 
+                                            child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: 
                                               'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["defenderTag"], widget.playerTab)}.png')),
                                           SizedBox(width: 4),
                                         ],
@@ -274,7 +278,9 @@ class WarEventsCardState extends State<WarEventsCard> {
                                           SizedBox(
                                             height: 40,
                                             width: 40,
-                                            child: CachedNetworkImage(imageUrl: 
+                                            child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: 
                                               'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["defenderTag"], widget.playerTab)}.png',
                                             ),
                                           ),
@@ -375,7 +381,9 @@ class WarEventsCardState extends State<WarEventsCard> {
                                             SizedBox(
                                               height: 40,
                                               width: 40,
-                                              child: CachedNetworkImage(imageUrl: 
+                                              child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: 
                                                 'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${getPlayerTownhallByTag(attack["attackerTag"], widget.playerTab)}.png'),
                                             ),
                                             SizedBox(width: 4),
@@ -434,7 +442,9 @@ class WarEventsCardState extends State<WarEventsCard> {
                     padding: EdgeInsets.all(16),
                     child: Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data available'))),
                 SizedBox(height: 32),
-                CachedNetworkImage(imageUrl: 
+                CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: 
                   'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
                   height: 250,
                   width: 200,

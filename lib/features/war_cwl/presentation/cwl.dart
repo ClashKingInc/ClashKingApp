@@ -62,6 +62,8 @@ class CwlScreenState extends State<CwlScreen> {
                       colorFilter: ColorFilter.mode(
                           Colors.black.withAlpha(128), BlendMode.darken),
                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl:
                             "https://assets.clashk.ing/landscape/cwl-landscape.png",
                         width: double.infinity,
@@ -91,6 +93,8 @@ class CwlScreenState extends State<CwlScreen> {
                           SizedBox(
                             height: 70,
                             child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                 imageUrl: widget.clanInfo.badgeUrls.medium),
                           ),
                           Column(

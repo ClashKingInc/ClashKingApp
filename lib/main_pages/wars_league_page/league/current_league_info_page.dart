@@ -77,6 +77,8 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                       colorFilter: ColorFilter.mode(
                           Colors.black.withValues(alpha : 0.5), BlendMode.darken),
                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl:
                             "https://assets.clashk.ing/landscape/cwl-landscape.png",
                         width: double.infinity,
@@ -106,6 +108,8 @@ class CurrentLeagueInfoScreenState extends State<CurrentLeagueInfoScreen> {
                           SizedBox(
                             height: 70,
                             child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                 imageUrl: widget.clanInfo.badgeUrls.medium),
                           ),
                           Column(

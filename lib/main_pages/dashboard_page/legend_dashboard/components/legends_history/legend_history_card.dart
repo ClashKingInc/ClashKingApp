@@ -36,6 +36,8 @@ class LegendHistoryCard extends StatelessWidget {
                               children: <Widget>[
                                 Center(
                                   child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl:
                                         "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png",
                                     height: 80,
@@ -89,6 +91,8 @@ class LegendHistoryCard extends StatelessWidget {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_HV_Trophy_Best.png",
                                     ),
@@ -107,6 +111,8 @@ class LegendHistoryCard extends StatelessWidget {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_HV_Planet.png"),
                                   ),
@@ -124,6 +130,8 @@ class LegendHistoryCard extends StatelessWidget {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                                     ),
@@ -142,6 +150,8 @@ class LegendHistoryCard extends StatelessWidget {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_HV_Shield.png",
                                     ),

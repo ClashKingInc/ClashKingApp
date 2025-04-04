@@ -29,6 +29,8 @@ class NotInWarCardState extends State<NotInWarCard> {
                     height: 70,
                     child: Center(
                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                           imageUrl: widget.clanBadgeUrl, fit: BoxFit.cover),
                     ),
                   ),

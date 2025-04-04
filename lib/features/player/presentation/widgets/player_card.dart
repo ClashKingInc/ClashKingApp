@@ -57,7 +57,9 @@ class PlayerCard extends StatelessWidget {
                         SizedBox(
                           height: 100,
                           width: 100,
-                          child: CachedNetworkImage(imageUrl: player.townHallPic),
+                          child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: player.townHallPic),
                         ),
                         Text(
                           player.name,

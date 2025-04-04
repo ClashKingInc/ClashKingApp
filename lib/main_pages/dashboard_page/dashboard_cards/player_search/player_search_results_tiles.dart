@@ -91,6 +91,8 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                     SizedBox(
                       width: 50,
                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                           imageUrl: townHallUrl ??
                               "https://assets.clashk.ing/home-base/town-hall-pics/town-hall-16.png"),
                     ),
@@ -121,6 +123,8 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                               avatar: CircleAvatar(
                                 backgroundColor: Colors.transparent,
                                 child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                   imageUrl: leagueUrl ??
                                       (widget.player.containsKey('league') &&
                                               widget.player['league'] is Map &&

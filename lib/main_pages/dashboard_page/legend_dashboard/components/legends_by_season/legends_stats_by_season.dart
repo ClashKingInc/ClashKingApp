@@ -73,6 +73,8 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                 imageUrl: widget.playerLegendData.legendIcon,
                                 width: 40,
                               ),
@@ -103,6 +105,8 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                               Row(
                                 children: [
                                   CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl:
                                         widget.playerLegendData.attackIcon,
                                     width: 15,
@@ -120,6 +124,8 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                               Row(
                                 children: [
                                   CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl:
                                         "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                                     width: 15,
@@ -140,6 +146,8 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                     alignment: Alignment.topCenter,
                                     children: [
                                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                                         width: 16,
@@ -147,6 +155,8 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                         fit: BoxFit.cover,
                                       ),
                                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_BB_Star.png",
                                         width: 8,
@@ -219,6 +229,8 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                               Row(
                                 children: [
                                   CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl:
                                         widget.playerLegendData.defenseIcon,
                                     width: 15,
@@ -236,6 +248,8 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                               Row(
                                 children: [
                                   CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl:
                                         "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                                     width: 15,
@@ -256,6 +270,8 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                     alignment: Alignment.topCenter,
                                     children: [
                                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                                         width: 16,
@@ -263,6 +279,8 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                                         fit: BoxFit.cover,
                                       ),
                                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_BB_Star.png",
                                         width: 8,
@@ -356,6 +374,8 @@ class LegendsStatsBySeasonState extends State<LegendsStatsBySeason> {
                         'No data available',
                     style: Theme.of(context).textTheme.bodyMedium),
                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl:
                       'https://assets.clashk.ing/stickers/Villager_HV_Villager_12.png',
                   height: 300,

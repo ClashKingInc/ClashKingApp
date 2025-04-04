@@ -99,6 +99,7 @@ class ImageAssets {
   static const String attacks = "$baseUrl/icons/Icon_HV_Attack.png";
   static const String hitrate = "$baseUrl/icons/Icon_DC_Hitrate.png";
   static const String podium = "$baseUrl/icons/Icon_HV_Podium.png";
+  static const String clanCastle = "$baseUrl/builder-base/building-pics/Building_HV_Clan_Castle_level_2_3.png";
 
   // 🎖️ Legend League
   static const String legendStartFlag = "$baseUrl/icons/Icon_HV_Start_Flag.png";

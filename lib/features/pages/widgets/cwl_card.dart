@@ -60,6 +60,8 @@ class CwlCardState extends State<CwlCard> {
                   height: 70,
                   width: 70,
                   child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl: ImageAssets.leagues[clanWarLeague]!,
                   ),
                 ),

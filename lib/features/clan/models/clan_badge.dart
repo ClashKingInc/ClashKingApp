@@ -1,3 +1,5 @@
+import 'package:clashkingapp/core/services/api_service.dart';
+
 class ClanBadgeUrls {
   final String small;
   final String medium;
@@ -8,9 +10,9 @@ class ClanBadgeUrls {
 
   factory ClanBadgeUrls.fromJson(Map<String, dynamic> json) {
     return ClanBadgeUrls(
-      small: json["small"],
-      medium: json["medium"],
-      large: json["large"],
+      small: ApiService.cocAssetsProxyUrl(json["small"]),
+      medium: ApiService.cocAssetsProxyUrl(json["medium"]),
+      large: ApiService.cocAssetsProxyUrl(json["large"]),
     );
   }
 

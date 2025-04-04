@@ -72,6 +72,8 @@ class ToDoBodyState extends State<ToDoBody> {
                     Text(AppLocalizations.of(context)!.noInactiveAccounts),
                     SizedBox(height: 10),
                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl:
                           'https://assets.clashk.ing/stickers/Villager_BB_Master_Builder_7.png',
                       width: 200,
@@ -95,6 +97,8 @@ class ToDoBodyState extends State<ToDoBody> {
                     ),
                     SizedBox(height: 10),
                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl:
                           'https://assets.clashk.ing/stickers/Villager_BB_Master_Builder_4.png',
                       width: 200,

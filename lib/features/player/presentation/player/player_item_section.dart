@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/features/player/models/player_item.dart';
@@ -97,7 +98,7 @@ class PlayerItemSection extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(6),
-              child: CachedNetworkImage(
+              child: MobileWebImage(
                 imageUrl: item.imageUrl,
                 width: 50,
                 height: 50,
@@ -121,7 +122,7 @@ class PlayerItemSection extends StatelessWidget {
                         Shimmer.fromColors(
                           baseColor: const Color(0xFFD4AF37),
                           highlightColor:
-                              const Color(0xFFD4AF37).withValues(alpha : 0.7),
+                              const Color(0xFFD4AF37).withValues(alpha: 0.7),
                           child: Container(
                             decoration: BoxDecoration(
                               color: const Color(0xFFD4AF37),
@@ -136,6 +137,7 @@ class PlayerItemSection extends StatelessWidget {
                           style:
                               Theme.of(context).textTheme.labelMedium!.copyWith(
                                     fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
                         ),
                       ),
@@ -151,7 +153,7 @@ class PlayerItemSection extends StatelessWidget {
 
   void _showItemDialog(BuildContext context, PlayerItem item) {
     final isSuperTroop = item is PlayerSuperTroop;
-    
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -165,6 +167,7 @@ class PlayerItemSection extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 CachedNetworkImage(
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: item.imageUrl,
                   width: 80,
                   height: 80,

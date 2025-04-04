@@ -38,6 +38,8 @@ class ClanJoinLeaveCard extends StatelessWidget {
                   child: Column(
                     children: [
                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                         height: 70,
                         width: 70,
                         imageUrl: "https://assets.clashk.ing/stickers/Troop_HV_Goblin.png"),

@@ -8,6 +8,7 @@ import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
+import 'package:flutter/foundation.dart';
 
 @pragma("vm:entry-point")
 FutureOr<void> backgroundCallback(Uri? data) async {
@@ -25,7 +26,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Register the background callback for the Home Widget
-    HomeWidget.registerInteractivityCallback(backgroundCallback);
+    if (!kIsWeb) {
+      HomeWidget.registerInteractivityCallback(backgroundCallback);
+    }
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: Consumer<MyAppState>(

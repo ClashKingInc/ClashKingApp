@@ -57,7 +57,6 @@ class WarCwl {
 
   WarInfo? getWarInfoFromTag(String tag) {
     try {
-      print("WarCwl: $tag");
       return warLeagueInfos.firstWhere((warInfo) => warInfo.tag == tag);
     } catch (e) {
       print("❌ Error getting war info from tag: $e");

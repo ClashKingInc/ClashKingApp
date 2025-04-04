@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
@@ -159,6 +160,7 @@ Future<void> clearPrefs() async {
 
 
 
+
 Future<String> getAppAndDeviceInfo() async {
   // Fetch app version and build number
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -169,13 +171,24 @@ Future<String> getAppAndDeviceInfo() async {
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   String deviceData;
 
-  if (Platform.isAndroid) {
+  if (!kIsWeb && Platform.isAndroid) {
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     deviceData =
         'Device: ${androidInfo.model}, OS: Android ${androidInfo.version.release} (SDK ${androidInfo.version.sdkInt})';
-  } else if (Platform.isIOS) {
+  } else if (!kIsWeb && Platform.isIOS) {
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    deviceData = 'Device: ${iosInfo.utsname.machine}, OS: iOS ${iosInfo.systemVersion}';
+    deviceData =
+        'Device: ${iosInfo.utsname.machine}, OS: iOS ${iosInfo.systemVersion}';
+  } else if (!kIsWeb && Platform.isMacOS) {
+    MacOsDeviceInfo macInfo = await deviceInfo.macOsInfo;
+    deviceData = 'Device: ${macInfo.model}, OS: macOS ${macInfo.osRelease}';
+  } else if (!kIsWeb && Platform.isWindows) {
+    WindowsDeviceInfo windowsInfo = await deviceInfo.windowsInfo;
+    deviceData =
+        'Device: ${windowsInfo.computerName}, OS: Windows ${windowsInfo.displayVersion}';
+  } else if (!kIsWeb && Platform.isLinux) {
+    LinuxDeviceInfo linuxInfo = await deviceInfo.linuxInfo;
+    deviceData = 'Device: ${linuxInfo.name}, OS: Linux ${linuxInfo.version}';
   } else {
     deviceData = 'Unknown Platform';
   }

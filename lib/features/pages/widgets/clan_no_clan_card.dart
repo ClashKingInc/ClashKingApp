@@ -1,6 +1,7 @@
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class NoClanCard extends StatelessWidget {
   @override
@@ -15,9 +16,7 @@ class NoClanCard extends StatelessWidget {
               SizedBox(
                 height: 80,
                 width: 80,
-                child: CachedNetworkImage(
-                    imageUrl:
-                        "https://assets.clashk.ing/builder-base/building-pics/Building_HV_Clan_Castle_level_2_3.png"),
+                child: MobileWebImage(imageUrl: ImageAssets.clanCastle),
               ),
               SizedBox(width: 16),
               Expanded(

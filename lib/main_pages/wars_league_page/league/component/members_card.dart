@@ -41,7 +41,9 @@ class MembersCard extends StatelessWidget {
                           SizedBox(
                             height: 70,
                             width: 70,
-                            child: CachedNetworkImage(imageUrl: 
+                            child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: 
                               'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${memberEntry.value['townHallLevel']}.png')),
                         ],
                       ),
@@ -61,7 +63,9 @@ class MembersCard extends StatelessWidget {
                           SizedBox(
                             height: 20,
                             width: 20,
-                            child: CachedNetworkImage(imageUrl: 
+                            child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: 
                               'https://assets.clashk.ing/icons/Icon_BB_Star.png')),
                         ],
                       ),
@@ -83,7 +87,9 @@ class MembersCard extends StatelessWidget {
                           SizedBox(
                             height: 20,
                             width: 20,
-                            child: CachedNetworkImage(imageUrl: 
+                            child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: 
                               'https://assets.clashk.ing/icons/Icon_BB_Star.png')),
                         ],
                       ),

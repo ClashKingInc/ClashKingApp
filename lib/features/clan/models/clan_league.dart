@@ -14,7 +14,6 @@ class ClanLeague {
   });
 
   factory ClanLeague.fromJson(Map<String, dynamic> json) {
-    print(json);
     return ClanLeague(
       id: json["id"],
       name: json["name"],

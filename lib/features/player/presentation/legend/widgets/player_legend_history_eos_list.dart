@@ -42,6 +42,8 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                               children: <Widget>[
                                 Center(
                                   child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl: ImageAssets.legendBlazonBordersNoPadding,
                                     height: 80,
                                   ),
@@ -88,6 +90,8 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl: ImageAssets.bestTrophies,
                                     ),
                                   ),
@@ -103,6 +107,8 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl: ImageAssets.planet),
                                   ),
                                   label: Text(
@@ -117,6 +123,8 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl: ImageAssets.sword,
                                     ),
                                   ),
@@ -132,6 +140,8 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl: ImageAssets.shieldWithArrow,
                                     ),
                                   ),

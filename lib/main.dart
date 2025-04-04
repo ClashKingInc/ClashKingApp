@@ -26,6 +26,7 @@ import 'package:clashkingapp/classes/data/spells_data_manager.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter/foundation.dart';
 
 // CallbackDispatcher for background execution (Android only)
 void callbackDispatcher() {
@@ -38,49 +39,54 @@ void callbackDispatcher() {
   });
 }
 
-
 Future<void> main() async {
-  await dotenv.load(fileName: ".env"); // Load .env file
-  WidgetsFlutterBinding
-      .ensureInitialized(); // Required by Workmanager to ensure binding is initialized
-  Workmanager().initialize(
-      callbackDispatcher); // Required by Workmanager to initialize the callback dispatcher
-  Future.wait([
-    GameDataManager().loadGameData(),
-    LeagueDataManager().loadLeagueData(),
-    TroopDataManager().loadTroopsData(),
-    PlayerLeagueDataManager().loadLeagueData(),
-    GearDataManager().loadGearsData(),
-    HeroesDataManager().loadHeroesData(),
-    SpellsDataManager().loadSpellsData(),
-    PetsDataManager().loadPetsData(),
-    GameDataService.loadGameData(),
-  ]);
-  FlutterNativeSplash.remove();
 
   await SentryFlutter.init(
     (options) {
-      options.dsn = const String.fromEnvironment('SENTRY_DSN');
+      options.dsn = const String.fromEnvironment('SENTRY_DSN', defaultValue: '');
       options.tracesSampleRate = 1.0;
     },
-    appRunner: () => runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-              create: (_) => ThemeNotifier()), // ThemeNotifier (Theme data)
-          ChangeNotifierProvider(
-              create: (_) => MyAppState()), // MyAppState (User data)
-          ChangeNotifierProvider(create: (_) => AuthService()),
-          ChangeNotifierProvider(create: (context) => CocAccountService()),
-          ChangeNotifierProvider(create: (context) => PlayerService()),
-          ChangeNotifierProvider(create: (context) => ClanService()),
-          ChangeNotifierProvider(create: (context) => WarCwlService()),
-          Provider(create: (_) => ApiService()),
-          Provider(create: (_) => UserService()),
-          Provider(create: (_) => TokenService()),
-        ],
-        child: MyApp(),
-      ),
-    ),
+    appRunner: () async {
+
+      WidgetsFlutterBinding.ensureInitialized();
+
+      await dotenv.load(fileName: ".env");
+
+      if (!kIsWeb) {
+        Workmanager().initialize(callbackDispatcher);
+      }
+
+      await Future.wait([
+        GameDataManager().loadGameData().then((_) => print("✅ GameDataManager OK")),
+        LeagueDataManager().loadLeagueData().then((_) => print("✅ LeagueDataManager OK")),
+        TroopDataManager().loadTroopsData().then((_) => print("✅ TroopDataManager OK")),
+        PlayerLeagueDataManager().loadLeagueData().then((_) => print("✅ PlayerLeagueDataManager OK")),
+        GearDataManager().loadGearsData().then((_) => print("✅ GearDataManager OK")),
+        HeroesDataManager().loadHeroesData().then((_) => print("✅ HeroesDataManager OK")),
+        SpellsDataManager().loadSpellsData().then((_) => print("✅ SpellsDataManager OK")),
+        PetsDataManager().loadPetsData().then((_) => print("✅ PetsDataManager OK")),
+        GameDataService.loadGameData().then((_) => print("✅ GameDataService OK")),
+      ]);
+
+      FlutterNativeSplash.remove();
+      runApp(
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+            ChangeNotifierProvider(create: (_) => MyAppState()),
+            ChangeNotifierProvider(create: (_) => AuthService()),
+            ChangeNotifierProvider(create: (_) => CocAccountService()),
+            ChangeNotifierProvider(create: (_) => PlayerService()),
+            ChangeNotifierProvider(create: (_) => ClanService()),
+            ChangeNotifierProvider(create: (_) => WarCwlService()),
+            Provider(create: (_) => ApiService()),
+            Provider(create: (_) => UserService()),
+            Provider(create: (_) => TokenService()),
+          ],
+          child: MyApp(),
+        ),
+      );
+    },
   );
 }
+

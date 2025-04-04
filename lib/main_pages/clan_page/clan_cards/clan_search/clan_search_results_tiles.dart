@@ -65,7 +65,9 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                       padding: EdgeInsets.only(right: 8),
                       child: SizedBox(
                         width: 50,
-                        child: CachedNetworkImage(imageUrl: widget.clan['badgeUrls']['medium']),
+                        child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: widget.clan['badgeUrls']['medium']),
                       ),
                     ),
                   ],
@@ -85,11 +87,15 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                           Text("${widget.clan['name']} "),
                           (widget.clan.containsKey('location') && widget.clan['location']!.containsKey('countryCode'))
                             ? CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                               imageUrl: "https://assets.clashk.ing/country-flags/${widget.clan['location']['countryCode'].toLowerCase()}.png",
                               width: 16)
                             : SizedBox.shrink(),
                           SizedBox(width: 8),
                           CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             width: 20,
                             imageUrl: leagueUrl ?? "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                           ),
@@ -119,7 +125,9 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                               Chip(
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors.transparent,
-                                  child: CachedNetworkImage(imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Trophy.png"),
+                                  child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Trophy.png"),
                                 ),
                                 label: Text(
                                   widget.clan['clanPoints'].toString(),

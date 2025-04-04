@@ -54,6 +54,8 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                       child: SizedBox(
                         width: 50,
                         child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl: widget.clan['badgeUrls']['medium']),
                       ),
                     ),
@@ -76,6 +78,8 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                                   widget.clan['location']!
                                       .containsKey('countryCode'))
                               ? CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                   imageUrl: ImageAssets.flag(widget
                                       .clan['location']['countryCode']
                                       .toLowerCase()),
@@ -83,6 +87,8 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                               : SizedBox.shrink(),
                           SizedBox(width: 8),
                           CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             width: 20,
                             imageUrl: ImageAssets.leagues[
                                     widget.clan['warLeague']['name']] ??
@@ -119,6 +125,8 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors.transparent,
                                   child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl: ImageAssets.trophies),
                                 ),
                                 label: Text(

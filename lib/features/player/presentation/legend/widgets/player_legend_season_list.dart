@@ -112,7 +112,9 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
           if (icon is IconData)
             Icon(icon)
           else if (icon is String)
-            CachedNetworkImage(imageUrl: icon, height: 20),
+            CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: icon, height: 20),
           const SizedBox(width: 4),
           Icon(
             _sortCriterion == criterion

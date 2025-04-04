@@ -126,6 +126,8 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                   ),
                   SizedBox(height: 32),
                   CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl:
                         'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
                     height: 250,
@@ -219,6 +221,8 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                                       width: 70,
                                       height: 70,
                                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                           imageUrl:
                                               warLogDetail.clan.badgeUrls.large,
                                           fit: BoxFit.cover),
@@ -283,6 +287,8 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                                           MainAxisAlignment.center,
                                       children: [
                                         CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                             imageUrl:
                                                 'https://assets.clashk.ing/icons/Icon_HV_XP.png',
                                             width: 20,
@@ -302,6 +308,8 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                                       width: 70,
                                       height: 70,
                                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                           imageUrl: warLogDetail
                                               .opponent.badgeUrls.large,
                                           fit: BoxFit.cover),

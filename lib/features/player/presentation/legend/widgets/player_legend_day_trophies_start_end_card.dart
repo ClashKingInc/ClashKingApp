@@ -32,6 +32,8 @@ class LegendTrophiesStartEndCard extends StatelessWidget {
           ],
         ),
         CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
           imageUrl:
               "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border.png",
           width: 80,

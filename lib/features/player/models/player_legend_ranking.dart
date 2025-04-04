@@ -22,7 +22,6 @@ class PlayerLegendRanking {
   });
 
   factory PlayerLegendRanking.fromJson(Map<String, dynamic> json) {
-    print("PlayerLegendRanking: ${json['tag']}");
     return PlayerLegendRanking(
       tag: json['tag'] ?? "",
       name: json['name'] ?? "",

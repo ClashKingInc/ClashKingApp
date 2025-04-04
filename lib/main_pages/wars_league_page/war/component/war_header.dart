@@ -30,6 +30,8 @@ class WarHeader extends StatelessWidget {
                 BlendMode.darken,
               ),
               child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl:
                     "https://assets.clashk.ing/landscape/war-landscape.jpg",
                 width: double.infinity,
@@ -80,6 +82,8 @@ class WarHeader extends StatelessWidget {
                             }
                           },
                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl:
                                 widget.currentWarInfo.clan.badgeUrls.large,
                             width: 90,
@@ -145,6 +149,8 @@ class WarHeader extends StatelessWidget {
                             }
                           },
                           child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl:
                                 widget.currentWarInfo.opponent.badgeUrls.large,
                             width: 90,

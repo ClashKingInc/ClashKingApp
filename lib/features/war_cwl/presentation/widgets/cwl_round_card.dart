@@ -43,6 +43,8 @@ class RoundClanCard extends StatelessWidget {
                               height: 50,
                               width: 50,
                               child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                   imageUrl: warInfo.clan!.badgeUrls.small),
                             ),
                             Column(
@@ -50,6 +52,8 @@ class RoundClanCard extends StatelessWidget {
                                 Row(children: [
                                   SizedBox(
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                                       width: 12,
@@ -65,6 +69,8 @@ class RoundClanCard extends StatelessWidget {
                                 Row(children: [
                                   SizedBox(
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                       width: 12,
@@ -163,6 +169,8 @@ class RoundClanCard extends StatelessWidget {
                                             .labelMedium),
                                     SizedBox(
                                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                                         width: 12,
@@ -180,6 +188,8 @@ class RoundClanCard extends StatelessWidget {
                                             .labelMedium),
                                     SizedBox(
                                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                         width: 12,
@@ -193,6 +203,8 @@ class RoundClanCard extends StatelessWidget {
                             height: 50,
                             width: 50,
                             child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                 imageUrl:
                                     warInfo.opponent!.badgeUrls.small),
                           ),

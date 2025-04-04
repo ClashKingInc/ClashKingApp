@@ -44,6 +44,8 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                       BlendMode.darken,
                     ),
                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: backgroundImageUrl,
                       width: double.infinity,
                       fit: BoxFit.cover,
@@ -100,6 +102,8 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                                   : 1.3,
                               child: InteractiveViewer(
                                 child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                 width: 170,
                                 fit: BoxFit.cover,
                                 imageUrl:

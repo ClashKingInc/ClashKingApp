@@ -227,6 +227,8 @@ class ClanMembersState extends State<ClanMembers> {
                                 Column(
                                   children: [
                                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${member.townHallLevel}.png',
                                       width: 40,
@@ -281,6 +283,8 @@ class ClanMembersState extends State<ClanMembers> {
                                   return Row(children: [
                                     SizedBox(width: 20),
                                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_HV_XP.png",
                                       width: 24,
@@ -299,6 +303,8 @@ class ClanMembersState extends State<ClanMembers> {
                                     return Row(children: [
                                       SizedBox(width: 20),
                                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                                         width: 24,
@@ -376,6 +382,8 @@ class ClanMembersState extends State<ClanMembers> {
                                     children: [
                                       SizedBox(width: 20),
                                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl: member.league.imageUrl.tiny,
                                         width: 24,
                                       ),

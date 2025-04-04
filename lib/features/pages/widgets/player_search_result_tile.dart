@@ -65,6 +65,8 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                     SizedBox(
                       width: 50,
                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                           imageUrl: ImageAssets.townHall(
                               widget.player['townHallLevel'] ?? 1)),
                     ),
@@ -95,6 +97,8 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                               avatar: CircleAvatar(
                                 backgroundColor: Colors.transparent,
                                 child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                   imageUrl: ImageAssets.leagues[widget
                                               .player['league']?['iconUrls'] ??
                                           "Unranked"] ??

@@ -56,6 +56,8 @@ class PlayerLegendCard extends StatelessWidget {
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
                                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                   imageUrl: ImageAssets.legendBlazon,
                                   width: 100,
                                   height: 100,

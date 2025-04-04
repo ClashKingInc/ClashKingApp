@@ -375,6 +375,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                               children: [
                                 Row(children: [
                                   CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
                                       width: 16,
@@ -387,6 +389,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                 Row(
                                   children: [
                                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                         width: 16,
@@ -400,6 +404,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                 Row(
                                   children: [
                                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                                         width: 16,
@@ -545,6 +551,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                             Row(
                               children: [
                                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl:
                                         "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
                                     width: 16,
@@ -558,6 +566,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                             Row(
                               children: [
                                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl:
                                         "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                     width: 16,
@@ -572,6 +582,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                             Row(
                               children: [
                                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl:
                                         "https://assets.clashk.ing/icons/Icon_HV_Shield.png",
                                     width: 16,
@@ -728,6 +740,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                             imageUrl: thStats.townHallImageUrl,
                             width: 30,
                             height: 30,
@@ -752,6 +766,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                 children: [
                                   Row(children: [
                                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
                                         width: 16,
@@ -764,6 +780,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                   Row(
                                     children: [
                                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                           imageUrl:
                                               "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                           width: 16,
@@ -778,6 +796,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                   Row(
                                     children: [
                                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                           imageUrl:
                                               "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                                           width: 16,
@@ -925,6 +945,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                 children: [
                                   Row(children: [
                                     CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
                                         width: 16,
@@ -937,6 +959,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                   Row(
                                     children: [
                                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                           imageUrl:
                                               "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                           width: 16,
@@ -951,6 +975,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                                   Row(
                                     children: [
                                       CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                           imageUrl:
                                               "https://assets.clashk.ing/icons/Icon_HV_Shield.png",
                                           width: 16,
@@ -1110,6 +1136,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                       'No data available'))),
           SizedBox(height: 32),
           CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
             imageUrl:
                 'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
             height: 250,
@@ -1132,6 +1160,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                       'No data available'))),
           SizedBox(height: 32),
           CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
             imageUrl:
                 'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
             height: 250,
@@ -1207,6 +1237,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                             Row(
                               children: [
                                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                   imageUrl:
                                       'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${attack.defender.townhallLevel}.png',
                                   width: 40,
@@ -1278,6 +1310,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                       'No data available'))),
           SizedBox(height: 32),
           CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
             imageUrl:
                 'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
             height: 250,
@@ -1354,6 +1388,8 @@ class PlayerStatsScreenState extends State<PlayerStatsScreen>
                             Row(
                               children: [
                                 CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                   imageUrl:
                                       'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${defense.attacker.townhallLevel}.png',
                                   width: 40,

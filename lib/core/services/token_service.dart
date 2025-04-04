@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenService {
-
   Future<String?> getAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
     final accessToken = prefs.getString('access_token');
@@ -23,7 +24,8 @@ class TokenService {
       if (newAccessToken != null) {
         return newAccessToken;
       } else {
-        print("❌ Impossible de rafraîchir le token, l'utilisateur doit se reconnecter.");
+        print(
+            "❌ Impossible de rafraîchir le token, l'utilisateur doit se reconnecter.");
         await clearTokens();
         return null;
       }
@@ -32,12 +34,14 @@ class TokenService {
     return accessToken;
   }
 
-  Future<String?> refreshAccessToken(String refreshToken, String deviceId) async {
+  Future<String?> refreshAccessToken(
+      String refreshToken, String deviceId) async {
     try {
       final response = await http.post(
         Uri.parse('${ApiService.apiUrl}/auth/refresh'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({"refresh_token": refreshToken, "device_id": deviceId}),
+        body:
+            jsonEncode({"refresh_token": refreshToken, "device_id": deviceId}),
       );
 
       if (response.statusCode == 200) {
@@ -76,7 +80,8 @@ class TokenService {
       if (parts.length != 3) {
         return true;
       }
-      final payload = json.decode(utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))));
+      final payload = json
+          .decode(utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))));
       final exp = payload['exp'];
       final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
@@ -88,21 +93,45 @@ class TokenService {
 
   Future<String> getDeviceId() async {
     final deviceInfo = DeviceInfoPlugin();
-    if (deviceInfo.androidInfo != null) {
-      return (await deviceInfo.androidInfo).id;
-    } else if (deviceInfo.iosInfo != null) {
-      return (await deviceInfo.iosInfo).identifierForVendor ?? "unknown-device";
+
+    try {
+      if (kIsWeb) {
+        final webInfo = await deviceInfo.webBrowserInfo;
+        return webInfo.userAgent ?? "unknown-web-device";
+      } else if (Platform.isAndroid) {
+        final androidInfo = await deviceInfo.androidInfo;
+        return androidInfo.id ?? "unknown-android-device";
+      } else if (Platform.isIOS) {
+        final iosInfo = await deviceInfo.iosInfo;
+        return iosInfo.identifierForVendor ?? "unknown-ios-device";
+      } else {
+        return "unsupported-platform";
+      }
+    } catch (e) {
+      print("❌ Erreur getDeviceId: $e");
+      return "unknown-device";
     }
-    return "unknown-device";
   }
 
   Future<String> getDeviceName() async {
     final deviceInfo = DeviceInfoPlugin();
-    if (deviceInfo.androidInfo != null) {
-      return (await deviceInfo.androidInfo).model;
-    } else if (deviceInfo.iosInfo != null) {
-      return (await deviceInfo.iosInfo).name;
+
+    try {
+      if (kIsWeb) {
+        final webInfo = await deviceInfo.webBrowserInfo;
+        return webInfo.browserName.name; // ex: "chrome", "safari"
+      } else if (Platform.isAndroid) {
+        final androidInfo = await deviceInfo.androidInfo;
+        return androidInfo.model ?? "unknown-android-model";
+      } else if (Platform.isIOS) {
+        final iosInfo = await deviceInfo.iosInfo;
+        return iosInfo.name ?? "unknown-ios-name";
+      } else {
+        return "unsupported-platform";
+      }
+    } catch (e) {
+      print("❌ Erreur getDeviceName: $e");
+      return "unknown-device";
     }
-    return "unknown-device";
   }
 }

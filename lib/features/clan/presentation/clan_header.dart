@@ -44,6 +44,8 @@ class ClanInfoHeaderCard extends StatelessWidget {
                     BlendMode.darken,
                   ),
                   child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl: ImageAssets.clanPageBackground,
                     fit: BoxFit.cover,
                   ),
@@ -73,6 +75,8 @@ class ClanInfoHeaderCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl: clanInfo.badgeUrls.large,
                     width: 100,
                   ),
@@ -148,6 +152,8 @@ class ClanInfoHeaderCard extends StatelessWidget {
                 if (clanInfo.warLeague != null)
                   Chip(
                     avatar: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl:
                           ImageAssets.leagues[clanInfo.warLeague?.name ?? "Unranked"]!,
                       width: 20,
@@ -160,6 +166,8 @@ class ClanInfoHeaderCard extends StatelessWidget {
                     avatar: CircleAvatar(
                       backgroundColor: Colors.transparent,
                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl:
                             ImageAssets.flag(clanInfo.location!.countryCode!),
                         width: 20,
@@ -173,12 +181,16 @@ class ClanInfoHeaderCard extends StatelessWidget {
                 ),
                 Chip(
                   avatar: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: ImageAssets.trophies, width: 20),
                   label:
                       Text(NumberFormat('#,###').format(clanInfo.clanPoints)),
                 ),
                 Chip(
                   avatar: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: ImageAssets.attacks, width: 20),
                   label: Text(
                       NumberFormat('#,###').format(clanInfo.clanCapitalPoints)),
@@ -186,6 +198,8 @@ class ClanInfoHeaderCard extends StatelessWidget {
                 if (clanInfo.requiredTownhallLevel > 0)
                   Chip(
                     avatar: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl: ImageAssets.townHall(
                             clanInfo.requiredTownhallLevel),
                         width: 20),
@@ -208,6 +222,8 @@ class ClanInfoHeaderCard extends StatelessWidget {
                 ),
                 Chip(
                   avatar: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl: ImageAssets.war,
                     width: 20,
                   ),

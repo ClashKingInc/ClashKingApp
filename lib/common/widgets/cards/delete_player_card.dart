@@ -66,7 +66,9 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
                     SizedBox(
                       height: 30,
                       width: 30,
-                      child: CachedNetworkImage(imageUrl: imageUrl),
+                      child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: imageUrl),
                     ),
                     SizedBox(width: 4),
                     Text(name,

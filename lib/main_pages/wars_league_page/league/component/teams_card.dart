@@ -103,6 +103,8 @@ class TeamsCard extends StatelessWidget {
                                         child: Row(
                                           children: [
                                             CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                               imageUrl: clan.badgeUrls.small,
                                               width: 40,
                                               height: 40,
@@ -136,6 +138,8 @@ class TeamsCard extends StatelessWidget {
                                                     "  ${clan.stars}"),
                                                 SizedBox(
                                                   child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                                     imageUrl:
                                                         "https://assets.clashk.ing/icons/Icon_BB_Star.png",
                                                     width: 20,
@@ -163,6 +167,8 @@ class TeamsCard extends StatelessWidget {
                                         child: Wrap(
                                           children: [
                                             CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                               imageUrl:
                                                   'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${entry.key}.png',
                                               width: 20,

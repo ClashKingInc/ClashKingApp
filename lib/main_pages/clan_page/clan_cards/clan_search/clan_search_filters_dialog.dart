@@ -47,7 +47,8 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
         }
       });
     } else {
-      throw Exception('Failed to load countries with status code: ${response.statusCode}');
+      throw Exception(
+          'Failed to load countries with status code: ${response.statusCode}');
     }
   }
 
@@ -201,8 +202,8 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                               DropdownMenuItem<String>(
                                 value: '0',
                                 alignment: Alignment.center,
-                                child: Text(
-                                    AppLocalizations.of(context)!.notSet),
+                                child:
+                                    Text(AppLocalizations.of(context)!.notSet),
                               ),
                               ..._countries.map<DropdownMenuItem<String>>(
                                 (item) {
@@ -214,6 +215,8 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                                       children: <Widget>[
                                         item["isCountry"] == true
                                             ? CachedNetworkImage(
+                                                placeholder: (context, url) =>
+                                                    CircularProgressIndicator(),
                                                 imageUrl:
                                                     "https://assets.clashk.ing/country-flags/${item['countryCode'].toLowerCase()}.png",
                                                 width: 16,

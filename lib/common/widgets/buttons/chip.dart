@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -78,7 +79,7 @@ class ImageChipState extends State<ImageChip> {
         child: Chip(
           avatar: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
+            child: MobileWebImage(
               imageUrl: widget.imageUrl,
               fit: BoxFit.cover,
             ),

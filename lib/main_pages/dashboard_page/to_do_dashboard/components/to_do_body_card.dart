@@ -38,6 +38,8 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                       height: 100,
                       width: 100,
                       child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                           imageUrl: widget.profileInfo.townHallPic),
                     ),
                     Text(
@@ -91,6 +93,8 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png",
                                     ),
@@ -119,6 +123,8 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_DC_War.png",
                                     ),
@@ -146,6 +152,8 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_HV_Clan_Games_Medal.png",
                                     ),
@@ -177,6 +185,8 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_HV_Raid_Attack.png",
                                     ),
@@ -220,6 +230,8 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_DC_CWL_No_Border.png",
                                     ),
@@ -248,6 +260,8 @@ class ToDoBodyCardState extends State<ToDoBodyCard> {
                                   child: Transform.scale(
                                     scale: 1.7,
                                     child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_HV_Gold_Pass.png",
                                     ),

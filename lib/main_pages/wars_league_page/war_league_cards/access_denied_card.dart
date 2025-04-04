@@ -37,7 +37,9 @@ class AccessDeniedCardState extends State<AccessDeniedCard> {
                     width: 70,
                     height: 70,
                     child: Center(
-                      child: CachedNetworkImage(imageUrl: 
+                      child: CachedNetworkImage(
+  
+  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: 
                         widget.clanBadgeUrl,
                         fit: BoxFit.cover),
                     ),
