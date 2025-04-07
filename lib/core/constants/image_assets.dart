@@ -121,6 +121,7 @@ class ImageAssets {
       badgeUrl.isNotEmpty ? badgeUrl : "$baseUrl/icons/default_clan_badge.png";
   static String getClanBadgeImage(String url) =>
       url.isNotEmpty ? url : defaultImage;
+  static const String clock = "$baseUrl/bot/icons/clock.png";
 
   // ⭐ Clan Capital
   static const String capitalGold =

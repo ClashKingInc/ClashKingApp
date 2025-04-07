@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/shapes/stat_tile.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -69,7 +70,7 @@ class MembersCard extends StatelessWidget {
         return withIcon(
             "${attack?.stars ?? 0}", ImageAssets.attackStar, "Stars");
       case 'percentage':
-        return withIcon("${(attack?.totalDestruction ?? 0).toStringAsFixed(0)}",
+        return withIcon((attack?.totalDestruction ?? 0).toStringAsFixed(0),
             ImageAssets.hitrate, "Destruction %");
       case 'averageStars':
         return withIcon("${attack?.averageStars?.toStringAsFixed(1) ?? '0.0'}",
@@ -89,10 +90,8 @@ class MembersCard extends StatelessWidget {
         return withIcon(
             "${defense?.stars ?? 0}", ImageAssets.attackStar, "Def Stars");
       case 'defDestruction':
-        return withIcon(
-            "${(defense?.totalDestruction ?? 0).toStringAsFixed(0)}",
-            ImageAssets.hitrate,
-            "Def %");
+        return withIcon((defense?.totalDestruction ?? 0).toStringAsFixed(0),
+            ImageAssets.hitrate, "Def %");
       case 'defAverageStars':
         return withIcon("${defense?.averageStars?.toStringAsFixed(1) ?? '0.0'}",
             ImageAssets.attackStar, "Avg Def Stars");
@@ -105,6 +104,28 @@ class MembersCard extends StatelessWidget {
     return null;
   }
 
+  Widget statWithTextIcon(BuildContext context, String label, String value,
+      IconData icon, Color color) {
+    return Row(
+      children: [
+        Icon(icon, size: 16, color: color),
+        const SizedBox(width: 4),
+        Text("$label: $value", style: Theme.of(context).textTheme.bodyMedium),
+      ],
+    );
+  }
+
+  Widget statWithIcon(
+      BuildContext context, String label, String value, String imageUrl) {
+    return Row(
+      children: [
+        MobileWebImage(imageUrl: imageUrl, width: 16, height: 16),
+        const SizedBox(width: 4),
+        Text("$label: $value", style: Theme.of(context).textTheme.bodyMedium),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final attack = member.attackStats;
@@ -115,7 +136,6 @@ class MembersCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -124,8 +144,8 @@ class MembersCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 MobileWebImage(
                   imageUrl: ImageAssets.townHall(member.townhallLevel),
-                  width: 28,
-                  height: 28,
+                  width: 36,
+                  height: 36,
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -151,275 +171,323 @@ class MembersCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(member.name,
-                            style: Theme.of(context).textTheme.titleMedium),
+                            style: Theme.of(context).textTheme.titleSmall),
                         Text(member.tag,
-                            style: Theme.of(context).textTheme.labelSmall),
+                            style: Theme.of(context).textTheme.labelMedium),
                       ],
                     ),
                   ),
                 ),
-                getStatFromSortKey(context) ?? const SizedBox.shrink(),
-              ],
-            ),
-            const SizedBox(height: 12),
-            if (attack != null || defense != null) ...[
-              GestureDetector(
-                onTap: onToggleFullStats,
-                child: Row(
-                  children: [
-                    Icon(showFullStats ? Icons.expand_less : Icons.expand_more,
-                        size: 16),
-                    const SizedBox(width: 4),
-                    Text(AppLocalizations.of(context)!.fullStats,
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface)),
-                  ],
-                ),
-              ),
-              if (showFullStats)
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  margin: const EdgeInsets.only(top: 8),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .surfaceVariant
-                        .withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (attack != null) ...[
-                              Text(AppLocalizations.of(context)!.attacks,
-                                  style:
-                                      Theme.of(context).textTheme.bodyMedium),
-                              const SizedBox(height: 8),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Stars
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      _buildStarBreakdown(
-                                          context, attack.threeStars, 3),
-                                      const SizedBox(height: 4),
-                                      _buildStarBreakdown(
-                                          context, attack.twoStars, 2),
-                                      const SizedBox(height: 4),
-                                      _buildStarBreakdown(
-                                          context, attack.oneStar, 1),
-                                      const SizedBox(height: 4),
-                                      _buildStarBreakdown(
-                                          context, attack.zeroStar, 0),
-                                    ],
-                                  ),
-                                  const SizedBox(width: 16),
-                                  // Other stats
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          MobileWebImage(
-                                              imageUrl: ImageAssets.sword,
-                                              width: 16,
-                                              height: 16),
-                                          const SizedBox(width: 4),
-                                          Text("${attack.attackCount}",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Row(
-                                        children: [
-                                          MobileWebImage(
-                                              imageUrl: ImageAssets.brokenSword,
-                                              width: 16,
-                                              height: 16),
-                                          const SizedBox(width: 4),
-                                          Text("${attack.missedAttacks}",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Row(
-                                        children: [
-                                          MobileWebImage(
-                                              imageUrl: ImageAssets.attackStar,
-                                              width: 16,
-                                              height: 16),
-                                          const SizedBox(width: 4),
-                                          formatStatWithAverage(
-                                              context,
-                                              "${attack.stars}",
-                                              attack.averageStars
-                                                  ?.toStringAsFixed(1)),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Row(
-                                        children: [
-                                          MobileWebImage(
-                                              imageUrl: ImageAssets.hitrate,
-                                              width: 16,
-                                              height: 16),
-                                          const SizedBox(width: 4),
-                                          formatStatWithAverage(
-                                              context,
-                                              attack.totalDestruction
-                                                  .toStringAsFixed(0),
-                                              attack.averageDestruction
-                                                  ?.toStringAsFixed(0)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ]
-                          ],
+                      getStatFromSortKey(context) ?? const SizedBox.shrink(),
+                      if (attack != null || defense != null) ...[
+                        GestureDetector(
+                          onTap: onToggleFullStats,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(
+                                  showFullStats
+                                      ? Icons.expand_less
+                                      : Icons.expand_more,
+                                  size: 16,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.7)),
+                              const SizedBox(width: 4),
+                              Text(AppLocalizations.of(context)!.fullStats,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge
+                                      ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withValues(alpha: 0.7))),
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        width: 1,
-                        height: 100,
-                        color: Theme.of(context).dividerColor.withOpacity(0.2),
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            if (defense != null) ...[
-                              Text(AppLocalizations.of(context)!.defenses,
-                                  style:
-                                      Theme.of(context).textTheme.bodyMedium),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text("${defense.defenseCount}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium),
-                                  const SizedBox(width: 4),
-                                  MobileWebImage(
-                                      imageUrl: ImageAssets.shieldWithArrow,
-                                      width: 16,
-                                      height: 16),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  formatStatWithAverage(
-                                      context,
-                                      "${defense.stars}",
-                                      defense.averageStars?.toStringAsFixed(1)),
-                                  const SizedBox(width: 8),
-                                  MobileWebImage(
-                                      imageUrl: ImageAssets.attackStar,
-                                      width: 16,
-                                      height: 16),
-                                  const SizedBox(width: 8),
-                                  Text(" | ",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium),
-                                  const SizedBox(width: 8),
-                                  formatStatWithAverage(
-                                      context,
-                                      defense.totalDestruction
-                                          .toStringAsFixed(0),
-                                      defense.averageDestruction
-                                          ?.toStringAsFixed(0)),
-                                  const SizedBox(width: 4),
-                                  MobileWebImage(
-                                      imageUrl: ImageAssets.hitrate,
-                                      width: 16,
-                                      height: 16),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Wrap(
-                                spacing: 12,
-                                runSpacing: 4,
-                                children: [
-                                  _buildStarBreakdown(
-                                      context, defense.threeStars, 3,
-                                      alignRight: true),
-                                  _buildStarBreakdown(
-                                      context, defense.twoStars, 2,
-                                      alignRight: true),
-                                  _buildStarBreakdown(
-                                      context, defense.oneStar, 1,
-                                      alignRight: true),
-                                  _buildStarBreakdown(
-                                      context, defense.zeroStar, 0,
-                                      alignRight: true),
-                                ],
-                              )
-                            ]
-                          ],
-                        ),
-                      )
+                      ],
                     ],
                   ),
-                )
-            ],
+                ),
+              ],
+            ),
+            if (showFullStats) ...[
+              const SizedBox(height: 8),
+              _buildStatsSection(context, attack, defense)
+            ]
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStarBreakdown(BuildContext context, int count, int stars,
-      {bool alignRight = false}) {
-    List<Widget> starIcons = [];
+  Widget _buildStatsSection(BuildContext context, attack, defense) {
+    final attack = member.attackStats;
+    final defense = member.defenseStats;
 
-    // Add filled stars (attackStar)
-    for (int i = 0; i < stars; i++) {
-      starIcons.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 2),
-          child: MobileWebImage(
-            imageUrl: ImageAssets.attackStar,
-            width: 14,
-            height: 14,
-          ),
-        ),
-      );
-    }
-
-    // Add empty stars (star_border)
-    for (int i = stars; i < 3; i++) {
-      starIcons.add(
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 1),
-          child: Icon(Icons.star_border, size: 16),
-        ),
-      );
-    }
-
-    return Row(
-      mainAxisAlignment:
-          alignRight ? MainAxisAlignment.end : MainAxisAlignment.start,
+    return Column(
       children: [
-        Text("$count"),
-        const SizedBox(width: 4),
-        ...starIcons,
+        if (attack != null)
+          Column(
+            children: [
+              Text(AppLocalizations.of(context)!.attacks,
+                  style: Theme.of(context).textTheme.titleSmall),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 16,
+                runAlignment: WrapAlignment.center,
+                runSpacing: 16,
+                children: [
+                  StatTile(
+                      label: 'Attacks',
+                      value: '${attack.attackCount}',
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.sword, width: 16, height: 16)),
+                  StatTile(
+                      label: 'Missed',
+                      value: '${attack.missedAttacks}',
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.brokenSword,
+                          width: 16,
+                          height: 16)),
+                  StatTile(
+                      label: 'Total',
+                      value: '${attack.stars}',
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.attackStar,
+                          width: 16,
+                          height: 16)),
+                  StatTile(
+                      label: 'Avg',
+                      value:
+                          '${attack.averageStars?.toStringAsFixed(1) ?? "0.0"}',
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.attackStar,
+                          width: 16,
+                          height: 16)),
+                  StatTile(
+                      label: '0 Star',
+                      value: '${member.zeroStar}',
+                      icon: buildStarsIcon(0)),
+                  StatTile(
+                      label: '1 Star',
+                      value: '${member.oneStar}',
+                      icon: buildStarsIcon(1)),
+                  StatTile(
+                      label: '2 Stars',
+                      value: '${member.twoStars}',
+                      icon: buildStarsIcon(2)),
+                  StatTile(
+                      label: '3 Stars',
+                      value: '${member.threeStars}',
+                      icon: buildStarsIcon(3)),
+                  StatTile(
+                      label: 'Destruction',
+                      value: '${attack.totalDestruction.toStringAsFixed(1)}%',
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.hitrate,
+                          width: 16,
+                          height: 16)),
+                  StatTile(
+                      label: 'Avg %',
+                      value:
+                          '${attack.averageDestruction?.toStringAsFixed(1) ?? "0.0"}',
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.hitrate,
+                          width: 16,
+                          height: 16)),
+                  StatTile(
+                      label: 'Order',
+                      value: member.avgAttackOrder?.toStringAsFixed(1) ?? "-",
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.clock, width: 16, height: 16)),
+                  StatTile(
+                      label: 'Pos',
+                      value: member.avgMapPosition?.toStringAsFixed(1) ?? "-",
+                      icon: const Icon(Icons.location_pin,
+                          size: 16, color: Colors.redAccent)),
+                  StatTile(
+                      label: 'Opp TH',
+                      value:
+                          member.avgOpponentTownHallLevel?.toStringAsFixed(1) ??
+                              "-",
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.townHall(
+                              member.avgOpponentTownHallLevel?.round() ?? 1),
+                          width: 16,
+                          height: 16)),
+                  StatTile(
+                      label: 'Lower TH',
+                      value: member.attackLowerTHLevel?.toStringAsFixed(0) ?? "-",
+                      icon: Icon(Icons.keyboard_double_arrow_down,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.primary)),
+                  StatTile(
+                      label: 'Upper TH',
+                      value: member.attackUpperTHLevel?.toStringAsFixed(0) ?? "-",
+                      icon: Icon(Icons.keyboard_double_arrow_up,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.secondary)),
+                ],
+              ),
+            ],
+          ),
+        if (defense != null)
+          Column(
+            children: [
+              const SizedBox(height: 18),
+              Text(AppLocalizations.of(context)!.defenses,
+                  style: Theme.of(context).textTheme.titleSmall),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 16,
+                runAlignment: WrapAlignment.center,
+                runSpacing: 16,
+                children: [
+                  StatTile(
+                      label: 'Defenses',
+                      value: '${defense.defenseCount}',
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.shieldWithArrow,
+                          width: 16,
+                          height: 16)),
+                  StatTile(
+                      label: 'Missed',
+                      value: '${defense.missedDefenses}',
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.shield, width: 16, height: 16)),
+                  StatTile(
+                      label: 'Total',
+                      value: '${defense.stars}',
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.attackStar,
+                          width: 16,
+                          height: 16)),
+                  StatTile(
+                      label: 'Avg',
+                      value:
+                          '${defense.averageStars?.toStringAsFixed(1) ?? "0.0"}',
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.attackStar,
+                          width: 16,
+                          height: 16)),
+                  StatTile(
+                      label: '0 Star',
+                      value: '${member.zeroStarDef}',
+                      icon: buildStarsIcon(0)),
+                  StatTile(
+                      label: '1 Star',
+                      value: '${member.oneStarDef}',
+                      icon: buildStarsIcon(1)),
+                  StatTile(
+                      label: '2 Stars',
+                      value: '${member.twoStarsDef}',
+                      icon: buildStarsIcon(2)),
+                  StatTile(
+                      label: '3 Stars',
+                      value: '${member.threeStarsDef}',
+                      icon: buildStarsIcon(3)),
+                  StatTile(
+                      label: 'Destruction',
+                      value: '${defense.totalDestruction.toStringAsFixed(1)}%',
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.hitrate,
+                          width: 16,
+                          height: 16)),
+                  StatTile(
+                      label: 'Avg %',
+                      value:
+                          '${defense.averageDestruction?.toStringAsFixed(1) ?? "0.0"}',
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.hitrate,
+                          width: 16,
+                          height: 16)),
+                  StatTile(
+                      label: 'Order',
+                      value: member.avgDefenseOrder?.toStringAsFixed(1) ?? "-",
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.clock, width: 16, height: 16)),
+                  StatTile(
+                      label: 'Pos',
+                      value:
+                          member.avgAttackerPosition?.toStringAsFixed(1) ?? "-",
+                      icon: const Icon(Icons.location_pin,
+                          size: 16, color: Colors.redAccent)),
+                  StatTile(
+                      label: 'Opp TH',
+                      value:
+                          member.avgAttackerTownHallLevel?.toStringAsFixed(1) ??
+                              "-",
+                      icon: MobileWebImage(
+                          imageUrl: ImageAssets.townHall(
+                              member.avgAttackerTownHallLevel?.round() ?? 1),
+                          width: 16,
+                          height: 16)),
+                  StatTile(
+                      label: 'Lower TH',
+                      value: member.defenseLowerTHLevel?.toStringAsFixed(0) ?? "-",
+                      icon: Icon(Icons.keyboard_double_arrow_down,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.primary)),
+                  StatTile(
+                      label: 'Upper TH',
+                      value: member.defenseUpperTHLevel?.toStringAsFixed(0) ?? "-",
+                      icon: Icon(Icons.keyboard_double_arrow_up,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.secondary)),
+                ],
+              ),
+            ],
+          ),
       ],
     );
+  }
+
+  Widget buildStatCategory(String title, List<StatTile> stats) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Text(title,
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        ),
+        Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          children: stats,
+        ),
+        const SizedBox(height: 12),
+      ],
+    );
+  }
+
+  Widget buildStarsIcon(int filledStars) {
+    List<Widget> stars = [];
+    for (int i = 0; i < 3; i++) {
+      stars.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 1),
+          child: i < filledStars
+              ? MobileWebImage(
+                  imageUrl: ImageAssets.attackStar, width: 12, height: 12)
+              : const Icon(Icons.star_border, size: 14),
+        ),
+      );
+    }
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: stars,
+        ));
   }
 }

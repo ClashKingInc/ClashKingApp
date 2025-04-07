@@ -1,9 +1,9 @@
 class CwlAttackStats {
   final int stars;
-  final int threeStars;
-  final int twoStars;
-  final int oneStar;
-  final int zeroStar;
+  final Map<String, int> threeStars;
+  final Map<String, int> twoStars;
+  final Map<String, int> oneStar;
+  final Map<String, int> zeroStar;
   final double totalDestruction;
   final int attackCount;
   final int missedAttacks;
@@ -33,10 +33,10 @@ class CwlAttackStats {
     try {
       return CwlAttackStats(
         stars: json['stars'] ?? 0,
-        threeStars: json['3_stars'] ?? 0,
-        twoStars: json['2_stars'] ?? 0,
-        oneStar: json['1_star'] ?? 0,
-        zeroStar: json['0_star'] ?? 0,
+        threeStars: Map<String, int>.from(json['3_stars'] ?? {}),
+        twoStars: Map<String, int>.from(json['2_stars'] ?? {}),
+        oneStar: Map<String, int>.from(json['1_star'] ?? {}),
+        zeroStar: Map<String, int>.from(json['0_star'] ?? {}),
         totalDestruction:
             (json['total_destruction'] as num?)?.toDouble() ?? 0.0,
         attackCount: json['attack_count'] ?? 0,
@@ -46,10 +46,10 @@ class CwlAttackStats {
       print("❌ Error parsing CwlAttackStats: $e");
       return CwlAttackStats(
         stars: 0,
-        threeStars: 0,
-        twoStars: 0,
-        oneStar: 0,
-        zeroStar: 0,
+        threeStars: {},
+        twoStars: {},
+        oneStar: {},
+        zeroStar: {},
         totalDestruction: 0.0,
         attackCount: 0,
         missedAttacks: 0,
@@ -71,12 +71,13 @@ class CwlAttackStats {
 
 class CwlDefenseStats {
   final int stars;
-  final int threeStars;
-  final int twoStars;
-  final int oneStar;
-  final int zeroStar;
+  final Map<String, int> threeStars;
+  final Map<String, int> twoStars;
+  final Map<String, int> oneStar;
+  final Map<String, int> zeroStar;
   final double totalDestruction;
   final int defenseCount;
+  final int missedDefenses;
 
   CwlDefenseStats({
     required this.stars,
@@ -86,6 +87,7 @@ class CwlDefenseStats {
     required this.zeroStar,
     required this.totalDestruction,
     required this.defenseCount,
+    required this.missedDefenses,
   });
 
   get averageStars {
@@ -102,24 +104,26 @@ class CwlDefenseStats {
     try {
       return CwlDefenseStats(
         stars: json['stars'] ?? 0,
-        threeStars: json['3_stars'] ?? 0,
-        twoStars: json['2_stars'] ?? 0,
-        oneStar: json['1_star'] ?? 0,
-        zeroStar: json['0_star'] ?? 0,
+        threeStars: Map<String, int>.from(json['3_stars'] ?? {}),
+        twoStars: Map<String, int>.from(json['2_stars'] ?? {}),
+        oneStar: Map<String, int>.from(json['1_star'] ?? {}),
+        zeroStar: Map<String, int>.from(json['0_star'] ?? {}),
         totalDestruction:
             (json['total_destruction'] as num?)?.toDouble() ?? 0.0,
         defenseCount: json['defense_count'] ?? 0,
+        missedDefenses: json['missed_defenses'] ?? 0,
       );
     } catch (e) {
       print("❌ Error parsing CwlDefenseStats: $e");
       return CwlDefenseStats(
         stars: 0,
-        threeStars: 0,
-        twoStars: 0,
-        oneStar: 0,
-        zeroStar: 0,
+        threeStars: {},
+        twoStars: {},
+        oneStar: {},
+        zeroStar: {},
         totalDestruction: 0.0,
         defenseCount: 0,
+        missedDefenses: 0,
       );
     }
   }

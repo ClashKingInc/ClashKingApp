@@ -1,4 +1,5 @@
 import 'package:clashkingapp/features/clan/models/clan_badge.dart';
+import 'package:clashkingapp/features/war_cwl/models/cwl_attacks_defenses_stats.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_member.dart';
 
 class CwlClan {
@@ -23,37 +24,22 @@ class CwlClan {
     return totalAttacks;
   }
 
-  int get threeStars {
-    int totalThreeStars = 0;
+  int _sumStars(Map<String, int> Function(CwlAttackStats) selector) {
+    int total = 0;
     for (var member in members) {
-      totalThreeStars += member.attackStats?.threeStars ?? 0;
+      final stats = member.attackStats;
+      if (stats != null) {
+        final starsMap = selector(stats);
+        total += starsMap.values.fold(0, (a, b) => a + b);
+      }
     }
-    return totalThreeStars;
+    return total;
   }
 
-  int get twoStars {
-    int totalTwoStars = 0;
-    for (var member in members) {
-      totalTwoStars += member.attackStats?.twoStars ?? 0;
-    }
-    return totalTwoStars;
-  }
-
-  int get oneStar {
-    int totalOneStar = 0;
-    for (var member in members) {
-      totalOneStar += member.attackStats?.oneStar ?? 0;
-    }
-    return totalOneStar;
-  }
-
-  int get zeroStar {
-    int totalZeroStar = 0;
-    for (var member in members) {
-      totalZeroStar += member.attackStats?.zeroStar ?? 0;
-    }
-    return totalZeroStar;
-  }
+  int get threeStars => _sumStars((stats) => stats.threeStars);
+  int get twoStars => _sumStars((stats) => stats.twoStars);
+  int get oneStar => _sumStars((stats) => stats.oneStar);
+  int get zeroStar => _sumStars((stats) => stats.zeroStar);
 
   int get defStars {
     int totalDefStars = 0;

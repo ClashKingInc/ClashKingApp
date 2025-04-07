@@ -21,6 +21,7 @@ class CwlMembersTab extends StatefulWidget {
 
 class _CwlMembersTabState extends State<CwlMembersTab> {
   String sortBy = 'stars';
+  final Map<String, GlobalKey> _cardKeys = {};
 
   bool showFullStats = false;
 
@@ -30,9 +31,20 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
     });
   }
 
-  void toggleShowStats() {
+  void toggleShowStats(key) {
     setState(() {
       showFullStats = !showFullStats;
+      Future.delayed(Duration(milliseconds: 200), () {
+        final context = key.currentContext;
+        if (context != null) {
+          Scrollable.ensureVisible(
+            context,
+            duration: Duration(milliseconds: 300),
+            alignment: 0.1,
+            curve: Curves.easeInOut,
+          );
+        }
+      });
     });
   }
 
@@ -68,10 +80,12 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
         ...members.asMap().entries.map((entry) {
           final index = entry.key;
           final member = entry.value;
+          final key = _cardKeys.putIfAbsent(member.tag, () => GlobalKey());
           return MembersCard(
+            key: key,
             sortBy: sortBy,
             showFullStats: showFullStats,
-            onToggleFullStats: toggleShowStats,
+            onToggleFullStats: () => toggleShowStats(key),
             member: member,
             index: index,
           );
