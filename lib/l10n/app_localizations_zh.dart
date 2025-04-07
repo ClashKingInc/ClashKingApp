@@ -478,6 +478,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stats => '统计数据';
 
   @override
+  String get fullStats => 'Full Stats';
+
+  @override
   String get details => '详细信息';
 
   @override
@@ -981,6 +984,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get threeStars => '3 stars';
 
   @override
+  String get attackCount => 'Attack Count';
+
+  @override
+  String get missedAttacks => 'Missed Attacks';
+
+  @override
+  String get defenseStars => 'Defense Stars';
+
+  @override
+  String get defenseDestruction => 'Defense Destruction';
+
+  @override
+  String get defenseAverageStars => 'Defense Avg Stars';
+
+  @override
+  String get defenseAverageDestruction => 'Defense Avg Destruction';
+
+  @override
   String get warParticipation => 'War Participation';
 
   @override
@@ -1143,6 +1164,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get rounds => 'Rounds';
+
+  @override
+  String roundNumber(int number) {
+    return 'Round $number';
+  }
+
+  @override
+  String currentRound(int number) {
+    return 'Current round (Round $number)';
+  }
 
   @override
   String get noDataAvailableForThisWar => 'No data available for this war';

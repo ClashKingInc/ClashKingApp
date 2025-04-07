@@ -24,6 +24,11 @@ class CwlLeague {
       rounds: (json['rounds'] as List)
           .asMap()
           .entries
+          .where((entry) {
+            final warTags =
+                (entry.value['warTags'] as List?)?.cast<String>() ?? [];
+            return warTags.any((tag) => tag != '#0');
+          })
           .map((entry) => CwlLeagueRound.fromJson(entry.value, entry.key))
           .toList(),
     );
@@ -68,5 +73,20 @@ class CwlLeague {
             b.destructionPercentage.compareTo(a.destructionPercentage));
         break;
     }
+  }
+
+  List<CwlLeagueRound> getRounds() {
+    return rounds
+        .where((round) => round.warTags.any((tag) => tag != "#0"))
+        .toList();
+  }
+
+  CwlLeagueRound getCurrentRounds() {
+    if (rounds.length == 1) {
+      return rounds.first;
+    } else if (rounds.length <= 6) {
+      return rounds[rounds.length - 2];
+    }
+    return rounds[rounds.length - 1];
   }
 }

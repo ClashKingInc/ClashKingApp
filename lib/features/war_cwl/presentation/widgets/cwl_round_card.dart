@@ -1,7 +1,5 @@
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
-import 'package:clashkingapp/main_pages/wars_league_page/war/current_war_info_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 
@@ -20,9 +18,10 @@ class RoundClanCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => /*CurrentWarInfoScreen(
+              builder:
+                  (context) => /*CurrentWarInfoScreen(
                   currentWarInfo: warInfo, discordUser: discordUser),*/
-                  const SizedBox.shrink(),
+                      const SizedBox.shrink(),
             ),
           );
         },
@@ -43,8 +42,8 @@ class RoundClanCard extends StatelessWidget {
                               height: 50,
                               width: 50,
                               child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
                                   imageUrl: warInfo.clan!.badgeUrls.small),
                             ),
                             Column(
@@ -52,8 +51,8 @@ class RoundClanCard extends StatelessWidget {
                                 Row(children: [
                                   SizedBox(
                                     child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                                       width: 12,
@@ -69,8 +68,8 @@ class RoundClanCard extends StatelessWidget {
                                 Row(children: [
                                   SizedBox(
                                     child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
                                       imageUrl:
                                           "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                       width: 12,
@@ -100,50 +99,47 @@ class RoundClanCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                          warInfo.state == "preparation"
-                              ? "Starts at ${DateFormat('HH:mm').format(warInfo.startTime!.toLocal())}"
-                              : "Ends at ${DateFormat('HH:mm').format(warInfo.endTime!.toLocal())}",
-                          style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center,),
+                        warInfo.state == "preparation"
+                            ? "Starts at ${DateFormat('HH:mm').format(warInfo.startTime!.toLocal())}"
+                            : "Ends at ${DateFormat('HH:mm').format(warInfo.endTime!.toLocal())}",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             "${warInfo.clan!.stars}",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                                  color: warInfo.clan!.stars >
-                                              warInfo.opponent!.stars ||
-                                          (warInfo.clan!.stars ==
-                                                  warInfo
-                                                      .opponent!.stars &&
-                                              warInfo.clan!
-                                                      .destructionPercentage >
-                                                  warInfo.opponent!
-                                                      .destructionPercentage)
-                                      ? Colors.green
-                                      : null,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      color: warInfo.clan!.stars >
+                                                  warInfo.opponent!.stars ||
+                                              (warInfo.clan!.stars ==
+                                                      warInfo.opponent!.stars &&
+                                                  warInfo.clan!
+                                                          .destructionPercentage >
+                                                      warInfo.opponent!
+                                                          .destructionPercentage)
+                                          ? Colors.green
+                                          : null,
+                                    ),
                           ),
                           Text(" - "),
                           Text(
                             "${warInfo.opponent!.stars}",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                                  color: warInfo.opponent!.stars >
-                                              warInfo.clan!.stars ||
-                                          (warInfo.opponent!.stars ==
-                                                  warInfo.clan!.stars &&
-                                              warInfo.opponent!
-                                                      .destructionPercentage >
-                                                  warInfo.clan!
-                                                      .destructionPercentage)
-                                      ? Colors.green
-                                      : null,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      color: warInfo.opponent!.stars >
+                                                  warInfo.clan!.stars ||
+                                              (warInfo.opponent!.stars ==
+                                                      warInfo.clan!.stars &&
+                                                  warInfo.opponent!
+                                                          .destructionPercentage >
+                                                      warInfo.clan!
+                                                          .destructionPercentage)
+                                          ? Colors.green
+                                          : null,
+                                    ),
                           ),
                         ],
                       ),
@@ -169,8 +165,8 @@ class RoundClanCard extends StatelessWidget {
                                             .labelMedium),
                                     SizedBox(
                                       child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
                                         width: 12,
@@ -188,8 +184,8 @@ class RoundClanCard extends StatelessWidget {
                                             .labelMedium),
                                     SizedBox(
                                       child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
                                         imageUrl:
                                             "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
                                         width: 12,
@@ -203,10 +199,9 @@ class RoundClanCard extends StatelessWidget {
                             height: 50,
                             width: 50,
                             child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                                imageUrl:
-                                    warInfo.opponent!.badgeUrls.small),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                                imageUrl: warInfo.opponent!.badgeUrls.small),
                           ),
                         ],
                       ),

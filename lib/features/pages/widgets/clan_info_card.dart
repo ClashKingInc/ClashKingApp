@@ -49,8 +49,7 @@ class ClanInfoCard extends StatelessWidget {
                           MobileWebImage(
                             imageUrl: ImageAssets.flag(
                                 clanInfo!.location!.countryCode!.toLowerCase()),
-                            width: 16,
-                            height: 20,
+                            height: 10,
                           ),
                         SizedBox(width: 8),
                         Text(

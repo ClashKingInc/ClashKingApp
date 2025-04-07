@@ -4,7 +4,6 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_page.dart';
-import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/legend/player_legend_page.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +12,14 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clipboard/clipboard.dart';
-import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:shimmer/shimmer.dart';
 
 class PlayerInfoHeader extends StatefulWidget {
   final int selectedTab;
-  const PlayerInfoHeader({super.key, required this.selectedTab});
+  final Player player;
+  const PlayerInfoHeader({super.key, required this.selectedTab, required this.player});
 
   @override
   PlayerInfoHeaderState createState() => PlayerInfoHeaderState();
@@ -28,32 +27,19 @@ class PlayerInfoHeader extends StatefulWidget {
 
 class PlayerInfoHeaderState extends State<PlayerInfoHeader>
     with SingleTickerProviderStateMixin {
-  Player? player;
-
-  @override
-  void initState() {
-    super.initState();
-    final playerService = context.read<PlayerService>();
-    final cocAccountService = context.read<CocAccountService>();
-    player = playerService.getSelectedProfile(cocAccountService);
-  }
 
   @override
   Widget build(BuildContext context) {
-    if (player == null) {
-      return Center(child: CircularProgressIndicator());
-    }
-
     // Determine UI elements depending on selected tab
     final String backgroundImageUrl = widget.selectedTab == 0
         ? ImageAssets.homeBaseBackground
         : ImageAssets.builderBaseBackground;
 
     final String hallImageUrl =
-        widget.selectedTab == 0 ? player!.townHallPic : player!.builderHallPic;
+        widget.selectedTab == 0 ? widget.player.townHallPic : widget.player.builderHallPic;
 
     final List<Widget> stars = widget.selectedTab == 0
-        ? _buildStars(player!.townHallWeaponLevel)
+        ? _buildStars(widget.player.townHallWeaponLevel)
         : _buildStars(0);
 
     final Widget hallChips = widget.selectedTab == 0
@@ -173,7 +159,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                 final url =
                     Uri.https('link.clashofclans.com', '/$languageCode', {
                   'action': 'OpenPlayerProfile',
-                  'tag': player!.tag,
+                  'tag': widget.player.tag,
                 });
                 return OpenClashDialog(url: url);
               },
@@ -202,7 +188,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                   : SizedBox(height: 22),
               SizedBox(height: 8),
               Text(
-                player!.name,
+                widget.player.name,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               _buildCopyablePlayerTag(context),
@@ -217,7 +203,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
   Widget _buildCopyablePlayerTag(BuildContext context) {
     return InkWell(
       onTap: () {
-        FlutterClipboard.copy(player!.tag).then((_) {
+        FlutterClipboard.copy(widget.player.tag).then((_) {
           if (context.mounted) {
             final snackBar = SnackBar(
               content: Center(
@@ -237,7 +223,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
       child: Container(
         padding: EdgeInsets.only(top: 2.0, bottom: 10.0),
         child: Text(
-          player!.tag,
+          widget.player.tag,
           style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
         ),
       ),
@@ -261,7 +247,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
     final locale = Localizations.localeOf(context).toString();
 
     return [
-      if (player!.clan != null)
+      if (widget.player.clanTag != "")
         GestureDetector(
           onTap: () async {
             showDialog(
@@ -270,7 +256,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
               builder: (_) => const Center(child: CircularProgressIndicator()),
             );
             final Clan clanInfo =
-                await ClanService().loadClanData(player!.clan!.tag);
+                await ClanService().loadClanData(widget.player.clanTag);
             if (mounted) {
               Navigator.pop(context);
               Navigator.push(
@@ -288,7 +274,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
               backgroundColor: Colors.transparent,
               child: CachedNetworkImage(
                 errorWidget: (context, url, error) => Icon(Icons.error),
-                imageUrl: player!.clan!.badgeUrls.small,
+                imageUrl: widget.player.clanOverview.badgeUrls.small,
               ),
             ),
             label: Shimmer.fromColors(
@@ -299,7 +285,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                   .onSurface
                   .withValues(alpha: 0.3),
               child: Text(
-                player!.clan!.name,
+                widget.player.clanOverview.name,
                 style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
@@ -314,7 +300,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
           ),
         ),
         label: Text(
-          PlayerService().getRoleText(player!.role, context),
+          PlayerService().getRoleText(widget.player.role, context),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -323,11 +309,11 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
           backgroundColor: Colors.transparent,
           child: CachedNetworkImage(
               errorWidget: (context, url, error) => Icon(Icons.error),
-              imageUrl: player!.townHallPic),
+              imageUrl: widget.player.townHallPic),
         ),
         label: Text(
-          AppLocalizations.of(context)?.thLevel(player!.townHallLevel) ??
-              'TH ${player!.townHallLevel}',
+          AppLocalizations.of(context)?.thLevel(widget.player.townHallLevel) ??
+              'TH ${widget.player.townHallLevel}',
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -338,7 +324,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                 errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl: ImageAssets.xp)),
         label: Text(
-          NumberFormat('#,###', locale).format(player!.expLevel),
+          NumberFormat('#,###', locale).format(widget.player.expLevel),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -346,7 +332,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         avatar: Icon(LucideIcons.chevronUp,
             color: const Color.fromARGB(255, 27, 114, 33)),
         label: Text(
-          NumberFormat('#,###', locale).format(player!.donations),
+          NumberFormat('#,###', locale).format(widget.player.donations),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -354,7 +340,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         avatar: Icon(LucideIcons.chevronDown,
             color: const Color.fromARGB(255, 155, 4, 4)),
         label: Text(
-          NumberFormat('#,###', locale).format(player!.donationsReceived),
+          NumberFormat('#,###', locale).format(widget.player.donationsReceived),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -362,10 +348,10 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         avatar: Icon(LucideIcons.chevronsUpDown,
             color: const Color.fromARGB(255, 0, 136, 255)),
         label: Text(
-          (player!.donations /
-                  (player!.donationsReceived == 0
+          (widget.player.donations /
+                  (widget.player.donationsReceived == 0
                       ? 1
-                      : player!.donationsReceived))
+                      : widget.player.donationsReceived))
               .toStringAsFixed(2),
           style: Theme.of(context).textTheme.labelLarge,
         ),
@@ -377,7 +363,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                 errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl: ImageAssets.attackStar)),
         label: Text(
-          NumberFormat('#,###', locale).format(player!.warStars),
+          NumberFormat('#,###', locale).format(widget.player.warStars),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -390,7 +376,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         ),
         label: Text(
           NumberFormat('#,###', locale)
-              .format(player!.clanCapitalContributions),
+              .format(widget.player.clanCapitalContributions),
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -411,13 +397,13 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
             backgroundColor: Colors.transparent,
             child: CachedNetworkImage(
               errorWidget: (context, url, error) => Icon(Icons.error),
-              imageUrl: player!.warPreference == 'in'
+              imageUrl: widget.player.warPreference == 'in'
                   ? ImageAssets.warPreferenceIn
                   : ImageAssets.warPreferenceOut,
             ),
           ),
           label: Text(
-            player!.warPreference == 'in'
+            widget.player.warPreference == 'in'
                 ? AppLocalizations.of(context)!.ready
                 : AppLocalizations.of(context)!.unready,
             style: Theme.of(context).textTheme.labelLarge,
@@ -430,7 +416,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                   errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: ImageAssets.sword)),
           label: Text(
-            NumberFormat('#,###', locale).format(player!.attackWins),
+            NumberFormat('#,###', locale).format(widget.player.attackWins),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
@@ -441,13 +427,13 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                   errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: ImageAssets.shield)),
           label: Text(
-            NumberFormat('#,###', locale).format(player!.defenseWins),
+            NumberFormat('#,###', locale).format(widget.player.defenseWins),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
         // Legend trophies + optional shimmer
-        player!.legendsBySeason != null &&
-                player!.legendsBySeason!.allSeasons.isNotEmpty
+        widget.player.legendsBySeason != null &&
+                widget.player.legendsBySeason!.allSeasons.isNotEmpty
             ? GestureDetector(
                 onTap: () {
                   showDialog(
@@ -467,7 +453,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                 child: Chip(
                   avatar: CircleAvatar(
                     backgroundColor: Colors.transparent,
-                    child: MobileWebImage(imageUrl: player!.leagueUrl),
+                    child: MobileWebImage(imageUrl: widget.player.leagueUrl),
                   ),
                   label: Shimmer.fromColors(
                     period: const Duration(seconds: 3),
@@ -477,7 +463,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                         .onSurface
                         .withValues(alpha: 0.3),
                     child: Text(
-                      NumberFormat('#,###', locale).format(player!.trophies),
+                      NumberFormat('#,###', locale).format(widget.player.trophies),
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
@@ -488,10 +474,10 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                   backgroundColor: Colors.transparent,
                   child: CachedNetworkImage(
                       errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl: player!.leagueUrl),
+                      imageUrl: widget.player.leagueUrl),
                 ),
                 label: Text(
-                  NumberFormat('#,###', locale).format(player!.trophies),
+                  NumberFormat('#,###', locale).format(widget.player.trophies),
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
               ),
@@ -502,7 +488,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                   errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: ImageAssets.bestTrophies)),
           label: Text(
-            NumberFormat('#,###', locale).format(player!.bestTrophies),
+            NumberFormat('#,###', locale).format(widget.player.bestTrophies),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
@@ -526,7 +512,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                   errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: ImageAssets.trophies)),
           label: Text(
-            NumberFormat('#,###', locale).format(player!.builderBaseTrophies),
+            NumberFormat('#,###', locale).format(widget.player.builderBaseTrophies),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
@@ -538,7 +524,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                   imageUrl: ImageAssets.trophies)),
           label: Text(
             NumberFormat('#,###', locale)
-                .format(player!.bestBuilderBaseTrophies),
+                .format(widget.player.bestBuilderBaseTrophies),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),

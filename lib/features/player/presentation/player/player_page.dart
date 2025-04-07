@@ -34,13 +34,13 @@ class PlayerScreenState extends State<PlayerScreen>
 
   @override
   Widget build(BuildContext context) {
-
+    print("Selected player: ${widget.selectedPlayer.tag}");
     return Scaffold(
       body: SingleChildScrollView(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              PlayerInfoHeader(selectedTab: selectedTab),
+              PlayerInfoHeader(selectedTab: selectedTab, player: widget.selectedPlayer),
               ScrollableTab(
                 labelColor: Theme.of(context).colorScheme.onSurface,
                 unselectedLabelColor:

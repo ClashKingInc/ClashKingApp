@@ -193,7 +193,7 @@ class _LegendScreenState extends State<LegendScreen>
                           ),
                         ],
                       ),
-                      PlayerLegendHistory(rankings: player.legendRanking),
+                      PlayerLegendHistory(player: player),
                       showHistoryTable
                           ? PlayerLegendHistoryEosList(
                               rankings: player.legendRanking)

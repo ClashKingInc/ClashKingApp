@@ -19,6 +19,16 @@ class CwlAttackStats {
     required this.missedAttacks,
   });
 
+  get averageStars {
+    if (attackCount == 0) return 0.0;
+    return stars / attackCount;
+  }
+
+  get averageDestruction {
+    if (attackCount == 0) return 0.0;
+    return totalDestruction / attackCount;
+  }
+
   factory CwlAttackStats.fromJson(Map<String, dynamic> json) {
     try {
       return CwlAttackStats(
@@ -77,6 +87,16 @@ class CwlDefenseStats {
     required this.totalDestruction,
     required this.defenseCount,
   });
+
+  get averageStars {
+    if (defenseCount == 0) return 0.0;
+    return stars / defenseCount;
+  }
+
+  get averageDestruction {
+    if (defenseCount == 0) return 0.0;
+    return totalDestruction / defenseCount;
+  }
 
   factory CwlDefenseStats.fromJson(Map<String, dynamic> json) {
     try {

@@ -27,9 +27,8 @@ class NoClanCard extends StatelessWidget {
                     Text(AppLocalizations.of(context)?.noClan ?? 'No Clan',
                         style: (Theme.of(context).textTheme.titleSmall)),
                     Text(
-                        AppLocalizations.of(context)
-                                ?.joinClanToUnlockNewFeatures ??
-                            'Join a clan to unlock new features.',
+                        AppLocalizations.of(context)!
+                            .joinClanToUnlockNewFeatures,
                         style: (Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Theme.of(context).colorScheme.tertiary))),
                   ],

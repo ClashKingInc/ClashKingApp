@@ -90,6 +90,7 @@ class ImageAssets {
   static const String war = "$baseUrl/icons/Icon_DC_War.png";
   static const String builderBaseStar = "$baseUrl/icons/Icon_BB_Star.png";
   static const String sword = "$baseUrl/icons/Icon_HV_Sword.png";
+  static const String brokenSword = "$baseUrl/bot/icons/broken_sword.png";
   static const String shield = "$baseUrl/icons/Icon_HV_Shield.png";
   static const String shieldWithArrow =
       "$baseUrl/icons/Icon_HV_Shield_Arrow.png";
@@ -137,6 +138,8 @@ class ImageAssets {
       "$baseUrl/landscape/legend-landscape.png";
   static const String clanPageBackground =
       "$baseUrl/landscape/clan-landscape.png";
+  static const String cwlPageBackground =
+      "$baseUrl/landscape/cwl-landscape.png";
 
   // 🎭 Heroes & Troops & Others
   static String getHeroImage(String heroName) {

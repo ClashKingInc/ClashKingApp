@@ -100,7 +100,7 @@ class TokenService {
         return webInfo.userAgent ?? "unknown-web-device";
       } else if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
-        return androidInfo.id ?? "unknown-android-device";
+        return androidInfo.id;
       } else if (Platform.isIOS) {
         final iosInfo = await deviceInfo.iosInfo;
         return iosInfo.identifierForVendor ?? "unknown-ios-device";
@@ -122,10 +122,10 @@ class TokenService {
         return webInfo.browserName.name; // ex: "chrome", "safari"
       } else if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
-        return androidInfo.model ?? "unknown-android-model";
+        return androidInfo.model;
       } else if (Platform.isIOS) {
         final iosInfo = await deviceInfo.iosInfo;
-        return iosInfo.name ?? "unknown-ios-name";
+        return iosInfo.name;
       } else {
         return "unsupported-platform";
       }

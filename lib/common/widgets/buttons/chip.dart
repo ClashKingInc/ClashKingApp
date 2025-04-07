@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -65,11 +64,12 @@ class ImageChipState extends State<ImageChip> {
         showDuration: Duration(seconds: 5),
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha : 0.9),
+          color:
+              Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(4),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha : 0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               spreadRadius: 2,
               blurRadius: 2,
               offset: Offset(0, 1),
@@ -84,6 +84,9 @@ class ImageChipState extends State<ImageChip> {
               fit: BoxFit.cover,
             ),
           ),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4))),
           labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
           label: widget.label.isNotEmpty
               ? Text(widget.label,
@@ -167,11 +170,12 @@ class IconChipState extends State<IconChip> {
             ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha : 0.9),
+          color:
+              Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha : 0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               spreadRadius: 2,
               blurRadius: 2,
               offset: Offset(0, 1),
@@ -184,6 +188,9 @@ class IconChipState extends State<IconChip> {
             child: Icon(widget.icon,
                 size: widget.size.toDouble(), color: actualColor),
           ),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4))),
           labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
           label: Text(widget.label,
               style: Theme.of(context)
@@ -260,11 +267,12 @@ class CustomChipState extends State<CustomChip> {
             ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
         margin: EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha : 0.9),
+          color:
+              Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha : 0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               spreadRadius: 2,
               blurRadius: 2,
               offset: Offset(0, 1),

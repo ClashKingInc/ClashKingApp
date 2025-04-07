@@ -1,10 +1,10 @@
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/buttons/info_button.dart';
 
 class LegendHeaderCard extends StatefulWidget {
@@ -17,12 +17,14 @@ class LegendHeaderCard extends StatefulWidget {
 }
 
 class _LegendHeaderCardState extends State<LegendHeaderCard> {
-
-
   @override
   Widget build(BuildContext context) {
-    final currentTrophies =
-        widget.player.legendsBySeason?.currentSeason?.endTrophies ?? 0;
+    final currentSeason = widget.player.legendsBySeason?.currentSeason;
+    int currentTrophies = 0;
+    currentSeason != null
+        ? currentTrophies = currentSeason.endTrophies
+        : widget.player.trophies;
+
     final diffTrophies = currentTrophies - 5000;
 
     return Stack(
@@ -38,9 +40,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                 Colors.black.withValues(alpha: 0.7),
                 BlendMode.darken,
               ),
-              child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+              child: MobileWebImage(
                 imageUrl: ImageAssets.legendPageBackground,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -74,9 +74,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                          MobileWebImage(
                             imageUrl: ImageAssets.legendBlazon,
                             width: 60,
                           ),
@@ -115,9 +113,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                          MobileWebImage(
                             imageUrl: ImageAssets.legendBlazonBorders,
                             width: 60,
                           ),
@@ -140,15 +136,15 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                 spacing: 8,
                                 runSpacing: 0,
                                 children: <Widget>[
-                                  if (widget.player.rankings?.countryCode != null)
+                                  if (widget.player.rankings?.countryCode != "")
                                     Chip(
                                       avatar: CircleAvatar(
                                           backgroundColor: Colors.transparent,
-                                          child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                                              imageUrl: ImageAssets.flag(widget.player
-                                                      .rankings?.countryCode ??
+                                          child: MobileWebImage(
+                                              imageUrl: ImageAssets.flag(widget
+                                                      .player
+                                                      .rankings
+                                                      ?.countryCode ??
                                                   ''))),
                                       label: Text(
                                         widget.player.rankings?.countryName ??
@@ -164,17 +160,19 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                             color: Colors.white, width: 1),
                                       ),
                                     ),
-                                  if (widget.player.rankings?.countryCode != null)
+                                  if (widget.player.rankings?.countryCode != "")
                                     Chip(
                                       avatar: CircleAvatar(
                                           backgroundColor: Colors.transparent,
-                                          child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                                              imageUrl: ImageAssets.flag(widget.player
-                                                      .rankings?.countryCode ??
+                                          child: MobileWebImage(
+                                              imageUrl: ImageAssets.flag(widget
+                                                      .player
+                                                      .rankings
+                                                      ?.countryCode ??
                                                   ''))),
-                                      label: widget.player.rankings?.localRank != 0
+                                      label: widget
+                                                  .player.rankings?.localRank !=
+                                              0
                                           ? Text(
                                               widget.player.rankings?.localRank
                                                       ?.toString() ??
@@ -206,20 +204,18 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                   Chip(
                                     avatar: CircleAvatar(
                                       backgroundColor: Colors.transparent,
-                                      child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                      child: MobileWebImage(
                                           imageUrl: ImageAssets.planet),
                                     ),
                                     label: Text(
-                                        widget.player.rankings?.globalRank != null
+                                        widget.player.rankings?.globalRank != 0
                                             ? NumberFormat(
                                                     '#,###',
                                                     Localizations.localeOf(
                                                             context)
                                                         .toString())
-                                                .format(widget.player
-                                                    .rankings?.globalRank)
+                                                .format(widget.player.rankings
+                                                    ?.globalRank)
                                             : AppLocalizations.of(context)
                                                     ?.noRank ??
                                                 'No rank',

@@ -4,6 +4,7 @@ import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/player/models/player_bb_hero.dart';
 import 'package:clashkingapp/features/player/models/player_bb_troop.dart';
+import 'package:clashkingapp/features/player/models/player_clan.dart';
 import 'package:clashkingapp/features/player/models/player_equipment.dart';
 import 'package:clashkingapp/features/player/models/player_hero.dart';
 import 'package:clashkingapp/features/player/models/player_legend_ranking.dart';
@@ -30,8 +31,8 @@ class Player {
   int builderHallLevel;
   int builderBaseTrophies;
   int bestBuilderBaseTrophies;
-  String clanTag;
   Clan? clan;
+  PlayerClanOverview clanOverview;
   String role;
   String warPreference;
   int donations;
@@ -68,7 +69,7 @@ class Player {
     required this.builderHallLevel,
     required this.builderBaseTrophies,
     required this.bestBuilderBaseTrophies,
-    required this.clanTag,
+    required this.clanOverview,
     required this.role,
     required this.warPreference,
     required this.donations,
@@ -101,6 +102,25 @@ class Player {
       : ImageAssets.warPreferenceOut;
 
   PlayerLegendSeason? get currentLegendSeason => legendsBySeason?.currentSeason;
+
+  String get clanTag => clanOverview.tag;
+
+  PlayerLegendRanking? getBestTrophiesSeason() {
+    return legendRanking.reduce((a, b) => a.trophies > b.trophies ? a : b);
+  }
+
+  PlayerLegendRanking? getBestGlobalRankSeason() {
+    return legendRanking.reduce((a, b) => a.rank < b.rank ? a : b);
+  }
+
+  PlayerLegendRanking? getLastSeason() {
+    return legendRanking.first;
+  }
+
+  PlayerLegendRanking? getBestAttackWinsSeason() {
+    return legendRanking.reduce((a, b) => a.attackWins > b.attackWins ? a : b);
+  }
+
 
   factory Player.fromJson(Map<String, dynamic> json) {
     try {
@@ -147,7 +167,9 @@ class Player {
         builderHallLevel: json["builderHallLevel"] ?? 0,
         builderBaseTrophies: json["builderBaseTrophies"] ?? 0,
         bestBuilderBaseTrophies: json["bestBuilderBaseTrophies"] ?? 0,
-        clanTag: json["clan"]?["tag"] ?? "",
+        clanOverview: json["clan"] != null
+            ? PlayerClanOverview.fromJson(json["clan"])
+            : PlayerClanOverview.empty(),
         role: json["role"] ?? "",
         warPreference: json["warPreference"] ?? "",
         donations: json["donations"] ?? 0,
@@ -156,7 +178,8 @@ class Player {
         league: json["league"]?["name"] ?? "",
         townHallPic: ImageAssets.townHall(json["townHallLevel"] ?? 0),
         builderHallPic: ImageAssets.builderHall(json["builderHallLevel"] ?? 0),
-        leagueUrl: ApiService.cocAssetsProxyUrl(json["league"]?["iconUrls"]?["medium"] ?? ""),
+        leagueUrl: ApiService.cocAssetsProxyUrl(
+            json["league"]?["iconUrls"]?["medium"] ?? ""),
         heroes: (json['heroes'] as List)
             .where((x) => x['village'] == 'home')
             .map((x) => PlayerHero.fromJson(x))
@@ -195,42 +218,41 @@ class Player {
       print("❌ Exception in ProfileInfo.fromJson: $e");
       print(stacktrace);
       return Player(
-        name: "Unknown",
-        tag: "Unknown",
-        townHallLevel: 0,
-        townHallWeaponLevel: 0,
-        expLevel: 0,
-        trophies: 0,
-        bestTrophies: 0,
-        warStars: 0,
-        attackWins: 0,
-        defenseWins: 0,
-        builderHallLevel: 0,
-        builderBaseTrophies: 0,
-        bestBuilderBaseTrophies: 0,
-        clanTag: "",
-        role: "",
-        warPreference: "",
-        donations: 0,
-        donationsReceived: 0,
-        clanCapitalContributions: 0,
-        league: "",
-        townHallPic: "",
-        builderHallPic: "",
-        leagueUrl: "",
-        heroes: [],
-        bbHeroes: [],
-        troops: [],
-        superTroops: [],
-        bbTroops: [],
-        siegeMachines: [],
-        pets: [],
-        spells: [],
-        equipments: [],
-        legendsBySeason: null,
-        legendRanking: [],
-        rankings: null
-      );
+          name: "Unknown",
+          tag: "Unknown",
+          townHallLevel: 0,
+          townHallWeaponLevel: 0,
+          expLevel: 0,
+          trophies: 0,
+          bestTrophies: 0,
+          warStars: 0,
+          attackWins: 0,
+          defenseWins: 0,
+          builderHallLevel: 0,
+          builderBaseTrophies: 0,
+          bestBuilderBaseTrophies: 0,
+          clanOverview: PlayerClanOverview.empty(),
+          role: "",
+          warPreference: "",
+          donations: 0,
+          donationsReceived: 0,
+          clanCapitalContributions: 0,
+          league: "",
+          townHallPic: "",
+          builderHallPic: "",
+          leagueUrl: "",
+          heroes: [],
+          bbHeroes: [],
+          troops: [],
+          superTroops: [],
+          bbTroops: [],
+          siegeMachines: [],
+          pets: [],
+          spells: [],
+          equipments: [],
+          legendsBySeason: null,
+          legendRanking: [],
+          rankings: null);
     }
   }
 }

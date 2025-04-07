@@ -1,10 +1,12 @@
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/player/models/player_legend_day.dart';
+import 'package:clashkingapp/features/player/models/player_legend_season.dart';
 import 'package:clashkingapp/features/player/presentation/legend/player_legend_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/buttons/chip.dart';
@@ -21,22 +23,28 @@ class PlayerLegendCard extends StatelessWidget {
     final cocService = context.watch<CocAccountService>();
     final player = playerService.getSelectedProfile(cocService);
     final isLegend = player!.league == "Legend League";
-    final currentSeason = player.currentLegendSeason;
-    final currentDay = currentSeason?.currentDay;
+    PlayerLegendSeason? currentSeason;
+    PlayerLegendDay? currentDay;
+
+    if (isLegend) {
+      currentSeason = player.currentLegendSeason;
+      currentDay = currentSeason?.currentDay;
+    }
 
     return GestureDetector(
       onTap: () {
-        if (player.legendsBySeason != null) {
+        if (player.legendsBySeason != null &&
+            player.legendsBySeason!.allSeasons.isNotEmpty) {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => LegendScreen(
-              ),
+              builder: (context) => LegendScreen(),
             ),
           );
         }
       },
-      child: player.legendsBySeason != null
+      child: player.legendsBySeason != null &&
+              player.legendsBySeason!.allSeasons.isNotEmpty
           ? Card(
               child: Padding(
                 padding:
@@ -55,9 +63,7 @@ class PlayerLegendCard extends StatelessWidget {
                                   AppLocalizations.of(context)!.legendLeague,
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
-                                CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                MobileWebImage(
                                   imageUrl: ImageAssets.legendBlazon,
                                   width: 100,
                                   height: 100,
@@ -97,31 +103,30 @@ class PlayerLegendCard extends StatelessWidget {
                                           label: player.rankings?.localRank != 0
                                               ? NumberFormat('#,###', Localizations.localeOf(context).toString()).format(
                                                   player.rankings?.localRank)
-                                              : AppLocalizations.of(context)!.noRank,
-                                          description: player.rankings?.localRank != 0
-                                              ? AppLocalizations.of(context)!.legendRankLocalDescription(
-                                                  player.rankings!.countryName ??
-                                                      "",
-                                                  "${player.rankings?.localRank}",
-                                                  "${player.trophies}")
                                               : AppLocalizations.of(context)!
-                                                  .legendNoRankLocalDescription(player.rankings!.countryName ?? "", player.trophies)),
+                                                  .noRank,
+                                          description: player.rankings?.localRank != 0
+                                              ? AppLocalizations.of(context)!
+                                                  .legendRankLocalDescription(
+                                                      player.rankings!.countryName ??
+                                                          "",
+                                                      "${player.rankings?.localRank}",
+                                                      "${player.trophies}")
+                                              : AppLocalizations.of(context)!.legendNoRankLocalDescription(player.rankings!.countryName ?? "", player.trophies)),
                                     if (player.rankings?.countryCode != null &&
                                         player.rankings?.countryCode != "" &&
                                         player.rankings?.globalRank != 0)
                                       ImageChip(
                                           imageUrl: ImageAssets.planet,
-                                          label: player.rankings?.globalRank !=
-                                                  null
-                                              ? NumberFormat('#,###', Localizations.localeOf(context).toString()).format(player.rankings?.globalRank)
+                                          label: player.rankings?.globalRank != null
+                                              ? NumberFormat('#,###', Localizations.localeOf(context).toString()).format(
+                                                  player.rankings?.globalRank)
                                               : "N/A",
-                                          description: player
-                                                      .rankings?.globalRank !=
+                                          description: player.rankings?.globalRank !=
                                                   null
                                               ? AppLocalizations.of(context)!
                                                   .legendGlobalRankDescription(
-                                                      player.rankings
-                                                              ?.globalRank ??
+                                                      player.rankings?.globalRank ??
                                                           0,
                                                       "${player.trophies}")
                                               : AppLocalizations.of(context)!
@@ -129,7 +134,12 @@ class PlayerLegendCard extends StatelessWidget {
                                                       player.trophies)),
                                     ImageChip(
                                       imageUrl: ImageAssets.legendStartFlag,
-                                      label: NumberFormat('#,###', Localizations.localeOf(context).toString()).format(currentDay.startTrophies ?? 0),
+                                      label: NumberFormat(
+                                              '#,###',
+                                              Localizations.localeOf(context)
+                                                  .toString())
+                                          .format(
+                                              currentDay.startTrophies ?? 0),
                                       description: AppLocalizations.of(context)!
                                           .legendStartDescription(
                                               "${currentDay.startTrophies ?? 0}"),
@@ -209,9 +219,9 @@ class PlayerLegendCard extends StatelessWidget {
                                   ],
                                 )
                               : Text(
-                                  AppLocalizations.of(context)!.noLegendData,
-                                  textAlign: TextAlign.center,
-                                ),
+                                  "You're not in Legend League, but past seasons are available.",
+                                  style:
+                                      Theme.of(context).textTheme.labelLarge),
                         ),
                       ],
                     ),

@@ -82,27 +82,21 @@ class PlayerService extends ChangeNotifier {
     final token = await TokenService().getAccessToken();
     if (token == null) throw Exception("User not authenticated");
 
-    final response = await http.post(
-      Uri.parse("${ApiService.apiUrl}/players/full-stats"),
+    playerTag = playerTag.replaceAll("#", "%23");
+
+    final response = await http.get(
+      Uri.parse("${ApiService.apiUrl}/player/$playerTag/full-stats"),
       headers: {
         "Authorization": "Bearer $token",
         "Content-Type": "application/json",
       },
-      body: jsonEncode({"player_tags": [playerTag]}),
     );
 
     try {
       if (response.statusCode == 200) {
         final responseBody = utf8.decode(response.bodyBytes);
         final data = jsonDecode(responseBody);
-
-        if (data.containsKey("items") && data["items"] is List) {
-          return Player.fromJson(data["items"][0]);
-        } else {
-          Sentry.captureMessage("Error loading player data: $data",
-              level: SentryLevel.error);
-          throw Exception("Error loading player data");
-        }
+        return Player.fromJson(data);
       } else {
         Sentry.captureMessage("Error loading player data",
             level: SentryLevel.error);

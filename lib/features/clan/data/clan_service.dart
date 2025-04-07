@@ -76,11 +76,12 @@ class ClanService extends ChangeNotifier {
 
     try {
       print("🏰 Loading clan data for tag: $clanTag");
+      clanTag = clanTag.replaceAll("#", "%23");
       final token = await TokenService().getAccessToken();
       if (token == null) throw Exception("User not authenticated");
 
       final response = await http.get(
-        Uri.parse("${ApiService.apiUrl}/clans/$clanTag"),
+        Uri.parse("${ApiService.apiUrl}/clan/$clanTag/full-stats"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",

@@ -1022,6 +1022,12 @@ abstract class AppLocalizations {
   /// **'Stats'**
   String get stats;
 
+  /// No description provided for @fullStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Stats'**
+  String get fullStats;
+
   /// No description provided for @details.
   ///
   /// In en, this message translates to:
@@ -1904,6 +1910,42 @@ abstract class AppLocalizations {
   /// **'3 stars'**
   String get threeStars;
 
+  /// No description provided for @attackCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Attack Count'**
+  String get attackCount;
+
+  /// No description provided for @missedAttacks.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed Attacks'**
+  String get missedAttacks;
+
+  /// No description provided for @defenseStars.
+  ///
+  /// In en, this message translates to:
+  /// **'Defense Stars'**
+  String get defenseStars;
+
+  /// No description provided for @defenseDestruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Defense Destruction'**
+  String get defenseDestruction;
+
+  /// No description provided for @defenseAverageStars.
+  ///
+  /// In en, this message translates to:
+  /// **'Defense Avg Stars'**
+  String get defenseAverageStars;
+
+  /// No description provided for @defenseAverageDestruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Defense Avg Destruction'**
+  String get defenseAverageDestruction;
+
   /// No description provided for @warParticipation.
   ///
   /// In en, this message translates to:
@@ -2179,6 +2221,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rounds'**
   String get rounds;
+
+  /// No description provided for @roundNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Round {number}'**
+  String roundNumber(int number);
+
+  /// No description provided for @currentRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Current round (Round {number})'**
+  String currentRound(int number);
 
   /// No description provided for @noDataAvailableForThisWar.
   ///

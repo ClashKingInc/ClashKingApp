@@ -68,7 +68,7 @@ class WarCwlPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Card(
-                  color: Theme.of(context).colorScheme.surface.withOpacity(0.1),
+                  color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.2),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Column(
@@ -78,12 +78,11 @@ class WarCwlPage extends StatelessWidget {
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder:
-                                  (context) => /*CurrentLeagueInfoScreen(
-                                  currentLeagueInfo: warCwl.leagueInfo!,
-                                  clanTag: clan.tag,
-                                  clanInfo: clan),*/
-                                      SizedBox.shrink(),
+                              builder: (context) => CwlScreen(
+                                clanTag: clan.tag,
+                                warCwl: warCwl,
+                                clanInfo: cwlClan!,
+                              ),
                             ),
                           ),
                           child: CwlCard(),

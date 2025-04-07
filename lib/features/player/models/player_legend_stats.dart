@@ -17,10 +17,14 @@ class PlayerLegendStats {
   List<PlayerLegendSeason> get allSeasons => seasons.values.toList();
 
   PlayerLegendSeason? get currentSeason {
-    final now = DateTime.now();
-    return seasons.values.firstWhere((season) =>
-        now.isAfter(season.start) &&
-        now.isBefore(season.end.add(Duration(days: 1))));
+    try {
+      final now = DateTime.now();
+      return seasons.values.firstWhere((season) =>
+          now.isAfter(season.start) &&
+          now.isBefore(season.end.add(Duration(days: 1))));
+    } catch (_) {
+      return null;
+    }
   }
 
   PlayerLegendSeason? getSpecificSeason(DateTime date) {

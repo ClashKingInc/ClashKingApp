@@ -38,91 +38,79 @@ class CwlCardState extends State<CwlCard> {
       return SizedBox.shrink();
     }
 
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SizedBox.shrink(),
-          ),
-        );
-      },
-      child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-        child: Card(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 70,
-                  width: 70,
-                  child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                    imageUrl: ImageAssets.leagues[clanWarLeague]!,
-                  ),
-                ),
-                SizedBox(width: 24),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              height: 70,
+              width: 70,
+              child: CachedNetworkImage(
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                imageUrl: ImageAssets.leagues[clanWarLeague]!,
+              ),
+            ),
+            SizedBox(width: 24),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Wrap(
+                    alignment: WrapAlignment.start,
+                    spacing: 7.0,
+                    runSpacing: -7.0,
                     children: [
-                      Wrap(
-                        alignment: WrapAlignment.start,
-                        spacing: 7.0,
-                        runSpacing: -7.0,
-                        children: [
-                          ImageChip(
-                            imageUrl:
-                                "https://assets.clashk.ing/icons/Icon_HV_Podium.png",
-                            labelPadding: 4,
-                            label: "Rank ${clan.rank.toString()}",
-                            description: AppLocalizations.of(context)!
-                                .cwlRank(clan.rank),
-                          ),
-                          ImageChip(
-                            imageUrl: ImageAssets.war,
-                            labelPadding: 2,
-                            label: " Round ${clan.warsPlayed.toString()}",
-                            description: AppLocalizations.of(context)!
-                                .cwlCurrentRound(clan.warsPlayed),
-                          ),
-                          ImageChip(
-                            imageUrl: ImageAssets.builderBaseStar,
-                            labelPadding: 2,
-                            label: clan.stars.toString(),
-                            description: AppLocalizations.of(context)!
-                                .cwlStars(clan.stars),
-                          ),
-                          ImageChip(
-                            imageUrl: ImageAssets.hitrate,
-                            labelPadding: 2,
-                            label: clan.destructionPercentageInflicted
-                                .toStringAsFixed(0),
-                            description: AppLocalizations.of(context)!
-                                .cwlDestructionPercentage(
-                              clan.destructionPercentageInflicted
-                                  .toStringAsFixed(0),
-                            ),
-                          ),
-                          ImageChip(
-                              imageUrl: ImageAssets.sword,
-                              labelPadding: 2,
-                              label:
-                                  "${clan.attacks.toString()}/${warCwl?.teamSize * clan.warsPlayed}",
-                              description: AppLocalizations.of(context)!.cwlTotalAttacks(clan.attacks, warCwl?.teamSize * clan.warsPlayed),),
-                        ],
+                      ImageChip(
+                        imageUrl:
+                            "https://assets.clashk.ing/icons/Icon_HV_Podium.png",
+                        labelPadding: 4,
+                        label: "Rank ${clan.rank.toString()}",
+                        description:
+                            AppLocalizations.of(context)!.cwlRank(clan.rank),
+                      ),
+                      ImageChip(
+                        imageUrl: ImageAssets.war,
+                        labelPadding: 2,
+                        label: " Round ${clan.warsPlayed.toString()}",
+                        description: AppLocalizations.of(context)!
+                            .cwlCurrentRound(clan.warsPlayed),
+                      ),
+                      ImageChip(
+                        imageUrl: ImageAssets.builderBaseStar,
+                        labelPadding: 2,
+                        label: clan.stars.toString(),
+                        description:
+                            AppLocalizations.of(context)!.cwlStars(clan.stars),
+                      ),
+                      ImageChip(
+                        imageUrl: ImageAssets.hitrate,
+                        labelPadding: 2,
+                        label: clan.destructionPercentageInflicted
+                            .toStringAsFixed(0),
+                        description: AppLocalizations.of(context)!
+                            .cwlDestructionPercentage(
+                          clan.destructionPercentageInflicted
+                              .toStringAsFixed(0),
+                        ),
+                      ),
+                      ImageChip(
+                        imageUrl: ImageAssets.sword,
+                        labelPadding: 2,
+                        label:
+                            "${clan.attackCount.toString()}/${warCwl?.teamSize * clan.warsPlayed}",
+                        description: AppLocalizations.of(context)!
+                            .cwlTotalAttacks(clan.attackCount,
+                                warCwl?.teamSize * clan.warsPlayed),
                       ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

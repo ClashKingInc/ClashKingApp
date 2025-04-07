@@ -1,3 +1,4 @@
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,7 +8,6 @@ class MobileWebImage extends StatelessWidget {
   final BoxFit fit;
   final double? width;
   final double? height;
-  final String fallbackAsset;
 
   const MobileWebImage({
     super.key,
@@ -15,7 +15,6 @@ class MobileWebImage extends StatelessWidget {
     this.fit = BoxFit.cover,
     this.width,
     this.height,
-    this.fallbackAsset = 'assets/images/fallback.png',
   });
 
   @override
@@ -26,8 +25,8 @@ class MobileWebImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
-        errorBuilder: (_, __, ___) => Image.asset(
-          fallbackAsset,
+        errorBuilder: (_, __, ___) => Image.network(
+          ImageAssets.defaultImage,
           width: width,
           height: height,
           fit: fit,
@@ -40,8 +39,8 @@ class MobileWebImage extends StatelessWidget {
         height: height,
         fit: fit,
         placeholder: (_, __) => const SizedBox.shrink(),
-        errorWidget: (_, __, ___) => Image.asset(
-          fallbackAsset,
+        errorWidget: (_, __, ___) => Image.network(
+          ImageAssets.defaultImage,
           width: width,
           height: height,
           fit: fit,

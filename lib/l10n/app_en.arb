@@ -310,6 +310,7 @@
 },
 "date": "Date",
 "stats": "Stats",
+"fullStats": "Full Stats",
 "details": "Details",
 "seasonStats": "Season Stats",
 "charts": "Charts",
@@ -743,6 +744,12 @@
 "oneStar": "1 star",
 "twoStars": "2 stars",
 "threeStars": "3 stars",
+"attackCount": "Attack Count",
+"missedAttacks": "Missed Attacks",
+"defenseStars": "Defense Stars",
+"defenseDestruction": "Defense Destruction",
+"defenseAverageStars": "Defense Avg Stars",
+"defenseAverageDestruction": "Defense Avg Destruction",
 "warParticipation": "War Participation",
 "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
 "@toggleTownHallVisibility": {
@@ -920,6 +927,22 @@
 "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
 "warLogClosed": "War log closed.",
 "rounds": "Rounds",
+"roundNumber": "Round {number}",
+"@roundNumber": {
+    "placeholders": {
+        "number": {
+            "type": "int"
+        }
+    }
+},
+"currentRound": "Current round (Round {number})",
+"@currentRound": {
+    "placeholders": {
+        "number": {
+            "type": "int"
+        }
+    }
+},
 "noDataAvailableForThisWar": "No data available for this war",
 "stateOfTheWar": "State of the war",
 "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
