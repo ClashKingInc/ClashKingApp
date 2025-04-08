@@ -534,6 +534,31 @@
     }
 },
 "justNow": "Just Now",
+"endedJustNow": "Ended just now",
+"endedMinutesAgo": "Ended {minutes} minutes ago",
+"@endedMinutesAgo": {
+    "placeholders": {
+        "minutes": {
+            "type": "int"
+        }
+    }
+},
+"endedHoursAgo": "Ended {hours} hours ago",
+"@endedHoursAgo": {
+    "placeholders": {
+        "hours": {
+            "type": "int"
+        }
+    }
+},
+"endedDaysAgo": "Ended {days} days ago",
+"@endedDaysAgo": {
+    "placeholders": {
+        "days": {
+            "type": "int"
+        }
+    }
+},
 "trophiesByMonth": "Trophies by month",
 "trophiesBySeason": "Trophies by season",
 "eosTrophies": "End Of Season Trophies",
@@ -740,17 +765,67 @@
 },
 "averageStars": "Average stars",
 "averageDestruction": "Average destruction",
-"noStars": "0 star",
 "oneStar": "1 star",
 "twoStars": "2 stars",
 "threeStars": "3 stars",
+"highDestruction": "High destruction",
+"lowDestruction": "Low destruction",
+"avg" : "Avg",
+"@avg": {
+    "description": "Abbreviation for average"
+},
+"avgPercentage": "Avg %",
+"@avgPercentage": {
+    "description": "Abbreviation for average percentage"
+},
 "attackCount": "Attack Count",
 "missedAttacks": "Missed Attacks",
+"order": "Order",
+"@order": {
+    "description": "Order of the player in the clan"
+},
 "defenseStars": "Defense Stars",
 "defenseDestruction": "Defense Destruction",
 "defenseAverageStars": "Defense Avg Stars",
 "defenseAverageDestruction": "Defense Avg Destruction",
+"zeroStar": "0 Star",
+"defZeroStar": "0 Star (def)",
+"defOneStar": "1 Star (def)",
+"defTwoStars": "2 Stars (def)",
+"defThreeStars": "3 Stars (def)",
+"lowerTownHallAttack": "Lower TH Attack",
+"upperTownHallAttack": "Upper TH Attack",
+"lowerTownHallDefense": "Lower TH Defense",
+"upperTownHallDefense": "Upper TH Defense",
 "warParticipation": "War Participation",
+"missed": "Missed",
+"@missed": {
+    "description": "Missed attacks"
+},
+"totalStars": "Total",
+"averageAbbr": "Avg",
+"@averageAbbr": {
+    "description": "Abbreviation for average"
+},
+"destruction": "Destruction",
+"averageDestructionAbbr": "Avg %",
+"@averageDestructionAbbr": {
+    "description": "Abbreviation for average destruction percentage"
+},
+"mapPosition": "Map Position",
+"@mapPosition": {
+    "description": "Map position in war"
+},
+"pos": "Pos",
+"@pos": {
+    "description": "Abbreviation for map position"
+},
+"oppTownhall": "Opp TH",
+"@oppTownhall": {
+    "description": "Abbreviation for opponent's town hall level"
+},
+"lowerTownhall": "Lower TH",
+"upperTownhall": "Upper TH",
 "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
 "@toggleTownHallVisibility": {
     "description": "For example, hide stats from TH15 and below if the player is now TH16"
@@ -894,8 +969,25 @@
 "enemiesTeam": "Enemies",
 "defense": "Defense",
 "defenses": "Defenses",
+"bestDefenseOutOf": "Best defense (out of {number})",
+"@bestDefenseOutOf": {
+    "placeholders": {
+        "number": {
+            "type": "int"
+        }
+    },
+    "description": "Best war defense (out of 3 defenses)"
+},
 "attack": "Attack",
 "attacks": "Attacks",
+"noAttackYet": "No attack yet",
+"@noAttackYet": {
+    "description": "No attack yet in war"
+},
+"noDefenseYet": "No defense yet",
+"@noDefenseYet": {
+    "description": "No defense yet in war"
+},
 "victory": "Victory",
 "defeat": "Defeat",
 "draw": "Draw",

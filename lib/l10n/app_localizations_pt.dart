@@ -715,6 +715,24 @@ class AppLocalizationsPt extends AppLocalizations {
   String get justNow => 'Agora mesmo';
 
   @override
+  String get endedJustNow => 'Ended just now';
+
+  @override
+  String endedMinutesAgo(int minutes) {
+    return 'Ended $minutes minutes ago';
+  }
+
+  @override
+  String endedHoursAgo(int hours) {
+    return 'Ended $hours hours ago';
+  }
+
+  @override
+  String endedDaysAgo(int days) {
+    return 'Ended $days days ago';
+  }
+
+  @override
   String get trophiesByMonth => 'Troféus por mês';
 
   @override
@@ -972,9 +990,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get averageDestruction => 'Destruição média';
 
   @override
-  String get noStars => '0 estrelas';
-
-  @override
   String get oneStar => '1 estrela';
 
   @override
@@ -984,10 +999,25 @@ class AppLocalizationsPt extends AppLocalizations {
   String get threeStars => '3 estrelas';
 
   @override
+  String get highDestruction => 'High destruction';
+
+  @override
+  String get lowDestruction => 'Low destruction';
+
+  @override
+  String get avg => 'Avg';
+
+  @override
+  String get avgPercentage => 'Avg %';
+
+  @override
   String get attackCount => 'Attack Count';
 
   @override
   String get missedAttacks => 'Missed Attacks';
+
+  @override
+  String get order => 'Order';
 
   @override
   String get defenseStars => 'Defense Stars';
@@ -1002,7 +1032,64 @@ class AppLocalizationsPt extends AppLocalizations {
   String get defenseAverageDestruction => 'Defense Avg Destruction';
 
   @override
+  String get zeroStar => '0 Star';
+
+  @override
+  String get defZeroStar => '0 Star (def)';
+
+  @override
+  String get defOneStar => '1 Star (def)';
+
+  @override
+  String get defTwoStars => '2 Stars (def)';
+
+  @override
+  String get defThreeStars => '3 Stars (def)';
+
+  @override
+  String get lowerTownHallAttack => 'Lower TH Attack';
+
+  @override
+  String get upperTownHallAttack => 'Upper TH Attack';
+
+  @override
+  String get lowerTownHallDefense => 'Lower TH Defense';
+
+  @override
+  String get upperTownHallDefense => 'Upper TH Defense';
+
+  @override
   String get warParticipation => 'Participação na guerra';
+
+  @override
+  String get missed => 'Missed';
+
+  @override
+  String get totalStars => 'Total';
+
+  @override
+  String get averageAbbr => 'Avg';
+
+  @override
+  String get destruction => 'Destruction';
+
+  @override
+  String get averageDestructionAbbr => 'Avg %';
+
+  @override
+  String get mapPosition => 'Map Position';
+
+  @override
+  String get pos => 'Pos';
+
+  @override
+  String get oppTownhall => 'Opp TH';
+
+  @override
+  String get lowerTownhall => 'Lower TH';
+
+  @override
+  String get upperTownhall => 'Upper TH';
 
   @override
   String get toggleTownHallVisibility => 'Ocultar/Mostrar estatísticas de níveis de CV antigos';
@@ -1114,10 +1201,21 @@ class AppLocalizationsPt extends AppLocalizations {
   String get defenses => 'Defesas';
 
   @override
+  String bestDefenseOutOf(int number) {
+    return 'Best defense (out of $number)';
+  }
+
+  @override
   String get attack => 'Ataque';
 
   @override
   String get attacks => 'Ataques';
+
+  @override
+  String get noAttackYet => 'No attack yet';
+
+  @override
+  String get noDefenseYet => 'No defense yet';
 
   @override
   String get victory => 'Vitória';

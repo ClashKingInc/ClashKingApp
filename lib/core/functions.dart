@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart' as material;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
@@ -10,6 +11,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:io' show Platform;
+import 'package:clashkingapp/l10n/app_localizations.dart';
 
 final String clientId = dotenv.env['DISCORD_CLIENT_ID']!;
 final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
@@ -195,3 +197,24 @@ Future<String> getAppAndDeviceInfo() async {
 
   return 'Version: $version (Build $buildNumber)\n$deviceData';
 }
+
+String getEndedAgoText(DateTime? endTime, material.BuildContext context) {
+  if (endTime == null) return AppLocalizations.of(context)!.unknown;
+
+  final localEndTime = endTime.toLocal();
+  final now = DateTime.now();
+  final difference = now.difference(localEndTime);
+
+  final l10n = AppLocalizations.of(context)!;
+
+  if (difference.inMinutes < 1) {
+    return l10n.endedJustNow; // "Ended just now"
+  } else if (difference.inMinutes < 60) {
+    return l10n.endedMinutesAgo(difference.inMinutes); // "Ended X minutes ago"
+  } else if (difference.inHours < 24) {
+    return l10n.endedHoursAgo(difference.inHours); // "Ended X hours ago"
+  } else {
+    return l10n.endedDaysAgo(difference.inDays); // "Ended X days ago"
+  }
+}
+

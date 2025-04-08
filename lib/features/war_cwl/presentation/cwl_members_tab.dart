@@ -57,11 +57,23 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
       AppLocalizations.of(context)!.averageDestruction: 'averagePercentage',
       AppLocalizations.of(context)!.attackCount: 'attackCount',
       AppLocalizations.of(context)!.missedAttacks: 'missedAttacks',
+      AppLocalizations.of(context)!.zeroStar: '0stars',
+      AppLocalizations.of(context)!.oneStar: '1stars',
+      AppLocalizations.of(context)!.twoStars: '2stars',
+      AppLocalizations.of(context)!.threeStars: '3stars',
+      AppLocalizations.of(context)!.lowerTownHallAttack: 'attackLowerTH',
+      AppLocalizations.of(context)!.upperTownHallAttack: 'attackUpperTH',
       AppLocalizations.of(context)!.defenseStars: 'defStars',
       AppLocalizations.of(context)!.defenseDestruction: 'defDestruction',
       AppLocalizations.of(context)!.defenseAverageStars: 'defAverageStars',
       AppLocalizations.of(context)!.defenseAverageDestruction:
           'defAverageDestruction',
+      AppLocalizations.of(context)!.defZeroStar: 'def0stars',
+      AppLocalizations.of(context)!.defOneStar: 'def1stars',
+      AppLocalizations.of(context)!.defTwoStars: 'def2stars',
+      AppLocalizations.of(context)!.defThreeStars: 'def3stars',
+      AppLocalizations.of(context)!.lowerTownHallDefense: 'defenseLowerTH',
+      AppLocalizations.of(context)!.upperTownHallDefense: 'defenseUpperTH',
     };
 
     final members =
@@ -136,6 +148,51 @@ void sortCwlMembers(List<CwlMember> members, String sortBy) {
     case 'defAverageDestruction':
       members.sort((a, b) => (b.defenseStats?.averageDestruction ?? 0)
           .compareTo(a.defenseStats?.averageDestruction ?? 0));
+      break;
+    case '0stars':
+      members.sort((a, b) => (b.zeroStar).compareTo(a.zeroStar));
+      break;
+    case '1stars':
+      members.sort((a, b) => (b.oneStar).compareTo(a.oneStar));
+      break;
+    case '2stars':
+      members.sort((a, b) => (b.twoStars).compareTo(a.twoStars));
+      break;
+    case '3stars':
+      members.sort((a, b) => (b.threeStars).compareTo(a.threeStars));
+      break;
+    case 'attackLowerTH':
+      members.sort((a, b) =>
+          (b.attackLowerTHLevel ?? 0).compareTo(a.attackLowerTHLevel ?? 0));
+      break;
+    case 'attackUpperTH':
+      members.sort((a, b) =>
+          (b.attackUpperTHLevel ?? 0).compareTo(a.attackUpperTHLevel ?? 0));
+      break;
+    case 'def0stars':
+      members.sort((a, b) => (b.zeroStarDef).compareTo(a.zeroStarDef));
+      break;
+    case 'def1stars':
+      members.sort((a, b) => (b.oneStarDef).compareTo(a.oneStarDef));
+      break;
+    case 'def2stars':
+      members.sort((a, b) => (b.twoStarsDef).compareTo(a.twoStarsDef));
+      break;
+    case 'def3stars':
+      members.sort((a, b) => (b.threeStarsDef).compareTo(a.threeStarsDef));
+      break;
+    case 'defenseLowerTH':
+      members.sort((a, b) =>
+          (b.defenseLowerTHLevel ?? 0).compareTo(a.defenseLowerTHLevel ?? 0));
+      break;
+    case 'defenseUpperTH':
+      members.sort((a, b) =>
+          (b.defenseUpperTHLevel ?? 0).compareTo(a.defenseUpperTHLevel ?? 0));
+      break;
+
+    default:
+      members.sort((a, b) =>
+          (b.attackStats?.stars ?? 0).compareTo(a.attackStats?.stars ?? 0));
       break;
   }
 }

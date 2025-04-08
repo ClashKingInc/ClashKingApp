@@ -1424,6 +1424,30 @@ abstract class AppLocalizations {
   /// **'Just Now'**
   String get justNow;
 
+  /// No description provided for @endedJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended just now'**
+  String get endedJustNow;
+
+  /// No description provided for @endedMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended {minutes} minutes ago'**
+  String endedMinutesAgo(int minutes);
+
+  /// No description provided for @endedHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended {hours} hours ago'**
+  String endedHoursAgo(int hours);
+
+  /// No description provided for @endedDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended {days} days ago'**
+  String endedDaysAgo(int days);
+
   /// No description provided for @trophiesByMonth.
   ///
   /// In en, this message translates to:
@@ -1886,12 +1910,6 @@ abstract class AppLocalizations {
   /// **'Average destruction'**
   String get averageDestruction;
 
-  /// No description provided for @noStars.
-  ///
-  /// In en, this message translates to:
-  /// **'0 star'**
-  String get noStars;
-
   /// No description provided for @oneStar.
   ///
   /// In en, this message translates to:
@@ -1910,6 +1928,30 @@ abstract class AppLocalizations {
   /// **'3 stars'**
   String get threeStars;
 
+  /// No description provided for @highDestruction.
+  ///
+  /// In en, this message translates to:
+  /// **'High destruction'**
+  String get highDestruction;
+
+  /// No description provided for @lowDestruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Low destruction'**
+  String get lowDestruction;
+
+  /// Abbreviation for average
+  ///
+  /// In en, this message translates to:
+  /// **'Avg'**
+  String get avg;
+
+  /// Abbreviation for average percentage
+  ///
+  /// In en, this message translates to:
+  /// **'Avg %'**
+  String get avgPercentage;
+
   /// No description provided for @attackCount.
   ///
   /// In en, this message translates to:
@@ -1921,6 +1963,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Missed Attacks'**
   String get missedAttacks;
+
+  /// Order of the player in the clan
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get order;
 
   /// No description provided for @defenseStars.
   ///
@@ -1946,11 +1994,125 @@ abstract class AppLocalizations {
   /// **'Defense Avg Destruction'**
   String get defenseAverageDestruction;
 
+  /// No description provided for @zeroStar.
+  ///
+  /// In en, this message translates to:
+  /// **'0 Star'**
+  String get zeroStar;
+
+  /// No description provided for @defZeroStar.
+  ///
+  /// In en, this message translates to:
+  /// **'0 Star (def)'**
+  String get defZeroStar;
+
+  /// No description provided for @defOneStar.
+  ///
+  /// In en, this message translates to:
+  /// **'1 Star (def)'**
+  String get defOneStar;
+
+  /// No description provided for @defTwoStars.
+  ///
+  /// In en, this message translates to:
+  /// **'2 Stars (def)'**
+  String get defTwoStars;
+
+  /// No description provided for @defThreeStars.
+  ///
+  /// In en, this message translates to:
+  /// **'3 Stars (def)'**
+  String get defThreeStars;
+
+  /// No description provided for @lowerTownHallAttack.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower TH Attack'**
+  String get lowerTownHallAttack;
+
+  /// No description provided for @upperTownHallAttack.
+  ///
+  /// In en, this message translates to:
+  /// **'Upper TH Attack'**
+  String get upperTownHallAttack;
+
+  /// No description provided for @lowerTownHallDefense.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower TH Defense'**
+  String get lowerTownHallDefense;
+
+  /// No description provided for @upperTownHallDefense.
+  ///
+  /// In en, this message translates to:
+  /// **'Upper TH Defense'**
+  String get upperTownHallDefense;
+
   /// No description provided for @warParticipation.
   ///
   /// In en, this message translates to:
   /// **'War Participation'**
   String get warParticipation;
+
+  /// Missed attacks
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get missed;
+
+  /// No description provided for @totalStars.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get totalStars;
+
+  /// Abbreviation for average
+  ///
+  /// In en, this message translates to:
+  /// **'Avg'**
+  String get averageAbbr;
+
+  /// No description provided for @destruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Destruction'**
+  String get destruction;
+
+  /// Abbreviation for average destruction percentage
+  ///
+  /// In en, this message translates to:
+  /// **'Avg %'**
+  String get averageDestructionAbbr;
+
+  /// Map position in war
+  ///
+  /// In en, this message translates to:
+  /// **'Map Position'**
+  String get mapPosition;
+
+  /// Abbreviation for map position
+  ///
+  /// In en, this message translates to:
+  /// **'Pos'**
+  String get pos;
+
+  /// Abbreviation for opponent's town hall level
+  ///
+  /// In en, this message translates to:
+  /// **'Opp TH'**
+  String get oppTownhall;
+
+  /// No description provided for @lowerTownhall.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower TH'**
+  String get lowerTownhall;
+
+  /// No description provided for @upperTownhall.
+  ///
+  /// In en, this message translates to:
+  /// **'Upper TH'**
+  String get upperTownhall;
 
   /// For example, hide stats from TH15 and below if the player is now TH16
   ///
@@ -2126,6 +2288,12 @@ abstract class AppLocalizations {
   /// **'Defenses'**
   String get defenses;
 
+  /// Best war defense (out of 3 defenses)
+  ///
+  /// In en, this message translates to:
+  /// **'Best defense (out of {number})'**
+  String bestDefenseOutOf(int number);
+
   /// No description provided for @attack.
   ///
   /// In en, this message translates to:
@@ -2137,6 +2305,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Attacks'**
   String get attacks;
+
+  /// No attack yet in war
+  ///
+  /// In en, this message translates to:
+  /// **'No attack yet'**
+  String get noAttackYet;
+
+  /// No defense yet in war
+  ///
+  /// In en, this message translates to:
+  /// **'No defense yet'**
+  String get noDefenseYet;
 
   /// No description provided for @victory.
   ///

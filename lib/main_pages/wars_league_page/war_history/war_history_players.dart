@@ -463,7 +463,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                         "Three Stars Attacks",
                     AppLocalizations.of(context)!.twoStars: "Two Stars Attacks",
                     AppLocalizations.of(context)!.oneStar: "One Star Attacks",
-                    AppLocalizations.of(context)!.noStars: "No Star Attacks",
+                    AppLocalizations.of(context)!.zeroStar: "No Star Attacks",
                     AppLocalizations.of(context)!.averageDestruction:
                         "Average Destruction",
                     AppLocalizations.of(context)!.averageStars: "Average Stars",

@@ -5,6 +5,7 @@ class WarMember {
   final String name;
   final int townhallLevel;
   final int mapPosition;
+  final int opponentAttacks;
   final List<WarAttack>? attacks;
   final WarAttack? bestOpponentAttack;
 
@@ -13,6 +14,7 @@ class WarMember {
     required this.name,
     required this.townhallLevel,
     required this.mapPosition,
+    required this.opponentAttacks,
     this.attacks,
     this.bestOpponentAttack,
   });
@@ -23,6 +25,7 @@ class WarMember {
       name: json['name'],
       townhallLevel: json['townhallLevel'],
       mapPosition: json['mapPosition'],
+      opponentAttacks: json['opponentAttacks'] ?? 0,
       attacks: (json['attacks'] as List<dynamic>?)
           ?.map((e) => WarAttack.fromJson(e))
           .toList(),
@@ -38,6 +41,7 @@ class WarMember {
       'name': name,
       'townhallLevel': townhallLevel,
       'mapPosition': mapPosition,
+      'opponentAttacks': opponentAttacks,
       'attacks': attacks?.map((e) => e.toJson()).toList(),
       'bestOpponentAttack': bestOpponentAttack?.toJson(),
     };

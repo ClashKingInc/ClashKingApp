@@ -1,4 +1,7 @@
+import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war_info.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
@@ -18,10 +21,7 @@ class RoundClanCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder:
-                  (context) => /*CurrentWarInfoScreen(
-                  currentWarInfo: warInfo, discordUser: discordUser),*/
-                      const SizedBox.shrink(),
+              builder: (context) => WarInfoScreen(war: warInfo),
             ),
           );
         },
@@ -53,8 +53,7 @@ class RoundClanCard extends StatelessWidget {
                                     child: CachedNetworkImage(
                                       errorWidget: (context, url, error) =>
                                           Icon(Icons.error),
-                                      imageUrl:
-                                          "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
+                                      imageUrl: ImageAssets.sword,
                                       width: 12,
                                       height: 12,
                                     ),
@@ -70,8 +69,7 @@ class RoundClanCard extends StatelessWidget {
                                     child: CachedNetworkImage(
                                       errorWidget: (context, url, error) =>
                                           Icon(Icons.error),
-                                      imageUrl:
-                                          "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
+                                      imageUrl: ImageAssets.hitrate,
                                       width: 12,
                                       height: 12,
                                     ),
@@ -101,7 +99,9 @@ class RoundClanCard extends StatelessWidget {
                       Text(
                         warInfo.state == "preparation"
                             ? "Starts at ${DateFormat('HH:mm').format(warInfo.startTime!.toLocal())}"
-                            : "Ends at ${DateFormat('HH:mm').format(warInfo.endTime!.toLocal())}",
+                            : warInfo.state == "inWar"
+                                ? "Ends at ${DateFormat('HH:mm').format(warInfo.endTime!.toLocal())}"
+                                : getEndedAgoText(warInfo.endTime, context),
                         style: Theme.of(context).textTheme.bodyMedium,
                         textAlign: TextAlign.center,
                       ),

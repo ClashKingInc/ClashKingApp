@@ -1,4 +1,5 @@
 import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
 
 class WarInfo {
   final String? tag;
@@ -42,5 +43,31 @@ class WarInfo {
       opponent:
           json['opponent'] != null ? WarClan.fromJson(json['opponent']) : null,
     );
+  }
+
+  /// Return a WarMember from either clan or opponent by tag
+  WarMember? getMemberByTag(String tag) {
+    try {
+      return (clan?.members ?? []).firstWhere((m) => m.tag == tag,
+          orElse: () =>
+              (opponent?.members ?? []).firstWhere((m) => m.tag == tag));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Get the TH level from a tag
+  int? getTownhallLevelByTag(String tag) {
+    return getMemberByTag(tag)?.townhallLevel;
+  }
+
+  /// Get the map position from a tag
+  int? getMapPositionByTag(String tag) {
+    return getMemberByTag(tag)?.mapPosition;
+  }
+
+  /// Get the name from a tag
+  String? getNameByTag(String tag) {
+    return getMemberByTag(tag)?.name;
   }
 }
