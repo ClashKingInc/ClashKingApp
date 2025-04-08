@@ -5,8 +5,8 @@ import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class WarStatisticsCard extends StatelessWidget {
-  const WarStatisticsCard({
+class WarStatisticsTab extends StatelessWidget {
+  const WarStatisticsTab({
     super.key,
     required this.warInfo,
   });

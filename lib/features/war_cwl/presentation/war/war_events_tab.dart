@@ -1,3 +1,5 @@
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
@@ -8,16 +10,16 @@ import 'package:clashkingapp/features/war_cwl/data/war_functions.dart'
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class WarEventsCard extends StatefulWidget {
+class WarEventsTab extends StatefulWidget {
   final WarInfo warInfo;
 
-  const WarEventsCard({super.key, required this.warInfo});
+  const WarEventsTab({super.key, required this.warInfo});
 
   @override
-  State<WarEventsCard> createState() => _WarEventsCardState();
+  State<WarEventsTab> createState() => _WarEventsTabState();
 }
 
-class _WarEventsCardState extends State<WarEventsCard> {
+class _WarEventsTabState extends State<WarEventsTab> {
   String filterOption = 'All';
 
   void updateFilterOption(String newOption) {
@@ -67,10 +69,8 @@ class _WarEventsCardState extends State<WarEventsCard> {
           SizedBox(
             width: 40,
             height: 40,
-            child: CachedNetworkImage(
-              imageUrl:
-                  'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${member!.townhallLevel}.png',
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+            child: MobileWebImage(
+              imageUrl:ImageAssets.townHall(member?.townhallLevel ?? 1),
             ),
           ),
         const SizedBox(width: 4),
@@ -92,10 +92,8 @@ class _WarEventsCardState extends State<WarEventsCard> {
           SizedBox(
             width: 40,
             height: 40,
-            child: CachedNetworkImage(
-              imageUrl:
-                  'https://assets.clashk.ing/home-base/town-hall-pics/town-hall-${member.townhallLevel}.png',
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+            child: MobileWebImage(
+              imageUrl:ImageAssets.townHall(member.townhallLevel),
             ),
           ),
         if (rightAlign) const SizedBox(width: 4),

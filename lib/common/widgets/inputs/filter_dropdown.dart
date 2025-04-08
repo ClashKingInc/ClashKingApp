@@ -24,6 +24,7 @@ class FilterDropdown extends StatelessWidget {
               ),
         );
       }).toList(),
+      alignment: Alignment.center,
       onChanged: (String? newValue) {
         updateSortBy(newValue!);
       },

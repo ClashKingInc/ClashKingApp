@@ -1,7 +1,9 @@
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_functions.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_member.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/widgets/cwl_member_card.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/cwl/widgets/cwl_member_card.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -50,45 +52,90 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, String> sortByOptions = {
-      AppLocalizations.of(context)!.stars: 'stars',
-      AppLocalizations.of(context)!.destructionRate: 'percentage',
-      AppLocalizations.of(context)!.averageStars: 'averageStars',
-      AppLocalizations.of(context)!.averageDestruction: 'averagePercentage',
-      AppLocalizations.of(context)!.attackCount: 'attackCount',
-      AppLocalizations.of(context)!.missedAttacks: 'missedAttacks',
-      AppLocalizations.of(context)!.zeroStar: '0stars',
-      AppLocalizations.of(context)!.oneStar: '1stars',
-      AppLocalizations.of(context)!.twoStars: '2stars',
-      AppLocalizations.of(context)!.threeStars: '3stars',
-      AppLocalizations.of(context)!.lowerTownHallAttack: 'attackLowerTH',
-      AppLocalizations.of(context)!.upperTownHallAttack: 'attackUpperTH',
-      AppLocalizations.of(context)!.defenseStars: 'defStars',
-      AppLocalizations.of(context)!.defenseDestruction: 'defDestruction',
-      AppLocalizations.of(context)!.defenseAverageStars: 'defAverageStars',
-      AppLocalizations.of(context)!.defenseAverageDestruction:
-          'defAverageDestruction',
-      AppLocalizations.of(context)!.defZeroStar: 'def0stars',
-      AppLocalizations.of(context)!.defOneStar: 'def1stars',
-      AppLocalizations.of(context)!.defTwoStars: 'def2stars',
-      AppLocalizations.of(context)!.defThreeStars: 'def3stars',
-      AppLocalizations.of(context)!.lowerTownHallDefense: 'defenseLowerTH',
-      AppLocalizations.of(context)!.upperTownHallDefense: 'defenseUpperTH',
-    };
-
     final members =
         widget.warCwl.leagueInfo?.getClanDetails(widget.clanTag)?.members ?? [];
     sortCwlMembers(members, sortBy);
 
     return Column(
       children: [
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         FilterDropdown(
-          sortBy: sortBy,
-          updateSortBy: updateSortBy,
-          sortByOptions: sortByOptions,
-        ),
-        const SizedBox(height: 4),
+            sortBy: sortBy,
+            updateSortBy: updateSortBy,
+            sortByOptions: {
+              generateDoubleIcons(
+                  16, ImageAssets.sword, ImageAssets.builderBaseStar): 'stars',
+              generateDoubleIcons(16, ImageAssets.sword, ImageAssets.hitrate):
+                  'percentage',
+              generateDoubleImageIconsWithText(
+                  16,
+                  ImageAssets.sword,
+                  ImageAssets.builderBaseStar,
+                  "(${AppLocalizations.of(context)!.avg})"): 'averageStars',
+              generateDoubleImageIconsWithText(
+                      16,
+                      ImageAssets.sword,
+                      ImageAssets.hitrate,
+                      "(${AppLocalizations.of(context)!.avg})"):
+                  'averagePercentage',
+              generateImageIconWithText(16, ImageAssets.sword,
+                  AppLocalizations.of(context)!.attackCount): 'attackCount',
+              generateImageIconWithText(16, ImageAssets.sword,
+                  AppLocalizations.of(context)!.missedAttacks): 'missedAttacks',
+              generateStarsWithIconBefore(3, 16, ImageAssets.sword): '3stars',
+              generateStarsWithIconBefore(2, 16, ImageAssets.sword): '2stars',
+              generateStarsWithIconBefore(1, 16, ImageAssets.sword): '1stars',
+              generateStarsWithIconBefore(0, 16, ImageAssets.sword): '0stars',
+              generateDoubleIconsWithText(
+                      16,
+                      ImageAssets.sword,
+                      Icons.keyboard_double_arrow_down,
+                      AppLocalizations.of(context)!.lowerTownhall):
+                  'attackLowerTH',
+              generateDoubleIconsWithText(
+                      16,
+                      ImageAssets.sword,
+                      Icons.keyboard_double_arrow_up,
+                      AppLocalizations.of(context)!.upperTownhall):
+                  'attackUpperTH',
+              generateDoubleIcons(16, ImageAssets.shieldWithArrow,
+                  ImageAssets.builderBaseStar): 'defStars',
+              generateDoubleIcons(
+                      16, ImageAssets.shieldWithArrow, ImageAssets.hitrate):
+                  'defDestruction',
+              generateDoubleImageIconsWithText(
+                  16,
+                  ImageAssets.shieldWithArrow,
+                  ImageAssets.builderBaseStar,
+                  "(${AppLocalizations.of(context)!.avg})"): 'defAverageStars',
+              generateDoubleImageIconsWithText(
+                      16,
+                      ImageAssets.shieldWithArrow,
+                      ImageAssets.hitrate,
+                      "(${AppLocalizations.of(context)!.avg})"):
+                  'defAverageDestruction',
+              generateStarsWithIconBefore(3, 16, ImageAssets.shieldWithArrow):
+                  'def3stars',
+              generateStarsWithIconBefore(2, 16, ImageAssets.shieldWithArrow):
+                  'def2stars',
+              generateStarsWithIconBefore(1, 16, ImageAssets.shieldWithArrow):
+                  'def1stars',
+              generateStarsWithIconBefore(0, 16, ImageAssets.shieldWithArrow):
+                  'def0stars',
+              generateDoubleIconsWithText(
+                      16,
+                      ImageAssets.shieldWithArrow,
+                      Icons.keyboard_double_arrow_down,
+                      AppLocalizations.of(context)!.lowerTownhall):
+                  'defenseLowerTH',
+              generateDoubleIconsWithText(
+                      16,
+                      ImageAssets.shieldWithArrow,
+                      Icons.keyboard_double_arrow_up,
+                      AppLocalizations.of(context)!.upperTownhall):
+                  'defenseUpperTH',
+            }),
+        const SizedBox(height: 12),
         ...members.asMap().entries.map((entry) {
           final index = entry.key;
           final member = entry.value;

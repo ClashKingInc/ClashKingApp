@@ -28,22 +28,28 @@ class CwlClan {
       0,
       (sum, m) =>
           sum +
-          (m.attackStats?.threeStars.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0));
+          (m.attackStats?.threeStars.values.fold(0, (a, b) => (a ?? 0) + b) ??
+              0));
 
   int get totalTwoStars => members.fold(
       0,
       (sum, m) =>
-          sum + (m.attackStats?.twoStars.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0));
+          sum +
+          (m.attackStats?.twoStars.values.fold(0, (a, b) => (a ?? 0) + b) ??
+              0));
 
   int get totalOneStar => members.fold(
       0,
       (sum, m) =>
-          sum + (m.attackStats?.oneStar.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0));
+          sum +
+          (m.attackStats?.oneStar.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0));
 
   int get totalZeroStar => members.fold(
       0,
       (sum, m) =>
-          sum + (m.attackStats?.zeroStar.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0));
+          sum +
+          (m.attackStats?.zeroStar.values.fold(0, (a, b) => (a ?? 0) + b) ??
+              0));
 
   int _sumStars(Map<String, int> Function(CwlAttackStats) selector) {
     int total = 0;
@@ -62,7 +68,7 @@ class CwlClan {
   int get oneStar => _sumStars((stats) => stats.oneStar);
   int get zeroStar => _sumStars((stats) => stats.zeroStar);
 
-    num get averageStars {
+  num get averageStars {
     num totalAverageStars = 0;
     for (var member in members) {
       totalAverageStars += member.attackStats?.averageStars ?? 0;
@@ -87,6 +93,14 @@ class CwlClan {
     return totalDefAverageStars.toInt();
   }
 
+  int get defAverageDestruction {
+    num totalDefAverageDestruction = 0;
+    for (var member in members) {
+      totalDefAverageDestruction +=
+          member.defenseStats?.averageDestruction ?? 0;
+    }
+    return totalDefAverageDestruction.toInt();
+  }
 
   int get defStars {
     int totalDefStars = 0;
@@ -95,15 +109,6 @@ class CwlClan {
     }
     return totalDefStars;
   }
-
-  num get defDestruction {
-    num totalDefStars = 0;
-    for (var member in members) {
-      totalDefStars += member.defenseStats?.totalDestruction ?? 0;
-    }
-    return totalDefStars;
-  }
-
 
   int get defenseCount {
     int totalDefenseCount = 0;
@@ -124,7 +129,9 @@ class CwlClan {
   int get threeStarsDef {
     int totalThreeStarsDefense = 0;
     for (var member in members) {
-      totalThreeStarsDefense += member.defenseStats?.threeStars.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0;
+      totalThreeStarsDefense += member.defenseStats?.threeStars.values
+              .fold(0, (a, b) => (a ?? 0) + b) ??
+          0;
     }
     return totalThreeStarsDefense;
   }
@@ -132,7 +139,9 @@ class CwlClan {
   int get twoStarsDef {
     int totalTwoStarsDefense = 0;
     for (var member in members) {
-      totalTwoStarsDefense += member.defenseStats?.twoStars.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0;
+      totalTwoStarsDefense += member.defenseStats?.twoStars.values
+              .fold(0, (a, b) => (a ?? 0) + b) ??
+          0;
     }
     return totalTwoStarsDefense;
   }
@@ -140,7 +149,9 @@ class CwlClan {
   int get oneStarDef {
     int totalOneStarDefense = 0;
     for (var member in members) {
-      totalOneStarDefense += member.defenseStats?.oneStar.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0;
+      totalOneStarDefense +=
+          member.defenseStats?.oneStar.values.fold(0, (a, b) => (a ?? 0) + b) ??
+              0;
     }
     return totalOneStarDefense;
   }
@@ -148,7 +159,9 @@ class CwlClan {
   int get zeroStarDef {
     int totalZeroStarDefense = 0;
     for (var member in members) {
-      totalZeroStarDefense += member.defenseStats?.zeroStar.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0;
+      totalZeroStarDefense += member.defenseStats?.zeroStar.values
+              .fold(0, (a, b) => (a ?? 0) + b) ??
+          0;
     }
     return totalZeroStarDefense;
   }

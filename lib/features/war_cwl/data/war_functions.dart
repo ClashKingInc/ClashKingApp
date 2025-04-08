@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
@@ -43,7 +44,8 @@ List<Widget> generateStars(int numberOfStars, double size) {
   });
 }
 
-List<Widget> generateStarsWithIconBefore(int numberOfStars, double size, String iconUrl) {
+List<Widget> generateStarsWithIconBefore(
+    int numberOfStars, double size, String iconUrl) {
   return [
     CachedNetworkImage(
       imageUrl: iconUrl,
@@ -52,17 +54,90 @@ List<Widget> generateStarsWithIconBefore(int numberOfStars, double size, String 
       errorWidget: (context, url, error) => const Icon(Icons.error),
     ),
     const SizedBox(width: 4),
-    ...List.generate(3, (index) => CachedNetworkImage(
-          imageUrl: index < numberOfStars
-              ? "https://assets.clashk.ing/icons/Icon_BB_Star.png"
-              : "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png",
-          width: size,
-          height: size,
-          errorWidget: (context, url, error) => const Icon(Icons.error),
-        )),
+    ...List.generate(
+        3,
+        (index) => CachedNetworkImage(
+              imageUrl: index < numberOfStars
+                  ? "https://assets.clashk.ing/icons/Icon_BB_Star.png"
+                  : "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png",
+              width: size,
+              height: size,
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            )),
   ];
 }
 
+List<Widget> generateDoubleIcons(
+    double size, String iconUrl1, String iconUrl2) {
+  return [
+    MobileWebImage(
+      imageUrl: iconUrl1,
+      width: size,
+      height: size,
+    ),
+    const SizedBox(width: 4),
+    MobileWebImage(
+      imageUrl: iconUrl2,
+      width: size,
+      height: size,
+    ),
+  ];
+}
+
+List<Widget> generateDoubleImageIconsWithText(
+    double size, String iconUrl1, String iconUrl2, String text) {
+  return [
+    MobileWebImage(
+      imageUrl: iconUrl1,
+      width: size,
+      height: size,
+    ),
+    const SizedBox(width: 4),
+    MobileWebImage(
+      imageUrl: iconUrl2,
+      width: size,
+      height: size,
+    ),
+    const SizedBox(width: 4),
+    Text(text),
+  ];
+}
+
+List<Widget> generateImageIconWithText(
+    double size, String iconUrl, String text) {
+  return [
+    MobileWebImage(
+      imageUrl: iconUrl,
+      width: size,
+      height: size,
+    ),
+    const SizedBox(width: 4),
+    Text(text),
+  ];
+}
+
+List<Widget> generateDoubleIconsWithText(
+    double size, String iconUrl, IconData icon2, String text) {
+  return [
+    MobileWebImage(
+      imageUrl: iconUrl,
+      width: size,
+      height: size,
+    ),
+    const SizedBox(width: 4),
+    Icon(icon2),
+    const SizedBox(width: 4),
+    Text(text),
+  ];
+}
+
+List<Widget> generateIconWithText(double size, IconData icon, String text) {
+  return [
+    Icon(icon),
+    const SizedBox(width: 4),
+    Text(text),
+  ];
+}
 
 Widget timeLeft(
     WarInfo currentWarInfo, BuildContext context, TextStyle? style) {

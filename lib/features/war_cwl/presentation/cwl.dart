@@ -1,9 +1,9 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/cwl_members_tab.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/cwl_rounds_tab.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/cwl_teams_tab.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_members_tab.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_rounds_tab.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_teams_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_clan.dart';
 import 'dart:ui';
@@ -106,6 +106,7 @@ class CwlScreenState extends State<CwlScreen> {
                         children: <Widget>[
                           ImageChip(
                             textColor: Colors.white,
+                            edgeColor: Colors.white,
                             imageUrl: ImageAssets.podium,
                             labelPadding: 6,
                             label: clan.rank.toString(),
@@ -114,6 +115,7 @@ class CwlScreenState extends State<CwlScreen> {
                           ),
                           ImageChip(
                             textColor: Colors.white,
+                            edgeColor: Colors.white,
                             imageUrl: ImageAssets.builderBaseStar,
                             labelPadding: 2,
                             label: clan.stars.toString(),
@@ -122,6 +124,7 @@ class CwlScreenState extends State<CwlScreen> {
                           ),
                           ImageChip(
                             textColor: Colors.white,
+                            edgeColor: Colors.white,
                             imageUrl: ImageAssets.hitrate,
                             labelPadding: 6,
                             label: NumberFormat('#,###',
@@ -134,6 +137,7 @@ class CwlScreenState extends State<CwlScreen> {
                           ),
                           ImageChip(
                             textColor: Colors.white,
+                            edgeColor: Colors.white,
                             imageUrl: ImageAssets.war,
                             labelPadding: 6,
                             label: clan.warsPlayed.toString(),
@@ -142,6 +146,7 @@ class CwlScreenState extends State<CwlScreen> {
                           ),
                           ImageChip(
                             textColor: Colors.white,
+                            edgeColor: Colors.white,
                             imageUrl: ImageAssets.sword,
                             labelPadding: 2,
                             label:
@@ -152,6 +157,7 @@ class CwlScreenState extends State<CwlScreen> {
                           ),
                           ImageChip(
                             textColor: Colors.white,
+                            edgeColor: Colors.white,
                             imageUrl: ImageAssets.brokenSword,
                             labelPadding: 6,
                             label: clan.missedAttacks.toString(),

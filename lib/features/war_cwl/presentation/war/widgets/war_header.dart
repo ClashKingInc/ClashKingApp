@@ -1,12 +1,14 @@
 import 'dart:ui';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_page.dart';
-import 'package:clashkingapp/features/war_cwl/data/war_functions.dart' show timeLeft;
+import 'package:clashkingapp/features/war_cwl/data/war_functions.dart'
+    show timeLeft;
 import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class WarHeader extends StatelessWidget {
   final WarInfo warInfo;
@@ -28,15 +30,13 @@ class WarHeader extends StatelessWidget {
             imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.5),
+                Colors.black.withValues(alpha: 0.5),
                 BlendMode.darken,
               ),
-              child: CachedNetworkImage(
-                imageUrl: "https://assets.clashk.ing/landscape/war-landscape.jpg",
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
+              child: MobileWebImage(
+                  imageUrl: ImageAssets.warPageBackground,
+                  width: double.infinity,
+                  fit: BoxFit.cover),
             ),
           ),
         ),
@@ -47,8 +47,10 @@ class WarHeader extends StatelessWidget {
               timeLeft(
                 warInfo,
                 context,
-                Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary),
+                Theme.of(context)
+                    .textTheme
+                    .titleSmall
+                    ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -81,7 +83,8 @@ class WarHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildClanColumn(BuildContext context, WarClan? clan, {required bool isLeft}) {
+  Widget _buildClanColumn(BuildContext context, WarClan? clan,
+      {required bool isLeft}) {
     if (clan == null) return const SizedBox.shrink();
 
     return Expanded(
@@ -93,7 +96,8 @@ class WarHeader extends StatelessWidget {
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                builder: (_) => const Center(child: CircularProgressIndicator()),
+                builder: (_) =>
+                    const Center(child: CircularProgressIndicator()),
               );
               final Clan clanInfo = await ClanService().loadClanData(clan.tag);
               if (context.mounted) {
@@ -106,25 +110,25 @@ class WarHeader extends StatelessWidget {
                 );
               }
             },
-            child: CachedNetworkImage(
-              imageUrl: clan.badgeUrls.large,
-              width: 90,
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-            ),
+            child: MobileWebImage(imageUrl: clan.badgeUrls.large, width: 90),
           ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Text(
               clan.name,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimary),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall
+                  ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
             ),
           ),
           Text(
             "${clan.destructionPercentage.toStringAsFixed(2)}%",
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary),
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
           ),
         ],
       ),

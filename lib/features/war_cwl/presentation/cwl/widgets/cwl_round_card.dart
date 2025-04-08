@@ -1,7 +1,7 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/war_info.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
@@ -21,11 +21,12 @@ class RoundClanCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => WarInfoScreen(war: warInfo),
+              builder: (context) => WarScreen(war: warInfo),
             ),
           );
         },
         child: Card(
+          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           child: Padding(
             padding: const EdgeInsets.only(right: 8.0, top: 8.0, bottom: 8.0),
             child: Row(

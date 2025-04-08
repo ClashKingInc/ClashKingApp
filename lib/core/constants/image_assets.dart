@@ -148,6 +148,8 @@ class ImageAssets {
       "$baseUrl/landscape/clan-landscape.png";
   static const String cwlPageBackground =
       "$baseUrl/landscape/cwl-landscape.png";
+  static const String warPageBackground =
+      "$baseUrl/landscape/war-landscape.jpg";
 
   // 🎭 Heroes & Troops & Others
   static String getHeroImage(String heroName) {

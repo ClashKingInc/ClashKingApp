@@ -9,6 +9,7 @@ class ImageChip extends StatefulWidget {
   final double labelPadding;
   final String description;
   final Color? textColor;
+  final Color edgeColor;
 
   ImageChip({
     required this.imageUrl,
@@ -17,6 +18,7 @@ class ImageChip extends StatefulWidget {
     this.labelPadding = 4,
     this.description = '',
     this.textColor,
+    this.edgeColor = Colors.black,
   });
 
   @override
@@ -49,6 +51,8 @@ class ImageChipState extends State<ImageChip> {
 
   @override
   Widget build(BuildContext context) {
+
+    print("Edge Color : ${widget.edgeColor}");
     final textColor =
         widget.textColor ?? Theme.of(context).colorScheme.onSurface;
     return GestureDetector(
@@ -86,7 +90,7 @@ class ImageChipState extends State<ImageChip> {
           ),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: BorderSide(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4))),
+              side: BorderSide(color: widget.edgeColor.withValues(alpha: 0.4))),
           labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
           label: widget.label.isNotEmpty
               ? Text(widget.label,
@@ -108,7 +112,8 @@ class IconChip extends StatefulWidget {
   final Color? color;
   final double labelPadding;
   final String description;
-  final Color? textColor; // Mark as final
+  final Color? textColor;
+  final Color edgeColor;
 
   IconChip({
     required this.icon,
@@ -118,6 +123,7 @@ class IconChip extends StatefulWidget {
     this.labelPadding = 2,
     this.description = '',
     this.textColor,
+    this.edgeColor = Colors.black,
   });
 
   @override
@@ -190,7 +196,7 @@ class IconChipState extends State<IconChip> {
           ),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: BorderSide(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4))),
+              side: BorderSide(color: widget.edgeColor.withValues(alpha: 0.4))),
           labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
           label: Text(widget.label,
               style: Theme.of(context)

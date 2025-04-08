@@ -1,7 +1,9 @@
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_functions.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_clan.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/widgets/cwl_team_card.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/cwl/widgets/cwl_team_card.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -41,25 +43,6 @@ class CwlTeamsTabState extends State<CwlTeamsTab> {
   Widget build(BuildContext context) {
     List<CwlClan> clans = List.from(widget.warCwl.leagueInfo?.clans ?? []);
 
-    final Map<String, String> sortByOptions = {
-      AppLocalizations.of(context)!.stars: 'stars',
-      AppLocalizations.of(context)!.destructionRate: 'percentage',
-      AppLocalizations.of(context)!.townHallLevel: 'townHallLevel',
-      AppLocalizations.of(context)!.missedAttacks: 'missedAttacks',
-      AppLocalizations.of(context)!.averageStars: 'averageStars',
-      AppLocalizations.of(context)!.zeroStar: '0stars',
-      AppLocalizations.of(context)!.oneStar: '1stars',
-      AppLocalizations.of(context)!.twoStars: '2stars',
-      AppLocalizations.of(context)!.threeStars: '3stars',
-      AppLocalizations.of(context)!.defenseStars: 'defStars',
-      AppLocalizations.of(context)!.defenseDestruction: 'defDestruction',
-      AppLocalizations.of(context)!.defenseAverageStars: 'defAverageStars',
-      AppLocalizations.of(context)!.defZeroStar: 'def0stars',
-      AppLocalizations.of(context)!.defOneStar: 'def1stars',
-      AppLocalizations.of(context)!.defTwoStars: 'def2stars',
-      AppLocalizations.of(context)!.defThreeStars: 'def3stars',
-    };
-
     if (sortBy == 'stars') {
       clans.sort((a, b) => b.stars.compareTo(a.stars));
     } else if (sortBy == 'percentage') {
@@ -97,6 +80,9 @@ class CwlTeamsTabState extends State<CwlTeamsTab> {
           (a, b) => b.destructionPercentage.compareTo(a.destructionPercentage));
     } else if (sortBy == 'defAverageStars') {
       clans.sort((a, b) => b.defAverageStars.compareTo(a.defAverageStars));
+    } else if (sortBy == 'defAverageDestruction') {
+      clans.sort(
+          (a, b) => b.defAverageDestruction.compareTo(a.defAverageDestruction));
     } else if (sortBy == 'def0stars') {
       clans.sort((a, b) => b.zeroStarDef.compareTo(a.zeroStarDef));
     } else if (sortBy == 'def1stars') {
@@ -109,17 +95,61 @@ class CwlTeamsTabState extends State<CwlTeamsTab> {
 
     return Column(
       children: [
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         FilterDropdown(
-          sortBy: sortBy,
-          updateSortBy: (newValue) {
-            setState(() {
-              sortBy = newValue;
-            });
-          },
-          sortByOptions: sortByOptions,
-        ),
-        const SizedBox(height: 10),
+            sortBy: sortBy,
+            updateSortBy: (newValue) {
+              setState(() {
+                sortBy = newValue;
+              });
+            },
+            sortByOptions: {
+              generateDoubleIcons(
+                  16, ImageAssets.sword, ImageAssets.builderBaseStar): 'stars',
+              generateDoubleIcons(16, ImageAssets.sword, ImageAssets.hitrate):
+                  'percentage',
+              generateDoubleImageIconsWithText(
+                  16,
+                  ImageAssets.sword,
+                  ImageAssets.townHall(17),
+                  AppLocalizations.of(context)!.townHallLevel): 'townHallLevel',
+              generateImageIconWithText(16, ImageAssets.sword,
+                  AppLocalizations.of(context)!.missedAttacks): 'missedAttacks',
+              generateDoubleImageIconsWithText(
+                  16,
+                  ImageAssets.sword,
+                  ImageAssets.builderBaseStar,
+                  "(${AppLocalizations.of(context)!.avg})"): 'averageStars',
+              generateStarsWithIconBefore(3, 16, ImageAssets.sword): '3stars',
+              generateStarsWithIconBefore(2, 16, ImageAssets.sword): '2stars',
+              generateStarsWithIconBefore(1, 16, ImageAssets.sword): '1stars',
+              generateStarsWithIconBefore(0, 16, ImageAssets.sword): '0stars',
+              generateDoubleIcons(16, ImageAssets.shieldWithArrow,
+                  ImageAssets.builderBaseStar): 'defStars',
+              generateDoubleIcons(
+                      16, ImageAssets.shieldWithArrow, ImageAssets.hitrate):
+                  'defDestruction',
+              generateDoubleImageIconsWithText(
+                  16,
+                  ImageAssets.shieldWithArrow,
+                  ImageAssets.builderBaseStar,
+                  "(${AppLocalizations.of(context)!.avg})"): 'defAverageStars',
+              generateDoubleImageIconsWithText(
+                      16,
+                      ImageAssets.shieldWithArrow,
+                      ImageAssets.hitrate,
+                      "(${AppLocalizations.of(context)!.avg})"):
+                  'defAverageDestruction',
+              generateStarsWithIconBefore(3, 16, ImageAssets.shieldWithArrow):
+                  'def3stars',
+              generateStarsWithIconBefore(2, 16, ImageAssets.shieldWithArrow):
+                  'def2stars',
+              generateStarsWithIconBefore(1, 16, ImageAssets.shieldWithArrow):
+                  'def1stars',
+              generateStarsWithIconBefore(0, 16, ImageAssets.shieldWithArrow):
+                  'def0stars',
+            }),
+        const SizedBox(height: 12),
         ...clans.map((clan) {
           final key = _cardKeys.putIfAbsent(clan.tag, () => GlobalKey());
           return CwlTeamCard(

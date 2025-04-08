@@ -33,6 +33,7 @@ class CwlTeamCard extends StatelessWidget {
         .sort((a, b) => int.parse(b.key).compareTo(int.parse(a.key)));
 
     return Card(
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -308,7 +309,7 @@ class CwlTeamCard extends StatelessWidget {
                             StatTile(
                                 label:
                                     AppLocalizations.of(context)!.avgPercentage,
-                                value: clan.defDestruction.toStringAsFixed(1),
+                                value: clan.defAverageDestruction.toStringAsFixed(1),
                                 icon: MobileWebImage(
                                     imageUrl: ImageAssets.hitrate,
                                     width: 16,

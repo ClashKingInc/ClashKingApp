@@ -8,12 +8,12 @@ import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-class WarTeamCard extends StatelessWidget {
+class WarTeamTab extends StatelessWidget {
   final WarInfo warInfo;
   final List<WarMember> members;
   final int attacksPerMember;
 
-  const WarTeamCard({
+  const WarTeamTab({
     super.key,
     required this.members,
     required this.attacksPerMember,

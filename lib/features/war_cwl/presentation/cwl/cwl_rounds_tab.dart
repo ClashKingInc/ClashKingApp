@@ -1,5 +1,5 @@
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/widgets/cwl_round_card.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/cwl/widgets/cwl_round_card.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
