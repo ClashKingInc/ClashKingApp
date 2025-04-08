@@ -51,8 +51,6 @@ class ImageChipState extends State<ImageChip> {
 
   @override
   Widget build(BuildContext context) {
-
-    print("Edge Color : ${widget.edgeColor}");
     final textColor =
         widget.textColor ?? Theme.of(context).colorScheme.onSurface;
     return GestureDetector(
