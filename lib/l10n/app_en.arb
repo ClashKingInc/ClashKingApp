@@ -320,7 +320,7 @@
 },
 "legendLeague": "Legend League",
 "notInLegendLeague": "Not in Legend League",
-"noLegendData": "No Legend Data Found for today",
+"noLegendsDataToday": "You're not in Legend League, but past seasons are available.",
 "legendStartDescription": "You started the day with {trophies} trophies.",
 "@legendStartDescription": {
     "placeholders": {
@@ -564,6 +564,7 @@
 "eosTrophies": "End Of Season Trophies",
 "eosDetails": "End Of Season Details",
 "searchClan": "Search clan",
+"clanName": "Clan's name",
 "nameOrTagClan": "Clan's name or tag",
 "noResult": "No result.",
 "filters": "Filters",

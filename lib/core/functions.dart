@@ -160,9 +160,6 @@ Future<void> clearPrefs() async {
   await storage.deleteAll();
 }
 
-
-
-
 Future<String> getAppAndDeviceInfo() async {
   // Fetch app version and build number
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -218,3 +215,41 @@ String getEndedAgoText(DateTime? endTime, material.BuildContext context) {
   }
 }
 
+bool isInTimeFrameForRaid() {
+  DateTime nowUtc = DateTime.now().toUtc();
+  bool isInTimeFrameForRaid = false;
+
+  if (nowUtc.weekday == DateTime.friday && nowUtc.hour >= 7) {
+    isInTimeFrameForRaid = true;
+  } else if (nowUtc.weekday == DateTime.saturday ||
+      nowUtc.weekday == DateTime.sunday) {
+    isInTimeFrameForRaid = true;
+  } else if (nowUtc.weekday == DateTime.monday && nowUtc.hour < 7) {
+    isInTimeFrameForRaid = true;
+  }
+
+  return isInTimeFrameForRaid;
+}
+
+bool isInTimeFrameForClanGames() {
+  DateTime nowUtc = DateTime.now().toUtc();
+  bool isInTimeFrameForClanGames = false;
+
+  if ((nowUtc.day >= 22 && nowUtc.hour >= 8) &&
+      (nowUtc.day <= 28 && nowUtc.hour <= 8)) {
+    isInTimeFrameForClanGames = true;
+  }
+
+  return isInTimeFrameForClanGames;
+}
+
+bool isInTimeFrameForCwl() {
+  DateTime nowUtc = DateTime.now().toUtc();
+  bool isInTimeFrameForCwl = false;
+
+  if (nowUtc.day >= 1 && nowUtc.day <= 12) {
+    isInTimeFrameForCwl = true;
+  }
+
+  return isInTimeFrameForCwl;
+}

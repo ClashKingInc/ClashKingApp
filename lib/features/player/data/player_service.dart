@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
+import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/api_service.dart';
@@ -29,8 +30,8 @@ class PlayerService extends ChangeNotifier {
     );
   }
 
-  /// Loads all stats for the saved accounts.
-  Future<void> loadPlayerData(List<String> playerTags) async {
+  /// Init basic stats for the saved accounts.
+  Future<Map<String, String>> initPlayerData(List<String> playerTags) async {
     _isLoading = true;
     notifyListeners();
 
@@ -38,13 +39,15 @@ class PlayerService extends ChangeNotifier {
     if (token == null) throw Exception("User not authenticated");
 
     final response = await http.post(
-      Uri.parse("${ApiService.apiUrl}/players/full-stats"),
+      Uri.parse("${ApiService.apiUrl}/players"),
       headers: {
         "Authorization": "Bearer $token",
         "Content-Type": "application/json",
       },
       body: jsonEncode({"player_tags": playerTags}),
     );
+
+    final Map<String, String> clanTagsByPlayer = {};
 
     try {
       if (response.statusCode == 200) {
@@ -54,9 +57,74 @@ class PlayerService extends ChangeNotifier {
         if (data.containsKey("items") && data["items"] is List) {
           _profiles = (data["items"] as List)
               .whereType<Map<String, dynamic>>()
-              .map((account) => Player.fromJson(account))
-              .toList();
-          print("✅ Loaded profiles: ${profiles.map((p) => p.tag).toList()}");
+              .map((account) {
+            final player = Player.fromJson(account);
+            if (player.clanOverview.tag.isNotEmpty) {
+              clanTagsByPlayer[player.tag] = player.clanOverview.tag;
+            }
+            return player;
+          }).toList();
+          print(
+              "✅ Initialized profiles: ${profiles.map((p) => p.tag).toList()}");
+        } else {
+          Sentry.captureMessage("Error initializing player data: $data",
+              level: SentryLevel.error);
+        }
+      } else {
+        Sentry.captureMessage("Error initializing accounts data",
+            level: SentryLevel.error);
+        throw Exception("Error initializing accounts data");
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+      print("❌ Error initializing accounts data: $e");
+    }
+
+    _isLoading = false;
+    notifyListeners();
+    return clanTagsByPlayer;
+  }
+
+  /// Loads all stats for the saved accounts.
+  Future<void> loadPlayerData(
+      List<String> playerTags, Map<String, String> clanTagsByPlayer) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final token = await TokenService().getAccessToken();
+    if (token == null) throw Exception("User not authenticated");
+
+    final response = await http.post(
+      Uri.parse("${ApiService.apiUrl}/players/extended"),
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "player_tags": playerTags,
+        "clan_tags": clanTagsByPlayer,
+      }),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final responseBody = utf8.decode(response.bodyBytes);
+        final data = jsonDecode(responseBody);
+
+        if (data.containsKey("items") && data["items"] is List) {
+          final items =
+              (data["items"] as List).whereType<Map<String, dynamic>>();
+
+          for (final item in items) {
+            final tag = item["tag"];
+            final existing = _profiles.firstWhere(
+              (p) => p.tag == tag,
+              orElse: () => Player.fromJson(item), // fallback
+            );
+            existing.enrichWithFullStats(item);
+          }
+
+          print("✅ Enriched profiles: ${_profiles.map((p) => p.tag).toList()}");
         } else {
           Sentry.captureMessage("Error loading player data: $data",
               level: SentryLevel.error);
@@ -85,7 +153,7 @@ class PlayerService extends ChangeNotifier {
     playerTag = playerTag.replaceAll("#", "%23");
 
     final response = await http.get(
-      Uri.parse("${ApiService.apiUrl}/player/$playerTag/full-stats"),
+      Uri.parse("${ApiService.apiUrl}/player/$playerTag/extended"),
       headers: {
         "Authorization": "Bearer $token",
         "Content-Type": "application/json",
@@ -112,11 +180,64 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
-  void linkProfilesToClans(List<Player> profiles, List<Clan> clans) {
-    for (var profile in profiles) {
+  void linkClansToPlayer(List<Player> players, List<Clan> clans) {
+    for (var profile in players) {
       if (profile.clanTag.isEmpty) continue;
-      profile.clan = clans.firstWhere((clan) => clan.tag == profile.clanTag);
-      print("🔗 Linked ${profile.tag} to ${profile.clan?.name}");
+      try {
+        profile.clan = clans.firstWhere((clan) => clan.tag == profile.clanTag);
+        print("🔗 Linked ${profile.tag} to ${profile.clan?.name}");
+      } catch (e) {
+        print("❌ Error linking ${profile.tag} to clan: $e");
+      }
+    }
+  }
+
+  Future<void> loadPlayerWarStats(List<String> playerTags) async {
+    final token = await TokenService().getAccessToken();
+    if (token == null) throw Exception("User not authenticated");
+    print("🏰 Loading player data for tags: $playerTags");
+
+    final response = await http.post(
+      Uri.parse("${ApiService.apiUrl}/players/warhits"),
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "player_tags": playerTags,
+        "limit": 50
+      }),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final responseBody = utf8.decode(response.bodyBytes);
+        final data = jsonDecode(responseBody);
+
+        if (data.containsKey("items") && data["items"] is List) {
+          for (final item in data["items"]) {
+            final String tag = item["tag"];
+            try {
+              final Player player = _profiles.firstWhere((p) => p.tag == tag);
+              player.warStats = PlayerWarStats.fromJson(item);
+            } catch (e) {
+              print("❌ Error loading war stats for $tag: $e");
+              continue;
+            }
+          }
+          print("✅ Loaded & linked war stats for $playerTags players");
+        } else {
+          Sentry.captureMessage("Error loading war stats: $data",
+              level: SentryLevel.error);
+        }
+      } else {
+        Sentry.captureMessage("Error loading war stats",
+            level: SentryLevel.error);
+        throw Exception("Error loading war stats");
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+      print("❌ Error loading war stats: $e");
     }
   }
 

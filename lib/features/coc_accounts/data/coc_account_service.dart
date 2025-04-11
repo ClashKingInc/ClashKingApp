@@ -192,42 +192,101 @@ class CocAccountService extends ChangeNotifier {
         .toList();
   }
 
-  Future<void> loadApiData(PlayerService playerService, ClanService clanService,
-      WarCwlService warCwlService) async {
-    // Get the CoC accounts
-    await fetchCocAccounts();
+  Future<void> loadApiData(
+    PlayerService playerService,
+    ClanService clanService,
+    WarCwlService warCwlService,
+  ) async {
+    final transaction = Sentry.startTransaction(
+      "CocAccountService.loadApiData",
+      "task",
+      bindToScope: true,
+    );
 
-    if (cocAccounts.isNotEmpty) {
-      // Extract the player tags
+    try {
+      final spanFetchAccounts = transaction.startChild("fetchCocAccounts");
+      await fetchCocAccounts();
+      spanFetchAccounts.finish();
+
+      if (cocAccounts.isEmpty) {
+        transaction.finish(status: SpanStatus.ok());
+        return;
+      }
+
       final List<String> playerTags = cocAccounts
           .map((account) => account["player_tag"].toString())
           .toList();
 
-      // Load all player stats
-      await playerService.loadPlayerData(playerTags);
-
-      print(
-          "📋 Profiles list from PlayerService: ${playerService.profiles.map((p) => p.tag).toList()}");
+      final spanInitPlayers = transaction.startChild("initPlayerData");
+      final clanTagsByPlayer = await playerService.initPlayerData(playerTags);
+      spanInitPlayers.finish();
 
       final Set<String> clanTags = playerService.profiles
           .map((profile) => profile.clanTag)
           .where((tag) => tag.isNotEmpty)
           .toSet();
+      
+      transaction.setTag("playerTags", playerTags.toString());
+      transaction.setTag("playerTagsCount", playerTags.length.toString());
+      transaction.setTag("clanTags", clanTags.toString());
+      transaction.setTag("clanTagsCount", clanTags.length.toString());
 
+      // → On lance en parallèle ce qui est parallélisable
+      final spanParallel = transaction.startChild("load.parallelTasks");
+
+      await Future.wait([
+        () async {
+          final span = spanParallel.startChild("loadPlayerData");
+          await playerService.loadPlayerData(playerTags, clanTagsByPlayer);
+          span.finish();
+        }(),
+        () async {
+          final span = spanParallel.startChild("loadPlayerWarStats");
+          await playerService.loadPlayerWarStats(playerTags);
+          span.finish();
+        }(),
+        if (clanTags.isNotEmpty)
+          () async {
+            final span = spanParallel.startChild("loadAllClanData");
+            await clanService.loadAllClanData(clanTags.toList());
+            span.finish();
+          }(),
+        if (clanTags.isNotEmpty)
+          () async {
+            final span = spanParallel.startChild("loadAllWarData");
+            await warCwlService.loadAllWarData(clanTags.toList());
+            span.finish();
+          }(),
+      ]);
+
+      spanParallel.finish();
+
+      // → Linkage après les chargements
       if (clanTags.isNotEmpty) {
-        await Future.wait([
-          clanService.loadAllClanData(clanTags.toList()),
-          warCwlService.loadAllWarData(clanTags.toList()),
-        ]);
+        final spanLinkClans = transaction.startChild("linkClansToPlayers");
+        playerService.linkClansToPlayer(
+          playerService.profiles,
+          clanService.clans.values.toList(),
+        );
+        spanLinkClans.finish();
+
+        final spanLinkWars = transaction.startChild("linkWarsToClans");
+        clanService.linkWarsToClans(
+          clanService.clans.values.toList(),
+          warCwlService.summaries.values.toList(),
+        );
+        spanLinkWars.finish();
       }
 
-      playerService.linkProfilesToClans(
-          playerService.profiles, clanService.clans.values.toList());
-
-      clanService.linkWarsToClans(clanService.clans.values.toList(),
-          warCwlService.summaries.values.toList());
+      transaction.finish(status: SpanStatus.ok());
 
       initializeSelectedTag();
+    } catch (e, stack) {
+      transaction.throwable = e;
+      transaction.status = SpanStatus.internalError();
+      transaction.finish();
+      Sentry.captureException(e, stackTrace: stack);
+      rethrow;
     }
   }
 }

@@ -499,7 +499,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get notInLegendLeague => '不在传奇联赛中';
 
   @override
-  String get noLegendData => '未找到今日传奇联赛数据';
+  String get noLegendsDataToday => 'You\'re not in Legend League, but past seasons are available.';
 
   @override
   String legendStartDescription(String trophies) {
@@ -746,6 +746,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get searchClan => '搜索部落';
+
+  @override
+  String get clanName => 'Clan\'s name';
 
   @override
   String get nameOrTagClan => '村庄名称或标签';

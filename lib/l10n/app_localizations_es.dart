@@ -499,7 +499,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notInLegendLeague => 'No está en la Liga de Leyendas';
 
   @override
-  String get noLegendData => 'No se han encontrado datos de leyenda hoy';
+  String get noLegendsDataToday => 'You\'re not in Legend League, but past seasons are available.';
 
   @override
   String legendStartDescription(String trophies) {
@@ -746,6 +746,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get searchClan => 'Buscar clan';
+
+  @override
+  String get clanName => 'Clan\'s name';
 
   @override
   String get nameOrTagClan => 'Nombre o etiqueta del clan';
@@ -1814,9 +1817,6 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get notInLegendLeague => 'No está en la Liga de Leyendas';
-
-  @override
-  String get noLegendData => 'No se han encontrado datos de leyenda hoy';
 
   @override
   String legendStartDescription(String trophies) {

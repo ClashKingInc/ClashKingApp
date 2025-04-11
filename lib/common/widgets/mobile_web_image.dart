@@ -12,7 +12,7 @@ class MobileWebImage extends StatelessWidget {
   const MobileWebImage({
     super.key,
     required this.imageUrl,
-    this.fit = BoxFit.cover,
+    this.fit = BoxFit.contain,
     this.width,
     this.height,
   });

@@ -27,7 +27,7 @@ class ClanService extends ChangeNotifier {
       if (token == null) throw Exception("User not authenticated");
 
       final response = await http.post(
-        Uri.parse("${ApiService.apiUrl}/clans/full-stats"),
+        Uri.parse("${ApiService.apiUrl}/clans/details"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
@@ -81,7 +81,7 @@ class ClanService extends ChangeNotifier {
       if (token == null) throw Exception("User not authenticated");
 
       final response = await http.get(
-        Uri.parse("${ApiService.apiUrl}/clan/$clanTag/full-stats"),
+        Uri.parse("${ApiService.apiUrl}/clan/$clanTag/details"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",

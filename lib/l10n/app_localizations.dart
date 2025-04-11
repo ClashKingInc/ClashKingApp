@@ -1064,11 +1064,11 @@ abstract class AppLocalizations {
   /// **'Not in Legend League'**
   String get notInLegendLeague;
 
-  /// No description provided for @noLegendData.
+  /// No description provided for @noLegendsDataToday.
   ///
   /// In en, this message translates to:
-  /// **'No Legend Data Found for today'**
-  String get noLegendData;
+  /// **'You\'re not in Legend League, but past seasons are available.'**
+  String get noLegendsDataToday;
 
   /// No description provided for @legendStartDescription.
   ///
@@ -1477,6 +1477,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search clan'**
   String get searchClan;
+
+  /// No description provided for @clanName.
+  ///
+  /// In en, this message translates to:
+  /// **'Clan\'s name'**
+  String get clanName;
 
   /// No description provided for @nameOrTagClan.
   ///

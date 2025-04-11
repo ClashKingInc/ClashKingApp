@@ -46,14 +46,16 @@ class LoginPageState extends State<LoginPage> {
                       height: 150,
                       width: 150,
                       child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: logoUrl)),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                          imageUrl: logoUrl)),
                   SizedBox(height: 8),
                   SizedBox(
                       width: 250,
                       child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: textLogoUrl)),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                          imageUrl: textLogoUrl)),
                 ]),
                 SizedBox(height: 48),
 
@@ -76,7 +78,8 @@ class LoginPageState extends State<LoginPage> {
                               final playerService =
                                   context.read<PlayerService>();
                               final clanService = context.read<ClanService>();
-                              final warCwlService = context.read<WarCwlService>();
+                              final warCwlService =
+                                  context.read<WarCwlService>();
                               await cocService.loadApiData(
                                   playerService, clanService, warCwlService);
                               if (context.mounted) {

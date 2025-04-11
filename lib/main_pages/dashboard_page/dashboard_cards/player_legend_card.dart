@@ -83,7 +83,7 @@ class PlayerLegendCard extends StatelessWidget {
                       SizedBox(width: 8),
                       Flexible(
                         child: Text(
-                          AppLocalizations.of(context)!.noLegendData,
+                          AppLocalizations.of(context)!.noLegendsDataToday,
                           style: Theme.of(context).textTheme.labelLarge,
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,

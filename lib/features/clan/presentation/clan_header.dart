@@ -1,13 +1,17 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/cwl.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ClanInfoHeaderCard extends StatelessWidget {
@@ -44,8 +48,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
                     BlendMode.darken,
                   ),
                   child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl: ImageAssets.clanPageBackground,
                     fit: BoxFit.cover,
                   ),
@@ -75,8 +78,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl: clanInfo.badgeUrls.large,
                     width: 100,
                   ),
@@ -150,64 +152,42 @@ class ClanInfoHeaderCard extends StatelessWidget {
               alignment: WrapAlignment.center,
               children: [
                 if (clanInfo.warLeague != null)
-                  Chip(
-                    avatar: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl:
-                          ImageAssets.leagues[clanInfo.warLeague?.name ?? "Unranked"]!,
-                      width: 20,
-                    ),
-                    label: Text(clanInfo.warLeague!.name),
+                  ImageChip(
+                    imageUrl: ImageAssets
+                        .leagues[clanInfo.warLeague?.name ?? "Unranked"]!,
+                    label: clanInfo.warLeague!.name,
                   ),
                 if (clanInfo.location?.name != null &&
                     clanInfo.location!.countryCode != null)
-                  Chip(
-                    avatar: CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                        imageUrl:
-                            ImageAssets.flag(clanInfo.location!.countryCode!),
-                        width: 20,
-                      ),
-                    ),
-                    label: Text(clanInfo.location!.name),
+                  ImageChip(
+                    imageUrl: ImageAssets.flag(clanInfo.location!.countryCode!),
+                    label: clanInfo.location!.name,
                   ),
-                Chip(
-                  avatar: Icon(Icons.groups, size: 16, color: Theme.of(context).colorScheme.onSurface),
-                  label: Text("${clanInfo.members}/50"),
+                IconChip(
+                    icon: Icons.groups,
+                    size: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    label: "${clanInfo.members}/50"),
+                ImageChip(
+                  imageUrl: ImageAssets.trophies,
+                  label: NumberFormat('#,###').format(clanInfo.clanPoints),
                 ),
-                Chip(
-                  avatar: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl: ImageAssets.trophies, width: 20),
+                ImageChip(
+                  imageUrl: ImageAssets.attacks,
                   label:
-                      Text(NumberFormat('#,###').format(clanInfo.clanPoints)),
-                ),
-                Chip(
-                  avatar: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl: ImageAssets.attacks, width: 20),
-                  label: Text(
-                      NumberFormat('#,###').format(clanInfo.clanCapitalPoints)),
+                      NumberFormat('#,###').format(clanInfo.clanCapitalPoints),
                 ),
                 if (clanInfo.requiredTownhallLevel > 0)
-                  Chip(
-                    avatar: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                        imageUrl: ImageAssets.townHall(
-                            clanInfo.requiredTownhallLevel),
-                        width: 20),
-                    label: Text(clanInfo.requiredTownhallLevel.toString()),
+                  ImageChip(
+                    imageUrl:
+                        ImageAssets.townHall(clanInfo.requiredTownhallLevel),
+                    label: clanInfo.requiredTownhallLevel.toString(),
                   ),
-                Chip(
-                  avatar: Icon(Icons.mail, size: 16, color: Theme.of(context).colorScheme.onSurface),
-                  label: Text(() {
+                IconChip(
+                  icon: Icons.mail,
+                  size: 16,
+                  color: Theme.of(context).colorScheme.onSurface,
+                  label: () {
                     switch (clanInfo.type) {
                       case 'inviteOnly':
                         return loc.inviteOnly;
@@ -218,16 +198,11 @@ class ClanInfoHeaderCard extends StatelessWidget {
                       default:
                         return clanInfo.type;
                     }
-                  }()),
+                  }(),
                 ),
-                Chip(
-                  avatar: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                    imageUrl: ImageAssets.war,
-                    width: 20,
-                  ),
-                  label: Text(() {
+                ImageChip(
+                  imageUrl: ImageAssets.war,
+                  label: () {
                     switch (clanInfo.warFrequency) {
                       case 'always':
                         return loc.always;
@@ -242,7 +217,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
                       default:
                         return loc.unknown;
                     }
-                  }()),
+                  }(),
                 ),
               ],
             ),
@@ -258,6 +233,102 @@ class ClanInfoHeaderCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            if (clanInfo.warCwl != null && clanInfo.warCwl!.isInWar)
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  shadowColor: Theme.of(context).colorScheme.secondary,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WarScreen(
+                        war: clanInfo.warCwl!.warInfo,
+                      ),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CachedNetworkImage(
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        width: 20,
+                        imageUrl:
+                            "https://assets.clashk.ing/icons/Icon_DC_War.png",
+                      ),
+                      SizedBox(width: 8),
+                      Shimmer.fromColors(
+                        period: Duration(seconds: 3),
+                        baseColor: Colors.white,
+                        highlightColor: Colors.white.withValues(alpha: 0.4),
+                        child: Text(AppLocalizations.of(context)!.ongoingWar,
+                            style: Theme.of(context).textTheme.bodyMedium),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            if (clanInfo.warCwl != null && clanInfo.warCwl!.isInCwl)
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  shadowColor: Theme.of(context).colorScheme.secondary,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CwlScreen(
+                        warCwl: clanInfo.warCwl!,
+                        clanTag: clanInfo.tag,
+                        clanInfo: clanInfo.warCwl!.leagueInfo!.clans.firstWhere(
+                          (clan) => clan.tag == clanInfo.tag,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CachedNetworkImage(
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        width: 20,
+                        imageUrl:
+                            "https://assets.clashk.ing/icons/Icon_DC_War.png",
+                      ),
+                      SizedBox(width: 8),
+                      Shimmer.fromColors(
+                        period: Duration(seconds: 3),
+                        baseColor: Colors.white,
+                        highlightColor: Colors.white.withValues(alpha: 0.4),
+                        child: Text(AppLocalizations.of(context)!.ongoingCwl,
+                            style: Theme.of(context).textTheme.bodyMedium),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            if (clanInfo.warCwl != null && clanInfo.warCwl!.isInCwl)
+              const SizedBox(height: 16),
           ],
         ),
       ],

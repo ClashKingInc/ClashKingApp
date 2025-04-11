@@ -1,6 +1,7 @@
 import 'package:clashkingapp/features/war_cwl/models/cwl_league.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_league_round.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 
 class WarCwl {
   final String tag;
@@ -64,5 +65,34 @@ class WarCwl {
     }
   }
 
-  
+  WarInfo getActiveWarForClan(String clanTag) {
+    try {
+      return warLeagueInfos.firstWhere(
+        (warInfo) =>
+            warInfo.state == 'inWar' &&
+            (warInfo.clan!.tag == clanTag || warInfo.opponent!.tag == clanTag),
+      );
+    } catch (e) {
+      return WarInfo(state: 'unknown');
+    }
+  }
+
+  WarMemberPresence getMemberPresence(String memberTag, String clanTag) {
+    try {
+      final warInfo = getActiveWarForClan(clanTag);
+      final member = warInfo.getMemberByTag(memberTag);
+
+      if (member != null) {
+        int attacksDone = member.attacks?.length ?? 0;
+        return WarMemberPresence(
+          isInWar: true,
+          attacksDone: attacksDone,
+          attacksAvailable: warInfo.attacksPerMember ?? 1,
+        );
+      }
+    } catch (e) {
+      print("❌ Error getting member presence: $e");
+    }
+    return WarMemberPresence(isInWar: false);
+  }
 }

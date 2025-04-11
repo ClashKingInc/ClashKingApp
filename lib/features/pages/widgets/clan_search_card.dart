@@ -93,7 +93,7 @@ class ClanSearchCardState extends State<ClanSearchCard> {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 labelText: AppLocalizations.of(context)!.searchClan,
-                hintText: AppLocalizations.of(context)!.nameOrTagClan,
+                hintText: AppLocalizations.of(context)!.clanName,
                 hintStyle: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 16,

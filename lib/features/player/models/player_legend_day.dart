@@ -29,6 +29,10 @@ class PlayerLegendDay {
     this.endTrophies,
   });
 
+  int get remainingAttacks {
+    return 8 - totalAttacks;
+  }
+
   factory PlayerLegendDay.fromJson(Map<String, dynamic> json) {
     return PlayerLegendDay(
       attacks: List<int>.from(json['attacks'] ?? []),

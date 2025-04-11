@@ -1,40 +1,69 @@
-import 'package:clashkingapp/classes/account/accounts.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/functions.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/player/models/player.dart';
+import 'package:clashkingapp/features/player/models/player_legend_day.dart';
+import 'package:clashkingapp/features/player/presentation/toDo/player_to_do_page.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
+import 'package:clashkingapp/features/war_cwl/models/cwl_member.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/classes/profile/profile_info.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/main_pages/dashboard_page/to_do_dashboard/to_do_page.dart';
-import 'package:clashkingapp/common/widgets/labels/beta_label.dart';
+import 'package:provider/provider.dart';
 
-class ToDoCard extends StatefulWidget {
-  const ToDoCard({
-    super.key,
-    required this.playerStats,
-    required this.tags,
-    required this.accounts,
-  });
-
-  final ProfileInfo playerStats;
-  final List<String> tags;
-  final Accounts accounts;
+class PlayerToDoCard extends StatefulWidget {
+  const PlayerToDoCard({super.key});
 
   @override
-  ToDoCardState createState() => ToDoCardState();
+  PlayerToDoCardState createState() => PlayerToDoCardState();
 }
 
-class ToDoCardState extends State<ToDoCard> {
+class PlayerToDoCardState extends State<PlayerToDoCard> {
   @override
   Widget build(BuildContext context) {
+    final playerService = context.watch<PlayerService>();
+    final cocAccountService = context.watch<CocAccountService>();
+    final player = playerService.getSelectedProfile(cocAccountService);
+    final warCwlService = context.watch<WarCwlService>();
+    WarMemberPresence memberCwl = WarMemberPresence.empty();
+
+    if (player == null) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    if (player.clan != null && player.clan!.tag != '') {
+      final warCwl = warCwlService.getWarCwlByTag(player.clan!.tag);
+      memberCwl = warCwl?.getMemberPresence(player.tag, player.clan!.tag) ??
+          WarMemberPresence.empty();
+    }
+
+    final ratio = player.getTodoProgressRatio(memberCwl: memberCwl);
+    final percent = (ratio * 100).toInt();
+
     return GestureDetector(
       onTap: () {
+        final Map<String, WarMemberPresence> memberPresenceMap = {};
+
+        for (final player in playerService.profiles) {
+          if (player.clan != null && player.clan!.tag.isNotEmpty) {
+            final warCwl = warCwlService.getWarCwlByTag(player.clan!.tag);
+            if (warCwl != null) {
+              memberPresenceMap[player.tag] =
+                  warCwl.getMemberPresence(player.tag, player.clan!.tag);
+            }
+          }
+        }
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ToDoScreen(
-                playerStats: widget.playerStats,
-                tags: widget.tags,
-                accounts: widget.accounts),
+            builder: (context) => PlayerToDoScreen(
+                players: playerService.profiles,
+                memberPresenceMap: memberPresenceMap),
           ),
         );
       },
@@ -53,20 +82,16 @@ class ToDoCardState extends State<ToDoCard> {
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            Text(
-                                AppLocalizations.of(context)?.toDoList ??
-                                    'To Do List',
+                            Text(AppLocalizations.of(context)!.toDoList,
                                 style:
                                     (Theme.of(context).textTheme.labelLarge)),
                             SizedBox(height: 12),
                             SizedBox(
                               height: 90,
                               width: 100,
-                              child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                                  imageUrl:
-                                      'https://assets.clashk.ing/icons/Magic_Item_Builder_Potion.png'),
+                              child: MobileWebImage(
+                                  imageUrl: ImageAssets.iconBuilderPotion,
+                                  fit: BoxFit.fitHeight),
                             ),
                           ],
                         ),
@@ -75,47 +100,41 @@ class ToDoCardState extends State<ToDoCard> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              iconToDo(widget.playerStats),
-                              if (widget.playerStats.toDo != null)
-                                Row(
-                                  children: [
-                                    SizedBox(width: 8),
-                                    Expanded(
-                                      child: Container(
-                                        height: 8,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color:
-                                                  Colors.black.withValues(alpha: 0.2),
-                                              width: 1),
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          child: LinearProgressIndicator(
-                                            value: widget.playerStats.toDo!
-                                                    .percentageDone /
-                                                100,
-                                            backgroundColor: Theme.of(context)
-                                                .scaffoldBackgroundColor,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    Colors.green),
-                                          ),
+                              iconToDo(player, memberCwl),
+                              Row(
+                                children: [
+                                  SizedBox(width: 8),
+                                  Expanded(
+                                    child: Container(
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.black
+                                                .withValues(alpha: 0.2),
+                                            width: 1),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(4),
+                                        child: LinearProgressIndicator(
+                                          value: ratio,
+                                          backgroundColor: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Colors.green),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '${widget.playerStats.toDo!.percentageDone}%',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge,
-                                    ),
-                                  ],
-                                )
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    '$percent%',
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         ),
@@ -126,17 +145,19 @@ class ToDoCardState extends State<ToDoCard> {
               ),
             ),
           ),
-          BetaLabel()
         ],
       ),
     );
   }
 
-  Widget iconToDo(ProfileInfo profileInfo) {
-    final int lastActiveTimestamp = profileInfo.toDo!.lastActive;
-    final Locale userLocale = Localizations.localeOf(context);
-    String formattedDate = DateFormat.yMd(userLocale.toString()).format(
-        DateTime.fromMillisecondsSinceEpoch(lastActiveTimestamp * 1000));
+  Widget iconToDo(Player player, WarMemberPresence memberCwl) {
+    final lastOnlineDate = player.lastOnline.toLocal();
+    final isLegend = player.league == "Legend League";
+    PlayerLegendDay? currentDay;
+
+    if (isLegend) {
+      currentDay = player.currentLegendSeason?.currentDay;
+    }
 
     return Column(
       children: <Widget>[
@@ -148,79 +169,43 @@ class ToDoCardState extends State<ToDoCard> {
                 children: [
                   Column(
                     children: <Widget>[
-                      profileInfo.toDo!.lastActive == 0
+                      lastOnlineDate == DateTime.utc(1970, 1, 1)
                           ? Text(
                               AppLocalizations.of(context)!.playerNotTracked,
                               style: Theme.of(context).textTheme.labelLarge,
                               textAlign: TextAlign.center,
                             )
-                          :
-                      Text(
-                        AppLocalizations.of(context)
-                                ?.lastActive((formattedDate)) ??
-                            'Last active: $formattedDate',
-                        style: Theme.of(context).textTheme.labelLarge,
-                        textAlign: TextAlign.center,
-                      ),
-                      //Text(timeAgo, style: Theme.of(context).textTheme.labelLarge),
+                          : Text(
+                              AppLocalizations.of(context)!.lastActive(
+                                  (player.getLastOnlineText(context))
+                                      .toString()),
+                              style: Theme.of(context).textTheme.labelLarge,
+                              textAlign: TextAlign.center,
+                            ),
                       SizedBox(height: 8),
                       Wrap(
                         alignment: WrapAlignment.start,
                         spacing: 7.0,
                         runSpacing: -7.0,
                         children: <Widget>[
-                          if ((profileInfo.toDo != null &&
-                                  profileInfo.toDo!.legends != null) ||
-                              profileInfo.league == 'Legend League')
+                          if (player.league == 'Legend League' ||
+                              currentDay != null)
                             Chip(
                               avatar: CircleAvatar(
                                 backgroundColor: Colors.transparent,
-                                child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                                  imageUrl:
-                                      "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png",
-                                ),
+                                child: MobileWebImage(
+                                    imageUrl:
+                                        ImageAssets.legendBlazonNoPadding),
                               ),
                               labelPadding:
                                   EdgeInsets.only(left: 2.0, right: 2.0),
                               label: Text(
-                                "${profileInfo.toDo!.legends?.numAttacks ?? 0}/8",
+                                "${currentDay?.totalAttacks ?? 0}/8",
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                               shape: RoundedRectangleBorder(
                                 side: BorderSide(
-                                  color:
-                                      profileInfo.toDo!.legends?.numAttacks == 8
-                                          ? Colors.green
-                                          : Colors.red,
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                          if (profileInfo.toDo!.war != null &&
-                              profileInfo.toDo!.war!.attackLimit != 0)
-                            Chip(
-                              avatar: CircleAvatar(
-                                backgroundColor: Colors.transparent,
-                                child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                                  imageUrl:
-                                      "https://assets.clashk.ing/icons/Icon_DC_War.png",
-                                ),
-                              ),
-                              labelPadding:
-                                  EdgeInsets.only(left: 2.0, right: 2.0),
-                              label: Text(
-                                "${profileInfo.toDo!.war!.attacksDone}/${profileInfo.toDo!.war!.attackLimit}",
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                  color: profileInfo.toDo!.war!.attacksDone ==
-                                          profileInfo.toDo!.war!.attackLimit
+                                  color: currentDay?.totalAttacks == 8
                                       ? Colors.green
                                       : Colors.red,
                                   width: 1.0,
@@ -228,15 +213,41 @@ class ToDoCardState extends State<ToDoCard> {
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
-                          if (profileInfo.toDo!.isInTimeFrameForClanGames)
+                          /*if (player.toDo!.war != null &&
+                              player.toDo!.war!.attackLimit != 0)
                             Chip(
                               avatar: CircleAvatar(
                                 backgroundColor: Colors.transparent,
                                 child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
                                   imageUrl:
-                                      "https://assets.clashk.ing/icons/Icon_HV_Clan_Games_Medal.png",
+                                      "https://assets.clashk.ing/icons/Icon_DC_War.png",
+                                ),
+                              ),
+                              labelPadding:
+                                  EdgeInsets.only(left: 2.0, right: 2.0),
+                              label: Text(
+                                "${player.toDo!.war!.attacksDone}/${player.toDo!.war!.attackLimit}",
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: player.toDo!.war!.attacksDone ==
+                                          player.toDo!.war!.attackLimit
+                                      ? Colors.green
+                                      : Colors.red,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),*/
+                          if (isInTimeFrameForClanGames())
+                            Chip(
+                              avatar: CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                child: MobileWebImage(
+                                  imageUrl: ImageAssets.clanGamesMedals,
                                 ),
                               ),
                               labelPadding:
@@ -246,61 +257,14 @@ class ToDoCardState extends State<ToDoCard> {
                                         '#,###',
                                         Localizations.localeOf(context)
                                             .toString())
-                                    .format(int.parse(profileInfo
-                                        .toDo!.clanGames.points
+                                    .format(int.parse(player
+                                        .currentClanGamesPoints
                                         .toString())),
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                               shape: RoundedRectangleBorder(
                                 side: BorderSide(
-                                  color:
-                                      profileInfo.toDo!.clanGames.points == 4000
-                                          ? Colors.green
-                                          : Colors.red,
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                          if (profileInfo.toDo!.isInTimeFrameForRaid)
-                            Chip(
-                              avatar: CircleAvatar(
-                                backgroundColor: Colors.transparent,
-                                child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                                  imageUrl:
-                                      "https://assets.clashk.ing/icons/Icon_HV_Raid_Attack.png",
-                                ),
-                              ),
-                              labelPadding:
-                                  EdgeInsets.only(left: 2.0, right: 2.0),
-                              label: profileInfo.toDo!.raids.attackLimit == 0
-                                  ? Text(
-                                      '0/5',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge,
-                                    )
-                                  : Text(
-                                      '${profileInfo.toDo!.raids.attacksDone}/${profileInfo.toDo!.raids.attackLimit}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge,
-                                    ),
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                  color: (profileInfo.toDo!.raids.attacksDone ==
-                                                  5 &&
-                                              profileInfo.toDo!.raids
-                                                      .attackLimit ==
-                                                  5) ||
-                                          (profileInfo.toDo!.raids
-                                                      .attacksDone ==
-                                                  6 &&
-                                              profileInfo.toDo!.raids
-                                                      .attackLimit ==
-                                                  6)
+                                  color: player.currentClanGamesPoints == 4000
                                       ? Colors.green
                                       : Colors.red,
                                   width: 1.0,
@@ -308,27 +272,67 @@ class ToDoCardState extends State<ToDoCard> {
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
-                          if (widget.playerStats.toDo!.cwl.attackLimit > 0)
+                          /*if (isInTimeFrameForRaid())
                             Chip(
                               avatar: CircleAvatar(
                                 backgroundColor: Colors.transparent,
                                 child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
                                   imageUrl:
-                                      "https://assets.clashk.ing/icons/Icon_DC_CWL_No_Border.png",
+                                      "https://assets.clashk.ing/icons/Icon_HV_Raid_Attack.png",
+                                ),
+                              ),
+                              labelPadding:
+                                  EdgeInsets.only(left: 2.0, right: 2.0),
+                              label: player.toDo!.raids.attackLimit == 0
+                                  ? Text(
+                                      '0/5',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    )
+                                  : Text(
+                                      '${player.toDo!.raids.attacksDone}/${player.toDo!.raids.attackLimit}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    ),
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: (player.toDo!.raids.attacksDone == 5 &&
+                                              player.toDo!.raids.attackLimit ==
+                                                  5) ||
+                                          (player.toDo!.raids.attacksDone ==
+                                                  6 &&
+                                              player.toDo!.raids.attackLimit ==
+                                                  6)
+                                      ? Colors.green
+                                      : Colors.red,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),*/
+                          if (isInTimeFrameForCwl() && 
+                              memberCwl.attacksAvailable != 0)
+                            Chip(
+                              avatar: CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                child: MobileWebImage(
+                                  imageUrl: ImageAssets.cwlSwordsNoBorder,
                                 ),
                               ),
                               labelPadding:
                                   EdgeInsets.only(left: 2.0, right: 2.0),
                               label: Text(
-                                '${widget.playerStats.toDo!.cwl.attacksDone}/${widget.playerStats.toDo!.cwl.attackLimit}',
+                                '${memberCwl.attacksDone}/${memberCwl.attacksAvailable}',
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                               shape: RoundedRectangleBorder(
                                 side: BorderSide(
-                                  color: (profileInfo.toDo!.cwl.attacksDone ==
-                                          profileInfo.toDo!.cwl.attackLimit)
+                                  color: (memberCwl.attacksDone ==
+                                          memberCwl.attacksAvailable)
                                       ? Colors.green
                                       : Colors.red,
                                   width: 1.0,
@@ -341,11 +345,8 @@ class ToDoCardState extends State<ToDoCard> {
                               backgroundColor: Colors.transparent,
                               child: Transform.scale(
                                 scale: 1.7,
-                                child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                                  imageUrl:
-                                      "https://assets.clashk.ing/icons/Icon_HV_Gold_Pass.png",
+                                child: MobileWebImage(
+                                  imageUrl: ImageAssets.iconGoldPass,
                                 ),
                               ),
                             ),
@@ -357,12 +358,12 @@ class ToDoCardState extends State<ToDoCard> {
                                       Localizations.localeOf(context)
                                           .toString())
                                   .format(int.parse(
-                                      profileInfo.toDo!.seasonPass.toString())),
+                                      player.currentSeasonPoints.toString())),
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: profileInfo.toDo!.seasonPassRatio == 1
+                                color: player.seasonPassRatio == 1
                                     ? Colors.green
                                     : Colors.red,
                                 width: 1.0,

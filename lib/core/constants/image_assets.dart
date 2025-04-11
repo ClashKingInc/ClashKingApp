@@ -83,7 +83,7 @@ class ImageAssets {
     "Unranked": "$baseUrl/home-base/league-icons/Icon_HV_CWL_Unranked.png",
   };
 
-  // 🏆 Wars & Trophies
+  // 🏆 Wars & CWL & Trophies
   static const String warPreferenceIn = "$baseUrl/icons/Icon_HV_In.png";
   static const String warPreferenceOut = "$baseUrl/icons/Icon_HV_Out.png";
   static const String attackStar = "$baseUrl/icons/Icon_HV_Attack_Star.png";
@@ -102,6 +102,7 @@ class ImageAssets {
   static const String podium = "$baseUrl/icons/Icon_HV_Podium.png";
   static const String clanCastle =
       "$baseUrl/builder-base/building-pics/Building_HV_Clan_Castle_level_2_3.png";
+  static const String cwlSwordsNoBorder = "$baseUrl/icons/Icon_DC_CWL_No_Border.png";
 
   // 🎖️ Legend League
   static const String legendStartFlag = "$baseUrl/icons/Icon_HV_Start_Flag.png";
@@ -122,6 +123,7 @@ class ImageAssets {
       badgeUrl.isNotEmpty ? badgeUrl : "$baseUrl/icons/default_clan_badge.png";
   static String getClanBadgeImage(String url) =>
       url.isNotEmpty ? url : defaultImage;
+  static const String clanGamesMedals = "$baseUrl/icons/Icon_HV_Clan_Games_Medal.png";
 
   // Icons
   static const String iconTick =
@@ -129,6 +131,8 @@ class ImageAssets {
   static const String iconCross =
       "https://assets.clashk.ing/icons/Icon_DC_Cross.png";
   static const String iconClock = "$baseUrl/bot/icons/clock.png";
+  static const String iconBuilderPotion = "$baseUrl/icons/Magic_Item_Builder_Potion.png";
+  static const String iconGoldPass = "$baseUrl/icons/Icon_HV_Gold_Pass.png";
 
   // ⭐ Clan Capital
   static const String capitalGold =

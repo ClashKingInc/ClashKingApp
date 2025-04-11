@@ -48,4 +48,5 @@ class WarCwlService extends ChangeNotifier {
     if (tag.isEmpty) return null;
     return summaries[tag];
   }
+
 }
