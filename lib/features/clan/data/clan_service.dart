@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -11,6 +12,7 @@ class ClanService extends ChangeNotifier {
   final Map<String, Clan> _clans = {};
   List<Clan> fetchedClans = [];
   bool _isLoading = false;
+  List<ClanJoinLeave> joinLeaveList = [];
 
   bool get isLoading => _isLoading;
   Map<String, Clan> get clans => _clans;
@@ -120,6 +122,70 @@ class ClanService extends ChangeNotifier {
         print("🔗 Linked ${clan.name} to war info (${warCwl.tag})");
       } catch (e) {
         print("❌ Error linking clan ${warCwl.tag} to war info: $e");
+      }
+    }
+  }
+
+  Future<List<ClanJoinLeave>> loadClanJoinLeaveData(
+      List<String> clanTags) async {
+    if (clanTags.isEmpty) return List<ClanJoinLeave>.empty();
+
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      print("🏰 Loading clan join/leave data for tags: $clanTags");
+      final token = await TokenService().getAccessToken();
+      if (token == null) throw Exception("User not authenticated");
+
+
+      final response = await http.post(
+        Uri.parse(
+            "${ApiService.apiUrl}/clans/join-leave?+current_season=true"),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({"clan_tags": clanTags}),
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = utf8.decode(response.bodyBytes);
+        final data = jsonDecode(responseBody);
+        if (data.containsKey("items") && data["items"] is List) {
+          joinLeaveList = (data["items"] as List)
+              .whereType<Map<String, dynamic>>()
+              .map((clan) => ClanJoinLeave.fromJson(clan))
+              .toList();
+        } else {
+          Sentry.captureMessage("Error loading clan data: $data",
+              level: SentryLevel.error);
+        }
+
+        return joinLeaveList;
+      } else {
+        Sentry.captureMessage("Error loading clan data",
+            level: SentryLevel.error);
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+      print("❌ Error loading clan data: $e");
+    }
+
+    return List<ClanJoinLeave>.empty();
+  }
+
+  void linkJoinLeaveToClans() {
+    for (var clan in _clans.values) {
+      try {
+        final joinLeave = joinLeaveList.firstWhere(
+            (joinLeave) => joinLeave.clanTag == clan.tag,
+            orElse: () => ClanJoinLeave.empty());
+        clan.joinLeave = joinLeave;
+        print(
+            "🔗 Linked ${clan.tag} to join/leave data (${joinLeave.clanTag})");
+      } catch (e) {
+        print("❌ Error linking clan ${clan.tag} to join/leave data: $e");
       }
     }
   }

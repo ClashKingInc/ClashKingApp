@@ -1,7 +1,7 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/war.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';

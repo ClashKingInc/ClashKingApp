@@ -54,8 +54,8 @@ class PlayerWarStatsCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         SizedBox(
-                          height: 70,
-                          width: 70,
+                          height: 60,
+                          width: 60,
                           child: MobileWebImage(imageUrl: ImageAssets.war),
                         ),
                       ],

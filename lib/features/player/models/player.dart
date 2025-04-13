@@ -13,6 +13,7 @@ import 'package:clashkingapp/features/player/models/player_legend_ranking.dart';
 import 'package:clashkingapp/features/player/models/player_legend_season.dart';
 import 'package:clashkingapp/features/player/models/player_legend_stats.dart';
 import 'package:clashkingapp/features/player/models/player_pet.dart';
+import 'package:clashkingapp/features/player/models/player_raids.dart';
 import 'package:clashkingapp/features/player/models/player_rankings.dart';
 import 'package:clashkingapp/features/player/models/player_season_pass.dart';
 import 'package:clashkingapp/features/player/models/player_siege_machine.dart';
@@ -66,6 +67,7 @@ class Player {
   List<PlayerLegendRanking> legendRanking;
   PlayerRankings? rankings;
   PlayerWarStats? warStats;
+  PlayerRaids? raids;
 
   Player({
     required this.name,
@@ -354,6 +356,7 @@ class Player {
   }
 
   void enrichWithFullStats(Map<String, dynamic> json) {
+    print(json['raid_data']);
     clanGamesPoint =
         (json['clan_games'] as Map<String, dynamic>?)?.entries.map((entry) {
               return PlayerClanGames.fromJson(entry.key, entry.value);
@@ -386,6 +389,9 @@ class Player {
     rankings = json['rankings'] != null
         ? PlayerRankings.fromJson(json['rankings'])
         : null;
+    raids = json['raid_data'] != null && (json['raid_data'] as Map).isNotEmpty
+        ? PlayerRaids.fromJson(json['raid_data'])
+        : PlayerRaids.empty();
   }
 
   String getLastOnlineText(BuildContext context) {
@@ -449,11 +455,11 @@ class Player {
     totalEvent += 2;
     totalDone += seasonPassRatio * 2;
 
-    // Raids et Guerres (désactivés pour l'instant)
-    // totalEvent += 5;
-    // totalDone += ...;
-
-    print("Total Done: $totalDone, Total Event: $totalEvent");
+    // Raids
+    if (isInTimeFrameForRaid()) {
+      totalEvent += raids?.attackLimit ?? 0.0;
+      totalDone += raids?.attackDone ?? 0.0;
+    }
 
     if (totalEvent == 0) return 0.0;
     return (totalDone / totalEvent).clamp(0.0, 1.0);

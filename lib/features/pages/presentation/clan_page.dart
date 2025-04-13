@@ -1,6 +1,9 @@
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
-import 'package:clashkingapp/features/clan/presentation/clan_page.dart';
+import 'package:clashkingapp/features/clan/presentation/join_leave/clan_join_leave.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
+import 'package:clashkingapp/features/pages/widgets/clan_capital_card.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_info_card.dart';
+import 'package:clashkingapp/features/pages/widgets/clan_join_leave_card.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_no_clan_card.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_search_card.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -42,19 +45,48 @@ class ClanPage extends StatelessWidget {
               child: ClanSearchCard(),
             ),
             if (hasClan)
-              GestureDetector(
-                  onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ClanInfoScreen(
-                            clanInfo: clanInfo,
-                          ),
+              Column(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ClanInfoScreen(
+                          clanInfo: clanInfo
                         ),
                       ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: ClanInfoCard(clanInfo: clanInfo),
-                  ))
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: ClanInfoCard(),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ClanJoinLeaveScreen(clanInfo: clanInfo),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: ClanJoinLeaveCard(),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ClanJoinLeaveScreen(clanInfo: clanInfo),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: ClanCapitaleCard(),
+                    ),
+                  ),
+                ],
+              )
             else
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0),

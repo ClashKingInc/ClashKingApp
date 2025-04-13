@@ -2171,7 +2171,7 @@ abstract class AppLocalizations {
   /// Logs of players joining or leaving the clan.
   ///
   /// In en, this message translates to:
-  /// **'Join/Leave Logs'**
+  /// **'Join/Leave Logs (Current Season)'**
   String get joinLeaveLogs;
 
   /// No description provided for @join.
@@ -2204,11 +2204,35 @@ abstract class AppLocalizations {
   /// **'{number} player(s) joined the clan during the current season ({date}).'**
   String joinNumberDescription(int number, String date);
 
-  /// Number of new members gained by the clan this season.
+  /// Number of players who left and rejoined the clan during the current season.
   ///
   /// In en, this message translates to:
-  /// **'Your clan has gained {number} new member(s) this season ({date}).'**
-  String joinLeaveDifferenceUpDescription(int number, String date);
+  /// **'{number} player(s) left and rejoined the clan during the current season ({date}).'**
+  String movingNumberDescription(int number, String date);
+
+  /// Number of unique players who joined/left the clan during the current season.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} unique player(s) joined/left the clan during the current season ({date}).'**
+  String uniqueNumberDescription(int number, String date);
+
+  /// The hour with the most join/leave activity.
+  ///
+  /// In en, this message translates to:
+  /// **'{hour}h is usually the hour with the most join/leave activity.'**
+  String mostMovingHourDescription(int hour);
+
+  /// Number of players still in the clan.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} player(s) are still in the clan.'**
+  String stillInClanNumberDescription(int number);
+
+  /// Number of players who left the clan.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} player(s) left the clan.'**
+  String leftClanNumberDescription(int number);
 
   /// Number of members lost by the clan this season.
   ///

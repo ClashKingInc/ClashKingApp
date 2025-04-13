@@ -107,6 +107,8 @@ class PlayerService extends ChangeNotifier {
     );
 
     try {
+      print(clanTagsByPlayer);
+      print(playerTags);
       if (response.statusCode == 200) {
         final responseBody = utf8.decode(response.bodyBytes);
         final data = jsonDecode(responseBody);

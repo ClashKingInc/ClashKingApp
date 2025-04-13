@@ -22,7 +22,6 @@ class ClanJoinLeaveCard extends StatelessWidget {
     
     var joinsAfterLastMonday = clanInfo!.joinLeaveClan.items.where((item) => item.type == "join" && item.time.isAfter(lastMonday)).toList();
     var leavesAfterLastMonday = clanInfo!.joinLeaveClan.items.where((item) => item.type == "leave" && item.time.isAfter(lastMonday)).toList();
-    int joinDifference = joinsAfterLastMonday.length - leavesAfterLastMonday.length;
 
     return Card(
       child: Padding(
@@ -80,18 +79,7 @@ class ClanJoinLeaveCard extends StatelessWidget {
                             description: AppLocalizations.of(context)!
                               .joinNumberDescription(leavesAfterLastMonday.length,formattedDate),
                           ),
-                          IconChip(
-                            icon: LucideIcons.arrowUpDown,
-                            color: Colors.blue,
-                            size: 16,
-                            labelPadding: 2,
-                            label: joinDifference.toString(),
-                            description: joinDifference > 0
-                              ? AppLocalizations.of(context)!.joinLeaveDifferenceUpDescription(joinDifference, formattedDate)
-                              : joinDifference < 0
-                                ? AppLocalizations.of(context)!.joinLeaveDifferenceDownDescription(-joinDifference, formattedDate)
-                                : AppLocalizations.of(context)!.joinLeaveDifferenceEqualDescription(formattedDate)
-                          ),
+                          
                         ],
                       ),
                     ],

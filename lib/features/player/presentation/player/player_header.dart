@@ -3,7 +3,7 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
-import 'package:clashkingapp/features/clan/presentation/clan_page.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/legend/player_legend_page.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +19,7 @@ import 'package:shimmer/shimmer.dart';
 class PlayerInfoHeader extends StatefulWidget {
   final int selectedTab;
   final Player player;
+  
   const PlayerInfoHeader({super.key, required this.selectedTab, required this.player});
 
   @override

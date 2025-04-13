@@ -253,3 +253,4 @@ bool isInTimeFrameForCwl() {
 
   return isInTimeFrameForCwl;
 }
+

@@ -3,17 +3,20 @@ import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/models/clan_member.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class ClanMembers extends StatefulWidget {
   final Clan clanInfo;
 
-  const ClanMembers({required this.clanInfo, super.key});
+  const ClanMembers(
+      {required this.clanInfo, super.key});
 
   @override
   ClanMembersState createState() => ClanMembersState();
@@ -44,6 +47,9 @@ class ClanMembersState extends State<ClanMembers> {
       AppLocalizations.of(context)?.donationsRatio ?? 'Donation Ratio':
           'donationsRatio',
     };
+    
+    final cocService = context.watch<CocAccountService>();
+    final activeUserTags = cocService.getAccountTags();
 
     Map<String, int> roleWeights = {
       'leader': 4,
@@ -130,13 +136,19 @@ class ClanMembersState extends State<ClanMembers> {
                 navigator.pop();
                 navigator.push(
                   MaterialPageRoute(
-                      builder: (context) =>
-                          PlayerScreen(selectedPlayer: selectedPlayer)),
+                      builder: (context) => PlayerScreen(
+                          selectedPlayer: selectedPlayer)),
                 );
               },
               child: Card(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.0),
+                  side: BorderSide(
+                    color: activeUserTags.contains(member.tag)
+                        ? Colors.green
+                        : Colors.transparent,
+                    width: 2,
+                  ),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
@@ -151,8 +163,8 @@ class ClanMembersState extends State<ClanMembers> {
                         child: Row(
                           children: [
                             CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
                               imageUrl:
                                   ImageAssets.townHall(member.townHallLevel),
                               width: 40,
@@ -250,11 +262,11 @@ class ClanMembersState extends State<ClanMembers> {
       children: [
         const SizedBox(width: 20),
         CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: imageUrl, width: 24),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+            imageUrl: imageUrl,
+            width: 24),
         const SizedBox(width: 8),
-        Text(text,
-            style: Theme.of(context).textTheme.bodySmall),
+        Text(text, style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }

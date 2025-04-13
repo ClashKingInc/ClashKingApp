@@ -1,3 +1,4 @@
+import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 
 import 'clan_location.dart';
@@ -36,6 +37,7 @@ class Clan {
   final ClanCapital? clanCapital;
   final ClanChatLanguage? chatLanguage;
   WarCwl? warCwl;
+  ClanJoinLeave? joinLeave;
 
   Clan({
     required this.tag,
@@ -64,7 +66,7 @@ class Clan {
     required this.requiredBuilderBaseTrophies,
     required this.requiredTownhallLevel,
     this.clanCapital,
-    this.chatLanguage,
+    this.chatLanguage
   });
 
   factory Clan.fromJson(Map<String, dynamic> json) {
@@ -86,7 +88,7 @@ class Clan {
           ? ClanLeague.fromJson(json["capitalLeague"])
           : null,
       requiredTrophies: json["requiredTrophies"] ?? 0,
-      warFrequency: json["warFrequency"]  ?? "unknown",
+      warFrequency: json["warFrequency"] ?? "unknown",
       warWinStreak: json["warWinStreak"] ?? 0,
       warWins: json["warWins"] ?? 0,
       warTies: json["warTies"] ?? 0,
@@ -114,5 +116,9 @@ class Clan {
 
   void linkWar(WarCwl s) {
     warCwl = s;
+  }
+
+  void linkJoinLeave(ClanJoinLeave s) {
+    joinLeave = s;
   }
 }

@@ -85,9 +85,8 @@ class PlayerToDoBodyCard extends StatelessWidget {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: MobileWebImage(
-                                      imageUrl:
-                                          ImageAssets.legendBlazonNoPadding
-                                    ),
+                                        imageUrl:
+                                            ImageAssets.legendBlazonNoPadding),
                                   ),
                                   labelPadding:
                                       EdgeInsets.symmetric(horizontal: 4.0),
@@ -115,8 +114,7 @@ class PlayerToDoBodyCard extends StatelessWidget {
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     child: MobileWebImage(
-                                      imageUrl: ImageAssets.clanGamesMedals
-                                    ),
+                                        imageUrl: ImageAssets.clanGamesMedals),
                                   ),
                                   labelPadding:
                                       EdgeInsets.symmetric(horizontal: 4.0),
@@ -163,29 +161,41 @@ class PlayerToDoBodyCard extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
                                 ),
-                              /* 
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  child: CachedNetworkImage(
-                                    imageUrl: 'https://assets.clashk.ing/icons/Icon_HV_Raid_Attack.png',
-                                    errorWidget: (context, url, error) => Icon(Icons.error),
+                              if (isInTimeFrameForRaid())
+                                Chip(
+                                  avatar: CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    child: MobileWebImage(
+                                      imageUrl: ImageAssets.raidAttacks,
+                                    ),
+                                  ),
+                                  labelPadding:
+                                      EdgeInsets.only(left: 2.0, right: 2.0),
+                                  label: Text(
+                                    '${player.raids?.attackDone}/${player.raids?.attackLimit}',
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color: (player.raids?.attackDone == 5 &&
+                                                  player.raids?.attackLimit ==
+                                                      5) ||
+                                              (player.raids?.attackDone == 6 &&
+                                                  player.raids?.attackLimit ==
+                                                      6)
+                                          ? Colors.green
+                                          : Colors.red,
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
                                   ),
                                 ),
-                                labelPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                                label: Text('0/6'), 
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(color: Colors.red),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                              ),
-                              */
                               Chip(
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors.transparent,
                                   child: MobileWebImage(
-                                    imageUrl: ImageAssets.iconGoldPass
-                                  ),
+                                      imageUrl: ImageAssets.iconGoldPass),
                                 ),
                                 labelPadding:
                                     EdgeInsets.symmetric(horizontal: 4.0),

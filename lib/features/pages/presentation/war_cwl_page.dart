@@ -3,7 +3,8 @@ import 'package:clashkingapp/features/pages/widgets/cwl_card.dart';
 import 'package:clashkingapp/features/pages/widgets/cwl_war_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_access_denied_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_card.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/cwl.dart';
+import 'package:clashkingapp/features/pages/widgets/war_not_in_war_card.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,7 @@ class WarCwlPage extends StatelessWidget {
     final clanService = context.watch<ClanService>();
     final playerService = context.watch<PlayerService>();
     final warCwlService = context.watch<WarCwlService>();
-    
+
     final clan = clanService.getClanByTag(
         playerService.getSelectedProfile(cocService)?.clanTag ?? "");
     final warCwl = warCwlService.getWarCwlByTag(clan?.tag ?? "");
@@ -66,7 +67,10 @@ class WarCwlPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Card(
-                  color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.2),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .surface
+                      .withValues(alpha: 0.2),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Column(
@@ -112,7 +116,7 @@ class WarCwlPage extends StatelessWidget {
                   clanBadgeUrl: clan.badgeUrls.large,
                 ),
               )
-            /*else
+            else
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: NotInWarCard(
@@ -120,7 +124,17 @@ class WarCwlPage extends StatelessWidget {
                   clanBadgeUrl: clan.badgeUrls.large,
                 ),
               ),
-            if (hasClan && warState != "accessDenied" && clan!.isWarLogPublic == true)
+            if (hasClan &&
+                !warCwl!.isInCwl &&
+                warCwl.warInfo.state == "accessDenied" &&
+                clan.isWarLogPublic == true)
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: WarAccessDeniedCard(
+                    clanName: clan.name,
+                    clanBadgeUrl: clan.badgeUrls.large,
+                  )),
+            /*if (hasClan && warState != "accessDenied" && clan!.isWarLogPublic == true)
               WarHistoryCard(
                 clan: clan,
                 warLogData: clan.warLog.items,

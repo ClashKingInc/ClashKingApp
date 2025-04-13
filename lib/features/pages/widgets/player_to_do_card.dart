@@ -272,49 +272,36 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
-                          /*if (isInTimeFrameForRaid())
+                          if (isInTimeFrameForRaid())
                             Chip(
                               avatar: CircleAvatar(
                                 backgroundColor: Colors.transparent,
-                                child: CachedNetworkImage(
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
-                                  imageUrl:
-                                      "https://assets.clashk.ing/icons/Icon_HV_Raid_Attack.png",
+                                child: MobileWebImage(
+                                  imageUrl: ImageAssets.raidAttacks,
                                 ),
                               ),
                               labelPadding:
                                   EdgeInsets.only(left: 2.0, right: 2.0),
-                              label: player.toDo!.raids.attackLimit == 0
-                                  ? Text(
-                                      '0/5',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge,
-                                    )
-                                  : Text(
-                                      '${player.toDo!.raids.attacksDone}/${player.toDo!.raids.attackLimit}',
+                              label: Text(
+                                      '${player.raids?.attackDone}/${player.raids?.attackLimit}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge,
                                     ),
                               shape: RoundedRectangleBorder(
                                 side: BorderSide(
-                                  color: (player.toDo!.raids.attacksDone == 5 &&
-                                              player.toDo!.raids.attackLimit ==
-                                                  5) ||
-                                          (player.toDo!.raids.attacksDone ==
-                                                  6 &&
-                                              player.toDo!.raids.attackLimit ==
-                                                  6)
+                                  color: (player.raids?.attackDone == 5 &&
+                                              player.raids?.attackLimit == 5) ||
+                                          (player.raids?.attackDone == 6 &&
+                                              player.raids?.attackLimit == 6)
                                       ? Colors.green
                                       : Colors.red,
                                   width: 1.0,
                                 ),
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
-                            ),*/
-                          if (isInTimeFrameForCwl() && 
+                            ),
+                          if (isInTimeFrameForCwl() &&
                               memberCwl.attacksAvailable != 0)
                             Chip(
                               avatar: CircleAvatar(

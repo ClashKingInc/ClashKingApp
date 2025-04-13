@@ -866,7 +866,7 @@
         }
     }
 },
-"joinLeaveLogs": "Join/Leave Logs",
+"joinLeaveLogs": "Join/Leave Logs (Current Season)",
 "join": "Join",
 "leave": "Leave",
 "reset": "Reset",
@@ -894,15 +894,54 @@
         }
     }
 },
-"joinLeaveDifferenceUpDescription": "Your clan has gained {number} new member(s) this season ({date}).",
-"@joinLeaveDifferenceUpDescription": {
-    "description": "Number of new members gained by the clan this season.",
+"movingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
+"@movingNumberDescription": {
+    "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
         "number": {
             "type": "int"
         },
         "date": {
             "type": "String"
+        }
+    }
+},
+"uniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
+"@uniqueNumberDescription": {
+    "description": "Number of unique players who joined/left the clan during the current season.",
+    "placeholders": {
+        "number": {
+            "type": "int"
+        },
+        "date": {
+            "type": "String"
+        }
+    }
+},
+"mostMovingHourDescription": "{hour}h is usually the hour with the most join/leave activity.",
+"@mostMovingHourDescription": {
+    "description": "The hour with the most join/leave activity.",
+    "placeholders": {
+        "hour": {
+            "type": "int"
+        }
+    }
+},
+"stillInClanNumberDescription": "{number} player(s) are still in the clan.",
+"@stillInClanNumberDescription": {
+    "description": "Number of players still in the clan.",
+    "placeholders": {
+        "number": {
+            "type": "int"
+        }
+    }
+},
+"leftClanNumberDescription": "{number} player(s) left the clan.",
+"@leftClanNumberDescription": {
+    "description": "Number of players who left the clan.",
+    "placeholders": {
+        "number": {
+            "type": "int"
         }
     }
 },

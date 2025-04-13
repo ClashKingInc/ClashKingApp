@@ -225,7 +225,7 @@ class CocAccountService extends ChangeNotifier {
           .map((profile) => profile.clanTag)
           .where((tag) => tag.isNotEmpty)
           .toSet();
-      
+
       transaction.setTag("playerTags", playerTags.toString());
       transaction.setTag("playerTagsCount", playerTags.length.toString());
       transaction.setTag("clanTags", clanTags.toString());
@@ -253,6 +253,12 @@ class CocAccountService extends ChangeNotifier {
           }(),
         if (clanTags.isNotEmpty)
           () async {
+            final span = spanParallel.startChild("loadClanJoinLeaveData");
+            await clanService.loadClanJoinLeaveData(clanTags.toList());
+            span.finish();
+          }(),
+        if (clanTags.isNotEmpty)
+          () async {
             final span = spanParallel.startChild("loadAllWarData");
             await warCwlService.loadAllWarData(clanTags.toList());
             span.finish();
@@ -261,7 +267,7 @@ class CocAccountService extends ChangeNotifier {
 
       spanParallel.finish();
 
-      // → Linkage après les chargements
+      // Link players to clans and link wars to clans
       if (clanTags.isNotEmpty) {
         final spanLinkClans = transaction.startChild("linkClansToPlayers");
         playerService.linkClansToPlayer(
@@ -276,6 +282,11 @@ class CocAccountService extends ChangeNotifier {
           warCwlService.summaries.values.toList(),
         );
         spanLinkWars.finish();
+
+        final spanLinkJoinLeave =
+            transaction.startChild("linkJoinLeaveToClans");
+        clanService.linkJoinLeaveToClans();
+        spanLinkJoinLeave.finish();
       }
 
       transaction.finish(status: SpanStatus.ok());

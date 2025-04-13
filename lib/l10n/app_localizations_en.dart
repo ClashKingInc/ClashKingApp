@@ -1127,7 +1127,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get joinLeaveLogs => 'Join/Leave Logs';
+  String get joinLeaveLogs => 'Join/Leave Logs (Current Season)';
 
   @override
   String get join => 'Join';
@@ -1149,8 +1149,28 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String joinLeaveDifferenceUpDescription(int number, String date) {
-    return 'Your clan has gained $number new member(s) this season ($date).';
+  String movingNumberDescription(int number, String date) {
+    return '$number player(s) left and rejoined the clan during the current season ($date).';
+  }
+
+  @override
+  String uniqueNumberDescription(int number, String date) {
+    return '$number unique player(s) joined/left the clan during the current season ($date).';
+  }
+
+  @override
+  String mostMovingHourDescription(int hour) {
+    return '${hour}h is usually the hour with the most join/leave activity.';
+  }
+
+  @override
+  String stillInClanNumberDescription(int number) {
+    return '$number player(s) are still in the clan.';
+  }
+
+  @override
+  String leftClanNumberDescription(int number) {
+    return '$number player(s) left the clan.';
   }
 
   @override
@@ -2382,11 +2402,6 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   }
 
   @override
-  String joinLeaveDifferenceUpDescription(int number, String date) {
-    return 'Your clan has gained $number new member(s) this season ($date).';
-  }
-
-  @override
   String joinLeaveDifferenceDownDescription(int number, String date) {
     return 'Your clan has lost $number member(s) this season ($date).';
   }
@@ -3586,11 +3601,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String joinNumberDescription(int number, String date) {
     return '$number player(s) joined the clan during the current season ($date).';
-  }
-
-  @override
-  String joinLeaveDifferenceUpDescription(int number, String date) {
-    return 'Your clan has gained $number new member(s) this season ($date).';
   }
 
   @override

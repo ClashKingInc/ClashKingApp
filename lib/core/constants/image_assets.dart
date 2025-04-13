@@ -137,6 +137,7 @@ class ImageAssets {
   // ⭐ Clan Capital
   static const String capitalGold =
       "$baseUrl/icons/Icon_CC_Resource_Capital_Gold_small.png";
+  static const String raidAttacks = "$baseUrl/icons/Icon_HV_Raid_Attack.png";
 
   // ✨ Defaults
   static const String defaultProfile = "$baseUrl/icons/default_profile.png";
@@ -198,6 +199,7 @@ class ImageAssets {
 
   // Stickers
   static const String villager = "$baseUrl/stickers/Villager_HV_Villager_7.png";
+  static const String goblin = "$baseUrl/stickers/Troop_HV_Goblin.png";
 
   // 🔄 Normalize
   static String _normalizeName(String name) {
