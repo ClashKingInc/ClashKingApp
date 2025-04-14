@@ -1,3 +1,4 @@
+import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -34,7 +35,32 @@ class StartupWidgetState extends State<StartupWidget> {
       final playerService = context.read<PlayerService>();
       final clanService = context.read<ClanService>();
       final warService = context.read<WarCwlService>();
-      await cocService.loadApiData(playerService, clanService, warService);
+      try {
+        await cocService.loadApiData(playerService, clanService, warService);
+      } catch (e) {
+        if (e.toString().contains("503") || e.toString().contains("500")) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => MaintenanceScreen()),
+          );
+        } else {
+          // Handle other errors (e.g., network issues)
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text("Error"),
+              content: Text("An error occurred: $e"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            ),
+          );
+        }
+      }
     }
 
     setState(() {

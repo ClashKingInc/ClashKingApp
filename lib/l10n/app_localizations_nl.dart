@@ -1413,4 +1413,13 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get raidsCompleted => 'Rooftochten voltooid';
+
+  @override
+  String get maintenance => 'Maintenance';
+
+  @override
+  String get maintenanceDescription => 'Clash of Clans is currently under maintenance, so we can\'t access the API. Please check back later.';
+
+  @override
+  String get tryAgain => 'Try again';
 }

@@ -1201,5 +1201,8 @@
     "lastRaids": "Last raids",
     "ongoingRaids": "Ongoing raids",
     "districtsDestroyed": "Districts destroyed",
-    "raidsCompleted": "Raids completed"
+    "raidsCompleted": "Raids completed",
+    "maintenance" : "Maintenance",
+    "maintenanceDescription" : "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
+    "tryAgain" : "Try again"
 }

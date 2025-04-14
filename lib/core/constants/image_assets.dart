@@ -200,6 +200,7 @@ class ImageAssets {
   // Stickers
   static const String villager = "$baseUrl/stickers/Villager_HV_Villager_7.png";
   static const String goblin = "$baseUrl/stickers/Troop_HV_Goblin.png";
+  static const String sleepingApprenticeBuilder = "$baseUrl/stickers/Apprentice_Builder_Sleeping.png";
 
   // 🔄 Normalize
   static String _normalizeName(String name) {

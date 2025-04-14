@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -231,7 +232,6 @@ class CocAccountService extends ChangeNotifier {
       transaction.setTag("clanTags", clanTags.toString());
       transaction.setTag("clanTagsCount", clanTags.length.toString());
 
-      // → On lance en parallèle ce qui est parallélisable
       final spanParallel = transaction.startChild("load.parallelTasks");
 
       await Future.wait([
@@ -292,6 +292,14 @@ class CocAccountService extends ChangeNotifier {
       transaction.finish(status: SpanStatus.ok());
 
       initializeSelectedTag();
+    } on HttpException catch (e) {
+      if (e.message.contains("503")) {
+        throw Exception("503");
+      } else if (e.message.contains("500")) {
+        throw Exception("500");
+      } else {
+        rethrow;
+      }
     } catch (e, stack) {
       transaction.throwable = e;
       transaction.status = SpanStatus.internalError();

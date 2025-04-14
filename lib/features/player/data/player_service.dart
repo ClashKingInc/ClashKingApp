@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
@@ -66,6 +67,10 @@ class PlayerService extends ChangeNotifier {
           }).toList();
           print(
               "✅ Initialized profiles: ${profiles.map((p) => p.tag).toList()}");
+        } else if (response.statusCode == 503) {
+          throw HttpException("503", uri: response.request!.url);
+        } else if (response.statusCode == 500) {
+          throw HttpException("500", uri: response.request!.url);
         } else {
           Sentry.captureMessage("Error initializing player data: $data",
               level: SentryLevel.error);
@@ -205,10 +210,7 @@ class PlayerService extends ChangeNotifier {
         "Authorization": "Bearer $token",
         "Content-Type": "application/json",
       },
-      body: jsonEncode({
-        "player_tags": playerTags,
-        "limit": 50
-      }),
+      body: jsonEncode({"player_tags": playerTags, "limit": 50}),
     );
 
     try {

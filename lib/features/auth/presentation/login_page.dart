@@ -2,6 +2,7 @@ import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
+import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -59,7 +60,7 @@ class LoginPageState extends State<LoginPage> {
                 ]),
                 SizedBox(height: 48),
 
-                // Bouton Connexion Discord
+                // Login button Discord
                 ElevatedButton(
                   onPressed: _isLoading
                       ? null
@@ -91,11 +92,21 @@ class LoginPageState extends State<LoginPage> {
                             }
                           } catch (e) {
                             if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                              if (e.toString().contains("503") ||
+                                  e.toString().contains("500")) {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          MaintenanceScreen()),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
                                     content: Text(AppLocalizations.of(context)!
-                                        .loginError)),
-                              );
+                                        .loginError),
+                                  ),
+                                );
+                              }
                             }
                           }
                           setState(() => _isLoading = false);

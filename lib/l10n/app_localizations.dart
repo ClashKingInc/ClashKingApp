@@ -2635,6 +2635,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Raids completed'**
   String get raidsCompleted;
+
+  /// No description provided for @maintenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance'**
+  String get maintenance;
+
+  /// No description provided for @maintenanceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Clash of Clans is currently under maintenance, so we can\'t access the API. Please check back later.'**
+  String get maintenanceDescription;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get tryAgain;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

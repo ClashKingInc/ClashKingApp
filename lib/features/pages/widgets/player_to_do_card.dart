@@ -214,7 +214,7 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                               ),
                             ),
                           /*if (player.toDo!.war != null &&
-                              player.toDo!.war!.attackLimit != 0)
+                              player.toDo!.war!.attackLimit != 0)6 66
                             Chip(
                               avatar: CircleAvatar(
                                 backgroundColor: Colors.transparent,
