@@ -23,6 +23,11 @@ class PlayerItemSection extends StatelessWidget {
 
     final completionPercentage = _calculateCompletionPercentage();
 
+    final sortedItems = [...items]..sort((a, b) {
+        if (a.isUnlocked == b.isUnlocked) return 0;
+        return a.isUnlocked ? -1 : 1; // unlocked en premier
+      });
+
     return SizedBox(
       width: double.infinity,
       child: Card(
@@ -54,8 +59,9 @@ class PlayerItemSection extends StatelessWidget {
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children:
-                    items.map((item) => _buildItemTile(context, item)).toList(),
+                children: sortedItems
+                    .map((item) => _buildItemTile(context, item))
+                    .toList(),
               ),
             ],
           ),
@@ -74,17 +80,23 @@ class PlayerItemSection extends StatelessWidget {
 
   Widget _buildItemTile(BuildContext context, PlayerItem item) {
     final isMax = item.level == item.maxLevel;
+    final isLocked = !item.isUnlocked;
 
     // Determine border color
-    final borderColor = isMax
-        ? const Color(0xFFD4AF37) // Gold if max
-        : Theme.of(context).colorScheme.onSurface;
+    final borderColor = isLocked || item.level == 0
+        ? Colors.grey
+        : isMax
+            ? const Color(0xFFD4AF37) // Gold if max
+            : Theme.of(context).colorScheme.onSurface;
 
-    // Determine background color for equipment rarity
+    // Background color for unlocked PlayerEquipment
     Color? backgroundColor;
-    if (item is PlayerEquipment) {
+    if (item is PlayerEquipment && item.isUnlocked) {
       backgroundColor = item.rarity == '2' ? Colors.purple : Colors.blue;
     }
+
+    // Final background depending on locked status
+    final containerBackground = isLocked ? Colors.grey[850] : backgroundColor;
 
     return GestureDetector(
       onTap: () => _showItemDialog(context, item),
@@ -92,20 +104,31 @@ class PlayerItemSection extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(color: borderColor, width: 2),
           borderRadius: BorderRadius.circular(6),
-          color: backgroundColor,
+          color: containerBackground,
         ),
         child: Stack(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: MobileWebImage(
-                imageUrl: item.imageUrl,
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
+              borderRadius: BorderRadius.circular(4),
+              child: ColorFiltered(
+                colorFilter: isLocked || item.level == 0
+                    ? const ColorFilter.mode(
+                        Colors.grey,
+                        BlendMode.saturation,
+                      )
+                    : const ColorFilter.mode(
+                        Colors.transparent,
+                        BlendMode.multiply,
+                      ),
+                child: MobileWebImage(
+                  imageUrl: item.imageUrl,
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-            if (item is! PlayerSuperTroop) // No level tag for super troop
+            if (item is! PlayerSuperTroop && !isLocked && item.level > 0)
               Positioned(
                 right: 1,
                 bottom: 1,
@@ -118,11 +141,11 @@ class PlayerItemSection extends StatelessWidget {
                   ),
                   child: Stack(
                     children: [
-                      if (isMax)
+                      if (isMax && (!isLocked || item.level > 0))
                         Shimmer.fromColors(
                           baseColor: const Color(0xFFD4AF37),
                           highlightColor:
-                              const Color(0xFFD4AF37).withValues(alpha: 0.7),
+                              const Color(0xFFD4AF37).withAlpha(180),
                           child: Container(
                             decoration: BoxDecoration(
                               color: const Color(0xFFD4AF37),

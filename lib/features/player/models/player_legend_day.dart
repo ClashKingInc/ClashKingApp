@@ -78,6 +78,7 @@ class PlayerLegendDay {
             rarity:
                 GameDataService.gearsData["gears"]?[gearName]?["rarity"] ?? "1",
             village: "home",
+            isUnlocked: true,
           ),
         );
 

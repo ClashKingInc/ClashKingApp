@@ -10,6 +10,7 @@ class PlayerEquipedEquipment extends PlayerItem {
       required super.maxLevel,
       required this.village})
       : super(
+          isUnlocked: true,
           type: 'equipment',
           imageUrl: ImageAssets.getGearImage(name),
         );

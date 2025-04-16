@@ -8,7 +8,8 @@ class PlayerSpell extends PlayerItem {
       {required super.name,
       required super.level,
       required super.maxLevel,
-      required this.village})
+      required this.village,
+      required super.isUnlocked})
       : super(
           type: 'spell',
           imageUrl: ImageAssets.getSpellImage(name),
@@ -20,6 +21,23 @@ class PlayerSpell extends PlayerItem {
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
       village: json['village'] ?? 'home',
+      isUnlocked: true,
+    );
+  }
+
+  factory PlayerSpell.fromRaw(
+      {required String name,
+      required int level,
+      required int maxLevel,
+      required bool isUnlocked,
+      Map<String, dynamic>? meta,
+    Map<String, dynamic>? rawJson}) {
+    return PlayerSpell(
+      name: name,
+      level: level,
+      maxLevel: maxLevel,
+      isUnlocked: isUnlocked,
+      village: meta?['village'] ?? 'home',
     );
   }
 }

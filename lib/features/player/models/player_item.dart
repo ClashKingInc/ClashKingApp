@@ -5,7 +5,8 @@ class PlayerItem {
   final String type;
   final String imageUrl;
   final bool isMaxLevel;
-  final bool? isActive; // Pour les Super Troupes
+  final bool? isActive;
+  final bool isUnlocked;
 
   PlayerItem({
     required this.name,
@@ -13,6 +14,7 @@ class PlayerItem {
     required this.maxLevel,
     required this.type,
     required this.imageUrl,
+    required this.isUnlocked,
     this.isActive,
   }) : isMaxLevel = level == maxLevel;
 }

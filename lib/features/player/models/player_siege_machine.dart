@@ -3,14 +3,13 @@ import 'package:clashkingapp/features/player/models/player_item.dart';
 
 class PlayerSiegeMachine extends PlayerItem {
   final String village;
-  final bool superTroopIsActive;
 
   PlayerSiegeMachine(
       {required super.name,
       required super.level,
       required super.maxLevel,
-      required this.superTroopIsActive,
-      required this.village})
+      required this.village,
+      required super.isUnlocked})
       : super(
           type: 'pet',
           imageUrl: ImageAssets.getSiegeMachineImage(name),
@@ -21,8 +20,25 @@ class PlayerSiegeMachine extends PlayerItem {
       name: json['name'],
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
-      superTroopIsActive: json['superTroopIsActive'] ?? false,
       village: json['village'] ?? 'home',
+      isUnlocked: true,
+    );
+  }
+
+  factory PlayerSiegeMachine.fromRaw(
+      {required String name,
+      required int level,
+      required int maxLevel,
+      required bool isUnlocked,
+      Map<String, dynamic>? meta,
+      bool? superTroopIsActive,
+    Map<String, dynamic>? rawJson}) {
+    return PlayerSiegeMachine(
+      name: name,
+      level: level,
+      maxLevel: maxLevel,
+      isUnlocked: isUnlocked,
+      village: meta?['village'] ?? 'home',
     );
   }
 }

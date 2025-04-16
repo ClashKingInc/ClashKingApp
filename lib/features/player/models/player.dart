@@ -3,6 +3,7 @@ import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/features/player/data/player_item_utils.dart';
 import 'package:clashkingapp/features/player/models/player_bb_hero.dart';
 import 'package:clashkingapp/features/player/models/player_bb_troop.dart';
 import 'package:clashkingapp/features/player/models/player_clan.dart';
@@ -251,58 +252,97 @@ class Player {
         clanGamesPoint: [],
         seasonPass: [],
         lastOnline: DateTime.utc(1970, 1, 1),
-        heroes: (json['heroes'] as List?)
-                ?.where((x) => x['village'] == 'home')
-                .map((x) => PlayerHero.fromJson(x))
-                .toList() ??
-            [],
-        bbHeroes: (json['heroes'] as List?)
-                ?.where((x) => x['village'] == 'builderBase')
-                .map((x) => PlayerBuilderBaseHero.fromJson(x))
-                .toList() ??
-            [],
-        troops: (json['troops'] as List?)
-                ?.where((x) =>
-                    x['village'] == 'home' &&
-                    !GameDataService.isSuperTroop(x['name']) &&
-                    !GameDataService.isSiegeMachine(x['name']) &&
-                    !GameDataService.isPet(x['name']))
-                .map((x) => PlayerTroop.fromJson(x))
-                .toList() ??
-            [],
-        superTroops: (json['troops'] as List?)
-                ?.where((x) =>
-                    x['village'] == 'home' &&
-                    GameDataService.isSuperTroop(x['name']))
-                .map((x) => PlayerSuperTroop.fromJson(x))
-                .toList() ??
-            [],
-        siegeMachines: (json['troops'] as List?)
-                ?.where((x) =>
-                    x['village'] == 'home' &&
-                    GameDataService.isSiegeMachine(x['name']))
-                .map((x) => PlayerSiegeMachine.fromJson(x))
-                .toList() ??
-            [],
-        pets: (json['troops'] as List?)
-                ?.where((x) =>
-                    x['village'] == 'home' && GameDataService.isPet(x['name']))
-                .map((x) => PlayerPet.fromJson(x))
-                .toList() ??
-            [],
-        bbTroops: (json['troops'] as List?)
-                ?.where((x) => x['village'] == 'builderBase')
-                .map((x) => PlayerBuilderBaseTroop.fromJson(x))
-                .toList() ??
-            [],
-        spells: (json['spells'] as List?)
-                ?.map((x) => PlayerSpell.fromJson(x))
-                .toList() ??
-            [],
-        equipments: (json['heroEquipment'] as List?)
-                ?.map((x) => PlayerEquipment.fromJson(x))
-                .toList() ??
-            [],
+        heroes: generateCompleteItemList<PlayerHero>(
+          jsonList: (json['heroes'] as List?)
+              ?.where((x) => x['village'] == 'home')
+              .toList(),
+          gameData: filterGameData(
+            GameDataService.heroesData['heroes'],
+            (k, v) => v['village'] == 'home',
+          ),
+          factory: PlayerHero.fromRaw,
+        ),
+        bbHeroes: generateCompleteItemList<PlayerBuilderBaseHero>(
+          jsonList: (json['heroes'] as List?)
+              ?.where((x) => x['village'] == 'builderBase')
+              .toList(),
+          gameData: filterGameData(
+            GameDataService.heroesData['heroes'],
+            (k, v) => v['village'] == 'builderBase',
+          ),
+          factory: PlayerBuilderBaseHero.fromRaw,
+        ),
+        troops: generateCompleteItemList<PlayerTroop>(
+          jsonList: (json['troops'] as List?)
+              ?.where((x) =>
+                  x['village'] == 'home' &&
+                  !GameDataService.isSuperTroop(x['name']) &&
+                  !GameDataService.isSiegeMachine(x['name']) &&
+                  !GameDataService.isPet(x['name']))
+              .toList(),
+          gameData: filterGameData(
+            GameDataService.troopsData['troops'],
+            (k, v) =>
+                v['village'] == 'home' &&
+                !GameDataService.isSuperTroop(k) &&
+                !GameDataService.isSiegeMachine(k) &&
+                !GameDataService.isPet(k),
+          ),
+          factory: PlayerTroop.fromRaw,
+        ),
+        superTroops: generateCompleteItemList<PlayerSuperTroop>(
+          jsonList: (json['troops'] as List?)
+              ?.where((x) =>
+                  x['village'] == 'home' &&
+                  GameDataService.isSuperTroop(x['name']))
+              .toList(),
+          gameData: filterGameData(
+            GameDataService.troopsData['troops'],
+            (k, v) => v['village'] == 'home' && GameDataService.isSuperTroop(k),
+          ),
+          factory: PlayerSuperTroop.fromRaw,
+        ),
+        siegeMachines: generateCompleteItemList<PlayerSiegeMachine>(
+          jsonList: (json['troops'] as List?)
+              ?.where((x) =>
+                  x['village'] == 'home' &&
+                  GameDataService.isSiegeMachine(x['name']))
+              .toList(),
+          gameData: filterGameData(
+            GameDataService.troopsData['troops'],
+            (k, v) =>
+                v['village'] == 'home' && GameDataService.isSiegeMachine(k),
+          ),
+          factory: PlayerSiegeMachine.fromRaw,
+        ),
+        pets: generateCompleteItemList<PlayerPet>(
+          jsonList: (json['troops'] as List?)
+              ?.where((x) =>
+                  x['village'] == 'home' && GameDataService.isPet(x['name']))
+              .toList(),
+          gameData: GameDataService.petsData['pets'] ?? {},
+          factory: PlayerPet.fromRaw,
+        ),
+        bbTroops: generateCompleteItemList<PlayerBuilderBaseTroop>(
+          jsonList: (json['troops'] as List?)
+              ?.where((x) => x['village'] == 'builderBase')
+              .toList(),
+          gameData: filterGameData(
+            GameDataService.troopsData['troops'],
+            (k, v) => v['village'] == 'builderBase',
+          ),
+          factory: PlayerBuilderBaseTroop.fromRaw,
+        ),
+        spells: generateCompleteItemList<PlayerSpell>(
+          jsonList: json['spells'] as List?,
+          gameData: GameDataService.spellsData['spells'] ?? {},
+          factory: PlayerSpell.fromRaw,
+        ),
+        equipments: generateCompleteItemList<PlayerEquipment>(
+          jsonList: json['heroEquipment'] as List?,
+          gameData: GameDataService.gearsData['gears'] ?? {},
+          factory: PlayerEquipment.fromRaw,
+        ),
         legendsBySeason: null,
         legendRanking: [],
         rankings: null,

@@ -10,7 +10,8 @@ class PlayerSuperTroop extends PlayerItem {
       required super.level,
       required super.maxLevel,
       required this.superTroopIsActive,
-      required this.village})
+      required this.village,
+      required super.isUnlocked})
       : super(
           type: 'troop',
           imageUrl: ImageAssets.getSuperTroopImage(name),
@@ -22,7 +23,26 @@ class PlayerSuperTroop extends PlayerItem {
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
       superTroopIsActive: json['superTroopIsActive'] ?? false,
+      isUnlocked: true,
       village: json['village'] ?? 'home',
+    );
+  }
+
+  factory PlayerSuperTroop.fromRaw(
+      {required String name,
+      required int level,
+      required int maxLevel,
+      required bool isUnlocked,
+      Map<String, dynamic>? meta,
+      bool? superTroopIsActive,
+    Map<String, dynamic>? rawJson}) {
+    return PlayerSuperTroop(
+      name: name,
+      level: level,
+      maxLevel: maxLevel,
+      isUnlocked: isUnlocked,
+      superTroopIsActive: superTroopIsActive ?? false,
+      village: meta?['village'] ?? 'home',
     );
   }
 }
