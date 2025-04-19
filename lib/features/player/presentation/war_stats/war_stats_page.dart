@@ -1,9 +1,9 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
-import 'package:clashkingapp/features/player/presentation/warStats/player_war_attacks_tab.dart';
-import 'package:clashkingapp/features/player/presentation/warStats/player_war_stats_tab.dart';
-import 'package:clashkingapp/features/player/presentation/warStats/war_stats_header.dart';
+import 'package:clashkingapp/features/player/presentation/war_stats/player_war_attacks_tab.dart';
+import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_tab.dart';
+import 'package:clashkingapp/features/player/presentation/war_stats/war_stats_header.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';

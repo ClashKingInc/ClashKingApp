@@ -141,7 +141,7 @@ class ClanService extends ChangeNotifier {
 
       final response = await http.post(
         Uri.parse(
-            "${ApiService.apiUrl}/clans/join-leave?+current_season=true"),
+            "${ApiService.apiUrl}/clans/join-leave?current_season=true"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",

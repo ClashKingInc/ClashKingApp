@@ -27,7 +27,7 @@ class WarCwl {
       tag: json['clan_tag'],
       isInWar: json['isInWar'],
       isInCwl: json['isInCwl'],
-      warInfo: WarInfo.fromJson(json['war_info']),
+      warInfo: WarInfo.fromJson(json['war_info']["currentWarInfo"]),
       leagueInfo: json['league_info'] != null
           ? CwlLeague.fromJson(json['league_info'])
           : null,

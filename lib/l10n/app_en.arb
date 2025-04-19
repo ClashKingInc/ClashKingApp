@@ -870,9 +870,8 @@
 "join": "Join",
 "leave": "Leave",
 "reset": "Reset",
-"leaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
+"leaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
 "@leaveNumberDescription": {
-    "description": "Number of players who left the clan during the current season.",
     "placeholders": {
         "number": {
             "type": "int"
@@ -882,9 +881,8 @@
         }
     }
 },
-"joinNumberDescription": "{number} player(s) joined the clan during the current season ({date}).",
+"joinNumberDescription": "{number} join events occurred during the current season ({date}).",
 "@joinNumberDescription": {
-    "description": "Number of players who joined the clan during the current season.",
     "placeholders": {
         "number": {
             "type": "int"
@@ -927,18 +925,16 @@
         }
     }
 },
-"stillInClanNumberDescription": "{number} player(s) are still in the clan.",
+"stillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
 "@stillInClanNumberDescription": {
-    "description": "Number of players still in the clan.",
     "placeholders": {
         "number": {
             "type": "int"
         }
     }
 },
-"leftClanNumberDescription": "{number} player(s) left the clan.",
+"leftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
 "@leftClanNumberDescription": {
-    "description": "Number of players who left the clan.",
     "placeholders": {
         "number": {
             "type": "int"
@@ -1009,6 +1005,7 @@
 "enemiesTeam": "Enemies",
 "defense": "Defense",
 "defenses": "Defenses",
+"bestDefenses": "Best defenses",
 "bestDefenseOutOf": "Best defense (out of {number})",
 "@bestDefenseOutOf": {
     "placeholders": {
@@ -1020,6 +1017,7 @@
 },
 "attack": "Attack",
 "attacks": "Attacks",
+"bestAttacks": "Best attacks",
 "noAttackYet": "No attack yet",
 "@noAttackYet": {
     "description": "No attack yet in war"
@@ -1027,6 +1025,10 @@
 "noDefenseYet": "No defense yet",
 "@noDefenseYet": {
     "description": "No defense yet in war"
+},
+"bestPerformance": "Best performance",
+"@bestPerformance": {
+    "description": "Best performance in war"
 },
 "victory": "Victory",
 "defeat": "Defeat",

@@ -6,6 +6,10 @@ import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/legend/player_legend_page.dart';
+import 'package:clashkingapp/features/player/presentation/player/player_achievement_page.dart';
+import 'package:clashkingapp/features/player/presentation/to_do/widget/player_to_do_body_card.dart';
+import 'package:clashkingapp/features/player/presentation/war_stats/war_stats_page.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -19,8 +23,9 @@ import 'package:shimmer/shimmer.dart';
 class PlayerInfoHeader extends StatefulWidget {
   final int selectedTab;
   final Player player;
-  
-  const PlayerInfoHeader({super.key, required this.selectedTab, required this.player});
+
+  const PlayerInfoHeader(
+      {super.key, required this.selectedTab, required this.player});
 
   @override
   PlayerInfoHeaderState createState() => PlayerInfoHeaderState();
@@ -28,7 +33,6 @@ class PlayerInfoHeader extends StatefulWidget {
 
 class PlayerInfoHeaderState extends State<PlayerInfoHeader>
     with SingleTickerProviderStateMixin {
-
   @override
   Widget build(BuildContext context) {
     // Determine UI elements depending on selected tab
@@ -36,8 +40,9 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         ? ImageAssets.homeBaseBackground
         : ImageAssets.builderBaseBackground;
 
-    final String hallImageUrl =
-        widget.selectedTab == 0 ? widget.player.townHallPic : widget.player.builderHallPic;
+    final String hallImageUrl = widget.selectedTab == 0
+        ? widget.player.townHallPic
+        : widget.player.builderHallPic;
 
     final List<Widget> stars = widget.selectedTab == 0
         ? _buildStars(widget.player.townHallWeaponLevel)
@@ -57,6 +62,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
             children: <Widget>[
               _buildBackgroundImage(backgroundImageUrl),
               _buildBackButton(context),
+              _buildAction(context),
               _buildPlayerMainInfo(hallImageUrl),
             ],
           ),
@@ -107,68 +113,131 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
     );
   }
 
+  /// ⚙️ Action button (three dot menu)
+  Widget _buildAction(BuildContext context) {
+    return Positioned(
+      top: 40,
+      right: 10,
+      child: Row(
+        children: [
+          IconButton(
+            icon: Icon(Icons.sports_esports_rounded,
+                color: Colors.white, size: 32),
+            onPressed: () {
+              final languageCode =
+                  Localizations.localeOf(context).languageCode.toLowerCase();
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  final url =
+                      Uri.https('link.clashofclans.com', '/$languageCode', {
+                    'action': 'OpenPlayerProfile',
+                    'tag': widget.player.tag,
+                  });
+                  return OpenClashDialog(url: url);
+                },
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.more_vert_rounded,
+                color: Theme.of(context).colorScheme.onPrimary, size: 32),
+            onPressed: () {
+              showMenu(
+                context: context,
+                position: RelativeRect.fromLTRB(100, 100, 0, 0),
+                items: [
+                  PopupMenuItem(
+                    value: 'achievements',
+                    child: Row(
+                      children: [
+                        MobileWebImage(
+                            imageUrl:
+                                widget.player.clanOverview.badgeUrls.small,
+                            width: 20),
+                        SizedBox(width: 8),
+                        Text(AppLocalizations.of(context)!.achievements),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayerAchievementScreen(
+                                  player: widget.player,
+                                )),
+                      );
+                    },
+                  ),
+                  PopupMenuItem(
+                    value: 'war_stats',
+                    child: Row(
+                      children: [
+                        MobileWebImage(imageUrl: ImageAssets.war, width: 20),
+                        SizedBox(width: 8),
+                        Text(AppLocalizations.of(context)!.warStats),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                PlayerWarStatsScreen(player: widget.player)),
+                      );
+                    },
+                  ),
+                  PopupMenuItem(
+                    value: 'todolist',
+                    child: Row(
+                      children: [
+                        MobileWebImage(
+                            imageUrl: ImageAssets.iconBuilderPotion, width: 20),
+                        SizedBox(width: 8),
+                        Text(AppLocalizations.of(context)!.toDoList),
+                      ],
+                    ),
+                    onTap: () {
+                      if (context.mounted) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => Dialog(
+                            backgroundColor: Colors.transparent,
+                            insetPadding: EdgeInsets.all(8),
+                            child: IntrinsicHeight(
+                              child: PlayerToDoBodyCard(
+                                player: widget.player,
+                                member: WarMemberPresence.empty(),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   /// 👤 Player avatar, icons & stats
   Widget _buildPlayerMainInfo(String hallImageUrl) {
     return Positioned(
       bottom: -72,
       child: Row(
         children: [
-          _buildPlayerActions(),
           SizedBox(width: 16),
           CachedNetworkImage(
               errorWidget: (context, url, error) => Icon(Icons.error),
               imageUrl: hallImageUrl,
-              width: 170),
+              width: 190),
           SizedBox(width: 16),
-          _buildExternalActions(),
         ],
       ),
-    );
-  }
-
-  /// 🎮 Buttons for in-app actions
-  Widget _buildPlayerActions() {
-    return Column(
-      children: [
-        IconButton(
-          icon: Icon(Icons.verified_rounded, color: Colors.white, size: 32),
-          onPressed: () {},
-        ),
-        SizedBox(height: 8),
-        IconButton(
-          icon: Icon(LucideIcons.barChart3, color: Colors.white, size: 32),
-          onPressed: () {},
-        ),
-        SizedBox(height: 48),
-      ],
-    );
-  }
-
-  /// 🌐 External actions (e.g. open in Clash of Clans)
-  Widget _buildExternalActions() {
-    return Column(
-      children: [
-        IconButton(
-          icon:
-              Icon(Icons.sports_esports_rounded, color: Colors.white, size: 32),
-          onPressed: () {
-            final languageCode =
-                Localizations.localeOf(context).languageCode.toLowerCase();
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                final url =
-                    Uri.https('link.clashofclans.com', '/$languageCode', {
-                  'action': 'OpenPlayerProfile',
-                  'tag': widget.player.tag,
-                });
-                return OpenClashDialog(url: url);
-              },
-            );
-          },
-        ),
-        SizedBox(height: 48),
-      ],
     );
   }
 
@@ -447,7 +516,9 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LegendScreen(),
+                      builder: (context) => PlayerLegendScreen(
+                        player: widget.player,
+                      ),
                     ),
                   );
                 },
@@ -464,7 +535,8 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                         .onSurface
                         .withValues(alpha: 0.3),
                     child: Text(
-                      NumberFormat('#,###', locale).format(widget.player.trophies),
+                      NumberFormat('#,###', locale)
+                          .format(widget.player.trophies),
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
@@ -513,7 +585,8 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                   errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: ImageAssets.trophies)),
           label: Text(
-            NumberFormat('#,###', locale).format(widget.player.builderBaseTrophies),
+            NumberFormat('#,###', locale)
+                .format(widget.player.builderBaseTrophies),
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),

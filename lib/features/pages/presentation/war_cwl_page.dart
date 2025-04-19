@@ -5,6 +5,7 @@ import 'package:clashkingapp/features/pages/widgets/war_access_denied_card.dart'
 import 'package:clashkingapp/features/pages/widgets/war_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_not_in_war_card.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -50,11 +51,7 @@ class WarCwlPage extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder:
-                        (context) => /*War(
-                        currentWarInfo: warCwl.warInfo, clanTag: clan.tag),
-                  ),*/
-                            SizedBox.shrink(),
+                    builder: (context) => WarScreen(war: warCwl.warInfo),
                   ),
                 ),
                 child: Padding(

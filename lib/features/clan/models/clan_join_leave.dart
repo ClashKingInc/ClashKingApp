@@ -84,7 +84,7 @@ class JoinLeaveStats {
       totalLeaves: json['total_leaves'] ?? 0,
       uniquePlayers: json['unique_players'] ?? 0,
       movingPlayers: json['moving_players'] ?? 0,
-      playerStillInClan: json['player_still_in_clan'] ?? 0,
+      playerStillInClan: json['players_still_in_clan'] ?? 0,
       playerLeftClan: json['players_left_forever'] ?? 0,
       rejoinedPlayers: json['rejoined_players'] ?? 0,
       firstEvent: json['first_event'] ?? "",

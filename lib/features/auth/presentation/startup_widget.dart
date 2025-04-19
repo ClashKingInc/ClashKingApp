@@ -38,27 +38,29 @@ class StartupWidgetState extends State<StartupWidget> {
       try {
         await cocService.loadApiData(playerService, clanService, warService);
       } catch (e) {
-        if (e.toString().contains("503") || e.toString().contains("500")) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => MaintenanceScreen()),
-          );
-        } else {
-          // Handle other errors (e.g., network issues)
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text("Error"),
-              content: Text("An error occurred: $e"),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("OK"),
-                ),
-              ],
-            ),
-          );
+        if (mounted) {
+          if (e.toString().contains("503") || e.toString().contains("500")) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => MaintenanceScreen()),
+            );
+          } else {
+            // Handle other errors (e.g., network issues)
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text("Error"),
+                content: Text("An error occurred: $e"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("OK"),
+                  ),
+                ],
+              ),
+            );
+          }
         }
       }
     }

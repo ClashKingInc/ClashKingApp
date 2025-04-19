@@ -2192,16 +2192,16 @@ abstract class AppLocalizations {
   /// **'Reset'**
   String get reset;
 
-  /// Number of players who left the clan during the current season.
+  /// No description provided for @leaveNumberDescription.
   ///
   /// In en, this message translates to:
-  /// **'{number} player(s) left the clan during the current season ({date}).'**
+  /// **'{number} leave events occurred during the current season ({date}).'**
   String leaveNumberDescription(int number, String date);
 
-  /// Number of players who joined the clan during the current season.
+  /// No description provided for @joinNumberDescription.
   ///
   /// In en, this message translates to:
-  /// **'{number} player(s) joined the clan during the current season ({date}).'**
+  /// **'{number} join events occurred during the current season ({date}).'**
   String joinNumberDescription(int number, String date);
 
   /// Number of players who left and rejoined the clan during the current season.
@@ -2222,16 +2222,16 @@ abstract class AppLocalizations {
   /// **'{hour}h is usually the hour with the most join/leave activity.'**
   String mostMovingHourDescription(int hour);
 
-  /// Number of players still in the clan.
+  /// No description provided for @stillInClanNumberDescription.
   ///
   /// In en, this message translates to:
-  /// **'{number} player(s) are still in the clan.'**
+  /// **'{number} player(s) joined and are still in the clan.'**
   String stillInClanNumberDescription(int number);
 
-  /// Number of players who left the clan.
+  /// No description provided for @leftClanNumberDescription.
   ///
   /// In en, this message translates to:
-  /// **'{number} player(s) left the clan.'**
+  /// **'{number} player(s) joined, then left the clan and never rejoined.'**
   String leftClanNumberDescription(int number);
 
   /// Number of members lost by the clan this season.
@@ -2318,6 +2318,12 @@ abstract class AppLocalizations {
   /// **'Defenses'**
   String get defenses;
 
+  /// No description provided for @bestDefenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Best defenses'**
+  String get bestDefenses;
+
   /// Best war defense (out of 3 defenses)
   ///
   /// In en, this message translates to:
@@ -2336,6 +2342,12 @@ abstract class AppLocalizations {
   /// **'Attacks'**
   String get attacks;
 
+  /// No description provided for @bestAttacks.
+  ///
+  /// In en, this message translates to:
+  /// **'Best attacks'**
+  String get bestAttacks;
+
   /// No attack yet in war
   ///
   /// In en, this message translates to:
@@ -2347,6 +2359,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No defense yet'**
   String get noDefenseYet;
+
+  /// Best performance in war
+  ///
+  /// In en, this message translates to:
+  /// **'Best performance'**
+  String get bestPerformance;
 
   /// No description provided for @victory.
   ///

@@ -69,7 +69,7 @@ class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
             imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.7),
+                Colors.black.withValues(alpha: 0.7),
                 BlendMode.darken,
               ),
               child: CachedNetworkImage(
@@ -117,7 +117,7 @@ class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
                 child: Container(
                   height: 8,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black.withOpacity(0.2), width: 1),
+                    border: Border.all(color: Colors.black.withValues(alpha: 0.2), width: 1),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: ClipRRect(

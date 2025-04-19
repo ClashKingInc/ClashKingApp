@@ -5,10 +5,8 @@ import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_legend_day.dart';
-import 'package:clashkingapp/features/player/presentation/toDo/player_to_do_page.dart';
+import 'package:clashkingapp/features/player/presentation/to_do/player_to_do_page.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
-import 'package:clashkingapp/features/war_cwl/models/cwl_member.dart';
-import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';

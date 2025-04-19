@@ -40,12 +40,11 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                   imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                   child: ColorFiltered(
                     colorFilter: ColorFilter.mode(
-                      Colors.black.withValues(alpha : 0.3),
+                      Colors.black.withValues(alpha: 0.3),
                       BlendMode.darken,
                     ),
                     child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: backgroundImageUrl,
                       width: double.infinity,
                       fit: BoxFit.cover,
@@ -102,12 +101,12 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                                   : 1.3,
                               child: InteractiveViewer(
                                 child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                                width: 170,
-                                fit: BoxFit.cover,
-                                imageUrl:
-                                  'https://assets.clashk.ing/capital-base/capital-hall-pics/Building_CC_Capital_Hall_level_${widget.clanInfo?.clanCapital?.capitalHallLevel}.png',
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                  width: 170,
+                                  fit: BoxFit.cover,
+                                  imageUrl:
+                                      'https://assets.clashk.ing/capital-base/capital-hall-pics/Building_CC_Capital_Hall_level_${widget.clanInfo?.clanCapital?.capitalHallLevel}.png',
                                 ),
                               ),
                             ),

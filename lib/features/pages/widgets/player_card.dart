@@ -22,7 +22,8 @@ class PlayerCard extends StatelessWidget {
     if (player == null) {
       return Center(
         child: Text(
-          AppLocalizations.of(context)?.connectionErrorRelaunch ?? 'Error, please restart',
+          AppLocalizations.of(context)?.connectionErrorRelaunch ??
+              'Error, please restart',
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       );
@@ -36,7 +37,6 @@ class PlayerCard extends StatelessWidget {
       style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
       child: GestureDetector(
         onTap: () {
-          
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -44,7 +44,7 @@ class PlayerCard extends StatelessWidget {
             ),
           );
         },
-        child : Card(
+        child: Card(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -58,12 +58,15 @@ class PlayerCard extends StatelessWidget {
                           height: 100,
                           width: 100,
                           child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: player.townHallPic),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                              imageUrl: player.townHallPic),
                         ),
                         Text(
                           player.name,
-                          style: (Theme.of(context).textTheme.labelLarge
+                          style: (Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
                                   ?.copyWith(fontWeight: FontWeight.bold)) ??
                               TextStyle(fontWeight: FontWeight.bold),
                         ),
@@ -101,30 +104,40 @@ class PlayerCard extends StatelessWidget {
                                       .playerRatioDescription(
                                           player.donationRatio,
                                           player.donations.toStringAsFixed(0),
-                                          player.donationsReceived.toStringAsFixed(0))),
+                                          player.donationsReceived
+                                              .toStringAsFixed(0))),
                               ImageChip(
                                 imageUrl: player.warPreferenceImage,
                                 label: warPreference,
                                 description: AppLocalizations.of(context)!
-                                    .playerWarPreferenceDescription(warPreference),
+                                    .playerWarPreferenceDescription(
+                                        warPreference),
                               ),
                               ImageChip(
                                   imageUrl: ImageAssets.attackStar,
                                   label: NumberFormat(
-                                          '#,###', Localizations.localeOf(context).toString())
-                                      .format(int.parse(player.warStars.toString())),
+                                          '#,###',
+                                          Localizations.localeOf(context)
+                                              .toString())
+                                      .format(int.parse(
+                                          player.warStars.toString())),
                                   description: AppLocalizations.of(context)!
-                                      .playerWarStarsDescription(player.warStars)),
+                                      .playerWarStarsDescription(
+                                          player.warStars)),
                               ImageChip(
                                   imageUrl: player.townHallPic,
                                   label: player.townHallLevel.toString(),
                                   description: AppLocalizations.of(context)!
-                                      .playerTownHallLevelDescription(player.townHallLevel)),
+                                      .playerTownHallLevelDescription(
+                                          player.townHallLevel)),
                               ImageChip(
                                   imageUrl: player.leagueUrl,
                                   label: NumberFormat(
-                                          '#,###', Localizations.localeOf(context).toString())
-                                      .format(int.parse(player.trophies.toString())),
+                                          '#,###',
+                                          Localizations.localeOf(context)
+                                              .toString())
+                                      .format(int.parse(
+                                          player.trophies.toString())),
                                   description: AppLocalizations.of(context)!
                                       .playerTrophiesDescription(
                                           player.trophies, player.league)),
@@ -133,7 +146,8 @@ class PlayerCard extends StatelessWidget {
                                   label: player.builderHallLevel.toString(),
                                   description: AppLocalizations.of(context)!
                                       .playerBuilderBaseDescription(
-                                          player.builderHallLevel, player.builderBaseTrophies)),
+                                          player.builderHallLevel,
+                                          player.builderBaseTrophies)),
                             ],
                           ),
                         ],

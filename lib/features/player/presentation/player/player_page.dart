@@ -34,7 +34,6 @@ class PlayerScreenState extends State<PlayerScreen>
 
   @override
   Widget build(BuildContext context) {
-    print("Selected player: ${widget.selectedPlayer.tag}");
     return Scaffold(
       body: SingleChildScrollView(
         child: SingleChildScrollView(

@@ -36,7 +36,7 @@ class MembersCard extends StatelessWidget {
                 offset: const Offset(2, -8),
                 child: Text(
                   "($average)",
-                  textScaleFactor: 0.8,
+                  textScaler: TextScaler.linear(0.8),
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
               ),
@@ -66,7 +66,6 @@ class MembersCard extends StatelessWidget {
       );
     }
 
-    
     Widget withIcon(String value, Icon icon, String tooltip) {
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -123,10 +122,12 @@ class MembersCard extends StatelessWidget {
         );
 
       case '0stars':
-        return withImageIcon("${member.zeroStar}", ImageAssets.attackStar, "0 Star");
+        return withImageIcon(
+            "${member.zeroStar}", ImageAssets.attackStar, "0 Star");
 
       case '1stars':
-        return withImageIcon("${member.oneStar}", ImageAssets.attackStar, "1 Star");
+        return withImageIcon(
+            "${member.oneStar}", ImageAssets.attackStar, "1 Star");
 
       case '2stars':
         return withImageIcon(
@@ -145,7 +146,7 @@ class MembersCard extends StatelessWidget {
 
       case 'attackUpperTH':
         return withImageIcon(
-          "${member.attackUpperTHLevel?.toStringAsFixed(0) ?? '0'}",
+          member.attackUpperTHLevel?.toStringAsFixed(0) ?? '0',
           ImageAssets.townHall(1),
           "Upper TH Attacks",
         );
@@ -156,12 +157,16 @@ class MembersCard extends StatelessWidget {
             "${defense?.stars ?? 0}", ImageAssets.attackStar, "Def Stars");
 
       case 'defDestruction':
-        return withImageIcon((defense?.totalDestruction ?? 0).toStringAsFixed(0),
-            ImageAssets.hitrate, "Def %");
+        return withImageIcon(
+            (defense?.totalDestruction ?? 0).toStringAsFixed(0),
+            ImageAssets.hitrate,
+            "Def %");
 
       case 'defAverageStars':
-        return withImageIcon("${defense?.averageStars?.toStringAsFixed(1) ?? '0.0'}",
-            ImageAssets.attackStar, "Avg Def Stars");
+        return withImageIcon(
+            "${defense?.averageStars?.toStringAsFixed(1) ?? '0.0'}",
+            ImageAssets.attackStar,
+            "Avg Def Stars");
 
       case 'defAverageDestruction':
         return withImageIcon(
@@ -203,7 +208,8 @@ class MembersCard extends StatelessWidget {
             "${member.zeroStar}", ImageAssets.attackStar, "0 Stars");
 
       case 'oneStar':
-        return withImageIcon("${member.oneStar}", ImageAssets.attackStar, "1 Star");
+        return withImageIcon(
+            "${member.oneStar}", ImageAssets.attackStar, "1 Star");
 
       case 'twoStars':
         return withImageIcon(
@@ -464,7 +470,9 @@ class MembersCard extends StatelessWidget {
                       label: AppLocalizations.of(context)!.order,
                       value: member.avgAttackOrder?.toStringAsFixed(1) ?? "-",
                       icon: MobileWebImage(
-                          imageUrl: ImageAssets.iconClock, width: 16, height: 16)),
+                          imageUrl: ImageAssets.iconClock,
+                          width: 16,
+                          height: 16)),
                   StatTile(
                       label: AppLocalizations.of(context)!.pos,
                       value:
@@ -573,7 +581,9 @@ class MembersCard extends StatelessWidget {
                       label: AppLocalizations.of(context)!.order,
                       value: member.avgDefenseOrder?.toStringAsFixed(1) ?? "-",
                       icon: MobileWebImage(
-                          imageUrl: ImageAssets.iconClock, width: 16, height: 16)),
+                          imageUrl: ImageAssets.iconClock,
+                          width: 16,
+                          height: 16)),
                   StatTile(
                       label: AppLocalizations.of(context)!.pos,
                       value:

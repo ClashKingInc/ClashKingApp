@@ -45,8 +45,7 @@ class WarCard extends StatelessWidget {
                 width: 70,
                 height: 70,
                 child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl: currentWarInfo.clan!.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
@@ -134,8 +133,7 @@ class WarCard extends StatelessWidget {
                 width: 70,
                 height: 70,
                 child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl: currentWarInfo.opponent!.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
@@ -159,8 +157,7 @@ class WarCard extends StatelessWidget {
               width: 70,
               height: 70,
               child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: currentWarInfo.clan!.badgeUrls.large,
                   fit: BoxFit.cover),
             ),
@@ -199,8 +196,7 @@ class WarCard extends StatelessWidget {
               width: 70,
               height: 70,
               child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: currentWarInfo.opponent!.badgeUrls.large,
                   fit: BoxFit.cover),
             ),
@@ -228,8 +224,7 @@ class WarCard extends StatelessWidget {
                 width: 70,
                 height: 70,
                 child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl: currentWarInfo.clan!.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
@@ -273,8 +268,7 @@ class WarCard extends StatelessWidget {
                 width: 70,
                 height: 70,
                 child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl: currentWarInfo.opponent!.badgeUrls.large,
                     fit: BoxFit.cover),
               ),

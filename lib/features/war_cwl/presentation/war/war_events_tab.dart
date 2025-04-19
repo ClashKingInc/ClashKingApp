@@ -1,5 +1,6 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
@@ -9,6 +10,7 @@ import 'package:clashkingapp/features/war_cwl/data/war_functions.dart'
     show generateStars;
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:provider/provider.dart';
 
 class WarEventsTab extends StatefulWidget {
   final WarInfo warInfo;
@@ -31,27 +33,37 @@ class _WarEventsTabState extends State<WarEventsTab> {
   List<Map<String, dynamic>> getAttacks() {
     List<Map<String, dynamic>> attacks = [];
 
-    void add(List members, int clanId) {
+    void add(List members, String clanTag, {int? starFilter}) {
       for (var member in members) {
-        for (var attack in member.attacks ?? []) {
-          if (filterOption == 'All' ||
-              filterOption == clanId.toString() ||
-              attack.stars.toString() == filterOption) {
-            attacks.add({
-              'attacker': member,
-              'attack': attack,
-              'clanId': clanId,
-            });
-          }
+        final filteredAttacks = (member.attacks ?? [])
+            .where((a) => starFilter == null || a.stars == starFilter)
+            .toList();
+
+        for (var attack in filteredAttacks) {
+          attacks.add({
+            'attacker': member,
+            'attack': attack,
+            'clanTag': clanTag,
+          });
         }
       }
     }
 
-    if (filterOption == 'All' || filterOption == '5') {
-      add(widget.warInfo.clan!.members, 5);
-    }
-    if (filterOption == 'All' || filterOption == '4') {
-      add(widget.warInfo.opponent!.members, 4);
+    if (filterOption == 'All') {
+      add(widget.warInfo.clan!.members, widget.warInfo.clan!.tag);
+      add(widget.warInfo.opponent!.members, widget.warInfo.opponent!.tag);
+    } else if (filterOption == '5') {
+      add(widget.warInfo.clan!.members, widget.warInfo.clan!.tag);
+    } else if (filterOption == '4') {
+      add(widget.warInfo.opponent!.members, widget.warInfo.opponent!.tag);
+    } else {
+      final starFilter = int.tryParse(filterOption);
+      if (starFilter != null) {
+        add(widget.warInfo.clan!.members, widget.warInfo.clan!.tag,
+            starFilter: starFilter);
+        add(widget.warInfo.opponent!.members, widget.warInfo.opponent!.tag,
+            starFilter: starFilter);
+      }
     }
 
     attacks.sort((a, b) => b['attack'].order.compareTo(a['attack'].order));
@@ -70,7 +82,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
             width: 40,
             height: 40,
             child: MobileWebImage(
-              imageUrl:ImageAssets.townHall(member?.townhallLevel ?? 1),
+              imageUrl: ImageAssets.townHall(member?.townhallLevel ?? 1),
             ),
           ),
         const SizedBox(width: 4),
@@ -93,7 +105,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
             width: 40,
             height: 40,
             child: MobileWebImage(
-              imageUrl:ImageAssets.townHall(member.townhallLevel),
+              imageUrl: ImageAssets.townHall(member.townhallLevel),
             ),
           ),
         if (rightAlign) const SizedBox(width: 4),
@@ -104,8 +116,13 @@ class _WarEventsTabState extends State<WarEventsTab> {
   Widget buildEventRow(Map<String, dynamic> item) {
     final attacker = item['attacker'];
     final attack = item['attack'];
-    final clanId = item['clanId'];
-    final isClanAttacker = clanId == 0;
+    final attackerClanTag = item['clanTag'];
+    final cocService = context.watch<CocAccountService>();
+    final activeUserTags = cocService.getAccountTags();
+
+    final isAttackerFromClan = attackerClanTag == widget.warInfo.clan!.tag;
+    final isActiveUser = activeUserTags.contains(attacker.tag) ||
+        activeUserTags.contains(attack.defenderTag);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -117,34 +134,42 @@ class _WarEventsTabState extends State<WarEventsTab> {
             Expanded(
               flex: 4,
               child: Container(
-                color: isClanAttacker
-                    ? Theme.of(context)
-                        .colorScheme
-                        .tertiary
-                        .withValues(alpha: 0.3)
+                color: isAttackerFromClan
+                    ? isActiveUser
+                        ? Colors.green.shade200
+                        : Theme.of(context)
+                            .colorScheme
+                            .tertiary
+                            .withValues(alpha: 0.3)
                     : Colors.transparent,
-                child: buildPlayerInfo(attacker.tag, false),
+                child: buildPlayerInfo(
+                    isAttackerFromClan ? attacker.tag : attack.defenderTag,
+                    false),
               ),
             ),
             SizedBox(
               width: 10,
               height: 40,
-              child: !isClanAttacker
+              child: !isAttackerFromClan
                   ? Center(
                       child: LeftPointingTriangle(
                         width: 10,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .tertiary
-                            .withValues(alpha: 0.3),
+                        color: isActiveUser
+                            ? Colors.green.shade200
+                            : Theme.of(context)
+                                .colorScheme
+                                .tertiary
+                                .withValues(alpha: 0.3),
                       ),
                     )
                   : Container(
                       width: 10,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .tertiary
-                          .withValues(alpha: 0.3),
+                      color: isActiveUser
+                          ? Colors.green.shade200
+                          : Theme.of(context)
+                              .colorScheme
+                              .tertiary
+                              .withValues(alpha: 0.3),
                     ),
             ),
 
@@ -152,16 +177,20 @@ class _WarEventsTabState extends State<WarEventsTab> {
             Expanded(
               flex: 2,
               child: Container(
-                color: Theme.of(context)
-                    .colorScheme
-                    .tertiary
-                    .withValues(alpha: 0.3),
+                color: isActiveUser
+                    ? Colors.green.shade200
+                    : Theme.of(context)
+                        .colorScheme
+                        .tertiary
+                        .withValues(alpha: 0.3),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('${attack.destructionPercentage}%',
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.tertiary)),
+                            color: attack.destructionPercentage != 100
+                                ? Theme.of(context).colorScheme.tertiary
+                                : Theme.of(context).colorScheme.primary)),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: generateStars(attack.stars, 13),
@@ -172,42 +201,50 @@ class _WarEventsTabState extends State<WarEventsTab> {
             ),
             SizedBox(
               width: 10,
-              child: isClanAttacker
+              child: isAttackerFromClan
                   ? // Triangle direction
                   SizedBox(
                       width: 14,
                       height: 40,
-                      child: isClanAttacker
+                      child: isAttackerFromClan
                           ? Center(
                               child: RightPointingTriangle(
                                 width: 10,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .tertiary
-                                    .withValues(alpha: 0.3),
+                                color: isActiveUser
+                                    ? Colors.green.shade200
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .tertiary
+                                        .withValues(alpha: 0.3),
                               ),
                             )
                           : const SizedBox(),
                     )
                   : Container(
                       width: 10,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .tertiary
-                          .withValues(alpha: 0.3),
+                      color: isActiveUser
+                          ? Colors.green.shade200
+                          : Theme.of(context)
+                              .colorScheme
+                              .tertiary
+                              .withValues(alpha: 0.3),
                     ),
             ),
             // Defender
             Expanded(
               flex: 4,
               child: Container(
-                  color: !isClanAttacker
-                      ? Theme.of(context)
-                          .colorScheme
-                          .tertiary
-                          .withValues(alpha: 0.3)
+                  color: !isAttackerFromClan
+                      ? isActiveUser
+                          ? Colors.green.shade200
+                          : Theme.of(context)
+                              .colorScheme
+                              .tertiary
+                              .withValues(alpha: 0.3)
                       : Colors.transparent,
-                  child: buildPlayerInfo(attack.defenderTag, true)),
+                  child: buildPlayerInfo(
+                      isAttackerFromClan ? attack.defenderTag : attacker.tag,
+                      true)),
             ),
           ],
         ),

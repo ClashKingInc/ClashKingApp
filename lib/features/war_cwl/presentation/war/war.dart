@@ -34,8 +34,7 @@ class PlayerTab {
   PlayerTab(this.tag, this.name, this.townhallLevel, this.mapPosition);
 }
 
-class _WarScreenState extends State<WarScreen>
-    with TickerProviderStateMixin {
+class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
   late TabController tabController;
   int _currentSegment = 1;
   String filterBy = "all";
@@ -96,8 +95,7 @@ class _WarScreenState extends State<WarScreen>
               final bDef = b.bestOpponentAttack!;
 
               if (aDef.stars != bDef.stars) {
-                return aDef.stars
-                    .compareTo(bDef.stars);
+                return aDef.stars.compareTo(bDef.stars);
               } else {
                 return aDef.destructionPercentage
                     .compareTo(bDef.destructionPercentage);
@@ -105,9 +103,23 @@ class _WarScreenState extends State<WarScreen>
             });
 
         case 'noattacks':
-          return members.where((m) => (m.attacks?.isEmpty ?? true)).toList();
+          return members.where((m) => (m.attacks?.isEmpty ?? true)).toList()
+            ..sort((a, b) {
+              if (a.mapPosition != b.mapPosition) {
+                return a.mapPosition.compareTo(b.mapPosition);
+              } else {
+                return a.name.compareTo(b.name);
+              }
+            });
         case 'nodefenses':
-          return members.where((m) => m.opponentAttacks == 0).toList();
+          return members.where((m) => m.opponentAttacks == 0).toList()
+            ..sort((a, b) {
+              if (a.mapPosition != b.mapPosition) {
+                return a.mapPosition.compareTo(b.mapPosition);
+              } else {
+                return a.name.compareTo(b.name);
+              }
+            });
         case '3stars':
         case '2stars':
         case '1star':
@@ -115,7 +127,14 @@ class _WarScreenState extends State<WarScreen>
           int stars = int.parse(filter[0]);
           return members
               .where((m) => m.attacks?.any((a) => a.stars == stars) ?? false)
-              .toList();
+              .toList()
+            ..sort((a, b) {
+              if (a.mapPosition != b.mapPosition) {
+                return a.mapPosition.compareTo(b.mapPosition);
+              } else {
+                return a.name.compareTo(b.name);
+              }
+            });
         case 'def_3stars':
         case 'def_2stars':
         case 'def_1star':
@@ -123,19 +142,87 @@ class _WarScreenState extends State<WarScreen>
           int stars = int.parse(filter.split('_')[1][0]);
           return members
               .where((m) => m.bestOpponentAttack?.stars == stars)
-              .toList();
-        case 'highDestruction':
+              .toList()
+            ..sort((a, b) {
+              if (a.mapPosition != b.mapPosition) {
+                return a.mapPosition.compareTo(b.mapPosition);
+              } else {
+                return a.name.compareTo(b.name);
+              }
+            });
+        case 'bestAttacks':
+          return members.where((m) => (m.attacks?.isNotEmpty ?? false)).toList()
+            ..sort((a, b) {
+              final aStars = a.attacks!.fold<int>(0, (sum, a) => sum + a.stars);
+              final bStars = b.attacks!.fold<int>(0, (sum, a) => sum + a.stars);
+
+              if (bStars != aStars) return bStars.compareTo(aStars);
+
+              final aDestruction = a.attacks!
+                  .fold<double>(0, (sum, a) => sum + a.destructionPercentage);
+              final bDestruction = b.attacks!
+                  .fold<double>(0, (sum, a) => sum + a.destructionPercentage);
+
+              return bDestruction.compareTo(aDestruction);
+            });
+        case 'bestDefenses':
+          return members.where((m) => (m.bestOpponentAttack != null)).toList()
+            ..sort((b, a) {
+              final aStars = a.bestOpponentAttack!.stars;
+              final bStars = b.bestOpponentAttack!.stars;
+
+              if (bStars != aStars) return bStars.compareTo(aStars);
+
+              final aDestruction = a.bestOpponentAttack!.destructionPercentage;
+              final bDestruction = b.bestOpponentAttack!.destructionPercentage;
+
+              return bDestruction.compareTo(aDestruction);
+            });
+        case 'bestPerformance':
           return members
               .where((m) =>
-                  m.attacks?.any((a) => a.destructionPercentage >= 80) ?? false)
-              .toList();
-        case 'lowDestruction':
-          return members
-              .where((m) =>
-                  m.attacks?.any((a) => a.destructionPercentage <= 50) ?? false)
-              .toList();
+                  (m.attacks != null && m.attacks!.isNotEmpty) ||
+                  m.bestOpponentAttack != null)
+              .toList()
+            ..sort((a, b) {
+              // Atk : stars + destruction
+              final aAtkStars =
+                  a.attacks?.fold<int>(0, (sum, a) => sum + a.stars) ?? 0;
+              final bAtkStars =
+                  b.attacks?.fold<int>(0, (sum, a) => sum + a.stars) ?? 0;
+
+              final aAtkDestr = a.attacks?.fold<double>(
+                      0, (sum, a) => sum + a.destructionPercentage) ??
+                  0;
+              final bAtkDestr = b.attacks?.fold<double>(
+                      0, (sum, a) => sum + a.destructionPercentage) ??
+                  0;
+
+              // Def
+              final aDefStars = a.bestOpponentAttack?.stars ?? 0;
+              final bDefStars = b.bestOpponentAttack?.stars ?? 0;
+
+              final aDefDestr =
+                  a.bestOpponentAttack?.destructionPercentage ?? 0.0;
+              final bDefDestr =
+                  b.bestOpponentAttack?.destructionPercentage ?? 0.0;
+
+              // Final score
+              final aScore = aAtkStars * 100 + aAtkDestr - aDefStars * 100 - aDefDestr;
+              final bScore = bAtkStars * 100 + bAtkDestr - bDefStars * 100 - bDefDestr;
+
+              return bScore.compareTo(aScore);
+            });
+
         default:
-          return members;
+          return members
+            ..sort((a, b) {
+              if (a.mapPosition != b.mapPosition) {
+                return a.mapPosition.compareTo(b.mapPosition);
+              } else {
+                return a.name.compareTo(b.name);
+              }
+            });
       }
     }
 
@@ -192,8 +279,14 @@ class _WarScreenState extends State<WarScreen>
                                     'all',
                                 AppLocalizations.of(context)!.attacks:
                                     'rattacks',
-                                AppLocalizations.of(context)!.defense:
+                                AppLocalizations.of(context)!.defenses:
                                     'rdefenses',
+                                AppLocalizations.of(context)!.bestAttacks:
+                                    'bestAttacks',
+                                AppLocalizations.of(context)!.bestDefenses:
+                                    'bestDefenses',
+                                AppLocalizations.of(context)!.bestPerformance:
+                                    'bestPerformance',
                                 AppLocalizations.of(context)!.noAttackYet:
                                     'noattacks',
                                 AppLocalizations.of(context)!.noDefenseYet:

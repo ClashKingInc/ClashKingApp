@@ -4,6 +4,7 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/player/data/player_item_utils.dart';
+import 'package:clashkingapp/features/player/models/player_achievement.dart';
 import 'package:clashkingapp/features/player/models/player_bb_hero.dart';
 import 'package:clashkingapp/features/player/models/player_bb_troop.dart';
 import 'package:clashkingapp/features/player/models/player_clan.dart';
@@ -40,6 +41,7 @@ class Player {
   int builderHallLevel;
   int builderBaseTrophies;
   int bestBuilderBaseTrophies;
+  List<PlayerAchievement> achievements;
   String clanTag;
   Clan? clan;
   PlayerClanOverview clanOverview;
@@ -84,6 +86,7 @@ class Player {
     required this.builderHallLevel,
     required this.builderBaseTrophies,
     required this.bestBuilderBaseTrophies,
+    required this.achievements,
     required this.clanTag,
     required this.clanOverview,
     required this.role,
@@ -258,7 +261,7 @@ class Player {
               .toList(),
           gameData: filterGameData(
             GameDataService.heroesData['heroes'],
-            (k, v) => v['village'] == 'home',
+            (k, v) => v['type'] == 'hero',
           ),
           factory: PlayerHero.fromRaw,
         ),
@@ -268,7 +271,7 @@ class Player {
               .toList(),
           gameData: filterGameData(
             GameDataService.heroesData['heroes'],
-            (k, v) => v['village'] == 'builderBase',
+            (k, v) => v['type'] == 'bb-hero',
           ),
           factory: PlayerBuilderBaseHero.fromRaw,
         ),
@@ -283,7 +286,7 @@ class Player {
           gameData: filterGameData(
             GameDataService.troopsData['troops'],
             (k, v) =>
-                v['village'] == 'home' &&
+                v['type'] == 'troop' &&
                 !GameDataService.isSuperTroop(k) &&
                 !GameDataService.isSiegeMachine(k) &&
                 !GameDataService.isPet(k),
@@ -298,7 +301,7 @@ class Player {
               .toList(),
           gameData: filterGameData(
             GameDataService.troopsData['troops'],
-            (k, v) => v['village'] == 'home' && GameDataService.isSuperTroop(k),
+            (k, v) => v['type'] == 'troop' && GameDataService.isSuperTroop(k),
           ),
           factory: PlayerSuperTroop.fromRaw,
         ),
@@ -311,7 +314,8 @@ class Player {
           gameData: filterGameData(
             GameDataService.troopsData['troops'],
             (k, v) =>
-                v['village'] == 'home' && GameDataService.isSiegeMachine(k),
+                v['type'] == 'siege-machine' &&
+                GameDataService.isSiegeMachine(k),
           ),
           factory: PlayerSiegeMachine.fromRaw,
         ),
@@ -329,9 +333,16 @@ class Player {
               .toList(),
           gameData: filterGameData(
             GameDataService.troopsData['troops'],
-            (k, v) => v['village'] == 'builderBase',
+            (k, v) => v['type'] == 'bb-troop',
           ),
           factory: PlayerBuilderBaseTroop.fromRaw,
+          nameMatcher: (gameDataName, jsonItem) {
+            if (gameDataName == 'Baby Dragon 2' &&
+                jsonItem['name'] == 'Baby Dragon') {
+              return true;
+            }
+            return gameDataName == jsonItem['name'];
+          },
         ),
         spells: generateCompleteItemList<PlayerSpell>(
           jsonList: json['spells'] as List?,
@@ -343,6 +354,8 @@ class Player {
           gameData: GameDataService.gearsData['gears'] ?? {},
           factory: PlayerEquipment.fromRaw,
         ),
+        achievements: List<PlayerAchievement>.from(json['achievements']
+            .map((x) => PlayerAchievement.fromJson(x ?? {}))),
         legendsBySeason: null,
         legendRanking: [],
         rankings: null,
@@ -366,6 +379,7 @@ class Player {
           builderHallLevel: 0,
           builderBaseTrophies: 0,
           bestBuilderBaseTrophies: 0,
+          achievements: [],
           clanTag: "",
           clanOverview: PlayerClanOverview.empty(),
           role: "",

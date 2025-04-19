@@ -1,6 +1,6 @@
 import 'package:clashkingapp/features/player/models/player.dart';
-import 'package:clashkingapp/features/player/presentation/toDo/widget/player_to_do_body.dart';
-import 'package:clashkingapp/features/player/presentation/toDo/widget/player_to_do_header.dart';
+import 'package:clashkingapp/features/player/presentation/to_do/widget/player_to_do_body.dart';
+import 'package:clashkingapp/features/player/presentation/to_do/widget/player_to_do_header.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';

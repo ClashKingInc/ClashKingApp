@@ -13,6 +13,7 @@ List<T> generateCompleteItemList<T extends PlayerItem>({
   required List<dynamic>? jsonList,
   required Map<String, dynamic> gameData,
   required PlayerItemFactory<T> factory,
+  bool Function(String itemName, dynamic jsonItem)? nameMatcher,
 }) {
   final Map<String, Map<String, dynamic>> allItems = Map.fromEntries(
     gameData.entries
@@ -22,8 +23,10 @@ List<T> generateCompleteItemList<T extends PlayerItem>({
   return allItems.entries.map((entry) {
     final name = entry.key;
     final meta = entry.value;
-    final owned =
-        jsonList?.firstWhere((x) => x['name'] == name, orElse: () => null);
+    final owned = jsonList?.firstWhere(
+      (x) => nameMatcher?.call(name, x) ?? x['name'] == name,
+      orElse: () => null,
+    );
 
     return factory(
       name: name,

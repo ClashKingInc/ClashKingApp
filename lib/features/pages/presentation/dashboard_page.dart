@@ -7,7 +7,7 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/pages/widgets/player_card.dart';
 import 'package:clashkingapp/features/pages/widgets/player_legend_card.dart';
 import 'package:clashkingapp/features/player/presentation/legend/player_legend_page.dart'
-    show LegendScreen;
+    show PlayerLegendScreen;
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +61,8 @@ class DashboardPage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => LegendScreen(),
+                            builder: (context) =>
+                                PlayerLegendScreen(player: player),
                           ),
                         );
                       }
@@ -73,9 +74,19 @@ class DashboardPage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
                   child: PlayerCard(),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: PlayerLegendCard(),
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PlayerLegendScreen(
+                        player: player!,
+                      ),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: PlayerLegendCard(),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),

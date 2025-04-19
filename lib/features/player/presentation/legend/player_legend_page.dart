@@ -1,5 +1,4 @@
-import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
-import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/legend/player_legend_by_day.dart';
 import 'package:clashkingapp/features/player/presentation/legend/player_legend_history.dart';
 import 'package:clashkingapp/features/player/presentation/legend/player_legend_season.dart';
@@ -12,17 +11,17 @@ import 'package:flutter/material.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_functions.dart';
 
-class LegendScreen extends StatefulWidget {
-  const LegendScreen({super.key});
+class PlayerLegendScreen extends StatefulWidget {
+  final Player player;
+  const PlayerLegendScreen({super.key, required this.player});
 
   @override
-  State<LegendScreen> createState() => _LegendScreenState();
+  State<PlayerLegendScreen> createState() => _PlayerLegendScreenState();
 }
 
-class _LegendScreenState extends State<LegendScreen>
+class _PlayerLegendScreenState extends State<PlayerLegendScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   DateTime selectedDate =
@@ -67,12 +66,9 @@ class _LegendScreenState extends State<LegendScreen>
 
   @override
   Widget build(BuildContext context) {
-    final playerService = context.watch<PlayerService>();
-    final cocService = context.watch<CocAccountService>();
-    final player = playerService.getSelectedProfile(cocService);
 
-    final legends = player?.legendsBySeason;
-    if (player == null || legends == null) {
+    final legends = widget.player.legendsBySeason;
+    if (legends == null) {
       return Center(
         child: Text(AppLocalizations.of(context)?.noDataAvailable ??
             'No data available'),
@@ -86,7 +82,7 @@ class _LegendScreenState extends State<LegendScreen>
         child: SingleChildScrollView(
           child: Column(
             children: [
-              LegendHeaderCard(player: player),
+              LegendHeaderCard(player: widget.player),
               ScrollableTab(
                 tabBarDecoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
@@ -104,7 +100,7 @@ class _LegendScreenState extends State<LegendScreen>
                   Tab(text: AppLocalizations.of(context)?.history ?? "History"),
                 ],
                 children: [
-                  LegendByDayTab(player: player),
+                  LegendByDayTab(player: widget.player),
                   Column(
                     children: [
                       Row(
@@ -166,11 +162,11 @@ class _LegendScreenState extends State<LegendScreen>
                         ],
                       ),
                       LegendSeason(
-                          player: player,
+                          player: widget.player,
                           season: legends.getSpecificSeason(selectedMonth)),
                       showBySeasonTable
                           ? PlayerLegendSeasonList(
-                              player: player,
+                              player: widget.player,
                               season: legends.getSpecificSeason(selectedMonth))
                           : LegendSeasonChart(
                               season: legends.getSpecificSeason(selectedMonth))
@@ -193,12 +189,12 @@ class _LegendScreenState extends State<LegendScreen>
                           ),
                         ],
                       ),
-                      PlayerLegendHistory(player: player),
+                      PlayerLegendHistory(player: widget.player),
                       showHistoryTable
                           ? PlayerLegendHistoryEosList(
-                              rankings: player.legendRanking)
+                              rankings: widget.player.legendRanking)
                           : PlayerLegendHistoryEosChart(
-                              rankings: player.legendRanking),
+                              rankings: widget.player.legendRanking),
                     ],
                   ),
                 ],

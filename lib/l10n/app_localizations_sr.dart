@@ -1165,12 +1165,12 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String stillInClanNumberDescription(int number) {
-    return '$number player(s) are still in the clan.';
+    return '$number player(s) joined and are still in the clan.';
   }
 
   @override
   String leftClanNumberDescription(int number) {
-    return '$number player(s) left the clan.';
+    return '$number player(s) joined, then left the clan and never rejoined.';
   }
 
   @override
@@ -1224,6 +1224,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get defenses => 'Defenses';
 
   @override
+  String get bestDefenses => 'Best defenses';
+
+  @override
   String bestDefenseOutOf(int number) {
     return 'Best defense (out of $number)';
   }
@@ -1235,10 +1238,16 @@ class AppLocalizationsSr extends AppLocalizations {
   String get attacks => 'Attacks';
 
   @override
+  String get bestAttacks => 'Best attacks';
+
+  @override
   String get noAttackYet => 'No attack yet';
 
   @override
   String get noDefenseYet => 'No defense yet';
+
+  @override
+  String get bestPerformance => 'Best performance';
 
   @override
   String get victory => 'Victory';

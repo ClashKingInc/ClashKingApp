@@ -27,22 +27,33 @@ class WarInfo {
   });
 
   factory WarInfo.fromJson(Map<String, dynamic> json) {
-    return WarInfo(
-      tag: json['war_tag'],
-      state: json['state'] ?? 'unknown',
-      teamSize: json['teamSize'],
-      attacksPerMember: json['attacksPerMember'],
-      startTime:
-          json['startTime'] != null ? DateTime.parse(json['startTime']) : null,
-      endTime: json['endTime'] != null ? DateTime.parse(json['endTime']) : null,
-      preparationStartTime: json['preparationStartTime'] != null
-          ? DateTime.parse(json['preparationStartTime'])
-          : null,
-      warType: json['warType'],
-      clan: json['clan'] != null ? WarClan.fromJson(json['clan']) : null,
-      opponent:
-          json['opponent'] != null ? WarClan.fromJson(json['opponent']) : null,
-    );
+    try {
+      return WarInfo(
+        state: json['state'] ?? 'unknown',
+        teamSize: json['teamSize'],
+        attacksPerMember: json['attacksPerMember'],
+        startTime: json['startTime'] != null
+            ? DateTime.parse(json['startTime'])
+            : null,
+        endTime:
+            json['endTime'] != null ? DateTime.parse(json['endTime']) : null,
+        preparationStartTime: json['preparationStartTime'] != null
+            ? DateTime.parse(json['preparationStartTime'])
+            : null,
+        warType: json['warType'],
+        clan: json['clan'] != null ? WarClan.fromJson(json['clan']) : null,
+        opponent: json['opponent'] != null
+            ? WarClan.fromJson(json['opponent'])
+            : null,
+      );
+    } catch (e) {
+      print("❌ Error parsing WarInfo: $e");
+      return WarInfo(
+        state: 'unknown',
+        clan: null,
+        opponent: null,
+      );
+    }
   }
 
   /// Return a WarMember from either clan or opponent by tag

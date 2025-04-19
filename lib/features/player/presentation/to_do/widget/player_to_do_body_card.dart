@@ -230,7 +230,7 @@ class PlayerToDoBodyCard extends StatelessWidget {
                   child: Container(
                     height: 8,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black.withOpacity(0.2)),
+                      border: Border.all(color: Colors.black.withValues(alpha: 0.2)),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: ClipRRect(
