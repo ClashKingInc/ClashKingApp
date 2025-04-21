@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
+import 'package:clashkingapp/core/war_functions.dart';
 
 class LegendSeason extends StatelessWidget {
   final Player player;

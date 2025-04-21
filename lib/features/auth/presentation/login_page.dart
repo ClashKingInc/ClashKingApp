@@ -8,7 +8,6 @@ import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/main_pages/login_page/guest_login_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
@@ -123,7 +122,7 @@ class LoginPageState extends State<LoginPage> {
                 SizedBox(height: 16),
 
                 // Mode invité
-                ElevatedButton(
+                /*ElevatedButton(
                   onPressed: () => Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => GuestLoginPage()),
                   ),
@@ -132,7 +131,7 @@ class LoginPageState extends State<LoginPage> {
                     SizedBox(width: 8),
                     Text(AppLocalizations.of(context)!.guestMode),
                   ]),
-                ),
+                ),*/
 
                 SizedBox(height: 8),
 

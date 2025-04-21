@@ -33,9 +33,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get loginError => 'An error occurred while logging in. Please try again later.';
 
   @override
-  String get createGuestProfile => 'Cria o seu perfil de convidado';
-
-  @override
   String doesNotExist(String tag) {
     return '$tag não existe.';
   }
@@ -47,9 +44,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get username => 'Nome de utilizador';
-
-  @override
-  String get pleaseEnterUsername => 'Por favor, insira um nome de utilizador';
 
   @override
   String get playerTag => 'Player Tag (#ABC123)';
@@ -1038,30 +1032,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get zeroStar => '0 Star';
 
   @override
-  String get defZeroStar => '0 Star (def)';
-
-  @override
-  String get defOneStar => '1 Star (def)';
-
-  @override
-  String get defTwoStars => '2 Stars (def)';
-
-  @override
-  String get defThreeStars => '3 Stars (def)';
-
-  @override
-  String get lowerTownHallAttack => 'Lower TH Attack';
-
-  @override
-  String get upperTownHallAttack => 'Upper TH Attack';
-
-  @override
-  String get lowerTownHallDefense => 'Lower TH Defense';
-
-  @override
-  String get upperTownHallDefense => 'Upper TH Defense';
-
-  @override
   String get warParticipation => 'Participação na guerra';
 
   @override
@@ -1071,13 +1041,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get totalStars => 'Total';
 
   @override
-  String get averageAbbr => 'Avg';
-
-  @override
   String get destruction => 'Destruction';
-
-  @override
-  String get averageDestructionAbbr => 'Avg %';
 
   @override
   String get mapPosition => 'Map Position';

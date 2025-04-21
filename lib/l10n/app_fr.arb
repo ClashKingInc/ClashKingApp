@@ -3,7 +3,6 @@
     "signInWithDiscord": "Connexion avec Discord",
     "guestMode": "Mode invité",
     "needHelpJoinDiscord": "Besoin d'aide ? Rejoins-nous sur Discord.",
-    "createGuestProfile": "Créer un profil invité",
     "doesNotExist": "{tag} n'existe pas.",
     "@doesNotExist": {
         "placeholders": {
@@ -21,7 +20,6 @@
         }
     },
     "username": "Nom d'utilisateur",
-    "pleaseEnterUsername": "Veuillez saisir un nom d'utilisateur",
     "playerTags": "Tags de joueur",
     "followingTagsDoNotExist": "Les tags suivants n'existent pas : {tags}.",
     "@followingTagsDoNotExist": {

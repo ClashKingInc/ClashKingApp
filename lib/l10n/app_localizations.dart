@@ -200,12 +200,6 @@ abstract class AppLocalizations {
   /// **'An error occurred while logging in. Please try again later.'**
   String get loginError;
 
-  /// No description provided for @createGuestProfile.
-  ///
-  /// In en, this message translates to:
-  /// **'Create your guest profile'**
-  String get createGuestProfile;
-
   /// No description provided for @doesNotExist.
   ///
   /// In en, this message translates to:
@@ -223,12 +217,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Username'**
   String get username;
-
-  /// No description provided for @pleaseEnterUsername.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a username'**
-  String get pleaseEnterUsername;
 
   /// No description provided for @playerTag.
   ///
@@ -2006,54 +1994,6 @@ abstract class AppLocalizations {
   /// **'0 Star'**
   String get zeroStar;
 
-  /// No description provided for @defZeroStar.
-  ///
-  /// In en, this message translates to:
-  /// **'0 Star (def)'**
-  String get defZeroStar;
-
-  /// No description provided for @defOneStar.
-  ///
-  /// In en, this message translates to:
-  /// **'1 Star (def)'**
-  String get defOneStar;
-
-  /// No description provided for @defTwoStars.
-  ///
-  /// In en, this message translates to:
-  /// **'2 Stars (def)'**
-  String get defTwoStars;
-
-  /// No description provided for @defThreeStars.
-  ///
-  /// In en, this message translates to:
-  /// **'3 Stars (def)'**
-  String get defThreeStars;
-
-  /// No description provided for @lowerTownHallAttack.
-  ///
-  /// In en, this message translates to:
-  /// **'Lower TH Attack'**
-  String get lowerTownHallAttack;
-
-  /// No description provided for @upperTownHallAttack.
-  ///
-  /// In en, this message translates to:
-  /// **'Upper TH Attack'**
-  String get upperTownHallAttack;
-
-  /// No description provided for @lowerTownHallDefense.
-  ///
-  /// In en, this message translates to:
-  /// **'Lower TH Defense'**
-  String get lowerTownHallDefense;
-
-  /// No description provided for @upperTownHallDefense.
-  ///
-  /// In en, this message translates to:
-  /// **'Upper TH Defense'**
-  String get upperTownHallDefense;
-
   /// No description provided for @warParticipation.
   ///
   /// In en, this message translates to:
@@ -2072,23 +2012,11 @@ abstract class AppLocalizations {
   /// **'Total'**
   String get totalStars;
 
-  /// Abbreviation for average
-  ///
-  /// In en, this message translates to:
-  /// **'Avg'**
-  String get averageAbbr;
-
   /// No description provided for @destruction.
   ///
   /// In en, this message translates to:
   /// **'Destruction'**
   String get destruction;
-
-  /// Abbreviation for average destruction percentage
-  ///
-  /// In en, this message translates to:
-  /// **'Avg %'**
-  String get averageDestructionAbbr;
 
   /// Map position in war
   ///

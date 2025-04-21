@@ -2,7 +2,6 @@ import 'package:clashkingapp/common/widgets/icons/custom_icons_icons.dart';
 import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
 import 'package:clashkingapp/features/pages/presentation/war_cwl_page.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/main_pages/tools_page/tools_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/app_bar/app_bar.dart';
 
@@ -50,7 +49,6 @@ class MyHomePageState extends State<MyHomePage> {
           DashboardPage(),
           ClanPage(),
           WarCwlPage(),
-          ToolsPage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -71,10 +69,10 @@ class MyHomePageState extends State<MyHomePage> {
             icon: Icon(CustomIcons.swordCross),
             label: AppLocalizations.of(context)?.warLeague ?? 'War/League',
           ),
-          BottomNavigationBarItem(
+          /*BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: AppLocalizations.of(context)?.tools ?? 'Tools',
-          ),
+          ),*/
         ],
         currentIndex: _selectedIndex,
         showUnselectedLabels: true,

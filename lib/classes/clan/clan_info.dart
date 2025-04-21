@@ -3,6 +3,7 @@ import 'package:clashkingapp/classes/clan/description/badge_urls.dart';
 import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
 import 'package:clashkingapp/classes/clan/logs/join_leave.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_functions.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:retry/retry.dart';
@@ -19,7 +20,6 @@ import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
 import 'package:clashkingapp/classes/clan/description/clan_capital.dart';
 import 'package:clashkingapp/classes/functions.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 
 class Clan {
   String tag;
