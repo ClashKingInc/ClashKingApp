@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:clashkingapp/classes/profile/legend/legend_functions.dart';
+import 'package:clashkingapp/core/legend_functions.dart';
 
 class PlayerLegendScreen extends StatefulWidget {
   final Player player;

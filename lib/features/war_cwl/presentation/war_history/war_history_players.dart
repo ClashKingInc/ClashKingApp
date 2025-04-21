@@ -1,12 +1,11 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/classes/clan/clan_info.dart';
-import 'package:clashkingapp/classes/clan/description/member.dart';
-import 'package:clashkingapp/classes/clan/war_league/member_war_stats.dart';
-import 'package:clashkingapp/classes/data/game_data_manager.dart';
-import 'package:clashkingapp/classes/functions.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/services/game_data_service.dart';
+import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/features/clan/models/clan_member.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_functions.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_member_stats.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_history/component/war_history_players_header.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -26,25 +25,27 @@ class PlayersWarHistoryScreen extends StatefulWidget {
 class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
     with TickerProviderStateMixin {
   String _sortBy = "Three Stars Attacks";
-  List<Member> sortedMembers = [];
+  List<ClanMember> sortedMembers = [];
   bool isCWLChecked = true;
   bool isRandomChecked = true;
   bool isFriendlyChecked = true;
   MembersWarStats? warStats;
   MembersWarStats? defaultWarStats;
 
-
-
   // Track selected Town Hall levels for members and enemies
-  Map<int, bool> memberThSelection = {for (int i = 1; i <= GameDataManager().getMaxTownHallLevel(); i++) i: false};
-  Map<int, bool> enemyThSelection = {for (int i = 1; i <= GameDataManager().getMaxTownHallLevel(); i++) i: false};
+  Map<int, bool> memberThSelection = {
+    for (int i = 1; i <= GameDataService.getMaxTownHallLevel(); i++) i: false
+  };
+  Map<int, bool> enemyThSelection = {
+    for (int i = 1; i <= GameDataService.getMaxTownHallLevel(); i++) i: false
+  };
   bool equalThSelected = false;
   bool showUppedTownHall = true;
 
   @override
   void initState() {
     super.initState();
-    warStats = widget.clan.membersWarStats!;
+    //warStats = widget.clan.membersWarStats!;
     defaultWarStats = warStats;
     _sortMembers();
   }
@@ -57,8 +58,14 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
       isFriendlyChecked = true;
 
       // Réinitialiser les sélections de niveaux TH
-      memberThSelection = {for (int i = 6; i <= GameDataManager().getMaxTownHallLevel(); i++) i: false};
-      enemyThSelection = {for (int i = 6; i <= GameDataManager().getMaxTownHallLevel(); i++) i: false};
+      memberThSelection = {
+        for (int i = 6; i <= GameDataService.getMaxTownHallLevel(); i++)
+          i: false
+      };
+      enemyThSelection = {
+        for (int i = 6; i <= GameDataService.getMaxTownHallLevel(); i++)
+          i: false
+      };
       equalThSelected = false;
 
       // Réinitialiser les données affichées
@@ -82,14 +89,14 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
       sortedMembers = warStats!.allMembers
           .map((memberStats) {
             // Find the original member details from the clan list using the member tag
-            Member? matchingMember = widget.clan.memberList!.firstWhere(
+            ClanMember? matchingMember = widget.clan.memberList!.firstWhere(
                 (clanMember) => clanMember.tag == memberStats.tag,
-                orElse: () => Member.defaultMember());
+                orElse: () => ClanMember.empty());
 
             return matchingMember;
           })
           .where((member) => member.name != "") // Filter out nulls
-          .cast<Member>() // Cast the list to the correct type
+          .cast<ClanMember>() // Cast the list to the correct type
           .toList();
 
       // Sort the members based on the selected sorting criteria
@@ -194,12 +201,12 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                           selectedColor: Theme.of(context)
                               .colorScheme
                               .primary
-                              .withValues(alpha : 0.7),
+                              .withValues(alpha: 0.7),
                           labelPadding: EdgeInsets.all(0),
                           label: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                              imageUrl: getTownHallPicture(thLevel),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                              imageUrl: ImageAssets.townHall(thLevel),
                               height: 24),
                           selected: memberThSelection[thLevel]!,
                           onSelected: (bool selected) {
@@ -221,12 +228,12 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                           selectedColor: Theme.of(context)
                               .colorScheme
                               .primary
-                              .withValues(alpha : 0.7),
+                              .withValues(alpha: 0.7),
                           labelPadding: EdgeInsets.all(0),
                           label: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                              imageUrl: getTownHallPicture(thLevel),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                              imageUrl: ImageAssets.townHall(thLevel),
                               height: 24),
                           selected: enemyThSelection[thLevel]!,
                           onSelected: (bool selected) {
@@ -503,9 +510,10 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                               Row(
                                 children: [
                                   CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                                    imageUrl: member.getTownHallPicture(),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                    imageUrl: ImageAssets.townHall(
+                                        member.townHallLevel),
                                     height: 50,
                                   ),
                                   SizedBox(width: 16),
@@ -529,8 +537,8 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                                           ""),
                                       SizedBox(width: 8),
                                       CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
                                           imageUrl:
                                               "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png",
                                           height: 16,
@@ -544,8 +552,8 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                                           ""),
                                       SizedBox(width: 8),
                                       CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
                                           imageUrl:
                                               "https://assets.clashk.ing/bot/icons/broken_sword.png",
                                           height: 16,

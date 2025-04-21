@@ -12,6 +12,7 @@ class GameDataService {
   static Map<String, dynamic> _gearsData = {};
   static Map<String, dynamic> _leagueData = {};
   static Map<String, dynamic> _playerLeagueData = {};
+  static Map<String, dynamic> _gameData = {};
 
   static Future<void> loadGameData() async {
     await Future.wait([
@@ -22,6 +23,7 @@ class GameDataService {
       _fetchJson("gears_data.json", _gearsData),
       _fetchJson("league_data.json", _leagueData),
       _fetchJson("player_league_data.json", _playerLeagueData),
+      _fetchJson("game_data.json", _gameData),
     ]);
   }
 
@@ -51,6 +53,10 @@ class GameDataService {
     return petsData["pets"]?.containsKey(name) ?? false;
   }
 
+  static int getMaxTownHallLevel() {
+    return gameData["max_TownHall"] ?? 0;
+  }
+
   static Map<String, dynamic> get petsData => _petsData;
   static Map<String, dynamic> get heroesData => _heroesData;
   static Map<String, dynamic> get troopsData => _troopsData;
@@ -58,4 +64,5 @@ class GameDataService {
   static Map<String, dynamic> get gearsData => _gearsData;
   static Map<String, dynamic> get leagueData => _leagueData;
   static Map<String, dynamic> get playerLeagueData => _playerLeagueData;
+  static Map<String, dynamic> get gameData => _gameData;
 }

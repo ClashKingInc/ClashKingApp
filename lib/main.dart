@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:clashkingapp/classes/data/gears_data_manager.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -16,13 +15,6 @@ import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
-import 'package:clashkingapp/classes/data/game_data_manager.dart';
-import 'package:clashkingapp/classes/data/league_data_manager.dart';
-import 'package:clashkingapp/classes/data/player_league_data_manager.dart';
-import 'package:clashkingapp/classes/data/troops_data_manager.dart';
-import 'package:clashkingapp/classes/data/pets_data_manager.dart';
-import 'package:clashkingapp/classes/data/heroes_data_manager.dart';
-import 'package:clashkingapp/classes/data/spells_data_manager.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -57,14 +49,6 @@ Future<void> main() async {
       }
 
       await Future.wait([
-        GameDataManager().loadGameData().then((_) => print("✅ GameDataManager OK")),
-        LeagueDataManager().loadLeagueData().then((_) => print("✅ LeagueDataManager OK")),
-        TroopDataManager().loadTroopsData().then((_) => print("✅ TroopDataManager OK")),
-        PlayerLeagueDataManager().loadLeagueData().then((_) => print("✅ PlayerLeagueDataManager OK")),
-        GearDataManager().loadGearsData().then((_) => print("✅ GearDataManager OK")),
-        HeroesDataManager().loadHeroesData().then((_) => print("✅ HeroesDataManager OK")),
-        SpellsDataManager().loadSpellsData().then((_) => print("✅ SpellsDataManager OK")),
-        PetsDataManager().loadPetsData().then((_) => print("✅ PetsDataManager OK")),
         GameDataService.loadGameData().then((_) => print("✅ GameDataService OK")),
       ]);
 

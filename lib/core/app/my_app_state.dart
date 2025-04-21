@@ -1,8 +1,6 @@
+
 import 'dart:io';
 
-import 'package:clashkingapp/classes/account/user.dart';
-import 'package:clashkingapp/classes/profile/profile_info.dart';
-import 'package:clashkingapp/classes/profile/todo/to_do_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/functions.dart';
@@ -12,16 +10,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
-import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
-  User? user;
   Future<void>? initializeUserFuture;
   String? clanTag;
-  Account? account;
-  Accounts? accounts;
   ValueNotifier<String?> selectedTagNotifier = ValueNotifier<String?>(null);
 
   Locale _locale = Locale('en'); // Default language is English
@@ -42,12 +36,12 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       );
     }
 
-    selectedTagNotifier.addListener(() async {
+    /*selectedTagNotifier.addListener(() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await storePrefs('clanTag', account!.profileInfo.clan?.tag ?? '');
       await prefs.setString('clanTag', account!.profileInfo.clan?.tag ?? '');
       updateWidgets();
-    });
+    });*/
   }
 
   // This method is called when the app is resumed
@@ -130,13 +124,13 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> updateWarWidget() async {
     await dotenv.load(fileName: ".env");
     clanTag = await getPrefs('clanTag');
-    final warInfo = await checkCurrentWar(clanTag);
+    //final warInfo = await checkCurrentWar(clanTag);
     if (clanTag != "") {
       clanTag = clanTag?.replaceAll('#', '%23');
     }
     try {
       // Send data to the widget
-      await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
+      //await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
       // Request the Home Widget to update
       await HomeWidget.updateWidget(
         name: 'WarAppWidgetProvider',
@@ -144,7 +138,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       );
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Failed to update war widget, clanTag: $clanTag, warInfo: $warInfo');
+      //Sentry.captureMessage('Failed to update war widget, clanTag: $clanTag, warInfo: $warInfo');
     }
   }
 
@@ -157,7 +151,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   /* User management */
 
-  void deleteAccountByTag(String tag, MyAppState myAppState) {
+  /*void deleteAccountByTag(String tag, MyAppState myAppState) {
     accounts!.accounts.removeWhere((account) => account.profileInfo.tag == tag);
     accounts!.selectedTag =
         ValueNotifier<String?>(accounts!.accounts.first.profileInfo.tag);
@@ -239,5 +233,5 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     } else {
       throw Exception('Failed to fetch profile information for tag: $tag');
     }
-  }
+  }*/
 }

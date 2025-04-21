@@ -1,4 +1,3 @@
-import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_log.dart';
@@ -159,7 +158,7 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                         );
                       },
                     );
-                    CurrentWarService.fetchWarDataFromTime(
+                    /*CurrentWarService.fetchWarDataFromTime(
                             widget.clan.tag, warLogDetail.endTime)
                         .then((currentWarInfo) {
                       navigator.pop();
@@ -195,7 +194,7 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                     }).catchError((error, stackTrace) {
                       Sentry.captureException(error, stackTrace: stackTrace);
                       return null;
-                    });
+                    });*/
                   },
                   child: Card(
                     margin:

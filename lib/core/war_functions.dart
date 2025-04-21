@@ -1,12 +1,12 @@
-import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
+import 'package:clashkingapp/features/clan/models/clan_war_log.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 Map<int, int> countStars(List<WarMember> members) {
@@ -32,8 +32,7 @@ Map<int, int> countStars(List<WarMember> members) {
 List<Widget> generateStars(int numberOfStars, double size) {
   return List<Widget>.generate(3, (index) {
     return CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+      errorWidget: (context, url, error) => Icon(Icons.error),
       imageUrl: index < numberOfStars
           ? "https://assets.clashk.ing/icons/Icon_BB_Star.png"
           : "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png",
@@ -44,7 +43,7 @@ List<Widget> generateStars(int numberOfStars, double size) {
 }
 
 Widget timeLeft(
-    CurrentWarInfo currentWarInfo, BuildContext context, TextStyle? style) {
+    WarInfo currentWarInfo, BuildContext context, TextStyle? style) {
   String hourIndicator = AppLocalizations.of(context)?.hourIndicator ?? ":";
   DateTime now = DateTime.now();
   Duration difference = Duration.zero;
@@ -54,13 +53,13 @@ Widget timeLeft(
   String time = '';
 
   if (currentWarInfo.state == 'preparation') {
-    difference = currentWarInfo.startTime.difference(now);
+    difference = currentWarInfo.startTime!.difference(now);
     hours = difference.inHours.toString().padLeft(2, '0');
     minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
     time = hours + hourIndicator + minutes;
     state = AppLocalizations.of(context)?.startsIn(time) ?? 'Starting in';
   } else if (currentWarInfo.state == 'inWar') {
-    difference = currentWarInfo.endTime.difference(now);
+    difference = currentWarInfo.endTime!.difference(now);
     hours = difference.inHours.toString().padLeft(2, '0');
     minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
     time = hours + hourIndicator + minutes;
@@ -154,7 +153,7 @@ Map<String, String> analyzeWarLogs(List<WarLogDetails> warLogs) {
   };
 }
 
-Future<String> checkCurrentWar(
+/*Future<String> checkCurrentWar(
     String clanTag,
     LeagueInfoContainer leagueInfoContainer,
     WarInfoContainer warInfoContainer) async {
@@ -214,7 +213,7 @@ Future<String> checkCurrentWar(
   } else {
     return initialResult;
   }
-}
+}*/
 
 Future<String?> fetchWarOpponentTag(String clanTag) async {
   final response = await http.get(

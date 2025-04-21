@@ -1,9 +1,7 @@
-import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
+import 'package:clashkingapp/core/functions.dart';
+import 'package:clashkingapp/features/player/models/player_legend_day.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:clashkingapp/classes/profile/legend/legend_attack.dart';
-import 'package:clashkingapp/classes/profile/legend/legend_defense.dart';
-import 'package:clashkingapp/classes/profile/legend/legend_day.dart';
 
 String convertToTimeAgo(int timestamp, context) {
   DateTime now = DateTime.now();
@@ -19,42 +17,6 @@ String convertToTimeAgo(int timestamp, context) {
   } else {
     return AppLocalizations.of(context)?.justNow ?? "Just now";
   }
-}
-
-Map<String, dynamic> calculateStats(List<dynamic> list) {
-  int sum = 0;
-  int count = 0;
-  double average = 0;
-  int remaining = 320;
-  int bestPossibleTrophies = 0;
-
-  if (list.isNotEmpty) {
-    var filteredList =
-        list.where((item) => item is Attack || item is Defense).toList();
-    if (filteredList.isNotEmpty) {
-      sum = filteredList
-          .map((item) =>
-              (item is Attack ? item.change : (item as Defense).change))
-          .reduce((value, element) => value + element);
-      count = filteredList.length +
-          filteredList
-              .where((item) =>
-                  (item is Attack ? item.change : (item as Defense).change) >
-                  40)
-              .length;
-      average = sum / count;
-      remaining = 320 - count * 40;
-      bestPossibleTrophies = remaining + sum;
-    }
-  }
-
-  return {
-    'sum': sum,
-    'count': count,
-    'average': average,
-    'remaining': remaining,
-    'bestPossibleTrophies': bestPossibleTrophies,
-  };
 }
 
 DateTime findSeasonStartDate(DateTime date) {
@@ -105,13 +67,28 @@ List<FlSpot> convertToContinuousScale(
   return spots;
 }
 
+List<DateTime> findSeasonStartEndDate(DateTime currentDate) {
+  DateTime seasonStart =
+      findLastMondayOfMonth(currentDate.year, currentDate.month);
+
+  DateTime seasonEnd =
+      findLastMondayOfMonth(currentDate.year, currentDate.month + 1);
+  if (currentDate.isBefore(seasonStart) || currentDate == seasonStart) {
+    seasonStart =
+        findLastMondayOfMonth(currentDate.year, currentDate.month - 1);
+    seasonEnd = findLastMondayOfMonth(currentDate.year, currentDate.month)
+        .subtract(Duration(days: 1));
+  }
+  return [seasonStart, seasonEnd];
+}
+
 DateTime findCurrentSeasonMonth(currentDate) {
   List<DateTime> test = findSeasonStartEndDate(currentDate);
   DateTime selectedMonth = DateTime(test[1].year, test[1].month, 1);
   return selectedMonth;
 }
 
-DateTime getLastMonthWithSeasonData(Map<String, LegendDay> seasonData) {
+DateTime getLastMonthWithSeasonData(Map<String, PlayerLegendDay> seasonData) {
   if (seasonData.isEmpty) {
     throw Exception("No season data available");
   }
