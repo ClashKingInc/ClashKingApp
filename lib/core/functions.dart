@@ -254,3 +254,9 @@ bool isInTimeFrameForCwl() {
   return isInTimeFrameForCwl;
 }
 
+String formatSecondsToHHMM(double seconds) {
+  final duration = Duration(seconds: seconds.round());
+  final hours = duration.inHours.toString().padLeft(2, '0');
+  final minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
+  return '$hours:$minutes';
+}

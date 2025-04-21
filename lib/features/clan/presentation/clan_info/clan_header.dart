@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/buttons/chip.dart';
+import 'package:clashkingapp/common/widgets/buttons/war_button.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
@@ -12,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ClanInfoHeaderCard extends StatelessWidget {
@@ -149,7 +149,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
           label: NumberFormat('#,###').format(clanInfo.clanPoints),
         ),
         ImageChip(
-          imageUrl: ImageAssets.attacks,
+          imageUrl: ImageAssets.capitalGold,
           label: NumberFormat('#,###').format(clanInfo.clanCapitalPoints),
         ),
         if (clanInfo.requiredTownhallLevel > 0)
@@ -224,22 +224,23 @@ class ClanInfoHeaderCard extends StatelessWidget {
   }
 
   Widget _buildWarButton(BuildContext context) {
-    return _buildCtaButton(
-      context,
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => WarScreen(war: clanInfo.warCwl!.warInfo),
-          ),
-        );
-      },
-      label: AppLocalizations.of(context)!.ongoingWar,
-    );
+    return buildWarButton(context, onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WarScreen(war: clanInfo.warCwl!.warInfo),
+        ),
+      );
+    },
+        label: clanInfo.warCwl!.warInfo.state == "preparation"
+            ? AppLocalizations.of(context)!.preparation
+            : clanInfo.warCwl!.warInfo.state == "inWar"
+                ? AppLocalizations.of(context)!.ongoingWar
+                : AppLocalizations.of(context)!.warEnded);
   }
 
   Widget _buildCwlButton(BuildContext context) {
-    return _buildCtaButton(
+    return buildWarButton(
       context,
       onTap: () {
         Navigator.push(
@@ -256,41 +257,6 @@ class ClanInfoHeaderCard extends StatelessWidget {
         );
       },
       label: AppLocalizations.of(context)!.ongoingCwl,
-    );
-  }
-
-  Widget _buildCtaButton(BuildContext context,
-      {required VoidCallback onTap, required String label}) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.zero,
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        shadowColor: Theme.of(context).colorScheme.secondary,
-      ),
-      onPressed: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CachedNetworkImage(
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-              width: 20,
-              imageUrl: "https://assets.clashk.ing/icons/Icon_DC_War.png",
-            ),
-            SizedBox(width: 8),
-            Shimmer.fromColors(
-              period: Duration(seconds: 3),
-              baseColor: Colors.white,
-              highlightColor: Colors.white.withValues(alpha: 0.4),
-              child: Text(label, style: Theme.of(context).textTheme.bodyMedium),
-            ),
-          ],
-        ),
-      ),
     );
   }
 

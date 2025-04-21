@@ -23,7 +23,7 @@ for key in arb_data.keys():
     found = False
     for root, dirs, files in os.walk(search_dir):
         for file in files:
-            if file.endswith('.dart'):
+            if file.endswith('.dart') and not file.startswith('app_localizations'):
                 file_path = os.path.join(root, file)
                 with open(file_path, 'r', encoding='utf-8') as source_file:
                     if key in source_file.read():

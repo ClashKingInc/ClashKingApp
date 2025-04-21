@@ -1,5 +1,7 @@
+import 'package:clashkingapp/features/clan/models/clan_capital_history.dart';
 import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
+import 'package:clashkingapp/features/clan/models/clan_war_log.dart';
 
 import 'clan_location.dart';
 import 'clan_badge.dart';
@@ -38,6 +40,8 @@ class Clan {
   final ClanChatLanguage? chatLanguage;
   WarCwl? warCwl;
   ClanJoinLeave? joinLeave;
+  CapitalHistoryItems? clanCapitalRaid;
+  ClanWarLog? clanWarLog;
 
   Clan({
     required this.tag,

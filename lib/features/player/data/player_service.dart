@@ -4,6 +4,7 @@ import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/api_service.dart';
@@ -150,36 +151,94 @@ class PlayerService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Player> getPlayerData(String playerTag) async {
+  Future<Player> getPlayerAndClanData(String playerTag) async {
     _isLoading = true;
     notifyListeners();
 
-    final token = await TokenService().getAccessToken();
-    if (token == null) throw Exception("User not authenticated");
-
-    playerTag = playerTag.replaceAll("#", "%23");
-
-    final response = await http.get(
-      Uri.parse("${ApiService.apiUrl}/player/$playerTag/extended"),
-      headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json",
-      },
-    );
-
     try {
-      if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes);
-        final data = jsonDecode(responseBody);
-        return Player.fromJson(data);
-      } else {
-        Sentry.captureMessage("Error loading player data",
-            level: SentryLevel.error);
-        throw Exception("Error loading player data");
+      final token = await TokenService().getAccessToken();
+      if (token == null) throw Exception("User not authenticated");
+
+      playerTag = playerTag.replaceAll("#", "%23");
+
+      final responseInit = await http.post(
+        Uri.parse("${ApiService.apiUrl}/players"),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({
+          "player_tags": [playerTag]
+        }),
+      );
+
+      if (responseInit.statusCode != 200) {
+        throw Exception("Failed to fetch initial player data");
       }
-    } catch (e) {
-      Sentry.captureException(e);
-      print("❌ Error loading player data: $e");
+
+      final initData = jsonDecode(utf8.decode(responseInit.bodyBytes));
+      final Player player = Player.fromJson(initData["items"][0]);
+
+      final String clanTag = player.clanTag;
+
+      if (clanTag.isEmpty) {
+        return player;
+      }
+
+      String clanTagUrl = clanTag.replaceAll("#", "%23");
+
+      final responses = await Future.wait([
+        http.get(
+          Uri.parse("${ApiService.apiUrl}/player/$playerTag/extended")
+              .replace(queryParameters: {
+            "clan_tag": clanTag,
+          }),
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json",
+          },
+        ),
+        http.get(
+          Uri.parse("${ApiService.apiUrl}/war/$clanTagUrl/war-summary"),
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json",
+          },
+        ),
+        http.post(
+          Uri.parse("${ApiService.apiUrl}/players/warhits"),
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json",
+          },
+          body: jsonEncode({"player_tags": [playerTag], "limit": 50}),
+        )
+      ]);
+
+      final responseExtended = responses[0];
+      final responseWar = responses[1];
+      final responseWarHits = responses[2];
+
+      if (responseExtended.statusCode == 200) {
+        final extendedData =
+            jsonDecode(utf8.decode(responseExtended.bodyBytes));
+        player.enrichWithFullStats(extendedData);
+      }
+
+      if (responseWar.statusCode == 200) {
+        player.clan?.warCwl =
+            WarCwl.fromJson(jsonDecode(utf8.decode(responseWar.bodyBytes)));
+      }
+
+      if (responseWarHits.statusCode == 200) {
+        final warStatsData = jsonDecode(utf8.decode(responseWarHits.bodyBytes));
+        player.warStats = PlayerWarStats.fromJson(warStatsData["items"][0]);
+      }
+
+      return player;
+    } catch (e, st) {
+      Sentry.captureException(e, stackTrace: st);
+      print("❌ Error in getPlayerAndClanData: $e");
       rethrow;
     } finally {
       _isLoading = false;

@@ -81,7 +81,6 @@ class MembersCard extends StatelessWidget {
     }
 
     switch (sortBy) {
-      // --- Attaque ---
       case 'stars':
         return withImageIcon(
             "${attack?.stars ?? 0}", ImageAssets.attackStar, "Stars");
@@ -322,7 +321,7 @@ class MembersCard extends StatelessWidget {
                             const Center(child: CircularProgressIndicator()),
                       );
                       final player =
-                          await PlayerService().getPlayerData(member.tag);
+                          await PlayerService().getPlayerAndClanData(member.tag);
                       navigator.pop();
                       navigator.push(
                         MaterialPageRoute(

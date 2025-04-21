@@ -17,21 +17,32 @@ class PlayerWarStats {
   });
 
   factory PlayerWarStats.fromJson(Map<String, dynamic> json) {
-    return PlayerWarStats(
-      tag: json['tag'] ?? '',
-      townhallLevel: json['townhallLevel'] ?? 0,
-      timeRange: json['timeRange'] != null
-          ? Map<String, int>.from(json['timeRange'])
-          : {'start': 0, 'end': 0},
-      wars: (json['wars'] as List<dynamic>)
-          .map((w) => PlayerWarStatsData.fromJson(w))
-          .toList(),
-      statsByType:
-          (json['stats'] as Map<String, dynamic>).map((key, value) => MapEntry(
-                key,
-                PlayerWarTypeStats.fromJson(value),
-              )),
-    );
+    try {
+      return PlayerWarStats(
+        tag: json['tag'] ?? '',
+        townhallLevel: json['townhallLevel'] ?? 0,
+        timeRange: json['timeRange'] != null
+            ? Map<String, int>.from(json['timeRange'])
+            : {'start': 0, 'end': 0},
+        wars: (json['wars'] as List<dynamic>)
+            .map((w) => PlayerWarStatsData.fromJson(w))
+            .toList(),
+        statsByType: (json['stats'] as Map<String, dynamic>)
+            .map((key, value) => MapEntry(
+                  key,
+                  PlayerWarTypeStats.fromJson(value),
+                )),
+      );
+    } catch (e) {
+      print('Error parsing PlayerWarStats: $e');
+      return PlayerWarStats(
+        tag: json['tag'] ?? '',
+        townhallLevel: json['townhallLevel'] ?? 0,
+        timeRange: {'start': 0, 'end': 0},
+        wars: [],
+        statsByType: {},
+      );
+    }
   }
 
   PlayerWarTypeStats getSpecificStats(String warType) {
@@ -73,8 +84,7 @@ class PlayerWarStats {
       s.byEnemyTownhall.forEach((th, stats) {
         final existing = byEnemyTownhall[th];
         if (existing == null) {
-          byEnemyTownhall[th] =
-              stats.copy();
+          byEnemyTownhall[th] = stats.copy();
         } else {
           existing.merge(stats);
         }

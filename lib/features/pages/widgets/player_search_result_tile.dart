@@ -1,10 +1,11 @@
+import 'package:clashkingapp/common/widgets/buttons/chip.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class PlayerSearchResultTile extends StatefulWidget {
   final dynamic player;
@@ -43,7 +44,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
           );
 
           final Player player =
-              await PlayerService().getPlayerData(widget.player['tag']);
+              await PlayerService().getPlayerAndClanData(widget.player['tag']);
 
           navigator.pop();
           navigator.push(
@@ -64,9 +65,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                   children: [
                     SizedBox(
                       width: 50,
-                      child: CachedNetworkImage(
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                      child: MobileWebImage(
                           imageUrl: ImageAssets.townHall(
                               widget.player['townHallLevel'] ?? 1)),
                     ),
@@ -93,32 +92,20 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                           spacing: 7.0,
                           runSpacing: -7.0,
                           children: <Widget>[
-                            Chip(
-                              avatar: CircleAvatar(
-                                backgroundColor: Colors.transparent,
-                                child: CachedNetworkImage(
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
-                                  imageUrl: ImageAssets.leagues[widget
-                                              .player['league']?['iconUrls'] ??
-                                          "Unranked"] ??
-                                      ImageAssets.defaultImage,
-                                ),
-                              ),
-                              label: Text(
-                                widget.player['trophies'].toString(),
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
+                            ImageChip(
+                              imageUrl: widget.player['league']?['iconUrls']
+                                      ?['small'] ??
+                                  "Unranked" ??
+                                  ImageAssets.defaultImage,
+                              label: widget.player['trophies'].toString(),
                             ),
-                            Chip(
-                              labelPadding:
-                                  EdgeInsets.only(left: 2.0, right: 2.0),
-                              label: Text(
-                                widget.player['clan_name'] ??
-                                    widget.player['clan']?['name'] ??
-                                    AppLocalizations.of(context)?.noClan,
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
+                            ImageChip(
+                              imageUrl: widget.player['clan']?['badgeUrls']
+                                      ?['small'] ??
+                                  "Unranked" ??
+                                  ImageAssets.defaultImage,
+                              label: widget.player['clan']?['name'] ??
+                                  AppLocalizations.of(context)?.noClan,
                             ),
                           ],
                         ),

@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-class ClanCapitaleCard extends StatelessWidget {
-  const ClanCapitaleCard({super.key});
+class ClanCapitalCard extends StatelessWidget {
+  const ClanCapitalCard({super.key});
 
   @override
   Widget build(BuildContext context) {

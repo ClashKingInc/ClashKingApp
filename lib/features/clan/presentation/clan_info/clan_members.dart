@@ -131,7 +131,7 @@ class ClanMembersState extends State<ClanMembers> {
                 );
 
                 final Player selectedPlayer =
-                    await PlayerService().getPlayerData(member.tag);
+                    await PlayerService().getPlayerAndClanData(member.tag);
 
                 navigator.pop();
                 navigator.push(

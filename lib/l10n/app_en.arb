@@ -870,6 +870,16 @@
 "join": "Join",
 "leave": "Leave",
 "reset": "Reset",
+"joins": "Joins",
+"leaves": "Leaves",
+"uniquePlayers": "Unique Players",
+"movingPlayers": "Moving Players",
+"mostMovingPlayers": "Most Moving Players",
+"stillInClan": "Still in Clan",
+"leftForever": "Left Forever",
+"rejoinedPlayers": "Rejoined Players",
+"avgTimeJoinLeave": "Avg Join/Leave Time",
+"peakHour": "Most Active Hour",
 "leaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
 "@leaveNumberDescription": {
     "placeholders": {

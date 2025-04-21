@@ -1,40 +1,34 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/classes/clan/clan_info.dart';
-import 'package:clashkingapp/classes/clan/war_league/war_log.dart';
-import 'package:clashkingapp/classes/profile/profile_info.dart';
+import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war_history/war_history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:clashkingapp/main_pages/wars_league_page/war_history/war_history_page.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 
 class WarHistoryCard extends StatelessWidget {
-  final ProfileInfo playerStats;
   final Clan clan;
-  final List<String> discordUser;
-  final List<WarLogDetails> warLogData;
-  final WarLogStats warLogStats;
 
   const WarHistoryCard(
       {super.key,
-      required this.clan,
-      required this.warLogStats,
-      required this.playerStats,
-      required this.discordUser,
-      required this.warLogData});
+      required this.clan});
 
   @override
   Widget build(BuildContext context) {
+
+    if (clan.clanWarLog == null) {
+      return const SizedBox.shrink();
+    }
+    
+    final warLogStats = clan.clanWarLog!.warLogStats;
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => WarHistoryScreen(
-              clan: clan,
-              discordUser: discordUser,
-              warLogData: warLogData,
-              warLogStats: warLogStats,
+              clan: clan
             ),
           ),
         );

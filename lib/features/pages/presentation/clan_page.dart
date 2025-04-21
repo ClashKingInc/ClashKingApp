@@ -1,4 +1,5 @@
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_capital/clan_capital_page.dart';
 import 'package:clashkingapp/features/clan/presentation/join_leave/clan_join_leave.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_capital_card.dart';
@@ -77,12 +78,12 @@ class ClanPage extends StatelessWidget {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ClanJoinLeaveScreen(clanInfo: clanInfo),
+                        builder: (context) => ClanCapitalScreen(clanInfo: clanInfo,),
                       ),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ClanCapitaleCard(),
+                      child: ClanCapitalCard(),
                     ),
                   ),
                 ],

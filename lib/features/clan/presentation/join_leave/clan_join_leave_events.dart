@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
@@ -9,19 +9,19 @@ import 'package:intl/intl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-class ClanJoinLeaveBody extends StatefulWidget {
+class ClanJoinLeaveEvents extends StatefulWidget {
   final ClanJoinLeave? joinLeaveClan;
 
-  const ClanJoinLeaveBody({
+  const ClanJoinLeaveEvents({
     super.key,
     required this.joinLeaveClan,
   });
 
   @override
-  ClanJoinLeaveBodyState createState() => ClanJoinLeaveBodyState();
+  ClanJoinLeaveEventsState createState() => ClanJoinLeaveEventsState();
 }
 
-class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
+class ClanJoinLeaveEventsState extends State<ClanJoinLeaveEvents>
     with SingleTickerProviderStateMixin {
   String currentFilter = "all";
   bool filterActiveUsers = false;
@@ -62,8 +62,7 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
     var filteredItems = widget.joinLeaveClan?.joinLeaveList
             .where((item) =>
                 (currentFilter == "all" || item.type == currentFilter) &&
-                (!filterActiveUsers ||
-                    activeUserTags.contains(item.tag)) &&
+                (!filterActiveUsers || activeUserTags.contains(item.tag)) &&
                 (selectedDate == null ||
                     DateTime(selectedDate!.year, selectedDate!.month,
                             selectedDate!.day)
@@ -79,51 +78,52 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            IconButton(
-              icon: Icon(Icons.calendar_today, size: 16),
-              onPressed: () async {
-                DateTime? picked = await showDatePicker(
-                  context: context,
-                  initialDate: selectedDate ?? DateTime.now(),
-                  firstDate: DateTime(2018, 8),
-                  lastDate: DateTime(2200),
-                );
-                if (picked != null) {
-                  setState(() {
-                    selectedDate = picked;
-                  });
-                }
-              },
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.calendar_today, size: 24),
+                  onPressed: () async {
+                    DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: selectedDate ?? DateTime.now(),
+                      firstDate: DateTime(2018, 8),
+                      lastDate: DateTime(2200),
+                    );
+                    if (picked != null) {
+                      setState(() {
+                        selectedDate = picked;
+                      });
+                    }
+                  },
+                ),
+                IconButton(
+                  icon: Icon(LucideIcons.listRestart),
+                  onPressed: resetDateFilter,
+                  tooltip: loc.reset,
+                ),
+              ],
             ),
             FilterDropdown(
               sortBy: currentFilter,
               updateSortBy: updateFilter,
               sortByOptions: filterOptions,
             ),
-            IconButton(
-              icon: Icon(Icons.link,
-                  color: filterActiveUsers ? Colors.green : null),
-              onPressed: toggleFilterActiveUsers,
-              tooltip: 'Filter Active Users',
-            ),
-            IconButton(
-              icon: Icon(LucideIcons.listRestart),
-              onPressed: resetDateFilter,
-              tooltip: loc.reset,
+            Row(
+              children: [
+                SizedBox(
+                  width: 48,
+                ),
+                IconButton(
+                  icon: Icon(Icons.link,
+                      color: filterActiveUsers ? Colors.green : null, size: 24),
+                  onPressed: toggleFilterActiveUsers,
+                  tooltip: 'Filter Active Users',
+                ),
+              ],
             ),
           ],
         ),
         const SizedBox(height: 8),
-        if (widget.joinLeaveClan != null)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              "total Events: ${widget.joinLeaveClan!.stats.totalEvents} | Joined: ${widget.joinLeaveClan!.stats.totalJoins} | Left: ${widget.joinLeaveClan!.stats.totalLeaves}",
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
-          ),
-        const SizedBox(height: 8),
-
         // No results
         if (filteredItems.isEmpty)
           Card(
@@ -149,16 +149,27 @@ class ClanJoinLeaveBodyState extends State<ClanJoinLeaveBody>
                 ),
               ),
               child: ListTile(
-                leading: CachedNetworkImage(
+                leading: MobileWebImage(
                   imageUrl: ImageAssets.townHall(item.th),
                   width: 48,
                   height: 48,
-                  errorWidget: (_, __, ___) => Icon(Icons.error),
                 ),
                 title: Text(item.name,
                     style: Theme.of(context).textTheme.bodyLarge),
                 subtitle: Text(
-                  "${item.type == "join" ? loc.joinedOnAt : loc.leftOnAt} ${DateFormat.yMd().format(item.time)} ${DateFormat.Hm().format(item.time)}",
+                  item.type == "join"
+                      ? loc.joinedOnAt(
+                          DateFormat.yMMMd(
+                                  Localizations.localeOf(context).languageCode)
+                              .format(item.time),
+                          DateFormat.Hm().format(item.time),
+                        )
+                      : loc.leftOnAt(
+                          DateFormat.yMMMd(
+                                  Localizations.localeOf(context).languageCode)
+                              .format(item.time),
+                          DateFormat.Hm().format(item.time),
+                        ),
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
                 trailing: Icon(

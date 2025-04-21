@@ -23,6 +23,7 @@ import 'package:clashkingapp/features/player/models/player_spell.dart';
 import 'package:clashkingapp/features/player/models/player_super_troop.dart';
 import 'package:clashkingapp/features/player/models/player_troop.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,7 @@ class Player {
   PlayerRankings? rankings;
   PlayerWarStats? warStats;
   PlayerRaids? raids;
+  WarInfo? warData;
 
   Player({
     required this.name,
@@ -113,6 +115,7 @@ class Player {
     required this.legendsBySeason,
     required this.rankings,
     required this.legendRanking,
+    this.warData,
   });
 
   String get donationRatio => donationsReceived == 0
@@ -359,6 +362,10 @@ class Player {
         legendsBySeason: null,
         legendRanking: [],
         rankings: null,
+        warData: json['war_data'] != null &&
+                json['war_data']["currentWarInfo"] != null
+            ? WarInfo.fromJson(json['war_data']["currentWarInfo"])
+            : null,
       );
 
       return profile;

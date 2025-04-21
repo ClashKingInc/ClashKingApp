@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:clashkingapp/common/widgets/buttons/war_button.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
@@ -9,7 +10,10 @@ import 'package:clashkingapp/features/player/presentation/legend/player_legend_p
 import 'package:clashkingapp/features/player/presentation/player/player_achievement_page.dart';
 import 'package:clashkingapp/features/player/presentation/to_do/widget/player_to_do_body_card.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/war_stats_page.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -72,6 +76,9 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: hallChips,
           ),
+          SizedBox(height: 16),
+          _buildWarButtons(context),
+          SizedBox(height: 16),
         ],
       ),
     );
@@ -603,6 +610,64 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildWarButtons(BuildContext context) {
+    return Column(
+      children: [
+        if (widget.player.warData != null)
+          _buildWarButton(context, widget.player.warData!),
+        if (widget.player.clan != null &&
+            widget.player.clan?.warCwl != null &&
+            widget.player.clan!.warCwl!.isInWar &&
+            widget.player.warData == null)
+          _buildWarButton(context, widget.player.clan!.warCwl!.warInfo),
+        if (widget.player.clan != null &&
+            widget.player.clan?.warCwl != null &&
+            widget.player.clan!.warCwl!.isInCwl) ...[
+          _buildCwlButton(context),
+          const SizedBox(height: 16),
+        ]
+      ],
+    );
+  }
+
+  Widget _buildWarButton(BuildContext context, WarInfo warInfo) {
+    return buildWarButton(context, onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WarScreen(war: warInfo),
+        ),
+      );
+    },
+        label: warInfo.state == "preparation"
+            ? AppLocalizations.of(context)!.preparation
+            : warInfo.state == "inWar"
+                ? AppLocalizations.of(context)!.ongoingWar
+                : AppLocalizations.of(context)!.warEnded);
+  }
+
+  Widget _buildCwlButton(BuildContext context) {
+    return buildWarButton(
+      context,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CwlScreen(
+              warCwl: widget.player.clan!.warCwl!,
+              clanTag: widget.player.clan!.tag,
+              clanInfo:
+                  widget.player.clan!.warCwl!.leagueInfo!.clans.firstWhere(
+                (clan) => clan.tag == widget.player.clan?.tag,
+              ),
+            ),
+          ),
+        );
+      },
+      label: AppLocalizations.of(context)!.ongoingCwl,
     );
   }
 }

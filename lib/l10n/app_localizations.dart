@@ -2192,6 +2192,66 @@ abstract class AppLocalizations {
   /// **'Reset'**
   String get reset;
 
+  /// No description provided for @joins.
+  ///
+  /// In en, this message translates to:
+  /// **'Joins'**
+  String get joins;
+
+  /// No description provided for @leaves.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaves'**
+  String get leaves;
+
+  /// No description provided for @uniquePlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Unique Players'**
+  String get uniquePlayers;
+
+  /// No description provided for @movingPlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving Players'**
+  String get movingPlayers;
+
+  /// No description provided for @mostMovingPlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Moving Players'**
+  String get mostMovingPlayers;
+
+  /// No description provided for @stillInClan.
+  ///
+  /// In en, this message translates to:
+  /// **'Still in Clan'**
+  String get stillInClan;
+
+  /// No description provided for @leftForever.
+  ///
+  /// In en, this message translates to:
+  /// **'Left Forever'**
+  String get leftForever;
+
+  /// No description provided for @rejoinedPlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejoined Players'**
+  String get rejoinedPlayers;
+
+  /// No description provided for @avgTimeJoinLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Join/Leave Time'**
+  String get avgTimeJoinLeave;
+
+  /// No description provided for @peakHour.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Active Hour'**
+  String get peakHour;
+
   /// No description provided for @leaveNumberDescription.
   ///
   /// In en, this message translates to:

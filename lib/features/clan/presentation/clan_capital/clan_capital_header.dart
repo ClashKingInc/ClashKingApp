@@ -1,8 +1,11 @@
-import 'package:clashkingapp/classes/clan/clan_info.dart';
-import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
+import 'package:clashkingapp/common/widgets/buttons/chip.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:intl/intl.dart';
 
 class ClanCapitalHeader extends StatefulWidget {
   final List<String> user;
@@ -20,9 +23,6 @@ class ClanCapitalHeader extends StatefulWidget {
 
 class ClanCapitalHeaderState extends State<ClanCapitalHeader>
     with SingleTickerProviderStateMixin {
-  String backgroundImageUrl =
-      "https://assets.clashk.ing/landscape/clan-capital-landscape.png";
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,9 +43,8 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                       Colors.black.withValues(alpha: 0.3),
                       BlendMode.darken,
                     ),
-                    child: CachedNetworkImage(
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl: backgroundImageUrl,
+                    child: MobileWebImage(
+                      imageUrl: ImageAssets.clanCapitalPageBackground,
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
@@ -100,13 +99,14 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                                   ? 0.91
                                   : 1.3,
                               child: InteractiveViewer(
-                                child: CachedNetworkImage(
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
+                                child: MobileWebImage(
                                   width: 170,
                                   fit: BoxFit.cover,
-                                  imageUrl:
-                                      'https://assets.clashk.ing/capital-base/capital-hall-pics/Building_CC_Capital_Hall_level_${widget.clanInfo?.clanCapital?.capitalHallLevel}.png',
+                                  imageUrl: ImageAssets.capitalHall(widget
+                                          .clanInfo
+                                          ?.clanCapital
+                                          ?.capitalHallLevel ??
+                                      1),
                                 ),
                               ),
                             ),
@@ -123,26 +123,6 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                           height: 32,
                         ),
                         SizedBox(height: 8),
-                        IconButton(
-                          icon: Icon(Icons.sports_esports_rounded,
-                              color: Colors.white, size: 32),
-                          onPressed: () async {
-                            final languageCode = Localizations.localeOf(context)
-                                .languageCode
-                                .toLowerCase();
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  final url = Uri.https('link.clashofclans.com',
-                                      '/$languageCode', {
-                                    'action': 'OpenClanProfile',
-                                    'tag': widget.clanInfo?.tag,
-                                  });
-
-                                  return OpenClashDialog(url: url);
-                                });
-                          },
-                        ),
                         SizedBox(height: 8),
                         SizedBox(
                           width: 32,
@@ -156,7 +136,12 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
               ),
             ],
           ),
-          SizedBox(height: 60),
+          SizedBox(height: 80),
+          ImageChip(
+            imageUrl: ImageAssets.capitalGold,
+            label: NumberFormat('#,###').format(widget.clanInfo?.clanCapitalPoints),
+          ),
+          SizedBox(height: 8),
         ],
       ),
     );

@@ -1139,6 +1139,36 @@ class AppLocalizationsFr extends AppLocalizations {
   String get reset => 'Réinitialiser';
 
   @override
+  String get joins => 'Joins';
+
+  @override
+  String get leaves => 'Leaves';
+
+  @override
+  String get uniquePlayers => 'Unique Players';
+
+  @override
+  String get movingPlayers => 'Moving Players';
+
+  @override
+  String get mostMovingPlayers => 'Most Moving Players';
+
+  @override
+  String get stillInClan => 'Still in Clan';
+
+  @override
+  String get leftForever => 'Left Forever';
+
+  @override
+  String get rejoinedPlayers => 'Rejoined Players';
+
+  @override
+  String get avgTimeJoinLeave => 'Avg Join/Leave Time';
+
+  @override
+  String get peakHour => 'Most Active Hour';
+
+  @override
   String leaveNumberDescription(int number, String date) {
     return '$number joueurs ont quitté le clan durant la saison actuelle ($date).';
   }
@@ -1206,7 +1236,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get destructionRate => 'Taux de destruction';
 
   @override
-  String get events => 'Attaques';
+  String get events => 'Événements';
 
   @override
   String get team => 'Équipes';

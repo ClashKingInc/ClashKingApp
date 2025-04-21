@@ -90,6 +90,7 @@ class ImageAssets {
   static const String war = "$baseUrl/icons/Icon_DC_War.png";
   static const String builderBaseStar = "$baseUrl/icons/Icon_BB_Star.png";
   static const String sword = "$baseUrl/icons/Icon_HV_Sword.png";
+  static const String swordGif = "$baseUrl/bot/icons/animated_clash_swords.gif";
   static const String brokenSword = "$baseUrl/bot/icons/broken_sword.png";
   static const String shield = "$baseUrl/icons/Icon_HV_Shield.png";
   static const String shieldWithArrow =
@@ -102,7 +103,8 @@ class ImageAssets {
   static const String podium = "$baseUrl/icons/Icon_HV_Podium.png";
   static const String clanCastle =
       "$baseUrl/builder-base/building-pics/Building_HV_Clan_Castle_level_2_3.png";
-  static const String cwlSwordsNoBorder = "$baseUrl/icons/Icon_DC_CWL_No_Border.png";
+  static const String cwlSwordsNoBorder =
+      "$baseUrl/icons/Icon_DC_CWL_No_Border.png";
 
   // 🎖️ Legend League
   static const String legendStartFlag = "$baseUrl/icons/Icon_HV_Start_Flag.png";
@@ -123,21 +125,31 @@ class ImageAssets {
       badgeUrl.isNotEmpty ? badgeUrl : "$baseUrl/icons/default_clan_badge.png";
   static String getClanBadgeImage(String url) =>
       url.isNotEmpty ? url : defaultImage;
-  static const String clanGamesMedals = "$baseUrl/icons/Icon_HV_Clan_Games_Medal.png";
+  static const String clanGamesMedals =
+      "$baseUrl/icons/Icon_HV_Clan_Games_Medal.png";
 
   // Icons
   static const String iconTick =
-      "https://assets.clashk.ing/icons/Icon_DC_Tick.png";
+      "$baseUrl/icons/Icon_DC_Tick.png";
   static const String iconCross =
-      "https://assets.clashk.ing/icons/Icon_DC_Cross.png";
+      "$baseUrl/icons/Icon_DC_Cross.png";
   static const String iconClock = "$baseUrl/bot/icons/clock.png";
-  static const String iconBuilderPotion = "$baseUrl/icons/Magic_Item_Builder_Potion.png";
+  static const String iconBuilderPotion =
+      "$baseUrl/icons/Magic_Item_Builder_Potion.png";
   static const String iconGoldPass = "$baseUrl/icons/Icon_HV_Gold_Pass.png";
 
   // ⭐ Clan Capital
   static const String capitalGold =
       "$baseUrl/icons/Icon_CC_Resource_Capital_Gold_small.png";
   static const String raidAttacks = "$baseUrl/icons/Icon_HV_Raid_Attack.png";
+  static const String capitalThickSwords =
+      "$baseUrl/bot/icons/thick_capital_sword.png";
+  static const String capitalVacantHouse =
+      "$baseUrl/capital-base/clan-houses/Building_CC_Vacant_House.png";
+  static const String capitalClanHouse =
+      "$baseUrl/capital-base/clan-houses/Building_CC_Clan_House.png";
+  static String capitalHall(int level) =>
+      "$baseUrl/capital-base/capital-hall-pics/Building_CC_Capital_Hall_level_$level.png";
 
   // ✨ Defaults
   static const String defaultProfile = "$baseUrl/icons/default_profile.png";
@@ -155,6 +167,9 @@ class ImageAssets {
       "$baseUrl/landscape/cwl-landscape.png";
   static const String warPageBackground =
       "$baseUrl/landscape/war-landscape.jpg";
+  static const String clanCapitalPageBackground =
+      "$baseUrl/landscape/clan-capital-landscape.png";
+
 
   // 🎭 Heroes & Troops & Others
   static String getHeroImage(String heroName) {
@@ -200,7 +215,8 @@ class ImageAssets {
   // Stickers
   static const String villager = "$baseUrl/stickers/Villager_HV_Villager_7.png";
   static const String goblin = "$baseUrl/stickers/Troop_HV_Goblin.png";
-  static const String sleepingApprenticeBuilder = "$baseUrl/stickers/Apprentice_Builder_Sleeping.png";
+  static const String sleepingApprenticeBuilder =
+      "$baseUrl/stickers/Apprentice_Builder_Sleeping.png";
 
   // 🔄 Normalize
   static String _normalizeName(String name) {

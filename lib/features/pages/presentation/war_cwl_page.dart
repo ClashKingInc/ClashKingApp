@@ -3,6 +3,7 @@ import 'package:clashkingapp/features/pages/widgets/cwl_card.dart';
 import 'package:clashkingapp/features/pages/widgets/cwl_war_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_access_denied_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_card.dart';
+import 'package:clashkingapp/features/pages/widgets/war_history_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_not_in_war_card.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
@@ -23,11 +24,13 @@ class WarCwlPage extends StatelessWidget {
     final clanService = context.watch<ClanService>();
     final playerService = context.watch<PlayerService>();
     final warCwlService = context.watch<WarCwlService>();
+    final player = playerService.getSelectedProfile(cocService);
 
     final clan = clanService.getClanByTag(
         playerService.getSelectedProfile(cocService)?.clanTag ?? "");
     final warCwl = warCwlService.getWarCwlByTag(clan?.tag ?? "");
     final hasClan = clan != null && clan.tag.isNotEmpty;
+    final isPlayerInWarElsewhere = player?.warData != null;
     final cwlClan = warCwl?.leagueInfo?.clans
         .firstWhere((element) => element.tag == clan!.tag);
 
@@ -121,6 +124,14 @@ class WarCwlPage extends StatelessWidget {
                   clanBadgeUrl: clan.badgeUrls.large,
                 ),
               ),
+            if (isPlayerInWarElsewhere)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: WarCard(
+                  currentWarInfo: player!.warData!,
+                  clanTag: player.clanTag,
+                ),
+              ),
             if (hasClan &&
                 !warCwl!.isInCwl &&
                 warCwl.warInfo.state == "accessDenied" &&
@@ -131,14 +142,10 @@ class WarCwlPage extends StatelessWidget {
                     clanName: clan.name,
                     clanBadgeUrl: clan.badgeUrls.large,
                   )),
-            /*if (hasClan && warState != "accessDenied" && clan!.isWarLogPublic == true)
+            if (hasClan && clan.isWarLogPublic == true)
               WarHistoryCard(
-                clan: clan,
-                warLogData: clan.warLog.items,
-                playerStats: playerService.getSelectedProfile(cocService)!,
-                discordUser: cocService.getAccountTags(),
-                warLogStats: clan.warLog.warLogStats,
-              ),*/
+                clan: clan
+              ),
           ],
         ),
       ),
