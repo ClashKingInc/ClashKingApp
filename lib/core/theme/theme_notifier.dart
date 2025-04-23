@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/core/functions.dart';
+import 'package:clashkingapp/core/functions/functions.dart';
 
 class ThemeNotifier with ChangeNotifier {
   late ThemeMode _themeMode;

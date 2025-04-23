@@ -1,9 +1,9 @@
 import 'dart:ui';
+import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 import 'package:clashkingapp/common/widgets/buttons/war_button.dart';
+import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
-import 'package:clashkingapp/features/clan/data/clan_service.dart';
-import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/legend/player_legend_page.dart';
@@ -282,18 +282,10 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
       onTap: () {
         FlutterClipboard.copy(widget.player.tag).then((_) {
           if (context.mounted) {
-            final snackBar = SnackBar(
-              content: Center(
-                child: Text(
-                  AppLocalizations.of(context)!.copiedToClipboard,
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                ),
-              ),
-              duration: Duration(milliseconds: 1500),
-              backgroundColor: Theme.of(context).colorScheme.surface,
+            showClipboardSnackbar(
+              context,
+              AppLocalizations.of(context)!.copiedToClipboard,
             );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
         });
       },
@@ -325,137 +317,74 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
 
     return [
       if (widget.player.clanTag != "")
-        GestureDetector(
-          onTap: () async {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) => const Center(child: CircularProgressIndicator()),
-            );
-            final Clan clanInfo =
-                await ClanService().loadClanData(widget.player.clanTag);
+        ImageChip(
+          onTap: () {
             if (mounted) {
-              Navigator.pop(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => ClanInfoScreen(
-                    clanInfo: clanInfo,
+                    clanInfo: widget.player.clan!,
                   ),
                 ),
               );
             }
           },
-          child: Chip(
-            avatar: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                imageUrl: widget.player.clanOverview.badgeUrls.small,
-              ),
-            ),
-            label: Shimmer.fromColors(
-              period: const Duration(seconds: 3),
-              baseColor: Theme.of(context).colorScheme.onSurface,
-              highlightColor: Theme.of(context)
-                  .colorScheme
-                  .onSurface
-                  .withValues(alpha: 0.3),
-              child: Text(
-                widget.player.clanOverview.name,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
+          imageUrl: widget.player.clanOverview.badgeUrls.small,
+          labelWidget: Shimmer.fromColors(
+            period: const Duration(seconds: 3),
+            baseColor: Theme.of(context).colorScheme.onSurface,
+            highlightColor:
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
+            child: Text(
+              widget.player.clanOverview.name,
+              style: Theme.of(context).textTheme.labelLarge,
             ),
           ),
         ),
-      Chip(
-        avatar: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(
-            errorWidget: (context, url, error) => Icon(Icons.error),
-            imageUrl: ImageAssets.getHeroImage("Archer Queen"),
-          ),
-        ),
-        label: Text(
-          PlayerService().getRoleText(widget.player.role, context),
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
+      ImageChip(
+        imageUrl: ImageAssets.getHeroImage("Archer Queen"),
+        label: PlayerService().getRoleText(widget.player.role, context),
       ),
-      Chip(
-        avatar: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(
-              errorWidget: (context, url, error) => Icon(Icons.error),
-              imageUrl: widget.player.townHallPic),
-        ),
-        label: Text(
-          AppLocalizations.of(context)?.thLevel(widget.player.townHallLevel) ??
-              'TH ${widget.player.townHallLevel}',
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
+      ImageChip(
+          imageUrl: widget.player.townHallPic,
+          label: AppLocalizations.of(context)
+                  ?.thLevel(widget.player.townHallLevel) ??
+              'TH ${widget.player.townHallLevel}'),
+      ImageChip(
+        imageUrl: ImageAssets.xp,
+        label: NumberFormat('#,###', locale).format(widget.player.expLevel),
       ),
-      Chip(
-        avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                imageUrl: ImageAssets.xp)),
-        label: Text(
-          NumberFormat('#,###', locale).format(widget.player.expLevel),
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
+      IconChip(
+          icon: LucideIcons.chevronUp,
+          size: 16,
+          color: const Color.fromARGB(255, 27, 114, 33),
+          label: NumberFormat('#,###', locale).format(widget.player.donations)),
+      IconChip(
+        icon: LucideIcons.chevronDown,
+        size: 16,
+        color: const Color.fromARGB(255, 155, 4, 4),
+        label: NumberFormat('#,###', locale)
+            .format(widget.player.donationsReceived),
       ),
-      Chip(
-        avatar: Icon(LucideIcons.chevronUp,
-            color: const Color.fromARGB(255, 27, 114, 33)),
-        label: Text(
-          NumberFormat('#,###', locale).format(widget.player.donations),
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
+      IconChip(
+        icon: LucideIcons.chevronsUpDown,
+        size: 16,
+        color: const Color.fromARGB(255, 0, 136, 255),
+        label: (widget.player.donations /
+                (widget.player.donationsReceived == 0
+                    ? 1
+                    : widget.player.donationsReceived))
+            .toStringAsFixed(2),
       ),
-      Chip(
-        avatar: Icon(LucideIcons.chevronDown,
-            color: const Color.fromARGB(255, 155, 4, 4)),
-        label: Text(
-          NumberFormat('#,###', locale).format(widget.player.donationsReceived),
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
+      ImageChip(
+        imageUrl: ImageAssets.attackStar,
+        label: NumberFormat('#,###', locale).format(widget.player.warStars),
       ),
-      Chip(
-        avatar: Icon(LucideIcons.chevronsUpDown,
-            color: const Color.fromARGB(255, 0, 136, 255)),
-        label: Text(
-          (widget.player.donations /
-                  (widget.player.donationsReceived == 0
-                      ? 1
-                      : widget.player.donationsReceived))
-              .toStringAsFixed(2),
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-      ),
-      Chip(
-        avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                imageUrl: ImageAssets.attackStar)),
-        label: Text(
-          NumberFormat('#,###', locale).format(widget.player.warStars),
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-      ),
-      Chip(
-        avatar: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(
-              errorWidget: (context, url, error) => Icon(Icons.error),
-              imageUrl: ImageAssets.capitalGold),
-        ),
-        label: Text(
-          NumberFormat('#,###', locale)
-              .format(widget.player.clanCapitalContributions),
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
+      ImageChip(
+        imageUrl: ImageAssets.capitalGold,
+        label: NumberFormat('#,###', locale)
+            .format(widget.player.clanCapitalContributions),
       ),
     ];
   }
@@ -469,49 +398,27 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
       runSpacing: 0,
       children: [
         ..._buildAllHallChips(),
-        Chip(
-          avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: CachedNetworkImage(
-              errorWidget: (context, url, error) => Icon(Icons.error),
-              imageUrl: widget.player.warPreference == 'in'
-                  ? ImageAssets.warPreferenceIn
-                  : ImageAssets.warPreferenceOut,
-            ),
-          ),
-          label: Text(
-            widget.player.warPreference == 'in'
-                ? AppLocalizations.of(context)!.ready
-                : AppLocalizations.of(context)!.unready,
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
+        ImageChip(
+          imageUrl: widget.player.warPreference == 'in'
+              ? ImageAssets.warPreferenceIn
+              : ImageAssets.warPreferenceOut,
+          label: widget.player.warPreference == 'in'
+              ? AppLocalizations.of(context)!.ready
+              : AppLocalizations.of(context)!.unready,
         ),
-        Chip(
-          avatar: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: ImageAssets.sword)),
-          label: Text(
-            NumberFormat('#,###', locale).format(widget.player.attackWins),
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
+        ImageChip(
+          imageUrl: ImageAssets.sword,
+          label: NumberFormat('#,###', locale).format(widget.player.attackWins),
         ),
-        Chip(
-          avatar: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: ImageAssets.shield)),
-          label: Text(
-            NumberFormat('#,###', locale).format(widget.player.defenseWins),
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
+        ImageChip(
+          imageUrl: ImageAssets.shield,
+          label:
+              NumberFormat('#,###', locale).format(widget.player.defenseWins),
         ),
         // Legend trophies + optional shimmer
         widget.player.legendsBySeason != null &&
                 widget.player.legendsBySeason!.allSeasons.isNotEmpty
-            ? GestureDetector(
+            ? ImageChip(
                 onTap: () {
                   showDialog(
                     context: context,
@@ -529,48 +436,29 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                     ),
                   );
                 },
-                child: Chip(
-                  avatar: CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    child: MobileWebImage(imageUrl: widget.player.leagueUrl),
-                  ),
-                  label: Shimmer.fromColors(
-                    period: const Duration(seconds: 3),
-                    baseColor: Theme.of(context).colorScheme.onSurface,
-                    highlightColor: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.3),
-                    child: Text(
-                      NumberFormat('#,###', locale)
-                          .format(widget.player.trophies),
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
+                imageUrl: widget.player.leagueUrl,
+                labelWidget: Shimmer.fromColors(
+                  period: const Duration(seconds: 3),
+                  baseColor: Theme.of(context).colorScheme.onSurface,
+                  highlightColor: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.3),
+                  child: Text(
+                    NumberFormat('#,###', locale)
+                        .format(widget.player.trophies),
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
               )
-            : Chip(
-                avatar: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: CachedNetworkImage(
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl: widget.player.leagueUrl),
-                ),
-                label: Text(
-                  NumberFormat('#,###', locale).format(widget.player.trophies),
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-              ),
-        Chip(
-          avatar: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: ImageAssets.bestTrophies)),
-          label: Text(
-            NumberFormat('#,###', locale).format(widget.player.bestTrophies),
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
+            : ImageChip(
+                imageUrl: widget.player.leagueUrl,
+                label: NumberFormat('#,###', locale)
+                    .format(widget.player.trophies)),
+        ImageChip(
+          imageUrl: ImageAssets.bestTrophies,
+          label:
+              NumberFormat('#,###', locale).format(widget.player.bestTrophies),
         ),
       ],
     );
@@ -585,30 +473,14 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
       runSpacing: 0,
       children: [
         ..._buildAllHallChips(),
-        Chip(
-          avatar: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: ImageAssets.trophies)),
-          label: Text(
-            NumberFormat('#,###', locale)
-                .format(widget.player.builderBaseTrophies),
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-        ),
-        Chip(
-          avatar: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: ImageAssets.trophies)),
-          label: Text(
-            NumberFormat('#,###', locale)
-                .format(widget.player.bestBuilderBaseTrophies),
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-        ),
+        ImageChip(
+            imageUrl: ImageAssets.trophies,
+            label: NumberFormat('#,###', locale)
+                .format(widget.player.builderBaseTrophies)),
+        ImageChip(
+            imageUrl: ImageAssets.trophies,
+            label: NumberFormat('#,###', locale)
+                .format(widget.player.bestBuilderBaseTrophies)),
       ],
     );
   }

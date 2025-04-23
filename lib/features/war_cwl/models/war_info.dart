@@ -81,4 +81,33 @@ class WarInfo {
   String? getNameByTag(String tag) {
     return getMemberByTag(tag)?.name;
   }
+
+  int getAttacksDoneByPlayer(String playerTag, String clanTag) {
+    if (clan?.tag == clanTag) {
+      return clan?.members
+              .firstWhere((member) => member.tag == playerTag,
+                  orElse: () => WarMember.empty())
+              .attacks
+              ?.length ??
+          0;
+    } else if (opponent?.tag == clanTag) {
+      return opponent?.members
+              .firstWhere((member) => member.tag == playerTag,
+                  orElse: () => WarMember.empty())
+              .attacks
+              ?.length ??
+          0;
+    }
+    return 0;
+  }
+
+  bool isPlayerInWar(String playerTag, String clanTag) {
+    if (clan?.tag == clanTag) {
+      return clan?.members.any((member) => member.tag == playerTag) ?? false;
+    } else if (opponent?.tag == clanTag) {
+      return opponent?.members.any((member) => member.tag == playerTag) ??
+          false;
+    }
+    return false;
+  }
 }

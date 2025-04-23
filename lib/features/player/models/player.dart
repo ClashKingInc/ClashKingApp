@@ -1,5 +1,5 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
-import 'package:clashkingapp/core/functions.dart';
+import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
@@ -188,6 +188,22 @@ class Player {
               ? 1
               : (currentSeasonPoints.toDouble() / seasonPassDaily);
       return seasonPassRatio.toDouble();
+    } catch (e) {
+      return 0.0;
+    }
+  }
+
+  double get clanGamesRatio {
+    try {
+      DateTime now = DateTime.now();
+      DateTime clanGamesStart = DateTime(now.year, now.month, 22, 8);
+      int daysPassed = now.difference(clanGamesStart).inDays + 1;
+      double clanGamesDaily = (4000 / 8) * daysPassed;
+      double clanGamesRatio =
+          (currentClanGamesPoints.toDouble() / clanGamesDaily) > 1
+              ? 1
+              : (currentClanGamesPoints.toDouble() / clanGamesDaily);
+      return clanGamesRatio.toDouble();
     } catch (e) {
       return 0.0;
     }
@@ -496,8 +512,7 @@ class Player {
     // Clan Games
     if (isInTimeFrameForClanGames()) {
       DateTime now = DateTime.now();
-      DateTime clanGamesStart =
-          DateTime(now.year, now.month, 22, 8); // début des clan games
+      DateTime clanGamesStart = DateTime(now.year, now.month, 22, 8);
       int daysPassed = now.difference(clanGamesStart).inDays + 1;
       double clanGamesDaily = (4000 / 8) * daysPassed;
       double clanGamesRatio =

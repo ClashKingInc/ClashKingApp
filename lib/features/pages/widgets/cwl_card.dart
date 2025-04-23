@@ -64,6 +64,7 @@ class CwlCardState extends State<CwlCard> {
                     runSpacing: -7.0,
                     children: [
                       ImageChip(
+                            context: context,
                         imageUrl:
                             "https://assets.clashk.ing/icons/Icon_HV_Podium.png",
                         labelPadding: 4,
@@ -72,6 +73,7 @@ class CwlCardState extends State<CwlCard> {
                             AppLocalizations.of(context)!.cwlRank(clan.rank),
                       ),
                       ImageChip(
+                            context: context,
                         imageUrl: ImageAssets.war,
                         labelPadding: 2,
                         label: " Round ${clan.warsPlayed.toString()}",
@@ -79,6 +81,7 @@ class CwlCardState extends State<CwlCard> {
                             .cwlCurrentRound(clan.warsPlayed),
                       ),
                       ImageChip(
+                            context: context,
                         imageUrl: ImageAssets.builderBaseStar,
                         labelPadding: 2,
                         label: clan.stars.toString(),
@@ -86,6 +89,7 @@ class CwlCardState extends State<CwlCard> {
                             AppLocalizations.of(context)!.cwlStars(clan.stars),
                       ),
                       ImageChip(
+                            context: context,
                         imageUrl: ImageAssets.hitrate,
                         labelPadding: 2,
                         label: clan.destructionPercentageInflicted
@@ -97,6 +101,7 @@ class CwlCardState extends State<CwlCard> {
                         ),
                       ),
                       ImageChip(
+                            context: context,
                         imageUrl: ImageAssets.sword,
                         labelPadding: 2,
                         label:

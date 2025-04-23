@@ -109,6 +109,7 @@ class WarHistoryCard extends StatelessWidget {
                                     warLogStats.totalTies, warLogStats.tiePercentage),
                           ),
                           ImageChip(
+                            context: context,
                             imageUrl:
                                 "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
                             label: warLogStats.averageClanStarsPerMember

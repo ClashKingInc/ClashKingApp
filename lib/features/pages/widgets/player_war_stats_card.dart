@@ -81,34 +81,40 @@ class PlayerWarStatsCard extends StatelessWidget {
                             children: <Widget>[
                               if (warStats != null) ...[
                                 ImageChip(
+                            context: context,
                                   imageUrl: ImageAssets.sword,
                                   label: "${allStats?.totalAttacks}",
                                   description: "",
                                 ),
                                 ImageChip(
+                            context: context,
                                   imageUrl: ImageAssets.attackStar,
                                   label:
                                       allStats?.averageStars.toStringAsFixed(2) ?? "",
                                   description: "",
                                 ),
                                 ImageChip(
+                            context: context,
                                   imageUrl: ImageAssets.hitrate,
                                   label:
                                       "${allStats?.averageDestruction.toStringAsFixed(1)}%",
                                   description: "",
                                 ),
                                 ImageChip(
+                            context: context,
                                   imageUrl: ImageAssets.shieldWithArrow,
                                   label: "${allStats?.totalDefenses}",
                                   description: "",
                                 ),
                                 ImageChip(
+                            context: context,
                                   imageUrl: ImageAssets.attackStar,
                                   label: allStats?.averageStarsDef
                                       .toStringAsFixed(2) ?? "",
                                   description: "",
                                 ),
                                 ImageChip(
+                            context: context,
                                   imageUrl: ImageAssets.hitrate,
                                   label:
                                       "${allStats?.averageDestructionDef.toStringAsFixed(1)}%",

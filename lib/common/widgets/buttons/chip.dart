@@ -7,18 +7,22 @@ class ImageChip extends StatefulWidget {
   final String label;
   final Widget labelWidget;
   final double labelPadding;
-  final String description;
+  final String? description;
   final Color? textColor;
-  final Color edgeColor;
+  final Color? edgeColor;
+  final BuildContext? context;
+  final GestureTapCallback? onTap;
 
   ImageChip({
     required this.imageUrl,
     this.label = '',
     this.labelWidget = const SizedBox(),
     this.labelPadding = 4,
-    this.description = '',
+    this.description,
     this.textColor,
-    this.edgeColor = Colors.black,
+    this.edgeColor,
+    this.context,
+    this.onTap,
   });
 
   @override
@@ -49,57 +53,69 @@ class ImageChipState extends State<ImageChip> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final textColor =
-        widget.textColor ?? Theme.of(context).colorScheme.onSurface;
-    return GestureDetector(
-      onTap: _toggleTooltip,
-      child: Tooltip(
-        textAlign: TextAlign.center,
-        key: _tooltipKey,
-        message: widget.description,
-        textStyle: Theme.of(context)
-            .textTheme
-            .bodyMedium
-            ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
-        showDuration: Duration(seconds: 5),
-        margin: EdgeInsets.symmetric(horizontal: 64),
-        decoration: BoxDecoration(
-          color:
-              Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.9),
-          borderRadius: BorderRadius.circular(4),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              spreadRadius: 2,
-              blurRadius: 2,
-              offset: Offset(0, 1),
-            ),
-          ],
-        ),
-        child: Chip(
-          avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: MobileWebImage(
-              imageUrl: widget.imageUrl,
-              fit: BoxFit.cover,
-            ),
-          ),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-              side: BorderSide(color: widget.edgeColor.withValues(alpha: 0.4))),
-          labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
-          label: widget.label.isNotEmpty
-              ? Text(widget.label,
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelLarge
-                      ?.copyWith(color: textColor))
-              : widget.labelWidget,
+  Widget _buildChip(Color textColor, Color edgeColor) {
+    return Chip(
+      avatar: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        child: MobileWebImage(
+          imageUrl: widget.imageUrl,
+          fit: BoxFit.cover,
         ),
       ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: edgeColor),
+      ),
+      labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
+      label: widget.label.isNotEmpty
+          ? Text(
+              widget.label,
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(color: textColor),
+            )
+          : widget.labelWidget,
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final textColor =
+        widget.textColor ?? Theme.of(context).colorScheme.onSurface;
+    final edgeColor =
+        widget.edgeColor ?? (isDarkMode ? Colors.white.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.2));
+    return GestureDetector(
+        onTap: widget.description != null ? _toggleTooltip : widget.onTap,
+        child: widget.description != null
+            ? Tooltip(
+                textAlign: TextAlign.center,
+                key: _tooltipKey,
+                message: widget.description,
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                showDuration: Duration(seconds: 5),
+                margin: EdgeInsets.symmetric(horizontal: 64),
+                decoration: BoxDecoration(
+                  color: Theme.of(context)
+                      .scaffoldBackgroundColor
+                      .withValues(alpha: 0.9),
+                  borderRadius: BorderRadius.circular(4),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      spreadRadius: 2,
+                      blurRadius: 2,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: _buildChip(textColor, edgeColor),
+              )
+            : _buildChip(textColor, edgeColor));
   }
 }
 
@@ -109,9 +125,11 @@ class IconChip extends StatefulWidget {
   final int size;
   final Color? color;
   final double labelPadding;
-  final String description;
+  final String? description;
   final Color? textColor;
-  final Color edgeColor;
+  final Color? edgeColor;
+  final BuildContext? context;
+  final GestureTapCallback? onTap;
 
   IconChip({
     required this.icon,
@@ -119,9 +137,11 @@ class IconChip extends StatefulWidget {
     this.size = 24,
     this.color,
     this.labelPadding = 2,
-    this.description = '',
+    this.description,
     this.textColor,
-    this.edgeColor = Colors.black,
+    this.edgeColor,
+    this.context,
+    this.onTap,
   });
 
   @override
@@ -157,52 +177,71 @@ class IconChipState extends State<IconChip> {
     });
   }
 
+  Widget _buildChip(Color textColor, Color edgeColor, Color actualColor) {
+    return Chip(
+      avatar: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        child:
+            Icon(widget.icon, size: widget.size.toDouble(), color: actualColor),
+      ),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: BorderSide(color: edgeColor.withValues(alpha: 0.2))),
+      labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
+      label: Text(widget.label,
+          style: Theme.of(context)
+              .textTheme
+              .labelLarge
+              ?.copyWith(color: textColor)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final actualColor = widget.color ?? Theme.of(context).colorScheme.onSurface;
     final textColor =
         widget.textColor ?? Theme.of(context).colorScheme.onSurface;
+    final edgeColor = widget.edgeColor ??
+        (Theme.of(context).brightness == Brightness.dark
+            ? Colors.white.withValues(alpha: 0.2)
+            : Colors.black.withValues(alpha: 0.2));
     return GestureDetector(
-      onTap: _toggleTooltip,
-      child: Tooltip(
-        textAlign: TextAlign.center,
-        key: _tooltipKey,
-        message: widget.description,
-        textStyle: Theme.of(context)
-            .textTheme
-            .bodyMedium
-            ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
-        margin: EdgeInsets.symmetric(horizontal: 64),
-        decoration: BoxDecoration(
-          color:
-              Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.9),
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              spreadRadius: 2,
-              blurRadius: 2,
-              offset: Offset(0, 1),
-            ),
-          ],
-        ),
-        child: Chip(
-          avatar: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: Icon(widget.icon,
-                size: widget.size.toDouble(), color: actualColor),
-          ),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-              side: BorderSide(color: widget.edgeColor.withValues(alpha: 0.4))),
-          labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
-          label: Text(widget.label,
-              style: Theme.of(context)
+      onTap: widget.description != null ? _toggleTooltip : widget.onTap,
+      child: widget.description != null
+          ? Tooltip(
+              textAlign: TextAlign.center,
+              key: _tooltipKey,
+              message: widget.description,
+              textStyle: Theme.of(context)
                   .textTheme
-                  .labelLarge
-                  ?.copyWith(color: textColor)),
-        ),
-      ),
+                  .bodyMedium
+                  ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+              margin: EdgeInsets.symmetric(horizontal: 64),
+              decoration: BoxDecoration(
+                color: Theme.of(context)
+                    .scaffoldBackgroundColor
+                    .withValues(alpha: 0.9),
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    spreadRadius: 2,
+                    blurRadius: 2,
+                    offset: Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: _buildChip(
+                textColor,
+                edgeColor,
+                actualColor,
+              ),
+            )
+          : _buildChip(
+              textColor,
+              edgeColor,
+              actualColor,
+            ),
     );
   }
 }

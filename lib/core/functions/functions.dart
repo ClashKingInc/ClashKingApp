@@ -235,8 +235,9 @@ bool isInTimeFrameForClanGames() {
   DateTime nowUtc = DateTime.now().toUtc();
   bool isInTimeFrameForClanGames = false;
 
-  if ((nowUtc.day >= 22 && nowUtc.hour >= 8) &&
-      (nowUtc.day <= 28 && nowUtc.hour <= 8)) {
+  if ((nowUtc.day == 22 && nowUtc.hour >= 8) ||
+      (nowUtc.day >= 23 && nowUtc.day <= 27) ||
+      (nowUtc.day == 28 && nowUtc.hour <= 8)) {
     isInTimeFrameForClanGames = true;
   }
 
@@ -274,4 +275,28 @@ DateTime findLastMondayOfMonth(int year, int month) {
       lastDayOfMonth.subtract(Duration(days: daysToLastMonday));
 
   return lastMondayOfMonth;
+}
+
+int get requiredSeasonPassPoints {
+  try {
+    final now = DateTime.now();
+    int totalDaysInMonth = DateTime(now.year, now.month + 1, 0).day;
+    int daysPassed = now.day;
+    int requiredPoints = ((daysPassed * 2600) / totalDaysInMonth).toInt();
+    return requiredPoints;
+  } catch (e) {
+    return 0;
+  }
+}
+
+int get requiredClanGamesPoints {
+  try {
+    final now = DateTime.now();
+    DateTime clanGamesStart = DateTime(now.year, now.month, 22, 8);
+    int daysPassed = now.difference(clanGamesStart).inDays;
+    int requiredPoints = ((daysPassed * 4000) / 6).toInt();
+    return requiredPoints;
+  } catch (e) {
+    return 0;
+  }
 }

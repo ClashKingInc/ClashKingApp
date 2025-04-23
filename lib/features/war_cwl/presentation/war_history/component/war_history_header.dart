@@ -78,6 +78,7 @@ class WarHistoryHeader extends StatelessWidget {
               runSpacing: -7.0,
               children: <Widget>[
                 ImageChip(
+                            context: context,
                     textColor: Colors.white,
                     imageUrl:
                         "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png",

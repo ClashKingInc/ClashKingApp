@@ -1,4 +1,4 @@
-import 'package:clashkingapp/core/functions.dart';
+import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/player/models/player_legend_day.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';

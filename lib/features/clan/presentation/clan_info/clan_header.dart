@@ -129,6 +129,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
       children: [
         if (clanInfo.warLeague != null)
           ImageChip(
+                            context: context,
             imageUrl:
                 ImageAssets.leagues[clanInfo.warLeague?.name ?? "Unranked"]!,
             label: clanInfo.warLeague!.name,
@@ -136,6 +137,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
         if (clanInfo.location?.name != null &&
             clanInfo.location!.countryCode != null)
           ImageChip(
+                            context: context,
             imageUrl: ImageAssets.flag(clanInfo.location!.countryCode!),
             label: clanInfo.location!.name,
           ),
@@ -145,15 +147,18 @@ class ClanInfoHeaderCard extends StatelessWidget {
             color: Theme.of(context).colorScheme.onSurface,
             label: "${clanInfo.members}/50"),
         ImageChip(
+                            context: context,
           imageUrl: ImageAssets.trophies,
           label: NumberFormat('#,###').format(clanInfo.clanPoints),
         ),
         ImageChip(
+                            context: context,
           imageUrl: ImageAssets.capitalGold,
           label: NumberFormat('#,###').format(clanInfo.clanCapitalPoints),
         ),
         if (clanInfo.requiredTownhallLevel > 0)
           ImageChip(
+                            context: context,
             imageUrl: ImageAssets.townHall(clanInfo.requiredTownhallLevel),
             label: clanInfo.requiredTownhallLevel.toString(),
           ),
@@ -175,6 +180,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
           }(),
         ),
         ImageChip(
+                            context: context,
           imageUrl: ImageAssets.war,
           label: () {
             switch (clanInfo.warFrequency) {

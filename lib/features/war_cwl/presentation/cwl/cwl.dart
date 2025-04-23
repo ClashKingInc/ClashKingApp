@@ -105,6 +105,7 @@ class CwlScreenState extends State<CwlScreen> {
                         runSpacing: -7.0,
                         children: <Widget>[
                           ImageChip(
+                            context: context,
                             textColor: Colors.white,
                             edgeColor: Colors.white,
                             imageUrl: ImageAssets.podium,
@@ -114,6 +115,7 @@ class CwlScreenState extends State<CwlScreen> {
                                 .cwlRank(clan.rank),
                           ),
                           ImageChip(
+                            context: context,
                             textColor: Colors.white,
                             edgeColor: Colors.white,
                             imageUrl: ImageAssets.builderBaseStar,
@@ -123,6 +125,7 @@ class CwlScreenState extends State<CwlScreen> {
                                 .cwlStars(clan.stars),
                           ),
                           ImageChip(
+                            context: context,
                             textColor: Colors.white,
                             edgeColor: Colors.white,
                             imageUrl: ImageAssets.hitrate,
@@ -136,6 +139,7 @@ class CwlScreenState extends State<CwlScreen> {
                                     .toStringAsFixed(0)),
                           ),
                           ImageChip(
+                            context: context,
                             textColor: Colors.white,
                             edgeColor: Colors.white,
                             imageUrl: ImageAssets.war,
@@ -145,6 +149,7 @@ class CwlScreenState extends State<CwlScreen> {
                                 .cwlCurrentRound(clan.warsPlayed),
                           ),
                           ImageChip(
+                            context: context,
                             textColor: Colors.white,
                             edgeColor: Colors.white,
                             imageUrl: ImageAssets.sword,
@@ -156,6 +161,7 @@ class CwlScreenState extends State<CwlScreen> {
                                     widget.warCwl.teamSize * clan.warsPlayed),
                           ),
                           ImageChip(
+                            context: context,
                             textColor: Colors.white,
                             edgeColor: Colors.white,
                             imageUrl: ImageAssets.brokenSword,

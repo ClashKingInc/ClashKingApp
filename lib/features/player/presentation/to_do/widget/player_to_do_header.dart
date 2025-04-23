@@ -1,3 +1,4 @@
+import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -21,15 +22,15 @@ class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
   @override
   Widget build(BuildContext context) {
     print("PlayerToDoHeader build called");
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context)!; 
     int total = widget.players.length;
     int active = widget.players.where((p) => DateTime.now().difference(p.lastOnline).inDays < 14).length;
     int inactive = total - active;
 
     int totalClanGames = 0;
-    int requiredClanGames = widget.players.length * 4000;
+    int requiredClanGames = widget.players.length * requiredClanGamesPoints;
     int totalSeasonPass = 0;
-    int requiredSeasonPass = widget.players.length * 2600; // min threshold
+    int requiredSeasonPass = widget.players.length * requiredSeasonPassPoints;
     int totalLegend = 0;
     int requiredLegend = 0;
     int totalCwl = 0;

@@ -1,5 +1,6 @@
+import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/core/functions.dart';
+import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:flutter/material.dart';
@@ -81,137 +82,81 @@ class PlayerToDoBodyCard extends StatelessWidget {
                               if (player.league == 'Legend League' &&
                                   player.currentLegendSeason?.currentDay !=
                                       null)
-                                Chip(
-                                  avatar: CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child: MobileWebImage(
-                                        imageUrl:
-                                            ImageAssets.legendBlazonNoPadding),
-                                  ),
-                                  labelPadding:
-                                      EdgeInsets.symmetric(horizontal: 4.0),
-                                  label: Text(
-                                    "${player.currentLegendSeason?.currentDay?.totalAttacks ?? 0}/8",
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      color: (player
-                                                      .currentLegendSeason
-                                                      ?.currentDay
-                                                      ?.totalAttacks ??
-                                                  0) ==
-                                              8
-                                          ? Colors.green
-                                          : Colors.red,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
+                                ImageChip(
+                                  imageUrl: ImageAssets.legendBlazonNoPadding,
+                                  labelPadding: 4.0,
+                                  label:
+                                      "${player.currentLegendSeason?.currentDay?.totalAttacks ?? 0}/8",
+                                  edgeColor: (player.currentLegendSeason
+                                                  ?.currentDay?.totalAttacks ??
+                                              0) ==
+                                          8
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                              if (player.clan != null &&
+                                  player.clan!.warCwl != null &&
+                                  player.clan!.warCwl!.warInfo.state ==
+                                      'inWar' &&
+                                  player.clan!.warCwl!.warInfo.isPlayerInWar(
+                                      player.tag, player.clanTag))
+                                ImageChip(
+                                  imageUrl: ImageAssets.war,
+                                  labelPadding: 2.0,
+                                  label:
+                                      "${player.clan?.warCwl!.warInfo.getAttacksDoneByPlayer(player.tag, player.clanTag)}/${player.clan?.warCwl!.warInfo.attacksPerMember}",
+                                  edgeColor: player.clan?.warCwl!.warInfo
+                                              .getAttacksDoneByPlayer(
+                                                  player.tag, player.clanTag) ==
+                                          player.clan?.warCwl!.warInfo
+                                              .attacksPerMember
+                                      ? Colors.green
+                                      : Colors.red,
                                 ),
                               if (isInTimeFrameForClanGames())
-                                Chip(
-                                  avatar: CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child: MobileWebImage(
-                                        imageUrl: ImageAssets.clanGamesMedals),
-                                  ),
-                                  labelPadding:
-                                      EdgeInsets.symmetric(horizontal: 4.0),
-                                  label: Text(
-                                    NumberFormat('#,###', locale)
-                                        .format(player.currentClanGamesPoints),
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      color:
-                                          player.currentClanGamesPoints == 4000
-                                              ? Colors.green
-                                              : Colors.red,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
+                                ImageChip(
+                                  imageUrl: ImageAssets.clanGamesMedals,
+                                  labelPadding: 4.0,
+                                  label: NumberFormat('#,###', locale)
+                                      .format(player.currentClanGamesPoints),
+                                  edgeColor:
+                                      player.clanGamesRatio == 1
+                                          ? Colors.green
+                                          : Colors.red,
                                 ),
                               if (isInTimeFrameForCwl() &&
                                   member.attacksAvailable > 0)
-                                Chip(
-                                  avatar: CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child: MobileWebImage(
-                                      imageUrl: ImageAssets.cwlSwordsNoBorder,
-                                    ),
-                                  ),
-                                  labelPadding:
-                                      EdgeInsets.only(left: 2.0, right: 2.0),
-                                  label: Text(
-                                    '${member.attacksDone}/${member.attacksAvailable}',
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      color: (member.attacksDone ==
-                                              member.attacksAvailable)
-                                          ? Colors.green
-                                          : Colors.red,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
+                                ImageChip(
+                                  imageUrl: ImageAssets.cwlSwordsNoBorder,
+                                  labelPadding: 2.0,
+                                  label:
+                                      '${member.attacksDone}/${member.attacksAvailable}',
+                                  edgeColor: (member.attacksDone ==
+                                          member.attacksAvailable)
+                                      ? Colors.green
+                                      : Colors.red,
                                 ),
                               if (isInTimeFrameForRaid())
-                                Chip(
-                                  avatar: CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child: MobileWebImage(
-                                      imageUrl: ImageAssets.raidAttacks,
-                                    ),
-                                  ),
-                                  labelPadding:
-                                      EdgeInsets.only(left: 2.0, right: 2.0),
-                                  label: Text(
-                                    '${player.raids?.attackDone}/${player.raids?.attackLimit}',
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      color: (player.raids?.attackDone == 5 &&
-                                                  player.raids?.attackLimit ==
-                                                      5) ||
-                                              (player.raids?.attackDone == 6 &&
-                                                  player.raids?.attackLimit ==
-                                                      6)
-                                          ? Colors.green
-                                          : Colors.red,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
+                                ImageChip(
+                                  imageUrl: ImageAssets.raidAttacks,
+                                  labelPadding: 2.0,
+                                  label:
+                                      '${player.raids?.attackDone}/${player.raids?.attackLimit}',
+                                  edgeColor: (player.raids?.attackDone == 5 &&
+                                              player.raids?.attackLimit == 5) ||
+                                          (player.raids?.attackDone == 6 &&
+                                              player.raids?.attackLimit == 6)
+                                      ? Colors.green
+                                      : Colors.red,
                                 ),
-                              Chip(
-                                avatar: CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  child: MobileWebImage(
-                                      imageUrl: ImageAssets.iconGoldPass),
-                                ),
-                                labelPadding:
-                                    EdgeInsets.symmetric(horizontal: 4.0),
-                                label: Text(
-                                  NumberFormat('#,###', locale)
-                                      .format(player.currentSeasonPoints),
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                    color: player.seasonPassRatio >= 1
-                                        ? Colors.green
-                                        : Colors.red,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
+                              ImageChip(
+                                imageUrl: ImageAssets.iconGoldPass,
+                                labelPadding: 4.0,
+                                label: NumberFormat('#,###', locale)
+                                    .format(player.currentSeasonPoints),
+                                edgeColor: player.seasonPassRatio >= 1
+                                    ? Colors.green
+                                    : Colors.red,
                               ),
                             ],
                           ),
@@ -230,7 +175,8 @@ class PlayerToDoBodyCard extends StatelessWidget {
                   child: Container(
                     height: 8,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black.withValues(alpha: 0.2)),
+                      border: Border.all(
+                          color: Colors.black.withValues(alpha: 0.2)),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: ClipRRect(

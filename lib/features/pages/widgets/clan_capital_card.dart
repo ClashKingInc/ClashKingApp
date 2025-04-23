@@ -57,6 +57,7 @@ class ClanCapitalCard extends StatelessWidget {
                         runSpacing: -7.0,
                         children: <Widget>[
                           ImageChip(
+                            context: context,
                             imageUrl:
                                 'https://assets.clashk.ing/capital-base/capital-hall-pics/Building_CC_Capital_Hall_level_${clanInfo?.clanCapital?.capitalHallLevel}.png',
                             labelPadding: 2,
@@ -66,6 +67,7 @@ class ClanCapitalCard extends StatelessWidget {
                             //description: AppLocalizations.of(context)!.comingSoon,
                           ),
                           ImageChip(
+                            context: context,
                             imageUrl:
                                 'https://assets.clashk.ing/bot/icons/capital_trophy.png',
                             labelPadding: 2,

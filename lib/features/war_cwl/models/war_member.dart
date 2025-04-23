@@ -35,6 +35,18 @@ class WarMember {
     );
   }
 
+  factory WarMember.empty() {
+    return WarMember(
+      tag: "",
+      name: "",
+      townhallLevel: 0,
+      mapPosition: 0,
+      opponentAttacks: 0,
+      attacks: [],
+      bestOpponentAttack: null,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'tag': tag,

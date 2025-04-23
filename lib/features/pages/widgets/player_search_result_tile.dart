@@ -93,6 +93,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                           runSpacing: -7.0,
                           children: <Widget>[
                             ImageChip(
+                            context: context,
                               imageUrl: widget.player['league']?['iconUrls']
                                       ?['small'] ??
                                   "Unranked" ??
@@ -100,6 +101,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                               label: widget.player['trophies'].toString(),
                             ),
                             ImageChip(
+                            context: context,
                               imageUrl: widget.player['clan']?['badgeUrls']
                                       ?['small'] ??
                                   "Unranked" ??

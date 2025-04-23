@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_attack.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:clashkingapp/core/war_functions.dart';
+import 'package:clashkingapp/core/functions/war_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

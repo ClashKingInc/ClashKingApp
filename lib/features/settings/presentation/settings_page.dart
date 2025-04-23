@@ -13,7 +13,7 @@ import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/l10n/locale.dart';
 import 'package:clashkingapp/features/settings/presentation/faq_page.dart';
 import 'package:clashkingapp/features/settings/presentation/translation_page.dart';
-import 'package:clashkingapp/core/functions.dart';
+import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/settings/presentation/features_vote.dart';
 import 'package:url_launcher/url_launcher.dart';
 

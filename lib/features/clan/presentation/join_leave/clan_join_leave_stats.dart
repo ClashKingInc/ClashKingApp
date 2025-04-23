@@ -1,7 +1,7 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/shapes/stat_tile.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
-import 'package:clashkingapp/core/functions.dart';
+import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';

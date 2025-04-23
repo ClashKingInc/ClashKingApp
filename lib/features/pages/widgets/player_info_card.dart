@@ -94,6 +94,7 @@ class PlayerInfosCard extends StatelessWidget {
                             children: <Widget>[
                               /*if (selectedProfile.clan != null)
                                 ImageChip(
+                            context: context,
                                   imageUrl: selectedProfile.clan!.badgeUrls.small,
                                   labelPadding: 2,
                                   label: selectedProfile.clan!.name,
@@ -115,6 +116,7 @@ class PlayerInfosCard extends StatelessWidget {
                                           selectedProfile.donationsReceived
                                               .toStringAsFixed(0))),
                               ImageChip(
+                            context: context,
                                 imageUrl: imageOptInOut,
                                 label: warPreference,
                                 description: AppLocalizations.of(context)!
@@ -122,6 +124,7 @@ class PlayerInfosCard extends StatelessWidget {
                                         warPreference),
                               ),
                               ImageChip(
+                            context: context,
                                   imageUrl: ImageAssets.attackStar,
                                   label: NumberFormat(
                                           '#,###',
@@ -133,6 +136,7 @@ class PlayerInfosCard extends StatelessWidget {
                                       .playerWarStarsDescription(
                                           selectedProfile.warStars)),
                               ImageChip(
+                            context: context,
                                   imageUrl: selectedProfile.townHallPic,
                                   label:
                                       selectedProfile.townHallLevel.toString(),
@@ -140,6 +144,7 @@ class PlayerInfosCard extends StatelessWidget {
                                       .playerTownHallLevelDescription(
                                           selectedProfile.townHallLevel)),
                               ImageChip(
+                            context: context,
                                   imageUrl: selectedProfile.leagueUrl,
                                   label: NumberFormat(
                                           '#,###',
@@ -152,6 +157,7 @@ class PlayerInfosCard extends StatelessWidget {
                                           selectedProfile.trophies,
                                           selectedProfile.league)),
                               ImageChip(
+                            context: context,
                                   imageUrl: selectedProfile.builderHallPic,
                                   label: selectedProfile.builderHallLevel
                                       .toString(),
