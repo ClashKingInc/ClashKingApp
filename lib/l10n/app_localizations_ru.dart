@@ -585,6 +585,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get toDoList => 'To-do list';
 
   @override
+  String get clanGames => 'Clan Games';
+
+  @override
+  String get seasonPass => 'Season Pass';
+
+  @override
   String lastActive(String date) {
     return 'Last active: $date';
   }
@@ -981,6 +987,36 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String attacksLeftDescription(int attacks, String type) {
+    return 'You have $attacks attack(s) left ($type).';
+  }
+
+  @override
+  String defensesLeftDescription(int defenses, String type) {
+    return 'You have $defenses defense(s) left ($type).';
+  }
+
+  @override
+  String noAttacksLeftDescription(String type) {
+    return 'Congratulations, you have done all your attacks ($type)!';
+  }
+
+  @override
+  String noDefensesLeftDescription(Object type) {
+    return 'You have taken all your defenses ($type)!';
+  }
+
+  @override
+  String pointsLeftDescription(int points, String type) {
+    return 'You have $points points left to get today to be in time for the end of the event ($type).';
+  }
+
+  @override
+  String pointsLeftDescriptionNoPoints(String type) {
+    return 'Congratulations, you are on time to get the maximum rewards at the end of the event ($type)!';
+  }
+
+  @override
   String get averageStars => 'Average stars';
 
   @override
@@ -1339,6 +1375,36 @@ class AppLocalizationsRu extends AppLocalizations {
   String get warStats => 'War Stats';
 
   @override
+  String warAttacksNumber(int number_time, int number_war) {
+    return 'You attacked $number_time time(s) during the last $number_war wars.';
+  }
+
+  @override
+  String warDefensesNumber(int number_time, int number_war) {
+    return 'You defended $number_time time(s) during the last $number_war wars.';
+  }
+
+  @override
+  String warAverageStars(String stars) {
+    return 'You had an average of $stars stars per war.';
+  }
+
+  @override
+  String warAverageDestruction(String percent) {
+    return 'You had an average of $percent% destruction rate per war.';
+  }
+
+  @override
+  String warAverageStarsDefense(double stars) {
+    return 'You had an average of $stars stars per defense.';
+  }
+
+  @override
+  String warAverageDestructionDefense(Object percent) {
+    return 'You had an average of $percent% destruction rate per defense.';
+  }
+
+  @override
   String get membersStats => 'Members Stats';
 
   @override
@@ -1404,6 +1470,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get community => 'Community';
+
+  @override
+  String get raids => 'Raids';
 
   @override
   String get lastRaids => 'Last raids';

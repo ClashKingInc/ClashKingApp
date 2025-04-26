@@ -414,6 +414,8 @@
     "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
     "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
     "toDoList": "To-do list",
+    "clanGames": "Clan Games",
+    "seasonPass": "Season Pass",
     "lastActive": "Last active: {date}",
     "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
     "@lastActive": {
@@ -758,6 +760,56 @@
         "placeholders": {
             "members": {
                 "type": "int"
+            }
+        }
+    },
+    "attacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
+    "@attacksLeftDescription": {
+        "placeholders": {
+            "attacks": {
+                "type": "int"
+            },
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "defensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
+    "@defensesLeftDescription": {
+        "placeholders": {
+            "defenses": {
+                "type": "int"
+            },
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "noAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+    "noDefensesLeftDescription": "You have taken all your defenses ({type})!",
+    "@noAttacksLeftDescription": {
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "pointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+    "@pointsLeftDescription": {
+        "placeholders": {
+            "points": {
+                "type": "int"
+            },
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "pointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+    "@pointsLeftDescriptionNoPoints": {
+        "placeholders": {
+            "type": {
+                "type": "String"
             }
         }
     },
@@ -1115,6 +1167,53 @@
     "neededOverall": "% Needed overall",
     "calculate": "Calculate",
     "warStats": "War Stats",
+    "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
+    "@warAttacksNumber": {
+        "placeholders": {
+            "number_time": {
+                "type": "int"
+            },
+            "number_war": {
+                "type": "int"
+            }
+        }
+    },
+    "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
+    "@warDefensesNumber": {
+        "placeholders": {
+            "number_time": {
+                "type": "int"
+            },
+            "number_war": {
+                "type": "int"
+            }
+        }
+    },
+    "warAverageStars": "You had an average of {stars} stars per war.",
+    "@warAverageStars": {
+        "placeholders": {
+            "stars": {
+                "type": "String"
+            }
+        }
+    },
+    "warAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+    "@warAverageDestruction": {
+        "placeholders": {
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "warAverageStarsDefense": "You had an average of {stars} stars per defense.",
+    "@warAverageStarsDefense": {
+        "placeholders": {
+            "stars": {
+                "type": "double"
+            }
+        }
+    },
+    "warAverageDestructionDefense": "You had an average of {percent}% destruction rate per defense.",
     "membersStats": "Members Stats",
     "clanWarLeague": "Clan War League",
     "cwlRank": "Your clan is currently ranked {rank}.",
@@ -1191,6 +1290,7 @@
     },
     "tools": "Tools",
     "community": "Community",
+    "raids": "Raids",
     "lastRaids": "Last raids",
     "ongoingRaids": "Ongoing raids",
     "districtsDestroyed": "Districts destroyed",

@@ -1208,6 +1208,18 @@ abstract class AppLocalizations {
   /// **'To-do list'**
   String get toDoList;
 
+  /// No description provided for @clanGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Clan Games'**
+  String get clanGames;
+
+  /// No description provided for @seasonPass.
+  ///
+  /// In en, this message translates to:
+  /// **'Season Pass'**
+  String get seasonPass;
+
   /// No description provided for @lastActive.
   ///
   /// In en, this message translates to:
@@ -1892,6 +1904,42 @@ abstract class AppLocalizations {
   /// **'~{members} members per war'**
   String warHistoryAverageMembers(int members);
 
+  /// No description provided for @attacksLeftDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {attacks} attack(s) left ({type}).'**
+  String attacksLeftDescription(int attacks, String type);
+
+  /// No description provided for @defensesLeftDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {defenses} defense(s) left ({type}).'**
+  String defensesLeftDescription(int defenses, String type);
+
+  /// No description provided for @noAttacksLeftDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations, you have done all your attacks ({type})!'**
+  String noAttacksLeftDescription(String type);
+
+  /// No description provided for @noDefensesLeftDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You have taken all your defenses ({type})!'**
+  String noDefensesLeftDescription(Object type);
+
+  /// No description provided for @pointsLeftDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {points} points left to get today to be in time for the end of the event ({type}).'**
+  String pointsLeftDescription(int points, String type);
+
+  /// No description provided for @pointsLeftDescriptionNoPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!'**
+  String pointsLeftDescriptionNoPoints(String type);
+
   /// No description provided for @averageStars.
   ///
   /// In en, this message translates to:
@@ -2516,6 +2564,42 @@ abstract class AppLocalizations {
   /// **'War Stats'**
   String get warStats;
 
+  /// No description provided for @warAttacksNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'You attacked {number_time} time(s) during the last {number_war} wars.'**
+  String warAttacksNumber(int number_time, int number_war);
+
+  /// No description provided for @warDefensesNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'You defended {number_time} time(s) during the last {number_war} wars.'**
+  String warDefensesNumber(int number_time, int number_war);
+
+  /// No description provided for @warAverageStars.
+  ///
+  /// In en, this message translates to:
+  /// **'You had an average of {stars} stars per war.'**
+  String warAverageStars(String stars);
+
+  /// No description provided for @warAverageDestruction.
+  ///
+  /// In en, this message translates to:
+  /// **'You had an average of {percent}% destruction rate per war.'**
+  String warAverageDestruction(String percent);
+
+  /// No description provided for @warAverageStarsDefense.
+  ///
+  /// In en, this message translates to:
+  /// **'You had an average of {stars} stars per defense.'**
+  String warAverageStarsDefense(double stars);
+
+  /// No description provided for @warAverageDestructionDefense.
+  ///
+  /// In en, this message translates to:
+  /// **'You had an average of {percent}% destruction rate per defense.'**
+  String warAverageDestructionDefense(Object percent);
+
   /// No description provided for @membersStats.
   ///
   /// In en, this message translates to:
@@ -2617,6 +2701,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Community'**
   String get community;
+
+  /// No description provided for @raids.
+  ///
+  /// In en, this message translates to:
+  /// **'Raids'**
+  String get raids;
 
   /// No description provided for @lastRaids.
   ///

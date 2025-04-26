@@ -90,7 +90,7 @@ class PlayerLegendCard extends StatelessWidget {
                                           children: [
                                             if (player.rankings?.countryCode != null && player.rankings?.countryCode != "")
                                               ImageChip(
-                            context: context,
+                                                  context: context,
                                                   imageUrl: ImageAssets.flag(
                                                       player.rankings?.countryCode ??
                                                           ""),
@@ -115,7 +115,7 @@ class PlayerLegendCard extends StatelessWidget {
                                                 player.rankings?.globalRank !=
                                                     0)
                                               ImageChip(
-                            context: context,
+                                                  context: context,
                                                   imageUrl: ImageAssets.planet,
                                                   label: player.rankings?.globalRank != null
                                                       ? NumberFormat('#,###', Localizations.localeOf(context).toString())
@@ -130,7 +130,7 @@ class PlayerLegendCard extends StatelessWidget {
                                                               "${player.trophies}")
                                                       : AppLocalizations.of(context)!.legendNoGlobalRankDescription(player.trophies)),
                                             ImageChip(
-                            context: context,
+                                              context: context,
                                               imageUrl:
                                                   ImageAssets.legendStartFlag,
                                               label: NumberFormat(
@@ -147,7 +147,7 @@ class PlayerLegendCard extends StatelessWidget {
                                                       "${currentDay.startTrophies ?? 0}"),
                                             ),
                                             ImageChip(
-                            context: context,
+                                              context: context,
                                               imageUrl: ImageAssets.sword,
                                               labelWidget: RichText(
                                                 text: TextSpan(
@@ -175,10 +175,16 @@ class PlayerLegendCard extends StatelessWidget {
                                                   ],
                                                 ),
                                               ),
-                                              description: "",
+                                              description:
+                                                  AppLocalizations.of(context)!
+                                                      .attacksLeftDescription(
+                                                (8 - currentDay.totalAttacks),
+                                                AppLocalizations.of(context)!
+                                                    .legendLeague,
+                                              ),
                                             ),
                                             ImageChip(
-                            context: context,
+                                              context: context,
                                               imageUrl:
                                                   ImageAssets.shieldWithArrow,
                                               labelWidget: RichText(
@@ -207,7 +213,13 @@ class PlayerLegendCard extends StatelessWidget {
                                                   ],
                                                 ),
                                               ),
-                                              description: "",
+                                              description:
+                                                  AppLocalizations.of(context)!
+                                                      .defensesLeftDescription(
+                                                (8 - currentDay.totalDefenses),
+                                                AppLocalizations.of(context)!
+                                                    .legendLeague,
+                                              ),
                                             ),
                                             IconChip(
                                               icon:
@@ -251,7 +263,7 @@ class PlayerLegendCard extends StatelessWidget {
                                               children: [
                                                 if (player.rankings?.countryCode != null && player.rankings?.countryCode != "")
                                                   ImageChip(
-                            context: context,
+                                                      context: context,
                                                       imageUrl: ImageAssets.flag(
                                                           player.rankings?.countryCode ??
                                                               ""),
@@ -275,7 +287,7 @@ class PlayerLegendCard extends StatelessWidget {
                                                     player.rankings?.globalRank !=
                                                         0)
                                                   ImageChip(
-                            context: context,
+                                                      context: context,
                                                       imageUrl:
                                                           ImageAssets.planet,
                                                       label: player.rankings?.globalRank != null
@@ -291,7 +303,7 @@ class PlayerLegendCard extends StatelessWidget {
                                                                   "${player.trophies}")
                                                           : AppLocalizations.of(context)!.legendNoGlobalRankDescription(player.trophies)),
                                                 ImageChip(
-                            context: context,
+                                                  context: context,
                                                   imageUrl: ImageAssets
                                                       .legendStartFlag,
                                                   label: NumberFormat(
@@ -307,7 +319,7 @@ class PlayerLegendCard extends StatelessWidget {
                                                           "${player.trophies}"),
                                                 ),
                                                 ImageChip(
-                            context: context,
+                                                  context: context,
                                                   imageUrl: ImageAssets.sword,
                                                   labelWidget: RichText(
                                                     text: TextSpan(
@@ -337,7 +349,7 @@ class PlayerLegendCard extends StatelessWidget {
                                                   description: "",
                                                 ),
                                                 ImageChip(
-                            context: context,
+                                                  context: context,
                                                   imageUrl: ImageAssets
                                                       .shieldWithArrow,
                                                   labelWidget: RichText(

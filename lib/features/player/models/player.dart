@@ -193,6 +193,20 @@ class Player {
     }
   }
 
+  int get seasonPassPointLeft {
+    try {
+      final now = DateTime.now();
+      int totalDaysInMonth = DateTime(now.year, now.month + 1, 0).day;
+      int daysPassed = now.day;
+      double seasonPassDaily = ((daysPassed * 2600) / totalDaysInMonth);
+      double seasonPassPointLeft =
+          (seasonPassDaily - currentSeasonPoints.toDouble()).clamp(0, 2600);
+      return seasonPassPointLeft.toInt();
+    } catch (e) {
+      return 0;
+    }
+  }
+
   double get clanGamesRatio {
     try {
       DateTime now = DateTime.now();
@@ -206,6 +220,20 @@ class Player {
       return clanGamesRatio.toDouble();
     } catch (e) {
       return 0.0;
+    }
+  }
+
+  int get clanGamesPointLeft {
+    try {
+      DateTime now = DateTime.now();
+      DateTime clanGamesStart = DateTime(now.year, now.month, 22, 8);
+      int daysPassed = now.difference(clanGamesStart).inDays + 1;
+      double clanGamesDaily = (4000 / 8) * daysPassed;
+      double clanGamesPointLeft =
+          (clanGamesDaily - currentClanGamesPoints.toDouble()).clamp(0, 4000);
+      return clanGamesPointLeft.toInt();
+    } catch (e) {
+      return 0;
     }
   }
 

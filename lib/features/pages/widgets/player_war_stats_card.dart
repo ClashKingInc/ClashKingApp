@@ -81,44 +81,63 @@ class PlayerWarStatsCard extends StatelessWidget {
                             children: <Widget>[
                               if (warStats != null) ...[
                                 ImageChip(
-                            context: context,
+                                  context: context,
                                   imageUrl: ImageAssets.sword,
                                   label: "${allStats?.totalAttacks}",
-                                  description: "",
+                                  description: AppLocalizations.of(context)!
+                                      .warAttacksNumber(
+                                          allStats?.totalAttacks ?? 0, 50),
                                 ),
                                 ImageChip(
-                            context: context,
+                                  context: context,
                                   imageUrl: ImageAssets.attackStar,
-                                  label:
-                                      allStats?.averageStars.toStringAsFixed(2) ?? "",
-                                  description: "",
+                                  label: allStats?.averageStars
+                                          .toStringAsFixed(2) ??
+                                      "",
+                                  description: AppLocalizations.of(context)!
+                                      .warAverageStars(allStats?.averageStars
+                                              .toStringAsFixed(2) ??
+                                          "?"),
                                 ),
                                 ImageChip(
-                            context: context,
+                                  context: context,
                                   imageUrl: ImageAssets.hitrate,
                                   label:
                                       "${allStats?.averageDestruction.toStringAsFixed(1)}%",
-                                  description: "",
+                                  description: AppLocalizations.of(context)!
+                                      .warAverageDestruction(allStats
+                                              ?.averageDestruction
+                                              .toStringAsFixed(1) ??
+                                          "?"),
                                 ),
                                 ImageChip(
-                            context: context,
+                                  context: context,
                                   imageUrl: ImageAssets.shieldWithArrow,
                                   label: "${allStats?.totalDefenses}",
-                                  description: "",
+                                  description: AppLocalizations.of(context)!
+                                      .warDefensesNumber(
+                                          allStats?.totalDefenses ?? 0, 50),
                                 ),
                                 ImageChip(
-                            context: context,
+                                  context: context,
                                   imageUrl: ImageAssets.attackStar,
                                   label: allStats?.averageStarsDef
-                                      .toStringAsFixed(2) ?? "",
-                                  description: "",
+                                          .toStringAsFixed(2) ??
+                                      "",
+                                  description: AppLocalizations.of(context)!
+                                      .warAverageStarsDefense(
+                                          allStats?.averageStarsDef ?? 0),
                                 ),
                                 ImageChip(
-                            context: context,
+                                  context: context,
                                   imageUrl: ImageAssets.hitrate,
                                   label:
                                       "${allStats?.averageDestructionDef.toStringAsFixed(1)}%",
-                                  description: "",
+                                  description: AppLocalizations.of(context)!
+                                      .warAverageDestructionDefense(allStats
+                                              ?.averageDestructionDef
+                                              .toStringAsFixed(1) ??
+                                          "?"),
                                 ),
                               ]
                             ],
