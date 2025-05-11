@@ -41,7 +41,7 @@ class PlayerService extends ChangeNotifier {
     if (token == null) throw Exception("User not authenticated");
 
     final response = await http.post(
-      Uri.parse("${ApiService.apiUrl}/players"),
+      Uri.parse("${ApiService.apiUrlV2}/players"),
       headers: {
         "Authorization": "Bearer $token",
         "Content-Type": "application/json",
@@ -101,7 +101,7 @@ class PlayerService extends ChangeNotifier {
     if (token == null) throw Exception("User not authenticated");
 
     final response = await http.post(
-      Uri.parse("${ApiService.apiUrl}/players/extended"),
+      Uri.parse("${ApiService.apiUrlV2}/players/extended"),
       headers: {
         "Authorization": "Bearer $token",
         "Content-Type": "application/json",
@@ -113,8 +113,6 @@ class PlayerService extends ChangeNotifier {
     );
 
     try {
-      print(clanTagsByPlayer);
-      print(playerTags);
       if (response.statusCode == 200) {
         final responseBody = utf8.decode(response.bodyBytes);
         final data = jsonDecode(responseBody);
@@ -162,7 +160,7 @@ class PlayerService extends ChangeNotifier {
       playerTag = playerTag.replaceAll("#", "%23");
 
       final responseInit = await http.post(
-        Uri.parse("${ApiService.apiUrl}/players"),
+        Uri.parse("${ApiService.apiUrlV2}/players"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
@@ -189,7 +187,7 @@ class PlayerService extends ChangeNotifier {
 
       final responses = await Future.wait([
         http.get(
-          Uri.parse("${ApiService.apiUrl}/player/$playerTag/extended")
+          Uri.parse("${ApiService.apiUrlV2}/player/$playerTag/extended")
               .replace(queryParameters: {
             "clan_tag": clanTag,
           }),
@@ -199,25 +197,36 @@ class PlayerService extends ChangeNotifier {
           },
         ),
         http.get(
-          Uri.parse("${ApiService.apiUrl}/war/$clanTagUrl/war-summary"),
+          Uri.parse("${ApiService.apiUrlV2}/clan/$clanTagUrl/details"),
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json",
+          },
+        ),
+        http.get(
+          Uri.parse("${ApiService.apiUrlV2}/war/$clanTagUrl/war-summary"),
           headers: {
             "Authorization": "Bearer $token",
             "Content-Type": "application/json",
           },
         ),
         http.post(
-          Uri.parse("${ApiService.apiUrl}/players/warhits"),
+          Uri.parse("${ApiService.apiUrlV2}/players/warhits"),
           headers: {
             "Authorization": "Bearer $token",
             "Content-Type": "application/json",
           },
-          body: jsonEncode({"player_tags": [playerTag], "limit": 50}),
+          body: jsonEncode({
+            "player_tags": [playerTag],
+            "limit": 50
+          }),
         )
       ]);
 
       final responseExtended = responses[0];
-      final responseWar = responses[1];
-      final responseWarHits = responses[2];
+      final responseClan = responses[1];
+      final responseWar = responses[2];
+      final responseWarHits = responses[3];
 
       if (responseExtended.statusCode == 200) {
         final extendedData =
@@ -225,9 +234,14 @@ class PlayerService extends ChangeNotifier {
         player.enrichWithFullStats(extendedData);
       }
 
+      if (responseClan.statusCode == 200) {
+        final clanData = jsonDecode(utf8.decode(responseClan.bodyBytes));
+        player.clan = Clan.fromJson(clanData);
+      }
+
       if (responseWar.statusCode == 200) {
-        player.clan?.warCwl =
-            WarCwl.fromJson(jsonDecode(utf8.decode(responseWar.bodyBytes)));
+        player.clan?.warCwl = WarCwl.fromJson(
+            jsonDecode(utf8.decode(responseWar.bodyBytes)), player.clan?.tag);
       }
 
       if (responseWarHits.statusCode == 200) {
@@ -264,7 +278,7 @@ class PlayerService extends ChangeNotifier {
     print("🏰 Loading player data for tags: $playerTags");
 
     final response = await http.post(
-      Uri.parse("${ApiService.apiUrl}/players/warhits"),
+      Uri.parse("${ApiService.apiUrlV2}/players/warhits"),
       headers: {
         "Authorization": "Bearer $token",
         "Content-Type": "application/json",

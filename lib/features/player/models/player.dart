@@ -461,7 +461,6 @@ class Player {
   }
 
   void enrichWithFullStats(Map<String, dynamic> json) {
-    print(json['raid_data']);
     clanGamesPoint =
         (json['clan_games'] as Map<String, dynamic>?)?.entries.map((entry) {
               return PlayerClanGames.fromJson(entry.key, entry.value);

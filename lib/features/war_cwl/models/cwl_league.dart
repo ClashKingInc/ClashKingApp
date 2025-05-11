@@ -15,23 +15,33 @@ class CwlLeague {
   });
 
   factory CwlLeague.fromJson(Map<String, dynamic> json) {
-    return CwlLeague(
-      state: json['state'],
-      season: json['season'],
-      clans: (json['clans'] as List)
-          .map((clan) => CwlClan.fromJson(clan))
-          .toList(),
-      rounds: (json['rounds'] as List)
-          .asMap()
-          .entries
-          .where((entry) {
-            final warTags =
-                (entry.value['warTags'] as List?)?.cast<String>() ?? [];
-            return warTags.any((tag) => tag != '#0');
-          })
-          .map((entry) => CwlLeagueRound.fromJson(entry.value, entry.key))
-          .toList(),
-    );
+    try {
+      return CwlLeague(
+        state: json['state'],
+        season: json['season'],
+        clans: (json['clans'] as List)
+            .map((clan) => CwlClan.fromJson(clan))
+            .toList(),
+        rounds: (json['rounds'] as List)
+            .asMap()
+            .entries
+            .where((entry) {
+              final warTags =
+                  (entry.value['warTags'] as List?)?.cast<String>() ?? [];
+              return warTags.any((tag) => tag != '#0');
+            })
+            .map((entry) => CwlLeagueRound.fromJson(entry.value, entry.key))
+            .toList(),
+      );
+    } catch (e) {
+      print("❌ Error parsing CwlLeague: $e");
+      return CwlLeague(
+        state: 'unknown',
+        season: 'unknown',
+        clans: [],
+        rounds: [],
+      );
+    }
   }
 
   int? getStarsGapFromRank(String clanTag, int targetRank) {

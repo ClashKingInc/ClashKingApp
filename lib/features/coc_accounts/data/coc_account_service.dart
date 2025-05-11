@@ -32,7 +32,7 @@ class CocAccountService extends ChangeNotifier {
       if (token == null) throw Exception("User not authenticated");
 
       final response = await http.get(
-        Uri.parse("${ApiService.apiUrl}/users/coc-accounts"),
+        Uri.parse("${ApiService.apiUrlV2}/users/coc-accounts"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ class CocAccountService extends ChangeNotifier {
 
     try {
       final response = await http.post(
-        Uri.parse("${ApiService.apiUrl}/users/add-coc-account"),
+        Uri.parse("${ApiService.apiUrlV2}/users/add-coc-account"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
@@ -101,7 +101,7 @@ class CocAccountService extends ChangeNotifier {
       }
 
       final response = await http.post(
-        Uri.parse("${ApiService.apiUrl}/users/add-coc-account-with-token"),
+        Uri.parse("${ApiService.apiUrlV2}/users/add-coc-account-with-token"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
@@ -129,7 +129,7 @@ class CocAccountService extends ChangeNotifier {
       if (token == null) throw Exception("User not authenticated");
 
       final response = await http.delete(
-        Uri.parse("${ApiService.apiUrl}/users/remove-coc-account"),
+        Uri.parse("${ApiService.apiUrlV2}/users/remove-coc-account"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
@@ -156,7 +156,7 @@ class CocAccountService extends ChangeNotifier {
     if (token == null) throw Exception("User not authenticated");
 
     final response = await http.put(
-      Uri.parse("${ApiService.apiUrl}/users/reorder-coc-accounts"),
+      Uri.parse("${ApiService.apiUrlV2}/users/reorder-coc-accounts"),
       headers: {
         "Authorization": "Bearer $token",
         "Content-Type": "application/json",

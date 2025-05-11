@@ -22,19 +22,34 @@ class WarCwl {
 
   get teamSize => warLeagueInfos[0].teamSize;
 
-  factory WarCwl.fromJson(Map<String, dynamic> json) {
-    return WarCwl(
-      tag: json['clan_tag'],
-      isInWar: json['isInWar'],
-      isInCwl: json['isInCwl'],
-      warInfo: WarInfo.fromJson(json['war_info']["currentWarInfo"]),
-      leagueInfo: json['league_info'] != null
-          ? CwlLeague.fromJson(json['league_info'])
-          : null,
-      warLeagueInfos: (json['war_league_infos'] as List)
-          .map((e) => WarInfo.fromJson(e))
-          .toList(),
-    );
+  factory WarCwl.fromJson(Map<String, dynamic> json, String? tag) {
+    print("Parsing WarCwl: $json");
+    try {
+      return WarCwl(
+        tag: json['clan_tag'] ?? tag,
+        isInWar: json['isInWar'],
+        isInCwl: json['isInCwl'],
+        warInfo: json['war_info']['state'] != "notInWar"
+            ? WarInfo.fromJson(json['war_info']["currentWarInfo"])
+            : WarInfo(state: 'notInWar'),
+        leagueInfo: json['league_info'] != null
+            ? CwlLeague.fromJson(json['league_info'])
+            : null,
+        warLeagueInfos: (json['war_league_infos'] as List)
+            .map((e) => WarInfo.fromJson(e))
+            .toList(),
+      );
+    } catch (e) {
+      print("❌ Error parsing WarCwl: $e");
+      return WarCwl(
+        tag: json['clan_tag'],
+        isInWar: false,
+        isInCwl: false,
+        warInfo: WarInfo(state: 'unknown'),
+        leagueInfo: null,
+        warLeagueInfos: [],
+      );
+    }
   }
 
   WarInfo? getActiveWarByTag(String tag) {
@@ -45,7 +60,7 @@ class WarCwl {
             (warInfo.clan!.tag == tag || warInfo.opponent!.tag == tag),
       );
     } catch (e) {
-      return null;
+      return warLeagueInfos.last;
     }
   }
 
@@ -57,6 +72,7 @@ class WarCwl {
   }
 
   WarInfo? getWarInfoFromTag(String tag) {
+    print("Getting war info from tag: $tag");
     try {
       return warLeagueInfos.firstWhere((warInfo) => warInfo.tag == tag);
     } catch (e) {

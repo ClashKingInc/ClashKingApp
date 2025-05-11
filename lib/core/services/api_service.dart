@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/token_service.dart';
 
 class ApiService {
-  static const String apiUrl = "https://dev.api.clashk.ing/v2";
+  static const String apiUrlV1 = "https://dev.api.clashk.ing";
+  static const String apiUrlV2 = "https://dev.api.clashk.ing/v2";
   static const String assetUrl = "https://assets.clashk.ing";
   static const String proxyUrl = "https://proxy.clashk.ing/v1";
   static const String cocAssetsUrl = "https://coc-assets.clashk.ing";
@@ -13,7 +14,7 @@ class ApiService {
   Future<Map<String, dynamic>> get(String endpoint) async {
     final token = await TokenService().getAccessToken();
     final response = await http.get(
-      Uri.parse('$apiUrl$endpoint'),
+      Uri.parse('$apiUrlV2$endpoint'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -25,7 +26,7 @@ class ApiService {
   Future<Map<String, dynamic>> post(
       String endpoint, Map<String, String> body) async {
     final response = await http.post(
-      Uri.parse('$apiUrl$endpoint'),
+      Uri.parse('$apiUrlV2$endpoint'),
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: body,
     );

@@ -38,7 +38,7 @@ class TokenService {
       String refreshToken, String deviceId) async {
     try {
       final response = await http.post(
-        Uri.parse('${ApiService.apiUrl}/auth/refresh'),
+        Uri.parse('${ApiService.apiUrlV2}/auth/refresh'),
         headers: {'Content-Type': 'application/json'},
         body:
             jsonEncode({"refresh_token": refreshToken, "device_id": deviceId}),

@@ -53,6 +53,7 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    print("war data ${widget.war.clan?.name} ${widget.war.opponent?.name}");
     final clanMembers = widget.war.clan?.members ?? [];
     final opponentMembers = widget.war.opponent?.members ?? [];
 

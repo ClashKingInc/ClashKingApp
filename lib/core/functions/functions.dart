@@ -6,59 +6,13 @@ import 'package:encrypt/encrypt.dart';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:collection/collection.dart';
-import 'package:http/http.dart' as http;
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:io' show Platform;
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
-final String clientId = dotenv.env['DISCORD_CLIENT_ID']!;
-final String redirectUri = dotenv.env['DISCORD_REDIRECT_URI']!;
-final String clientSecret = dotenv.env['DISCORD_CLIENT_SECRET']!;
-final String callbackUrlScheme = dotenv.env['DISCORD_CALLBACK_URL_SCHEME']!;
 final storage = FlutterSecureStorage();
-
-Future<bool> isTokenValid() async {
-  String? expirationDateString = await getPrefs('expiration_date');
-  if (expirationDateString != null) {
-    DateTime expirationDate = DateTime.parse(expirationDateString);
-    return DateTime.now().isBefore(expirationDate);
-  }
-
-  return false;
-}
-
-Future<bool> refreshToken() async {
-  final refreshToken = await getPrefs("refresh_token");
-  if (refreshToken == null) return false;
-
-  final tokenUrl = Uri.https('discord.com', '/api/oauth2/token');
-  final response = await http.post(tokenUrl, body: {
-    'client_id': clientId,
-    'client_secret': clientSecret,
-    'grant_type': 'refresh_token',
-    'refresh_token': refreshToken,
-    'redirect_uri': redirectUri,
-  });
-
-  if (response.statusCode == 200) {
-    final accessToken = jsonDecode(response.body)['access_token'] as String;
-    final newRefreshToken =
-        jsonDecode(response.body)['refresh_token'] as String;
-    int expiresIn = jsonDecode(response.body)['expires_in'];
-
-    DateTime expirationDate = DateTime.now().add(Duration(seconds: expiresIn));
-    await storePrefs('access_token', accessToken);
-    await storePrefs(
-        'refresh_token', newRefreshToken); // Stocker le nouveau refreshToken
-    await storePrefs('expiration_date', expirationDate.toIso8601String());
-
-    return true;
-  }
-
-  return false;
-}
 
 Future<void> storePrefs(String name, String token) async {
   try {

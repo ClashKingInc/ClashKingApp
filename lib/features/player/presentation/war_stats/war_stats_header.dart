@@ -1,7 +1,8 @@
 import 'dart:ui';
 
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class PlayerWarStatsHeader extends StatelessWidget {
@@ -47,9 +48,8 @@ class PlayerWarStatsHeader extends StatelessWidget {
                   Colors.black.withValues(alpha: 0.7),
                   BlendMode.darken,
                 ),
-                child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: "https://assets.clashk.ing/landscape/war-stats.png",
+                child: MobileWebImage(
+                  imageUrl: ImageAssets.playerWarStatsPageBackground,
                   width: double.infinity,
                   fit: BoxFit.cover,
                 )),
@@ -74,8 +74,7 @@ class PlayerWarStatsHeader extends StatelessWidget {
                           ?.copyWith(color: Colors.white),
                     ),
                     SizedBox(height: 8),
-                    CachedNetworkImage(
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    MobileWebImage(
                       imageUrl: townHallPic,
                       width: 50,
                     ),
@@ -155,14 +154,14 @@ class PlayerWarStatsHeader extends StatelessWidget {
             onPressed: onBack,
           ),
         ),
-        Positioned(
+        /*Positioned(
           top: 40,
           right: 10,
           child: IconButton(
             icon: Icon(Icons.filter_list, color: Colors.white),
             onPressed: onFilter,
           ),
-        ),
+        ),*/
       ],
     );
   }

@@ -3,6 +3,9 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/player/models/player.dart';
+import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:intl/intl.dart';
@@ -185,9 +188,11 @@ class ClanJoinLeaveEventsState extends State<ClanJoinLeaveEvents>
                       child: CircularProgressIndicator(),
                     ),
                   );
+                  Player player =
+                      await PlayerService().getPlayerAndClanData(item.tag);
                   navigator.pop();
-                  navigator.push(
-                      MaterialPageRoute(builder: (_) => SizedBox.shrink()));
+                  navigator.push(MaterialPageRoute(
+                      builder: (_) => PlayerScreen(selectedPlayer: player)));
                 },
               ),
             ),

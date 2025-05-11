@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:clashkingapp/common/widgets/buttons/chip.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -31,8 +32,7 @@ class WarHistoryHeader extends StatelessWidget {
               ),
               child: CachedNetworkImage(
                 errorWidget: (context, url, error) => Icon(Icons.error),
-                imageUrl:
-                    "https://assets.clashk.ing/landscape/war-landscape.jpg",
+                imageUrl: ImageAssets.warPageBackground,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
@@ -72,21 +72,23 @@ class WarHistoryHeader extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(height: 16),
             Wrap(
               alignment: WrapAlignment.start,
               spacing: 7.0,
               runSpacing: -7.0,
               children: <Widget>[
                 ImageChip(
-                            context: context,
+                    context: context,
                     textColor: Colors.white,
-                    imageUrl:
-                        "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png",
+                    edgeColor: Colors.white,
+                    imageUrl: ImageAssets.warClan,
                     label: warLogStats.totalWars.toString()),
                 IconChip(
                     icon: Icons.circle,
                     color: Colors.green,
                     textColor: Colors.white,
+                    edgeColor: Colors.white,
                     size: 16,
                     labelPadding: 2,
                     label: warLogStats.totalWins.toString(),
@@ -97,6 +99,7 @@ class WarHistoryHeader extends StatelessWidget {
                     icon: Icons.circle,
                     color: Colors.red,
                     textColor: Colors.white,
+                    edgeColor: Colors.white,
                     size: 16,
                     labelPadding: 2,
                     label: warLogStats.totalLosses.toString(),
@@ -107,6 +110,7 @@ class WarHistoryHeader extends StatelessWidget {
                     icon: Icons.circle,
                     color: Colors.blue,
                     textColor: Colors.white,
+                    edgeColor: Colors.white,
                     size: 16,
                     labelPadding: 2,
                     label: warLogStats.totalTies.toString(),

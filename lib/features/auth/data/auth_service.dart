@@ -95,7 +95,7 @@ class AuthService extends ChangeNotifier {
     }
 
     final response = await http.get(
-      Uri.parse('${ApiService.apiUrl}$endpoint'),
+      Uri.parse('${ApiService.apiUrlV2}$endpoint'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ class AuthService extends ChangeNotifier {
     }
 
     final response = await http.post(
-      Uri.parse('${ApiService.apiUrl}$endpoint'),
+      Uri.parse('${ApiService.apiUrlV2}$endpoint'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/x-www-form-urlencoded',

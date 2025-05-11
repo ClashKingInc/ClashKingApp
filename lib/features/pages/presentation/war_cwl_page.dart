@@ -49,7 +49,7 @@ class WarCwlPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Card(child: NoClanCard()),
               )
-            else if (warCwl!.isInWar == true)
+            else if (warCwl != null && warCwl.isInWar == true)
               GestureDetector(
                 onTap: () => Navigator.push(
                   context,
@@ -63,7 +63,7 @@ class WarCwlPage extends StatelessWidget {
                       currentWarInfo: warCwl.warInfo, clanTag: clan.tag),
                 ),
               )
-            else if (warCwl.isInCwl == true)
+            else if (warCwl != null && warCwl.isInCwl == true)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Card(
@@ -108,7 +108,7 @@ class WarCwlPage extends StatelessWidget {
                   ),
                 ),
               )
-            else if (warCwl.warInfo.state == "accessDenied")
+            else if (warCwl != null && warCwl.warInfo.state == "accessDenied")
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: WarAccessDeniedCard(
@@ -133,7 +133,8 @@ class WarCwlPage extends StatelessWidget {
                 ),
               ),
             if (hasClan &&
-                !warCwl!.isInCwl &&
+                warCwl != null &&
+                !warCwl.isInCwl &&
                 warCwl.warInfo.state == "accessDenied" &&
                 clan.isWarLogPublic == true)
               Padding(
@@ -143,9 +144,7 @@ class WarCwlPage extends StatelessWidget {
                     clanBadgeUrl: clan.badgeUrls.large,
                   )),
             if (hasClan && clan.isWarLogPublic == true)
-              WarHistoryCard(
-                clan: clan
-              ),
+              WarHistoryCard(clan: clan),
           ],
         ),
       ),

@@ -15,6 +15,7 @@ class WarStatisticsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("war data ${warInfo.clan?.name} ${warInfo.opponent?.name}");
     final clan = warInfo.clan!;
     final opponent = warInfo.opponent!;
 

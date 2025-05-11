@@ -1,3 +1,4 @@
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/pages/widgets/player_search_result_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -8,7 +9,6 @@ import 'dart:async';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class PlayerSearchCard extends StatefulWidget {
-
   PlayerSearchCard({super.key});
   @override
   PlayerSearchCardState createState() => PlayerSearchCardState();
@@ -58,7 +58,8 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
       });
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
-      Sentry.captureMessage('Error in search, search: ${_controller.text}, searchResults: $_searchResults');
+      Sentry.captureMessage(
+          'Error in search, search: ${_controller.text}, searchResults: $_searchResults');
     }
   }
 
@@ -68,10 +69,10 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
         RegExp(r'^[PYLQGRJCUV0289]{3,9}$').hasMatch(query)) {
       query = query.replaceFirst('#', '!');
       response = await http
-          .get(Uri.parse('https://proxy.clashk.ing/v1/players/$query'));
+          .get(Uri.parse('${ApiService.proxyUrl}/players/$query'));
     } else {
       response = await http
-          .get(Uri.parse('https://api.clashking.xyz/player/search/$query'));
+          .get(Uri.parse('${ApiService.apiUrlV1}/player/full-search/$query'));
     }
 
     if (query.isEmpty || query.length < 3) {
@@ -160,8 +161,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                 return SingleChildScrollView(
                     child: Column(
                   children: snapshot.data!.map<Widget>((player) {
-                    return PlayerSearchResultTile(
-                        player: player);
+                    return PlayerSearchResultTile(player: player);
                   }).toList(),
                 ));
               } else {

@@ -4,7 +4,6 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
-import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class PlayerSearchResultTile extends StatefulWidget {
@@ -23,6 +22,26 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
   @override
   void initState() {
     super.initState();
+  }
+
+  String? getLeagueName(dynamic player) {
+    if (player['league'] is Map) return player['league']?['name'];
+    return player['league'] ?? 'Unranked';
+  }
+
+  String? getLeagueIcon(dynamic player) {
+    if (player['league'] is Map) return player['league']?['iconUrls']?['small'];
+    return null;
+  }
+
+  String getClanName(dynamic player) {
+    if (player['clan'] is Map) return player['clan']?['name'];
+    return player['clan_name'];
+  }
+
+  String? getClanBadge(dynamic player) {
+    if (player['clan'] is Map) return player['clan']?['badgeUrls']?['small'];
+    return null;
   }
 
   @override
@@ -67,7 +86,9 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                       width: 50,
                       child: MobileWebImage(
                           imageUrl: ImageAssets.townHall(
-                              widget.player['townHallLevel'] ?? 1)),
+                              widget.player['townHallLevel'] ??
+                                  widget.player['townhall'] ??
+                                  1)),
                     ),
                   ],
                 ),
@@ -93,21 +114,19 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                           runSpacing: -7.0,
                           children: <Widget>[
                             ImageChip(
-                            context: context,
-                              imageUrl: widget.player['league']?['iconUrls']
-                                      ?['small'] ??
-                                  "Unranked" ??
+                              context: context,
+                              imageUrl: getLeagueIcon(widget.player) ??
+                                  ImageAssets.leagues[
+                                      getLeagueName(widget.player) ??
+                                          "Unranked"] ??
                                   ImageAssets.defaultImage,
                               label: widget.player['trophies'].toString(),
                             ),
                             ImageChip(
-                            context: context,
-                              imageUrl: widget.player['clan']?['badgeUrls']
-                                      ?['small'] ??
-                                  "Unranked" ??
+                              context: context,
+                              imageUrl: getClanBadge(widget.player) ??
                                   ImageAssets.defaultImage,
-                              label: widget.player['clan']?['name'] ??
-                                  AppLocalizations.of(context)?.noClan,
+                              label: getClanName(widget.player),
                             ),
                           ],
                         ),

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_history/war_history_page.dart';
 import 'package:flutter/material.dart';
@@ -9,17 +10,14 @@ import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 class WarHistoryCard extends StatelessWidget {
   final Clan clan;
 
-  const WarHistoryCard(
-      {super.key,
-      required this.clan});
+  const WarHistoryCard({super.key, required this.clan});
 
   @override
   Widget build(BuildContext context) {
-
     if (clan.clanWarLog == null) {
       return const SizedBox.shrink();
     }
-    
+
     final warLogStats = clan.clanWarLog!.warLogStats;
 
     return GestureDetector(
@@ -27,9 +25,7 @@ class WarHistoryCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => WarHistoryScreen(
-              clan: clan
-            ),
+            builder: (context) => WarHistoryScreen(clan: clan),
           ),
         );
       },
@@ -38,7 +34,8 @@ class WarHistoryCard extends StatelessWidget {
         child: Card(
           margin: EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 4),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -46,17 +43,15 @@ class WarHistoryCard extends StatelessWidget {
                   height: 70,
                   width: 70,
                   child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl:
-                          "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png"),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    imageUrl: ImageAssets.warClan,
+                  ),
                 ),
                 SizedBox(width: 24),
                 Expanded(
                   child: Column(
                     children: [
-                      Text(
-                          AppLocalizations.of(context)!.warHistory,
+                      Text(AppLocalizations.of(context)!.warHistory,
                           style: Theme.of(context).textTheme.labelLarge),
                       Wrap(
                         alignment: WrapAlignment.start,
@@ -72,11 +67,13 @@ class WarHistoryCard extends StatelessWidget {
                                 shape: BoxShape.circle,
                               ),
                             ),
+                            edgeColor: Colors.white.withValues(alpha: 0.2),
                             labelPadding: 8,
                             label: warLogStats.totalWins.toString(),
                             description: AppLocalizations.of(context)!
                                 .warHistoryWinsDescription(
-                                    warLogStats.totalWins, warLogStats.winPercentage),
+                                    warLogStats.totalWins,
+                                    warLogStats.winPercentage),
                           ),
                           CustomChip(
                             icon: Container(
@@ -87,11 +84,13 @@ class WarHistoryCard extends StatelessWidget {
                                 shape: BoxShape.circle,
                               ),
                             ),
+                            edgeColor: Colors.white.withValues(alpha: 0.2),
                             labelPadding: 8,
                             label: warLogStats.totalLosses.toString(),
                             description: AppLocalizations.of(context)!
                                 .warHistoryLossesDescription(
-                                    warLogStats.totalLosses, warLogStats.lossPercentage),
+                                    warLogStats.totalLosses,
+                                    warLogStats.lossPercentage),
                           ),
                           CustomChip(
                             icon: Container(
@@ -102,11 +101,13 @@ class WarHistoryCard extends StatelessWidget {
                                 shape: BoxShape.circle,
                               ),
                             ),
+                            edgeColor: Colors.white.withValues(alpha: 0.2),
                             labelPadding: 8,
                             label: warLogStats.totalTies.toString(),
                             description: AppLocalizations.of(context)!
                                 .warHistoryDrawsDescription(
-                                    warLogStats.totalTies, warLogStats.tiePercentage),
+                                    warLogStats.totalTies,
+                                    warLogStats.tiePercentage),
                           ),
                           ImageChip(
                             context: context,
@@ -116,7 +117,9 @@ class WarHistoryCard extends StatelessWidget {
                                 .toString(),
                             description: AppLocalizations.of(context)!
                                 .warHistoryAverageWarStarsDescription(
-                                    warLogStats.averageClanStarsPerMember, warLogStats.averageClanStarsPercentage.toStringAsFixed(2)),
+                                    warLogStats.averageClanStarsPerMember,
+                                    warLogStats.averageClanStarsPercentage
+                                        .toStringAsFixed(2)),
                           ),
                           IconChip(
                             icon: LucideIcons.users,

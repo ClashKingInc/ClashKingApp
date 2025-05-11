@@ -88,6 +88,7 @@ class ImageAssets {
   static const String warPreferenceOut = "$baseUrl/icons/Icon_HV_Out.png";
   static const String attackStar = "$baseUrl/icons/Icon_HV_Attack_Star.png";
   static const String war = "$baseUrl/icons/Icon_DC_War.png";
+  static const String warClan = "$baseUrl/icons/Icon_HV_Clan_War.png";
   static const String builderBaseStar = "$baseUrl/icons/Icon_BB_Star.png";
   static const String sword = "$baseUrl/icons/Icon_HV_Sword.png";
   static const String swordGif = "$baseUrl/bot/icons/animated_clash_swords.gif";
@@ -169,6 +170,8 @@ class ImageAssets {
       "$baseUrl/landscape/war-landscape.jpg";
   static const String clanCapitalPageBackground =
       "$baseUrl/landscape/clan-capital-landscape.png";
+  static const String playerWarStatsPageBackground =
+      "$baseUrl/landscape/war-stats.png";
 
 
   // 🎭 Heroes & Troops & Others
@@ -207,10 +210,6 @@ class ImageAssets {
         defaultImage;
   }
 
-  // 🏆 League
-  static String getLeagueImage(String leagueName) {
-    return "$baseUrl/leagues/${_normalizeName(leagueName)}.png";
-  }
 
   // Stickers
   static const String villager = "$baseUrl/stickers/Villager_HV_Villager_7.png";

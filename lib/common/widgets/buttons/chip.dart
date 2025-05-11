@@ -84,8 +84,10 @@ class ImageChipState extends State<ImageChip> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final textColor =
         widget.textColor ?? Theme.of(context).colorScheme.onSurface;
-    final edgeColor =
-        widget.edgeColor ?? (isDarkMode ? Colors.white.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.2));
+    final edgeColor = widget.edgeColor ??
+        (isDarkMode
+            ? Colors.white.withValues(alpha: 0.2)
+            : Colors.black.withValues(alpha: 0.2));
     return GestureDetector(
         onTap: widget.description != null ? _toggleTooltip : widget.onTap,
         child: widget.description != null
@@ -185,8 +187,9 @@ class IconChipState extends State<IconChip> {
             Icon(widget.icon, size: widget.size.toDouble(), color: actualColor),
       ),
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: BorderSide(color: edgeColor.withValues(alpha: 0.2))),
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: edgeColor),
+      ),
       labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
       label: Text(widget.label,
           style: Theme.of(context)
@@ -251,6 +254,7 @@ class CustomChip extends StatefulWidget {
   final String label;
   final int size;
   final Color? color;
+  final Color? edgeColor;
   final double labelPadding;
   final String description;
 
@@ -259,6 +263,7 @@ class CustomChip extends StatefulWidget {
     required this.label,
     this.size = 24,
     this.color,
+    this.edgeColor,
     this.labelPadding = 2,
     this.description = '',
   });
@@ -298,6 +303,10 @@ class CustomChipState extends State<CustomChip> {
 
   @override
   Widget build(BuildContext context) {
+    final edgeColor = widget.edgeColor ??
+        (Theme.of(context).brightness == Brightness.dark
+            ? Colors.white.withValues(alpha: 0.2)
+            : Colors.black.withValues(alpha: 0.2));
     return GestureDetector(
       onTap: _toggleTooltip,
       child: Tooltip(
@@ -325,6 +334,10 @@ class CustomChipState extends State<CustomChip> {
         child: Chip(
           avatar: CircleAvatar(
               backgroundColor: Colors.transparent, child: widget.icon),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: BorderSide(color: edgeColor),
+          ),
           labelPadding: EdgeInsets.symmetric(horizontal: widget.labelPadding),
           label:
               Text(widget.label, style: Theme.of(context).textTheme.labelLarge),
