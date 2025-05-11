@@ -1297,5 +1297,16 @@
     "raidsCompleted": "Raids completed",
     "maintenance": "Maintenance",
     "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "downloadTooltip": "Download CWL summary",
+    "downloadInProgress": "Downloading file... It can take a few seconds...",
+    "downloadSuccess": "File saved successfully in ${path}",
+    "@downloadSuccess": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "downloadError": "Failed to download file"
 }

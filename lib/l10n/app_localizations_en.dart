@@ -1494,6 +1494,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tryAgain => 'Try again';
+
+  @override
+  String get downloadTooltip => 'Download CWL summary';
+
+  @override
+  String get downloadInProgress => 'Downloading file... It can take a few seconds...';
+
+  @override
+  String downloadSuccess(String path) {
+    return 'File saved successfully in \$$path';
+  }
+
+  @override
+  String get downloadError => 'Failed to download file';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).

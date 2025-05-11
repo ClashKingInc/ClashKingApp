@@ -64,6 +64,13 @@ class MyApp extends StatelessWidget {
                     .withValues(alpha : 1.0), // 1.0 means 100% opacity
                 elevation: 2.0,
               ),
+              snackBarTheme: SnackBarThemeData(
+                backgroundColor: Color.fromARGB(255, 31, 31, 31),
+                contentTextStyle: TextStyle(
+                  color: Colors.white,
+                  fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                ),
+              ),
               canvasColor: Colors.transparent,
               elevatedButtonTheme: ElevatedButtonThemeData(
                 style: ElevatedButton.styleFrom(
@@ -182,6 +189,13 @@ class MyApp extends StatelessWidget {
                 color: Color(0xFFFFFFFF)
                     .withValues(alpha : 1.0), // 1.0 means 100% opacity
                 elevation: 2.0,
+              ),
+              snackBarTheme: SnackBarThemeData(
+                backgroundColor: Colors.white,
+                contentTextStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                ),
               ),
               elevatedButtonTheme: ElevatedButtonThemeData(
                 style: ElevatedButton.styleFrom(

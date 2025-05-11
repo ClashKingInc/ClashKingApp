@@ -23,7 +23,6 @@ class WarCwl {
   get teamSize => warLeagueInfos[0].teamSize;
 
   factory WarCwl.fromJson(Map<String, dynamic> json, String? tag) {
-    print("Parsing WarCwl: $json");
     try {
       return WarCwl(
         tag: json['clan_tag'] ?? tag,
@@ -72,7 +71,6 @@ class WarCwl {
   }
 
   WarInfo? getWarInfoFromTag(String tag) {
-    print("Getting war info from tag: $tag");
     try {
       return warLeagueInfos.firstWhere((warInfo) => warInfo.tag == tag);
     } catch (e) {

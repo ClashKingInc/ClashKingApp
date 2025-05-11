@@ -16,7 +16,8 @@ class PlayerWarStats {
     required this.statsByType,
   });
 
-  factory PlayerWarStats.fromJson(Map<String, dynamic> json) {
+  factory PlayerWarStats.fromJson(
+      Map<String, dynamic> json, List<dynamic> wars, String playerTag) {
     try {
       return PlayerWarStats(
         tag: json['tag'] ?? '',
@@ -24,9 +25,8 @@ class PlayerWarStats {
         timeRange: json['timeRange'] != null
             ? Map<String, int>.from(json['timeRange'])
             : {'start': 0, 'end': 0},
-        wars: (json['wars'] as List<dynamic>)
-            .map((w) => PlayerWarStatsData.fromJson(w))
-            .toList(),
+        wars:
+            wars.map((w) => PlayerWarStatsData.fromJson(w, playerTag)).toList(),
         statsByType: (json['stats'] as Map<String, dynamic>)
             .map((key, value) => MapEntry(
                   key,
@@ -221,17 +221,74 @@ class PlayerWarStatsData {
     required this.defenses,
   });
 
-  factory PlayerWarStatsData.fromJson(Map<String, dynamic> json) {
-    return PlayerWarStatsData(
-      warDetails: PlayerWarStatsDetails.fromJson(json['war_data']),
-      memberData: WarMemberData.fromJson(json['member_data']),
-      attacks: (json['attacks'] as List<dynamic>)
-          .map((a) => WarAttack.fromJson(a))
-          .toList(),
-      defenses: (json['defenses'] as List<dynamic>)
-          .map((d) => WarAttack.fromJson(d))
-          .toList(),
-    );
+  factory PlayerWarStatsData.fromJson(
+      Map<String, dynamic> json, String playerTag) {
+    try {
+      final warDetails = PlayerWarStatsDetails.fromJson(json['war_data']);
+      final members = json['members'] as List<dynamic>? ?? [];
+
+      // On ne peut parser qu'un seul membre ici, donc on choisit le premier si présent
+      if (members.isEmpty) throw Exception("No members in war json");
+
+      final member =
+          members.firstWhere((m) => m['tag'] == playerTag, orElse: () => null);
+
+      if (member == null) {
+        throw Exception("Member with tag $playerTag not found in war.");
+      }
+
+      return PlayerWarStatsData(
+        warDetails: warDetails,
+        memberData: WarMemberData.fromJson(member),
+        attacks: (member['attacks'] as List<dynamic>? ?? [])
+            .map((a) => WarAttack.fromJson(a))
+            .toList(),
+        defenses: (member['defenses'] as List<dynamic>? ?? [])
+            .map((d) => WarAttack.fromJson(d))
+            .toList(),
+      );
+    } catch (e) {
+      print('Error parsing PlayerWarStatsData: $e');
+      return PlayerWarStatsData(
+        warDetails: PlayerWarStatsDetails(
+          state: 'unknown',
+          teamSize: 0,
+          attacksPerMember: 0,
+          battleModifier: '',
+          preparationStartTime: '',
+          startTime: '',
+          endTime: '',
+          clan: ClanInfo(
+            tag: '',
+            name: '',
+            badgeUrls: {},
+            clanLevel: 0,
+            attacks: 0,
+            stars: 0,
+            destructionPercentage: 0.0,
+          ),
+          opponent: ClanInfo(
+            tag: '',
+            name: '',
+            badgeUrls: {},
+            clanLevel: 0,
+            attacks: 0,
+            stars: 0,
+            destructionPercentage: 0.0,
+          ),
+          type: '',
+        ),
+        memberData: WarMemberData(
+          tag: '',
+          name: '',
+          townhallLevel: 0,
+          mapPosition: 0,
+          opponentAttacks: 0,
+        ),
+        attacks: [],
+        defenses: [],
+      );
+    }
   }
 }
 

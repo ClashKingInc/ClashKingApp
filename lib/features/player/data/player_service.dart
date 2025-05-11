@@ -211,7 +211,7 @@ class PlayerService extends ChangeNotifier {
           },
         ),
         http.post(
-          Uri.parse("${ApiService.apiUrlV2}/players/warhits"),
+          Uri.parse("${ApiService.apiUrlV2}/war/players/warhits"),
           headers: {
             "Authorization": "Bearer $token",
             "Content-Type": "application/json",
@@ -246,7 +246,8 @@ class PlayerService extends ChangeNotifier {
 
       if (responseWarHits.statusCode == 200) {
         final warStatsData = jsonDecode(utf8.decode(responseWarHits.bodyBytes));
-        player.warStats = PlayerWarStats.fromJson(warStatsData["items"][0]);
+        player.warStats = PlayerWarStats.fromJson(
+            warStatsData[0], warStatsData["wars"], player.tag);
       }
 
       return player;
@@ -278,7 +279,7 @@ class PlayerService extends ChangeNotifier {
     print("🏰 Loading player data for tags: $playerTags");
 
     final response = await http.post(
-      Uri.parse("${ApiService.apiUrlV2}/players/warhits"),
+      Uri.parse("${ApiService.apiUrlV2}/war/players/warhits"),
       headers: {
         "Authorization": "Bearer $token",
         "Content-Type": "application/json",
@@ -296,7 +297,8 @@ class PlayerService extends ChangeNotifier {
             final String tag = item["tag"];
             try {
               final Player player = _profiles.firstWhere((p) => p.tag == tag);
-              player.warStats = PlayerWarStats.fromJson(item);
+              player.warStats =
+                  PlayerWarStats.fromJson(item, data["wars"], tag);
             } catch (e) {
               print("❌ Error loading war stats for $tag: $e");
               continue;

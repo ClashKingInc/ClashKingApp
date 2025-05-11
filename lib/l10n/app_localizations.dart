@@ -2749,6 +2749,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get tryAgain;
+
+  /// No description provided for @downloadTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Download CWL summary'**
+  String get downloadTooltip;
+
+  /// No description provided for @downloadInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading file... It can take a few seconds...'**
+  String get downloadInProgress;
+
+  /// No description provided for @downloadSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'File saved successfully in \${path}'**
+  String downloadSuccess(String path);
+
+  /// No description provided for @downloadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to download file'**
+  String get downloadError;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

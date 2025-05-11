@@ -1,5 +1,7 @@
+import 'package:clashkingapp/common/widgets/icons/excel_download_icon.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_members_tab.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_rounds_tab.dart';
@@ -64,6 +66,15 @@ class CwlScreenState extends State<CwlScreen> {
                         size: 32),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
+                ),
+                Positioned(
+                  top: 40,
+                  right: 10,
+                  child: DownloadCwlExcelButton(
+                      url:
+                          "${ApiService.apiUrlV2}/war/cwl-summary/export?tag=${widget.clanTag.replaceAll('#', '!')}",
+                      fileName:
+                          "cwl_summary_${widget.clanInfo.tag.replaceAll('#', '')}.xlsx"),
                 ),
                 Positioned(
                   child: Column(
