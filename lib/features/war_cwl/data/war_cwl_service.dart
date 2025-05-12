@@ -34,7 +34,6 @@ class WarCwlService extends ChangeNotifier {
             jsonDecode(utf8.decode(response.bodyBytes))['items'];
         for (final summary in data) {
           final warSummary = WarCwl.fromJson(summary, null);
-          print(summary);
           summaries[warSummary.tag] = warSummary;
           print("✅ Loaded war data for clan: ${warSummary.tag}");
         }

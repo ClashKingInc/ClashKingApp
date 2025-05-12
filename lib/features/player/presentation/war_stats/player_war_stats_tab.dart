@@ -1,21 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
-import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class WarStatsView extends StatelessWidget {
-  final Player player;
+  final PlayerWarStats? warStats;
   final List<String> filterTypes;
   final DateTime currentSeasonDate;
   final int warDataLimit;
 
   const WarStatsView({
     super.key,
-    required this.player,
+    this.warStats,
     required this.filterTypes,
     required this.currentSeasonDate,
     required this.warDataLimit,
@@ -23,7 +22,7 @@ class WarStatsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stats = player.warStats?.getStatsForTypes(filterTypes);
+    final stats = warStats?.getStatsForTypes(filterTypes);
 
     final Locale userLocale = Localizations.localeOf(context);
     String formattedStartDate = DateFormat.yMd(userLocale.toString())
@@ -77,13 +76,10 @@ class WarStatsView extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CachedNetworkImage(
-                            imageUrl:
-                                "https://assets.clashk.ing/home-base/town-hall-pics/town-hall-$thLevel.png",
+                          MobileWebImage(
+                            imageUrl: ImageAssets.townHall(int.parse(thLevel)),
                             width: 30,
                             height: 30,
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
                           ),
                           SizedBox(width: 8),
                           Text(AppLocalizations.of(context)!
@@ -182,9 +178,8 @@ class WarStatsView extends StatelessWidget {
         Row(children: [
           CachedNetworkImage(
               errorWidget: (context, url, error) => const Icon(Icons.error),
-              imageUrl: isAttack
-                  ? ImageAssets.sword
-                  : ImageAssets.shieldWithArrow,
+              imageUrl:
+                  isAttack ? ImageAssets.sword : ImageAssets.shieldWithArrow,
               width: 16,
               height: 16,
               fit: BoxFit.cover),
@@ -195,9 +190,8 @@ class WarStatsView extends StatelessWidget {
           Row(
             children: [
               MobileWebImage(
-                  imageUrl: isAttack
-                      ? ImageAssets.brokenSword
-                      : ImageAssets.shield,
+                  imageUrl:
+                      isAttack ? ImageAssets.brokenSword : ImageAssets.shield,
                   width: 16),
               const SizedBox(width: 8),
               Text(missing.toString()),

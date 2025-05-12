@@ -49,9 +49,9 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
         child: Column(
           children: [
             PlayerWarStatsHeader(
-              playerName: widget.player.name,
-              playerTag: widget.player.tag,
-              townHallPic: ImageAssets.townHall(widget.player.townHallLevel),
+              name: widget.player.name,
+              tag: widget.player.tag,
+              picture: ImageAssets.townHall(widget.player.townHallLevel),
               isCWLChecked: isCWLChecked,
               isRandomChecked: isRandomChecked,
               isFriendlyChecked: isFriendlyChecked,
@@ -86,7 +86,7 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
                     ],
                     children: [
                       WarStatsView(
-                        player: widget.player,
+                        warStats: widget.player.warStats,
                         filterTypes: _getSelectedTypes(),
                         currentSeasonDate: DateTime.now(),
                         warDataLimit: 0,

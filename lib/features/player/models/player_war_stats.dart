@@ -2,31 +2,38 @@ import 'package:clashkingapp/features/player/models/player_enemy_townhall_stats.
 import 'package:clashkingapp/features/war_cwl/models/war_attack.dart';
 
 class PlayerWarStats {
+  final String name;
   final String tag;
   final int townhallLevel;
   final Map<String, PlayerWarTypeStats> statsByType;
   final Map<String, int> timeRange;
-  final List<PlayerWarStatsData> wars;
+  List<PlayerWarStatsData>? wars;
 
   PlayerWarStats({
+    required this.name,
     required this.tag,
     required this.townhallLevel,
     required this.timeRange,
-    required this.wars,
+    this.wars,
     required this.statsByType,
   });
 
   factory PlayerWarStats.fromJson(
-      Map<String, dynamic> json, List<dynamic> wars, String playerTag) {
+      Map<String, dynamic> json, String? playerTag, List<dynamic>? wars) {
     try {
       return PlayerWarStats(
+        name: json['name'] ?? '',
         tag: json['tag'] ?? '',
         townhallLevel: json['townhallLevel'] ?? 0,
         timeRange: json['timeRange'] != null
             ? Map<String, int>.from(json['timeRange'])
             : {'start': 0, 'end': 0},
-        wars:
-            wars.map((w) => PlayerWarStatsData.fromJson(w, playerTag)).toList(),
+        wars: wars != null
+            ? wars
+                .map((w) =>
+                    PlayerWarStatsData.fromJson(w, playerTag ?? json['tag']))
+                .toList()
+            : [],
         statsByType: (json['stats'] as Map<String, dynamic>)
             .map((key, value) => MapEntry(
                   key,
@@ -36,6 +43,7 @@ class PlayerWarStats {
     } catch (e) {
       print('Error parsing PlayerWarStats: $e');
       return PlayerWarStats(
+        name: json['name'] ?? '',
         tag: json['tag'] ?? '',
         townhallLevel: json['townhallLevel'] ?? 0,
         timeRange: {'start': 0, 'end': 0},
@@ -190,6 +198,43 @@ class PlayerWarTypeStats {
     return totalHitsDef > 0 ? totalDestructionDef / totalHitsDef : 0.0;
   }
 
+  Map<String, int> getFilteredStarsCountByEnemyTh({
+    required List<int> selectedThLevels,
+  }) {
+    // Initialize result with 0 stars
+    final Map<String, int> result = {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 0,
+    };
+
+    // If no filter is applied, return the default starsCount
+    if (selectedThLevels.isEmpty) {
+      return starsCount;
+    }
+
+    for (final th in selectedThLevels) {
+      final thStats = byEnemyTownhall[th.toString()];
+      if (thStats != null) {
+        for (final entry in thStats.starsCount.entries) {
+          result[entry.key] = result[entry.key]! + entry.value;
+        }
+      }
+    }
+
+    return result;
+  }
+
+  Map<String, int> getStarsCountAgainstTh(int? thLevel) {
+    print("TH Level: $thLevel");
+    if (thLevel == null || byEnemyTownhall.isEmpty) return starsCount;
+
+    final stats = byEnemyTownhall["$thLevel"];
+    print("Stats: $stats");
+    return stats?.starsCount ?? {};
+  }
+
   factory PlayerWarTypeStats.fromJson(Map<String, dynamic> json) {
     return PlayerWarTypeStats(
       warsCounts: json['warsCounts'] ?? 0,
@@ -211,14 +256,10 @@ class PlayerWarTypeStats {
 class PlayerWarStatsData {
   final PlayerWarStatsDetails warDetails;
   final WarMemberData memberData;
-  final List<WarAttack> attacks;
-  final List<WarAttack> defenses;
 
   PlayerWarStatsData({
     required this.warDetails,
     required this.memberData,
-    required this.attacks,
-    required this.defenses,
   });
 
   factory PlayerWarStatsData.fromJson(
@@ -240,12 +281,6 @@ class PlayerWarStatsData {
       return PlayerWarStatsData(
         warDetails: warDetails,
         memberData: WarMemberData.fromJson(member),
-        attacks: (member['attacks'] as List<dynamic>? ?? [])
-            .map((a) => WarAttack.fromJson(a))
-            .toList(),
-        defenses: (member['defenses'] as List<dynamic>? ?? [])
-            .map((d) => WarAttack.fromJson(d))
-            .toList(),
       );
     } catch (e) {
       print('Error parsing PlayerWarStatsData: $e');
@@ -284,9 +319,9 @@ class PlayerWarStatsData {
           townhallLevel: 0,
           mapPosition: 0,
           opponentAttacks: 0,
+          attacks: [],
+          defenses: [],
         ),
-        attacks: [],
-        defenses: [],
       );
     }
   }
@@ -374,6 +409,8 @@ class WarMemberData {
   final int townhallLevel;
   final int mapPosition;
   final int opponentAttacks;
+  final List<WarAttack> attacks;
+  final List<WarAttack> defenses;
 
   WarMemberData({
     required this.tag,
@@ -381,6 +418,8 @@ class WarMemberData {
     required this.townhallLevel,
     required this.mapPosition,
     required this.opponentAttacks,
+    required this.attacks,
+    required this.defenses,
   });
 
   factory WarMemberData.fromJson(Map<String, dynamic> json) {
@@ -390,6 +429,12 @@ class WarMemberData {
       townhallLevel: (json['townhallLevel'] ?? 0) as int,
       mapPosition: (json['mapPosition'] ?? 0) as int,
       opponentAttacks: (json['opponentAttacks'] ?? 0) as int,
+      attacks: (json['attacks'] as List<dynamic>? ?? [])
+          .map((a) => WarAttack.fromJson(a))
+          .toList(),
+      defenses: (json['defenses'] as List<dynamic>? ?? [])
+          .map((d) => WarAttack.fromJson(d))
+          .toList(),
     );
   }
 }

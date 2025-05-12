@@ -22,11 +22,11 @@ class PlayerWarAttacksCard extends StatelessWidget {
 
     if (type == "attacks") {
       allAttacks = wars
-          .expand((w) => w.attacks.map((d) => {"defense": d, "war": w}))
+          .expand((w) => w.memberData.attacks.map((d) => {"defense": d, "war": w}))
           .toList();
     } else {
       allAttacks = wars
-          .expand((w) => w.defenses.map((d) => {"defense": d, "war": w}))
+          .expand((w) => w.memberData.defenses.map((d) => {"defense": d, "war": w}))
           .toList();
     }
 

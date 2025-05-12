@@ -247,7 +247,7 @@ class PlayerService extends ChangeNotifier {
       if (responseWarHits.statusCode == 200) {
         final warStatsData = jsonDecode(utf8.decode(responseWarHits.bodyBytes));
         player.warStats = PlayerWarStats.fromJson(
-            warStatsData[0], warStatsData["wars"], player.tag);
+            warStatsData[0], player.tag, warStatsData["wars"]);
       }
 
       return player;
@@ -298,7 +298,7 @@ class PlayerService extends ChangeNotifier {
             try {
               final Player player = _profiles.firstWhere((p) => p.tag == tag);
               player.warStats =
-                  PlayerWarStats.fromJson(item, data["wars"], tag);
+                  PlayerWarStats.fromJson(item, tag, data["wars"]);
             } catch (e) {
               print("❌ Error loading war stats for $tag: $e");
               continue;

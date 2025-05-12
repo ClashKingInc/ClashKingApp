@@ -38,7 +38,7 @@ class _DownloadCwlExcelButtonState extends State<DownloadCwlExcelButton> {
       if (kIsWeb) {
         final blob = html.Blob([bytes]);
         final urlBlob = html.Url.createObjectUrlFromBlob(blob);
-        final anchor = html.AnchorElement(href: urlBlob)
+        html.AnchorElement(href: urlBlob)
           ..setAttribute("download", filename)
           ..click();
         html.Url.revokeObjectUrl(urlBlob);

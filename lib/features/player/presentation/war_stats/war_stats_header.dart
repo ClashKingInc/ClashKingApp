@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class PlayerWarStatsHeader extends StatelessWidget {
-  final String playerName;
-  final String playerTag;
-  final String townHallPic;
+  final String name;
+  final String tag;
+  final String picture;
   final bool isCWLChecked;
   final bool isRandomChecked;
   final bool isFriendlyChecked;
@@ -20,9 +20,9 @@ class PlayerWarStatsHeader extends StatelessWidget {
 
   PlayerWarStatsHeader({
     super.key,
-    required this.playerName,
-    required this.playerTag,
-    required this.townHallPic,
+    required this.name,
+    required this.tag,
+    required this.picture,
     required this.isCWLChecked,
     required this.isRandomChecked,
     required this.isFriendlyChecked,
@@ -75,19 +75,19 @@ class PlayerWarStatsHeader extends StatelessWidget {
                     ),
                     SizedBox(height: 8),
                     MobileWebImage(
-                      imageUrl: townHallPic,
+                      imageUrl: picture,
                       width: 50,
                     ),
                     SizedBox(height: 8),
                     Text(
-                      playerName,
+                      name,
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium
                           ?.copyWith(color: Colors.white),
                     ),
                     Text(
-                      playerTag,
+                      tag,
                       style: Theme.of(context)
                           .textTheme
                           .labelLarge
@@ -154,14 +154,14 @@ class PlayerWarStatsHeader extends StatelessWidget {
             onPressed: onBack,
           ),
         ),
-        /*Positioned(
+        Positioned(
           top: 40,
           right: 10,
           child: IconButton(
             icon: Icon(Icons.filter_list, color: Colors.white),
             onPressed: onFilter,
           ),
-        ),*/
+        ),
       ],
     );
   }

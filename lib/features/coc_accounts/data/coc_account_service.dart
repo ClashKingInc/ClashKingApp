@@ -275,6 +275,12 @@ class CocAccountService extends ChangeNotifier {
             await clanService.loadWarLogData(clanTags.toList());
             span.finish();
           }(),
+        if (clanTags.isNotEmpty)
+          () async {
+            final span = spanParallel.startChild("loadClanWarStatsData");
+            await clanService.loadClanWarStatsData(clanTags.toList());
+            span.finish();
+          }(),
       ]);
 
       spanParallel.finish();
@@ -307,6 +313,10 @@ class CocAccountService extends ChangeNotifier {
         final spanLinkWarCwl = transaction.startChild("linkWarCwlToClans");
         clanService.linkWarLogToClans();
         spanLinkWarCwl.finish();
+
+        final spanLinkWarStats = transaction.startChild("linkWarStatsToClans");
+        clanService.linkWarStatsToClans();
+        spanLinkWarStats.finish();
       }
 
       transaction.finish(status: SpanStatus.ok());

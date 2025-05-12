@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:clashkingapp/features/clan/models/clan_capital_history.dart';
 import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
+import 'package:clashkingapp/features/clan/models/clan_war_stats.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_log.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class ClanService extends ChangeNotifier {
   List<ClanJoinLeave> joinLeaveList = [];
   List<CapitalHistoryItems> capitalHistory = [];
   List<ClanWarLog> warLogList = [];
+  List<ClanWarStats> warStatsList = [];
 
   bool get isLoading => _isLoading;
   Map<String, Clan> get clans => _clans;
@@ -147,7 +149,8 @@ class ClanService extends ChangeNotifier {
       if (token == null) throw Exception("User not authenticated");
 
       final response = await http.post(
-        Uri.parse("${ApiService.apiUrlV2}/clans/join-leave?current_season=true"),
+        Uri.parse(
+            "${ApiService.apiUrlV2}/clans/join-leave?current_season=true"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
@@ -265,7 +268,7 @@ class ClanService extends ChangeNotifier {
 
     for (String tag in clanTags) {
       final response = await http.get(Uri.parse(
-          'https://proxy.clashk.ing/v1/clans/${tag.replaceAll('#', '%23')}/warlog'));
+          '${ApiService.proxyUrl}/clans/${tag.replaceAll('#', '%23')}/warlog'));
 
       if (response.statusCode == 200) {
         String body = utf8.decode(response.bodyBytes);
@@ -294,6 +297,55 @@ class ClanService extends ChangeNotifier {
         print("🔗 Linked ${clan.tag} to war log data (${warLog.clanTag})");
       } catch (e) {
         print("❌ Error linking clan ${clan.tag} to war log data: $e");
+      }
+    }
+  }
+
+  Future<List<ClanWarStats>> loadClanWarStatsData(List<String> clanTags) async {
+    if (clanTags.isEmpty) return [];
+
+    final token = await TokenService().getAccessToken();
+    if (token == null) throw Exception("User not authenticated");
+
+    final response = await http.post(
+      Uri.parse("${ApiService.apiUrlV2}/war/clans/warhits"),
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({"clan_tags": clanTags, "limit": 50}),
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = utf8.decode(response.bodyBytes);
+      final data = jsonDecode(responseBody);
+      if (data.containsKey("items") && data["items"] is List) {
+        warStatsList = (data["items"] as List)
+            .whereType<Map<String, dynamic>>()
+            .map((clan) => ClanWarStats.fromJson(clan))
+            .toList();
+      }
+
+      print("✅ Loaded war stats: ${warStatsList.length} items");
+      return warStatsList;
+    } else {
+      Sentry.captureMessage("Error loading clan data",
+          level: SentryLevel.error);
+      return List<ClanWarStats>.empty();
+    }
+  }
+
+  void linkWarStatsToClans() {
+    for (var clan in _clans.values) {
+      try {
+        final warStats = warStatsList.firstWhere(
+          (stats) => stats.clanTag == clan.tag,
+          orElse: () => ClanWarStats(players: [], clanTag: "", wars: []),
+        );
+        clan.clanWarStats = warStats;
+        print("🔗 Linked ${clan.tag} to war stats data (${warStats.clanTag})");
+      } catch (e) {
+        print("❌ Error linking clan ${clan.tag} to war stats data: $e");
       }
     }
   }
