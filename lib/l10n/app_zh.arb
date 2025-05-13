@@ -623,7 +623,7 @@
     },
     "selectMembersThLevel": "成员大本等级",
     "selectOpponentsThLevel": "队友大本等级",
-    "equalThLevel": "Equal TH",
+    "equalThLevel": "大本等级相同",
     "builderBaseTrophies": "建筑大师奖杯",
     "donations": "增援",
     "donationsReceived": "收到的增援",
@@ -635,12 +635,12 @@
     "oncePerWeek": "1次/周",
     "twicePerWeek": "2次/周",
     "rarely": "很少",
-    "warLeague": "War/League",
-    "war": "War",
-    "league": "部落",
-    "wars": "Wars",
-    "ongoingWar": "Ongoing war",
-    "ongoingCwl": "Ongoing CWL",
+    "warLeague": "部落战/联赛",
+    "war": "部落战",
+    "league": "联赛",
+    "wars": "部落战列表",
+    "ongoingWar": "正在进行的部落战",
+    "ongoingCwl": "正在进行的部落联赛",
     "cantOpenLink": "我们无法打开此链接",
     "notInWar": "不在战争中",
     "warHistory": "部落对战历史",
@@ -720,7 +720,7 @@
     "twoStars": "2 胜利之星",
     "threeStars": "3 胜利之星",
     "warParticipation": "参战",
-    "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
+    "toggleTownHallVisibility": "显示/隐藏前大本等级统计",
     "@toggleTownHallVisibility": {
         "description": "For example, hide stats from TH15 and below if the player is now TH16"
     },
@@ -735,7 +735,7 @@
             }
         }
     },
-    "startsAt": "Starts at {time}",
+    "startsAt": "开始时间（{time}）",
     "@startsAt": {
         "placeholders": {
             "time": {
@@ -751,7 +751,7 @@
             }
         }
     },
-    "endsAt": "Ends at {time}",
+    "endsAt": "结束于{time}",
     "@endsAt": {
         "placeholders": {
             "time": {
@@ -759,11 +759,11 @@
             }
         }
     },
-    "joinLeaveLogs": "Join/Leave Logs",
+    "joinLeaveLogs": "加入/退出日志",
     "join": "加入",
     "leave": "退出",
-    "reset": "Reset",
-    "leaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
+    "reset": "重置",
+    "leaveNumberDescription": "{number} 名玩家在本赛季（{date}）离开了部落。",
     "@leaveNumberDescription": {
         "description": "Number of players who left the clan during the current season.",
         "placeholders": {
@@ -775,7 +775,7 @@
             }
         }
     },
-    "joinNumberDescription": "{number} player(s) joined the clan during the current season ({date}).",
+    "joinNumberDescription": "{number} 名玩家在本赛季 ({date}) 加入了部落。",
     "@joinNumberDescription": {
         "description": "Number of players who joined the clan during the current season.",
         "placeholders": {
@@ -787,7 +787,7 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new member(s) this season ({date}).",
+    "joinLeaveDifferenceUpDescription": "你的部落在本赛季 ({date}) 新增了 {number} 名成员。",
     "@joinLeaveDifferenceUpDescription": {
         "description": "Number of new members gained by the clan this season.",
         "placeholders": {
@@ -799,7 +799,7 @@
             }
         }
     },
-    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} member(s) this season ({date}).",
+    "joinLeaveDifferenceDownDescription": "你的部落在本赛季 ({date}) 失去了 {number} 名成员。",
     "@joinLeaveDifferenceDownDescription": {
         "description": "Number of members lost by the clan this season.",
         "placeholders": {
