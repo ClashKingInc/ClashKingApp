@@ -727,7 +727,7 @@
     "warLog": "对战日志",
     "publicWarLog": "公开对战日志",
     "privateWarLog": "私人对战日志",
-    "startsIn": "Starts in {time}",
+    "startsIn": "开始时间（{time}后",
     "@startsIn": {
         "placeholders": {
             "time": {
@@ -743,7 +743,7 @@
             }
         }
     },
-    "endsIn": "Ends in {time}",
+    "endsIn": "结束于{time}",
     "@endsIn": {
         "placeholders": {
             "time": {
@@ -811,7 +811,7 @@
             }
         }
     },
-    "joinLeaveDifferenceEqualDescription": "Your clan has the same number of members as at the beginning of the season ({date}).",
+    "joinLeaveDifferenceEqualDescription": "你的部落拥有与赛季开始时相同的成员数量（{date}）。",
     "@joinLeaveDifferenceEqualDescription": {
         "description": "Difference in the number of members between the beginning and the end of the season.",
         "placeholders": {
@@ -823,7 +823,7 @@
     "@joinLeaveLogs": {
         "description": "Logs of players joining or leaving the clan."
     },
-    "leftOnAt": "Left on {date} at {time}.",
+    "leftOnAt": "于 {date} 的 {time} 离开。",
     "@leftOnAt": {
         "description": "[The player] left the clan on 16/06/2024 at 10:35.",
         "placeholders": {
@@ -835,7 +835,7 @@
             }
         }
     },
-    "joinedOnAt": "Joined on {date} at {time}.",
+    "joinedOnAt": "于 {date} 的 {time} 加入。",
     "@joinedOnAt": {
         "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
         "placeholders": {
@@ -847,36 +847,36 @@
             }
         }
     },
-    "statistics": "Statistics",
-    "stars": "Stars",
-    "numberOfStars": "Number of stars",
-    "destructionRate": "Destruction rate",
+    "statistics": "统计数据",
+    "stars": "星数",
+    "numberOfStars": "获得的星数",
+    "destructionRate": "摧毁率",
     "@destructionRate": {
         "description": "Percentage of destruction in war"
     },
-    "events": "Events",
+    "events": "事件",
     "@events": {
         "description": "War events"
     },
-    "team": "Teams",
-    "myTeam": "My team",
-    "enemiesTeam": "Enemies",
-    "defense": "Defense",
-    "defenses": "Defenses",
-    "attack": "Attack",
-    "attacks": "Attacks",
-    "victory": "Victory",
-    "defeat": "Defeat",
-    "draw": "Draw",
+    "team": "部落",
+    "myTeam": "我的部落",
+    "enemiesTeam": "敌方部落",
+    "defense": "防御",
+    "defenses": "防御记录",
+    "attack": "进攻",
+    "attacks": "进攻记录",
+    "victory": "胜利",
+    "defeat": "失败",
+    "draw": "平局",
     "@draw": {
         "description": "War ended in a draw"
     },
-    "perfectWar": "Perfect war",
-    "newest": "Newest",
-    "oldest": "Oldest",
-    "warEnded": "War ended",
-    "preparation": "Preparation",
-    "isNotInWar": "{clan} is not in war.",
+    "perfectWar": "满星部落战",
+    "newest": "最新",
+    "oldest": "最早",
+    "warEnded": "部落战已结束",
+    "preparation": "准备阶段",
+    "isNotInWar": "{clan} 当前未参与部落战。",
     "@isNotInWar": {
         "placeholders": {
             "clan": {
@@ -884,7 +884,7 @@
             }
         }
     },
-    "warLogIsClosed": "{clan}'s war log is closed.",
+    "warLogIsClosed": "{clan} 的对战日志已关闭。",
     "@warLogIsClosed": {
         "placeholders": {
             "clan": {
@@ -892,13 +892,13 @@
             }
         }
     },
-    "askForWar": "Contact the leader or a co-leader to start a war.",
-    "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-    "warLogClosed": "War log closed.",
-    "rounds": "Rounds",
-    "noDataAvailableForThisWar": "No data available for this war",
-    "stateOfTheWar": "State of the war",
-    "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+    "askForWar": "请联系首领或副首领发起一场部落战。",
+    "askForWarLogOpening": "请联系首领或副首领开启对战日志。",
+    "warLogClosed": "对战日志已关闭。",
+    "rounds": "轮次",
+    "noDataAvailableForThisWar": "此场部落战暂无数据",
+    "stateOfTheWar": "部落战状态",
+    "starsNeededToTakeTheLead": "{clan} 仍需 {star} 颗星，或 {stars2} 颗星加上 {percent}% 的摧毁率才能取得领先",
     "@starsNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -915,7 +915,7 @@
             }
         }
     },
-    "starsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+    "starsAndPercentNeededToTakeTheLead": "{clan} 仍需 {percent}% 或再获得 1 颗星才能取得领先",
     "@starsAndPercentNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -926,9 +926,9 @@
             }
         }
     },
-    "clanDraw": "The two clans are tied",
-    "fastCalculator": "Fast calculator",
-    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
+    "clanDraw": "双方部落战成平局",
+    "fastCalculator": "快速计算",
+    "fastCalculatorAnswer": "要达到 {percentNeeded}% 的摧毁率，总共需要 {result}%。",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
@@ -939,13 +939,13 @@
             }
         }
     },
-    "teamSize": "Team size",
-    "neededOverall": "% Needed overall",
-    "calculate": "Calculate",
-    "warStats": "War Stats",
-    "membersStats": "Members Stats",
-    "clanWarLeague": "Clan War League",
-    "cwlRank": "Your clan is currently ranked {rank}.",
+    "teamSize": "队伍规模",
+    "neededOverall": "所需总百分比",
+    "calculate": "计算",
+    "warStats": "部落战统计",
+    "membersStats": "成员统计",
+    "clanWarLeague": "部落战联赛",
+    "cwlRank": "你的部落当前排名第 {rank}。",
     "@cwlRank": {
         "placeholders": {
             "rank": {
@@ -953,7 +953,7 @@
             }
         }
     },
-    "cwlStars": "Your clan has a total of {stars} stars.",
+    "cwlStars": "你的部落共获得 {stars} 颗星。",
     "@cwlStars": {
         "placeholders": {
             "stars": {
@@ -961,7 +961,7 @@
             }
         }
     },
-    "cwlMissingStarsFromNext": "Your clan is missing {stars} stars to catch up with the next clan.",
+    "cwlMissingStarsFromNext": "你的部落还需 {stars} 颗星才能追上前一名部落。",
     "@cwlMissingStarsFromNext": {
         "placeholders": {
             "stars": {
@@ -969,7 +969,7 @@
             }
         }
     },
-    "cwlMissingStarsFromFirst": "Your clan is missing {stars} stars to catch up with the first clan.",
+    "cwlMissingStarsFromFirst": "你的部落还需 {stars} 颗星才能追上第一名部落。",
     "@cwlMissingStarsFromFirst": {
         "placeholders": {
             "stars": {
@@ -977,7 +977,7 @@
             }
         }
     },
-    "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
+    "cwlDestructionPercentage": "你的部落的总摧毁率为 {percent}%。",
     "@cwlDestructionPercentage": {
         "placeholders": {
             "percent": {
@@ -985,7 +985,7 @@
             }
         }
     },
-    "cwlCurrentRound": "It's currently round {round}.",
+    "cwlCurrentRound": "当前是第 {round} 轮。",
     "@cwlCurrentRound": {
         "placeholders": {
             "round": {
@@ -993,12 +993,12 @@
             }
         }
     },
-    "noAccountLinkedToYourProfileFound": "No account linked to your profile found",
-    "management": "Management",
-    "comingSoon": "Coming soon!",
-    "connectionError": "An error occurred. Please check your internet connection and try again.",
-    "connectionErrorRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-    "updatedAt": "Updated at {time}",
+    "noAccountLinkedToYourProfileFound": "未找到与你的个人资料关联的账号",
+    "management": "管理",
+    "comingSoon": "敬请期待！",
+    "connectionError": "发生错误，请检查网络连接并重试。",
+    "connectionErrorRelaunch": "发生错误，请检查网络连接并重新启动应用。",
+    "updatedAt": "更新于 {time}",
     "@updatedAt": {
         "placeholders": {
             "time": {
@@ -1006,10 +1006,10 @@
             }
         }
     },
-    "tools": "Tools",
-    "community": "Community",
-    "lastRaids": "Last raids",
-    "ongoingRaids": "Ongoing raids",
-    "districtsDestroyed": "Districts destroyed",
-    "raidsCompleted": "Raids completed"
+    "tools": "工具",
+    "community": "社区",
+    "lastRaids": "历史突袭记录",
+    "ongoingRaids": "进行中的突袭",
+    "districtsDestroyed": "摧毁的都城",
+    "raidsCompleted": "已完成突袭"
 }
