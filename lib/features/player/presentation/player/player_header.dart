@@ -9,7 +9,7 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/legend/player_legend_page.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_achievement_page.dart';
 import 'package:clashkingapp/features/player/presentation/to_do/widget/player_to_do_body_card.dart';
-import 'package:clashkingapp/features/player/presentation/war_stats/war_stats_page.dart';
+import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_page.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';

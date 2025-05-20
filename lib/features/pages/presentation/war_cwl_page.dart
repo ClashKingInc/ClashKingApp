@@ -5,7 +5,6 @@ import 'package:clashkingapp/features/pages/widgets/war_access_denied_card.dart'
 import 'package:clashkingapp/features/pages/widgets/war_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_history_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_not_in_war_card.dart';
-import 'package:clashkingapp/features/pages/widgets/war_stats_card.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -144,16 +143,10 @@ class WarCwlPage extends StatelessWidget {
                     clanName: clan.name,
                     clanBadgeUrl: clan.badgeUrls.large,
                   )),
-            if (hasClan && clan.isWarLogPublic == true)
-              WarHistoryCard(clan: clan),
             if (hasClan &&
                 clan.isWarLogPublic == true &&
                 clan.clanWarStats != null)
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: WarStatsCard(
-                    clan: clan,
-                  )),
+              WarHistoryCard(clan: clan),
           ],
         ),
       ),

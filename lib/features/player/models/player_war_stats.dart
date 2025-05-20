@@ -33,7 +33,12 @@ class PlayerWarStats {
                 .map((w) =>
                     PlayerWarStatsData.fromJson(w, playerTag ?? json['tag']))
                 .toList()
-            : [],
+            : json['wars'] != null
+                ? (json['wars'] as List<dynamic>)
+                    .map((w) => PlayerWarStatsData.fromJson(
+                        w, playerTag ?? json['tag']))
+                    .toList()
+                : [],
         statsByType: (json['stats'] as Map<String, dynamic>)
             .map((key, value) => MapEntry(
                   key,
@@ -57,7 +62,12 @@ class PlayerWarStats {
     return statsByType[warType] ?? _emptyStats;
   }
 
-  PlayerWarTypeStats getStatsForTypes(List<String> types) {
+  PlayerWarTypeStats getStatsForTypes(
+    List<String> types, {
+    List<int>? attackerThFilter,
+    List<int>? defenderThFilter,
+    bool equalThSelected = false,
+  }) {
     if (types.isEmpty) return statsByType['all'] ?? _emptyStats;
 
     int totalAttacks = 0;
@@ -76,37 +86,79 @@ class PlayerWarStats {
       final s = statsByType[type];
       if (s == null) continue;
 
-      totalAttacks += s.totalAttacks;
-      totalDefenses += s.totalDefenses;
+      // Filtered stats
+      s.byEnemyTownhall.forEach((thKey, stats) {
+        final parts = thKey.split("vs");
+        if (parts.length != 2) return;
+
+        final attackerTh = int.tryParse(parts[0]);
+        final defenderTh = int.tryParse(parts[1]);
+        if (attackerTh == null || defenderTh == null) return;
+
+        final matchAttacker =
+            (attackerThFilter == null || attackerThFilter.isEmpty) ||
+                attackerThFilter.contains(attackerTh);
+        final matchDefender =
+            (defenderThFilter == null || defenderThFilter.isEmpty) ||
+                defenderThFilter.contains(defenderTh);
+
+        final match = equalThSelected
+            ? (attackerTh == defenderTh && matchAttacker && matchDefender)
+            : (matchAttacker && matchDefender);
+        if (!match) return;
+
+        totalAttacks += stats.count;
+
+        for (var k in starsCount.keys) {
+          starsCount[k] = (starsCount[k] ?? 0) + (stats.starsCount[k] ?? 0);
+        }
+
+        final existing = byEnemyTownhall[thKey];
+        if (existing == null) {
+          byEnemyTownhall[thKey] = stats.copy();
+        } else {
+          existing.merge(stats);
+        }
+      });
+
+      // Filtered stats
+      s.byEnemyTownhallDef.forEach((thKey, stats) {
+        final parts = thKey.split("vs");
+        if (parts.length != 2) return;
+
+        final attackerTh = int.tryParse(parts[0]);
+        final defenderTh = int.tryParse(parts[1]);
+        if (attackerTh == null || defenderTh == null) return;
+
+        final matchEqual = equalThSelected && attackerTh == defenderTh;
+        final matchAttacker =
+            (attackerThFilter == null || attackerThFilter.isEmpty) ||
+                attackerThFilter.contains(attackerTh);
+        final matchDefender =
+            (defenderThFilter == null || defenderThFilter.isEmpty) ||
+                defenderThFilter.contains(defenderTh);
+
+        final match = matchEqual || (matchAttacker && matchDefender);
+        if (!match) return;
+
+        totalDefenses += stats.count;
+
+        for (var k in starsCountDef.keys) {
+          final defStars =
+              stats.starsCountDef != null ? stats.starsCountDef[k] ?? 0 : 0;
+          starsCountDef[k] = (starsCountDef[k] ?? 0) + (defStars as int);
+        }
+
+        final existing = byEnemyTownhallDef[thKey];
+        if (existing == null) {
+          byEnemyTownhallDef[thKey] = stats.copy();
+        } else {
+          existing.merge(stats);
+        }
+      });
+
+      // Ce compteur global peut rester inchangé
       warsCounts += s.warsCounts;
-      missedAttacks += s.missedAttacks;
-      missedDefenses += s.missedDefenses;
-
-      // Stars count
-      for (var k in starsCount.keys) {
-        starsCount[k] = (starsCount[k] ?? 0) + (s.starsCount[k] ?? 0);
-        starsCountDef[k] = (starsCountDef[k] ?? 0) + (s.starsCountDef[k] ?? 0);
-      }
-
-      // Attacks per enemy TH
-      s.byEnemyTownhall.forEach((th, stats) {
-        final existing = byEnemyTownhall[th];
-        if (existing == null) {
-          byEnemyTownhall[th] = stats.copy();
-        } else {
-          existing.merge(stats);
-        }
-      });
-
-      // Defenses per enemy TH
-      s.byEnemyTownhallDef.forEach((th, stats) {
-        final existing = byEnemyTownhallDef[th];
-        if (existing == null) {
-          byEnemyTownhallDef[th] = stats.copy();
-        } else {
-          existing.merge(stats);
-        }
-      });
     }
 
     return PlayerWarTypeStats(
@@ -198,10 +250,9 @@ class PlayerWarTypeStats {
     return totalHitsDef > 0 ? totalDestructionDef / totalHitsDef : 0.0;
   }
 
-  Map<String, int> getFilteredStarsCountByEnemyTh({
-    required List<int> selectedThLevels,
-  }) {
-    // Initialize result with 0 stars
+  Map<String, int> getStarsCountAgainstTh(int? thLevel) {
+    if (thLevel == null || byEnemyTownhall.isEmpty) return starsCount;
+
     final Map<String, int> result = {
       "0": 0,
       "1": 0,
@@ -209,30 +260,20 @@ class PlayerWarTypeStats {
       "3": 0,
     };
 
-    // If no filter is applied, return the default starsCount
-    if (selectedThLevels.isEmpty) {
-      return starsCount;
-    }
+    final matchingKeys = byEnemyTownhall.keys.where(
+      (key) => key.endsWith('vs$thLevel'),
+    );
 
-    for (final th in selectedThLevels) {
-      final thStats = byEnemyTownhall[th.toString()];
-      if (thStats != null) {
-        for (final entry in thStats.starsCount.entries) {
+    for (final key in matchingKeys) {
+      final stats = byEnemyTownhall[key];
+      if (stats != null) {
+        for (final entry in stats.starsCount.entries) {
           result[entry.key] = result[entry.key]! + entry.value;
         }
       }
     }
 
     return result;
-  }
-
-  Map<String, int> getStarsCountAgainstTh(int? thLevel) {
-    print("TH Level: $thLevel");
-    if (thLevel == null || byEnemyTownhall.isEmpty) return starsCount;
-
-    final stats = byEnemyTownhall["$thLevel"];
-    print("Stats: $stats");
-    return stats?.starsCount ?? {};
   }
 
   factory PlayerWarTypeStats.fromJson(Map<String, dynamic> json) {

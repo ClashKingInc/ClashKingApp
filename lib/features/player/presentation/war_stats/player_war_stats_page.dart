@@ -3,7 +3,7 @@ import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_attacks_tab.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_tab.dart';
-import 'package:clashkingapp/features/player/presentation/war_stats/war_stats_header.dart';
+import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_header.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
@@ -23,13 +23,12 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
   bool isFriendlyChecked = true;
 
   List<String> _getSelectedTypes() {
-  final List<String> selected = [];
-  if (isCWLChecked) selected.add("cwl");
-  if (isRandomChecked) selected.add("random");
-  if (isFriendlyChecked) selected.add("friendly");
-  return selected;
-}
-
+    final List<String> selected = [];
+    if (isCWLChecked) selected.add("cwl");
+    if (isRandomChecked) selected.add("random");
+    if (isFriendlyChecked) selected.add("friendly");
+    return selected;
+  }
 
   List<PlayerWarStatsData> get _filteredWars {
     final wars = widget.player.warStats?.wars ?? [];

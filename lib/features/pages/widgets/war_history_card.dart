@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/war_history/war_history_page.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -25,7 +25,7 @@ class WarHistoryCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => WarHistoryScreen(clan: clan),
+            builder: (context) => ClanWarStatsScreen(clan: clan),
           ),
         );
       },
@@ -111,8 +111,7 @@ class WarHistoryCard extends StatelessWidget {
                           ),
                           ImageChip(
                             context: context,
-                            imageUrl:
-                                "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
+                            imageUrl: ImageAssets.attackStar,
                             label: warLogStats.averageClanStarsPerMember
                                 .toString(),
                             description: AppLocalizations.of(context)!

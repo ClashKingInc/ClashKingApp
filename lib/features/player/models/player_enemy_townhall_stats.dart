@@ -20,6 +20,8 @@ class EnemyTownhallStats {
     );
   }
 
+  get starsCountDef => null;
+
   void merge(EnemyTownhallStats other) {
     final newCount = count + other.count;
     averageDestruction = newCount > 0

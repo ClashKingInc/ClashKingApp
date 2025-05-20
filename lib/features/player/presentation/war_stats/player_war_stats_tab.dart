@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/features/player/models/player_enemy_townhall_stats.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +21,42 @@ class WarStatsView extends StatelessWidget {
     required this.warDataLimit,
   });
 
+  /// Groups the [EnemyTownhallStats] by defender town hall level
+  Map<String, List<EnemyTownhallStats>> groupByDefenderTh(
+      Map<String, EnemyTownhallStats> data) {
+    final Map<String, List<EnemyTownhallStats>> grouped = {};
+    for (final entry in data.entries) {
+      final parts = entry.key.split("vs");
+      if (parts.length != 2) continue;
+      final defenderTh = parts[1];
+      grouped.putIfAbsent(defenderTh, () => []).add(entry.value);
+    }
+    return grouped;
+  }
+
+  /// Merges a list of [EnemyTownhallStats] into a single [EnemyTownhallStats]
+  EnemyTownhallStats mergeStats(List<EnemyTownhallStats> statList) {
+    double totalStars = 0;
+    double totalDestruction = 0;
+    int totalCount = 0;
+
+    for (final stat in statList) {
+      final count = stat.count;
+      final stars = stat.averageStars;
+      final destruction = stat.averageDestruction;
+      totalStars += stars * count;
+      totalDestruction += destruction * count;
+      totalCount += count;
+    }
+
+    return EnemyTownhallStats(
+      averageStars: totalCount > 0 ? totalStars / totalCount : 0.0,
+      averageDestruction: totalCount > 0 ? totalDestruction / totalCount : 0.0,
+      count: totalCount,
+      starsCount: {},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final stats = warStats?.getStatsForTypes(filterTypes);
@@ -29,6 +66,12 @@ class WarStatsView extends StatelessWidget {
         .format(DateTime.fromMillisecondsSinceEpoch(1000));
     String formattedEndDate = DateFormat.yMd(userLocale.toString())
         .format(DateTime.fromMillisecondsSinceEpoch(1000));
+
+    final groupedAttackStats = groupByDefenderTh(stats!.byEnemyTownhall);
+    final groupedDefenseStats = groupByDefenderTh(stats.byEnemyTownhallDef);
+
+    final sortedEntries = groupedAttackStats.entries.toList()
+      ..sort((a, b) => int.parse(b.key).compareTo(int.parse(a.key)));
 
     return Column(
       children: <Widget>[
@@ -54,70 +97,72 @@ class WarStatsView extends StatelessWidget {
                                 .format(currentSeasonDate)),
                         style: Theme.of(context).textTheme.bodyMedium),
                   const SizedBox(height: 16),
-                  _buildStatRows(context, stats!),
+                  _buildStatRows(context, stats),
                 ],
               ),
             ),
           ),
         ),
-        ...stats.byEnemyTownhall.entries.map(
-          (entry) {
-            final thLevel = entry.key;
-            final attackStats = entry.value;
-            final defenseStats = stats.byEnemyTownhallDef[thLevel];
+        ...sortedEntries.map((entry) {
+          final thLevel = entry.key;
+          final attackStats = mergeStats(entry.value);
+          final defenseStats = groupedDefenseStats[thLevel] != null
+              ? mergeStats(groupedDefenseStats[thLevel]!)
+              : null;
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          MobileWebImage(
-                            imageUrl: ImageAssets.townHall(int.parse(thLevel)),
-                            width: 30,
-                            height: 30,
-                          ),
-                          SizedBox(width: 8),
-                          Text(AppLocalizations.of(context)!
-                              .townHallLevelLevel(int.parse(thLevel))),
-                        ],
-                      ),
-                      SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
+          final defTh = int.tryParse(thLevel);
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MobileWebImage(
+                          imageUrl: ImageAssets.townHall(defTh ?? 1),
+                          width: 30,
+                          height: 30,
+                        ),
+                        SizedBox(width: 8),
+                        Text(AppLocalizations.of(context)!
+                            .townHallLevelLevel(defTh ?? 1)),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildColumn(
+                            context,
+                            AppLocalizations.of(context)!.attacks,
+                            attackStats.averageStars,
+                            attackStats.averageDestruction,
+                            attackStats.count,
+                            -1,
+                            isAttack: true),
+                        if (defenseStats != null)
                           _buildColumn(
                               context,
-                              AppLocalizations.of(context)!.attacks,
-                              attackStats.averageStars,
-                              attackStats.averageDestruction,
-                              attackStats.count,
+                              AppLocalizations.of(context)!.defenses,
+                              defenseStats.averageStars,
+                              defenseStats.averageDestruction,
+                              defenseStats.count,
                               -1,
-                              isAttack: true),
-                          if (defenseStats != null)
-                            _buildColumn(
-                                context,
-                                AppLocalizations.of(context)!.defenses,
-                                defenseStats.averageStars,
-                                defenseStats.averageDestruction,
-                                defenseStats.count,
-                                -1,
-                                isAttack: false)
-                          else
-                            Text(AppLocalizations.of(context)!.noDefenseYet),
-                        ],
-                      ),
-                    ],
-                  ),
+                              isAttack: false)
+                        else
+                          Text(AppLocalizations.of(context)!.noDefenseYet),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        }),
       ],
     );
   }

@@ -1,7 +1,7 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
-import 'package:clashkingapp/features/player/presentation/war_stats/war_stats_page.dart';
+import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:provider/provider.dart';

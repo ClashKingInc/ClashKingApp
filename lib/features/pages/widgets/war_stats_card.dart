@@ -1,7 +1,7 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
