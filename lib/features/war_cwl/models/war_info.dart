@@ -41,7 +41,7 @@ class WarInfo {
         preparationStartTime: json['preparationStartTime'] != null
             ? DateTime.parse(json['preparationStartTime'])
             : null,
-        warType: json['warType'],
+        warType: json['warType'] ?? json['type'] ?? 'unknown',
         clan: json['clan'] != null ? WarClan.fromJson(json['clan']) : null,
         opponent: json['opponent'] != null
             ? WarClan.fromJson(json['opponent'])
@@ -55,6 +55,14 @@ class WarInfo {
         opponent: null,
       );
     }
+  }
+
+  factory WarInfo.empty() {
+    return WarInfo(
+      state: 'unknown',
+      clan: WarClan.empty(),
+      opponent: WarClan.empty(),
+    );
   }
 
   /// Return a WarMember from either clan or opponent by tag
@@ -110,5 +118,62 @@ class WarInfo {
           false;
     }
     return false;
+  }
+
+  String getWarResult(String clanTag) {
+    if (clan?.tag != clanTag && opponent?.tag != clanTag) {
+      return 'unknown';
+    }
+    bool isPerfectWar() {
+      return (clan?.destructionPercentage == 100.0 &&
+              opponent?.destructionPercentage == 100.0);
+    }
+
+    if (clan?.tag == clanTag) {
+      if (state == 'warEnded') {
+        if (isPerfectWar()) {
+          return 'perfectWar';
+        }
+        if (clan!.stars > opponent!.stars) {
+          return 'won';
+        } else if (clan!.stars < opponent!.stars) {
+          return 'lost';
+        } else {
+          // Tie on stars, check destructionPercentage
+          if ((clan!.destructionPercentage) > (opponent!.destructionPercentage)) {
+            return 'won';
+          } else if ((clan!.destructionPercentage) < (opponent!.destructionPercentage)) {
+            return 'lost';
+          } else {
+            return 'tie';
+          }
+        }
+      } else {
+        return 'inWar';
+      }
+    } else if (opponent?.tag == clanTag) {
+      if (state == 'warEnded') {
+        if (isPerfectWar()) {
+          return 'perfectWar';
+        }
+        if (opponent!.stars > clan!.stars) {
+          return 'won';
+        } else if (opponent!.stars < clan!.stars) {
+          return 'lost';
+        } else {
+          // Tie on stars, check destructionPercentage
+          if ((opponent!.destructionPercentage) > (clan!.destructionPercentage)) {
+            return 'won';
+          } else if ((opponent!.destructionPercentage) < (clan!.destructionPercentage)) {
+            return 'lost';
+          } else {
+            return 'tie';
+          }
+        }
+      } else {
+        return 'inWar';
+      }
+    }
+    return 'unknown';
   }
 }

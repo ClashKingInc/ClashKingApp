@@ -329,6 +329,7 @@ class ClanService extends ChangeNotifier {
       print("✅ Loaded war stats: ${warStatsList.length} items");
       return warStatsList;
     } else {
+      print("❌ Error loading clan war stats data: ${response.statusCode}");
       Sentry.captureMessage("Error loading clan data",
           level: SentryLevel.error);
       return List<ClanWarStats>.empty();

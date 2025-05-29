@@ -34,7 +34,7 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
     final wars = widget.player.warStats?.wars ?? [];
 
     return wars.where((war) {
-      final type = war.warDetails.type.toLowerCase();
+      final type = war.warDetails.warType?.toLowerCase();
       return (isCWLChecked && type == "cwl") ||
           (isRandomChecked && type == "random") ||
           (isFriendlyChecked && type == "friendly");

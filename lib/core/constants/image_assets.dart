@@ -217,12 +217,4 @@ class ImageAssets {
   static const String sleepingApprenticeBuilder =
       "$baseUrl/stickers/Apprentice_Builder_Sleeping.png";
 
-  // 🔄 Normalize
-  static String _normalizeName(String name) {
-    return name
-        .replaceAll(" ", "_")
-        .replaceAll("-", "_")
-        .replaceAll("'", "")
-        .replaceAll("&", "and");
-  }
 }

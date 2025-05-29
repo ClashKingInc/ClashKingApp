@@ -1,5 +1,6 @@
 import 'package:clashkingapp/features/player/models/player_enemy_townhall_stats.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_attack.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 
 class PlayerWarStats {
   final String name;
@@ -295,7 +296,7 @@ class PlayerWarTypeStats {
 }
 
 class PlayerWarStatsData {
-  final PlayerWarStatsDetails warDetails;
+  final WarInfo warDetails;
   final WarMemberData memberData;
 
   PlayerWarStatsData({
@@ -306,7 +307,7 @@ class PlayerWarStatsData {
   factory PlayerWarStatsData.fromJson(
       Map<String, dynamic> json, String playerTag) {
     try {
-      final warDetails = PlayerWarStatsDetails.fromJson(json['war_data']);
+      final warDetails = WarInfo.fromJson(json['war_data']);
       final members = json['members'] as List<dynamic>? ?? [];
 
       // On ne peut parser qu'un seul membre ici, donc on choisit le premier si présent
@@ -326,34 +327,7 @@ class PlayerWarStatsData {
     } catch (e) {
       print('Error parsing PlayerWarStatsData: $e');
       return PlayerWarStatsData(
-        warDetails: PlayerWarStatsDetails(
-          state: 'unknown',
-          teamSize: 0,
-          attacksPerMember: 0,
-          battleModifier: '',
-          preparationStartTime: '',
-          startTime: '',
-          endTime: '',
-          clan: ClanInfo(
-            tag: '',
-            name: '',
-            badgeUrls: {},
-            clanLevel: 0,
-            attacks: 0,
-            stars: 0,
-            destructionPercentage: 0.0,
-          ),
-          opponent: ClanInfo(
-            tag: '',
-            name: '',
-            badgeUrls: {},
-            clanLevel: 0,
-            attacks: 0,
-            stars: 0,
-            destructionPercentage: 0.0,
-          ),
-          type: '',
-        ),
+        warDetails: WarInfo.empty(),
         memberData: WarMemberData(
           tag: '',
           name: '',

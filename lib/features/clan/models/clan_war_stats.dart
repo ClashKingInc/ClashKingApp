@@ -1,4 +1,5 @@
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 
 class ClanWarStats {
   final List<PlayerWarStats> players;
@@ -33,7 +34,7 @@ class ClanWarStats {
 }
 
 class ClanWarStatsData {
-  final PlayerWarStatsDetails warDetails;
+  final WarInfo warDetails;
   final List<WarMemberData> membersData;
 
   ClanWarStatsData({
@@ -44,7 +45,7 @@ class ClanWarStatsData {
   factory ClanWarStatsData.fromJson(
       Map<String, dynamic> json) {
     try {
-      final warDetails = PlayerWarStatsDetails.fromJson(json['war_data']);
+      final warDetails = WarInfo.fromJson(json['war_data']);
       final members = json['members'] as List<dynamic>? ?? [];
 
       return ClanWarStatsData(
@@ -54,7 +55,7 @@ class ClanWarStatsData {
     } catch (e) {
       print('Error parsing ClanWarStatsData: $e');
       return ClanWarStatsData(
-        warDetails: PlayerWarStatsDetails.fromJson(json['war_data']),
+        warDetails: WarInfo.empty(),
         membersData: [],
       );
     }

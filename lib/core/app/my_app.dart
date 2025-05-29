@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
                 yearForegroundColor: WidgetStateProperty.all(Colors.white),
                 todayForegroundColor: WidgetStateProperty.all(Colors.white),
               ),
-              cardTheme: CardTheme(
+              cardTheme: CardThemeData(
                 surfaceTintColor: Colors.transparent,
                 color: Color.fromARGB(255, 31, 31, 31)
                     .withValues(alpha : 1.0), // 1.0 means 100% opacity
@@ -184,10 +184,10 @@ class MyApp extends StatelessWidget {
                 yearForegroundColor: WidgetStateProperty.all(Colors.black),
                 todayForegroundColor: WidgetStateProperty.all(Colors.black),
               ),
-              cardTheme: CardTheme(
+              cardTheme: CardThemeData(
                 surfaceTintColor: Colors.transparent,
                 color: Color(0xFFFFFFFF)
-                    .withValues(alpha : 1.0), // 1.0 means 100% opacity
+                    .withAlpha(255), // 255 means 100% opacity
                 elevation: 2.0,
               ),
               snackBarTheme: SnackBarThemeData(

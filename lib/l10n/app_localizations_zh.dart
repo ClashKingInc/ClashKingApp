@@ -12,10 +12,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get creatorCode => '创作者代码：ClashKing';
 
   @override
-  String get errorTitle => 'Oops! Our servers might have taken a fireball to the face! We\'re casting a healing spell... Try again in a moment.';
+  String get errorTitle =>
+      'Oops! Our servers might have taken a fireball to the face! We\'re casting a healing spell... Try again in a moment.';
 
   @override
-  String get errorSubtitle => 'If the issue persists, check our Discord Server to see if we\'re aware of it.';
+  String get errorSubtitle =>
+      'If the issue persists, check our Discord Server to see if we\'re aware of it.';
 
   @override
   String get retry => 'Retry';
@@ -30,7 +32,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get needHelpJoinDiscord => '需要帮助？请加入我们的Discord频道。';
 
   @override
-  String get loginError => 'An error occurred while logging in. Please try again later.';
+  String get loginError =>
+      'An error occurred while logging in. Please try again later.';
 
   @override
   String doesNotExist(String tag) {
@@ -98,7 +101,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get faqIsThisFromSupercell => '这个应用程序是Supercell的吗？';
 
   @override
-  String get faqFanContentPolicy => '此材料是非官方的，未得到Supercell的认可。有关更多信息，请参阅Supercell的粉丝内容政策：www.Supercell.com/Fan-Content-Policy';
+  String get faqFanContentPolicy =>
+      '此材料是非官方的，未得到Supercell的认可。有关更多信息，请参阅Supercell的粉丝内容政策：www.Supercell.com/Fan-Content-Policy';
 
   @override
   String get faqWhyNotAccurate => '为什么数据有时不准确或缺失？';
@@ -107,19 +111,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get faqClanNotTracked => '部落未被追踪';
 
   @override
-  String get faqClanNotTrackedAnswer => '只有当部落被追踪时，ClashKing才能检索此信息。如果你的部落没有被追踪，请邀请ClashKing机器人到你的Discord服务器，并使用命令/addclan。我们正在努力尽快在应用程序中提供此功能。';
+  String get faqClanNotTrackedAnswer =>
+      '只有当部落被追踪时，ClashKing才能检索此信息。如果你的部落没有被追踪，请邀请ClashKing机器人到你的Discord服务器，并使用命令/addclan。我们正在努力尽快在应用程序中提供此功能。';
 
   @override
   String get faqTrackingDown => '跟踪';
 
   @override
-  String get faqTrackingDownAnswer => '跟踪可以在一段时间内停止工作。这就是为什么你的数据有时会有漏洞。我们正在努力改进这一点。';
+  String get faqTrackingDownAnswer =>
+      '跟踪可以在一段时间内停止工作。这就是为什么你的数据有时会有漏洞。我们正在努力改进这一点。';
 
   @override
   String get faqApiLimitation => '部落冲突API限制';
 
   @override
-  String get faqApiLimitationAnswer => '一些数据是由部落冲突提供的，他们的API有一些限制。传奇杯追踪就是这种情况，它有时会像一次攻击一样叠加奖杯的得失。这也是为什么我们没有关于您基地的任何信息。';
+  String get faqApiLimitationAnswer =>
+      '一些数据是由部落冲突提供的，他们的API有一些限制。传奇杯追踪就是这种情况，它有时会像一次攻击一样叠加奖杯的得失。这也是为什么我们没有关于您基地的任何信息。';
 
   @override
   String get faqSupportWork => '我如何支持你的工作？';
@@ -146,7 +153,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get faqHowToInviteTheBot => '我如何邀请您的机器人加入我的Discord服务器？';
 
   @override
-  String get faqHowToInviteTheBotAnswer => '您可以通过单击下面的按钮邀请我们的机器人到您的服务器。您需要“管理服务器”权限才能添加机器人。';
+  String get faqHowToInviteTheBotAnswer =>
+      '您可以通过单击下面的按钮邀请我们的机器人到您的服务器。您需要“管理服务器”权限才能添加机器人。';
 
   @override
   String get faqInviteTheBot => '邀请ClashKing机器人';
@@ -155,7 +163,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get faqNeedHelp => '我需要帮助，或者我想提个建议。我怎样才能联系到你？';
 
   @override
-  String get faqNeedHelpAnswer => '您可以加入我们的Discord服务器以寻求帮助或提供反馈，也可以发送电子邮件至devs@clashkingbot.com.请用英语或法语书写。';
+  String get faqNeedHelpAnswer =>
+      '您可以加入我们的Discord服务器以寻求帮助或提供反馈，也可以发送电子邮件至devs@clashkingbot.com.请用英语或法语书写。';
 
   @override
   String get faqSendEmail => '发送电子邮件';
@@ -164,7 +173,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get faqJoinDiscord => '加入我们的Discord服务器';
 
   @override
-  String get faqCannotOpenMailClient => '由于某些原因，我们无法打开您的邮件客户端。我们为您复制了电子邮件地址。您可以编写电子邮件并将地址粘贴到收件人字段中。';
+  String get faqCannotOpenMailClient =>
+      '由于某些原因，我们无法打开您的邮件客户端。我们为您复制了电子邮件地址。您可以编写电子邮件并将地址粘贴到收件人字段中。';
 
   @override
   String get helpUsTranslate => '帮助我们翻译';
@@ -179,7 +189,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get thankYouContent => '非常感谢我们所有出色的翻译人员，他们帮助我们让世界各地的更多人可以访问这个应用程序！';
 
   @override
-  String get helpTranslateContent => '您可以在Crowdin上帮助我们翻译应用程序。如果您的语言在Crowdin上不可用，请随时在我们的Discord服务器上请求。非常感谢你的帮助！';
+  String get helpTranslateContent =>
+      '您可以在Crowdin上帮助我们翻译应用程序。如果您的语言在Crowdin上不可用，请随时在我们的Discord服务器上请求。非常感谢你的帮助！';
 
   @override
   String get helpTranslateButton => '在Crowdin上帮助翻译';
@@ -203,7 +214,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get beta => 'BETA';
 
   @override
-  String get betaDescription => '此功能目前处于测试阶段，可能存在一些错误或不完整。我们正在积极改进，欢迎您的反馈。请在我们的Discord服务器中分享您的想法并报告任何问题，以帮助我们做得更好。';
+  String get betaDescription =>
+      '此功能目前处于测试阶段，可能存在一些错误或不完整。我们正在积极改进，欢迎您的反馈。请在我们的Discord服务器中分享您的想法并报告任何问题，以帮助我们做得更好。';
 
   @override
   String get copiedToClipboard => '复制到剪贴板';
@@ -329,7 +341,8 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String playerRatioDescription(String ratio, String donations, String received) {
+  String playerRatioDescription(
+      String ratio, String donations, String received) {
     return '您的捐兵比例为$ratio。你们已经捐赠了$donations人口的部队，并接收了$received人口的部队。';
   }
 
@@ -493,7 +506,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get notInLegendLeague => '不在传奇联赛中';
 
   @override
-  String get noLegendsDataToday => 'You\'re not in Legend League, but past seasons are available.';
+  String get noLegendsDataToday =>
+      'You\'re not in Legend League, but past seasons are available.';
 
   @override
   String legendStartDescription(String trophies) {
@@ -506,7 +520,8 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String legendRankLocalDescription(Object country, Object rank, Object trophies) {
+  String legendRankLocalDescription(
+      Object country, Object rank, Object trophies) {
     return '您目前拥有$trophies奖杯，排名$rank（$country）。';
   }
 
@@ -549,37 +564,45 @@ class AppLocalizationsZh extends AppLocalizations {
   String get legendsTitle => '数据不准确？';
 
   @override
-  String get legendsExplanation_intro => '由于Clans API分类的限制，我们的数据可能并不总是完全准确。可能有以下原因：';
+  String get legendsExplanation_intro =>
+      '由于Clans API分类的限制，我们的数据可能并不总是完全准确。可能有以下原因：';
 
   @override
   String get legendsExplanation_api_delay_title => '1. API 延迟： ';
 
   @override
-  String get legendsExplanation_api_delay_body => 'API可能需要长达5分钟的时间进行更新，从而导致反映实时奖杯变化的滞后。';
+  String get legendsExplanation_api_delay_body =>
+      'API可能需要长达5分钟的时间进行更新，从而导致反映实时奖杯变化的滞后。';
 
   @override
   String get legendsExplanation_concurrent_changes_title => '2.合并奖杯：';
 
   @override
-  String get legendsExplanation_multiple_attacks_defenses_title => '- 多次攻击/防御： ';
+  String get legendsExplanation_multiple_attacks_defenses_title =>
+      '- 多次攻击/防御： ';
 
   @override
-  String get legendsExplanation_multiple_attacks_defenses_body => '如果连续发生多次攻击或防御，API可能会显示合并结果(如+68 或 -68)。\n';
+  String get legendsExplanation_multiple_attacks_defenses_body =>
+      '如果连续发生多次攻击或防御，API可能会显示合并结果(如+68 或 -68)。\n';
 
   @override
-  String get legendsExplanation_simultaneous_attack_defense_title => '- 同时攻击和防御： ';
+  String get legendsExplanation_simultaneous_attack_defense_title =>
+      '- 同时攻击和防御： ';
 
   @override
-  String get legendsExplanation_simultaneous_attack_defense_body => '如果同时发生攻击和防御，你可能会看到好坏参半的结果(例如+4。\n';
+  String get legendsExplanation_simultaneous_attack_defense_body =>
+      '如果同时发生攻击和防御，你可能会看到好坏参半的结果(例如+4。\n';
 
   @override
   String get legendsExplanation_net_gain_loss_title => '3. 净增益： ';
 
   @override
-  String get legendsExplanation_net_gain_loss_body => '尽管时间安排有问题，但这一天的净损益总额是准确的。 ';
+  String get legendsExplanation_net_gain_loss_body =>
+      '尽管时间安排有问题，但这一天的净损益总额是准确的。 ';
 
   @override
-  String get legendsExplanation_conclusion => '这些限制在使用部落冲突API的所有工具上都很常见。遗憾的是，我们无法修复这个问题，因为它的所有权是在Supercell的手中。 我们尽最大努力弥补这些限制，提供尽可能接近现实的结果。谢谢你们的理解！';
+  String get legendsExplanation_conclusion =>
+      '这些限制在使用部落冲突API的所有工具上都很常见。遗憾的是，我们无法修复这个问题，因为它的所有权是在Supercell的手中。 我们尽最大努力弥补这些限制，提供尽可能接近现实的结果。谢谢你们的理解！';
 
   @override
   String get toDoList => '待办事宜列表';
@@ -653,16 +676,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get todoExplanation_cwl_title => '部落联赛';
 
   @override
-  String get todoExplanation_cwl => '每个账户的权重为1分，1次攻击=1分。如果玩家不在他们的部落中，则无法跟踪部落联赛。';
+  String get todoExplanation_cwl =>
+      '每个账户的权重为1分，1次攻击=1分。如果玩家不在他们的部落中，则无法跟踪部落联赛。';
 
   @override
   String get todoExplanation_passAndGames_title => '月卡和部落游戏';
 
   @override
-  String get todoExplanation_passAndGames => '每个账户的权重为2分。该比率基于剩余天数（通行证为1个月，比赛为6天）。绿色=按计划完成传球或比赛，红色=落后于计划。';
+  String get todoExplanation_passAndGames =>
+      '每个账户的权重为2分。该比率基于剩余天数（通行证为1个月，比赛为6天）。绿色=按计划完成传球或比赛，红色=落后于计划。';
 
   @override
-  String get todoExplanation_conclusion => '最终百分比是通过将正在进行的事件中完成的总操作除以所需的总操作来计算的。超过14天未活动的帐户不在计算范围内。';
+  String get todoExplanation_conclusion =>
+      '最终百分比是通过将正在进行的事件中完成的总操作除以所需的总操作来计算的。超过14天未活动的帐户不在计算范围内。';
 
   @override
   String get worst => '最差';
@@ -1095,7 +1121,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get upperTownhall => 'Upper TH';
 
   @override
-  String get toggleTownHallVisibility => 'Hide/Show stats from former TH levels';
+  String get toggleTownHallVisibility =>
+      'Hide/Show stats from former TH levels';
 
   @override
   String get warLog => 'War Log';
@@ -1317,7 +1344,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get askForWar => 'Contact the leader or a co-leader to start a war.';
 
   @override
-  String get askForWarLogOpening => 'Contact a leader or a co-leader to open the war log.';
+  String get askForWarLogOpening =>
+      'Contact a leader or a co-leader to open the war log.';
 
   @override
   String get warLogClosed => 'War log closed.';
@@ -1342,7 +1370,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stateOfTheWar => 'State of the war';
 
   @override
-  String starsNeededToTakeTheLead(String clan, int star, int star2, String percent, Object stars2) {
+  String starsNeededToTakeTheLead(
+      String clan, int star, int star2, String percent, Object stars2) {
     return '$clan still need $star more star(s) or $stars2 star(s) and $percent% to take the lead.';
   }
 
@@ -1358,7 +1387,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fastCalculator => 'Fast calculator';
 
   @override
-  String fastCalculatorAnswer(String percentNeedeed, String result, Object percentNeeded) {
+  String fastCalculatorAnswer(
+      String percentNeedeed, String result, Object percentNeeded) {
     return 'To achieve a destruction rate of $percentNeeded%, a total of $result% is needed.';
   }
 
@@ -1446,7 +1476,8 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get noAccountLinkedToYourProfileFound => 'No account linked to your profile found';
+  String get noAccountLinkedToYourProfileFound =>
+      'No account linked to your profile found';
 
   @override
   String get management => 'Management';
@@ -1455,10 +1486,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get comingSoon => 'Coming soon!';
 
   @override
-  String get connectionError => 'An error occurred. Please check your internet connection and try again.';
+  String get connectionError =>
+      'An error occurred. Please check your internet connection and try again.';
 
   @override
-  String get connectionErrorRelaunch => 'An error occurred. Please check your internet connection and relaunch the app.';
+  String get connectionErrorRelaunch =>
+      'An error occurred. Please check your internet connection and relaunch the app.';
 
   @override
   String updatedAt(String time) {
@@ -1490,7 +1523,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get maintenance => 'Maintenance';
 
   @override
-  String get maintenanceDescription => 'Clash of Clans is currently under maintenance, so we can\'t access the API. Please check back later.';
+  String get maintenanceDescription =>
+      'Clash of Clans is currently under maintenance, so we can\'t access the API. Please check back later.';
 
   @override
   String get tryAgain => 'Try again';
@@ -1499,7 +1533,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get downloadTooltip => 'Download CWL summary';
 
   @override
-  String get downloadInProgress => 'Downloading file... It can take a few seconds...';
+  String get downloadInProgress =>
+      'Downloading file... It can take a few seconds...';
 
   @override
   String downloadSuccess(String path) {

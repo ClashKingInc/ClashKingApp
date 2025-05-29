@@ -57,6 +57,25 @@ class WarClan {
     }
   }
 
+  factory WarClan.empty() {
+    return WarClan(
+      tag: 'No tag',
+      name: 'No name',
+      badgeUrls: ClanBadgeUrls(
+        small: 'No small',
+        medium: 'No medium',
+        large: 'No large',
+      ),
+      clanLevel: 0,
+      attacks: 0,
+      stars: 0,
+      destructionPercentage: 0.0,
+      members: [],
+    );
+  }
+
+  get expEarned => null;
+
   Map<String, dynamic> toJson() {
     return {
       'tag': tag,

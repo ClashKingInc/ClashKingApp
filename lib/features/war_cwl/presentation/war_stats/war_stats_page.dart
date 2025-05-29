@@ -3,7 +3,7 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/war_history/component/war_log_history_tab.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war_stats/clan_war_log.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_players.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_header.dart';
@@ -360,7 +360,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                   padding: EdgeInsets.all(8),
                   child: Column(
                     children: [
-                      WarLogHistoryTab(clan: widget.clan),
+                      ClanWarLog(clan: widget.clan, selectedTypes: _getSelectedTypes(),),
                     ],
                   ),
                 ),

@@ -89,7 +89,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
       sortedMembers = warStats!.allMembers
           .map((memberStats) {
             // Find the original member details from the clan list using the member tag
-            ClanMember? matchingMember = widget.clan.memberList!.firstWhere(
+            ClanMember? matchingMember = widget.clan.memberList.firstWhere(
                 (clanMember) => clanMember.tag == memberStats.tag,
                 orElse: () => ClanMember.empty());
 

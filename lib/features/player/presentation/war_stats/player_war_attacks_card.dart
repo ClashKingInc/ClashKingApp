@@ -40,7 +40,7 @@ class PlayerWarAttacksCard extends StatelessWidget {
         final war = defenseData["war"] as PlayerWarStatsData;
         final formattedDate =
             DateFormat.yMd(Localizations.localeOf(context).toString())
-                .format(DateTime.parse(war.warDetails.startTime));
+                .format(war.warDetails.startTime ?? DateTime.now());
 
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
