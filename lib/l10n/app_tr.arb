@@ -212,7 +212,7 @@
             }
         }
     },
-    "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+    "playerBuilderBaseDescription": "İnşaatçı Binası seviyeniz {level} ve {trophies} kupanız var.",
     "@playerBuilderBaseDescription": {
         "placeholders": {
             "level": {
@@ -376,7 +376,7 @@
     "@average": {
         "description": "Average value of legend trophies (defense and attack)"
     },
-    "remaining": "Remaining",
+    "remaining": "Kalan",
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
