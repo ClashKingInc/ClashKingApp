@@ -77,7 +77,7 @@
     "suggestFeatures": "Özellik önerin",
     "thankYou": "Teşekkürler!",
     "thankYouContent": "Bu uygulamayı dünya çapında daha fazla insana ulaştırmamıza yardımcı olan tüm harika çevirmenlerimize çok teşekkür ederiz!",
-    "helpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
+    "helpTranslateContent": "Uygulamayı Crowdin'de çevirmemize yardımcı olabilirsiniz. Diliniz Crowdin'de mevcut değilse, Discord Sunucumuzda talep etmekten çekinmeyin. Yardımınız için çok teşekkür ederim!",
     "helpTranslateButton": "Crowdin'de Çeviriye Yardım Edin",
     "versionDevice": "Sürüm & Cihaz",
     "@version": {
@@ -223,7 +223,7 @@
             }
         }
     },
-    "dashboard": "Dashboard",
+    "dashboard": "Kontrol Paneli",
     "homeBase": "Ana Üs",
     "th": "BB",
     "builderBase": "İnşaatçı Üssü",
@@ -380,7 +380,7 @@
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inaccurate data?",
+    "legendsTitle": "Veri yanlış mı?",
     "legendsExplanation_intro": "Clash of Clans API'sinin sınırlamaları nedeniyle, verilerimiz her zaman mükemmel derecede doğru olmayabilir. İşte nedeni:",
     "legendsExplanation_api_delay_title": "1. API Gecikmesi:",
     "legendsExplanation_api_delay_body": "API'nin güncellenmesi 5 dakikaya kadar sürebilir ve bu da gerçek zamanlı kupa değişikliklerinin yansıtılmasında gecikmeye neden olabilir.",
@@ -515,7 +515,7 @@
     "trophiesBySeason": "Sezonlara göre kupalar",
     "eosTrophies": "Sezon Sonu Kupaları",
     "searchClan": "Klan ara",
-    "nameOrTagClan": "Clan's name or tag",
+    "nameOrTagClan": "Klanın adı veya etiketi",
     "noResult": "Sonuç yok.",
     "filters": "Filtreler",
     "whatever": "Her neyse",
@@ -633,18 +633,18 @@
     "never": "Hiçbir zaman",
     "unknown": "Bilinmeyen",
     "oncePerWeek": "1/hafta",
-    "twicePerWeek": "2/week",
-    "rarely": "Rarely",
-    "warLeague": "War/League",
-    "war": "War",
-    "league": "League",
-    "wars": "Wars",
-    "ongoingWar": "Ongoing war",
-    "ongoingCwl": "Ongoing CWL",
-    "cantOpenLink": "We can't open this link.",
-    "notInWar": "Not in war",
-    "warHistory": "War History",
-    "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
+    "twicePerWeek": "2/hafta",
+    "rarely": "Nadiren",
+    "warLeague": "Savaş/Lig",
+    "war": "Savaş",
+    "league": "Lig",
+    "wars": "Savaşlar",
+    "ongoingWar": "Devam eden savaş",
+    "ongoingCwl": "Devam eden KSL",
+    "cantOpenLink": "Bu bağlantıyı açamıyoruz.",
+    "notInWar": "Savaşta değil",
+    "warHistory": "Savaş Geçmişi",
+    "warHistoryWinsDescription": "Klanınız son 50 savaşta {wins} savaş (%{percent}) kazandı.",
     "@warHistoryWinsDescription": {
         "placeholders": {
             "wins": {
@@ -655,7 +655,7 @@
             }
         }
     },
-    "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) out of the last 50 wars.",
+    "warHistoryLossesDescription": "Klanınız son 50 savaşta {losses} savaş (%{percent}) kaybetti.",
     "@warHistoryLossesDescription": {
         "placeholders": {
             "losses": {
@@ -666,7 +666,7 @@
             }
         }
     },
-    "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) out of the last 50 wars.",
+    "warHistoryDrawsDescription": "Klanınız son 50 savaşta {draws} savaş (%{percent}) berabere kaldı.",
     "@warHistoryDrawsDescription": {
         "placeholders": {
             "draws": {
@@ -677,7 +677,7 @@
             }
         }
     },
-    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
+    "warHistoryAverageMembersDescription": "Klanınızda son 50 savaşta ortalama {members} üye yer aldı.",
     "@warHistoryAverageMembersDescription": {
         "placeholders": {
             "members": {
@@ -685,7 +685,7 @@
             }
         }
     },
-    "warHistoryAverageWarStarsDescription": "Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.",
+    "warHistoryAverageWarStarsDescription": "Klanınız son 50 savaşta savaş başına ortalama {stars} yıldıza sahipti. Toplam yıldızların {percent}'ini temsil ediyor.",
     "@warHistoryAverageWarStarsDescription": {
         "placeholders": {
             "stars": {
@@ -696,7 +696,7 @@
             }
         }
     },
-    "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
+    "warHistoryAverageHitRateDescription": "Klanınızın son 50 savaşta ortalama %{percent} yıkım oranı vardı.",
     "@warHistoryAverageHitRateDescription": {
         "placeholders": {
             "percent": {
@@ -704,8 +704,8 @@
             }
         }
     },
-    "warHistoryAverageClanStarsPerMember": "Your clan had an average of {stars} stars per member from the last 50 wars.",
-    "warHistoryAverageMembers": "~{members} members per war",
+    "warHistoryAverageClanStarsPerMember": "Klanınızın son 50 savaşta üye başına ortalama {stars} yıldızı vardı.",
+    "warHistoryAverageMembers": "Savaş başına ~{members} üye",
     "@warHistoryAverageMembers": {
         "placeholders": {
             "members": {
@@ -713,21 +713,21 @@
             }
         }
     },
-    "averageStars": "Average stars",
-    "averageDestruction": "Average destruction",
-    "noStars": "0 star",
-    "oneStar": "1 star",
-    "twoStars": "2 stars",
-    "threeStars": "3 stars",
-    "warParticipation": "War Participation",
-    "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
+    "averageStars": "Ortalama Yıldızlar",
+    "averageDestruction": "Ortalama Yıkım",
+    "noStars": "0 yıldız",
+    "oneStar": "1 yıldız",
+    "twoStars": "2 yıldız",
+    "threeStars": "3 yıldız",
+    "warParticipation": "Savaş Katılımı",
+    "toggleTownHallVisibility": "Eski BB seviyelerindeki istatistikleri gizle/göster",
     "@toggleTownHallVisibility": {
         "description": "For example, hide stats from TH15 and below if the player is now TH16"
     },
-    "warLog": "War Log",
-    "publicWarLog": "Public War Log",
-    "privateWarLog": "Private War Log",
-    "startsIn": "Starts in {time}",
+    "warLog": "Savaş Günlüğü",
+    "publicWarLog": "Halka Açık Savaş Günlüğü",
+    "privateWarLog": "Özel Savaş Günlüğü",
+    "startsIn": "Başlamasına: {time}",
     "@startsIn": {
         "placeholders": {
             "time": {
@@ -735,7 +735,7 @@
             }
         }
     },
-    "startsAt": "Starts at {time}",
+    "startsAt": "{time}'de başlıyor",
     "@startsAt": {
         "placeholders": {
             "time": {
@@ -743,7 +743,7 @@
             }
         }
     },
-    "endsIn": "Ends in {time}",
+    "endsIn": "Bitmesine: {time}",
     "@endsIn": {
         "placeholders": {
             "time": {
@@ -751,7 +751,7 @@
             }
         }
     },
-    "endsAt": "Ends at {time}",
+    "endsAt": "{time}'de bitiyor",
     "@endsAt": {
         "placeholders": {
             "time": {
@@ -759,11 +759,11 @@
             }
         }
     },
-    "joinLeaveLogs": "Join/Leave Logs",
-    "join": "Join",
-    "leave": "Leave",
-    "reset": "Reset",
-    "leaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
+    "joinLeaveLogs": "Giriş/Çıkış Günlüğü",
+    "join": "Katıl",
+    "leave": "Ayrıl",
+    "reset": "Sıfırla",
+    "leaveNumberDescription": "{number} oyuncu mevcut sezonda ({date}) klandan ayrıldı.",
     "@leaveNumberDescription": {
         "description": "Number of players who left the clan during the current season.",
         "placeholders": {
@@ -775,7 +775,7 @@
             }
         }
     },
-    "joinNumberDescription": "{number} player(s) joined the clan during the current season ({date}).",
+    "joinNumberDescription": "{number} oyuncu mevcut sezonda ({date}) klana katıldı.",
     "@joinNumberDescription": {
         "description": "Number of players who joined the clan during the current season.",
         "placeholders": {
@@ -787,7 +787,7 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new member(s) this season ({date}).",
+    "joinLeaveDifferenceUpDescription": "Klanınız bu sezonda {number} yeni üye kazandı ({date}).",
     "@joinLeaveDifferenceUpDescription": {
         "description": "Number of new members gained by the clan this season.",
         "placeholders": {
@@ -799,7 +799,7 @@
             }
         }
     },
-    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} member(s) this season ({date}).",
+    "joinLeaveDifferenceDownDescription": "Klanınız bu sezonda ({date}) {number} üyeyi kaybetti.",
     "@joinLeaveDifferenceDownDescription": {
         "description": "Number of members lost by the clan this season.",
         "placeholders": {
@@ -811,7 +811,7 @@
             }
         }
     },
-    "joinLeaveDifferenceEqualDescription": "Your clan has the same number of members as at the beginning of the season ({date}).",
+    "joinLeaveDifferenceEqualDescription": "Klanınızın üye sayısı sezon başlangıcındakiyle aynıdır ({date}).",
     "@joinLeaveDifferenceEqualDescription": {
         "description": "Difference in the number of members between the beginning and the end of the season.",
         "placeholders": {
@@ -823,7 +823,7 @@
     "@joinLeaveLogs": {
         "description": "Logs of players joining or leaving the clan."
     },
-    "leftOnAt": "Left on {date} at {time}.",
+    "leftOnAt": "{date}} tarihinde {time}te ayrıldı.",
     "@leftOnAt": {
         "description": "[The player] left the clan on 16/06/2024 at 10:35.",
         "placeholders": {
@@ -835,7 +835,7 @@
             }
         }
     },
-    "joinedOnAt": "Joined on {date} at {time}.",
+    "joinedOnAt": "{date}} tarihinde {time}te katıldı.",
     "@joinedOnAt": {
         "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
         "placeholders": {
@@ -847,36 +847,36 @@
             }
         }
     },
-    "statistics": "Statistics",
-    "stars": "Stars",
-    "numberOfStars": "Number of stars",
-    "destructionRate": "Destruction rate",
+    "statistics": "İstatistikler",
+    "stars": "Yıldızlar",
+    "numberOfStars": "Yıldız Sayısı",
+    "destructionRate": "Yıkım oranı",
     "@destructionRate": {
         "description": "Percentage of destruction in war"
     },
-    "events": "Events",
+    "events": "Etkinlikler",
     "@events": {
         "description": "War events"
     },
-    "team": "Teams",
-    "myTeam": "My team",
-    "enemiesTeam": "Enemies",
-    "defense": "Defense",
-    "defenses": "Defenses",
-    "attack": "Attack",
-    "attacks": "Attacks",
-    "victory": "Victory",
-    "defeat": "Defeat",
-    "draw": "Draw",
+    "team": "Takımlar",
+    "myTeam": "Takımım",
+    "enemiesTeam": "Düşman",
+    "defense": "Savunma",
+    "defenses": "Savunmalar",
+    "attack": "Saldırı",
+    "attacks": "Saldırılar",
+    "victory": "Zafer",
+    "defeat": "Yenilgi",
+    "draw": "Berabere",
     "@draw": {
         "description": "War ended in a draw"
     },
-    "perfectWar": "Perfect war",
-    "newest": "Newest",
-    "oldest": "Oldest",
-    "warEnded": "War ended",
-    "preparation": "Preparation",
-    "isNotInWar": "{clan} is not in war.",
+    "perfectWar": "Mükemmel savaş",
+    "newest": "En yeni",
+    "oldest": "En eski",
+    "warEnded": "Savaş sonu",
+    "preparation": "Hazırlık",
+    "isNotInWar": "{clan} savaşta değil.",
     "@isNotInWar": {
         "placeholders": {
             "clan": {
@@ -884,7 +884,7 @@
             }
         }
     },
-    "warLogIsClosed": "{clan}'s war log is closed.",
+    "warLogIsClosed": "{clan}'ın savaş günlüğü kapalı.",
     "@warLogIsClosed": {
         "placeholders": {
             "clan": {
@@ -892,13 +892,13 @@
             }
         }
     },
-    "askForWar": "Contact the leader or a co-leader to start a war.",
-    "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-    "warLogClosed": "War log closed.",
-    "rounds": "Rounds",
-    "noDataAvailableForThisWar": "No data available for this war",
-    "stateOfTheWar": "State of the war",
-    "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+    "askForWar": "Savaş başlatmak için lidere veya yardımcı lidere başvurun.",
+    "askForWarLogOpening": "Savaş günlüğünü açmak için bir lidere veya yardımcı lidere başvurun.",
+    "warLogClosed": "Savaş günlüğü kapatıldı.",
+    "rounds": "Turlar",
+    "noDataAvailableForThisWar": "Bu savaş için veri mevcut değil",
+    "stateOfTheWar": "Savaş durumu",
+    "starsNeededToTakeTheLead": "{clan} takımının liderliği ele geçirebilmesi için hala {star} yıldıza veya {stars2} yıldıza ve %{percent}'e ihtiyacı var.",
     "@starsNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -915,7 +915,7 @@
             }
         }
     },
-    "starsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+    "starsAndPercentNeededToTakeTheLead": "{clan} 'ın liderliği ele geçirmek için hala %{percent} veya 1 yıldıza daha ihtiyacı var",
     "@starsAndPercentNeededToTakeTheLead": {
         "placeholders": {
             "clan": {
@@ -926,9 +926,9 @@
             }
         }
     },
-    "clanDraw": "The two clans are tied",
-    "fastCalculator": "Fast calculator",
-    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
+    "clanDraw": "İki klan da berabere",
+    "fastCalculator": "Hızlı hesaplayıcı",
+    "fastCalculatorAnswer": "%{percentNeeded} oranında bir yıkım oranına ulaşmak için toplamda %{result} gerekiyor.",
     "@fastCalculatorAnswer": {
         "placeholders": {
             "percentNeedeed": {
@@ -939,13 +939,13 @@
             }
         }
     },
-    "teamSize": "Team size",
-    "neededOverall": "% Needed overall",
-    "calculate": "Calculate",
-    "warStats": "War Stats",
-    "membersStats": "Members Stats",
-    "clanWarLeague": "Clan War League",
-    "cwlRank": "Your clan is currently ranked {rank}.",
+    "teamSize": "Takım boyutu",
+    "neededOverall": "% Genel olarak ihtiyaç duyuluyor",
+    "calculate": "Hesapla",
+    "warStats": "Savaş İstatistikleri",
+    "membersStats": "Üye İstatistikleri",
+    "clanWarLeague": "Klan Savaş Ligi",
+    "cwlRank": "Klanınız şu anda {rank} sıralamasında.",
     "@cwlRank": {
         "placeholders": {
             "rank": {
@@ -953,7 +953,7 @@
             }
         }
     },
-    "cwlStars": "Your clan has a total of {stars} stars.",
+    "cwlStars": "Klanınızın toplam {stars} yıldızı var.",
     "@cwlStars": {
         "placeholders": {
             "stars": {
