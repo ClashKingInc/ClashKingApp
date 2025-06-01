@@ -37,16 +37,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'An error occurred while logging in. Please try again later.';
 
   @override
-  String doesNotExist(String tag) {
-    return '$tag не существует.';
-  }
-
-  @override
-  String isAlreadyLinked(String tag) {
-    return '$tag уже связан с кем-то.';
-  }
-
-  @override
   String get username => 'Имя пользователя';
 
   @override
@@ -54,19 +44,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get playerTags => 'Теги игрока';
-
-  @override
-  String get linkedAccounts => 'Linked Accounts';
-
-  @override
-  String followingTagsDoNotExist(String tags) {
-    return 'Следующие теги не существуют: $tags.';
-  }
-
-  @override
-  String followingTagsAreAlreadyLinked(String tags) {
-    return 'Следующие теги уже связаны с кем-то: $tags.';
-  }
 
   @override
   String get welcome => 'Добро пожаловать!';
@@ -251,21 +228,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get player => 'Игрок';
 
   @override
-  String notFoundOrNotLinkedToOurSystem(String player) {
-    return '$player не найден или не связан с нашей системой.';
-  }
-
-  @override
-  String get tryAnotherNameOrTagOrLinkIt =>
-      'Попробуйте другое имя/тег или привяжите его.';
-
-  @override
-  String get playerNotFound => 'Игрок не найден';
-
-  @override
-  String get noValueEntered => 'Значение не введено';
-
-  @override
   String get manage => 'Управление';
 
   @override
@@ -316,17 +278,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Не удалось добавить ссылку. Пожалуйста, повторите попытку позже.';
 
   @override
-  String get enterPlayerTagWarning =>
-      'Вам необходимо ввести тег игрока и нажать «+», чтобы продолжить.';
-
-  @override
-  String get failedToLoadAccountData => 'Failed to load accounts data.';
-
-  @override
   String get failedToUpdateOrder => 'Failed to update the order of accounts.';
-
-  @override
-  String get loadAccountData => 'Load accounts data';
 
   @override
   String get manageAccounts => 'Manage your accounts';
@@ -347,9 +299,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get confirmLogout => 'Вы уверены, что хотите выйти?';
-
-  @override
-  String get tagOrNamePlayer => 'Тег или имя игрока';
 
   @override
   String get searchPlayer => 'Найти игрока';
@@ -787,9 +736,6 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get trophiesByMonth => 'Трофеи по месяцам';
-
-  @override
   String get trophiesBySeason => 'Trophies by season';
 
   @override
@@ -803,9 +749,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get clanName => 'Clan\'s name';
-
-  @override
-  String get nameOrTagClan => 'Clan\'s name or tag';
 
   @override
   String get noResult => 'Нет результатов.';
@@ -1032,16 +975,6 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String warHistoryAverageClanStarsPerMember(Object stars) {
-    return 'Your clan had an average of $stars stars per member from the last 50 wars.';
-  }
-
-  @override
-  String warHistoryAverageMembers(int members) {
-    return '~$members members per war';
-  }
-
-  @override
   String attacksLeftDescription(int attacks, String type) {
     return 'You have $attacks attack(s) left ($type).';
   }
@@ -1052,13 +985,8 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String noAttacksLeftDescription(String type) {
+  String noAttacksLeftDescription(Object type) {
     return 'Congratulations, you have done all your attacks ($type)!';
-  }
-
-  @override
-  String noDefensesLeftDescription(Object type) {
-    return 'You have taken all your defenses ($type)!';
   }
 
   @override
@@ -1087,12 +1015,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get threeStars => '3 stars';
 
   @override
-  String get highDestruction => 'High destruction';
-
-  @override
-  String get lowDestruction => 'Low destruction';
-
-  @override
   String get avg => 'Avg';
 
   @override
@@ -1109,15 +1031,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get defenseStars => 'Defense Stars';
-
-  @override
-  String get defenseDestruction => 'Defense Destruction';
-
-  @override
-  String get defenseAverageStars => 'Defense Avg Stars';
-
-  @override
-  String get defenseAverageDestruction => 'Defense Avg Destruction';
 
   @override
   String get zeroStar => '0 Star';
@@ -1245,11 +1158,6 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String mostMovingHourDescription(int hour) {
-    return '${hour}h is usually the hour with the most join/leave activity.';
-  }
-
-  @override
   String stillInClanNumberDescription(int number) {
     return '$number player(s) joined and are still in the clan.';
   }
@@ -1257,16 +1165,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String leftClanNumberDescription(int number) {
     return '$number player(s) joined, then left the clan and never rejoined.';
-  }
-
-  @override
-  String joinLeaveDifferenceDownDescription(int number, String date) {
-    return 'Your clan has lost $number member(s) this season ($date).';
-  }
-
-  @override
-  String joinLeaveDifferenceEqualDescription(String date) {
-    return 'Your clan has the same number of members as at the beginning of the season ($date).';
   }
 
   @override
@@ -1377,9 +1275,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Contact a leader or a co-leader to open the war log.';
 
   @override
-  String get warLogClosed => 'War log closed.';
-
-  @override
   String get rounds => 'Rounds';
 
   @override
@@ -1477,16 +1372,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String cwlStars(int stars) {
     return 'Your clan has a total of $stars stars.';
-  }
-
-  @override
-  String cwlMissingStarsFromNext(int stars) {
-    return 'Your clan is missing $stars stars to catch up with the next clan.';
-  }
-
-  @override
-  String cwlMissingStarsFromFirst(int stars) {
-    return 'Your clan is missing $stars stars to catch up with the first clan.';
   }
 
   @override

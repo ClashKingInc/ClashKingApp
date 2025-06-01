@@ -37,16 +37,6 @@ class AppLocalizationsDe extends AppLocalizations {
       'An error occurred while logging in. Please try again later.';
 
   @override
-  String doesNotExist(String tag) {
-    return '$tag existiert nicht.';
-  }
-
-  @override
-  String isAlreadyLinked(String tag) {
-    return 'Das Spielerkürzel $tag ist bereits mit jemand anderem verknüpft.';
-  }
-
-  @override
   String get username => 'Benutzername';
 
   @override
@@ -54,19 +44,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get playerTags => 'Spielerkürzel';
-
-  @override
-  String get linkedAccounts => 'Linked Accounts';
-
-  @override
-  String followingTagsDoNotExist(String tags) {
-    return 'Die folgenden Spielerkürzel existieren nicht: $tags.';
-  }
-
-  @override
-  String followingTagsAreAlreadyLinked(String tags) {
-    return 'Die folgenden Spielerkürzel sind bereits mit jemand anderem verknüpft: $tags.';
-  }
 
   @override
   String get welcome => 'Willkommen!';
@@ -252,21 +229,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get player => 'Spieler';
 
   @override
-  String notFoundOrNotLinkedToOurSystem(String player) {
-    return '$player wurde nicht gefunden oder ist nicht mit unserem System verknüpft.';
-  }
-
-  @override
-  String get tryAnotherNameOrTagOrLinkIt =>
-      'Versuche einen anderen Namen/Spielerkürzel, oder verknüpfe ihn.';
-
-  @override
-  String get playerNotFound => 'Spieler nicht gefunden';
-
-  @override
-  String get noValueEntered => 'Kein Wert eingegeben';
-
-  @override
   String get manage => 'Verwalten';
 
   @override
@@ -319,17 +281,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Fehler beim Löschen der Verknüpfung. Bitte versuche es später erneut.';
 
   @override
-  String get enterPlayerTagWarning =>
-      'Du musst ein Spielerkürzel eingeben und auf \"+\" klicken um fortzufahren.';
-
-  @override
-  String get failedToLoadAccountData => 'Failed to load accounts data.';
-
-  @override
   String get failedToUpdateOrder => 'Failed to update the order of accounts.';
-
-  @override
-  String get loadAccountData => 'Load accounts data';
 
   @override
   String get manageAccounts => 'Manage your accounts';
@@ -351,9 +303,6 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get confirmLogout =>
       'Bist du dir sicher, dass du dich abmelden möchtest?';
-
-  @override
-  String get tagOrNamePlayer => 'Spielerkürzel oder Name';
 
   @override
   String get searchPlayer => 'Spieler suchen';
@@ -792,9 +741,6 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get trophiesByMonth => 'Trophäen pro Monat';
-
-  @override
   String get trophiesBySeason => 'Trophäen nach Saison';
 
   @override
@@ -808,9 +754,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get clanName => 'Clan\'s name';
-
-  @override
-  String get nameOrTagClan => 'Name oder Clankürzel';
 
   @override
   String get noResult => 'Kein Ergebnis.';
@@ -1037,16 +980,6 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String warHistoryAverageClanStarsPerMember(Object stars) {
-    return 'Dein Clan hatte durchschnittlich $stars Sterne pro Mitglied in den letzten 50 Kriegen.';
-  }
-
-  @override
-  String warHistoryAverageMembers(int members) {
-    return '$members Mitglieder pro Krieg';
-  }
-
-  @override
   String attacksLeftDescription(int attacks, String type) {
     return 'You have $attacks attack(s) left ($type).';
   }
@@ -1057,13 +990,8 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String noAttacksLeftDescription(String type) {
+  String noAttacksLeftDescription(Object type) {
     return 'Congratulations, you have done all your attacks ($type)!';
-  }
-
-  @override
-  String noDefensesLeftDescription(Object type) {
-    return 'You have taken all your defenses ($type)!';
   }
 
   @override
@@ -1092,12 +1020,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get threeStars => '3 Sterne';
 
   @override
-  String get highDestruction => 'High destruction';
-
-  @override
-  String get lowDestruction => 'Low destruction';
-
-  @override
   String get avg => 'Avg';
 
   @override
@@ -1114,15 +1036,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get defenseStars => 'Defense Stars';
-
-  @override
-  String get defenseDestruction => 'Defense Destruction';
-
-  @override
-  String get defenseAverageStars => 'Defense Avg Stars';
-
-  @override
-  String get defenseAverageDestruction => 'Defense Avg Destruction';
 
   @override
   String get zeroStar => '0 Star';
@@ -1249,11 +1162,6 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String mostMovingHourDescription(int hour) {
-    return '${hour}h is usually the hour with the most join/leave activity.';
-  }
-
-  @override
   String stillInClanNumberDescription(int number) {
     return '$number player(s) joined and are still in the clan.';
   }
@@ -1261,16 +1169,6 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String leftClanNumberDescription(int number) {
     return '$number player(s) joined, then left the clan and never rejoined.';
-  }
-
-  @override
-  String joinLeaveDifferenceDownDescription(int number, String date) {
-    return 'Dein Clan hat in dieser Saison $number Mitglieder verloren ($date).';
-  }
-
-  @override
-  String joinLeaveDifferenceEqualDescription(String date) {
-    return 'Dein Clan hat dieselbe Anzahl an Mitgliedern wie zu Beginn der Saison ($date).';
   }
 
   @override
@@ -1382,9 +1280,6 @@ class AppLocalizationsDe extends AppLocalizations {
       'Kontaktiere den Anführer oder einen Vize-Anführer, um den Kriegsverlauf öffentlich zu machen.';
 
   @override
-  String get warLogClosed => 'Kriegslog geschlossen.';
-
-  @override
   String get rounds => 'Runden';
 
   @override
@@ -1483,16 +1378,6 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String cwlStars(int stars) {
     return 'Dein Clan hat insgesamt $stars Sterne.';
-  }
-
-  @override
-  String cwlMissingStarsFromNext(int stars) {
-    return 'Deinem Clan fehlen $stars Sterne, um den nächsten Clan aufzuholen.';
-  }
-
-  @override
-  String cwlMissingStarsFromFirst(int stars) {
-    return 'Deinem Clan fehlen $stars Sterne, um den ersten Clan aufzuholen.';
   }
 
   @override

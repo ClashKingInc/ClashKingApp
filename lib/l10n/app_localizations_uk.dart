@@ -37,16 +37,6 @@ class AppLocalizationsUk extends AppLocalizations {
       'An error occurred while logging in. Please try again later.';
 
   @override
-  String doesNotExist(String tag) {
-    return '$tag Не існує.';
-  }
-
-  @override
-  String isAlreadyLinked(String tag) {
-    return '$tag Вже зв\'язаний з кимось.';
-  }
-
-  @override
   String get username => 'Ім\'я користувача';
 
   @override
@@ -54,19 +44,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get playerTags => 'Тег гравця';
-
-  @override
-  String get linkedAccounts => 'Linked Accounts';
-
-  @override
-  String followingTagsDoNotExist(String tags) {
-    return 'Наступні теги не існують: $tags.';
-  }
-
-  @override
-  String followingTagsAreAlreadyLinked(String tags) {
-    return 'Наступні теги вже з\'єднані з кимось: $tags.';
-  }
 
   @override
   String get welcome => 'Вітаємо!';
@@ -250,21 +227,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get player => 'Гравець';
 
   @override
-  String notFoundOrNotLinkedToOurSystem(String player) {
-    return '$player Не знайдено або не пов\'язано з нашою системою.';
-  }
-
-  @override
-  String get tryAnotherNameOrTagOrLinkIt =>
-      'Спробуйте інше ім\'я/тег або посилання на нього.';
-
-  @override
-  String get playerNotFound => 'Гравця не знайдено';
-
-  @override
-  String get noValueEntered => 'Не введено жодного значення';
-
-  @override
   String get manage => 'Керувати';
 
   @override
@@ -315,17 +277,7 @@ class AppLocalizationsUk extends AppLocalizations {
       'Не вдалося видалити посилання. Будь ласка, повторіть спробу пізніше.';
 
   @override
-  String get enterPlayerTagWarning =>
-      'Вам потрібно ввести тег гравця та натиснути на знак \"+\", щоб продовжити.';
-
-  @override
-  String get failedToLoadAccountData => 'Failed to load accounts data.';
-
-  @override
   String get failedToUpdateOrder => 'Failed to update the order of accounts.';
-
-  @override
-  String get loadAccountData => 'Load accounts data';
 
   @override
   String get manageAccounts => 'Manage your accounts';
@@ -346,9 +298,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get confirmLogout => 'Впевнені, що хочете вийти?';
-
-  @override
-  String get tagOrNamePlayer => 'Тег гравця або ім\'я';
 
   @override
   String get searchPlayer => 'Пошук гравця';
@@ -788,9 +737,6 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get trophiesByMonth => 'Трофеї за місяць';
-
-  @override
   String get trophiesBySeason => 'Трофеї за сезон';
 
   @override
@@ -804,9 +750,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get clanName => 'Clan\'s name';
-
-  @override
-  String get nameOrTagClan => 'Назва клану або тег';
 
   @override
   String get noResult => 'Нічого не знайдено.';
@@ -1033,16 +976,6 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String warHistoryAverageClanStarsPerMember(Object stars) {
-    return 'Ваш клан мав у середньому $stars зірок на кожного учасника з останніх 50 війн.';
-  }
-
-  @override
-  String warHistoryAverageMembers(int members) {
-    return '~$members учасників на війну';
-  }
-
-  @override
   String attacksLeftDescription(int attacks, String type) {
     return 'You have $attacks attack(s) left ($type).';
   }
@@ -1053,13 +986,8 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String noAttacksLeftDescription(String type) {
+  String noAttacksLeftDescription(Object type) {
     return 'Congratulations, you have done all your attacks ($type)!';
-  }
-
-  @override
-  String noDefensesLeftDescription(Object type) {
-    return 'You have taken all your defenses ($type)!';
   }
 
   @override
@@ -1088,12 +1016,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get threeStars => '3 зірки';
 
   @override
-  String get highDestruction => 'High destruction';
-
-  @override
-  String get lowDestruction => 'Low destruction';
-
-  @override
   String get avg => 'Avg';
 
   @override
@@ -1110,15 +1032,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get defenseStars => 'Defense Stars';
-
-  @override
-  String get defenseDestruction => 'Defense Destruction';
-
-  @override
-  String get defenseAverageStars => 'Defense Avg Stars';
-
-  @override
-  String get defenseAverageDestruction => 'Defense Avg Destruction';
 
   @override
   String get zeroStar => '0 Star';
@@ -1246,11 +1159,6 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String mostMovingHourDescription(int hour) {
-    return '${hour}h is usually the hour with the most join/leave activity.';
-  }
-
-  @override
   String stillInClanNumberDescription(int number) {
     return '$number player(s) joined and are still in the clan.';
   }
@@ -1258,16 +1166,6 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String leftClanNumberDescription(int number) {
     return '$number player(s) joined, then left the clan and never rejoined.';
-  }
-
-  @override
-  String joinLeaveDifferenceDownDescription(int number, String date) {
-    return 'Ваш клан втратив учасників $number в цьому сезоні ($date).';
-  }
-
-  @override
-  String joinLeaveDifferenceEqualDescription(String date) {
-    return 'У вашому клані стільки ж учасників, що на початку сезону ($date).';
   }
 
   @override
@@ -1379,9 +1277,6 @@ class AppLocalizationsUk extends AppLocalizations {
       'Звертайтеся до лідера або спів-лідера, аби відкрити журнал бою.';
 
   @override
-  String get warLogClosed => 'Журнал війн закритий.';
-
-  @override
   String get rounds => 'Раунди';
 
   @override
@@ -1479,16 +1374,6 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String cwlStars(int stars) {
     return 'Ваш клан має загально $stars зірок.';
-  }
-
-  @override
-  String cwlMissingStarsFromNext(int stars) {
-    return 'Ваш клан відстає на $stars зірок, щоб наздогнати наступний клан.';
-  }
-
-  @override
-  String cwlMissingStarsFromFirst(int stars) {
-    return 'Ваш клан відстає на $stars зірок, щоб наздогнати перший клан.';
   }
 
   @override

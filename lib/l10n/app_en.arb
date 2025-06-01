@@ -7,42 +7,9 @@
     "guestMode": "Guest Mode",
     "needHelpJoinDiscord": "Need help? Join us on Discord.",
     "loginError": "An error occurred while logging in. Please try again later.",
-    "doesNotExist": "{tag} does not exist.",
-    "@doesNotExist": {
-        "placeholders": {
-            "tag": {
-                "type": "String"
-            }
-        }
-    },
-    "isAlreadyLinked": "{tag} is already linked to someone.",
-    "@isAlreadyLinked": {
-        "placeholders": {
-            "tag": {
-                "type": "String"
-            }
-        }
-    },
     "username": "Username",
     "playerTag": "Player Tag (#ABC123)",
     "playerTags": "Player Tags",
-    "linkedAccounts": "Linked Accounts",
-    "followingTagsDoNotExist": "The following tags do not exist: {tags}.",
-    "@followingTagsDoNotExist": {
-        "placeholders": {
-            "tags": {
-                "type": "String"
-            }
-        }
-    },
-    "followingTagsAreAlreadyLinked": "The following tags are already linked to someone: {tags}.",
-    "@followingTagsAreAlreadyLinked": {
-        "placeholders": {
-            "tags": {
-                "type": "String"
-            }
-        }
-    },
     "welcome": "Welcome!",
     "welcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
     "login": "Login",
@@ -111,17 +78,6 @@
     },
     "error": "Error",
     "player": "Player",
-    "notFoundOrNotLinkedToOurSystem": "{player} not found or not linked to our system.",
-    "@notFoundOrNotLinkedToOurSystem": {
-        "placeholders": {
-            "player": {
-                "type": "String"
-            }
-        }
-    },
-    "tryAnotherNameOrTagOrLinkIt": "Try another name/tag or link it.",
-    "playerNotFound": "Player not found",
-    "noValueEntered": "No value entered",
     "manage": "Manage",
     "enterPlayerTag": "Enter a player tag",
     "add": "Add",
@@ -143,10 +99,7 @@
     "failedToAddTryAgain": "Failed to add the account. Please try again later.",
     "fillAllFields": "Please fill all fields.",
     "failedToDeleteTryAgain": "Failed to delete link. Please try again later.",
-    "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
-    "failedToLoadAccountData": "Failed to load accounts data.",
     "failedToUpdateOrder": "Failed to update the order of accounts.",
-    "loadAccountData": "Load accounts data",
     "manageAccounts": "Manage your accounts",
     "manageAccountsDescription": "You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.",
     "confirm": "Confirm",
@@ -159,7 +112,6 @@
     "@confirmLogout": {
         "description": "Prompt asking the user to confirm logout"
     },
-    "tagOrNamePlayer": "Player's tag or name",
     "searchPlayer": "Search player",
     "nameOrTagPlayer": "Player's name or tag",
     "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
@@ -562,13 +514,11 @@
             }
         }
     },
-    "trophiesByMonth": "Trophies by month",
     "trophiesBySeason": "Trophies by season",
     "eosTrophies": "End Of Season Trophies",
     "eosDetails": "End Of Season Details",
     "searchClan": "Search clan",
     "clanName": "Clan's name",
-    "nameOrTagClan": "Clan's name or tag",
     "noResult": "No result.",
     "filters": "Filters",
     "whatever": "Whatever",
@@ -757,15 +707,6 @@
             }
         }
     },
-    "warHistoryAverageClanStarsPerMember": "Your clan had an average of {stars} stars per member from the last 50 wars.",
-    "warHistoryAverageMembers": "~{members} members per war",
-    "@warHistoryAverageMembers": {
-        "placeholders": {
-            "members": {
-                "type": "int"
-            }
-        }
-    },
     "attacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
     "@attacksLeftDescription": {
         "placeholders": {
@@ -789,14 +730,6 @@
         }
     },
     "noAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
-    "noDefensesLeftDescription": "You have taken all your defenses ({type})!",
-    "@noAttacksLeftDescription": {
-        "placeholders": {
-            "type": {
-                "type": "String"
-            }
-        }
-    },
     "pointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
     "@pointsLeftDescription": {
         "placeholders": {
@@ -821,8 +754,6 @@
     "oneStar": "1 star",
     "twoStars": "2 stars",
     "threeStars": "3 stars",
-    "highDestruction": "High destruction",
-    "lowDestruction": "Low destruction",
     "avg": "Avg",
     "@avg": {
         "description": "Abbreviation for average"
@@ -838,9 +769,6 @@
         "description": "Order of the player in the clan"
     },
     "defenseStars": "Defense Stars",
-    "defenseDestruction": "Defense Destruction",
-    "defenseAverageStars": "Defense Avg Stars",
-    "defenseAverageDestruction": "Defense Avg Destruction",
     "zeroStar": "0 Star",
     "warParticipation": "War Participation",
     "missed": "Missed",
@@ -962,15 +890,6 @@
             }
         }
     },
-    "mostMovingHourDescription": "{hour}h is usually the hour with the most join/leave activity.",
-    "@mostMovingHourDescription": {
-        "description": "The hour with the most join/leave activity.",
-        "placeholders": {
-            "hour": {
-                "type": "int"
-            }
-        }
-    },
     "stillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
     "@stillInClanNumberDescription": {
         "placeholders": {
@@ -984,27 +903,6 @@
         "placeholders": {
             "number": {
                 "type": "int"
-            }
-        }
-    },
-    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} member(s) this season ({date}).",
-    "@joinLeaveDifferenceDownDescription": {
-        "description": "Number of members lost by the clan this season.",
-        "placeholders": {
-            "number": {
-                "type": "int"
-            },
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "joinLeaveDifferenceEqualDescription": "Your clan has the same number of members as at the beginning of the season ({date}).",
-    "@joinLeaveDifferenceEqualDescription": {
-        "description": "Difference in the number of members between the beginning and the end of the season.",
-        "placeholders": {
-            "date": {
-                "type": "String"
             }
         }
     },
@@ -1105,7 +1003,6 @@
     },
     "askForWar": "Contact the leader or a co-leader to start a war.",
     "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-    "warLogClosed": "War log closed.",
     "rounds": "Rounds",
     "roundNumber": "Round {number}",
     "@roundNumber": {
@@ -1229,22 +1126,6 @@
     },
     "cwlStars": "Your clan has a total of {stars} stars.",
     "@cwlStars": {
-        "placeholders": {
-            "stars": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlMissingStarsFromNext": "Your clan is missing {stars} stars to catch up with the next clan.",
-    "@cwlMissingStarsFromNext": {
-        "placeholders": {
-            "stars": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlMissingStarsFromFirst": "Your clan is missing {stars} stars to catch up with the first clan.",
-    "@cwlMissingStarsFromFirst": {
         "placeholders": {
             "stars": {
                 "type": "int"

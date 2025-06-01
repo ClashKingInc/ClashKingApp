@@ -37,16 +37,6 @@ class AppLocalizationsEl extends AppLocalizations {
       'An error occurred while logging in. Please try again later.';
 
   @override
-  String doesNotExist(String tag) {
-    return 'Ο χρήστης $tag δεν υπάρχει.';
-  }
-
-  @override
-  String isAlreadyLinked(String tag) {
-    return 'Ο χρήστης $tag είναι ήδη συνδεδεμένος σε κάποιον.';
-  }
-
-  @override
   String get username => 'Όνομα Χρήστη';
 
   @override
@@ -54,19 +44,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get playerTags => 'Λογαριασμοί Παίχτη';
-
-  @override
-  String get linkedAccounts => 'Linked Accounts';
-
-  @override
-  String followingTagsDoNotExist(String tags) {
-    return 'Οι ακόλουθοι λογαριασμοί δεν υπάρχουν: $tags.';
-  }
-
-  @override
-  String followingTagsAreAlreadyLinked(String tags) {
-    return 'Οι ακόλουθοι λογαριασμοί είναι ήδη συνδεδεμένοι σε κάποιον: $tags.';
-  }
 
   @override
   String get welcome => 'Καλώς Ήλθατε!';
@@ -253,21 +230,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get player => 'Παίχτης';
 
   @override
-  String notFoundOrNotLinkedToOurSystem(String player) {
-    return '$player δε βρέθηκε ή δεν έχει συνδεθεί στο σύστημά μας.';
-  }
-
-  @override
-  String get tryAnotherNameOrTagOrLinkIt =>
-      'Δοκιμάστε διαφορετικό όνομα/αριθμό λογαριασμού ή συνδέστε το.';
-
-  @override
-  String get playerNotFound => 'Παίχτης δε βρέθηκε';
-
-  @override
-  String get noValueEntered => 'Δεν εντοπίστηκε αξία';
-
-  @override
   String get manage => 'Διαχείριση';
 
   @override
@@ -320,17 +282,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Σφάλμα στη διαγραφή της σύνδεσης. Παρακαλώ προσπαθήστε ξανά αργότερα.';
 
   @override
-  String get enterPlayerTagWarning =>
-      'Εισάγετε έναν αριθμό λογαριασμού και πιέσετε το κουμπί \"+\" για να συνεχίσετε.';
-
-  @override
-  String get failedToLoadAccountData => 'Failed to load accounts data.';
-
-  @override
   String get failedToUpdateOrder => 'Failed to update the order of accounts.';
-
-  @override
-  String get loadAccountData => 'Load accounts data';
 
   @override
   String get manageAccounts => 'Manage your accounts';
@@ -352,9 +304,6 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String get confirmLogout =>
       'Είστε σίγουροι ότι θέλετε να κάνετε έξοδο από τον λογαριασμό σας;';
-
-  @override
-  String get tagOrNamePlayer => 'Αριθμός λογαριασμού ή όνομα';
 
   @override
   String get searchPlayer => 'Αναζήτηση παίχτη';
@@ -792,9 +741,6 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get trophiesByMonth => 'Trophies by month';
-
-  @override
   String get trophiesBySeason => 'Trophies by season';
 
   @override
@@ -808,9 +754,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get clanName => 'Clan\'s name';
-
-  @override
-  String get nameOrTagClan => 'Clan\'s name or tag';
 
   @override
   String get noResult => 'No result.';
@@ -1037,16 +980,6 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String warHistoryAverageClanStarsPerMember(Object stars) {
-    return 'Your clan had an average of $stars stars per member from the last 50 wars.';
-  }
-
-  @override
-  String warHistoryAverageMembers(int members) {
-    return '~$members members per war';
-  }
-
-  @override
   String attacksLeftDescription(int attacks, String type) {
     return 'You have $attacks attack(s) left ($type).';
   }
@@ -1057,13 +990,8 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String noAttacksLeftDescription(String type) {
+  String noAttacksLeftDescription(Object type) {
     return 'Congratulations, you have done all your attacks ($type)!';
-  }
-
-  @override
-  String noDefensesLeftDescription(Object type) {
-    return 'You have taken all your defenses ($type)!';
   }
 
   @override
@@ -1092,12 +1020,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get threeStars => '3 stars';
 
   @override
-  String get highDestruction => 'High destruction';
-
-  @override
-  String get lowDestruction => 'Low destruction';
-
-  @override
   String get avg => 'Avg';
 
   @override
@@ -1114,15 +1036,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get defenseStars => 'Defense Stars';
-
-  @override
-  String get defenseDestruction => 'Defense Destruction';
-
-  @override
-  String get defenseAverageStars => 'Defense Avg Stars';
-
-  @override
-  String get defenseAverageDestruction => 'Defense Avg Destruction';
 
   @override
   String get zeroStar => '0 Star';
@@ -1250,11 +1163,6 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String mostMovingHourDescription(int hour) {
-    return '${hour}h is usually the hour with the most join/leave activity.';
-  }
-
-  @override
   String stillInClanNumberDescription(int number) {
     return '$number player(s) joined and are still in the clan.';
   }
@@ -1262,16 +1170,6 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String leftClanNumberDescription(int number) {
     return '$number player(s) joined, then left the clan and never rejoined.';
-  }
-
-  @override
-  String joinLeaveDifferenceDownDescription(int number, String date) {
-    return 'Your clan has lost $number member(s) this season ($date).';
-  }
-
-  @override
-  String joinLeaveDifferenceEqualDescription(String date) {
-    return 'Your clan has the same number of members as at the beginning of the season ($date).';
   }
 
   @override
@@ -1382,9 +1280,6 @@ class AppLocalizationsEl extends AppLocalizations {
       'Contact a leader or a co-leader to open the war log.';
 
   @override
-  String get warLogClosed => 'War log closed.';
-
-  @override
   String get rounds => 'Rounds';
 
   @override
@@ -1482,16 +1377,6 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String cwlStars(int stars) {
     return 'Your clan has a total of $stars stars.';
-  }
-
-  @override
-  String cwlMissingStarsFromNext(int stars) {
-    return 'Your clan is missing $stars stars to catch up with the next clan.';
-  }
-
-  @override
-  String cwlMissingStarsFromFirst(int stars) {
-    return 'Your clan is missing $stars stars to catch up with the first clan.';
   }
 
   @override

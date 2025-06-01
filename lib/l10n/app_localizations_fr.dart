@@ -37,16 +37,6 @@ class AppLocalizationsFr extends AppLocalizations {
       'An error occurred while logging in. Please try again later.';
 
   @override
-  String doesNotExist(String tag) {
-    return '$tag n\'existe pas.';
-  }
-
-  @override
-  String isAlreadyLinked(String tag) {
-    return '$tag est déjà lié à un compte.';
-  }
-
-  @override
   String get username => 'Nom d\'utilisateur';
 
   @override
@@ -54,19 +44,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get playerTags => 'Tags de joueur';
-
-  @override
-  String get linkedAccounts => 'Linked Accounts';
-
-  @override
-  String followingTagsDoNotExist(String tags) {
-    return 'Les tags suivants n\'existent pas : $tags.';
-  }
-
-  @override
-  String followingTagsAreAlreadyLinked(String tags) {
-    return 'Les tags suivants sont déjà liés à un compte : $tags.';
-  }
 
   @override
   String get welcome => 'Bienvenue !';
@@ -253,21 +230,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get player => 'Joueur';
 
   @override
-  String notFoundOrNotLinkedToOurSystem(String player) {
-    return 'introuvable ou non lié à notre système.';
-  }
-
-  @override
-  String get tryAnotherNameOrTagOrLinkIt =>
-      'Essayez un autre nom/tag ou liez le.';
-
-  @override
-  String get playerNotFound => 'Joueur introuvable';
-
-  @override
-  String get noValueEntered => 'Aucune valeur saisie';
-
-  @override
   String get manage => 'Gérer';
 
   @override
@@ -319,17 +281,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Échec de la suppression du compte. Veuillez réessayer plus tard.';
 
   @override
-  String get enterPlayerTagWarning =>
-      'Tu dois saisir un tag de joueur et cliquer sur \"+\" pour continuer.';
-
-  @override
-  String get failedToLoadAccountData => 'Failed to load accounts data.';
-
-  @override
   String get failedToUpdateOrder => 'Failed to update the order of accounts.';
-
-  @override
-  String get loadAccountData => 'Load accounts data';
 
   @override
   String get manageAccounts => 'Manage your accounts';
@@ -350,9 +302,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get confirmLogout => 'Es-tu sûr de vouloir te déconnecter ?';
-
-  @override
-  String get tagOrNamePlayer => 'Tag ou nom du joueur';
 
   @override
   String get searchPlayer => 'Rechercher un joueur';
@@ -792,9 +741,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get trophiesByMonth => 'Trophées par mois';
-
-  @override
   String get trophiesBySeason => 'Trophées par saison';
 
   @override
@@ -808,9 +754,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get clanName => 'Clan\'s name';
-
-  @override
-  String get nameOrTagClan => 'Nom ou tag du clan';
 
   @override
   String get noResult => 'Aucun résultat.';
@@ -1037,16 +980,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String warHistoryAverageClanStarsPerMember(Object stars) {
-    return 'Moyenne d\'étoiles par membre';
-  }
-
-  @override
-  String warHistoryAverageMembers(int members) {
-    return '~$members membres par guerre';
-  }
-
-  @override
   String attacksLeftDescription(int attacks, String type) {
     return 'You have $attacks attack(s) left ($type).';
   }
@@ -1057,13 +990,8 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String noAttacksLeftDescription(String type) {
+  String noAttacksLeftDescription(Object type) {
     return 'Congratulations, you have done all your attacks ($type)!';
-  }
-
-  @override
-  String noDefensesLeftDescription(Object type) {
-    return 'You have taken all your defenses ($type)!';
   }
 
   @override
@@ -1092,12 +1020,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get threeStars => '3 étoiles';
 
   @override
-  String get highDestruction => 'High destruction';
-
-  @override
-  String get lowDestruction => 'Low destruction';
-
-  @override
   String get avg => 'Avg';
 
   @override
@@ -1114,15 +1036,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get defenseStars => 'Defense Stars';
-
-  @override
-  String get defenseDestruction => 'Defense Destruction';
-
-  @override
-  String get defenseAverageStars => 'Defense Avg Stars';
-
-  @override
-  String get defenseAverageDestruction => 'Defense Avg Destruction';
 
   @override
   String get zeroStar => '0 Star';
@@ -1250,11 +1163,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String mostMovingHourDescription(int hour) {
-    return '${hour}h is usually the hour with the most join/leave activity.';
-  }
-
-  @override
   String stillInClanNumberDescription(int number) {
     return '$number player(s) joined and are still in the clan.';
   }
@@ -1262,16 +1170,6 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String leftClanNumberDescription(int number) {
     return '$number player(s) joined, then left the clan and never rejoined.';
-  }
-
-  @override
-  String joinLeaveDifferenceDownDescription(int number, String date) {
-    return 'Ton clan a perdu $number membres durant la saison actuelle ($date).';
-  }
-
-  @override
-  String joinLeaveDifferenceEqualDescription(String date) {
-    return 'Ton clan a maintenu son nombre de membres durant la saison actuelle ($date).';
   }
 
   @override
@@ -1383,9 +1281,6 @@ class AppLocalizationsFr extends AppLocalizations {
       'Contactez un chef ou un adjoint pour ouvrir le journal de guerre.';
 
   @override
-  String get warLogClosed => 'Le journal de guerre est privé.';
-
-  @override
   String get rounds => 'Tours';
 
   @override
@@ -1484,16 +1379,6 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String cwlStars(int stars) {
     return 'Ton clan a un total de $stars étoiles.';
-  }
-
-  @override
-  String cwlMissingStarsFromNext(int stars) {
-    return 'Ton clan a besoin de $stars étoiles pour rattraper le clan suivant.';
-  }
-
-  @override
-  String cwlMissingStarsFromFirst(int stars) {
-    return 'Ton clan a besoin de $stars étoiles pour rattraper le premier.';
   }
 
   @override

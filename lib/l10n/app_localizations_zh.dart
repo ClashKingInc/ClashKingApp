@@ -36,16 +36,6 @@ class AppLocalizationsZh extends AppLocalizations {
       'An error occurred while logging in. Please try again later.';
 
   @override
-  String doesNotExist(String tag) {
-    return '$tag不存在。';
-  }
-
-  @override
-  String isAlreadyLinked(String tag) {
-    return '$tag此标签已被绑定。';
-  }
-
-  @override
   String get username => '用户名';
 
   @override
@@ -53,19 +43,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get playerTags => '玩家标签';
-
-  @override
-  String get linkedAccounts => 'Linked Accounts';
-
-  @override
-  String followingTagsDoNotExist(String tags) {
-    return '以下标签不存在：$tags。';
-  }
-
-  @override
-  String followingTagsAreAlreadyLinked(String tags) {
-    return '以下标签已被绑定：$tags。';
-  }
 
   @override
   String get welcome => '欢迎！';
@@ -245,20 +222,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get player => '玩家';
 
   @override
-  String notFoundOrNotLinkedToOurSystem(String player) {
-    return '$player未被找到或未链接到我们的系统。';
-  }
-
-  @override
-  String get tryAnotherNameOrTagOrLinkIt => '尝试其他名称/标签或链接它。';
-
-  @override
-  String get playerNotFound => '未找到玩家';
-
-  @override
-  String get noValueEntered => '未输入有效值';
-
-  @override
   String get manage => '管理';
 
   @override
@@ -306,16 +269,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get failedToDeleteTryAgain => '删除链接失败。请稍后再试。';
 
   @override
-  String get enterPlayerTagWarning => '您必须输入村庄标签，然后点击“+”继续。';
-
-  @override
-  String get failedToLoadAccountData => 'Failed to load accounts data.';
-
-  @override
   String get failedToUpdateOrder => 'Failed to update the order of accounts.';
-
-  @override
-  String get loadAccountData => 'Load accounts data';
 
   @override
   String get manageAccounts => 'Manage your accounts';
@@ -335,9 +289,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get confirmLogout => '确定要退出登录吗？';
-
-  @override
-  String get tagOrNamePlayer => '村庄的标签或村庄名称';
 
   @override
   String get searchPlayer => '搜索玩家';
@@ -769,9 +720,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get trophiesByMonth => '每月奖杯';
-
-  @override
   String get trophiesBySeason => '每赛季的奖杯数';
 
   @override
@@ -785,9 +733,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get clanName => 'Clan\'s name';
-
-  @override
-  String get nameOrTagClan => '村庄名称或标签';
 
   @override
   String get noResult => '没有找到该查询的结果';
@@ -1013,16 +958,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String warHistoryAverageClanStarsPerMember(Object stars) {
-    return 'Your clan had an average of $stars stars per member from the last 50 wars.';
-  }
-
-  @override
-  String warHistoryAverageMembers(int members) {
-    return '~$members members per war';
-  }
-
-  @override
   String attacksLeftDescription(int attacks, String type) {
     return 'You have $attacks attack(s) left ($type).';
   }
@@ -1033,13 +968,8 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String noAttacksLeftDescription(String type) {
+  String noAttacksLeftDescription(Object type) {
     return 'Congratulations, you have done all your attacks ($type)!';
-  }
-
-  @override
-  String noDefensesLeftDescription(Object type) {
-    return 'You have taken all your defenses ($type)!';
   }
 
   @override
@@ -1068,12 +998,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get threeStars => '3 stars';
 
   @override
-  String get highDestruction => 'High destruction';
-
-  @override
-  String get lowDestruction => 'Low destruction';
-
-  @override
   String get avg => 'Avg';
 
   @override
@@ -1090,15 +1014,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get defenseStars => 'Defense Stars';
-
-  @override
-  String get defenseDestruction => 'Defense Destruction';
-
-  @override
-  String get defenseAverageStars => 'Defense Avg Stars';
-
-  @override
-  String get defenseAverageDestruction => 'Defense Avg Destruction';
 
   @override
   String get zeroStar => '0 Star';
@@ -1226,11 +1141,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String mostMovingHourDescription(int hour) {
-    return '${hour}h is usually the hour with the most join/leave activity.';
-  }
-
-  @override
   String stillInClanNumberDescription(int number) {
     return '$number player(s) joined and are still in the clan.';
   }
@@ -1238,16 +1148,6 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String leftClanNumberDescription(int number) {
     return '$number player(s) joined, then left the clan and never rejoined.';
-  }
-
-  @override
-  String joinLeaveDifferenceDownDescription(int number, String date) {
-    return 'Your clan has lost $number member(s) this season ($date).';
-  }
-
-  @override
-  String joinLeaveDifferenceEqualDescription(String date) {
-    return 'Your clan has the same number of members as at the beginning of the season ($date).';
   }
 
   @override
@@ -1358,9 +1258,6 @@ class AppLocalizationsZh extends AppLocalizations {
       'Contact a leader or a co-leader to open the war log.';
 
   @override
-  String get warLogClosed => 'War log closed.';
-
-  @override
   String get rounds => 'Rounds';
 
   @override
@@ -1458,16 +1355,6 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String cwlStars(int stars) {
     return 'Your clan has a total of $stars stars.';
-  }
-
-  @override
-  String cwlMissingStarsFromNext(int stars) {
-    return 'Your clan is missing $stars stars to catch up with the next clan.';
-  }
-
-  @override
-  String cwlMissingStarsFromFirst(int stars) {
-    return 'Your clan is missing $stars stars to catch up with the first clan.';
   }
 
   @override

@@ -37,16 +37,6 @@ class AppLocalizationsHu extends AppLocalizations {
       'An error occurred while logging in. Please try again later.';
 
   @override
-  String doesNotExist(String tag) {
-    return '$tag nem létezik.';
-  }
-
-  @override
-  String isAlreadyLinked(String tag) {
-    return '$tag már csatolva van.';
-  }
-
-  @override
   String get username => 'Felhasználónév';
 
   @override
@@ -54,19 +44,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get playerTags => 'Játékos tag';
-
-  @override
-  String get linkedAccounts => 'Linked Accounts';
-
-  @override
-  String followingTagsDoNotExist(String tags) {
-    return 'Ezek a tag-ek nem léteznek: $tags.';
-  }
-
-  @override
-  String followingTagsAreAlreadyLinked(String tags) {
-    return 'Ezek a tag-ek már csatolva vannak: $tags.';
-  }
 
   @override
   String get welcome => 'Üdv!';
@@ -252,21 +229,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get player => 'Játékos';
 
   @override
-  String notFoundOrNotLinkedToOurSystem(String player) {
-    return '$player nem található vagy nincs kapcsolva a rendszerünkhöz.';
-  }
-
-  @override
-  String get tryAnotherNameOrTagOrLinkIt =>
-      'Próbáljon meg egy másik nevet/tag-et vagy linkelj.';
-
-  @override
-  String get playerNotFound => 'Játékos nem található';
-
-  @override
-  String get noValueEntered => 'Nincs érték megadva';
-
-  @override
   String get manage => 'Kezelés';
 
   @override
@@ -318,17 +280,7 @@ class AppLocalizationsHu extends AppLocalizations {
       'A kapcsolat törlése nem sikerült. Kérjük, próbálja meg később újra.';
 
   @override
-  String get enterPlayerTagWarning =>
-      'You must enter a player tag and click on the \"+\" to continue.';
-
-  @override
-  String get failedToLoadAccountData => 'Failed to load accounts data.';
-
-  @override
   String get failedToUpdateOrder => 'Failed to update the order of accounts.';
-
-  @override
-  String get loadAccountData => 'Load accounts data';
 
   @override
   String get manageAccounts => 'Manage your accounts';
@@ -349,9 +301,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get confirmLogout => 'Are you sure you want to log out?';
-
-  @override
-  String get tagOrNamePlayer => 'Játékos tag-je vagy neve';
 
   @override
   String get searchPlayer => 'Játékos keresése';
@@ -789,9 +738,6 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get trophiesByMonth => 'Kupák hónap szerint';
-
-  @override
   String get trophiesBySeason => 'Trophies by season';
 
   @override
@@ -805,9 +751,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get clanName => 'Clan\'s name';
-
-  @override
-  String get nameOrTagClan => 'Clan\'s name or tag';
 
   @override
   String get noResult => 'Nincs találat.';
@@ -1034,16 +977,6 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String warHistoryAverageClanStarsPerMember(Object stars) {
-    return 'Your clan had an average of $stars stars per member from the last 50 wars.';
-  }
-
-  @override
-  String warHistoryAverageMembers(int members) {
-    return '~$members members per war';
-  }
-
-  @override
   String attacksLeftDescription(int attacks, String type) {
     return 'You have $attacks attack(s) left ($type).';
   }
@@ -1054,13 +987,8 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String noAttacksLeftDescription(String type) {
+  String noAttacksLeftDescription(Object type) {
     return 'Congratulations, you have done all your attacks ($type)!';
-  }
-
-  @override
-  String noDefensesLeftDescription(Object type) {
-    return 'You have taken all your defenses ($type)!';
   }
 
   @override
@@ -1089,12 +1017,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get threeStars => '3 stars';
 
   @override
-  String get highDestruction => 'High destruction';
-
-  @override
-  String get lowDestruction => 'Low destruction';
-
-  @override
   String get avg => 'Avg';
 
   @override
@@ -1111,15 +1033,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get defenseStars => 'Defense Stars';
-
-  @override
-  String get defenseDestruction => 'Defense Destruction';
-
-  @override
-  String get defenseAverageStars => 'Defense Avg Stars';
-
-  @override
-  String get defenseAverageDestruction => 'Defense Avg Destruction';
 
   @override
   String get zeroStar => '0 Star';
@@ -1247,11 +1160,6 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String mostMovingHourDescription(int hour) {
-    return '${hour}h is usually the hour with the most join/leave activity.';
-  }
-
-  @override
   String stillInClanNumberDescription(int number) {
     return '$number player(s) joined and are still in the clan.';
   }
@@ -1259,16 +1167,6 @@ class AppLocalizationsHu extends AppLocalizations {
   @override
   String leftClanNumberDescription(int number) {
     return '$number player(s) joined, then left the clan and never rejoined.';
-  }
-
-  @override
-  String joinLeaveDifferenceDownDescription(int number, String date) {
-    return 'Your clan has lost $number member(s) this season ($date).';
-  }
-
-  @override
-  String joinLeaveDifferenceEqualDescription(String date) {
-    return 'Your clan has the same number of members as at the beginning of the season ($date).';
   }
 
   @override
@@ -1380,9 +1278,6 @@ class AppLocalizationsHu extends AppLocalizations {
       'Lépj kapcsolatba egy vezetővel vagy egy társvezetővel, hogy megnyisd a háború naplót.';
 
   @override
-  String get warLogClosed => 'Háborúnapló lezárva.';
-
-  @override
   String get rounds => 'Körök';
 
   @override
@@ -1481,16 +1376,6 @@ class AppLocalizationsHu extends AppLocalizations {
   @override
   String cwlStars(int stars) {
     return 'Your clan has a total of $stars stars.';
-  }
-
-  @override
-  String cwlMissingStarsFromNext(int stars) {
-    return 'Your clan is missing $stars stars to catch up with the next clan.';
-  }
-
-  @override
-  String cwlMissingStarsFromFirst(int stars) {
-    return 'Your clan is missing $stars stars to catch up with the first clan.';
   }
 
   @override

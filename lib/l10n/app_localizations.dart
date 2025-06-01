@@ -203,18 +203,6 @@ abstract class AppLocalizations {
   /// **'An error occurred while logging in. Please try again later.'**
   String get loginError;
 
-  /// No description provided for @doesNotExist.
-  ///
-  /// In en, this message translates to:
-  /// **'{tag} does not exist.'**
-  String doesNotExist(String tag);
-
-  /// No description provided for @isAlreadyLinked.
-  ///
-  /// In en, this message translates to:
-  /// **'{tag} is already linked to someone.'**
-  String isAlreadyLinked(String tag);
-
   /// No description provided for @username.
   ///
   /// In en, this message translates to:
@@ -232,24 +220,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Player Tags'**
   String get playerTags;
-
-  /// No description provided for @linkedAccounts.
-  ///
-  /// In en, this message translates to:
-  /// **'Linked Accounts'**
-  String get linkedAccounts;
-
-  /// No description provided for @followingTagsDoNotExist.
-  ///
-  /// In en, this message translates to:
-  /// **'The following tags do not exist: {tags}.'**
-  String followingTagsDoNotExist(String tags);
-
-  /// No description provided for @followingTagsAreAlreadyLinked.
-  ///
-  /// In en, this message translates to:
-  /// **'The following tags are already linked to someone: {tags}.'**
-  String followingTagsAreAlreadyLinked(String tags);
 
   /// No description provided for @welcome.
   ///
@@ -587,30 +557,6 @@ abstract class AppLocalizations {
   /// **'Player'**
   String get player;
 
-  /// No description provided for @notFoundOrNotLinkedToOurSystem.
-  ///
-  /// In en, this message translates to:
-  /// **'{player} not found or not linked to our system.'**
-  String notFoundOrNotLinkedToOurSystem(String player);
-
-  /// No description provided for @tryAnotherNameOrTagOrLinkIt.
-  ///
-  /// In en, this message translates to:
-  /// **'Try another name/tag or link it.'**
-  String get tryAnotherNameOrTagOrLinkIt;
-
-  /// No description provided for @playerNotFound.
-  ///
-  /// In en, this message translates to:
-  /// **'Player not found'**
-  String get playerNotFound;
-
-  /// No description provided for @noValueEntered.
-  ///
-  /// In en, this message translates to:
-  /// **'No value entered'**
-  String get noValueEntered;
-
   /// No description provided for @manage.
   ///
   /// In en, this message translates to:
@@ -701,29 +647,11 @@ abstract class AppLocalizations {
   /// **'Failed to delete link. Please try again later.'**
   String get failedToDeleteTryAgain;
 
-  /// No description provided for @enterPlayerTagWarning.
-  ///
-  /// In en, this message translates to:
-  /// **'You must enter a player tag and click on the \"+\" to continue.'**
-  String get enterPlayerTagWarning;
-
-  /// No description provided for @failedToLoadAccountData.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to load accounts data.'**
-  String get failedToLoadAccountData;
-
   /// No description provided for @failedToUpdateOrder.
   ///
   /// In en, this message translates to:
   /// **'Failed to update the order of accounts.'**
   String get failedToUpdateOrder;
-
-  /// No description provided for @loadAccountData.
-  ///
-  /// In en, this message translates to:
-  /// **'Load accounts data'**
-  String get loadAccountData;
 
   /// No description provided for @manageAccounts.
   ///
@@ -760,12 +688,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to log out?'**
   String get confirmLogout;
-
-  /// No description provided for @tagOrNamePlayer.
-  ///
-  /// In en, this message translates to:
-  /// **'Player\'s tag or name'**
-  String get tagOrNamePlayer;
 
   /// No description provided for @searchPlayer.
   ///
@@ -1471,12 +1393,6 @@ abstract class AppLocalizations {
   /// **'Ended {days} days ago'**
   String endedDaysAgo(int days);
 
-  /// No description provided for @trophiesByMonth.
-  ///
-  /// In en, this message translates to:
-  /// **'Trophies by month'**
-  String get trophiesByMonth;
-
   /// No description provided for @trophiesBySeason.
   ///
   /// In en, this message translates to:
@@ -1506,12 +1422,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clan\'s name'**
   String get clanName;
-
-  /// No description provided for @nameOrTagClan.
-  ///
-  /// In en, this message translates to:
-  /// **'Clan\'s name or tag'**
-  String get nameOrTagClan;
 
   /// No description provided for @noResult.
   ///
@@ -1915,18 +1825,6 @@ abstract class AppLocalizations {
   /// **'Your clan had an average of {percent}% destruction rate from the last 50 wars.'**
   String warHistoryAverageHitRateDescription(String percent);
 
-  /// No description provided for @warHistoryAverageClanStarsPerMember.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan had an average of {stars} stars per member from the last 50 wars.'**
-  String warHistoryAverageClanStarsPerMember(Object stars);
-
-  /// No description provided for @warHistoryAverageMembers.
-  ///
-  /// In en, this message translates to:
-  /// **'~{members} members per war'**
-  String warHistoryAverageMembers(int members);
-
   /// No description provided for @attacksLeftDescription.
   ///
   /// In en, this message translates to:
@@ -1943,13 +1841,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Congratulations, you have done all your attacks ({type})!'**
-  String noAttacksLeftDescription(String type);
-
-  /// No description provided for @noDefensesLeftDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You have taken all your defenses ({type})!'**
-  String noDefensesLeftDescription(Object type);
+  String noAttacksLeftDescription(Object type);
 
   /// No description provided for @pointsLeftDescription.
   ///
@@ -1993,18 +1885,6 @@ abstract class AppLocalizations {
   /// **'3 stars'**
   String get threeStars;
 
-  /// No description provided for @highDestruction.
-  ///
-  /// In en, this message translates to:
-  /// **'High destruction'**
-  String get highDestruction;
-
-  /// No description provided for @lowDestruction.
-  ///
-  /// In en, this message translates to:
-  /// **'Low destruction'**
-  String get lowDestruction;
-
   /// Abbreviation for average
   ///
   /// In en, this message translates to:
@@ -2040,24 +1920,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Defense Stars'**
   String get defenseStars;
-
-  /// No description provided for @defenseDestruction.
-  ///
-  /// In en, this message translates to:
-  /// **'Defense Destruction'**
-  String get defenseDestruction;
-
-  /// No description provided for @defenseAverageStars.
-  ///
-  /// In en, this message translates to:
-  /// **'Defense Avg Stars'**
-  String get defenseAverageStars;
-
-  /// No description provided for @defenseAverageDestruction.
-  ///
-  /// In en, this message translates to:
-  /// **'Defense Avg Destruction'**
-  String get defenseAverageDestruction;
 
   /// No description provided for @zeroStar.
   ///
@@ -2275,12 +2137,6 @@ abstract class AppLocalizations {
   /// **'{number} unique player(s) joined/left the clan during the current season ({date}).'**
   String uniqueNumberDescription(int number, String date);
 
-  /// The hour with the most join/leave activity.
-  ///
-  /// In en, this message translates to:
-  /// **'{hour}h is usually the hour with the most join/leave activity.'**
-  String mostMovingHourDescription(int hour);
-
   /// No description provided for @stillInClanNumberDescription.
   ///
   /// In en, this message translates to:
@@ -2292,18 +2148,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{number} player(s) joined, then left the clan and never rejoined.'**
   String leftClanNumberDescription(int number);
-
-  /// Number of members lost by the clan this season.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan has lost {number} member(s) this season ({date}).'**
-  String joinLeaveDifferenceDownDescription(int number, String date);
-
-  /// Difference in the number of members between the beginning and the end of the season.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan has the same number of members as at the beginning of the season ({date}).'**
-  String joinLeaveDifferenceEqualDescription(String date);
 
   /// [The player] left the clan on 16/06/2024 at 10:35.
   ///
@@ -2497,12 +2341,6 @@ abstract class AppLocalizations {
   /// **'Contact a leader or a co-leader to open the war log.'**
   String get askForWarLogOpening;
 
-  /// No description provided for @warLogClosed.
-  ///
-  /// In en, this message translates to:
-  /// **'War log closed.'**
-  String get warLogClosed;
-
   /// No description provided for @rounds.
   ///
   /// In en, this message translates to:
@@ -2648,18 +2486,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your clan has a total of {stars} stars.'**
   String cwlStars(int stars);
-
-  /// No description provided for @cwlMissingStarsFromNext.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan is missing {stars} stars to catch up with the next clan.'**
-  String cwlMissingStarsFromNext(int stars);
-
-  /// No description provided for @cwlMissingStarsFromFirst.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan is missing {stars} stars to catch up with the first clan.'**
-  String cwlMissingStarsFromFirst(int stars);
 
   /// No description provided for @cwlDestructionPercentage.
   ///
