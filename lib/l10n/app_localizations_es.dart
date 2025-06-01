@@ -331,7 +331,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loadAccountData => 'Load accounts data';
 
   @override
-  String get syncAccounts => 'Sync Accounts';
+  String get manageAccounts => 'Manage your accounts';
+
+  @override
+  String get manageAccountsDescription =>
+      'You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.';
 
   @override
   String get confirm => 'Confirm';

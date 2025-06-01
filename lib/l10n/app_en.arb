@@ -147,7 +147,8 @@
     "failedToLoadAccountData": "Failed to load accounts data.",
     "failedToUpdateOrder": "Failed to update the order of accounts.",
     "loadAccountData": "Load accounts data",
-    "syncAccounts": "Sync Accounts",
+    "manageAccounts": "Manage your accounts",
+    "manageAccountsDescription": "You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.",
     "confirm": "Confirm",
     "@search": {
         "description": "Search for a player or a clan"

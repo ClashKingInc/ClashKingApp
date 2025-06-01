@@ -725,11 +725,17 @@ abstract class AppLocalizations {
   /// **'Load accounts data'**
   String get loadAccountData;
 
-  /// No description provided for @syncAccounts.
+  /// No description provided for @manageAccounts.
   ///
   /// In en, this message translates to:
-  /// **'Sync Accounts'**
-  String get syncAccounts;
+  /// **'Manage your accounts'**
+  String get manageAccounts;
+
+  /// No description provided for @manageAccountsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.'**
+  String get manageAccountsDescription;
 
   /// No description provided for @confirm.
   ///
