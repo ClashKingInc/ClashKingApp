@@ -334,4 +334,16 @@ class PlayerService extends ChangeNotifier {
         return 'No clan';
     }
   }
+
+  String getMinimalisticPlayerByTag(String tag) {
+    final player = _profiles.cast<Player?>().firstWhere((p) => p?.tag == tag, orElse: () => null);
+    if (player != null) {
+      return jsonEncode({
+        "player_tag": player.tag,
+        "name": player.name,
+        "townHallLevel": player.townHallLevel,
+      });
+    }
+    return "{}";
+  }
 }

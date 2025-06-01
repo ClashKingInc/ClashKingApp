@@ -12,9 +12,9 @@ class User {
   // Factory method to create a User object from a JSON response
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      userId: json['user_id'],
-      username: json['discord_username'],
-      avatarUrl: json['avatar_url'],
+      userId: json['user_id'] ??  '',
+      username: json['discord_username'] ?? json['username'] ?? 'Unknown',
+      avatarUrl: json['avatar_url'] ?? '',
     );
   }
 

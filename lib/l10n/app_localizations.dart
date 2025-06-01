@@ -713,17 +713,29 @@ abstract class AppLocalizations {
   /// **'Failed to load accounts data.'**
   String get failedToLoadAccountData;
 
+  /// No description provided for @failedToUpdateOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update the order of accounts.'**
+  String get failedToUpdateOrder;
+
   /// No description provided for @loadAccountData.
   ///
   /// In en, this message translates to:
   /// **'Load accounts data'**
   String get loadAccountData;
 
-  /// Search for a player or a clan
+  /// No description provided for @syncAccounts.
   ///
   /// In en, this message translates to:
-  /// **'Search'**
-  String get search;
+  /// **'Sync Accounts'**
+  String get syncAccounts;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
 
   /// No description provided for @warning.
   ///

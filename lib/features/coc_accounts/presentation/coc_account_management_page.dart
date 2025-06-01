@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/app_bar/coc_accounts_app_bar.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
@@ -21,10 +22,17 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
   final TextEditingController _playerTagController = TextEditingController();
   final TextEditingController _apiTokenController = TextEditingController();
   bool _showApiTokenInput = false;
-  bool _isLoading = false;
+  bool _isAddingLoading = false;
   String _errorMessage = "";
   List<Map<String, dynamic>> _tempUserAccounts = [];
   bool _isOrderChanged = false;
+  String? _deletingPlayerTag;
+
+  @override
+  void initState() {
+    super.initState();
+    _syncTempAccountsWithPlayerService();
+  }
 
   void _loadAllAccountData() async {
     final playerService = context.read<PlayerService>();
@@ -36,15 +44,21 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     // Save the new order
     if (_isOrderChanged) {
       playerTags = _tempUserAccounts
-          .map((account) => account["tag"].toString())
+          .map((account) => account["player_tag"].toString())
           .toList();
-      await cocService.updateAccountOrder(playerTags);
+      try {
+        await cocService.updateAccountOrder(playerTags);
+      } catch (error) {
+        setState(() {
+          _errorMessage = AppLocalizations.of(context)!.failedToUpdateOrder;
+        });
+      }
       _isOrderChanged = false;
     } else {
       playerTags = context
           .read<CocAccountService>()
           .cocAccounts
-          .map((account) => account["tag"].toString())
+          .map((account) => account["player_tag"].toString())
           .toList();
     }
 
@@ -75,10 +89,6 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         ? ImageAssets.darkModeTextLogo
         : ImageAssets.lightModeTextLogo);
 
-    if (_tempUserAccounts.length != userAccounts.length) {
-      _tempUserAccounts = List.from(userAccounts);
-    }
-
     return Scaffold(
       appBar: CocAccountsAppBar(),
       body: Padding(
@@ -87,7 +97,6 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              // Permet de prendre tout l'espace disponible
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,15 +107,17 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                         height: 100,
                         width: 100,
                         child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: logoUrl),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            imageUrl: logoUrl),
                       ),
                       SizedBox(height: 16),
                       SizedBox(
                         width: 200,
                         child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: textLogoUrl),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            imageUrl: textLogoUrl),
                       ),
                       SizedBox(height: 32),
                       Text(AppLocalizations.of(context)!.welcome,
@@ -122,7 +133,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.playerTag,
                         border: OutlineInputBorder(),
-                        suffixIcon: _isLoading
+                        suffixIcon: _isAddingLoading
                             ? SizedBox(
                                 height: 24,
                                 width: 24,
@@ -199,33 +210,48 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                     index++)
                                   ListTile(
                                     key: ValueKey(
-                                        _tempUserAccounts[index]["tag"]),
+                                        _tempUserAccounts[index]["player_tag"]),
                                     contentPadding: EdgeInsets.zero,
                                     leading: CircleAvatar(
                                       backgroundColor: Colors.transparent,
                                       child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
                                         imageUrl: ImageAssets.townHall(
                                             _tempUserAccounts[index]
-                                                ["townHallLevel"]),
+                                                    ["townHallLevel"] ??
+                                                1),
                                       ),
                                     ),
-                                    title:
-                                        Text(_tempUserAccounts[index]["name"]),
-                                    subtitle:
-                                        Text(_tempUserAccounts[index]["tag"]),
+                                    title: Text(
+                                        _tempUserAccounts[index]["name"] ?? ""),
+                                    subtitle: Text(_tempUserAccounts[index]
+                                            ["player_tag"] ??
+                                        ""),
                                     trailing: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Icon(Icons.drag_handle),
                                         IconButton(
-                                          icon: Icon(Icons.delete,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
+                                          icon: _deletingPlayerTag == _tempUserAccounts[index]["player_tag"]
+                                              ? SizedBox(
+                                                  height: 24,
+                                                  width: 24,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                                )
+                                              : Icon(Icons.delete,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary),
                                           onPressed: () => _removeAccount(
-                                              _tempUserAccounts[index]["tag"]),
+                                              _tempUserAccounts[index]
+                                                  ["player_tag"]),
                                         ),
                                       ],
                                     ),
@@ -246,7 +272,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                     onPressed:
                         userAccounts.isNotEmpty ? _loadAllAccountData : null,
                     child: Text(
-                      AppLocalizations.of(context)!.loadAccountData,
+                      AppLocalizations.of(context)!.confirm,
                     ),
                   ),
                 ),
@@ -262,13 +288,13 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     setState(() {
       _errorMessage = message;
       _showApiTokenInput = showApiToken;
-      _isLoading = false;
+      _isAddingLoading = false;
     });
   }
 
   Future<void> _addAccount() async {
     setState(() {
-      _isLoading = true;
+      _isAddingLoading = true;
       _errorMessage = "";
     });
 
@@ -276,7 +302,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     if (playerTag.isEmpty) {
       setState(() {
         _errorMessage = AppLocalizations.of(context)!.enterPlayerTag;
-        _isLoading = false;
+        _isAddingLoading = false;
       });
       return;
     }
@@ -284,7 +310,8 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     final cocService = context.read<CocAccountService>();
 
     // Check if the player tag is already in the list
-    if (cocService.cocAccounts.any((account) => account["tag"] == playerTag)) {
+    if (cocService.cocAccounts
+        .any((account) => account["player_tag"] == playerTag)) {
       _setError(AppLocalizations.of(context)!.accountAlreadyLinkedToYou);
       return;
     }
@@ -316,16 +343,17 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
 
     // Get the new account data
     final newAccount = {
-      "tag": response["account"]["tag"],
+      "player_tag": response["account"]["tag"],
       "name": response["account"]["name"],
-      "townHallLevel": response["account"]["townHallLevel"]
+      "townHallLevel": response["account"]["townHallLevel"] ?? 1
     };
 
     // Add the account to the local list
     setState(() {
-      _isLoading = false;
+      _isAddingLoading = false;
       _errorMessage = "";
       context.read<CocAccountService>().addLocalAccount(newAccount);
+      _syncTempAccountsWithPlayerService();
     });
 
     _playerTagController.clear();
@@ -333,7 +361,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
 
   Future<void> _submitApiToken() async {
     setState(() {
-      _isLoading = true;
+      _isAddingLoading = true;
       _errorMessage = "";
     });
 
@@ -343,7 +371,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     if (playerTag.isEmpty || apiToken.isEmpty) {
       setState(() {
         _errorMessage = AppLocalizations.of(context)!.fillAllFields;
-        _isLoading = false;
+        _isAddingLoading = false;
       });
       return;
     }
@@ -376,16 +404,17 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
 
     // Get the new account data
     final newAccount = {
-      "tag": response["account"]["tag"],
+      "player_tag": response["account"]["tag"],
       "name": response["account"]["name"],
-      "townHallLevel": response["account"]["townHallLevel"]
+      "townHallLevel": response["account"]["townHallLevel"] ?? 1
     };
 
     // Add the account to the local list
     setState(() {
-      _isLoading = false;
+      _isAddingLoading = false;
       _errorMessage = "";
       context.read<CocAccountService>().addLocalAccount(newAccount);
+      _syncTempAccountsWithPlayerService();
     });
 
     _playerTagController.clear();
@@ -393,11 +422,36 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
   }
 
   Future<void> _removeAccount(String playerTag) async {
+
+    setState(() {
+      _deletingPlayerTag = playerTag;
+      _errorMessage = "";
+    });
+
     final cocService = context.read<CocAccountService>();
     await cocService.removeCocAccount(playerTag);
 
     setState(() {
-      _tempUserAccounts.removeWhere((account) => account["tag"] == playerTag);
+      _tempUserAccounts
+          .removeWhere((account) => account["player_tag"] == playerTag);
+      _deletingPlayerTag = null;
+    });
+  }
+
+  void _syncTempAccountsWithPlayerService() {
+    final playerService = context.read<PlayerService>();
+    setState(() {
+      _tempUserAccounts =
+          context.read<CocAccountService>().cocAccounts.map((account) {
+        final playerTag = account["player_tag"];
+        final jsonString = playerService.getMinimalisticPlayerByTag(playerTag);
+        final playerData = jsonDecode(jsonString);
+        return {
+          "player_tag": playerTag,
+          "name": playerData["name"],
+          "townHallLevel": playerData["townHallLevel"] ?? 1,
+        };
+      }).toList();
     });
   }
 }

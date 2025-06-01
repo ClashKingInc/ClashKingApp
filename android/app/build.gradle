@@ -15,7 +15,7 @@ if (localPropertiesFile.exists()) {
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '1'
 def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '1.0'
 def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion')?.toInteger() ?: 21
-def flutterTargetSdkVersion = localProperties.getProperty('flutter.targetSdkVersion')?.toInteger() ?: 34
+def flutterTargetSdkVersion = localProperties.getProperty('flutter.targetSdkVersion')?.toInteger() ?: 36
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
@@ -25,8 +25,8 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "com.clashking.clashkingapp"
-    compileSdk 35
-    ndkVersion '26.3.11579264'
+    compileSdk 36
+    ndkVersion '29.0.13113456'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -44,7 +44,7 @@ android {
     defaultConfig {
         applicationId "com.clashking.clashkingapp"
         minSdkVersion flutterMinSdkVersion
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -64,6 +64,12 @@ android {
         }
     }
 }
+
+tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
 
 flutter {
     source '../..'

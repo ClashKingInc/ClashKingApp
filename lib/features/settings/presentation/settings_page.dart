@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/dialogs/logout_dialog.dart';
+import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -16,7 +17,6 @@ import 'package:clashkingapp/features/settings/presentation/translation_page.dar
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/settings/presentation/features_vote.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 class SettingsInfoScreen extends StatefulWidget {
   final User user;
@@ -196,14 +196,19 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
 
   Future<void> _logOut() async {
     await clearPrefs();
+    print("SettingsInfoScreen: _logOut called, clearing prefs and signing out.");
     if (mounted) {
+      final authService = Provider.of<AuthService>(context, listen: false);
+      await authService.signOut();
       globalNavigatorKey.currentState?.pushReplacement(
         MaterialPageRoute(builder: (context) => LoginPage()),
       );
     }
+    else {
+      print("SettingsInfoScreen: _logOut called but context is not mounted.");
+    }
   }
 }
-
 
 Widget _buildVersionInfoTile(BuildContext context) {
   return FutureBuilder<String>(

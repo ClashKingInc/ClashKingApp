@@ -324,10 +324,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get failedToLoadAccountData => 'Failed to load accounts data.';
 
   @override
+  String get failedToUpdateOrder => 'Failed to update the order of accounts.';
+
+  @override
   String get loadAccountData => 'Load accounts data';
 
   @override
-  String get search => 'Zoeken';
+  String get syncAccounts => 'Sync Accounts';
+
+  @override
+  String get confirm => 'Confirm';
 
   @override
   String get warning => 'Waarschuwing';

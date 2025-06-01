@@ -19,7 +19,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  bool _isLoading = false; // Indicateur de chargement
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {

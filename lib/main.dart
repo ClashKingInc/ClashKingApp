@@ -21,6 +21,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter/foundation.dart';
 
 // CallbackDispatcher for background execution (Android only)
+@pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,7 @@ Future<void> main() async {
     (options) {
       options.dsn = const String.fromEnvironment('SENTRY_DSN', defaultValue: '');
       options.tracesSampleRate = 1.0;
+      options.debug = false;
     },
     appRunner: () async {
 

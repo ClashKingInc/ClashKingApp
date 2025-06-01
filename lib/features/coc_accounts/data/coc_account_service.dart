@@ -138,7 +138,7 @@ class CocAccountService extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        _cocAccounts.removeWhere((account) => account["tag"] == playerTag);
+        _cocAccounts.removeWhere((account) => account["player_tag"] == playerTag);
         notifyListeners();
       } else {
         Sentry.captureMessage(
@@ -337,5 +337,14 @@ class CocAccountService extends ChangeNotifier {
       Sentry.captureException(e, stackTrace: stack);
       rethrow;
     }
+  }
+
+  void clearAccounts() {
+    _cocAccounts.clear();
+    _isLoading = false;
+    _selectedTag = null;
+    selectedTagNotifier.value = null;
+    profiles.clear();
+    notifyListeners();
   }
 }

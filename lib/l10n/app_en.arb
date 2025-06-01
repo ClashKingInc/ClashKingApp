@@ -145,8 +145,10 @@
     "failedToDeleteTryAgain": "Failed to delete link. Please try again later.",
     "enterPlayerTagWarning": "You must enter a player tag and click on the \"+\" to continue.",
     "failedToLoadAccountData": "Failed to load accounts data.",
+    "failedToUpdateOrder": "Failed to update the order of accounts.",
     "loadAccountData": "Load accounts data",
-    "search": "Search",
+    "syncAccounts": "Sync Accounts",
+    "confirm": "Confirm",
     "@search": {
         "description": "Search for a player or a clan"
     },

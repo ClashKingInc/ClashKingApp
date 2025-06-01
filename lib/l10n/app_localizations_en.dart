@@ -322,10 +322,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failedToLoadAccountData => 'Failed to load accounts data.';
 
   @override
+  String get failedToUpdateOrder => 'Failed to update the order of accounts.';
+
+  @override
   String get loadAccountData => 'Load accounts data';
 
   @override
-  String get search => 'Search';
+  String get syncAccounts => 'Sync Accounts';
+
+  @override
+  String get confirm => 'Confirm';
 
   @override
   String get warning => 'Warning';
@@ -1854,9 +1860,6 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
       'You must enter a player tag and click on the \"+\" to continue.';
 
   @override
-  String get search => 'Search';
-
-  @override
   String get warning => 'Warning';
 
   @override
@@ -3095,9 +3098,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String get enterPlayerTagWarning =>
       'You must enter a player tag and click on the \"+\" to continue.';
-
-  @override
-  String get search => 'Search';
 
   @override
   String get warning => 'Warning';

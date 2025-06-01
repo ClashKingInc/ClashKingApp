@@ -325,10 +325,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get failedToLoadAccountData => 'Failed to load accounts data.';
 
   @override
+  String get failedToUpdateOrder => 'Failed to update the order of accounts.';
+
+  @override
   String get loadAccountData => 'Load accounts data';
 
   @override
-  String get search => 'Busca';
+  String get syncAccounts => 'Sync Accounts';
+
+  @override
+  String get confirm => 'Confirm';
 
   @override
   String get warning => 'Advertencia';
@@ -1829,9 +1835,6 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   @override
   String get failedToDeleteTryAgain =>
       'Error al eliminar el enlace. Inténtalo de nuevo más tarde.';
-
-  @override
-  String get search => 'Busca';
 
   @override
   String get warning => 'Warning';

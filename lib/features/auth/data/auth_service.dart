@@ -1,3 +1,4 @@
+import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/models/user.dart';
 import 'package:clashkingapp/core/utils/discord_auth_helper.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
@@ -48,6 +49,8 @@ class AuthService extends ChangeNotifier {
       print("🔄 Device ID: $deviceId");
       final deviceName = await _tokenService.getDeviceName();
       print("🔄 Device Name: $deviceName");
+      print("🔄 Discord code_verifier : ${result['code_verifier']}");
+      print("🔄 Discord code: ${result['code']}");
       final response = await _apiService.post('/auth/discord', {
         'code': result['code']!,
         'redirect_uri': DiscordAuthHelper.getRedirectUri(),
@@ -55,10 +58,12 @@ class AuthService extends ChangeNotifier {
         'device_id': deviceId,
         'device_name': deviceName,
       });
+      
       print("🔄 Discord login response: $response");
 
       await _tokenService.saveTokens(
           response['access_token'], response['refresh_token']);
+      _currentUser = User.fromJson(response['user']);
       print("🔄 Tokens saved successfully.");
       notifyListeners();
     } catch (e) {
@@ -132,5 +137,15 @@ class AuthService extends ChangeNotifier {
     } else {
       throw Exception('API Error: ${response.statusCode} ${response.body}');
     }
+  }
+
+  Future<void> signOut() async {
+    await _tokenService.clearTokens();
+    clearPrefs();
+    _isAuthenticated = false;
+    _currentUser = null;
+    _cocAccounts = null;
+    _accessToken = null;
+    notifyListeners();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -5,9 +6,6 @@ import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
-import 'package:clashkingapp/common/widgets/cards/add_player_card.dart';
-import 'package:clashkingapp/common/widgets/cards/delete_player_card.dart';
 import 'package:clashkingapp/features/settings/presentation/settings_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -32,7 +30,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           if (newValue != "manageAccounts") {
             cocService.setSelectedTag(newValue);
           } else {
-            _showManageAccountsDialog(context, cocService);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddCocAccountPage(),
+              ),
+            );
           }
         },
         items: [
@@ -46,7 +49,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     width: 30,
                     child: CachedNetworkImage(
                       imageUrl: profile.townHallPic,
-                      
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
                   ),
@@ -54,7 +56,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Text(
                     profile.name,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface),
                   ),
                 ],
               ),
@@ -96,7 +99,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: CachedNetworkImage(
                     imageUrl: authService.currentUser?.avatarUrl ?? "",
                     fit: BoxFit.cover,
-                    
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
@@ -106,61 +108,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         SizedBox(width: 16),
       ],
-    );
-  }
-
-  void _showManageAccountsDialog(BuildContext context, CocAccountService cocService) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        int currentSegment = 0;
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              title: Text(AppLocalizations.of(context)?.manage ?? 'Manage'),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomSlidingSegmentedControl<int>(
-                      children: {
-                        0: Text(AppLocalizations.of(context)?.add ?? 'Add'),
-                        1: Text(AppLocalizations.of(context)?.delete ?? 'Delete'),
-                      },
-                      initialValue: currentSegment,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.tertiary.withValues(alpha : 0.5),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      thumbDecoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius: BorderRadius.circular(6),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha : .3),
-                            blurRadius: 4.0,
-                            spreadRadius: 1.0,
-                            offset: Offset(0.0, 2.0),
-                          ),
-                        ],
-                      ),
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInToLinear,
-                      onValueChanged: (newValue) {
-                        setState(() {
-                          currentSegment = newValue;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 4),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
     );
   }
 }
