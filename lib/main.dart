@@ -15,20 +15,34 @@ import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
-import 'package:flutter/widgets.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter/foundation.dart';
+import 'package:clashkingapp/widgets/war_widget.dart';
 
 // CallbackDispatcher for background execution (Android only)
 @pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await dotenv.load(fileName: ".env");
-    final myAppState = MyAppState();
-    await myAppState.updateWarWidget();
-    return Future.value(true);
+    try {
+      WidgetsFlutterBinding.ensureInitialized();
+      await dotenv.load(fileName: ".env");
+      
+      // Handle different background tasks
+      if (task == 'simplePeriodicTask') {
+        // Regular periodic widget update
+        final myAppState = MyAppState();
+        await myAppState.updateWarWidget();
+      } else if (task == 'refreshWarWidget') {
+        // Manual refresh from widget button
+        await WarWidgetService.handleWidgetRefresh();
+      }
+      
+      return Future.value(true);
+    } catch (e) {
+      print("❌ Background task error: $e");
+      return Future.value(false);
+    }
   });
 }
 
@@ -48,6 +62,8 @@ Future<void> main() async {
 
       if (!kIsWeb) {
         Workmanager().initialize(callbackDispatcher);
+        // Initialize war widget service for background callbacks
+        WarWidgetService.initialize();
       }
 
       await Future.wait([

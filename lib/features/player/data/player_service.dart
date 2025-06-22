@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
@@ -27,9 +28,14 @@ class PlayerService extends ChangeNotifier {
     print("📊 Available profiles: ${profiles.map((p) => p.tag).toList()}");
 
     if (selectedTag == null) return null;
-    return profiles.firstWhere(
-      (profile) => profile.tag == selectedTag,
-    );
+    try {
+      return profiles.firstWhere(
+        (profile) => profile.tag == selectedTag,
+      );
+    } catch (e) {
+      print("⚠️ Profile not found for tag: $selectedTag");
+      return null;
+    }
   }
 
   /// Init basic stats for the saved accounts.
@@ -63,6 +69,8 @@ class PlayerService extends ChangeNotifier {
             final player = Player.fromJson(account);
             if (player.clanOverview.tag.isNotEmpty) {
               clanTagsByPlayer[player.tag] = player.clanOverview.tag;
+              // Cache clan tag for widget use
+              storePrefs('player_${player.tag}_clan_tag', player.clanOverview.tag);
             }
             return player;
           }).toList();

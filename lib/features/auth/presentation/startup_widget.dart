@@ -36,6 +36,8 @@ class StartupWidgetState extends State<StartupWidget> {
       final clanService = context.read<ClanService>();
       final warService = context.read<WarCwlService>();
       try {
+        // Load the selected tag from SharedPreferences first
+        await cocService.loadSelectedTag();
         await cocService.loadApiData(playerService, clanService, warService);
       } catch (e) {
         if (mounted) {

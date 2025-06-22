@@ -30,6 +30,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -42,16 +43,18 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
 
       _debounce = Timer(const Duration(seconds: 1), () {
         if (_controller.text != lastSearch) {
-          if (!isEmpty) {
+          if (!isEmpty && mounted) {
             setState(() {
               isSearching = true;
             });
           }
           _searchResults = _searchPlayerByTag(_controller.text);
           _searchResults!.whenComplete(() {
-            setState(() {
-              isSearching = false;
-            });
+            if (mounted) {
+              setState(() {
+                isSearching = false;
+              });
+            }
           });
           lastSearch = _controller.text;
         }
@@ -64,31 +67,41 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
   }
 
   Future<List<dynamic>> _searchPlayerByTag(String query) async {
-    dynamic response;
-    if (RegExp(r'^#[PYLQGRJCUV0289]{3,9}$').hasMatch(query) ||
-        RegExp(r'^[PYLQGRJCUV0289]{3,9}$').hasMatch(query)) {
-      query = query.replaceFirst('#', '!');
-      response = await http
-          .get(Uri.parse('${ApiService.proxyUrl}/players/$query'));
-    } else {
-      response = await http
-          .get(Uri.parse('${ApiService.apiUrlV1}/player/full-search/$query'));
-    }
-
-    if (query.isEmpty || query.length < 3) {
-      isSearching = false;
-      return [];
-    }
-
-    if (response.statusCode == 200) {
-      var body = utf8.decode(response.bodyBytes);
-      var data = jsonDecode(body);
-      if (data.containsKey('items')) {
-        return data['items'];
-      } else {
-        return [data];
+    try {
+      if (query.isEmpty || query.length < 3) {
+        return [];
       }
-    } else {
+
+      dynamic response;
+      const timeout = Duration(seconds: 10);
+      
+      if (RegExp(r'^#[PYLQGRJCUV0289]{3,9}$').hasMatch(query) ||
+          RegExp(r'^[PYLQGRJCUV0289]{3,9}$').hasMatch(query)) {
+        query = query.replaceFirst('#', '!');
+        response = await http
+            .get(Uri.parse('${ApiService.proxyUrl}/players/$query'))
+            .timeout(timeout);
+      } else {
+        response = await http
+            .get(Uri.parse('${ApiService.apiUrlV1}/player/full-search/$query'))
+            .timeout(timeout);
+      }
+
+      if (response.statusCode == 200) {
+        var body = utf8.decode(response.bodyBytes);
+        var data = jsonDecode(body);
+        if (data.containsKey('items')) {
+          return data['items'];
+        } else {
+          return [data];
+        }
+      } else {
+        Sentry.captureMessage('Search API returned status ${response.statusCode} for query: $query');
+        return [];
+      }
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureMessage('Error searching for player: $query');
       return [];
     }
   }
@@ -130,9 +143,11 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                                   ),
                                   onPressed: () {
                                     _controller.clear();
-                                    setState(() {
-                                      isSearching = false;
-                                    });
+                                    if (mounted) {
+                                      setState(() {
+                                        isSearching = false;
+                                      });
+                                    }
                                   },
                                 )
                               : Icon(

@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/widgets/widgets_functions.dart';
+import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:home_widget/home_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
@@ -35,13 +35,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         frequency: Duration(minutes: 15),
       );
     }
-
-    /*selectedTagNotifier.addListener(() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await storePrefs('clanTag', account!.profileInfo.clan?.tag ?? '');
-      await prefs.setString('clanTag', account!.profileInfo.clan?.tag ?? '');
-      updateWidgets();
-    });*/
   }
 
   // This method is called when the app is resumed
@@ -122,24 +115,35 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   // Update the war widget
   Future<void> updateWarWidget() async {
-    await dotenv.load(fileName: ".env");
-    clanTag = await getPrefs('clanTag');
-    //final warInfo = await checkCurrentWar(clanTag);
-    if (clanTag != "") {
-      clanTag = clanTag?.replaceAll('#', '%23');
-    }
     try {
-      // Send data to the widget
-      //await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
-      // Request the Home Widget to update
+      await dotenv.load(fileName: ".env");
+      
+      // Get clan tag from the currently selected player
+      clanTag = await getCurrentPlayerClanTag();
+      
+      // Fetch war data using the new API
+      final warInfo = await fetchWarSummary(clanTag);
+      
+      // Save the war info to SharedPreferences for the widget
+      await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
+      
+      // Update the widget
       await HomeWidget.updateWidget(
         name: 'WarAppWidgetProvider',
         androidName: 'WarAppWidgetProvider',
       );
+      
+      print("✅ War widget updated successfully");
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
-      //Sentry.captureMessage('Failed to update war widget, clanTag: $clanTag, warInfo: $warInfo');
+      print("❌ Error updating war widget: $exception");
     }
+  }
+
+  // Get the clan tag from the currently selected player
+  Future<String?> getCurrentPlayerClanTag() async {
+    // Use the implementation from WarWidgetService
+    return await WarWidgetService.getCurrentPlayerClanTag();
   }
 
   // Update the widgets
@@ -149,89 +153,4 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
-  /* User management */
-
-  /*void deleteAccountByTag(String tag, MyAppState myAppState) {
-    accounts!.accounts.removeWhere((account) => account.profileInfo.tag == tag);
-    accounts!.selectedTag =
-        ValueNotifier<String?>(accounts!.accounts.first.profileInfo.tag);
-    accounts!.toDoList.deleteToDoByTag(tag);
-    accounts!.toDoList.reinitializeTotals();
-    accounts!.toDoList.calculateTotals();
-
-    myAppState.selectedTagNotifier.value = accounts!.selectedTag.value;
-    notifyListeners();
-  }
-
-  Future<void> addAccount(String tag, MyAppState appState) async {
-    // Vérifiez si le compte existe déjà
-    if (accounts!.tags.contains(tag)) {
-      throw Exception('Account with this tag already exists');
-    }
-
-    if (!tag.startsWith('#')) {
-      tag = '#$tag';
-    }
-
-    final transaction = Sentry.startTransaction(
-      'addAccount',
-      'task',
-      bindToScope: true,
-    );
-
-    // Récupérez les informations de profil pour le tag donné
-    ProfileInfo? profileInfo = await ProfileInfoService().fetchProfileInfo(tag);
-
-    if (profileInfo != null) {
-      // Créez un nouvel objet Account
-      Account newAccount = Account(profileInfo: profileInfo, clan: null);
-
-      // Ajoutez le compte à la liste des comptes
-      accounts!.accounts.add(newAccount);
-      accounts!.tags.add(tag);
-      var accountsService = AccountsService();
-
-      // Load clanInfo in the background
-      if (profileInfo.clan != null) {
-        accountsService.fetchClanWarInfoInBackground(
-            profileInfo.clan!.tag, newAccount, transaction);
-      }
-
-      // Attendez que le To-Do associé à ce compte soit complètement chargé
-      await ToDoService.fetchPlayerToDoData(profileInfo);
-
-      accounts!.toDoList.addToDo(profileInfo.toDo!);
-      accounts!.toDoList.reinitializeTotals();
-      accounts!.toDoList.calculateTotals();
-
-      // Définissez le nouveau compte comme étant sélectionné
-      accounts!.selectedTag = ValueNotifier<String?>(profileInfo.tag);
-
-      // Triez les comptes selon le critère de tri initial
-      accounts!.accounts.sort((a, b) {
-        if (a.profileInfo.tag == tag) {
-          return -1;
-        } else if (b.profileInfo.tag == tag) {
-          return 1;
-        } else {
-          int townHallComparison = b.profileInfo.townHallLevel
-              .compareTo(a.profileInfo.townHallLevel);
-          if (townHallComparison != 0) {
-            return townHallComparison;
-          } else {
-            return b.profileInfo.expLevel.compareTo(a.profileInfo.expLevel);
-          }
-        }
-      });
-
-      // Sauvegardez le nouveau tag sélectionné
-      await storePrefs('selectedTag', tag);
-
-      // Notifiez les auditeurs du changement
-      selectedTagNotifier.value = accounts?.selectedTag.value;
-      notifyListeners();
-    } else {
-      throw Exception('Failed to fetch profile information for tag: $tag');
-    }
-  }*/
 }

@@ -5,6 +5,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class TokenService {
   Future<String?> getAccessToken() async {
@@ -24,8 +25,7 @@ class TokenService {
       if (newAccessToken != null) {
         return newAccessToken;
       } else {
-        print(
-            "❌ Impossible de rafraîchir le token, l'utilisateur doit se reconnecter.");
+        print("❌ Failed to refresh token, user must re-authenticate");
         await clearTokens();
         return null;
       }
@@ -40,24 +40,31 @@ class TokenService {
       final response = await http.post(
         Uri.parse('${ApiService.apiUrlV2}/auth/refresh'),
         headers: {'Content-Type': 'application/json'},
-        body:
-            jsonEncode({"refresh_token": refreshToken, "device_id": deviceId}),
-      );
+        body: jsonEncode({"refresh_token": refreshToken, "device_id": deviceId}),
+      ).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final newAccessToken = data['access_token'];
 
+        if (newAccessToken == null || newAccessToken.isEmpty) {
+          Sentry.captureMessage("Token refresh API returned empty access token");
+          return null;
+        }
+
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('access_token', newAccessToken);
 
+        print("✅ Token refreshed successfully");
         return newAccessToken;
       } else {
-        print("❌ Erreur lors du rafraîchissement du token: ${response.body}");
+        Sentry.captureMessage("Token refresh failed with status ${response.statusCode}: ${response.body}");
         return null;
       }
-    } catch (e) {
-      print("❌ Exception lors du rafraîchissement du token: $e");
+    } catch (e, stackTrace) {
+      final errorMessage = "Exception during token refresh: $e";
+      Sentry.captureException(e, stackTrace: stackTrace);
+      Sentry.captureMessage(errorMessage);
       return null;
     }
   }
@@ -76,17 +83,32 @@ class TokenService {
 
   bool isTokenExpired(String token) {
     try {
-      final parts = token.split('.');
-      if (parts.length != 3) {
+      if (token.isEmpty) {
         return true;
       }
+      
+      final parts = token.split('.');
+      if (parts.length != 3) {
+        print("⚠️ Invalid JWT token format: expected 3 parts, got ${parts.length}");
+        return true;
+      }
+      
       final payload = json
           .decode(utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))));
+      
       final exp = payload['exp'];
+      if (exp == null) {
+        print("⚠️ JWT token missing expiration claim");
+        return true;
+      }
+      
       final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-
-      return now >= exp;
-    } catch (e) {
+      const bufferTime = 30; // Add 30 second buffer before expiration
+      
+      return now >= (exp - bufferTime);
+    } catch (e, stackTrace) {
+      Sentry.captureException(e, stackTrace: stackTrace);
+      Sentry.captureMessage("Error parsing JWT token expiration");
       return true;
     }
   }
@@ -107,8 +129,8 @@ class TokenService {
       } else {
         return "unsupported-platform";
       }
-    } catch (e) {
-      print("❌ Erreur getDeviceId: $e");
+    } catch (e, stackTrace) {
+      Sentry.captureException(e, stackTrace: stackTrace);
       return "unknown-device";
     }
   }

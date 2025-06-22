@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:clashkingapp/core/functions/functions.dart';
+import 'package:clashkingapp/widgets/war_widget.dart';
+import 'package:flutter/foundation.dart';
 
 class CocAccountService extends ChangeNotifier {
   List<Map<String, dynamic>> _cocAccounts = [];
@@ -171,15 +174,35 @@ class CocAccountService extends ChangeNotifier {
     }
   }
 
-  void setSelectedTag(String? tag) {
+  void setSelectedTag(String? tag) async {
+    final previousTag = _selectedTag;
     _selectedTag = tag;
     selectedTagNotifier.value = tag;
+    
+    // Persist to SharedPreferences for widget access
+    if (tag != null) {
+      await storePrefs('selectedTag', tag);
+      
+      // Check if we need to refresh the war widget due to clan change
+      await _checkAndRefreshWarWidget(previousTag, tag);
+    }
+    
     notifyListeners();
   }
 
   void initializeSelectedTag() {
     if (_cocAccounts.isNotEmpty && selectedTagNotifier.value == null) {
       setSelectedTag(_cocAccounts.first["player_tag"]);
+    }
+  }
+
+  // Load selected tag from SharedPreferences on app start
+  Future<void> loadSelectedTag() async {
+    final storedTag = await getPrefs('selectedTag');
+    if (storedTag != null && storedTag.isNotEmpty) {
+      _selectedTag = storedTag;
+      selectedTagNotifier.value = storedTag;
+      print("🔄 Loaded selected tag from preferences: $storedTag");
     }
   }
 
@@ -336,6 +359,40 @@ class CocAccountService extends ChangeNotifier {
       transaction.finish();
       Sentry.captureException(e, stackTrace: stack);
       rethrow;
+    }
+  }
+
+  // Check if clan changed and refresh war widget if needed (non-blocking)
+  Future<void> _checkAndRefreshWarWidget(String? previousTag, String newTag) async {
+    try {
+      // Only refresh widget on mobile platforms
+      if (kIsWeb) return;
+      
+      // Skip if no previous tag (first time selection)
+      if (previousTag == null) return;
+      
+      // Get clan tags for both players from cache
+      final previousClanTag = await getPrefs('player_${previousTag}_clan_tag');
+      final newClanTag = await getPrefs('player_${newTag}_clan_tag');
+      
+      print("🔄 Account switch - Previous: $previousTag (clan: $previousClanTag) → New: $newTag (clan: $newClanTag)");
+      
+      // If clan tags are different, refresh the war widget in background
+      if (previousClanTag != newClanTag) {
+        print("🔄 Clan changed! Refreshing war widget in background...");
+        // Don't await - let it run in background
+        WarWidgetService.handleWidgetRefresh().catchError((error) {
+          print("❌ Background widget refresh error: $error");
+        });
+      } else {
+        print("✅ Same clan, no widget refresh needed");
+      }
+    } catch (e) {
+      print("⚠️ Error checking clan change: $e");
+      // If there's an error, refresh anyway to be safe (in background)
+      WarWidgetService.handleWidgetRefresh().catchError((error) {
+        print("❌ Background widget refresh error: $error");
+      });
     }
   }
 

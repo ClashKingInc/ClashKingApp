@@ -61,9 +61,37 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
                 "notInClan" -> {
                     setWidgetText(views, "You're currently not in a Clan.")
                 }
+                
+                "accessDenied" -> {
+                    setWidgetText(views, "War log is private.")
+                }
 
                 "error" -> {
                     setWidgetText(views, "An error occurred while fetching data.")
+                }
+                
+                "cwl" -> {
+                    // Handle CWL state specifically
+                    val score = warInfo.optString("score", "")
+                    val warStatus = warInfo.optString("timeState", "CWL")
+
+                    val clanInfo = warInfo.getJSONObject("clan")
+                    val opponentInfo = warInfo.getJSONObject("opponent")
+
+                    val clanDetails = getClanOrOpponentDetails(clanInfo)
+                    val opponentDetails = getClanOrOpponentDetails(opponentInfo)
+
+                    views.setTextViewText(R.id.text_score, score)
+                    views.setTextViewText(R.id.text_state, warStatus)
+                    setDetailsToViews(views, clanDetails, opponentDetails)
+
+                    Thread {
+                        val clanBitmap = downloadBitmap(clanDetails.badgeUrl)
+                        val opponentBitmap = downloadBitmap(opponentDetails.badgeUrl)
+                        views.setImageViewBitmap(R.id.clan_flag, clanBitmap)
+                        views.setImageViewBitmap(R.id.opponent_flag, opponentBitmap)
+                        appWidgetManager.updateAppWidget(appWidgetId, views)
+                    }.start()
                 }
 
                 else -> {
