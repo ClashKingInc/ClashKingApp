@@ -5,7 +5,6 @@ import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
