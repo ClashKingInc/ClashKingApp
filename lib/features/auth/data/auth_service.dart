@@ -72,19 +72,118 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Future<void> signInWithClashKing(String email, String password) async {
-    final response = await _apiService.post('/auth/clashking', {
-      'email': email,
-      'password': password,
-    });
-    await _tokenService.saveTokens(
-        response['access_token'], response['refresh_token']);
-    notifyListeners();
+  Future<void> signInWithEmail(String email, String password) async {
+    try {
+      print("🔄 Starting email login process...");
+      final deviceId = await _tokenService.getDeviceId();
+      final deviceName = await _tokenService.getDeviceName();
+      
+      final response = await _apiService.post('/auth/email', {
+        'email': email,
+        'password': password,
+        'device_id': deviceId,
+        'device_name': deviceName,
+      });
+      
+      print("🔄 Email login response: $response");
+      
+      await _tokenService.saveTokens(
+          response['access_token'], response['refresh_token']);
+      _currentUser = User.fromJson(response['user']);
+      _isAuthenticated = true;
+      _accessToken = response['access_token'];
+      
+      print("🔄 Email login completed successfully");
+      notifyListeners();
+    } catch (e) {
+      print("❌ Email login error: $e");
+      throw Exception("Email login failed. Please check your credentials.");
+    }
+  }
+
+  Future<void> registerWithEmail(String email, String password, String username) async {
+    try {
+      print("🔄 Starting email registration process...");
+      final deviceId = await _tokenService.getDeviceId();
+      final deviceName = await _tokenService.getDeviceName();
+      
+      final response = await _apiService.post('/auth/register', {
+        'email': email,
+        'password': password,
+        'username': username,
+        'device_id': deviceId,
+        'device_name': deviceName,
+      });
+      
+      print("🔄 Email registration response: $response");
+      
+      await _tokenService.saveTokens(
+          response['access_token'], response['refresh_token']);
+      _currentUser = User.fromJson(response['user']);
+      _isAuthenticated = true;
+      _accessToken = response['access_token'];
+      
+      print("🔄 Email registration completed successfully");
+      notifyListeners();
+    } catch (e) {
+      print("❌ Email registration error: $e");
+      throw Exception("Registration failed. Email may already be in use.");
+    }
+  }
+
+  Future<void> linkDiscordAccount(String discordAccessToken, String? refreshToken, int? expiresIn) async {
+    try {
+      print("🔄 Linking Discord account...");
+      final deviceId = await _tokenService.getDeviceId();
+      final deviceName = await _tokenService.getDeviceName();
+      
+      final response = await _apiService.post('/auth/link-discord', {
+        'access_token': discordAccessToken,
+        if (refreshToken != null) 'refresh_token': refreshToken,
+        if (expiresIn != null) 'expires_in': expiresIn.toString(),
+        'device_id': deviceId,
+        'device_name': deviceName,
+      });
+      
+      print("🔄 Discord linking completed: $response");
+      // Refresh user data to get updated auth methods
+      await initializeAuth();
+    } catch (e) {
+      print("❌ Discord linking error: $e");
+      throw Exception("Failed to link Discord account. It may already be linked to another account.");
+    }
+  }
+
+  Future<void> linkEmailAccount(String email, String password, String username) async {
+    try {
+      print("🔄 Linking email account...");
+      final deviceId = await _tokenService.getDeviceId();
+      final deviceName = await _tokenService.getDeviceName();
+      
+      final response = await _apiService.post('/auth/link-email', {
+        'email': email,
+        'password': password,
+        'username': username,
+        'device_id': deviceId,
+        'device_name': deviceName,
+      });
+      
+      print("🔄 Email linking completed: $response");
+      // Refresh user data to get updated auth methods
+      await initializeAuth();
+    } catch (e) {
+      print("❌ Email linking error: $e");
+      throw Exception("Failed to link email account. Email may already be in use.");
+    }
   }
 
   Future<void> logout() async {
     await _tokenService.clearTokens();
+    clearPrefs();
     _isAuthenticated = false;
+    _currentUser = null;
+    _cocAccounts = null;
+    _accessToken = null;
     notifyListeners();
     globalNavigatorKey.currentState?.pushReplacement(
       MaterialPageRoute(builder: (context) => LoginPage()),
@@ -147,5 +246,20 @@ class AuthService extends ChangeNotifier {
     _cocAccounts = null;
     _accessToken = null;
     notifyListeners();
+  }
+
+  /// Comprehensive logout that clears all service data
+  /// Call this method and then separately call clearAccountData() on CocAccountService
+  Future<void> logoutAndClearAllData() async {
+    await _tokenService.clearTokens();
+    clearPrefs();
+    _isAuthenticated = false;
+    _currentUser = null;
+    _cocAccounts = null;
+    _accessToken = null;
+    notifyListeners();
+    
+    // Note: Also call CocAccountService.clearAccountData() after this
+    print("🔄 AuthService data cleared. Make sure to also clear CocAccountService data.");
   }
 }

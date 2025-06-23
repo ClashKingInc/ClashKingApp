@@ -42,8 +42,8 @@ class ErrorPage extends StatelessWidget {
                       .errorSubtitle,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.blue,
-                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
                         decoration: TextDecoration.underline,
                       ),
                 ),

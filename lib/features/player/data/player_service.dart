@@ -46,6 +46,7 @@ class PlayerService extends ChangeNotifier {
     final token = await TokenService().getAccessToken();
     if (token == null) throw Exception("User not authenticated");
 
+    print("🔄 Calling players API with tags: $playerTags");
     final response = await http.post(
       Uri.parse("${ApiService.apiUrlV2}/players"),
       headers: {
@@ -54,19 +55,24 @@ class PlayerService extends ChangeNotifier {
       },
       body: jsonEncode({"player_tags": playerTags}),
     );
+    
+    print("🔄 Players API response status: ${response.statusCode}");
 
     final Map<String, String> clanTagsByPlayer = {};
 
     try {
       if (response.statusCode == 200) {
         final responseBody = utf8.decode(response.bodyBytes);
+        print("🔄 Players API response body: $responseBody");
         final data = jsonDecode(responseBody);
 
         if (data.containsKey("items") && data["items"] is List) {
           _profiles = (data["items"] as List)
               .whereType<Map<String, dynamic>>()
               .map((account) {
+            print("🔄 Processing player JSON: $account");
             final player = Player.fromJson(account);
+            print("🔄 Created player: ${player.name} (${player.tag})");
             if (player.clanOverview.tag.isNotEmpty) {
               clanTagsByPlayer[player.tag] = player.clanOverview.tag;
               // Cache clan tag for widget use

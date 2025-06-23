@@ -24,6 +24,16 @@ class CocAccountService extends ChangeNotifier {
   List<String> get accounts =>
       _cocAccounts.map((account) => account["player_tag"].toString()).toList();
 
+  /// Clears all cached account data (for logout)
+  void clearAccountData() {
+    _cocAccounts = [];
+    _selectedTag = null;
+    selectedTagNotifier.value = null;
+    profiles = [];
+    _isLoading = false;
+    notifyListeners();
+  }
+
   /// Fetches the user's linked Clash of Clans accounts from the backend.
   Future<void> fetchCocAccounts() async {
     _isLoading = true;

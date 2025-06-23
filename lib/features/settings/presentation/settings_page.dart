@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/dialogs/logout_dialog.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -195,14 +196,23 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   }
 
   Future<void> _logOut() async {
-    await clearPrefs();
-    print("SettingsInfoScreen: _logOut called, clearing prefs and signing out.");
+    print("SettingsInfoScreen: _logOut called, clearing all service data.");
     if (mounted) {
       final authService = Provider.of<AuthService>(context, listen: false);
-      await authService.signOut();
+      final cocAccountService = Provider.of<CocAccountService>(context, listen: false);
+      
+      // Clear all authentication and user data
+      await authService.logoutAndClearAllData();
+      
+      // Clear all COC account service data
+      cocAccountService.clearAccountData();
+      
+      // Navigate to login page
       globalNavigatorKey.currentState?.pushReplacement(
         MaterialPageRoute(builder: (context) => LoginPage()),
       );
+      
+      print("SettingsInfoScreen: All service data cleared successfully.");
     }
     else {
       print("SettingsInfoScreen: _logOut called but context is not mounted.");

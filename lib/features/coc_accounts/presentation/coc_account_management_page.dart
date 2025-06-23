@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/app_bar/coc_accounts_app_bar.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
@@ -486,17 +485,13 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
   }
 
   void _syncTempAccountsWithPlayerService() {
-    final playerService = context.read<PlayerService>();
     setState(() {
       _tempUserAccounts =
           context.read<CocAccountService>().cocAccounts.map((account) {
-        final playerTag = account["player_tag"];
-        final jsonString = playerService.getMinimalisticPlayerByTag(playerTag);
-        final playerData = jsonDecode(jsonString);
         return {
-          "player_tag": playerTag,
-          "name": playerData["name"],
-          "townHallLevel": playerData["townHallLevel"] ?? 1,
+          "player_tag": account["player_tag"],
+          "name": account["name"],
+          "townHallLevel": account["townHallLevel"] ?? 1,
         };
       }).toList();
     });

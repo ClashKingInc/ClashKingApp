@@ -282,7 +282,7 @@ class Player {
         builderHallLevel: json["builderHallLevel"] ?? 0,
         builderBaseTrophies: json["builderBaseTrophies"] ?? 0,
         bestBuilderBaseTrophies: json["bestBuilderBaseTrophies"] ?? 0,
-        clanTag: json["clan"]["tag"] ?? "",
+        clanTag: json["clan"]?["tag"] ?? "",
         clanOverview: json["clan"] != null
             ? PlayerClanOverview.fromJson(json["clan"])
             : PlayerClanOverview.empty(),

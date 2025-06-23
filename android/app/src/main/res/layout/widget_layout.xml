@@ -107,7 +107,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/text_state"
+            android:id="@+id/text_score"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -115,7 +115,7 @@
             android:textColor="@color/widget_text" />
 
         <TextView
-            android:id="@+id/text_score"
+            android:id="@+id/text_state"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

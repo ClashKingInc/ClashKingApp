@@ -2624,6 +2624,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to download file'**
   String get downloadError;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome Back'**
+  String get welcomeBack;
+
+  /// No description provided for @chooseSignInMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your preferred sign-in method'**
+  String get chooseSignInMethod;
+
+  /// No description provided for @discord.
+  ///
+  /// In en, this message translates to:
+  /// **'Discord'**
+  String get discord;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @signInWithEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Email'**
+  String get signInWithEmail;
+
+  /// No description provided for @useDiscordAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!'**
+  String get useDiscordAccount;
+
+  /// No description provided for @useEmailAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Use email if you can\'t access Discord or prefer app-only features'**
+  String get useEmailAccount;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @signIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get signIn;
+
+  /// No description provided for @dontHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? Create one'**
+  String get dontHaveAccount;
+
+  /// No description provided for @createClashKingAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create ClashKing Account'**
+  String get createClashKingAccount;
+
+  /// No description provided for @joinClashKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Join ClashKing'**
+  String get joinClashKing;
+
+  /// No description provided for @createAccountToGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your account to get started'**
+  String get createAccountToGetStarted;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPassword;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get createAccount;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Sign in'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @pleaseEnterEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email'**
+  String get pleaseEnterEmail;
+
+  /// No description provided for @pleaseEnterValidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get pleaseEnterValidEmail;
+
+  /// No description provided for @pleaseEnterPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your password'**
+  String get pleaseEnterPassword;
+
+  /// No description provided for @pleaseEnterUsername.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a username'**
+  String get pleaseEnterUsername;
+
+  /// No description provided for @usernameTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Username must be at least 3 characters'**
+  String get usernameTooShort;
+
+  /// No description provided for @pleaseConfirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm your password'**
+  String get pleaseConfirmPassword;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @passwordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get passwordTooShort;
+
+  /// No description provided for @passwordRequirements.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain: uppercase, lowercase, digit, and special character'**
+  String get passwordRequirements;
+
+  /// No description provided for @invalidEmailOrPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email or password'**
+  String get invalidEmailOrPassword;
+
+  /// No description provided for @emailAlreadyInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Email may already be in use'**
+  String get emailAlreadyInUse;
+
+  /// No description provided for @accountManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Management'**
+  String get accountManagement;
+
+  /// No description provided for @connectedAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected Accounts'**
+  String get connectedAccounts;
+
+  /// No description provided for @connected.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected'**
+  String get connected;
+
+  /// No description provided for @notConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Not connected'**
+  String get notConnected;
+
+  /// No description provided for @emailAndPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Email & Password'**
+  String get emailAndPassword;
+
+  /// No description provided for @accountSecuredMultipleAuth.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is secured with multiple authentication methods'**
+  String get accountSecuredMultipleAuth;
+
+  /// No description provided for @linkEmailAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Link Email Account'**
+  String get linkEmailAccount;
+
+  /// No description provided for @addEmailPasswordAuth.
+  ///
+  /// In en, this message translates to:
+  /// **'Add email & password authentication to your account for additional security.'**
+  String get addEmailPasswordAuth;
+
+  /// No description provided for @emailAccountLinkedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Email account successfully linked!'**
+  String get emailAccountLinkedSuccessfully;
+
+  /// No description provided for @failedToLinkEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to link email account. Email may already be in use.'**
+  String get failedToLinkEmail;
+
+  /// No description provided for @registrationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration failed. Email may already be in use.'**
+  String get registrationFailed;
+
+  /// No description provided for @emailLoginFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Email login failed. Please check your credentials.'**
+  String get emailLoginFailed;
+
+  /// No description provided for @discordLoginFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Discord login failed. Please try again.'**
+  String get discordLoginFailed;
 }
 
 class _AppLocalizationsDelegate

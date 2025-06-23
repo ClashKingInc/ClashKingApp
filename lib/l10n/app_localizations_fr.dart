@@ -1464,4 +1464,133 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get downloadError => 'Failed to download file';
+
+  @override
+  String get welcomeBack => 'Welcome Back';
+
+  @override
+  String get chooseSignInMethod => 'Choose your preferred sign-in method';
+
+  @override
+  String get discord => 'Discord';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get signInWithEmail => 'Sign in with Email';
+
+  @override
+  String get useDiscordAccount =>
+      'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!';
+
+  @override
+  String get useEmailAccount =>
+      'Use email if you can\'t access Discord or prefer app-only features';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get signIn => 'Sign In';
+
+  @override
+  String get dontHaveAccount => 'Don\'t have an account? Create one';
+
+  @override
+  String get createClashKingAccount => 'Create ClashKing Account';
+
+  @override
+  String get joinClashKing => 'Join ClashKing';
+
+  @override
+  String get createAccountToGetStarted => 'Create your account to get started';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get createAccount => 'Create Account';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account? Sign in';
+
+  @override
+  String get pleaseEnterEmail => 'Please enter your email';
+
+  @override
+  String get pleaseEnterValidEmail => 'Please enter a valid email';
+
+  @override
+  String get pleaseEnterPassword => 'Please enter your password';
+
+  @override
+  String get pleaseEnterUsername => 'Please enter a username';
+
+  @override
+  String get usernameTooShort => 'Username must be at least 3 characters';
+
+  @override
+  String get pleaseConfirmPassword => 'Please confirm your password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 8 characters';
+
+  @override
+  String get passwordRequirements =>
+      'Password must contain: uppercase, lowercase, digit, and special character';
+
+  @override
+  String get invalidEmailOrPassword => 'Invalid email or password';
+
+  @override
+  String get emailAlreadyInUse => 'Email may already be in use';
+
+  @override
+  String get accountManagement => 'Account Management';
+
+  @override
+  String get connectedAccounts => 'Connected Accounts';
+
+  @override
+  String get connected => 'Connected';
+
+  @override
+  String get notConnected => 'Not connected';
+
+  @override
+  String get emailAndPassword => 'Email & Password';
+
+  @override
+  String get accountSecuredMultipleAuth =>
+      'Your account is secured with multiple authentication methods';
+
+  @override
+  String get linkEmailAccount => 'Link Email Account';
+
+  @override
+  String get addEmailPasswordAuth =>
+      'Add email & password authentication to your account for additional security.';
+
+  @override
+  String get emailAccountLinkedSuccessfully =>
+      'Email account successfully linked!';
+
+  @override
+  String get failedToLinkEmail =>
+      'Failed to link email account. Email may already be in use.';
+
+  @override
+  String get registrationFailed =>
+      'Registration failed. Email may already be in use.';
+
+  @override
+  String get emailLoginFailed =>
+      'Email login failed. Please check your credentials.';
+
+  @override
+  String get discordLoginFailed => 'Discord login failed. Please try again.';
 }

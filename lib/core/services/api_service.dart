@@ -36,8 +36,8 @@ class ApiService {
     try {
       final response = await http.post(
         Uri.parse('$apiUrlV2$endpoint'),
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: body,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body),
       ).timeout(const Duration(seconds: 15));
       return _handleResponse(response, endpoint);
     } catch (e, stackTrace) {

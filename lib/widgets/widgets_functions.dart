@@ -133,7 +133,7 @@ String _buildRegularWarData(Map<String, dynamic> warInfo, String updatedAt) {
     score = "vs ${currentWar["opponent"]?["name"] ?? "Unknown"}";
   } else if (state == "inWar") {
     statusIcon = "⚔️";
-    secondaryText = "$clanStars ⭐ - $opponentStars ⭐";
+    secondaryText = "$clanStars - $opponentStars";
     colorTheme = clanStars > opponentStars ? "winning" : clanStars < opponentStars ? "losing" : "tied";
     if (currentWar["endTime"] != null) {
       final endTime = DateTime.parse(currentWar["endTime"]);
@@ -150,7 +150,7 @@ String _buildRegularWarData(Map<String, dynamic> warInfo, String updatedAt) {
     final isWin = clanStars > opponentStars;
     statusIcon = isWin ? "🏆" : "💔";
     primaryText = isWin ? "Victory!" : "Defeat";
-    secondaryText = "$clanStars ⭐ - $opponentStars ⭐";
+    secondaryText = "$clanStars - $opponentStars";
     colorTheme = isWin ? "victory" : "defeat";
     timeState = "War Ended";
     score = "$clanStars - $opponentStars";
@@ -261,7 +261,7 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt) {
     score = "vs ${currentWar["opponent"]?["name"] ?? "Unknown"}";
   } else if (state == "inWar") {
     statusIcon = "🏅";
-    secondaryText = "$clanStars ⭐ - $opponentStars ⭐";
+    secondaryText = "$clanStars - $opponentStars";
     colorTheme = clanStars > opponentStars ? "winning" : clanStars < opponentStars ? "losing" : "tied";
     if (currentWar["endTime"] != null) {
       final endTime = DateTime.parse(currentWar["endTime"]);
@@ -278,7 +278,7 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt) {
     final isWin = clanStars > opponentStars;
     statusIcon = isWin ? "🏆" : "🥈";
     primaryText = isWin ? "CWL Victory!" : "CWL Complete";
-    secondaryText = "$clanStars ⭐ - $opponentStars ⭐";
+    secondaryText = "$clanStars - $opponentStars";
     colorTheme = isWin ? "victory" : "cwl";
     timeState = "CWL War Ended";
     score = "$clanStars - $opponentStars";
@@ -321,6 +321,6 @@ String _buildErrorResult() {
   return jsonEncode({
     "updatedAt": "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
     "timeState": "",
-    "state": "error"
+    "state": ""
   });
 }
