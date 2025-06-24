@@ -263,7 +263,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
           sortBy: filterOption,
           updateSortBy: updateFilterOption,
           sortByOptions: {
-            AppLocalizations.of(context)!.all: 'All',
+            AppLocalizations.of(context)!.generalAll: 'All',
             widget.warInfo.clan!.name: '5',
             widget.warInfo.opponent!.name: '4',
             generateStars(3, 20): '3',
@@ -281,7 +281,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child:
-                          Text(AppLocalizations.of(context)!.noDataAvailable),
+                          Text(AppLocalizations.of(context)!.generalNoDataAvailable),
                     ),
                   ),
                   const SizedBox(height: 32),

@@ -24,8 +24,8 @@ class _PlayerWarAttacksTabState extends State<PlayerWarAttacksTab> {
         CustomSlidingSegmentedControl<int>(
           initialValue: _currentSegment,
           children: {
-            1: Text(AppLocalizations.of(context)!.attacks),
-            2: Text(AppLocalizations.of(context)!.defenses),
+            1: Text(AppLocalizations.of(context)!.warAttacksTitle),
+            2: Text(AppLocalizations.of(context)!.warDefensesTitle),
           },
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.5),

@@ -155,11 +155,737 @@ abstract class AppLocalizations {
     Locale('zh')
   ];
 
-  /// No description provided for @creatorCode.
+  /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Creator Code: ClashKing'**
-  String get creatorCode;
+  /// **'ClashKing'**
+  String get appTitle;
+
+  /// No description provided for @appDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.'**
+  String get appDescription;
+
+  /// No description provided for @generalLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get generalLoading;
+
+  /// No description provided for @generalError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get generalError;
+
+  /// No description provided for @generalRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get generalRetry;
+
+  /// No description provided for @generalTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get generalTryAgain;
+
+  /// No description provided for @generalClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get generalClose;
+
+  /// No description provided for @generalCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get generalCancel;
+
+  /// OK button on pop up
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get generalOk;
+
+  /// No description provided for @generalApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get generalApply;
+
+  /// No description provided for @generalConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get generalConfirm;
+
+  /// Add an account
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get generalAdd;
+
+  /// Delete an account
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get generalDelete;
+
+  /// No description provided for @generalManage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage'**
+  String get generalManage;
+
+  /// No description provided for @generalManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Management'**
+  String get generalManagement;
+
+  /// No description provided for @generalSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get generalSettings;
+
+  /// No description provided for @generalCopiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get generalCopiedToClipboard;
+
+  /// No description provided for @generalComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon!'**
+  String get generalComingSoon;
+
+  /// all items
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get generalAll;
+
+  /// No description provided for @generalTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get generalTotal;
+
+  /// Best end of day trophies
+  ///
+  /// In en, this message translates to:
+  /// **'Best'**
+  String get generalBest;
+
+  /// Worst end of day trophies
+  ///
+  /// In en, this message translates to:
+  /// **'Worst'**
+  String get generalWorst;
+
+  /// Average value of legend trophies (defense and attack)
+  ///
+  /// In en, this message translates to:
+  /// **'Average'**
+  String get generalAverage;
+
+  /// Remaining attacks or defenses
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining'**
+  String get generalRemaining;
+
+  /// No description provided for @generalActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get generalActive;
+
+  /// No description provided for @generalInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive'**
+  String get generalInactive;
+
+  /// Title for the number of trophies at the beginning of the day
+  ///
+  /// In en, this message translates to:
+  /// **'Started'**
+  String get generalStarted;
+
+  /// Title for the number of trophies at the end of the day
+  ///
+  /// In en, this message translates to:
+  /// **'Ended'**
+  String get generalEnded;
+
+  /// No description provided for @generalLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level'**
+  String get generalLevel;
+
+  /// No description provided for @generalRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get generalRole;
+
+  /// No description provided for @generalDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get generalDate;
+
+  /// No description provided for @generalStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get generalStats;
+
+  /// No description provided for @generalFullStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Stats'**
+  String get generalFullStats;
+
+  /// No description provided for @generalDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get generalDetails;
+
+  /// Shows EOS trophies history
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get generalHistory;
+
+  /// No description provided for @generalCharts.
+  ///
+  /// In en, this message translates to:
+  /// **'Charts'**
+  String get generalCharts;
+
+  /// No description provided for @generalFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get generalFilters;
+
+  /// Whatever the value
+  ///
+  /// In en, this message translates to:
+  /// **'Whatever'**
+  String get generalWhatever;
+
+  /// Any value is accepted
+  ///
+  /// In en, this message translates to:
+  /// **'Any'**
+  String get generalAny;
+
+  /// Filter value is not set
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get generalNotSet;
+
+  /// No description provided for @generalWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get generalWarning;
+
+  /// No description provided for @generalNoDataAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No data available.'**
+  String get generalNoDataAvailable;
+
+  /// WarLog closed
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get generalClosed;
+
+  /// No description provided for @authWelcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome Back'**
+  String get authWelcomeBack;
+
+  /// No description provided for @authClashKingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.'**
+  String get authClashKingDescription;
+
+  /// No description provided for @authChooseSignInMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your preferred sign-in method'**
+  String get authChooseSignInMethod;
+
+  /// No description provided for @authSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get authSignIn;
+
+  /// No description provided for @authSignUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get authSignUp;
+
+  /// No description provided for @authLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get authLogin;
+
+  /// No description provided for @authLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get authLogout;
+
+  /// No description provided for @authCreateAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get authCreateAccount;
+
+  /// No description provided for @authJoinClashKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Join ClashKing'**
+  String get authJoinClashKing;
+
+  /// No description provided for @authCreateClashKingAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create ClashKing Account'**
+  String get authCreateClashKingAccount;
+
+  /// No description provided for @authCreateAccountToGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your account to get started'**
+  String get authCreateAccountToGetStarted;
+
+  /// No description provided for @authDontHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? Create one'**
+  String get authDontHaveAccount;
+
+  /// No description provided for @authAlreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Sign in'**
+  String get authAlreadyHaveAccount;
+
+  /// Prompt asking the user to confirm logout
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out?'**
+  String get authConfirmLogout;
+
+  /// No description provided for @authDiscordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discord'**
+  String get authDiscordTitle;
+
+  /// No description provided for @authDiscordSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In with Discord'**
+  String get authDiscordSignIn;
+
+  /// No description provided for @authDiscordContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Discord'**
+  String get authDiscordContinue;
+
+  /// No description provided for @authDiscordDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!'**
+  String get authDiscordDescription;
+
+  /// No description provided for @authDiscordError.
+  ///
+  /// In en, this message translates to:
+  /// **'Discord login failed. Please try again.'**
+  String get authDiscordError;
+
+  /// No description provided for @authEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get authEmailTitle;
+
+  /// No description provided for @authEmailSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Email'**
+  String get authEmailSignIn;
+
+  /// No description provided for @authEmailDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Use email if you can\'t access Discord or prefer app-only features'**
+  String get authEmailDescription;
+
+  /// No description provided for @authEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get authEmailLabel;
+
+  /// No description provided for @authEmailPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get authEmailPlaceholder;
+
+  /// No description provided for @authEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email'**
+  String get authEmailRequired;
+
+  /// No description provided for @authEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get authEmailInvalid;
+
+  /// No description provided for @authEmailAlreadyInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Email may already be in use'**
+  String get authEmailAlreadyInUse;
+
+  /// No description provided for @authEmailError.
+  ///
+  /// In en, this message translates to:
+  /// **'Email login failed. Please check your credentials.'**
+  String get authEmailError;
+
+  /// No description provided for @authPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get authPasswordLabel;
+
+  /// No description provided for @authPasswordConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get authPasswordConfirm;
+
+  /// No description provided for @authPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your password'**
+  String get authPasswordRequired;
+
+  /// No description provided for @authPasswordConfirmRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm your password'**
+  String get authPasswordConfirmRequired;
+
+  /// No description provided for @authPasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get authPasswordMismatch;
+
+  /// No description provided for @authPasswordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get authPasswordTooShort;
+
+  /// No description provided for @authPasswordRequirements.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain: uppercase, lowercase, digit, and special character'**
+  String get authPasswordRequirements;
+
+  /// No description provided for @authPasswordForgot.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get authPasswordForgot;
+
+  /// No description provided for @authPasswordInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email or password'**
+  String get authPasswordInvalid;
+
+  /// No description provided for @authUsernameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get authUsernameLabel;
+
+  /// No description provided for @authUsernameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a username'**
+  String get authUsernameRequired;
+
+  /// No description provided for @authUsernameTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Username must be at least 3 characters'**
+  String get authUsernameTooShort;
+
+  /// No description provided for @authErrorGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while logging in. Please try again later.'**
+  String get authErrorGeneral;
+
+  /// No description provided for @authErrorRegistration.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration failed. Email may already be in use.'**
+  String get authErrorRegistration;
+
+  /// No description provided for @authErrorConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred. Please check your internet connection and try again.'**
+  String get authErrorConnection;
+
+  /// No description provided for @authErrorConnectionRelaunch.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred. Please check your internet connection and relaunch the app.'**
+  String get authErrorConnectionRelaunch;
+
+  /// No description provided for @authAccountManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Management'**
+  String get authAccountManagement;
+
+  /// No description provided for @authAccountConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected Accounts'**
+  String get authAccountConnected;
+
+  /// No description provided for @authAccountConnectedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected'**
+  String get authAccountConnectedStatus;
+
+  /// No description provided for @authAccountNotConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Not connected'**
+  String get authAccountNotConnected;
+
+  /// No description provided for @authAccountEmailAndPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Email & Password'**
+  String get authAccountEmailAndPassword;
+
+  /// No description provided for @authAccountSecured.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is secured with multiple authentication methods'**
+  String get authAccountSecured;
+
+  /// No description provided for @authAccountLinkEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Link Email Account'**
+  String get authAccountLinkEmail;
+
+  /// No description provided for @authAccountAddEmailAuth.
+  ///
+  /// In en, this message translates to:
+  /// **'Add email & password authentication to your account for additional security.'**
+  String get authAccountAddEmailAuth;
+
+  /// No description provided for @authAccountEmailLinkedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Email account successfully linked!'**
+  String get authAccountEmailLinkedSuccess;
+
+  /// No description provided for @authAccountEmailLinkFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to link email account. Email may already be in use.'**
+  String get authAccountEmailLinkFailed;
+
+  /// No description provided for @helpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Need help?'**
+  String get helpTitle;
+
+  /// No description provided for @helpJoinDiscord.
+  ///
+  /// In en, this message translates to:
+  /// **'Join Discord'**
+  String get helpJoinDiscord;
+
+  /// No description provided for @helpEmailUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Us'**
+  String get helpEmailUs;
+
+  /// No description provided for @helpJoinDiscordServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Need help? Join us on Discord.'**
+  String get helpJoinDiscordServer;
+
+  /// No description provided for @helpCannotOpenMailClient.
+  ///
+  /// In en, this message translates to:
+  /// **'For some reasons we can\'t open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.'**
+  String get helpCannotOpenMailClient;
+
+  /// No description provided for @accountsWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome!'**
+  String get accountsWelcome;
+
+  /// No description provided for @accountsWelcomeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.'**
+  String get accountsWelcomeMessage;
+
+  /// No description provided for @accountsManageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your accounts'**
+  String get accountsManageTitle;
+
+  /// No description provided for @accountsManageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.'**
+  String get accountsManageDescription;
+
+  /// No description provided for @accountsNoneFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No account linked to your profile found'**
+  String get accountsNoneFound;
+
+  /// No description provided for @accountsPlayerTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Player Tag (#ABC123)'**
+  String get accountsPlayerTag;
+
+  /// No description provided for @accountsPlayerTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Player Tags'**
+  String get accountsPlayerTags;
+
+  /// No description provided for @accountsEnterPlayerTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a player tag'**
+  String get accountsEnterPlayerTag;
+
+  /// No description provided for @accountsAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add account'**
+  String get accountsAdd;
+
+  /// No description provided for @accountsDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get accountsDelete;
+
+  /// No description provided for @accountsApiToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Account API Token'**
+  String get accountsApiToken;
+
+  /// No description provided for @accountsEnterApiToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the account API token to confirm it\'s yours. You can find it in Clash of Clans Settings > More Settings > API Token.'**
+  String get accountsEnterApiToken;
+
+  /// No description provided for @accountsFillAllFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill all fields.'**
+  String get accountsFillAllFields;
+
+  /// No description provided for @accountsErrorTagNotExists.
+  ///
+  /// In en, this message translates to:
+  /// **'The player tag entered does not exist.'**
+  String get accountsErrorTagNotExists;
+
+  /// No description provided for @accountsErrorAlreadyLinked.
+  ///
+  /// In en, this message translates to:
+  /// **'The player tag is already linked to someone.'**
+  String get accountsErrorAlreadyLinked;
+
+  /// No description provided for @accountsErrorAlreadyLinkedToYou.
+  ///
+  /// In en, this message translates to:
+  /// **'The player tag is already linked to you.'**
+  String get accountsErrorAlreadyLinkedToYou;
+
+  /// No description provided for @accountsErrorWrongApiToken.
+  ///
+  /// In en, this message translates to:
+  /// **'The API token entered is incorrect'**
+  String get accountsErrorWrongApiToken;
+
+  /// No description provided for @accountsErrorFailedToAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add the account. Please try again later.'**
+  String get accountsErrorFailedToAdd;
+
+  /// No description provided for @accountsErrorFailedToDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete link. Please try again later.'**
+  String get accountsErrorFailedToDelete;
+
+  /// No description provided for @accountsErrorFailedToUpdateOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update the order of accounts.'**
+  String get accountsErrorFailedToUpdateOrder;
 
   /// No description provided for @errorTitle.
   ///
@@ -173,107 +899,1879 @@ abstract class AppLocalizations {
   /// **'If the issue persists, check our Discord Server to see if we\'re aware of it.'**
   String get errorSubtitle;
 
-  /// No description provided for @retry.
+  /// Error message when the app version cannot be loaded
   ///
   /// In en, this message translates to:
-  /// **'Retry'**
-  String get retry;
+  /// **'Error loading version'**
+  String get errorLoadingVersion;
 
-  /// No description provided for @signInWithDiscord.
+  /// No description provided for @errorConnectionGeneral.
   ///
   /// In en, this message translates to:
-  /// **'Sign In with Discord'**
-  String get signInWithDiscord;
+  /// **'An error occurred. Please check your internet connection and try again.'**
+  String get errorConnectionGeneral;
 
-  /// No description provided for @guestMode.
+  /// No description provided for @errorConnectionRelaunch.
   ///
   /// In en, this message translates to:
-  /// **'Guest Mode'**
-  String get guestMode;
+  /// **'An error occurred. Please check your internet connection and relaunch the app.'**
+  String get errorConnectionRelaunch;
 
-  /// No description provided for @needHelpJoinDiscord.
+  /// No description provided for @errorCannotOpenLink.
   ///
   /// In en, this message translates to:
-  /// **'Need help? Join us on Discord.'**
-  String get needHelpJoinDiscord;
+  /// **'We can\'t open this link.'**
+  String get errorCannotOpenLink;
 
-  /// No description provided for @loginError.
+  /// No description provided for @errorExitAppToOpenClash.
   ///
   /// In en, this message translates to:
-  /// **'An error occurred while logging in. Please try again later.'**
-  String get loginError;
+  /// **'You are about to leave the app to open Clash of Clans.'**
+  String get errorExitAppToOpenClash;
 
-  /// No description provided for @username.
+  /// No description provided for @playerTitle.
   ///
   /// In en, this message translates to:
-  /// **'Username'**
-  String get username;
+  /// **'Player'**
+  String get playerTitle;
 
-  /// No description provided for @playerTag.
+  /// No description provided for @playerSearchTitle.
   ///
   /// In en, this message translates to:
-  /// **'Player Tag (#ABC123)'**
-  String get playerTag;
+  /// **'Search player'**
+  String get playerSearchTitle;
 
-  /// No description provided for @playerTags.
+  /// No description provided for @playerSearchPlaceholder.
   ///
   /// In en, this message translates to:
-  /// **'Player Tags'**
-  String get playerTags;
+  /// **'Player\'s name or tag'**
+  String get playerSearchPlaceholder;
 
-  /// No description provided for @welcome.
+  /// No description provided for @playerLastActive.
   ///
   /// In en, this message translates to:
-  /// **'Welcome!'**
-  String get welcome;
+  /// **'Last active: {date}'**
+  String playerLastActive(String date);
 
-  /// No description provided for @welcomeMessage.
+  /// No description provided for @playerNotTracked.
   ///
   /// In en, this message translates to:
-  /// **'Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.'**
-  String get welcomeMessage;
+  /// **'This player is not tracked. Data may be inaccurate.'**
+  String get playerNotTracked;
 
-  /// No description provided for @login.
+  /// No description provided for @playerClanDescription.
   ///
   /// In en, this message translates to:
-  /// **'Login'**
-  String get login;
+  /// **'Your clan is \"{clan}\" ({tag}).'**
+  String playerClanDescription(String clan, String tag);
 
-  /// No description provided for @logout.
+  /// No description provided for @playerRatioDescription.
   ///
   /// In en, this message translates to:
-  /// **'Log out'**
-  String get logout;
+  /// **'Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.'**
+  String playerRatioDescription(
+      String ratio, String donations, String received);
 
-  /// No description provided for @language.
+  /// No description provided for @playerWarPreferenceDescription.
   ///
   /// In en, this message translates to:
-  /// **'Language'**
-  String get language;
+  /// **'Your war preference is \"{preference}\".'**
+  String playerWarPreferenceDescription(String preference);
 
-  /// No description provided for @settings.
+  /// No description provided for @playerWarStarsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {stars} war stars.'**
+  String playerWarStarsDescription(int stars);
+
+  /// No description provided for @playerTrophiesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {trophies} trophies. You\'re currently in {league}.'**
+  String playerTrophiesDescription(int trophies, String league);
+
+  /// No description provided for @playerTownHallLevelDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Town Hall level is {level}.'**
+  String playerTownHallLevelDescription(int level);
+
+  /// No description provided for @playerBuilderBaseDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Builder Hall level is {level} and you have {trophies} trophies.'**
+  String playerBuilderBaseDescription(int level, int trophies);
+
+  /// No description provided for @gameBaseHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Base'**
+  String get gameBaseHome;
+
+  /// No description provided for @gameBaseBuilder.
+  ///
+  /// In en, this message translates to:
+  /// **'Builder Base'**
+  String get gameBaseBuilder;
+
+  /// No description provided for @gameClanCapital.
+  ///
+  /// In en, this message translates to:
+  /// **'Clan Capital'**
+  String get gameClanCapital;
+
+  /// No description provided for @gameTownHall.
+  ///
+  /// In en, this message translates to:
+  /// **'TH'**
+  String get gameTownHall;
+
+  /// No description provided for @gameBuilderHall.
+  ///
+  /// In en, this message translates to:
+  /// **'BH'**
+  String get gameBuilderHall;
+
+  /// No description provided for @gameTownHallLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'TH Level'**
+  String get gameTownHallLevel;
+
+  /// No description provided for @gameTownHallLevelNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Town Hall {level}'**
+  String gameTownHallLevelNumber(int level);
+
+  /// No description provided for @gameTHLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'TH{level}'**
+  String gameTHLevel(int level);
+
+  /// No description provided for @gameBHLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'BH{level}'**
+  String gameBHLevel(int level);
+
+  /// No description provided for @gameExpLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Experience Level'**
+  String get gameExpLevel;
+
+  /// No description provided for @gameTrophies.
+  ///
+  /// In en, this message translates to:
+  /// **'Trophies'**
+  String get gameTrophies;
+
+  /// No description provided for @gameBuilderBaseTrophies.
+  ///
+  /// In en, this message translates to:
+  /// **'BB Trophies'**
+  String get gameBuilderBaseTrophies;
+
+  /// No description provided for @gameDonations.
+  ///
+  /// In en, this message translates to:
+  /// **'Donations'**
+  String get gameDonations;
+
+  /// No description provided for @gameDonationsReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Donations Received'**
+  String get gameDonationsReceived;
+
+  /// No description provided for @gameDonationsRatio.
+  ///
+  /// In en, this message translates to:
+  /// **'Donation Ratio'**
+  String get gameDonationsRatio;
+
+  /// No description provided for @gameLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level: {level}/{maxLevel}'**
+  String gameLevel(int level, int maxLevel);
+
+  /// No description provided for @gameHeroes.
+  ///
+  /// In en, this message translates to:
+  /// **'Heroes'**
+  String get gameHeroes;
+
+  /// No description provided for @gameEquipment.
+  ///
+  /// In en, this message translates to:
+  /// **'Equipments'**
+  String get gameEquipment;
+
+  /// No description provided for @gameHeroesEquipments.
+  ///
+  /// In en, this message translates to:
+  /// **'Hero equipments'**
+  String get gameHeroesEquipments;
+
+  /// No description provided for @gameTroops.
+  ///
+  /// In en, this message translates to:
+  /// **'Troops'**
+  String get gameTroops;
+
+  /// No description provided for @gameSuperTroops.
+  ///
+  /// In en, this message translates to:
+  /// **'Super Troops'**
+  String get gameSuperTroops;
+
+  /// No description provided for @gameActiveSuperTroops.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Super Troops'**
+  String get gameActiveSuperTroops;
+
+  /// No description provided for @gamePets.
+  ///
+  /// In en, this message translates to:
+  /// **'Pets'**
+  String get gamePets;
+
+  /// No description provided for @gameSiegeMachines.
+  ///
+  /// In en, this message translates to:
+  /// **'Siege Machines'**
+  String get gameSiegeMachines;
+
+  /// No description provided for @gameSpells.
+  ///
+  /// In en, this message translates to:
+  /// **'Spells'**
+  String get gameSpells;
+
+  /// No description provided for @gameAchievements.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievements'**
+  String get gameAchievements;
+
+  /// No description provided for @gameClanGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Clan Games'**
+  String get gameClanGames;
+
+  /// No description provided for @gameSeasonPass.
+  ///
+  /// In en, this message translates to:
+  /// **'Season Pass'**
+  String get gameSeasonPass;
+
+  /// No description provided for @gameCreatorCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Creator Code: ClashKing'**
+  String get gameCreatorCode;
+
+  /// No description provided for @clanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clan'**
+  String get clanTitle;
+
+  /// No description provided for @clansTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clans'**
+  String get clansTitle;
+
+  /// No description provided for @clanSearchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search clan'**
+  String get clanSearchTitle;
+
+  /// No description provided for @clanSearchPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Clan\'s name'**
+  String get clanSearchPlaceholder;
+
+  /// No description provided for @clanNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No clan'**
+  String get clanNone;
+
+  /// No description provided for @clanJoinToUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Join a clan to unlock new features.'**
+  String get clanJoinToUnlock;
+
+  /// No description provided for @clanMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Members'**
+  String get clanMembers;
+
+  /// No description provided for @clanWarFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'War frequency'**
+  String get clanWarFrequency;
+
+  /// No description provided for @clanMinimumMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum members'**
+  String get clanMinimumMembers;
+
+  /// No description provided for @clanMaximumMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum members'**
+  String get clanMaximumMembers;
+
+  /// No description provided for @clanLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get clanLocation;
+
+  /// No description provided for @clanMinimumPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum clan points'**
+  String get clanMinimumPoints;
+
+  /// No description provided for @clanMinimumLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum clan level'**
+  String get clanMinimumLevel;
+
+  /// Clan is invite only
+  ///
+  /// In en, this message translates to:
+  /// **'Invite Only'**
+  String get clanInviteOnly;
+
+  /// Clan is opened
+  ///
+  /// In en, this message translates to:
+  /// **'Opened'**
+  String get clanOpened;
+
+  /// Clan is closed
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get clanClosed;
+
+  /// No description provided for @clanRoleLeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Leader'**
+  String get clanRoleLeader;
+
+  /// No description provided for @clanRoleCoLeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Co-Leader'**
+  String get clanRoleCoLeader;
+
+  /// No description provided for @clanRoleElder.
+  ///
+  /// In en, this message translates to:
+  /// **'Elder'**
+  String get clanRoleElder;
+
+  /// No description provided for @clanRoleMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Member'**
+  String get clanRoleMember;
+
+  /// No description provided for @clanWarFrequencyAlways.
+  ///
+  /// In en, this message translates to:
+  /// **'Always'**
+  String get clanWarFrequencyAlways;
+
+  /// No description provided for @clanWarFrequencyNever.
+  ///
+  /// In en, this message translates to:
+  /// **'Never'**
+  String get clanWarFrequencyNever;
+
+  /// No description provided for @clanWarFrequencyUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get clanWarFrequencyUnknown;
+
+  /// No description provided for @clanWarFrequencyOncePerWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'1/week'**
+  String get clanWarFrequencyOncePerWeek;
+
+  /// No description provided for @clanWarFrequencyMoreThanOncePerWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'More than 1/week'**
+  String get clanWarFrequencyMoreThanOncePerWeek;
+
+  /// No description provided for @clanWarFrequencyRarely.
+  ///
+  /// In en, this message translates to:
+  /// **'Rarely'**
+  String get clanWarFrequencyRarely;
+
+  /// No description provided for @timeHourIndicator.
+  ///
+  /// In en, this message translates to:
+  /// **'h'**
+  String get timeHourIndicator;
+
+  /// No description provided for @timeMinIndicator.
+  ///
+  /// In en, this message translates to:
+  /// **'m'**
+  String get timeMinIndicator;
+
+  /// No description provided for @timeDaysLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days left'**
+  String timeDaysLeft(int days);
+
+  /// No description provided for @timeDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days ago'**
+  String timeDaysAgo(int days);
+
+  /// No description provided for @timeDayAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{day} day ago'**
+  String timeDayAgo(int day);
+
+  /// No description provided for @timeHourAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{hour} hour ago'**
+  String timeHourAgo(int hour);
+
+  /// No description provided for @timeHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} hours ago'**
+  String timeHoursAgo(int hours);
+
+  /// No description provided for @timeMinuteAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{minute} minute ago'**
+  String timeMinuteAgo(int minute);
+
+  /// No description provided for @timeMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} minutes ago'**
+  String timeMinutesAgo(int minutes);
+
+  /// No description provided for @timeSecondAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds}s ago'**
+  String timeSecondAgo(int seconds);
+
+  /// No description provided for @timeJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just Now'**
+  String get timeJustNow;
+
+  /// No description provided for @timeEndedJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended just now'**
+  String get timeEndedJustNow;
+
+  /// No description provided for @timeEndedMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended {minutes} minutes ago'**
+  String timeEndedMinutesAgo(int minutes);
+
+  /// No description provided for @timeEndedHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended {hours} hours ago'**
+  String timeEndedHoursAgo(int hours);
+
+  /// No description provided for @timeEndedDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended {days} days ago'**
+  String timeEndedDaysAgo(int days);
+
+  /// No description provided for @timeStartsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts in {time}'**
+  String timeStartsIn(String time);
+
+  /// No description provided for @timeStartsAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts at {time}'**
+  String timeStartsAt(String time);
+
+  /// No description provided for @timeEndsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends in {time}'**
+  String timeEndsIn(String time);
+
+  /// No description provided for @timeEndsAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends at {time}'**
+  String timeEndsAt(String time);
+
+  /// No description provided for @timeUpdatedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated at {time}'**
+  String timeUpdatedAt(String time);
+
+  /// No description provided for @legendsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Legend League'**
+  String get legendsTitle;
+
+  /// No description provided for @legendsNotInLeague.
+  ///
+  /// In en, this message translates to:
+  /// **'Not in Legend League'**
+  String get legendsNotInLeague;
+
+  /// No description provided for @legendsNoDataToday.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re not in Legend League, but past seasons are available.'**
+  String get legendsNoDataToday;
+
+  /// No description provided for @legendsStartDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You started the day with {trophies} trophies.'**
+  String legendsStartDescription(String trophies);
+
+  /// No description provided for @legendsNoRankLocalDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You are currently not ranked ({country}) with {trophies} trophies.'**
+  String legendsNoRankLocalDescription(String country, int trophies);
+
+  /// No description provided for @legendsRankLocalDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You are currently ranked {rank} ({country}) with {trophies} trophies.'**
+  String legendsRankLocalDescription(int rank, String country, int trophies);
+
+  /// No description provided for @legendsGainDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You gained {trophies} trophies for now.'**
+  String legendsGainDescription(int trophies);
+
+  /// No description provided for @legendsLossDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You lost {trophies} trophies for now.'**
+  String legendsLossDescription(int trophies);
+
+  /// No description provided for @legendsNoGlobalRankDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You are currently not ranked globally with {trophies} trophies.'**
+  String legendsNoGlobalRankDescription(int trophies);
+
+  /// No description provided for @legendsGlobalRankDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You are currently ranked {rank} globally with {trophies} trophies.'**
+  String legendsGlobalRankDescription(int rank, int trophies);
+
+  /// No description provided for @legendsNoRank.
+  ///
+  /// In en, this message translates to:
+  /// **'No ranking'**
+  String get legendsNoRank;
+
+  /// No description provided for @legendsBestTrophies.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Trophies'**
+  String get legendsBestTrophies;
+
+  /// No description provided for @legendsMostAttacks.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Attacks'**
+  String get legendsMostAttacks;
+
+  /// No description provided for @legendsLastSeason.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Season'**
+  String get legendsLastSeason;
+
+  /// No description provided for @legendsBestRank.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Global Rank'**
+  String get legendsBestRank;
+
+  /// No description provided for @legendsTrophiesBySeason.
+  ///
+  /// In en, this message translates to:
+  /// **'Trophies by season'**
+  String get legendsTrophiesBySeason;
+
+  /// No description provided for @legendsEosTrophies.
+  ///
+  /// In en, this message translates to:
+  /// **'End Of Season Trophies'**
+  String get legendsEosTrophies;
+
+  /// No description provided for @legendsEosDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'End Of Season Details'**
+  String get legendsEosDetails;
+
+  /// No description provided for @legendsInaccurateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Inaccurate data?'**
+  String get legendsInaccurateTitle;
+
+  /// No description provided for @legendsInaccurateIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here\'s why:\n'**
+  String get legendsInaccurateIntro;
+
+  /// No description provided for @legendsInaccurateApiDelayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'1. API Delay: '**
+  String get legendsInaccurateApiDelayTitle;
+
+  /// No description provided for @legendsInaccurateApiDelayBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n'**
+  String get legendsInaccurateApiDelayBody;
+
+  /// No description provided for @legendsInaccurateConcurrentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Concurrent Changes: \n'**
+  String get legendsInaccurateConcurrentTitle;
+
+  /// No description provided for @legendsInaccurateMultipleAttacksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'- Multiple Attacks/Defenses: '**
+  String get legendsInaccurateMultipleAttacksTitle;
+
+  /// No description provided for @legendsInaccurateMultipleAttacksBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n'**
+  String get legendsInaccurateMultipleAttacksBody;
+
+  /// No description provided for @legendsInaccurateSimultaneousTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'- Simultaneous Attack and Defense: '**
+  String get legendsInaccurateSimultaneousTitle;
+
+  /// No description provided for @legendsInaccurateSimultaneousBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n'**
+  String get legendsInaccurateSimultaneousBody;
+
+  /// No description provided for @legendsInaccurateNetGainTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Net Gain/Loss: '**
+  String get legendsInaccurateNetGainTitle;
+
+  /// No description provided for @legendsInaccurateNetGainBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Despite timing issues, the overall net gain or loss for the day is accurate. '**
+  String get legendsInaccurateNetGainBody;
+
+  /// No description provided for @legendsInaccurateConclusion.
+  ///
+  /// In en, this message translates to:
+  /// **'These limitations are common across all tools using the Clash of Clans API. We sadly can\'t fix that as it is in Supercell\'s hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!'**
+  String get legendsInaccurateConclusion;
+
+  /// No description provided for @statsSeasonStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Season Stats'**
+  String get statsSeasonStats;
+
+  /// Shows stats by day
+  ///
+  /// In en, this message translates to:
+  /// **'By Day'**
+  String get statsByDay;
+
+  /// Shows stats by season
+  ///
+  /// In en, this message translates to:
+  /// **'By Season'**
+  String get statsBySeason;
+
+  /// No description provided for @statsDayIndex.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {index}'**
+  String statsDayIndex(int index);
+
+  /// No description provided for @statsIndexDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{index} days'**
+  String statsIndexDays(int index);
+
+  /// No description provided for @statsYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get statsYear;
+
+  /// No description provided for @statsMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get statsMonth;
+
+  /// Example: August 2024 season
+  ///
+  /// In en, this message translates to:
+  /// **'{date} season'**
+  String statsSeasonDate(String date);
+
+  /// Ask player to select a season
+  ///
+  /// In en, this message translates to:
+  /// **'Select a season'**
+  String get statsSelectSeason;
+
+  /// No description provided for @statsAllTownHalls.
+  ///
+  /// In en, this message translates to:
+  /// **'All Town Halls'**
+  String get statsAllTownHalls;
+
+  /// No description provided for @statsMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Members Stats'**
+  String get statsMembers;
+
+  /// No description provided for @todoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'To-do list'**
+  String get todoTitle;
+
+  /// No description provided for @todoExplanationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Calculation'**
+  String get todoExplanationTitle;
+
+  /// No description provided for @todoExplanationIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'The task completion percentage is calculated based on the following activities with specific weightings:'**
+  String get todoExplanationIntro;
+
+  /// No description provided for @todoExplanationLegendsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Legend League:'**
+  String get todoExplanationLegendsTitle;
+
+  /// No description provided for @todoExplanationLegends.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight of 8 points per account, 1 attack = 1 point.'**
+  String get todoExplanationLegends;
+
+  /// No description provided for @todoExplanationRaidsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Raids:'**
+  String get todoExplanationRaidsTitle;
+
+  /// No description provided for @todoExplanationRaids.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.'**
+  String get todoExplanationRaids;
+
+  /// No description provided for @todoExplanationClanWarsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clan Wars:'**
+  String get todoExplanationClanWarsTitle;
+
+  /// No description provided for @todoExplanationClanWars.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight of 2 points per account, 1 attack = 1 point.'**
+  String get todoExplanationClanWars;
+
+  /// No description provided for @todoExplanationCwlTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clan War League:'**
+  String get todoExplanationCwlTitle;
+
+  /// No description provided for @todoExplanationCwl.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.'**
+  String get todoExplanationCwl;
+
+  /// No description provided for @todoExplanationPassAndGamesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Season Pass & Clan Games:'**
+  String get todoExplanationPassAndGamesTitle;
+
+  /// No description provided for @todoExplanationPassAndGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.'**
+  String get todoExplanationPassAndGames;
+
+  /// No description provided for @todoExplanationConclusion.
+  ///
+  /// In en, this message translates to:
+  /// **'The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.'**
+  String get todoExplanationConclusion;
+
+  /// Number of accounts (ex: 4 accounts)
+  ///
+  /// In en, this message translates to:
+  /// **'{number} accounts'**
+  String todoAccountsNumber(int number);
+
+  /// No description provided for @todoAccountsNumberActive.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} active accounts'**
+  String todoAccountsNumberActive(int number);
+
+  /// No description provided for @todoAccountsNumberInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} inactive accounts'**
+  String todoAccountsNumberInactive(int number);
+
+  /// No description provided for @todoAccountsActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active accounts'**
+  String get todoAccountsActive;
+
+  /// No description provided for @todoAccountsInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive accounts'**
+  String get todoAccountsInactive;
+
+  /// No description provided for @todoAccountsNoInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'No inactive accounts.'**
+  String get todoAccountsNoInactive;
+
+  /// No description provided for @todoAccountsNoActive.
+  ///
+  /// In en, this message translates to:
+  /// **'No active accounts.'**
+  String get todoAccountsNoActive;
+
+  /// No description provided for @todoAttacksLeftDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {attacks} attack(s) left ({type}).'**
+  String todoAttacksLeftDescription(int attacks, String type);
+
+  /// No description provided for @todoDefensesLeftDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {defenses} defense(s) left ({type}).'**
+  String todoDefensesLeftDescription(int defenses, String type);
+
+  /// No description provided for @todoNoAttacksLeftDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations, you have done all your attacks ({type})!'**
+  String todoNoAttacksLeftDescription(String type);
+
+  /// No description provided for @todoPointsLeftDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {points} points left to get today to be in time for the end of the event ({type}).'**
+  String todoPointsLeftDescription(int points, String type);
+
+  /// No description provided for @todoPointsLeftDescriptionNoPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!'**
+  String todoPointsLeftDescriptionNoPoints(String type);
+
+  /// No description provided for @warTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'War'**
+  String get warTitle;
+
+  /// No description provided for @warFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'War frequency'**
+  String get warFrequency;
+
+  /// No description provided for @warParticipation.
+  ///
+  /// In en, this message translates to:
+  /// **'War Participation'**
+  String get warParticipation;
+
+  /// No description provided for @warLeague.
+  ///
+  /// In en, this message translates to:
+  /// **'War/League'**
+  String get warLeague;
+
+  /// No description provided for @warHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'War History'**
+  String get warHistory;
+
+  /// No description provided for @warLog.
+  ///
+  /// In en, this message translates to:
+  /// **'War Log'**
+  String get warLog;
+
+  /// No description provided for @warLogPublic.
+  ///
+  /// In en, this message translates to:
+  /// **'Public War Log'**
+  String get warLogPublic;
+
+  /// No description provided for @warLogPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Private War Log'**
+  String get warLogPrivate;
+
+  /// No description provided for @warLogClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'{clan}\'s war log is closed.'**
+  String warLogClosed(String clan);
+
+  /// No description provided for @warStats.
+  ///
+  /// In en, this message translates to:
+  /// **'War Stats'**
+  String get warStats;
+
+  /// No description provided for @warOngoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing war'**
+  String get warOngoing;
+
+  /// No description provided for @warNotInWar.
+  ///
+  /// In en, this message translates to:
+  /// **'Not in war'**
+  String get warNotInWar;
+
+  /// No description provided for @warIsNotInWar.
+  ///
+  /// In en, this message translates to:
+  /// **'{clan} is not in war.'**
+  String warIsNotInWar(String clan);
+
+  /// No description provided for @warAskForWar.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact the leader or a co-leader to start a war.'**
+  String get warAskForWar;
+
+  /// No description provided for @warAskForWarLogOpening.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact a leader or a co-leader to open the war log.'**
+  String get warAskForWarLogOpening;
+
+  /// No description provided for @warEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'War ended'**
+  String get warEnded;
+
+  /// No description provided for @warPreparation.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparation'**
+  String get warPreparation;
+
+  /// No description provided for @warPerfectWar.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect war'**
+  String get warPerfectWar;
+
+  /// No description provided for @warVictory.
+  ///
+  /// In en, this message translates to:
+  /// **'Victory'**
+  String get warVictory;
+
+  /// No description provided for @warDefeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Defeat'**
+  String get warDefeat;
+
+  /// War ended in a draw
+  ///
+  /// In en, this message translates to:
+  /// **'Draw'**
+  String get warDraw;
+
+  /// No description provided for @warTeamSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Team size'**
+  String get warTeamSize;
+
+  /// No description provided for @warMyTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'My team'**
+  String get warMyTeam;
+
+  /// No description provided for @warEnemiesTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Enemies'**
+  String get warEnemiesTeam;
+
+  /// No description provided for @warClanDraw.
+  ///
+  /// In en, this message translates to:
+  /// **'The two clans are tied'**
+  String get warClanDraw;
+
+  /// No description provided for @warStateOfTheWar.
+  ///
+  /// In en, this message translates to:
+  /// **'State of the war'**
+  String get warStateOfTheWar;
+
+  /// No description provided for @warStarsNeededToTakeTheLead.
+  ///
+  /// In en, this message translates to:
+  /// **'{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.'**
+  String warStarsNeededToTakeTheLead(
+      String clan, int star, int stars2, String percent);
+
+  /// No description provided for @warStarsAndPercentNeededToTakeTheLead.
+  ///
+  /// In en, this message translates to:
+  /// **'{clan} still need {percent}% or 1 more star to take the lead'**
+  String warStarsAndPercentNeededToTakeTheLead(String clan, String percent);
+
+  /// No description provided for @warNoDataAvailableForThisWar.
+  ///
+  /// In en, this message translates to:
+  /// **'No data available for this war'**
+  String get warNoDataAvailableForThisWar;
+
+  /// No description provided for @warCalculatorFast.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast calculator'**
+  String get warCalculatorFast;
+
+  /// No description provided for @warCalculatorAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.'**
+  String warCalculatorAnswer(String percentNeeded, String result);
+
+  /// No description provided for @warCalculatorNeededOverall.
+  ///
+  /// In en, this message translates to:
+  /// **'% Needed overall'**
+  String get warCalculatorNeededOverall;
+
+  /// No description provided for @warCalculatorCalculate.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculate'**
+  String get warCalculatorCalculate;
+
+  /// No description provided for @warAttacksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Attacks'**
+  String get warAttacksTitle;
+
+  /// No attack yet in war
+  ///
+  /// In en, this message translates to:
+  /// **'No attack yet'**
+  String get warAttacksNone;
+
+  /// No description provided for @warAttacksBest.
+  ///
+  /// In en, this message translates to:
+  /// **'Best attacks'**
+  String get warAttacksBest;
+
+  /// No description provided for @warAttacksCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Attack Count'**
+  String get warAttacksCount;
+
+  /// No description provided for @warAttacksMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed Attacks'**
+  String get warAttacksMissed;
+
+  /// No description provided for @warAttacksNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'You attacked {number_time} time(s) during the last {number_war} wars.'**
+  String warAttacksNumber(int number_time, int number_war);
+
+  /// No description provided for @warAttacksAverageStars.
+  ///
+  /// In en, this message translates to:
+  /// **'You had an average of {stars} stars per war.'**
+  String warAttacksAverageStars(String stars);
+
+  /// No description provided for @warAttacksAverageDestruction.
+  ///
+  /// In en, this message translates to:
+  /// **'You had an average of {percent}% destruction rate per war.'**
+  String warAttacksAverageDestruction(String percent);
+
+  /// No description provided for @warDefenseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Defense'**
+  String get warDefenseTitle;
+
+  /// No description provided for @warDefensesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Defenses'**
+  String get warDefensesTitle;
+
+  /// No defense yet in war
+  ///
+  /// In en, this message translates to:
+  /// **'No defense yet'**
+  String get warDefensesNone;
+
+  /// No description provided for @warDefensesBest.
+  ///
+  /// In en, this message translates to:
+  /// **'Best defenses'**
+  String get warDefensesBest;
+
+  /// Best war defense (out of 3 defenses)
+  ///
+  /// In en, this message translates to:
+  /// **'Best defense (out of {number})'**
+  String warDefensesBestOutOf(int number);
+
+  /// No description provided for @warDefenseStars.
+  ///
+  /// In en, this message translates to:
+  /// **'Defense Stars'**
+  String get warDefenseStars;
+
+  /// No description provided for @warDefensesNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'You defended {number_time} time(s) during the last {number_war} wars.'**
+  String warDefensesNumber(int number_time, int number_war);
+
+  /// No description provided for @warDefensesAverageStars.
+  ///
+  /// In en, this message translates to:
+  /// **'You had an average of {stars} stars per defense.'**
+  String warDefensesAverageStars(double stars);
+
+  /// No description provided for @warDefensesAverageDestruction.
+  ///
+  /// In en, this message translates to:
+  /// **'You had an average of {percent}% destruction rate per defense.'**
+  String warDefensesAverageDestruction(String percent);
+
+  /// No description provided for @warStarsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stars'**
+  String get warStarsTitle;
+
+  /// No description provided for @warStarsTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get warStarsTotal;
+
+  /// No description provided for @warStarsAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Average stars'**
+  String get warStarsAverage;
+
+  /// No description provided for @warStarsNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of stars'**
+  String get warStarsNumber;
+
+  /// No description provided for @warStarsOne.
+  ///
+  /// In en, this message translates to:
+  /// **'1 star'**
+  String get warStarsOne;
+
+  /// No description provided for @warStarsTwo.
+  ///
+  /// In en, this message translates to:
+  /// **'2 stars'**
+  String get warStarsTwo;
+
+  /// No description provided for @warStarsThree.
+  ///
+  /// In en, this message translates to:
+  /// **'3 stars'**
+  String get warStarsThree;
+
+  /// No description provided for @warStarsZero.
+  ///
+  /// In en, this message translates to:
+  /// **'0 Star'**
+  String get warStarsZero;
+
+  /// Best performance in war
+  ///
+  /// In en, this message translates to:
+  /// **'Best performance'**
+  String get warStarsBestPerformance;
+
+  /// No description provided for @warDestructionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Destruction'**
+  String get warDestructionTitle;
+
+  /// No description provided for @warDestructionAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Average destruction'**
+  String get warDestructionAverage;
+
+  /// Percentage of destruction in war
+  ///
+  /// In en, this message translates to:
+  /// **'Destruction rate'**
+  String get warDestructionRate;
+
+  /// No description provided for @warHistoryWinsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clan won {wins} wars ({percent}%) out of the last 50 wars.'**
+  String warHistoryWinsDescription(int wins, String percent);
+
+  /// No description provided for @warHistoryLossesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clan lost {losses} wars ({percent}%) out of the last 50 wars.'**
+  String warHistoryLossesDescription(int losses, String percent);
+
+  /// No description provided for @warHistoryDrawsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clan had {draws} draws ({percent}%) out of the last 50 wars.'**
+  String warHistoryDrawsDescription(int draws, String percent);
+
+  /// No description provided for @warHistoryAverageMembersDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clan has an average of {members} members participating out of the last 50 wars.'**
+  String warHistoryAverageMembersDescription(int members);
+
+  /// No description provided for @warHistoryAverageWarStarsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.'**
+  String warHistoryAverageWarStarsDescription(double stars, String percent);
+
+  /// No description provided for @warHistoryAverageHitRateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clan had an average of {percent}% destruction rate from the last 50 wars.'**
+  String warHistoryAverageHitRateDescription(String percent);
+
+  /// Map position in war
+  ///
+  /// In en, this message translates to:
+  /// **'Map Position'**
+  String get warPositionMap;
+
+  /// Abbreviation for map position
+  ///
+  /// In en, this message translates to:
+  /// **'Pos'**
+  String get warPositionAbbr;
+
+  /// Order of the player in the clan
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get warPositionOrder;
+
+  /// Abbreviation for opponent's town hall level
+  ///
+  /// In en, this message translates to:
+  /// **'Opp TH'**
+  String get warOpponentTownhall;
+
+  /// No description provided for @warOpponentLowerTownhall.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower TH'**
+  String get warOpponentLowerTownhall;
+
+  /// No description provided for @warOpponentUpperTownhall.
+  ///
+  /// In en, this message translates to:
+  /// **'Upper TH'**
+  String get warOpponentUpperTownhall;
+
+  /// No description provided for @warOpponentEqualThLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Equal TH'**
+  String get warOpponentEqualThLevel;
+
+  /// No description provided for @warOpponentSelectMembersThLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Members TH Level'**
+  String get warOpponentSelectMembersThLevel;
+
+  /// No description provided for @warOpponentSelectOpponentsThLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Opponents TH Level'**
+  String get warOpponentSelectOpponentsThLevel;
+
+  /// filter by number of wars
+  ///
+  /// In en, this message translates to:
+  /// **'By number of wars'**
+  String get warFiltersByNumberOfWars;
+
+  /// filter by date range
+  ///
+  /// In en, this message translates to:
+  /// **'By date range'**
+  String get warFiltersByDateRange;
+
+  /// Example: Shows the last 25 wars
+  ///
+  /// In en, this message translates to:
+  /// **'Last {number} wars'**
+  String warFiltersLastXwars(int number);
+
+  /// Friendly war
+  ///
+  /// In en, this message translates to:
+  /// **'Friendly'**
+  String get warFiltersFriendly;
+
+  /// Random/basic war (not friendly or cwl)
+  ///
+  /// In en, this message translates to:
+  /// **'Random'**
+  String get warFiltersRandom;
+
+  /// For example, hide stats from TH15 and below if the player is now TH16
+  ///
+  /// In en, this message translates to:
+  /// **'Hide/Show stats from former TH levels'**
+  String get warVisibilityToggleTownHall;
+
+  /// War events
+  ///
+  /// In en, this message translates to:
+  /// **'Events'**
+  String get warEventsTitle;
+
+  /// No description provided for @warEventsNewest.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get warEventsNewest;
+
+  /// No description provided for @warEventsOldest.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest'**
+  String get warEventsOldest;
+
+  /// Opted In for war
+  ///
+  /// In en, this message translates to:
+  /// **'Opted In'**
+  String get warStatusReady;
+
+  /// Opted Out for war
+  ///
+  /// In en, this message translates to:
+  /// **'Opted Out'**
+  String get warStatusUnready;
+
+  /// Missed attacks
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get warStatusMissed;
+
+  /// Abbreviation for average
+  ///
+  /// In en, this message translates to:
+  /// **'Avg'**
+  String get warAbbreviationAvg;
+
+  /// Abbreviation for average percentage
+  ///
+  /// In en, this message translates to:
+  /// **'Avg %'**
+  String get warAbbreviationAvgPercentage;
+
+  /// No description provided for @cwlTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CWL'**
+  String get cwlTitle;
+
+  /// No description provided for @cwlClanWarLeague.
+  ///
+  /// In en, this message translates to:
+  /// **'Clan War League'**
+  String get cwlClanWarLeague;
+
+  /// No description provided for @cwlOngoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing CWL'**
+  String get cwlOngoing;
+
+  /// No description provided for @cwlRounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Rounds'**
+  String get cwlRounds;
+
+  /// No description provided for @cwlRoundNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Round {number}'**
+  String cwlRoundNumber(int number);
+
+  /// No description provided for @cwlCurrentRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Current round (Round {round})'**
+  String cwlCurrentRound(int round);
+
+  /// No description provided for @cwlRank.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clan is currently ranked {rank}.'**
+  String cwlRank(int rank);
+
+  /// No description provided for @cwlStars.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clan has a total of {stars} stars.'**
+  String cwlStars(int stars);
+
+  /// No description provided for @cwlDestructionPercentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clan has a total destruction rate of {percent}%.'**
+  String cwlDestructionPercentage(String percent);
+
+  /// No description provided for @cwlTotalAttacks.
+  ///
+  /// In en, this message translates to:
+  /// **'Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.'**
+  String cwlTotalAttacks(int attacks, int totalAttacks);
+
+  /// No description provided for @cwlCurrentRoundDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s currently round {round}.'**
+  String cwlCurrentRoundDescription(int round);
+
+  /// Logs of players joining or leaving the clan.
+  ///
+  /// In en, this message translates to:
+  /// **'Join/Leave Logs (Current Season)'**
+  String get joinLeaveTitle;
+
+  /// No description provided for @joinLeaveJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Join'**
+  String get joinLeaveJoin;
+
+  /// No description provided for @joinLeaveLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get joinLeaveLeave;
+
+  /// No description provided for @joinLeaveReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get joinLeaveReset;
+
+  /// No description provided for @joinLeaveJoins.
+  ///
+  /// In en, this message translates to:
+  /// **'Joins'**
+  String get joinLeaveJoins;
+
+  /// No description provided for @joinLeaveLeaves.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaves'**
+  String get joinLeaveLeaves;
+
+  /// No description provided for @joinLeaveUniquePlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Unique Players'**
+  String get joinLeaveUniquePlayers;
+
+  /// No description provided for @joinLeaveMovingPlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving Players'**
+  String get joinLeaveMovingPlayers;
+
+  /// No description provided for @joinLeaveMostMovingPlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Moving Players'**
+  String get joinLeaveMostMovingPlayers;
+
+  /// No description provided for @joinLeaveStillInClan.
+  ///
+  /// In en, this message translates to:
+  /// **'Still in Clan'**
+  String get joinLeaveStillInClan;
+
+  /// No description provided for @joinLeaveLeftForever.
+  ///
+  /// In en, this message translates to:
+  /// **'Left Forever'**
+  String get joinLeaveLeftForever;
+
+  /// No description provided for @joinLeaveRejoinedPlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejoined Players'**
+  String get joinLeaveRejoinedPlayers;
+
+  /// No description provided for @joinLeaveAvgTimeJoinLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Join/Leave Time'**
+  String get joinLeaveAvgTimeJoinLeave;
+
+  /// No description provided for @joinLeavePeakHour.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Active Hour'**
+  String get joinLeavePeakHour;
+
+  /// No description provided for @joinLeaveNumberDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} leave events occurred during the current season ({date}).'**
+  String joinLeaveNumberDescription(int number, String date);
+
+  /// No description provided for @joinLeaveJoinNumberDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} join events occurred during the current season ({date}).'**
+  String joinLeaveJoinNumberDescription(int number, String date);
+
+  /// Number of players who left and rejoined the clan during the current season.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} player(s) left and rejoined the clan during the current season ({date}).'**
+  String joinLeaveMovingNumberDescription(int number, String date);
+
+  /// Number of unique players who joined/left the clan during the current season.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} unique player(s) joined/left the clan during the current season ({date}).'**
+  String joinLeaveUniqueNumberDescription(int number, String date);
+
+  /// No description provided for @joinLeaveStillInClanNumberDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} player(s) joined and are still in the clan.'**
+  String joinLeaveStillInClanNumberDescription(int number);
+
+  /// No description provided for @joinLeaveLeftClanNumberDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} player(s) joined, then left the clan and never rejoined.'**
+  String joinLeaveLeftClanNumberDescription(int number);
+
+  /// [The player] left the clan on 16/06/2024 at 10:35.
+  ///
+  /// In en, this message translates to:
+  /// **'Left on {date} at {time}.'**
+  String joinLeaveLeftOnAt(String date, String time);
+
+  /// [The player] joined the clan on 16/06/2024 at 10:35.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined on {date} at {time}.'**
+  String joinLeaveJoinedOnAt(String date, String time);
+
+  /// No description provided for @raidsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Raids'**
+  String get raidsTitle;
+
+  /// No description provided for @raidsLast.
+  ///
+  /// In en, this message translates to:
+  /// **'Last raids'**
+  String get raidsLast;
+
+  /// No description provided for @raidsOngoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing raids'**
+  String get raidsOngoing;
+
+  /// No description provided for @raidsDistrictsDestroyed.
+  ///
+  /// In en, this message translates to:
+  /// **'Districts destroyed'**
+  String get raidsDistrictsDestroyed;
+
+  /// No description provided for @raidsCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Raids completed'**
+  String get raidsCompleted;
+
+  /// Search for a player or a clan
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchTitle;
+
+  /// No description provided for @searchNoResult.
+  ///
+  /// In en, this message translates to:
+  /// **'No result.'**
+  String get searchNoResult;
+
+  /// No description provided for @maintenanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance'**
+  String get maintenanceTitle;
+
+  /// No description provided for @maintenanceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Clash of Clans is currently under maintenance, so we can\'t access the API. Please check back later.'**
+  String get maintenanceDescription;
+
+  /// No description provided for @downloadTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Download CWL summary'**
+  String get downloadTooltip;
+
+  /// No description provided for @downloadInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading file... It can take a few seconds...'**
+  String get downloadInProgress;
+
+  /// No description provided for @downloadSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'File saved successfully in {path}'**
+  String downloadSuccess(String path);
+
+  /// No description provided for @downloadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to download file'**
+  String get downloadError;
+
+  /// No description provided for @dashboardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get dashboardTitle;
+
+  /// No description provided for @toolsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tools'**
+  String get toolsTitle;
+
+  /// No description provided for @communityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Community'**
+  String get communityTitle;
+
+  /// No description provided for @navigationTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Teams'**
+  String get navigationTeam;
+
+  /// No description provided for @navigationStatistics.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get navigationStatistics;
+
+  /// No description provided for @navigationLeague.
+  ///
+  /// In en, this message translates to:
+  /// **'League'**
+  String get navigationLeague;
+
+  /// No description provided for @navigationWars.
+  ///
+  /// In en, this message translates to:
+  /// **'Wars'**
+  String get navigationWars;
+
+  /// Version of the app and device information
+  ///
+  /// In en, this message translates to:
+  /// **'Version & Device'**
+  String get versionDevice;
+
+  /// No description provided for @betaFeature.
+  ///
+  /// In en, this message translates to:
+  /// **'Beta Feature'**
+  String get betaFeature;
+
+  /// No description provided for @betaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'BETA'**
+  String get betaLabel;
+
+  /// No description provided for @betaDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.'**
+  String get betaDescription;
+
+  /// No description provided for @settingsTitle.
   ///
   /// In en, this message translates to:
   /// **'Settings'**
-  String get settings;
+  String get settingsTitle;
 
-  /// No description provided for @toggleTheme.
+  /// No description provided for @settingsLanguage.
   ///
   /// In en, this message translates to:
-  /// **'Toggle Theme'**
-  String get toggleTheme;
+  /// **'Language'**
+  String get settingsLanguage;
 
-  /// No description provided for @selectLanguage.
+  /// No description provided for @settingsSelectLanguage.
   ///
   /// In en, this message translates to:
   /// **'Select a language'**
-  String get selectLanguage;
+  String get settingsSelectLanguage;
 
-  /// No description provided for @faq.
+  /// No description provided for @settingsToggleTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle Theme'**
+  String get settingsToggleTheme;
+
+  /// No description provided for @faqTitle.
   ///
   /// In en, this message translates to:
   /// **'FAQ'**
-  String get faq;
+  String get faqTitle;
 
   /// No description provided for @faqSubtitle.
   ///
@@ -425,2445 +2923,47 @@ abstract class AppLocalizations {
   /// **'For some reasons we can\'t open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.'**
   String get faqCannotOpenMailClient;
 
-  /// No description provided for @helpUsTranslate.
+  /// No description provided for @translationHelpUsTranslate.
   ///
   /// In en, this message translates to:
   /// **'Help us translate'**
-  String get helpUsTranslate;
+  String get translationHelpUsTranslate;
 
-  /// No description provided for @suggestFeatures.
+  /// No description provided for @translationSuggestFeatures.
   ///
   /// In en, this message translates to:
   /// **'Suggest features'**
-  String get suggestFeatures;
+  String get translationSuggestFeatures;
 
-  /// No description provided for @thankYou.
+  /// No description provided for @translationThankYou.
   ///
   /// In en, this message translates to:
   /// **'Thank you!'**
-  String get thankYou;
+  String get translationThankYou;
 
-  /// No description provided for @thankYouContent.
+  /// No description provided for @translationThankYouContent.
   ///
   /// In en, this message translates to:
   /// **'A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!'**
-  String get thankYouContent;
+  String get translationThankYouContent;
 
-  /// No description provided for @helpTranslateContent.
+  /// No description provided for @translationHelpTranslateContent.
   ///
   /// In en, this message translates to:
   /// **'You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!'**
-  String get helpTranslateContent;
+  String get translationHelpTranslateContent;
 
-  /// No description provided for @helpTranslateButton.
+  /// No description provided for @translationHelpTranslateButton.
   ///
   /// In en, this message translates to:
   /// **'Help Translate on Crowdin'**
-  String get helpTranslateButton;
+  String get translationHelpTranslateButton;
 
-  /// No description provided for @versionDevice.
-  ///
-  /// In en, this message translates to:
-  /// **'Version & Device'**
-  String get versionDevice;
-
-  /// No description provided for @loading.
-  ///
-  /// In en, this message translates to:
-  /// **'Loading...'**
-  String get loading;
-
-  /// Error message when the app version cannot be loaded
-  ///
-  /// In en, this message translates to:
-  /// **'Error loading version'**
-  String get errorLoadingVersion;
-
-  /// No description provided for @currentTranslators.
+  /// No description provided for @translationCurrentTranslators.
   ///
   /// In en, this message translates to:
   /// **'Current Translators'**
-  String get currentTranslators;
-
-  /// No description provided for @betaFeature.
-  ///
-  /// In en, this message translates to:
-  /// **'Beta Feature'**
-  String get betaFeature;
-
-  /// No description provided for @beta.
-  ///
-  /// In en, this message translates to:
-  /// **'BETA'**
-  String get beta;
-
-  /// No description provided for @betaDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.'**
-  String get betaDescription;
-
-  /// No description provided for @copiedToClipboard.
-  ///
-  /// In en, this message translates to:
-  /// **'Copied to clipboard'**
-  String get copiedToClipboard;
-
-  /// all items
-  ///
-  /// In en, this message translates to:
-  /// **'All'**
-  String get all;
-
-  /// No description provided for @hourIndicator.
-  ///
-  /// In en, this message translates to:
-  /// **'h'**
-  String get hourIndicator;
-
-  /// No description provided for @minIndicator.
-  ///
-  /// In en, this message translates to:
-  /// **'m'**
-  String get minIndicator;
-
-  /// No description provided for @noDataAvailable.
-  ///
-  /// In en, this message translates to:
-  /// **'No data available.'**
-  String get noDataAvailable;
-
-  /// No description provided for @close.
-  ///
-  /// In en, this message translates to:
-  /// **'Close'**
-  String get close;
-
-  /// WarLog closed
-  ///
-  /// In en, this message translates to:
-  /// **'Closed'**
-  String get closed;
-
-  /// No description provided for @error.
-  ///
-  /// In en, this message translates to:
-  /// **'Error'**
-  String get error;
-
-  /// No description provided for @player.
-  ///
-  /// In en, this message translates to:
-  /// **'Player'**
-  String get player;
-
-  /// No description provided for @manage.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage'**
-  String get manage;
-
-  /// No description provided for @enterPlayerTag.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter a player tag'**
-  String get enterPlayerTag;
-
-  /// Add an account
-  ///
-  /// In en, this message translates to:
-  /// **'Add'**
-  String get add;
-
-  /// Delete an account
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get delete;
-
-  /// No description provided for @addAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Add account'**
-  String get addAccount;
-
-  /// No description provided for @deleteAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete account'**
-  String get deleteAccount;
-
-  /// No description provided for @playerTagNotExists.
-  ///
-  /// In en, this message translates to:
-  /// **'The player tag entered does not exist.'**
-  String get playerTagNotExists;
-
-  /// No description provided for @accountAlreadyLinked.
-  ///
-  /// In en, this message translates to:
-  /// **'The player tag is already linked to someone.'**
-  String accountAlreadyLinked(Object tag);
-
-  /// No description provided for @enterApiToken.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter the account API token to confirm it\'s yours. You can find it in Clash of Clans Settings > More Settings > API Token.'**
-  String get enterApiToken;
-
-  /// No description provided for @wrongApiToken.
-  ///
-  /// In en, this message translates to:
-  /// **'The API token entered is incorrect'**
-  String get wrongApiToken;
-
-  /// No description provided for @accountAlreadyLinkedToYou.
-  ///
-  /// In en, this message translates to:
-  /// **'The player tag is already linked to you.'**
-  String get accountAlreadyLinkedToYou;
-
-  /// No description provided for @apiToken.
-  ///
-  /// In en, this message translates to:
-  /// **'Account API Token'**
-  String get apiToken;
-
-  /// No description provided for @failedToAddTryAgain.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to add the account. Please try again later.'**
-  String get failedToAddTryAgain;
-
-  /// No description provided for @fillAllFields.
-  ///
-  /// In en, this message translates to:
-  /// **'Please fill all fields.'**
-  String get fillAllFields;
-
-  /// No description provided for @failedToDeleteTryAgain.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to delete link. Please try again later.'**
-  String get failedToDeleteTryAgain;
-
-  /// No description provided for @failedToUpdateOrder.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to update the order of accounts.'**
-  String get failedToUpdateOrder;
-
-  /// No description provided for @manageAccounts.
-  ///
-  /// In en, this message translates to:
-  /// **'Manage your accounts'**
-  String get manageAccounts;
-
-  /// No description provided for @manageAccountsDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.'**
-  String get manageAccountsDescription;
-
-  /// No description provided for @confirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm'**
-  String get confirm;
-
-  /// No description provided for @warning.
-  ///
-  /// In en, this message translates to:
-  /// **'Warning'**
-  String get warning;
-
-  /// No description provided for @exitAppToOpenClash.
-  ///
-  /// In en, this message translates to:
-  /// **'You are about to leave the app to open Clash of Clans.'**
-  String get exitAppToOpenClash;
-
-  /// Prompt asking the user to confirm logout
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to log out?'**
-  String get confirmLogout;
-
-  /// No description provided for @searchPlayer.
-  ///
-  /// In en, this message translates to:
-  /// **'Search player'**
-  String get searchPlayer;
-
-  /// No description provided for @nameOrTagPlayer.
-  ///
-  /// In en, this message translates to:
-  /// **'Player\'s name or tag'**
-  String get nameOrTagPlayer;
-
-  /// No description provided for @playerClanDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan is \"{clan}\" ({tag}).'**
-  String playerClanDescription(String clan, String tag);
-
-  /// No description provided for @playerRatioDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.'**
-  String playerRatioDescription(
-      String ratio, String donations, String received);
-
-  /// No description provided for @playerWarPreferenceDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your war preference is \"{preference}\".'**
-  String playerWarPreferenceDescription(String preference);
-
-  /// No description provided for @playerWarStarsDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You have {stars} war stars.'**
-  String playerWarStarsDescription(int stars);
-
-  /// No description provided for @playerTrophiesDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You have {trophies} trophies. You\'re currently in {league}.'**
-  String playerTrophiesDescription(int trophies, String league);
-
-  /// No description provided for @playerTownHallLevelDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your Town Hall level is {level}.'**
-  String playerTownHallLevelDescription(int level);
-
-  /// No description provided for @playerBuilderBaseDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your Builder Hall level is {level} and you have {trophies} trophies.'**
-  String playerBuilderBaseDescription(int level, int trophies);
-
-  /// No description provided for @dashboard.
-  ///
-  /// In en, this message translates to:
-  /// **'Dashboard'**
-  String get dashboard;
-
-  /// No description provided for @homeBase.
-  ///
-  /// In en, this message translates to:
-  /// **'Home Base'**
-  String get homeBase;
-
-  /// No description provided for @th.
-  ///
-  /// In en, this message translates to:
-  /// **'TH'**
-  String get th;
-
-  /// No description provided for @builderBase.
-  ///
-  /// In en, this message translates to:
-  /// **'Builder Base'**
-  String get builderBase;
-
-  /// No description provided for @bh.
-  ///
-  /// In en, this message translates to:
-  /// **'BH'**
-  String get bh;
-
-  /// No description provided for @clanCapital.
-  ///
-  /// In en, this message translates to:
-  /// **'Clan Capital'**
-  String get clanCapital;
-
-  /// No description provided for @leader.
-  ///
-  /// In en, this message translates to:
-  /// **'Leader'**
-  String get leader;
-
-  /// No description provided for @coLeader.
-  ///
-  /// In en, this message translates to:
-  /// **'Co-Leader'**
-  String get coLeader;
-
-  /// No description provided for @elder.
-  ///
-  /// In en, this message translates to:
-  /// **'Elder'**
-  String get elder;
-
-  /// No description provided for @member.
-  ///
-  /// In en, this message translates to:
-  /// **'Member'**
-  String get member;
-
-  /// Opted In for war
-  ///
-  /// In en, this message translates to:
-  /// **'Opted In'**
-  String get ready;
-
-  /// Opted Out for war
-  ///
-  /// In en, this message translates to:
-  /// **'Opted Out'**
-  String get unready;
-
-  /// No description provided for @level.
-  ///
-  /// In en, this message translates to:
-  /// **'Level: {level}/{maxLevel}'**
-  String level(int level, int maxLevel);
-
-  /// No description provided for @heroes.
-  ///
-  /// In en, this message translates to:
-  /// **'Heroes'**
-  String get heroes;
-
-  /// No description provided for @equipment.
-  ///
-  /// In en, this message translates to:
-  /// **'Equipments'**
-  String get equipment;
-
-  /// No description provided for @troops.
-  ///
-  /// In en, this message translates to:
-  /// **'Troops'**
-  String get troops;
-
-  /// No description provided for @superTroops.
-  ///
-  /// In en, this message translates to:
-  /// **'Super Troops'**
-  String get superTroops;
-
-  /// No description provided for @activeSuperTroops.
-  ///
-  /// In en, this message translates to:
-  /// **'Active Super Troops'**
-  String get activeSuperTroops;
-
-  /// No description provided for @active.
-  ///
-  /// In en, this message translates to:
-  /// **'Active'**
-  String get active;
-
-  /// No description provided for @inactive.
-  ///
-  /// In en, this message translates to:
-  /// **'Inactive'**
-  String get inactive;
-
-  /// No description provided for @pets.
-  ///
-  /// In en, this message translates to:
-  /// **'Pets'**
-  String get pets;
-
-  /// No description provided for @siegeMachines.
-  ///
-  /// In en, this message translates to:
-  /// **'Siege Machines'**
-  String get siegeMachines;
-
-  /// No description provided for @spells.
-  ///
-  /// In en, this message translates to:
-  /// **'Spells'**
-  String get spells;
-
-  /// No description provided for @achievements.
-  ///
-  /// In en, this message translates to:
-  /// **'Achievements'**
-  String get achievements;
-
-  /// Shows stats by day
-  ///
-  /// In en, this message translates to:
-  /// **'By Day'**
-  String get byDay;
-
-  /// No description provided for @bySeason.
-  ///
-  /// In en, this message translates to:
-  /// **'By Season'**
-  String get bySeason;
-
-  /// No description provided for @dayIndex.
-  ///
-  /// In en, this message translates to:
-  /// **'Day {index}'**
-  String dayIndex(int index);
-
-  /// No description provided for @indexDays.
-  ///
-  /// In en, this message translates to:
-  /// **'{index} days'**
-  String indexDays(int index);
-
-  /// No description provided for @bestTrophies.
-  ///
-  /// In en, this message translates to:
-  /// **'Best Trophies'**
-  String get bestTrophies;
-
-  /// No description provided for @mostAttacks.
-  ///
-  /// In en, this message translates to:
-  /// **'Most Attacks'**
-  String get mostAttacks;
-
-  /// No description provided for @lastSeason.
-  ///
-  /// In en, this message translates to:
-  /// **'Last Season'**
-  String get lastSeason;
-
-  /// No description provided for @bestRank.
-  ///
-  /// In en, this message translates to:
-  /// **'Best Global Rank'**
-  String get bestRank;
-
-  /// No description provided for @daysLeft.
-  ///
-  /// In en, this message translates to:
-  /// **'{days} days left'**
-  String daysLeft(int days);
-
-  /// No description provided for @date.
-  ///
-  /// In en, this message translates to:
-  /// **'Date'**
-  String get date;
-
-  /// No description provided for @stats.
-  ///
-  /// In en, this message translates to:
-  /// **'Stats'**
-  String get stats;
-
-  /// No description provided for @fullStats.
-  ///
-  /// In en, this message translates to:
-  /// **'Full Stats'**
-  String get fullStats;
-
-  /// No description provided for @details.
-  ///
-  /// In en, this message translates to:
-  /// **'Details'**
-  String get details;
-
-  /// No description provided for @seasonStats.
-  ///
-  /// In en, this message translates to:
-  /// **'Season Stats'**
-  String get seasonStats;
-
-  /// No description provided for @charts.
-  ///
-  /// In en, this message translates to:
-  /// **'Charts'**
-  String get charts;
-
-  /// Shows EOS trophies history
-  ///
-  /// In en, this message translates to:
-  /// **'History'**
-  String get history;
-
-  /// No description provided for @legendLeague.
-  ///
-  /// In en, this message translates to:
-  /// **'Legend League'**
-  String get legendLeague;
-
-  /// No description provided for @notInLegendLeague.
-  ///
-  /// In en, this message translates to:
-  /// **'Not in Legend League'**
-  String get notInLegendLeague;
-
-  /// No description provided for @noLegendsDataToday.
-  ///
-  /// In en, this message translates to:
-  /// **'You\'re not in Legend League, but past seasons are available.'**
-  String get noLegendsDataToday;
-
-  /// No description provided for @legendStartDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You started the day with {trophies} trophies.'**
-  String legendStartDescription(String trophies);
-
-  /// No description provided for @legendNoRankLocalDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You are currently not ranked ({country}) with {trophies} trophies.'**
-  String legendNoRankLocalDescription(String country, int trophies);
-
-  /// No description provided for @legendRankLocalDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You are currently ranked {rank} ({country}) with {trophies} trophies.'**
-  String legendRankLocalDescription(
-      Object country, Object rank, Object trophies);
-
-  /// No description provided for @legendGainDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You gained {trophies} trophies for now.'**
-  String legendGainDescription(int trophies);
-
-  /// No description provided for @legendLossDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You lost {trophies} trophies for now.'**
-  String legendLossDescription(int trophies);
-
-  /// No description provided for @legendNoGlobalRankDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You are currently not ranked globally with {trophies} trophies.'**
-  String legendNoGlobalRankDescription(int trophies);
-
-  /// No description provided for @legendGlobalRankDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You are currently ranked {rank} globally.'**
-  String legendGlobalRankDescription(int rank, Object trophies);
-
-  /// No description provided for @noRank.
-  ///
-  /// In en, this message translates to:
-  /// **'No ranking'**
-  String get noRank;
-
-  /// Title for the number of trophies at the beginning of the day
-  ///
-  /// In en, this message translates to:
-  /// **'Started'**
-  String get started;
-
-  /// Title for the number of trophies at the end of the day
-  ///
-  /// In en, this message translates to:
-  /// **'Ended'**
-  String get ended;
-
-  /// Average value of legend trophies (defense and attack)
-  ///
-  /// In en, this message translates to:
-  /// **'Average'**
-  String get average;
-
-  /// Remaining attacks or defenses
-  ///
-  /// In en, this message translates to:
-  /// **'Remaining'**
-  String get remaining;
-
-  /// No description provided for @legendsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Inaccurate data?'**
-  String get legendsTitle;
-
-  /// No description provided for @legendsExplanation_intro.
-  ///
-  /// In en, this message translates to:
-  /// **'Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here\'s why:\n'**
-  String get legendsExplanation_intro;
-
-  /// No description provided for @legendsExplanation_api_delay_title.
-  ///
-  /// In en, this message translates to:
-  /// **'1. API Delay: '**
-  String get legendsExplanation_api_delay_title;
-
-  /// No description provided for @legendsExplanation_api_delay_body.
-  ///
-  /// In en, this message translates to:
-  /// **'The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n'**
-  String get legendsExplanation_api_delay_body;
-
-  /// No description provided for @legendsExplanation_concurrent_changes_title.
-  ///
-  /// In en, this message translates to:
-  /// **'2. Concurrent Changes: \n'**
-  String get legendsExplanation_concurrent_changes_title;
-
-  /// No description provided for @legendsExplanation_multiple_attacks_defenses_title.
-  ///
-  /// In en, this message translates to:
-  /// **'- Multiple Attacks/Defenses: '**
-  String get legendsExplanation_multiple_attacks_defenses_title;
-
-  /// No description provided for @legendsExplanation_multiple_attacks_defenses_body.
-  ///
-  /// In en, this message translates to:
-  /// **'If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n'**
-  String get legendsExplanation_multiple_attacks_defenses_body;
-
-  /// No description provided for @legendsExplanation_simultaneous_attack_defense_title.
-  ///
-  /// In en, this message translates to:
-  /// **'- Simultaneous Attack and Defense: '**
-  String get legendsExplanation_simultaneous_attack_defense_title;
-
-  /// No description provided for @legendsExplanation_simultaneous_attack_defense_body.
-  ///
-  /// In en, this message translates to:
-  /// **'If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n'**
-  String get legendsExplanation_simultaneous_attack_defense_body;
-
-  /// No description provided for @legendsExplanation_net_gain_loss_title.
-  ///
-  /// In en, this message translates to:
-  /// **'3. Net Gain/Loss: '**
-  String get legendsExplanation_net_gain_loss_title;
-
-  /// No description provided for @legendsExplanation_net_gain_loss_body.
-  ///
-  /// In en, this message translates to:
-  /// **'Despite timing issues, the overall net gain or loss for the day is accurate. '**
-  String get legendsExplanation_net_gain_loss_body;
-
-  /// No description provided for @legendsExplanation_conclusion.
-  ///
-  /// In en, this message translates to:
-  /// **'These limitations are common across all tools using the Clash of Clans API. We sadly can\'t fix that as it is in Supercell\'s hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!'**
-  String get legendsExplanation_conclusion;
-
-  /// No description provided for @toDoList.
-  ///
-  /// In en, this message translates to:
-  /// **'To-do list'**
-  String get toDoList;
-
-  /// No description provided for @clanGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Clan Games'**
-  String get clanGames;
-
-  /// No description provided for @seasonPass.
-  ///
-  /// In en, this message translates to:
-  /// **'Season Pass'**
-  String get seasonPass;
-
-  /// No description provided for @lastActive.
-  ///
-  /// In en, this message translates to:
-  /// **'Last active: {date}'**
-  String lastActive(String date);
-
-  /// No description provided for @playerNotTracked.
-  ///
-  /// In en, this message translates to:
-  /// **'This player is not tracked. Data may be inaccurate.'**
-  String get playerNotTracked;
-
-  /// Number of accounts (ex: 4 accounts)
-  ///
-  /// In en, this message translates to:
-  /// **'{number} accounts'**
-  String numberAccounts(int number);
-
-  /// No description provided for @numberActiveAccounts.
-  ///
-  /// In en, this message translates to:
-  /// **'{number} active accounts'**
-  String numberActiveAccounts(int number);
-
-  /// No description provided for @numberInactiveAccounts.
-  ///
-  /// In en, this message translates to:
-  /// **'{number} inactive accounts'**
-  String numberInactiveAccounts(int number);
-
-  /// No description provided for @activeAccounts.
-  ///
-  /// In en, this message translates to:
-  /// **'Active accounts'**
-  String get activeAccounts;
-
-  /// No description provided for @inactiveAccounts.
-  ///
-  /// In en, this message translates to:
-  /// **'Inactive accounts'**
-  String get inactiveAccounts;
-
-  /// No description provided for @noInactiveAccounts.
-  ///
-  /// In en, this message translates to:
-  /// **'No inactive accounts.'**
-  String get noInactiveAccounts;
-
-  /// No description provided for @noActiveAccounts.
-  ///
-  /// In en, this message translates to:
-  /// **'No active accounts.'**
-  String get noActiveAccounts;
-
-  /// No description provided for @todoExplanation_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Task Calculation'**
-  String get todoExplanation_title;
-
-  /// No description provided for @todoExplanation_intro.
-  ///
-  /// In en, this message translates to:
-  /// **'The task completion percentage is calculated based on the following activities with specific weightings:'**
-  String get todoExplanation_intro;
-
-  /// No description provided for @todoExplanation_legends_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Legend League:'**
-  String get todoExplanation_legends_title;
-
-  /// No description provided for @todoExplanation_legends.
-  ///
-  /// In en, this message translates to:
-  /// **'Weight of 8 points per account, 1 attack = 1 point.'**
-  String get todoExplanation_legends;
-
-  /// No description provided for @todoExplanation_raids_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Raids:'**
-  String get todoExplanation_raids_title;
-
-  /// No description provided for @todoExplanation_raids.
-  ///
-  /// In en, this message translates to:
-  /// **'Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.'**
-  String get todoExplanation_raids;
-
-  /// No description provided for @todoExplanation_clanWars_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Clan Wars:'**
-  String get todoExplanation_clanWars_title;
-
-  /// No description provided for @todoExplanation_clanWars.
-  ///
-  /// In en, this message translates to:
-  /// **'Weight of 2 points per account, 1 attack = 1 point.'**
-  String get todoExplanation_clanWars;
-
-  /// No description provided for @todoExplanation_cwl_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Clan War League:'**
-  String get todoExplanation_cwl_title;
-
-  /// No description provided for @todoExplanation_cwl.
-  ///
-  /// In en, this message translates to:
-  /// **'Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.'**
-  String get todoExplanation_cwl;
-
-  /// No description provided for @todoExplanation_passAndGames_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Season Pass & Clan Games:'**
-  String get todoExplanation_passAndGames_title;
-
-  /// No description provided for @todoExplanation_passAndGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.'**
-  String get todoExplanation_passAndGames;
-
-  /// No description provided for @todoExplanation_conclusion.
-  ///
-  /// In en, this message translates to:
-  /// **'The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.'**
-  String get todoExplanation_conclusion;
-
-  /// Worst end of day trophies
-  ///
-  /// In en, this message translates to:
-  /// **'Worst'**
-  String get worst;
-
-  /// Best end of day trophies
-  ///
-  /// In en, this message translates to:
-  /// **'Best'**
-  String get best;
-
-  /// No description provided for @total.
-  ///
-  /// In en, this message translates to:
-  /// **'Total'**
-  String get total;
-
-  /// No description provided for @heroesEquipments.
-  ///
-  /// In en, this message translates to:
-  /// **'Hero equipments'**
-  String get heroesEquipments;
-
-  /// No description provided for @daysAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'{days} days ago'**
-  String daysAgo(int days);
-
-  /// No description provided for @dayAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'{day} day ago'**
-  String dayAgo(int day);
-
-  /// No description provided for @hourAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'{hour} hour ago'**
-  String hourAgo(int hour);
-
-  /// No description provided for @hoursAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'{hours} hours ago'**
-  String hoursAgo(int hours, Object Hours);
-
-  /// No description provided for @minuteAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'{minute} minute ago'**
-  String minuteAgo(int minute);
-
-  /// No description provided for @minutesAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'{minutes} minutes ago'**
-  String minutesAgo(int minutes);
-
-  /// No description provided for @secondAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'{seconds}s ago'**
-  String secondAgo(int seconds);
-
-  /// No description provided for @justNow.
-  ///
-  /// In en, this message translates to:
-  /// **'Just Now'**
-  String get justNow;
-
-  /// No description provided for @endedJustNow.
-  ///
-  /// In en, this message translates to:
-  /// **'Ended just now'**
-  String get endedJustNow;
-
-  /// No description provided for @endedMinutesAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'Ended {minutes} minutes ago'**
-  String endedMinutesAgo(int minutes);
-
-  /// No description provided for @endedHoursAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'Ended {hours} hours ago'**
-  String endedHoursAgo(int hours);
-
-  /// No description provided for @endedDaysAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'Ended {days} days ago'**
-  String endedDaysAgo(int days);
-
-  /// No description provided for @trophiesBySeason.
-  ///
-  /// In en, this message translates to:
-  /// **'Trophies by season'**
-  String get trophiesBySeason;
-
-  /// No description provided for @eosTrophies.
-  ///
-  /// In en, this message translates to:
-  /// **'End Of Season Trophies'**
-  String get eosTrophies;
-
-  /// No description provided for @eosDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'End Of Season Details'**
-  String get eosDetails;
-
-  /// No description provided for @searchClan.
-  ///
-  /// In en, this message translates to:
-  /// **'Search clan'**
-  String get searchClan;
-
-  /// No description provided for @clanName.
-  ///
-  /// In en, this message translates to:
-  /// **'Clan\'s name'**
-  String get clanName;
-
-  /// No description provided for @noResult.
-  ///
-  /// In en, this message translates to:
-  /// **'No result.'**
-  String get noResult;
-
-  /// No description provided for @filters.
-  ///
-  /// In en, this message translates to:
-  /// **'Filters'**
-  String get filters;
-
-  /// Whatever the value
-  ///
-  /// In en, this message translates to:
-  /// **'Whatever'**
-  String get whatever;
-
-  /// Any value is accepted
-  ///
-  /// In en, this message translates to:
-  /// **'Any'**
-  String get any;
-
-  /// Filter value is not set
-  ///
-  /// In en, this message translates to:
-  /// **'Not set'**
-  String get notSet;
-
-  /// No description provided for @warFrequency.
-  ///
-  /// In en, this message translates to:
-  /// **'War frequency'**
-  String get warFrequency;
-
-  /// No description provided for @minimumMembers.
-  ///
-  /// In en, this message translates to:
-  /// **'Minimum members'**
-  String get minimumMembers;
-
-  /// No description provided for @maximumMembers.
-  ///
-  /// In en, this message translates to:
-  /// **'Maximum members'**
-  String get maximumMembers;
-
-  /// No description provided for @location.
-  ///
-  /// In en, this message translates to:
-  /// **'Location'**
-  String get location;
-
-  /// No description provided for @minimumClanPoints.
-  ///
-  /// In en, this message translates to:
-  /// **'Minimum clan points'**
-  String get minimumClanPoints;
-
-  /// No description provided for @minimumClanLevel.
-  ///
-  /// In en, this message translates to:
-  /// **'Minimum clan level'**
-  String get minimumClanLevel;
-
-  /// No description provided for @noClan.
-  ///
-  /// In en, this message translates to:
-  /// **'No clan'**
-  String get noClan;
-
-  /// No description provided for @joinClanToUnlockNewFeatures.
-  ///
-  /// In en, this message translates to:
-  /// **'Join a clan to unlock new features.'**
-  String get joinClanToUnlockNewFeatures;
-
-  /// No description provided for @apply.
-  ///
-  /// In en, this message translates to:
-  /// **'Apply'**
-  String get apply;
-
-  /// Clan is opened
-  ///
-  /// In en, this message translates to:
-  /// **'Opened'**
-  String get opened;
-
-  /// No description provided for @inviteOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'Invite Only'**
-  String get inviteOnly;
-
-  /// No description provided for @cancel.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get cancel;
-
-  /// No description provided for @clan.
-  ///
-  /// In en, this message translates to:
-  /// **'Clan'**
-  String get clan;
-
-  /// No description provided for @clans.
-  ///
-  /// In en, this message translates to:
-  /// **'Clans'**
-  String get clans;
-
-  /// No description provided for @members.
-  ///
-  /// In en, this message translates to:
-  /// **'Members'**
-  String get members;
-
-  /// No description provided for @role.
-  ///
-  /// In en, this message translates to:
-  /// **'Role'**
-  String get role;
-
-  /// No description provided for @expLevel.
-  ///
-  /// In en, this message translates to:
-  /// **'Experience Level'**
-  String get expLevel;
-
-  /// No description provided for @townHallLevel.
-  ///
-  /// In en, this message translates to:
-  /// **'TH Level'**
-  String get townHallLevel;
-
-  /// No description provided for @thLevel.
-  ///
-  /// In en, this message translates to:
-  /// **'TH{level}'**
-  String thLevel(int level);
-
-  /// No description provided for @bhLevel.
-  ///
-  /// In en, this message translates to:
-  /// **'BH{level}'**
-  String bhLevel(int level);
-
-  /// No description provided for @townHallLevelLevel.
-  ///
-  /// In en, this message translates to:
-  /// **'Town Hall {level}'**
-  String townHallLevelLevel(int level);
-
-  /// filter by number of wars
-  ///
-  /// In en, this message translates to:
-  /// **'By number of wars'**
-  String get byNumberOfWars;
-
-  /// OK button on pop up
-  ///
-  /// In en, this message translates to:
-  /// **'OK'**
-  String get ok;
-
-  /// filter by date range
-  ///
-  /// In en, this message translates to:
-  /// **'By date range'**
-  String get byDateRange;
-
-  /// Ask player to select a season
-  ///
-  /// In en, this message translates to:
-  /// **'Select a season'**
-  String get selectSeason;
-
-  /// No description provided for @year.
-  ///
-  /// In en, this message translates to:
-  /// **'Year'**
-  String get year;
-
-  /// No description provided for @month.
-  ///
-  /// In en, this message translates to:
-  /// **'Month'**
-  String get month;
-
-  /// No description provided for @allTownHalls.
-  ///
-  /// In en, this message translates to:
-  /// **'All Town Halls'**
-  String get allTownHalls;
-
-  /// Example: August 2024 season
-  ///
-  /// In en, this message translates to:
-  /// **'{date} season'**
-  String seasonDate(String date);
-
-  /// Example: Shows the last 25 wars
-  ///
-  /// In en, this message translates to:
-  /// **'Last {number} wars'**
-  String lastXwars(int number);
-
-  /// Friendly war
-  ///
-  /// In en, this message translates to:
-  /// **'Friendly'**
-  String get friendly;
-
-  /// No description provided for @cwl.
-  ///
-  /// In en, this message translates to:
-  /// **'CWL'**
-  String get cwl;
-
-  /// Random/basic war (not friendly or cwl)
-  ///
-  /// In en, this message translates to:
-  /// **'Random'**
-  String get random;
-
-  /// No description provided for @selectMembersThLevel.
-  ///
-  /// In en, this message translates to:
-  /// **'Members TH Level'**
-  String get selectMembersThLevel;
-
-  /// No description provided for @selectOpponentsThLevel.
-  ///
-  /// In en, this message translates to:
-  /// **'Opponents TH Level'**
-  String get selectOpponentsThLevel;
-
-  /// No description provided for @equalThLevel.
-  ///
-  /// In en, this message translates to:
-  /// **'Equal TH'**
-  String get equalThLevel;
-
-  /// No description provided for @builderBaseTrophies.
-  ///
-  /// In en, this message translates to:
-  /// **'BB Trophies'**
-  String get builderBaseTrophies;
-
-  /// No description provided for @donations.
-  ///
-  /// In en, this message translates to:
-  /// **'Donations'**
-  String get donations;
-
-  /// No description provided for @donationsReceived.
-  ///
-  /// In en, this message translates to:
-  /// **'Donations Received'**
-  String get donationsReceived;
-
-  /// No description provided for @donationsRatio.
-  ///
-  /// In en, this message translates to:
-  /// **'Donation Ratio'**
-  String get donationsRatio;
-
-  /// No description provided for @trophies.
-  ///
-  /// In en, this message translates to:
-  /// **'Trophies'**
-  String get trophies;
-
-  /// No description provided for @always.
-  ///
-  /// In en, this message translates to:
-  /// **'Always'**
-  String get always;
-
-  /// No description provided for @never.
-  ///
-  /// In en, this message translates to:
-  /// **'Never'**
-  String get never;
-
-  /// No description provided for @unknown.
-  ///
-  /// In en, this message translates to:
-  /// **'Unknown'**
-  String get unknown;
-
-  /// No description provided for @oncePerWeek.
-  ///
-  /// In en, this message translates to:
-  /// **'1/week'**
-  String get oncePerWeek;
-
-  /// No description provided for @twicePerWeek.
-  ///
-  /// In en, this message translates to:
-  /// **'2/week'**
-  String get twicePerWeek;
-
-  /// No description provided for @rarely.
-  ///
-  /// In en, this message translates to:
-  /// **'Rarely'**
-  String get rarely;
-
-  /// No description provided for @warLeague.
-  ///
-  /// In en, this message translates to:
-  /// **'War/League'**
-  String get warLeague;
-
-  /// No description provided for @war.
-  ///
-  /// In en, this message translates to:
-  /// **'War'**
-  String get war;
-
-  /// No description provided for @league.
-  ///
-  /// In en, this message translates to:
-  /// **'League'**
-  String get league;
-
-  /// No description provided for @wars.
-  ///
-  /// In en, this message translates to:
-  /// **'Wars'**
-  String get wars;
-
-  /// No description provided for @ongoingWar.
-  ///
-  /// In en, this message translates to:
-  /// **'Ongoing war'**
-  String get ongoingWar;
-
-  /// No description provided for @ongoingCwl.
-  ///
-  /// In en, this message translates to:
-  /// **'Ongoing CWL'**
-  String get ongoingCwl;
-
-  /// No description provided for @cantOpenLink.
-  ///
-  /// In en, this message translates to:
-  /// **'We can\'t open this link.'**
-  String get cantOpenLink;
-
-  /// No description provided for @notInWar.
-  ///
-  /// In en, this message translates to:
-  /// **'Not in war'**
-  String get notInWar;
-
-  /// No description provided for @warHistory.
-  ///
-  /// In en, this message translates to:
-  /// **'War History'**
-  String get warHistory;
-
-  /// No description provided for @warHistoryWinsDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan won {wins} wars ({percent}%) out of the last 50 wars.'**
-  String warHistoryWinsDescription(int wins, String percent);
-
-  /// No description provided for @warHistoryLossesDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan lost {losses} wars ({percent}%) out of the last 50 wars.'**
-  String warHistoryLossesDescription(int losses, String percent);
-
-  /// No description provided for @warHistoryDrawsDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan had {draws} draws ({percent}%) out of the last 50 wars.'**
-  String warHistoryDrawsDescription(int draws, String percent);
-
-  /// No description provided for @warHistoryAverageMembersDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan has an average of {members} members participating out of the last 50 wars.'**
-  String warHistoryAverageMembersDescription(int members);
-
-  /// No description provided for @warHistoryAverageWarStarsDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.'**
-  String warHistoryAverageWarStarsDescription(double stars, String percent);
-
-  /// No description provided for @warHistoryAverageHitRateDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan had an average of {percent}% destruction rate from the last 50 wars.'**
-  String warHistoryAverageHitRateDescription(String percent);
-
-  /// No description provided for @attacksLeftDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You have {attacks} attack(s) left ({type}).'**
-  String attacksLeftDescription(int attacks, String type);
-
-  /// No description provided for @defensesLeftDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You have {defenses} defense(s) left ({type}).'**
-  String defensesLeftDescription(int defenses, String type);
-
-  /// No description provided for @noAttacksLeftDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Congratulations, you have done all your attacks ({type})!'**
-  String noAttacksLeftDescription(Object type);
-
-  /// No description provided for @pointsLeftDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You have {points} points left to get today to be in time for the end of the event ({type}).'**
-  String pointsLeftDescription(int points, String type);
-
-  /// No description provided for @pointsLeftDescriptionNoPoints.
-  ///
-  /// In en, this message translates to:
-  /// **'Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!'**
-  String pointsLeftDescriptionNoPoints(String type);
-
-  /// No description provided for @averageStars.
-  ///
-  /// In en, this message translates to:
-  /// **'Average stars'**
-  String get averageStars;
-
-  /// No description provided for @averageDestruction.
-  ///
-  /// In en, this message translates to:
-  /// **'Average destruction'**
-  String get averageDestruction;
-
-  /// No description provided for @oneStar.
-  ///
-  /// In en, this message translates to:
-  /// **'1 star'**
-  String get oneStar;
-
-  /// No description provided for @twoStars.
-  ///
-  /// In en, this message translates to:
-  /// **'2 stars'**
-  String get twoStars;
-
-  /// No description provided for @threeStars.
-  ///
-  /// In en, this message translates to:
-  /// **'3 stars'**
-  String get threeStars;
-
-  /// Abbreviation for average
-  ///
-  /// In en, this message translates to:
-  /// **'Avg'**
-  String get avg;
-
-  /// Abbreviation for average percentage
-  ///
-  /// In en, this message translates to:
-  /// **'Avg %'**
-  String get avgPercentage;
-
-  /// No description provided for @attackCount.
-  ///
-  /// In en, this message translates to:
-  /// **'Attack Count'**
-  String get attackCount;
-
-  /// No description provided for @missedAttacks.
-  ///
-  /// In en, this message translates to:
-  /// **'Missed Attacks'**
-  String get missedAttacks;
-
-  /// Order of the player in the clan
-  ///
-  /// In en, this message translates to:
-  /// **'Order'**
-  String get order;
-
-  /// No description provided for @defenseStars.
-  ///
-  /// In en, this message translates to:
-  /// **'Defense Stars'**
-  String get defenseStars;
-
-  /// No description provided for @zeroStar.
-  ///
-  /// In en, this message translates to:
-  /// **'0 Star'**
-  String get zeroStar;
-
-  /// No description provided for @warParticipation.
-  ///
-  /// In en, this message translates to:
-  /// **'War Participation'**
-  String get warParticipation;
-
-  /// Missed attacks
-  ///
-  /// In en, this message translates to:
-  /// **'Missed'**
-  String get missed;
-
-  /// No description provided for @totalStars.
-  ///
-  /// In en, this message translates to:
-  /// **'Total'**
-  String get totalStars;
-
-  /// No description provided for @destruction.
-  ///
-  /// In en, this message translates to:
-  /// **'Destruction'**
-  String get destruction;
-
-  /// Map position in war
-  ///
-  /// In en, this message translates to:
-  /// **'Map Position'**
-  String get mapPosition;
-
-  /// Abbreviation for map position
-  ///
-  /// In en, this message translates to:
-  /// **'Pos'**
-  String get pos;
-
-  /// Abbreviation for opponent's town hall level
-  ///
-  /// In en, this message translates to:
-  /// **'Opp TH'**
-  String get oppTownhall;
-
-  /// No description provided for @lowerTownhall.
-  ///
-  /// In en, this message translates to:
-  /// **'Lower TH'**
-  String get lowerTownhall;
-
-  /// No description provided for @upperTownhall.
-  ///
-  /// In en, this message translates to:
-  /// **'Upper TH'**
-  String get upperTownhall;
-
-  /// For example, hide stats from TH15 and below if the player is now TH16
-  ///
-  /// In en, this message translates to:
-  /// **'Hide/Show stats from former TH levels'**
-  String get toggleTownHallVisibility;
-
-  /// No description provided for @warLog.
-  ///
-  /// In en, this message translates to:
-  /// **'War Log'**
-  String get warLog;
-
-  /// No description provided for @publicWarLog.
-  ///
-  /// In en, this message translates to:
-  /// **'Public War Log'**
-  String get publicWarLog;
-
-  /// No description provided for @privateWarLog.
-  ///
-  /// In en, this message translates to:
-  /// **'Private War Log'**
-  String get privateWarLog;
-
-  /// No description provided for @startsIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Starts in {time}'**
-  String startsIn(String time);
-
-  /// No description provided for @startsAt.
-  ///
-  /// In en, this message translates to:
-  /// **'Starts at {time}'**
-  String startsAt(String time);
-
-  /// No description provided for @endsIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Ends in {time}'**
-  String endsIn(String time);
-
-  /// No description provided for @endsAt.
-  ///
-  /// In en, this message translates to:
-  /// **'Ends at {time}'**
-  String endsAt(String time);
-
-  /// Logs of players joining or leaving the clan.
-  ///
-  /// In en, this message translates to:
-  /// **'Join/Leave Logs (Current Season)'**
-  String get joinLeaveLogs;
-
-  /// No description provided for @join.
-  ///
-  /// In en, this message translates to:
-  /// **'Join'**
-  String get join;
-
-  /// No description provided for @leave.
-  ///
-  /// In en, this message translates to:
-  /// **'Leave'**
-  String get leave;
-
-  /// No description provided for @reset.
-  ///
-  /// In en, this message translates to:
-  /// **'Reset'**
-  String get reset;
-
-  /// No description provided for @joins.
-  ///
-  /// In en, this message translates to:
-  /// **'Joins'**
-  String get joins;
-
-  /// No description provided for @leaves.
-  ///
-  /// In en, this message translates to:
-  /// **'Leaves'**
-  String get leaves;
-
-  /// No description provided for @uniquePlayers.
-  ///
-  /// In en, this message translates to:
-  /// **'Unique Players'**
-  String get uniquePlayers;
-
-  /// No description provided for @movingPlayers.
-  ///
-  /// In en, this message translates to:
-  /// **'Moving Players'**
-  String get movingPlayers;
-
-  /// No description provided for @mostMovingPlayers.
-  ///
-  /// In en, this message translates to:
-  /// **'Most Moving Players'**
-  String get mostMovingPlayers;
-
-  /// No description provided for @stillInClan.
-  ///
-  /// In en, this message translates to:
-  /// **'Still in Clan'**
-  String get stillInClan;
-
-  /// No description provided for @leftForever.
-  ///
-  /// In en, this message translates to:
-  /// **'Left Forever'**
-  String get leftForever;
-
-  /// No description provided for @rejoinedPlayers.
-  ///
-  /// In en, this message translates to:
-  /// **'Rejoined Players'**
-  String get rejoinedPlayers;
-
-  /// No description provided for @avgTimeJoinLeave.
-  ///
-  /// In en, this message translates to:
-  /// **'Avg Join/Leave Time'**
-  String get avgTimeJoinLeave;
-
-  /// No description provided for @peakHour.
-  ///
-  /// In en, this message translates to:
-  /// **'Most Active Hour'**
-  String get peakHour;
-
-  /// No description provided for @leaveNumberDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'{number} leave events occurred during the current season ({date}).'**
-  String leaveNumberDescription(int number, String date);
-
-  /// No description provided for @joinNumberDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'{number} join events occurred during the current season ({date}).'**
-  String joinNumberDescription(int number, String date);
-
-  /// Number of players who left and rejoined the clan during the current season.
-  ///
-  /// In en, this message translates to:
-  /// **'{number} player(s) left and rejoined the clan during the current season ({date}).'**
-  String movingNumberDescription(int number, String date);
-
-  /// Number of unique players who joined/left the clan during the current season.
-  ///
-  /// In en, this message translates to:
-  /// **'{number} unique player(s) joined/left the clan during the current season ({date}).'**
-  String uniqueNumberDescription(int number, String date);
-
-  /// No description provided for @stillInClanNumberDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'{number} player(s) joined and are still in the clan.'**
-  String stillInClanNumberDescription(int number);
-
-  /// No description provided for @leftClanNumberDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'{number} player(s) joined, then left the clan and never rejoined.'**
-  String leftClanNumberDescription(int number);
-
-  /// [The player] left the clan on 16/06/2024 at 10:35.
-  ///
-  /// In en, this message translates to:
-  /// **'Left on {date} at {time}.'**
-  String leftOnAt(String date, String time);
-
-  /// [The player] joined the clan on 16/06/2024 at 10:35.
-  ///
-  /// In en, this message translates to:
-  /// **'Joined on {date} at {time}.'**
-  String joinedOnAt(String date, String time);
-
-  /// No description provided for @statistics.
-  ///
-  /// In en, this message translates to:
-  /// **'Statistics'**
-  String get statistics;
-
-  /// No description provided for @stars.
-  ///
-  /// In en, this message translates to:
-  /// **'Stars'**
-  String get stars;
-
-  /// No description provided for @numberOfStars.
-  ///
-  /// In en, this message translates to:
-  /// **'Number of stars'**
-  String get numberOfStars;
-
-  /// Percentage of destruction in war
-  ///
-  /// In en, this message translates to:
-  /// **'Destruction rate'**
-  String get destructionRate;
-
-  /// War events
-  ///
-  /// In en, this message translates to:
-  /// **'Events'**
-  String get events;
-
-  /// No description provided for @team.
-  ///
-  /// In en, this message translates to:
-  /// **'Teams'**
-  String get team;
-
-  /// No description provided for @myTeam.
-  ///
-  /// In en, this message translates to:
-  /// **'My team'**
-  String get myTeam;
-
-  /// No description provided for @enemiesTeam.
-  ///
-  /// In en, this message translates to:
-  /// **'Enemies'**
-  String get enemiesTeam;
-
-  /// No description provided for @defense.
-  ///
-  /// In en, this message translates to:
-  /// **'Defense'**
-  String get defense;
-
-  /// No description provided for @defenses.
-  ///
-  /// In en, this message translates to:
-  /// **'Defenses'**
-  String get defenses;
-
-  /// No description provided for @bestDefenses.
-  ///
-  /// In en, this message translates to:
-  /// **'Best defenses'**
-  String get bestDefenses;
-
-  /// Best war defense (out of 3 defenses)
-  ///
-  /// In en, this message translates to:
-  /// **'Best defense (out of {number})'**
-  String bestDefenseOutOf(int number);
-
-  /// No description provided for @attack.
-  ///
-  /// In en, this message translates to:
-  /// **'Attack'**
-  String get attack;
-
-  /// No description provided for @attacks.
-  ///
-  /// In en, this message translates to:
-  /// **'Attacks'**
-  String get attacks;
-
-  /// No description provided for @bestAttacks.
-  ///
-  /// In en, this message translates to:
-  /// **'Best attacks'**
-  String get bestAttacks;
-
-  /// No attack yet in war
-  ///
-  /// In en, this message translates to:
-  /// **'No attack yet'**
-  String get noAttackYet;
-
-  /// No defense yet in war
-  ///
-  /// In en, this message translates to:
-  /// **'No defense yet'**
-  String get noDefenseYet;
-
-  /// Best performance in war
-  ///
-  /// In en, this message translates to:
-  /// **'Best performance'**
-  String get bestPerformance;
-
-  /// No description provided for @victory.
-  ///
-  /// In en, this message translates to:
-  /// **'Victory'**
-  String get victory;
-
-  /// No description provided for @defeat.
-  ///
-  /// In en, this message translates to:
-  /// **'Defeat'**
-  String get defeat;
-
-  /// War ended in a draw
-  ///
-  /// In en, this message translates to:
-  /// **'Draw'**
-  String get draw;
-
-  /// No description provided for @perfectWar.
-  ///
-  /// In en, this message translates to:
-  /// **'Perfect war'**
-  String get perfectWar;
-
-  /// No description provided for @newest.
-  ///
-  /// In en, this message translates to:
-  /// **'Newest'**
-  String get newest;
-
-  /// No description provided for @oldest.
-  ///
-  /// In en, this message translates to:
-  /// **'Oldest'**
-  String get oldest;
-
-  /// No description provided for @warEnded.
-  ///
-  /// In en, this message translates to:
-  /// **'War ended'**
-  String get warEnded;
-
-  /// No description provided for @preparation.
-  ///
-  /// In en, this message translates to:
-  /// **'Preparation'**
-  String get preparation;
-
-  /// No description provided for @isNotInWar.
-  ///
-  /// In en, this message translates to:
-  /// **'{clan} is not in war.'**
-  String isNotInWar(String clan);
-
-  /// No description provided for @warLogIsClosed.
-  ///
-  /// In en, this message translates to:
-  /// **'{clan}\'s war log is closed.'**
-  String warLogIsClosed(String clan);
-
-  /// No description provided for @askForWar.
-  ///
-  /// In en, this message translates to:
-  /// **'Contact the leader or a co-leader to start a war.'**
-  String get askForWar;
-
-  /// No description provided for @askForWarLogOpening.
-  ///
-  /// In en, this message translates to:
-  /// **'Contact a leader or a co-leader to open the war log.'**
-  String get askForWarLogOpening;
-
-  /// No description provided for @rounds.
-  ///
-  /// In en, this message translates to:
-  /// **'Rounds'**
-  String get rounds;
-
-  /// No description provided for @roundNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'Round {number}'**
-  String roundNumber(int number);
-
-  /// No description provided for @currentRound.
-  ///
-  /// In en, this message translates to:
-  /// **'Current round (Round {number})'**
-  String currentRound(int number);
-
-  /// No description provided for @noDataAvailableForThisWar.
-  ///
-  /// In en, this message translates to:
-  /// **'No data available for this war'**
-  String get noDataAvailableForThisWar;
-
-  /// No description provided for @stateOfTheWar.
-  ///
-  /// In en, this message translates to:
-  /// **'State of the war'**
-  String get stateOfTheWar;
-
-  /// No description provided for @starsNeededToTakeTheLead.
-  ///
-  /// In en, this message translates to:
-  /// **'{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.'**
-  String starsNeededToTakeTheLead(
-      String clan, int star, int star2, String percent, Object stars2);
-
-  /// No description provided for @starsAndPercentNeededToTakeTheLead.
-  ///
-  /// In en, this message translates to:
-  /// **'{clan} still need {percent}% or 1 more star to take the lead'**
-  String starsAndPercentNeededToTakeTheLead(String clan, String percent);
-
-  /// No description provided for @clanDraw.
-  ///
-  /// In en, this message translates to:
-  /// **'The two clans are tied'**
-  String get clanDraw;
-
-  /// No description provided for @fastCalculator.
-  ///
-  /// In en, this message translates to:
-  /// **'Fast calculator'**
-  String get fastCalculator;
-
-  /// No description provided for @fastCalculatorAnswer.
-  ///
-  /// In en, this message translates to:
-  /// **'To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.'**
-  String fastCalculatorAnswer(
-      String percentNeedeed, String result, Object percentNeeded);
-
-  /// No description provided for @teamSize.
-  ///
-  /// In en, this message translates to:
-  /// **'Team size'**
-  String get teamSize;
-
-  /// No description provided for @neededOverall.
-  ///
-  /// In en, this message translates to:
-  /// **'% Needed overall'**
-  String get neededOverall;
-
-  /// No description provided for @calculate.
-  ///
-  /// In en, this message translates to:
-  /// **'Calculate'**
-  String get calculate;
-
-  /// No description provided for @warStats.
-  ///
-  /// In en, this message translates to:
-  /// **'War Stats'**
-  String get warStats;
-
-  /// No description provided for @warAttacksNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'You attacked {number_time} time(s) during the last {number_war} wars.'**
-  String warAttacksNumber(int number_time, int number_war);
-
-  /// No description provided for @warDefensesNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'You defended {number_time} time(s) during the last {number_war} wars.'**
-  String warDefensesNumber(int number_time, int number_war);
-
-  /// No description provided for @warAverageStars.
-  ///
-  /// In en, this message translates to:
-  /// **'You had an average of {stars} stars per war.'**
-  String warAverageStars(String stars);
-
-  /// No description provided for @warAverageDestruction.
-  ///
-  /// In en, this message translates to:
-  /// **'You had an average of {percent}% destruction rate per war.'**
-  String warAverageDestruction(String percent);
-
-  /// No description provided for @warAverageStarsDefense.
-  ///
-  /// In en, this message translates to:
-  /// **'You had an average of {stars} stars per defense.'**
-  String warAverageStarsDefense(double stars);
-
-  /// No description provided for @warAverageDestructionDefense.
-  ///
-  /// In en, this message translates to:
-  /// **'You had an average of {percent}% destruction rate per defense.'**
-  String warAverageDestructionDefense(Object percent);
-
-  /// No description provided for @membersStats.
-  ///
-  /// In en, this message translates to:
-  /// **'Members Stats'**
-  String get membersStats;
-
-  /// No description provided for @clanWarLeague.
-  ///
-  /// In en, this message translates to:
-  /// **'Clan War League'**
-  String get clanWarLeague;
-
-  /// No description provided for @cwlRank.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan is currently ranked {rank}.'**
-  String cwlRank(int rank);
-
-  /// No description provided for @cwlStars.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan has a total of {stars} stars.'**
-  String cwlStars(int stars);
-
-  /// No description provided for @cwlDestructionPercentage.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan has a total destruction rate of {percent}%.'**
-  String cwlDestructionPercentage(String percent);
-
-  /// No description provided for @cwlTotalAttacks.
-  ///
-  /// In en, this message translates to:
-  /// **'Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.'**
-  String cwlTotalAttacks(int attacks, int totalAttacks);
-
-  /// No description provided for @cwlCurrentRound.
-  ///
-  /// In en, this message translates to:
-  /// **'It\'s currently round {round}.'**
-  String cwlCurrentRound(int round);
-
-  /// No description provided for @noAccountLinkedToYourProfileFound.
-  ///
-  /// In en, this message translates to:
-  /// **'No account linked to your profile found'**
-  String get noAccountLinkedToYourProfileFound;
-
-  /// No description provided for @management.
-  ///
-  /// In en, this message translates to:
-  /// **'Management'**
-  String get management;
-
-  /// No description provided for @comingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Coming soon!'**
-  String get comingSoon;
-
-  /// No description provided for @connectionError.
-  ///
-  /// In en, this message translates to:
-  /// **'An error occurred. Please check your internet connection and try again.'**
-  String get connectionError;
-
-  /// No description provided for @connectionErrorRelaunch.
-  ///
-  /// In en, this message translates to:
-  /// **'An error occurred. Please check your internet connection and relaunch the app.'**
-  String get connectionErrorRelaunch;
-
-  /// No description provided for @updatedAt.
-  ///
-  /// In en, this message translates to:
-  /// **'Updated at {time}'**
-  String updatedAt(String time);
-
-  /// No description provided for @tools.
-  ///
-  /// In en, this message translates to:
-  /// **'Tools'**
-  String get tools;
-
-  /// No description provided for @community.
-  ///
-  /// In en, this message translates to:
-  /// **'Community'**
-  String get community;
-
-  /// No description provided for @raids.
-  ///
-  /// In en, this message translates to:
-  /// **'Raids'**
-  String get raids;
-
-  /// No description provided for @lastRaids.
-  ///
-  /// In en, this message translates to:
-  /// **'Last raids'**
-  String get lastRaids;
-
-  /// No description provided for @ongoingRaids.
-  ///
-  /// In en, this message translates to:
-  /// **'Ongoing raids'**
-  String get ongoingRaids;
-
-  /// No description provided for @districtsDestroyed.
-  ///
-  /// In en, this message translates to:
-  /// **'Districts destroyed'**
-  String get districtsDestroyed;
-
-  /// No description provided for @raidsCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'Raids completed'**
-  String get raidsCompleted;
-
-  /// No description provided for @maintenance.
-  ///
-  /// In en, this message translates to:
-  /// **'Maintenance'**
-  String get maintenance;
-
-  /// No description provided for @maintenanceDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Clash of Clans is currently under maintenance, so we can\'t access the API. Please check back later.'**
-  String get maintenanceDescription;
-
-  /// No description provided for @tryAgain.
-  ///
-  /// In en, this message translates to:
-  /// **'Try again'**
-  String get tryAgain;
-
-  /// No description provided for @downloadTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Download CWL summary'**
-  String get downloadTooltip;
-
-  /// No description provided for @downloadInProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'Downloading file... It can take a few seconds...'**
-  String get downloadInProgress;
-
-  /// No description provided for @downloadSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'File saved successfully in \${path}'**
-  String downloadSuccess(String path);
-
-  /// No description provided for @downloadError.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to download file'**
-  String get downloadError;
-
-  /// No description provided for @welcomeBack.
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome Back'**
-  String get welcomeBack;
-
-  /// No description provided for @chooseSignInMethod.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose your preferred sign-in method'**
-  String get chooseSignInMethod;
-
-  /// No description provided for @discord.
-  ///
-  /// In en, this message translates to:
-  /// **'Discord'**
-  String get discord;
-
-  /// No description provided for @email.
-  ///
-  /// In en, this message translates to:
-  /// **'Email'**
-  String get email;
-
-  /// No description provided for @signInWithEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign in with Email'**
-  String get signInWithEmail;
-
-  /// No description provided for @useDiscordAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!'**
-  String get useDiscordAccount;
-
-  /// No description provided for @useEmailAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Use email if you can\'t access Discord or prefer app-only features'**
-  String get useEmailAccount;
-
-  /// No description provided for @password.
-  ///
-  /// In en, this message translates to:
-  /// **'Password'**
-  String get password;
-
-  /// No description provided for @signIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign In'**
-  String get signIn;
-
-  /// No description provided for @dontHaveAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Don\'t have an account? Create one'**
-  String get dontHaveAccount;
-
-  /// No description provided for @createClashKingAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Create ClashKing Account'**
-  String get createClashKingAccount;
-
-  /// No description provided for @joinClashKing.
-  ///
-  /// In en, this message translates to:
-  /// **'Join ClashKing'**
-  String get joinClashKing;
-
-  /// No description provided for @createAccountToGetStarted.
-  ///
-  /// In en, this message translates to:
-  /// **'Create your account to get started'**
-  String get createAccountToGetStarted;
-
-  /// No description provided for @confirmPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm Password'**
-  String get confirmPassword;
-
-  /// No description provided for @createAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Create Account'**
-  String get createAccount;
-
-  /// No description provided for @alreadyHaveAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Already have an account? Sign in'**
-  String get alreadyHaveAccount;
-
-  /// No description provided for @pleaseEnterEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter your email'**
-  String get pleaseEnterEmail;
-
-  /// No description provided for @pleaseEnterValidEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid email'**
-  String get pleaseEnterValidEmail;
-
-  /// No description provided for @pleaseEnterPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter your password'**
-  String get pleaseEnterPassword;
-
-  /// No description provided for @pleaseEnterUsername.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a username'**
-  String get pleaseEnterUsername;
-
-  /// No description provided for @usernameTooShort.
-  ///
-  /// In en, this message translates to:
-  /// **'Username must be at least 3 characters'**
-  String get usernameTooShort;
-
-  /// No description provided for @pleaseConfirmPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Please confirm your password'**
-  String get pleaseConfirmPassword;
-
-  /// No description provided for @passwordsDoNotMatch.
-  ///
-  /// In en, this message translates to:
-  /// **'Passwords do not match'**
-  String get passwordsDoNotMatch;
-
-  /// No description provided for @passwordTooShort.
-  ///
-  /// In en, this message translates to:
-  /// **'Password must be at least 8 characters'**
-  String get passwordTooShort;
-
-  /// No description provided for @passwordRequirements.
-  ///
-  /// In en, this message translates to:
-  /// **'Password must contain: uppercase, lowercase, digit, and special character'**
-  String get passwordRequirements;
-
-  /// No description provided for @invalidEmailOrPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid email or password'**
-  String get invalidEmailOrPassword;
-
-  /// No description provided for @emailAlreadyInUse.
-  ///
-  /// In en, this message translates to:
-  /// **'Email may already be in use'**
-  String get emailAlreadyInUse;
-
-  /// No description provided for @accountManagement.
-  ///
-  /// In en, this message translates to:
-  /// **'Account Management'**
-  String get accountManagement;
-
-  /// No description provided for @connectedAccounts.
-  ///
-  /// In en, this message translates to:
-  /// **'Connected Accounts'**
-  String get connectedAccounts;
-
-  /// No description provided for @connected.
-  ///
-  /// In en, this message translates to:
-  /// **'Connected'**
-  String get connected;
-
-  /// No description provided for @notConnected.
-  ///
-  /// In en, this message translates to:
-  /// **'Not connected'**
-  String get notConnected;
-
-  /// No description provided for @emailAndPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Email & Password'**
-  String get emailAndPassword;
-
-  /// No description provided for @accountSecuredMultipleAuth.
-  ///
-  /// In en, this message translates to:
-  /// **'Your account is secured with multiple authentication methods'**
-  String get accountSecuredMultipleAuth;
-
-  /// No description provided for @linkEmailAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Link Email Account'**
-  String get linkEmailAccount;
-
-  /// No description provided for @addEmailPasswordAuth.
-  ///
-  /// In en, this message translates to:
-  /// **'Add email & password authentication to your account for additional security.'**
-  String get addEmailPasswordAuth;
-
-  /// No description provided for @emailAccountLinkedSuccessfully.
-  ///
-  /// In en, this message translates to:
-  /// **'Email account successfully linked!'**
-  String get emailAccountLinkedSuccessfully;
-
-  /// No description provided for @failedToLinkEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to link email account. Email may already be in use.'**
-  String get failedToLinkEmail;
-
-  /// No description provided for @registrationFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Registration failed. Email may already be in use.'**
-  String get registrationFailed;
-
-  /// No description provided for @emailLoginFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Email login failed. Please check your credentials.'**
-  String get emailLoginFailed;
-
-  /// No description provided for @discordLoginFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Discord login failed. Please try again.'**
-  String get discordLoginFailed;
+  String get translationCurrentTranslators;
 }
 
 class _AppLocalizationsDelegate

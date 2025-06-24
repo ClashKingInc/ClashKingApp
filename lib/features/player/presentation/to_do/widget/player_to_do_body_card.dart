@@ -68,7 +68,7 @@ class PlayerToDoBodyCard extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                 )
                               : Text(
-                                  AppLocalizations.of(context)!.lastActive(
+                                  AppLocalizations.of(context)!.playerLastActive(
                                       player.getLastOnlineText(context)),
                                   style: Theme.of(context).textTheme.labelLarge,
                                   textAlign: TextAlign.center,

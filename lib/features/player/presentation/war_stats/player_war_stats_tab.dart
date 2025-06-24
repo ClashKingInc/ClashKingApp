@@ -82,17 +82,17 @@ class WarStatsView extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               child: Column(
                 children: [
-                  Text(AppLocalizations.of(context)!.allTownHalls,
+                  Text(AppLocalizations.of(context)!.statsAllTownHalls,
                       style: Theme.of(context).textTheme.titleSmall),
                   if (filterTypes.contains("dateRange"))
                     Text("($formattedStartDate - $formattedEndDate)",
                         style: Theme.of(context).textTheme.bodyMedium),
                   if (filterTypes.contains("lastXWars"))
-                    Text(AppLocalizations.of(context)!.lastXwars(warDataLimit),
+                    Text(AppLocalizations.of(context)!.warFiltersLastXwars(warDataLimit),
                         style: Theme.of(context).textTheme.bodyMedium),
                   if (filterTypes.contains("season"))
                     Text(
-                        AppLocalizations.of(context)!.seasonDate(
+                        AppLocalizations.of(context)!.statsSeasonDate(
                             DateFormat.yMMMM(userLocale.toString())
                                 .format(currentSeasonDate)),
                         style: Theme.of(context).textTheme.bodyMedium),
@@ -129,7 +129,7 @@ class WarStatsView extends StatelessWidget {
                         ),
                         SizedBox(width: 8),
                         Text(AppLocalizations.of(context)!
-                            .townHallLevelLevel(defTh ?? 1)),
+                            .gameTownHallLevelNumber(defTh ?? 1)),
                       ],
                     ),
                     SizedBox(height: 12),
@@ -138,7 +138,7 @@ class WarStatsView extends StatelessWidget {
                       children: [
                         _buildColumn(
                             context,
-                            AppLocalizations.of(context)!.attacks,
+                            AppLocalizations.of(context)!.warAttacksTitle,
                             attackStats.averageStars,
                             attackStats.averageDestruction,
                             attackStats.count,
@@ -147,14 +147,14 @@ class WarStatsView extends StatelessWidget {
                         if (defenseStats != null)
                           _buildColumn(
                               context,
-                              AppLocalizations.of(context)!.defenses,
+                              AppLocalizations.of(context)!.warDefensesTitle,
                               defenseStats.averageStars,
                               defenseStats.averageDestruction,
                               defenseStats.count,
                               -1,
                               isAttack: false)
                         else
-                          Text(AppLocalizations.of(context)!.noDefenseYet),
+                          Text(AppLocalizations.of(context)!.warDefensesNone),
                       ],
                     ),
                   ],
@@ -173,7 +173,7 @@ class WarStatsView extends StatelessWidget {
       children: [
         _buildColumn(
           context,
-          AppLocalizations.of(context)!.attacks,
+          AppLocalizations.of(context)!.warAttacksTitle,
           stats.averageStars,
           stats.averageDestruction,
           stats.totalAttacks,
@@ -182,7 +182,7 @@ class WarStatsView extends StatelessWidget {
         ),
         _buildColumn(
           context,
-          AppLocalizations.of(context)!.defenses,
+          AppLocalizations.of(context)!.warDefensesTitle,
           stats.averageStarsDef,
           stats.averageDestructionDef,
           stats.totalDefenses,

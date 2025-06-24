@@ -42,7 +42,7 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
   @override
   Widget build(BuildContext context) {
     final failedToDeleteTryAgain =
-        AppLocalizations.of(context)!.failedToDeleteTryAgain;
+        AppLocalizations.of(context)!.accountsErrorFailedToDelete;
     var myAppState = Provider.of<MyAppState>(context, listen: false);
 
     return Padding(
@@ -145,7 +145,7 @@ class DeletePlayerCardState extends State<DeletePlayerCard> {
               ),
               elevation: WidgetStateProperty.all(4),
             ),
-            child: Text(AppLocalizations.of(context)!.deleteAccount,
+            child: Text(AppLocalizations.of(context)!.accountsDelete,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary)),
           ),

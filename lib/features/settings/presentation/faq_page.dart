@@ -330,7 +330,7 @@ class _FaqScreenState extends State<FaqScreen> {
                                           Navigator.of(context).pop();
                                         },
                                         child: Text(
-                                            AppLocalizations.of(context)!.ok),
+                                            AppLocalizations.of(context)!.generalOk),
                                       ),
                                     ],
                                   );

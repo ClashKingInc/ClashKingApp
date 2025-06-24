@@ -30,7 +30,7 @@ class LegendSeason extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Column(
               children: [
-                Text(AppLocalizations.of(context)!.seasonStats,
+                Text(AppLocalizations.of(context)!.statsSeasonStats,
                     style: Theme.of(context).textTheme.titleMedium),
                 Text(
                   "(${DateFormat.yMMMd(locale).format(season!.start)} - ${DateFormat.yMMMd(locale).format(season!.end)})",
@@ -45,8 +45,8 @@ class LegendSeason extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       season!.dayOfSeason < season!.duration
-                          ? "${AppLocalizations.of(context)!.indexDays(season!.duration)} (${AppLocalizations.of(context)!.dayIndex(season!.dayOfSeason)})"
-                          : "${season!.daysInLegend}/${AppLocalizations.of(context)!.indexDays(season!.duration)}",
+                          ? "${AppLocalizations.of(context)!.statsIndexDays(season!.duration)} (${AppLocalizations.of(context)!.statsDayIndex(season!.dayOfSeason)})"
+                          : "${season!.daysInLegend}/${AppLocalizations.of(context)!.statsIndexDays(season!.duration)}",
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
@@ -78,7 +78,7 @@ class LegendSeason extends StatelessWidget {
                         children: [
                           _buildStatsBlock(
                             context,
-                            title: AppLocalizations.of(context)!.attacks,
+                            title: AppLocalizations.of(context)!.warAttacksTitle,
                             count: season!.totalAttacks,
                             trophies: season!.trophiesGainedTotal,
                             average: season!.avgGainedPerAttack,
@@ -91,7 +91,7 @@ class LegendSeason extends StatelessWidget {
                           ),
                           _buildStatsBlock(
                             context,
-                            title: AppLocalizations.of(context)!.defenses,
+                            title: AppLocalizations.of(context)!.warDefensesTitle,
                             count: season!.totalDefenses,
                             trophies: season!.trophiesLostTotal,
                             average: season!.avgLostPerDefense,
@@ -127,7 +127,7 @@ class LegendSeason extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                    AppLocalizations.of(context)?.noDataAvailable ??
+                    AppLocalizations.of(context)?.generalNoDataAvailable ??
                         'No data available',
                     style: Theme.of(context).textTheme.bodyMedium),
                 CachedNetworkImage(

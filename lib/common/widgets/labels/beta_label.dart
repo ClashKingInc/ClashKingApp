@@ -22,7 +22,7 @@ class BetaLabel extends StatelessWidget {
               ),
             ],
           ),
-          child: Text(AppLocalizations.of(context)!.beta,
+          child: Text(AppLocalizations.of(context)!.betaLabel,
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium!

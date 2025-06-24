@@ -78,19 +78,19 @@ class LegendOffenseDefenseCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(AppLocalizations.of(context)?.statistics ?? "Statistics",
+              Text(AppLocalizations.of(context)?.navigationStatistics ?? "Statistics",
                   style: Theme.of(context).textTheme.bodyLarge),
               Text(
-                  "${AppLocalizations.of(context)?.total ?? "Total"} : $totalCount/8",
+                  "${AppLocalizations.of(context)?.generalTotal ?? "Total"} : $totalCount/8",
                   style: Theme.of(context).textTheme.bodySmall),
               Text(
-                  '${AppLocalizations.of(context)?.average ?? "Average"} : ${average.toStringAsFixed(1)}',
+                  '${AppLocalizations.of(context)?.generalAverage ?? "Average"} : ${average.toStringAsFixed(1)}',
                   style: Theme.of(context).textTheme.bodySmall),
               Text(
-                  '${AppLocalizations.of(context)?.remaining ?? "Remaining"} : $remaining',
+                  '${AppLocalizations.of(context)?.generalRemaining ?? "Remaining"} : $remaining',
                   style: Theme.of(context).textTheme.bodySmall),
               Text(
-                  '${plusMinus == "-" ? AppLocalizations.of(context)?.worst ?? "Worst" : AppLocalizations.of(context)?.best ?? "Best"} : $bestPossible',
+                  '${plusMinus == "-" ? AppLocalizations.of(context)?.generalWorst ?? "Worst" : AppLocalizations.of(context)?.generalBest ?? "Best"} : $bestPossible',
                   style: Theme.of(context).textTheme.bodySmall),
             ],
           ),

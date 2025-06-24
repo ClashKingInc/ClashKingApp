@@ -45,7 +45,7 @@ class ClanCapitalCard extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       Text(
-                        AppLocalizations.of(context)!.clanCapital,
+                        AppLocalizations.of(context)!.gameClanCapital,
                         style: Theme.of(context).textTheme.labelLarge,
                         textAlign: TextAlign.center,
                         softWrap: true,
@@ -64,7 +64,7 @@ class ClanCapitalCard extends StatelessWidget {
                             label: clanInfo!.clanCapital?.capitalHallLevel
                                     .toString() ??
                                 '0',
-                            //description: AppLocalizations.of(context)!.comingSoon,
+                            //description: AppLocalizations.of(context)!.generalComingSoon,
                           ),
                           ImageChip(
                             context: context,
@@ -72,7 +72,7 @@ class ClanCapitalCard extends StatelessWidget {
                                 'https://assets.clashk.ing/bot/icons/capital_trophy.png',
                             labelPadding: 2,
                             label: clanInfo.clanCapitalPoints.toString(),
-                            //description: AppLocalizations.of(context)!.comingSoon,
+                            //description: AppLocalizations.of(context)!.generalComingSoon,
                           ),
                         ],
                       ),

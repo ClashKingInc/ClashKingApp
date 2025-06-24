@@ -97,12 +97,12 @@ class ClanWarLogState extends State<ClanWarLog> {
             });
           },
           sortByOptions: {
-            AppLocalizations.of(context)?.newest ?? 'Newest': 'newest',
-            AppLocalizations.of(context)?.oldest ?? 'Oldest': 'oldest',
-            AppLocalizations.of(context)?.victory ?? 'Victory': 'victory',
-            AppLocalizations.of(context)?.defeat ?? 'Defeat': 'defeat',
-            AppLocalizations.of(context)?.draw ?? 'Draw': 'draw',
-            AppLocalizations.of(context)?.perfectWar ?? 'Perfect War':
+            AppLocalizations.of(context)?.warEventsNewest ?? 'Newest': 'newest',
+            AppLocalizations.of(context)?.warEventsOldest ?? 'Oldest': 'oldest',
+            AppLocalizations.of(context)?.warVictory ?? 'Victory': 'victory',
+            AppLocalizations.of(context)?.warDefeat ?? 'Defeat': 'defeat',
+            AppLocalizations.of(context)?.warDraw ?? 'Draw': 'draw',
+            AppLocalizations.of(context)?.warPerfectWar ?? 'Perfect War':
                 'perfectWar',
             '5v5': '5',
             '10v10': '10',
@@ -123,7 +123,7 @@ class ClanWarLogState extends State<ClanWarLog> {
                     child: Padding(
                       padding: EdgeInsets.all(16),
                       child: Text(
-                          AppLocalizations.of(context)?.noDataAvailable ??
+                          AppLocalizations.of(context)?.generalNoDataAvailable ??
                               'No data available'),
                     ),
                   ),
@@ -175,7 +175,7 @@ class ClanWarLogState extends State<ClanWarLog> {
                               content: Center(
                                 child: Text(
                                   AppLocalizations.of(context)
-                                          ?.noDataAvailableForThisWar ??
+                                          ?.warNoDataAvailableForThisWar ??
                                       'No data available for this war',
                                   style: TextStyle(
                                       color: Theme.of(context)

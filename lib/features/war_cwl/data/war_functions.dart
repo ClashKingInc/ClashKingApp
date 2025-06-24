@@ -141,7 +141,7 @@ List<Widget> generateIconWithText(double size, IconData icon, String text) {
 
 Widget timeLeft(
     WarInfo currentWarInfo, BuildContext context, TextStyle? style) {
-  String hourIndicator = AppLocalizations.of(context)?.hourIndicator ?? ":";
+  String hourIndicator = AppLocalizations.of(context)?.timeHourIndicator ?? ":";
   DateTime now = DateTime.now();
   Duration difference = Duration.zero;
   String state = '';
@@ -154,13 +154,13 @@ Widget timeLeft(
     hours = difference.inHours.toString().padLeft(2, '0');
     minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
     time = hours + hourIndicator + minutes;
-    state = AppLocalizations.of(context)?.startsIn(time) ?? 'Starting in';
+    state = AppLocalizations.of(context)?.timeStartsIn(time) ?? 'Starting in';
   } else if (currentWarInfo.state == 'inWar') {
     difference = currentWarInfo.endTime?.difference(now) ?? Duration.zero;
     hours = difference.inHours.toString().padLeft(2, '0');
     minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
     time = hours + hourIndicator + minutes;
-    state = AppLocalizations.of(context)?.endsIn(time) ?? 'Ends in';
+    state = AppLocalizations.of(context)?.timeEndsIn(time) ?? 'Ends in';
   }
 
   return Padding(

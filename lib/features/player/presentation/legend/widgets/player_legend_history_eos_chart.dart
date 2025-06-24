@@ -35,7 +35,7 @@ class PlayerLegendHistoryEosChart extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  AppLocalizations.of(context)?.eosTrophies ?? "EOS Trophies",
+                  AppLocalizations.of(context)?.legendsEosTrophies ?? "EOS Trophies",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 16),

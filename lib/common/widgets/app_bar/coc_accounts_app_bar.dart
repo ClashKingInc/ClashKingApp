@@ -23,7 +23,7 @@ class CocAccountsAppBar extends StatelessWidget implements PreferredSizeWidget {
                     style: Theme.of(context).textTheme.bodyMedium,
                     overflow: TextOverflow.ellipsis,
                   )
-                : Text(AppLocalizations.of(context)!.loading),
+                : Text(AppLocalizations.of(context)!.generalLoading),
             Padding(padding: EdgeInsets.all(5)),
             CircleAvatar(
               radius: 20,

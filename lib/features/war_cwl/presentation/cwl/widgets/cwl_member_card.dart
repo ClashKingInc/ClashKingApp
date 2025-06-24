@@ -362,7 +362,7 @@ class MembersCard extends StatelessWidget {
                                       .onSurface
                                       .withValues(alpha: 0.7)),
                               const SizedBox(width: 4),
-                              Text(AppLocalizations.of(context)!.fullStats,
+                              Text(AppLocalizations.of(context)!.generalFullStats,
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelLarge
@@ -399,7 +399,7 @@ class MembersCard extends StatelessWidget {
         if (attack != null)
           Column(
             children: [
-              Text(AppLocalizations.of(context)!.attacks,
+              Text(AppLocalizations.of(context)!.warAttacksTitle,
                   style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 12),
               Wrap(
@@ -408,26 +408,26 @@ class MembersCard extends StatelessWidget {
                 runSpacing: 16,
                 children: [
                   StatTile(
-                      label: AppLocalizations.of(context)!.attacks,
+                      label: AppLocalizations.of(context)!.warAttacksTitle,
                       value: '${attack.attackCount}',
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.sword, width: 16, height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.missed,
+                      label: AppLocalizations.of(context)!.warStatusMissed,
                       value: '${attack.missedAttacks}',
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.brokenSword,
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.total,
+                      label: AppLocalizations.of(context)!.generalTotal,
                       value: '${attack.stars}',
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.attackStar,
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.avg,
+                      label: AppLocalizations.of(context)!.warAbbreviationAvg,
                       value:
                           '${attack.averageStars?.toStringAsFixed(1) ?? "0.0"}',
                       icon: MobileWebImage(
@@ -435,30 +435,30 @@ class MembersCard extends StatelessWidget {
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.threeStars,
+                      label: AppLocalizations.of(context)!.warStarsThree,
                       value: '${member.threeStars}',
                       icon: buildStarsIcon(3)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.twoStars,
+                      label: AppLocalizations.of(context)!.warStarsTwo,
                       value: '${member.twoStars}',
                       icon: buildStarsIcon(2)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.oneStar,
+                      label: AppLocalizations.of(context)!.warStarsOne,
                       value: '${member.oneStar}',
                       icon: buildStarsIcon(1)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.zeroStar,
+                      label: AppLocalizations.of(context)!.warStarsZero,
                       value: '${member.zeroStar}',
                       icon: buildStarsIcon(0)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.destruction,
+                      label: AppLocalizations.of(context)!.warDestructionTitle,
                       value: '${attack.totalDestruction.toStringAsFixed(1)}%',
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.hitrate,
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.avgPercentage,
+                      label: AppLocalizations.of(context)!.warAbbreviationAvgPercentage,
                       value:
                           '${attack.averageDestruction?.toStringAsFixed(1) ?? "0.0"}',
                       icon: MobileWebImage(
@@ -466,20 +466,20 @@ class MembersCard extends StatelessWidget {
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.order,
+                      label: AppLocalizations.of(context)!.warPositionOrder,
                       value: member.avgAttackOrder?.toStringAsFixed(1) ?? "-",
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.iconClock,
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.pos,
+                      label: AppLocalizations.of(context)!.warPositionAbbr,
                       value:
                           member.avgOpponentPosition?.toStringAsFixed(1) ?? "-",
                       icon: const Icon(Icons.location_pin,
                           size: 16, color: Colors.redAccent)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.oppTownhall,
+                      label: AppLocalizations.of(context)!.warOpponentTownhall,
                       value:
                           member.avgOpponentTownHallLevel?.toStringAsFixed(1) ??
                               "-",
@@ -489,14 +489,14 @@ class MembersCard extends StatelessWidget {
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.lowerTownhall,
+                      label: AppLocalizations.of(context)!.warOpponentLowerTownhall,
                       value:
                           member.attackLowerTHLevel?.toStringAsFixed(0) ?? "-",
                       icon: Icon(Icons.keyboard_double_arrow_down,
                           size: 16,
                           color: Theme.of(context).colorScheme.primary)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.upperTownhall,
+                      label: AppLocalizations.of(context)!.warOpponentUpperTownhall,
                       value:
                           member.attackUpperTHLevel?.toStringAsFixed(0) ?? "-",
                       icon: Icon(Icons.keyboard_double_arrow_up,
@@ -510,7 +510,7 @@ class MembersCard extends StatelessWidget {
           Column(
             children: [
               const SizedBox(height: 18),
-              Text(AppLocalizations.of(context)!.defenses,
+              Text(AppLocalizations.of(context)!.warDefensesTitle,
                   style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 12),
               Wrap(
@@ -519,26 +519,26 @@ class MembersCard extends StatelessWidget {
                 runSpacing: 16,
                 children: [
                   StatTile(
-                      label: AppLocalizations.of(context)!.defenses,
+                      label: AppLocalizations.of(context)!.warDefensesTitle,
                       value: '${defense.defenseCount}',
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.shieldWithArrow,
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.missed,
+                      label: AppLocalizations.of(context)!.warStatusMissed,
                       value: '${defense.missedDefenses}',
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.shield, width: 16, height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.total,
+                      label: AppLocalizations.of(context)!.generalTotal,
                       value: '${defense.stars}',
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.attackStar,
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.avg,
+                      label: AppLocalizations.of(context)!.warAbbreviationAvg,
                       value:
                           '${defense.averageStars?.toStringAsFixed(1) ?? "0.0"}',
                       icon: MobileWebImage(
@@ -546,30 +546,30 @@ class MembersCard extends StatelessWidget {
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.threeStars,
+                      label: AppLocalizations.of(context)!.warStarsThree,
                       value: '${member.threeStarsDef}',
                       icon: buildStarsIcon(3)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.twoStars,
+                      label: AppLocalizations.of(context)!.warStarsTwo,
                       value: '${member.twoStarsDef}',
                       icon: buildStarsIcon(2)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.oneStar,
+                      label: AppLocalizations.of(context)!.warStarsOne,
                       value: '${member.oneStarDef}',
                       icon: buildStarsIcon(1)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.zeroStar,
+                      label: AppLocalizations.of(context)!.warStarsZero,
                       value: '${member.zeroStarDef}',
                       icon: buildStarsIcon(0)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.destruction,
+                      label: AppLocalizations.of(context)!.warDestructionTitle,
                       value: '${defense.totalDestruction.toStringAsFixed(1)}%',
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.hitrate,
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.avgPercentage,
+                      label: AppLocalizations.of(context)!.warAbbreviationAvgPercentage,
                       value:
                           '${defense.averageDestruction?.toStringAsFixed(1) ?? "0.0"}',
                       icon: MobileWebImage(
@@ -577,20 +577,20 @@ class MembersCard extends StatelessWidget {
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.order,
+                      label: AppLocalizations.of(context)!.warPositionOrder,
                       value: member.avgDefenseOrder?.toStringAsFixed(1) ?? "-",
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.iconClock,
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.pos,
+                      label: AppLocalizations.of(context)!.warPositionAbbr,
                       value:
                           member.avgAttackerPosition?.toStringAsFixed(1) ?? "-",
                       icon: const Icon(Icons.location_pin,
                           size: 16, color: Colors.redAccent)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.oppTownhall,
+                      label: AppLocalizations.of(context)!.warOpponentTownhall,
                       value:
                           member.avgAttackerTownHallLevel?.toStringAsFixed(1) ??
                               "-",
@@ -600,14 +600,14 @@ class MembersCard extends StatelessWidget {
                           width: 16,
                           height: 16)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.lowerTownhall,
+                      label: AppLocalizations.of(context)!.warOpponentLowerTownhall,
                       value:
                           member.defenseLowerTHLevel?.toStringAsFixed(0) ?? "-",
                       icon: Icon(Icons.keyboard_double_arrow_down,
                           size: 16,
                           color: Theme.of(context).colorScheme.primary)),
                   StatTile(
-                      label: AppLocalizations.of(context)!.upperTownhall,
+                      label: AppLocalizations.of(context)!.warOpponentUpperTownhall,
                       value:
                           member.defenseUpperTHLevel?.toStringAsFixed(0) ?? "-",
                       icon: Icon(Icons.keyboard_double_arrow_up,

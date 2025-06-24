@@ -337,13 +337,13 @@ class PlayerService extends ChangeNotifier {
   String getRoleText(String role, BuildContext context) {
     switch (role) {
       case 'leader':
-        return AppLocalizations.of(context)?.leader ?? 'Leader';
+        return AppLocalizations.of(context)?.clanRoleLeader ?? 'Leader';
       case 'coLeader':
-        return AppLocalizations.of(context)?.coLeader ?? 'Co-Leader';
+        return AppLocalizations.of(context)?.clanRoleCoLeader ?? 'Co-Leader';
       case 'admin':
-        return AppLocalizations.of(context)?.elder ?? 'Elder';
+        return AppLocalizations.of(context)?.clanRoleElder ?? 'Elder';
       case 'member':
-        return AppLocalizations.of(context)?.member ?? 'Member';
+        return AppLocalizations.of(context)?.clanRoleMember ?? 'Member';
       default:
         return 'No clan';
     }

@@ -50,8 +50,8 @@ class ClanJoinLeaveScreenState extends State<ClanJoinLeaveScreen>
                   });
                 },
                 tabs: [
-                  Tab(text: AppLocalizations.of(context)!.stats),
-                  Tab(text: AppLocalizations.of(context)!.events),
+                  Tab(text: AppLocalizations.of(context)!.generalStats),
+                  Tab(text: AppLocalizations.of(context)!.warEventsTitle),
                 ],
                 children: [
                   ClanJoinLeaveStats(joinLeaveClan: widget.clanInfo.joinLeave),

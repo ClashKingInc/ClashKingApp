@@ -185,13 +185,13 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
           builder: (context, setState) {
             return SingleChildScrollView(
               child: AlertDialog(
-                title: Text(AppLocalizations.of(context)!.filters,
+                title: Text(AppLocalizations.of(context)!.generalFilters,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleSmall),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text(AppLocalizations.of(context)!.selectMembersThLevel,
+                    Text(AppLocalizations.of(context)!.warOpponentSelectMembersThLevel,
                         style: Theme.of(context).textTheme.bodyMedium),
                     Wrap(
                       spacing: 0.0,
@@ -218,7 +218,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                       }).toList(),
                     ),
                     SizedBox(height: 10),
-                    Text(AppLocalizations.of(context)!.selectOpponentsThLevel,
+                    Text(AppLocalizations.of(context)!.warOpponentSelectOpponentsThLevel,
                         style: Theme.of(context).textTheme.bodyMedium),
                     Wrap(
                       spacing: 5.0,
@@ -246,7 +246,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                     ),
                     SizedBox(height: 10),
                     CheckboxListTile(
-                      title: Text(AppLocalizations.of(context)!.equalThLevel,
+                      title: Text(AppLocalizations.of(context)!.warOpponentEqualThLevel,
                           style: Theme.of(context).textTheme.bodyMedium),
                       value: equalThSelected,
                       onChanged: (bool? value) {
@@ -259,13 +259,13 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                 ),
                 actions: <Widget>[
                   TextButton(
-                    child: Text(AppLocalizations.of(context)!.cancel),
+                    child: Text(AppLocalizations.of(context)!.generalCancel),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
                   ),
                   TextButton(
-                    child: Text(AppLocalizations.of(context)!.apply),
+                    child: Text(AppLocalizations.of(context)!.generalApply),
                     onPressed: () {
                       // Apply filters when the user presses "Apply"
                       applyFilters();
@@ -459,21 +459,21 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                     size: 20,
                   ),
                   tooltip:
-                      AppLocalizations.of(context)!.toggleTownHallVisibility,
+                      AppLocalizations.of(context)!.warVisibilityToggleTownHall,
                   onPressed: toggleTownHallVisibility,
                 ),
                 FilterDropdown(
                   sortBy: _sortBy,
                   updateSortBy: _updateSortBy,
                   sortByOptions: {
-                    AppLocalizations.of(context)!.threeStars:
+                    AppLocalizations.of(context)!.warStarsThree:
                         "Three Stars Attacks",
-                    AppLocalizations.of(context)!.twoStars: "Two Stars Attacks",
-                    AppLocalizations.of(context)!.oneStar: "One Star Attacks",
-                    AppLocalizations.of(context)!.zeroStar: "No Star Attacks",
-                    AppLocalizations.of(context)!.averageDestruction:
+                    AppLocalizations.of(context)!.warStarsTwo: "Two Stars Attacks",
+                    AppLocalizations.of(context)!.warStarsOne: "One Star Attacks",
+                    AppLocalizations.of(context)!.warStarsZero: "No Star Attacks",
+                    AppLocalizations.of(context)!.warDestructionAverage:
                         "Average Destruction",
-                    AppLocalizations.of(context)!.averageStars: "Average Stars",
+                    AppLocalizations.of(context)!.warStarsAverage: "Average Stars",
                     AppLocalizations.of(context)!.warParticipation:
                         "War Participation",
                   },
@@ -483,7 +483,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                   onPressed: () {
                     _resetFilters();
                   },
-                  tooltip: AppLocalizations.of(context)!.reset,
+                  tooltip: AppLocalizations.of(context)!.joinLeaveReset,
                 ),
               ],
             ),

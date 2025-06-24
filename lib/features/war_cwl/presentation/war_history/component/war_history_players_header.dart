@@ -101,7 +101,7 @@ class WarHistoryPlayersStatsHeader extends StatelessWidget {
                           visualDensity: VisualDensity.compact,
                           selectedColor: Theme.of(context).colorScheme.primary,
                           checkmarkColor: Colors.white,
-                          label: Text(AppLocalizations.of(context)!.cwl,
+                          label: Text(AppLocalizations.of(context)!.cwlTitle,
                               style: Theme.of(context)
                                   .textTheme
                                   .labelMedium
@@ -114,7 +114,7 @@ class WarHistoryPlayersStatsHeader extends StatelessWidget {
                           visualDensity: VisualDensity.compact,
                           selectedColor: Theme.of(context).colorScheme.primary,
                           checkmarkColor: Colors.white,
-                          label: Text(AppLocalizations.of(context)!.random,
+                          label: Text(AppLocalizations.of(context)!.warFiltersRandom,
                               style: Theme.of(context)
                                   .textTheme
                                   .labelMedium
@@ -127,7 +127,7 @@ class WarHistoryPlayersStatsHeader extends StatelessWidget {
                           visualDensity: VisualDensity.compact,
                           selectedColor: Theme.of(context).colorScheme.primary,
                           checkmarkColor: Colors.white,
-                          label: Text(AppLocalizations.of(context)!.friendly,
+                          label: Text(AppLocalizations.of(context)!.warFiltersFriendly,
                               style: Theme.of(context)
                                   .textTheme
                                   .labelMedium

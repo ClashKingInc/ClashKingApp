@@ -86,7 +86,7 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Column(
                       children: [
-                        Text(AppLocalizations.of(context)!.attacks,
+                        Text(AppLocalizations.of(context)!.warAttacksTitle,
                             style: Theme.of(context).textTheme.bodyLarge),
                         SizedBox(height: 8),
                         Column(
@@ -106,7 +106,7 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                               ],
                             ),
                             SizedBox(height: 8),
-                            Text(AppLocalizations.of(context)!.membersStats,
+                            Text(AppLocalizations.of(context)!.statsMembers,
                                 style: Theme.of(context).textTheme.bodyMedium),
                             Row(
                               children: [
@@ -156,7 +156,7 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Column(
                       children: [
-                        Text(AppLocalizations.of(context)!.defenses,
+                        Text(AppLocalizations.of(context)!.warDefensesTitle,
                             style: Theme.of(context).textTheme.bodyLarge),
                         SizedBox(height: 8),
                         Column(
@@ -177,7 +177,7 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                               ],
                             ),
                             SizedBox(height: 8),
-                            Text(AppLocalizations.of(context)!.membersStats,
+                            Text(AppLocalizations.of(context)!.statsMembers,
                                 style: Theme.of(context).textTheme.bodyMedium),
                             Row(
                               children: [
@@ -266,7 +266,7 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                           Expanded(
                             flex: 6,
                             child: Text(
-                                AppLocalizations.of(context)!.membersStats,
+                                AppLocalizations.of(context)!.statsMembers,
                                 style: Theme.of(context).textTheme.bodyLarge,
                                 textAlign: TextAlign.center),
                           ),

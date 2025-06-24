@@ -99,7 +99,7 @@ class RegisterPageState extends State<RegisterPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.createClashKingAccount),
+        title: Text(AppLocalizations.of(context)!.authCreateClashKingAccount),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -127,7 +127,7 @@ class RegisterPageState extends State<RegisterPage> {
               SizedBox(height: 32),
               
               Text(
-                AppLocalizations.of(context)!.joinClashKing,
+                AppLocalizations.of(context)!.authJoinClashKing,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -137,7 +137,7 @@ class RegisterPageState extends State<RegisterPage> {
               SizedBox(height: 8),
               
               Text(
-                AppLocalizations.of(context)!.createAccountToGetStarted,
+                AppLocalizations.of(context)!.authCreateAccountToGetStarted,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey[600],
                 ),
@@ -150,7 +150,7 @@ class RegisterPageState extends State<RegisterPage> {
               TextFormField(
                 controller: _usernameController,
                 decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.username,
+                  labelText: AppLocalizations.of(context)!.authUsernameLabel,
                   prefixIcon: Icon(Icons.person),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -158,10 +158,10 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return AppLocalizations.of(context)!.pleaseEnterUsername;
+                    return AppLocalizations.of(context)!.authUsernameRequired;
                   }
                   if (value.trim().length < 3) {
-                    return AppLocalizations.of(context)!.usernameTooShort;
+                    return AppLocalizations.of(context)!.authUsernameTooShort;
                   }
                   return null;
                 },
@@ -174,7 +174,7 @@ class RegisterPageState extends State<RegisterPage> {
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.email,
+                  labelText: AppLocalizations.of(context)!.authEmailTitle,
                   prefixIcon: Icon(Icons.email),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -182,10 +182,10 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return AppLocalizations.of(context)!.pleaseEnterEmail;
+                    return AppLocalizations.of(context)!.authEmailRequired;
                   }
                   if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                    return AppLocalizations.of(context)!.pleaseEnterValidEmail;
+                    return AppLocalizations.of(context)!.authEmailInvalid;
                   }
                   return null;
                 },
@@ -198,7 +198,7 @@ class RegisterPageState extends State<RegisterPage> {
                 controller: _passwordController,
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.password,
+                  labelText: AppLocalizations.of(context)!.authPasswordLabel,
                   prefixIcon: Icon(Icons.lock),
                   suffixIcon: IconButton(
                     icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
@@ -210,14 +210,14 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context)!.pleaseEnterPassword;
+                    return AppLocalizations.of(context)!.authPasswordRequired;
                   }
                   if (value.length < 8) {
-                    return AppLocalizations.of(context)!.passwordTooShort;
+                    return AppLocalizations.of(context)!.authPasswordTooShort;
                   }
                   // Check for uppercase, lowercase, digit, and special character
                   if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])').hasMatch(value)) {
-                    return AppLocalizations.of(context)!.passwordRequirements;
+                    return AppLocalizations.of(context)!.authPasswordRequirements;
                   }
                   return null;
                 },
@@ -230,7 +230,7 @@ class RegisterPageState extends State<RegisterPage> {
                 controller: _confirmPasswordController,
                 obscureText: _obscureConfirmPassword,
                 decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.confirmPassword,
+                  labelText: AppLocalizations.of(context)!.authPasswordConfirm,
                   prefixIcon: Icon(Icons.lock_outline),
                   suffixIcon: IconButton(
                     icon: Icon(_obscureConfirmPassword ? Icons.visibility : Icons.visibility_off),
@@ -242,10 +242,10 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context)!.pleaseConfirmPassword;
+                    return AppLocalizations.of(context)!.authPasswordConfirmRequired;
                   }
                   if (value != _passwordController.text) {
-                    return AppLocalizations.of(context)!.passwordsDoNotMatch;
+                    return AppLocalizations.of(context)!.authPasswordMismatch;
                   }
                   return null;
                 },
@@ -265,7 +265,7 @@ class RegisterPageState extends State<RegisterPage> {
                 child: _isLoading
                     ? CircularProgressIndicator(color: Colors.white)
                     : Text(
-                        AppLocalizations.of(context)!.createAccount,
+                        AppLocalizations.of(context)!.authCreateAccount,
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
               ),
@@ -275,7 +275,7 @@ class RegisterPageState extends State<RegisterPage> {
               // Back to Login
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text(AppLocalizations.of(context)!.alreadyHaveAccount),
+                child: Text(AppLocalizations.of(context)!.authAlreadyHaveAccount),
               ),
             ],
           ),

@@ -57,9 +57,9 @@ class ClanJoinLeaveEventsState extends State<ClanJoinLeaveEvents>
     final activeUserTags = cocService.getAccountTags();
 
     Map<String, String> filterOptions = {
-      loc.all: "all",
-      loc.join: "join",
-      loc.leave: "leave",
+      loc.generalAll: "all",
+      loc.joinLeaveJoin: "join",
+      loc.joinLeaveLeave: "leave",
     };
 
     var filteredItems = widget.joinLeaveClan?.joinLeaveList
@@ -102,7 +102,7 @@ class ClanJoinLeaveEventsState extends State<ClanJoinLeaveEvents>
                 IconButton(
                   icon: Icon(LucideIcons.listRestart),
                   onPressed: resetDateFilter,
-                  tooltip: loc.reset,
+                  tooltip: loc.joinLeaveReset,
                 ),
               ],
             ),
@@ -134,7 +134,7 @@ class ClanJoinLeaveEventsState extends State<ClanJoinLeaveEvents>
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Center(
-                child: Text(loc.noDataAvailable,
+                child: Text(loc.generalNoDataAvailable,
                     style: Theme.of(context).textTheme.labelLarge),
               ),
             ),
@@ -161,13 +161,13 @@ class ClanJoinLeaveEventsState extends State<ClanJoinLeaveEvents>
                     style: Theme.of(context).textTheme.bodyLarge),
                 subtitle: Text(
                   item.type == "join"
-                      ? loc.joinedOnAt(
+                      ? loc.joinLeaveJoinedOnAt(
                           DateFormat.yMMMd(
                                   Localizations.localeOf(context).languageCode)
                               .format(item.time),
                           DateFormat.Hm().format(item.time),
                         )
-                      : loc.leftOnAt(
+                      : loc.joinLeaveLeftOnAt(
                           DateFormat.yMMMd(
                                   Localizations.localeOf(context).languageCode)
                               .format(item.time),

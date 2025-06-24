@@ -220,8 +220,8 @@ class ClanCapitalRaidState extends State<ClanCapitalRaid> {
                     children: [
                       Text(
                         isOngoing
-                            ? AppLocalizations.of(context)!.ongoingRaids
-                            : AppLocalizations.of(context)!.lastRaids,
+                            ? AppLocalizations.of(context)!.raidsOngoing
+                            : AppLocalizations.of(context)!.raidsLast,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       SizedBox(width: 4),
@@ -259,7 +259,7 @@ class ClanCapitalRaidState extends State<ClanCapitalRaid> {
                                   Text(
                                     isOngoing
                                         ? AppLocalizations.of(context)!
-                                            .comingSoon
+                                            .generalComingSoon
                                         : '${6 * firstRaid.offensiveReward + firstRaid.defensiveReward}',
                                     style:
                                         Theme.of(context).textTheme.titleMedium,
@@ -331,7 +331,7 @@ class ClanCapitalRaidState extends State<ClanCapitalRaid> {
                                   ),
                                   SizedBox(width: 2),
                                   Text(
-                                      "${firstRaid.enemyDistrictsDestroyed} ${AppLocalizations.of(context)!.districtsDestroyed}"),
+                                      "${firstRaid.enemyDistrictsDestroyed} ${AppLocalizations.of(context)!.raidsDistrictsDestroyed}"),
                                 ],
                               ),
                               Row(
@@ -375,7 +375,7 @@ class ClanCapitalRaidState extends State<ClanCapitalRaid> {
           child: Column(
             children: [
               Text(
-                "${AppLocalizations.of(context)!.members} (${firstRaid.members.length}/50)",
+                "${AppLocalizations.of(context)!.clanMembers} (${firstRaid.members.length}/50)",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               SizedBox(height: 10),

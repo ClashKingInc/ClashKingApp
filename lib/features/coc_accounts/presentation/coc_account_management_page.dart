@@ -57,7 +57,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         await cocService.updateAccountOrder(playerTags);
       } catch (error) {
         setState(() {
-          _errorMessage = AppLocalizations.of(context)!.failedToUpdateOrder;
+          _errorMessage = AppLocalizations.of(context)!.accountsErrorFailedToUpdateOrder;
         });
       }
       _isOrderChanged = false;
@@ -127,19 +127,19 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                     ),
                     SizedBox(height: 32),
                     if (_isFirstConnection) ...[
-                      Text(AppLocalizations.of(context)!.welcome,
+                      Text(AppLocalizations.of(context)!.accountsWelcome,
                           style: Theme.of(context).textTheme.titleSmall,
                           textAlign: TextAlign.center),
-                      Text(AppLocalizations.of(context)!.welcomeMessage,
+                      Text(AppLocalizations.of(context)!.accountsWelcomeMessage,
                           style: Theme.of(context).textTheme.bodyMedium,
                           textAlign: TextAlign.center),
                     ] else ...[
-                      Text(AppLocalizations.of(context)!.manageAccounts,
+                      Text(AppLocalizations.of(context)!.accountsManageTitle,
                           style: Theme.of(context).textTheme.titleSmall,
                           textAlign: TextAlign.center),
                       Text(
                           AppLocalizations.of(context)!
-                              .manageAccountsDescription,
+                              .authAccountManagement,
                           style: Theme.of(context).textTheme.bodyMedium,
                           textAlign: TextAlign.center),
                     ],
@@ -158,7 +158,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                 controller: _playerTagController,
                                 decoration: InputDecoration(
                                   labelText:
-                                      AppLocalizations.of(context)!.playerTag,
+                                      AppLocalizations.of(context)!.accountsPlayerTag,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(16.0),
                                   ),
@@ -193,7 +193,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                               if (_showApiTokenInput) ...[
                                 SizedBox(height: 16),
                                 Text(
-                                    AppLocalizations.of(context)!.enterApiToken,
+                                    AppLocalizations.of(context)!.accountsEnterApiToken,
                                     style:
                                         Theme.of(context).textTheme.bodyMedium),
                                 SizedBox(height: 8),
@@ -201,7 +201,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                   controller: _apiTokenController,
                                   decoration: InputDecoration(
                                     labelText:
-                                        AppLocalizations.of(context)!.apiToken,
+                                        AppLocalizations.of(context)!.accountsApiToken,
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
@@ -214,7 +214,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                 ? Center(
                                     child: Text(
                                       AppLocalizations.of(context)!
-                                          .noAccountLinkedToYourProfileFound,
+                                          .accountsNoneFound,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium,
@@ -321,7 +321,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
 
                     await _loadAllAccountData();
                   },
-                  child: Text(AppLocalizations.of(context)!.confirm),
+                  child: Text(AppLocalizations.of(context)!.generalConfirm),
                 ),
               ),
             ),
@@ -348,7 +348,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     final playerTag = _playerTagController.text.trim();
     if (playerTag.isEmpty) {
       setState(() {
-        _errorMessage = AppLocalizations.of(context)!.enterPlayerTag;
+        _errorMessage = AppLocalizations.of(context)!.accountsEnterPlayerTag;
         _isAddingLoading = false;
       });
       return;
@@ -359,7 +359,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     // Check if the player tag is already in the list
     if (cocService.cocAccounts
         .any((account) => account["player_tag"] == playerTag)) {
-      _setError(AppLocalizations.of(context)!.accountAlreadyLinkedToYou);
+      _setError(AppLocalizations.of(context)!.accountsErrorAlreadyLinkedToYou);
       return;
     }
 
@@ -370,10 +370,10 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       final errorCode = response["code"];
 
       if (errorCode == 409) {
-        _setError(AppLocalizations.of(context)!.accountAlreadyLinked(playerTag),
+        _setError(AppLocalizations.of(context)!.accountsErrorAlreadyLinked,
             showApiToken: true);
       } else if (errorCode == 404) {
-        _setError(AppLocalizations.of(context)!.playerTagNotExists);
+        _setError(AppLocalizations.of(context)!.accountsErrorTagNotExists);
       } else if (errorCode == 500) {
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -381,7 +381,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
           ),
         );
       } else {
-        _setError(AppLocalizations.of(context)!.failedToAddTryAgain);
+        _setError(AppLocalizations.of(context)!.accountsErrorFailedToAdd);
       }
       return;
     }
@@ -417,7 +417,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
 
     if (playerTag.isEmpty || apiToken.isEmpty) {
       setState(() {
-        _errorMessage = AppLocalizations.of(context)!.fillAllFields;
+        _errorMessage = AppLocalizations.of(context)!.accountsFillAllFields;
         _isAddingLoading = false;
       });
       return;
@@ -431,10 +431,10 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       final errorCode = response["code"];
 
       if (errorCode == 403) {
-        _setError(AppLocalizations.of(context)!.wrongApiToken,
+        _setError(AppLocalizations.of(context)!.accountsErrorWrongApiToken,
             showApiToken: true);
       } else if (errorCode == 404) {
-        _setError(AppLocalizations.of(context)!.playerTagNotExists);
+        _setError(AppLocalizations.of(context)!.accountsErrorTagNotExists);
       } else if (errorCode == 500) {
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -442,7 +442,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
           ),
         );
       } else {
-        _setError(AppLocalizations.of(context)!.failedToAddTryAgain);
+        _setError(AppLocalizations.of(context)!.accountsErrorFailedToAdd);
       }
       return;
     }

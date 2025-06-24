@@ -27,7 +27,7 @@ class LegendUsedGearCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                AppLocalizations.of(context)?.heroesEquipments ?? "Heroes Equipments",
+                AppLocalizations.of(context)?.gameHeroesEquipments ?? "Heroes Equipments",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 10),

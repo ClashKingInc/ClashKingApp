@@ -163,7 +163,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                                 widget.player.clanOverview.badgeUrls.small,
                             width: 20),
                         SizedBox(width: 8),
-                        Text(AppLocalizations.of(context)!.achievements),
+                        Text(AppLocalizations.of(context)!.gameAchievements),
                       ],
                     ),
                     onTap: () {
@@ -201,7 +201,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                         MobileWebImage(
                             imageUrl: ImageAssets.iconBuilderPotion, width: 20),
                         SizedBox(width: 8),
-                        Text(AppLocalizations.of(context)!.toDoList),
+                        Text(AppLocalizations.of(context)!.todoTitle),
                       ],
                     ),
                     onTap: () {
@@ -284,7 +284,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
           if (context.mounted) {
             showClipboardSnackbar(
               context,
-              AppLocalizations.of(context)!.copiedToClipboard,
+              AppLocalizations.of(context)!.generalCopiedToClipboard,
             );
           }
         });
@@ -349,7 +349,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
       ImageChip(
           imageUrl: widget.player.townHallPic,
           label: AppLocalizations.of(context)
-                  ?.thLevel(widget.player.townHallLevel) ??
+                  ?.gameTHLevel(widget.player.townHallLevel) ??
               'TH ${widget.player.townHallLevel}'),
       ImageChip(
         imageUrl: ImageAssets.xp,
@@ -403,8 +403,8 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
               ? ImageAssets.warPreferenceIn
               : ImageAssets.warPreferenceOut,
           label: widget.player.warPreference == 'in'
-              ? AppLocalizations.of(context)!.ready
-              : AppLocalizations.of(context)!.unready,
+              ? AppLocalizations.of(context)!.warStatusReady
+              : AppLocalizations.of(context)!.warStatusUnready,
         ),
         ImageChip(
           imageUrl: ImageAssets.sword,
@@ -515,9 +515,9 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
       );
     },
         label: warInfo.state == "preparation"
-            ? AppLocalizations.of(context)!.preparation
+            ? AppLocalizations.of(context)!.warPreparation
             : warInfo.state == "inWar"
-                ? AppLocalizations.of(context)!.ongoingWar
+                ? AppLocalizations.of(context)!.warOngoing
                 : AppLocalizations.of(context)!.warEnded);
   }
 
@@ -539,7 +539,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
           ),
         );
       },
-      label: AppLocalizations.of(context)!.ongoingCwl,
+      label: AppLocalizations.of(context)!.cwlOngoing,
     );
   }
 }

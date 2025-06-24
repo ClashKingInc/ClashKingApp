@@ -25,7 +25,7 @@ class PlayerSuperTroopSection extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                AppLocalizations.of(context)!.activeSuperTroops,
+                AppLocalizations.of(context)!.gameActiveSuperTroops,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 10),

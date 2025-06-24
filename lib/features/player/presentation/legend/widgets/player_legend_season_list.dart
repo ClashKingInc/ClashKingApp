@@ -235,7 +235,7 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                     Expanded(
                       child: PlayerLegendOffenseDefense(
                         title:
-                            AppLocalizations.of(context)?.attacks ?? "Attacks",
+                            AppLocalizations.of(context)?.warAttacksTitle ?? "Attacks",
                         list: day.newAttacks,
                         context: context,
                         sum: day.trophiesGainedTotal,
@@ -248,7 +248,7 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                     ),
                     Expanded(
                       child: PlayerLegendOffenseDefense(
-                        title: AppLocalizations.of(context)?.defenses ??
+                        title: AppLocalizations.of(context)?.warDefensesTitle ??
                             "Defenses",
                         list: day.newDefenses,
                         context: context,

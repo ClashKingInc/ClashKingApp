@@ -75,7 +75,7 @@ class CurrentWarInfoCard extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                AppLocalizations.of(context)?.startsAt(
+                AppLocalizations.of(context)?.timeStartsAt(
                       DateFormat('HH:mm')
                           .format(currentWarInfo.startTime!.toLocal()),
                     ) ??
@@ -85,7 +85,7 @@ class CurrentWarInfoCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                AppLocalizations.of(context)?.preparation ?? 'Preparation',
+                AppLocalizations.of(context)?.warPreparation ?? 'Preparation',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
@@ -106,7 +106,7 @@ class CurrentWarInfoCard extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                AppLocalizations.of(context)?.endsAt(
+                AppLocalizations.of(context)?.timeEndsAt(
                       DateFormat('HH:mm')
                           .format(currentWarInfo.endTime!.toLocal()),
                     ) ??
@@ -168,7 +168,7 @@ class CurrentWarInfoCard extends StatelessWidget {
           ),
           if (isVictory)
             Text(
-              AppLocalizations.of(context)?.victory ?? 'Victory',
+              AppLocalizations.of(context)?.warVictory ?? 'Victory',
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
@@ -176,7 +176,7 @@ class CurrentWarInfoCard extends StatelessWidget {
             )
           else if (isDefeat)
             Text(
-              AppLocalizations.of(context)?.defeat ?? 'Defeat',
+              AppLocalizations.of(context)?.warDefeat ?? 'Defeat',
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.red,
@@ -184,7 +184,7 @@ class CurrentWarInfoCard extends StatelessWidget {
             )
           else
             Text(
-              AppLocalizations.of(context)?.draw ?? 'Draw',
+              AppLocalizations.of(context)?.warDraw ?? 'Draw',
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

@@ -54,13 +54,13 @@ class WarTeamTab extends StatelessWidget {
                         children: [
                           Text(
                               AppLocalizations.of(context)!
-                                  .bestDefenseOutOf(member.opponentAttacks),
+                                  .warDefensesBestOutOf(member.opponentAttacks),
                               style: Theme.of(context).textTheme.bodySmall),
                           const SizedBox(height: 4),
                           if (member.bestOpponentAttack != null)
                             _buildDefenseCard(context, member)
                           else
-                            Text(AppLocalizations.of(context)!.noDefenseYet,
+                            Text(AppLocalizations.of(context)!.warDefensesNone,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall!
@@ -88,7 +88,7 @@ class WarTeamTab extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              "${AppLocalizations.of(context)!.attacks} (${member.attacks?.length ?? 0}/$attacksPerMember)",
+                              "${AppLocalizations.of(context)!.warAttacksTitle} (${member.attacks?.length ?? 0}/$attacksPerMember)",
                               style: Theme.of(context).textTheme.bodySmall),
                           const SizedBox(height: 4),
                           ...List.generate(attacksPerMember, (index) {
@@ -149,7 +149,7 @@ class WarTeamTab extends StatelessWidget {
     if (attack == null) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Text(AppLocalizations.of(context)!.noAttackYet,
+        child: Text(AppLocalizations.of(context)!.warAttacksNone,
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: Theme.of(context).colorScheme.onSurface.withValues(
                         alpha: 0.5,

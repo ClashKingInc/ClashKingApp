@@ -151,7 +151,7 @@ class CwlTeamCard extends StatelessWidget {
                             .onSurface
                             .withValues(alpha: 0.7)),
                     const SizedBox(width: 4),
-                    Text(AppLocalizations.of(context)!.fullStats,
+                    Text(AppLocalizations.of(context)!.generalFullStats,
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
                             color: Theme.of(context)
                                 .colorScheme
@@ -168,7 +168,7 @@ class CwlTeamCard extends StatelessWidget {
                   children: [
                     Column(
                       children: [
-                        Text(AppLocalizations.of(context)!.attacks,
+                        Text(AppLocalizations.of(context)!.warAttacksTitle,
                             style: Theme.of(context).textTheme.titleSmall),
                         const SizedBox(height: 12),
                         Wrap(
@@ -177,52 +177,52 @@ class CwlTeamCard extends StatelessWidget {
                           runSpacing: 16,
                           children: [
                             StatTile(
-                                label: AppLocalizations.of(context)!.attacks,
+                                label: AppLocalizations.of(context)!.warAttacksTitle,
                                 value: '${clan.attackCount}',
                                 icon: MobileWebImage(
                                     imageUrl: ImageAssets.sword,
                                     width: 16,
                                     height: 16)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.missed,
+                                label: AppLocalizations.of(context)!.warStatusMissed,
                                 value: '${clan.missedAttacks}',
                                 icon: MobileWebImage(
                                     imageUrl: ImageAssets.brokenSword,
                                     width: 16,
                                     height: 16)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.total,
+                                label: AppLocalizations.of(context)!.generalTotal,
                                 value: '${clan.stars}',
                                 icon: MobileWebImage(
                                     imageUrl: ImageAssets.attackStar,
                                     width: 16,
                                     height: 16)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.avg,
+                                label: AppLocalizations.of(context)!.warAbbreviationAvg,
                                 value: clan.averageStars.toStringAsFixed(1),
                                 icon: MobileWebImage(
                                     imageUrl: ImageAssets.attackStar,
                                     width: 16,
                                     height: 16)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.threeStars,
+                                label: AppLocalizations.of(context)!.warStarsThree,
                                 value: '${clan.threeStars}',
                                 icon: buildStarsIcon(3)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.twoStars,
+                                label: AppLocalizations.of(context)!.warStarsTwo,
                                 value: '${clan.twoStars}',
                                 icon: buildStarsIcon(2)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.oneStar,
+                                label: AppLocalizations.of(context)!.warStarsOne,
                                 value: '${clan.oneStar}',
                                 icon: buildStarsIcon(1)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.zeroStar,
+                                label: AppLocalizations.of(context)!.warStarsZero,
                                 value: '${clan.zeroStar}',
                                 icon: buildStarsIcon(0)),
                             StatTile(
                                 label:
-                                    AppLocalizations.of(context)!.destruction,
+                                    AppLocalizations.of(context)!.warDestructionTitle,
                                 value:
                                     '${clan.destructionPercentageInflicted.toStringAsFixed(1)}%',
                                 icon: MobileWebImage(
@@ -231,7 +231,7 @@ class CwlTeamCard extends StatelessWidget {
                                     height: 16)),
                             StatTile(
                                 label:
-                                    AppLocalizations.of(context)!.avgPercentage,
+                                    AppLocalizations.of(context)!.warAbbreviationAvgPercentage,
                                 value:
                                     clan.averageDestruction.toStringAsFixed(1),
                                 icon: MobileWebImage(
@@ -245,7 +245,7 @@ class CwlTeamCard extends StatelessWidget {
                     Column(
                       children: [
                         const SizedBox(height: 18),
-                        Text(AppLocalizations.of(context)!.defenses,
+                        Text(AppLocalizations.of(context)!.warDefensesTitle,
                             style: Theme.of(context).textTheme.titleSmall),
                         const SizedBox(height: 12),
                         Wrap(
@@ -254,52 +254,52 @@ class CwlTeamCard extends StatelessWidget {
                           runSpacing: 16,
                           children: [
                             StatTile(
-                                label: AppLocalizations.of(context)!.defenses,
+                                label: AppLocalizations.of(context)!.warDefensesTitle,
                                 value: '${clan.defenseCount}',
                                 icon: MobileWebImage(
                                     imageUrl: ImageAssets.shieldWithArrow,
                                     width: 16,
                                     height: 16)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.missed,
+                                label: AppLocalizations.of(context)!.warStatusMissed,
                                 value: '${clan.missedDefenses}',
                                 icon: MobileWebImage(
                                     imageUrl: ImageAssets.shield,
                                     width: 16,
                                     height: 16)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.total,
+                                label: AppLocalizations.of(context)!.generalTotal,
                                 value: '${clan.defStars}',
                                 icon: MobileWebImage(
                                     imageUrl: ImageAssets.attackStar,
                                     width: 16,
                                     height: 16)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.avg,
+                                label: AppLocalizations.of(context)!.warAbbreviationAvg,
                                 value: clan.defAverageStars.toStringAsFixed(1),
                                 icon: MobileWebImage(
                                     imageUrl: ImageAssets.attackStar,
                                     width: 16,
                                     height: 16)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.threeStars,
+                                label: AppLocalizations.of(context)!.warStarsThree,
                                 value: '${clan.threeStarsDef}',
                                 icon: buildStarsIcon(3)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.twoStars,
+                                label: AppLocalizations.of(context)!.warStarsTwo,
                                 value: '${clan.twoStarsDef}',
                                 icon: buildStarsIcon(2)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.oneStar,
+                                label: AppLocalizations.of(context)!.warStarsOne,
                                 value: '${clan.oneStarDef}',
                                 icon: buildStarsIcon(1)),
                             StatTile(
-                                label: AppLocalizations.of(context)!.zeroStar,
+                                label: AppLocalizations.of(context)!.warStarsZero,
                                 value: '${clan.zeroStarDef}',
                                 icon: buildStarsIcon(0)),
                             StatTile(
                                 label:
-                                    AppLocalizations.of(context)!.destruction,
+                                    AppLocalizations.of(context)!.warDestructionTitle,
                                 value:
                                     '${clan.destructionPercentage.toStringAsFixed(1)}%',
                                 icon: MobileWebImage(
@@ -308,7 +308,7 @@ class CwlTeamCard extends StatelessWidget {
                                     height: 16)),
                             StatTile(
                                 label:
-                                    AppLocalizations.of(context)!.avgPercentage,
+                                    AppLocalizations.of(context)!.warAbbreviationAvgPercentage,
                                 value: clan.defAverageDestruction.toStringAsFixed(1),
                                 icon: MobileWebImage(
                                     imageUrl: ImageAssets.hitrate,

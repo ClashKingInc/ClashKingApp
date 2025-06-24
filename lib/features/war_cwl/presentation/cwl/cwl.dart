@@ -179,7 +179,7 @@ class CwlScreenState extends State<CwlScreen> {
                             labelPadding: 6,
                             label: clan.missedAttacks.toString(),
                             description:
-                                AppLocalizations.of(context)!.missedAttacks,
+                                AppLocalizations.of(context)!.warAttacksMissed,
                           ),
                         ],
                       ),
@@ -198,9 +198,9 @@ class CwlScreenState extends State<CwlScreen> {
               unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
               onTap: (value) {},
               tabs: [
-                Tab(text: AppLocalizations.of(context)?.rounds ?? 'Rounds'),
-                Tab(text: AppLocalizations.of(context)?.team ?? 'Teams'),
-                Tab(text: AppLocalizations.of(context)?.members ?? "Members")
+                Tab(text: AppLocalizations.of(context)?.cwlRounds ?? 'Rounds'),
+                Tab(text: AppLocalizations.of(context)?.navigationTeam ?? 'Teams'),
+                Tab(text: AppLocalizations.of(context)?.clanMembers ?? "Members")
               ],
               children: [
                 CwlRoundsTab(warCwl: widget.warCwl),

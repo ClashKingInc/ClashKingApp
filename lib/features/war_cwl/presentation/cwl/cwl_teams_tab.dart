@@ -112,14 +112,14 @@ class CwlTeamsTabState extends State<CwlTeamsTab> {
                   16,
                   ImageAssets.sword,
                   ImageAssets.townHall(17),
-                  AppLocalizations.of(context)!.townHallLevel): 'townHallLevel',
+                  AppLocalizations.of(context)!.gameTownHallLevel): 'townHallLevel',
               generateImageIconWithText(16, ImageAssets.sword,
-                  AppLocalizations.of(context)!.missedAttacks): 'missedAttacks',
+                  AppLocalizations.of(context)!.warAttacksMissed): 'missedAttacks',
               generateDoubleImageIconsWithText(
                   16,
                   ImageAssets.sword,
                   ImageAssets.builderBaseStar,
-                  "(${AppLocalizations.of(context)!.avg})"): 'averageStars',
+                  "(${AppLocalizations.of(context)!.warAbbreviationAvg})"): 'averageStars',
               generateStarsWithIconBefore(3, 16, ImageAssets.sword): '3stars',
               generateStarsWithIconBefore(2, 16, ImageAssets.sword): '2stars',
               generateStarsWithIconBefore(1, 16, ImageAssets.sword): '1stars',
@@ -133,12 +133,12 @@ class CwlTeamsTabState extends State<CwlTeamsTab> {
                   16,
                   ImageAssets.shieldWithArrow,
                   ImageAssets.builderBaseStar,
-                  "(${AppLocalizations.of(context)!.avg})"): 'defAverageStars',
+                  "(${AppLocalizations.of(context)!.warAbbreviationAvg})"): 'defAverageStars',
               generateDoubleImageIconsWithText(
                       16,
                       ImageAssets.shieldWithArrow,
                       ImageAssets.hitrate,
-                      "(${AppLocalizations.of(context)!.avg})"):
+                      "(${AppLocalizations.of(context)!.warAbbreviationAvg})"):
                   'defAverageDestruction',
               generateStarsWithIconBefore(3, 16, ImageAssets.shieldWithArrow):
                   'def3stars',

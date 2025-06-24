@@ -34,15 +34,15 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.settings),
+        title: Text(AppLocalizations.of(context)!.generalSettings),
         actions: [],
       ),
       body: ListView(
         children: <Widget>[
           _buildListTile(
             context,
-            title: AppLocalizations.of(context)!.language,
-            subtitle: AppLocalizations.of(context)!.selectLanguage,
+            title: AppLocalizations.of(context)!.settingsLanguage,
+            subtitle: AppLocalizations.of(context)!.settingsSelectLanguage,
             leadingIcon: Icons.language,
             onTap: () async {
               await _showLanguageSelection(context);
@@ -53,7 +53,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
             builder: (context, themeNotifier, child) {
               return _buildListTile(
                 context,
-                title: AppLocalizations.of(context)!.toggleTheme,
+                title: AppLocalizations.of(context)!.settingsToggleTheme,
                 leadingIcon: LucideIcons.sunMoon,
                 onTap: () {
                   themeNotifier.toggleTheme();
@@ -64,7 +64,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           Divider(),
           _buildListTile(
             context,
-            title: AppLocalizations.of(context)!.faq,
+            title: AppLocalizations.of(context)!.faqTitle,
             subtitle: AppLocalizations.of(context)!.faqSubtitle,
             leadingIcon: Icons.question_answer,
             onTap: () async {
@@ -77,7 +77,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           Divider(),
           _buildListTile(
             context,
-            title: AppLocalizations.of(context)!.helpUsTranslate,
+            title: AppLocalizations.of(context)!.translationHelpUsTranslate,
             leadingIcon: Icons.language,
             onTap: () async {
               Navigator.of(context).push(
@@ -88,7 +88,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           Divider(),
           _buildListTile(
             context,
-            title: AppLocalizations.of(context)!.suggestFeatures,
+            title: AppLocalizations.of(context)!.translationSuggestFeatures,
             leadingIcon: Icons.featured_play_list,
             onTap: () async {
               // Open Features vote
@@ -109,7 +109,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           Divider(),
           _buildListTile(
             context,
-            title: AppLocalizations.of(context)!.logout,
+            title: AppLocalizations.of(context)!.authLogout,
             leadingIcon: Icons.exit_to_app,
             onTap: () {
               showDialog(
@@ -227,7 +227,7 @@ Widget _buildVersionInfoTile(BuildContext context) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return ListTile(
           title: Text(AppLocalizations.of(context)!.versionDevice),
-          subtitle: Text(AppLocalizations.of(context)!.loading),
+          subtitle: Text(AppLocalizations.of(context)!.generalLoading),
         );
       } else if (snapshot.hasError) {
         return ListTile(
@@ -242,7 +242,7 @@ Widget _buildVersionInfoTile(BuildContext context) {
             Clipboard.setData(ClipboardData(text: snapshot.data ?? ''));
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(AppLocalizations.of(context)!.copiedToClipboard),
+                content: Text(AppLocalizations.of(context)!.generalCopiedToClipboard),
               ),
             );
           },

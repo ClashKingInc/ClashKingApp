@@ -45,7 +45,7 @@ class ClanJoinLeaveCard extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       Text(
-                        AppLocalizations.of(context)!.joinLeaveLogs,
+                        AppLocalizations.of(context)!.joinLeaveTitle,
                         style: Theme.of(context).textTheme.labelLarge,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.visible,
@@ -62,7 +62,7 @@ class ClanJoinLeaveCard extends StatelessWidget {
                             labelPadding: 2,
                             label: clan!.joinLeave!.stats.totalJoins.toString(),
                             description: AppLocalizations.of(context)!
-                                .joinNumberDescription(
+                                .joinLeaveJoinNumberDescription(
                                     clan.joinLeave!.stats.totalJoins,
                                     formattedDate),
                           ),
@@ -73,7 +73,7 @@ class ClanJoinLeaveCard extends StatelessWidget {
                             labelPadding: 2,
                             label: clan.joinLeave!.stats.totalLeaves.toString(),
                             description: AppLocalizations.of(context)!
-                                .leaveNumberDescription(
+                                .joinLeaveNumberDescription(
                                     clan.joinLeave!.stats.totalLeaves,
                                     formattedDate),
                           ),
@@ -85,7 +85,7 @@ class ClanJoinLeaveCard extends StatelessWidget {
                               label: clan.joinLeave!.stats.movingPlayers
                                   .toString(),
                               description: AppLocalizations.of(context)!
-                                  .movingNumberDescription(
+                                  .joinLeaveMovingNumberDescription(
                                       clan.joinLeave!.stats.movingPlayers,
                                       formattedDate)),
                           IconChip(
@@ -95,7 +95,7 @@ class ClanJoinLeaveCard extends StatelessWidget {
                             label:
                                 clan.joinLeave!.stats.uniquePlayers.toString(),
                             description: AppLocalizations.of(context)!
-                                .uniqueNumberDescription(
+                                .joinLeaveUniqueNumberDescription(
                                     clan.joinLeave!.stats.uniquePlayers,
                                     formattedDate),
                           ),
@@ -107,7 +107,7 @@ class ClanJoinLeaveCard extends StatelessWidget {
                             label: clan.joinLeave!.stats.playerStillInClan
                                 .toString(),
                             description: AppLocalizations.of(context)!
-                                .stillInClanNumberDescription(
+                                .joinLeaveStillInClanNumberDescription(
                                     clan.joinLeave!.stats.playerStillInClan),
                           ),
                           IconChip(
@@ -118,7 +118,7 @@ class ClanJoinLeaveCard extends StatelessWidget {
                             label:
                                 clan.joinLeave!.stats.playerLeftClan.toString(),
                             description: AppLocalizations.of(context)!
-                                .leftClanNumberDescription(
+                                .joinLeaveLeftClanNumberDescription(
                                     clan.joinLeave!.stats.playerLeftClan),
                           ),
                         ],

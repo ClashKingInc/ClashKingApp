@@ -24,11 +24,11 @@ class NoClanCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(AppLocalizations.of(context)?.noClan ?? 'No Clan',
+                    Text(AppLocalizations.of(context)?.clanNone ?? 'No Clan',
                         style: (Theme.of(context).textTheme.titleSmall)),
                     Text(
                         AppLocalizations.of(context)!
-                            .joinClanToUnlockNewFeatures,
+                            .clanJoinToUnlock,
                         style: (Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Theme.of(context).colorScheme.tertiary))),
                   ],

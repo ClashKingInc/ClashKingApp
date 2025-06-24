@@ -105,7 +105,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Center(child: Text(loc.copiedToClipboard)),
+                    content: Center(child: Text(loc.generalCopiedToClipboard)),
                     duration: const Duration(seconds: 1),
                   ),
                 );
@@ -169,11 +169,11 @@ class ClanInfoHeaderCard extends StatelessWidget {
           label: () {
             switch (clanInfo.type) {
               case 'inviteOnly':
-                return loc.inviteOnly;
+                return loc.clanInviteOnly;
               case 'open':
-                return loc.opened;
+                return loc.clanOpened;
               case 'closed':
-                return loc.closed;
+                return loc.clanClosed;
               default:
                 return clanInfo.type;
             }
@@ -185,17 +185,17 @@ class ClanInfoHeaderCard extends StatelessWidget {
           label: () {
             switch (clanInfo.warFrequency) {
               case 'always':
-                return loc.always;
+                return loc.clanWarFrequencyAlways;
               case 'never':
-                return loc.never;
+                return loc.clanWarFrequencyNever;
               case 'oncePerWeek':
-                return loc.oncePerWeek;
+                return loc.clanWarFrequencyOncePerWeek;
               case 'moreThanOncePerWeek':
-                return loc.twicePerWeek;
+                return loc.clanWarFrequencyMoreThanOncePerWeek;
               case 'lessThanOncePerWeek':
-                return loc.rarely;
+                return loc.clanWarFrequencyRarely;
               default:
-                return loc.unknown;
+                return loc.clanWarFrequencyUnknown;
             }
           }(),
         ),
@@ -239,9 +239,9 @@ class ClanInfoHeaderCard extends StatelessWidget {
       );
     },
         label: clanInfo.warCwl!.warInfo.state == "preparation"
-            ? AppLocalizations.of(context)!.preparation
+            ? AppLocalizations.of(context)!.warPreparation
             : clanInfo.warCwl!.warInfo.state == "inWar"
-                ? AppLocalizations.of(context)!.ongoingWar
+                ? AppLocalizations.of(context)!.warOngoing
                 : AppLocalizations.of(context)!.warEnded);
   }
 
@@ -262,7 +262,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
           ),
         );
       },
-      label: AppLocalizations.of(context)!.ongoingCwl,
+      label: AppLocalizations.of(context)!.cwlOngoing,
     );
   }
 
@@ -294,7 +294,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                             content: Text(
-                                AppLocalizations.of(context)!.cantOpenLink)),
+                                AppLocalizations.of(context)!.errorCannotOpenLink)),
                       );
                     }
                   }
@@ -331,7 +331,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
                         MobileWebImage(
                             imageUrl: clanInfo.badgeUrls.small, width: 20),
                         SizedBox(width: 8),
-                        Text(AppLocalizations.of(context)!.stats),
+                        Text(AppLocalizations.of(context)!.generalStats),
                       ],
                     ),
                   ),

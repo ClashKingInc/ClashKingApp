@@ -57,13 +57,13 @@ class PlayerToDoBodyState extends State<PlayerToDoBody> {
         if (cards.isEmpty && !widget.active)
           _emptyCard(
             context,
-            AppLocalizations.of(context)!.noActiveAccounts,
+            AppLocalizations.of(context)!.todoAccountsNoActive,
             'https://assets.clashk.ing/stickers/Villager_BB_Master_Builder_7.png',
           )
         else if (cards.isEmpty && widget.active)
           _emptyCard(
             context,
-            AppLocalizations.of(context)!.noInactiveAccounts,
+            AppLocalizations.of(context)!.todoAccountsNoInactive,
             'https://assets.clashk.ing/stickers/Villager_BB_Master_Builder_4.png',
           )
         else

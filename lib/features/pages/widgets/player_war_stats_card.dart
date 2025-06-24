@@ -67,7 +67,7 @@ class PlayerWarStatsCard extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             AppLocalizations.of(context)!
-                                .lastXwars(allStats?.warsCounts ?? 0),
+                                .warFiltersLastXwars(allStats?.warsCounts ?? 0),
                             style: Theme.of(context).textTheme.labelLarge,
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.visible,
@@ -95,7 +95,7 @@ class PlayerWarStatsCard extends StatelessWidget {
                                           .toStringAsFixed(2) ??
                                       "",
                                   description: AppLocalizations.of(context)!
-                                      .warAverageStars(allStats?.averageStars
+                                      .warAttacksAverageStars(allStats?.averageStars
                                               .toStringAsFixed(2) ??
                                           "?"),
                                 ),
@@ -105,7 +105,7 @@ class PlayerWarStatsCard extends StatelessWidget {
                                   label:
                                       "${allStats?.averageDestruction.toStringAsFixed(1)}%",
                                   description: AppLocalizations.of(context)!
-                                      .warAverageDestruction(allStats
+                                      .warAttacksAverageDestruction(allStats
                                               ?.averageDestruction
                                               .toStringAsFixed(1) ??
                                           "?"),
@@ -125,7 +125,7 @@ class PlayerWarStatsCard extends StatelessWidget {
                                           .toStringAsFixed(2) ??
                                       "",
                                   description: AppLocalizations.of(context)!
-                                      .warAverageStarsDefense(
+                                      .warDefensesAverageStars(
                                           allStats?.averageStarsDef ?? 0),
                                 ),
                                 ImageChip(
@@ -134,7 +134,7 @@ class PlayerWarStatsCard extends StatelessWidget {
                                   label:
                                       "${allStats?.averageDestructionDef.toStringAsFixed(1)}%",
                                   description: AppLocalizations.of(context)!
-                                      .warAverageDestructionDefense(allStats
+                                      .warDefensesAverageDestruction(allStats
                                               ?.averageDestructionDef
                                               .toStringAsFixed(1) ??
                                           "?"),

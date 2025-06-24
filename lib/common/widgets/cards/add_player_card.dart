@@ -37,14 +37,14 @@ class AddPlayerCardState extends State<AddPlayerCard> {
 
   @override
   Widget build(BuildContext context) {
-    final playerTagNotExists = AppLocalizations.of(context)!.playerTagNotExists;
+    final playerTagNotExists = AppLocalizations.of(context)!.accountsErrorTagNotExists;
     String accountAlreadyLinked =
-        AppLocalizations.of(context)!.accountAlreadyLinked("");
+        AppLocalizations.of(context)!.accountsErrorAlreadyLinked("");
     final failedToAddTryAgain =
-        AppLocalizations.of(context)!.failedToAddTryAgain;
+        AppLocalizations.of(context)!.accountsErrorFailedToAdd;
     final failedToDeleteTryAgain =
-        AppLocalizations.of(context)!.failedToDeleteTryAgain;
-    String wrongApiToken = AppLocalizations.of(context)!.wrongApiToken;
+        AppLocalizations.of(context)!.accountsErrorFailedToDelete;
+    String wrongApiToken = AppLocalizations.of(context)!.accountsErrorWrongApiToken;
 
     return Column(
       children: [
@@ -53,7 +53,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
           style: Theme.of(context).textTheme.bodySmall,
           controller: controller,
           decoration: InputDecoration(
-            labelText: AppLocalizations.of(context)!.enterPlayerTag,
+            labelText: AppLocalizations.of(context)!.accountsEnterPlayerTag,
             labelStyle: Theme.of(context)
                 .textTheme
                 .bodySmall
@@ -86,14 +86,14 @@ class AddPlayerCardState extends State<AddPlayerCard> {
             : SizedBox.shrink(),
         SizedBox(height: 16), // Add spacing
         if (showApiTokenInput) ...[
-          Text(AppLocalizations.of(context)!.enterApiToken,
+          Text(AppLocalizations.of(context)!.accountsEnterApiToken,
               style: Theme.of(context).textTheme.bodySmall),
           SizedBox(height: 16),
           TextField(
             style: Theme.of(context).textTheme.bodySmall,
             controller: apiTokenController,
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.apiToken,
+              labelText: AppLocalizations.of(context)!.accountsApiToken,
               labelStyle: Theme.of(context)
                   .textTheme
                   .bodySmall
@@ -183,7 +183,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
               } else {
                 if (context.mounted) {
                   updateErrorMessage(
-                      AppLocalizations.of(context)!.accountAlreadyLinkedToYou);
+                      AppLocalizations.of(context)!.accountsErrorAlreadyLinkedToYou);
                 }
               }
             } else {
@@ -230,7 +230,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
               } else {
                 if (context.mounted) {
                   updateErrorMessage(
-                      AppLocalizations.of(context)!.accountAlreadyLinkedToYou);
+                      AppLocalizations.of(context)!.accountsErrorAlreadyLinkedToYou);
                 }
               }
             }
@@ -249,7 +249,7 @@ class AddPlayerCardState extends State<AddPlayerCard> {
             ),
             elevation: WidgetStateProperty.all(4),
           ),
-          child: Text(AppLocalizations.of(context)!.addAccount,
+          child: Text(AppLocalizations.of(context)!.accountsAdd,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSecondary)),
         ),

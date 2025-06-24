@@ -9,13 +9,13 @@ String convertToTimeAgo(int timestamp, context) {
   Duration diff = now.difference(date);
 
   if (diff.inDays >= 1) {
-    return '${diff.inDays == 1 ? AppLocalizations.of(context)?.dayAgo(diff.inDays) : AppLocalizations.of(context)?.daysAgo(diff.inDays)}';
+    return '${diff.inDays == 1 ? AppLocalizations.of(context)?.timeDayAgo(diff.inDays) : AppLocalizations.of(context)?.timeDaysAgo(diff.inDays)}';
   } else if (diff.inHours >= 1) {
-    return '${diff.inHours == 1 ? AppLocalizations.of(context)?.hourAgo(diff.inHours) : AppLocalizations.of(context)?.hoursAgo(diff.inHours, "")}';
+    return '${diff.inHours == 1 ? AppLocalizations.of(context)?.timeHourAgo(diff.inHours) : AppLocalizations.of(context)?.timeHoursAgo(diff.inHours)}';
   } else if (diff.inMinutes >= 1) {
-    return '${diff.inMinutes == 1 ? AppLocalizations.of(context)?.minuteAgo(diff.inMinutes) : AppLocalizations.of(context)?.minutesAgo(diff.inMinutes)}';
+    return '${diff.inMinutes == 1 ? AppLocalizations.of(context)?.timeMinuteAgo(diff.inMinutes) : AppLocalizations.of(context)?.timeMinutesAgo(diff.inMinutes)}';
   } else {
-    return AppLocalizations.of(context)?.justNow ?? "Just now";
+    return AppLocalizations.of(context)?.timeJustNow ?? "Just now";
   }
 }
 

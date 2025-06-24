@@ -22,7 +22,7 @@ class LegendTrophiesStartEndCard extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Column(
           children: [
-            Text(AppLocalizations.of(context)?.started ?? "Started",
+            Text(AppLocalizations.of(context)?.generalStarted ?? "Started",
                 style: Theme.of(context).textTheme.titleSmall),
             Text(
                 NumberFormat(
@@ -39,7 +39,7 @@ class LegendTrophiesStartEndCard extends StatelessWidget {
           width: 80,
         ),
         Column(children: [
-          Text(AppLocalizations.of(context)?.ended ?? "Ended",
+          Text(AppLocalizations.of(context)?.generalEnded ?? "Ended",
               style: Theme.of(context).textTheme.titleSmall),
           Text(
               NumberFormat('#,###', Localizations.localeOf(context).toString())

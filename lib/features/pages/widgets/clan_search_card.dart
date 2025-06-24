@@ -92,8 +92,8 @@ class ClanSearchCardState extends State<ClanSearchCard> {
               controller: _controller,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                labelText: AppLocalizations.of(context)!.searchClan,
-                hintText: AppLocalizations.of(context)!.clanName,
+                labelText: AppLocalizations.of(context)!.clanSearchTitle,
+                hintText: AppLocalizations.of(context)!.clanSearchPlaceholder,
                 hintStyle: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 16,
@@ -186,7 +186,7 @@ class ClanSearchCardState extends State<ClanSearchCard> {
               } else {
                 if (_controller.text.length >= 2) {
                   return Column(children: [
-                    Center(child: Text(AppLocalizations.of(context)!.noResult)),
+                    Center(child: Text(AppLocalizations.of(context)!.searchNoResult)),
                     const SizedBox(height: 8)
                   ]);
                 } else {

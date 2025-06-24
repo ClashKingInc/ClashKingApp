@@ -82,7 +82,7 @@ class PlayerWarAttacksCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          Text(AppLocalizations.of(context)?.noDataAvailable ?? 'No data'),
+          Text(AppLocalizations.of(context)?.generalNoDataAvailable ?? 'No data'),
           const SizedBox(height: 16),
           CachedNetworkImage(
             imageUrl:

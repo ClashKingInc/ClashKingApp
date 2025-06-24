@@ -198,14 +198,14 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text(AppLocalizations.of(context)!.filters,
+              title: Text(AppLocalizations.of(context)!.generalFilters,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleSmall),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text(AppLocalizations.of(context)!.selectMembersThLevel,
+                    Text(AppLocalizations.of(context)!.warOpponentSelectMembersThLevel,
                         style: Theme.of(context).textTheme.bodyMedium),
                     Wrap(
                       spacing: 4.0,
@@ -230,7 +230,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                       }).toList(),
                     ),
                     SizedBox(height: 10),
-                    Text(AppLocalizations.of(context)!.selectOpponentsThLevel,
+                    Text(AppLocalizations.of(context)!.warOpponentSelectOpponentsThLevel,
                         style: Theme.of(context).textTheme.bodyMedium),
                     Wrap(
                       spacing: 4.0,
@@ -256,7 +256,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                     ),
                     SizedBox(height: 10),
                     CheckboxListTile(
-                      title: Text(AppLocalizations.of(context)!.equalThLevel,
+                      title: Text(AppLocalizations.of(context)!.warOpponentEqualThLevel,
                           style: Theme.of(context).textTheme.bodyMedium),
                       value: equalThSelected,
                       onChanged: (bool? value) {
@@ -270,13 +270,13 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text(AppLocalizations.of(context)!.cancel),
+                  child: Text(AppLocalizations.of(context)!.generalCancel),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 TextButton(
-                  child: Text(AppLocalizations.of(context)!.apply),
+                  child: Text(AppLocalizations.of(context)!.generalApply),
                   onPressed: () {
                     final newAttackerThFilter = memberThSelection.entries
                         .where((entry) => entry.value)
@@ -352,7 +352,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
               tabs: [
                 Tab(text: AppLocalizations.of(context)?.warLog ?? 'War Log'),
                 Tab(
-                    text: AppLocalizations.of(context)?.statistics ??
+                    text: AppLocalizations.of(context)?.navigationStatistics ??
                         'Statistics'),
               ],
               children: [

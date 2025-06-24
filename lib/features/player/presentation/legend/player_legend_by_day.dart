@@ -98,7 +98,7 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
                     Expanded(
                       child: LegendOffenseDefenseCard(
                         title:
-                            AppLocalizations.of(context)?.attacks ?? "Attacks",
+                            AppLocalizations.of(context)?.warAttacksTitle ?? "Attacks",
                         list: legendDay.attacks,
                         context: context,
                         totalCount: legendDay.totalAttacks,
@@ -109,7 +109,7 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
                     ),
                     Expanded(
                       child: LegendOffenseDefenseCard(
-                        title: AppLocalizations.of(context)?.defenses ??
+                        title: AppLocalizations.of(context)?.warDefensesTitle ??
                             "Defenses",
                         list: legendDay.defenses,
                         context: context,
@@ -137,7 +137,7 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text(AppLocalizations.of(context)?.noDataAvailable ??
+                  child: Text(AppLocalizations.of(context)?.generalNoDataAvailable ??
                       'No data available'),
                 ),
               ),

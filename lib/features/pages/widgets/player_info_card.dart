@@ -34,8 +34,8 @@ class PlayerInfosCard extends StatelessWidget {
         : 'https://assets.clashk.ing/icons/Icon_HV_Out.png';
 
     String warPreference = selectedProfile.warPreference == 'in'
-        ? AppLocalizations.of(context)?.ready ?? 'Ready'
-        : AppLocalizations.of(context)?.unready ?? 'Unready';
+        ? AppLocalizations.of(context)?.warStatusReady ?? 'Ready'
+        : AppLocalizations.of(context)?.warStatusUnready ?? 'Unready';
 
     return GestureDetector(
       onTap: () {

@@ -70,7 +70,7 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
     final legends = widget.player.legendsBySeason;
     if (legends == null) {
       return Center(
-        child: Text(AppLocalizations.of(context)?.noDataAvailable ??
+        child: Text(AppLocalizations.of(context)?.generalNoDataAvailable ??
             'No data available'),
       );
     }
@@ -93,11 +93,11 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
                 unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
                 onTap: (_) => setState(() {}),
                 tabs: [
-                  Tab(text: AppLocalizations.of(context)?.byDay ?? "By Day"),
+                  Tab(text: AppLocalizations.of(context)?.statsByDay ?? "By Day"),
                   Tab(
-                      text: AppLocalizations.of(context)?.bySeason ??
+                      text: AppLocalizations.of(context)?.statsBySeason ??
                           "By Season"),
-                  Tab(text: AppLocalizations.of(context)?.history ?? "History"),
+                  Tab(text: AppLocalizations.of(context)?.generalHistory ?? "History"),
                 ],
                 children: [
                   LegendByDayTab(player: widget.player),

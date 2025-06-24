@@ -81,7 +81,7 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            Text(AppLocalizations.of(context)!.toDoList,
+                            Text(AppLocalizations.of(context)!.todoTitle,
                                 style:
                                     (Theme.of(context).textTheme.labelLarge)),
                             SizedBox(height: 12),
@@ -175,7 +175,7 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                               textAlign: TextAlign.center,
                             )
                           : Text(
-                              AppLocalizations.of(context)!.lastActive(
+                              AppLocalizations.of(context)!.playerLastActive(
                                   (player.getLastOnlineText(context))
                                       .toString()),
                               style: Theme.of(context).textTheme.labelLarge,
@@ -198,16 +198,16 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                                               .currentDay!.totalAttacks) >
                                       0
                                   ? AppLocalizations.of(context)!
-                                      .attacksLeftDescription(
+                                      .todoAttacksLeftDescription(
                                           (8 -
                                               player.currentLegendSeason!
                                                   .currentDay!.totalAttacks),
                                           AppLocalizations.of(context)!
-                                              .legendLeague)
+                                              .legendsTitle)
                                   : AppLocalizations.of(context)!
-                                      .noAttacksLeftDescription(
+                                      .todoNoAttacksLeftDescription(
                                           AppLocalizations.of(context)!
-                                              .legendLeague),
+                                              .legendsTitle),
                               edgeColor: currentDay?.totalAttacks == 8
                                   ? Colors.green
                                   : Colors.red,
@@ -226,17 +226,17 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                                                   player.tag, player.clanTag)) >
                                       0
                                   ? AppLocalizations.of(context)!
-                                      .attacksLeftDescription(
+                                      .todoAttacksLeftDescription(
                                           ((player.warData!.attacksPerMember ??
                                                   0) -
                                               player.warData!
                                                   .getAttacksDoneByPlayer(
                                                       player.tag,
                                                       player.clanTag)),
-                                          AppLocalizations.of(context)!.war)
+                                          AppLocalizations.of(context)!.warTitle)
                                   : AppLocalizations.of(context)!
-                                      .noAttacksLeftDescription(
-                                          AppLocalizations.of(context)!.war),
+                                      .todoNoAttacksLeftDescription(
+                                          AppLocalizations.of(context)!.warTitle),
                               edgeColor: player.warData!.getAttacksDoneByPlayer(
                                           player.tag, player.clanTag) ==
                                       player.warData!.attacksPerMember
@@ -258,17 +258,17 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                                                   player.tag, player.clanTag) ??
                                               0) >
                                       0
-                                  ? AppLocalizations.of(context)!.attacksLeftDescription(
+                                  ? AppLocalizations.of(context)!.todoAttacksLeftDescription(
                                       ((player.clan?.warCwl!.warInfo.attacksPerMember ?? 0) -
                                           (player.clan?.warCwl!.warInfo
                                                   .getAttacksDoneByPlayer(
                                                       player.tag,
                                                       player.clanTag) ??
                                               0)),
-                                      AppLocalizations.of(context)!.war)
+                                      AppLocalizations.of(context)!.warTitle)
                                   : AppLocalizations.of(context)!
-                                      .noAttacksLeftDescription(
-                                          AppLocalizations.of(context)!.war),
+                                      .todoNoAttacksLeftDescription(
+                                          AppLocalizations.of(context)!.warTitle),
                               edgeColor: player.clan?.warCwl!.warInfo
                                           .getAttacksDoneByPlayer(
                                               player.tag, player.clanTag) ==
@@ -290,17 +290,17 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                                       .toString())),
                               description: player.clanGamesRatio != 1
                                   ? AppLocalizations.of(context)!
-                                      .pointsLeftDescription(
+                                      .todoPointsLeftDescription(
                                           player.clanGamesPointLeft,
                                           AppLocalizations.of(context)!
-                                              .pointsLeftDescription(
+                                              .todoPointsLeftDescription(
                                                   player.clanGamesPointLeft,
                                                   AppLocalizations.of(context)!
-                                                      .clanGames))
+                                                      .gameClanGames))
                                   : AppLocalizations.of(context)!
-                                      .pointsLeftDescriptionNoPoints(
+                                      .todoPointsLeftDescriptionNoPoints(
                                           AppLocalizations.of(context)!
-                                              .clanGames),
+                                              .gameClanGames),
                               edgeColor: player.clanGamesRatio == 1
                                   ? Colors.green
                                   : Colors.red,
@@ -311,12 +311,12 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                               labelPadding: 2.0,
                               description: player.raids?.attackLimit == 0
                                   ? AppLocalizations.of(context)!
-                                      .noAttacksLeftDescription(
-                                          AppLocalizations.of(context)!.raids)
+                                      .todoNoAttacksLeftDescription(
+                                          AppLocalizations.of(context)!.raidsTitle)
                                   : AppLocalizations.of(context)!
-                                      .attacksLeftDescription(
+                                      .todoAttacksLeftDescription(
                                           player.raids?.attackLimit ?? 0,
-                                          AppLocalizations.of(context)!.raids),
+                                          AppLocalizations.of(context)!.raidsTitle),
                               label:
                                   '${player.raids?.attackDone}/${player.raids?.attackLimit}',
                               edgeColor: (player.raids?.attackDone == 5 &&
@@ -346,15 +346,15 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                                       player.currentSeasonPoints.toString())),
                               description: player.seasonPassRatio != 1
                                   ? AppLocalizations.of(context)!
-                                      .pointsLeftDescription(
+                                      .todoPointsLeftDescription(
                                           player.seasonPassPointLeft,
                                           AppLocalizations.of(context)!
-                                              .pointsLeftDescription(
+                                              .todoPointsLeftDescription(
                                                   player.seasonPassPointLeft,
                                                   AppLocalizations.of(context)!
-                                                      .seasonPass))
-                                  : AppLocalizations.of(context)!.pointsLeftDescriptionNoPoints(
-                                      AppLocalizations.of(context)!.seasonPass),
+                                                      .gameSeasonPass))
+                                  : AppLocalizations.of(context)!.todoPointsLeftDescriptionNoPoints(
+                                      AppLocalizations.of(context)!.gameSeasonPass),
                               edgeColor: player.seasonPassRatio == 1
                                   ? Colors.green
                                   : Colors.red),

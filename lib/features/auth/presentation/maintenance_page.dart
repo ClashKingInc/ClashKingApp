@@ -18,7 +18,7 @@ class MaintenanceScreen extends StatelessWidget {
               imageUrl: ImageAssets.sleepingApprenticeBuilder, width: 250),
           const SizedBox(height: 20),
           Text(
-            AppLocalizations.of(context)!.maintenance,
+            AppLocalizations.of(context)!.maintenanceTitle,
             style: Theme.of(context)
                 .textTheme
                 .headlineMedium
@@ -40,7 +40,7 @@ class MaintenanceScreen extends StatelessWidget {
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 const Icon(Icons.refresh, size: 20),
                 const SizedBox(width: 8),
-                Text(AppLocalizations.of(context)!.tryAgain,
+                Text(AppLocalizations.of(context)!.generalTryAgain,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Theme.of(context).colorScheme.primary)),
               ])),
