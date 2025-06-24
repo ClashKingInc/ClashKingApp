@@ -490,7 +490,7 @@
       }
     }
   },
-  "legendsTitle": "Efsane Lig",
+  "legendsTitle": "Veri yanlış mı?",
   "legendsNotInLeague": "Efsane ligde değil",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "Güne {trophies} kupayla başladın.",
@@ -723,7 +723,7 @@
   "warLog": "Savaş Günlüğü",
   "warLogPublic": "Halka Açık Savaş Günlüğü",
   "warLogPrivate": "Özel Savaş Günlüğü",
-  "warLogClosed": "{clan}'ın savaş günlüğü kapalı.",
+  "warLogClosed": "Savaş günlüğü kapatıldı.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
