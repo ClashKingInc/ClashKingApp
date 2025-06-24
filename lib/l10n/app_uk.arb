@@ -490,7 +490,7 @@
       }
     }
   },
-  "legendsTitle": "Легендарна Ліга",
+  "legendsTitle": "Некоректні дані?",
   "legendsNotInLeague": "Не в Легендарній Лізі",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "Ви розпочали день з {trophies} трофеїв.",
@@ -723,7 +723,7 @@
   "warLog": "Журнал війн",
   "warLogPublic": "Відкритий журнал війн",
   "warLogPrivate": "Закритий журнал війн",
-  "warLogClosed": "Журнал війн {clan} закритий.",
+  "warLogClosed": "Журнал війн закритий.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
