@@ -490,7 +490,7 @@
       }
     }
   },
-  "legendsTitle": "Liga Legendarna",
+  "legendsTitle": "Nieprecyzyjne dane?",
   "legendsNotInLeague": "Nie w Lidze Legendarnej",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "Zacząłeś dzień z {trophies} pucharów.",
@@ -723,7 +723,7 @@
   "warLog": "Dziennik wojenny",
   "warLogPublic": "Publiczny Dziennik Wojny",
   "warLogPrivate": "Prywatny dziennik Wojny",
-  "warLogClosed": "Dziennik wojenny {clan} jest zamknięty.",
+  "warLogClosed": "Dziennik wojenny jest zamknięty.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
