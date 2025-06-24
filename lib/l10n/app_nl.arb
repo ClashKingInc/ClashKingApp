@@ -490,7 +490,7 @@
       }
     }
   },
-  "legendsTitle": "Legendarische Divisie",
+  "legendsTitle": "Onjuiste gegevens?",
   "legendsNotInLeague": "Niet in de Legendarische Divisie",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "Je bent de dag begonnen met {trophies} trofeeën.",
@@ -723,7 +723,7 @@
   "warLog": "Oorlogs logboek",
   "warLogPublic": "Openbaar Oorlogslogboek",
   "warLogPrivate": "Privé Oorlogslogboek",
-  "warLogClosed": "Het oorlogs logboek van {clan} is gesloten.",
+  "warLogClosed": "Oorlogs logboek gesloten.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
