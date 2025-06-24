@@ -408,7 +408,7 @@ class AppLocalizationsHu extends AppLocalizations {
       'If the issue persists, check our Discord Server to see if we\'re aware of it.';
 
   @override
-  String get errorLoadingVersion => 'Error loading version';
+  String get errorLoadingVersion => 'Hiba verzió betöltése közben';
 
   @override
   String get errorConnectionGeneral =>
@@ -1454,7 +1454,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get raidsDistrictsDestroyed => 'Districts destroyed';
 
   @override
-  String get raidsCompleted => 'Raids completed';
+  String get raidsCompleted => 'Sikeres portyázások';
 
   @override
   String get searchTitle => 'Search';
@@ -1506,17 +1506,17 @@ class AppLocalizationsHu extends AppLocalizations {
   String get navigationWars => 'Wars';
 
   @override
-  String get versionDevice => 'Version & Device';
+  String get versionDevice => 'Verzió & Eszköz';
 
   @override
-  String get betaFeature => 'Beta Feature';
+  String get betaFeature => 'Béta Funkció';
 
   @override
   String get betaLabel => 'BETA';
 
   @override
   String get betaDescription =>
-      'This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.';
+      'Ez a funkció jelenleg báta fázisban van, lehetnek benne hibák vagy lehet nincs befejezve. Aktívan dolgozunk a javításokon és szívesen fogadunk megjegyzéseket. Kérjük oszd meg az ötleteided vagy jelentsd a hibákat a Discord szerverünkön hogy segíts minket.';
 
   @override
   String get settingsTitle => 'Settings';
@@ -1549,31 +1549,32 @@ class AppLocalizationsHu extends AppLocalizations {
       'Miért nem pontos néha az adat, vagy miért hiányos?';
 
   @override
-  String get faqClanNotTracked => 'Clan not tracked';
+  String get faqClanNotTracked => 'Klán nincs követve';
 
   @override
   String get faqClanNotTrackedAnswer =>
-      'ClashKing can only retrieve this info if the clan is tracked. If your clan isn\'t tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.';
+      'ClashKing csak úgy éri el az információt, ha a klán követve van. Ha a klán nincs követve, hívd meg a ClashKing bot-ot a Discord szerveredre es használd az /addclan parancsot. Reméljük hamarosan ez a funkció az alkalmazásban is jelen lesz.';
 
   @override
-  String get faqTrackingDown => 'Tracking down';
+  String get faqTrackingDown => 'Lekövetés';
 
   @override
   String get faqTrackingDownAnswer =>
-      'The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.';
+      'A követés néha megállhat, emiatt lehet hiányos az adat. Dolgozunk azon, hogy ez javítva legyen.';
 
   @override
-  String get faqApiLimitation => 'Clash of Clans API limitation';
+  String get faqApiLimitation => 'Clash of Clans API korlát';
 
   @override
   String get faqApiLimitationAnswer =>
-      'Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don\'t have any information on your building levels.';
+      'Az adat egy része a Clash of Clans API-tól van, és ennek vannak korlátjai. Például a Legends League követés, a támadással és védéssel járó kupák összekeverednek. És emiatt nincs információnk az épületek szintjéről.';
 
   @override
   String get faqSupportWork => 'Hogyan tudom támogatni a munkádat?';
 
   @override
-  String get faqSupportWorkAnswer => 'There are several ways to support us:';
+  String get faqSupportWorkAnswer =>
+      'Számos mód van arra, hogy támogass minket:';
 
   @override
   String get faqUseCodeClashKing => 'Használd a \"ClashKing\" alkotói kódot';
@@ -1585,18 +1586,18 @@ class AppLocalizationsHu extends AppLocalizations {
   String get faqShareTheApp => 'Oszd meg az alkalmazást a barátaiddal';
 
   @override
-  String get faqRateTheApp => 'Rate the app in the store';
+  String get faqRateTheApp => 'Értékelj minket az áruházban';
 
   @override
   String get faqHelpUsTranslate => 'Segíts lefordítani az appot';
 
   @override
   String get faqHowToInviteTheBot =>
-      'How can I invite your bot to my Discord Server?';
+      'Hogyan tudom a ClashKinget Discordon meghívni?';
 
   @override
   String get faqHowToInviteTheBotAnswer =>
-      'You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.';
+      'Meg tudod hívni a bot-ot a lent lévő gomb megnyomásával. Ehhez \"Manage Server\" joghoz van szükséged.';
 
   @override
   String get faqInviteTheBot => 'Hívd meg a ClashKing bot-ot';
@@ -1607,7 +1608,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.';
+      'Csatlakozhatsz a Discord szerverünkhöz és kérhetsz segítset, vagy küldhetsz emailt a devs@clashkingbot.com címre.\nKérjük csak angolul vagy franciául írj.';
 
   @override
   String get faqSendEmail => 'Küldjön egy e-mailt';
@@ -1617,7 +1618,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get faqCannotOpenMailClient =>
-      'For some reasons we can\'t open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.';
+      'Valamijen oknál fogva nem tudtuk a levelező kliensedet kinyitni. Vágólapra másoltuk a címet. Irhatsz egy emailt és bemásolhatod a címet.';
 
   @override
   String get translationHelpUsTranslate => 'Help us translate';

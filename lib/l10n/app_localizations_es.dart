@@ -1647,6 +1647,13 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   AppLocalizationsEsEs() : super('es_ES');
 
   @override
+  String get errorLoadingVersion => 'Error al cargar la versión';
+
+  @override
+  String get playerNotTracked =>
+      'This player is not tracked. Data may be inaccurate.';
+
+  @override
   String playerClanDescription(String clan, String tag) {
     return 'Tu clan es \"$clan\" ($tag).';
   }
@@ -1674,7 +1681,7 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String playerTownHallLevelDescription(int level) {
-    return 'Tu nivel de ayuntamiento es $level.';
+    return 'Your Town Hall level is $level.';
   }
 
   @override
@@ -1683,10 +1690,13 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   }
 
   @override
-  String get legendsTitle => 'Inacurate Data?';
+  String get legendsTitle => '¿Datos inexactos?';
 
   @override
   String get warFrequency => 'Frecuencia de guerra';
+
+  @override
+  String get warParticipation => 'Participación en guerra';
 
   @override
   String get warLeague => 'Guerra/Liga';
@@ -1710,32 +1720,32 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String warHistoryWinsDescription(int wins, String percent) {
-    return 'Hemos seguido los datos de $wins victorias en guerra de tu clan.';
+    return 'Your clan won $wins wars ($percent%) out of the last 50 wars.';
   }
 
   @override
   String warHistoryLossesDescription(int losses, String percent) {
-    return 'Hemos seguido los datos de $losses derrotas en guerra de tu clan.';
+    return 'Your clan lost $losses wars ($percent%) out of the last 50 wars.';
   }
 
   @override
   String warHistoryDrawsDescription(int draws, String percent) {
-    return 'Hemos seguido los datos de $draws empates en guerra de tu clan.';
+    return 'Your clan had $draws draws ($percent%) out of the last 50 wars.';
   }
 
   @override
   String warHistoryAverageMembersDescription(int members) {
-    return 'Tu clan tiene un promedio de $members miembros participando por guerra que hemos seguido.';
+    return 'Your clan has an average of $members members participating out of the last 50 wars.';
   }
 
   @override
   String warHistoryAverageWarStarsDescription(double stars, String percent) {
-    return 'Tu clan tiene un promedio de $stars estrellas por ataque al final de las guerras que hemos seguido.';
+    return 'Your clan had an average of $stars stars per war from the last 50 wars. It represents $percent of the total stars.';
   }
 
   @override
   String warHistoryAverageHitRateDescription(String percent) {
-    return 'Tu clan tiene un promedio de $percent de destrucción por ataque al final de las guerras que hemos seguido.';
+    return 'Your clan had an average of $percent% destruction rate from the last 50 wars.';
   }
 
   @override
@@ -1759,11 +1769,17 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   }
 
   @override
-  String get betaFeature => 'Beta Feature';
+  String get raidsCompleted => 'Raids completed';
+
+  @override
+  String get versionDevice => 'Versión y dispositivo';
+
+  @override
+  String get betaFeature => 'Función beta';
 
   @override
   String get betaDescription =>
-      'This feature is in beta and may contain some bugs and be incomplete. It will be improved in the upcoming updates. Feel free to propose ideas and report bugs from our Discord server to help us improve it.';
+      'This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.';
 
   @override
   String get faqSubtitle => 'Preguntas frecuentes';
@@ -1845,4 +1861,8 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get faqJoinDiscord => 'Unirse al Servidor de Discord';
+
+  @override
+  String get faqCannotOpenMailClient =>
+      'For some reasons we can\'t open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.';
 }

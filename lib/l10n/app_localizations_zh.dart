@@ -1003,16 +1003,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get warFrequency => '对战频率';
 
   @override
-  String get warParticipation => 'War Participation';
+  String get warParticipation => '参战';
 
   @override
-  String get warLeague => 'War/League';
+  String get warLeague => '部落战/联赛';
 
   @override
-  String get warHistory => 'War History';
+  String get warHistory => '部落对战历史';
 
   @override
-  String get warLog => 'War Log';
+  String get warLog => '对战日志';
 
   @override
   String get warLogPublic => 'Public War Log';
@@ -1022,11 +1022,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String warLogClosed(String clan) {
-    return 'War log closed.';
+    return '对战日志已关闭。';
   }
 
   @override
-  String get warStats => 'War Stats';
+  String get warStats => '部落战统计';
 
   @override
   String get warOngoing => 'Ongoing war';
@@ -1048,7 +1048,7 @@ class AppLocalizationsZh extends AppLocalizations {
       'Contact a leader or a co-leader to open the war log.';
 
   @override
-  String get warEnded => 'War ended';
+  String get warEnded => '部落战已结束';
 
   @override
   String get warPreparation => 'Preparation';
@@ -1211,32 +1211,32 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String warHistoryWinsDescription(int wins, String percent) {
-    return 'Your clan won $wins wars ($percent%) out of the last 50 wars.';
+    return '在过去50场部落战中，您的部落赢得$wins场($percent%)';
   }
 
   @override
   String warHistoryLossesDescription(int losses, String percent) {
-    return 'Your clan lost $losses wars ($percent%) out of the last 50 wars.';
+    return '在过去的50 场部落战中，您的部落失败$losses场($percent%)';
   }
 
   @override
   String warHistoryDrawsDescription(int draws, String percent) {
-    return 'Your clan had $draws draws ($percent%) out of the last 50 wars.';
+    return '在过去50场部落战中，您的部落平局$draws场($percent%)';
   }
 
   @override
   String warHistoryAverageMembersDescription(int members) {
-    return 'Your clan has an average of $members members participating out of the last 50 wars.';
+    return '在过去50场部落战中，您的部落平均有$members人参战';
   }
 
   @override
   String warHistoryAverageWarStarsDescription(double stars, String percent) {
-    return 'Your clan had an average of $stars stars per war from the last 50 wars. It represents $percent of the total stars.';
+    return '在过去 50 场战争中，您的部落平均每场战争获得 $stars 颗星星，占比 $percent';
   }
 
   @override
   String warHistoryAverageHitRateDescription(String percent) {
-    return 'Your clan had an average of $percent% destruction rate from the last 50 wars.';
+    return '您的部落在过去 50 场战争中的平均摧毁率为 $percent%';
   }
 
   @override
@@ -1330,22 +1330,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String cwlCurrentRound(int round) {
-    return 'It\'s currently round $round.';
+    return '当前是第 $round 轮。';
   }
 
   @override
   String cwlRank(int rank) {
-    return 'Your clan is currently ranked $rank.';
+    return '你的部落当前排名第 $rank。';
   }
 
   @override
   String cwlStars(int stars) {
-    return 'Your clan has a total of $stars stars.';
+    return '你的部落共获得 $stars 颗星。';
   }
 
   @override
   String cwlDestructionPercentage(String percent) {
-    return 'Your clan has a total destruction rate of $percent%.';
+    return '你的部落的总摧毁率为 $percent%。';
   }
 
   @override
@@ -1453,7 +1453,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get raidsDistrictsDestroyed => 'Districts destroyed';
 
   @override
-  String get raidsCompleted => 'Raids completed';
+  String get raidsCompleted => '已完成突袭';
 
   @override
   String get searchTitle => 'Search';

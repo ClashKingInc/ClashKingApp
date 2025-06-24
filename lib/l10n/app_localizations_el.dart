@@ -441,7 +441,7 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get playerNotTracked =>
-      'This player is not tracked. Data may be inaccurate.';
+      'Αυτός ο παίχτης δεν καταγράφεται. Τα δεδομένα ενδέχεται να είναι ανακριβή.';
 
   @override
   String playerClanDescription(String clan, String tag) {
@@ -745,7 +745,7 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get legendsTitle => 'Inaccurate data?';
+  String get legendsTitle => 'Ανακριβή δεδομένα;';
 
   @override
   String get legendsNotInLeague => 'Not in Legend League';
@@ -1509,14 +1509,14 @@ class AppLocalizationsEl extends AppLocalizations {
   String get versionDevice => 'Εκδοχή & Συσκευή';
 
   @override
-  String get betaFeature => 'Χαρακτηριστικό εκδοχής Beta';
+  String get betaFeature => 'Χαρακτηριστικό εκδοχής Βήτα';
 
   @override
   String get betaLabel => 'BETA';
 
   @override
   String get betaDescription =>
-      'Αυτό το χαρακτηριστικό βρίσκεται ακόμη στην εκδοχή beta, οπότε μπορεί να αντιμετωπίσετε μερικά σφάλματα ή να μην είναι ολοκληρωμένο. Δουλεύουμε ενεργά για τη βελτίωση της εφαρμογής και σας προσκαλούμε, να μοιραστείτε τις ιδέες σας και να αναφέρετε οποιαδήποτε σφάλματα αντιμετωπίζετε, στην ομάδα μας στο Discord.';
+      'Αυτό το χαρακτηριστικό βρίσκεται ακόμη στην εκδοχή βήτα, οπότε μπορεί να αντιμετωπίσετε μερικά σφάλματα ή να μην είναι ολοκληρωμένο. Δουλεύουμε ενεργά για τη βελτίωση της εφαρμογής και σας προσκαλούμε, να μοιραστείτε τις ιδέες σας και να αναφέρετε οποιαδήποτε σφάλματα αντιμετωπίζετε, στην ομάδα μας στο Discord.';
 
   @override
   String get settingsTitle => 'Settings';
@@ -1548,7 +1548,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Γιατί τα δεδομένα είναι μερικές φορές ανακριβή ή ελλιπή;';
 
   @override
-  String get faqClanNotTracked => 'Δεν εμφανίζει την ομάδα';
+  String get faqClanNotTracked => 'Η ομάδα δεν καταγράφεται';
 
   @override
   String get faqClanNotTrackedAnswer =>
@@ -1566,7 +1566,7 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get faqApiLimitationAnswer =>
-      'Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was one attack. It is also why we do not have any information on your buildings levels.';
+      'Μερικά δεδομένα που παρέχει το Clash of Clans και το «API» τους έχουνε μερικούς περιορισμούς. Αυτή είναι η περίπτωση για το επίπεδο θρύλου και την καταγραφή του, όπου μερικές φορές αθροίζει το κέρδος τρόπαιων με την απώλεια σαν να ήταν μία επίθεση. Αυτός είναι επίσης ο λόγος για τον οποίο δε διαθέτουμε πληροφορίες στα επίπεδα των κτηρίων σας.';
 
   @override
   String get faqSupportWork => 'Πώς μπορώ να υποστηρίξω το έργο σας;';

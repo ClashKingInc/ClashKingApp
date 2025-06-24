@@ -408,7 +408,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'If the issue persists, check our Discord Server to see if we\'re aware of it.';
 
   @override
-  String get errorLoadingVersion => 'Error loading version';
+  String get errorLoadingVersion => 'Sürüm yüklenirken hata oluştu';
 
   @override
   String get errorConnectionGeneral =>
@@ -441,42 +441,42 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get playerNotTracked =>
-      'This player is not tracked. Data may be inaccurate.';
+      'Bu oyuncu takip edilmiyor. Veriler yanlış olabilir.';
 
   @override
   String playerClanDescription(String clan, String tag) {
-    return 'Your clan is \"$clan\" ($tag).';
+    return 'Klanınız \"$clan\" ($tag)';
   }
 
   @override
   String playerRatioDescription(
       String ratio, String donations, String received) {
-    return 'Your donation ratio is $ratio. You have donated $donations troops and received $received troops.';
+    return 'Bağış oranınız $ratio. $donations birlik bağışladınız ve $received birlik aldınız.';
   }
 
   @override
   String playerWarPreferenceDescription(String preference) {
-    return 'Your war preference is \"$preference\".';
+    return 'Savaş tercihiniz $preference.';
   }
 
   @override
   String playerWarStarsDescription(int stars) {
-    return 'You have $stars war stars.';
+    return '$stars savaş yıldızınız var.';
   }
 
   @override
   String playerTrophiesDescription(int trophies, String league) {
-    return 'You have $trophies trophies. You\'re currently in $league.';
+    return '$trophies kupanız var. Şu anki liginiz $league.';
   }
 
   @override
   String playerTownHallLevelDescription(int level) {
-    return 'Your Town Hall level is $level.';
+    return 'Belediye Binası seviyeniz $level.';
   }
 
   @override
   String playerBuilderBaseDescription(int level, int trophies) {
-    return 'Your Builder Hall level is $level and you have $trophies trophies.';
+    return 'İnşaatçı Binası seviyeniz $level ve $trophies kupanız var.';
   }
 
   @override
@@ -745,7 +745,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get legendsTitle => 'Inaccurate data?';
+  String get legendsTitle => 'Veri yanlış mı?';
 
   @override
   String get legendsNotInLeague => 'Not in Legend League';
@@ -1001,19 +1001,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get warTitle => 'War';
 
   @override
-  String get warFrequency => 'War frequency';
+  String get warFrequency => 'Savaş sıklığı';
 
   @override
-  String get warParticipation => 'War Participation';
+  String get warParticipation => 'Savaş Katılımı';
 
   @override
-  String get warLeague => 'War/League';
+  String get warLeague => 'Savaş/Lig';
 
   @override
-  String get warHistory => 'War History';
+  String get warHistory => 'Savaş Geçmişi';
 
   @override
-  String get warLog => 'War Log';
+  String get warLog => 'Savaş Günlüğü';
 
   @override
   String get warLogPublic => 'Public War Log';
@@ -1023,11 +1023,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String warLogClosed(String clan) {
-    return 'War log closed.';
+    return 'Savaş günlüğü kapatıldı.';
   }
 
   @override
-  String get warStats => 'War Stats';
+  String get warStats => 'Savaş İstatistikleri';
 
   @override
   String get warOngoing => 'Ongoing war';
@@ -1049,7 +1049,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Contact a leader or a co-leader to open the war log.';
 
   @override
-  String get warEnded => 'War ended';
+  String get warEnded => 'Savaş sonu';
 
   @override
   String get warPreparation => 'Preparation';
@@ -1212,32 +1212,32 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String warHistoryWinsDescription(int wins, String percent) {
-    return 'Your clan won $wins wars ($percent%) out of the last 50 wars.';
+    return 'Klanınız son 50 savaşta $wins savaş (%$percent) kazandı.';
   }
 
   @override
   String warHistoryLossesDescription(int losses, String percent) {
-    return 'Your clan lost $losses wars ($percent%) out of the last 50 wars.';
+    return 'Klanınız son 50 savaşta $losses savaş (%$percent) kaybetti.';
   }
 
   @override
   String warHistoryDrawsDescription(int draws, String percent) {
-    return 'Your clan had $draws draws ($percent%) out of the last 50 wars.';
+    return 'Klanınız son 50 savaşta $draws savaş (%$percent) berabere kaldı.';
   }
 
   @override
   String warHistoryAverageMembersDescription(int members) {
-    return 'Your clan has an average of $members members participating out of the last 50 wars.';
+    return 'Klanınızda son 50 savaşta ortalama $members üye yer aldı.';
   }
 
   @override
   String warHistoryAverageWarStarsDescription(double stars, String percent) {
-    return 'Your clan had an average of $stars stars per war from the last 50 wars. It represents $percent of the total stars.';
+    return 'Klanınız son 50 savaşta savaş başına ortalama $stars yıldıza sahipti. Toplam yıldızların $percent\'ini temsil ediyor.';
   }
 
   @override
   String warHistoryAverageHitRateDescription(String percent) {
-    return 'Your clan had an average of $percent% destruction rate from the last 50 wars.';
+    return 'Klanınızın son 50 savaşta ortalama %$percent yıkım oranı vardı.';
   }
 
   @override
@@ -1331,22 +1331,22 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String cwlCurrentRound(int round) {
-    return 'It\'s currently round $round.';
+    return 'Şu anda tur $round.';
   }
 
   @override
   String cwlRank(int rank) {
-    return 'Your clan is currently ranked $rank.';
+    return 'Klanınız şu anda $rank sıralamasında.';
   }
 
   @override
   String cwlStars(int stars) {
-    return 'Your clan has a total of $stars stars.';
+    return 'Klanınızın toplam $stars yıldızı var.';
   }
 
   @override
   String cwlDestructionPercentage(String percent) {
-    return 'Your clan has a total destruction rate of $percent%.';
+    return 'Klanınızın toplam yıkım oranı %$percent\'dir.';
   }
 
   @override
@@ -1454,7 +1454,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get raidsDistrictsDestroyed => 'Districts destroyed';
 
   @override
-  String get raidsCompleted => 'Raids completed';
+  String get raidsCompleted => 'Tamamlanan baskınlar';
 
   @override
   String get searchTitle => 'Search';
@@ -1506,17 +1506,17 @@ class AppLocalizationsTr extends AppLocalizations {
   String get navigationWars => 'Wars';
 
   @override
-  String get versionDevice => 'Version & Device';
+  String get versionDevice => 'Sürüm & Cihaz';
 
   @override
-  String get betaFeature => 'Beta Feature';
+  String get betaFeature => 'Beta Özellikleri';
 
   @override
   String get betaLabel => 'BETA';
 
   @override
   String get betaDescription =>
-      'This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.';
+      'Bu özellik şu anda beta aşamasındadır, bazı hatalar içerebilir veya eksik olabilir. İyileştirmeler üzerinde aktif olarak çalışıyoruz ve geri bildirimlerinizi bekliyoruz. Lütfen fikirlerinizi paylaşın ve Discord Sunucumuzdaki sorunları bildirin, böylece daha iyi hale getirmemize yardımcı olun.';
 
   @override
   String get settingsTitle => 'Settings';
@@ -1534,89 +1534,89 @@ class AppLocalizationsTr extends AppLocalizations {
   String get faqTitle => 'FAQ';
 
   @override
-  String get faqSubtitle => 'Frequently Asked Questions';
+  String get faqSubtitle => 'Sıkça Sorulan Sorular';
 
   @override
-  String get faqIsThisFromSupercell => 'Is this App from Supercell?';
+  String get faqIsThisFromSupercell => 'Bu uygulama Supercell\'e mi ait?';
 
   @override
   String get faqFanContentPolicy =>
-      'This material is unofficial and is not endorsed by Supercell. For more information see Supercell\'s Fan Content Policy: www.supercell.com/fan-content-policy';
+      'Bu materyal resmi değildir ve Supercell tarafından desteklenmemektedir. Daha fazla bilgi için Supercell\'in Hayran İçerik Politikasına bakın: www.supercell.com/fan-content-policy.';
 
   @override
   String get faqWhyNotAccurate =>
-      'Why is the data sometimes inaccurate or missing?';
+      'Veriler bazen neden yanlış veya eksik oluyor?';
 
   @override
-  String get faqClanNotTracked => 'Clan not tracked';
+  String get faqClanNotTracked => 'Klan izlenmiyor';
 
   @override
   String get faqClanNotTrackedAnswer =>
-      'ClashKing can only retrieve this info if the clan is tracked. If your clan isn\'t tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.';
+      'ClashKing bu bilgiyi yalnızca klan izleniyorsa alabilir. Klanınız izlenmemişse lütfen ClashKing Bot\'unu Discord Sunucunuza davet edin ve /addclan komutunu kullanın. Bu özelliği yakında uygulamada kullanılabilir hale getirmek için çalışıyoruz.';
 
   @override
-  String get faqTrackingDown => 'Tracking down';
+  String get faqTrackingDown => 'Takip etmek';
 
   @override
   String get faqTrackingDownAnswer =>
-      'The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.';
+      'İzleme belirli bir süre boyunca çalışmayı durdurabilir. Bu nedenle bazen verilerinizde boşluklar olabilir. Bunu iyileştirmek için çalışıyoruz.';
 
   @override
-  String get faqApiLimitation => 'Clash of Clans API limitation';
+  String get faqApiLimitation => 'Clash of Clans API sınırlaması';
 
   @override
   String get faqApiLimitationAnswer =>
-      'Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don\'t have any information on your building levels.';
+      'Bazı veriler Clash of Clans tarafından sağlanır ve API\'lerinin bazı sınırlamaları vardır. Bu, efsanelerin takibi için geçerlidir, bazen tek bir saldırıymış gibi kupa kazanımını ve kaybını üst üste koyar. Bu ayrıca bina seviyeleriniz hakkında hiçbir bilgiye sahip olmamamızın nedenidir.';
 
   @override
-  String get faqSupportWork => 'How can I support your work?';
+  String get faqSupportWork => 'Çalışmalarınıza nasıl destek olabilirim?';
 
   @override
-  String get faqSupportWorkAnswer => 'There are several ways to support us:';
+  String get faqSupportWorkAnswer => 'Bizi desteklemenin birkaç yolu var:';
 
   @override
-  String get faqUseCodeClashKing => 'Use code \"ClashKing\"';
+  String get faqUseCodeClashKing => '\"ClashKing\" kodunu kullanın';
 
   @override
-  String get faqSupportUsOnPatreon => 'Support us on Patreon';
+  String get faqSupportUsOnPatreon => 'Bizi Patreon’da Destekleyin';
 
   @override
-  String get faqShareTheApp => 'Share the app with your friends';
+  String get faqShareTheApp => 'Uygulamayı arkadaşlarınızla paylaşın';
 
   @override
-  String get faqRateTheApp => 'Rate the app in the store';
+  String get faqRateTheApp => 'Uygulamayı mağazada derecelendirin';
 
   @override
-  String get faqHelpUsTranslate => 'Help us translate the app';
+  String get faqHelpUsTranslate => 'Uygulamayı çevirmemize yardım edin';
 
   @override
   String get faqHowToInviteTheBot =>
-      'How can I invite your bot to my Discord Server?';
+      'Botunuzu Discord Sunucuma nasıl davet edebilirim?';
 
   @override
   String get faqHowToInviteTheBotAnswer =>
-      'You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.';
+      'Aşağıdaki butona tıklayarak botumuzu sunucunuza davet edebilirsiniz. Botu eklemek için \"Sunucuyu Yönet\" iznine ihtiyacınız olacak.';
 
   @override
-  String get faqInviteTheBot => 'Invite ClashKing Bot';
+  String get faqInviteTheBot => 'ClashKing Botunu Davet Et';
 
   @override
   String get faqNeedHelp =>
-      'I need help or I would like to make a suggestion. How can I contact you?';
+      'Yardıma ihtiyacım var veya bir öneride bulunmak istiyorum. Sizinle nasıl iletişime geçebilirim?';
 
   @override
   String get faqNeedHelpAnswer =>
-      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.';
+      'Yardım istemek veya geri bildirim sağlamak için Discord Sunucumuza katılabilir veya devs@clashkingbot.com adresine e-posta gönderebilirsiniz. Lütfen yalnızca İngilizce veya Fransızca yazın.';
 
   @override
-  String get faqSendEmail => 'Send an email';
+  String get faqSendEmail => 'E-posta gönderin';
 
   @override
-  String get faqJoinDiscord => 'Join our Discord Server';
+  String get faqJoinDiscord => 'Discord Sunucumuza Katılın';
 
   @override
   String get faqCannotOpenMailClient =>
-      'For some reasons we can\'t open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.';
+      'Bazı nedenlerden dolayı posta istemcinizi açamadık. E-posta adresini sizin için kopyaladık. Bir e-posta yazıp adresi alıcı alanına yapıştırabilirsiniz.';
 
   @override
   String get translationHelpUsTranslate => 'Help us translate';

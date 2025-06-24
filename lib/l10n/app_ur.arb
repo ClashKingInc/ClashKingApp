@@ -163,18 +163,12 @@
             }
         }
     },
-    "playerRatioDescription": "آپ کے عطیہ کا تناسب {ratio} ہے۔ آپ نے {عطیات} دستے عطیہ کیے ہیں اور {received} دستے حاصل کیے ہیں.",
+    "playerRatioDescription": "آپ کے عطیہ کا تناسب {ratio} ہے۔ آپ نے {donations} دستے عطیہ کیے ہیں اور {received} دستے حاصل کیے ہیں.",
     "@playerRatioDescription": {
         "placeholders": {
-            "ratio": {
-                "type": "String"
-            },
-            "donations": {
-                "type": "String"
-            },
-            "received": {
-                "type": "String"
-            }
+            "ratio": { "type": "String" },
+            "donations": { "type": "String" },
+            "received": { "type": "String" }
         }
     },
     "playerWarPreferenceDescription": "آپ کی جنگ کی ترجیح \"{preference}\" ہے.",

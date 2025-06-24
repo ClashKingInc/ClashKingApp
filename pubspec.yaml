@@ -77,6 +77,8 @@ dependencies:
   webview_flutter: ^4.8.0
   flutter_native_splash: ^2.4.1
   path_provider: ^2.1.5
+  web: ^1.1.1
+  js: ^0.6.7
 
 dev_dependencies:
   flutter_test:
