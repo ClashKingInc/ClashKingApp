@@ -490,7 +490,7 @@
       }
     }
   },
-  "legendsTitle": "Legend League",
+  "legendsTitle": "Inaccurate data?",
   "legendsNotInLeague": "Not in Legend League",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "You started the day with {trophies} trophies.",
@@ -723,7 +723,7 @@
   "warLog": "War Log",
   "warLogPublic": "Public War Log",
   "warLogPrivate": "Private War Log",
-  "warLogClosed": "{clan}'s war log is closed.",
+  "warLogClosed": "War log closed.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
