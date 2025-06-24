@@ -1,0 +1,1015 @@
+{
+    "creatorCode": "خالق کوڈ: ClashKing",
+    "signInWithDiscord": "Discord کے ساتھ سائن ان کریں۔",
+    "guestMode": "گیسٹ موڈ",
+    "needHelpJoinDiscord": "مدد کی ضرورت ہے؟ Discord پر ہمارے ساتھ شامل ہوں.",
+    "createGuestProfile": "اپنا مہمان پروفائل بنائیں",
+    "doesNotExist": "{tag} موجود نہیں ہے.",
+    "@doesNotExist": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
+    "isAlreadyLinked": "{tag} پہلے ہی کسی سے منسلک ہے.",
+    "@isAlreadyLinked": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
+    "username": "صارف نام",
+    "pleaseEnterUsername": "براہ کرم ایک صارف نام درج کریں",
+    "playerTags": "پلیئر ٹیگز",
+    "followingTagsDoNotExist": "درج ذیل ٹیگز موجود نہیں ہیں: {tags}.",
+    "@followingTagsDoNotExist": {
+        "placeholders": {
+            "tags": {
+                "type": "String"
+            }
+        }
+    },
+    "followingTagsAreAlreadyLinked": "درج ذیل ٹیگز پہلے ہی کسی سے منسلک ہیں: {tags}.",
+    "@followingTagsAreAlreadyLinked": {
+        "placeholders": {
+            "tags": {
+                "type": "String"
+            }
+        }
+    },
+    "welcome": "خوش آمدید!",
+    "welcomeMessage": "براہ کرم اپنے پروفائل میں ایک یا زیادہ Clash of Clans اکاؤنٹس شامل کریں۔ آپ بعد میں اکاؤنٹس کو شامل یا ہٹا سکتے ہیں.",
+    "login": "لاگ ان",
+    "logout": "لاگ آؤٹ کریں۔",
+    "language": "زبان",
+    "settings": "ترتیبات",
+    "toggleTheme": "تھیم کو ٹوگل کریں۔",
+    "selectLanguage": "ایک زبان منتخب کریں",
+    "faq": "FAQ",
+    "faqSubtitle": "اکثر پوچھے گئے سوالات",
+    "faqIsThisFromSupercell": "کیا یہ ایپ سپر سیل کی ہے؟",
+    "faqFanContentPolicy": "یہ مواد غیر سرکاری ہے اور سپر سیل کی طرف سے اس کی توثیق نہیں کی گئی ہے۔ مزید معلومات کے لیے سپر سیل کی مداحوں کے مواد کی پالیسی دیکھیں: www.supercell.com/fan-content-policy",
+    "faqWhyNotAccurate": "ڈیٹا بعض اوقات غلط یا غائب کیوں ہوتا ہے؟",
+    "faqClanNotTracked": "قبیلہ کو ٹریک نہیں کیا گیا۔",
+    "faqClanNotTrackedAnswer": "ClashKing یہ معلومات صرف اس صورت میں بازیافت کر سکتا ہے جب قبیلہ کو ٹریک کیا جائے۔ اگر آپ کے قبیلے کو ٹریک نہیں کیا گیا ہے، تو براہ کرم ClashKing Bot کو اپنے Discord Server میں مدعو کریں اور کمانڈ /addclan استعمال کریں۔ ہم جلد ہی اس فیچر کو ایپ میں دستیاب کرنے پر کام کر رہے ہیں.",
+    "faqTrackingDown": "ٹریکنگ ڈاؤن",
+    "faqTrackingDownAnswer": "ٹریکنگ ایک خاص مدت کے لیے کام کرنا بند کر سکتی ہے۔ یہی وجہ ہے کہ بعض اوقات آپ کے ڈیٹا میں سوراخ ہو سکتے ہیں۔ ہم اسے بہتر بنانے پر کام کر رہے ہیں.",
+    "faqApiLimitation": "Clash of Clans API کی حد",
+    "faqApiLimitationAnswer": "کچھ ڈیٹا Clash of Clans کے ذریعے فراہم کیا جاتا ہے اور ان کے API کی کچھ حدود ہیں۔ یہ معاملہ لیجنڈز سے باخبر رہنے کا ہے، یہ کبھی کبھی ٹرافی کے فائدے اور نقصان کو اس طرح کھڑا کر دیتا ہے جیسے یہ ایک ہی حملہ ہو۔ یہی وجہ ہے کہ ہمارے پاس آپ کی عمارت کی سطح کے بارے میں کوئی معلومات نہیں ہیں.",
+    "faqSupportWork": "میں آپ کے کام کی حمایت کیسے کر سکتا ہوں؟",
+    "faqSupportWorkAnswer": "ہماری مدد کرنے کے کئی طریقے ہیں:",
+    "faqUseCodeClashKing": "ہمارا کوڈ \"ClashKing\" k استعمال کریں۔",
+    "faqSupportUsOnPatreon": "پیٹریون پر ہمارا ساتھ دیں۔",
+    "faqShareTheApp": "اپنے دوستوں کے ساتھ ایپ کا اشتراک کریں۔",
+    "faqRateTheApp": "اسٹور میں ایپ کی درجہ بندی کریں",
+    "faqHelpUsTranslate": "ایپ کا ترجمہ کرنے میں ہماری مدد کریں۔",
+    "faqHowToInviteTheBot": "میں آپ کے بوٹ کو اپنے ڈسکارڈ سرور میں کیسے مدعو کرسکتا ہوں؟",
+    "faqHowToInviteTheBotAnswer": "آپ نیچے دیئے گئے بٹن پر کلک کر کے ہمارے بوٹ کو اپنے سرور پر مدعو کر سکتے ہیں۔ بوٹ کو شامل کرنے کے لیے آپ کو \"سرور کا نظم کریں\" کی اجازت درکار ہوگی.",
+    "faqInviteTheBot": "ClashKing Bot کو مدعو کریں۔",
+    "faqNeedHelp": "مجھے مدد کی ضرورت ہے یا میں کوئی تجویز دینا چاہوں گا۔ میں آپ سے کیسے رابطہ کر سکتا ہوں؟",
+    "faqNeedHelpAnswer": "آپ مدد طلب کرنے یا رائے دینے کے لیے ہمارے Discord سرور میں شامل ہو سکتے ہیں، یا آپ ہمیں devs@clashkingbot.com پر ای میل کر سکتے ہیں۔ براہ کرم صرف انگریزی یا فرانسیسی میں لکھیں.",
+    "faqSendEmail": "ای میل بھیجیں۔",
+    "faqJoinDiscord": "ہمارے ڈسکارڈ سرور میں شامل ہوں۔",
+    "faqCannotOpenMailClient": "کچھ وجوہات کی بنا پر ہم آپ کے میل کلائنٹ کو نہیں کھول سکتے۔ ہم نے آپ کے لیے ای میل ایڈریس کاپی کیا ہے۔ آپ ایک ای میل لکھ سکتے ہیں اور وصول کنندہ کے خانے میں پتہ چسپاں کر سکتے ہیں.",
+    "helpUsTranslate": "ترجمہ کرنے میں ہماری مدد کریں۔",
+    "suggestFeatures": "خصوصیات تجویز کریں۔",
+    "thankYou": "شکریہ!",
+    "thankYouContent": "ہمارے تمام حیرت انگیز مترجمین کا بہت بہت شکریہ جنہوں نے اس ایپ کو دنیا بھر کے مزید لوگوں تک قابل رسائی بنانے میں ہماری مدد کی!",
+    "helpTranslateContent": "آپ Crowdin پر ایپ کا ترجمہ کرنے میں ہماری مدد کر سکتے ہیں۔ اگر آپ کی زبان Crowdin پر دستیاب نہیں ہے تو بلا جھجھک ہمارے Discord Server میں اس کی درخواست کریں۔ آپ کی مدد کے لیے آپ کا بہت بہت شکریہ!",
+    "helpTranslateButton": "Crowdin پر ترجمہ میں مدد کریں۔",
+    "versionDevice": "ورژن اور ڈیوائس",
+    "@version": {
+        "description": "Version of the app and device information"
+    },
+    "loading": "لوڈ ہو رہا ہے...",
+    "errorLoadingVersion": "ورژن لوڈ کرنے میں خرابی۔",
+    "@errorLoadingVersion": {
+        "description": "Error message when the app version cannot be loaded"
+    },
+    "currentTranslators": "موجودہ مترجم",
+    "betaFeature": "بیٹا فیچر",
+    "beta": "BETA",
+    "betaDescription": "یہ فیچر فی الحال بیٹا میں ہے، اس میں کچھ کیڑے ہو سکتے ہیں یا نامکمل ہیں۔ ہم بہتری پر سرگرمی سے کام کر رہے ہیں اور آپ کے تاثرات کا خیرمقدم کرتے ہیں۔ براہ کرم اپنے خیالات کا اشتراک کریں اور اسے بہتر بنانے میں ہماری مدد کرنے کے لیے ہمارے Discord Server میں کسی بھی مسئلے کی اطلاع دیں.",
+    "copiedToClipboard": "کلپ بورڈ پر کاپی ہو گیا۔",
+    "all": "تمام",
+    "@all": {
+        "description": "all items"
+    },
+    "hourIndicator": "ایچ",
+    "minIndicator": "ایم",
+    "noDataAvailable": "کوئی ڈیٹا دستیاب نہیں ہے.",
+    "close": "بند",
+    "closed": "بند",
+    "@closed": {
+        "description": "WarLog closed"
+    },
+    "error": "خرابی",
+    "player": "کھلاڑی",
+    "notFoundOrNotLinkedToOurSystem": "{player} نہیں ملا یا ہمارے سسٹم سے منسلک نہیں ہے.",
+    "@notFoundOrNotLinkedToOurSystem": {
+        "placeholders": {
+            "player": {
+                "type": "String"
+            }
+        }
+    },
+    "tryAnotherNameOrTagOrLinkIt": "دوسرا نام/ٹیگ آزمائیں یا اسے لنک کریں.",
+    "playerNotFound": "کھلاڑی نہیں ملا",
+    "noValueEntered": "کوئی قدر درج نہیں کی گئی۔",
+    "manage": "انتظام کریں۔",
+    "enterPlayerTag": "پلیئر ٹیگ درج کریں۔",
+    "add": "شامل کریں۔",
+    "@add": {
+        "description": "Add an account"
+    },
+    "delete": "حذف کریں۔",
+    "@delete": {
+        "description": "Delete an account"
+    },
+    "addAccount": "اکاؤنٹ شامل کریں۔",
+    "deleteAccount": "اکاؤنٹ حذف کریں۔",
+    "playerTagNotExists": "درج کردہ پلیئر ٹیگ موجود نہیں ہے.",
+    "accountAlreadyLinked": "کھلاڑی کا ٹیگ پہلے ہی کسی سے منسلک ہے.",
+    "enterApiToken": "یہ تصدیق کرنے کے لیے کہ یہ آپ کا اکاؤنٹ API ٹوکن درج کریں۔ آپ اسے Clash of Clans Settings > More Settings > API Token میں تلاش کر سکتے ہیں.",
+    "wrongApiToken": "درج کردہ API ٹوکن غلط ہے.",
+    "accountAlreadyLinkedToYou": "پلیئر ٹیگ پہلے ہی آپ سے منسلک ہے.",
+    "apiToken": "اکاؤنٹ API ٹوکن",
+    "failedToAddTryAgain": "لنک شامل کرنے میں ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں.",
+    "failedToDeleteTryAgain": "لنک کو حذف کرنے میں ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں.",
+    "enterPlayerTagWarning": "آپ کو پلیئر ٹیگ درج کرنا ہوگا اور جاری رکھنے کے لیے \"+\" پر کلک کرنا ہوگا.",
+    "search": "تلاش کریں۔",
+    "@search": {
+        "description": "Search for a player or a clan"
+    },
+    "warning": "وارننگ",
+    "exitAppToOpenClash": "آپ Clash of Clans کھولنے کے لیے ایپ چھوڑنے والے ہیں.",
+    "confirmLogout": "کیا آپ واقعی لاگ آؤٹ کرنا چاہتے ہیں؟",
+    "@confirmLogout": {
+        "description": "Prompt asking the user to confirm logout"
+    },
+    "tagOrNamePlayer": "کھلاڑی کا ٹیگ یا نام",
+    "searchPlayer": "پلیئر تلاش کریں۔",
+    "nameOrTagPlayer": "کھلاڑی کا نام یا ٹیگ",
+    "playerClanDescription": "آپ کا قبیلہ \"{clan}\" ({tag}) ہے.",
+    "@playerClanDescription": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
+    "playerRatioDescription": "آپ کے عطیہ کا تناسب {ratio} ہے۔ آپ نے {عطیات} دستے عطیہ کیے ہیں اور {received} دستے حاصل کیے ہیں.",
+    "@playerRatioDescription": {
+        "placeholders": {
+            "ratio": {
+                "type": "String"
+            },
+            "donations": {
+                "type": "String"
+            },
+            "received": {
+                "type": "String"
+            }
+        }
+    },
+    "playerWarPreferenceDescription": "آپ کی جنگ کی ترجیح \"{preference}\" ہے.",
+    "@playerWarPreferenceDescription": {
+        "placeholders": {
+            "preference": {
+                "type": "String"
+            }
+        }
+    },
+    "playerWarStarsDescription": "آپ کے پاس {stars} جنگی ستارے ہیں.",
+    "@playerWarStarsDescription": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "playerTrophiesDescription": "آپ کے پاس {trophies} ٹرافیاں ہیں۔ آپ فی الحال {league} میں ہیں.",
+    "@playerTrophiesDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            },
+            "league": {
+                "type": "String"
+            }
+        }
+    },
+    "playerTownHallLevelDescription": "آپ کا ٹاؤن ہال لیول {level} ہے.",
+    "@playerTownHallLevelDescription": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "playerBuilderBaseDescription": "آپ کا بلڈر ہال لیول {level} ہے اور آپ کے پاس {trophies} ٹرافیاں ہیں.",
+    "@playerBuilderBaseDescription": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            },
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "dashboard": "ڈیش بورڈ",
+    "homeBase": "ہوم بیس",
+    "th": "ٹی ایچ",
+    "builderBase": "بلڈر بیس",
+    "bh": "بی ایچ",
+    "clanCapital": "قبیلہ کیپٹل",
+    "leader": "لیڈر",
+    "coLeader": "شریک رہنما",
+    "elder": "ایلڈر",
+    "member": "ممبر",
+    "ready": "آپٹ ان",
+    "@ready": {
+        "description": "Opted In for war"
+    },
+    "unready": "آپٹ آؤٹ",
+    "@unready": {
+        "description": "Opted Out for war"
+    },
+    "heroes": "ہیرو",
+    "equipment": "سازوسامان",
+    "troops": "دستے",
+    "superTroops": "سپر ٹروپس",
+    "activeSuperTroops": "ایکٹو سپر ٹروپس",
+    "pets": "پالتو",
+    "siegeMachines": "سیج مشینیں",
+    "spells": "منتر",
+    "achievements": "کامیابیاں",
+    "byDay": "دن کی طرف سے",
+    "@byDay": {
+        "description": "Shows stats by day"
+    },
+    "bySeason": "سیزن کے لحاظ سے",
+    "@byMonth": {
+        "description": "Shows stats by season"
+    },
+    "dayIndex": "دن {index}",
+    "@dayIndex": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            }
+        }
+    },
+    "indexDays": "{index} دن",
+    "@indexDays": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            }
+        }
+    },
+    "bestTrophies": "بہترین ٹرافیاں",
+    "mostAttacks": "زیادہ تر حملے",
+    "lastSeason": "آخری سیزن",
+    "bestRank": "بہترین عالمی درجہ بندی",
+    "daysLeft": "{days} دن باقی ہیں۔",
+    "@daysLeft": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "date": "تاریخ",
+    "stats": "اعدادوشمار",
+    "details": "تفصیلات",
+    "seasonStats": "سیزن کے اعدادوشمار",
+    "charts": "چارٹس",
+    "history": "اتحاد",
+    "@history": {
+        "description": "Shows EOS trophies history"
+    },
+    "legendLeague": "لیجنڈ لیگ",
+    "notInLegendLeague": "لیجنڈ لیگ میں نہیں۔",
+    "noLegendData": "آج کے لیے کوئی لیجنڈ ڈیٹا نہیں ملا",
+    "legendStartDescription": "آپ نے دن کا آغاز {trophies} ٹرافیوں سے کیا.",
+    "@legendStartDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "String"
+            }
+        }
+    },
+    "legendNoRankLocalDescription": "آپ فی الحال {trophies} ٹرافیوں کے ساتھ درجہ بندی ({country}) میں نہیں ہیں.",
+    "@legendNoRankLocalDescription": {
+        "placeholders": {
+            "country": {
+                "type": "String"
+            },
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendRankLocalDescription": "آپ فی الحال {trophies} ٹرافیوں کے ساتھ {rank} ({country}) پر ہیں.",
+    "@legendRankDescription": {
+        "placeholders": {
+            "rank": {
+                "type": "int"
+            },
+            "country": {
+                "type": "String"
+            },
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendGainDescription": "آپ نے ابھی کے لیے {trophies} ٹرافی حاصل کی ہیں.",
+    "@legendGainDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendLossDescription": "آپ ابھی کے لیے {trophies} ٹرافی کھو چکے ہیں.",
+    "@legendLossDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendNoGlobalRankDescription": "آپ فی الحال {trophies} ٹرافیوں کے ساتھ عالمی سطح پر درجہ بندی میں نہیں ہیں.",
+    "@legendNoGlobalRankDescription": {
+        "placeholders": {
+            "trophies": {
+                "type": "int"
+            }
+        }
+    },
+    "legendGlobalRankDescription": "آپ کو فی الحال عالمی سطح پر {rank} کا درجہ دیا گیا ہے.",
+    "@legendGlobalRankDescription": {
+        "placeholders": {
+            "rank": {
+                "type": "int"
+            }
+        }
+    },
+    "noRank": "کوئی درجہ بندی نہیں۔",
+    "started": "شروع کر دیا۔",
+    "@started": {
+        "description": "Title for the number of trophies at the beginning of the day"
+    },
+    "ended": "ختم ہوا۔",
+    "@ended": {
+        "description": "Title for the number of trophies at the end of the day"
+    },
+    "average": "اوسط",
+    "@average": {
+        "description": "Average value of legend trophies (defense and attack)"
+    },
+    "remaining": "باقی",
+    "@remaining": {
+        "description": "Remaining attacks or defenses"
+    },
+    "legendsTitle": "غلط ڈیٹا؟",
+    "legendsExplanation_intro": "Clash of Clans API کی حدود کی وجہ سے، ہمارا ڈیٹا ہمیشہ بالکل درست نہیں ہو سکتا۔ یہاں کیوں ہے:\n",
+    "legendsExplanation_api_delay_title": "1. API تاخیر: ",
+    "legendsExplanation_api_delay_body": "API کو اپ ڈیٹ ہونے میں 5 منٹ تک کا وقت لگ سکتا ہے، جس کی وجہ سے ریئل ٹائم ٹرافی کی تبدیلیوں کو ظاہر کرنے میں وقفہ ہوتا ہے.\n",
+    "legendsExplanation_concurrent_changes_title": "2. ہم آہنگی تبدیلیاں: ",
+    "legendsExplanation_multiple_attacks_defenses_title": "- متعدد حملے/دفاع: ",
+    "legendsExplanation_multiple_attacks_defenses_body": "اگر ایک سے زیادہ حملے یا دفاع یکے بعد دیگرے ہوتے ہیں، تو API مشترکہ نتائج دکھا سکتا ہے (جیسے، +68 یا -68).",
+    "legendsExplanation_simultaneous_attack_defense_title": "- بیک وقت حملہ اور دفاع: ",
+    "legendsExplanation_simultaneous_attack_defense_body": "اگر حملہ اور دفاع ایک ہی وقت میں ہوتا ہے، تو آپ کو ملا جلا نتیجہ نظر آ سکتا ہے (جیسے، +4).",
+    "legendsExplanation_net_gain_loss_title": "خالص فائدہ/نقصان: ",
+    "legendsExplanation_net_gain_loss_body": "وقت کے مسائل کے باوجود، دنوں کے لیے مجموعی خالص فائدہ یا نقصان درست ہے. ",
+    "legendsExplanation_conclusion": "یہ حدود Clash of Clans API کا استعمال کرتے ہوئے تمام ٹولز میں عام ہیں۔ ہم افسوس سے اسے ٹھیک نہیں کر سکتے کیونکہ یہ سپر سیل کے ہاتھ میں ہے۔ ہم ان حدود کی تلافی کرنے کی پوری کوشش کرتے ہیں اور ممکنہ حد تک حقیقت کے قریب نتائج فراہم کرتے ہیں۔ سمجھنے کے لیے آپ کا شکریہ!",
+    "toDoList": "کرنے کی فہرست",
+    "lastActive": "آخری فعال: {date}",
+    "playerNotTracked": "اس کھلاڑی کو ٹریک نہیں کیا گیا ہے۔ ڈیٹا غلط ہو سکتا ہے.",
+    "@lastActive": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "numberAccounts": "{number} اکاؤنٹس",
+    "@numberAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        },
+        "description": "Number of accounts (ex: 4 accounts)"
+    },
+    "numberActiveAccounts": "{number} فعال اکاؤنٹس",
+    "@numberActiveAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "numberInactiveAccounts": "{number} غیر فعال اکاؤنٹس",
+    "@numberInactiveAccounts": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "activeAccounts": "فعال اکاؤنٹس",
+    "inactiveAccounts": "غیر فعال اکاؤنٹس",
+    "noInactiveAccounts": "کوئی غیر فعال اکاؤنٹس نہیں.",
+    "noActiveAccounts": "کوئی فعال اکاؤنٹس نہیں ہیں.",
+    "todoExplanation_title": "ٹاسک کیلکولیشن",
+    "todoExplanation_intro": "کام کی تکمیل کا فیصد مخصوص وزن کے ساتھ درج ذیل سرگرمیوں کی بنیاد پر لگایا جاتا ہے:",
+    "todoExplanation_legends_title": "لیجنڈ لیگ:",
+    "todoExplanation_legends": "فی اکاؤنٹ 8 پوائنٹس کا وزن، 1 حملہ = 1 پوائنٹ.",
+    "todoExplanation_raids_title": "چھاپے:",
+    "todoExplanation_raids": "فی اکاؤنٹ 5 پوائنٹس کا وزن (یا 6 اگر آخری حملہ غیر مقفل ہو گیا ہے)، 1 حملہ = 1 پوائنٹ.",
+    "todoExplanation_clanWars_title": "قبائلی جنگیں:",
+    "todoExplanation_clanWars": "فی اکاؤنٹ 2 پوائنٹس کا وزن، 1 حملہ = 1 پوائنٹ.",
+    "todoExplanation_cwl_title": "قبیلہ وار لیگ:",
+    "todoExplanation_cwl": "فی اکاؤنٹ 1 پوائنٹ کا وزن، 1 حملہ = 1 پوائنٹ۔ CWL کو ٹریک نہیں کیا جا سکتا اگر کھلاڑی ان کے لیگ قبیلے میں نہیں ہے.",
+    "todoExplanation_passAndGames_title": "سیزن پاس اور کلین گیمز:",
+    "todoExplanation_passAndGames": "ہر اکاؤنٹ میں 2 پوائنٹس کا وزن۔ تناسب باقی دنوں کی تعداد پر مبنی ہے (پاس کے لیے 1 مہینہ اور گیمز کے لیے 6 دن)۔ سبز = پاس یا گیمز کو مکمل کرنے کے لیے ٹریک پر، سرخ = شیڈیول کے پیچھے.",
+    "todoExplanation_conclusion": "حتمی فیصد کا حساب جاری واقعات کے دوران مکمل ہونے والی کل کارروائیوں کو کل مطلوبہ کارروائیوں سے تقسیم کر کے لگایا جاتا ہے۔ 14 دنوں سے زیادہ غیر فعال اکاؤنٹس کو حساب سے خارج کر دیا گیا ہے.",
+    "worst": "بدترین",
+    "@worst": {
+        "description": "Worst end of day trophies"
+    },
+    "best": "بہترین",
+    "@best": {
+        "description": "Best end of day trophies"
+    },
+    "total": "کل",
+    "heroesEquipments": "ہیرو کا سامان",
+    "daysAgo": "{days} دن پہلے",
+    "@daysAgo": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "dayAgo": "{day} دن پہلے",
+    "@dayAgo": {
+        "placeholders": {
+            "day": {
+                "type": "int"
+            }
+        }
+    },
+    "hourAgo": "{hour} گھنٹے پہلے",
+    "@hourAgo": {
+        "placeholders": {
+            "hour": {
+                "type": "int"
+            }
+        }
+    },
+    "hoursAgo": "{hours} گھنٹے پہلے",
+    "@hoursAgo": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "minuteAgo": "{minute} منٹ پہلے",
+    "@minuteAgo": {
+        "placeholders": {
+            "minute": {
+                "type": "int"
+            }
+        }
+    },
+    "minutesAgo": "{minutes} منٹ پہلے",
+    "@minutesAgo": {
+        "placeholders": {
+            "minutes": {
+                "type": "int"
+            }
+        }
+    },
+    "secondAgo": "{seconds}s پہلے",
+    "@secondAgo": {
+        "placeholders": {
+            "seconds": {
+                "type": "int"
+            }
+        }
+    },
+    "justNow": "ابھی ابھی",
+    "trophiesByMonth": "مہینے کے حساب سے ٹرافی",
+    "trophiesBySeason": "سیزن کی حساب سے ٹرافی",
+    "eosTrophies": "سیزن ٹرافی کا اختتام",
+    "searchClan": "قبیلہ تلاش کریں۔",
+    "nameOrTagClan": "قبیلے کا نام یا ٹیگ",
+    "noResult": "کوئی نتیجہ نہیں نکلا.",
+    "filters": "فلٹرز",
+    "whatever": "جو بھی ہو۔",
+    "@whatever": {
+        "description": "Whatever the value"
+    },
+    "any": "کوئی بھی",
+    "@any": {
+        "description": "Any value is accepted"
+    },
+    "notSet": "سیٹ نہیں ہے۔",
+    "@notSet": {
+        "description": "Filter value is not set"
+    },
+    "warFrequency": "جنگ کی تعدد",
+    "minimumMembers": "کم سے کم ممبران",
+    "maximumMembers": "زیادہ سے زیادہ ممبران",
+    "location": "مقام",
+    "minimumClanPoints": "کم از کم قبیلہ پوائنٹس",
+    "minimumClanLevel": "کم از کم قبیلہ کی سطح",
+    "noClan": "کوئی قبیلہ نہیں۔",
+    "joinClanToUnlockNewFeatures": "نئی خصوصیات کو غیر مقفل کرنے کے لیے ایک قبیلے میں شامل ہوں.",
+    "apply": "لگائیں",
+    "opened": "کھول دیا",
+    "@opened": {
+        "description": "Clan is opened"
+    },
+    "inviteOnly": "صرف دعوت دیں۔",
+    "cancel": "منسوخ کریں۔",
+    "clan": "قبیلہ",
+    "clans": "قبیلے",
+    "members": "ممبران",
+    "role": "کردار",
+    "expLevel": "تجربہ کی سطح",
+    "townHallLevel": "ٹی ایچ سطح",
+    "thLevel": "TH{level}",
+    "@thLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "bhLevel": "BH{level}",
+    "@bhLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "townHallLevelLevel": "ٹاؤن ہال {level}",
+    "@townHallLevelLevel": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            }
+        }
+    },
+    "byNumberOfWars": "جنگوں کی تعداد کے حساب سے",
+    "@byNumberOfWars": {
+        "description": "filter by number of wars"
+    },
+    "ok": "ٹھیک ہے",
+    "@ok": {
+        "description": "OK button on pop up"
+    },
+    "byDateRange": "تاریخ کی حد کے لحاظ سے",
+    "@byDateRange": {
+        "description": "filter by date range"
+    },
+    "selectSeason": "ایک سیزن منتخب کریں۔",
+    "@selectSeason": {
+        "description": "Ask player to select a season"
+    },
+    "year": "سال",
+    "month": "مہینہ",
+    "allTownHalls": "تمام ٹاؤن ہالز",
+    "seasonDate": "{date} سیزن",
+    "@seasonDate": {
+        "description": "Example: August 2024 season",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "lastXwars": "آخری {number} جنگیں۔",
+    "@lastXwars": {
+        "description": "Example: Shows the last 25 wars",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "friendly": "دوستانہ",
+    "@friendly": {
+        "description": "Friendly war"
+    },
+    "cwl": "سی ڈبلیو ایل",
+    "random": "بے ترتیب",
+    "@random": {
+        "description": "Random/basic war (not friendly or cwl)"
+    },
+    "selectMembersThLevel": "ممبران ٹی ایچ سطح",
+    "selectOpponentsThLevel": "مخالفین ٹی ایچ سطح",
+    "equalThLevel": "مساوی TH",
+    "builderBaseTrophies": "بی بی ٹرافی",
+    "donations": "عطیات",
+    "donationsReceived": "عطیات موصول ہوئے۔",
+    "donationsRatio": "عطیہ کا تناسب",
+    "trophies": "ٹرافیاں",
+    "always": "ہمیشہ",
+    "never": "کبھی نہیں",
+    "unknown": "نامعلوم",
+    "oncePerWeek": "1/ہفتہ",
+    "twicePerWeek": "2/ہفتہ",
+    "rarely": "کبھی کبھار",
+    "warLeague": "جنگ/لیگ",
+    "war": "جنگ",
+    "league": "لیگ",
+    "wars": "جنگیں",
+    "ongoingWar": "جاری جنگ",
+    "ongoingCwl": "جاری CWL",
+    "cantOpenLink": "ہم اس لنک کو نہیں کھول سکتے.",
+    "notInWar": "جنگ میں نہیں۔",
+    "warHistory": "جنگ کی تاریخ",
+    "warHistoryWinsDescription": "آپ کے قبیلے نے پچھلی 50 جنگوں میں سے {wins} جنگیں ({percent}%) جیتیں.",
+    "@warHistoryWinsDescription": {
+        "placeholders": {
+            "wins": {
+                "type": "int"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "warHistoryLossesDescription": "آپ کا قبیلہ پچھلی 50 جنگوں میں سے {losses} جنگیں ({percent}%) ہار گیا.",
+    "@warHistoryLossesDescription": {
+        "placeholders": {
+            "losses": {
+                "type": "int"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "warHistoryDrawsDescription": "آپ کے قبیلے نے پچھلی 50 جنگوں میں سے {draws} قرعہ اندازی ({percent}%) کی تھی.",
+    "@warHistoryDrawsDescription": {
+        "placeholders": {
+            "draws": {
+                "type": "int"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "warHistoryAverageMembersDescription": "آپ کے قبیلے میں پچھلی 50 جنگوں میں حصہ لینے والے اوسطاً {members} اراکین ہیں.",
+    "@warHistoryAverageMembersDescription": {
+        "placeholders": {
+            "members": {
+                "type": "int"
+            }
+        }
+    },
+    "warHistoryAverageWarStarsDescription": "آپ کے قبیلے میں پچھلی 50 جنگوں میں فی جنگ اوسطاً {stars} ستارے تھے۔ یہ کل ستاروں کے {percent} کی نمائندگی کرتا ہے.",
+    "@warHistoryAverageWarStarsDescription": {
+        "placeholders": {
+            "stars": {
+                "type": "double"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "warHistoryAverageHitRateDescription": "پچھلی 50 جنگوں سے آپ کے قبیلے میں تباہی کی اوسط شرح {percent}% تھی.",
+    "@warHistoryAverageHitRateDescription": {
+        "placeholders": {
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "warHistoryAverageClanStarsPerMember": "آپ کے قبیلے میں پچھلی 50 جنگوں میں فی ممبر اوسطاً {stars} ستارے تھے.",
+    "warHistoryAverageMembers": "~{members} ممبرز فی جنگ",
+    "@warHistoryAverageMembers": {
+        "placeholders": {
+            "members": {
+                "type": "int"
+            }
+        }
+    },
+    "averageStars": "اوسط ستارے۔",
+    "averageDestruction": "اوسط تباہی",
+    "noStars": "0 ستارہ",
+    "oneStar": "1 ستارہ",
+    "twoStars": "2 ستارے",
+    "threeStars": "3 ستارے",
+    "warParticipation": "جنگ میں شرکت",
+    "toggleTownHallVisibility": "سابقہ TH سطحوں سے اعدادوشمار چھپائیں/ دکھائیں۔",
+    "@toggleTownHallVisibility": {
+        "description": "For example, hide stats from TH15 and below if the player is now TH16"
+    },
+    "warLog": "جنگی ریکارڈ",
+    "publicWarLog": "عوامی جنگ کا ریکارڈ",
+    "privateWarLog": "نجی جینگ ریکارڈ",
+    "startsIn": "{time} میں شروع ہوتا ہے",
+    "@startsIn": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "startsAt": "{time} پر شروع ہوتا ہے",
+    "@startsAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "endsIn": "{time} میں ختم ہوتا ہے",
+    "@endsIn": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "endsAt": "{time} پر ختم ہوتا ہے",
+    "@endsAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "joinLeaveLogs": "اندر/بہار کا ریکارڈ",
+    "join": "شمولیت",
+    "leave": "چھوڑو",
+    "reset": "دوبارہ ترتیب دیں۔",
+    "leaveNumberDescription": "موجودہ سیزن ({date}) کے دوران {number} کھلاڑیوں نے قبیلہ چھوڑ دیا.",
+    "@leaveNumberDescription": {
+        "description": "Number of players who left the clan during the current season.",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinNumberDescription": "{number} کھلاڑی موجودہ سیزن ({date}) کے دوران قبیلے میں شامل ہوئے.",
+    "@joinNumberDescription": {
+        "description": "Number of players who joined the clan during the current season.",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinLeaveDifferenceUpDescription": "آپ کے قبیلے نے اس سیزن میں {number} نئے ممبر حاصل کیے ہیں ({date}).",
+    "@joinLeaveDifferenceUpDescription": {
+        "description": "Number of new members gained by the clan this season.",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinLeaveDifferenceDownDescription": "آپ کے قبیلے نے اس سیزن ({date}) سے {number} نئے میمبرز کھو دیے ہیں.",
+    "@joinLeaveDifferenceDownDescription": {
+        "description": "Number of members lost by the clan this season.",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "joinLeaveDifferenceEqualDescription": "آپ کے قبیلے میں ممبروں کی اتنی ہی تعداد ہے جو سیزن کے آغاز میں ہے ({date}).",
+    "@joinLeaveDifferenceEqualDescription": {
+        "description": "Difference in the number of members between the beginning and the end of the season.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "@joinLeaveLogs": {
+        "description": "Logs of players joining or leaving the clan."
+    },
+    "leftOnAt": "{date} کو {time} پر روانہ ہوا.",
+    "@leftOnAt": {
+        "description": "[The player] left the clan on 16/06/2024 at 10:35.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "joinedOnAt": "{date} کو {time} پر شامل ہوا.",
+    "@joinedOnAt": {
+        "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "statistics": "شماریات",
+    "stars": "ستارے",
+    "numberOfStars": "ستاروں کی تعداد",
+    "destructionRate": "تباہی کی شرح",
+    "@destructionRate": {
+        "description": "Percentage of destruction in war"
+    },
+    "events": "واقعات",
+    "@events": {
+        "description": "War events"
+    },
+    "team": "ٹیمیں",
+    "myTeam": "میری ٹیم",
+    "enemiesTeam": "دشمنوں",
+    "defense": "دفاع",
+    "defenses": "دفاع",
+    "attack": "حملہ",
+    "attacks": "حملے",
+    "victory": "فتح",
+    "defeat": "شکست",
+    "draw": "ڈرا",
+    "@draw": {
+        "description": "War ended in a draw"
+    },
+    "perfectWar": "کامل جنگ",
+    "newest": "تازہ ترین",
+    "oldest": "قدیم ترین",
+    "warEnded": "جنگ ختم ہوئی۔",
+    "preparation": "تیاری",
+    "isNotInWar": "{clan} جنگ میں نہیں ہے.",
+    "@isNotInWar": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            }
+        }
+    },
+    "warLogIsClosed": "{clan} کا وار لاگ بند ہے.",
+    "@warLogIsClosed": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            }
+        }
+    },
+    "askForWar": "جنگ شروع کرنے کے لیے لیڈر یا شریک لیڈر سے رابطہ کریں.",
+    "askForWarLogOpening": "جنگ کے لاگ کو کھولنے کے لیے کسی رہنما یا شریک رہنما سے رابطہ کریں.",
+    "warLogClosed": "جنگی لاگ بند.",
+    "rounds": "راؤنڈز",
+    "noDataAvailableForThisWar": "اس جنگ کا کوئی ڈیٹا دستیاب نہیں ہے۔",
+    "stateOfTheWar": "جنگ کی حالت",
+    "starsNeededToTakeTheLead": "{clan} کو ابھی بھی {star} مزید ستاروں (s) یا {stars2} star(s) اور {percent}% کی ضرورت ہے.",
+    "@starsNeededToTakeTheLead": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "star": {
+                "type": "int"
+            },
+            "star2": {
+                "type": "int"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "starsAndPercentNeededToTakeTheLead": "{clan} کو ابھی بھی برتری حاصل کرنے کے لیے {percent}% یا 1 مزید ستارے کی ضرورت ہے۔",
+    "@starsAndPercentNeededToTakeTheLead": {
+        "placeholders": {
+            "clan": {
+                "type": "String"
+            },
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "clanDraw": "دو قبیلے ڈرا ہوئے۔",
+    "fastCalculator": "تیز رفتار کیلکولیٹر",
+    "fastCalculatorAnswer": "تباہی کی شرح {percentNeeded}% حاصل کرنے کے لیے، کل {result}% کی ضرورت ہے.",
+    "@fastCalculatorAnswer": {
+        "placeholders": {
+            "percentNeedeed": {
+                "type": "String"
+            },
+            "result": {
+                "type": "String"
+            }
+        }
+    },
+    "teamSize": "ٹیم کا سائز",
+    "neededOverall": "مجموعی طور پر % کی ضرورت ہے۔",
+    "calculate": "حساب لگانا",
+    "warStats": "جنگ کے اعدادوشمار",
+    "membersStats": "ممبر کے اعدادوشمار",
+    "clanWarLeague": "قبیلہ وار لیگ",
+    "cwlRank": "آپ کا قبیلہ فی الحال {rank} کا درجہ رکھتا ہے.",
+    "@cwlRank": {
+        "placeholders": {
+            "rank": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlStars": "آپ کے قبیلے میں کل {stars} ستارے ہیں.",
+    "@cwlStars": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlMissingStarsFromNext": "اگلے قبیلے کو پکڑنے کے لیے آپ کے قبیلے میں {stars} ستارے نہیں ہیں.",
+    "@cwlMissingStarsFromNext": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlMissingStarsFromFirst": "پہلے قبیلے کو پکڑنے کے لیے آپ کے قبیلے میں {stars} ستارے نہیں ہیں.",
+    "@cwlMissingStarsFromFirst": {
+        "placeholders": {
+            "stars": {
+                "type": "int"
+            }
+        }
+    },
+    "cwlDestructionPercentage": "آپ کے قبیلے میں تباہی کی کل شرح {percent}% ہے.",
+    "@cwlDestructionPercentage": {
+        "placeholders": {
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "cwlCurrentRound": "یہ فی الحال گول {round} ہے.",
+    "@cwlCurrentRound": {
+        "placeholders": {
+            "round": {
+                "type": "int"
+            }
+        }
+    },
+    "noAccountLinkedToYourProfileFound": "آپ کے پروفائل سے منسلک کوئی اکاؤنٹ نہیں ملا",
+    "management": "انتظام",
+    "comingSoon": "جلد آ رہا ہے!",
+    "connectionError": "ایک خرابی پیش آگئی۔ براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور دوبارہ کوشش کریں.",
+    "connectionErrorRelaunch": "ایک خرابی پیش آگئی۔ براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور ایپ کو دوبارہ لانچ کریں.",
+    "updatedAt": "{time} پر اپ ڈیٹ کیا گیا",
+    "@updatedAt": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "tools": "اوزار",
+    "community": "برادری",
+    "lastRaids": "آخری چھاپے۔",
+    "ongoingRaids": "جاری چھاپے۔",
+    "districtsDestroyed": "اضلاع تباہ",
+    "raidsCompleted": "چھاپے مکمل"
+}
