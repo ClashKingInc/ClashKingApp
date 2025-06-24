@@ -47,11 +47,11 @@ class WarAccessDeniedCardState extends State<WarAccessDeniedCard> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(AppLocalizations.of(context)?.warLogIsClosed(widget.clanName) ?? "'s war log is closed.",
+                      Text(AppLocalizations.of(context)?.warLogClosed(widget.clanName) ?? "'s war log is closed.",
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        AppLocalizations.of(context)?.askForWarLogOpening ?? 'Contact a leader or a co-leader to open the war log.',
+                        AppLocalizations.of(context)?.warAskForWarLogOpening ?? 'Contact a leader or a co-leader to open the war log.',
                         textAlign: TextAlign.center,
                       ),
                     ],

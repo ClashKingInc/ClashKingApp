@@ -105,10 +105,10 @@ class CwlCardState extends State<CwlCard> {
                         imageUrl: ImageAssets.sword,
                         labelPadding: 2,
                         label:
-                            "${clan.attackCount.toString()}/${warCwl?.teamSize * clan.warsPlayed}",
+                            "${clan.attackCount.toString()}/${(warCwl?.teamSize ?? 0) * clan.warsPlayed}",
                         description: AppLocalizations.of(context)!
                             .cwlTotalAttacks(clan.attackCount,
-                                warCwl?.teamSize * clan.warsPlayed),
+                                (warCwl?.teamSize ?? 0) * clan.warsPlayed),
                       ),
                     ],
                   ),

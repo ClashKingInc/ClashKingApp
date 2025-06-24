@@ -70,7 +70,8 @@ class _WarEventsTabState extends State<WarEventsTab> {
     return attacks;
   }
 
-  Widget buildPlayerInfo(String tag, bool rightAlign) {
+  Widget buildPlayerInfo(
+      String tag, bool color, bool rightAlign) {
     final member = widget.warInfo.getMemberByTag(tag);
     return Row(
       mainAxisAlignment:
@@ -92,8 +93,13 @@ class _WarEventsTabState extends State<WarEventsTab> {
                 rightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: [
               Text("N°${member!.mapPosition}",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.tertiary)),
+                  style: color
+                      ? Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(color: Colors.white)
+                      : Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.tertiary)),
               Text(member.name,
                   style: Theme.of(context).textTheme.bodySmall,
                   overflow: TextOverflow.ellipsis),
@@ -136,7 +142,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
               child: Container(
                 color: isAttackerFromClan
                     ? isActiveUser
-                        ? Colors.green.shade200
+                        ? Colors.green.shade500
                         : Theme.of(context)
                             .colorScheme
                             .tertiary
@@ -144,6 +150,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
                     : Colors.transparent,
                 child: buildPlayerInfo(
                     isAttackerFromClan ? attacker.tag : attack.defenderTag,
+                    isActiveUser && isAttackerFromClan,
                     false),
               ),
             ),
@@ -155,7 +162,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
                       child: LeftPointingTriangle(
                         width: 10,
                         color: isActiveUser
-                            ? Colors.green.shade200
+                            ? Colors.green.shade500
                             : Theme.of(context)
                                 .colorScheme
                                 .tertiary
@@ -165,7 +172,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
                   : Container(
                       width: 10,
                       color: isActiveUser
-                          ? Colors.green.shade200
+                          ? Colors.green.shade500
                           : Theme.of(context)
                               .colorScheme
                               .tertiary
@@ -178,7 +185,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
               flex: 2,
               child: Container(
                 color: isActiveUser
-                    ? Colors.green.shade200
+                    ? Colors.green.shade500
                     : Theme.of(context)
                         .colorScheme
                         .tertiary
@@ -189,7 +196,9 @@ class _WarEventsTabState extends State<WarEventsTab> {
                     Text('${attack.destructionPercentage}%',
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
                             color: attack.destructionPercentage != 100
-                                ? Theme.of(context).colorScheme.tertiary
+                                ? isActiveUser
+                                    ? Colors.white
+                                    : Theme.of(context).colorScheme.tertiary
                                 : Theme.of(context).colorScheme.primary)),
                     Row(
                       mainAxisSize: MainAxisSize.min,
@@ -211,7 +220,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
                               child: RightPointingTriangle(
                                 width: 10,
                                 color: isActiveUser
-                                    ? Colors.green.shade200
+                                    ? Colors.green.shade500
                                     : Theme.of(context)
                                         .colorScheme
                                         .tertiary
@@ -223,7 +232,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
                   : Container(
                       width: 10,
                       color: isActiveUser
-                          ? Colors.green.shade200
+                          ? Colors.green.shade500
                           : Theme.of(context)
                               .colorScheme
                               .tertiary
@@ -236,7 +245,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
               child: Container(
                   color: !isAttackerFromClan
                       ? isActiveUser
-                          ? Colors.green.shade200
+                          ? Colors.green.shade500
                           : Theme.of(context)
                               .colorScheme
                               .tertiary
@@ -244,6 +253,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
                       : Colors.transparent,
                   child: buildPlayerInfo(
                       isAttackerFromClan ? attack.defenderTag : attacker.tag,
+                      isActiveUser && !isAttackerFromClan,
                       true)),
             ),
           ],
@@ -263,7 +273,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
           sortBy: filterOption,
           updateSortBy: updateFilterOption,
           sortByOptions: {
-            AppLocalizations.of(context)!.all: 'All',
+            AppLocalizations.of(context)!.generalAll: 'All',
             widget.warInfo.clan!.name: '5',
             widget.warInfo.opponent!.name: '4',
             generateStars(3, 20): '3',
@@ -280,8 +290,8 @@ class _WarEventsTabState extends State<WarEventsTab> {
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
-                      child:
-                          Text(AppLocalizations.of(context)!.noDataAvailable),
+                      child: Text(
+                          AppLocalizations.of(context)!.generalNoDataAvailable),
                     ),
                   ),
                   const SizedBox(height: 32),

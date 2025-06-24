@@ -204,10 +204,10 @@ class PlayerItemSection extends StatelessWidget {
                 Text(
                   isSuperTroop
                       ? (item.superTroopIsActive
-                          ? AppLocalizations.of(context)!.active
-                          : AppLocalizations.of(context)!.inactive)
+                          ? AppLocalizations.of(context)!.generalActive
+                          : AppLocalizations.of(context)!.generalInactive)
                       : AppLocalizations.of(context)
-                              ?.level(item.level, item.maxLevel) ??
+                              ?.gameLevel(item.level, item.maxLevel) ??
                           "Level: ${item.level}/${item.maxLevel}",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),

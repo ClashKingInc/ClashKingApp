@@ -39,7 +39,7 @@ class _ClanJoinLeaveStatsState extends State<ClanJoinLeaveStats> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
           child: Column(
             children: [
-              Text(AppLocalizations.of(context)!.statistics,
+              Text(AppLocalizations.of(context)!.navigationStatistics,
                   style: Theme.of(context).textTheme.titleSmall),
               Text(
                 "($formattedStart - $formattedEnd)",
@@ -51,34 +51,34 @@ class _ClanJoinLeaveStatsState extends State<ClanJoinLeaveStats> {
                 runSpacing: 16,
                 children: [
                   StatTile(
-                    label: AppLocalizations.of(context)!.events,
+                    label: AppLocalizations.of(context)!.warEventsTitle,
                     value: '${stats.totalEvents}',
                     icon: Icon(Icons.event),
                   ),
                   StatTile(
-                    label: AppLocalizations.of(context)!.joins,
+                    label: AppLocalizations.of(context)!.joinLeaveJoins,
                     value: '${stats.totalJoins}',
                     icon:
                         Icon(LucideIcons.logIn, size: 24, color: Colors.green),
                   ),
                   StatTile(
-                    label: AppLocalizations.of(context)!.leaves,
+                    label: AppLocalizations.of(context)!.joinLeaveLeaves,
                     value: '${stats.totalLeaves}',
                     icon: Icon(LucideIcons.logOut, size: 24, color: Colors.red),
                   ),
                   StatTile(
-                    label: AppLocalizations.of(context)!.uniquePlayers,
+                    label: AppLocalizations.of(context)!.joinLeaveUniquePlayers,
                     value: '${stats.uniquePlayers}',
                     icon: Icon(Icons.group),
                   ),
                   StatTile(
-                    label: AppLocalizations.of(context)!.movingPlayers,
+                    label: AppLocalizations.of(context)!.joinLeaveMovingPlayers,
                     value: '${stats.movingPlayers}',
                     icon: Icon(LucideIcons.activity,
                         color: const Color.fromARGB(255, 255, 196, 0)),
                   ),
                   StatTile(
-                    label: AppLocalizations.of(context)!.stillInClan,
+                    label: AppLocalizations.of(context)!.joinLeaveStillInClan,
                     value: '${stats.playerStillInClan}',
                     icon: MobileWebImage(
                       imageUrl: ImageAssets.clanCastle,
@@ -87,32 +87,32 @@ class _ClanJoinLeaveStatsState extends State<ClanJoinLeaveStats> {
                     ),
                   ),
                   StatTile(
-                    label: AppLocalizations.of(context)!.leftForever,
+                    label: AppLocalizations.of(context)!.joinLeaveLeftForever,
                     value: '${stats.playerLeftClan}',
                     icon: Icon(Icons.waving_hand),
                   ),
                   StatTile(
-                    label: AppLocalizations.of(context)!.rejoinedPlayers,
+                    label: AppLocalizations.of(context)!.joinLeaveRejoinedPlayers,
                     value: '${stats.rejoinedPlayers}',
                     icon: Icon(Icons.repeat),
                   ),
                   if (stats.avgTimeBetweenJoinLeave != null)
                     StatTile(
-                      label: AppLocalizations.of(context)!.avgTimeJoinLeave,
+                      label: AppLocalizations.of(context)!.joinLeaveAvgTimeJoinLeave,
                       value: formatSecondsToHHMM(
                           stats.avgTimeBetweenJoinLeave ?? 0),
                       icon: Icon(Icons.timer),
                     ),
                   if (stats.mostMovingHour != null)
                     StatTile(
-                      label: AppLocalizations.of(context)!.peakHour,
+                      label: AppLocalizations.of(context)!.joinLeavePeakHour,
                       value: '${stats.mostMovingHour}:00',
                       icon: Icon(Icons.access_time),
                     ),
                 ],
               ),
               const SizedBox(height: 20),
-              Text(AppLocalizations.of(context)!.mostMovingPlayers,
+              Text(AppLocalizations.of(context)!.joinLeaveMostMovingPlayers,
                   style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 12),
               Wrap(

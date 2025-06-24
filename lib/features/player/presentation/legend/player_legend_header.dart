@@ -118,7 +118,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                             width: 60,
                           ),
                           Text(
-                            AppLocalizations.of(context)!.notInLegendLeague,
+                            AppLocalizations.of(context)!.legendsNotInLeague,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall
@@ -177,7 +177,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                               widget.player.rankings?.localRank
                                                       ?.toString() ??
                                                   AppLocalizations.of(context)
-                                                      ?.noRank ??
+                                                      ?.legendsNoRank ??
                                                   'No rank',
                                               style: Theme.of(context)
                                                   .textTheme
@@ -187,7 +187,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                             )
                                           : Text(
                                               AppLocalizations.of(context)
-                                                      ?.noRank ??
+                                                      ?.legendsNoRank ??
                                                   'No rank',
                                               style: Theme.of(context)
                                                   .textTheme
@@ -217,7 +217,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                                 .format(widget.player.rankings
                                                     ?.globalRank)
                                             : AppLocalizations.of(context)
-                                                    ?.noRank ??
+                                                    ?.legendsNoRank ??
                                                 'No rank',
                                         style: Theme.of(context)
                                             .textTheme
@@ -259,45 +259,45 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
             children: [
               TextSpan(
                   text:
-                      "${AppLocalizations.of(context)!.legendsExplanation_intro}\n"),
+                      "${AppLocalizations.of(context)!.legendsInaccurateIntro}\n"),
               TextSpan(
                   text:
-                      "${AppLocalizations.of(context)!.legendsExplanation_api_delay_title}\n",
+                      "${AppLocalizations.of(context)!.legendsInaccurateApiDelayTitle}\n",
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
                   text:
-                      "${AppLocalizations.of(context)!.legendsExplanation_api_delay_body}\n"),
+                      "${AppLocalizations.of(context)!.legendsInaccurateApiDelayBody}\n"),
               TextSpan(
                   text: AppLocalizations.of(context)!
-                      .legendsExplanation_concurrent_changes_title,
+                      .legendsInaccurateConcurrentTitle,
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
                   text: AppLocalizations.of(context)!
-                      .legendsExplanation_multiple_attacks_defenses_title,
+                      .legendsInaccurateMultipleAttacksTitle,
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
                   text: AppLocalizations.of(context)!
-                      .legendsExplanation_multiple_attacks_defenses_body),
+                      .legendsInaccurateMultipleAttacksBody),
               TextSpan(
                   text: AppLocalizations.of(context)!
-                      .legendsExplanation_simultaneous_attack_defense_title,
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(
-                  text:
-                      "${AppLocalizations.of(context)!.legendsExplanation_simultaneous_attack_defense_body}\n"),
-              TextSpan(
-                  text:
-                      "${AppLocalizations.of(context)!.legendsExplanation_net_gain_loss_title}\n",
+                      .legendsInaccurateSimultaneousTitle,
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
                   text:
-                      "${AppLocalizations.of(context)!.legendsExplanation_net_gain_loss_body}\n\n"),
+                      "${AppLocalizations.of(context)!.legendsInaccurateSimultaneousBody}\n"),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.legendsInaccurateNetGainTitle}\n",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text:
+                      "${AppLocalizations.of(context)!.legendsInaccurateNetGainBody}\n\n"),
               TextSpan(
                   text: AppLocalizations.of(context)!
-                      .legendsExplanation_conclusion),
+                      .legendsInaccurateConclusion),
             ],
           ),
-          title: AppLocalizations.of(context)!.legendsTitle,
+          title: AppLocalizations.of(context)!.legendsInaccurateTitle,
         ),
       ],
     );

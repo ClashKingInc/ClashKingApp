@@ -86,7 +86,7 @@ class LegendSeasonChart extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: Column(children: [
             Text(
-              AppLocalizations.of(context)?.trophiesBySeason ?? "Trophies by Season",
+              AppLocalizations.of(context)?.legendsTrophiesBySeason ?? "Trophies by Season",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 16),

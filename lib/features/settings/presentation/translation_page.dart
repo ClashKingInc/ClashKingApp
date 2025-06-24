@@ -8,7 +8,7 @@ class TranslationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.helpUsTranslate),
+        title: Text(AppLocalizations.of(context)!.translationHelpUsTranslate),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -17,14 +17,14 @@ class TranslationScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppLocalizations.of(context)!.thankYou,
+                AppLocalizations.of(context)!.translationThankYou,
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16),
               Text(
-                AppLocalizations.of(context)!.thankYouContent,
+                AppLocalizations.of(context)!.translationThankYouContent,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               SizedBox(height: 16),
@@ -44,14 +44,14 @@ class TranslationScreen extends StatelessWidget {
               ),
               SizedBox(height: 24),
               Text(
-                AppLocalizations.of(context)!.helpUsTranslate,
+                AppLocalizations.of(context)!.translationHelpUsTranslate,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.primary,
                     ),
               ),
               SizedBox(height: 16),
-              Text(AppLocalizations.of(context)!.helpTranslateContent,
+              Text(AppLocalizations.of(context)!.translationHelpTranslateContent,
                   style: Theme.of(context).textTheme.bodyMedium),
               SizedBox(height: 16),
               Center(
@@ -65,7 +65,7 @@ class TranslationScreen extends StatelessWidget {
                   ),
                   icon: Icon(Icons.language),
                   label: Text(
-                    AppLocalizations.of(context)!.helpTranslateButton,
+                    AppLocalizations.of(context)!.translationHelpTranslateButton,
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
@@ -94,7 +94,7 @@ class TranslationScreen extends StatelessWidget {
               ),
               SizedBox(height: 16),
               Text(
-                AppLocalizations.of(context)!.currentTranslators,
+                AppLocalizations.of(context)!.translationCurrentTranslators,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.primary,

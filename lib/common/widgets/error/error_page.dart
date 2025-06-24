@@ -29,7 +29,7 @@ class ErrorPage extends StatelessWidget {
             SizedBox(height: 24),
             ElevatedButton.icon(
               icon: Icon(Icons.refresh),
-              label: Text(AppLocalizations.of(context)!.retry),
+              label: Text(AppLocalizations.of(context)!.generalRetry),
               onPressed: onRetry,
             ),
             Spacer(),

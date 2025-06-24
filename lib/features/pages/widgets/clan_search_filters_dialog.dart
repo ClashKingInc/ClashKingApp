@@ -115,34 +115,34 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
       DropdownMenuItem(
           value: 'whatever',
           alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!.notSet)),
+          child: Text(AppLocalizations.of(context)!.generalNotSet)),
       DropdownMenuItem(
           value: 'always',
           alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!.always)),
+          child: Text(AppLocalizations.of(context)!.clanWarFrequencyAlways)),
       DropdownMenuItem(
           value: 'never',
           alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!.never)),
+          child: Text(AppLocalizations.of(context)!.clanWarFrequencyNever)),
       DropdownMenuItem(
           value: 'oncePerWeek',
           alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!.oncePerWeek)),
+          child: Text(AppLocalizations.of(context)!.clanWarFrequencyOncePerWeek)),
       DropdownMenuItem(
           value: 'moreThanOncePerWeek',
           alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!.twicePerWeek)),
+          child: Text(AppLocalizations.of(context)!.clanWarFrequencyMoreThanOncePerWeek)),
       DropdownMenuItem(
           value: 'lessThanOncePerWeek',
           alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!.rarely)),
+          child: Text(AppLocalizations.of(context)!.clanWarFrequencyRarely)),
     ];
 
     return AlertDialog(
       insetPadding: EdgeInsets.all(16),
       backgroundColor: Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
-      title: Text(AppLocalizations.of(context)!.filters,
+      title: Text(AppLocalizations.of(context)!.generalFilters,
           textAlign: TextAlign.center),
       content: SingleChildScrollView(
         child: Form(
@@ -154,7 +154,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 child: Column(
                   children: [
                     SizedBox(height: 8),
-                    Text(AppLocalizations.of(context)!.warFrequency,
+                    Text(AppLocalizations.of(context)!.clanWarFrequency,
                         style: Theme.of(context).textTheme.bodyMedium),
                     DropdownButton<String>(
                       value: warfrequency,
@@ -180,7 +180,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 child: Column(
                   children: [
                     SizedBox(height: 8),
-                    Text(AppLocalizations.of(context)!.location,
+                    Text(AppLocalizations.of(context)!.clanLocation,
                         style: Theme.of(context).textTheme.bodyMedium),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -202,7 +202,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                                 value: '0',
                                 alignment: Alignment.center,
                                 child: Text(
-                                    AppLocalizations.of(context)!.notSet),
+                                    AppLocalizations.of(context)!.generalNotSet),
                               ),
                               ..._countries.map<DropdownMenuItem<String>>(
                                 (item) {
@@ -260,7 +260,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 child: Column(
                   children: [
                     SizedBox(height: 8),
-                    Text(AppLocalizations.of(context)!.members,
+                    Text(AppLocalizations.of(context)!.clanMembers,
                         style: Theme.of(context).textTheme.bodyMedium),
                     Row(
                       children: [
@@ -283,7 +283,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               hintText:
-                                  AppLocalizations.of(context)!.minimumMembers,
+                                  AppLocalizations.of(context)!.clanMinimumMembers,
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -324,7 +324,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               hintText:
-                                  AppLocalizations.of(context)!.maximumMembers,
+                                  AppLocalizations.of(context)!.clanMaximumMembers,
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -362,7 +362,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 child: Column(
                   children: [
                     SizedBox(height: 8),
-                    Text(AppLocalizations.of(context)!.minimumClanPoints,
+                    Text(AppLocalizations.of(context)!.clanMinimumPoints,
                         style: Theme.of(context).textTheme.bodyMedium),
                     SizedBox(height: 8),
                     Row(
@@ -385,7 +385,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               hintText:
-                                  AppLocalizations.of(context)!.minimumMembers,
+                                  AppLocalizations.of(context)!.clanMinimumMembers,
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -424,7 +424,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 child: Column(
                   children: [
                     SizedBox(height: 8),
-                    Text(AppLocalizations.of(context)!.minimumClanLevel,
+                    Text(AppLocalizations.of(context)!.clanMinimumLevel,
                         style: Theme.of(context).textTheme.bodyMedium),
                     SizedBox(height: 8),
                     Row(
@@ -447,7 +447,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               hintText:
-                                  AppLocalizations.of(context)!.minimumMembers,
+                                  AppLocalizations.of(context)!.clanMinimumMembers,
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -487,13 +487,13 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text(AppLocalizations.of(context)!.cancel),
+          child: Text(AppLocalizations.of(context)!.generalCancel),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text(AppLocalizations.of(context)!.apply),
+          child: Text(AppLocalizations.of(context)!.generalApply),
           onPressed: () {
             String query = "";
             if (_formKey.currentState!.validate()) {

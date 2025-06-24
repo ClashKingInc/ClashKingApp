@@ -49,7 +49,7 @@ class PlayerLegendCard extends StatelessWidget {
                               Column(
                                 children: [
                                   Text(
-                                    AppLocalizations.of(context)!.legendLeague,
+                                    AppLocalizations.of(context)!.legendsInaccurateTitle,
                                     style:
                                         Theme.of(context).textTheme.labelLarge,
                                   ),
@@ -100,14 +100,14 @@ class PlayerLegendCard extends StatelessWidget {
                                                               .rankings
                                                               ?.localRank)
                                                       : AppLocalizations.of(context)!
-                                                          .noRank,
+                                                          .legendsNoRank,
                                                   description: player.rankings?.localRank != 0
                                                       ? AppLocalizations.of(context)!
-                                                          .legendRankLocalDescription(
+                                                          .legendsRankLocalDescription(
+                                                              player.rankings?.localRank ?? 0,
                                                               player.rankings!.countryName ?? "",
-                                                              "${player.rankings?.localRank}",
-                                                              "${player.trophies}")
-                                                      : AppLocalizations.of(context)!.legendNoRankLocalDescription(player.rankings!.countryName ?? "", player.trophies)),
+                                                              player.trophies)
+                                                      : AppLocalizations.of(context)!.legendsNoRankLocalDescription(player.rankings!.countryName ?? "", player.trophies)),
                                             if (player.rankings?.countryCode !=
                                                     null &&
                                                 player.rankings?.countryCode !=
@@ -125,10 +125,10 @@ class PlayerLegendCard extends StatelessWidget {
                                                       : "N/A",
                                                   description: player.rankings?.globalRank != null
                                                       ? AppLocalizations.of(context)!
-                                                          .legendGlobalRankDescription(
+                                                          .legendsGlobalRankDescription(
                                                               player.rankings?.globalRank ?? 0,
-                                                              "${player.trophies}")
-                                                      : AppLocalizations.of(context)!.legendNoGlobalRankDescription(player.trophies)),
+                                                              player.trophies)
+                                                      : AppLocalizations.of(context)!.legendsNoGlobalRankDescription(player.trophies)),
                                             ImageChip(
                                               context: context,
                                               imageUrl:
@@ -143,7 +143,7 @@ class PlayerLegendCard extends StatelessWidget {
                                                       0),
                                               description: AppLocalizations.of(
                                                       context)!
-                                                  .legendStartDescription(
+                                                  .legendsStartDescription(
                                                       "${currentDay.startTrophies ?? 0}"),
                                             ),
                                             ImageChip(
@@ -177,10 +177,10 @@ class PlayerLegendCard extends StatelessWidget {
                                               ),
                                               description:
                                                   AppLocalizations.of(context)!
-                                                      .attacksLeftDescription(
+                                                      .todoAttacksLeftDescription(
                                                 (8 - currentDay.totalAttacks),
                                                 AppLocalizations.of(context)!
-                                                    .legendLeague,
+                                                    .legendsTitle,
                                               ),
                                             ),
                                             ImageChip(
@@ -215,10 +215,10 @@ class PlayerLegendCard extends StatelessWidget {
                                               ),
                                               description:
                                                   AppLocalizations.of(context)!
-                                                      .defensesLeftDescription(
+                                                      .todoDefensesLeftDescription(
                                                 (8 - currentDay.totalDefenses),
                                                 AppLocalizations.of(context)!
-                                                    .legendLeague,
+                                                    .legendsTitle,
                                               ),
                                             ),
                                             IconChip(
@@ -238,12 +238,12 @@ class PlayerLegendCard extends StatelessWidget {
                                                       0
                                                   ? AppLocalizations.of(
                                                           context)!
-                                                      .legendGainDescription(
+                                                      .legendsGainDescription(
                                                           currentDay
                                                               .trophiesTotal)
                                                   : AppLocalizations.of(
                                                           context)!
-                                                      .legendLossDescription(
+                                                      .legendsLossDescription(
                                                           -currentDay
                                                               .trophiesTotal),
                                             ),
@@ -273,14 +273,14 @@ class PlayerLegendCard extends StatelessWidget {
                                                                   .rankings
                                                                   ?.localRank)
                                                           : AppLocalizations.of(context)!
-                                                              .noRank,
+                                                              .legendsNoRank,
                                                       description: player.rankings?.localRank != 0
                                                           ? AppLocalizations.of(context)!
-                                                              .legendRankLocalDescription(
+                                                              .legendsRankLocalDescription(
+                                                                  player.rankings?.localRank ?? 0,
                                                                   player.rankings!.countryName ?? "",
-                                                                  "${player.rankings?.localRank}",
-                                                                  "${player.trophies}")
-                                                          : AppLocalizations.of(context)!.legendNoRankLocalDescription(player.rankings!.countryName ?? "", player.trophies)),
+                                                                  player.trophies)
+                                                          : AppLocalizations.of(context)!.legendsNoRankLocalDescription(player.rankings!.countryName ?? "", player.trophies)),
                                                 if (player.rankings?.countryCode != null &&
                                                     player.rankings?.countryCode !=
                                                         "" &&
@@ -298,10 +298,10 @@ class PlayerLegendCard extends StatelessWidget {
                                                           : "N/A",
                                                       description: player.rankings?.globalRank != null
                                                           ? AppLocalizations.of(context)!
-                                                              .legendGlobalRankDescription(
+                                                              .legendsGlobalRankDescription(
                                                                   player.rankings?.globalRank ?? 0,
-                                                                  "${player.trophies}")
-                                                          : AppLocalizations.of(context)!.legendNoGlobalRankDescription(player.trophies)),
+                                                                  player.trophies)
+                                                          : AppLocalizations.of(context)!.legendsNoGlobalRankDescription(player.trophies)),
                                                 ImageChip(
                                                   context: context,
                                                   imageUrl: ImageAssets
@@ -315,7 +315,7 @@ class PlayerLegendCard extends StatelessWidget {
                                                       .format(player.trophies),
                                                   description: AppLocalizations
                                                           .of(context)!
-                                                      .legendStartDescription(
+                                                      .legendsStartDescription(
                                                           "${player.trophies}"),
                                                 ),
                                                 ImageChip(
@@ -386,14 +386,14 @@ class PlayerLegendCard extends StatelessWidget {
                                                     label: "0",
                                                     description: AppLocalizations
                                                             .of(context)!
-                                                        .legendGainDescription(
+                                                        .legendsGainDescription(
                                                             0)),
                                               ],
                                             )
                                           ])
                                     : Text(
                                         AppLocalizations.of(context)!
-                                            .noLegendsDataToday,
+                                            .legendsNoDataToday,
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelLarge),

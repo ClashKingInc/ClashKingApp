@@ -39,12 +39,12 @@ class NotInWarCardState extends State<NotInWarCard> {
                     children: [
                       Text(
                         AppLocalizations.of(context)
-                                ?.isNotInWar(widget.clanName) ??
+                                ?.warIsNotInWar(widget.clanName) ??
                             "is not in war.",
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        AppLocalizations.of(context)?.askForWar ??
+                        AppLocalizations.of(context)?.warAskForWar ??
                             'Contact a leader or co-leader to start a war.',
                         textAlign: TextAlign.center,
                       ),

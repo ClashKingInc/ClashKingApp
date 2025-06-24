@@ -24,33 +24,31 @@ class WarStatisticsTab extends StatelessWidget {
 
     String getWarStatus() {
       if (clan.stars < opponent.stars) {
-        return AppLocalizations.of(context)?.starsNeededToTakeTheLead(
+        return AppLocalizations.of(context)?.warStarsNeededToTakeTheLead(
               clan.name,
               opponent.stars - clan.stars + 1,
               opponent.stars - clan.stars,
-              (opponent.destructionPercentage - clan.destructionPercentage + 0.01).toStringAsFixed(2),
-              opponent.stars - clan.stars,
+              (opponent.destructionPercentage - clan.destructionPercentage + 0.01).toStringAsFixed(2)
             ) ?? '';
       } else if (clan.stars > opponent.stars) {
-        return AppLocalizations.of(context)?.starsNeededToTakeTheLead(
+        return AppLocalizations.of(context)?.warStarsNeededToTakeTheLead(
               opponent.name,
               clan.stars - opponent.stars + 1,
               clan.stars - opponent.stars,
-              (clan.destructionPercentage - opponent.destructionPercentage + 0.01).toStringAsFixed(2),
-              clan.stars - opponent.stars,
+              (clan.destructionPercentage - opponent.destructionPercentage + 0.01).toStringAsFixed(2)
             ) ?? '';
       } else if (clan.destructionPercentage > opponent.destructionPercentage) {
-        return AppLocalizations.of(context)?.starsAndPercentNeededToTakeTheLead(
+        return AppLocalizations.of(context)?.warStarsAndPercentNeededToTakeTheLead(
               clan.name,
               (clan.destructionPercentage - opponent.destructionPercentage + 0.01).toStringAsFixed(2),
             ) ?? '';
       } else if (clan.destructionPercentage < opponent.destructionPercentage) {
-        return AppLocalizations.of(context)?.starsAndPercentNeededToTakeTheLead(
+        return AppLocalizations.of(context)?.warStarsAndPercentNeededToTakeTheLead(
               opponent.name,
               (opponent.destructionPercentage - clan.destructionPercentage + 0.01).toStringAsFixed(2),
             ) ?? '';
       } else {
-        return '${AppLocalizations.of(context)?.clanDraw ?? 'The two clans are tied'}.';
+        return '${AppLocalizations.of(context)?.warClanDraw ?? 'The two clans are tied'}.';
       }
     }
 
@@ -68,7 +66,7 @@ class WarStatisticsTab extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text(AppLocalizations.of(context)?.stars ?? 'Stars'),
+            Text(AppLocalizations.of(context)?.warStarsTitle ?? 'Stars'),
             const SizedBox(height: 10),
             _buildDoubleProgressBar(
               context,
@@ -79,7 +77,7 @@ class WarStatisticsTab extends StatelessWidget {
               imageUrl: "https://assets.clashk.ing/icons/Icon_BB_Star.png",
             ),
             const SizedBox(height: 10),
-            Text(AppLocalizations.of(context)?.attacks ?? 'Attacks'),
+            Text(AppLocalizations.of(context)?.warAttacksTitle ?? 'Attacks'),
             const SizedBox(height: 10),
             _buildDoubleProgressBar(
               context,
@@ -90,7 +88,7 @@ class WarStatisticsTab extends StatelessWidget {
               imageUrl: "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
             ),
             const SizedBox(height: 20),
-            Text(AppLocalizations.of(context)?.destructionRate ?? 'Destruction rate'),
+            Text(AppLocalizations.of(context)?.warDestructionRate ?? 'Destruction rate'),
             const SizedBox(height: 10),
             _buildDoubleProgressBar(
               context,
@@ -101,12 +99,12 @@ class WarStatisticsTab extends StatelessWidget {
               icon: LucideIcons.percent,
             ),
             const SizedBox(height: 20),
-            Text(AppLocalizations.of(context)?.numberOfStars ?? "Number of stars"),
+            Text(AppLocalizations.of(context)?.warStarsNumber ?? "Number of stars"),
             const SizedBox(height: 10),
             _buildStarsBreakdown(clanStarCounts, opponentStarCounts),
             if (warInfo.state == 'inWar') ...[
               const SizedBox(height: 20),
-              Text(AppLocalizations.of(context)?.stateOfTheWar ?? 'State of the war'),
+              Text(AppLocalizations.of(context)?.warStateOfTheWar ?? 'State of the war'),
               const SizedBox(height: 10),
               Text(
                 getWarStatus(),

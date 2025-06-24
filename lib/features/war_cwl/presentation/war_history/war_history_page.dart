@@ -52,7 +52,7 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
               tabs: [
                 Tab(text: AppLocalizations.of(context)?.warLog ?? 'War Log'),
                 Tab(
-                    text: AppLocalizations.of(context)?.statistics ??
+                    text: AppLocalizations.of(context)?.navigationStatistics ??
                         'Statistics'),
               ],
               children: [

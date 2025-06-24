@@ -79,7 +79,7 @@ class WarCard extends StatelessWidget {
                           currentWarInfo.clan!.destructionPercentage <
                               currentWarInfo.opponent!.destructionPercentage))
                   ? Text(
-                      AppLocalizations.of(context)?.victory ?? 'Victory',
+                      AppLocalizations.of(context)?.warVictory ?? 'Victory',
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold, color: Colors.green),
                     )
@@ -98,7 +98,7 @@ class WarCard extends StatelessWidget {
                                   currentWarInfo
                                       .opponent!.destructionPercentage))
                       ? Text(
-                          AppLocalizations.of(context)?.defeat ?? 'Defeat',
+                          AppLocalizations.of(context)?.warDefeat ?? 'Defeat',
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall
@@ -107,7 +107,7 @@ class WarCard extends StatelessWidget {
                                   color: Colors.red),
                         )
                       : Text(
-                          AppLocalizations.of(context)?.draw ?? 'Draw',
+                          AppLocalizations.of(context)?.warDraw ?? 'Draw',
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall
@@ -174,13 +174,13 @@ class WarCard extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              '${AppLocalizations.of(context)?.startsAt(DateFormat('HH:mm').format(currentWarInfo.startTime!.toLocal()))}',
+              '${AppLocalizations.of(context)?.timeStartsAt(DateFormat('HH:mm').format(currentWarInfo.startTime!.toLocal()))}',
               style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 10),
             Text(
-              AppLocalizations.of(context)?.preparation ?? 'Preparation',
+              AppLocalizations.of(context)?.warPreparation ?? 'Preparation',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleSmall,
             ),
@@ -241,7 +241,7 @@ class WarCard extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Text(
-                  "${AppLocalizations.of(context)?.endsAt(DateFormat('HH:mm').format(currentWarInfo.endTime!.toLocal()))}",
+                  "${AppLocalizations.of(context)?.timeEndsAt(DateFormat('HH:mm').format(currentWarInfo.endTime!.toLocal()))}",
                   style: Theme.of(context).textTheme.bodySmall,
                   textAlign: TextAlign.center),
               Center(

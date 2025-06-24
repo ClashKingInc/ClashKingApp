@@ -147,17 +147,17 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   Column(
                     children: [
                       SizedBox(
-                        height: 120,
-                        width: 120,
+                        height: 80,
+                        width: 80,
                         child: CachedNetworkImage(
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
                           imageUrl: logoUrl,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: 12),
                       SizedBox(
-                        width: 200,
+                        width: 160,
                         child: CachedNetworkImage(
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
@@ -167,37 +167,31 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     ],
                   ),
 
-                  SizedBox(height: 32),
+                  SizedBox(height: 16),
 
-                  // Welcome Text
+                  // ClashKing Description
                   Text(
-                    AppLocalizations.of(context)!.welcomeBack,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-
-                  SizedBox(height: 8),
-
-                  Text(
-                    AppLocalizations.of(context)!.chooseSignInMethod,
+                    AppLocalizations.of(context)!.authClashKingDescription,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Colors.grey[600],
+                          fontWeight: FontWeight.w400,
                         ),
+                    textAlign: TextAlign.center,
                   ),
 
-                  SizedBox(height: 32),
+                  SizedBox(height: 24),
 
                   // Auth Tabs
                   Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 10,
-                          offset: Offset(0, 4),
+                          color: Colors.black.withValues(alpha: 0.08),
+                          blurRadius: 20,
+                          offset: Offset(0, 8),
+                          spreadRadius: -4,
                         ),
                       ],
                     ),
@@ -207,33 +201,46 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         TabBar(
                           controller: _tabController,
                           labelColor: Theme.of(context).colorScheme.primary,
-                          unselectedLabelColor: Colors.grey,
-                          indicatorColor: Theme.of(context).colorScheme.primary,
-                          indicatorWeight: 3,
+                          unselectedLabelColor: Colors.grey[600],
+                          indicator: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          indicatorPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                          dividerColor: Colors.transparent,
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                          unselectedLabelStyle: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                          ),
                           tabs: [
                             Tab(
-                              icon: Icon(Icons.discord),
-                              text: AppLocalizations.of(context)!.discord,
+                              icon: Icon(Icons.discord, size: 20),
+                              text: AppLocalizations.of(context)!.authDiscordTitle,
+                              height: 50,
                             ),
                             Tab(
-                              icon: Icon(Icons.email),
-                              text: AppLocalizations.of(context)!.email,
+                              icon: Icon(Icons.email_outlined, size: 20),
+                              text: AppLocalizations.of(context)!.authEmailTitle,
+                              height: 50,
                             ),
                           ],
                         ),
 
                         // Tab Content
                         Container(
-                          constraints:
-                              BoxConstraints(minHeight: 280, maxHeight: 360),
-                          padding: EdgeInsets.all(24),
+                          height: 260,
+                          padding: EdgeInsets.fromLTRB(20, 8, 20, 16),
                           child: TabBarView(
                             controller: _tabController,
                             children: [
                               // Discord Tab
                               _buildDiscordTab(),
 
-                              // email Tab
+                              // Email Tab
                               _buildEmailTab(),
                             ],
                           ),
@@ -242,18 +249,70 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     ),
                   ),
 
-                  SizedBox(height: 24),
+                  SizedBox(height: 16),
 
-                  // Help Link
-                  TextButton(
-                    onPressed: () async =>
-                        launchUrl(Uri.parse('https://discord.gg/clashking')),
-                    child: Text(
-                      AppLocalizations.of(context)!.needHelpJoinDiscord,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            decoration: TextDecoration.underline,
+                  // Help Section
+                  Column(
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.helpTitle,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton.icon(
+                            onPressed: () async =>
+                                launchUrl(Uri.parse('https://discord.gg/clashking')),
+                            icon: Icon(
+                              Icons.discord,
+                              size: 16,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            label: Text(
+                              AppLocalizations.of(context)!.helpJoinDiscord,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            ),
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            ),
                           ),
-                    ),
+                          Text(
+                            ' or ',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: Colors.grey[600],
+                                ),
+                          ),
+                          TextButton.icon(
+                            onPressed: () async => launchUrl(
+                              Uri.parse('mailto:support@clashk.ing?subject=ClashKing App Support'),
+                            ),
+                            icon: Icon(
+                              Icons.email_outlined,
+                              size: 16,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            label: Text(
+                              AppLocalizations.of(context)!.helpEmailUs,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            ),
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -267,28 +326,34 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   Widget _buildDiscordTab() {
     return Column(
       children: [
-        SizedBox(height: 16),
-        Icon(
-          Icons.discord,
-          size: 48,
-          color: Color(0xFF5865F2),
-        ),
-        SizedBox(height: 16),
-        Text(
-          AppLocalizations.of(context)!.signInWithDiscord,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
+        Expanded(
+          child: Column(
+            children: [
+              SizedBox(height: 12),
+              Icon(
+                Icons.discord,
+                size: 48,
+                color: Color(0xFF5865F2),
               ),
-        ),
-        SizedBox(height: 8),
-        Text(
-          AppLocalizations.of(context)!.useDiscordAccount,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[600],
+              SizedBox(height: 12),
+              Text(
+                AppLocalizations.of(context)!.authDiscordSignIn,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                textAlign: TextAlign.center,
               ),
-          textAlign: TextAlign.center,
+              SizedBox(height: 6),
+              Text(
+                AppLocalizations.of(context)!.authDiscordDescription,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Colors.grey[600],
+                    ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
-        Spacer(),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
@@ -296,28 +361,36 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF5865F2),
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
+              elevation: 2,
             ),
             child: _isLoading
-                ? CircularProgressIndicator(color: Colors.white)
+                ? SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.discord, size: 24),
+                      Icon(Icons.discord, size: 20),
                       SizedBox(width: 8),
                       Text(
-                        AppLocalizations.of(context)!.signInWithDiscord,
+                        AppLocalizations.of(context)!.authDiscordContinue,
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                            fontSize: 15, fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
           ),
         ),
-        SizedBox(height: 16),
+        SizedBox(height: 8),
       ],
     );
   }
@@ -327,100 +400,159 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       key: _formKey,
       child: Column(
         children: [
-          // Email description
-          Text(
-            AppLocalizations.of(context)!.useEmailAccount,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
-            textAlign: TextAlign.center,
-          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: 8),
+                  
+                  // Email description
+                  Text(
+                    AppLocalizations.of(context)!.authEmailDescription,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
 
-          SizedBox(height: 16),
+                  SizedBox(height: 12),
 
-          // Email Field
-          TextFormField(
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.email,
-              prefixIcon: Icon(Icons.email),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                  // Email Field
+                  TextFormField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.authEmailTitle,
+                      prefixIcon: Icon(Icons.email_outlined, size: 20),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      isDense: true,
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return AppLocalizations.of(context)!.authEmailRequired;
+                      }
+                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                          .hasMatch(value)) {
+                        return AppLocalizations.of(context)!.authEmailInvalid;
+                      }
+                      return null;
+                    },
+                  ),
+
+                  SizedBox(height: 10),
+
+                  // Password Field
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: _obscurePassword,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.authPasswordLabel,
+                      prefixIcon: Icon(Icons.lock_outline, size: 20),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                            _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                            size: 20),
+                        onPressed: () =>
+                            setState(() => _obscurePassword = !_obscurePassword),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      isDense: true,
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return AppLocalizations.of(context)!.authPasswordRequired;
+                      }
+                      return null;
+                    },
+                  ),
+
+                  // Compact Links Row
+                  SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => RegisterPage()),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        ),
+                        child: Text(
+                          AppLocalizations.of(context)!.authSignUp,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Forgot password feature coming soon!'),
+                              backgroundColor: Theme.of(context).colorScheme.primary,
+                            ),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        ),
+                        child: Text(
+                          AppLocalizations.of(context)!.authPasswordForgot,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return AppLocalizations.of(context)!.pleaseEnterEmail;
-              }
-              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                  .hasMatch(value)) {
-                return AppLocalizations.of(context)!.pleaseEnterValidEmail;
-              }
-              return null;
-            },
           ),
 
-          SizedBox(height: 16),
-
-          // Password Field
-          TextFormField(
-            controller: _passwordController,
-            obscureText: _obscurePassword,
-            decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.password,
-              prefixIcon: Icon(Icons.lock),
-              suffixIcon: IconButton(
-                icon: Icon(
-                    _obscurePassword ? Icons.visibility : Icons.visibility_off),
-                onPressed: () =>
-                    setState(() => _obscurePassword = !_obscurePassword),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return AppLocalizations.of(context)!.pleaseEnterPassword;
-              }
-              return null;
-            },
-          ),
-          // Register Link
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => RegisterPage()),
-              );
-            },
-            child: Text(AppLocalizations.of(context)!.dontHaveAccount),
-          ),
-
-          Spacer(),
-
-          // Sign In Button
+          // Sign In Button (aligned with Discord button)
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: _isLoading ? null : _signInWithEmail,
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
+                elevation: 2,
               ),
               child: _isLoading
-                  ? CircularProgressIndicator(color: Colors.white)
+                  ? SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
                   : Text(
-                      AppLocalizations.of(context)!.signIn,
+                      AppLocalizations.of(context)!.authSignIn,
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
             ),
           ),
 
-          SizedBox(height: 16),
+          SizedBox(height: 8),
         ],
       ),
     );

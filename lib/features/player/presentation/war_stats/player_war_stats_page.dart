@@ -80,8 +80,8 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
                       setState(() {});
                     },
                     tabs: [
-                      Tab(text: AppLocalizations.of(context)!.stats),
-                      Tab(text: AppLocalizations.of(context)!.details),
+                      Tab(text: AppLocalizations.of(context)!.generalStats),
+                      Tab(text: AppLocalizations.of(context)!.generalDetails),
                     ],
                     children: [
                       WarStatsView(
@@ -96,7 +96,7 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
                     ],
                   )
                 : Center(
-                    child: Text(AppLocalizations.of(context)?.noDataAvailable ??
+                    child: Text(AppLocalizations.of(context)?.generalNoDataAvailable ??
                         'No data'),
                   ),
           ],
@@ -109,13 +109,13 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context)?.filters ?? 'Filters'),
+        title: Text(AppLocalizations.of(context)?.generalFilters ?? 'Filters'),
         content:
-            Text(AppLocalizations.of(context)?.comingSoon ?? 'Coming soon...'),
+            Text(AppLocalizations.of(context)?.generalComingSoon ?? 'Coming soon...'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(AppLocalizations.of(context)?.ok ?? 'OK'),
+            child: Text(AppLocalizations.of(context)?.generalOk ?? 'OK'),
           )
         ],
       ),

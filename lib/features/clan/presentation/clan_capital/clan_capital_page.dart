@@ -82,7 +82,7 @@ class ClanCapitalScreenState extends State<ClanCapitalScreen>
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Text(
-                AppLocalizations.of(context)?.noDataAvailable ??
+                AppLocalizations.of(context)?.generalNoDataAvailable ??
                     'No data available',
               ),
             ),

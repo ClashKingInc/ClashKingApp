@@ -32,7 +32,7 @@ class CwlRoundsTabState extends State<CwlRoundsTab> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             AppLocalizations.of(context)!
-                .currentRound(currentRound.roundNumber),
+                .cwlCurrentRound(currentRound.roundNumber),
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
@@ -54,7 +54,7 @@ class CwlRoundsTabState extends State<CwlRoundsTab> {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
                         AppLocalizations.of(context)!
-                            .roundNumber(round.roundNumber),
+                            .cwlRoundNumber(round.roundNumber),
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),

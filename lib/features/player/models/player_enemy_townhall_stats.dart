@@ -20,7 +20,7 @@ class EnemyTownhallStats {
     );
   }
 
-  get starsCountDef => null;
+  Map<String, int> get starsCountDef => Map<String, int>.from(starsCount);
 
   void merge(EnemyTownhallStats other) {
     final newCount = count + other.count;

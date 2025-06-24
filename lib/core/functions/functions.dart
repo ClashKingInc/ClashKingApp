@@ -150,7 +150,7 @@ Future<String> getAppAndDeviceInfo() async {
 }
 
 String getEndedAgoText(DateTime? endTime, material.BuildContext context) {
-  if (endTime == null) return AppLocalizations.of(context)!.unknown;
+  if (endTime == null) return AppLocalizations.of(context)!.clanWarFrequencyUnknown;
 
   final localEndTime = endTime.toLocal();
   final now = DateTime.now();
@@ -159,13 +159,13 @@ String getEndedAgoText(DateTime? endTime, material.BuildContext context) {
   final l10n = AppLocalizations.of(context)!;
 
   if (difference.inMinutes < 1) {
-    return l10n.endedJustNow; // "Ended just now"
+    return l10n.timeEndedJustNow; // "Ended just now"
   } else if (difference.inMinutes < 60) {
-    return l10n.endedMinutesAgo(difference.inMinutes); // "Ended X minutes ago"
+    return l10n.timeEndedMinutesAgo(difference.inMinutes); // "Ended X minutes ago"
   } else if (difference.inHours < 24) {
-    return l10n.endedHoursAgo(difference.inHours); // "Ended X hours ago"
+    return l10n.timeEndedHoursAgo(difference.inHours); // "Ended X hours ago"
   } else {
-    return l10n.endedDaysAgo(difference.inDays); // "Ended X days ago"
+    return l10n.timeEndedDaysAgo(difference.inDays); // "Ended X days ago"
   }
 }
 

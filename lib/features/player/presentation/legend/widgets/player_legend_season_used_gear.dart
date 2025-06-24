@@ -24,7 +24,7 @@ class PlayerLegendSeasonUsedGear extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(localizations?.heroesEquipments ?? "Heroes Equipments",
+          Text(localizations?.gameHeroesEquipments ?? "Heroes Equipments",
               style: Theme.of(context).textTheme.bodyMedium),
           SizedBox(height: 16),
           Wrap(

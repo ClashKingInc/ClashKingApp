@@ -33,12 +33,12 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
     });
   }
 
-  void toggleShowStats(key) {
+  void toggleShowStats(GlobalKey<State<StatefulWidget>> key) {
     setState(() {
       showFullStats = !showFullStats;
       Future.delayed(Duration(milliseconds: 200), () {
         final context = key.currentContext;
-        if (context != null) {
+        if (context != null && context.mounted) {
           Scrollable.ensureVisible(
             context,
             duration: Duration(milliseconds: 300),
@@ -71,17 +71,17 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
                   16,
                   ImageAssets.sword,
                   ImageAssets.builderBaseStar,
-                  "(${AppLocalizations.of(context)!.avg})"): 'averageStars',
+                  "(${AppLocalizations.of(context)!.warAbbreviationAvg})"): 'averageStars',
               generateDoubleImageIconsWithText(
                       16,
                       ImageAssets.sword,
                       ImageAssets.hitrate,
-                      "(${AppLocalizations.of(context)!.avg})"):
+                      "(${AppLocalizations.of(context)!.warAbbreviationAvg})"):
                   'averagePercentage',
               generateImageIconWithText(16, ImageAssets.sword,
-                  AppLocalizations.of(context)!.attackCount): 'attackCount',
+                  AppLocalizations.of(context)!.warAttacksCount): 'attackCount',
               generateImageIconWithText(16, ImageAssets.sword,
-                  AppLocalizations.of(context)!.missedAttacks): 'missedAttacks',
+                  AppLocalizations.of(context)!.warAttacksMissed): 'missedAttacks',
               generateStarsWithIconBefore(3, 16, ImageAssets.sword): '3stars',
               generateStarsWithIconBefore(2, 16, ImageAssets.sword): '2stars',
               generateStarsWithIconBefore(1, 16, ImageAssets.sword): '1stars',
@@ -90,13 +90,13 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
                       16,
                       ImageAssets.sword,
                       Icons.keyboard_double_arrow_down,
-                      AppLocalizations.of(context)!.lowerTownhall):
+                      AppLocalizations.of(context)!.warOpponentLowerTownhall):
                   'attackLowerTH',
               generateDoubleIconsWithText(
                       16,
                       ImageAssets.sword,
                       Icons.keyboard_double_arrow_up,
-                      AppLocalizations.of(context)!.upperTownhall):
+                      AppLocalizations.of(context)!.warOpponentUpperTownhall):
                   'attackUpperTH',
               generateDoubleIcons(16, ImageAssets.shieldWithArrow,
                   ImageAssets.builderBaseStar): 'defStars',
@@ -107,12 +107,12 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
                   16,
                   ImageAssets.shieldWithArrow,
                   ImageAssets.builderBaseStar,
-                  "(${AppLocalizations.of(context)!.avg})"): 'defAverageStars',
+                  "(${AppLocalizations.of(context)!.warAbbreviationAvg})"): 'defAverageStars',
               generateDoubleImageIconsWithText(
                       16,
                       ImageAssets.shieldWithArrow,
                       ImageAssets.hitrate,
-                      "(${AppLocalizations.of(context)!.avg})"):
+                      "(${AppLocalizations.of(context)!.warAbbreviationAvg})"):
                   'defAverageDestruction',
               generateStarsWithIconBefore(3, 16, ImageAssets.shieldWithArrow):
                   'def3stars',
@@ -126,13 +126,13 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
                       16,
                       ImageAssets.shieldWithArrow,
                       Icons.keyboard_double_arrow_down,
-                      AppLocalizations.of(context)!.lowerTownhall):
+                      AppLocalizations.of(context)!.warOpponentLowerTownhall):
                   'defenseLowerTH',
               generateDoubleIconsWithText(
                       16,
                       ImageAssets.shieldWithArrow,
                       Icons.keyboard_double_arrow_up,
-                      AppLocalizations.of(context)!.upperTownhall):
+                      AppLocalizations.of(context)!.warOpponentUpperTownhall):
                   'defenseUpperTH',
             }),
         const SizedBox(height: 12),

@@ -50,23 +50,23 @@ class ClanWarStatsPlayers extends StatelessWidget {
                 showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
                 size: 20,
               ),
-              tooltip: AppLocalizations.of(context)!.toggleTownHallVisibility,
+              tooltip: AppLocalizations.of(context)!.warVisibilityToggleTownHall,
               onPressed: toggleTownHallVisibility,
             ),
             FilterDropdown(
               sortBy: sortBy,
               updateSortBy: updateSortBy,
               sortByOptions: {
-                AppLocalizations.of(context)!.threeStars: "Three Stars Attacks",
-                AppLocalizations.of(context)!.twoStars: "Two Stars Attacks",
-                AppLocalizations.of(context)!.oneStar: "One Star Attacks",
-                AppLocalizations.of(context)!.zeroStar: "No Star Attacks",
-                AppLocalizations.of(context)!.averageDestruction:
+                AppLocalizations.of(context)!.warStarsThree: "Three Stars Attacks",
+                AppLocalizations.of(context)!.warStarsTwo: "Two Stars Attacks",
+                AppLocalizations.of(context)!.warStarsOne: "One Star Attacks",
+                AppLocalizations.of(context)!.warStarsZero: "No Star Attacks",
+                AppLocalizations.of(context)!.warDestructionAverage:
                     "Average Destruction",
-                AppLocalizations.of(context)!.averageStars: "Average Stars",
+                AppLocalizations.of(context)!.warStarsAverage: "Average Stars",
                 AppLocalizations.of(context)!.warParticipation:
                     "War Participation",
-                AppLocalizations.of(context)!.missedAttacks: "Missed Attacks",
+                AppLocalizations.of(context)!.warAttacksMissed: "Missed Attacks",
               },
             ),
             IconButton(
@@ -74,7 +74,7 @@ class ClanWarStatsPlayers extends StatelessWidget {
               onPressed: () {
                 resetFilters();
               },
-              tooltip: AppLocalizations.of(context)!.reset,
+              tooltip: AppLocalizations.of(context)!.joinLeaveReset,
             ),
           ],
         ),

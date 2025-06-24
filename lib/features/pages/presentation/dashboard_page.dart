@@ -39,7 +39,7 @@ class DashboardPage extends StatelessWidget {
             if (selectedProfile.tag.isEmpty) {
               return Center(
                 child: Text(
-                  AppLocalizations.of(context)?.connectionErrorRelaunch ??
+                  AppLocalizations.of(context)?.authErrorConnectionRelaunch ??
                       "Error, please restart",
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),

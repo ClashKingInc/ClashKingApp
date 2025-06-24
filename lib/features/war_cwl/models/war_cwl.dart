@@ -20,7 +20,7 @@ class WarCwl {
     required this.warLeagueInfos,
   });
 
-  get teamSize => warLeagueInfos[0].teamSize;
+  int get teamSize => warLeagueInfos[0].teamSize ?? 0;
 
   factory WarCwl.fromJson(Map<String, dynamic> json, String? tag) {
     try {

@@ -47,7 +47,7 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
               SizedBox(width: 16),
               Expanded(
                 child: Text(
-                  AppLocalizations.of(context)?.creatorCode ??
+                  AppLocalizations.of(context)?.gameCreatorCode ??
                       'Creator Code : ClashKing',
                   textAlign: TextAlign.center,
                   style: TextStyle(

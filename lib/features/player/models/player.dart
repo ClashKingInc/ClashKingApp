@@ -505,16 +505,16 @@ class Player {
     final loc = AppLocalizations.of(context)!;
 
     if (diff.inSeconds < 60) {
-      return loc.justNow;
+      return loc.timeJustNow;
     } else if (diff.inMinutes < 60) {
       final minutes = diff.inMinutes;
-      return minutes == 1 ? loc.minuteAgo(minutes) : loc.minutesAgo(minutes);
+      return minutes == 1 ? loc.timeMinuteAgo(minutes) : loc.timeMinutesAgo(minutes);
     } else if (diff.inHours < 24) {
       final hours = diff.inHours;
-      return hours == 1 ? loc.hourAgo(hours) : loc.hoursAgo(hours, hours);
+      return hours == 1 ? loc.timeHourAgo(hours) : loc.timeHoursAgo(hours);
     } else {
       final days = diff.inDays;
-      return days == 1 ? loc.dayAgo(days) : loc.daysAgo(days);
+      return days == 1 ? loc.timeDayAgo(days) : loc.timeDaysAgo(days);
     }
   }
 

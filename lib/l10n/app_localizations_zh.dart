@@ -9,7 +9,395 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get creatorCode => '创作者代码：ClashKing';
+  String get appTitle => 'ClashKing';
+
+  @override
+  String get appDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+
+  @override
+  String get generalLoading => 'Loading...';
+
+  @override
+  String get generalError => 'Error';
+
+  @override
+  String get generalRetry => 'Retry';
+
+  @override
+  String get generalTryAgain => 'Try again';
+
+  @override
+  String get generalClose => 'Close';
+
+  @override
+  String get generalCancel => 'Cancel';
+
+  @override
+  String get generalOk => 'OK';
+
+  @override
+  String get generalApply => 'Apply';
+
+  @override
+  String get generalConfirm => 'Confirm';
+
+  @override
+  String get generalAdd => 'Add';
+
+  @override
+  String get generalDelete => 'Delete';
+
+  @override
+  String get generalManage => 'Manage';
+
+  @override
+  String get generalManagement => 'Management';
+
+  @override
+  String get generalSettings => 'Settings';
+
+  @override
+  String get generalCopiedToClipboard => 'Copied to clipboard';
+
+  @override
+  String get generalComingSoon => 'Coming soon!';
+
+  @override
+  String get generalAll => 'All';
+
+  @override
+  String get generalTotal => 'Total';
+
+  @override
+  String get generalBest => 'Best';
+
+  @override
+  String get generalWorst => 'Worst';
+
+  @override
+  String get generalAverage => 'Average';
+
+  @override
+  String get generalRemaining => 'Remaining';
+
+  @override
+  String get generalActive => 'Active';
+
+  @override
+  String get generalInactive => 'Inactive';
+
+  @override
+  String get generalStarted => 'Started';
+
+  @override
+  String get generalEnded => 'Ended';
+
+  @override
+  String get generalLevel => 'Level';
+
+  @override
+  String get generalRole => 'Role';
+
+  @override
+  String get generalDate => 'Date';
+
+  @override
+  String get generalStats => 'Stats';
+
+  @override
+  String get generalFullStats => 'Full Stats';
+
+  @override
+  String get generalDetails => 'Details';
+
+  @override
+  String get generalHistory => 'History';
+
+  @override
+  String get generalCharts => 'Charts';
+
+  @override
+  String get generalFilters => 'Filters';
+
+  @override
+  String get generalWhatever => 'Whatever';
+
+  @override
+  String get generalAny => 'Any';
+
+  @override
+  String get generalNotSet => 'Not set';
+
+  @override
+  String get generalWarning => 'Warning';
+
+  @override
+  String get generalNoDataAvailable => 'No data available.';
+
+  @override
+  String get generalClosed => 'Closed';
+
+  @override
+  String get authWelcomeBack => 'Welcome Back';
+
+  @override
+  String get authClashKingDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+
+  @override
+  String get authChooseSignInMethod => 'Choose your preferred sign-in method';
+
+  @override
+  String get authSignIn => 'Sign In';
+
+  @override
+  String get authSignUp => 'Sign up';
+
+  @override
+  String get authLogin => 'Login';
+
+  @override
+  String get authLogout => 'Log out';
+
+  @override
+  String get authCreateAccount => 'Create Account';
+
+  @override
+  String get authJoinClashKing => 'Join ClashKing';
+
+  @override
+  String get authCreateClashKingAccount => 'Create ClashKing Account';
+
+  @override
+  String get authCreateAccountToGetStarted =>
+      'Create your account to get started';
+
+  @override
+  String get authDontHaveAccount => 'Don\'t have an account? Create one';
+
+  @override
+  String get authAlreadyHaveAccount => 'Already have an account? Sign in';
+
+  @override
+  String get authConfirmLogout => 'Are you sure you want to log out?';
+
+  @override
+  String get authDiscordTitle => 'Discord';
+
+  @override
+  String get authDiscordSignIn => 'Sign In with Discord';
+
+  @override
+  String get authDiscordContinue => 'Continue with Discord';
+
+  @override
+  String get authDiscordDescription =>
+      'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!';
+
+  @override
+  String get authDiscordError => 'Discord login failed. Please try again.';
+
+  @override
+  String get authEmailTitle => 'Email';
+
+  @override
+  String get authEmailSignIn => 'Sign in with Email';
+
+  @override
+  String get authEmailDescription =>
+      'Use email if you can\'t access Discord or prefer app-only features';
+
+  @override
+  String get authEmailLabel => 'Email';
+
+  @override
+  String get authEmailPlaceholder => 'Enter your email';
+
+  @override
+  String get authEmailRequired => 'Please enter your email';
+
+  @override
+  String get authEmailInvalid => 'Please enter a valid email';
+
+  @override
+  String get authEmailAlreadyInUse => 'Email may already be in use';
+
+  @override
+  String get authEmailError =>
+      'Email login failed. Please check your credentials.';
+
+  @override
+  String get authPasswordLabel => 'Password';
+
+  @override
+  String get authPasswordConfirm => 'Confirm Password';
+
+  @override
+  String get authPasswordRequired => 'Please enter your password';
+
+  @override
+  String get authPasswordConfirmRequired => 'Please confirm your password';
+
+  @override
+  String get authPasswordMismatch => 'Passwords do not match';
+
+  @override
+  String get authPasswordTooShort => 'Password must be at least 8 characters';
+
+  @override
+  String get authPasswordRequirements =>
+      'Password must contain: uppercase, lowercase, digit, and special character';
+
+  @override
+  String get authPasswordForgot => 'Forgot password?';
+
+  @override
+  String get authPasswordInvalid => 'Invalid email or password';
+
+  @override
+  String get authUsernameLabel => 'Username';
+
+  @override
+  String get authUsernameRequired => 'Please enter a username';
+
+  @override
+  String get authUsernameTooShort => 'Username must be at least 3 characters';
+
+  @override
+  String get authErrorGeneral =>
+      'An error occurred while logging in. Please try again later.';
+
+  @override
+  String get authErrorRegistration =>
+      'Registration failed. Email may already be in use.';
+
+  @override
+  String get authErrorConnection =>
+      'An error occurred. Please check your internet connection and try again.';
+
+  @override
+  String get authErrorConnectionRelaunch =>
+      'An error occurred. Please check your internet connection and relaunch the app.';
+
+  @override
+  String get authAccountManagement => 'Account Management';
+
+  @override
+  String get authAccountConnected => 'Connected Accounts';
+
+  @override
+  String get authAccountConnectedStatus => 'Connected';
+
+  @override
+  String get authAccountNotConnected => 'Not connected';
+
+  @override
+  String get authAccountEmailAndPassword => 'Email & Password';
+
+  @override
+  String get authAccountSecured =>
+      'Your account is secured with multiple authentication methods';
+
+  @override
+  String get authAccountLinkEmail => 'Link Email Account';
+
+  @override
+  String get authAccountAddEmailAuth =>
+      'Add email & password authentication to your account for additional security.';
+
+  @override
+  String get authAccountEmailLinkedSuccess =>
+      'Email account successfully linked!';
+
+  @override
+  String get authAccountEmailLinkFailed =>
+      'Failed to link email account. Email may already be in use.';
+
+  @override
+  String get helpTitle => 'Need help?';
+
+  @override
+  String get helpJoinDiscord => 'Join Discord';
+
+  @override
+  String get helpEmailUs => 'Email Us';
+
+  @override
+  String get helpJoinDiscordServer => 'Need help? Join us on Discord.';
+
+  @override
+  String get helpCannotOpenMailClient =>
+      'For some reasons we can\'t open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.';
+
+  @override
+  String get accountsWelcome => 'Welcome!';
+
+  @override
+  String get accountsWelcomeMessage =>
+      'Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.';
+
+  @override
+  String get accountsManageTitle => 'Manage your accounts';
+
+  @override
+  String get accountsManageDescription =>
+      'You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.';
+
+  @override
+  String get accountsNoneFound => 'No account linked to your profile found';
+
+  @override
+  String get accountsPlayerTag => 'Player Tag (#ABC123)';
+
+  @override
+  String get accountsPlayerTags => 'Player Tags';
+
+  @override
+  String get accountsEnterPlayerTag => 'Enter a player tag';
+
+  @override
+  String get accountsAdd => 'Add account';
+
+  @override
+  String get accountsDelete => 'Delete account';
+
+  @override
+  String get accountsApiToken => 'Account API Token';
+
+  @override
+  String get accountsEnterApiToken =>
+      'Please enter the account API token to confirm it\'s yours. You can find it in Clash of Clans Settings > More Settings > API Token.';
+
+  @override
+  String get accountsFillAllFields => 'Please fill all fields.';
+
+  @override
+  String get accountsErrorTagNotExists =>
+      'The player tag entered does not exist.';
+
+  @override
+  String get accountsErrorAlreadyLinked =>
+      'The player tag is already linked to someone.';
+
+  @override
+  String get accountsErrorAlreadyLinkedToYou =>
+      'The player tag is already linked to you.';
+
+  @override
+  String get accountsErrorWrongApiToken => 'The API token entered is incorrect';
+
+  @override
+  String get accountsErrorFailedToAdd =>
+      'Failed to add the account. Please try again later.';
+
+  @override
+  String get accountsErrorFailedToDelete =>
+      'Failed to delete link. Please try again later.';
+
+  @override
+  String get accountsErrorFailedToUpdateOrder =>
+      'Failed to update the order of accounts.';
 
   @override
   String get errorTitle =>
@@ -20,56 +408,1129 @@ class AppLocalizationsZh extends AppLocalizations {
       'If the issue persists, check our Discord Server to see if we\'re aware of it.';
 
   @override
-  String get retry => 'Retry';
+  String get errorLoadingVersion => '加载版本时出错';
 
   @override
-  String get signInWithDiscord => '使用Discord登录';
+  String get errorConnectionGeneral =>
+      'An error occurred. Please check your internet connection and try again.';
 
   @override
-  String get guestMode => '访客模式';
+  String get errorConnectionRelaunch =>
+      'An error occurred. Please check your internet connection and relaunch the app.';
 
   @override
-  String get needHelpJoinDiscord => '需要帮助？请加入我们的Discord频道。';
+  String get errorCannotOpenLink => 'We can\'t open this link.';
 
   @override
-  String get loginError =>
-      'An error occurred while logging in. Please try again later.';
+  String get errorExitAppToOpenClash =>
+      'You are about to leave the app to open Clash of Clans.';
 
   @override
-  String get username => '用户名';
+  String get playerTitle => 'Player';
 
   @override
-  String get playerTag => 'Player Tag (#ABC123)';
+  String get playerSearchTitle => 'Search player';
 
   @override
-  String get playerTags => '玩家标签';
+  String get playerSearchPlaceholder => 'Player\'s name or tag';
 
   @override
-  String get welcome => '欢迎！';
+  String playerLastActive(String date) {
+    return 'Last active: $date';
+  }
 
   @override
-  String get welcomeMessage => '请将一个或多个部落冲突帐户添加到您的个人资料中。您可以稍后添加或删除帐户。';
+  String get playerNotTracked => '该玩家未被跟踪。数据可能不准确。';
 
   @override
-  String get login => '登录';
+  String playerClanDescription(String clan, String tag) {
+    return '您的部落是“$clan”（$tag）';
+  }
 
   @override
-  String get logout => '注销';
+  String playerRatioDescription(
+      String ratio, String donations, String received) {
+    return '您的捐兵比例为$ratio。你们已经捐赠了$donations人口的部队，并接收了$received人口的部队。';
+  }
 
   @override
-  String get language => '语言';
+  String playerWarPreferenceDescription(String preference) {
+    return '您的部落对战偏好是“$preference”。';
+  }
 
   @override
-  String get settings => '设置';
+  String playerWarStarsDescription(int stars) {
+    return '您拥有$stars胜利之星。';
+  }
 
   @override
-  String get toggleTheme => '切换主题';
+  String playerTrophiesDescription(int trophies, String league) {
+    return '您拥有$trophies奖杯。你目前在$league杯段。';
+  }
 
   @override
-  String get selectLanguage => '搜索语言';
+  String playerTownHallLevelDescription(int level) {
+    return '您的大本营等级是$level';
+  }
 
   @override
-  String get faq => 'FAQ';
+  String playerBuilderBaseDescription(int level, int trophies) {
+    return '您的大本等级为$level，您的奖杯数为：$trophies。';
+  }
+
+  @override
+  String get gameBaseHome => 'Home Base';
+
+  @override
+  String get gameBaseBuilder => 'Builder Base';
+
+  @override
+  String get gameClanCapital => 'Clan Capital';
+
+  @override
+  String get gameTownHall => 'TH';
+
+  @override
+  String get gameBuilderHall => 'BH';
+
+  @override
+  String get gameTownHallLevel => 'TH Level';
+
+  @override
+  String gameTownHallLevelNumber(int level) {
+    return 'Town Hall $level';
+  }
+
+  @override
+  String gameTHLevel(int level) {
+    return 'TH$level';
+  }
+
+  @override
+  String gameBHLevel(int level) {
+    return 'BH$level';
+  }
+
+  @override
+  String get gameExpLevel => 'Experience Level';
+
+  @override
+  String get gameTrophies => 'Trophies';
+
+  @override
+  String get gameBuilderBaseTrophies => 'BB Trophies';
+
+  @override
+  String get gameDonations => 'Donations';
+
+  @override
+  String get gameDonationsReceived => 'Donations Received';
+
+  @override
+  String get gameDonationsRatio => 'Donation Ratio';
+
+  @override
+  String gameLevel(int level, int maxLevel) {
+    return 'Level: $level/$maxLevel';
+  }
+
+  @override
+  String get gameHeroes => 'Heroes';
+
+  @override
+  String get gameEquipment => 'Equipments';
+
+  @override
+  String get gameHeroesEquipments => 'Hero equipments';
+
+  @override
+  String get gameTroops => 'Troops';
+
+  @override
+  String get gameSuperTroops => 'Super Troops';
+
+  @override
+  String get gameActiveSuperTroops => 'Active Super Troops';
+
+  @override
+  String get gamePets => 'Pets';
+
+  @override
+  String get gameSiegeMachines => 'Siege Machines';
+
+  @override
+  String get gameSpells => 'Spells';
+
+  @override
+  String get gameAchievements => 'Achievements';
+
+  @override
+  String get gameClanGames => 'Clan Games';
+
+  @override
+  String get gameSeasonPass => 'Season Pass';
+
+  @override
+  String get gameCreatorCode => 'Creator Code: ClashKing';
+
+  @override
+  String get clanTitle => 'Clan';
+
+  @override
+  String get clansTitle => 'Clans';
+
+  @override
+  String get clanSearchTitle => 'Search clan';
+
+  @override
+  String get clanSearchPlaceholder => 'Clan\'s name';
+
+  @override
+  String get clanNone => 'No clan';
+
+  @override
+  String get clanJoinToUnlock => 'Join a clan to unlock new features.';
+
+  @override
+  String get clanMembers => 'Members';
+
+  @override
+  String get clanWarFrequency => 'War frequency';
+
+  @override
+  String get clanMinimumMembers => 'Minimum members';
+
+  @override
+  String get clanMaximumMembers => 'Maximum members';
+
+  @override
+  String get clanLocation => 'Location';
+
+  @override
+  String get clanMinimumPoints => 'Minimum clan points';
+
+  @override
+  String get clanMinimumLevel => 'Minimum clan level';
+
+  @override
+  String get clanInviteOnly => 'Invite Only';
+
+  @override
+  String get clanOpened => 'Opened';
+
+  @override
+  String get clanClosed => 'Closed';
+
+  @override
+  String get clanRoleLeader => 'Leader';
+
+  @override
+  String get clanRoleCoLeader => 'Co-Leader';
+
+  @override
+  String get clanRoleElder => 'Elder';
+
+  @override
+  String get clanRoleMember => 'Member';
+
+  @override
+  String get clanWarFrequencyAlways => 'Always';
+
+  @override
+  String get clanWarFrequencyNever => 'Never';
+
+  @override
+  String get clanWarFrequencyUnknown => 'Unknown';
+
+  @override
+  String get clanWarFrequencyOncePerWeek => '1/week';
+
+  @override
+  String get clanWarFrequencyMoreThanOncePerWeek => 'More than 1/week';
+
+  @override
+  String get clanWarFrequencyRarely => 'Rarely';
+
+  @override
+  String get timeHourIndicator => 'h';
+
+  @override
+  String get timeMinIndicator => 'm';
+
+  @override
+  String timeDaysLeft(int days) {
+    return '$days days left';
+  }
+
+  @override
+  String timeDaysAgo(int days) {
+    return '$days days ago';
+  }
+
+  @override
+  String timeDayAgo(int day) {
+    return '$day day ago';
+  }
+
+  @override
+  String timeHourAgo(int hour) {
+    return '$hour hour ago';
+  }
+
+  @override
+  String timeHoursAgo(int hours) {
+    return '$hours hours ago';
+  }
+
+  @override
+  String timeMinuteAgo(int minute) {
+    return '$minute minute ago';
+  }
+
+  @override
+  String timeMinutesAgo(int minutes) {
+    return '$minutes minutes ago';
+  }
+
+  @override
+  String timeSecondAgo(int seconds) {
+    return '${seconds}s ago';
+  }
+
+  @override
+  String get timeJustNow => 'Just Now';
+
+  @override
+  String get timeEndedJustNow => 'Ended just now';
+
+  @override
+  String timeEndedMinutesAgo(int minutes) {
+    return 'Ended $minutes minutes ago';
+  }
+
+  @override
+  String timeEndedHoursAgo(int hours) {
+    return 'Ended $hours hours ago';
+  }
+
+  @override
+  String timeEndedDaysAgo(int days) {
+    return 'Ended $days days ago';
+  }
+
+  @override
+  String timeStartsIn(String time) {
+    return 'Starts in $time';
+  }
+
+  @override
+  String timeStartsAt(String time) {
+    return 'Starts at $time';
+  }
+
+  @override
+  String timeEndsIn(String time) {
+    return 'Ends in $time';
+  }
+
+  @override
+  String timeEndsAt(String time) {
+    return 'Ends at $time';
+  }
+
+  @override
+  String timeUpdatedAt(String time) {
+    return 'Updated at $time';
+  }
+
+  @override
+  String get legendsTitle => '数据不准确？';
+
+  @override
+  String get legendsNotInLeague => 'Not in Legend League';
+
+  @override
+  String get legendsNoDataToday =>
+      'You\'re not in Legend League, but past seasons are available.';
+
+  @override
+  String legendsStartDescription(String trophies) {
+    return 'You started the day with $trophies trophies.';
+  }
+
+  @override
+  String legendsNoRankLocalDescription(String country, int trophies) {
+    return 'You are currently not ranked ($country) with $trophies trophies.';
+  }
+
+  @override
+  String legendsRankLocalDescription(int rank, String country, int trophies) {
+    return 'You are currently ranked $rank ($country) with $trophies trophies.';
+  }
+
+  @override
+  String legendsGainDescription(int trophies) {
+    return 'You gained $trophies trophies for now.';
+  }
+
+  @override
+  String legendsLossDescription(int trophies) {
+    return 'You lost $trophies trophies for now.';
+  }
+
+  @override
+  String legendsNoGlobalRankDescription(int trophies) {
+    return 'You are currently not ranked globally with $trophies trophies.';
+  }
+
+  @override
+  String legendsGlobalRankDescription(int rank, int trophies) {
+    return 'You are currently ranked $rank globally with $trophies trophies.';
+  }
+
+  @override
+  String get legendsNoRank => 'No ranking';
+
+  @override
+  String get legendsBestTrophies => 'Best Trophies';
+
+  @override
+  String get legendsMostAttacks => 'Most Attacks';
+
+  @override
+  String get legendsLastSeason => 'Last Season';
+
+  @override
+  String get legendsBestRank => 'Best Global Rank';
+
+  @override
+  String get legendsTrophiesBySeason => 'Trophies by season';
+
+  @override
+  String get legendsEosTrophies => 'End Of Season Trophies';
+
+  @override
+  String get legendsEosDetails => 'End Of Season Details';
+
+  @override
+  String get legendsInaccurateTitle => 'Inaccurate data?';
+
+  @override
+  String get legendsInaccurateIntro =>
+      'Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here\'s why:\n';
+
+  @override
+  String get legendsInaccurateApiDelayTitle => '1. API Delay: ';
+
+  @override
+  String get legendsInaccurateApiDelayBody =>
+      'The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n';
+
+  @override
+  String get legendsInaccurateConcurrentTitle => '2. Concurrent Changes: \n';
+
+  @override
+  String get legendsInaccurateMultipleAttacksTitle =>
+      '- Multiple Attacks/Defenses: ';
+
+  @override
+  String get legendsInaccurateMultipleAttacksBody =>
+      'If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n';
+
+  @override
+  String get legendsInaccurateSimultaneousTitle =>
+      '- Simultaneous Attack and Defense: ';
+
+  @override
+  String get legendsInaccurateSimultaneousBody =>
+      'If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n';
+
+  @override
+  String get legendsInaccurateNetGainTitle => '3. Net Gain/Loss: ';
+
+  @override
+  String get legendsInaccurateNetGainBody =>
+      'Despite timing issues, the overall net gain or loss for the day is accurate. ';
+
+  @override
+  String get legendsInaccurateConclusion =>
+      'These limitations are common across all tools using the Clash of Clans API. We sadly can\'t fix that as it is in Supercell\'s hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!';
+
+  @override
+  String get statsSeasonStats => 'Season Stats';
+
+  @override
+  String get statsByDay => 'By Day';
+
+  @override
+  String get statsBySeason => 'By Season';
+
+  @override
+  String statsDayIndex(int index) {
+    return 'Day $index';
+  }
+
+  @override
+  String statsIndexDays(int index) {
+    return '$index days';
+  }
+
+  @override
+  String get statsYear => 'Year';
+
+  @override
+  String get statsMonth => 'Month';
+
+  @override
+  String statsSeasonDate(String date) {
+    return '$date season';
+  }
+
+  @override
+  String get statsSelectSeason => 'Select a season';
+
+  @override
+  String get statsAllTownHalls => 'All Town Halls';
+
+  @override
+  String get statsMembers => 'Members Stats';
+
+  @override
+  String get todoTitle => 'To-do list';
+
+  @override
+  String get todoExplanationTitle => 'Task Calculation';
+
+  @override
+  String get todoExplanationIntro =>
+      'The task completion percentage is calculated based on the following activities with specific weightings:';
+
+  @override
+  String get todoExplanationLegendsTitle => 'Legend League:';
+
+  @override
+  String get todoExplanationLegends =>
+      'Weight of 8 points per account, 1 attack = 1 point.';
+
+  @override
+  String get todoExplanationRaidsTitle => 'Raids:';
+
+  @override
+  String get todoExplanationRaids =>
+      'Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.';
+
+  @override
+  String get todoExplanationClanWarsTitle => 'Clan Wars:';
+
+  @override
+  String get todoExplanationClanWars =>
+      'Weight of 2 points per account, 1 attack = 1 point.';
+
+  @override
+  String get todoExplanationCwlTitle => 'Clan War League:';
+
+  @override
+  String get todoExplanationCwl =>
+      'Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.';
+
+  @override
+  String get todoExplanationPassAndGamesTitle => 'Season Pass & Clan Games:';
+
+  @override
+  String get todoExplanationPassAndGames =>
+      'Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.';
+
+  @override
+  String get todoExplanationConclusion =>
+      'The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.';
+
+  @override
+  String todoAccountsNumber(int number) {
+    return '$number accounts';
+  }
+
+  @override
+  String todoAccountsNumberActive(int number) {
+    return '$number active accounts';
+  }
+
+  @override
+  String todoAccountsNumberInactive(int number) {
+    return '$number inactive accounts';
+  }
+
+  @override
+  String get todoAccountsActive => 'Active accounts';
+
+  @override
+  String get todoAccountsInactive => 'Inactive accounts';
+
+  @override
+  String get todoAccountsNoInactive => 'No inactive accounts.';
+
+  @override
+  String get todoAccountsNoActive => 'No active accounts.';
+
+  @override
+  String todoAttacksLeftDescription(int attacks, String type) {
+    return 'You have $attacks attack(s) left ($type).';
+  }
+
+  @override
+  String todoDefensesLeftDescription(int defenses, String type) {
+    return 'You have $defenses defense(s) left ($type).';
+  }
+
+  @override
+  String todoNoAttacksLeftDescription(String type) {
+    return 'Congratulations, you have done all your attacks ($type)!';
+  }
+
+  @override
+  String todoPointsLeftDescription(int points, String type) {
+    return 'You have $points points left to get today to be in time for the end of the event ($type).';
+  }
+
+  @override
+  String todoPointsLeftDescriptionNoPoints(String type) {
+    return 'Congratulations, you are on time to get the maximum rewards at the end of the event ($type)!';
+  }
+
+  @override
+  String get warTitle => 'War';
+
+  @override
+  String get warFrequency => '对战频率';
+
+  @override
+  String get warParticipation => '参战';
+
+  @override
+  String get warLeague => '部落战/联赛';
+
+  @override
+  String get warHistory => '部落对战历史';
+
+  @override
+  String get warLog => '对战日志';
+
+  @override
+  String get warLogPublic => 'Public War Log';
+
+  @override
+  String get warLogPrivate => 'Private War Log';
+
+  @override
+  String warLogClosed(String clan) {
+    return '对战日志已关闭。';
+  }
+
+  @override
+  String get warStats => '部落战统计';
+
+  @override
+  String get warOngoing => 'Ongoing war';
+
+  @override
+  String get warNotInWar => 'Not in war';
+
+  @override
+  String warIsNotInWar(String clan) {
+    return '$clan is not in war.';
+  }
+
+  @override
+  String get warAskForWar =>
+      'Contact the leader or a co-leader to start a war.';
+
+  @override
+  String get warAskForWarLogOpening =>
+      'Contact a leader or a co-leader to open the war log.';
+
+  @override
+  String get warEnded => '部落战已结束';
+
+  @override
+  String get warPreparation => 'Preparation';
+
+  @override
+  String get warPerfectWar => 'Perfect war';
+
+  @override
+  String get warVictory => 'Victory';
+
+  @override
+  String get warDefeat => 'Defeat';
+
+  @override
+  String get warDraw => 'Draw';
+
+  @override
+  String get warTeamSize => 'Team size';
+
+  @override
+  String get warMyTeam => 'My team';
+
+  @override
+  String get warEnemiesTeam => 'Enemies';
+
+  @override
+  String get warClanDraw => 'The two clans are tied';
+
+  @override
+  String get warStateOfTheWar => 'State of the war';
+
+  @override
+  String warStarsNeededToTakeTheLead(
+      String clan, int star, int stars2, String percent) {
+    return '$clan still need $star more star(s) or $stars2 star(s) and $percent% to take the lead.';
+  }
+
+  @override
+  String warStarsAndPercentNeededToTakeTheLead(String clan, String percent) {
+    return '$clan still need $percent% or 1 more star to take the lead';
+  }
+
+  @override
+  String get warNoDataAvailableForThisWar => 'No data available for this war';
+
+  @override
+  String get warCalculatorFast => 'Fast calculator';
+
+  @override
+  String warCalculatorAnswer(String percentNeeded, String result) {
+    return 'To achieve a destruction rate of $percentNeeded%, a total of $result% is needed.';
+  }
+
+  @override
+  String get warCalculatorNeededOverall => '% Needed overall';
+
+  @override
+  String get warCalculatorCalculate => 'Calculate';
+
+  @override
+  String get warAttacksTitle => 'Attacks';
+
+  @override
+  String get warAttacksNone => 'No attack yet';
+
+  @override
+  String get warAttacksBest => 'Best attacks';
+
+  @override
+  String get warAttacksCount => 'Attack Count';
+
+  @override
+  String get warAttacksMissed => 'Missed Attacks';
+
+  @override
+  String warAttacksNumber(int number_time, int number_war) {
+    return 'You attacked $number_time time(s) during the last $number_war wars.';
+  }
+
+  @override
+  String warAttacksAverageStars(String stars) {
+    return 'You had an average of $stars stars per war.';
+  }
+
+  @override
+  String warAttacksAverageDestruction(String percent) {
+    return 'You had an average of $percent% destruction rate per war.';
+  }
+
+  @override
+  String get warDefenseTitle => 'Defense';
+
+  @override
+  String get warDefensesTitle => 'Defenses';
+
+  @override
+  String get warDefensesNone => 'No defense yet';
+
+  @override
+  String get warDefensesBest => 'Best defenses';
+
+  @override
+  String warDefensesBestOutOf(int number) {
+    return 'Best defense (out of $number)';
+  }
+
+  @override
+  String get warDefenseStars => 'Defense Stars';
+
+  @override
+  String warDefensesNumber(int number_time, int number_war) {
+    return 'You defended $number_time time(s) during the last $number_war wars.';
+  }
+
+  @override
+  String warDefensesAverageStars(double stars) {
+    return 'You had an average of $stars stars per defense.';
+  }
+
+  @override
+  String warDefensesAverageDestruction(String percent) {
+    return 'You had an average of $percent% destruction rate per defense.';
+  }
+
+  @override
+  String get warStarsTitle => 'Stars';
+
+  @override
+  String get warStarsTotal => 'Total';
+
+  @override
+  String get warStarsAverage => 'Average stars';
+
+  @override
+  String get warStarsNumber => 'Number of stars';
+
+  @override
+  String get warStarsOne => '1 star';
+
+  @override
+  String get warStarsTwo => '2 stars';
+
+  @override
+  String get warStarsThree => '3 stars';
+
+  @override
+  String get warStarsZero => '0 Star';
+
+  @override
+  String get warStarsBestPerformance => 'Best performance';
+
+  @override
+  String get warDestructionTitle => 'Destruction';
+
+  @override
+  String get warDestructionAverage => 'Average destruction';
+
+  @override
+  String get warDestructionRate => 'Destruction rate';
+
+  @override
+  String warHistoryWinsDescription(int wins, String percent) {
+    return '在过去50场部落战中，您的部落赢得$wins场($percent%)';
+  }
+
+  @override
+  String warHistoryLossesDescription(int losses, String percent) {
+    return '在过去的50 场部落战中，您的部落失败$losses场($percent%)';
+  }
+
+  @override
+  String warHistoryDrawsDescription(int draws, String percent) {
+    return '在过去50场部落战中，您的部落平局$draws场($percent%)';
+  }
+
+  @override
+  String warHistoryAverageMembersDescription(int members) {
+    return '在过去50场部落战中，您的部落平均有$members人参战';
+  }
+
+  @override
+  String warHistoryAverageWarStarsDescription(double stars, String percent) {
+    return '在过去 50 场战争中，您的部落平均每场战争获得 $stars 颗星星，占比 $percent';
+  }
+
+  @override
+  String warHistoryAverageHitRateDescription(String percent) {
+    return '您的部落在过去 50 场战争中的平均摧毁率为 $percent%';
+  }
+
+  @override
+  String get warPositionMap => 'Map Position';
+
+  @override
+  String get warPositionAbbr => 'Pos';
+
+  @override
+  String get warPositionOrder => 'Order';
+
+  @override
+  String get warOpponentTownhall => 'Opp TH';
+
+  @override
+  String get warOpponentLowerTownhall => 'Lower TH';
+
+  @override
+  String get warOpponentUpperTownhall => 'Upper TH';
+
+  @override
+  String get warOpponentEqualThLevel => 'Equal TH';
+
+  @override
+  String get warOpponentSelectMembersThLevel => 'Members TH Level';
+
+  @override
+  String get warOpponentSelectOpponentsThLevel => 'Opponents TH Level';
+
+  @override
+  String get warFiltersByNumberOfWars => 'By number of wars';
+
+  @override
+  String get warFiltersByDateRange => 'By date range';
+
+  @override
+  String warFiltersLastXwars(int number) {
+    return 'Last $number wars';
+  }
+
+  @override
+  String get warFiltersFriendly => 'Friendly';
+
+  @override
+  String get warFiltersRandom => 'Random';
+
+  @override
+  String get warVisibilityToggleTownHall =>
+      'Hide/Show stats from former TH levels';
+
+  @override
+  String get warEventsTitle => 'Events';
+
+  @override
+  String get warEventsNewest => 'Newest';
+
+  @override
+  String get warEventsOldest => 'Oldest';
+
+  @override
+  String get warStatusReady => 'Opted In';
+
+  @override
+  String get warStatusUnready => 'Opted Out';
+
+  @override
+  String get warStatusMissed => 'Missed';
+
+  @override
+  String get warAbbreviationAvg => 'Avg';
+
+  @override
+  String get warAbbreviationAvgPercentage => 'Avg %';
+
+  @override
+  String get cwlTitle => 'CWL';
+
+  @override
+  String get cwlClanWarLeague => 'Clan War League';
+
+  @override
+  String get cwlOngoing => 'Ongoing CWL';
+
+  @override
+  String get cwlRounds => 'Rounds';
+
+  @override
+  String cwlRoundNumber(int number) {
+    return 'Round $number';
+  }
+
+  @override
+  String cwlCurrentRound(int round) {
+    return '当前是第 $round 轮。';
+  }
+
+  @override
+  String cwlRank(int rank) {
+    return '你的部落当前排名第 $rank。';
+  }
+
+  @override
+  String cwlStars(int stars) {
+    return '你的部落共获得 $stars 颗星。';
+  }
+
+  @override
+  String cwlDestructionPercentage(String percent) {
+    return '你的部落的总摧毁率为 $percent%。';
+  }
+
+  @override
+  String cwlTotalAttacks(int attacks, int totalAttacks) {
+    return 'Your clan has a total of $attacks attacks out of $totalAttacks possible attacks.';
+  }
+
+  @override
+  String cwlCurrentRoundDescription(int round) {
+    return 'It\'s currently round $round.';
+  }
+
+  @override
+  String get joinLeaveTitle => 'Join/Leave Logs (Current Season)';
+
+  @override
+  String get joinLeaveJoin => 'Join';
+
+  @override
+  String get joinLeaveLeave => 'Leave';
+
+  @override
+  String get joinLeaveReset => 'Reset';
+
+  @override
+  String get joinLeaveJoins => 'Joins';
+
+  @override
+  String get joinLeaveLeaves => 'Leaves';
+
+  @override
+  String get joinLeaveUniquePlayers => 'Unique Players';
+
+  @override
+  String get joinLeaveMovingPlayers => 'Moving Players';
+
+  @override
+  String get joinLeaveMostMovingPlayers => 'Most Moving Players';
+
+  @override
+  String get joinLeaveStillInClan => 'Still in Clan';
+
+  @override
+  String get joinLeaveLeftForever => 'Left Forever';
+
+  @override
+  String get joinLeaveRejoinedPlayers => 'Rejoined Players';
+
+  @override
+  String get joinLeaveAvgTimeJoinLeave => 'Avg Join/Leave Time';
+
+  @override
+  String get joinLeavePeakHour => 'Most Active Hour';
+
+  @override
+  String joinLeaveNumberDescription(int number, String date) {
+    return '$number leave events occurred during the current season ($date).';
+  }
+
+  @override
+  String joinLeaveJoinNumberDescription(int number, String date) {
+    return '$number join events occurred during the current season ($date).';
+  }
+
+  @override
+  String joinLeaveMovingNumberDescription(int number, String date) {
+    return '$number player(s) left and rejoined the clan during the current season ($date).';
+  }
+
+  @override
+  String joinLeaveUniqueNumberDescription(int number, String date) {
+    return '$number unique player(s) joined/left the clan during the current season ($date).';
+  }
+
+  @override
+  String joinLeaveStillInClanNumberDescription(int number) {
+    return '$number player(s) joined and are still in the clan.';
+  }
+
+  @override
+  String joinLeaveLeftClanNumberDescription(int number) {
+    return '$number player(s) joined, then left the clan and never rejoined.';
+  }
+
+  @override
+  String joinLeaveLeftOnAt(String date, String time) {
+    return 'Left on $date at $time.';
+  }
+
+  @override
+  String joinLeaveJoinedOnAt(String date, String time) {
+    return 'Joined on $date at $time.';
+  }
+
+  @override
+  String get raidsTitle => 'Raids';
+
+  @override
+  String get raidsLast => 'Last raids';
+
+  @override
+  String get raidsOngoing => 'Ongoing raids';
+
+  @override
+  String get raidsDistrictsDestroyed => 'Districts destroyed';
+
+  @override
+  String get raidsCompleted => '已完成突袭';
+
+  @override
+  String get searchTitle => 'Search';
+
+  @override
+  String get searchNoResult => 'No result.';
+
+  @override
+  String get maintenanceTitle => 'Maintenance';
+
+  @override
+  String get maintenanceDescription =>
+      'Clash of Clans is currently under maintenance, so we can\'t access the API. Please check back later.';
+
+  @override
+  String get downloadTooltip => 'Download CWL summary';
+
+  @override
+  String get downloadInProgress =>
+      'Downloading file... It can take a few seconds...';
+
+  @override
+  String downloadSuccess(String path) {
+    return 'File saved successfully in $path';
+  }
+
+  @override
+  String get downloadError => 'Failed to download file';
+
+  @override
+  String get dashboardTitle => 'Dashboard';
+
+  @override
+  String get toolsTitle => 'Tools';
+
+  @override
+  String get communityTitle => 'Community';
+
+  @override
+  String get navigationTeam => 'Teams';
+
+  @override
+  String get navigationStatistics => 'Statistics';
+
+  @override
+  String get navigationLeague => 'League';
+
+  @override
+  String get navigationWars => 'Wars';
+
+  @override
+  String get versionDevice => '版本&设备';
+
+  @override
+  String get betaFeature => 'Beta功能';
+
+  @override
+  String get betaLabel => 'BETA';
+
+  @override
+  String get betaDescription =>
+      '此功能目前处于测试阶段，可能存在一些错误或不完整。我们正在积极改进，欢迎您的反馈。请在我们的Discord服务器中分享您的想法并报告任何问题，以帮助我们做得更好。';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsLanguage => 'Language';
+
+  @override
+  String get settingsSelectLanguage => 'Select a language';
+
+  @override
+  String get settingsToggleTheme => 'Toggle Theme';
+
+  @override
+  String get faqTitle => 'FAQ';
 
   @override
   String get faqSubtitle => '常见问题回答';
@@ -154,1419 +1615,25 @@ class AppLocalizationsZh extends AppLocalizations {
       '由于某些原因，我们无法打开您的邮件客户端。我们为您复制了电子邮件地址。您可以编写电子邮件并将地址粘贴到收件人字段中。';
 
   @override
-  String get helpUsTranslate => '帮助我们翻译';
+  String get translationHelpUsTranslate => 'Help us translate';
 
   @override
-  String get suggestFeatures => '建议功能';
+  String get translationSuggestFeatures => 'Suggest features';
 
   @override
-  String get thankYou => '感谢您！';
+  String get translationThankYou => 'Thank you!';
 
   @override
-  String get thankYouContent => '非常感谢我们所有出色的翻译人员，他们帮助我们让世界各地的更多人可以访问这个应用程序！';
+  String get translationThankYouContent =>
+      'A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!';
 
   @override
-  String get helpTranslateContent =>
-      '您可以在Crowdin上帮助我们翻译应用程序。如果您的语言在Crowdin上不可用，请随时在我们的Discord服务器上请求。非常感谢你的帮助！';
+  String get translationHelpTranslateContent =>
+      'You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!';
 
   @override
-  String get helpTranslateButton => '在Crowdin上帮助翻译';
+  String get translationHelpTranslateButton => 'Help Translate on Crowdin';
 
   @override
-  String get versionDevice => '版本&设备';
-
-  @override
-  String get loading => '加载中...';
-
-  @override
-  String get errorLoadingVersion => '加载版本时出错';
-
-  @override
-  String get currentTranslators => '当前翻译员';
-
-  @override
-  String get betaFeature => 'Beta功能';
-
-  @override
-  String get beta => 'BETA';
-
-  @override
-  String get betaDescription =>
-      '此功能目前处于测试阶段，可能存在一些错误或不完整。我们正在积极改进，欢迎您的反馈。请在我们的Discord服务器中分享您的想法并报告任何问题，以帮助我们做得更好。';
-
-  @override
-  String get copiedToClipboard => '复制到剪贴板';
-
-  @override
-  String get all => '所有';
-
-  @override
-  String get hourIndicator => '小时';
-
-  @override
-  String get minIndicator => '分钟';
-
-  @override
-  String get noDataAvailable => '没有可用数据';
-
-  @override
-  String get close => '关闭';
-
-  @override
-  String get closed => '已关闭';
-
-  @override
-  String get error => '出错';
-
-  @override
-  String get player => '玩家';
-
-  @override
-  String get manage => '管理';
-
-  @override
-  String get enterPlayerTag => '输入一个玩家标签';
-
-  @override
-  String get add => '添加';
-
-  @override
-  String get delete => '删除';
-
-  @override
-  String get addAccount => '添加账户';
-
-  @override
-  String get deleteAccount => '删除账户';
-
-  @override
-  String get playerTagNotExists => '输入的村庄标签不存在。';
-
-  @override
-  String accountAlreadyLinked(Object tag) {
-    return '村庄标签已经链接到某人。';
-  }
-
-  @override
-  String get enterApiToken => '请输入帐户API令牌以确认您的身份。您可以在部落冲突设置>更多设置>API令牌中找到它。';
-
-  @override
-  String get wrongApiToken => '输入的 API 令牌不正确';
-
-  @override
-  String get accountAlreadyLinkedToYou => '您已连接玩家标签';
-
-  @override
-  String get apiToken => '帐户 API 令牌';
-
-  @override
-  String get failedToAddTryAgain => '无法添加链接。请稍后再试。';
-
-  @override
-  String get fillAllFields => 'Please fill all fields.';
-
-  @override
-  String get failedToDeleteTryAgain => '删除链接失败。请稍后再试。';
-
-  @override
-  String get failedToUpdateOrder => 'Failed to update the order of accounts.';
-
-  @override
-  String get manageAccounts => 'Manage your accounts';
-
-  @override
-  String get manageAccountsDescription =>
-      'You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.';
-
-  @override
-  String get confirm => 'Confirm';
-
-  @override
-  String get warning => '警告';
-
-  @override
-  String get exitAppToOpenClash => '您即将离开应用程序打开部落冲突';
-
-  @override
-  String get confirmLogout => '确定要退出登录吗？';
-
-  @override
-  String get searchPlayer => '搜索玩家';
-
-  @override
-  String get nameOrTagPlayer => '村庄名称或标签';
-
-  @override
-  String playerClanDescription(String clan, String tag) {
-    return '您的部落是“$clan”（$tag）';
-  }
-
-  @override
-  String playerRatioDescription(
-      String ratio, String donations, String received) {
-    return '您的捐兵比例为$ratio。你们已经捐赠了$donations人口的部队，并接收了$received人口的部队。';
-  }
-
-  @override
-  String playerWarPreferenceDescription(String preference) {
-    return '您的部落对战偏好是“$preference”。';
-  }
-
-  @override
-  String playerWarStarsDescription(int stars) {
-    return '您拥有$stars胜利之星。';
-  }
-
-  @override
-  String playerTrophiesDescription(int trophies, String league) {
-    return '您拥有$trophies奖杯。你目前在$league杯段。';
-  }
-
-  @override
-  String playerTownHallLevelDescription(int level) {
-    return '您的大本营等级是$level';
-  }
-
-  @override
-  String playerBuilderBaseDescription(int level, int trophies) {
-    return '您的大本等级为$level，您的奖杯数为：$trophies。';
-  }
-
-  @override
-  String get dashboard => '主页';
-
-  @override
-  String get homeBase => '家乡';
-
-  @override
-  String get th => '大本等级';
-
-  @override
-  String get builderBase => '夜世界';
-
-  @override
-  String get bh => '夜本等级';
-
-  @override
-  String get clanCapital => '部落都城';
-
-  @override
-  String get leader => '首领';
-
-  @override
-  String get coLeader => '副首领';
-
-  @override
-  String get elder => '长老';
-
-  @override
-  String get member => '成员';
-
-  @override
-  String get ready => '参战';
-
-  @override
-  String get unready => '退出';
-
-  @override
-  String level(int level, int maxLevel) {
-    return 'Level: $level/$maxLevel';
-  }
-
-  @override
-  String get heroes => '英雄';
-
-  @override
-  String get equipment => '装备';
-
-  @override
-  String get troops => '部队';
-
-  @override
-  String get superTroops => '超级部队';
-
-  @override
-  String get activeSuperTroops => '已启用的超级部队';
-
-  @override
-  String get active => 'Active';
-
-  @override
-  String get inactive => 'Inactive';
-
-  @override
-  String get pets => '宠物';
-
-  @override
-  String get siegeMachines => '攻城机器';
-
-  @override
-  String get spells => '法术';
-
-  @override
-  String get achievements => '成就';
-
-  @override
-  String get byDay => '按天';
-
-  @override
-  String get bySeason => '按赛季';
-
-  @override
-  String dayIndex(int index) {
-    return 'Day $index';
-  }
-
-  @override
-  String indexDays(int index) {
-    return '$index days';
-  }
-
-  @override
-  String get bestTrophies => '最高奖杯';
-
-  @override
-  String get mostAttacks => '最多进攻次数';
-
-  @override
-  String get lastSeason => '上一赛季';
-
-  @override
-  String get bestRank => '最佳全球等级';
-
-  @override
-  String daysLeft(int days) {
-    return '$days days left';
-  }
-
-  @override
-  String get date => '日期';
-
-  @override
-  String get stats => '统计数据';
-
-  @override
-  String get fullStats => 'Full Stats';
-
-  @override
-  String get details => '详细信息';
-
-  @override
-  String get seasonStats => '赛季数据';
-
-  @override
-  String get charts => '统计图';
-
-  @override
-  String get history => '历史记录';
-
-  @override
-  String get legendLeague => '传奇联赛';
-
-  @override
-  String get notInLegendLeague => '不在传奇联赛中';
-
-  @override
-  String get noLegendsDataToday =>
-      'You\'re not in Legend League, but past seasons are available.';
-
-  @override
-  String legendStartDescription(String trophies) {
-    return '您以$trophies奖杯开始了新的一天。';
-  }
-
-  @override
-  String legendNoRankLocalDescription(String country, int trophies) {
-    return '您目前没有获得$trophies奖杯的排名（$country）。';
-  }
-
-  @override
-  String legendRankLocalDescription(
-      Object country, Object rank, Object trophies) {
-    return '您目前拥有$trophies奖杯，排名$rank（$country）。';
-  }
-
-  @override
-  String legendGainDescription(int trophies) {
-    return '您获得了$trophies奖杯。';
-  }
-
-  @override
-  String legendLossDescription(int trophies) {
-    return '您失去了$trophies奖杯。';
-  }
-
-  @override
-  String legendNoGlobalRankDescription(int trophies) {
-    return '您目前没有在全国范围内获得排名（$trophies）。';
-  }
-
-  @override
-  String legendGlobalRankDescription(int rank, Object trophies) {
-    return '您目前在全球排名$rank。';
-  }
-
-  @override
-  String get noRank => '暂无排名';
-
-  @override
-  String get started => '已激活';
-
-  @override
-  String get ended => '已结束';
-
-  @override
-  String get average => '平均水平';
-
-  @override
-  String get remaining => '剩余时间';
-
-  @override
-  String get legendsTitle => '数据不准确？';
-
-  @override
-  String get legendsExplanation_intro =>
-      '由于Clans API分类的限制，我们的数据可能并不总是完全准确。可能有以下原因：';
-
-  @override
-  String get legendsExplanation_api_delay_title => '1. API 延迟： ';
-
-  @override
-  String get legendsExplanation_api_delay_body =>
-      'API可能需要长达5分钟的时间进行更新，从而导致反映实时奖杯变化的滞后。';
-
-  @override
-  String get legendsExplanation_concurrent_changes_title => '2.合并奖杯：';
-
-  @override
-  String get legendsExplanation_multiple_attacks_defenses_title =>
-      '- 多次攻击/防御： ';
-
-  @override
-  String get legendsExplanation_multiple_attacks_defenses_body =>
-      '如果连续发生多次攻击或防御，API可能会显示合并结果(如+68 或 -68)。\n';
-
-  @override
-  String get legendsExplanation_simultaneous_attack_defense_title =>
-      '- 同时攻击和防御： ';
-
-  @override
-  String get legendsExplanation_simultaneous_attack_defense_body =>
-      '如果同时发生攻击和防御，你可能会看到好坏参半的结果(例如+4。\n';
-
-  @override
-  String get legendsExplanation_net_gain_loss_title => '3. 净增益： ';
-
-  @override
-  String get legendsExplanation_net_gain_loss_body =>
-      '尽管时间安排有问题，但这一天的净损益总额是准确的。 ';
-
-  @override
-  String get legendsExplanation_conclusion =>
-      '这些限制在使用部落冲突API的所有工具上都很常见。遗憾的是，我们无法修复这个问题，因为它的所有权是在Supercell的手中。 我们尽最大努力弥补这些限制，提供尽可能接近现实的结果。谢谢你们的理解！';
-
-  @override
-  String get toDoList => '待办事宜列表';
-
-  @override
-  String get clanGames => 'Clan Games';
-
-  @override
-  String get seasonPass => 'Season Pass';
-
-  @override
-  String lastActive(String date) {
-    return '上次活跃：$date';
-  }
-
-  @override
-  String get playerNotTracked => '该玩家未被跟踪。数据可能不准确。';
-
-  @override
-  String numberAccounts(int number) {
-    return '$number账户';
-  }
-
-  @override
-  String numberActiveAccounts(int number) {
-    return '$number活账户';
-  }
-
-  @override
-  String numberInactiveAccounts(int number) {
-    return '$number不活跃账户';
-  }
-
-  @override
-  String get activeAccounts => '活跃帐户';
-
-  @override
-  String get inactiveAccounts => '不活跃账户';
-
-  @override
-  String get noInactiveAccounts => '没有不活跃的帐户。';
-
-  @override
-  String get noActiveAccounts => '没有活跃的帐户。';
-
-  @override
-  String get todoExplanation_title => '任务计算方法';
-
-  @override
-  String get todoExplanation_intro => '任务完成率是根据下列具有特定权重的活动计算出来的：';
-
-  @override
-  String get todoExplanation_legends_title => '传奇联赛';
-
-  @override
-  String get todoExplanation_legends => '每个账户的权重为8分，1次攻击=1分。';
-
-  @override
-  String get todoExplanation_raids_title => '突袭：';
-
-  @override
-  String get todoExplanation_raids => '每个账户的权重为5分（如果上次攻击已解锁，则为6分），1次攻击=1分。';
-
-  @override
-  String get todoExplanation_clanWars_title => '部落战：';
-
-  @override
-  String get todoExplanation_clanWars => '每个账户2分的权重，1次攻击=1分。';
-
-  @override
-  String get todoExplanation_cwl_title => '部落联赛';
-
-  @override
-  String get todoExplanation_cwl =>
-      '每个账户的权重为1分，1次攻击=1分。如果玩家不在他们的部落中，则无法跟踪部落联赛。';
-
-  @override
-  String get todoExplanation_passAndGames_title => '月卡和部落游戏';
-
-  @override
-  String get todoExplanation_passAndGames =>
-      '每个账户的权重为2分。该比率基于剩余天数（通行证为1个月，比赛为6天）。绿色=按计划完成传球或比赛，红色=落后于计划。';
-
-  @override
-  String get todoExplanation_conclusion =>
-      '最终百分比是通过将正在进行的事件中完成的总操作除以所需的总操作来计算的。超过14天未活动的帐户不在计算范围内。';
-
-  @override
-  String get worst => '最差';
-
-  @override
-  String get best => '最佳';
-
-  @override
-  String get total => '总计';
-
-  @override
-  String get heroesEquipments => '英雄装备';
-
-  @override
-  String daysAgo(int days) {
-    return '$days 天前';
-  }
-
-  @override
-  String dayAgo(int day) {
-    return '$day天之前';
-  }
-
-  @override
-  String hourAgo(int hour) {
-    return '$hour小时之前';
-  }
-
-  @override
-  String hoursAgo(int hours, Object Hours) {
-    return '$Hours 小时前';
-  }
-
-  @override
-  String minuteAgo(int minute) {
-    return '$minute分钟之前';
-  }
-
-  @override
-  String minutesAgo(int minutes) {
-    return '$minutes分钟之前';
-  }
-
-  @override
-  String secondAgo(int seconds) {
-    return '$seconds秒之前';
-  }
-
-  @override
-  String get justNow => '刚刚';
-
-  @override
-  String get endedJustNow => 'Ended just now';
-
-  @override
-  String endedMinutesAgo(int minutes) {
-    return 'Ended $minutes minutes ago';
-  }
-
-  @override
-  String endedHoursAgo(int hours) {
-    return 'Ended $hours hours ago';
-  }
-
-  @override
-  String endedDaysAgo(int days) {
-    return 'Ended $days days ago';
-  }
-
-  @override
-  String get trophiesBySeason => '每赛季的奖杯数';
-
-  @override
-  String get eosTrophies => '赛季结束前的奖杯数';
-
-  @override
-  String get eosDetails => 'End Of Season Details';
-
-  @override
-  String get searchClan => '搜索部落';
-
-  @override
-  String get clanName => 'Clan\'s name';
-
-  @override
-  String get noResult => '没有找到该查询的结果';
-
-  @override
-  String get filters => '筛选器';
-
-  @override
-  String get whatever => '任何';
-
-  @override
-  String get any => '任何 ';
-
-  @override
-  String get notSet => '未设置';
-
-  @override
-  String get warFrequency => '对战频率';
-
-  @override
-  String get minimumMembers => '最小成员数';
-
-  @override
-  String get maximumMembers => '最大成员数';
-
-  @override
-  String get location => '位置';
-
-  @override
-  String get minimumClanPoints => '最低部落奖杯总数';
-
-  @override
-  String get minimumClanLevel => '最低部落等级';
-
-  @override
-  String get noClan => '无部落信息';
-
-  @override
-  String get joinClanToUnlockNewFeatures => '加入一个部落来解锁新功能。';
-
-  @override
-  String get apply => '需要申请';
-
-  @override
-  String get opened => '开放';
-
-  @override
-  String get inviteOnly => '仅限邀请';
-
-  @override
-  String get cancel => '取消';
-
-  @override
-  String get clan => '部落';
-
-  @override
-  String get clans => '部落';
-
-  @override
-  String get members => '成员';
-
-  @override
-  String get role => '职位';
-
-  @override
-  String get expLevel => '经验等级';
-
-  @override
-  String get townHallLevel => '大本等级';
-
-  @override
-  String thLevel(int level) {
-    return '$level级大本';
-  }
-
-  @override
-  String bhLevel(int level) {
-    return '$level级夜本';
-  }
-
-  @override
-  String townHallLevelLevel(int level) {
-    return '大本营 $level';
-  }
-
-  @override
-  String get byNumberOfWars => '按进攻次数排序';
-
-  @override
-  String get ok => '确定';
-
-  @override
-  String get byDateRange => '按日期范围';
-
-  @override
-  String get selectSeason => '选择一个赛季';
-
-  @override
-  String get year => '年';
-
-  @override
-  String get month => '月';
-
-  @override
-  String get allTownHalls => '所有大本营';
-
-  @override
-  String seasonDate(String date) {
-    return '$date赛季';
-  }
-
-  @override
-  String lastXwars(int number) {
-    return '最后$number场战争';
-  }
-
-  @override
-  String get friendly => '友好';
-
-  @override
-  String get cwl => '部落联赛';
-
-  @override
-  String get random => '随机';
-
-  @override
-  String get selectMembersThLevel => '成员大本等级';
-
-  @override
-  String get selectOpponentsThLevel => '队友大本等级';
-
-  @override
-  String get equalThLevel => 'Equal TH';
-
-  @override
-  String get builderBaseTrophies => 'BB Trophies';
-
-  @override
-  String get donations => 'Donations';
-
-  @override
-  String get donationsReceived => 'Donations Received';
-
-  @override
-  String get donationsRatio => 'Donation Ratio';
-
-  @override
-  String get trophies => 'Trophies';
-
-  @override
-  String get always => 'Always';
-
-  @override
-  String get never => 'Never';
-
-  @override
-  String get unknown => 'Unknown';
-
-  @override
-  String get oncePerWeek => '1/week';
-
-  @override
-  String get twicePerWeek => '2/week';
-
-  @override
-  String get rarely => 'Rarely';
-
-  @override
-  String get warLeague => 'War/League';
-
-  @override
-  String get war => 'War';
-
-  @override
-  String get league => 'League';
-
-  @override
-  String get wars => 'Wars';
-
-  @override
-  String get ongoingWar => 'Ongoing war';
-
-  @override
-  String get ongoingCwl => 'Ongoing CWL';
-
-  @override
-  String get cantOpenLink => 'We can\'t open this link.';
-
-  @override
-  String get notInWar => 'Not in war';
-
-  @override
-  String get warHistory => 'War History';
-
-  @override
-  String warHistoryWinsDescription(int wins, String percent) {
-    return 'Your clan won $wins wars ($percent%) out of the last 50 wars.';
-  }
-
-  @override
-  String warHistoryLossesDescription(int losses, String percent) {
-    return 'Your clan lost $losses wars ($percent%) out of the last 50 wars.';
-  }
-
-  @override
-  String warHistoryDrawsDescription(int draws, String percent) {
-    return 'Your clan had $draws draws ($percent%) out of the last 50 wars.';
-  }
-
-  @override
-  String warHistoryAverageMembersDescription(int members) {
-    return 'Your clan has an average of $members members participating out of the last 50 wars.';
-  }
-
-  @override
-  String warHistoryAverageWarStarsDescription(double stars, String percent) {
-    return 'Your clan had an average of $stars stars per war from the last 50 wars. It represents $percent of the total stars.';
-  }
-
-  @override
-  String warHistoryAverageHitRateDescription(String percent) {
-    return 'Your clan had an average of $percent% destruction rate from the last 50 wars.';
-  }
-
-  @override
-  String attacksLeftDescription(int attacks, String type) {
-    return 'You have $attacks attack(s) left ($type).';
-  }
-
-  @override
-  String defensesLeftDescription(int defenses, String type) {
-    return 'You have $defenses defense(s) left ($type).';
-  }
-
-  @override
-  String noAttacksLeftDescription(Object type) {
-    return 'Congratulations, you have done all your attacks ($type)!';
-  }
-
-  @override
-  String pointsLeftDescription(int points, String type) {
-    return 'You have $points points left to get today to be in time for the end of the event ($type).';
-  }
-
-  @override
-  String pointsLeftDescriptionNoPoints(String type) {
-    return 'Congratulations, you are on time to get the maximum rewards at the end of the event ($type)!';
-  }
-
-  @override
-  String get averageStars => 'Average stars';
-
-  @override
-  String get averageDestruction => 'Average destruction';
-
-  @override
-  String get oneStar => '1 star';
-
-  @override
-  String get twoStars => '2 stars';
-
-  @override
-  String get threeStars => '3 stars';
-
-  @override
-  String get avg => 'Avg';
-
-  @override
-  String get avgPercentage => 'Avg %';
-
-  @override
-  String get attackCount => 'Attack Count';
-
-  @override
-  String get missedAttacks => 'Missed Attacks';
-
-  @override
-  String get order => 'Order';
-
-  @override
-  String get defenseStars => 'Defense Stars';
-
-  @override
-  String get zeroStar => '0 Star';
-
-  @override
-  String get warParticipation => 'War Participation';
-
-  @override
-  String get missed => 'Missed';
-
-  @override
-  String get totalStars => 'Total';
-
-  @override
-  String get destruction => 'Destruction';
-
-  @override
-  String get mapPosition => 'Map Position';
-
-  @override
-  String get pos => 'Pos';
-
-  @override
-  String get oppTownhall => 'Opp TH';
-
-  @override
-  String get lowerTownhall => 'Lower TH';
-
-  @override
-  String get upperTownhall => 'Upper TH';
-
-  @override
-  String get toggleTownHallVisibility =>
-      'Hide/Show stats from former TH levels';
-
-  @override
-  String get warLog => 'War Log';
-
-  @override
-  String get publicWarLog => 'Public War Log';
-
-  @override
-  String get privateWarLog => 'Private War Log';
-
-  @override
-  String startsIn(String time) {
-    return 'Starts in $time';
-  }
-
-  @override
-  String startsAt(String time) {
-    return 'Starts at $time';
-  }
-
-  @override
-  String endsIn(String time) {
-    return 'Ends in $time';
-  }
-
-  @override
-  String endsAt(String time) {
-    return 'Ends at $time';
-  }
-
-  @override
-  String get joinLeaveLogs => 'Join/Leave Logs';
-
-  @override
-  String get join => 'Join';
-
-  @override
-  String get leave => 'Leave';
-
-  @override
-  String get reset => 'Reset';
-
-  @override
-  String get joins => 'Joins';
-
-  @override
-  String get leaves => 'Leaves';
-
-  @override
-  String get uniquePlayers => 'Unique Players';
-
-  @override
-  String get movingPlayers => 'Moving Players';
-
-  @override
-  String get mostMovingPlayers => 'Most Moving Players';
-
-  @override
-  String get stillInClan => 'Still in Clan';
-
-  @override
-  String get leftForever => 'Left Forever';
-
-  @override
-  String get rejoinedPlayers => 'Rejoined Players';
-
-  @override
-  String get avgTimeJoinLeave => 'Avg Join/Leave Time';
-
-  @override
-  String get peakHour => 'Most Active Hour';
-
-  @override
-  String leaveNumberDescription(int number, String date) {
-    return '$number player(s) left the clan during the current season ($date).';
-  }
-
-  @override
-  String joinNumberDescription(int number, String date) {
-    return '$number player(s) joined the clan during the current season ($date).';
-  }
-
-  @override
-  String movingNumberDescription(int number, String date) {
-    return '$number player(s) left and rejoined the clan during the current season ($date).';
-  }
-
-  @override
-  String uniqueNumberDescription(int number, String date) {
-    return '$number unique player(s) joined/left the clan during the current season ($date).';
-  }
-
-  @override
-  String stillInClanNumberDescription(int number) {
-    return '$number player(s) joined and are still in the clan.';
-  }
-
-  @override
-  String leftClanNumberDescription(int number) {
-    return '$number player(s) joined, then left the clan and never rejoined.';
-  }
-
-  @override
-  String leftOnAt(String date, String time) {
-    return 'Left on $date at $time.';
-  }
-
-  @override
-  String joinedOnAt(String date, String time) {
-    return 'Joined on $date at $time.';
-  }
-
-  @override
-  String get statistics => 'Statistics';
-
-  @override
-  String get stars => 'Stars';
-
-  @override
-  String get numberOfStars => 'Number of stars';
-
-  @override
-  String get destructionRate => 'Destruction rate';
-
-  @override
-  String get events => 'Events';
-
-  @override
-  String get team => 'Teams';
-
-  @override
-  String get myTeam => 'My team';
-
-  @override
-  String get enemiesTeam => 'Enemies';
-
-  @override
-  String get defense => 'Defense';
-
-  @override
-  String get defenses => 'Defenses';
-
-  @override
-  String get bestDefenses => 'Best defenses';
-
-  @override
-  String bestDefenseOutOf(int number) {
-    return 'Best defense (out of $number)';
-  }
-
-  @override
-  String get attack => 'Attack';
-
-  @override
-  String get attacks => 'Attacks';
-
-  @override
-  String get bestAttacks => 'Best attacks';
-
-  @override
-  String get noAttackYet => 'No attack yet';
-
-  @override
-  String get noDefenseYet => 'No defense yet';
-
-  @override
-  String get bestPerformance => 'Best performance';
-
-  @override
-  String get victory => 'Victory';
-
-  @override
-  String get defeat => 'Defeat';
-
-  @override
-  String get draw => 'Draw';
-
-  @override
-  String get perfectWar => 'Perfect war';
-
-  @override
-  String get newest => 'Newest';
-
-  @override
-  String get oldest => 'Oldest';
-
-  @override
-  String get warEnded => 'War ended';
-
-  @override
-  String get preparation => 'Preparation';
-
-  @override
-  String isNotInWar(String clan) {
-    return '$clan is not in war.';
-  }
-
-  @override
-  String warLogIsClosed(String clan) {
-    return '$clan\'s war log is closed.';
-  }
-
-  @override
-  String get askForWar => 'Contact the leader or a co-leader to start a war.';
-
-  @override
-  String get askForWarLogOpening =>
-      'Contact a leader or a co-leader to open the war log.';
-
-  @override
-  String get rounds => 'Rounds';
-
-  @override
-  String roundNumber(int number) {
-    return 'Round $number';
-  }
-
-  @override
-  String currentRound(int number) {
-    return 'Current round (Round $number)';
-  }
-
-  @override
-  String get noDataAvailableForThisWar => 'No data available for this war';
-
-  @override
-  String get stateOfTheWar => 'State of the war';
-
-  @override
-  String starsNeededToTakeTheLead(
-      String clan, int star, int star2, String percent, Object stars2) {
-    return '$clan still need $star more star(s) or $stars2 star(s) and $percent% to take the lead.';
-  }
-
-  @override
-  String starsAndPercentNeededToTakeTheLead(String clan, String percent) {
-    return '$clan still need $percent% or 1 more star to take the lead';
-  }
-
-  @override
-  String get clanDraw => 'The two clans are tied';
-
-  @override
-  String get fastCalculator => 'Fast calculator';
-
-  @override
-  String fastCalculatorAnswer(
-      String percentNeedeed, String result, Object percentNeeded) {
-    return 'To achieve a destruction rate of $percentNeeded%, a total of $result% is needed.';
-  }
-
-  @override
-  String get teamSize => 'Team size';
-
-  @override
-  String get neededOverall => '% Needed overall';
-
-  @override
-  String get calculate => 'Calculate';
-
-  @override
-  String get warStats => 'War Stats';
-
-  @override
-  String warAttacksNumber(int number_time, int number_war) {
-    return 'You attacked $number_time time(s) during the last $number_war wars.';
-  }
-
-  @override
-  String warDefensesNumber(int number_time, int number_war) {
-    return 'You defended $number_time time(s) during the last $number_war wars.';
-  }
-
-  @override
-  String warAverageStars(String stars) {
-    return 'You had an average of $stars stars per war.';
-  }
-
-  @override
-  String warAverageDestruction(String percent) {
-    return 'You had an average of $percent% destruction rate per war.';
-  }
-
-  @override
-  String warAverageStarsDefense(double stars) {
-    return 'You had an average of $stars stars per defense.';
-  }
-
-  @override
-  String warAverageDestructionDefense(Object percent) {
-    return 'You had an average of $percent% destruction rate per defense.';
-  }
-
-  @override
-  String get membersStats => 'Members Stats';
-
-  @override
-  String get clanWarLeague => 'Clan War League';
-
-  @override
-  String cwlRank(int rank) {
-    return 'Your clan is currently ranked $rank.';
-  }
-
-  @override
-  String cwlStars(int stars) {
-    return 'Your clan has a total of $stars stars.';
-  }
-
-  @override
-  String cwlDestructionPercentage(String percent) {
-    return 'Your clan has a total destruction rate of $percent%.';
-  }
-
-  @override
-  String cwlTotalAttacks(int attacks, int totalAttacks) {
-    return 'Your clan has a total of $attacks attacks out of $totalAttacks possible attacks.';
-  }
-
-  @override
-  String cwlCurrentRound(int round) {
-    return 'It\'s currently round $round.';
-  }
-
-  @override
-  String get noAccountLinkedToYourProfileFound =>
-      'No account linked to your profile found';
-
-  @override
-  String get management => 'Management';
-
-  @override
-  String get comingSoon => 'Coming soon!';
-
-  @override
-  String get connectionError =>
-      'An error occurred. Please check your internet connection and try again.';
-
-  @override
-  String get connectionErrorRelaunch =>
-      'An error occurred. Please check your internet connection and relaunch the app.';
-
-  @override
-  String updatedAt(String time) {
-    return 'Updated at $time';
-  }
-
-  @override
-  String get tools => 'Tools';
-
-  @override
-  String get community => 'Community';
-
-  @override
-  String get raids => 'Raids';
-
-  @override
-  String get lastRaids => 'Last raids';
-
-  @override
-  String get ongoingRaids => 'Ongoing raids';
-
-  @override
-  String get districtsDestroyed => 'Districts destroyed';
-
-  @override
-  String get raidsCompleted => 'Raids completed';
-
-  @override
-  String get maintenance => 'Maintenance';
-
-  @override
-  String get maintenanceDescription =>
-      'Clash of Clans is currently under maintenance, so we can\'t access the API. Please check back later.';
-
-  @override
-  String get tryAgain => 'Try again';
-
-  @override
-  String get downloadTooltip => 'Download CWL summary';
-
-  @override
-  String get downloadInProgress =>
-      'Downloading file... It can take a few seconds...';
-
-  @override
-  String downloadSuccess(String path) {
-    return 'File saved successfully in \$$path';
-  }
-
-  @override
-  String get downloadError => 'Failed to download file';
-
-  @override
-  String get welcomeBack => 'Welcome Back';
-
-  @override
-  String get chooseSignInMethod => 'Choose your preferred sign-in method';
-
-  @override
-  String get discord => 'Discord';
-
-  @override
-  String get email => 'Email';
-
-  @override
-  String get signInWithEmail => 'Sign in with Email';
-
-  @override
-  String get useDiscordAccount =>
-      'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!';
-
-  @override
-  String get useEmailAccount =>
-      'Use email if you can\'t access Discord or prefer app-only features';
-
-  @override
-  String get password => 'Password';
-
-  @override
-  String get signIn => 'Sign In';
-
-  @override
-  String get dontHaveAccount => 'Don\'t have an account? Create one';
-
-  @override
-  String get createClashKingAccount => 'Create ClashKing Account';
-
-  @override
-  String get joinClashKing => 'Join ClashKing';
-
-  @override
-  String get createAccountToGetStarted => 'Create your account to get started';
-
-  @override
-  String get confirmPassword => 'Confirm Password';
-
-  @override
-  String get createAccount => 'Create Account';
-
-  @override
-  String get alreadyHaveAccount => 'Already have an account? Sign in';
-
-  @override
-  String get pleaseEnterEmail => 'Please enter your email';
-
-  @override
-  String get pleaseEnterValidEmail => 'Please enter a valid email';
-
-  @override
-  String get pleaseEnterPassword => 'Please enter your password';
-
-  @override
-  String get pleaseEnterUsername => '请输入用户名';
-
-  @override
-  String get usernameTooShort => 'Username must be at least 3 characters';
-
-  @override
-  String get pleaseConfirmPassword => 'Please confirm your password';
-
-  @override
-  String get passwordsDoNotMatch => 'Passwords do not match';
-
-  @override
-  String get passwordTooShort => 'Password must be at least 8 characters';
-
-  @override
-  String get passwordRequirements =>
-      'Password must contain: uppercase, lowercase, digit, and special character';
-
-  @override
-  String get invalidEmailOrPassword => 'Invalid email or password';
-
-  @override
-  String get emailAlreadyInUse => 'Email may already be in use';
-
-  @override
-  String get accountManagement => 'Account Management';
-
-  @override
-  String get connectedAccounts => 'Connected Accounts';
-
-  @override
-  String get connected => 'Connected';
-
-  @override
-  String get notConnected => 'Not connected';
-
-  @override
-  String get emailAndPassword => 'Email & Password';
-
-  @override
-  String get accountSecuredMultipleAuth =>
-      'Your account is secured with multiple authentication methods';
-
-  @override
-  String get linkEmailAccount => 'Link Email Account';
-
-  @override
-  String get addEmailPasswordAuth =>
-      'Add email & password authentication to your account for additional security.';
-
-  @override
-  String get emailAccountLinkedSuccessfully =>
-      'Email account successfully linked!';
-
-  @override
-  String get failedToLinkEmail =>
-      'Failed to link email account. Email may already be in use.';
-
-  @override
-  String get registrationFailed =>
-      'Registration failed. Email may already be in use.';
-
-  @override
-  String get emailLoginFailed =>
-      'Email login failed. Please check your credentials.';
-
-  @override
-  String get discordLoginFailed => 'Discord login failed. Please try again.';
+  String get translationCurrentTranslators => 'Current Translators';
 }

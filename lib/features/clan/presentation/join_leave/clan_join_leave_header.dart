@@ -70,7 +70,7 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
                       final snackBar = SnackBar(
                         content: Center(
                           child: Text(
-                            AppLocalizations.of(context)!.copiedToClipboard,
+                            AppLocalizations.of(context)!.generalCopiedToClipboard,
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.onSurface),
                           ),

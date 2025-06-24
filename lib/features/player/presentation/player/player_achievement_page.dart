@@ -60,11 +60,11 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
   @override
   Widget build(BuildContext context) {
     Map<String, String> filterOptions = {
-      AppLocalizations.of(context)?.all ?? 'All': 'All',
-      AppLocalizations.of(context)?.homeBase ?? 'Home Base': 'home',
-      AppLocalizations.of(context)?.builderBase ?? 'Builder Base':
+      AppLocalizations.of(context)?.generalAll ?? 'All': 'All',
+      AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base': 'home',
+      AppLocalizations.of(context)?.gameBaseBuilder ?? 'Builder Base':
           'builderBase',
-      AppLocalizations.of(context)?.clanCapital ?? 'Clan Capital':
+      AppLocalizations.of(context)?.gameClanCapital ?? 'Clan Capital':
           'clanCapital',
     };
 
@@ -101,7 +101,7 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
                     Positioned(
                       bottom: 70,
                       child: Text(
-                        AppLocalizations.of(context)?.achievements ??
+                        AppLocalizations.of(context)?.gameAchievements ??
                             'Achievements',
                         style: Theme.of(context)
                             .textTheme
@@ -165,7 +165,7 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
                     children: [
                       Center(
                         child: Text(
-                            AppLocalizations.of(context)?.homeBase ??
+                            AppLocalizations.of(context)?.gameBaseHome ??
                                 'Home Base',
                             style: Theme.of(context).textTheme.headlineMedium),
                       ),
@@ -179,7 +179,7 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
                       SizedBox(height: 14),
                       Center(
                         child: Text(
-                            AppLocalizations.of(context)?.builderBase ??
+                            AppLocalizations.of(context)?.gameBaseBuilder ??
                                 'Builder Base',
                             style: Theme.of(context).textTheme.headlineMedium),
                       ),
@@ -193,7 +193,7 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
                       SizedBox(height: 14),
                       Center(
                           child: Text(
-                              AppLocalizations.of(context)?.clanCapital ??
+                              AppLocalizations.of(context)?.gameClanCapital ??
                                   'Clan capital',
                               style:
                                   Theme.of(context).textTheme.headlineMedium)),

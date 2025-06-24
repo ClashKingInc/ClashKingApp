@@ -44,7 +44,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-                AppLocalizations.of(context)!.emailAccountLinkedSuccessfully),
+                AppLocalizations.of(context)!.authAccountEmailLinkedSuccess),
             backgroundColor: Colors.green,
           ),
         );
@@ -74,7 +74,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.accountManagement),
+        title: Text(AppLocalizations.of(context)!.authAccountManagement),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -173,7 +173,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppLocalizations.of(context)!.connectedAccounts,
+          AppLocalizations.of(context)!.authAccountConnected,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -191,10 +191,10 @@ class AccountManagementPageState extends State<AccountManagementPage> {
               backgroundColor: Color(0xFF5865F2),
               child: Icon(Icons.discord, color: Colors.white),
             ),
-            title: Text(AppLocalizations.of(context)!.discord),
+            title: Text(AppLocalizations.of(context)!.authDiscordTitle),
             subtitle: Text(user.hasDiscordAuth
-                ? AppLocalizations.of(context)!.connected
-                : AppLocalizations.of(context)!.notConnected),
+                ? AppLocalizations.of(context)!.authAccountConnectedStatus
+                : AppLocalizations.of(context)!.authAccountNotConnected),
             trailing: user.hasDiscordAuth
                 ? Icon(Icons.check_circle, color: Colors.green)
                 : Icon(Icons.circle_outlined, color: Colors.grey),
@@ -213,10 +213,10 @@ class AccountManagementPageState extends State<AccountManagementPage> {
               backgroundColor: Theme.of(context).primaryColor,
               child: Icon(Icons.email, color: Colors.white),
             ),
-            title: Text(AppLocalizations.of(context)!.emailAndPassword),
+            title: Text(AppLocalizations.of(context)!.authAccountEmailAndPassword),
             subtitle: Text(user.hasEmailAuth
-                ? AppLocalizations.of(context)!.connected
-                : AppLocalizations.of(context)!.notConnected),
+                ? AppLocalizations.of(context)!.authAccountConnectedStatus
+                : AppLocalizations.of(context)!.authAccountNotConnected),
             trailing: user.hasEmailAuth
                 ? Icon(Icons.check_circle, color: Colors.green)
                 : Icon(Icons.circle_outlined, color: Colors.grey),
@@ -240,7 +240,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    AppLocalizations.of(context)!.accountSecuredMultipleAuth,
+                    AppLocalizations.of(context)!.authAccountSecured,
                     style: TextStyle(color: Colors.green[700]),
                   ),
                 ),
@@ -257,14 +257,14 @@ class AccountManagementPageState extends State<AccountManagementPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppLocalizations.of(context)!.linkEmailAccount,
+          AppLocalizations.of(context)!.authAccountLinkEmail,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
         ),
         SizedBox(height: 8),
         Text(
-          AppLocalizations.of(context)!.addEmailPasswordAuth,
+          AppLocalizations.of(context)!.authAccountAddEmailAuth,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Colors.grey[600],
               ),
@@ -284,7 +284,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                   TextFormField(
                     controller: _usernameController,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.username,
+                      labelText: AppLocalizations.of(context)!.authUsernameLabel,
                       prefixIcon: Icon(Icons.person),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -293,10 +293,10 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return AppLocalizations.of(context)!
-                            .pleaseEnterUsername;
+                            .authUsernameRequired;
                       }
                       if (value.trim().length < 3) {
-                        return AppLocalizations.of(context)!.usernameTooShort;
+                        return AppLocalizations.of(context)!.authUsernameTooShort;
                       }
                       return null;
                     },
@@ -309,7 +309,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.email,
+                      labelText: AppLocalizations.of(context)!.authEmailTitle,
                       prefixIcon: Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -317,12 +317,12 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return AppLocalizations.of(context)!.pleaseEnterEmail;
+                        return AppLocalizations.of(context)!.authEmailRequired;
                       }
                       if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                           .hasMatch(value)) {
                         return AppLocalizations.of(context)!
-                            .pleaseEnterValidEmail;
+                            .authEmailInvalid;
                       }
                       return null;
                     },
@@ -335,7 +335,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                     controller: _passwordController,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.password,
+                      labelText: AppLocalizations.of(context)!.authPasswordLabel,
                       prefixIcon: Icon(Icons.lock),
                       suffixIcon: IconButton(
                         icon: Icon(_obscurePassword
@@ -351,14 +351,14 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return AppLocalizations.of(context)!
-                            .pleaseEnterPassword;
+                            .authPasswordRequired;
                       }
                       if (value.length < 8) {
-                        return AppLocalizations.of(context)!.passwordTooShort;
+                        return AppLocalizations.of(context)!.authPasswordTooShort;
                       }
                       // Check for uppercase, lowercase, digit, and special character
                       if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])').hasMatch(value)) {
-                        return AppLocalizations.of(context)!.passwordRequirements;
+                        return AppLocalizations.of(context)!.authPasswordRequirements;
                       }
                       return null;
                     },
@@ -386,7 +386,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                                 SizedBox(width: 8),
                                 Text(
                                   AppLocalizations.of(context)!
-                                      .linkEmailAccount,
+                                      .authAccountLinkEmail,
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),

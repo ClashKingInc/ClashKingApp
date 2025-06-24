@@ -75,7 +75,7 @@ class WarCwlPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Column(
                       children: [
-                        Text(AppLocalizations.of(context)!.clanWarLeague),
+                        Text(AppLocalizations.of(context)!.cwlClanWarLeague),
                         GestureDetector(
                           onTap: () => Navigator.push(
                             context,

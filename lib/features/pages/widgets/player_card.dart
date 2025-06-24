@@ -22,7 +22,7 @@ class PlayerCard extends StatelessWidget {
     if (player == null) {
       return Center(
         child: Text(
-          AppLocalizations.of(context)?.connectionErrorRelaunch ??
+          AppLocalizations.of(context)?.authErrorConnectionRelaunch ??
               'Error, please restart',
           style: Theme.of(context).textTheme.bodyLarge,
         ),
@@ -30,8 +30,8 @@ class PlayerCard extends StatelessWidget {
     }
 
     String warPreference = player.warPreference == 'in'
-        ? AppLocalizations.of(context)?.ready ?? 'Ready'
-        : AppLocalizations.of(context)?.unready ?? 'Unready';
+        ? AppLocalizations.of(context)?.warStatusReady ?? 'Ready'
+        : AppLocalizations.of(context)?.warStatusUnready ?? 'Unready';
 
     return DefaultTextStyle(
       style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),

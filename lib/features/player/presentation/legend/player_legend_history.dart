@@ -131,14 +131,14 @@ class PlayerLegendHistory extends StatelessWidget {
                     child: buildSeasonInfo(
                         player.getLastSeason(),
                         context,
-                        AppLocalizations.of(context)?.lastSeason ??
+                        AppLocalizations.of(context)?.legendsLastSeason ??
                             "Last Season")),
                 const SizedBox(width: 16),
                 Expanded(
                     child: buildSeasonInfo(
                         player.getBestGlobalRankSeason(),
                         context,
-                        AppLocalizations.of(context)?.bestRank ??
+                        AppLocalizations.of(context)?.legendsBestRank ??
                             "Best Global Rank")),
               ],
             ),
@@ -149,14 +149,14 @@ class PlayerLegendHistory extends StatelessWidget {
                     child: buildSeasonInfo(
                         player.getBestTrophiesSeason(),
                         context,
-                        AppLocalizations.of(context)?.bestTrophies ??
+                        AppLocalizations.of(context)?.legendsBestTrophies ??
                             "Best Trophies")),
                 const SizedBox(width: 16),
                 Expanded(
                     child: buildSeasonInfo(
                         player.getBestAttackWinsSeason(),
                         context,
-                        AppLocalizations.of(context)?.mostAttacks ??
+                        AppLocalizations.of(context)?.legendsMostAttacks ??
                             "Most Attacks")),
               ],
             ),

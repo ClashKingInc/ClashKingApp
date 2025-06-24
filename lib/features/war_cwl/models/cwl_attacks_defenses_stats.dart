@@ -19,12 +19,12 @@ class CwlAttackStats {
     required this.missedAttacks,
   });
 
-  get averageStars {
+  double get averageStars {
     if (attackCount == 0) return 0.0;
     return stars / attackCount;
   }
 
-  get averageDestruction {
+  double get averageDestruction {
     if (attackCount == 0) return 0.0;
     return totalDestruction / attackCount;
   }
@@ -90,12 +90,12 @@ class CwlDefenseStats {
     required this.missedDefenses,
   });
 
-  get averageStars {
+  double get averageStars {
     if (defenseCount == 0) return 0.0;
     return stars / defenseCount;
   }
 
-  get averageDestruction {
+  double get averageDestruction {
     if (defenseCount == 0) return 0.0;
     return totalDestruction / defenseCount;
   }

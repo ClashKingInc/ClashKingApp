@@ -52,7 +52,7 @@ class WarWidgetService {
     HomeWidget.setAppGroupId('group.clashking.warwidget');
     
     // Register callback for widget interactions
-    HomeWidget.registerBackgroundCallback(_backgroundCallback);
+    HomeWidget.registerInteractivityCallback(_backgroundCallback);
   }
 
   // Background callback handler

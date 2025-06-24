@@ -34,17 +34,17 @@ class ClanMembersState extends State<ClanMembers> {
   @override
   Widget build(BuildContext context) {
     Map<String, String> filterOptions = {
-      AppLocalizations.of(context)?.role ?? 'Role': 'role',
-      AppLocalizations.of(context)?.townHallLevel ?? 'Town Hall Level':
+      AppLocalizations.of(context)?.generalRole ?? 'Role': 'role',
+      AppLocalizations.of(context)?.gameTownHallLevel ?? 'Town Hall Level':
           'townHallLevel',
-      AppLocalizations.of(context)?.trophies ?? 'Trophies': 'trophies',
-      AppLocalizations.of(context)?.expLevel ?? 'Experience Level': 'expLevel',
-      AppLocalizations.of(context)?.builderBaseTrophies ??
+      AppLocalizations.of(context)?.gameTrophies ?? 'Trophies': 'trophies',
+      AppLocalizations.of(context)?.gameExpLevel ?? 'Experience Level': 'expLevel',
+      AppLocalizations.of(context)?.gameBuilderBaseTrophies ??
           'Builder Base Trophies': 'builderBaseTrophies',
-      AppLocalizations.of(context)?.donations ?? 'Donations': 'donations',
-      AppLocalizations.of(context)?.donationsReceived ?? 'Donations received':
+      AppLocalizations.of(context)?.gameDonations ?? 'Donations': 'donations',
+      AppLocalizations.of(context)?.gameDonationsReceived ?? 'Donations received':
           'donationsReceived',
-      AppLocalizations.of(context)?.donationsRatio ?? 'Donation Ratio':
+      AppLocalizations.of(context)?.gameDonationsRatio ?? 'Donation Ratio':
           'donationsRatio',
     };
     
@@ -108,7 +108,7 @@ class ClanMembersState extends State<ClanMembers> {
               padding: const EdgeInsets.all(16),
               child: Text(
                 AppLocalizations.of(context)
-                        ?.noAccountLinkedToYourProfileFound ??
+                        ?.accountsNoneFound ??
                     'No account linked to your profile found',
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
@@ -294,13 +294,13 @@ class ClanMembersState extends State<ClanMembers> {
     final loc = AppLocalizations.of(context)!;
     switch (role) {
       case 'admin':
-        return loc.elder;
+        return loc.clanRoleElder;
       case 'coLeader':
-        return loc.coLeader;
+        return loc.clanRoleCoLeader;
       case 'leader':
-        return loc.leader;
+        return loc.clanRoleLeader;
       default:
-        return loc.member;
+        return loc.clanRoleMember;
     }
   }
 }

@@ -59,11 +59,11 @@ class MyHomePageState extends State<MyHomePage> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
-            label: AppLocalizations.of(context)?.dashboard ?? 'Dashboard',
+            label: AppLocalizations.of(context)?.dashboardTitle ?? 'Dashboard',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shield),
-            label: AppLocalizations.of(context)?.clan ?? 'Clan',
+            label: AppLocalizations.of(context)?.clanTitle ?? 'Clan',
           ),
           BottomNavigationBarItem(
             icon: Icon(CustomIcons.swordCross),
@@ -71,7 +71,7 @@ class MyHomePageState extends State<MyHomePage> {
           ),
           /*BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: AppLocalizations.of(context)?.tools ?? 'Tools',
+            label: AppLocalizations.of(context)?.toolsTitle ?? 'Tools',
           ),*/
         ],
         currentIndex: _selectedIndex,

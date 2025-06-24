@@ -245,9 +245,9 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
               unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
               onTap: (value) {},
               tabs: [
-                Tab(text: AppLocalizations.of(context)!.statistics),
-                Tab(text: AppLocalizations.of(context)!.events),
-                Tab(text: AppLocalizations.of(context)!.team),
+                Tab(text: AppLocalizations.of(context)!.navigationStatistics),
+                Tab(text: AppLocalizations.of(context)!.warEventsTitle),
+                Tab(text: AppLocalizations.of(context)!.navigationTeam),
               ],
               children: [
                 Padding(
@@ -276,21 +276,21 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                                 });
                               },
                               sortByOptions: {
-                                AppLocalizations.of(context)!.mapPosition:
+                                AppLocalizations.of(context)!.warPositionMap:
                                     'all',
-                                AppLocalizations.of(context)!.attacks:
+                                AppLocalizations.of(context)!.warAttacksTitle:
                                     'rattacks',
-                                AppLocalizations.of(context)!.defenses:
+                                AppLocalizations.of(context)!.warDefensesTitle:
                                     'rdefenses',
-                                AppLocalizations.of(context)!.bestAttacks:
+                                AppLocalizations.of(context)!.warAttacksBest:
                                     'bestAttacks',
-                                AppLocalizations.of(context)!.bestDefenses:
+                                AppLocalizations.of(context)!.warDefensesBest:
                                     'bestDefenses',
-                                AppLocalizations.of(context)!.bestPerformance:
+                                AppLocalizations.of(context)!.warStarsBestPerformance:
                                     'bestPerformance',
-                                AppLocalizations.of(context)!.noAttackYet:
+                                AppLocalizations.of(context)!.warAttacksNone:
                                     'noattacks',
-                                AppLocalizations.of(context)!.noDefenseYet:
+                                AppLocalizations.of(context)!.warDefensesNone:
                                     'nodefenses',
                                 generateStarsWithIconBefore(
                                     3, 16, ImageAssets.sword): '3stars',
@@ -316,9 +316,9 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                           CustomSlidingSegmentedControl<int>(
                             initialValue: _currentSegment,
                             children: {
-                              1: Text(AppLocalizations.of(context)!.myTeam),
+                              1: Text(AppLocalizations.of(context)!.warMyTeam),
                               2: Text(
-                                  AppLocalizations.of(context)!.enemiesTeam),
+                                  AppLocalizations.of(context)!.warEnemiesTeam),
                             },
                             decoration: BoxDecoration(
                               color: Theme.of(context)

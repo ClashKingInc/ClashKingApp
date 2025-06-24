@@ -54,10 +54,10 @@ class PlayerScreenState extends State<PlayerScreen>
                 },
                 tabs: [
                   Tab(
-                      text: AppLocalizations.of(context)?.homeBase ??
+                      text: AppLocalizations.of(context)?.gameBaseHome ??
                           'Home Base'),
                   Tab(
-                      text: AppLocalizations.of(context)?.builderBase ??
+                      text: AppLocalizations.of(context)?.gameBaseBuilder ??
                           'Builder Base'),
                 ],
                 children: [
@@ -78,19 +78,19 @@ class PlayerScreenState extends State<PlayerScreen>
         SizedBox(height: 10),
         PlayerSuperTroopSection(superTroops: player.superTroops),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.heroes, items: player.heroes),
+            title: AppLocalizations.of(context)!.gameHeroes, items: player.heroes),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.equipment,
+            title: AppLocalizations.of(context)!.gameEquipment,
             items: player.equipments),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.troops, items: player.troops),
+            title: AppLocalizations.of(context)!.gameTroops, items: player.troops),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.spells, items: player.spells),
+            title: AppLocalizations.of(context)!.gameSpells, items: player.spells),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.siegeMachines,
+            title: AppLocalizations.of(context)!.gameSiegeMachines,
             items: player.siegeMachines),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.pets, items: player.pets),
+            title: AppLocalizations.of(context)!.gamePets, items: player.pets),
         SizedBox(height: 10),
       ],
     );
@@ -101,10 +101,10 @@ class PlayerScreenState extends State<PlayerScreen>
       children: [
         SizedBox(height: 10),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.heroes,
+            title: AppLocalizations.of(context)!.gameHeroes,
             items: player.bbHeroes),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.troops,
+            title: AppLocalizations.of(context)!.gameTroops,
             items: player.bbTroops),
         SizedBox(height: 10),
       ],

@@ -30,7 +30,7 @@ class PlayerToDoScreenState extends State<PlayerToDoScreen>
   @override
   Widget build(BuildContext context) {
     Map<String, String> filterOptions = {
-      AppLocalizations.of(context)!.all: 'all',
+      AppLocalizations.of(context)!.generalAll: 'all',
       //'byEvent': 'byEvent',
     };
 
@@ -64,8 +64,8 @@ class PlayerToDoScreenState extends State<PlayerToDoScreen>
                   setState(() {});
                 },
                 tabs: [
-                  Tab(text: AppLocalizations.of(context)!.activeAccounts),
-                  Tab(text: AppLocalizations.of(context)!.inactiveAccounts),
+                  Tab(text: AppLocalizations.of(context)!.todoAccountsActive),
+                  Tab(text: AppLocalizations.of(context)!.todoAccountsInactive),
                 ],
                 children: [
                   PlayerToDoBody(

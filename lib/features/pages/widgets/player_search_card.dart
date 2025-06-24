@@ -117,8 +117,8 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
               controller: _controller,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                labelText: AppLocalizations.of(context)!.searchPlayer,
-                hintText: AppLocalizations.of(context)!.nameOrTagPlayer,
+                labelText: AppLocalizations.of(context)!.playerSearchTitle,
+                hintText: AppLocalizations.of(context)!.playerSearchPlaceholder,
                 hintStyle: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 16,
@@ -185,7 +185,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                     children: [
                       Center(
                         child: Text(
-                          AppLocalizations.of(context)!.noResult,
+                          AppLocalizations.of(context)!.searchNoResult,
                         ),
                       ),
                       SizedBox(height: 8),

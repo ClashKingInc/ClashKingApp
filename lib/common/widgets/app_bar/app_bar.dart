@@ -69,7 +69,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: <Widget>[
                 Icon(Icons.settings),
                 SizedBox(width: 4),
-                Text(AppLocalizations.of(context)?.manage ?? 'Manage'),
+                Text(AppLocalizations.of(context)?.generalManage ?? 'Manage'),
               ],
             ),
           ),

@@ -20,7 +20,7 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
     return Column(
       children: [
         Text(
-          AppLocalizations.of(context)!.eosDetails,
+          AppLocalizations.of(context)!.legendsEosDetails,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         ...rankings.map((legendSeason) {
@@ -70,7 +70,7 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                           Text(
                             legendSeason.clan.name.isNotEmpty
                                 ? legendSeason.clan.name
-                                : AppLocalizations.of(context)!.noClan,
+                                : AppLocalizations.of(context)!.clanNone,
                             style: Theme.of(context).textTheme.labelMedium,
                           ),
                         ],
