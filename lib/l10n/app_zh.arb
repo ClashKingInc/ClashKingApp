@@ -490,7 +490,7 @@
       }
     }
   },
-  "legendsTitle": "传奇联赛",
+  "legendsTitle": "数据不准确？",
   "legendsNotInLeague": "不在传奇联赛中",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "您以{trophies}奖杯开始了新的一天。",
@@ -723,7 +723,7 @@
   "warLog": "对战日志",
   "warLogPublic": "公开对战日志",
   "warLogPrivate": "私人对战日志",
-  "warLogClosed": "{clan} 的对战日志已关闭。",
+  "warLogClosed": "对战日志已关闭。",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
