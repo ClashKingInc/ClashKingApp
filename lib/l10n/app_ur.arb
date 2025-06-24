@@ -203,7 +203,7 @@
       }
     }
   },
-  "playerRatioDescription": "آپ کے عطیہ کا تناسب {ratio} ہے۔ آپ نے {عطیات} دستے عطیہ کیے ہیں اور {received} دستے حاصل کیے ہیں.",
+  "playerRatioDescription": "آپ کے عطیہ کا تناسب {ratio} ہے۔ آپ نے {donations} دستے عطیہ کیے ہیں اور {received} دستے حاصل کیے ہیں.",
   "@playerRatioDescription": {
     "placeholders": {
       "ratio": {
@@ -490,7 +490,7 @@
       }
     }
   },
-  "legendsTitle": "لیجنڈ لیگ",
+  "legendsTitle": "غلط ڈیٹا؟",
   "legendsNotInLeague": "لیجنڈ لیگ میں نہیں۔",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "آپ نے دن کا آغاز {trophies} ٹرافیوں سے کیا.",
@@ -723,7 +723,7 @@
   "warLog": "جنگی ریکارڈ",
   "warLogPublic": "عوامی جنگ کا ریکارڈ",
   "warLogPrivate": "نجی جینگ ریکارڈ",
-  "warLogClosed": "{clan} کا وار لاگ بند ہے.",
+  "warLogClosed": "جنگی لاگ بند.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
