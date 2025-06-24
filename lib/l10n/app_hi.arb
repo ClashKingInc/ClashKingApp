@@ -490,7 +490,7 @@
       }
     }
   },
-  "legendsTitle": "लीजेंड लीग",
+  "legendsTitle": "गलत डेटा?",
   "legendsNotInLeague": "लीजेंड लीग में नहीं ",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "आपने दिन की शुरुआत {trophies} ट्रॉफियों के साथ की।",
@@ -723,7 +723,7 @@
   "warLog": "युद्ध लॉग",
   "warLogPublic": "सार्वजनिक युद्ध लॉग",
   "warLogPrivate": "निजी युद्ध लॉग",
-  "warLogClosed": "{clan}s युद्ध लॉग बंद है",
+  "warLogClosed": "युद्ध लॉग बंद",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
