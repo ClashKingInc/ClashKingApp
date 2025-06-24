@@ -1,63 +1,34 @@
 {
     "creatorCode": "Κωδικός Δημιουργού: ClashKing",
+    "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
+    "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
+    "retry": "Retry",
     "signInWithDiscord": "Είσοδος με Discord",
     "guestMode": "Συνέχεια ως Επισκέπτης",
     "needHelpJoinDiscord": "Χρειάζεστε βοήθεια; Βρείτε μας στο Discord.",
-    "createGuestProfile": "Δημιουργήστε το προφίλ επισκέπτη σας",
-    "doesNotExist": "Ο χρήστης {tag} δεν υπάρχει.",
-    "@doesNotExist": {
-        "placeholders": {
-            "tag": {
-                "type": "String"
-            }
-        }
-    },
-    "isAlreadyLinked": "Ο χρήστης {tag} είναι ήδη συνδεδεμένος σε κάποιον.",
-    "@isAlreadyLinked": {
-        "placeholders": {
-            "tag": {
-                "type": "String"
-            }
-        }
-    },
+    "loginError": "An error occurred while logging in. Please try again later.",
     "username": "Όνομα Χρήστη",
-    "pleaseEnterUsername": "Παρακαλώ εισάγετε το όνομα χρήστη σας",
-    "playerTags": "Λογαριασμοί Παίχτη",
-    "followingTagsDoNotExist": "Οι ακόλουθοι λογαριασμοί δεν υπάρχουν: {tags}.",
-    "@followingTagsDoNotExist": {
-        "placeholders": {
-            "tags": {
-                "type": "String"
-            }
-        }
-    },
-    "followingTagsAreAlreadyLinked": "Οι ακόλουθοι λογαριασμοί είναι ήδη συνδεδεμένοι σε κάποιον: {tags}.",
-    "@followingTagsAreAlreadyLinked": {
-        "placeholders": {
-            "tags": {
-                "type": "String"
-            }
-        }
-    },
+    "playerTag": "Player Tag (#ABC123)",
+    "playerTags": "Ετικέτα Παίχτη",
     "welcome": "Καλώς Ήλθατε!",
     "welcomeMessage": "Παρακαλώ προσθέστε έναν ή περισσότερους λογαριασμούς \"Clash Of Clans\" στο προφίλ σας. Μπορείτε να προσθέσετε ή να αφαιρέσετε λογαριασμούς αργότερα.",
     "login": "Είσοδος",
     "logout": "Έξοδος",
     "language": "Γλώσσα",
     "settings": "Ρυθμίσεις",
-    "toggleTheme": "Εμφάνιση",
+    "toggleTheme": "Αλλαγή Εμφάνισης",
     "selectLanguage": "Επιλέξτε μία γλώσσα",
     "faq": "FAQ",
     "faqSubtitle": "Συχνές Ερωτήσεις",
     "faqIsThisFromSupercell": "Η εφαρμογή ανήκει στη Supercell;",
     "faqFanContentPolicy": "Η εφαρμογή είναι ανεπίσημη και δεν υποστηρίζεται από τη Supercell. Για περισσότερες πληροφορίες δείτε την Πολιτική Δημιουργίας για Θαυμαστές της Supercell: www.supercell.com/fan-content-policy",
     "faqWhyNotAccurate": "Γιατί τα δεδομένα είναι μερικές φορές ανακριβή ή ελλιπή;",
-    "faqClanNotTracked": "Δεν εμφανίζει την ομάδα",
+    "faqClanNotTracked": "Η ομάδα δεν καταγράφεται",
     "faqClanNotTrackedAnswer": "Το ClashKing μπορεί να καταγράφει αυτές τις πληροφορίες μόνο όταν η ομάδα είναι ήδη καταγεγραμμένη. Εάν η ομάδα δεν είναι καταγεγραμμένη, παρακαλώ προσθέστε το εργαλείο ClashKing στη σελίδα του Discord σας και χρησιμοποιείστε την εντολή /addclan. Δουλεύουμε για να φέρουμε αυτό το χαρακτηριστικό στην εφαρμογή σύντομα.",
     "faqTrackingDown": "Σταμάτησε η καταγραφή",
     "faqTrackingDownAnswer": "Η καταγραφή μπορεί να σταματήσει για ένα συγκεκριμένο χρονικό διάστημα. Για αυτόν τον λόγο μπορεί μερικές φορές να μην είναι ολοκληρωμένα τα δεδομένα σας. Δουλεύουμε για να το βελτιώσουμε.",
     "faqApiLimitation": "Όρια του Clash Of Clans API",
-    "faqApiLimitationAnswer": "Some data are provided by Clash of Clans and their API has some limitations. This is the case for legend tracking where it sometimes stack the trophy gain and loss as if it was one attack. It is also why we do not have any information on your buildings levels.",
+    "faqApiLimitationAnswer": "Μερικά δεδομένα που παρέχει το Clash of Clans και το «API» τους έχουνε μερικούς περιορισμούς. Αυτή είναι η περίπτωση για το επίπεδο θρύλου και την καταγραφή του, όπου μερικές φορές αθροίζει το κέρδος τρόπαιων με την απώλεια σαν να ήταν μία επίθεση. Αυτός είναι επίσης ο λόγος για τον οποίο δε διαθέτουμε πληροφορίες στα επίπεδα των κτηρίων σας.",
     "faqSupportWork": "Πώς μπορώ να υποστηρίξω το έργο σας;",
     "faqSupportWorkAnswer": "Υπάρχουν αρκετοί τρόποι για να μας υποστηρίξετε:",
     "faqUseCodeClashKing": "Χρησιμοποιήστε τον κωδικό δημιουργού \"ClashKing\"",
@@ -89,9 +60,9 @@
         "description": "Error message when the app version cannot be loaded"
     },
     "currentTranslators": "Τωρινοί μεταφραστές",
-    "betaFeature": "Χαρακτηριστικό εκδοχής Beta",
-    "beta": "BETA",
-    "betaDescription": "Αυτό το χαρακτηριστικό βρίσκεται ακόμη στην εκδοχή beta, οπότε μπορεί να αντιμετωπίσετε μερικά σφάλματα ή να μην είναι ολοκληρωμένο. Δουλεύουμε ενεργά για τη βελτίωση της εφαρμογής και σας προσκαλούμε, να μοιραστείτε τις ιδέες σας και να αναφέρετε οποιαδήποτε σφάλματα αντιμετωπίζετε, στην ομάδα μας στο Discord.",
+    "betaFeature": "Χαρακτηριστικό εκδοχής Βήτα",
+    "beta": "ΒΗΤΑ",
+    "betaDescription": "Αυτό το χαρακτηριστικό βρίσκεται ακόμη στην εκδοχή βήτα, οπότε μπορεί να αντιμετωπίσετε μερικά σφάλματα ή να μην είναι ολοκληρωμένο. Δουλεύουμε ενεργά για τη βελτίωση της εφαρμογής και σας προσκαλούμε, να μοιραστείτε τις ιδέες σας και να αναφέρετε οποιαδήποτε σφάλματα αντιμετωπίζετε, στην ομάδα μας στο Discord.",
     "copiedToClipboard": "Αντιγράφηκε στο πρόχειρο",
     "all": "Όλα",
     "@all": {
@@ -107,39 +78,31 @@
     },
     "error": "Σφάλμα",
     "player": "Παίχτης",
-    "notFoundOrNotLinkedToOurSystem": "{player} δε βρέθηκε ή δεν έχει συνδεθεί στο σύστημά μας.",
-    "@notFoundOrNotLinkedToOurSystem": {
-        "placeholders": {
-            "player": {
-                "type": "String"
-            }
-        }
-    },
-    "tryAnotherNameOrTagOrLinkIt": "Δοκιμάστε διαφορετικό όνομα/αριθμό λογαριασμού ή συνδέστε το.",
-    "playerNotFound": "Παίχτης δε βρέθηκε",
-    "noValueEntered": "Δεν εντοπίστηκε αξία",
     "manage": "Διαχείριση",
-    "enterPlayerTag": "Εισάγετε έναν αριθμό λογαριασμού",
-    "add": "Προσθέσετε",
+    "enterPlayerTag": "Εισάγετε ετικέτα λογαριασμού",
+    "add": "Προσθήκη",
     "@add": {
         "description": "Add an account"
     },
-    "delete": "Διαγράψτε",
+    "delete": "Διαγραφή",
     "@delete": {
         "description": "Delete an account"
     },
-    "addAccount": "Προσθέστε λογαριασμό",
-    "deleteAccount": "Διαγράψτε λογαριασμό",
+    "addAccount": "Προσθήκη λογαριασμού",
+    "deleteAccount": "Διαγραφή λογαριασμού",
     "playerTagNotExists": "Ο αριθμός λογαριασμού που καταγράψατε δεν υπάρχει.",
     "accountAlreadyLinked": "Ο αριθμός λογαριασμού είναι ήδη συνδεδεμένος σε κάποιον.",
-    "enterApiToken": "Παρακαλώ εισάγετε το κλειδί API του λογαριασμού σας για να επιβεβαιώσετε ότι είναι δικός σας. Μπορείτε να το βρείτε στο Clash of Clans > Settings > More Settings > API Token.",
+    "enterApiToken": "Παρακαλώ εισάγετε το κλειδί «API» του λογαριασμού σας για να επιβεβαιώσετε ότι είναι δικός σας. Μπορείτε να το βρείτε στο Clash of Clans > Ρυθμίσεις > Περισσότερες Ρυθμίσεις > Κλειδί API.",
     "wrongApiToken": "Το κλειδί API που εισάγατε είναι λάθος",
     "accountAlreadyLinkedToYou": "Ο αριθμός λογαριασμού είναι ήδη συνδεδεμένος σε εσάς.",
     "apiToken": "Κλειδί API λογαριασμού",
     "failedToAddTryAgain": "Σφάλμα στην προσθήκη της σύνδεσης. Παρακαλώ προσπαθήστε ξανά αργότερα.",
+    "fillAllFields": "Please fill all fields.",
     "failedToDeleteTryAgain": "Σφάλμα στη διαγραφή της σύνδεσης. Παρακαλώ προσπαθήστε ξανά αργότερα.",
-    "enterPlayerTagWarning": "Εισάγετε έναν αριθμό λογαριασμού και πιέσετε το κουμπί \"+\" για να συνεχίσετε.",
-    "search": "Αναζήτηση",
+    "failedToUpdateOrder": "Failed to update the order of accounts.",
+    "manageAccounts": "Manage your accounts",
+    "manageAccountsDescription": "You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.",
+    "confirm": "Confirm",
     "@search": {
         "description": "Search for a player or a clan"
     },
@@ -149,7 +112,6 @@
     "@confirmLogout": {
         "description": "Prompt asking the user to confirm logout"
     },
-    "tagOrNamePlayer": "Αριθμός λογαριασμού ή όνομα",
     "searchPlayer": "Αναζήτηση παίχτη",
     "nameOrTagPlayer": "Όνομα παίχτη ή αριθμός λογαριασμού",
     "playerClanDescription": "Η ομάδα σας είναι η \"{clan}\" ({tag}).",
@@ -228,9 +190,9 @@
     "th": "Δ",
     "builderBase": "Βάση Χτίστη",
     "bh": "ΔΧ",
-    "clanCapital": "Πρωτεύουσα Ομάδας",
+    "clanCapital": "Πρωτεύουσα Φυλής",
     "leader": "Αρχηγός",
-    "coLeader": "Συν-Αρχηγός",
+    "coLeader": "Υπ-Αρχηγός",
     "elder": "Επίτιμο Μέλος",
     "member": "Μέλος",
     "ready": "Θέλω να συμμετέχω",
@@ -241,11 +203,24 @@
     "@unready": {
         "description": "Opted Out for war"
     },
+    "level": "Level: {level}/{maxLevel}",
+    "@level": {
+        "placeholders": {
+            "level": {
+                "type": "int"
+            },
+            "maxLevel": {
+                "type": "int"
+            }
+        }
+    },
     "heroes": "Ήρωες",
     "equipment": "Εξοπλισμός",
     "troops": "Στρατός",
     "superTroops": "Σούπερ Στρατός",
     "activeSuperTroops": "Ενεργός Σούπερ Στρατός",
+    "active": "Active",
+    "inactive": "Inactive",
     "pets": "Κατοικίδια",
     "siegeMachines": "Μηχανές Πολιορκίας",
     "spells": "Ξόρκια",
@@ -288,6 +263,7 @@
     },
     "date": "Ημερομηνία",
     "stats": "Στατιστικά",
+    "fullStats": "Full Stats",
     "details": "Λεπτομέρειες",
     "seasonStats": "Στατιστικά Σεζόν",
     "charts": "Διαγράμματα",
@@ -296,9 +272,9 @@
         "description": "Shows EOS trophies history"
     },
     "legendLeague": "Επίπεδο Θρύλων",
-    "notInLegendLeague": "Not in Legend League",
-    "noLegendData": "No Legend Data Found for today",
-    "legendStartDescription": "You started the day with {trophies} trophies.",
+    "notInLegendLeague": "Εκτός επιπέδου Θρύλου",
+    "noLegendsDataToday": "You're not in Legend League, but past seasons are available.",
+    "legendStartDescription": "Ξεκινήσατε τη μέρα με {trophies} τρόπαια.",
     "@legendStartDescription": {
         "placeholders": {
             "trophies": {
@@ -306,7 +282,7 @@
             }
         }
     },
-    "legendNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
+    "legendNoRankLocalDescription": "Δε βρίσκεστε στην κατάταξη κορυφαίων παιχτών της χώρας ({country}) με {trophies} τρόπαια.",
     "@legendNoRankLocalDescription": {
         "placeholders": {
             "country": {
@@ -317,7 +293,7 @@
             }
         }
     },
-    "legendRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+    "legendRankLocalDescription": "Βρίσκεστε στη θέση {rank} κορυφαίων παιχτών της χώρας ({country}) με {trophies} τρόπαια.",
     "@legendRankDescription": {
         "placeholders": {
             "rank": {
@@ -331,7 +307,7 @@
             }
         }
     },
-    "legendGainDescription": "You gained {trophies} trophies for now.",
+    "legendGainDescription": "Κερδίσατε {trophies} τρόπαια μέχρι τώρα.",
     "@legendGainDescription": {
         "placeholders": {
             "trophies": {
@@ -339,7 +315,7 @@
             }
         }
     },
-    "legendLossDescription": "You lost {trophies} trophies for now.",
+    "legendLossDescription": "Χάσατε {trophies} τρόπαια μέχρι τώρα.",
     "@legendLossDescription": {
         "placeholders": {
             "trophies": {
@@ -347,7 +323,7 @@
             }
         }
     },
-    "legendNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+    "legendNoGlobalRankDescription": "Δε βρίσκεστε στην κατάταξη κορυφαίων παιχτών του κόσμου με {trophies} τρόπαια.",
     "@legendNoGlobalRankDescription": {
         "placeholders": {
             "trophies": {
@@ -355,7 +331,7 @@
             }
         }
     },
-    "legendGlobalRankDescription": "You are currently ranked {rank} globally.",
+    "legendGlobalRankDescription": "Βρίσκεστε στη θέση {rank} κορυφαίων παιχτών του κόσμου.",
     "@legendGlobalRankDescription": {
         "placeholders": {
             "rank": {
@@ -363,38 +339,40 @@
             }
         }
     },
-    "noRank": "No ranking",
-    "started": "Started",
+    "noRank": "Δεν υπάρχει κατάταξη",
+    "started": "Ξεκίνησε",
     "@started": {
         "description": "Title for the number of trophies at the beginning of the day"
     },
-    "ended": "Ended",
+    "ended": "Έληξε",
     "@ended": {
         "description": "Title for the number of trophies at the end of the day"
     },
-    "average": "Average",
+    "average": "Μέσος όρος",
     "@average": {
         "description": "Average value of legend trophies (defense and attack)"
     },
-    "remaining": "Remaining",
+    "remaining": "Απομένει",
     "@remaining": {
         "description": "Remaining attacks or defenses"
     },
-    "legendsTitle": "Inaccurate data?",
-    "legendsExplanation_intro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
-    "legendsExplanation_api_delay_title": "1. API Delay: ",
-    "legendsExplanation_api_delay_body": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
-    "legendsExplanation_concurrent_changes_title": "2. Concurrent Changes: \n",
-    "legendsExplanation_multiple_attacks_defenses_title": "- Multiple Attacks/Defenses: ",
-    "legendsExplanation_multiple_attacks_defenses_body": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
-    "legendsExplanation_simultaneous_attack_defense_title": "- Simultaneous Attack and Defense: ",
-    "legendsExplanation_simultaneous_attack_defense_body": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
-    "legendsExplanation_net_gain_loss_title": "3. Net Gain/Loss: ",
-    "legendsExplanation_net_gain_loss_body": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
-    "legendsExplanation_conclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-    "toDoList": "To-do list",
-    "lastActive": "Last active: {date}",
-    "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
+    "legendsTitle": "Ανακριβή δεδομένα;",
+    "legendsExplanation_intro": "Λόγω περιορισμών από τον προγραμματισμό του Clash of Clans τα δεδομένα μας ενδέχεται να μην είναι πάντα ακριβή. Αυτός είναι ο λόγος:\n",
+    "legendsExplanation_api_delay_title": "1. Καθυστερήσεις του «API»: ",
+    "legendsExplanation_api_delay_body": "Το «API» ενδέχεται να χρειαστεί μέχρι και 5 λεπτά να ενημερωθεί, δημιουργώντας καθυστέρηση στην αναγραφή των αλλαγών στα τρόπαια σε πραγματικό χρόνο.\n",
+    "legendsExplanation_concurrent_changes_title": "2. Συνεχείς Αλλαγές:\n",
+    "legendsExplanation_multiple_attacks_defenses_title": "- Πολλαπλές Επιθέσεις/Άμυνες: ",
+    "legendsExplanation_multiple_attacks_defenses_body": "Εάν πολλαπλές επιθέσεις ή άμυνες λάβουν μέρος σε γρήγορη διαδοχή, το «API» ενδέχεται να δείξει το άθροισμα του αποτελέσματος (π.χ. +68 ή -68).\n",
+    "legendsExplanation_simultaneous_attack_defense_title": "- Ταυτόχρονη Επίθεση και άμυνα: ",
+    "legendsExplanation_simultaneous_attack_defense_body": "Εάν μία επίθεση ή άμυνα λάβουν μέρος ταυτόχρονα, τότε θα δείτε το άθροισμα του αποτελέσματος (π.χ. +4).\n",
+    "legendsExplanation_net_gain_loss_title": "3. Συνολικό Κέρδος/Απώλεια: ",
+    "legendsExplanation_net_gain_loss_body": "Παρά τα προβλήματα χρονισμού, το συνολικό κέρδος ή απώλεια για τη μέρα είναι ακριβές. ",
+    "legendsExplanation_conclusion": "Αυτοί οι περιορισμοί είναι κοινοί σε όλα τα εργαλεία που χρησιμοποιούν τον προγραμματισμό του Clash of Clans. Προσπαθούμε το καλύτερο που μπορούμε για να αντισταθμίσουμε αυτούς τους περιορισμούς και να παράσχουμε αποτελέσματα όσο το δυνατόν πιο κοντά στην πραγματικότητα. Σας ευχαριστούμε για την κατανόηση!",
+    "toDoList": "Λίστα εργασιών",
+    "clanGames": "Clan Games",
+    "seasonPass": "Season Pass",
+    "lastActive": "Τελευταία ενεργός: {date}",
+    "playerNotTracked": "Αυτός ο παίχτης δεν καταγράφεται. Τα δεδομένα ενδέχεται να είναι ανακριβή.",
     "@lastActive": {
         "placeholders": {
             "date": {
@@ -402,7 +380,7 @@
             }
         }
     },
-    "numberAccounts": "{number} accounts",
+    "numberAccounts": "{number} λογαριασμοί",
     "@numberAccounts": {
         "placeholders": {
             "number": {
@@ -411,7 +389,7 @@
         },
         "description": "Number of accounts (ex: 4 accounts)"
     },
-    "numberActiveAccounts": "{number} active accounts",
+    "numberActiveAccounts": "{number} ενεργοί λογαριασμοί",
     "@numberActiveAccounts": {
         "placeholders": {
             "number": {
@@ -419,7 +397,7 @@
             }
         }
     },
-    "numberInactiveAccounts": "{number} inactive accounts",
+    "numberInactiveAccounts": "{number} ανενεργοί λογαριασμοί",
     "@numberInactiveAccounts": {
         "placeholders": {
             "number": {
@@ -427,34 +405,34 @@
             }
         }
     },
-    "activeAccounts": "Active accounts",
-    "inactiveAccounts": "Inactive accounts",
-    "noInactiveAccounts": "No inactive accounts.",
-    "noActiveAccounts": "No active accounts.",
-    "todoExplanation_title": "Task Calculation",
-    "todoExplanation_intro": "The task completion percentage is calculated based on the following activities with specific weightings:",
-    "todoExplanation_legends_title": "Legend League:",
-    "todoExplanation_legends": "Weight of 8 points per account, 1 attack = 1 point.",
-    "todoExplanation_raids_title": "Raids:",
-    "todoExplanation_raids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-    "todoExplanation_clanWars_title": "Clan Wars:",
-    "todoExplanation_clanWars": "Weight of 2 points per account, 1 attack = 1 point.",
-    "todoExplanation_cwl_title": "Clan War League:",
-    "todoExplanation_cwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
-    "todoExplanation_passAndGames_title": "Season Pass & Clan Games:",
-    "todoExplanation_passAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
-    "todoExplanation_conclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
-    "worst": "Worst",
+    "activeAccounts": "Ενεργοί λογαριασμοί",
+    "inactiveAccounts": "Ανενεργοί λογαριασμοί",
+    "noInactiveAccounts": "Κανένας ανενεργός λογαριασμός.",
+    "noActiveAccounts": "Κανένας ενεργός λογαριασμός.",
+    "todoExplanation_title": "Υπολογισμός εργασιών",
+    "todoExplanation_intro": "Το ποσοστό ολοκλήρωσης των εργασιών υπολογίζεται βασισμένο στις ακόλουθες ενέργειες με συγκεκριμένο βάρος:",
+    "todoExplanation_legends_title": "Επίπεδο Θρύλου:",
+    "todoExplanation_legends": "Βάρος έως και 8 πόντους για κάθε λογαριασμό, 1 επίθεση = 1 πόντος.",
+    "todoExplanation_raids_title": "Επιδρομές:",
+    "todoExplanation_raids": "Βάρος έως και 5 πόντους για κάθε λογαριασμό (ή έως και 6 εάν η τελευταία επίθεση έχει ξεκλειδωθεί), 1 επίθεση = 1 πόντος.",
+    "todoExplanation_clanWars_title": "Πόλεμος Φυλής:",
+    "todoExplanation_clanWars": "Βάρος έως και 2 πόντους για κάθε λογαριασμό, 1 επίθεση = 1 πόντος.",
+    "todoExplanation_cwl_title": "Πρωτάθλημα Πολέμου Φυλής:",
+    "todoExplanation_cwl": "Βάρος έως και 1 πόντο για κάθε λογαριασμό, 1 επίθεση = 1 πόντος. Το «CWL» δεν μπορεί να καταγραφεί εάν ο παίχτης δεν βρίσκεται μέσα στην ομάδα του πρωταθλήματος.",
+    "todoExplanation_passAndGames_title": "Πάσο σεζόν & Παιχνίδια Φυλής:",
+    "todoExplanation_passAndGames": "Βάρος έως και 2 πόντους για κάθε λογαριασμό. Η αναλογία βασίζεται στον αριθμό ημερών που απομένουν (1 μήνα για το πάσο σεζόν και 6 ημέρες για τα παιχνίδια). Πράσινο = σε τροχιά να ολοκληρωθεί το πάσο ή τα παιχνίδια, κόκκινο = πίσω από το πρόγραμμα.",
+    "todoExplanation_conclusion": "Το τελικό ποσοστό υπολογίζεται διαιρώντας το σύνολο των ολοκληρωμένων ενεργειών στο χρόνο διάρκειας των «events» με το σύνολο των απαιτούμενων ενεργειών. Ανενεργού λογαριασμοί για περισσότερο από 14 ημέρες εξαιρούνται από τον υπολογισμό.",
+    "worst": "Χειρότερο",
     "@worst": {
         "description": "Worst end of day trophies"
     },
-    "best": "Best",
+    "best": "Καλύτερο",
     "@best": {
         "description": "Best end of day trophies"
     },
-    "total": "Total",
-    "heroesEquipments": "Hero equipments",
-    "daysAgo": "{days} days ago",
+    "total": "Σύνολο",
+    "heroesEquipments": "Εξοπλισμοί ηρώων",
+    "daysAgo": "πριν από {days} ημέρες",
     "@daysAgo": {
         "placeholders": {
             "days": {
@@ -462,7 +440,7 @@
             }
         }
     },
-    "dayAgo": "{day} day ago",
+    "dayAgo": "πριν από {day} ημέρα",
     "@dayAgo": {
         "placeholders": {
             "day": {
@@ -470,7 +448,7 @@
             }
         }
     },
-    "hourAgo": "{hour} hour ago",
+    "hourAgo": "πριν από {hour} ώρα",
     "@hourAgo": {
         "placeholders": {
             "hour": {
@@ -478,7 +456,7 @@
             }
         }
     },
-    "hoursAgo": "{hours} hours ago",
+    "hoursAgo": "πριν από {hours} ώρες",
     "@hoursAgo": {
         "placeholders": {
             "hours": {
@@ -486,7 +464,7 @@
             }
         }
     },
-    "minuteAgo": "{minute} minute ago",
+    "minuteAgo": "πριν από {minute} λεπτό",
     "@minuteAgo": {
         "placeholders": {
             "minute": {
@@ -494,7 +472,7 @@
             }
         }
     },
-    "minutesAgo": "{minutes} minutes ago",
+    "minutesAgo": "πριν από {minutes} λεπτά",
     "@minutesAgo": {
         "placeholders": {
             "minutes": {
@@ -502,7 +480,7 @@
             }
         }
     },
-    "secondAgo": "{seconds}s ago",
+    "secondAgo": "πριν από {seconds} δευτερόλεπτα",
     "@secondAgo": {
         "placeholders": {
             "seconds": {
@@ -510,12 +488,37 @@
             }
         }
     },
-    "justNow": "Just Now",
-    "trophiesByMonth": "Trophies by month",
+    "justNow": "Μόλις Τώρα",
+    "endedJustNow": "Ended just now",
+    "endedMinutesAgo": "Ended {minutes} minutes ago",
+    "@endedMinutesAgo": {
+        "placeholders": {
+            "minutes": {
+                "type": "int"
+            }
+        }
+    },
+    "endedHoursAgo": "Ended {hours} hours ago",
+    "@endedHoursAgo": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "endedDaysAgo": "Ended {days} days ago",
+    "@endedDaysAgo": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
     "trophiesBySeason": "Trophies by season",
     "eosTrophies": "End Of Season Trophies",
+    "eosDetails": "End Of Season Details",
     "searchClan": "Search clan",
-    "nameOrTagClan": "Clan's name or tag",
+    "clanName": "Clan's name",
     "noResult": "No result.",
     "filters": "Filters",
     "whatever": "Whatever",
@@ -704,22 +707,90 @@
             }
         }
     },
-    "warHistoryAverageClanStarsPerMember": "Your clan had an average of {stars} stars per member from the last 50 wars.",
-    "warHistoryAverageMembers": "~{members} members per war",
-    "@warHistoryAverageMembers": {
+    "attacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
+    "@attacksLeftDescription": {
         "placeholders": {
-            "members": {
+            "attacks": {
                 "type": "int"
+            },
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "defensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
+    "@defensesLeftDescription": {
+        "placeholders": {
+            "defenses": {
+                "type": "int"
+            },
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "noAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+    "pointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+    "@pointsLeftDescription": {
+        "placeholders": {
+            "points": {
+                "type": "int"
+            },
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "pointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+    "@pointsLeftDescriptionNoPoints": {
+        "placeholders": {
+            "type": {
+                "type": "String"
             }
         }
     },
     "averageStars": "Average stars",
     "averageDestruction": "Average destruction",
-    "noStars": "0 star",
     "oneStar": "1 star",
     "twoStars": "2 stars",
     "threeStars": "3 stars",
+    "avg": "Avg",
+    "@avg": {
+        "description": "Abbreviation for average"
+    },
+    "avgPercentage": "Avg %",
+    "@avgPercentage": {
+        "description": "Abbreviation for average percentage"
+    },
+    "attackCount": "Attack Count",
+    "missedAttacks": "Missed Attacks",
+    "order": "Order",
+    "@order": {
+        "description": "Order of the player in the clan"
+    },
+    "defenseStars": "Defense Stars",
+    "zeroStar": "0 Star",
     "warParticipation": "War Participation",
+    "missed": "Missed",
+    "@missed": {
+        "description": "Missed attacks"
+    },
+    "totalStars": "Σύνολο",
+    "destruction": "Destruction",
+    "mapPosition": "Map Position",
+    "@mapPosition": {
+        "description": "Map position in war"
+    },
+    "pos": "Pos",
+    "@pos": {
+        "description": "Abbreviation for map position"
+    },
+    "oppTownhall": "Opp TH",
+    "@oppTownhall": {
+        "description": "Abbreviation for opponent's town hall level"
+    },
+    "lowerTownhall": "Lower TH",
+    "upperTownhall": "Upper TH",
     "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
     "@toggleTownHallVisibility": {
         "description": "For example, hide stats from TH15 and below if the player is now TH16"
@@ -763,9 +834,18 @@
     "join": "Join",
     "leave": "Leave",
     "reset": "Reset",
+    "joins": "Joins",
+    "leaves": "Leaves",
+    "uniquePlayers": "Unique Players",
+    "movingPlayers": "Moving Players",
+    "mostMovingPlayers": "Most Moving Players",
+    "stillInClan": "Still in Clan",
+    "leftForever": "Left Forever",
+    "rejoinedPlayers": "Rejoined Players",
+    "avgTimeJoinLeave": "Avg Join/Leave Time",
+    "peakHour": "Most Active Hour",
     "leaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
     "@leaveNumberDescription": {
-        "description": "Number of players who left the clan during the current season.",
         "placeholders": {
             "number": {
                 "type": "int"
@@ -777,7 +857,6 @@
     },
     "joinNumberDescription": "{number} player(s) joined the clan during the current season ({date}).",
     "@joinNumberDescription": {
-        "description": "Number of players who joined the clan during the current season.",
         "placeholders": {
             "number": {
                 "type": "int"
@@ -787,9 +866,9 @@
             }
         }
     },
-    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new member(s) this season ({date}).",
-    "@joinLeaveDifferenceUpDescription": {
-        "description": "Number of new members gained by the clan this season.",
+    "movingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
+    "@movingNumberDescription": {
+        "description": "Number of players who left and rejoined the clan during the current season.",
         "placeholders": {
             "number": {
                 "type": "int"
@@ -799,9 +878,9 @@
             }
         }
     },
-    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} member(s) this season ({date}).",
-    "@joinLeaveDifferenceDownDescription": {
-        "description": "Number of members lost by the clan this season.",
+    "uniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
+    "@uniqueNumberDescription": {
+        "description": "Number of unique players who joined/left the clan during the current season.",
         "placeholders": {
             "number": {
                 "type": "int"
@@ -811,12 +890,19 @@
             }
         }
     },
-    "joinLeaveDifferenceEqualDescription": "Your clan has the same number of members as at the beginning of the season ({date}).",
-    "@joinLeaveDifferenceEqualDescription": {
-        "description": "Difference in the number of members between the beginning and the end of the season.",
+    "stillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
+    "@stillInClanNumberDescription": {
         "placeholders": {
-            "date": {
-                "type": "String"
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "leftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
+    "@leftClanNumberDescription": {
+        "placeholders": {
+            "number": {
+                "type": "int"
             }
         }
     },
@@ -863,8 +949,31 @@
     "enemiesTeam": "Enemies",
     "defense": "Defense",
     "defenses": "Defenses",
+    "bestDefenses": "Best defenses",
+    "bestDefenseOutOf": "Best defense (out of {number})",
+    "@bestDefenseOutOf": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        },
+        "description": "Best war defense (out of 3 defenses)"
+    },
     "attack": "Attack",
     "attacks": "Attacks",
+    "bestAttacks": "Best attacks",
+    "noAttackYet": "No attack yet",
+    "@noAttackYet": {
+        "description": "No attack yet in war"
+    },
+    "noDefenseYet": "No defense yet",
+    "@noDefenseYet": {
+        "description": "No defense yet in war"
+    },
+    "bestPerformance": "Best performance",
+    "@bestPerformance": {
+        "description": "Best performance in war"
+    },
     "victory": "Victory",
     "defeat": "Defeat",
     "draw": "Draw",
@@ -894,8 +1003,23 @@
     },
     "askForWar": "Contact the leader or a co-leader to start a war.",
     "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-    "warLogClosed": "War log closed.",
     "rounds": "Rounds",
+    "roundNumber": "Round {number}",
+    "@roundNumber": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "currentRound": "Current round (Round {number})",
+    "@currentRound": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
     "noDataAvailableForThisWar": "No data available for this war",
     "stateOfTheWar": "State of the war",
     "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
@@ -943,6 +1067,53 @@
     "neededOverall": "% Needed overall",
     "calculate": "Calculate",
     "warStats": "War Stats",
+    "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
+    "@warAttacksNumber": {
+        "placeholders": {
+            "number_time": {
+                "type": "int"
+            },
+            "number_war": {
+                "type": "int"
+            }
+        }
+    },
+    "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
+    "@warDefensesNumber": {
+        "placeholders": {
+            "number_time": {
+                "type": "int"
+            },
+            "number_war": {
+                "type": "int"
+            }
+        }
+    },
+    "warAverageStars": "You had an average of {stars} stars per war.",
+    "@warAverageStars": {
+        "placeholders": {
+            "stars": {
+                "type": "String"
+            }
+        }
+    },
+    "warAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+    "@warAverageDestruction": {
+        "placeholders": {
+            "percent": {
+                "type": "String"
+            }
+        }
+    },
+    "warAverageStarsDefense": "You had an average of {stars} stars per defense.",
+    "@warAverageStarsDefense": {
+        "placeholders": {
+            "stars": {
+                "type": "double"
+            }
+        }
+    },
+    "warAverageDestructionDefense": "You had an average of {percent}% destruction rate per defense.",
     "membersStats": "Members Stats",
     "clanWarLeague": "Clan War League",
     "cwlRank": "Your clan is currently ranked {rank}.",
@@ -961,27 +1132,22 @@
             }
         }
     },
-    "cwlMissingStarsFromNext": "Your clan is missing {stars} stars to catch up with the next clan.",
-    "@cwlMissingStarsFromNext": {
-        "placeholders": {
-            "stars": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlMissingStarsFromFirst": "Your clan is missing {stars} stars to catch up with the first clan.",
-    "@cwlMissingStarsFromFirst": {
-        "placeholders": {
-            "stars": {
-                "type": "int"
-            }
-        }
-    },
     "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
     "@cwlDestructionPercentage": {
         "placeholders": {
             "percent": {
                 "type": "String"
+            }
+        }
+    },
+    "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+    "@cwlTotalAttacks": {
+        "placeholders": {
+            "attacks": {
+                "type": "int"
+            },
+            "totalAttacks": {
+                "type": "int"
             }
         }
     },
@@ -1008,8 +1174,63 @@
     },
     "tools": "Tools",
     "community": "Community",
+    "raids": "Raids",
     "lastRaids": "Last raids",
     "ongoingRaids": "Ongoing raids",
     "districtsDestroyed": "Districts destroyed",
-    "raidsCompleted": "Raids completed"
+    "raidsCompleted": "Raids completed",
+    "maintenance": "Maintenance",
+    "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
+    "tryAgain": "Try again",
+    "downloadTooltip": "Download CWL summary",
+    "downloadInProgress": "Downloading file... It can take a few seconds...",
+    "downloadSuccess": "File saved successfully in ${path}",
+    "@downloadSuccess": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "downloadError": "Failed to download file",
+    "welcomeBack": "Welcome Back",
+    "chooseSignInMethod": "Choose your preferred sign-in method",
+    "discord": "Discord",
+    "email": "Email",
+    "signInWithEmail": "Sign in with Email",
+    "useDiscordAccount": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
+    "useEmailAccount": "Use email if you can't access Discord or prefer app-only features",
+    "password": "Password",
+    "signIn": "Sign In",
+    "dontHaveAccount": "Don't have an account? Create one",
+    "createClashKingAccount": "Create ClashKing Account",
+    "joinClashKing": "Join ClashKing",
+    "createAccountToGetStarted": "Create your account to get started",
+    "confirmPassword": "Confirm Password",
+    "createAccount": "Create Account",
+    "alreadyHaveAccount": "Already have an account? Sign in",
+    "pleaseEnterEmail": "Please enter your email",
+    "pleaseEnterValidEmail": "Please enter a valid email",
+    "pleaseEnterPassword": "Please enter your password",
+    "pleaseEnterUsername": "Παρακαλώ εισάγετε το όνομα χρήστη σας",
+    "usernameTooShort": "Username must be at least 3 characters",
+    "pleaseConfirmPassword": "Please confirm your password",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "passwordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
+    "invalidEmailOrPassword": "Invalid email or password",
+    "emailAlreadyInUse": "Email may already be in use",
+    "accountManagement": "Account Management",
+    "connectedAccounts": "Connected Accounts",
+    "connected": "Connected",
+    "notConnected": "Not connected",
+    "emailAndPassword": "Email & Password",
+    "accountSecuredMultipleAuth": "Your account is secured with multiple authentication methods",
+    "linkEmailAccount": "Link Email Account",
+    "addEmailPasswordAuth": "Add email & password authentication to your account for additional security.",
+    "emailAccountLinkedSuccessfully": "Email account successfully linked!",
+    "failedToLinkEmail": "Failed to link email account. Email may already be in use.",
+    "registrationFailed": "Registration failed. Email may already be in use.",
+    "emailLoginFailed": "Email login failed. Please check your credentials.",
+    "discordLoginFailed": "Discord login failed. Please try again."
 }
