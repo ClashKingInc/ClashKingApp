@@ -490,7 +490,7 @@
       }
     }
   },
-  "legendsTitle": "Liga Lendária",
+  "legendsTitle": "Dados imprecisos?",
   "legendsNotInLeague": "Não está na Liga Lendária",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "Começou o dia com {trophies} troféus.",
@@ -723,7 +723,7 @@
   "warLog": "Registo de guerra",
   "warLogPublic": "Registo de Guerra Público",
   "warLogPrivate": "Registo de Guerra privado",
-  "warLogClosed": "Os registos de guerra de {clan} estão fechados.",
+  "warLogClosed": "Registo de guerra fechado.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
