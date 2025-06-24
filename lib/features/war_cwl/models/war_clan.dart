@@ -74,8 +74,6 @@ class WarClan {
     );
   }
 
-  get expEarned => null;
-
   Map<String, dynamic> toJson() {
     return {
       'tag': tag,

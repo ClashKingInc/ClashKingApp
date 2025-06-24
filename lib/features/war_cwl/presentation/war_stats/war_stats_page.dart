@@ -309,7 +309,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
     });
   }
 
-  void updateThFilters(attackerThFilter, defenderThFilter) {
+  void updateThFilters(List<int> attackerThFilter, List<int> defenderThFilter) {
     setState(() {
       this.attackerThFilter = attackerThFilter;
       this.defenderThFilter = defenderThFilter;

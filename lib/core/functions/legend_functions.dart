@@ -82,7 +82,7 @@ List<DateTime> findSeasonStartEndDate(DateTime currentDate) {
   return [seasonStart, seasonEnd];
 }
 
-DateTime findCurrentSeasonMonth(currentDate) {
+DateTime findCurrentSeasonMonth(DateTime currentDate) {
   List<DateTime> test = findSeasonStartEndDate(currentDate);
   DateTime selectedMonth = DateTime(test[1].year, test[1].month, 1);
   return selectedMonth;

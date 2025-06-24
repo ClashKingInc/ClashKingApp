@@ -44,7 +44,7 @@ class ClanCapitalRaidState extends State<ClanCapitalRaid> {
   Widget build(BuildContext context) {
     final cocService = context.watch<CocAccountService>();
     final activeUserTags = cocService.getAccountTags();
-    var raid = widget.clanInfo.clanCapitalRaid!.items[week];
+    CapitalHistoryItem raid = widget.clanInfo.clanCapitalRaid!.items[week];
 
     final locale = Localizations.localeOf(context).toString();
     List<ClanMember> nonParticipants = getNonParticipatingMembers(raid);
@@ -134,7 +134,7 @@ class ClanCapitalRaidState extends State<ClanCapitalRaid> {
     );
   }
 
-  List<ClanMember> getNonParticipatingMembers(firstRaid) {
+  List<ClanMember> getNonParticipatingMembers(CapitalHistoryItem firstRaid) {
     List<ClanMember> nonParticipants = [];
     Set<String> raidParticipantTags = widget.clanInfo.clanCapitalRaid!.items
         .expand((item) => item.members!.map((member) => member.tag))
@@ -201,7 +201,7 @@ class ClanCapitalRaidState extends State<ClanCapitalRaid> {
     }).toList();
   }
 
-  Widget buildLastRaids(firstRaid, locale, isOngoing) {
+  Widget buildLastRaids(dynamic firstRaid, locale, isOngoing) {
     return Column(
       children: [
         SizedBox(
@@ -366,7 +366,8 @@ class ClanCapitalRaidState extends State<ClanCapitalRaid> {
     );
   }
 
-  Widget buildLastRaidsMembers(firstRaid, activeUserTags, filterAccountActive) {
+  Widget buildLastRaidsMembers(CapitalHistoryItem firstRaid,
+      List<String> activeUserTags, bool filterAccountActive) {
     return Column(
       children: [
         SizedBox(height: 10),
@@ -375,12 +376,12 @@ class ClanCapitalRaidState extends State<ClanCapitalRaid> {
           child: Column(
             children: [
               Text(
-                "${AppLocalizations.of(context)!.clanMembers} (${firstRaid.members.length}/50)",
+                "${AppLocalizations.of(context)!.clanMembers} (${firstRaid.members?.length ?? 0}/50)",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               SizedBox(height: 10),
               ...buildMemberWidgets(
-                  firstRaid.members, activeUserTags, filterAccountActive)
+                  firstRaid.members ?? [], activeUserTags, filterAccountActive)
             ],
           ),
         ),

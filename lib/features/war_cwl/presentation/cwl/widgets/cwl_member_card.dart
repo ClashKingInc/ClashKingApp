@@ -94,14 +94,14 @@ class MembersCard extends StatelessWidget {
 
       case 'averageStars':
         return withImageIcon(
-          "${attack?.averageStars?.toStringAsFixed(1) ?? '0.0'}",
+          attack?.averageStars.toStringAsFixed(1) ?? '0.0',
           ImageAssets.attackStar,
           "Avg Stars",
         );
 
       case 'averagePercentage':
         return withImageIcon(
-          "${attack?.averageDestruction?.toStringAsFixed(1) ?? '0.0'}",
+          attack?.averageDestruction.toStringAsFixed(1) ?? '0.0',
           ImageAssets.hitrate,
           "Avg %",
         );
@@ -163,13 +163,13 @@ class MembersCard extends StatelessWidget {
 
       case 'defAverageStars':
         return withImageIcon(
-            "${defense?.averageStars?.toStringAsFixed(1) ?? '0.0'}",
+            defense?.averageStars.toStringAsFixed(1) ?? '0.0',
             ImageAssets.attackStar,
             "Avg Def Stars");
 
       case 'defAverageDestruction':
         return withImageIcon(
-            "${defense?.averageDestruction?.toStringAsFixed(1) ?? '0.0'}",
+            defense?.averageDestruction.toStringAsFixed(1) ?? '0.0',
             ImageAssets.hitrate,
             "Avg Def %");
 
@@ -429,7 +429,7 @@ class MembersCard extends StatelessWidget {
                   StatTile(
                       label: AppLocalizations.of(context)!.warAbbreviationAvg,
                       value:
-                          '${attack.averageStars?.toStringAsFixed(1) ?? "0.0"}',
+                          attack.averageStars.toStringAsFixed(1),
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.attackStar,
                           width: 16,
@@ -460,7 +460,7 @@ class MembersCard extends StatelessWidget {
                   StatTile(
                       label: AppLocalizations.of(context)!.warAbbreviationAvgPercentage,
                       value:
-                          '${attack.averageDestruction?.toStringAsFixed(1) ?? "0.0"}',
+                          attack.averageDestruction.toStringAsFixed(1),
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.hitrate,
                           width: 16,
@@ -540,7 +540,7 @@ class MembersCard extends StatelessWidget {
                   StatTile(
                       label: AppLocalizations.of(context)!.warAbbreviationAvg,
                       value:
-                          '${defense.averageStars?.toStringAsFixed(1) ?? "0.0"}',
+                          defense.averageStars.toStringAsFixed(1),
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.attackStar,
                           width: 16,
@@ -571,7 +571,7 @@ class MembersCard extends StatelessWidget {
                   StatTile(
                       label: AppLocalizations.of(context)!.warAbbreviationAvgPercentage,
                       value:
-                          '${defense.averageDestruction?.toStringAsFixed(1) ?? "0.0"}',
+                          defense.averageDestruction.toStringAsFixed(1),
                       icon: MobileWebImage(
                           imageUrl: ImageAssets.hitrate,
                           width: 16,
