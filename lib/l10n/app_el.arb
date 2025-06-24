@@ -490,7 +490,7 @@
       }
     }
   },
-  "legendsTitle": "Επίπεδο Θρύλων",
+  "legendsTitle": "Ανακριβή δεδομένα;",
   "legendsNotInLeague": "Εκτός επιπέδου Θρύλου",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "Ξεκινήσατε τη μέρα με {trophies} τρόπαια.",
@@ -723,7 +723,7 @@
   "warLog": "War Log",
   "warLogPublic": "Public War Log",
   "warLogPrivate": "Private War Log",
-  "warLogClosed": "{clan}'s war log is closed.",
+  "warLogClosed": "War log closed.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
