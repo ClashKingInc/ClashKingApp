@@ -1,1236 +1,1277 @@
 {
-    "creatorCode": "İçerik Üretici Kodu: ClashKing",
-    "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
-    "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
-    "retry": "Retry",
-    "signInWithDiscord": "Discord ile giriş yap",
-    "guestMode": "Misafir Modu",
-    "needHelpJoinDiscord": "Yardım mı lazım?Discorda katıl.",
-    "loginError": "An error occurred while logging in. Please try again later.",
-    "username": "Kullanıcı Adı",
-    "playerTag": "Player Tag (#ABC123)",
-    "playerTags": "Oyuncu Kodu",
-    "welcome": "Hoşgeldiniz!",
-    "welcomeMessage": "Lütfen profilinize bir veya daha fazla Clash of Clans hesabı ekleyin. Daha sonra hesap ekleyebilir veya kaldırabilirsiniz.",
-    "login": "Oturum aç",
-    "logout": "Oturumu kapat",
-    "language": "Dil",
-    "settings": "Ayarlar",
-    "toggleTheme": "Temayı Değiştir",
-    "selectLanguage": "Bir dil seçin",
-    "faq": "S.S.S",
-    "faqSubtitle": "Sıkça Sorulan Sorular",
-    "faqIsThisFromSupercell": "Bu uygulama Supercell'e mi ait?",
-    "faqFanContentPolicy": "Bu materyal resmi değildir ve Supercell tarafından desteklenmemektedir. Daha fazla bilgi için Supercell'in Hayran İçerik Politikasına bakın: www.supercell.com/fan-content-policy.",
-    "faqWhyNotAccurate": "Veriler bazen neden yanlış veya eksik oluyor?",
-    "faqClanNotTracked": "Klan izlenmiyor",
-    "faqClanNotTrackedAnswer": "ClashKing bu bilgiyi yalnızca klan izleniyorsa alabilir. Klanınız izlenmemişse lütfen ClashKing Bot'unu Discord Sunucunuza davet edin ve /addclan komutunu kullanın. Bu özelliği yakında uygulamada kullanılabilir hale getirmek için çalışıyoruz.",
-    "faqTrackingDown": "Takip etmek",
-    "faqTrackingDownAnswer": "İzleme belirli bir süre boyunca çalışmayı durdurabilir. Bu nedenle bazen verilerinizde boşluklar olabilir. Bunu iyileştirmek için çalışıyoruz.",
-    "faqApiLimitation": "Clash of Clans API sınırlaması",
-    "faqApiLimitationAnswer": "Bazı veriler Clash of Clans tarafından sağlanır ve API'lerinin bazı sınırlamaları vardır. Bu, efsanelerin takibi için geçerlidir, bazen tek bir saldırıymış gibi kupa kazanımını ve kaybını üst üste koyar. Bu ayrıca bina seviyeleriniz hakkında hiçbir bilgiye sahip olmamamızın nedenidir.",
-    "faqSupportWork": "Çalışmalarınıza nasıl destek olabilirim?",
-    "faqSupportWorkAnswer": "Bizi desteklemenin birkaç yolu var:",
-    "faqUseCodeClashKing": "\"ClashKing\" kodunu kullanın",
-    "faqSupportUsOnPatreon": "Bizi Patreon’da Destekleyin",
-    "faqShareTheApp": "Uygulamayı arkadaşlarınızla paylaşın",
-    "faqRateTheApp": "Uygulamayı mağazada derecelendirin",
-    "faqHelpUsTranslate": "Uygulamayı çevirmemize yardım edin",
-    "faqHowToInviteTheBot": "Botunuzu Discord Sunucuma nasıl davet edebilirim?",
-    "faqHowToInviteTheBotAnswer": "Aşağıdaki butona tıklayarak botumuzu sunucunuza davet edebilirsiniz. Botu eklemek için \"Sunucuyu Yönet\" iznine ihtiyacınız olacak.",
-    "faqInviteTheBot": "ClashKing Botunu Davet Et",
-    "faqNeedHelp": "Yardıma ihtiyacım var veya bir öneride bulunmak istiyorum. Sizinle nasıl iletişime geçebilirim?",
-    "faqNeedHelpAnswer": "Yardım istemek veya geri bildirim sağlamak için Discord Sunucumuza katılabilir veya devs@clashkingbot.com adresine e-posta gönderebilirsiniz. Lütfen yalnızca İngilizce veya Fransızca yazın.",
-    "faqSendEmail": "E-posta gönderin",
-    "faqJoinDiscord": "Discord Sunucumuza Katılın",
-    "faqCannotOpenMailClient": "Bazı nedenlerden dolayı posta istemcinizi açamadık. E-posta adresini sizin için kopyaladık. Bir e-posta yazıp adresi alıcı alanına yapıştırabilirsiniz.",
-    "helpUsTranslate": "Çeviriye yardımcı olun",
-    "suggestFeatures": "Özellik önerin",
-    "thankYou": "Teşekkürler!",
-    "thankYouContent": "Bu uygulamayı dünya çapında daha fazla insana ulaştırmamıza yardımcı olan tüm harika çevirmenlerimize çok teşekkür ederiz!",
-    "helpTranslateContent": "Uygulamayı Crowdin'de çevirmemize yardımcı olabilirsiniz. Diliniz Crowdin'de mevcut değilse, Discord Sunucumuzda talep etmekten çekinmeyin. Yardımınız için çok teşekkür ederim!",
-    "helpTranslateButton": "Crowdin'de Çeviriye Yardım Edin",
-    "versionDevice": "Sürüm & Cihaz",
-    "@version": {
-        "description": "Version of the app and device information"
-    },
-    "loading": "Yükleniyor...",
-    "errorLoadingVersion": "Sürüm yüklenirken hata oluştu",
-    "@errorLoadingVersion": {
-        "description": "Error message when the app version cannot be loaded"
-    },
-    "currentTranslators": "Güncel Tercümanlar",
-    "betaFeature": "Beta Özellikleri",
-    "beta": "Beta",
-    "betaDescription": "Bu özellik şu anda beta aşamasındadır, bazı hatalar içerebilir veya eksik olabilir. İyileştirmeler üzerinde aktif olarak çalışıyoruz ve geri bildirimlerinizi bekliyoruz. Lütfen fikirlerinizi paylaşın ve Discord Sunucumuzdaki sorunları bildirin, böylece daha iyi hale getirmemize yardımcı olun.",
-    "copiedToClipboard": "Panoya kopyalandı",
-    "all": "Tümü",
-    "@all": {
-        "description": "all items"
-    },
-    "hourIndicator": "sa",
-    "minIndicator": "dk",
-    "noDataAvailable": "Veri bulunamadı.",
-    "close": "Kapat",
-    "closed": "Kapalı",
-    "@closed": {
-        "description": "WarLog closed"
-    },
-    "error": "Hata",
-    "player": "Oyuncu",
-    "manage": "Yönet",
-    "enterPlayerTag": "Bir oyuncu etiketi girin",
-    "add": "Ekle",
-    "@add": {
-        "description": "Add an account"
-    },
-    "delete": "Sil",
-    "@delete": {
-        "description": "Delete an account"
-    },
-    "addAccount": "Hesap ekle",
-    "deleteAccount": "Hesabı sil",
-    "playerTagNotExists": "Girilen oyuncu etiketi mevcut değil.",
-    "accountAlreadyLinked": "Oyuncu etiketi zaten birine bağlı.",
-    "enterApiToken": "Lütfen hesabınızın API token'ını girin ve sizin olduğunu doğrulayın. Bunu Clash of Clans Ayarları > Diğer Ayarlar > API Token'ında bulabilirsiniz.",
-    "wrongApiToken": "Girilen API belirteci yanlış",
-    "accountAlreadyLinkedToYou": "Oyuncu etiketi zaten size bağlı.",
-    "apiToken": "Hesap API Tokeni",
-    "failedToAddTryAgain": "Failed to add link. Please try again later.",
-    "fillAllFields": "Please fill all fields.",
-    "failedToDeleteTryAgain": "Bağlantı silinemedi. Lütfen daha sonra tekrar deneyin.",
-    "failedToUpdateOrder": "Failed to update the order of accounts.",
-    "manageAccounts": "Manage your accounts",
-    "manageAccountsDescription": "You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.",
-    "confirm": "Confirm",
-    "@search": {
-        "description": "Search for a player or a clan"
-    },
-    "warning": "Uyarı",
-    "exitAppToOpenClash": "Clash of Clans'ı açmak için uygulamadan çıkmak üzeresiniz.",
-    "confirmLogout": "Çıkış yapmak istediğinizden emin misiniz?",
-    "@confirmLogout": {
-        "description": "Prompt asking the user to confirm logout"
-    },
-    "searchPlayer": "Oyuncu ara",
-    "nameOrTagPlayer": "Oyuncunun adı veya etiketi",
-    "playerClanDescription": "Klanınız \"{clan}\" ({tag})",
-    "@playerClanDescription": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            },
-            "tag": {
-                "type": "String"
-            }
-        }
-    },
-    "playerRatioDescription": "Bağış oranınız {ratio}. {donations} birlik bağışladınız ve {received} birlik aldınız.",
-    "@playerRatioDescription": {
-        "placeholders": {
-            "ratio": {
-                "type": "String"
-            },
-            "donations": {
-                "type": "String"
-            },
-            "received": {
-                "type": "String"
-            }
-        }
-    },
-    "playerWarPreferenceDescription": "Savaş tercihiniz {preference}.",
-    "@playerWarPreferenceDescription": {
-        "placeholders": {
-            "preference": {
-                "type": "String"
-            }
-        }
-    },
-    "playerWarStarsDescription": "{stars} savaş yıldızınız var.",
-    "@playerWarStarsDescription": {
-        "placeholders": {
-            "stars": {
-                "type": "int"
-            }
-        }
-    },
-    "playerTrophiesDescription": "{trophies} kupanız var. Şu anki liginiz {league}.",
-    "@playerTrophiesDescription": {
-        "placeholders": {
-            "trophies": {
-                "type": "int"
-            },
-            "league": {
-                "type": "String"
-            }
-        }
-    },
-    "playerTownHallLevelDescription": "Belediye Binası seviyeniz {level}.",
-    "@playerTownHallLevelDescription": {
-        "placeholders": {
-            "level": {
-                "type": "int"
-            }
-        }
-    },
-    "playerBuilderBaseDescription": "İnşaatçı Binası seviyeniz {level} ve {trophies} kupanız var.",
-    "@playerBuilderBaseDescription": {
-        "placeholders": {
-            "level": {
-                "type": "int"
-            },
-            "trophies": {
-                "type": "int"
-            }
-        }
-    },
-    "dashboard": "Kontrol Paneli",
-    "homeBase": "Ana Üs",
-    "th": "BB",
-    "builderBase": "İnşaatçı Üssü",
-    "bh": "İB",
-    "clanCapital": "Klan Başkenti",
-    "leader": "Lider",
-    "coLeader": "Yardımcı Lider",
-    "elder": "Büyük",
-    "member": "Üye",
-    "ready": "Katılıyor",
-    "@ready": {
-        "description": "Opted In for war"
-    },
-    "unready": "Katılmıyor",
-    "@unready": {
-        "description": "Opted Out for war"
-    },
-    "level": "Level: {level}/{maxLevel}",
-    "@level": {
-        "placeholders": {
-            "level": {
-                "type": "int"
-            },
-            "maxLevel": {
-                "type": "int"
-            }
-        }
-    },
-    "heroes": "Kahramanlar",
-    "equipment": "Ekipmanlar",
-    "troops": "Birlikler",
-    "superTroops": "Süper Birlikler",
-    "activeSuperTroops": "Aktif Süper Birlikler",
-    "active": "Active",
-    "inactive": "Inactive",
-    "pets": "Evcil Hayvanlar",
-    "siegeMachines": "Kuşatma Makineleri",
-    "spells": "Büyüler",
-    "achievements": "Başarımlar",
-    "byDay": "Güne göre",
-    "@byDay": {
-        "description": "Shows stats by day"
-    },
-    "bySeason": "Sezona göre",
-    "@byMonth": {
-        "description": "Shows stats by season"
-    },
-    "dayIndex": "Gün {index}",
-    "@dayIndex": {
-        "placeholders": {
-            "index": {
-                "type": "int"
-            }
-        }
-    },
-    "indexDays": "{index} günler",
-    "@indexDays": {
-        "placeholders": {
-            "index": {
-                "type": "int"
-            }
-        }
-    },
-    "bestTrophies": "En İyi Kupalar",
-    "mostAttacks": "En Çok Saldırı",
-    "lastSeason": "Geçen Sezon",
-    "bestRank": "En İyi Küresel Sıralama",
-    "daysLeft": "{days} gün kaldı",
-    "@daysLeft": {
-        "placeholders": {
-            "days": {
-                "type": "int"
-            }
-        }
-    },
-    "date": "Tarih",
-    "stats": "İstatistikler",
-    "fullStats": "Full Stats",
-    "details": "Ayrıntılar",
-    "seasonStats": "Sezon İstatistikleri",
-    "charts": "Grafikler",
-    "history": "Geçmiş",
-    "@history": {
-        "description": "Shows EOS trophies history"
-    },
-    "legendLeague": "Efsane Lig",
-    "notInLegendLeague": "Efsane ligde değil",
-    "noLegendsDataToday": "You're not in Legend League, but past seasons are available.",
-    "legendStartDescription": "Güne {trophies} kupayla başladın.",
-    "@legendStartDescription": {
-        "placeholders": {
-            "trophies": {
-                "type": "String"
-            }
-        }
-    },
-    "legendNoRankLocalDescription": "Şu anda {trophies} kupa ile {country} sıralamasında yer almıyorsunuz.",
-    "@legendNoRankLocalDescription": {
-        "placeholders": {
-            "country": {
-                "type": "String"
-            },
-            "trophies": {
-                "type": "int"
-            }
-        }
-    },
-    "legendRankLocalDescription": "Şu anda {rank} ({country}) sıralamasındasınız ve {trophies} kupanız var.",
-    "@legendRankDescription": {
-        "placeholders": {
-            "rank": {
-                "type": "int"
-            },
-            "country": {
-                "type": "String"
-            },
-            "trophies": {
-                "type": "int"
-            }
-        }
-    },
-    "legendGainDescription": "Şu ana kadar {trophies} kupa kazandınız.",
-    "@legendGainDescription": {
-        "placeholders": {
-            "trophies": {
-                "type": "int"
-            }
-        }
-    },
-    "legendLossDescription": "Şu ana kadar {trophies} kupa kaybettiniz.",
-    "@legendLossDescription": {
-        "placeholders": {
-            "trophies": {
-                "type": "int"
-            }
-        }
-    },
-    "legendNoGlobalRankDescription": "Şu anda {trophies} kupa ile küresel sıralamada yer almıyorsunuz.",
-    "@legendNoGlobalRankDescription": {
-        "placeholders": {
-            "trophies": {
-                "type": "int"
-            }
-        }
-    },
-    "legendGlobalRankDescription": "Şu anda küresel sıralamada {rank} sıradasınız.",
-    "@legendGlobalRankDescription": {
-        "placeholders": {
-            "rank": {
-                "type": "int"
-            }
-        }
-    },
-    "noRank": "Sıralama yok",
-    "started": "Başladı",
-    "@started": {
-        "description": "Title for the number of trophies at the beginning of the day"
-    },
-    "ended": "Bitti",
-    "@ended": {
-        "description": "Title for the number of trophies at the end of the day"
-    },
-    "average": "Ortalama",
-    "@average": {
-        "description": "Average value of legend trophies (defense and attack)"
-    },
-    "remaining": "Kalan",
-    "@remaining": {
-        "description": "Remaining attacks or defenses"
-    },
-    "legendsTitle": "Veri yanlış mı?",
-    "legendsExplanation_intro": "Clash of Clans API'sinin sınırlamaları nedeniyle, verilerimiz her zaman mükemmel derecede doğru olmayabilir. İşte nedeni:",
-    "legendsExplanation_api_delay_title": "1. API Gecikmesi:",
-    "legendsExplanation_api_delay_body": "API'nin güncellenmesi 5 dakikaya kadar sürebilir ve bu da gerçek zamanlı kupa değişikliklerinin yansıtılmasında gecikmeye neden olabilir.",
-    "legendsExplanation_concurrent_changes_title": "2. Eş Zamanlı Değişiklikler:",
-    "legendsExplanation_multiple_attacks_defenses_title": "- Çoklu Saldırılar/Savunmalar:",
-    "legendsExplanation_multiple_attacks_defenses_body": "Birden fazla saldırı veya savunma hızlı bir şekilde gerçekleşirse, API birleşik sonuçlar gösterebilir (örneğin, +68 veya -68).",
-    "legendsExplanation_simultaneous_attack_defense_title": "- Eş Zamanlı Saldırı ve Savunma:",
-    "legendsExplanation_simultaneous_attack_defense_body": "Eğer saldırı ve savunma aynı anda gerçekleşirse, karışık bir sonuç görebilirsiniz (örneğin, +4).",
-    "legendsExplanation_net_gain_loss_title": "3. Net Kazanç/Kayıp:",
-    "legendsExplanation_net_gain_loss_body": "Zamanlama sorunlarına rağmen, günün genel net kazanç veya kaybı doğrudur.",
-    "legendsExplanation_conclusion": "Bu sınırlamalar Clash of Clans API'sini kullanan tüm araçlarda yaygındır. Ne yazık ki bunu düzeltemeyiz çünkü bu Supercell'in elinde. Bu sınırlamaları telafi etmek ve gerçeğe olabildiğince yakın sonuçlar sağlamak için elimizden geleni yapıyoruz. Anlayışınız için teşekkür ederiz!",
-    "toDoList": "Yapılacaklar Listesi",
-    "clanGames": "Clan Games",
-    "seasonPass": "Season Pass",
-    "lastActive": "Son Aktiflik: {date}",
-    "playerNotTracked": "Bu oyuncu takip edilmiyor. Veriler yanlış olabilir.",
-    "@lastActive": {
-        "placeholders": {
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "numberAccounts": "{number} hesaplar",
-    "@numberAccounts": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        },
-        "description": "Number of accounts (ex: 4 accounts)"
-    },
-    "numberActiveAccounts": "{number} aktif hesaplar",
-    "@numberActiveAccounts": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        }
-    },
-    "numberInactiveAccounts": "{number} inaktif hesaplar",
-    "@numberInactiveAccounts": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        }
-    },
-    "activeAccounts": "Aktif hesaplar",
-    "inactiveAccounts": "İnaktif hesaplar",
-    "noInactiveAccounts": "İnaktif hesap yok.",
-    "noActiveAccounts": "Aktif hesap yok.",
-    "todoExplanation_title": "Görev Hesaplaması",
-    "todoExplanation_intro": "Görev tamamlanma yüzdesi, aşağıdaki faaliyetlerin belirli ağırlıklara göre hesaplanmasıyla hesaplanır:",
-    "todoExplanation_legends_title": "Efsane Lig:",
-    "todoExplanation_legends": "Hesap başına 8 puan ağırlığı, 1 saldırı = 1 puan.",
-    "todoExplanation_raids_title": "Baskınlar:",
-    "todoExplanation_raids": "Hesap başına 5 puan (veya son saldırı açılmışsa 6) ağırlığı, 1 saldırı = 1 puan.",
-    "todoExplanation_clanWars_title": "Klan Savaşları:",
-    "todoExplanation_clanWars": "Hesap başına 2 puan ağırlığı, 1 saldırı = 1 puan.",
-    "todoExplanation_cwl_title": "Klan Savaş Ligi:",
-    "todoExplanation_cwl": "Hesap başına 1 puan ağırlığı, 1 saldırı = 1 puan. Oyuncu lig klanında değilse KSL takip edilemez.",
-    "todoExplanation_passAndGames_title": "Sezon Bileti & Klan Oyunları:",
-    "todoExplanation_passAndGames": "Hesap başına 2 puanlık ağırlık. Oran, kalan gün sayısına (Bilet için 1 ay ve klan oyunları için 6 gün) dayanmaktadır. Yeşil = Bileti veya oyunları tamamlama yolunda, kırmızı = programın gerisinde.",
-    "todoExplanation_conclusion": "Son yüzde, devam eden olaylar sırasında tamamlanan toplam eylemlerin toplam gerekli eylemlere bölünmesiyle hesaplanır. 14 günden uzun süredir etkin olmayan hesaplar hesaplamadan hariç tutulur.",
-    "worst": "En kötü",
-    "@worst": {
-        "description": "Worst end of day trophies"
-    },
-    "best": "En İyi",
-    "@best": {
-        "description": "Best end of day trophies"
-    },
-    "total": "Toplam",
-    "heroesEquipments": "Kahraman Ekipmanları",
-    "daysAgo": "{days} gün önce",
-    "@daysAgo": {
-        "placeholders": {
-            "days": {
-                "type": "int"
-            }
-        }
-    },
-    "dayAgo": "{day} gün önce",
-    "@dayAgo": {
-        "placeholders": {
-            "day": {
-                "type": "int"
-            }
-        }
-    },
-    "hourAgo": "{hour} saat önce",
-    "@hourAgo": {
-        "placeholders": {
-            "hour": {
-                "type": "int"
-            }
-        }
-    },
-    "hoursAgo": "{hours} saat önce",
-    "@hoursAgo": {
-        "placeholders": {
-            "hours": {
-                "type": "int"
-            }
-        }
-    },
-    "minuteAgo": "{minute} dakika önce",
-    "@minuteAgo": {
-        "placeholders": {
-            "minute": {
-                "type": "int"
-            }
-        }
-    },
-    "minutesAgo": "{minutes} dakika önce",
-    "@minutesAgo": {
-        "placeholders": {
-            "minutes": {
-                "type": "int"
-            }
-        }
-    },
-    "secondAgo": "{seconds} sn. önce",
-    "@secondAgo": {
-        "placeholders": {
-            "seconds": {
-                "type": "int"
-            }
-        }
-    },
-    "justNow": "Az Önce",
-    "endedJustNow": "Ended just now",
-    "endedMinutesAgo": "Ended {minutes} minutes ago",
-    "@endedMinutesAgo": {
-        "placeholders": {
-            "minutes": {
-                "type": "int"
-            }
-        }
-    },
-    "endedHoursAgo": "Ended {hours} hours ago",
-    "@endedHoursAgo": {
-        "placeholders": {
-            "hours": {
-                "type": "int"
-            }
-        }
-    },
-    "endedDaysAgo": "Ended {days} days ago",
-    "@endedDaysAgo": {
-        "placeholders": {
-            "days": {
-                "type": "int"
-            }
-        }
-    },
-    "trophiesBySeason": "Sezonlara göre kupalar",
-    "eosTrophies": "Sezon Sonu Kupaları",
-    "eosDetails": "End Of Season Details",
-    "searchClan": "Klan ara",
-    "clanName": "Clan's name",
-    "noResult": "Sonuç yok.",
-    "filters": "Filtreler",
-    "whatever": "Her neyse",
-    "@whatever": {
-        "description": "Whatever the value"
-    },
-    "any": "Herhangi",
-    "@any": {
-        "description": "Any value is accepted"
-    },
-    "notSet": "Ayarlanmamış",
-    "@notSet": {
-        "description": "Filter value is not set"
-    },
-    "warFrequency": "Savaş sıklığı",
-    "minimumMembers": "Asgari Üye",
-    "maximumMembers": "Azami Üye",
-    "location": "Konum",
-    "minimumClanPoints": "Minimum klan puanı",
-    "minimumClanLevel": "Minimum klan seviyesi",
-    "noClan": "Klan yok",
-    "joinClanToUnlockNewFeatures": "Yeni özelliklerin kilidini açmak için bir klana katılın.",
-    "apply": "Uygula",
-    "opened": "Açıldı",
-    "@opened": {
-        "description": "Clan is opened"
-    },
-    "inviteOnly": "Yalnızca Davet",
-    "cancel": "İptal",
-    "clan": "Klan",
-    "clans": "Klanlar",
-    "members": "Üyeler",
-    "role": "Rol",
-    "expLevel": "Deneyim Seviyesi",
-    "townHallLevel": "BB Seviyesi",
-    "thLevel": "BB {level}",
-    "@thLevel": {
-        "placeholders": {
-            "level": {
-                "type": "int"
-            }
-        }
-    },
-    "bhLevel": "İB {level}",
-    "@bhLevel": {
-        "placeholders": {
-            "level": {
-                "type": "int"
-            }
-        }
-    },
-    "townHallLevelLevel": "Belediye Binası {level}",
-    "@townHallLevelLevel": {
-        "placeholders": {
-            "level": {
-                "type": "int"
-            }
-        }
-    },
-    "byNumberOfWars": "Savaş sayısına göre",
-    "@byNumberOfWars": {
-        "description": "filter by number of wars"
-    },
-    "ok": "Tamam",
-    "@ok": {
-        "description": "OK button on pop up"
-    },
-    "byDateRange": "Tarih aralığına göre",
-    "@byDateRange": {
-        "description": "filter by date range"
-    },
-    "selectSeason": "Bir sezon seçin",
-    "@selectSeason": {
-        "description": "Ask player to select a season"
-    },
-    "year": "Yıl",
-    "month": "Ay",
-    "allTownHalls": "Tüm Belediye Binaları",
-    "seasonDate": "{date} sezon",
-    "@seasonDate": {
-        "description": "Example: August 2024 season",
-        "placeholders": {
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "lastXwars": "Son {number} savaş",
-    "@lastXwars": {
-        "description": "Example: Shows the last 25 wars",
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        }
-    },
-    "friendly": "Arkadaş canlısı",
-    "@friendly": {
-        "description": "Friendly war"
-    },
-    "cwl": "KSL",
-    "random": "Rastgele",
-    "@random": {
-        "description": "Random/basic war (not friendly or cwl)"
-    },
-    "selectMembersThLevel": "Üyelerin BB Seviyesi",
-    "selectOpponentsThLevel": "Rakiplerin BB Seviyesi",
-    "equalThLevel": "Eşit BB",
-    "builderBaseTrophies": "İÜ Kupaları",
-    "donations": "Bağışlar",
-    "donationsReceived": "Alınan Bağışlar",
-    "donationsRatio": "Bağış Oranı",
-    "trophies": "Kupalar",
-    "always": "Her zaman",
-    "never": "Hiçbir zaman",
-    "unknown": "Bilinmeyen",
-    "oncePerWeek": "1/hafta",
-    "twicePerWeek": "2/hafta",
-    "rarely": "Nadiren",
-    "warLeague": "Savaş/Lig",
-    "war": "Savaş",
-    "league": "Lig",
-    "wars": "Savaşlar",
-    "ongoingWar": "Devam eden savaş",
-    "ongoingCwl": "Devam eden KSL",
-    "cantOpenLink": "Bu bağlantıyı açamıyoruz.",
-    "notInWar": "Savaşta değil",
-    "warHistory": "Savaş Geçmişi",
-    "warHistoryWinsDescription": "Klanınız son 50 savaşta {wins} savaş (%{percent}) kazandı.",
-    "@warHistoryWinsDescription": {
-        "placeholders": {
-            "wins": {
-                "type": "int"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "warHistoryLossesDescription": "Klanınız son 50 savaşta {losses} savaş (%{percent}) kaybetti.",
-    "@warHistoryLossesDescription": {
-        "placeholders": {
-            "losses": {
-                "type": "int"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "warHistoryDrawsDescription": "Klanınız son 50 savaşta {draws} savaş (%{percent}) berabere kaldı.",
-    "@warHistoryDrawsDescription": {
-        "placeholders": {
-            "draws": {
-                "type": "int"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "warHistoryAverageMembersDescription": "Klanınızda son 50 savaşta ortalama {members} üye yer aldı.",
-    "@warHistoryAverageMembersDescription": {
-        "placeholders": {
-            "members": {
-                "type": "int"
-            }
-        }
-    },
-    "warHistoryAverageWarStarsDescription": "Klanınız son 50 savaşta savaş başına ortalama {stars} yıldıza sahipti. Toplam yıldızların {percent}'ini temsil ediyor.",
-    "@warHistoryAverageWarStarsDescription": {
-        "placeholders": {
-            "stars": {
-                "type": "double"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "warHistoryAverageHitRateDescription": "Klanınızın son 50 savaşta ortalama %{percent} yıkım oranı vardı.",
-    "@warHistoryAverageHitRateDescription": {
-        "placeholders": {
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "attacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
-    "@attacksLeftDescription": {
-        "placeholders": {
-            "attacks": {
-                "type": "int"
-            },
-            "type": {
-                "type": "String"
-            }
-        }
-    },
-    "defensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
-    "@defensesLeftDescription": {
-        "placeholders": {
-            "defenses": {
-                "type": "int"
-            },
-            "type": {
-                "type": "String"
-            }
-        }
-    },
-    "noAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
-    "pointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
-    "@pointsLeftDescription": {
-        "placeholders": {
-            "points": {
-                "type": "int"
-            },
-            "type": {
-                "type": "String"
-            }
-        }
-    },
-    "pointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
-    "@pointsLeftDescriptionNoPoints": {
-        "placeholders": {
-            "type": {
-                "type": "String"
-            }
-        }
-    },
-    "averageStars": "Ortalama Yıldızlar",
-    "averageDestruction": "Ortalama Yıkım",
-    "oneStar": "1 yıldız",
-    "twoStars": "2 yıldız",
-    "threeStars": "3 yıldız",
-    "avg": "Avg",
-    "@avg": {
-        "description": "Abbreviation for average"
-    },
-    "avgPercentage": "Avg %",
-    "@avgPercentage": {
-        "description": "Abbreviation for average percentage"
-    },
-    "attackCount": "Attack Count",
-    "missedAttacks": "Missed Attacks",
-    "order": "Order",
-    "@order": {
-        "description": "Order of the player in the clan"
-    },
-    "defenseStars": "Defense Stars",
-    "zeroStar": "0 Star",
-    "warParticipation": "Savaş Katılımı",
-    "missed": "Missed",
-    "@missed": {
-        "description": "Missed attacks"
-    },
-    "totalStars": "Toplam",
-    "destruction": "Destruction",
-    "mapPosition": "Map Position",
-    "@mapPosition": {
-        "description": "Map position in war"
-    },
-    "pos": "Pos",
-    "@pos": {
-        "description": "Abbreviation for map position"
-    },
-    "oppTownhall": "Opp TH",
-    "@oppTownhall": {
-        "description": "Abbreviation for opponent's town hall level"
-    },
-    "lowerTownhall": "Lower TH",
-    "upperTownhall": "Upper TH",
-    "toggleTownHallVisibility": "Eski BB seviyelerindeki istatistikleri gizle/göster",
-    "@toggleTownHallVisibility": {
-        "description": "For example, hide stats from TH15 and below if the player is now TH16"
-    },
-    "warLog": "Savaş Günlüğü",
-    "publicWarLog": "Halka Açık Savaş Günlüğü",
-    "privateWarLog": "Özel Savaş Günlüğü",
-    "startsIn": "Başlamasına: {time}",
-    "@startsIn": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "startsAt": "{time}'de başlıyor",
-    "@startsAt": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "endsIn": "Bitmesine: {time}",
-    "@endsIn": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "endsAt": "{time}'de bitiyor",
-    "@endsAt": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "joinLeaveLogs": "Join/Leave Logs",
-    "join": "Katıl",
-    "leave": "Ayrıl",
-    "reset": "Sıfırla",
-    "joins": "Joins",
-    "leaves": "Leaves",
-    "uniquePlayers": "Unique Players",
-    "movingPlayers": "Moving Players",
-    "mostMovingPlayers": "Most Moving Players",
-    "stillInClan": "Still in Clan",
-    "leftForever": "Left Forever",
-    "rejoinedPlayers": "Rejoined Players",
-    "avgTimeJoinLeave": "Avg Join/Leave Time",
-    "peakHour": "Most Active Hour",
-    "leaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
-    "@leaveNumberDescription": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            },
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "joinNumberDescription": "{number} player(s) joined the clan during the current season ({date}).",
-    "@joinNumberDescription": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            },
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "movingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
-    "@movingNumberDescription": {
-        "description": "Number of players who left and rejoined the clan during the current season.",
-        "placeholders": {
-            "number": {
-                "type": "int"
-            },
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "uniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
-    "@uniqueNumberDescription": {
-        "description": "Number of unique players who joined/left the clan during the current season.",
-        "placeholders": {
-            "number": {
-                "type": "int"
-            },
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "stillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
-    "@stillInClanNumberDescription": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        }
-    },
-    "leftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
-    "@leftClanNumberDescription": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        }
-    },
-    "@joinLeaveLogs": {
-        "description": "Logs of players joining or leaving the clan."
-    },
-    "leftOnAt": "{date}} tarihinde {time}te ayrıldı.",
-    "@leftOnAt": {
-        "description": "[The player] left the clan on 16/06/2024 at 10:35.",
-        "placeholders": {
-            "date": {
-                "type": "String"
-            },
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "joinedOnAt": "{date}} tarihinde {time}te katıldı.",
-    "@joinedOnAt": {
-        "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
-        "placeholders": {
-            "date": {
-                "type": "String"
-            },
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "statistics": "İstatistikler",
-    "stars": "Yıldızlar",
-    "numberOfStars": "Yıldız Sayısı",
-    "destructionRate": "Yıkım oranı",
-    "@destructionRate": {
-        "description": "Percentage of destruction in war"
-    },
-    "events": "Etkinlikler",
-    "@events": {
-        "description": "War events"
-    },
-    "team": "Takımlar",
-    "myTeam": "Takımım",
-    "enemiesTeam": "Düşman",
-    "defense": "Savunma",
-    "defenses": "Savunmalar",
-    "bestDefenses": "Best defenses",
-    "bestDefenseOutOf": "Best defense (out of {number})",
-    "@bestDefenseOutOf": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        },
-        "description": "Best war defense (out of 3 defenses)"
-    },
-    "attack": "Saldırı",
-    "attacks": "Saldırılar",
-    "bestAttacks": "Best attacks",
-    "noAttackYet": "No attack yet",
-    "@noAttackYet": {
-        "description": "No attack yet in war"
-    },
-    "noDefenseYet": "No defense yet",
-    "@noDefenseYet": {
-        "description": "No defense yet in war"
-    },
-    "bestPerformance": "Best performance",
-    "@bestPerformance": {
-        "description": "Best performance in war"
-    },
-    "victory": "Zafer",
-    "defeat": "Yenilgi",
-    "draw": "Berabere",
-    "@draw": {
-        "description": "War ended in a draw"
-    },
-    "perfectWar": "Mükemmel savaş",
-    "newest": "En yeni",
-    "oldest": "En eski",
-    "warEnded": "Savaş sonu",
-    "preparation": "Hazırlık",
-    "isNotInWar": "{clan} savaşta değil.",
-    "@isNotInWar": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            }
-        }
-    },
-    "warLogIsClosed": "{clan}'ın savaş günlüğü kapalı.",
-    "@warLogIsClosed": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            }
-        }
-    },
-    "askForWar": "Savaş başlatmak için lidere veya yardımcı lidere başvurun.",
-    "askForWarLogOpening": "Savaş günlüğünü açmak için bir lidere veya yardımcı lidere başvurun.",
-    "rounds": "Turlar",
-    "roundNumber": "Round {number}",
-    "@roundNumber": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        }
-    },
-    "currentRound": "Current round (Round {number})",
-    "@currentRound": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        }
-    },
-    "noDataAvailableForThisWar": "Bu savaş için veri mevcut değil",
-    "stateOfTheWar": "Savaş durumu",
-    "starsNeededToTakeTheLead": "{clan} takımının liderliği ele geçirebilmesi için hala {star} yıldıza veya {stars2} yıldıza ve %{percent}'e ihtiyacı var.",
-    "@starsNeededToTakeTheLead": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            },
-            "star": {
-                "type": "int"
-            },
-            "star2": {
-                "type": "int"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "starsAndPercentNeededToTakeTheLead": "{clan} 'ın liderliği ele geçirmek için hala %{percent} veya 1 yıldıza daha ihtiyacı var",
-    "@starsAndPercentNeededToTakeTheLead": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "clanDraw": "İki klan da berabere",
-    "fastCalculator": "Hızlı hesaplayıcı",
-    "fastCalculatorAnswer": "%{percentNeeded} oranında bir yıkım oranına ulaşmak için toplamda %{result} gerekiyor.",
-    "@fastCalculatorAnswer": {
-        "placeholders": {
-            "percentNeedeed": {
-                "type": "String"
-            },
-            "result": {
-                "type": "String"
-            }
-        }
-    },
-    "teamSize": "Takım boyutu",
-    "neededOverall": "% Genel olarak ihtiyaç duyuluyor",
-    "calculate": "Hesapla",
-    "warStats": "Savaş İstatistikleri",
-    "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
-    "@warAttacksNumber": {
-        "placeholders": {
-            "number_time": {
-                "type": "int"
-            },
-            "number_war": {
-                "type": "int"
-            }
-        }
-    },
-    "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
-    "@warDefensesNumber": {
-        "placeholders": {
-            "number_time": {
-                "type": "int"
-            },
-            "number_war": {
-                "type": "int"
-            }
-        }
-    },
-    "warAverageStars": "You had an average of {stars} stars per war.",
-    "@warAverageStars": {
-        "placeholders": {
-            "stars": {
-                "type": "String"
-            }
-        }
-    },
-    "warAverageDestruction": "You had an average of {percent}% destruction rate per war.",
-    "@warAverageDestruction": {
-        "placeholders": {
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "warAverageStarsDefense": "You had an average of {stars} stars per defense.",
-    "@warAverageStarsDefense": {
-        "placeholders": {
-            "stars": {
-                "type": "double"
-            }
-        }
-    },
-    "warAverageDestructionDefense": "You had an average of {percent}% destruction rate per defense.",
-    "membersStats": "Üye İstatistikleri",
-    "clanWarLeague": "Klan Savaş Ligi",
-    "cwlRank": "Klanınız şu anda {rank} sıralamasında.",
-    "@cwlRank": {
-        "placeholders": {
-            "rank": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlStars": "Klanınızın toplam {stars} yıldızı var.",
-    "@cwlStars": {
-        "placeholders": {
-            "stars": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlDestructionPercentage": "Klanınızın toplam yıkım oranı %{percent}'dir.",
-    "@cwlDestructionPercentage": {
-        "placeholders": {
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
-    "@cwlTotalAttacks": {
-        "placeholders": {
-            "attacks": {
-                "type": "int"
-            },
-            "totalAttacks": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlCurrentRound": "Şu anda tur {round}.",
-    "@cwlCurrentRound": {
-        "placeholders": {
-            "round": {
-                "type": "int"
-            }
-        }
-    },
-    "noAccountLinkedToYourProfileFound": "Profilinize bağlı bir hesap bulunamadı",
-    "management": "Yönetim",
-    "comingSoon": "Çok yakında!",
-    "connectionError": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.",
-    "connectionErrorRelaunch": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve uygulamayı yeniden başlatın.",
-    "updatedAt": "{time} tarihinde güncellendi",
-    "@updatedAt": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "tools": "Araçlar",
-    "community": "Topluluk",
-    "raids": "Raids",
-    "lastRaids": "Son baskınlar",
-    "ongoingRaids": "Devam eden baskınlar",
-    "districtsDestroyed": "Yıkılan bölgeler",
-    "raidsCompleted": "Tamamlanan baskınlar",
-    "maintenance": "Maintenance",
-    "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-    "tryAgain": "Try again",
-    "downloadTooltip": "Download CWL summary",
-    "downloadInProgress": "Downloading file... It can take a few seconds...",
-    "downloadSuccess": "File saved successfully in ${path}",
-    "@downloadSuccess": {
-        "placeholders": {
-            "path": {
-                "type": "String"
-            }
-        }
-    },
-    "downloadError": "Failed to download file",
-    "welcomeBack": "Welcome Back",
-    "chooseSignInMethod": "Choose your preferred sign-in method",
-    "discord": "Discord",
-    "email": "Email",
-    "signInWithEmail": "Sign in with Email",
-    "useDiscordAccount": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-    "useEmailAccount": "Use email if you can't access Discord or prefer app-only features",
-    "password": "Password",
-    "signIn": "Sign In",
-    "dontHaveAccount": "Don't have an account? Create one",
-    "createClashKingAccount": "Create ClashKing Account",
-    "joinClashKing": "Join ClashKing",
-    "createAccountToGetStarted": "Create your account to get started",
-    "confirmPassword": "Confirm Password",
-    "createAccount": "Create Account",
-    "alreadyHaveAccount": "Already have an account? Sign in",
-    "pleaseEnterEmail": "Please enter your email",
-    "pleaseEnterValidEmail": "Please enter a valid email",
-    "pleaseEnterPassword": "Please enter your password",
-    "pleaseEnterUsername": "Lütfen bir kullanıcı adı girin",
-    "usernameTooShort": "Username must be at least 3 characters",
-    "pleaseConfirmPassword": "Please confirm your password",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "passwordTooShort": "Password must be at least 8 characters",
-    "passwordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
-    "invalidEmailOrPassword": "Invalid email or password",
-    "emailAlreadyInUse": "Email may already be in use",
-    "accountManagement": "Account Management",
-    "connectedAccounts": "Connected Accounts",
-    "connected": "Connected",
-    "notConnected": "Not connected",
-    "emailAndPassword": "Email & Password",
-    "accountSecuredMultipleAuth": "Your account is secured with multiple authentication methods",
-    "linkEmailAccount": "Link Email Account",
-    "addEmailPasswordAuth": "Add email & password authentication to your account for additional security.",
-    "emailAccountLinkedSuccessfully": "Email account successfully linked!",
-    "failedToLinkEmail": "Failed to link email account. Email may already be in use.",
-    "registrationFailed": "Registration failed. Email may already be in use.",
-    "emailLoginFailed": "Email login failed. Please check your credentials.",
-    "discordLoginFailed": "Discord login failed. Please try again."
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "appTitle": "ClashKing",
+  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "generalLoading": "Yükleniyor...",
+  "generalError": "Hata",
+  "generalRetry": "Retry",
+  "generalTryAgain": "Try again",
+  "generalClose": "Kapat",
+  "generalCancel": "İptal",
+  "generalOk": "Tamam",
+  "@generalOk": {
+    "description": "OK button on pop up"
+  },
+  "generalApply": "Uygula",
+  "generalConfirm": "Confirm",
+  "generalAdd": "Ekle",
+  "@generalAdd": {
+    "description": "Add an account"
+  },
+  "generalDelete": "Sil",
+  "@generalDelete": {
+    "description": "Delete an account"
+  },
+  "generalManage": "Yönet",
+  "generalManagement": "Yönetim",
+  "generalSettings": "Ayarlar",
+  "generalCopiedToClipboard": "Panoya kopyalandı",
+  "generalComingSoon": "Çok yakında!",
+  "generalAll": "Tümü",
+  "@generalAll": {
+    "description": "all items"
+  },
+  "generalTotal": "Toplam",
+  "generalBest": "En İyi",
+  "@generalBest": {
+    "description": "Best end of day trophies"
+  },
+  "generalWorst": "En kötü",
+  "@generalWorst": {
+    "description": "Worst end of day trophies"
+  },
+  "generalAverage": "Ortalama",
+  "@generalAverage": {
+    "description": "Average value of legend trophies (defense and attack)"
+  },
+  "generalRemaining": "Kalan",
+  "@generalRemaining": {
+    "description": "Remaining attacks or defenses"
+  },
+  "generalActive": "Active",
+  "generalInactive": "Inactive",
+  "generalStarted": "Başladı",
+  "@generalStarted": {
+    "description": "Title for the number of trophies at the beginning of the day"
+  },
+  "generalEnded": "Bitti",
+  "@generalEnded": {
+    "description": "Title for the number of trophies at the end of the day"
+  },
+  "generalLevel": "Level",
+  "generalRole": "Rol",
+  "generalDate": "Tarih",
+  "generalStats": "İstatistikler",
+  "generalFullStats": "Full Stats",
+  "generalDetails": "Ayrıntılar",
+  "generalHistory": "Geçmiş",
+  "@generalHistory": {
+    "description": "Shows EOS trophies history"
+  },
+  "generalCharts": "Grafikler",
+  "generalFilters": "Filtreler",
+  "generalWhatever": "Her neyse",
+  "@generalWhatever": {
+    "description": "Whatever the value"
+  },
+  "generalAny": "Herhangi",
+  "@generalAny": {
+    "description": "Any value is accepted"
+  },
+  "generalNotSet": "Ayarlanmamış",
+  "@generalNotSet": {
+    "description": "Filter value is not set"
+  },
+  "generalWarning": "Uyarı",
+  "generalNoDataAvailable": "Veri bulunamadı.",
+  "generalClosed": "Kapalı",
+  "@generalClosed": {
+    "description": "WarLog closed"
+  },
+  "authWelcomeBack": "Welcome Back",
+  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "authChooseSignInMethod": "Choose your preferred sign-in method",
+  "authSignIn": "Sign In",
+  "authSignUp": "Sign up",
+  "authLogin": "Oturum aç",
+  "authLogout": "Oturumu kapat",
+  "authCreateAccount": "Create Account",
+  "authJoinClashKing": "Join ClashKing",
+  "authCreateClashKingAccount": "Create ClashKing Account",
+  "authCreateAccountToGetStarted": "Create your account to get started",
+  "authDontHaveAccount": "Don't have an account? Create one",
+  "authAlreadyHaveAccount": "Already have an account? Sign in",
+  "authConfirmLogout": "Çıkış yapmak istediğinizden emin misiniz?",
+  "@authConfirmLogout": {
+    "description": "Prompt asking the user to confirm logout"
+  },
+  "authDiscordTitle": "Discord",
+  "authDiscordSignIn": "Discord ile giriş yap",
+  "authDiscordContinue": "Continue with Discord",
+  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
+  "authDiscordError": "Discord login failed. Please try again.",
+  "authEmailTitle": "Email",
+  "authEmailSignIn": "Sign in with Email",
+  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
+  "authEmailLabel": "Email",
+  "authEmailPlaceholder": "Enter your email",
+  "authEmailRequired": "Please enter your email",
+  "authEmailInvalid": "Please enter a valid email",
+  "authEmailAlreadyInUse": "Email may already be in use",
+  "authEmailError": "Email login failed. Please check your credentials.",
+  "authPasswordLabel": "Password",
+  "authPasswordConfirm": "Confirm Password",
+  "authPasswordRequired": "Please enter your password",
+  "authPasswordConfirmRequired": "Please confirm your password",
+  "authPasswordMismatch": "Passwords do not match",
+  "authPasswordTooShort": "Password must be at least 8 characters",
+  "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
+  "authPasswordForgot": "Forgot password?",
+  "authPasswordInvalid": "Invalid email or password",
+  "authUsernameLabel": "Kullanıcı Adı",
+  "authUsernameRequired": "Lütfen bir kullanıcı adı girin",
+  "authUsernameTooShort": "Username must be at least 3 characters",
+  "authErrorGeneral": "An error occurred while logging in. Please try again later.",
+  "authErrorRegistration": "Registration failed. Email may already be in use.",
+  "authErrorConnection": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.",
+  "authErrorConnectionRelaunch": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve uygulamayı yeniden başlatın.",
+  "authAccountManagement": "Account Management",
+  "authAccountConnected": "Connected Accounts",
+  "authAccountConnectedStatus": "Connected",
+  "authAccountNotConnected": "Not connected",
+  "authAccountEmailAndPassword": "Email & Password",
+  "authAccountSecured": "Your account is secured with multiple authentication methods",
+  "authAccountLinkEmail": "Link Email Account",
+  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
+  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
+  "authAccountEmailLinkFailed": "Failed to link email account. Email may already be in use.",
+  "helpTitle": "Need help?",
+  "helpJoinDiscord": "Join Discord",
+  "helpEmailUs": "Email Us",
+  "helpJoinDiscordServer": "Yardım mı lazım?Discorda katıl.",
+  "helpCannotOpenMailClient": "Bazı nedenlerden dolayı posta istemcinizi açamadık. E-posta adresini sizin için kopyaladık. Bir e-posta yazıp adresi alıcı alanına yapıştırabilirsiniz.",
+  "accountsWelcome": "Hoşgeldiniz!",
+  "accountsWelcomeMessage": "Lütfen profilinize bir veya daha fazla Clash of Clans hesabı ekleyin. Daha sonra hesap ekleyebilir veya kaldırabilirsiniz.",
+  "accountsManageTitle": "Manage your accounts",
+  "accountsManageDescription": "You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.",
+  "accountsNoneFound": "Profilinize bağlı bir hesap bulunamadı",
+  "accountsPlayerTag": "Player Tag (#ABC123)",
+  "accountsPlayerTags": "Oyuncu Kodu",
+  "accountsEnterPlayerTag": "Bir oyuncu etiketi girin",
+  "accountsAdd": "Hesap ekle",
+  "accountsDelete": "Hesabı sil",
+  "accountsApiToken": "Hesap API Tokeni",
+  "accountsEnterApiToken": "Lütfen hesabınızın API token'ını girin ve sizin olduğunu doğrulayın. Bunu Clash of Clans Ayarları > Diğer Ayarlar > API Token'ında bulabilirsiniz.",
+  "accountsFillAllFields": "Please fill all fields.",
+  "accountsErrorTagNotExists": "Girilen oyuncu etiketi mevcut değil.",
+  "accountsErrorAlreadyLinked": "Oyuncu etiketi zaten birine bağlı.",
+  "accountsErrorAlreadyLinkedToYou": "Oyuncu etiketi zaten size bağlı.",
+  "accountsErrorWrongApiToken": "Girilen API belirteci yanlış",
+  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
+  "accountsErrorFailedToDelete": "Bağlantı silinemedi. Lütfen daha sonra tekrar deneyin.",
+  "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
+  "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
+  "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
+  "errorLoadingVersion": "Sürüm yüklenirken hata oluştu",
+  "@errorLoadingVersion": {
+    "description": "Error message when the app version cannot be loaded"
+  },
+  "errorConnectionGeneral": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.",
+  "errorConnectionRelaunch": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve uygulamayı yeniden başlatın.",
+  "errorCannotOpenLink": "Bu bağlantıyı açamıyoruz.",
+  "errorExitAppToOpenClash": "Clash of Clans'ı açmak için uygulamadan çıkmak üzeresiniz.",
+  "playerTitle": "Oyuncu",
+  "playerSearchTitle": "Oyuncu ara",
+  "playerSearchPlaceholder": "Oyuncunun adı veya etiketi",
+  "playerLastActive": "Son Aktiflik: {date}",
+  "@playerLastActive": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "playerNotTracked": "Bu oyuncu takip edilmiyor. Veriler yanlış olabilir.",
+  "playerClanDescription": "Klanınız \"{clan}\" ({tag})",
+  "@playerClanDescription": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "playerRatioDescription": "Bağış oranınız {ratio}. {donations} birlik bağışladınız ve {received} birlik aldınız.",
+  "@playerRatioDescription": {
+    "placeholders": {
+      "ratio": {
+        "type": "String"
+      },
+      "donations": {
+        "type": "String"
+      },
+      "received": {
+        "type": "String"
+      }
+    }
+  },
+  "playerWarPreferenceDescription": "Savaş tercihiniz {preference}.",
+  "@playerWarPreferenceDescription": {
+    "placeholders": {
+      "preference": {
+        "type": "String"
+      }
+    }
+  },
+  "playerWarStarsDescription": "{stars} savaş yıldızınız var.",
+  "@playerWarStarsDescription": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "playerTrophiesDescription": "{trophies} kupanız var. Şu anki liginiz {league}.",
+  "@playerTrophiesDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      },
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "playerTownHallLevelDescription": "Belediye Binası seviyeniz {level}.",
+  "@playerTownHallLevelDescription": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBuilderBaseDescription": "İnşaatçı Binası seviyeniz {level} ve {trophies} kupanız var.",
+  "@playerBuilderBaseDescription": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "gameBaseHome": "Ana Üs",
+  "gameBaseBuilder": "İnşaatçı Üssü",
+  "gameClanCapital": "Klan Başkenti",
+  "gameTownHall": "BB",
+  "gameBuilderHall": "İB",
+  "gameTownHallLevel": "BB Seviyesi",
+  "gameTownHallLevelNumber": "Belediye Binası {level}",
+  "@gameTownHallLevelNumber": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameTHLevel": "BB {level}",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameBHLevel": "İB {level}",
+  "@gameBHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameExpLevel": "Deneyim Seviyesi",
+  "gameTrophies": "Kupalar",
+  "gameBuilderBaseTrophies": "İÜ Kupaları",
+  "gameDonations": "Bağışlar",
+  "gameDonationsReceived": "Alınan Bağışlar",
+  "gameDonationsRatio": "Bağış Oranı",
+  "gameLevel": "Level: {level}/{maxLevel}",
+  "@gameLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "maxLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "gameHeroes": "Kahramanlar",
+  "gameEquipment": "Ekipmanlar",
+  "gameHeroesEquipments": "Kahraman Ekipmanları",
+  "gameTroops": "Birlikler",
+  "gameSuperTroops": "Süper Birlikler",
+  "gameActiveSuperTroops": "Aktif Süper Birlikler",
+  "gamePets": "Evcil Hayvanlar",
+  "gameSiegeMachines": "Kuşatma Makineleri",
+  "gameSpells": "Büyüler",
+  "gameAchievements": "Başarımlar",
+  "gameClanGames": "Clan Games",
+  "gameSeasonPass": "Season Pass",
+  "gameCreatorCode": "İçerik Üretici Kodu: ClashKing",
+  "clanTitle": "Klan",
+  "clansTitle": "Klanlar",
+  "clanSearchTitle": "Klan ara",
+  "clanSearchPlaceholder": "Clan's name",
+  "clanNone": "Klan yok",
+  "clanJoinToUnlock": "Yeni özelliklerin kilidini açmak için bir klana katılın.",
+  "clanMembers": "Üyeler",
+  "clanWarFrequency": "Savaş sıklığı",
+  "clanMinimumMembers": "Asgari Üye",
+  "clanMaximumMembers": "Azami Üye",
+  "clanLocation": "Konum",
+  "clanMinimumPoints": "Minimum klan puanı",
+  "clanMinimumLevel": "Minimum klan seviyesi",
+  "clanInviteOnly": "Yalnızca Davet",
+  "@clanInviteOnly": {
+    "description": "Clan is invite only"
+  },
+  "clanOpened": "Açıldı",
+  "@clanOpened": {
+    "description": "Clan is opened"
+  },
+  "clanClosed": "Kapalı",
+  "@clanClosed": {
+    "description": "Clan is closed"
+  },
+  "clanRoleLeader": "Lider",
+  "clanRoleCoLeader": "Yardımcı Lider",
+  "clanRoleElder": "Büyük",
+  "clanRoleMember": "Üye",
+  "clanWarFrequencyAlways": "Her zaman",
+  "clanWarFrequencyNever": "Hiçbir zaman",
+  "clanWarFrequencyUnknown": "Bilinmeyen",
+  "clanWarFrequencyOncePerWeek": "1/hafta",
+  "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
+  "clanWarFrequencyRarely": "Nadiren",
+  "timeHourIndicator": "sa",
+  "timeMinIndicator": "dk",
+  "timeDaysLeft": "{days} gün kaldı",
+  "@timeDaysLeft": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeDaysAgo": "{days} gün önce",
+  "@timeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeDayAgo": "{day} gün önce",
+  "@timeDayAgo": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHourAgo": "{hour} saat önce",
+  "@timeHourAgo": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHoursAgo": "{hours} saat önce",
+  "@timeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeMinuteAgo": "{minute} dakika önce",
+  "@timeMinuteAgo": {
+    "placeholders": {
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "timeMinutesAgo": "{minutes} dakika önce",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeSecondAgo": "{seconds} sn. önce",
+  "@timeSecondAgo": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "timeJustNow": "Az Önce",
+  "timeEndedJustNow": "Ended just now",
+  "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
+  "@timeEndedMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeEndedHoursAgo": "Ended {hours} hours ago",
+  "@timeEndedHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeEndedDaysAgo": "Ended {days} days ago",
+  "@timeEndedDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeStartsIn": "Başlamasına: {time}",
+  "@timeStartsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeStartsAt": "{time}'de başlıyor",
+  "@timeStartsAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEndsIn": "Bitmesine: {time}",
+  "@timeEndsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEndsAt": "{time}'de bitiyor",
+  "@timeEndsAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeUpdatedAt": "{time} tarihinde güncellendi",
+  "@timeUpdatedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "legendsTitle": "Efsane Lig",
+  "legendsNotInLeague": "Efsane ligde değil",
+  "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
+  "legendsStartDescription": "Güne {trophies} kupayla başladın.",
+  "@legendsStartDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "String"
+      }
+    }
+  },
+  "legendsNoRankLocalDescription": "Şu anda {trophies} kupa ile {country} sıralamasında yer almıyorsunuz.",
+  "@legendsNoRankLocalDescription": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsRankLocalDescription": "Şu anda {rank} ({country}) sıralamasındasınız ve {trophies} kupanız var.",
+  "@legendsRankLocalDescription": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "country": {
+        "type": "String"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsGainDescription": "Şu ana kadar {trophies} kupa kazandınız.",
+  "@legendsGainDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsLossDescription": "Şu ana kadar {trophies} kupa kaybettiniz.",
+  "@legendsLossDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsNoGlobalRankDescription": "Şu anda {trophies} kupa ile küresel sıralamada yer almıyorsunuz.",
+  "@legendsNoGlobalRankDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsGlobalRankDescription": "You are currently ranked {rank} globally with {trophies} trophies.",
+  "@legendsGlobalRankDescription": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsNoRank": "Sıralama yok",
+  "legendsBestTrophies": "En İyi Kupalar",
+  "legendsMostAttacks": "En Çok Saldırı",
+  "legendsLastSeason": "Geçen Sezon",
+  "legendsBestRank": "En İyi Küresel Sıralama",
+  "legendsTrophiesBySeason": "Sezonlara göre kupalar",
+  "legendsEosTrophies": "Sezon Sonu Kupaları",
+  "legendsEosDetails": "End Of Season Details",
+  "legendsInaccurateTitle": "Veri yanlış mı?",
+  "legendsInaccurateIntro": "Clash of Clans API'sinin sınırlamaları nedeniyle, verilerimiz her zaman mükemmel derecede doğru olmayabilir. İşte nedeni:",
+  "legendsInaccurateApiDelayTitle": "1. API Gecikmesi:",
+  "legendsInaccurateApiDelayBody": "API'nin güncellenmesi 5 dakikaya kadar sürebilir ve bu da gerçek zamanlı kupa değişikliklerinin yansıtılmasında gecikmeye neden olabilir.",
+  "legendsInaccurateConcurrentTitle": "2. Eş Zamanlı Değişiklikler:",
+  "legendsInaccurateMultipleAttacksTitle": "- Çoklu Saldırılar/Savunmalar:",
+  "legendsInaccurateMultipleAttacksBody": "Birden fazla saldırı veya savunma hızlı bir şekilde gerçekleşirse, API birleşik sonuçlar gösterebilir (örneğin, +68 veya -68).",
+  "legendsInaccurateSimultaneousTitle": "- Eş Zamanlı Saldırı ve Savunma:",
+  "legendsInaccurateSimultaneousBody": "Eğer saldırı ve savunma aynı anda gerçekleşirse, karışık bir sonuç görebilirsiniz (örneğin, +4).",
+  "legendsInaccurateNetGainTitle": "3. Net Kazanç/Kayıp:",
+  "legendsInaccurateNetGainBody": "Zamanlama sorunlarına rağmen, günün genel net kazanç veya kaybı doğrudur.",
+  "legendsInaccurateConclusion": "Bu sınırlamalar Clash of Clans API'sini kullanan tüm araçlarda yaygındır. Ne yazık ki bunu düzeltemeyiz çünkü bu Supercell'in elinde. Bu sınırlamaları telafi etmek ve gerçeğe olabildiğince yakın sonuçlar sağlamak için elimizden geleni yapıyoruz. Anlayışınız için teşekkür ederiz!",
+  "statsSeasonStats": "Sezon İstatistikleri",
+  "statsByDay": "Güne göre",
+  "@statsByDay": {
+    "description": "Shows stats by day"
+  },
+  "statsBySeason": "Sezona göre",
+  "@statsBySeason": {
+    "description": "Shows stats by season"
+  },
+  "statsDayIndex": "Gün {index}",
+  "@statsDayIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "statsIndexDays": "{index} günler",
+  "@statsIndexDays": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "statsYear": "Yıl",
+  "statsMonth": "Ay",
+  "statsSeasonDate": "{date} sezon",
+  "@statsSeasonDate": {
+    "description": "Example: August 2024 season",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "statsSelectSeason": "Bir sezon seçin",
+  "@statsSelectSeason": {
+    "description": "Ask player to select a season"
+  },
+  "statsAllTownHalls": "Tüm Belediye Binaları",
+  "statsMembers": "Üye İstatistikleri",
+  "todoTitle": "Yapılacaklar Listesi",
+  "todoExplanationTitle": "Görev Hesaplaması",
+  "todoExplanationIntro": "Görev tamamlanma yüzdesi, aşağıdaki faaliyetlerin belirli ağırlıklara göre hesaplanmasıyla hesaplanır:",
+  "todoExplanationLegendsTitle": "Efsane Lig:",
+  "todoExplanationLegends": "Hesap başına 8 puan ağırlığı, 1 saldırı = 1 puan.",
+  "todoExplanationRaidsTitle": "Baskınlar:",
+  "todoExplanationRaids": "Hesap başına 5 puan (veya son saldırı açılmışsa 6) ağırlığı, 1 saldırı = 1 puan.",
+  "todoExplanationClanWarsTitle": "Klan Savaşları:",
+  "todoExplanationClanWars": "Hesap başına 2 puan ağırlığı, 1 saldırı = 1 puan.",
+  "todoExplanationCwlTitle": "Klan Savaş Ligi:",
+  "todoExplanationCwl": "Hesap başına 1 puan ağırlığı, 1 saldırı = 1 puan. Oyuncu lig klanında değilse KSL takip edilemez.",
+  "todoExplanationPassAndGamesTitle": "Sezon Bileti & Klan Oyunları:",
+  "todoExplanationPassAndGames": "Hesap başına 2 puanlık ağırlık. Oran, kalan gün sayısına (Bilet için 1 ay ve klan oyunları için 6 gün) dayanmaktadır. Yeşil = Bileti veya oyunları tamamlama yolunda, kırmızı = programın gerisinde.",
+  "todoExplanationConclusion": "Son yüzde, devam eden olaylar sırasında tamamlanan toplam eylemlerin toplam gerekli eylemlere bölünmesiyle hesaplanır. 14 günden uzun süredir etkin olmayan hesaplar hesaplamadan hariç tutulur.",
+  "todoAccountsNumber": "{number} hesaplar",
+  "@todoAccountsNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    },
+    "description": "Number of accounts (ex: 4 accounts)"
+  },
+  "todoAccountsNumberActive": "{number} aktif hesaplar",
+  "@todoAccountsNumberActive": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsNumberInactive": "{number} inaktif hesaplar",
+  "@todoAccountsNumberInactive": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsActive": "Aktif hesaplar",
+  "todoAccountsInactive": "İnaktif hesaplar",
+  "todoAccountsNoInactive": "İnaktif hesap yok.",
+  "todoAccountsNoActive": "Aktif hesap yok.",
+  "todoAttacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
+  "@todoAttacksLeftDescription": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoDefensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
+  "@todoDefensesLeftDescription": {
+    "placeholders": {
+      "defenses": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoNoAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+  "@todoNoAttacksLeftDescription": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoPointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+  "@todoPointsLeftDescription": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoPointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+  "@todoPointsLeftDescriptionNoPoints": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "warTitle": "Savaş",
+  "warFrequency": "Savaş sıklığı",
+  "warParticipation": "Savaş Katılımı",
+  "warLeague": "Savaş/Lig",
+  "warHistory": "Savaş Geçmişi",
+  "warLog": "Savaş Günlüğü",
+  "warLogPublic": "Halka Açık Savaş Günlüğü",
+  "warLogPrivate": "Özel Savaş Günlüğü",
+  "warLogClosed": "{clan}'ın savaş günlüğü kapalı.",
+  "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "warStats": "Savaş İstatistikleri",
+  "warOngoing": "Devam eden savaş",
+  "warNotInWar": "Savaşta değil",
+  "warIsNotInWar": "{clan} savaşta değil.",
+  "@warIsNotInWar": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "warAskForWar": "Savaş başlatmak için lidere veya yardımcı lidere başvurun.",
+  "warAskForWarLogOpening": "Savaş günlüğünü açmak için bir lidere veya yardımcı lidere başvurun.",
+  "warEnded": "Savaş sonu",
+  "warPreparation": "Hazırlık",
+  "warPerfectWar": "Mükemmel savaş",
+  "warVictory": "Zafer",
+  "warDefeat": "Yenilgi",
+  "warDraw": "Berabere",
+  "@warDraw": {
+    "description": "War ended in a draw"
+  },
+  "warTeamSize": "Takım boyutu",
+  "warMyTeam": "Takımım",
+  "warEnemiesTeam": "Düşman",
+  "warClanDraw": "İki klan da berabere",
+  "warStateOfTheWar": "Savaş durumu",
+  "warStarsNeededToTakeTheLead": "{clan} takımının liderliği ele geçirebilmesi için hala {star} yıldıza veya {stars2} yıldıza ve %{percent}'e ihtiyacı var.",
+  "@warStarsNeededToTakeTheLead": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "star": {
+        "type": "int"
+      },
+      "stars2": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warStarsAndPercentNeededToTakeTheLead": "{clan} 'ın liderliği ele geçirmek için hala %{percent} veya 1 yıldıza daha ihtiyacı var",
+  "@warStarsAndPercentNeededToTakeTheLead": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warNoDataAvailableForThisWar": "Bu savaş için veri mevcut değil",
+  "warCalculatorFast": "Hızlı hesaplayıcı",
+  "warCalculatorAnswer": "%{percentNeeded} oranında bir yıkım oranına ulaşmak için toplamda %{result} gerekiyor.",
+  "@warCalculatorAnswer": {
+    "placeholders": {
+      "percentNeeded": {
+        "type": "String"
+      },
+      "result": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorNeededOverall": "% Genel olarak ihtiyaç duyuluyor",
+  "warCalculatorCalculate": "Hesapla",
+  "warAttacksTitle": "Saldırılar",
+  "warAttacksNone": "No attack yet",
+  "@warAttacksNone": {
+    "description": "No attack yet in war"
+  },
+  "warAttacksBest": "Best attacks",
+  "warAttacksCount": "Attack Count",
+  "warAttacksMissed": "Missed Attacks",
+  "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
+  "@warAttacksNumber": {
+    "placeholders": {
+      "number_time": {
+        "type": "int"
+      },
+      "number_war": {
+        "type": "int"
+      }
+    }
+  },
+  "warAttacksAverageStars": "You had an average of {stars} stars per war.",
+  "@warAttacksAverageStars": {
+    "placeholders": {
+      "stars": {
+        "type": "String"
+      }
+    }
+  },
+  "warAttacksAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+  "@warAttacksAverageDestruction": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warDefenseTitle": "Savunma",
+  "warDefensesTitle": "Savunmalar",
+  "warDefensesNone": "No defense yet",
+  "@warDefensesNone": {
+    "description": "No defense yet in war"
+  },
+  "warDefensesBest": "Best defenses",
+  "warDefensesBestOutOf": "Best defense (out of {number})",
+  "@warDefensesBestOutOf": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    },
+    "description": "Best war defense (out of 3 defenses)"
+  },
+  "warDefenseStars": "Defense Stars",
+  "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
+  "@warDefensesNumber": {
+    "placeholders": {
+      "number_time": {
+        "type": "int"
+      },
+      "number_war": {
+        "type": "int"
+      }
+    }
+  },
+  "warDefensesAverageStars": "You had an average of {stars} stars per defense.",
+  "@warDefensesAverageStars": {
+    "placeholders": {
+      "stars": {
+        "type": "double"
+      }
+    }
+  },
+  "warDefensesAverageDestruction": "You had an average of {percent}% destruction rate per defense.",
+  "@warDefensesAverageDestruction": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warStarsTitle": "Yıldızlar",
+  "warStarsTotal": "Toplam",
+  "warStarsAverage": "Ortalama Yıldızlar",
+  "warStarsNumber": "Yıldız Sayısı",
+  "warStarsOne": "1 yıldız",
+  "warStarsTwo": "2 yıldız",
+  "warStarsThree": "3 yıldız",
+  "warStarsZero": "0 Star",
+  "warStarsBestPerformance": "Best performance",
+  "@warStarsBestPerformance": {
+    "description": "Best performance in war"
+  },
+  "warDestructionTitle": "Destruction",
+  "warDestructionAverage": "Ortalama Yıkım",
+  "warDestructionRate": "Yıkım oranı",
+  "@warDestructionRate": {
+    "description": "Percentage of destruction in war"
+  },
+  "warHistoryWinsDescription": "Klanınız son 50 savaşta {wins} savaş (%{percent}) kazandı.",
+  "@warHistoryWinsDescription": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryLossesDescription": "Klanınız son 50 savaşta {losses} savaş (%{percent}) kaybetti.",
+  "@warHistoryLossesDescription": {
+    "placeholders": {
+      "losses": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryDrawsDescription": "Klanınız son 50 savaşta {draws} savaş (%{percent}) berabere kaldı.",
+  "@warHistoryDrawsDescription": {
+    "placeholders": {
+      "draws": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryAverageMembersDescription": "Klanınızda son 50 savaşta ortalama {members} üye yer aldı.",
+  "@warHistoryAverageMembersDescription": {
+    "placeholders": {
+      "members": {
+        "type": "int"
+      }
+    }
+  },
+  "warHistoryAverageWarStarsDescription": "Klanınız son 50 savaşta savaş başına ortalama {stars} yıldıza sahipti. Toplam yıldızların {percent}'ini temsil ediyor.",
+  "@warHistoryAverageWarStarsDescription": {
+    "placeholders": {
+      "stars": {
+        "type": "double"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryAverageHitRateDescription": "Klanınızın son 50 savaşta ortalama %{percent} yıkım oranı vardı.",
+  "@warHistoryAverageHitRateDescription": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warPositionMap": "Map Position",
+  "@warPositionMap": {
+    "description": "Map position in war"
+  },
+  "warPositionAbbr": "Pos",
+  "@warPositionAbbr": {
+    "description": "Abbreviation for map position"
+  },
+  "warPositionOrder": "Order",
+  "@warPositionOrder": {
+    "description": "Order of the player in the clan"
+  },
+  "warOpponentTownhall": "Opp TH",
+  "@warOpponentTownhall": {
+    "description": "Abbreviation for opponent's town hall level"
+  },
+  "warOpponentLowerTownhall": "Lower TH",
+  "warOpponentUpperTownhall": "Upper TH",
+  "warOpponentEqualThLevel": "Eşit BB",
+  "warOpponentSelectMembersThLevel": "Üyelerin BB Seviyesi",
+  "warOpponentSelectOpponentsThLevel": "Rakiplerin BB Seviyesi",
+  "warFiltersByNumberOfWars": "Savaş sayısına göre",
+  "@warFiltersByNumberOfWars": {
+    "description": "filter by number of wars"
+  },
+  "warFiltersByDateRange": "Tarih aralığına göre",
+  "@warFiltersByDateRange": {
+    "description": "filter by date range"
+  },
+  "warFiltersLastXwars": "Son {number} savaş",
+  "@warFiltersLastXwars": {
+    "description": "Example: Shows the last 25 wars",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warFiltersFriendly": "Arkadaş canlısı",
+  "@warFiltersFriendly": {
+    "description": "Friendly war"
+  },
+  "warFiltersRandom": "Rastgele",
+  "@warFiltersRandom": {
+    "description": "Random/basic war (not friendly or cwl)"
+  },
+  "warVisibilityToggleTownHall": "Eski BB seviyelerindeki istatistikleri gizle/göster",
+  "@warVisibilityToggleTownHall": {
+    "description": "For example, hide stats from TH15 and below if the player is now TH16"
+  },
+  "warEventsTitle": "Etkinlikler",
+  "@warEventsTitle": {
+    "description": "War events"
+  },
+  "warEventsNewest": "En yeni",
+  "warEventsOldest": "En eski",
+  "warStatusReady": "Katılıyor",
+  "@warStatusReady": {
+    "description": "Opted In for war"
+  },
+  "warStatusUnready": "Katılmıyor",
+  "@warStatusUnready": {
+    "description": "Opted Out for war"
+  },
+  "warStatusMissed": "Missed",
+  "@warStatusMissed": {
+    "description": "Missed attacks"
+  },
+  "warAbbreviationAvg": "Avg",
+  "@warAbbreviationAvg": {
+    "description": "Abbreviation for average"
+  },
+  "warAbbreviationAvgPercentage": "Avg %",
+  "@warAbbreviationAvgPercentage": {
+    "description": "Abbreviation for average percentage"
+  },
+  "cwlTitle": "KSL",
+  "cwlClanWarLeague": "Klan Savaş Ligi",
+  "cwlOngoing": "Devam eden KSL",
+  "cwlRounds": "Turlar",
+  "cwlRoundNumber": "Round {number}",
+  "@cwlRoundNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlCurrentRound": "Şu anda tur {round}.",
+  "@cwlCurrentRound": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRank": "Klanınız şu anda {rank} sıralamasında.",
+  "@cwlRank": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlStars": "Klanınızın toplam {stars} yıldızı var.",
+  "@cwlStars": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlDestructionPercentage": "Klanınızın toplam yıkım oranı %{percent}'dir.",
+  "@cwlDestructionPercentage": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+  "@cwlTotalAttacks": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "totalAttacks": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlCurrentRoundDescription": "Şu anda tur {round}.",
+  "@cwlCurrentRoundDescription": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
+  "joinLeaveJoin": "Katıl",
+  "joinLeaveLeave": "Ayrıl",
+  "joinLeaveReset": "Sıfırla",
+  "joinLeaveJoins": "Joins",
+  "joinLeaveLeaves": "Leaves",
+  "joinLeaveUniquePlayers": "Unique Players",
+  "joinLeaveMovingPlayers": "Moving Players",
+  "joinLeaveMostMovingPlayers": "Most Moving Players",
+  "joinLeaveStillInClan": "Still in Clan",
+  "joinLeaveLeftForever": "Left Forever",
+  "joinLeaveRejoinedPlayers": "Rejoined Players",
+  "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
+  "joinLeavePeakHour": "Most Active Hour",
+  "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
+  "@joinLeaveNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveJoinNumberDescription": "{number} join events occurred during the current season ({date}).",
+  "@joinLeaveJoinNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveMovingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
+  "@joinLeaveMovingNumberDescription": {
+    "description": "Number of players who left and rejoined the clan during the current season.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveUniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
+  "@joinLeaveUniqueNumberDescription": {
+    "description": "Number of unique players who joined/left the clan during the current season.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveStillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
+  "@joinLeaveStillInClanNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "joinLeaveLeftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
+  "@joinLeaveLeftClanNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "@joinLeaveTitle": {
+    "description": "Logs of players joining or leaving the clan."
+  },
+  "joinLeaveLeftOnAt": "{date}} tarihinde {time}te ayrıldı.",
+  "@joinLeaveLeftOnAt": {
+    "description": "[The player] left the clan on 16/06/2024 at 10:35.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveJoinedOnAt": "{date}} tarihinde {time}te katıldı.",
+  "@joinLeaveJoinedOnAt": {
+    "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "raidsTitle": "Raids",
+  "raidsLast": "Son baskınlar",
+  "raidsOngoing": "Devam eden baskınlar",
+  "raidsDistrictsDestroyed": "Yıkılan bölgeler",
+  "raidsCompleted": "Tamamlanan baskınlar",
+  "searchTitle": "Ara",
+  "@searchTitle": {
+    "description": "Search for a player or a clan"
+  },
+  "searchNoResult": "Sonuç yok.",
+  "maintenanceTitle": "Maintenance",
+  "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
+  "downloadTooltip": "Download CWL summary",
+  "downloadInProgress": "Downloading file... It can take a few seconds...",
+  "downloadSuccess": "File saved successfully in {path}",
+  "@downloadSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadError": "Failed to download file",
+  "dashboardTitle": "Kontrol Paneli",
+  "toolsTitle": "Araçlar",
+  "communityTitle": "Topluluk",
+  "navigationTeam": "Takımlar",
+  "navigationStatistics": "İstatistikler",
+  "navigationLeague": "Lig",
+  "navigationWars": "Savaşlar",
+  "versionDevice": "Sürüm & Cihaz",
+  "@versionDevice": {
+    "description": "Version of the app and device information"
+  },
+  "betaFeature": "Beta Özellikleri",
+  "betaLabel": "Beta",
+  "betaDescription": "Bu özellik şu anda beta aşamasındadır, bazı hatalar içerebilir veya eksik olabilir. İyileştirmeler üzerinde aktif olarak çalışıyoruz ve geri bildirimlerinizi bekliyoruz. Lütfen fikirlerinizi paylaşın ve Discord Sunucumuzdaki sorunları bildirin, böylece daha iyi hale getirmemize yardımcı olun.",
+  "settingsTitle": "Ayarlar",
+  "settingsLanguage": "Dil",
+  "settingsSelectLanguage": "Bir dil seçin",
+  "settingsToggleTheme": "Temayı Değiştir",
+  "faqTitle": "S.S.S",
+  "faqSubtitle": "Sıkça Sorulan Sorular",
+  "faqIsThisFromSupercell": "Bu uygulama Supercell'e mi ait?",
+  "faqFanContentPolicy": "Bu materyal resmi değildir ve Supercell tarafından desteklenmemektedir. Daha fazla bilgi için Supercell'in Hayran İçerik Politikasına bakın: www.supercell.com/fan-content-policy.",
+  "faqWhyNotAccurate": "Veriler bazen neden yanlış veya eksik oluyor?",
+  "faqClanNotTracked": "Klan izlenmiyor",
+  "faqClanNotTrackedAnswer": "ClashKing bu bilgiyi yalnızca klan izleniyorsa alabilir. Klanınız izlenmemişse lütfen ClashKing Bot'unu Discord Sunucunuza davet edin ve /addclan komutunu kullanın. Bu özelliği yakında uygulamada kullanılabilir hale getirmek için çalışıyoruz.",
+  "faqTrackingDown": "Takip etmek",
+  "faqTrackingDownAnswer": "İzleme belirli bir süre boyunca çalışmayı durdurabilir. Bu nedenle bazen verilerinizde boşluklar olabilir. Bunu iyileştirmek için çalışıyoruz.",
+  "faqApiLimitation": "Clash of Clans API sınırlaması",
+  "faqApiLimitationAnswer": "Bazı veriler Clash of Clans tarafından sağlanır ve API'lerinin bazı sınırlamaları vardır. Bu, efsanelerin takibi için geçerlidir, bazen tek bir saldırıymış gibi kupa kazanımını ve kaybını üst üste koyar. Bu ayrıca bina seviyeleriniz hakkında hiçbir bilgiye sahip olmamamızın nedenidir.",
+  "faqSupportWork": "Çalışmalarınıza nasıl destek olabilirim?",
+  "faqSupportWorkAnswer": "Bizi desteklemenin birkaç yolu var:",
+  "faqUseCodeClashKing": "\"ClashKing\" kodunu kullanın",
+  "faqSupportUsOnPatreon": "Bizi Patreon’da Destekleyin",
+  "faqShareTheApp": "Uygulamayı arkadaşlarınızla paylaşın",
+  "faqRateTheApp": "Uygulamayı mağazada derecelendirin",
+  "faqHelpUsTranslate": "Uygulamayı çevirmemize yardım edin",
+  "faqHowToInviteTheBot": "Botunuzu Discord Sunucuma nasıl davet edebilirim?",
+  "faqHowToInviteTheBotAnswer": "Aşağıdaki butona tıklayarak botumuzu sunucunuza davet edebilirsiniz. Botu eklemek için \"Sunucuyu Yönet\" iznine ihtiyacınız olacak.",
+  "faqInviteTheBot": "ClashKing Botunu Davet Et",
+  "faqNeedHelp": "Yardıma ihtiyacım var veya bir öneride bulunmak istiyorum. Sizinle nasıl iletişime geçebilirim?",
+  "faqNeedHelpAnswer": "Yardım istemek veya geri bildirim sağlamak için Discord Sunucumuza katılabilir veya devs@clashkingbot.com adresine e-posta gönderebilirsiniz. Lütfen yalnızca İngilizce veya Fransızca yazın.",
+  "faqSendEmail": "E-posta gönderin",
+  "faqJoinDiscord": "Discord Sunucumuza Katılın",
+  "faqCannotOpenMailClient": "Bazı nedenlerden dolayı posta istemcinizi açamadık. E-posta adresini sizin için kopyaladık. Bir e-posta yazıp adresi alıcı alanına yapıştırabilirsiniz.",
+  "translationHelpUsTranslate": "Çeviriye yardımcı olun",
+  "translationSuggestFeatures": "Özellik önerin",
+  "translationThankYou": "Teşekkürler!",
+  "translationThankYouContent": "Bu uygulamayı dünya çapında daha fazla insana ulaştırmamıza yardımcı olan tüm harika çevirmenlerimize çok teşekkür ederiz!",
+  "translationHelpTranslateContent": "Uygulamayı Crowdin'de çevirmemize yardımcı olabilirsiniz. Diliniz Crowdin'de mevcut değilse, Discord Sunucumuzda talep etmekten çekinmeyin. Yardımınız için çok teşekkür ederim!",
+  "translationHelpTranslateButton": "Crowdin'de Çeviriye Yardım Edin",
+  "translationCurrentTranslators": "Güncel Tercümanlar"
 }
