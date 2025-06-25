@@ -1,12 +1,9 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
-  "appTitle": "ClashKing",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Загрузка...",
-  "generalError": "Ошибка",
   "generalRetry": "Retry",
   "generalTryAgain": "Try again",
-  "generalClose": "Закрыть",
   "generalCancel": "Cancel",
   "generalOk": "OK",
   "@generalOk": {
@@ -14,16 +11,7 @@
   },
   "generalApply": "Применить",
   "generalConfirm": "Confirm",
-  "generalAdd": "Добавить",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "Удалить",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
   "generalManage": "Управление",
-  "generalManagement": "Management",
   "generalSettings": "Настройки",
   "generalCopiedToClipboard": "Скопировано в буфер обмена",
   "generalComingSoon": "Coming soon!",
@@ -58,9 +46,7 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
   "generalRole": "Role",
-  "generalDate": "Дата",
   "generalStats": "Статистика",
   "generalFullStats": "Full Stats",
   "generalDetails": "Детали",
@@ -68,30 +54,13 @@
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Диаграммы",
   "generalFilters": "Фильтры",
-  "generalWhatever": "Не важно",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Any",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
   "generalNotSet": "Not set",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
   "generalWarning": "Внимание",
   "generalNoDataAvailable": "Данные отсутствуют.",
-  "generalClosed": "Закрыт",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignIn": "Sign In",
   "authSignUp": "Sign up",
   "authLogin": "Вход",
   "authLogout": "Выход",
@@ -99,7 +68,6 @@
   "authJoinClashKing": "Join ClashKing",
   "authCreateClashKingAccount": "Create ClashKing Account",
   "authCreateAccountToGetStarted": "Create your account to get started",
-  "authDontHaveAccount": "Don't have an account? Create one",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "Вы уверены, что хотите выйти?",
   "@authConfirmLogout": {
@@ -109,16 +77,10 @@
   "authDiscordSignIn": "Вход через Discord",
   "authDiscordContinue": "Continue with Discord",
   "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authDiscordError": "Discord login failed. Please try again.",
   "authEmailTitle": "Email",
-  "authEmailSignIn": "Sign in with Email",
   "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailLabel": "Email",
-  "authEmailPlaceholder": "Enter your email",
   "authEmailRequired": "Please enter your email",
   "authEmailInvalid": "Please enter a valid email",
-  "authEmailAlreadyInUse": "Email may already be in use",
-  "authEmailError": "Email login failed. Please check your credentials.",
   "authPasswordLabel": "Password",
   "authPasswordConfirm": "Confirm Password",
   "authPasswordRequired": "Please enter your password",
@@ -127,12 +89,9 @@
   "authPasswordTooShort": "Password must be at least 8 characters",
   "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
   "authPasswordForgot": "Forgot password?",
-  "authPasswordInvalid": "Invalid email or password",
   "authUsernameLabel": "Имя пользователя",
   "authUsernameRequired": "Пожалуйста, введите имя пользователя",
   "authUsernameTooShort": "Username must be at least 3 characters",
-  "authErrorGeneral": "An error occurred while logging in. Please try again later.",
-  "authErrorRegistration": "Registration failed. Email may already be in use.",
   "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
   "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
   "authAccountManagement": "Account Management",
@@ -144,19 +103,14 @@
   "authAccountLinkEmail": "Link Email Account",
   "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
   "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "authAccountEmailLinkFailed": "Failed to link email account. Email may already be in use.",
   "helpTitle": "Need help?",
   "helpJoinDiscord": "Join Discord",
   "helpEmailUs": "Email Us",
-  "helpJoinDiscordServer": "Нужна помощь? Присоединяйтесь к нам в Discord.",
-  "helpCannotOpenMailClient": "По некоторым причинам мы не можем открыть ваш почтовый клиент. Мы скопировали адрес электронной почты для вас. Вы можете написать письмо и вставить адрес в поле получателя.",
   "accountsWelcome": "Добро пожаловать!",
   "accountsWelcomeMessage": "Пожалуйста, добавьте один или несколько аккаунтов Clash of Clans в свой профиль. Вы сможете добавлять или удалять аккаунты позже.",
   "accountsManageTitle": "Manage your accounts",
-  "accountsManageDescription": "You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.",
   "accountsNoneFound": "No account linked to your profile found",
   "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsPlayerTags": "Теги игрока",
   "accountsEnterPlayerTag": "Введите тег игрока",
   "accountsAdd": "Добавить аккаунт",
   "accountsDelete": "Удалить аккаунт",
@@ -176,11 +130,8 @@
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorConnectionGeneral": "An error occurred. Please check your internet connection and try again.",
-  "errorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
   "errorCannotOpenLink": "We can't open this link.",
   "errorExitAppToOpenClash": "Вам следует выйти из приложения, чтобы открыть Clash of Clans.",
-  "playerTitle": "Игрок",
   "playerSearchTitle": "Найти игрока",
   "playerSearchPlaceholder": "Имя или тег игрока",
   "playerLastActive": "Last active: {date}",
@@ -267,7 +218,6 @@
   "gameBaseBuilder": "Деревня Строителя",
   "gameClanCapital": "Столица клана",
   "gameTownHall": "ТХ",
-  "gameBuilderHall": "ДС",
   "gameTownHallLevel": "TH Level",
   "gameTownHallLevelNumber": "Town Hall {level}",
   "@gameTownHallLevelNumber": {
@@ -279,14 +229,6 @@
   },
   "gameTHLevel": "TH{level}",
   "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "gameBHLevel": "BH{level}",
-  "@gameBHLevel": {
     "placeholders": {
       "level": {
         "type": "int"
@@ -314,7 +256,6 @@
   "gameEquipment": "Снаряжение",
   "gameHeroesEquipments": "Hero equipments",
   "gameTroops": "Войны",
-  "gameSuperTroops": "Супервойны",
   "gameActiveSuperTroops": "Active Super Troops",
   "gamePets": "Животные",
   "gameSiegeMachines": "Осадные машины",
@@ -324,7 +265,6 @@
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Код Создателя: ClashKing",
   "clanTitle": "Clan",
-  "clansTitle": "Clans",
   "clanSearchTitle": "Найти клан",
   "clanSearchPlaceholder": "Clan's name",
   "clanNone": "Без клана",
@@ -359,15 +299,6 @@
   "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
   "clanWarFrequencyRarely": "Rarely",
   "timeHourIndicator": "ч",
-  "timeMinIndicator": "м",
-  "timeDaysLeft": "{days} days left",
-  "@timeDaysLeft": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
   "timeDaysAgo": "{days} дн. назад",
   "@timeDaysAgo": {
     "placeholders": {
@@ -412,14 +343,6 @@
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "timeSecondAgo": "{seconds} сек. назад",
-  "@timeSecondAgo": {
-    "placeholders": {
-      "seconds": {
         "type": "int"
       }
     }
@@ -476,14 +399,6 @@
   },
   "timeEndsAt": "Ends at {time}",
   "@timeEndsAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "timeUpdatedAt": "Updated at {time}",
-  "@timeUpdatedAt": {
     "placeholders": {
       "time": {
         "type": "String"
@@ -606,8 +521,6 @@
       }
     }
   },
-  "statsYear": "Year",
-  "statsMonth": "Month",
   "statsSeasonDate": "{date} season",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
@@ -616,10 +529,6 @@
         "type": "String"
       }
     }
-  },
-  "statsSelectSeason": "Select a season",
-  "@statsSelectSeason": {
-    "description": "Ask player to select a season"
   },
   "statsAllTownHalls": "All Town Halls",
   "statsMembers": "Members Stats",
@@ -721,8 +630,6 @@
   "warLeague": "War/League",
   "warHistory": "War History",
   "warLog": "War Log",
-  "warLogPublic": "Public War Log",
-  "warLogPrivate": "Private War Log",
   "warLogClosed": "War log closed.",
   "@warLogClosed": {
     "placeholders": {
@@ -733,7 +640,6 @@
   },
   "warStats": "War Stats",
   "warOngoing": "Ongoing war",
-  "warNotInWar": "Not in war",
   "warIsNotInWar": "{clan} is not in war.",
   "@warIsNotInWar": {
     "placeholders": {
@@ -836,7 +742,6 @@
       }
     }
   },
-  "warDefenseTitle": "Defense",
   "warDefensesTitle": "Defenses",
   "warDefensesNone": "No defense yet",
   "@warDefensesNone": {
@@ -852,7 +757,6 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefenseStars": "Defense Stars",
   "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
   "@warDefensesNumber": {
     "placeholders": {
@@ -881,7 +785,6 @@
     }
   },
   "warStarsTitle": "Stars",
-  "warStarsTotal": "Всего",
   "warStarsAverage": "Average stars",
   "warStarsNumber": "Number of stars",
   "warStarsOne": "1 star",
@@ -979,14 +882,6 @@
   "warOpponentEqualThLevel": "Equal TH",
   "warOpponentSelectMembersThLevel": "Members TH Level",
   "warOpponentSelectOpponentsThLevel": "Opponents TH Level",
-  "warFiltersByNumberOfWars": "By number of wars",
-  "@warFiltersByNumberOfWars": {
-    "description": "filter by number of wars"
-  },
-  "warFiltersByDateRange": "By date range",
-  "@warFiltersByDateRange": {
-    "description": "filter by date range"
-  },
   "warFiltersLastXwars": "Last {number} wars",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
@@ -1085,14 +980,6 @@
         "type": "int"
       },
       "totalAttacks": {
-        "type": "int"
-      }
-    }
-  },
-  "cwlCurrentRoundDescription": "It's currently round {round}.",
-  "@cwlCurrentRoundDescription": {
-    "placeholders": {
-      "round": {
         "type": "int"
       }
     }
@@ -1205,10 +1092,6 @@
   "raidsOngoing": "Ongoing raids",
   "raidsDistrictsDestroyed": "Districts destroyed",
   "raidsCompleted": "Raids completed",
-  "searchTitle": "Поиск",
-  "@searchTitle": {
-    "description": "Search for a player or a clan"
-  },
   "searchNoResult": "Нет результатов.",
   "maintenanceTitle": "Maintenance",
   "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
@@ -1225,11 +1108,8 @@
   "downloadError": "Failed to download file",
   "dashboardTitle": "Панель управления",
   "toolsTitle": "Tools",
-  "communityTitle": "Community",
   "navigationTeam": "Teams",
   "navigationStatistics": "Statistics",
-  "navigationLeague": "League",
-  "navigationWars": "Wars",
   "versionDevice": "Версия и устройство",
   "@versionDevice": {
     "description": "Version of the app and device information"
@@ -1237,7 +1117,6 @@
   "betaFeature": "Бета-Функция",
   "betaLabel": "Бета",
   "betaDescription": "Эта функция в настоящее время находится в стадии бета-тестирования, она может содержать некоторые ошибки или быть неполной. Мы активно работаем над улучшениями и приветствуем ваши отзывы. Пожалуйста, делитесь своими идеями и сообщайте о любых проблемах на нашем сервере Дискорд, чтобы помочь нам сделать его лучше.",
-  "settingsTitle": "Настройки",
   "settingsLanguage": "Язык",
   "settingsSelectLanguage": "Выберите язык",
   "settingsToggleTheme": "Переключить тему",
