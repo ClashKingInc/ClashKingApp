@@ -91,7 +91,6 @@
   "authWelcomeBack": "Welcome Back",
   "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignIn": "Sign In",
   "authSignUp": "Sign up",
   "authLogin": "登录",
   "authLogout": "注销",
@@ -99,7 +98,6 @@
   "authJoinClashKing": "Join ClashKing",
   "authCreateClashKingAccount": "Create ClashKing Account",
   "authCreateAccountToGetStarted": "Create your account to get started",
-  "authDontHaveAccount": "Don't have an account? Create one",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "确定要退出登录吗？",
   "@authConfirmLogout": {
@@ -109,16 +107,10 @@
   "authDiscordSignIn": "使用Discord登录",
   "authDiscordContinue": "Continue with Discord",
   "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authDiscordError": "Discord login failed. Please try again.",
   "authEmailTitle": "Email",
-  "authEmailSignIn": "Sign in with Email",
   "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailLabel": "Email",
-  "authEmailPlaceholder": "Enter your email",
   "authEmailRequired": "Please enter your email",
   "authEmailInvalid": "Please enter a valid email",
-  "authEmailAlreadyInUse": "Email may already be in use",
-  "authEmailError": "Email login failed. Please check your credentials.",
   "authPasswordLabel": "Password",
   "authPasswordConfirm": "Confirm Password",
   "authPasswordRequired": "Please enter your password",
@@ -127,12 +119,9 @@
   "authPasswordTooShort": "Password must be at least 8 characters",
   "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
   "authPasswordForgot": "Forgot password?",
-  "authPasswordInvalid": "Invalid email or password",
   "authUsernameLabel": "用户名",
   "authUsernameRequired": "请输入用户名",
   "authUsernameTooShort": "Username must be at least 3 characters",
-  "authErrorGeneral": "An error occurred while logging in. Please try again later.",
-  "authErrorRegistration": "Registration failed. Email may already be in use.",
   "authErrorConnection": "发生错误，请检查网络连接并重试。",
   "authErrorConnectionRelaunch": "发生错误，请检查网络连接并重新启动应用。",
   "authAccountManagement": "Account Management",
@@ -144,19 +133,14 @@
   "authAccountLinkEmail": "Link Email Account",
   "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
   "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "authAccountEmailLinkFailed": "Failed to link email account. Email may already be in use.",
   "helpTitle": "Need help?",
   "helpJoinDiscord": "Join Discord",
   "helpEmailUs": "Email Us",
-  "helpJoinDiscordServer": "需要帮助？请加入我们的Discord频道。",
-  "helpCannotOpenMailClient": "由于某些原因，我们无法打开您的邮件客户端。我们为您复制了电子邮件地址。您可以编写电子邮件并将地址粘贴到收件人字段中。",
   "accountsWelcome": "欢迎！",
   "accountsWelcomeMessage": "请将一个或多个部落冲突帐户添加到您的个人资料中。您可以稍后添加或删除帐户。",
   "accountsManageTitle": "Manage your accounts",
-  "accountsManageDescription": "You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.",
   "accountsNoneFound": "未找到与你的个人资料关联的账号",
   "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsPlayerTags": "玩家标签",
   "accountsEnterPlayerTag": "输入一个玩家标签",
   "accountsAdd": "添加账户",
   "accountsDelete": "删除账户",
@@ -176,11 +160,8 @@
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorConnectionGeneral": "发生错误，请检查网络连接并重试。",
-  "errorConnectionRelaunch": "发生错误，请检查网络连接并重新启动应用。",
   "errorCannotOpenLink": "我们无法打开此链接",
   "errorExitAppToOpenClash": "您即将离开应用程序打开部落冲突",
-  "playerTitle": "玩家",
   "playerSearchTitle": "搜索玩家",
   "playerSearchPlaceholder": "村庄名称或标签",
   "playerLastActive": "上次活跃：{date}",
@@ -267,7 +248,6 @@
   "gameBaseBuilder": "夜世界",
   "gameClanCapital": "部落都城",
   "gameTownHall": "大本等级",
-  "gameBuilderHall": "夜本等级",
   "gameTownHallLevel": "大本等级",
   "gameTownHallLevelNumber": "大本营 {level}",
   "@gameTownHallLevelNumber": {
@@ -279,14 +259,6 @@
   },
   "gameTHLevel": "{level}级大本",
   "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "gameBHLevel": "{level}级夜本",
-  "@gameBHLevel": {
     "placeholders": {
       "level": {
         "type": "int"
@@ -314,7 +286,6 @@
   "gameEquipment": "装备",
   "gameHeroesEquipments": "英雄装备",
   "gameTroops": "部队",
-  "gameSuperTroops": "超级部队",
   "gameActiveSuperTroops": "已启用的超级部队",
   "gamePets": "宠物",
   "gameSiegeMachines": "攻城机器",
@@ -324,7 +295,6 @@
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "创作者代码：ClashKing",
   "clanTitle": "部落",
-  "clansTitle": "部落",
   "clanSearchTitle": "搜索部落",
   "clanSearchPlaceholder": "Clan's name",
   "clanNone": "无部落信息",
@@ -359,15 +329,6 @@
   "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
   "clanWarFrequencyRarely": "很少",
   "timeHourIndicator": "小时",
-  "timeMinIndicator": "分钟",
-  "timeDaysLeft": "剩余{days}天",
-  "@timeDaysLeft": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
   "timeDaysAgo": "{days} 天前",
   "@timeDaysAgo": {
     "placeholders": {
@@ -412,14 +373,6 @@
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "timeSecondAgo": "{seconds}秒之前",
-  "@timeSecondAgo": {
-    "placeholders": {
-      "seconds": {
         "type": "int"
       }
     }
@@ -476,14 +429,6 @@
   },
   "timeEndsAt": "结束于{time}",
   "@timeEndsAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "timeUpdatedAt": "更新于 {time}",
-  "@timeUpdatedAt": {
     "placeholders": {
       "time": {
         "type": "String"
@@ -606,8 +551,6 @@
       }
     }
   },
-  "statsYear": "年",
-  "statsMonth": "月",
   "statsSeasonDate": "{date}赛季",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
@@ -616,10 +559,6 @@
         "type": "String"
       }
     }
-  },
-  "statsSelectSeason": "选择一个赛季",
-  "@statsSelectSeason": {
-    "description": "Ask player to select a season"
   },
   "statsAllTownHalls": "所有大本营",
   "statsMembers": "成员统计",
@@ -721,8 +660,6 @@
   "warLeague": "部落战/联赛",
   "warHistory": "部落对战历史",
   "warLog": "对战日志",
-  "warLogPublic": "公开对战日志",
-  "warLogPrivate": "私人对战日志",
   "warLogClosed": "对战日志已关闭。",
   "@warLogClosed": {
     "placeholders": {
@@ -733,7 +670,6 @@
   },
   "warStats": "部落战统计",
   "warOngoing": "正在进行的部落战",
-  "warNotInWar": "不在战争中",
   "warIsNotInWar": "{clan} 当前未参与部落战。",
   "@warIsNotInWar": {
     "placeholders": {
@@ -836,7 +772,6 @@
       }
     }
   },
-  "warDefenseTitle": "防御",
   "warDefensesTitle": "防御记录",
   "warDefensesNone": "No defense yet",
   "@warDefensesNone": {
@@ -852,7 +787,6 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefenseStars": "Defense Stars",
   "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
   "@warDefensesNumber": {
     "placeholders": {
@@ -881,7 +815,6 @@
     }
   },
   "warStarsTitle": "星数",
-  "warStarsTotal": "总计",
   "warStarsAverage": "平均胜利之星",
   "warStarsNumber": "获得的星数",
   "warStarsOne": "1 胜利之星",
@@ -979,14 +912,6 @@
   "warOpponentEqualThLevel": "大本等级相同",
   "warOpponentSelectMembersThLevel": "成员大本等级",
   "warOpponentSelectOpponentsThLevel": "队友大本等级",
-  "warFiltersByNumberOfWars": "按进攻次数排序",
-  "@warFiltersByNumberOfWars": {
-    "description": "filter by number of wars"
-  },
-  "warFiltersByDateRange": "按日期范围",
-  "@warFiltersByDateRange": {
-    "description": "filter by date range"
-  },
   "warFiltersLastXwars": "最后{number}场战争",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
@@ -1085,14 +1010,6 @@
         "type": "int"
       },
       "totalAttacks": {
-        "type": "int"
-      }
-    }
-  },
-  "cwlCurrentRoundDescription": "当前是第 {round} 轮。",
-  "@cwlCurrentRoundDescription": {
-    "placeholders": {
-      "round": {
         "type": "int"
       }
     }
@@ -1205,10 +1122,6 @@
   "raidsOngoing": "进行中的突袭",
   "raidsDistrictsDestroyed": "摧毁的都城",
   "raidsCompleted": "已完成突袭",
-  "searchTitle": "搜索",
-  "@searchTitle": {
-    "description": "Search for a player or a clan"
-  },
   "searchNoResult": "没有找到该查询的结果",
   "maintenanceTitle": "Maintenance",
   "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
@@ -1225,11 +1138,8 @@
   "downloadError": "Failed to download file",
   "dashboardTitle": "主页",
   "toolsTitle": "工具",
-  "communityTitle": "社区",
   "navigationTeam": "部落",
   "navigationStatistics": "统计数据",
-  "navigationLeague": "联赛",
-  "navigationWars": "部落战列表",
   "versionDevice": "版本&设备",
   "@versionDevice": {
     "description": "Version of the app and device information"
@@ -1237,7 +1147,6 @@
   "betaFeature": "Beta功能",
   "betaLabel": "BETA",
   "betaDescription": "此功能目前处于测试阶段，可能存在一些错误或不完整。我们正在积极改进，欢迎您的反馈。请在我们的Discord服务器中分享您的想法并报告任何问题，以帮助我们做得更好。",
-  "settingsTitle": "设置",
   "settingsLanguage": "语言",
   "settingsSelectLanguage": "搜索语言",
   "settingsToggleTheme": "切换主题",

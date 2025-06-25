@@ -9,6 +9,10 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
+  String get appDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+
+  @override
   String get generalLoading => 'Loading...';
 
   @override
@@ -99,14 +103,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get generalNoDataAvailable => 'No data available.';
 
   @override
-  String get authClashKingDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get authSignIn => 'Sign In';
-
-  @override
   String get authSignUp => 'Sign up';
+
+  @override
+  String get authLogin => 'Login';
 
   @override
   String get authLogout => 'Log out';
@@ -1452,6 +1452,10 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   AppLocalizationsEsEs() : super('es_ES');
 
   @override
+  String get appDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+
+  @override
   String get generalLoading => 'Cargando...';
 
   @override
@@ -1542,14 +1546,10 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   String get generalNoDataAvailable => 'No hay datos disponibles.';
 
   @override
-  String get authClashKingDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get authSignIn => 'Sign In';
-
-  @override
   String get authSignUp => 'Sign up';
+
+  @override
+  String get authLogin => 'Iniciar sesión';
 
   @override
   String get authLogout => 'Cerrar sesión';

@@ -9,6 +9,10 @@ class AppLocalizationsHu extends AppLocalizations {
   AppLocalizationsHu([String locale = 'hu']) : super(locale);
 
   @override
+  String get appDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+
+  @override
   String get generalLoading => 'Betöltés...';
 
   @override
@@ -99,14 +103,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get generalNoDataAvailable => 'Nincs rendelkezésre álló adat.';
 
   @override
-  String get authClashKingDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get authSignIn => 'Sign In';
-
-  @override
   String get authSignUp => 'Sign up';
+
+  @override
+  String get authLogin => 'Bejelentkezés';
 
   @override
   String get authLogout => 'Kijelentkezés';

@@ -11,7 +11,7 @@ String convertToTimeAgo(int timestamp, context) {
   if (diff.inDays >= 1) {
     return '${diff.inDays == 1 ? AppLocalizations.of(context)?.timeDayAgo(diff.inDays) : AppLocalizations.of(context)?.timeDaysAgo(diff.inDays)}';
   } else if (diff.inHours >= 1) {
-    return '${diff.inHours == 1 ? AppLocalizations.of(context)?.timeHourAgo(diff.inHours) : AppLocalizations.of(context)?.timeHoursAgo(diff.inHours, "")}';
+    return '${diff.inHours == 1 ? AppLocalizations.of(context)?.timeHourAgo(diff.inHours) : AppLocalizations.of(context)?.timeHoursAgo(diff.inHours, )}';
   } else if (diff.inMinutes >= 1) {
     return '${diff.inMinutes == 1 ? AppLocalizations.of(context)?.timeMinuteAgo(diff.inMinutes) : AppLocalizations.of(context)?.timeMinutesAgo(diff.inMinutes)}';
   } else {

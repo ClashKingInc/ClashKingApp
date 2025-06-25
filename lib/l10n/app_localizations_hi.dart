@@ -9,6 +9,10 @@ class AppLocalizationsHi extends AppLocalizations {
   AppLocalizationsHi([String locale = 'hi']) : super(locale);
 
   @override
+  String get appDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+
+  @override
   String get generalLoading => 'लोड हो रहा है...';
 
   @override
@@ -99,14 +103,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get generalNoDataAvailable => 'कोई डेटा मौजूद नहीं ';
 
   @override
-  String get authClashKingDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get authSignIn => 'Sign In';
-
-  @override
   String get authSignUp => 'Sign up';
+
+  @override
+  String get authLogin => 'लॉग इन करें';
 
   @override
   String get authLogout => 'लॉग आउट';

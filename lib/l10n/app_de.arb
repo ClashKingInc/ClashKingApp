@@ -2,7 +2,6 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "Dein ultimativer Clash of Clans Begleiter zum Verfolgen von Statistiken, Verwalten von Clans und Analysieren der Leistung.",
-
   "generalLoading": "Laden...",
   "generalError": "Fehler",
   "generalRetry": "Wiederholen",
@@ -89,11 +88,9 @@
   "@generalClosed": {
     "description": "Kriegslog geschlossen"
   },
-
   "authWelcomeBack": "Willkommen zurück!",
   "authClashKingDescription": "Dein ultimativer Clash of Clans Begleiter zum Verfolgen von Statistiken, Verwalten von Clans und Analysieren der Leistung.",
   "authChooseSignInMethod": "Wähle deine bevorzugte Anmeldmethode",
-  "authSignIn": "Anmelden",
   "authSignUp": "Registrieren",
   "authLogin": "Anmelden",
   "authLogout": "Abmelden",
@@ -101,7 +98,6 @@
   "authJoinClashKing": "ClashKing beitreten",
   "authCreateClashKingAccount": "ClashKing-Konto erstellen",
   "authCreateAccountToGetStarted": "Erstelle dein Konto, um zu beginnen",
-  "authDontHaveAccount": "Du hast kein Konto? Erstelle eins",
   "authAlreadyHaveAccount": "Du hast bereits ein Konto? Melde dich an",
   "authConfirmLogout": "Bist du dir sicher, dass du dich abmelden möchtest?",
   "@authConfirmLogout": {
@@ -111,16 +107,10 @@
   "authDiscordSignIn": "Mit Discord anmelden",
   "authDiscordContinue": "Mit Discord fortfahren",
   "authDiscordDescription": "Synchronisiere deine Daten mit dem ClashKing Bot und entfalte das volle Potenzial von ClashKing!",
-  "authDiscordError": "Discord-Anmeldung fehlgeschlagen. Bitte versuche es erneut.",
   "authEmailTitle": "E-Mail",
-  "authEmailSignIn": "Mit E-Mail anmelden",
   "authEmailDescription": "Verwende E-Mail, wenn du nicht auf Discord zugreifen kannst oder nur App-Funktionen bevorzugst",
-  "authEmailLabel": "E-Mail",
-  "authEmailPlaceholder": "Gib deine E-Mail ein",
   "authEmailRequired": "Bitte gib deine E-Mail ein",
   "authEmailInvalid": "Bitte gib eine gültige E-Mail ein",
-  "authEmailAlreadyInUse": "E-Mail wird möglicherweise bereits verwendet",
-  "authEmailError": "E-Mail-Anmeldung fehlgeschlagen. Bitte überprüfe deine Anmeldedaten.",
   "authPasswordLabel": "Passwort",
   "authPasswordConfirm": "Passwort bestätigen",
   "authPasswordRequired": "Bitte gib dein Passwort ein",
@@ -129,12 +119,9 @@
   "authPasswordTooShort": "Passwort muss mindestens 8 Zeichen lang sein",
   "authPasswordRequirements": "Passwort muss enthalten: Großbuchstaben, Kleinbuchstaben, Ziffer und Sonderzeichen",
   "authPasswordForgot": "Passwort vergessen?",
-  "authPasswordInvalid": "Ungültige E-Mail oder Passwort",
   "authUsernameLabel": "Benutzername",
   "authUsernameRequired": "Bitte gib einen Benutzernamen ein",
   "authUsernameTooShort": "Benutzername muss mindestens 3 Zeichen lang sein",
-  "authErrorGeneral": "Beim Anmelden ist ein Fehler aufgetreten. Bitte versuche es später erneut.",
-  "authErrorRegistration": "Registrierung fehlgeschlagen. E-Mail wird möglicherweise bereits verwendet.",
   "authErrorConnection": "Es ist ein Fehler aufgetreten. Bitte überprüfe deine Internetverbindung und versuche es erneut.",
   "authErrorConnectionRelaunch": "Es ist ein Fehler aufgetreten. Bitte überprüfe deine Internetverbindung und starte die App erneut.",
   "authAccountManagement": "Kontoverwaltung",
@@ -146,19 +133,14 @@
   "authAccountLinkEmail": "E-Mail-Konto verknüpfen",
   "authAccountAddEmailAuth": "Füge E-Mail- & Passwort-Authentifizierung zu deinem Konto für zusätzliche Sicherheit hinzu.",
   "authAccountEmailLinkedSuccess": "E-Mail-Konto erfolgreich verknüpft!",
-  "authAccountEmailLinkFailed": "E-Mail-Konto konnte nicht verknüpft werden. E-Mail wird möglicherweise bereits verwendet.",
   "helpTitle": "Brauchst du Hilfe?",
   "helpJoinDiscord": "Discord beitreten",
   "helpEmailUs": "E-Mail an uns",
-  "helpJoinDiscordServer": "Brauchst du Hilfe? Tritt unserem Discord bei.",
-  "helpCannotOpenMailClient": "Aus irgendeinem Grund können wir deinen E-Mail-Client nicht öffnen. Wir haben die E-Mail-Adresse für dich kopiert. Du kannst eine E-Mail schreiben und die Adresse im Empfängerfeld einfügen.",
   "accountsWelcome": "Willkommen!",
   "accountsWelcomeMessage": "Bitte füge ein oder mehrere Clash of Clans Konten zu deinem Profil hinzu. Du kannst später weitere Konten hinzufügen oder entfernen.",
   "accountsManageTitle": "Verwalte deine Konten",
-  "accountsManageDescription": "Du kannst hier deine Konten hinzufügen, entfernen und neu ordnen. Das erste Konto wird als Standardkonto in der App verwendet.",
   "accountsNoneFound": "Kein mit deinem Profil verknüpftes Konto gefunden",
   "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsPlayerTags": "Spielertags",
   "accountsEnterPlayerTag": "Spielertag eingeben",
   "accountsAdd": "Konto hinzufügen",
   "accountsDelete": "Konto löschen",
@@ -178,11 +160,8 @@
   "@errorLoadingVersion": {
     "description": "Fehlermeldung, wenn die App-Version nicht geladen werden kann"
   },
-  "errorConnectionGeneral": "Es ist ein Fehler aufgetreten. Bitte überprüfe deine Internetverbindung und versuche es erneut.",
-  "errorConnectionRelaunch": "Es ist ein Fehler aufgetreten. Bitte überprüfe deine Internetverbindung und starte die App erneut.",
   "errorCannotOpenLink": "Wir können diesen Link nicht öffnen.",
   "errorExitAppToOpenClash": "Du verlässt die App, um Clash of Clans zu öffnen.",
-  "playerTitle": "Spieler",
   "playerSearchTitle": "Spieler suchen",
   "playerSearchPlaceholder": "Name oder Spielertag",
   "playerLastActive": "Zuletzt aktiv: {date}",
@@ -269,7 +248,6 @@
   "gameBaseBuilder": "Bauarbeiterbasis",
   "gameClanCapital": "Clanstadt",
   "gameTownHall": "RH",
-  "gameBuilderHall": "BH",
   "gameTownHallLevel": "RH Level",
   "gameTownHallLevelNumber": "Rathaus {level}",
   "@gameTownHallLevelNumber": {
@@ -281,14 +259,6 @@
   },
   "gameTHLevel": "TH{level}",
   "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "gameBHLevel": "BH{level}",
-  "@gameBHLevel": {
     "placeholders": {
       "level": {
         "type": "int"
@@ -316,7 +286,6 @@
   "gameEquipment": "Ausrüstung",
   "gameHeroesEquipments": "Heldenausrüstung",
   "gameTroops": "Truppen",
-  "gameSuperTroops": "Supertruppen",
   "gameActiveSuperTroops": "Aktive Supertruppen",
   "gamePets": "Begleiter",
   "gameSiegeMachines": "Belagerungsmaschinen",
@@ -326,7 +295,6 @@
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Creator-Code: ClashKing",
   "clanTitle": "Clan",
-  "clansTitle": "Clans",
   "clanSearchTitle": "Clan suchen",
   "clanSearchPlaceholder": "Clanname",
   "clanNone": "Kein Clan",
@@ -361,15 +329,6 @@
   "clanWarFrequencyMoreThanOncePerWeek": "Mehr als 1/Woche",
   "clanWarFrequencyRarely": "Selten",
   "timeHourIndicator": "Std.",
-  "timeMinIndicator": "Min.",
-  "timeDaysLeft": "Noch {days} Tage",
-  "@timeDaysLeft": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
   "timeDaysAgo": "vor {days} Tagen",
   "@timeDaysAgo": {
     "placeholders": {
@@ -414,14 +373,6 @@
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "timeSecondAgo": "vor {seconds} Sekunden",
-  "@timeSecondAgo": {
-    "placeholders": {
-      "seconds": {
         "type": "int"
       }
     }
@@ -478,14 +429,6 @@
   },
   "timeEndsAt": "Endet um {time}",
   "@timeEndsAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "timeUpdatedAt": "Aktualisiert um {time}",
-  "@timeUpdatedAt": {
     "placeholders": {
       "time": {
         "type": "String"
@@ -608,8 +551,6 @@
       }
     }
   },
-  "statsYear": "Jahr",
-  "statsMonth": "Monat",
   "statsSeasonDate": "{date} Saison",
   "@statsSeasonDate": {
     "description": "Beispiel: August 2024 Saison",
@@ -618,10 +559,6 @@
         "type": "String"
       }
     }
-  },
-  "statsSelectSeason": "Wähle eine Saison",
-  "@statsSelectSeason": {
-    "description": "Spieler auffordern, eine Saison zu wählen"
   },
   "statsAllTownHalls": "Alle Rathäuser",
   "statsMembers": "Mitglieder Statistik",
@@ -723,8 +660,6 @@
   "warLeague": "Krieg/Clankriegsliga",
   "warHistory": "Kriegsgeschichte",
   "warLog": "Kriegslog",
-  "warLogPublic": "Öffentlicher Kriegslog",
-  "warLogPrivate": "Privater Kriegslog",
   "warLogClosed": "{clan}s Kriegslog ist geschlossen.",
   "@warLogClosed": {
     "placeholders": {
@@ -735,7 +670,6 @@
   },
   "warStats": "Kriegsstatistiken",
   "warOngoing": "Laufender Krieg",
-  "warNotInWar": "Nicht im Krieg",
   "warIsNotInWar": "{clan} befindet sich nicht im Krieg.",
   "@warIsNotInWar": {
     "placeholders": {
@@ -839,7 +773,6 @@
       }
     }
   },
-  "warDefenseTitle": "Verteidigung",
   "warDefensesTitle": "Verteidigungen",
   "warDefensesNone": "Noch keine Verteidigung",
   "@warDefensesNone": {
@@ -855,7 +788,6 @@
     },
     "description": "Beste Kriegsverteidigung (von 3 Verteidigungen)"
   },
-  "warDefenseStars": "Verteidigungssterne",
   "warDefensesNumber": "Du hast {number_time} mal in den letzten {number_war} Kriegen verteidigt.",
   "@warDefensesNumber": {
     "placeholders": {
@@ -884,7 +816,6 @@
     }
   },
   "warStarsTitle": "Sterne",
-  "warStarsTotal": "Insgesamt",
   "warStarsAverage": "Durchschnittliche Sterne",
   "warStarsNumber": "Anzahl der Sterne",
   "warStarsOne": "1 Stern",
@@ -982,14 +913,6 @@
   "equalThLevel": "Gleiches Rathaus",
   "selectMembersThLevel": "Mitglieder Rathauslevel",
   "selectOpponentsThLevel": "Gegnerische Rathauslevel",
-  "warFiltersByNumberOfWars": "Nach Anzahl der Kriege",
-  "@warFiltersByNumberOfWars": {
-    "description": "Filtern nach Anzahl der Kriege"
-  },
-  "warFiltersByDateRange": "Nach Zeitraum",
-  "@warFiltersByDateRange": {
-    "description": "Filtern nach Zeitraum"
-  },
   "warFiltersLastXwars": "Letzte {number} Kriege",
   "@warFiltersLastXwars": {
     "description": "Beispiel: Zeigt die letzten 25 Kriege",
@@ -1088,14 +1011,6 @@
         "type": "int"
       },
       "totalAttacks": {
-        "type": "int"
-      }
-    }
-  },
-  "cwlCurrentRoundDescription": "Es ist aktuell Runde {round}.",
-  "@cwlCurrentRoundDescription": {
-    "placeholders": {
-      "round": {
         "type": "int"
       }
     }
@@ -1208,10 +1123,6 @@
   "raidsOngoing": "Aktuelle Überfälle",
   "raidsDistrictsDestroyed": "Zerstörte Bezirke",
   "raidsCompleted": "Abgeschlossene Überfälle",
-  "searchTitle": "Suchen",
-  "@searchTitle": {
-    "description": "Nach einem Spieler oder Clan suchen"
-  },
   "searchNoResult": "Kein Ergebnis.",
   "maintenanceTitle": "Wartung",
   "maintenanceDescription": "Clash of Clans ist derzeit in Wartung, daher können wir nicht auf die API zugreifen. Bitte schaue später wieder vorbei.",
@@ -1228,11 +1139,8 @@
   "downloadError": "Fehler beim Herunterladen der Datei",
   "dashboardTitle": "Übersicht",
   "toolsTitle": "Werkzeuge",
-  "communityTitle": "Gemeinschaft",
   "navigationTeam": "Teams",
   "statistics": "Statistiken",
-  "navigationLeague": "Clankriegsliga",
-  "navigationWars": "Kriege",
   "versionDevice": "Version & Gerät",
   "@versionDevice": {
     "description": "Version der App und Geräteinformationen"
@@ -1240,7 +1148,6 @@
   "betaFeature": "Beta-Funktion",
   "betaLabel": "BETA",
   "betaDescription": "Diese Option ist aktuell in der Beta, es kann also zu Fehlern kommen oder unvollständig sein. Wir arbeiten aktiv an Verbesserungen und sind dankbar für dein Feedback. Bitte teile uns deine Ideen sowie Fragen und Probleme auf unserem Discord-Server mit, damit wir es besser machen können.",
-  "settingsTitle": "Einstellungen",
   "settingsLanguage": "Sprache",
   "settingsSelectLanguage": "Wähle eine Sprache aus",
   "settingsToggleTheme": "Design wechseln",

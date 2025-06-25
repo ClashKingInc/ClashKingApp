@@ -171,7 +171,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
                   // ClashKing Description
                   Text(
-                    AppLocalizations.of(context)!.authClashKingDescription,
+                    AppLocalizations.of(context)!.appDescription,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Colors.grey[600],
                           fontWeight: FontWeight.w400,
@@ -232,7 +232,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
                         // Tab Content
                         Container(
-                          height: 260,
+                          height: 320,
                           padding: EdgeInsets.fromLTRB(20, 8, 20, 16),
                           child: TabBarView(
                             controller: _tabController,
@@ -248,6 +248,8 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       ],
                     ),
                   ),
+
+                  SizedBox(height: 8),
 
                   SizedBox(height: 16),
 
@@ -292,7 +294,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           ),
                           TextButton.icon(
                             onPressed: () async => launchUrl(
-                              Uri.parse('mailto:support@clashk.ing?subject=ClashKing App Support'),
+                              Uri.parse('mailto:devs@clashk.ing?subject=ClashKing App Support'),
                             ),
                             icon: Icon(
                               Icons.email_outlined,
@@ -328,6 +330,8 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       children: [
         Expanded(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 12),
               Icon(
@@ -472,7 +476,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     },
                   ),
 
-                  // Compact Links Row
+                  // Authentication Links
                   SizedBox(height: 6),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -518,6 +522,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       ),
                     ],
                   ),
+
                 ],
               ),
             ),
@@ -545,7 +550,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       ),
                     )
                   : Text(
-                      AppLocalizations.of(context)!.authSignIn,
+                      AppLocalizations.of(context)!.authLogin,
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),

@@ -9,6 +9,10 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get appDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+
+  @override
   String get generalLoading => 'Loading...';
 
   @override
@@ -99,14 +103,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get generalNoDataAvailable => 'No data available.';
 
   @override
-  String get authClashKingDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get authSignIn => 'Sign In';
-
-  @override
   String get authSignUp => 'Sign up';
+
+  @override
+  String get authLogin => 'Login';
 
   @override
   String get authLogout => 'Log out';
@@ -1411,7 +1411,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.';
+      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.';
 
   @override
   String get faqSendEmail => 'Send an email';
@@ -1450,6 +1450,10 @@ class AppLocalizationsEn extends AppLocalizations {
 /// The translations for English, as used in the United Kingdom (`en_GB`).
 class AppLocalizationsEnGb extends AppLocalizationsEn {
   AppLocalizationsEnGb() : super('en_GB');
+
+  @override
+  String get appDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
 
   @override
   String get generalLoading => 'Loading...';
@@ -1542,14 +1546,10 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get generalNoDataAvailable => 'No data available.';
 
   @override
-  String get authClashKingDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get authSignIn => 'Sign In';
-
-  @override
   String get authSignUp => 'Sign up';
+
+  @override
+  String get authLogin => 'Login';
 
   @override
   String get authLogout => 'Log out';
@@ -2895,6 +2895,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   AppLocalizationsEnUs() : super('en_US');
 
   @override
+  String get appDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+
+  @override
   String get generalLoading => 'Loading...';
 
   @override
@@ -2985,14 +2989,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get generalNoDataAvailable => 'No data available.';
 
   @override
-  String get authClashKingDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get authSignIn => 'Sign In';
-
-  @override
   String get authSignUp => 'Sign up';
+
+  @override
+  String get authLogin => 'Login';
 
   @override
   String get authLogout => 'Log out';

@@ -157,6 +157,12 @@ abstract class AppLocalizations {
     Locale('zh')
   ];
 
+  /// No description provided for @appDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.'**
+  String get appDescription;
+
   /// No description provided for @generalLoading.
   ///
   /// In en, this message translates to:
@@ -337,23 +343,17 @@ abstract class AppLocalizations {
   /// **'No data available.'**
   String get generalNoDataAvailable;
 
-  /// No description provided for @authClashKingDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.'**
-  String get authClashKingDescription;
-
-  /// No description provided for @authSignIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign In'**
-  String get authSignIn;
-
   /// No description provided for @authSignUp.
   ///
   /// In en, this message translates to:
   /// **'Sign up'**
   String get authSignUp;
+
+  /// No description provided for @authLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get authLogin;
 
   /// No description provided for @authLogout.
   ///
@@ -2550,7 +2550,7 @@ abstract class AppLocalizations {
   /// No description provided for @faqNeedHelpAnswer.
   ///
   /// In en, this message translates to:
-  /// **'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.'**
+  /// **'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.'**
   String get faqNeedHelpAnswer;
 
   /// No description provided for @faqSendEmail.
