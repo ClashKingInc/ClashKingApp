@@ -57,7 +57,8 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         await cocService.updateAccountOrder(playerTags);
       } catch (error) {
         setState(() {
-          _errorMessage = AppLocalizations.of(context)!.accountsErrorFailedToUpdateOrder;
+          _errorMessage =
+              AppLocalizations.of(context)!.accountsErrorFailedToUpdateOrder;
         });
       }
       _isOrderChanged = false;
@@ -137,9 +138,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                       Text(AppLocalizations.of(context)!.accountsManageTitle,
                           style: Theme.of(context).textTheme.titleSmall,
                           textAlign: TextAlign.center),
-                      Text(
-                          AppLocalizations.of(context)!
-                              .authAccountManagement,
+                      Text(AppLocalizations.of(context)!.authAccountManagement,
                           style: Theme.of(context).textTheme.bodyMedium,
                           textAlign: TextAlign.center),
                     ],
@@ -157,8 +156,8 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                               TextField(
                                 controller: _playerTagController,
                                 decoration: InputDecoration(
-                                  labelText:
-                                      AppLocalizations.of(context)!.accountsPlayerTag,
+                                  labelText: AppLocalizations.of(context)!
+                                      .accountsPlayerTag,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(16.0),
                                   ),
@@ -193,15 +192,16 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                               if (_showApiTokenInput) ...[
                                 SizedBox(height: 16),
                                 Text(
-                                    AppLocalizations.of(context)!.accountsEnterApiToken,
+                                    AppLocalizations.of(context)!
+                                        .accountsEnterApiToken,
                                     style:
                                         Theme.of(context).textTheme.bodyMedium),
                                 SizedBox(height: 8),
                                 TextField(
                                   controller: _apiTokenController,
                                   decoration: InputDecoration(
-                                    labelText:
-                                        AppLocalizations.of(context)!.accountsApiToken,
+                                    labelText: AppLocalizations.of(context)!
+                                        .accountsApiToken,
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
@@ -370,7 +370,8 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       final errorCode = response["code"];
 
       if (errorCode == 409) {
-        _setError(AppLocalizations.of(context)!.accountsErrorAlreadyLinked,
+        _setError(
+            AppLocalizations.of(context)!.accountsErrorAlreadyLinked(playerTag),
             showApiToken: true);
       } else if (errorCode == 404) {
         _setError(AppLocalizations.of(context)!.accountsErrorTagNotExists);

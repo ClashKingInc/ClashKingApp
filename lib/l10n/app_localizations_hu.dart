@@ -9,17 +9,7 @@ class AppLocalizationsHu extends AppLocalizations {
   AppLocalizationsHu([String locale = 'hu']) : super(locale);
 
   @override
-  String get appTitle => 'ClashKing';
-
-  @override
-  String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get generalLoading => 'Loading...';
-
-  @override
-  String get generalError => 'Error';
+  String get generalLoading => 'Betöltés...';
 
   @override
   String get generalRetry => 'Retry';
@@ -28,58 +18,46 @@ class AppLocalizationsHu extends AppLocalizations {
   String get generalTryAgain => 'Try again';
 
   @override
-  String get generalClose => 'Close';
-
-  @override
-  String get generalCancel => 'Cancel';
+  String get generalCancel => 'Mégse';
 
   @override
   String get generalOk => 'OK';
 
   @override
-  String get generalApply => 'Apply';
+  String get generalApply => 'Jelentkezés';
 
   @override
   String get generalConfirm => 'Confirm';
 
   @override
-  String get generalAdd => 'Add';
+  String get generalManage => 'Kezelés';
 
   @override
-  String get generalDelete => 'Delete';
+  String get generalSettings => 'Beállítások';
 
   @override
-  String get generalManage => 'Manage';
+  String get generalCopiedToClipboard => 'Vágólapra másolva';
 
   @override
-  String get generalManagement => 'Management';
+  String get generalComingSoon => 'Hamarosan!';
 
   @override
-  String get generalSettings => 'Settings';
+  String get generalAll => 'Összes';
 
   @override
-  String get generalCopiedToClipboard => 'Copied to clipboard';
+  String get generalTotal => 'Összes';
 
   @override
-  String get generalComingSoon => 'Coming soon!';
+  String get generalBest => 'Legjobb';
 
   @override
-  String get generalAll => 'All';
+  String get generalWorst => 'Legrosszabb';
 
   @override
-  String get generalTotal => 'Total';
+  String get generalAverage => 'Átlag';
 
   @override
-  String get generalBest => 'Best';
-
-  @override
-  String get generalWorst => 'Worst';
-
-  @override
-  String get generalAverage => 'Average';
-
-  @override
-  String get generalRemaining => 'Remaining';
+  String get generalRemaining => 'Hátralévő idő';
 
   @override
   String get generalActive => 'Active';
@@ -88,19 +66,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get generalInactive => 'Inactive';
 
   @override
-  String get generalStarted => 'Started';
+  String get generalStarted => 'Elkezdődött';
 
   @override
-  String get generalEnded => 'Ended';
+  String get generalEnded => 'Befejezve';
 
   @override
-  String get generalLevel => 'Level';
-
-  @override
-  String get generalRole => 'Role';
-
-  @override
-  String get generalDate => 'Date';
+  String get generalRole => 'Szerepkör';
 
   @override
   String get generalStats => 'Stats';
@@ -112,19 +84,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get generalDetails => 'Details';
 
   @override
-  String get generalHistory => 'History';
+  String get generalHistory => 'Előzmények';
 
   @override
-  String get generalCharts => 'Charts';
-
-  @override
-  String get generalFilters => 'Filters';
-
-  @override
-  String get generalWhatever => 'Whatever';
-
-  @override
-  String get generalAny => 'Any';
+  String get generalFilters => 'Szűrők';
 
   @override
   String get generalNotSet => 'Not set';
@@ -133,20 +96,11 @@ class AppLocalizationsHu extends AppLocalizations {
   String get generalWarning => 'Warning';
 
   @override
-  String get generalNoDataAvailable => 'No data available.';
-
-  @override
-  String get generalClosed => 'Closed';
-
-  @override
-  String get authWelcomeBack => 'Welcome Back';
+  String get generalNoDataAvailable => 'Nincs rendelkezésre álló adat.';
 
   @override
   String get authClashKingDescription =>
       'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get authChooseSignInMethod => 'Choose your preferred sign-in method';
 
   @override
   String get authSignIn => 'Sign In';
@@ -155,10 +109,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get authSignUp => 'Sign up';
 
   @override
-  String get authLogin => 'Login';
-
-  @override
-  String get authLogout => 'Log out';
+  String get authLogout => 'Kijelentkezés';
 
   @override
   String get authCreateAccount => 'Create Account';
@@ -174,9 +125,6 @@ class AppLocalizationsHu extends AppLocalizations {
       'Create your account to get started';
 
   @override
-  String get authDontHaveAccount => 'Don\'t have an account? Create one';
-
-  @override
   String get authAlreadyHaveAccount => 'Already have an account? Sign in';
 
   @override
@@ -186,7 +134,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get authDiscordTitle => 'Discord';
 
   @override
-  String get authDiscordSignIn => 'Sign In with Discord';
+  String get authDiscordSignIn => 'Bejelentkezés Discord-dal';
 
   @override
   String get authDiscordContinue => 'Continue with Discord';
@@ -196,36 +144,17 @@ class AppLocalizationsHu extends AppLocalizations {
       'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!';
 
   @override
-  String get authDiscordError => 'Discord login failed. Please try again.';
-
-  @override
   String get authEmailTitle => 'Email';
-
-  @override
-  String get authEmailSignIn => 'Sign in with Email';
 
   @override
   String get authEmailDescription =>
       'Use email if you can\'t access Discord or prefer app-only features';
 
   @override
-  String get authEmailLabel => 'Email';
-
-  @override
-  String get authEmailPlaceholder => 'Enter your email';
-
-  @override
   String get authEmailRequired => 'Please enter your email';
 
   @override
   String get authEmailInvalid => 'Please enter a valid email';
-
-  @override
-  String get authEmailAlreadyInUse => 'Email may already be in use';
-
-  @override
-  String get authEmailError =>
-      'Email login failed. Please check your credentials.';
 
   @override
   String get authPasswordLabel => 'Password';
@@ -253,24 +182,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get authPasswordForgot => 'Forgot password?';
 
   @override
-  String get authPasswordInvalid => 'Invalid email or password';
+  String get authUsernameLabel => 'Felhasználónév';
 
   @override
-  String get authUsernameLabel => 'Username';
-
-  @override
-  String get authUsernameRequired => 'Please enter a username';
+  String get authUsernameRequired => 'Kérjük, adja meg a felhasználónevet';
 
   @override
   String get authUsernameTooShort => 'Username must be at least 3 characters';
-
-  @override
-  String get authErrorGeneral =>
-      'An error occurred while logging in. Please try again later.';
-
-  @override
-  String get authErrorRegistration =>
-      'Registration failed. Email may already be in use.';
 
   @override
   String get authErrorConnection =>
@@ -311,10 +229,6 @@ class AppLocalizationsHu extends AppLocalizations {
       'Email account successfully linked!';
 
   @override
-  String get authAccountEmailLinkFailed =>
-      'Failed to link email account. Email may already be in use.';
-
-  @override
   String get helpTitle => 'Need help?';
 
   @override
@@ -324,43 +238,29 @@ class AppLocalizationsHu extends AppLocalizations {
   String get helpEmailUs => 'Email Us';
 
   @override
-  String get helpJoinDiscordServer => 'Need help? Join us on Discord.';
-
-  @override
-  String get helpCannotOpenMailClient =>
-      'For some reasons we can\'t open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.';
-
-  @override
-  String get accountsWelcome => 'Welcome!';
+  String get accountsWelcome => 'Üdv!';
 
   @override
   String get accountsWelcomeMessage =>
-      'Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.';
+      'Kérjük adj egy vagy több Clash Of Clans fiókot a profilodhoz. Később tudsz további fiókokat hozzáadni.';
 
   @override
   String get accountsManageTitle => 'Manage your accounts';
 
   @override
-  String get accountsManageDescription =>
-      'You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.';
-
-  @override
-  String get accountsNoneFound => 'No account linked to your profile found';
+  String get accountsNoneFound => 'A profilhoz nem található csatolt fiók';
 
   @override
   String get accountsPlayerTag => 'Player Tag (#ABC123)';
 
   @override
-  String get accountsPlayerTags => 'Player Tags';
+  String get accountsEnterPlayerTag => 'Adjon meg egy játékos tag-et';
 
   @override
-  String get accountsEnterPlayerTag => 'Enter a player tag';
+  String get accountsAdd => 'Fiók hozzáadása';
 
   @override
-  String get accountsAdd => 'Add account';
-
-  @override
-  String get accountsDelete => 'Delete account';
+  String get accountsDelete => 'Fiók törlése';
 
   @override
   String get accountsApiToken => 'Account API Token';
@@ -373,12 +273,12 @@ class AppLocalizationsHu extends AppLocalizations {
   String get accountsFillAllFields => 'Please fill all fields.';
 
   @override
-  String get accountsErrorTagNotExists =>
-      'The player tag entered does not exist.';
+  String get accountsErrorTagNotExists => 'A megadott játékos tag nem létezik.';
 
   @override
-  String get accountsErrorAlreadyLinked =>
-      'The player tag is already linked to someone.';
+  String accountsErrorAlreadyLinked(Object tag) {
+    return 'A játékos tag-je már csatolva van valakihez.';
+  }
 
   @override
   String get accountsErrorAlreadyLinkedToYou =>
@@ -393,7 +293,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get accountsErrorFailedToDelete =>
-      'Failed to delete link. Please try again later.';
+      'A kapcsolat törlése nem sikerült. Kérjük, próbálja meg később újra.';
 
   @override
   String get accountsErrorFailedToUpdateOrder =>
@@ -411,14 +311,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get errorLoadingVersion => 'Hiba verzió betöltése közben';
 
   @override
-  String get errorConnectionGeneral =>
-      'An error occurred. Please check your internet connection and try again.';
-
-  @override
-  String get errorConnectionRelaunch =>
-      'An error occurred. Please check your internet connection and relaunch the app.';
-
-  @override
   String get errorCannotOpenLink => 'We can\'t open this link.';
 
   @override
@@ -426,10 +318,7 @@ class AppLocalizationsHu extends AppLocalizations {
       'You are about to leave the app to open Clash of Clans.';
 
   @override
-  String get playerTitle => 'Player';
-
-  @override
-  String get playerSearchTitle => 'Search player';
+  String get playerSearchTitle => 'Játékos keresése';
 
   @override
   String get playerSearchPlaceholder => 'Player\'s name or tag';
@@ -480,22 +369,19 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get gameBaseHome => 'Home Base';
+  String get gameBaseHome => 'Fő bázis';
 
   @override
-  String get gameBaseBuilder => 'Builder Base';
+  String get gameBaseBuilder => 'Építő Bázis';
 
   @override
-  String get gameClanCapital => 'Clan Capital';
+  String get gameClanCapital => 'Klán Főváros';
 
   @override
   String get gameTownHall => 'TH';
 
   @override
-  String get gameBuilderHall => 'BH';
-
-  @override
-  String get gameTownHallLevel => 'TH Level';
+  String get gameTownHallLevel => 'TH szint';
 
   @override
   String gameTownHallLevelNumber(int level) {
@@ -508,27 +394,22 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String gameBHLevel(int level) {
-    return 'BH$level';
-  }
+  String get gameExpLevel => 'Tapasztalati szint';
 
   @override
-  String get gameExpLevel => 'Experience Level';
+  String get gameTrophies => 'Kupák';
 
   @override
-  String get gameTrophies => 'Trophies';
+  String get gameBuilderBaseTrophies => 'BB kupák';
 
   @override
-  String get gameBuilderBaseTrophies => 'BB Trophies';
+  String get gameDonations => 'Adományok';
 
   @override
-  String get gameDonations => 'Donations';
+  String get gameDonationsReceived => 'Adományok Fogadva';
 
   @override
-  String get gameDonationsReceived => 'Donations Received';
-
-  @override
-  String get gameDonationsRatio => 'Donation Ratio';
+  String get gameDonationsRatio => 'Adományok aránya';
 
   @override
   String gameLevel(int level, int maxLevel) {
@@ -536,34 +417,31 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get gameHeroes => 'Heroes';
+  String get gameHeroes => 'Hősök';
 
   @override
-  String get gameEquipment => 'Equipments';
+  String get gameEquipment => 'Felszerelések';
 
   @override
   String get gameHeroesEquipments => 'Hero equipments';
 
   @override
-  String get gameTroops => 'Troops';
-
-  @override
-  String get gameSuperTroops => 'Super Troops';
+  String get gameTroops => 'Csapatok';
 
   @override
   String get gameActiveSuperTroops => 'Active Super Troops';
 
   @override
-  String get gamePets => 'Pets';
+  String get gamePets => 'Háziállatok';
 
   @override
-  String get gameSiegeMachines => 'Siege Machines';
+  String get gameSiegeMachines => 'Ostromgépek';
 
   @override
-  String get gameSpells => 'Spells';
+  String get gameSpells => 'Varázs szerek';
 
   @override
-  String get gameAchievements => 'Achievements';
+  String get gameAchievements => 'Mérföldkövek';
 
   @override
   String get gameClanGames => 'Clan Games';
@@ -572,134 +450,119 @@ class AppLocalizationsHu extends AppLocalizations {
   String get gameSeasonPass => 'Season Pass';
 
   @override
-  String get gameCreatorCode => 'Creator Code: ClashKing';
+  String get gameCreatorCode => 'Alkotói kód: ClashKing';
 
   @override
-  String get clanTitle => 'Clan';
+  String get clanTitle => 'Klán';
 
   @override
-  String get clansTitle => 'Clans';
-
-  @override
-  String get clanSearchTitle => 'Search clan';
+  String get clanSearchTitle => 'Klán keresése';
 
   @override
   String get clanSearchPlaceholder => 'Clan\'s name';
 
   @override
-  String get clanNone => 'No clan';
+  String get clanNone => 'Nincs klán';
 
   @override
-  String get clanJoinToUnlock => 'Join a clan to unlock new features.';
+  String get clanJoinToUnlock =>
+      'Csatlakozz egy klánhoz az új funkciók feloldásához.';
 
   @override
-  String get clanMembers => 'Members';
+  String get clanMembers => 'Tagok';
 
   @override
-  String get clanWarFrequency => 'War frequency';
+  String get clanWarFrequency => 'Háború gyakorisága';
 
   @override
-  String get clanMinimumMembers => 'Minimum members';
+  String get clanMinimumMembers => 'Minimum tagok';
 
   @override
-  String get clanMaximumMembers => 'Maximum members';
+  String get clanMaximumMembers => 'Maximum tagok';
 
   @override
-  String get clanLocation => 'Location';
+  String get clanLocation => 'Tartózkodási hely';
 
   @override
-  String get clanMinimumPoints => 'Minimum clan points';
+  String get clanMinimumPoints => 'Minimális klán pontok';
 
   @override
-  String get clanMinimumLevel => 'Minimum clan level';
+  String get clanMinimumLevel => 'Minimális klán szint';
 
   @override
-  String get clanInviteOnly => 'Invite Only';
+  String get clanInviteOnly => 'Csak meghívással';
 
   @override
-  String get clanOpened => 'Opened';
+  String get clanOpened => 'Megnyitva';
 
   @override
-  String get clanClosed => 'Closed';
+  String get clanClosed => 'Bezárva';
 
   @override
-  String get clanRoleLeader => 'Leader';
+  String get clanRoleLeader => 'Vezető';
 
   @override
-  String get clanRoleCoLeader => 'Co-Leader';
+  String get clanRoleCoLeader => 'Társvezető';
 
   @override
-  String get clanRoleElder => 'Elder';
+  String get clanRoleElder => 'Segítő';
 
   @override
-  String get clanRoleMember => 'Member';
+  String get clanRoleMember => 'Tag';
 
   @override
-  String get clanWarFrequencyAlways => 'Always';
+  String get clanWarFrequencyAlways => 'Mindig';
 
   @override
-  String get clanWarFrequencyNever => 'Never';
+  String get clanWarFrequencyNever => 'Soha';
 
   @override
-  String get clanWarFrequencyUnknown => 'Unknown';
+  String get clanWarFrequencyUnknown => 'Ismeretlen';
 
   @override
-  String get clanWarFrequencyOncePerWeek => '1/week';
+  String get clanWarFrequencyOncePerWeek => '1/hét';
 
   @override
   String get clanWarFrequencyMoreThanOncePerWeek => 'More than 1/week';
 
   @override
-  String get clanWarFrequencyRarely => 'Rarely';
+  String get clanWarFrequencyRarely => 'Ritkán';
 
   @override
-  String get timeHourIndicator => 'h';
-
-  @override
-  String get timeMinIndicator => 'm';
-
-  @override
-  String timeDaysLeft(int days) {
-    return '$days days left';
-  }
+  String get timeHourIndicator => 'ó';
 
   @override
   String timeDaysAgo(int days) {
-    return '$days days ago';
+    return '$days napja';
   }
 
   @override
   String timeDayAgo(int day) {
-    return '$day day ago';
+    return '$day napja';
   }
 
   @override
   String timeHourAgo(int hour) {
-    return '$hour hour ago';
+    return '$hour órája';
   }
 
   @override
   String timeHoursAgo(int hours) {
-    return '$hours hours ago';
+    return '$hours órája';
   }
 
   @override
   String timeMinuteAgo(int minute) {
-    return '$minute minute ago';
+    return '$minute perce';
   }
 
   @override
   String timeMinutesAgo(int minutes) {
-    return '$minutes minutes ago';
+    return '$minutes perce';
   }
 
   @override
-  String timeSecondAgo(int seconds) {
-    return '${seconds}s ago';
-  }
-
-  @override
-  String get timeJustNow => 'Just Now';
+  String get timeJustNow => 'Épp most';
 
   @override
   String get timeEndedJustNow => 'Ended just now';
@@ -737,11 +600,6 @@ class AppLocalizationsHu extends AppLocalizations {
   @override
   String timeEndsAt(String time) {
     return 'Ends at $time';
-  }
-
-  @override
-  String timeUpdatedAt(String time) {
-    return 'Updated at $time';
   }
 
   @override
@@ -790,7 +648,7 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get legendsNoRank => 'No ranking';
+  String get legendsNoRank => 'Nincs rangsorolás';
 
   @override
   String get legendsBestTrophies => 'Best Trophies';
@@ -808,7 +666,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get legendsTrophiesBySeason => 'Trophies by season';
 
   @override
-  String get legendsEosTrophies => 'End Of Season Trophies';
+  String get legendsEosTrophies => 'Szezonvégi kupák';
 
   @override
   String get legendsEosDetails => 'End Of Season Details';
@@ -861,7 +719,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get statsSeasonStats => 'Season Stats';
 
   @override
-  String get statsByDay => 'By Day';
+  String get statsByDay => 'Naponta';
 
   @override
   String get statsBySeason => 'By Season';
@@ -877,18 +735,9 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get statsYear => 'Year';
-
-  @override
-  String get statsMonth => 'Month';
-
-  @override
   String statsSeasonDate(String date) {
     return '$date season';
   }
-
-  @override
-  String get statsSelectSeason => 'Select a season';
 
   @override
   String get statsAllTownHalls => 'All Town Halls';
@@ -998,7 +847,7 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get warTitle => 'War';
+  String get warTitle => 'Háború';
 
   @override
   String get warFrequency => 'Háború gyakorisága';
@@ -1016,12 +865,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get warLog => 'Háború napló';
 
   @override
-  String get warLogPublic => 'Public War Log';
-
-  @override
-  String get warLogPrivate => 'Private War Log';
-
-  @override
   String warLogClosed(String clan) {
     return 'Háborúnapló lezárva.';
   }
@@ -1033,70 +876,68 @@ class AppLocalizationsHu extends AppLocalizations {
   String get warOngoing => 'Ongoing war';
 
   @override
-  String get warNotInWar => 'Not in war';
-
-  @override
   String warIsNotInWar(String clan) {
-    return '$clan is not in war.';
+    return 'A(z) $clan nincs háborúban.';
   }
 
   @override
   String get warAskForWar =>
-      'Contact the leader or a co-leader to start a war.';
+      'Lépj kapcsolatba egy vezetővel vagy egy társvezetővel, hogy háborút indíts.';
 
   @override
   String get warAskForWarLogOpening =>
-      'Contact a leader or a co-leader to open the war log.';
+      'Lépj kapcsolatba egy vezetővel vagy egy társvezetővel, hogy megnyisd a háború naplót.';
 
   @override
   String get warEnded => 'Háború véget ért';
 
   @override
-  String get warPreparation => 'Preparation';
+  String get warPreparation => 'Felkészülés';
 
   @override
-  String get warPerfectWar => 'Perfect war';
+  String get warPerfectWar => 'Tökéletes háború';
 
   @override
-  String get warVictory => 'Victory';
+  String get warVictory => 'Győzelem';
 
   @override
-  String get warDefeat => 'Defeat';
+  String get warDefeat => 'Vereség';
 
   @override
-  String get warDraw => 'Draw';
+  String get warDraw => 'Döntetlen';
 
   @override
-  String get warTeamSize => 'Team size';
+  String get warTeamSize => 'Csapat mérete';
 
   @override
-  String get warMyTeam => 'My team';
+  String get warMyTeam => 'Csapatom';
 
   @override
-  String get warEnemiesTeam => 'Enemies';
+  String get warEnemiesTeam => 'Ellenségek';
 
   @override
-  String get warClanDraw => 'The two clans are tied';
+  String get warClanDraw => 'A klánok fej-fej mellett vannak';
 
   @override
-  String get warStateOfTheWar => 'State of the war';
+  String get warStateOfTheWar => 'Háború állapota';
 
   @override
   String warStarsNeededToTakeTheLead(
       String clan, int star, int stars2, String percent) {
-    return '$clan still need $star more star(s) or $stars2 star(s) and $percent% to take the lead.';
+    return '$clan még $star csillagot vagy $stars2 csillagot és $percent%-ot kell szereznie az élre kerüléshez.';
   }
 
   @override
   String warStarsAndPercentNeededToTakeTheLead(String clan, String percent) {
-    return '$clan still need $percent% or 1 more star to take the lead';
+    return '$clan még $percent%-ot vagy még 1 csillagot kell szereznie az élre kerüléshez';
   }
 
   @override
-  String get warNoDataAvailableForThisWar => 'No data available for this war';
+  String get warNoDataAvailableForThisWar =>
+      'Nem áll rendelkezésre adat ehhez a háborúhoz';
 
   @override
-  String get warCalculatorFast => 'Fast calculator';
+  String get warCalculatorFast => 'Gyors számológép';
 
   @override
   String warCalculatorAnswer(String percentNeeded, String result) {
@@ -1104,13 +945,13 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get warCalculatorNeededOverall => '% Needed overall';
+  String get warCalculatorNeededOverall => '% Szükséges összesen';
 
   @override
-  String get warCalculatorCalculate => 'Calculate';
+  String get warCalculatorCalculate => 'Számítás';
 
   @override
-  String get warAttacksTitle => 'Attacks';
+  String get warAttacksTitle => 'Támadások';
 
   @override
   String get warAttacksNone => 'No attack yet';
@@ -1140,10 +981,7 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get warDefenseTitle => 'Defense';
-
-  @override
-  String get warDefensesTitle => 'Defenses';
+  String get warDefensesTitle => 'Védekezések';
 
   @override
   String get warDefensesNone => 'No defense yet';
@@ -1155,9 +993,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String warDefensesBestOutOf(int number) {
     return 'Best defense (out of $number)';
   }
-
-  @override
-  String get warDefenseStars => 'Defense Stars';
 
   @override
   String warDefensesNumber(int number_time, int number_war) {
@@ -1175,16 +1010,13 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get warStarsTitle => 'Stars';
-
-  @override
-  String get warStarsTotal => 'Total';
+  String get warStarsTitle => 'Csillagok';
 
   @override
   String get warStarsAverage => 'Average stars';
 
   @override
-  String get warStarsNumber => 'Number of stars';
+  String get warStarsNumber => 'Csillagok száma';
 
   @override
   String get warStarsOne => '1 star';
@@ -1208,7 +1040,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get warDestructionAverage => 'Average destruction';
 
   @override
-  String get warDestructionRate => 'Destruction rate';
+  String get warDestructionRate => 'Elpusztítási arány';
 
   @override
   String warHistoryWinsDescription(int wins, String percent) {
@@ -1268,12 +1100,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get warOpponentSelectOpponentsThLevel => 'Opponents TH Level';
 
   @override
-  String get warFiltersByNumberOfWars => 'By number of wars';
-
-  @override
-  String get warFiltersByDateRange => 'By date range';
-
-  @override
   String warFiltersLastXwars(int number) {
     return 'Last $number wars';
   }
@@ -1289,13 +1115,13 @@ class AppLocalizationsHu extends AppLocalizations {
       'Hide/Show stats from former TH levels';
 
   @override
-  String get warEventsTitle => 'Events';
+  String get warEventsTitle => 'Események';
 
   @override
-  String get warEventsNewest => 'Newest';
+  String get warEventsNewest => 'Legújabb';
 
   @override
-  String get warEventsOldest => 'Oldest';
+  String get warEventsOldest => 'Legidősebb';
 
   @override
   String get warStatusReady => 'Opted In';
@@ -1322,7 +1148,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get cwlOngoing => 'Ongoing CWL';
 
   @override
-  String get cwlRounds => 'Rounds';
+  String get cwlRounds => 'Körök';
 
   @override
   String cwlRoundNumber(int number) {
@@ -1352,11 +1178,6 @@ class AppLocalizationsHu extends AppLocalizations {
   @override
   String cwlTotalAttacks(int attacks, int totalAttacks) {
     return 'Your clan has a total of $attacks attacks out of $totalAttacks possible attacks.';
-  }
-
-  @override
-  String cwlCurrentRoundDescription(int round) {
-    return 'It\'s currently round $round.';
   }
 
   @override
@@ -1457,10 +1278,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get raidsCompleted => 'Sikeres portyázások';
 
   @override
-  String get searchTitle => 'Search';
-
-  @override
-  String get searchNoResult => 'No result.';
+  String get searchNoResult => 'Nincs találat.';
 
   @override
   String get maintenanceTitle => 'Maintenance';
@@ -1485,25 +1303,16 @@ class AppLocalizationsHu extends AppLocalizations {
   String get downloadError => 'Failed to download file';
 
   @override
-  String get dashboardTitle => 'Dashboard';
+  String get dashboardTitle => 'Vezérlőpult';
 
   @override
   String get toolsTitle => 'Tools';
 
   @override
-  String get communityTitle => 'Community';
+  String get navigationTeam => 'Csapatok';
 
   @override
-  String get navigationTeam => 'Teams';
-
-  @override
-  String get navigationStatistics => 'Statistics';
-
-  @override
-  String get navigationLeague => 'League';
-
-  @override
-  String get navigationWars => 'Wars';
+  String get navigationStatistics => 'Statisztikák';
 
   @override
   String get versionDevice => 'Verzió & Eszköz';
@@ -1512,26 +1321,23 @@ class AppLocalizationsHu extends AppLocalizations {
   String get betaFeature => 'Béta Funkció';
 
   @override
-  String get betaLabel => 'BETA';
+  String get betaLabel => 'BÉTA';
 
   @override
   String get betaDescription =>
       'Ez a funkció jelenleg báta fázisban van, lehetnek benne hibák vagy lehet nincs befejezve. Aktívan dolgozunk a javításokon és szívesen fogadunk megjegyzéseket. Kérjük oszd meg az ötleteided vagy jelentsd a hibákat a Discord szerverünkön hogy segíts minket.';
 
   @override
-  String get settingsTitle => 'Settings';
+  String get settingsLanguage => 'Nyelv';
 
   @override
-  String get settingsLanguage => 'Language';
+  String get settingsSelectLanguage => 'Nyelv kiválasztása';
 
   @override
-  String get settingsSelectLanguage => 'Select a language';
+  String get settingsToggleTheme => 'Téma váltása';
 
   @override
-  String get settingsToggleTheme => 'Toggle Theme';
-
-  @override
-  String get faqTitle => 'FAQ';
+  String get faqTitle => 'GYIK';
 
   @override
   String get faqSubtitle => 'Gyakran Ismételt Kérdések';
@@ -1621,25 +1427,25 @@ class AppLocalizationsHu extends AppLocalizations {
       'Valamijen oknál fogva nem tudtuk a levelező kliensedet kinyitni. Vágólapra másoltuk a címet. Irhatsz egy emailt és bemásolhatod a címet.';
 
   @override
-  String get translationHelpUsTranslate => 'Help us translate';
+  String get translationHelpUsTranslate => 'Segíts a fordításban';
 
   @override
-  String get translationSuggestFeatures => 'Suggest features';
+  String get translationSuggestFeatures => 'Funkció ajánlása';
 
   @override
-  String get translationThankYou => 'Thank you!';
+  String get translationThankYou => 'Köszönjük!';
 
   @override
   String get translationThankYouContent =>
-      'A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!';
+      'Hatalmas köszönet a rendkívüli fordítóknak, akik segítenek hogy az app minél több embernek világszerte elérhető legyen!';
 
   @override
   String get translationHelpTranslateContent =>
-      'You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!';
+      'Segíthetsz a fordításban Crowdin-en. Ha a nyelved nem elérhető Crowdin-en, nyugodtan kérd a Discord szerverünkön. Nagyon köszönjük a segítségedet!';
 
   @override
-  String get translationHelpTranslateButton => 'Help Translate on Crowdin';
+  String get translationHelpTranslateButton => 'Segíts fordítani Crowdin-en';
 
   @override
-  String get translationCurrentTranslators => 'Current Translators';
+  String get translationCurrentTranslators => 'Jelenlegi Fordítók';
 }

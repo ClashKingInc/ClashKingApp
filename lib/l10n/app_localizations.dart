@@ -157,29 +157,11 @@ abstract class AppLocalizations {
     Locale('zh')
   ];
 
-  /// No description provided for @appTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'ClashKing'**
-  String get appTitle;
-
-  /// No description provided for @appDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.'**
-  String get appDescription;
-
   /// No description provided for @generalLoading.
   ///
   /// In en, this message translates to:
   /// **'Loading...'**
   String get generalLoading;
-
-  /// No description provided for @generalError.
-  ///
-  /// In en, this message translates to:
-  /// **'Error'**
-  String get generalError;
 
   /// No description provided for @generalRetry.
   ///
@@ -192,12 +174,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get generalTryAgain;
-
-  /// No description provided for @generalClose.
-  ///
-  /// In en, this message translates to:
-  /// **'Close'**
-  String get generalClose;
 
   /// No description provided for @generalCancel.
   ///
@@ -223,29 +199,11 @@ abstract class AppLocalizations {
   /// **'Confirm'**
   String get generalConfirm;
 
-  /// Add an account
-  ///
-  /// In en, this message translates to:
-  /// **'Add'**
-  String get generalAdd;
-
-  /// Delete an account
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get generalDelete;
-
   /// No description provided for @generalManage.
   ///
   /// In en, this message translates to:
   /// **'Manage'**
   String get generalManage;
-
-  /// No description provided for @generalManagement.
-  ///
-  /// In en, this message translates to:
-  /// **'Management'**
-  String get generalManagement;
 
   /// No description provided for @generalSettings.
   ///
@@ -325,23 +283,11 @@ abstract class AppLocalizations {
   /// **'Ended'**
   String get generalEnded;
 
-  /// No description provided for @generalLevel.
-  ///
-  /// In en, this message translates to:
-  /// **'Level'**
-  String get generalLevel;
-
   /// No description provided for @generalRole.
   ///
   /// In en, this message translates to:
   /// **'Role'**
   String get generalRole;
-
-  /// No description provided for @generalDate.
-  ///
-  /// In en, this message translates to:
-  /// **'Date'**
-  String get generalDate;
 
   /// No description provided for @generalStats.
   ///
@@ -367,29 +313,11 @@ abstract class AppLocalizations {
   /// **'History'**
   String get generalHistory;
 
-  /// No description provided for @generalCharts.
-  ///
-  /// In en, this message translates to:
-  /// **'Charts'**
-  String get generalCharts;
-
   /// No description provided for @generalFilters.
   ///
   /// In en, this message translates to:
   /// **'Filters'**
   String get generalFilters;
-
-  /// Whatever the value
-  ///
-  /// In en, this message translates to:
-  /// **'Whatever'**
-  String get generalWhatever;
-
-  /// Any value is accepted
-  ///
-  /// In en, this message translates to:
-  /// **'Any'**
-  String get generalAny;
 
   /// Filter value is not set
   ///
@@ -409,29 +337,11 @@ abstract class AppLocalizations {
   /// **'No data available.'**
   String get generalNoDataAvailable;
 
-  /// WarLog closed
-  ///
-  /// In en, this message translates to:
-  /// **'Closed'**
-  String get generalClosed;
-
-  /// No description provided for @authWelcomeBack.
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome Back'**
-  String get authWelcomeBack;
-
   /// No description provided for @authClashKingDescription.
   ///
   /// In en, this message translates to:
   /// **'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.'**
   String get authClashKingDescription;
-
-  /// No description provided for @authChooseSignInMethod.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose your preferred sign-in method'**
-  String get authChooseSignInMethod;
 
   /// No description provided for @authSignIn.
   ///
@@ -444,12 +354,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign up'**
   String get authSignUp;
-
-  /// No description provided for @authLogin.
-  ///
-  /// In en, this message translates to:
-  /// **'Login'**
-  String get authLogin;
 
   /// No description provided for @authLogout.
   ///
@@ -480,12 +384,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create your account to get started'**
   String get authCreateAccountToGetStarted;
-
-  /// No description provided for @authDontHaveAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Don\'t have an account? Create one'**
-  String get authDontHaveAccount;
 
   /// No description provided for @authAlreadyHaveAccount.
   ///
@@ -523,41 +421,17 @@ abstract class AppLocalizations {
   /// **'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!'**
   String get authDiscordDescription;
 
-  /// No description provided for @authDiscordError.
-  ///
-  /// In en, this message translates to:
-  /// **'Discord login failed. Please try again.'**
-  String get authDiscordError;
-
   /// No description provided for @authEmailTitle.
   ///
   /// In en, this message translates to:
   /// **'Email'**
   String get authEmailTitle;
 
-  /// No description provided for @authEmailSignIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign in with Email'**
-  String get authEmailSignIn;
-
   /// No description provided for @authEmailDescription.
   ///
   /// In en, this message translates to:
   /// **'Use email if you can\'t access Discord or prefer app-only features'**
   String get authEmailDescription;
-
-  /// No description provided for @authEmailLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Email'**
-  String get authEmailLabel;
-
-  /// No description provided for @authEmailPlaceholder.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your email'**
-  String get authEmailPlaceholder;
 
   /// No description provided for @authEmailRequired.
   ///
@@ -570,18 +444,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a valid email'**
   String get authEmailInvalid;
-
-  /// No description provided for @authEmailAlreadyInUse.
-  ///
-  /// In en, this message translates to:
-  /// **'Email may already be in use'**
-  String get authEmailAlreadyInUse;
-
-  /// No description provided for @authEmailError.
-  ///
-  /// In en, this message translates to:
-  /// **'Email login failed. Please check your credentials.'**
-  String get authEmailError;
 
   /// No description provided for @authPasswordLabel.
   ///
@@ -631,12 +493,6 @@ abstract class AppLocalizations {
   /// **'Forgot password?'**
   String get authPasswordForgot;
 
-  /// No description provided for @authPasswordInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid email or password'**
-  String get authPasswordInvalid;
-
   /// No description provided for @authUsernameLabel.
   ///
   /// In en, this message translates to:
@@ -654,18 +510,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Username must be at least 3 characters'**
   String get authUsernameTooShort;
-
-  /// No description provided for @authErrorGeneral.
-  ///
-  /// In en, this message translates to:
-  /// **'An error occurred while logging in. Please try again later.'**
-  String get authErrorGeneral;
-
-  /// No description provided for @authErrorRegistration.
-  ///
-  /// In en, this message translates to:
-  /// **'Registration failed. Email may already be in use.'**
-  String get authErrorRegistration;
 
   /// No description provided for @authErrorConnection.
   ///
@@ -733,12 +577,6 @@ abstract class AppLocalizations {
   /// **'Email account successfully linked!'**
   String get authAccountEmailLinkedSuccess;
 
-  /// No description provided for @authAccountEmailLinkFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to link email account. Email may already be in use.'**
-  String get authAccountEmailLinkFailed;
-
   /// No description provided for @helpTitle.
   ///
   /// In en, this message translates to:
@@ -756,18 +594,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Email Us'**
   String get helpEmailUs;
-
-  /// No description provided for @helpJoinDiscordServer.
-  ///
-  /// In en, this message translates to:
-  /// **'Need help? Join us on Discord.'**
-  String get helpJoinDiscordServer;
-
-  /// No description provided for @helpCannotOpenMailClient.
-  ///
-  /// In en, this message translates to:
-  /// **'For some reasons we can\'t open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.'**
-  String get helpCannotOpenMailClient;
 
   /// No description provided for @accountsWelcome.
   ///
@@ -787,12 +613,6 @@ abstract class AppLocalizations {
   /// **'Manage your accounts'**
   String get accountsManageTitle;
 
-  /// No description provided for @accountsManageDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.'**
-  String get accountsManageDescription;
-
   /// No description provided for @accountsNoneFound.
   ///
   /// In en, this message translates to:
@@ -804,12 +624,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Player Tag (#ABC123)'**
   String get accountsPlayerTag;
-
-  /// No description provided for @accountsPlayerTags.
-  ///
-  /// In en, this message translates to:
-  /// **'Player Tags'**
-  String get accountsPlayerTags;
 
   /// No description provided for @accountsEnterPlayerTag.
   ///
@@ -857,7 +671,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'The player tag is already linked to someone.'**
-  String get accountsErrorAlreadyLinked;
+  String accountsErrorAlreadyLinked(Object tag);
 
   /// No description provided for @accountsErrorAlreadyLinkedToYou.
   ///
@@ -907,18 +721,6 @@ abstract class AppLocalizations {
   /// **'Error loading version'**
   String get errorLoadingVersion;
 
-  /// No description provided for @errorConnectionGeneral.
-  ///
-  /// In en, this message translates to:
-  /// **'An error occurred. Please check your internet connection and try again.'**
-  String get errorConnectionGeneral;
-
-  /// No description provided for @errorConnectionRelaunch.
-  ///
-  /// In en, this message translates to:
-  /// **'An error occurred. Please check your internet connection and relaunch the app.'**
-  String get errorConnectionRelaunch;
-
   /// No description provided for @errorCannotOpenLink.
   ///
   /// In en, this message translates to:
@@ -930,12 +732,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You are about to leave the app to open Clash of Clans.'**
   String get errorExitAppToOpenClash;
-
-  /// No description provided for @playerTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Player'**
-  String get playerTitle;
 
   /// No description provided for @playerSearchTitle.
   ///
@@ -1028,12 +824,6 @@ abstract class AppLocalizations {
   /// **'TH'**
   String get gameTownHall;
 
-  /// No description provided for @gameBuilderHall.
-  ///
-  /// In en, this message translates to:
-  /// **'BH'**
-  String get gameBuilderHall;
-
   /// No description provided for @gameTownHallLevel.
   ///
   /// In en, this message translates to:
@@ -1051,12 +841,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'TH{level}'**
   String gameTHLevel(int level);
-
-  /// No description provided for @gameBHLevel.
-  ///
-  /// In en, this message translates to:
-  /// **'BH{level}'**
-  String gameBHLevel(int level);
 
   /// No description provided for @gameExpLevel.
   ///
@@ -1124,12 +908,6 @@ abstract class AppLocalizations {
   /// **'Troops'**
   String get gameTroops;
 
-  /// No description provided for @gameSuperTroops.
-  ///
-  /// In en, this message translates to:
-  /// **'Super Troops'**
-  String get gameSuperTroops;
-
   /// No description provided for @gameActiveSuperTroops.
   ///
   /// In en, this message translates to:
@@ -1183,12 +961,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clan'**
   String get clanTitle;
-
-  /// No description provided for @clansTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Clans'**
-  String get clansTitle;
 
   /// No description provided for @clanSearchTitle.
   ///
@@ -1340,18 +1112,6 @@ abstract class AppLocalizations {
   /// **'h'**
   String get timeHourIndicator;
 
-  /// No description provided for @timeMinIndicator.
-  ///
-  /// In en, this message translates to:
-  /// **'m'**
-  String get timeMinIndicator;
-
-  /// No description provided for @timeDaysLeft.
-  ///
-  /// In en, this message translates to:
-  /// **'{days} days left'**
-  String timeDaysLeft(int days);
-
   /// No description provided for @timeDaysAgo.
   ///
   /// In en, this message translates to:
@@ -1387,12 +1147,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{minutes} minutes ago'**
   String timeMinutesAgo(int minutes);
-
-  /// No description provided for @timeSecondAgo.
-  ///
-  /// In en, this message translates to:
-  /// **'{seconds}s ago'**
-  String timeSecondAgo(int seconds);
 
   /// No description provided for @timeJustNow.
   ///
@@ -1447,12 +1201,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ends at {time}'**
   String timeEndsAt(String time);
-
-  /// No description provided for @timeUpdatedAt.
-  ///
-  /// In en, this message translates to:
-  /// **'Updated at {time}'**
-  String timeUpdatedAt(String time);
 
   /// No description provided for @legendsTitle.
   ///
@@ -1664,29 +1412,11 @@ abstract class AppLocalizations {
   /// **'{index} days'**
   String statsIndexDays(int index);
 
-  /// No description provided for @statsYear.
-  ///
-  /// In en, this message translates to:
-  /// **'Year'**
-  String get statsYear;
-
-  /// No description provided for @statsMonth.
-  ///
-  /// In en, this message translates to:
-  /// **'Month'**
-  String get statsMonth;
-
   /// Example: August 2024 season
   ///
   /// In en, this message translates to:
   /// **'{date} season'**
   String statsSeasonDate(String date);
-
-  /// Ask player to select a season
-  ///
-  /// In en, this message translates to:
-  /// **'Select a season'**
-  String get statsSelectSeason;
 
   /// No description provided for @statsAllTownHalls.
   ///
@@ -1892,18 +1622,6 @@ abstract class AppLocalizations {
   /// **'War Log'**
   String get warLog;
 
-  /// No description provided for @warLogPublic.
-  ///
-  /// In en, this message translates to:
-  /// **'Public War Log'**
-  String get warLogPublic;
-
-  /// No description provided for @warLogPrivate.
-  ///
-  /// In en, this message translates to:
-  /// **'Private War Log'**
-  String get warLogPrivate;
-
   /// No description provided for @warLogClosed.
   ///
   /// In en, this message translates to:
@@ -1921,12 +1639,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ongoing war'**
   String get warOngoing;
-
-  /// No description provided for @warNotInWar.
-  ///
-  /// In en, this message translates to:
-  /// **'Not in war'**
-  String get warNotInWar;
 
   /// No description provided for @warIsNotInWar.
   ///
@@ -2103,12 +1815,6 @@ abstract class AppLocalizations {
   /// **'You had an average of {percent}% destruction rate per war.'**
   String warAttacksAverageDestruction(String percent);
 
-  /// No description provided for @warDefenseTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Defense'**
-  String get warDefenseTitle;
-
   /// No description provided for @warDefensesTitle.
   ///
   /// In en, this message translates to:
@@ -2133,12 +1839,6 @@ abstract class AppLocalizations {
   /// **'Best defense (out of {number})'**
   String warDefensesBestOutOf(int number);
 
-  /// No description provided for @warDefenseStars.
-  ///
-  /// In en, this message translates to:
-  /// **'Defense Stars'**
-  String get warDefenseStars;
-
   /// No description provided for @warDefensesNumber.
   ///
   /// In en, this message translates to:
@@ -2162,12 +1862,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stars'**
   String get warStarsTitle;
-
-  /// No description provided for @warStarsTotal.
-  ///
-  /// In en, this message translates to:
-  /// **'Total'**
-  String get warStarsTotal;
 
   /// No description provided for @warStarsAverage.
   ///
@@ -2319,18 +2013,6 @@ abstract class AppLocalizations {
   /// **'Opponents TH Level'**
   String get warOpponentSelectOpponentsThLevel;
 
-  /// filter by number of wars
-  ///
-  /// In en, this message translates to:
-  /// **'By number of wars'**
-  String get warFiltersByNumberOfWars;
-
-  /// filter by date range
-  ///
-  /// In en, this message translates to:
-  /// **'By date range'**
-  String get warFiltersByDateRange;
-
   /// Example: Shows the last 25 wars
   ///
   /// In en, this message translates to:
@@ -2462,12 +2144,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.'**
   String cwlTotalAttacks(int attacks, int totalAttacks);
-
-  /// No description provided for @cwlCurrentRoundDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'It\'s currently round {round}.'**
-  String cwlCurrentRoundDescription(int round);
 
   /// Logs of players joining or leaving the clan.
   ///
@@ -2631,12 +2307,6 @@ abstract class AppLocalizations {
   /// **'Raids completed'**
   String get raidsCompleted;
 
-  /// Search for a player or a clan
-  ///
-  /// In en, this message translates to:
-  /// **'Search'**
-  String get searchTitle;
-
   /// No description provided for @searchNoResult.
   ///
   /// In en, this message translates to:
@@ -2691,12 +2361,6 @@ abstract class AppLocalizations {
   /// **'Tools'**
   String get toolsTitle;
 
-  /// No description provided for @communityTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Community'**
-  String get communityTitle;
-
   /// No description provided for @navigationTeam.
   ///
   /// In en, this message translates to:
@@ -2708,18 +2372,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Statistics'**
   String get navigationStatistics;
-
-  /// No description provided for @navigationLeague.
-  ///
-  /// In en, this message translates to:
-  /// **'League'**
-  String get navigationLeague;
-
-  /// No description provided for @navigationWars.
-  ///
-  /// In en, this message translates to:
-  /// **'Wars'**
-  String get navigationWars;
 
   /// Version of the app and device information
   ///
@@ -2744,12 +2396,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.'**
   String get betaDescription;
-
-  /// No description provided for @settingsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get settingsTitle;
 
   /// No description provided for @settingsLanguage.
   ///
@@ -2904,7 +2550,7 @@ abstract class AppLocalizations {
   /// No description provided for @faqNeedHelpAnswer.
   ///
   /// In en, this message translates to:
-  /// **'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.'**
+  /// **'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.'**
   String get faqNeedHelpAnswer;
 
   /// No description provided for @faqSendEmail.
