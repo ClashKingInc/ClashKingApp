@@ -1,12 +1,9 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
-  "appTitle": "ClashKing",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Φορτώνει...",
-  "generalError": "Σφάλμα",
   "generalRetry": "Retry",
   "generalTryAgain": "Try again",
-  "generalClose": "Κλείσιμο",
   "generalCancel": "Cancel",
   "generalOk": "OK",
   "@generalOk": {
@@ -14,16 +11,7 @@
   },
   "generalApply": "Apply",
   "generalConfirm": "Confirm",
-  "generalAdd": "Προσθήκη",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "Διαγραφή",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
   "generalManage": "Διαχείριση",
-  "generalManagement": "Management",
   "generalSettings": "Ρυθμίσεις",
   "generalCopiedToClipboard": "Αντιγράφηκε στο πρόχειρο",
   "generalComingSoon": "Coming soon!",
@@ -58,9 +46,7 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
   "generalRole": "Role",
-  "generalDate": "Ημερομηνία",
   "generalStats": "Στατιστικά",
   "generalFullStats": "Full Stats",
   "generalDetails": "Λεπτομέρειες",
@@ -68,30 +54,13 @@
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Διαγράμματα",
   "generalFilters": "Filters",
-  "generalWhatever": "Whatever",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Any",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
   "generalNotSet": "Not set",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
   "generalWarning": "Προειδοποίηση",
   "generalNoDataAvailable": "Δεν υπάρχουν διαθέσιμα δεδομένα.",
-  "generalClosed": "Έκλεισε",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignIn": "Sign In",
   "authSignUp": "Sign up",
   "authLogin": "Είσοδος",
   "authLogout": "Έξοδος",
@@ -99,7 +68,6 @@
   "authJoinClashKing": "Join ClashKing",
   "authCreateClashKingAccount": "Create ClashKing Account",
   "authCreateAccountToGetStarted": "Create your account to get started",
-  "authDontHaveAccount": "Don't have an account? Create one",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "Είστε σίγουροι ότι θέλετε να κάνετε έξοδο από τον λογαριασμό σας;",
   "@authConfirmLogout": {
@@ -109,16 +77,10 @@
   "authDiscordSignIn": "Είσοδος με Discord",
   "authDiscordContinue": "Continue with Discord",
   "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authDiscordError": "Discord login failed. Please try again.",
   "authEmailTitle": "Email",
-  "authEmailSignIn": "Sign in with Email",
   "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailLabel": "Email",
-  "authEmailPlaceholder": "Enter your email",
   "authEmailRequired": "Please enter your email",
   "authEmailInvalid": "Please enter a valid email",
-  "authEmailAlreadyInUse": "Email may already be in use",
-  "authEmailError": "Email login failed. Please check your credentials.",
   "authPasswordLabel": "Password",
   "authPasswordConfirm": "Confirm Password",
   "authPasswordRequired": "Please enter your password",
@@ -127,12 +89,9 @@
   "authPasswordTooShort": "Password must be at least 8 characters",
   "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
   "authPasswordForgot": "Forgot password?",
-  "authPasswordInvalid": "Invalid email or password",
   "authUsernameLabel": "Όνομα Χρήστη",
   "authUsernameRequired": "Παρακαλώ εισάγετε το όνομα χρήστη σας",
   "authUsernameTooShort": "Username must be at least 3 characters",
-  "authErrorGeneral": "An error occurred while logging in. Please try again later.",
-  "authErrorRegistration": "Registration failed. Email may already be in use.",
   "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
   "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
   "authAccountManagement": "Account Management",
@@ -144,19 +103,14 @@
   "authAccountLinkEmail": "Link Email Account",
   "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
   "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "authAccountEmailLinkFailed": "Failed to link email account. Email may already be in use.",
   "helpTitle": "Need help?",
   "helpJoinDiscord": "Join Discord",
   "helpEmailUs": "Email Us",
-  "helpJoinDiscordServer": "Χρειάζεστε βοήθεια; Βρείτε μας στο Discord.",
-  "helpCannotOpenMailClient": "Για κάποιους λόγους δεν μπορέσαμε να ανοίξουμε το mail σας. Έχουμε αντιγράψει τη διεύθυνση ηλεκτρονικού ταχυδρομείου για εσάς. Μπορείτε να γράψετε ένα email και να αποκολλήσετε τη διεύθυνση στο πεδίο του παραλήπτη.",
   "accountsWelcome": "Καλώς Ήλθατε!",
   "accountsWelcomeMessage": "Παρακαλώ προσθέστε έναν ή περισσότερους λογαριασμούς \"Clash Of Clans\" στο προφίλ σας. Μπορείτε να προσθέσετε ή να αφαιρέσετε λογαριασμούς αργότερα.",
   "accountsManageTitle": "Manage your accounts",
-  "accountsManageDescription": "You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.",
   "accountsNoneFound": "No account linked to your profile found",
   "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsPlayerTags": "Ετικέτα Παίχτη",
   "accountsEnterPlayerTag": "Εισάγετε ετικέτα λογαριασμού",
   "accountsAdd": "Προσθήκη λογαριασμού",
   "accountsDelete": "Διαγραφή λογαριασμού",
@@ -176,11 +130,8 @@
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorConnectionGeneral": "An error occurred. Please check your internet connection and try again.",
-  "errorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
   "errorCannotOpenLink": "We can't open this link.",
   "errorExitAppToOpenClash": "Πρόκειται να βγείτε από την εφαρμογή για να ανοίξετε το Clash of Clans.",
-  "playerTitle": "Παίχτης",
   "playerSearchTitle": "Αναζήτηση παίχτη",
   "playerSearchPlaceholder": "Όνομα παίχτη ή αριθμός λογαριασμού",
   "playerLastActive": "Τελευταία ενεργός: {date}",
@@ -267,7 +218,6 @@
   "gameBaseBuilder": "Βάση Χτίστη",
   "gameClanCapital": "Πρωτεύουσα Φυλής",
   "gameTownHall": "Δ",
-  "gameBuilderHall": "ΔΧ",
   "gameTownHallLevel": "TH Level",
   "gameTownHallLevelNumber": "Town Hall {level}",
   "@gameTownHallLevelNumber": {
@@ -279,14 +229,6 @@
   },
   "gameTHLevel": "TH{level}",
   "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "gameBHLevel": "BH{level}",
-  "@gameBHLevel": {
     "placeholders": {
       "level": {
         "type": "int"
@@ -314,7 +256,6 @@
   "gameEquipment": "Εξοπλισμός",
   "gameHeroesEquipments": "Εξοπλισμοί ηρώων",
   "gameTroops": "Στρατός",
-  "gameSuperTroops": "Σούπερ Στρατός",
   "gameActiveSuperTroops": "Ενεργός Σούπερ Στρατός",
   "gamePets": "Κατοικίδια",
   "gameSiegeMachines": "Μηχανές Πολιορκίας",
@@ -324,7 +265,6 @@
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Κωδικός Δημιουργού: ClashKing",
   "clanTitle": "Clan",
-  "clansTitle": "Clans",
   "clanSearchTitle": "Search clan",
   "clanSearchPlaceholder": "Clan's name",
   "clanNone": "No clan",
@@ -359,15 +299,6 @@
   "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
   "clanWarFrequencyRarely": "Rarely",
   "timeHourIndicator": "ω",
-  "timeMinIndicator": "λ",
-  "timeDaysLeft": "{days} ημέρες ακόμη",
-  "@timeDaysLeft": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
   "timeDaysAgo": "πριν από {days} ημέρες",
   "@timeDaysAgo": {
     "placeholders": {
@@ -412,14 +343,6 @@
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "timeSecondAgo": "πριν από {seconds} δευτερόλεπτα",
-  "@timeSecondAgo": {
-    "placeholders": {
-      "seconds": {
         "type": "int"
       }
     }
@@ -476,14 +399,6 @@
   },
   "timeEndsAt": "Ends at {time}",
   "@timeEndsAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "timeUpdatedAt": "Updated at {time}",
-  "@timeUpdatedAt": {
     "placeholders": {
       "time": {
         "type": "String"
@@ -606,8 +521,6 @@
       }
     }
   },
-  "statsYear": "Year",
-  "statsMonth": "Month",
   "statsSeasonDate": "{date} season",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
@@ -616,10 +529,6 @@
         "type": "String"
       }
     }
-  },
-  "statsSelectSeason": "Select a season",
-  "@statsSelectSeason": {
-    "description": "Ask player to select a season"
   },
   "statsAllTownHalls": "All Town Halls",
   "statsMembers": "Members Stats",
@@ -721,8 +630,6 @@
   "warLeague": "War/League",
   "warHistory": "War History",
   "warLog": "War Log",
-  "warLogPublic": "Public War Log",
-  "warLogPrivate": "Private War Log",
   "warLogClosed": "War log closed.",
   "@warLogClosed": {
     "placeholders": {
@@ -733,7 +640,6 @@
   },
   "warStats": "War Stats",
   "warOngoing": "Ongoing war",
-  "warNotInWar": "Not in war",
   "warIsNotInWar": "{clan} is not in war.",
   "@warIsNotInWar": {
     "placeholders": {
@@ -836,7 +742,6 @@
       }
     }
   },
-  "warDefenseTitle": "Defense",
   "warDefensesTitle": "Defenses",
   "warDefensesNone": "No defense yet",
   "@warDefensesNone": {
@@ -852,7 +757,6 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefenseStars": "Defense Stars",
   "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
   "@warDefensesNumber": {
     "placeholders": {
@@ -881,7 +785,6 @@
     }
   },
   "warStarsTitle": "Stars",
-  "warStarsTotal": "Σύνολο",
   "warStarsAverage": "Average stars",
   "warStarsNumber": "Number of stars",
   "warStarsOne": "1 star",
@@ -979,14 +882,6 @@
   "warOpponentEqualThLevel": "Equal TH",
   "warOpponentSelectMembersThLevel": "Members TH Level",
   "warOpponentSelectOpponentsThLevel": "Opponents TH Level",
-  "warFiltersByNumberOfWars": "By number of wars",
-  "@warFiltersByNumberOfWars": {
-    "description": "filter by number of wars"
-  },
-  "warFiltersByDateRange": "By date range",
-  "@warFiltersByDateRange": {
-    "description": "filter by date range"
-  },
   "warFiltersLastXwars": "Last {number} wars",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
@@ -1085,14 +980,6 @@
         "type": "int"
       },
       "totalAttacks": {
-        "type": "int"
-      }
-    }
-  },
-  "cwlCurrentRoundDescription": "It's currently round {round}.",
-  "@cwlCurrentRoundDescription": {
-    "placeholders": {
-      "round": {
         "type": "int"
       }
     }
@@ -1205,10 +1092,6 @@
   "raidsOngoing": "Ongoing raids",
   "raidsDistrictsDestroyed": "Districts destroyed",
   "raidsCompleted": "Raids completed",
-  "searchTitle": "Αναζήτηση",
-  "@searchTitle": {
-    "description": "Search for a player or a clan"
-  },
   "searchNoResult": "No result.",
   "maintenanceTitle": "Maintenance",
   "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
@@ -1225,11 +1108,8 @@
   "downloadError": "Failed to download file",
   "dashboardTitle": "Πίνακας Ελέγχου",
   "toolsTitle": "Tools",
-  "communityTitle": "Community",
   "navigationTeam": "Teams",
   "navigationStatistics": "Statistics",
-  "navigationLeague": "League",
-  "navigationWars": "Wars",
   "versionDevice": "Εκδοχή & Συσκευή",
   "@versionDevice": {
     "description": "Version of the app and device information"
@@ -1237,7 +1117,6 @@
   "betaFeature": "Χαρακτηριστικό εκδοχής Βήτα",
   "betaLabel": "ΒΗΤΑ",
   "betaDescription": "Αυτό το χαρακτηριστικό βρίσκεται ακόμη στην εκδοχή βήτα, οπότε μπορεί να αντιμετωπίσετε μερικά σφάλματα ή να μην είναι ολοκληρωμένο. Δουλεύουμε ενεργά για τη βελτίωση της εφαρμογής και σας προσκαλούμε, να μοιραστείτε τις ιδέες σας και να αναφέρετε οποιαδήποτε σφάλματα αντιμετωπίζετε, στην ομάδα μας στο Discord.",
-  "settingsTitle": "Ρυθμίσεις",
   "settingsLanguage": "Γλώσσα",
   "settingsSelectLanguage": "Επιλέξτε μία γλώσσα",
   "settingsToggleTheme": "Αλλαγή Εμφάνισης",
