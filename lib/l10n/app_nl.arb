@@ -1,99 +1,66 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
-  "appTitle": "ClashKing",
   "appDescription": "Jouw ultieme Clash of Clans metgezel voor het bijhouden van statistieken, beheren van clans en analyseren van prestaties.",
-
   "generalLoading": "Laden...",
-  "generalError": "Fout",
   "generalRetry": "Opnieuw proberen",
   "generalTryAgain": "Probeer het later opnieuw",
-  "generalClose": "Sluiten",
   "generalCancel": "Annuleren",
   "generalOk": "Oké",
   "@generalOk": {
-    "description": "OK-knop op popup"
+    "description": "OK button on pop up"
   },
   "generalApply": "Toepassen",
   "generalConfirm": "Bevestigen",
-  "generalAdd": "Toevoegen",
-  "@generalAdd": {
-    "description": "Een account toevoegen"
-  },
-  "generalDelete": "Verwijderen",
-  "@generalDelete": {
-    "description": "Een account verwijderen"
-  },
   "generalManage": "Beheren",
-  "generalManagement": "Beheer",
   "generalSettings": "Instellingen",
   "generalCopiedToClipboard": "Gekopieerd naar klembord",
   "generalComingSoon": "Binnenkort beschikbaar!",
   "generalAll": "Alle",
   "@generalAll": {
-    "description": "alle items"
+    "description": "all items"
   },
   "generalTotal": "Totaal",
   "generalBest": "Beste",
   "@generalBest": {
-    "description": "Beste einde van de dag trofeeën"
+    "description": "Best end of day trophies"
   },
   "generalWorst": "Slechtste",
   "@generalWorst": {
-    "description": "Slechtste einde van de dag trofeeën"
+    "description": "Worst end of day trophies"
   },
   "generalAverage": "Gemiddelde",
   "@generalAverage": {
-    "description": "Gemiddelde waarde van legend trofeeën (verdediging en aanval)"
+    "description": "Average value of legend trophies (defense and attack)"
   },
   "generalRemaining": "Resterend",
   "@generalRemaining": {
-    "description": "Resterende aanvallen of verdedigingen"
+    "description": "Remaining attacks or defenses"
   },
   "generalActive": "Actief",
   "generalInactive": "Inactief",
   "generalStarted": "Gestart",
   "@generalStarted": {
-    "description": "Titel voor het aantal trofeeën aan het begin van de dag"
+    "description": "Title for the number of trophies at the beginning of the day"
   },
   "generalEnded": "Afgelopen",
   "@generalEnded": {
-    "description": "Titel voor het aantal trofeeën aan het einde van de dag"
+    "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
   "generalRole": "Rol",
-  "generalDate": "Datum",
   "generalStats": "Statistieken",
   "generalFullStats": "Volledige statistieken",
   "generalDetails": "Details",
   "generalHistory": "Geschiedenis",
   "@generalHistory": {
-    "description": "Toont EOS-trofeeëngeschiedenis"
+    "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Grafieken",
   "generalFilters": "Filters",
-  "generalWhatever": "Wat dan ook",
-  "@generalWhatever": {
-    "description": "Wat de waarde ook is"
-  },
-  "generalAny": "Alle",
-  "@generalAny": {
-    "description": "Elke waarde wordt geaccepteerd"
-  },
   "generalNotSet": "Niet ingesteld",
   "@generalNotSet": {
-    "description": "Filterwaarde is niet ingesteld"
+    "description": "Filter value is not set"
   },
   "generalWarning": "Waarschuwing",
   "generalNoDataAvailable": "Geen gegevens beschikbaar.",
-  "generalClosed": "Gesloten",
-  "@generalClosed": {
-    "description": "Oorloglog gesloten"
-  },
-
-  "authWelcomeBack": "Welkom terug!",
-  "authClashKingDescription": "Jouw ultieme Clash of Clans metgezel voor het bijhouden van statistieken, beheren van clans en analyseren van prestaties.",
-  "authChooseSignInMethod": "Kies je favoriete inlogmethode",
-  "authSignIn": "Inloggen",
   "authSignUp": "Registreren",
   "authLogin": "Inloggen",
   "authLogout": "Uitloggen",
@@ -101,26 +68,19 @@
   "authJoinClashKing": "Doe mee met ClashKing",
   "authCreateClashKingAccount": "ClashKing-account aanmaken",
   "authCreateAccountToGetStarted": "Maak je account aan om te beginnen",
-  "authDontHaveAccount": "Heb je geen account? Maak er een aan",
   "authAlreadyHaveAccount": "Heb je al een account? Log in",
   "authConfirmLogout": "Weet je zeker dat je wilt uitloggen?",
   "@authConfirmLogout": {
-    "description": "Vraag om bevestiging van uitloggen"
+    "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
   "authDiscordSignIn": "Inloggen met Discord",
   "authDiscordContinue": "Doorgaan met Discord",
   "authDiscordDescription": "Synchroniseer je gegevens met ClashKing Bot en ontgrendel het volledige potentieel van ClashKing!",
-  "authDiscordError": "Discord-login mislukt. Probeer het opnieuw.",
   "authEmailTitle": "E-mail",
-  "authEmailSignIn": "Inloggen met e-mail",
   "authEmailDescription": "Gebruik e-mail als je geen toegang hebt tot Discord of alleen app-functies wilt",
-  "authEmailLabel": "E-mail",
-  "authEmailPlaceholder": "Voer je e-mail in",
   "authEmailRequired": "Voer je e-mail in",
   "authEmailInvalid": "Voer een geldig e-mailadres in",
-  "authEmailAlreadyInUse": "E-mail wordt mogelijk al gebruikt",
-  "authEmailError": "E-mail-login mislukt. Controleer je gegevens.",
   "authPasswordLabel": "Wachtwoord",
   "authPasswordConfirm": "Wachtwoord bevestigen",
   "authPasswordRequired": "Voer je wachtwoord in",
@@ -129,12 +89,9 @@
   "authPasswordTooShort": "Wachtwoord moet minimaal 8 tekens lang zijn",
   "authPasswordRequirements": "Wachtwoord moet bevatten: hoofdletter, kleine letter, cijfer en speciaal teken",
   "authPasswordForgot": "Wachtwoord vergeten?",
-  "authPasswordInvalid": "Ongeldig e-mailadres of wachtwoord",
   "authUsernameLabel": "Gebruikersnaam",
   "authUsernameRequired": "Voer een gebruikersnaam in",
   "authUsernameTooShort": "Gebruikersnaam moet minimaal 3 tekens lang zijn",
-  "authErrorGeneral": "Er is een fout opgetreden tijdens het inloggen. Probeer het later opnieuw.",
-  "authErrorRegistration": "Registratie mislukt. E-mail wordt mogelijk al gebruikt.",
   "authErrorConnection": "Er is een fout opgetreden. Controleer je internetverbinding en probeer het opnieuw.",
   "authErrorConnectionRelaunch": "Er is een fout opgetreden. Controleer je internetverbinding en start de app opnieuw op.",
   "authAccountManagement": "Accountbeheer",
@@ -146,27 +103,22 @@
   "authAccountLinkEmail": "E-mailaccount koppelen",
   "authAccountAddEmailAuth": "Voeg e-mail- en wachtwoordauthenticatie toe aan je account voor extra beveiliging.",
   "authAccountEmailLinkedSuccess": "E-mailaccount succesvol gekoppeld!",
-  "authAccountEmailLinkFailed": "E-mailaccount koppelen mislukt. E-mail wordt mogelijk al gebruikt.",
   "helpTitle": "Hulp nodig?",
   "helpJoinDiscord": "Doe mee op Discord",
   "helpEmailUs": "E-mail ons",
-  "helpJoinDiscordServer": "Hulp nodig? Doe mee op Discord.",
-  "helpCannotOpenMailClient": "Om een of andere reden kunnen we je mailclient niet openen. We hebben het e-mailadres voor je gekopieerd. Je kunt een e-mail schrijven en het adres plakken in het ontvangerveld.",
   "accountsWelcome": "Welkom!",
-  "accountsWelcomeMessage": "Voeg een of meer Clash of Clans-accounts toe aan je profiel. Je kunt later accounts toevoegen of verwijderen.",
+  "accountsWelcomeMessage": "Voeg alsjeblieft één of meer Clash Of Clans accounts toe aan je profiel. Je kan later accounts toevoegen of verwijderen.",
   "accountsManageTitle": "Beheer je accounts",
-  "accountsManageDescription": "Je kunt hier je accounts toevoegen, verwijderen en opnieuw ordenen. Het eerste account wordt gebruikt als standaardaccount in de app.",
-  "accountsNoneFound": "Geen account gekoppeld aan je profiel gevonden",
+  "accountsNoneFound": "Geen gekoppeld account aan je profiel gevonden",
   "accountsPlayerTag": "Speler Tag (#ABC123)",
-  "accountsPlayerTags": "Speler Tags",
-  "accountsEnterPlayerTag": "Voer een spelertag in",
+  "accountsEnterPlayerTag": "Voer een speler-ID in",
   "accountsAdd": "Account toevoegen",
   "accountsDelete": "Account verwijderen",
   "accountsApiToken": "Account API-token",
   "accountsEnterApiToken": "Voer het account API-token in om te bevestigen dat het van jou is. Je vindt het in Clash of Clans Instellingen > Meer instellingen > API-token.",
   "accountsFillAllFields": "Vul alle velden in.",
-  "accountsErrorTagNotExists": "De ingevoerde spelertag bestaat niet.",
-  "accountsErrorAlreadyLinked": "De spelertag is al gekoppeld aan iemand anders.",
+  "accountsErrorTagNotExists": "Het ingevoerde speler-ID bestaat niet.",
+  "accountsErrorAlreadyLinked": "Het speler-ID is al aan iemand gekoppeld.",
   "accountsErrorAlreadyLinkedToYou": "De spelertag is al aan jou gekoppeld.",
   "accountsErrorWrongApiToken": "Het ingevoerde API-token is onjuist",
   "accountsErrorFailedToAdd": "Account toevoegen mislukt. Probeer het later opnieuw.",
@@ -176,15 +128,12 @@
   "errorSubtitle": "Als het probleem aanhoudt, kijk dan op onze Discord-server of we ervan op de hoogte zijn.",
   "errorLoadingVersion": "Fout bij het laden van de versie",
   "@errorLoadingVersion": {
-    "description": "Foutmelding wanneer de app-versie niet kan worden geladen"
+    "description": "Error message when the app version cannot be loaded"
   },
-  "errorConnectionGeneral": "Er is een fout opgetreden. Controleer je internetverbinding en probeer het opnieuw.",
-  "errorConnectionRelaunch": "Er is een fout opgetreden. Controleer je internetverbinding en start de app opnieuw op.",
   "errorCannotOpenLink": "We kunnen deze link niet openen.",
   "errorExitAppToOpenClash": "Je verlaat de app om Clash of Clans te openen.",
-  "playerTitle": "Speler",
   "playerSearchTitle": "Zoek speler",
-  "playerSearchPlaceholder": "Spelernaam of tag",
+  "playerSearchPlaceholder": "Spelers-ID of naam",
   "playerLastActive": "Laatst actief: {date}",
   "@playerLastActive": {
     "placeholders": {
@@ -193,7 +142,7 @@
       }
     }
   },
-  "playerNotTracked": "Deze speler wordt niet gevolgd. De gegevens kunnen onnauwkeurig zijn.",
+  "playerNotTracked": "Deze speler wordt niet gevolgd. De gegevens zijn mogelijk onnauwkeurig.",
   "playerClanDescription": "Je clan is \"{clan}\" ({tag}).",
   "@playerClanDescription": {
     "placeholders": {
@@ -227,7 +176,7 @@
       }
     }
   },
-  "playerWarStarsDescription": "Je hebt {stars} oorlogsterren.",
+  "playerWarStarsDescription": "Je hebt {stars} oorlogssterren.",
   "@playerWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -269,7 +218,6 @@
   "gameBaseBuilder": "Bouwerbasis",
   "gameClanCapital": "Clan Hoofdstad",
   "gameTownHall": "SH",
-  "gameBuilderHall": "BZ",
   "gameTownHallLevel": "SH level",
   "gameTownHallLevelNumber": "Stadhuis {level}",
   "@gameTownHallLevelNumber": {
@@ -287,20 +235,12 @@
       }
     }
   },
-  "gameBHLevel": "BH{level}",
-  "@gameBHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
   "gameExpLevel": "Ervaringsniveau",
   "gameTrophies": "Trofeeën",
   "gameBuilderBaseTrophies": "BB Trofeeën",
   "gameDonations": "Donaties",
   "gameDonationsReceived": "Donaties ontvangen",
-  "gameDonationsRatio": "Donatieverhouding",
+  "gameDonationsRatio": "Donatie Verhouding",
   "gameLevel": "Level: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
@@ -316,7 +256,6 @@
   "gameEquipment": "Uitrusting",
   "gameHeroesEquipments": "Heldenuitrusting",
   "gameTroops": "Troepen",
-  "gameSuperTroops": "Supertroepen",
   "gameActiveSuperTroops": "Actieve supertroepen",
   "gamePets": "Huisdieren",
   "gameSiegeMachines": "Belegeringsmachines",
@@ -326,32 +265,31 @@
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Makerscode: ClashKing",
   "clanTitle": "Clan",
-  "clansTitle": "Clans",
   "clanSearchTitle": "Zoek clan",
   "clanSearchPlaceholder": "Clannaam",
   "clanNone": "Geen clan",
   "clanJoinToUnlock": "Sluit je aan bij een clan om nieuwe functies te ontgrendelen.",
   "clanMembers": "Leden",
-  "clanWarFrequency": "Oorlogfrequentie",
+  "clanWarFrequency": "Oorlog frequentie",
   "clanMinimumMembers": "Minimum aantal leden",
-  "clanMaximumMembers": "Maximum aantal leden",
+  "clanMaximumMembers": "Maximaal aantal leden",
   "clanLocation": "Locatie",
-  "clanMinimumPoints": "Minimale clanpunten",
-  "clanMinimumLevel": "Minimaal clanniveau",
+  "clanMinimumPoints": "Minimale clan punten",
+  "clanMinimumLevel": "Minimaal clan niveau",
   "clanInviteOnly": "Op uitnodiging",
   "@clanInviteOnly": {
-    "description": "Clan is alleen op uitnodiging"
+    "description": "Clan is invite only"
   },
   "clanOpened": "Geopend",
   "@clanOpened": {
-    "description": "Clan is geopend"
+    "description": "Clan is opened"
   },
   "clanClosed": "Gesloten",
   "@clanClosed": {
-    "description": "Clan is gesloten"
+    "description": "Clan is closed"
   },
   "clanRoleLeader": "Leider",
-  "clanRoleCoLeader": "Co-leider",
+  "clanRoleCoLeader": "Co-Leider",
   "clanRoleElder": "Oudste",
   "clanRoleMember": "Lid",
   "clanWarFrequencyAlways": "Altijd",
@@ -361,15 +299,6 @@
   "clanWarFrequencyMoreThanOncePerWeek": "Meer dan 1/week",
   "clanWarFrequencyRarely": "Zelden",
   "timeHourIndicator": "u",
-  "timeMinIndicator": "m",
-  "timeDaysLeft": "{days} resterende dagen",
-  "@timeDaysLeft": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
   "timeDaysAgo": "{days} dagen geleden",
   "@timeDaysAgo": {
     "placeholders": {
@@ -394,7 +323,7 @@
       }
     }
   },
-  "timeHoursAgo": "{hours} uur geleden",
+  "timeHoursAgo": "{hours} uren geleden",
   "@timeHoursAgo": {
     "placeholders": {
       "hours": {
@@ -414,14 +343,6 @@
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "timeSecondAgo": "{seconds}s geleden",
-  "@timeSecondAgo": {
-    "placeholders": {
-      "seconds": {
         "type": "int"
       }
     }
@@ -468,7 +389,7 @@
       }
     }
   },
-  "timeEndsIn": "Eindigt over {time}",
+  "timeEndsIn": "Eindigt in {time}",
   "@timeEndsIn": {
     "placeholders": {
       "time": {
@@ -484,16 +405,8 @@
       }
     }
   },
-  "timeUpdatedAt": "Bijgewerkt om {time}",
-  "@timeUpdatedAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "legendsTitle": "Legendarische Liga",
-  "legendsNotInLeague": "Niet in de Legendarische Liga",
+  "legendsTitle": "Onjuiste gegevens?",
+  "legendsNotInLeague": "Niet in de Legendarische Divisie",
   "legendsNoDataToday": "Je zit niet in de Legendarische Liga, maar vorige seizoenen zijn beschikbaar.",
   "legendsStartDescription": "Je bent de dag begonnen met {trophies} trofeeën.",
   "@legendsStartDescription": {
@@ -569,7 +482,7 @@
   "legendsLastSeason": "Laatste seizoen",
   "legendsBestRank": "Beste wereldwijde rang",
   "legendsTrophiesBySeason": "Trofeeën per seizoen",
-  "legendsEosTrophies": "Einde van seizoen trofeeën",
+  "legendsEosTrophies": "Einde van Seizoen Trofeeën",
   "legendsEosDetails": "Einde van seizoen details",
   "legendsInaccurateTitle": "Onjuiste gegevens?",
   "legendsInaccurateIntro": "Vanwege beperkingen van de Clash of Clans API zijn onze gegevens mogelijk niet altijd perfect accuraat. Hier is waarom:\n",
@@ -586,11 +499,11 @@
   "statsSeasonStats": "Seizoenstatistieken",
   "statsByDay": "Per dag",
   "@statsByDay": {
-    "description": "Toont statistieken per dag"
+    "description": "Shows stats by day"
   },
   "statsBySeason": "Per seizoen",
   "@statsBySeason": {
-    "description": "Toont statistieken per seizoen"
+    "description": "Shows stats by season"
   },
   "statsDayIndex": "Dag {index}",
   "@statsDayIndex": {
@@ -608,20 +521,14 @@
       }
     }
   },
-  "statsYear": "Jaar",
-  "statsMonth": "Maand",
   "statsSeasonDate": "{date} seizoen",
   "@statsSeasonDate": {
-    "description": "Voorbeeld: augustus 2024 seizoen",
+    "description": "Example: August 2024 season",
     "placeholders": {
       "date": {
         "type": "String"
       }
     }
-  },
-  "statsSelectSeason": "Selecteer een seizoen",
-  "@statsSelectSeason": {
-    "description": "Vraag speler om een seizoen te selecteren"
   },
   "statsAllTownHalls": "Alle stadhuizen",
   "statsMembers": "Ledenstatistieken",
@@ -646,7 +553,7 @@
         "type": "int"
       }
     },
-    "description": "Aantal accounts (bijv: 4 accounts)"
+    "description": "Number of accounts (ex: 4 accounts)"
   },
   "todoAccountsNumberActive": "{number} actieve accounts",
   "@todoAccountsNumberActive": {
@@ -718,14 +625,12 @@
     }
   },
   "warTitle": "Oorlog",
-  "warFrequency": "Oorlogfrequentie",
-  "warParticipation": "Oorlogdeelname",
-  "warLeague": "Oorlog/Liga",
-  "warHistory": "Oorloggeschiedenis",
-  "warLog": "Oorloglog",
-  "warLogPublic": "Openbaar oorloglog",
-  "warLogPrivate": "Privé oorloglog",
-  "warLogClosed": "{clan}s oorloglog is gesloten.",
+  "warFrequency": "Oorlog frequentie",
+  "warParticipation": "Oorlogsdeelname",
+  "warLeague": "Oorlog/Divisies",
+  "warHistory": "Oorlogsgeschiedenis",
+  "warLog": "Oorlogs logboek",
+  "warLogClosed": "Oorlogs logboek gesloten.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -735,7 +640,6 @@
   },
   "warStats": "Oorlogstatistieken",
   "warOngoing": "Lopende oorlog",
-  "warNotInWar": "Niet in oorlog",
   "warIsNotInWar": "{clan} is niet in oorlog.",
   "@warIsNotInWar": {
     "placeholders": {
@@ -745,21 +649,21 @@
     }
   },
   "warAskForWar": "Neem contact op met de leider of een co-leider om een oorlog te starten.",
-  "warAskForWarLogOpening": "Neem contact op met de leider of een co-leider om het oorloglog te openen.",
+  "warAskForWarLogOpening": "Neem contact op met de leider of een co-leider om het oorlogs logsboek te openen.",
   "warEnded": "Oorlog afgelopen",
   "warPreparation": "Voorbereiding",
   "warPerfectWar": "Perfecte oorlog",
   "warVictory": "Overwinning",
-  "warDefeat": "Nederlaag",
+  "warDefeat": "Verslagen",
   "warDraw": "Gelijkspel",
   "@warDraw": {
-    "description": "Oorlog eindigde in gelijkspel"
+    "description": "War ended in a draw"
   },
   "warTeamSize": "Teamgrootte",
   "warMyTeam": "Mijn team",
   "warEnemiesTeam": "Vijanden",
   "warClanDraw": "De twee clans staan gelijk",
-  "warStateOfTheWar": "Stand van de oorlog",
+  "warStateOfTheWar": "Staat van de oorlog",
   "warStarsNeededToTakeTheLead": "{clan} heeft nog {star} meer ster(ren) nodig of {stars2} ster(ren) en {percent}% om de leiding te nemen.",
   "@warStarsNeededToTakeTheLead": {
     "placeholders": {
@@ -789,9 +693,9 @@
     }
   },
   "warNoDataAvailableForThisWar": "Geen gegevens beschikbaar voor deze oorlog",
-  "fastCalculator": "Snelle rekenmachine",
-  "fastCalculatorAnswer": "Om een vernietigingspercentage van {percentNeeded}% te bereiken, heb je in totaal {result}% nodig.",
-  "@fastCalculatorAnswer": {
+  "warCalculatorFast": "Snelle rekenmachine",
+  "warCalculatorAnswer": "Om een vernietigingspercentage van {percentNeeded}% te bereiken, heb je in totaal {result}% nodig.",
+  "@warCalculatorAnswer": {
     "placeholders": {
       "percentNeeded": {
         "type": "String"
@@ -801,13 +705,12 @@
       }
     }
   },
-  "teamSize": "Teamgrootte",
-  "neededOverall": "% Nodig totaal",
-  "calculate": "Berekenen",
+  "warCalculatorNeededOverall": "% Nodig in totaal",
+  "warCalculatorCalculate": "Berekenen",
   "warAttacksTitle": "Aanvallen",
   "warAttacksNone": "Nog geen aanval",
   "@warAttacksNone": {
-    "description": "Nog geen aanval in oorlog"
+    "description": "No attack yet in war"
   },
   "warAttacksBest": "Beste aanvallen",
   "warAttacksCount": "Aantal aanvallen",
@@ -839,11 +742,10 @@
       }
     }
   },
-  "warDefenseTitle": "Verdediging",
   "warDefensesTitle": "Verdedigingen",
   "warDefensesNone": "Nog geen verdediging",
   "@warDefensesNone": {
-    "description": "Nog geen verdediging in oorlog"
+    "description": "No defense yet in war"
   },
   "warDefensesBest": "Beste verdedigingen",
   "warDefensesBestOutOf": "Beste verdediging (van {number})",
@@ -853,9 +755,8 @@
         "type": "int"
       }
     },
-    "description": "Beste oorlogverdediging (van 3 verdedigingen)"
+    "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefenseStars": "Verdedigingssterren",
   "warDefensesNumber": "Je hebt {number_time} keer verdedigd tijdens de laatste {number_war} oorlogen.",
   "@warDefensesNumber": {
     "placeholders": {
@@ -884,7 +785,6 @@
     }
   },
   "warStarsTitle": "Sterren",
-  "warStarsTotal": "Totaal",
   "warStarsAverage": "Gemiddelde sterren",
   "warStarsNumber": "Aantal sterren",
   "warStarsOne": "1 ster",
@@ -893,13 +793,13 @@
   "warStarsZero": "0 sterren",
   "warStarsBestPerformance": "Beste prestatie",
   "@warStarsBestPerformance": {
-    "description": "Beste prestatie in oorlog"
+    "description": "Best performance in war"
   },
   "warDestructionTitle": "Vernietiging",
   "warDestructionAverage": "Gemiddelde vernietiging",
-  "warDestructionRate": "Vernietigingspercentage",
+  "warDestructionRate": "Totale vernietiging",
   "@warDestructionRate": {
-    "description": "Percentage vernietiging in oorlog"
+    "description": "Percentage of destruction in war"
   },
   "warHistoryWinsDescription": "Je clan heeft {wins} oorlogen gewonnen ({percent}%) van de laatste 50 oorlogen.",
   "@warHistoryWinsDescription": {
@@ -912,7 +812,7 @@
       }
     }
   },
-  "warHistoryLossesDescription": "Je clan heeft {losses} oorlogen verloren ({percent}%) van de laatste 50 oorlogen.",
+  "warHistoryLossesDescription": "Je clan heeft {losses} oorlogen verloren ({percent}%) in de laatste 50 oorlogen.",
   "@warHistoryLossesDescription": {
     "placeholders": {
       "losses": {
@@ -923,7 +823,7 @@
       }
     }
   },
-  "warHistoryDrawsDescription": "Je clan had {draws} gelijkspelen ({percent}%) van de laatste 50 oorlogen.",
+  "warHistoryDrawsDescription": "Je clan had {draws} gelijkspel ({percent}%) in de laatste 50 oorlogen.",
   "@warHistoryDrawsDescription": {
     "placeholders": {
       "draws": {
@@ -942,7 +842,7 @@
       }
     }
   },
-  "warHistoryAverageWarStarsDescription": "Je clan had gemiddeld {stars} sterren per oorlog van de laatste 50 oorlogen. Dit vertegenwoordigt {percent}% van de totale sterren.",
+  "warHistoryAverageWarStarsDescription": "Je clan heeft gemiddeld {stars} sterren aan het einde van de laatste 50 oorlogen. Dit vertegenwoordigt {percent} van de totale sterren.",
   "@warHistoryAverageWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -953,7 +853,7 @@
       }
     }
   },
-  "warHistoryAverageHitRateDescription": "Je clan had een gemiddeld vernietigingspercentage van {percent}% van de laatste 50 oorlogen.",
+  "warHistoryAverageHitRateDescription": "Je clan heeft gemiddeld {percent} vernietigingspercentage aan het einde van de laatste 50 oorlogen.",
   "@warHistoryAverageHitRateDescription": {
     "placeholders": {
       "percent": {
@@ -963,36 +863,28 @@
   },
   "warPositionMap": "Kaartpositie",
   "@warPositionMap": {
-    "description": "Kaartpositie in oorlog"
+    "description": "Map position in war"
   },
   "warPositionAbbr": "Pos",
   "@warPositionAbbr": {
-    "description": "Afkorting voor kaartpositie"
+    "description": "Abbreviation for map position"
   },
   "warPositionOrder": "Volgorde",
   "@warPositionOrder": {
-    "description": "Volgorde van de speler in de clan"
+    "description": "Order of the player in the clan"
   },
   "warOpponentTownhall": "Teg SH",
   "@warOpponentTownhall": {
-    "description": "Afkorting voor tegenstander stadhuisniveau"
+    "description": "Abbreviation for opponent's town hall level"
   },
   "warOpponentLowerTownhall": "Lager SH",
   "warOpponentUpperTownhall": "Hoger SH",
-  "equalThLevel": "Gelijk SH",
-  "selectMembersThLevel": "Leden SH-niveau",
-  "selectOpponentsThLevel": "Tegenstanders SH-niveau",
-  "warFiltersByNumberOfWars": "Op aantal oorlogen",
-  "@warFiltersByNumberOfWars": {
-    "description": "filteren op aantal oorlogen"
-  },
-  "warFiltersByDateRange": "Op datumbereik",
-  "@warFiltersByDateRange": {
-    "description": "filteren op datumbereik"
-  },
+  "warOpponentEqualThLevel": "Hetzelfde SH",
+  "warOpponentSelectMembersThLevel": "Leden SH level",
+  "warOpponentSelectOpponentsThLevel": "Tegenstanders SH level",
   "warFiltersLastXwars": "Laatste {number} oorlogen",
   "@warFiltersLastXwars": {
-    "description": "Voorbeeld: toont de laatste 25 oorlogen",
+    "description": "Example: Shows the last 25 wars",
     "placeholders": {
       "number": {
         "type": "int"
@@ -1001,41 +893,41 @@
   },
   "warFiltersFriendly": "Vriendschappelijk",
   "@warFiltersFriendly": {
-    "description": "Vriendschappelijke oorlog"
+    "description": "Friendly war"
   },
   "warFiltersRandom": "Willekeurig",
   "@warFiltersRandom": {
-    "description": "Willekeurige/gewone oorlog (niet vriendschappelijk of CWL)"
+    "description": "Random/basic war (not friendly or cwl)"
   },
   "warVisibilityToggleTownHall": "Verberg/toon statistieken van voormalige SH-niveaus",
   "@warVisibilityToggleTownHall": {
-    "description": "Bijvoorbeeld, verberg statistieken van SH15 en lager als de speler nu SH16 is"
+    "description": "For example, hide stats from TH15 and below if the player is now TH16"
   },
-  "warEventsTitle": "Evenementen",
+  "warEventsTitle": "Events",
   "@warEventsTitle": {
-    "description": "Oorlogevenementen"
+    "description": "War events"
   },
   "warEventsNewest": "Nieuwste",
   "warEventsOldest": "Oudste",
   "warStatusReady": "Aangemeld",
   "@warStatusReady": {
-    "description": "Aangemeld voor oorlog"
+    "description": "Opted In for war"
   },
   "warStatusUnready": "Afgemeld",
   "@warStatusUnready": {
-    "description": "Afgemeld voor oorlog"
+    "description": "Opted Out for war"
   },
   "warStatusMissed": "Gemist",
   "@warStatusMissed": {
-    "description": "Gemiste aanvallen"
+    "description": "Missed attacks"
   },
   "warAbbreviationAvg": "Gem",
   "@warAbbreviationAvg": {
-    "description": "Afkorting voor gemiddelde"
+    "description": "Abbreviation for average"
   },
   "warAbbreviationAvgPercentage": "Gem %",
   "@warAbbreviationAvgPercentage": {
-    "description": "Afkorting voor gemiddeld percentage"
+    "description": "Abbreviation for average percentage"
   },
   "cwlTitle": "CWL",
   "cwlClanWarLeague": "Clanoorlogliga",
@@ -1065,7 +957,7 @@
       }
     }
   },
-  "cwlStars": "Je clan heeft in totaal {stars} sterren.",
+  "cwlStars": "Je clan heeft een totaal van {stars} sterren.",
   "@cwlStars": {
     "placeholders": {
       "stars": {
@@ -1088,14 +980,6 @@
         "type": "int"
       },
       "totalAttacks": {
-        "type": "int"
-      }
-    }
-  },
-  "cwlCurrentRoundDescription": "Het is momenteel ronde {round}.",
-  "@cwlCurrentRoundDescription": {
-    "placeholders": {
-      "round": {
         "type": "int"
       }
     }
@@ -1138,7 +1022,7 @@
   },
   "joinLeaveMovingNumberDescription": "{number} speler(s) verlieten de clan en traden opnieuw toe tijdens het huidige seizoen ({date}).",
   "@joinLeaveMovingNumberDescription": {
-    "description": "Aantal spelers die de clan verlieten en opnieuw toetraden tijdens het huidige seizoen.",
+    "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
       "number": {
         "type": "int"
@@ -1150,7 +1034,7 @@
   },
   "joinLeaveUniqueNumberDescription": "{number} unieke speler(s) traden toe/verlieten de clan tijdens het huidige seizoen ({date}).",
   "@joinLeaveUniqueNumberDescription": {
-    "description": "Aantal unieke spelers die toetraden/de clan verlieten tijdens het huidige seizoen.",
+    "description": "Number of unique players who joined/left the clan during the current season.",
     "placeholders": {
       "number": {
         "type": "int"
@@ -1177,11 +1061,11 @@
     }
   },
   "@joinLeaveTitle": {
-    "description": "Logs van spelers die toetreden tot of verlaten van de clan."
+    "description": "Logs of players joining or leaving the clan."
   },
   "joinLeaveLeftOnAt": "Vertrokken op {date} om {time}.",
   "@joinLeaveLeftOnAt": {
-    "description": "[De speler] verliet de clan op 16/06/2024 om 10:35.",
+    "description": "[The player] left the clan on 16/06/2024 at 10:35.",
     "placeholders": {
       "date": {
         "type": "String"
@@ -1191,9 +1075,9 @@
       }
     }
   },
-  "joinLeaveJoinedOnAt": "Toegetreden op {date} om {time}.",
+  "joinLeaveJoinedOnAt": "Lid geworden op {date} om {time}.",
   "@joinLeaveJoinedOnAt": {
-    "description": "[De speler] trad toe tot de clan op 16/06/2024 om 10:35.",
+    "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
     "placeholders": {
       "date": {
         "type": "String"
@@ -1207,11 +1091,7 @@
   "raidsLast": "Laatste raids",
   "raidsOngoing": "Lopende raids",
   "raidsDistrictsDestroyed": "Districten vernietigd",
-  "raidsCompleted": "Raids voltooid",
-  "searchTitle": "Zoeken",
-  "@searchTitle": {
-    "description": "Zoeken naar een speler of clan"
-  },
+  "raidsCompleted": "Rooftochten voltooid",
   "searchNoResult": "Geen resultaat.",
   "maintenanceTitle": "Onderhoud",
   "maintenanceDescription": "Clash of Clans is momenteel in onderhoud, dus we kunnen geen toegang krijgen tot de API. Kom later terug.",
@@ -1228,56 +1108,49 @@
   "downloadError": "Bestand downloaden mislukt",
   "dashboardTitle": "Dashboard",
   "toolsTitle": "Hulpmiddelen",
-  "communityTitle": "Gemeenschap",
   "navigationTeam": "Teams",
-  "statistics": "Statistieken",
-  "navigationLeague": "Liga",
-  "navigationWars": "Oorlogen",
-  "versionDevice": "Versie & apparaat",
+  "navigationStatistics": "Statistieken",
+  "versionDevice": "Versie & Apparaat",
   "@versionDevice": {
-    "description": "Versie van de app en apparaatinformatie"
+    "description": "Version of the app and device information"
   },
   "betaFeature": "Beta-functie",
   "betaLabel": "BETA",
-  "betaDescription": "Deze functie bevindt zich momenteel in beta, er kunnen bugs in zitten of het kan onvolledig zijn. We werken actief aan verbeteringen en verwelkomen je feedback. Deel je ideeën en meld problemen op onze Discord-server om ons te helpen het beter te maken.",
-  "settingsTitle": "Instellingen",
+  "betaDescription": "Deze functie bevindt zich momenteel in bèta, het kan wat bugs bevatten of onvolledig zijn. We werken actief aan verbeteringen en verwelkomen je feedback. Deel alstublieft je ideeën en meld eventuele problemen op onze Discord-server om ons te helpen de app te verbeteren.",
   "settingsLanguage": "Taal",
   "settingsSelectLanguage": "Selecteer een taal",
-  "settingsToggleTheme": "Thema wisselen",
+  "settingsToggleTheme": "Thema veranderen",
   "faqTitle": "FAQ",
-  "faqSubtitle": "Veelgestelde vragen",
+  "faqSubtitle": "Veelgestelde Vragen",
   "faqIsThisFromSupercell": "Is deze app van Supercell?",
-  "faqFanContentPolicy": "Dit materiaal is onofficieel en wordt niet goedgekeurd door Supercell. Voor meer informatie zie Supercells Fan Content Policy: www.supercell.com/fan-content-policy",
+  "faqFanContentPolicy": "Dit materiaal is onofficieel en wordt niet goedgekeurd door Supercell. Voor meer informatie, zie de Fan Content Policy van Supercell: www.supercell.com/fan-content-policy",
   "faqWhyNotAccurate": "Waarom zijn de gegevens soms onnauwkeurig of ontbreken ze?",
   "faqClanNotTracked": "Clan niet gevolgd",
-  "faqClanNotTrackedAnswer": "ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan de ClashKing Bot uit op je Discord-server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.",
-  "faqTrackingDown": "Tracking down",
-  "faqTrackingDownAnswer": "Het volgen kan gedurende een bepaalde periode stoppen met werken. Daarom kun je soms gaten in je gegevens hebben. We werken eraan om dit te verbeteren.",
-  "faqApiLimitation": "Clash of Clans API-beperking",
-  "faqApiLimitationAnswer": "Sommige gegevens worden geleverd door Clash of Clans en hun API heeft enkele beperkingen. Dit is het geval bij legend tracking, waarbij soms trofeewinst en -verlies worden gestapeld alsof het een enkele aanval was. Dit is ook waarom we geen informatie hebben over de niveaus van je gebouwen.",
-  "faqSupportWork": "Hoe kan ik jullie werk ondersteunen?",
-  "faqSupportWorkAnswer": "Er zijn verschillende manieren om ons te ondersteunen:",
+  "faqClanNotTrackedAnswer": "ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan ClashKing uit op je Discord server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.",
+  "faqTrackingDown": "Tracking niet beschikbaar",
+  "faqTrackingDownAnswer": "Het volgen kan gedurende een bepaalde periode stoppen met werken. Daarom kunnen er soms gaten in je gegevens zitten. We werken eraan om dit te verbeteren.",
+  "faqApiLimitation": "Clash of Clans API limitatie",
+  "faqApiLimitationAnswer": "Sommige gegevens worden geleverd door Clash of Clans en hun API heeft enkele beperkingen. Dit is het geval bij het volgen van de legendarisch divisie. De API stapelt soms een trofeeënwimst en -verlies, alsof het één aanval was. Daarom hebben we ook geen informatie over het niveau van je gebouwen.",
+  "faqSupportWork": "Hoe kan ik je werk ondersteunen?",
+  "faqSupportWorkAnswer": "Er zijn verschillende manieren om ons te steunen:",
   "faqUseCodeClashKing": "Gebruik code \"ClashKing\"",
   "faqSupportUsOnPatreon": "Steun ons op Patreon",
-  "faqShareTheApp": "Deel de app met je vrienden",
-  "faqRateTheApp": "Beoordeel de app in de store",
+  "faqShareTheApp": "Deel deze app met je vrienden",
+  "faqRateTheApp": "Beoordeel de app in de winkel",
   "faqHelpUsTranslate": "Help ons de app te vertalen",
-  "faqHowToInviteTheBot": "Hoe kan ik jullie bot uitnodigen op mijn Discord-server?",
-  "faqHowToInviteTheBotAnswer": "Je kunt onze bot uitnodigen op je server door op de onderstaande knop te klikken. Je hebt de \"Server beheren\" toestemming nodig om de bot toe te voegen.",
+  "faqHowToInviteTheBot": "Hoe kan ik je bot uitnodigen voor mijn Discord Server?",
+  "faqHowToInviteTheBotAnswer": "Je kan onze bot uitnodigen op je server door op de onderstaande knop te klikken. Je moet de toestemming \"Server Beheren\" hebben om de bot toe te voegen.",
   "faqInviteTheBot": "ClashKing Bot uitnodigen",
-  "faqNeedHelp": "Ik heb hulp nodig of wil graag een suggestie doen. Hoe kan ik contact met jullie opnemen?",
-  "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven, of je kunt ons een e-mail sturen naar devs@clashkingbot.com. Schrijf alleen in het Engels of Frans.",
+  "faqNeedHelp": "Ik heb hulp nodig of ik zou graag een suggestie willen doen. Hoe kan ik contact met u opnemen?",
+  "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven, of je kan ons een e-mail sturen naar devs@clashkingbot.com. Graag alleen in het Engels of Frans schrijven.",
   "faqSendEmail": "Stuur een e-mail",
-  "faqJoinDiscord": "Word lid van onze Discord-server",
-  "faqCannotOpenMailClient": "Om een of andere reden kunnen we je mailclient niet openen. We hebben het e-mailadres voor je gekopieerd. Je kunt een e-mail schrijven en het adres plakken in het ontvangerveld.",
+  "faqJoinDiscord": "Word lid van de Discord server",
+  "faqCannotOpenMailClient": "Om wat voor reden dan ook kunnen we je mailclient niet openen. We hebben het e-mailadres voor je gekopieerd. Je kan een e-mail schrijven en het adres plakken in het ontvanger-veld.",
   "translationHelpUsTranslate": "Help ons met vertalen",
   "translationSuggestFeatures": "Functies voorstellen",
   "translationThankYou": "Bedankt!",
   "translationThankYouContent": "Een enorme dank aan al onze geweldige vertalers die ons helpen deze app toegankelijk te maken voor meer mensen over de hele wereld!",
   "translationHelpTranslateContent": "Je kunt ons helpen de app te vertalen op Crowdin. Als je taal niet beschikbaar is op Crowdin, vraag deze dan aan op onze Discord-server. Heel erg bedankt voor je hulp!",
   "translationHelpTranslateButton": "Help vertalen op Crowdin",
-  "translationCurrentTranslators": "Huidige vertalers",
-  "filters": "Filters",
-  "cancel": "Annuleren",
-  "apply": "Toepassen"
+  "translationCurrentTranslators": "Huidige vertalers"
 }
