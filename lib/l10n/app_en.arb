@@ -1,14 +1,9 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
-  
-  "appTitle": "ClashKing",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  
   "generalLoading": "Loading...",
-  "generalError": "Error",
   "generalRetry": "Retry",
   "generalTryAgain": "Try again",
-  "generalClose": "Close",
   "generalCancel": "Cancel",
   "generalOk": "OK",
   "@generalOk": {
@@ -16,16 +11,7 @@
   },
   "generalApply": "Apply",
   "generalConfirm": "Confirm",
-  "generalAdd": "Add",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "Delete",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
   "generalManage": "Manage",
-  "generalManagement": "Management",
   "generalSettings": "Settings",
   "generalCopiedToClipboard": "Copied to clipboard",
   "generalComingSoon": "Coming soon!",
@@ -60,9 +46,7 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
   "generalRole": "Role",
-  "generalDate": "Date",
   "generalStats": "Stats",
   "generalFullStats": "Full Stats",
   "generalDetails": "Details",
@@ -70,31 +54,13 @@
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Charts",
   "generalFilters": "Filters",
-  "generalWhatever": "Whatever",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Any",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
   "generalNotSet": "Not set",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
   "generalWarning": "Warning",
   "generalNoDataAvailable": "No data available.",
-  "generalClosed": "Closed",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignIn": "Sign In",
   "authSignUp": "Sign up",
   "authLogin": "Login",
   "authLogout": "Log out",
@@ -102,29 +68,19 @@
   "authJoinClashKing": "Join ClashKing",
   "authCreateClashKingAccount": "Create ClashKing Account",
   "authCreateAccountToGetStarted": "Create your account to get started",
-  "authDontHaveAccount": "Don't have an account? Create one",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "Are you sure you want to log out?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
-  
   "authDiscordTitle": "Discord",
   "authDiscordSignIn": "Sign In with Discord",
   "authDiscordContinue": "Continue with Discord",
   "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authDiscordError": "Discord login failed. Please try again.",
-  
   "authEmailTitle": "Email",
-  "authEmailSignIn": "Sign in with Email",
   "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailLabel": "Email",
-  "authEmailPlaceholder": "Enter your email",
   "authEmailRequired": "Please enter your email",
   "authEmailInvalid": "Please enter a valid email",
-  "authEmailAlreadyInUse": "Email may already be in use",
-  "authEmailError": "Email login failed. Please check your credentials.",
-  
   "authPasswordLabel": "Password",
   "authPasswordConfirm": "Confirm Password",
   "authPasswordRequired": "Please enter your password",
@@ -133,17 +89,11 @@
   "authPasswordTooShort": "Password must be at least 8 characters",
   "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
   "authPasswordForgot": "Forgot password?",
-  "authPasswordInvalid": "Invalid email or password",
-  
   "authUsernameLabel": "Username",
   "authUsernameRequired": "Please enter a username",
   "authUsernameTooShort": "Username must be at least 3 characters",
-  
-  "authErrorGeneral": "An error occurred while logging in. Please try again later.",
-  "authErrorRegistration": "Registration failed. Email may already be in use.",
   "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
   "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-  
   "authAccountManagement": "Account Management",
   "authAccountConnected": "Connected Accounts",
   "authAccountConnectedStatus": "Connected",
@@ -153,21 +103,14 @@
   "authAccountLinkEmail": "Link Email Account",
   "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
   "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "authAccountEmailLinkFailed": "Failed to link email account. Email may already be in use.",
-  
   "helpTitle": "Need help?",
   "helpJoinDiscord": "Join Discord",
   "helpEmailUs": "Email Us",
-  "helpJoinDiscordServer": "Need help? Join us on Discord.",
-  "helpCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
-  
   "accountsWelcome": "Welcome!",
   "accountsWelcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
   "accountsManageTitle": "Manage your accounts",
-  "accountsManageDescription": "You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.",
   "accountsNoneFound": "No account linked to your profile found",
   "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsPlayerTags": "Player Tags",
   "accountsEnterPlayerTag": "Enter a player tag",
   "accountsAdd": "Add account",
   "accountsDelete": "Delete account",
@@ -181,19 +124,14 @@
   "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
   "accountsErrorFailedToDelete": "Failed to delete link. Please try again later.",
   "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
-  
   "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
   "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
   "errorLoadingVersion": "Error loading version",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorConnectionGeneral": "An error occurred. Please check your internet connection and try again.",
-  "errorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
   "errorCannotOpenLink": "We can't open this link.",
   "errorExitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-  
-  "playerTitle": "Player",
   "playerSearchTitle": "Search player",
   "playerSearchPlaceholder": "Player's name or tag",
   "playerLastActive": "Last active: {date}",
@@ -276,12 +214,10 @@
       }
     }
   },
-  
   "gameBaseHome": "Home Base",
   "gameBaseBuilder": "Builder Base",
   "gameClanCapital": "Clan Capital",
   "gameTownHall": "TH",
-  "gameBuilderHall": "BH",
   "gameTownHallLevel": "TH Level",
   "gameTownHallLevelNumber": "Town Hall {level}",
   "@gameTownHallLevelNumber": {
@@ -293,14 +229,6 @@
   },
   "gameTHLevel": "TH{level}",
   "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "gameBHLevel": "BH{level}",
-  "@gameBHLevel": {
     "placeholders": {
       "level": {
         "type": "int"
@@ -328,7 +256,6 @@
   "gameEquipment": "Equipments",
   "gameHeroesEquipments": "Hero equipments",
   "gameTroops": "Troops",
-  "gameSuperTroops": "Super Troops",
   "gameActiveSuperTroops": "Active Super Troops",
   "gamePets": "Pets",
   "gameSiegeMachines": "Siege Machines",
@@ -337,9 +264,7 @@
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Creator Code: ClashKing",
-  
   "clanTitle": "Clan",
-  "clansTitle": "Clans",
   "clanSearchTitle": "Search clan",
   "clanSearchPlaceholder": "Clan's name",
   "clanNone": "No clan",
@@ -363,29 +288,17 @@
   "@clanClosed": {
     "description": "Clan is closed"
   },
-  
   "clanRoleLeader": "Leader",
   "clanRoleCoLeader": "Co-Leader",
   "clanRoleElder": "Elder",
   "clanRoleMember": "Member",
-  
   "clanWarFrequencyAlways": "Always",
   "clanWarFrequencyNever": "Never",
   "clanWarFrequencyUnknown": "Unknown",
   "clanWarFrequencyOncePerWeek": "1/week",
   "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
   "clanWarFrequencyRarely": "Rarely",
-  
   "timeHourIndicator": "h",
-  "timeMinIndicator": "m",
-  "timeDaysLeft": "{days} days left",
-  "@timeDaysLeft": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
   "timeDaysAgo": "{days} days ago",
   "@timeDaysAgo": {
     "placeholders": {
@@ -430,14 +343,6 @@
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "timeSecondAgo": "{seconds}s ago",
-  "@timeSecondAgo": {
-    "placeholders": {
-      "seconds": {
         "type": "int"
       }
     }
@@ -500,15 +405,6 @@
       }
     }
   },
-  "timeUpdatedAt": "Updated at {time}",
-  "@timeUpdatedAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  
   "legendsTitle": "Legend League",
   "legendsNotInLeague": "Not in Legend League",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
@@ -600,7 +496,6 @@
   "legendsInaccurateNetGainTitle": "3. Net Gain/Loss: ",
   "legendsInaccurateNetGainBody": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
   "legendsInaccurateConclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-  
   "statsSeasonStats": "Season Stats",
   "statsByDay": "By Day",
   "@statsByDay": {
@@ -626,8 +521,6 @@
       }
     }
   },
-  "statsYear": "Year",
-  "statsMonth": "Month",
   "statsSeasonDate": "{date} season",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
@@ -637,13 +530,8 @@
       }
     }
   },
-  "statsSelectSeason": "Select a season",
-  "@statsSelectSeason": {
-    "description": "Ask player to select a season"
-  },
   "statsAllTownHalls": "All Town Halls",
   "statsMembers": "Members Stats",
-  
   "todoTitle": "To-do list",
   "todoExplanationTitle": "Task Calculation",
   "todoExplanationIntro": "The task completion percentage is calculated based on the following activities with specific weightings:",
@@ -736,15 +624,12 @@
       }
     }
   },
-  
   "warTitle": "War",
   "warFrequency": "War frequency",
   "warParticipation": "War Participation",
   "warLeague": "War/League",
   "warHistory": "War History",
   "warLog": "War Log",
-  "warLogPublic": "Public War Log",
-  "warLogPrivate": "Private War Log",
   "warLogClosed": "{clan}'s war log is closed.",
   "@warLogClosed": {
     "placeholders": {
@@ -755,7 +640,6 @@
   },
   "warStats": "War Stats",
   "warOngoing": "Ongoing war",
-  "warNotInWar": "Not in war",
   "warIsNotInWar": "{clan} is not in war.",
   "@warIsNotInWar": {
     "placeholders": {
@@ -823,7 +707,6 @@
   },
   "warCalculatorNeededOverall": "% Needed overall",
   "warCalculatorCalculate": "Calculate",
-  
   "warAttacksTitle": "Attacks",
   "warAttacksNone": "No attack yet",
   "@warAttacksNone": {
@@ -859,8 +742,6 @@
       }
     }
   },
-  
-  "warDefenseTitle": "Defense",
   "warDefensesTitle": "Defenses",
   "warDefensesNone": "No defense yet",
   "@warDefensesNone": {
@@ -876,7 +757,6 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefenseStars": "Defense Stars",
   "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
   "@warDefensesNumber": {
     "placeholders": {
@@ -904,9 +784,7 @@
       }
     }
   },
-  
   "warStarsTitle": "Stars",
-  "warStarsTotal": "Total",
   "warStarsAverage": "Average stars",
   "warStarsNumber": "Number of stars",
   "warStarsOne": "1 star",
@@ -917,14 +795,12 @@
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
   },
-  
   "warDestructionTitle": "Destruction",
   "warDestructionAverage": "Average destruction",
   "warDestructionRate": "Destruction rate",
   "@warDestructionRate": {
     "description": "Percentage of destruction in war"
   },
-  
   "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
   "@warHistoryWinsDescription": {
     "placeholders": {
@@ -985,7 +861,6 @@
       }
     }
   },
-  
   "warPositionMap": "Map Position",
   "@warPositionMap": {
     "description": "Map position in war"
@@ -998,7 +873,6 @@
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
-  
   "warOpponentTownhall": "Opp TH",
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
@@ -1008,15 +882,6 @@
   "warOpponentEqualThLevel": "Equal TH",
   "warOpponentSelectMembersThLevel": "Members TH Level",
   "warOpponentSelectOpponentsThLevel": "Opponents TH Level",
-  
-  "warFiltersByNumberOfWars": "By number of wars",
-  "@warFiltersByNumberOfWars": {
-    "description": "filter by number of wars"
-  },
-  "warFiltersByDateRange": "By date range",
-  "@warFiltersByDateRange": {
-    "description": "filter by date range"
-  },
   "warFiltersLastXwars": "Last {number} wars",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
@@ -1034,19 +899,16 @@
   "@warFiltersRandom": {
     "description": "Random/basic war (not friendly or cwl)"
   },
-  
   "warVisibilityToggleTownHall": "Hide/Show stats from former TH levels",
   "@warVisibilityToggleTownHall": {
     "description": "For example, hide stats from TH15 and below if the player is now TH16"
   },
-  
   "warEventsTitle": "Events",
   "@warEventsTitle": {
     "description": "War events"
   },
   "warEventsNewest": "Newest",
   "warEventsOldest": "Oldest",
-  
   "warStatusReady": "Opted In",
   "@warStatusReady": {
     "description": "Opted In for war"
@@ -1059,7 +921,6 @@
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  
   "warAbbreviationAvg": "Avg",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
@@ -1068,7 +929,6 @@
   "@warAbbreviationAvgPercentage": {
     "description": "Abbreviation for average percentage"
   },
-  
   "cwlTitle": "CWL",
   "cwlClanWarLeague": "Clan War League",
   "cwlOngoing": "Ongoing CWL",
@@ -1124,15 +984,6 @@
       }
     }
   },
-  "cwlCurrentRoundDescription": "It's currently round {round}.",
-  "@cwlCurrentRoundDescription": {
-    "placeholders": {
-      "round": {
-        "type": "int"
-      }
-    }
-  },
-  
   "joinLeaveTitle": "Join/Leave Logs (Current Season)",
   "joinLeaveJoin": "Join",
   "joinLeaveLeave": "Leave",
@@ -1236,22 +1087,14 @@
       }
     }
   },
-  
   "raidsTitle": "Raids",
   "raidsLast": "Last raids",
   "raidsOngoing": "Ongoing raids",
   "raidsDistrictsDestroyed": "Districts destroyed",
   "raidsCompleted": "Raids completed",
-  
-  "searchTitle": "Search",
-  "@searchTitle": {
-    "description": "Search for a player or a clan"
-  },
   "searchNoResult": "No result.",
-  
   "maintenanceTitle": "Maintenance",
   "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-  
   "downloadTooltip": "Download CWL summary",
   "downloadInProgress": "Downloading file... It can take a few seconds...",
   "downloadSuccess": "File saved successfully in {path}",
@@ -1263,31 +1106,20 @@
     }
   },
   "downloadError": "Failed to download file",
-  
   "dashboardTitle": "Dashboard",
-  
   "toolsTitle": "Tools",
-  "communityTitle": "Community",
-  
   "navigationTeam": "Teams",
   "navigationStatistics": "Statistics",
-  "navigationLeague": "League",
-  "navigationWars": "Wars",
-  
   "versionDevice": "Version & Device",
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  
   "betaFeature": "Beta Feature",
   "betaLabel": "BETA",
   "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
-  
-  "settingsTitle": "Settings",
   "settingsLanguage": "Language",
   "settingsSelectLanguage": "Select a language",
   "settingsToggleTheme": "Toggle Theme",
-  
   "faqTitle": "FAQ",
   "faqSubtitle": "Frequently Asked Questions",
   "faqIsThisFromSupercell": "Is this App from Supercell?",
@@ -1314,7 +1146,6 @@
   "faqSendEmail": "Send an email",
   "faqJoinDiscord": "Join our Discord Server",
   "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
-  
   "translationHelpUsTranslate": "Help us translate",
   "translationSuggestFeatures": "Suggest features",
   "translationThankYou": "Thank you!",
