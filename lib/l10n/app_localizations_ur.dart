@@ -9,17 +9,7 @@ class AppLocalizationsUr extends AppLocalizations {
   AppLocalizationsUr([String locale = 'ur']) : super(locale);
 
   @override
-  String get appTitle => 'ClashKing';
-
-  @override
-  String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get generalLoading => 'Loading...';
-
-  @override
-  String get generalError => 'Error';
+  String get generalLoading => 'لوڈ ہو رہا ہے...';
 
   @override
   String get generalRetry => 'Retry';
@@ -28,58 +18,46 @@ class AppLocalizationsUr extends AppLocalizations {
   String get generalTryAgain => 'Try again';
 
   @override
-  String get generalClose => 'Close';
+  String get generalCancel => 'منسوخ کریں۔';
 
   @override
-  String get generalCancel => 'Cancel';
+  String get generalOk => 'ٹھیک ہے';
 
   @override
-  String get generalOk => 'OK';
-
-  @override
-  String get generalApply => 'Apply';
+  String get generalApply => 'لگائیں';
 
   @override
   String get generalConfirm => 'Confirm';
 
   @override
-  String get generalAdd => 'Add';
+  String get generalManage => 'انتظام کریں۔';
 
   @override
-  String get generalDelete => 'Delete';
+  String get generalSettings => 'ترتیبات';
 
   @override
-  String get generalManage => 'Manage';
+  String get generalCopiedToClipboard => 'کلپ بورڈ پر کاپی ہو گیا۔';
 
   @override
-  String get generalManagement => 'Management';
+  String get generalComingSoon => 'جلد آ رہا ہے!';
 
   @override
-  String get generalSettings => 'Settings';
+  String get generalAll => 'تمام';
 
   @override
-  String get generalCopiedToClipboard => 'Copied to clipboard';
+  String get generalTotal => 'کل';
 
   @override
-  String get generalComingSoon => 'Coming soon!';
+  String get generalBest => 'بہترین';
 
   @override
-  String get generalAll => 'All';
+  String get generalWorst => 'بدترین';
 
   @override
-  String get generalTotal => 'Total';
+  String get generalAverage => 'اوسط';
 
   @override
-  String get generalBest => 'Best';
-
-  @override
-  String get generalWorst => 'Worst';
-
-  @override
-  String get generalAverage => 'Average';
-
-  @override
-  String get generalRemaining => 'Remaining';
+  String get generalRemaining => 'باقی';
 
   @override
   String get generalActive => 'Active';
@@ -88,65 +66,41 @@ class AppLocalizationsUr extends AppLocalizations {
   String get generalInactive => 'Inactive';
 
   @override
-  String get generalStarted => 'Started';
+  String get generalStarted => 'شروع کر دیا۔';
 
   @override
-  String get generalEnded => 'Ended';
+  String get generalEnded => 'ختم ہوا۔';
 
   @override
-  String get generalLevel => 'Level';
+  String get generalRole => 'کردار';
 
   @override
-  String get generalRole => 'Role';
-
-  @override
-  String get generalDate => 'Date';
-
-  @override
-  String get generalStats => 'Stats';
+  String get generalStats => 'اعدادوشمار';
 
   @override
   String get generalFullStats => 'Full Stats';
 
   @override
-  String get generalDetails => 'Details';
+  String get generalDetails => 'تفصیلات';
 
   @override
-  String get generalHistory => 'History';
+  String get generalHistory => 'اتحاد';
 
   @override
-  String get generalCharts => 'Charts';
+  String get generalFilters => 'فلٹرز';
 
   @override
-  String get generalFilters => 'Filters';
+  String get generalNotSet => 'سیٹ نہیں ہے۔';
 
   @override
-  String get generalWhatever => 'Whatever';
+  String get generalWarning => 'وارننگ';
 
   @override
-  String get generalAny => 'Any';
-
-  @override
-  String get generalNotSet => 'Not set';
-
-  @override
-  String get generalWarning => 'Warning';
-
-  @override
-  String get generalNoDataAvailable => 'No data available.';
-
-  @override
-  String get generalClosed => 'Closed';
-
-  @override
-  String get authWelcomeBack => 'Welcome Back';
+  String get generalNoDataAvailable => 'کوئی ڈیٹا دستیاب نہیں ہے.';
 
   @override
   String get authClashKingDescription =>
       'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get authChooseSignInMethod => 'Choose your preferred sign-in method';
 
   @override
   String get authSignIn => 'Sign In';
@@ -155,10 +109,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get authSignUp => 'Sign up';
 
   @override
-  String get authLogin => 'Login';
-
-  @override
-  String get authLogout => 'Log out';
+  String get authLogout => 'لاگ آؤٹ کریں۔';
 
   @override
   String get authCreateAccount => 'Create Account';
@@ -174,19 +125,16 @@ class AppLocalizationsUr extends AppLocalizations {
       'Create your account to get started';
 
   @override
-  String get authDontHaveAccount => 'Don\'t have an account? Create one';
-
-  @override
   String get authAlreadyHaveAccount => 'Already have an account? Sign in';
 
   @override
-  String get authConfirmLogout => 'Are you sure you want to log out?';
+  String get authConfirmLogout => 'کیا آپ واقعی لاگ آؤٹ کرنا چاہتے ہیں؟';
 
   @override
   String get authDiscordTitle => 'Discord';
 
   @override
-  String get authDiscordSignIn => 'Sign In with Discord';
+  String get authDiscordSignIn => 'Discord کے ساتھ سائن ان کریں۔';
 
   @override
   String get authDiscordContinue => 'Continue with Discord';
@@ -196,36 +144,17 @@ class AppLocalizationsUr extends AppLocalizations {
       'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!';
 
   @override
-  String get authDiscordError => 'Discord login failed. Please try again.';
-
-  @override
   String get authEmailTitle => 'Email';
-
-  @override
-  String get authEmailSignIn => 'Sign in with Email';
 
   @override
   String get authEmailDescription =>
       'Use email if you can\'t access Discord or prefer app-only features';
 
   @override
-  String get authEmailLabel => 'Email';
-
-  @override
-  String get authEmailPlaceholder => 'Enter your email';
-
-  @override
   String get authEmailRequired => 'Please enter your email';
 
   @override
   String get authEmailInvalid => 'Please enter a valid email';
-
-  @override
-  String get authEmailAlreadyInUse => 'Email may already be in use';
-
-  @override
-  String get authEmailError =>
-      'Email login failed. Please check your credentials.';
 
   @override
   String get authPasswordLabel => 'Password';
@@ -253,32 +182,21 @@ class AppLocalizationsUr extends AppLocalizations {
   String get authPasswordForgot => 'Forgot password?';
 
   @override
-  String get authPasswordInvalid => 'Invalid email or password';
+  String get authUsernameLabel => 'صارف نام';
 
   @override
-  String get authUsernameLabel => 'Username';
-
-  @override
-  String get authUsernameRequired => 'Please enter a username';
+  String get authUsernameRequired => 'براہ کرم ایک صارف نام درج کریں';
 
   @override
   String get authUsernameTooShort => 'Username must be at least 3 characters';
 
   @override
-  String get authErrorGeneral =>
-      'An error occurred while logging in. Please try again later.';
-
-  @override
-  String get authErrorRegistration =>
-      'Registration failed. Email may already be in use.';
-
-  @override
   String get authErrorConnection =>
-      'An error occurred. Please check your internet connection and try again.';
+      'ایک خرابی پیش آگئی۔ براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور دوبارہ کوشش کریں.';
 
   @override
   String get authErrorConnectionRelaunch =>
-      'An error occurred. Please check your internet connection and relaunch the app.';
+      'ایک خرابی پیش آگئی۔ براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور ایپ کو دوبارہ لانچ کریں.';
 
   @override
   String get authAccountManagement => 'Account Management';
@@ -311,10 +229,6 @@ class AppLocalizationsUr extends AppLocalizations {
       'Email account successfully linked!';
 
   @override
-  String get authAccountEmailLinkFailed =>
-      'Failed to link email account. Email may already be in use.';
-
-  @override
   String get helpTitle => 'Need help?';
 
   @override
@@ -324,68 +238,54 @@ class AppLocalizationsUr extends AppLocalizations {
   String get helpEmailUs => 'Email Us';
 
   @override
-  String get helpJoinDiscordServer => 'Need help? Join us on Discord.';
-
-  @override
-  String get helpCannotOpenMailClient =>
-      'For some reasons we can\'t open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.';
-
-  @override
-  String get accountsWelcome => 'Welcome!';
+  String get accountsWelcome => 'خوش آمدید!';
 
   @override
   String get accountsWelcomeMessage =>
-      'Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.';
+      'براہ کرم اپنے پروفائل میں ایک یا زیادہ Clash of Clans اکاؤنٹس شامل کریں۔ آپ بعد میں اکاؤنٹس کو شامل یا ہٹا سکتے ہیں.';
 
   @override
   String get accountsManageTitle => 'Manage your accounts';
 
   @override
-  String get accountsManageDescription =>
-      'You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.';
-
-  @override
-  String get accountsNoneFound => 'No account linked to your profile found';
+  String get accountsNoneFound => 'آپ کے پروفائل سے منسلک کوئی اکاؤنٹ نہیں ملا';
 
   @override
   String get accountsPlayerTag => 'Player Tag (#ABC123)';
 
   @override
-  String get accountsPlayerTags => 'Player Tags';
+  String get accountsEnterPlayerTag => 'پلیئر ٹیگ درج کریں۔';
 
   @override
-  String get accountsEnterPlayerTag => 'Enter a player tag';
+  String get accountsAdd => 'اکاؤنٹ شامل کریں۔';
 
   @override
-  String get accountsAdd => 'Add account';
+  String get accountsDelete => 'اکاؤنٹ حذف کریں۔';
 
   @override
-  String get accountsDelete => 'Delete account';
-
-  @override
-  String get accountsApiToken => 'Account API Token';
+  String get accountsApiToken => 'اکاؤنٹ API ٹوکن';
 
   @override
   String get accountsEnterApiToken =>
-      'Please enter the account API token to confirm it\'s yours. You can find it in Clash of Clans Settings > More Settings > API Token.';
+      'یہ تصدیق کرنے کے لیے کہ یہ آپ کا اکاؤنٹ API ٹوکن درج کریں۔ آپ اسے Clash of Clans Settings > More Settings > API Token میں تلاش کر سکتے ہیں.';
 
   @override
   String get accountsFillAllFields => 'Please fill all fields.';
 
   @override
-  String get accountsErrorTagNotExists =>
-      'The player tag entered does not exist.';
+  String get accountsErrorTagNotExists => 'درج کردہ پلیئر ٹیگ موجود نہیں ہے.';
 
   @override
-  String get accountsErrorAlreadyLinked =>
-      'The player tag is already linked to someone.';
+  String accountsErrorAlreadyLinked(Object tag) {
+    return 'کھلاڑی کا ٹیگ پہلے ہی کسی سے منسلک ہے.';
+  }
 
   @override
   String get accountsErrorAlreadyLinkedToYou =>
-      'The player tag is already linked to you.';
+      'پلیئر ٹیگ پہلے ہی آپ سے منسلک ہے.';
 
   @override
-  String get accountsErrorWrongApiToken => 'The API token entered is incorrect';
+  String get accountsErrorWrongApiToken => 'درج کردہ API ٹوکن غلط ہے.';
 
   @override
   String get accountsErrorFailedToAdd =>
@@ -393,7 +293,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get accountsErrorFailedToDelete =>
-      'Failed to delete link. Please try again later.';
+      'لنک کو حذف کرنے میں ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں.';
 
   @override
   String get accountsErrorFailedToUpdateOrder =>
@@ -411,32 +311,21 @@ class AppLocalizationsUr extends AppLocalizations {
   String get errorLoadingVersion => 'ورژن لوڈ کرنے میں خرابی۔';
 
   @override
-  String get errorConnectionGeneral =>
-      'An error occurred. Please check your internet connection and try again.';
-
-  @override
-  String get errorConnectionRelaunch =>
-      'An error occurred. Please check your internet connection and relaunch the app.';
-
-  @override
-  String get errorCannotOpenLink => 'We can\'t open this link.';
+  String get errorCannotOpenLink => 'ہم اس لنک کو نہیں کھول سکتے.';
 
   @override
   String get errorExitAppToOpenClash =>
-      'You are about to leave the app to open Clash of Clans.';
+      'آپ Clash of Clans کھولنے کے لیے ایپ چھوڑنے والے ہیں.';
 
   @override
-  String get playerTitle => 'Player';
+  String get playerSearchTitle => 'پلیئر تلاش کریں۔';
 
   @override
-  String get playerSearchTitle => 'Search player';
-
-  @override
-  String get playerSearchPlaceholder => 'Player\'s name or tag';
+  String get playerSearchPlaceholder => 'کھلاڑی کا نام یا ٹیگ';
 
   @override
   String playerLastActive(String date) {
-    return 'Last active: $date';
+    return 'آخری فعال: $date';
   }
 
   @override
@@ -480,26 +369,23 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String get gameBaseHome => 'Home Base';
+  String get gameBaseHome => 'ہوم بیس';
 
   @override
-  String get gameBaseBuilder => 'Builder Base';
+  String get gameBaseBuilder => 'بلڈر بیس';
 
   @override
-  String get gameClanCapital => 'Clan Capital';
+  String get gameClanCapital => 'قبیلہ کیپٹل';
 
   @override
-  String get gameTownHall => 'TH';
+  String get gameTownHall => 'ٹی ایچ';
 
   @override
-  String get gameBuilderHall => 'BH';
-
-  @override
-  String get gameTownHallLevel => 'TH Level';
+  String get gameTownHallLevel => 'ٹی ایچ سطح';
 
   @override
   String gameTownHallLevelNumber(int level) {
-    return 'Town Hall $level';
+    return 'ٹاؤن ہال $level';
   }
 
   @override
@@ -508,27 +394,22 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String gameBHLevel(int level) {
-    return 'BH$level';
-  }
+  String get gameExpLevel => 'تجربہ کی سطح';
 
   @override
-  String get gameExpLevel => 'Experience Level';
+  String get gameTrophies => 'ٹرافیاں';
 
   @override
-  String get gameTrophies => 'Trophies';
+  String get gameBuilderBaseTrophies => 'بی بی ٹرافی';
 
   @override
-  String get gameBuilderBaseTrophies => 'BB Trophies';
+  String get gameDonations => 'عطیات';
 
   @override
-  String get gameDonations => 'Donations';
+  String get gameDonationsReceived => 'عطیات موصول ہوئے۔';
 
   @override
-  String get gameDonationsReceived => 'Donations Received';
-
-  @override
-  String get gameDonationsRatio => 'Donation Ratio';
+  String get gameDonationsRatio => 'عطیہ کا تناسب';
 
   @override
   String gameLevel(int level, int maxLevel) {
@@ -536,34 +417,31 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String get gameHeroes => 'Heroes';
+  String get gameHeroes => 'ہیرو';
 
   @override
-  String get gameEquipment => 'Equipments';
+  String get gameEquipment => 'سازوسامان';
 
   @override
-  String get gameHeroesEquipments => 'Hero equipments';
+  String get gameHeroesEquipments => 'ہیرو کا سامان';
 
   @override
-  String get gameTroops => 'Troops';
+  String get gameTroops => 'دستے';
 
   @override
-  String get gameSuperTroops => 'Super Troops';
+  String get gameActiveSuperTroops => 'ایکٹو سپر ٹروپس';
 
   @override
-  String get gameActiveSuperTroops => 'Active Super Troops';
+  String get gamePets => 'پالتو';
 
   @override
-  String get gamePets => 'Pets';
+  String get gameSiegeMachines => 'سیج مشینیں';
 
   @override
-  String get gameSiegeMachines => 'Siege Machines';
+  String get gameSpells => 'منتر';
 
   @override
-  String get gameSpells => 'Spells';
-
-  @override
-  String get gameAchievements => 'Achievements';
+  String get gameAchievements => 'کامیابیاں';
 
   @override
   String get gameClanGames => 'Clan Games';
@@ -572,134 +450,119 @@ class AppLocalizationsUr extends AppLocalizations {
   String get gameSeasonPass => 'Season Pass';
 
   @override
-  String get gameCreatorCode => 'Creator Code: ClashKing';
+  String get gameCreatorCode => 'خالق کوڈ: ClashKing';
 
   @override
-  String get clanTitle => 'Clan';
+  String get clanTitle => 'قبیلہ';
 
   @override
-  String get clansTitle => 'Clans';
-
-  @override
-  String get clanSearchTitle => 'Search clan';
+  String get clanSearchTitle => 'قبیلہ تلاش کریں۔';
 
   @override
   String get clanSearchPlaceholder => 'Clan\'s name';
 
   @override
-  String get clanNone => 'No clan';
+  String get clanNone => 'کوئی قبیلہ نہیں۔';
 
   @override
-  String get clanJoinToUnlock => 'Join a clan to unlock new features.';
+  String get clanJoinToUnlock =>
+      'نئی خصوصیات کو غیر مقفل کرنے کے لیے ایک قبیلے میں شامل ہوں.';
 
   @override
-  String get clanMembers => 'Members';
+  String get clanMembers => 'ممبران';
 
   @override
-  String get clanWarFrequency => 'War frequency';
+  String get clanWarFrequency => 'جنگ کی تعدد';
 
   @override
-  String get clanMinimumMembers => 'Minimum members';
+  String get clanMinimumMembers => 'کم سے کم ممبران';
 
   @override
-  String get clanMaximumMembers => 'Maximum members';
+  String get clanMaximumMembers => 'زیادہ سے زیادہ ممبران';
 
   @override
-  String get clanLocation => 'Location';
+  String get clanLocation => 'مقام';
 
   @override
-  String get clanMinimumPoints => 'Minimum clan points';
+  String get clanMinimumPoints => 'کم از کم قبیلہ پوائنٹس';
 
   @override
-  String get clanMinimumLevel => 'Minimum clan level';
+  String get clanMinimumLevel => 'کم از کم قبیلہ کی سطح';
 
   @override
-  String get clanInviteOnly => 'Invite Only';
+  String get clanInviteOnly => 'صرف دعوت دیں۔';
 
   @override
-  String get clanOpened => 'Opened';
+  String get clanOpened => 'کھول دیا';
 
   @override
-  String get clanClosed => 'Closed';
+  String get clanClosed => 'بند';
 
   @override
-  String get clanRoleLeader => 'Leader';
+  String get clanRoleLeader => 'لیڈر';
 
   @override
-  String get clanRoleCoLeader => 'Co-Leader';
+  String get clanRoleCoLeader => 'شریک رہنما';
 
   @override
-  String get clanRoleElder => 'Elder';
+  String get clanRoleElder => 'ایلڈر';
 
   @override
-  String get clanRoleMember => 'Member';
+  String get clanRoleMember => 'ممبر';
 
   @override
-  String get clanWarFrequencyAlways => 'Always';
+  String get clanWarFrequencyAlways => 'ہمیشہ';
 
   @override
-  String get clanWarFrequencyNever => 'Never';
+  String get clanWarFrequencyNever => 'کبھی نہیں';
 
   @override
-  String get clanWarFrequencyUnknown => 'Unknown';
+  String get clanWarFrequencyUnknown => 'نامعلوم';
 
   @override
-  String get clanWarFrequencyOncePerWeek => '1/week';
+  String get clanWarFrequencyOncePerWeek => '1/ہفتہ';
 
   @override
   String get clanWarFrequencyMoreThanOncePerWeek => 'More than 1/week';
 
   @override
-  String get clanWarFrequencyRarely => 'Rarely';
+  String get clanWarFrequencyRarely => 'کبھی کبھار';
 
   @override
-  String get timeHourIndicator => 'h';
-
-  @override
-  String get timeMinIndicator => 'm';
-
-  @override
-  String timeDaysLeft(int days) {
-    return '$days days left';
-  }
+  String get timeHourIndicator => 'ایچ';
 
   @override
   String timeDaysAgo(int days) {
-    return '$days days ago';
+    return '$days دن پہلے';
   }
 
   @override
   String timeDayAgo(int day) {
-    return '$day day ago';
+    return '$day دن پہلے';
   }
 
   @override
   String timeHourAgo(int hour) {
-    return '$hour hour ago';
+    return '$hour گھنٹے پہلے';
   }
 
   @override
   String timeHoursAgo(int hours) {
-    return '$hours hours ago';
+    return '$hours گھنٹے پہلے';
   }
 
   @override
   String timeMinuteAgo(int minute) {
-    return '$minute minute ago';
+    return '$minute منٹ پہلے';
   }
 
   @override
   String timeMinutesAgo(int minutes) {
-    return '$minutes minutes ago';
+    return '$minutes منٹ پہلے';
   }
 
   @override
-  String timeSecondAgo(int seconds) {
-    return '${seconds}s ago';
-  }
-
-  @override
-  String get timeJustNow => 'Just Now';
+  String get timeJustNow => 'ابھی ابھی';
 
   @override
   String get timeEndedJustNow => 'Ended just now';
@@ -721,34 +584,29 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String timeStartsIn(String time) {
-    return 'Starts in $time';
+    return '$time میں شروع ہوتا ہے';
   }
 
   @override
   String timeStartsAt(String time) {
-    return 'Starts at $time';
+    return '$time پر شروع ہوتا ہے';
   }
 
   @override
   String timeEndsIn(String time) {
-    return 'Ends in $time';
+    return '$time میں ختم ہوتا ہے';
   }
 
   @override
   String timeEndsAt(String time) {
-    return 'Ends at $time';
-  }
-
-  @override
-  String timeUpdatedAt(String time) {
-    return 'Updated at $time';
+    return '$time پر ختم ہوتا ہے';
   }
 
   @override
   String get legendsTitle => 'غلط ڈیٹا؟';
 
   @override
-  String get legendsNotInLeague => 'Not in Legend League';
+  String get legendsNotInLeague => 'لیجنڈ لیگ میں نہیں۔';
 
   @override
   String get legendsNoDataToday =>
@@ -756,32 +614,32 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String legendsStartDescription(String trophies) {
-    return 'You started the day with $trophies trophies.';
+    return 'آپ نے دن کا آغاز $trophies ٹرافیوں سے کیا.';
   }
 
   @override
   String legendsNoRankLocalDescription(String country, int trophies) {
-    return 'You are currently not ranked ($country) with $trophies trophies.';
+    return 'آپ فی الحال $trophies ٹرافیوں کے ساتھ درجہ بندی ($country) میں نہیں ہیں.';
   }
 
   @override
   String legendsRankLocalDescription(int rank, String country, int trophies) {
-    return 'You are currently ranked $rank ($country) with $trophies trophies.';
+    return 'آپ فی الحال $trophies ٹرافیوں کے ساتھ $rank ($country) پر ہیں.';
   }
 
   @override
   String legendsGainDescription(int trophies) {
-    return 'You gained $trophies trophies for now.';
+    return 'آپ نے ابھی کے لیے $trophies ٹرافی حاصل کی ہیں.';
   }
 
   @override
   String legendsLossDescription(int trophies) {
-    return 'You lost $trophies trophies for now.';
+    return 'آپ ابھی کے لیے $trophies ٹرافی کھو چکے ہیں.';
   }
 
   @override
   String legendsNoGlobalRankDescription(int trophies) {
-    return 'You are currently not ranked globally with $trophies trophies.';
+    return 'آپ فی الحال $trophies ٹرافیوں کے ساتھ عالمی سطح پر درجہ بندی میں نہیں ہیں.';
   }
 
   @override
@@ -790,187 +648,176 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String get legendsNoRank => 'No ranking';
+  String get legendsNoRank => 'کوئی درجہ بندی نہیں۔';
 
   @override
-  String get legendsBestTrophies => 'Best Trophies';
+  String get legendsBestTrophies => 'بہترین ٹرافیاں';
 
   @override
-  String get legendsMostAttacks => 'Most Attacks';
+  String get legendsMostAttacks => 'زیادہ تر حملے';
 
   @override
-  String get legendsLastSeason => 'Last Season';
+  String get legendsLastSeason => 'آخری سیزن';
 
   @override
-  String get legendsBestRank => 'Best Global Rank';
+  String get legendsBestRank => 'بہترین عالمی درجہ بندی';
 
   @override
-  String get legendsTrophiesBySeason => 'Trophies by season';
+  String get legendsTrophiesBySeason => 'سیزن کی حساب سے ٹرافی';
 
   @override
-  String get legendsEosTrophies => 'End Of Season Trophies';
+  String get legendsEosTrophies => 'سیزن ٹرافی کا اختتام';
 
   @override
   String get legendsEosDetails => 'End Of Season Details';
 
   @override
-  String get legendsInaccurateTitle => 'Inaccurate data?';
+  String get legendsInaccurateTitle => 'غلط ڈیٹا؟';
 
   @override
   String get legendsInaccurateIntro =>
-      'Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here\'s why:\n';
+      'Clash of Clans API کی حدود کی وجہ سے، ہمارا ڈیٹا ہمیشہ بالکل درست نہیں ہو سکتا۔ یہاں کیوں ہے:\n';
 
   @override
-  String get legendsInaccurateApiDelayTitle => '1. API Delay: ';
+  String get legendsInaccurateApiDelayTitle => '1. API تاخیر: ';
 
   @override
   String get legendsInaccurateApiDelayBody =>
-      'The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n';
+      'API کو اپ ڈیٹ ہونے میں 5 منٹ تک کا وقت لگ سکتا ہے، جس کی وجہ سے ریئل ٹائم ٹرافی کی تبدیلیوں کو ظاہر کرنے میں وقفہ ہوتا ہے.\n';
 
   @override
-  String get legendsInaccurateConcurrentTitle => '2. Concurrent Changes: \n';
+  String get legendsInaccurateConcurrentTitle => '2. ہم آہنگی تبدیلیاں: ';
 
   @override
-  String get legendsInaccurateMultipleAttacksTitle =>
-      '- Multiple Attacks/Defenses: ';
+  String get legendsInaccurateMultipleAttacksTitle => '- متعدد حملے/دفاع: ';
 
   @override
   String get legendsInaccurateMultipleAttacksBody =>
-      'If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n';
+      'اگر ایک سے زیادہ حملے یا دفاع یکے بعد دیگرے ہوتے ہیں، تو API مشترکہ نتائج دکھا سکتا ہے (جیسے، +68 یا -68).';
 
   @override
-  String get legendsInaccurateSimultaneousTitle =>
-      '- Simultaneous Attack and Defense: ';
+  String get legendsInaccurateSimultaneousTitle => '- بیک وقت حملہ اور دفاع: ';
 
   @override
   String get legendsInaccurateSimultaneousBody =>
-      'If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n';
+      'اگر حملہ اور دفاع ایک ہی وقت میں ہوتا ہے، تو آپ کو ملا جلا نتیجہ نظر آ سکتا ہے (جیسے، +4).';
 
   @override
-  String get legendsInaccurateNetGainTitle => '3. Net Gain/Loss: ';
+  String get legendsInaccurateNetGainTitle => 'خالص فائدہ/نقصان: ';
 
   @override
   String get legendsInaccurateNetGainBody =>
-      'Despite timing issues, the overall net gain or loss for the day is accurate. ';
+      'وقت کے مسائل کے باوجود، دنوں کے لیے مجموعی خالص فائدہ یا نقصان درست ہے. ';
 
   @override
   String get legendsInaccurateConclusion =>
-      'These limitations are common across all tools using the Clash of Clans API. We sadly can\'t fix that as it is in Supercell\'s hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!';
+      'یہ حدود Clash of Clans API کا استعمال کرتے ہوئے تمام ٹولز میں عام ہیں۔ ہم افسوس سے اسے ٹھیک نہیں کر سکتے کیونکہ یہ سپر سیل کے ہاتھ میں ہے۔ ہم ان حدود کی تلافی کرنے کی پوری کوشش کرتے ہیں اور ممکنہ حد تک حقیقت کے قریب نتائج فراہم کرتے ہیں۔ سمجھنے کے لیے آپ کا شکریہ!';
 
   @override
-  String get statsSeasonStats => 'Season Stats';
+  String get statsSeasonStats => 'سیزن کے اعدادوشمار';
 
   @override
-  String get statsByDay => 'By Day';
+  String get statsByDay => 'دن کی طرف سے';
 
   @override
-  String get statsBySeason => 'By Season';
+  String get statsBySeason => 'سیزن کے لحاظ سے';
 
   @override
   String statsDayIndex(int index) {
-    return 'Day $index';
+    return 'دن $index';
   }
 
   @override
   String statsIndexDays(int index) {
-    return '$index days';
+    return '$index دن';
   }
-
-  @override
-  String get statsYear => 'Year';
-
-  @override
-  String get statsMonth => 'Month';
 
   @override
   String statsSeasonDate(String date) {
-    return '$date season';
+    return '$date سیزن';
   }
 
   @override
-  String get statsSelectSeason => 'Select a season';
+  String get statsAllTownHalls => 'تمام ٹاؤن ہالز';
 
   @override
-  String get statsAllTownHalls => 'All Town Halls';
+  String get statsMembers => 'ممبر کے اعدادوشمار';
 
   @override
-  String get statsMembers => 'Members Stats';
+  String get todoTitle => 'کرنے کی فہرست';
 
   @override
-  String get todoTitle => 'To-do list';
-
-  @override
-  String get todoExplanationTitle => 'Task Calculation';
+  String get todoExplanationTitle => 'ٹاسک کیلکولیشن';
 
   @override
   String get todoExplanationIntro =>
-      'The task completion percentage is calculated based on the following activities with specific weightings:';
+      'کام کی تکمیل کا فیصد مخصوص وزن کے ساتھ درج ذیل سرگرمیوں کی بنیاد پر لگایا جاتا ہے:';
 
   @override
-  String get todoExplanationLegendsTitle => 'Legend League:';
+  String get todoExplanationLegendsTitle => 'لیجنڈ لیگ:';
 
   @override
   String get todoExplanationLegends =>
-      'Weight of 8 points per account, 1 attack = 1 point.';
+      'فی اکاؤنٹ 8 پوائنٹس کا وزن، 1 حملہ = 1 پوائنٹ.';
 
   @override
-  String get todoExplanationRaidsTitle => 'Raids:';
+  String get todoExplanationRaidsTitle => 'چھاپے:';
 
   @override
   String get todoExplanationRaids =>
-      'Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.';
+      'فی اکاؤنٹ 5 پوائنٹس کا وزن (یا 6 اگر آخری حملہ غیر مقفل ہو گیا ہے)، 1 حملہ = 1 پوائنٹ.';
 
   @override
-  String get todoExplanationClanWarsTitle => 'Clan Wars:';
+  String get todoExplanationClanWarsTitle => 'قبائلی جنگیں:';
 
   @override
   String get todoExplanationClanWars =>
-      'Weight of 2 points per account, 1 attack = 1 point.';
+      'فی اکاؤنٹ 2 پوائنٹس کا وزن، 1 حملہ = 1 پوائنٹ.';
 
   @override
-  String get todoExplanationCwlTitle => 'Clan War League:';
+  String get todoExplanationCwlTitle => 'قبیلہ وار لیگ:';
 
   @override
   String get todoExplanationCwl =>
-      'Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.';
+      'فی اکاؤنٹ 1 پوائنٹ کا وزن، 1 حملہ = 1 پوائنٹ۔ CWL کو ٹریک نہیں کیا جا سکتا اگر کھلاڑی ان کے لیگ قبیلے میں نہیں ہے.';
 
   @override
-  String get todoExplanationPassAndGamesTitle => 'Season Pass & Clan Games:';
+  String get todoExplanationPassAndGamesTitle => 'سیزن پاس اور کلین گیمز:';
 
   @override
   String get todoExplanationPassAndGames =>
-      'Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.';
+      'ہر اکاؤنٹ میں 2 پوائنٹس کا وزن۔ تناسب باقی دنوں کی تعداد پر مبنی ہے (پاس کے لیے 1 مہینہ اور گیمز کے لیے 6 دن)۔ سبز = پاس یا گیمز کو مکمل کرنے کے لیے ٹریک پر، سرخ = شیڈیول کے پیچھے.';
 
   @override
   String get todoExplanationConclusion =>
-      'The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.';
+      'حتمی فیصد کا حساب جاری واقعات کے دوران مکمل ہونے والی کل کارروائیوں کو کل مطلوبہ کارروائیوں سے تقسیم کر کے لگایا جاتا ہے۔ 14 دنوں سے زیادہ غیر فعال اکاؤنٹس کو حساب سے خارج کر دیا گیا ہے.';
 
   @override
   String todoAccountsNumber(int number) {
-    return '$number accounts';
+    return '$number اکاؤنٹس';
   }
 
   @override
   String todoAccountsNumberActive(int number) {
-    return '$number active accounts';
+    return '$number فعال اکاؤنٹس';
   }
 
   @override
   String todoAccountsNumberInactive(int number) {
-    return '$number inactive accounts';
+    return '$number غیر فعال اکاؤنٹس';
   }
 
   @override
-  String get todoAccountsActive => 'Active accounts';
+  String get todoAccountsActive => 'فعال اکاؤنٹس';
 
   @override
-  String get todoAccountsInactive => 'Inactive accounts';
+  String get todoAccountsInactive => 'غیر فعال اکاؤنٹس';
 
   @override
-  String get todoAccountsNoInactive => 'No inactive accounts.';
+  String get todoAccountsNoInactive => 'کوئی غیر فعال اکاؤنٹس نہیں.';
 
   @override
-  String get todoAccountsNoActive => 'No active accounts.';
+  String get todoAccountsNoActive => 'کوئی فعال اکاؤنٹس نہیں ہیں.';
 
   @override
   String todoAttacksLeftDescription(int attacks, String type) {
@@ -998,7 +845,7 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String get warTitle => 'War';
+  String get warTitle => 'جنگ';
 
   @override
   String get warFrequency => 'جنگ کی تعدد';
@@ -1016,12 +863,6 @@ class AppLocalizationsUr extends AppLocalizations {
   String get warLog => 'جنگی ریکارڈ';
 
   @override
-  String get warLogPublic => 'Public War Log';
-
-  @override
-  String get warLogPrivate => 'Private War Log';
-
-  @override
   String warLogClosed(String clan) {
     return 'جنگی لاگ بند.';
   }
@@ -1030,87 +871,85 @@ class AppLocalizationsUr extends AppLocalizations {
   String get warStats => 'جنگ کے اعدادوشمار';
 
   @override
-  String get warOngoing => 'Ongoing war';
-
-  @override
-  String get warNotInWar => 'Not in war';
+  String get warOngoing => 'جاری جنگ';
 
   @override
   String warIsNotInWar(String clan) {
-    return '$clan is not in war.';
+    return '$clan جنگ میں نہیں ہے.';
   }
 
   @override
   String get warAskForWar =>
-      'Contact the leader or a co-leader to start a war.';
+      'جنگ شروع کرنے کے لیے لیڈر یا شریک لیڈر سے رابطہ کریں.';
 
   @override
   String get warAskForWarLogOpening =>
-      'Contact a leader or a co-leader to open the war log.';
+      'جنگ کے لاگ کو کھولنے کے لیے کسی رہنما یا شریک رہنما سے رابطہ کریں.';
 
   @override
   String get warEnded => 'جنگ ختم ہوئی۔';
 
   @override
-  String get warPreparation => 'Preparation';
+  String get warPreparation => 'تیاری';
 
   @override
-  String get warPerfectWar => 'Perfect war';
+  String get warPerfectWar => 'کامل جنگ';
 
   @override
-  String get warVictory => 'Victory';
+  String get warVictory => 'فتح';
 
   @override
-  String get warDefeat => 'Defeat';
+  String get warDefeat => 'شکست';
 
   @override
-  String get warDraw => 'Draw';
+  String get warDraw => 'ڈرا';
 
   @override
-  String get warTeamSize => 'Team size';
+  String get warTeamSize => 'ٹیم کا سائز';
 
   @override
-  String get warMyTeam => 'My team';
+  String get warMyTeam => 'میری ٹیم';
 
   @override
-  String get warEnemiesTeam => 'Enemies';
+  String get warEnemiesTeam => 'دشمنوں';
 
   @override
-  String get warClanDraw => 'The two clans are tied';
+  String get warClanDraw => 'دو قبیلے ڈرا ہوئے۔';
 
   @override
-  String get warStateOfTheWar => 'State of the war';
+  String get warStateOfTheWar => 'جنگ کی حالت';
 
   @override
   String warStarsNeededToTakeTheLead(
       String clan, int star, int stars2, String percent) {
-    return '$clan still need $star more star(s) or $stars2 star(s) and $percent% to take the lead.';
+    return '$clan کو ابھی بھی $star مزید ستاروں (s) یا $stars2 star(s) اور $percent% کی ضرورت ہے.';
   }
 
   @override
   String warStarsAndPercentNeededToTakeTheLead(String clan, String percent) {
-    return '$clan still need $percent% or 1 more star to take the lead';
+    return '$clan کو ابھی بھی برتری حاصل کرنے کے لیے $percent% یا 1 مزید ستارے کی ضرورت ہے۔';
   }
 
   @override
-  String get warNoDataAvailableForThisWar => 'No data available for this war';
+  String get warNoDataAvailableForThisWar =>
+      'اس جنگ کا کوئی ڈیٹا دستیاب نہیں ہے۔';
 
   @override
-  String get warCalculatorFast => 'Fast calculator';
+  String get warCalculatorFast => 'تیز رفتار کیلکولیٹر';
 
   @override
   String warCalculatorAnswer(String percentNeeded, String result) {
-    return 'To achieve a destruction rate of $percentNeeded%, a total of $result% is needed.';
+    return 'تباہی کی شرح $percentNeeded% حاصل کرنے کے لیے، کل $result% کی ضرورت ہے.';
   }
 
   @override
-  String get warCalculatorNeededOverall => '% Needed overall';
+  String get warCalculatorNeededOverall => 'مجموعی طور پر % کی ضرورت ہے۔';
 
   @override
-  String get warCalculatorCalculate => 'Calculate';
+  String get warCalculatorCalculate => 'حساب لگانا';
 
   @override
-  String get warAttacksTitle => 'Attacks';
+  String get warAttacksTitle => 'حملے';
 
   @override
   String get warAttacksNone => 'No attack yet';
@@ -1140,10 +979,7 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String get warDefenseTitle => 'Defense';
-
-  @override
-  String get warDefensesTitle => 'Defenses';
+  String get warDefensesTitle => 'دفاع';
 
   @override
   String get warDefensesNone => 'No defense yet';
@@ -1155,9 +991,6 @@ class AppLocalizationsUr extends AppLocalizations {
   String warDefensesBestOutOf(int number) {
     return 'Best defense (out of $number)';
   }
-
-  @override
-  String get warDefenseStars => 'Defense Stars';
 
   @override
   String warDefensesNumber(int number_time, int number_war) {
@@ -1175,25 +1008,22 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String get warStarsTitle => 'Stars';
+  String get warStarsTitle => 'ستارے';
 
   @override
-  String get warStarsTotal => 'Total';
+  String get warStarsAverage => 'اوسط ستارے۔';
 
   @override
-  String get warStarsAverage => 'Average stars';
+  String get warStarsNumber => 'ستاروں کی تعداد';
 
   @override
-  String get warStarsNumber => 'Number of stars';
+  String get warStarsOne => '1 ستارہ';
 
   @override
-  String get warStarsOne => '1 star';
+  String get warStarsTwo => '2 ستارے';
 
   @override
-  String get warStarsTwo => '2 stars';
-
-  @override
-  String get warStarsThree => '3 stars';
+  String get warStarsThree => '3 ستارے';
 
   @override
   String get warStarsZero => '0 Star';
@@ -1205,10 +1035,10 @@ class AppLocalizationsUr extends AppLocalizations {
   String get warDestructionTitle => 'Destruction';
 
   @override
-  String get warDestructionAverage => 'Average destruction';
+  String get warDestructionAverage => 'اوسط تباہی';
 
   @override
-  String get warDestructionRate => 'Destruction rate';
+  String get warDestructionRate => 'تباہی کی شرح';
 
   @override
   String warHistoryWinsDescription(int wins, String percent) {
@@ -1259,49 +1089,43 @@ class AppLocalizationsUr extends AppLocalizations {
   String get warOpponentUpperTownhall => 'Upper TH';
 
   @override
-  String get warOpponentEqualThLevel => 'Equal TH';
+  String get warOpponentEqualThLevel => 'مساوی TH';
 
   @override
-  String get warOpponentSelectMembersThLevel => 'Members TH Level';
+  String get warOpponentSelectMembersThLevel => 'ممبران ٹی ایچ سطح';
 
   @override
-  String get warOpponentSelectOpponentsThLevel => 'Opponents TH Level';
-
-  @override
-  String get warFiltersByNumberOfWars => 'By number of wars';
-
-  @override
-  String get warFiltersByDateRange => 'By date range';
+  String get warOpponentSelectOpponentsThLevel => 'مخالفین ٹی ایچ سطح';
 
   @override
   String warFiltersLastXwars(int number) {
-    return 'Last $number wars';
+    return 'آخری $number جنگیں۔';
   }
 
   @override
-  String get warFiltersFriendly => 'Friendly';
+  String get warFiltersFriendly => 'دوستانہ';
 
   @override
-  String get warFiltersRandom => 'Random';
+  String get warFiltersRandom => 'بے ترتیب';
 
   @override
   String get warVisibilityToggleTownHall =>
-      'Hide/Show stats from former TH levels';
+      'سابقہ TH سطحوں سے اعدادوشمار چھپائیں/ دکھائیں۔';
 
   @override
-  String get warEventsTitle => 'Events';
+  String get warEventsTitle => 'واقعات';
 
   @override
-  String get warEventsNewest => 'Newest';
+  String get warEventsNewest => 'تازہ ترین';
 
   @override
-  String get warEventsOldest => 'Oldest';
+  String get warEventsOldest => 'قدیم ترین';
 
   @override
-  String get warStatusReady => 'Opted In';
+  String get warStatusReady => 'آپٹ ان';
 
   @override
-  String get warStatusUnready => 'Opted Out';
+  String get warStatusUnready => 'آپٹ آؤٹ';
 
   @override
   String get warStatusMissed => 'Missed';
@@ -1313,16 +1137,16 @@ class AppLocalizationsUr extends AppLocalizations {
   String get warAbbreviationAvgPercentage => 'Avg %';
 
   @override
-  String get cwlTitle => 'CWL';
+  String get cwlTitle => 'سی ڈبلیو ایل';
 
   @override
-  String get cwlClanWarLeague => 'Clan War League';
+  String get cwlClanWarLeague => 'قبیلہ وار لیگ';
 
   @override
-  String get cwlOngoing => 'Ongoing CWL';
+  String get cwlOngoing => 'جاری CWL';
 
   @override
-  String get cwlRounds => 'Rounds';
+  String get cwlRounds => 'راؤنڈز';
 
   @override
   String cwlRoundNumber(int number) {
@@ -1355,21 +1179,16 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String cwlCurrentRoundDescription(int round) {
-    return 'It\'s currently round $round.';
-  }
-
-  @override
   String get joinLeaveTitle => 'Join/Leave Logs (Current Season)';
 
   @override
-  String get joinLeaveJoin => 'Join';
+  String get joinLeaveJoin => 'شمولیت';
 
   @override
-  String get joinLeaveLeave => 'Leave';
+  String get joinLeaveLeave => 'چھوڑو';
 
   @override
-  String get joinLeaveReset => 'Reset';
+  String get joinLeaveReset => 'دوبارہ ترتیب دیں۔';
 
   @override
   String get joinLeaveJoins => 'Joins';
@@ -1433,34 +1252,31 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String joinLeaveLeftOnAt(String date, String time) {
-    return 'Left on $date at $time.';
+    return '$date کو $time پر روانہ ہوا.';
   }
 
   @override
   String joinLeaveJoinedOnAt(String date, String time) {
-    return 'Joined on $date at $time.';
+    return '$date کو $time پر شامل ہوا.';
   }
 
   @override
   String get raidsTitle => 'Raids';
 
   @override
-  String get raidsLast => 'Last raids';
+  String get raidsLast => 'آخری چھاپے۔';
 
   @override
-  String get raidsOngoing => 'Ongoing raids';
+  String get raidsOngoing => 'جاری چھاپے۔';
 
   @override
-  String get raidsDistrictsDestroyed => 'Districts destroyed';
+  String get raidsDistrictsDestroyed => 'اضلاع تباہ';
 
   @override
   String get raidsCompleted => 'چھاپے مکمل';
 
   @override
-  String get searchTitle => 'Search';
-
-  @override
-  String get searchNoResult => 'No result.';
+  String get searchNoResult => 'کوئی نتیجہ نہیں نکلا.';
 
   @override
   String get maintenanceTitle => 'Maintenance';
@@ -1485,25 +1301,16 @@ class AppLocalizationsUr extends AppLocalizations {
   String get downloadError => 'Failed to download file';
 
   @override
-  String get dashboardTitle => 'Dashboard';
+  String get dashboardTitle => 'ڈیش بورڈ';
 
   @override
-  String get toolsTitle => 'Tools';
+  String get toolsTitle => 'اوزار';
 
   @override
-  String get communityTitle => 'Community';
+  String get navigationTeam => 'ٹیمیں';
 
   @override
-  String get navigationTeam => 'Teams';
-
-  @override
-  String get navigationStatistics => 'Statistics';
-
-  @override
-  String get navigationLeague => 'League';
-
-  @override
-  String get navigationWars => 'Wars';
+  String get navigationStatistics => 'شماریات';
 
   @override
   String get versionDevice => 'ورژن اور ڈیوائس';
@@ -1519,16 +1326,13 @@ class AppLocalizationsUr extends AppLocalizations {
       'یہ فیچر فی الحال بیٹا میں ہے، اس میں کچھ کیڑے ہو سکتے ہیں یا نامکمل ہیں۔ ہم بہتری پر سرگرمی سے کام کر رہے ہیں اور آپ کے تاثرات کا خیرمقدم کرتے ہیں۔ براہ کرم اپنے خیالات کا اشتراک کریں اور اسے بہتر بنانے میں ہماری مدد کرنے کے لیے ہمارے Discord Server میں کسی بھی مسئلے کی اطلاع دیں.';
 
   @override
-  String get settingsTitle => 'Settings';
+  String get settingsLanguage => 'زبان';
 
   @override
-  String get settingsLanguage => 'Language';
+  String get settingsSelectLanguage => 'ایک زبان منتخب کریں';
 
   @override
-  String get settingsSelectLanguage => 'Select a language';
-
-  @override
-  String get settingsToggleTheme => 'Toggle Theme';
+  String get settingsToggleTheme => 'تھیم کو ٹوگل کریں۔';
 
   @override
   String get faqTitle => 'FAQ';
@@ -1618,25 +1422,25 @@ class AppLocalizationsUr extends AppLocalizations {
       'کچھ وجوہات کی بنا پر ہم آپ کے میل کلائنٹ کو نہیں کھول سکتے۔ ہم نے آپ کے لیے ای میل ایڈریس کاپی کیا ہے۔ آپ ایک ای میل لکھ سکتے ہیں اور وصول کنندہ کے خانے میں پتہ چسپاں کر سکتے ہیں.';
 
   @override
-  String get translationHelpUsTranslate => 'Help us translate';
+  String get translationHelpUsTranslate => 'ترجمہ کرنے میں ہماری مدد کریں۔';
 
   @override
-  String get translationSuggestFeatures => 'Suggest features';
+  String get translationSuggestFeatures => 'خصوصیات تجویز کریں۔';
 
   @override
-  String get translationThankYou => 'Thank you!';
+  String get translationThankYou => 'شکریہ!';
 
   @override
   String get translationThankYouContent =>
-      'A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!';
+      'ہمارے تمام حیرت انگیز مترجمین کا بہت بہت شکریہ جنہوں نے اس ایپ کو دنیا بھر کے مزید لوگوں تک قابل رسائی بنانے میں ہماری مدد کی!';
 
   @override
   String get translationHelpTranslateContent =>
-      'You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!';
+      'آپ Crowdin پر ایپ کا ترجمہ کرنے میں ہماری مدد کر سکتے ہیں۔ اگر آپ کی زبان Crowdin پر دستیاب نہیں ہے تو بلا جھجھک ہمارے Discord Server میں اس کی درخواست کریں۔ آپ کی مدد کے لیے آپ کا بہت بہت شکریہ!';
 
   @override
-  String get translationHelpTranslateButton => 'Help Translate on Crowdin';
+  String get translationHelpTranslateButton => 'Crowdin پر ترجمہ میں مدد کریں۔';
 
   @override
-  String get translationCurrentTranslators => 'Current Translators';
+  String get translationCurrentTranslators => 'موجودہ مترجم';
 }

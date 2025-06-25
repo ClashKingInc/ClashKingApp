@@ -1176,7 +1176,7 @@
   "@joinLeaveTitle": {
     "description": "Logs of players joining or leaving the clan."
   },
-  "joinLeaveLeftOnAt": "{date}} tarihinde {time}te ayrıldı.",
+  "joinLeaveLeftOnAt": "{date} tarihinde {time}te ayrıldı.",
   "@joinLeaveLeftOnAt": {
     "description": "[The player] left the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1188,7 +1188,7 @@
       }
     }
   },
-  "joinLeaveJoinedOnAt": "{date}} tarihinde {time}te katıldı.",
+  "joinLeaveJoinedOnAt": "{date} tarihinde {time}te katıldı.",
   "@joinLeaveJoinedOnAt": {
     "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
     "placeholders": {

@@ -9,26 +9,13 @@ class AppLocalizationsAf extends AppLocalizations {
   AppLocalizationsAf([String locale = 'af']) : super(locale);
 
   @override
-  String get appTitle => 'ClashKing';
-
-  @override
-  String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
   String get generalLoading => 'Loading...';
-
-  @override
-  String get generalError => 'Error';
 
   @override
   String get generalRetry => 'Retry';
 
   @override
   String get generalTryAgain => 'Try again';
-
-  @override
-  String get generalClose => 'Close';
 
   @override
   String get generalCancel => 'Cancel';
@@ -43,16 +30,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get generalConfirm => 'Confirm';
 
   @override
-  String get generalAdd => 'Add';
-
-  @override
-  String get generalDelete => 'Delete';
-
-  @override
   String get generalManage => 'Manage';
-
-  @override
-  String get generalManagement => 'Management';
 
   @override
   String get generalSettings => 'Settings';
@@ -94,13 +72,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get generalEnded => 'Ended';
 
   @override
-  String get generalLevel => 'Level';
-
-  @override
   String get generalRole => 'Role';
-
-  @override
-  String get generalDate => 'Date';
 
   @override
   String get generalStats => 'Stats';
@@ -115,16 +87,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get generalHistory => 'History';
 
   @override
-  String get generalCharts => 'Charts';
-
-  @override
   String get generalFilters => 'Filters';
-
-  @override
-  String get generalWhatever => 'Whatever';
-
-  @override
-  String get generalAny => 'Any';
 
   @override
   String get generalNotSet => 'Not set';
@@ -136,26 +99,14 @@ class AppLocalizationsAf extends AppLocalizations {
   String get generalNoDataAvailable => 'No data available.';
 
   @override
-  String get generalClosed => 'Closed';
-
-  @override
-  String get authWelcomeBack => 'Welcome Back';
-
-  @override
   String get authClashKingDescription =>
       'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get authChooseSignInMethod => 'Choose your preferred sign-in method';
 
   @override
   String get authSignIn => 'Sign In';
 
   @override
   String get authSignUp => 'Sign up';
-
-  @override
-  String get authLogin => 'Login';
 
   @override
   String get authLogout => 'Log out';
@@ -172,9 +123,6 @@ class AppLocalizationsAf extends AppLocalizations {
   @override
   String get authCreateAccountToGetStarted =>
       'Create your account to get started';
-
-  @override
-  String get authDontHaveAccount => 'Don\'t have an account? Create one';
 
   @override
   String get authAlreadyHaveAccount => 'Already have an account? Sign in';
@@ -196,36 +144,17 @@ class AppLocalizationsAf extends AppLocalizations {
       'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!';
 
   @override
-  String get authDiscordError => 'Discord login failed. Please try again.';
-
-  @override
   String get authEmailTitle => 'Email';
-
-  @override
-  String get authEmailSignIn => 'Sign in with Email';
 
   @override
   String get authEmailDescription =>
       'Use email if you can\'t access Discord or prefer app-only features';
 
   @override
-  String get authEmailLabel => 'Email';
-
-  @override
-  String get authEmailPlaceholder => 'Enter your email';
-
-  @override
   String get authEmailRequired => 'Please enter your email';
 
   @override
   String get authEmailInvalid => 'Please enter a valid email';
-
-  @override
-  String get authEmailAlreadyInUse => 'Email may already be in use';
-
-  @override
-  String get authEmailError =>
-      'Email login failed. Please check your credentials.';
 
   @override
   String get authPasswordLabel => 'Password';
@@ -253,9 +182,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get authPasswordForgot => 'Forgot password?';
 
   @override
-  String get authPasswordInvalid => 'Invalid email or password';
-
-  @override
   String get authUsernameLabel => 'Username';
 
   @override
@@ -263,14 +189,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get authUsernameTooShort => 'Username must be at least 3 characters';
-
-  @override
-  String get authErrorGeneral =>
-      'An error occurred while logging in. Please try again later.';
-
-  @override
-  String get authErrorRegistration =>
-      'Registration failed. Email may already be in use.';
 
   @override
   String get authErrorConnection =>
@@ -311,10 +229,6 @@ class AppLocalizationsAf extends AppLocalizations {
       'Email account successfully linked!';
 
   @override
-  String get authAccountEmailLinkFailed =>
-      'Failed to link email account. Email may already be in use.';
-
-  @override
   String get helpTitle => 'Need help?';
 
   @override
@@ -322,13 +236,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get helpEmailUs => 'Email Us';
-
-  @override
-  String get helpJoinDiscordServer => 'Need help? Join us on Discord.';
-
-  @override
-  String get helpCannotOpenMailClient =>
-      'For some reasons we can\'t open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.';
 
   @override
   String get accountsWelcome => 'Welcome!';
@@ -341,17 +248,10 @@ class AppLocalizationsAf extends AppLocalizations {
   String get accountsManageTitle => 'Manage your accounts';
 
   @override
-  String get accountsManageDescription =>
-      'You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.';
-
-  @override
   String get accountsNoneFound => 'No account linked to your profile found';
 
   @override
   String get accountsPlayerTag => 'Player Tag (#ABC123)';
-
-  @override
-  String get accountsPlayerTags => 'Player Tags';
 
   @override
   String get accountsEnterPlayerTag => 'Enter a player tag';
@@ -377,8 +277,9 @@ class AppLocalizationsAf extends AppLocalizations {
       'The player tag entered does not exist.';
 
   @override
-  String get accountsErrorAlreadyLinked =>
-      'The player tag is already linked to someone.';
+  String accountsErrorAlreadyLinked(Object tag) {
+    return 'The player tag is already linked to someone.';
+  }
 
   @override
   String get accountsErrorAlreadyLinkedToYou =>
@@ -411,22 +312,11 @@ class AppLocalizationsAf extends AppLocalizations {
   String get errorLoadingVersion => 'Error loading version';
 
   @override
-  String get errorConnectionGeneral =>
-      'An error occurred. Please check your internet connection and try again.';
-
-  @override
-  String get errorConnectionRelaunch =>
-      'An error occurred. Please check your internet connection and relaunch the app.';
-
-  @override
   String get errorCannotOpenLink => 'We can\'t open this link.';
 
   @override
   String get errorExitAppToOpenClash =>
       'You are about to leave the app to open Clash of Clans.';
-
-  @override
-  String get playerTitle => 'Player';
 
   @override
   String get playerSearchTitle => 'Search player';
@@ -492,9 +382,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get gameTownHall => 'TH';
 
   @override
-  String get gameBuilderHall => 'BH';
-
-  @override
   String get gameTownHallLevel => 'TH Level';
 
   @override
@@ -505,11 +392,6 @@ class AppLocalizationsAf extends AppLocalizations {
   @override
   String gameTHLevel(int level) {
     return 'TH$level';
-  }
-
-  @override
-  String gameBHLevel(int level) {
-    return 'BH$level';
   }
 
   @override
@@ -548,9 +430,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get gameTroops => 'Troops';
 
   @override
-  String get gameSuperTroops => 'Super Troops';
-
-  @override
   String get gameActiveSuperTroops => 'Active Super Troops';
 
   @override
@@ -576,9 +455,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get clanTitle => 'Clan';
-
-  @override
-  String get clansTitle => 'Clans';
 
   @override
   String get clanSearchTitle => 'Search clan';
@@ -656,14 +532,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get timeHourIndicator => 'h';
 
   @override
-  String get timeMinIndicator => 'm';
-
-  @override
-  String timeDaysLeft(int days) {
-    return '$days days left';
-  }
-
-  @override
   String timeDaysAgo(int days) {
     return '$days days ago';
   }
@@ -691,11 +559,6 @@ class AppLocalizationsAf extends AppLocalizations {
   @override
   String timeMinutesAgo(int minutes) {
     return '$minutes minutes ago';
-  }
-
-  @override
-  String timeSecondAgo(int seconds) {
-    return '${seconds}s ago';
   }
 
   @override
@@ -737,11 +600,6 @@ class AppLocalizationsAf extends AppLocalizations {
   @override
   String timeEndsAt(String time) {
     return 'Ends at $time';
-  }
-
-  @override
-  String timeUpdatedAt(String time) {
-    return 'Updated at $time';
   }
 
   @override
@@ -877,18 +735,9 @@ class AppLocalizationsAf extends AppLocalizations {
   }
 
   @override
-  String get statsYear => 'Year';
-
-  @override
-  String get statsMonth => 'Month';
-
-  @override
   String statsSeasonDate(String date) {
     return '$date season';
   }
-
-  @override
-  String get statsSelectSeason => 'Select a season';
 
   @override
   String get statsAllTownHalls => 'All Town Halls';
@@ -1016,12 +865,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get warLog => 'War Log';
 
   @override
-  String get warLogPublic => 'Public War Log';
-
-  @override
-  String get warLogPrivate => 'Private War Log';
-
-  @override
   String warLogClosed(String clan) {
     return 'War log closed.';
   }
@@ -1031,9 +874,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get warOngoing => 'Ongoing war';
-
-  @override
-  String get warNotInWar => 'Not in war';
 
   @override
   String warIsNotInWar(String clan) {
@@ -1140,9 +980,6 @@ class AppLocalizationsAf extends AppLocalizations {
   }
 
   @override
-  String get warDefenseTitle => 'Defense';
-
-  @override
   String get warDefensesTitle => 'Defenses';
 
   @override
@@ -1155,9 +992,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String warDefensesBestOutOf(int number) {
     return 'Best defense (out of $number)';
   }
-
-  @override
-  String get warDefenseStars => 'Defense Stars';
 
   @override
   String warDefensesNumber(int number_time, int number_war) {
@@ -1176,9 +1010,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get warStarsTitle => 'Stars';
-
-  @override
-  String get warStarsTotal => 'Total';
 
   @override
   String get warStarsAverage => 'Average stars';
@@ -1268,12 +1099,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get warOpponentSelectOpponentsThLevel => 'Opponents TH Level';
 
   @override
-  String get warFiltersByNumberOfWars => 'By number of wars';
-
-  @override
-  String get warFiltersByDateRange => 'By date range';
-
-  @override
   String warFiltersLastXwars(int number) {
     return 'Last $number wars';
   }
@@ -1352,11 +1177,6 @@ class AppLocalizationsAf extends AppLocalizations {
   @override
   String cwlTotalAttacks(int attacks, int totalAttacks) {
     return 'Your clan has a total of $attacks attacks out of $totalAttacks possible attacks.';
-  }
-
-  @override
-  String cwlCurrentRoundDescription(int round) {
-    return 'It\'s currently round $round.';
   }
 
   @override
@@ -1457,9 +1277,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get raidsCompleted => 'Raids completed';
 
   @override
-  String get searchTitle => 'Search';
-
-  @override
   String get searchNoResult => 'No result.';
 
   @override
@@ -1491,19 +1308,10 @@ class AppLocalizationsAf extends AppLocalizations {
   String get toolsTitle => 'Tools';
 
   @override
-  String get communityTitle => 'Community';
-
-  @override
   String get navigationTeam => 'Teams';
 
   @override
   String get navigationStatistics => 'Statistics';
-
-  @override
-  String get navigationLeague => 'League';
-
-  @override
-  String get navigationWars => 'Wars';
 
   @override
   String get versionDevice => 'Version & Device';
@@ -1517,9 +1325,6 @@ class AppLocalizationsAf extends AppLocalizations {
   @override
   String get betaDescription =>
       'This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.';
-
-  @override
-  String get settingsTitle => 'Settings';
 
   @override
   String get settingsLanguage => 'Language';
