@@ -1,12 +1,9 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
-  "appTitle": "ClashKing",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Cargando...",
-  "generalError": "Error",
   "generalRetry": "Retry",
   "generalTryAgain": "Try again",
-  "generalClose": "Cerrar",
   "generalCancel": "Cancelar",
   "generalOk": "Ok",
   "@generalOk": {
@@ -14,16 +11,7 @@
   },
   "generalApply": "Aplicar",
   "generalConfirm": "Confirm",
-  "generalAdd": "Añadir",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "Eliminar",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
   "generalManage": "Gestionar",
-  "generalManagement": "Administración",
   "generalSettings": "Ajustes",
   "generalCopiedToClipboard": "Copiado al portapapeles",
   "generalComingSoon": "¡Próximamente!",
@@ -58,9 +46,7 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
   "generalRole": "Rol",
-  "generalDate": "Fecha",
   "generalStats": "Estadísticas",
   "generalFullStats": "Full Stats",
   "generalDetails": "Detalles",
@@ -68,30 +54,13 @@
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Gráficos",
   "generalFilters": "Filtros",
-  "generalWhatever": "Como sea",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Cualquiera",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
   "generalNotSet": "No establecido",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
   "generalWarning": "Advertencia",
   "generalNoDataAvailable": "No hay datos disponibles.",
-  "generalClosed": "Cerrado",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignIn": "Sign In",
   "authSignUp": "Sign up",
   "authLogin": "Iniciar sesión",
   "authLogout": "Cerrar sesión",
@@ -99,7 +68,6 @@
   "authJoinClashKing": "Join ClashKing",
   "authCreateClashKingAccount": "Create ClashKing Account",
   "authCreateAccountToGetStarted": "Create your account to get started",
-  "authDontHaveAccount": "Don't have an account? Create one",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "Are you sure you want to log out?",
   "@authConfirmLogout": {
@@ -109,16 +77,10 @@
   "authDiscordSignIn": "Iniciar sesión con Discord",
   "authDiscordContinue": "Continue with Discord",
   "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authDiscordError": "Discord login failed. Please try again.",
   "authEmailTitle": "Email",
-  "authEmailSignIn": "Sign in with Email",
   "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailLabel": "Email",
-  "authEmailPlaceholder": "Enter your email",
   "authEmailRequired": "Please enter your email",
   "authEmailInvalid": "Please enter a valid email",
-  "authEmailAlreadyInUse": "Email may already be in use",
-  "authEmailError": "Email login failed. Please check your credentials.",
   "authPasswordLabel": "Password",
   "authPasswordConfirm": "Confirm Password",
   "authPasswordRequired": "Please enter your password",
@@ -127,12 +89,9 @@
   "authPasswordTooShort": "Password must be at least 8 characters",
   "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
   "authPasswordForgot": "Forgot password?",
-  "authPasswordInvalid": "Invalid email or password",
   "authUsernameLabel": "Usuario",
   "authUsernameRequired": "Por favor ingrese un usuario",
   "authUsernameTooShort": "Username must be at least 3 characters",
-  "authErrorGeneral": "An error occurred while logging in. Please try again later.",
-  "authErrorRegistration": "Registration failed. Email may already be in use.",
   "authErrorConnection": "Se ha producido un error. Por favor, comprueba tu conexión a internet e inténtalo de nuevo.",
   "authErrorConnectionRelaunch": "Se ha producido un error. Por favor, verifica tu conexión a internet y vuelve a iniciar la aplicación.",
   "authAccountManagement": "Account Management",
@@ -144,19 +103,14 @@
   "authAccountLinkEmail": "Link Email Account",
   "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
   "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "authAccountEmailLinkFailed": "Failed to link email account. Email may already be in use.",
   "helpTitle": "Need help?",
   "helpJoinDiscord": "Join Discord",
   "helpEmailUs": "Email Us",
-  "helpJoinDiscordServer": "¿Necesitas ayuda? Únete a nosotros en Discord.",
-  "helpCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
   "accountsWelcome": "¡Bienvenido!",
   "accountsWelcomeMessage": "Por favor, añade una o más cuentas de Clash Of Clan a tu perfil. Puedes añadir o eliminar cuentas más tarde.",
   "accountsManageTitle": "Manage your accounts",
-  "accountsManageDescription": "You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.",
   "accountsNoneFound": "No se encontró ninguna cuenta vinculada a su perfil",
   "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsPlayerTags": "Etiquetas de Jugador",
   "accountsEnterPlayerTag": "Ingrese una etiqueta de jugador",
   "accountsAdd": "Añadir cuenta",
   "accountsDelete": "Eliminar cuenta",
@@ -176,11 +130,8 @@
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorConnectionGeneral": "Se ha producido un error. Por favor, comprueba tu conexión a internet e inténtalo de nuevo.",
-  "errorConnectionRelaunch": "Se ha producido un error. Por favor, verifica tu conexión a internet y vuelve a iniciar la aplicación.",
   "errorCannotOpenLink": "No podemos abrir este enlace.",
   "errorExitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-  "playerTitle": "Jugador",
   "playerSearchTitle": "Buscar jugador",
   "playerSearchPlaceholder": "Nombre o etiqueta del jugador",
   "playerLastActive": "Última actividad: {date}",
@@ -267,7 +218,6 @@
   "gameBaseBuilder": "Base del constructor",
   "gameClanCapital": "Capital del Clan",
   "gameTownHall": "TH",
-  "gameBuilderHall": "BH",
   "gameTownHallLevel": "Nivel TH",
   "gameTownHallLevelNumber": "Town Hall {level}",
   "@gameTownHallLevelNumber": {
@@ -279,14 +229,6 @@
   },
   "gameTHLevel": "TH{level}",
   "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "gameBHLevel": "BH{level}",
-  "@gameBHLevel": {
     "placeholders": {
       "level": {
         "type": "int"
@@ -314,7 +256,6 @@
   "gameEquipment": "Equipos",
   "gameHeroesEquipments": "Hero equipments",
   "gameTroops": "Tropas",
-  "gameSuperTroops": "Supertropas",
   "gameActiveSuperTroops": "Supertropas Activas",
   "gamePets": "Mascoras",
   "gameSiegeMachines": "Máquinas de asedio",
@@ -324,7 +265,6 @@
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Código de Creador: ClashKing",
   "clanTitle": "Clan",
-  "clansTitle": "Clanes",
   "clanSearchTitle": "Buscar clan",
   "clanSearchPlaceholder": "Clan's name",
   "clanNone": "Sin clan",
@@ -359,15 +299,6 @@
   "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
   "clanWarFrequencyRarely": "Raramente",
   "timeHourIndicator": "h",
-  "timeMinIndicator": "m",
-  "timeDaysLeft": "{days} días restantes",
-  "@timeDaysLeft": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
   "timeDaysAgo": "hace {days} días",
   "@timeDaysAgo": {
     "placeholders": {
@@ -412,14 +343,6 @@
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "timeSecondAgo": "Hace {seconds} segundos",
-  "@timeSecondAgo": {
-    "placeholders": {
-      "seconds": {
         "type": "int"
       }
     }
@@ -476,14 +399,6 @@
   },
   "timeEndsAt": "Termina en {time}",
   "@timeEndsAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "timeUpdatedAt": "Updated at {time}",
-  "@timeUpdatedAt": {
     "placeholders": {
       "time": {
         "type": "String"
@@ -606,8 +521,6 @@
       }
     }
   },
-  "statsYear": "Año",
-  "statsMonth": "Mes",
   "statsSeasonDate": "Temporada {date}",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
@@ -616,10 +529,6 @@
         "type": "String"
       }
     }
-  },
-  "statsSelectSeason": "Select a season",
-  "@statsSelectSeason": {
-    "description": "Ask player to select a season"
   },
   "statsAllTownHalls": "All Town Halls",
   "statsMembers": "Members Stats",
@@ -721,8 +630,6 @@
   "warLeague": "Guerra/Liga",
   "warHistory": "Curso de Guerra",
   "warLog": "Registro de guerra",
-  "warLogPublic": "Registro de guerra pública",
-  "warLogPrivate": "Registro de guerra privada",
   "warLogClosed": "El registro de guerra cerrado.",
   "@warLogClosed": {
     "placeholders": {
@@ -733,7 +640,6 @@
   },
   "warStats": "Estadísticas de Guerra",
   "warOngoing": "Guerra en curso",
-  "warNotInWar": "No está en guerra",
   "warIsNotInWar": "{clan} no está en guerra.",
   "@warIsNotInWar": {
     "placeholders": {
@@ -836,7 +742,6 @@
       }
     }
   },
-  "warDefenseTitle": "Defensa",
   "warDefensesTitle": "Defensas",
   "warDefensesNone": "No defense yet",
   "@warDefensesNone": {
@@ -852,7 +757,6 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefenseStars": "Defense Stars",
   "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
   "@warDefensesNumber": {
     "placeholders": {
@@ -881,7 +785,6 @@
     }
   },
   "warStarsTitle": "Estrellas",
-  "warStarsTotal": "Total",
   "warStarsAverage": "Average stars",
   "warStarsNumber": "Número de estrellas",
   "warStarsOne": "1 estrella",
@@ -979,14 +882,6 @@
   "warOpponentEqualThLevel": "Equal TH",
   "warOpponentSelectMembersThLevel": "Members TH Level",
   "warOpponentSelectOpponentsThLevel": "Opponents TH Level",
-  "warFiltersByNumberOfWars": "Por número de guerras",
-  "@warFiltersByNumberOfWars": {
-    "description": "filter by number of wars"
-  },
-  "warFiltersByDateRange": "Por rango de fechas",
-  "@warFiltersByDateRange": {
-    "description": "filter by date range"
-  },
   "warFiltersLastXwars": "Last {number} wars",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
@@ -1085,14 +980,6 @@
         "type": "int"
       },
       "totalAttacks": {
-        "type": "int"
-      }
-    }
-  },
-  "cwlCurrentRoundDescription": "It's currently round {round}.",
-  "@cwlCurrentRoundDescription": {
-    "placeholders": {
-      "round": {
         "type": "int"
       }
     }
@@ -1205,10 +1092,6 @@
   "raidsOngoing": "Ongoing raids",
   "raidsDistrictsDestroyed": "Districts destroyed",
   "raidsCompleted": "Raids completed",
-  "searchTitle": "Busca",
-  "@searchTitle": {
-    "description": "Search for a player or a clan"
-  },
   "searchNoResult": "Sin resultados.",
   "maintenanceTitle": "Maintenance",
   "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
@@ -1225,11 +1108,8 @@
   "downloadError": "Failed to download file",
   "dashboardTitle": "Panel",
   "toolsTitle": "Herramientas",
-  "communityTitle": "Comunidad",
   "navigationTeam": "Grupos",
   "navigationStatistics": "Estadísticas",
-  "navigationLeague": "Liga",
-  "navigationWars": "Guerras",
   "versionDevice": "Versión y dispositivo",
   "@versionDevice": {
     "description": "Version of the app and device information"
@@ -1237,7 +1117,6 @@
   "betaFeature": "Función beta",
   "betaLabel": "BETA",
   "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
-  "settingsTitle": "Ajustes",
   "settingsLanguage": "Idioma",
   "settingsSelectLanguage": "Selecciona un idioma",
   "settingsToggleTheme": "Cambiar tema",
