@@ -1,12 +1,9 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
-  "appTitle": "ClashKing",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Yükleniyor...",
-  "generalError": "Hata",
   "generalRetry": "Retry",
   "generalTryAgain": "Try again",
-  "generalClose": "Kapat",
   "generalCancel": "İptal",
   "generalOk": "Tamam",
   "@generalOk": {
@@ -14,16 +11,7 @@
   },
   "generalApply": "Uygula",
   "generalConfirm": "Confirm",
-  "generalAdd": "Ekle",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "Sil",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
   "generalManage": "Yönet",
-  "generalManagement": "Yönetim",
   "generalSettings": "Ayarlar",
   "generalCopiedToClipboard": "Panoya kopyalandı",
   "generalComingSoon": "Çok yakında!",
@@ -58,9 +46,7 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
   "generalRole": "Rol",
-  "generalDate": "Tarih",
   "generalStats": "İstatistikler",
   "generalFullStats": "Full Stats",
   "generalDetails": "Ayrıntılar",
@@ -68,30 +54,13 @@
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Grafikler",
   "generalFilters": "Filtreler",
-  "generalWhatever": "Her neyse",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Herhangi",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
   "generalNotSet": "Ayarlanmamış",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
   "generalWarning": "Uyarı",
   "generalNoDataAvailable": "Veri bulunamadı.",
-  "generalClosed": "Kapalı",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignIn": "Sign In",
   "authSignUp": "Sign up",
   "authLogin": "Oturum aç",
   "authLogout": "Oturumu kapat",
@@ -99,7 +68,6 @@
   "authJoinClashKing": "Join ClashKing",
   "authCreateClashKingAccount": "Create ClashKing Account",
   "authCreateAccountToGetStarted": "Create your account to get started",
-  "authDontHaveAccount": "Don't have an account? Create one",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "Çıkış yapmak istediğinizden emin misiniz?",
   "@authConfirmLogout": {
@@ -109,16 +77,10 @@
   "authDiscordSignIn": "Discord ile giriş yap",
   "authDiscordContinue": "Continue with Discord",
   "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authDiscordError": "Discord login failed. Please try again.",
   "authEmailTitle": "Email",
-  "authEmailSignIn": "Sign in with Email",
   "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailLabel": "Email",
-  "authEmailPlaceholder": "Enter your email",
   "authEmailRequired": "Please enter your email",
   "authEmailInvalid": "Please enter a valid email",
-  "authEmailAlreadyInUse": "Email may already be in use",
-  "authEmailError": "Email login failed. Please check your credentials.",
   "authPasswordLabel": "Password",
   "authPasswordConfirm": "Confirm Password",
   "authPasswordRequired": "Please enter your password",
@@ -127,12 +89,9 @@
   "authPasswordTooShort": "Password must be at least 8 characters",
   "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
   "authPasswordForgot": "Forgot password?",
-  "authPasswordInvalid": "Invalid email or password",
   "authUsernameLabel": "Kullanıcı Adı",
   "authUsernameRequired": "Lütfen bir kullanıcı adı girin",
   "authUsernameTooShort": "Username must be at least 3 characters",
-  "authErrorGeneral": "An error occurred while logging in. Please try again later.",
-  "authErrorRegistration": "Registration failed. Email may already be in use.",
   "authErrorConnection": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.",
   "authErrorConnectionRelaunch": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve uygulamayı yeniden başlatın.",
   "authAccountManagement": "Account Management",
@@ -144,19 +103,14 @@
   "authAccountLinkEmail": "Link Email Account",
   "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
   "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "authAccountEmailLinkFailed": "Failed to link email account. Email may already be in use.",
   "helpTitle": "Need help?",
   "helpJoinDiscord": "Join Discord",
   "helpEmailUs": "Email Us",
-  "helpJoinDiscordServer": "Yardım mı lazım?Discorda katıl.",
-  "helpCannotOpenMailClient": "Bazı nedenlerden dolayı posta istemcinizi açamadık. E-posta adresini sizin için kopyaladık. Bir e-posta yazıp adresi alıcı alanına yapıştırabilirsiniz.",
   "accountsWelcome": "Hoşgeldiniz!",
   "accountsWelcomeMessage": "Lütfen profilinize bir veya daha fazla Clash of Clans hesabı ekleyin. Daha sonra hesap ekleyebilir veya kaldırabilirsiniz.",
   "accountsManageTitle": "Manage your accounts",
-  "accountsManageDescription": "You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.",
   "accountsNoneFound": "Profilinize bağlı bir hesap bulunamadı",
   "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsPlayerTags": "Oyuncu Kodu",
   "accountsEnterPlayerTag": "Bir oyuncu etiketi girin",
   "accountsAdd": "Hesap ekle",
   "accountsDelete": "Hesabı sil",
@@ -176,11 +130,8 @@
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorConnectionGeneral": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.",
-  "errorConnectionRelaunch": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve uygulamayı yeniden başlatın.",
   "errorCannotOpenLink": "Bu bağlantıyı açamıyoruz.",
   "errorExitAppToOpenClash": "Clash of Clans'ı açmak için uygulamadan çıkmak üzeresiniz.",
-  "playerTitle": "Oyuncu",
   "playerSearchTitle": "Oyuncu ara",
   "playerSearchPlaceholder": "Oyuncunun adı veya etiketi",
   "playerLastActive": "Son Aktiflik: {date}",
@@ -267,7 +218,6 @@
   "gameBaseBuilder": "İnşaatçı Üssü",
   "gameClanCapital": "Klan Başkenti",
   "gameTownHall": "BB",
-  "gameBuilderHall": "İB",
   "gameTownHallLevel": "BB Seviyesi",
   "gameTownHallLevelNumber": "Belediye Binası {level}",
   "@gameTownHallLevelNumber": {
@@ -279,14 +229,6 @@
   },
   "gameTHLevel": "BB {level}",
   "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "gameBHLevel": "İB {level}",
-  "@gameBHLevel": {
     "placeholders": {
       "level": {
         "type": "int"
@@ -314,7 +256,6 @@
   "gameEquipment": "Ekipmanlar",
   "gameHeroesEquipments": "Kahraman Ekipmanları",
   "gameTroops": "Birlikler",
-  "gameSuperTroops": "Süper Birlikler",
   "gameActiveSuperTroops": "Aktif Süper Birlikler",
   "gamePets": "Evcil Hayvanlar",
   "gameSiegeMachines": "Kuşatma Makineleri",
@@ -324,7 +265,6 @@
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "İçerik Üretici Kodu: ClashKing",
   "clanTitle": "Klan",
-  "clansTitle": "Klanlar",
   "clanSearchTitle": "Klan ara",
   "clanSearchPlaceholder": "Clan's name",
   "clanNone": "Klan yok",
@@ -359,15 +299,6 @@
   "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
   "clanWarFrequencyRarely": "Nadiren",
   "timeHourIndicator": "sa",
-  "timeMinIndicator": "dk",
-  "timeDaysLeft": "{days} gün kaldı",
-  "@timeDaysLeft": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
   "timeDaysAgo": "{days} gün önce",
   "@timeDaysAgo": {
     "placeholders": {
@@ -412,14 +343,6 @@
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "timeSecondAgo": "{seconds} sn. önce",
-  "@timeSecondAgo": {
-    "placeholders": {
-      "seconds": {
         "type": "int"
       }
     }
@@ -476,14 +399,6 @@
   },
   "timeEndsAt": "{time}'de bitiyor",
   "@timeEndsAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "timeUpdatedAt": "{time} tarihinde güncellendi",
-  "@timeUpdatedAt": {
     "placeholders": {
       "time": {
         "type": "String"
@@ -606,8 +521,6 @@
       }
     }
   },
-  "statsYear": "Yıl",
-  "statsMonth": "Ay",
   "statsSeasonDate": "{date} sezon",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
@@ -616,10 +529,6 @@
         "type": "String"
       }
     }
-  },
-  "statsSelectSeason": "Bir sezon seçin",
-  "@statsSelectSeason": {
-    "description": "Ask player to select a season"
   },
   "statsAllTownHalls": "Tüm Belediye Binaları",
   "statsMembers": "Üye İstatistikleri",
@@ -721,8 +630,6 @@
   "warLeague": "Savaş/Lig",
   "warHistory": "Savaş Geçmişi",
   "warLog": "Savaş Günlüğü",
-  "warLogPublic": "Halka Açık Savaş Günlüğü",
-  "warLogPrivate": "Özel Savaş Günlüğü",
   "warLogClosed": "Savaş günlüğü kapatıldı.",
   "@warLogClosed": {
     "placeholders": {
@@ -733,7 +640,6 @@
   },
   "warStats": "Savaş İstatistikleri",
   "warOngoing": "Devam eden savaş",
-  "warNotInWar": "Savaşta değil",
   "warIsNotInWar": "{clan} savaşta değil.",
   "@warIsNotInWar": {
     "placeholders": {
@@ -836,7 +742,6 @@
       }
     }
   },
-  "warDefenseTitle": "Savunma",
   "warDefensesTitle": "Savunmalar",
   "warDefensesNone": "No defense yet",
   "@warDefensesNone": {
@@ -852,7 +757,6 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefenseStars": "Defense Stars",
   "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
   "@warDefensesNumber": {
     "placeholders": {
@@ -881,7 +785,6 @@
     }
   },
   "warStarsTitle": "Yıldızlar",
-  "warStarsTotal": "Toplam",
   "warStarsAverage": "Ortalama Yıldızlar",
   "warStarsNumber": "Yıldız Sayısı",
   "warStarsOne": "1 yıldız",
@@ -979,14 +882,6 @@
   "warOpponentEqualThLevel": "Eşit BB",
   "warOpponentSelectMembersThLevel": "Üyelerin BB Seviyesi",
   "warOpponentSelectOpponentsThLevel": "Rakiplerin BB Seviyesi",
-  "warFiltersByNumberOfWars": "Savaş sayısına göre",
-  "@warFiltersByNumberOfWars": {
-    "description": "filter by number of wars"
-  },
-  "warFiltersByDateRange": "Tarih aralığına göre",
-  "@warFiltersByDateRange": {
-    "description": "filter by date range"
-  },
   "warFiltersLastXwars": "Son {number} savaş",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
@@ -1085,14 +980,6 @@
         "type": "int"
       },
       "totalAttacks": {
-        "type": "int"
-      }
-    }
-  },
-  "cwlCurrentRoundDescription": "Şu anda tur {round}.",
-  "@cwlCurrentRoundDescription": {
-    "placeholders": {
-      "round": {
         "type": "int"
       }
     }
@@ -1205,10 +1092,6 @@
   "raidsOngoing": "Devam eden baskınlar",
   "raidsDistrictsDestroyed": "Yıkılan bölgeler",
   "raidsCompleted": "Tamamlanan baskınlar",
-  "searchTitle": "Ara",
-  "@searchTitle": {
-    "description": "Search for a player or a clan"
-  },
   "searchNoResult": "Sonuç yok.",
   "maintenanceTitle": "Maintenance",
   "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
@@ -1225,11 +1108,8 @@
   "downloadError": "Failed to download file",
   "dashboardTitle": "Kontrol Paneli",
   "toolsTitle": "Araçlar",
-  "communityTitle": "Topluluk",
   "navigationTeam": "Takımlar",
   "navigationStatistics": "İstatistikler",
-  "navigationLeague": "Lig",
-  "navigationWars": "Savaşlar",
   "versionDevice": "Sürüm & Cihaz",
   "@versionDevice": {
     "description": "Version of the app and device information"
@@ -1237,7 +1117,6 @@
   "betaFeature": "Beta Özellikleri",
   "betaLabel": "Beta",
   "betaDescription": "Bu özellik şu anda beta aşamasındadır, bazı hatalar içerebilir veya eksik olabilir. İyileştirmeler üzerinde aktif olarak çalışıyoruz ve geri bildirimlerinizi bekliyoruz. Lütfen fikirlerinizi paylaşın ve Discord Sunucumuzdaki sorunları bildirin, böylece daha iyi hale getirmemize yardımcı olun.",
-  "settingsTitle": "Ayarlar",
   "settingsLanguage": "Dil",
   "settingsSelectLanguage": "Bir dil seçin",
   "settingsToggleTheme": "Temayı Değiştir",
