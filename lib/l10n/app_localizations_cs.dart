@@ -10,119 +10,118 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'Váš dokonalý průvodce Clash of Clans pro sledování statistik, správu klanů a analýzu výkonu.';
 
   @override
-  String get generalLoading => 'Loading...';
+  String get generalLoading => 'Načítání...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => 'Opakovat';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => 'Zkusit znovu';
 
   @override
-  String get generalCancel => 'Cancel';
+  String get generalCancel => 'Zrušit';
 
   @override
   String get generalOk => 'OK';
 
   @override
-  String get generalApply => 'Apply';
+  String get generalApply => 'Použít';
 
   @override
-  String get generalConfirm => 'Confirm';
+  String get generalConfirm => 'Potvrdit';
 
   @override
-  String get generalManage => 'Manage';
+  String get generalManage => 'Spravovat';
 
   @override
-  String get generalSettings => 'Settings';
+  String get generalSettings => 'Nastavení';
 
   @override
-  String get generalCopiedToClipboard => 'Copied to clipboard';
+  String get generalCopiedToClipboard => 'Zkopírováno do schránky';
 
   @override
-  String get generalComingSoon => 'Coming soon!';
+  String get generalComingSoon => 'Již brzy!';
 
   @override
-  String get generalAll => 'All';
+  String get generalAll => 'Vše';
 
   @override
-  String get generalTotal => 'Total';
+  String get generalTotal => 'Celkem';
 
   @override
-  String get generalBest => 'Best';
+  String get generalBest => 'Nejlepší';
 
   @override
-  String get generalWorst => 'Worst';
+  String get generalWorst => 'Nejhorší';
 
   @override
-  String get generalAverage => 'Average';
+  String get generalAverage => 'Průměr';
 
   @override
-  String get generalRemaining => 'Remaining';
+  String get generalRemaining => 'Zbývající';
 
   @override
-  String get generalActive => 'Active';
+  String get generalActive => 'Aktivní';
 
   @override
-  String get generalInactive => 'Inactive';
+  String get generalInactive => 'Neaktivní';
 
   @override
-  String get generalStarted => 'Started';
+  String get generalStarted => 'Započato';
 
   @override
-  String get generalEnded => 'Ended';
+  String get generalEnded => 'Ukončeno';
 
   @override
   String get generalRole => 'Role';
 
   @override
-  String get generalStats => 'Stats';
+  String get generalStats => 'Statistiky';
 
   @override
-  String get generalFullStats => 'Full Stats';
+  String get generalFullStats => 'Úplné statistiky';
 
   @override
-  String get generalDetails => 'Details';
+  String get generalDetails => 'Podrobnosti';
 
   @override
-  String get generalHistory => 'History';
+  String get generalHistory => 'Historie';
 
   @override
-  String get generalFilters => 'Filters';
+  String get generalFilters => 'Filtry';
 
   @override
-  String get generalNotSet => 'Not set';
+  String get generalNotSet => 'Nenastaveno';
 
   @override
-  String get generalWarning => 'Warning';
+  String get generalWarning => 'Varování';
 
   @override
-  String get generalNoDataAvailable => 'No data available.';
+  String get generalNoDataAvailable => 'Žádná data nejsou k dispozici.';
 
   @override
-  String get authSignUp => 'Sign up';
+  String get authSignUp => 'Registrovat se';
 
   @override
-  String get authLogin => 'Login';
+  String get authLogin => 'Přihlásit se';
 
   @override
-  String get authLogout => 'Log out';
+  String get authLogout => 'Odhlásit se';
 
   @override
-  String get authCreateAccount => 'Create Account';
+  String get authCreateAccount => 'Vytvořit účet';
 
   @override
-  String get authJoinClashKing => 'Join ClashKing';
+  String get authJoinClashKing => 'Připojit se k ClashKing';
 
   @override
-  String get authCreateClashKingAccount => 'Create ClashKing Account';
+  String get authCreateClashKingAccount => 'Vytvořit ClashKing účet';
 
   @override
-  String get authCreateAccountToGetStarted =>
-      'Create your account to get started';
+  String get authCreateAccountToGetStarted => 'Vytvořte si účet pro začátek';
 
   @override
   String get authAlreadyHaveAccount => 'Already have an account? Sign in';

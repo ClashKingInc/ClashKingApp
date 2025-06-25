@@ -1,11 +1,11 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "appDescription": "您的终极部落冲突伴侣，用于追踪统计数据、管理部落和分析性能。",
   "generalLoading": "加载中...",
   "generalError": "出错",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
+  "generalRetry": "重试",
+  "generalTryAgain": "再试一次",
   "generalClose": "关闭",
   "generalCancel": "取消",
   "generalOk": "确定",
@@ -13,7 +13,7 @@
     "description": "OK button on pop up"
   },
   "generalApply": "需要申请",
-  "generalConfirm": "Confirm",
+  "generalConfirm": "确认",
   "generalAdd": "添加",
   "@generalAdd": {
     "description": "Add an account"
@@ -48,8 +48,8 @@
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Active",
-  "generalInactive": "Inactive",
+  "generalActive": "活跃",
+  "generalInactive": "非活跃",
   "generalStarted": "已激活",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
@@ -58,11 +58,11 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
+  "generalLevel": "等级",
   "generalRole": "职位",
   "generalDate": "日期",
   "generalStats": "统计数据",
-  "generalFullStats": "Full Stats",
+  "generalFullStats": "完整统计",
   "generalDetails": "详细信息",
   "generalHistory": "历史记录",
   "@generalHistory": {
@@ -88,16 +88,16 @@
   "@generalClosed": {
     "description": "WarLog closed"
   },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignUp": "Sign up",
+  "authWelcomeBack": "欢迎回来",
+  "authClashKingDescription": "您的终极Clash of Clans伴侣，用于跟踪统计数据、管理部落和分析性能。",
+  "authChooseSignInMethod": "选择您首选的登录方式",
+  "authSignUp": "注册",
   "authLogin": "登录",
   "authLogout": "注销",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateClashKingAccount": "Create ClashKing Account",
-  "authCreateAccountToGetStarted": "Create your account to get started",
+  "authCreateAccount": "创建账户",
+  "authJoinClashKing": "加入 ClashKing",
+  "authCreateClashKingAccount": "创建 ClashKing 账户",
+  "authCreateAccountToGetStarted": "创建您的账户以开始",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "确定要退出登录吗？",
   "@authConfirmLogout": {

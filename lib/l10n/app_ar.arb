@@ -1,103 +1,103 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "generalLoading": "Loading...",
-  "generalError": "Error",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
-  "generalClose": "Close",
-  "generalCancel": "Cancel",
-  "generalOk": "OK",
+  "appDescription": "رفيقك النهائي في Clash of Clans لتتبع الإحصائيات وإدارة العشائر وتحليل الأداء.",
+  "generalLoading": "جاري التحميل...",
+  "generalError": "خطأ",
+  "generalRetry": "إعادة المحاولة",
+  "generalTryAgain": "حاول مرة أخرى",
+  "generalClose": "إغلاق",
+  "generalCancel": "إلغاء",
+  "generalOk": "موافق",
   "@generalOk": {
     "description": "OK button on pop up"
   },
-  "generalApply": "Apply",
-  "generalConfirm": "Confirm",
-  "generalAdd": "Add",
+  "generalApply": "تطبيق",
+  "generalConfirm": "تأكيد",
+  "generalAdd": "إضافة",
   "@generalAdd": {
     "description": "Add an account"
   },
-  "generalDelete": "Delete",
+  "generalDelete": "حذف",
   "@generalDelete": {
     "description": "Delete an account"
   },
-  "generalManage": "Manage",
-  "generalManagement": "Management",
-  "generalSettings": "Settings",
-  "generalCopiedToClipboard": "Copied to clipboard",
-  "generalComingSoon": "Coming soon!",
-  "generalAll": "All",
+  "generalManage": "إدارة",
+  "generalManagement": "الإدارة",
+  "generalSettings": "الإعدادات",
+  "generalCopiedToClipboard": "تم النسخ إلى الحافظة",
+  "generalComingSoon": "قريباً!",
+  "generalAll": "الكل",
   "@generalAll": {
     "description": "all items"
   },
-  "generalTotal": "Total",
-  "generalBest": "Best",
+  "generalTotal": "المجموع",
+  "generalBest": "أفضل",
   "@generalBest": {
     "description": "Best end of day trophies"
   },
-  "generalWorst": "Worst",
+  "generalWorst": "أسوأ",
   "@generalWorst": {
     "description": "Worst end of day trophies"
   },
-  "generalAverage": "Average",
+  "generalAverage": "متوسط",
   "@generalAverage": {
     "description": "Average value of legend trophies (defense and attack)"
   },
-  "generalRemaining": "Remaining",
+  "generalRemaining": "متبقي",
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Active",
-  "generalInactive": "Inactive",
-  "generalStarted": "Started",
+  "generalActive": "نشط",
+  "generalInactive": "غير نشط",
+  "generalStarted": "بدأ",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
   },
-  "generalEnded": "Ended",
+  "generalEnded": "انتهى",
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
-  "generalRole": "Role",
-  "generalDate": "Date",
-  "generalStats": "Stats",
-  "generalFullStats": "Full Stats",
-  "generalDetails": "Details",
-  "generalHistory": "History",
+  "generalLevel": "المستوى",
+  "generalRole": "الدور",
+  "generalDate": "التاريخ",
+  "generalStats": "الإحصائيات",
+  "generalFullStats": "الإحصائيات الكاملة",
+  "generalDetails": "التفاصيل",
+  "generalHistory": "التاريخ",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Charts",
-  "generalFilters": "Filters",
-  "generalWhatever": "Whatever",
+  "generalCharts": "الرسوم البيانية",
+  "generalFilters": "المرشحات",
+  "generalWhatever": "أي شيء",
   "@generalWhatever": {
     "description": "Whatever the value"
   },
-  "generalAny": "Any",
+  "generalAny": "أي",
   "@generalAny": {
     "description": "Any value is accepted"
   },
-  "generalNotSet": "Not set",
+  "generalNotSet": "غير محدد",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Warning",
-  "generalNoDataAvailable": "No data available.",
-  "generalClosed": "Closed",
+  "generalWarning": "تحذير",
+  "generalNoDataAvailable": "لا توجد بيانات متاحة.",
+  "generalClosed": "مغلق",
   "@generalClosed": {
     "description": "WarLog closed"
   },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignUp": "Sign up",
-  "authLogin": "Login",
-  "authLogout": "Log out",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateClashKingAccount": "Create ClashKing Account",
-  "authCreateAccountToGetStarted": "Create your account to get started",
+  "authWelcomeBack": "مرحباً بعودتك",
+  "authClashKingDescription": "رفيقك النهائي في Clash of Clans لتتبع الإحصائيات وإدارة العشائر وتحليل الأداء.",
+  "authChooseSignInMethod": "اختر طريقة تسجيل الدخول المفضلة",
+  "authSignUp": "إنشاء حساب",
+  "authLogin": "تسجيل الدخول",
+  "authLogout": "تسجيل الخروج",
+  "authCreateAccount": "إنشاء حساب",
+  "authJoinClashKing": "انضم إلى ClashKing",
+  "authCreateClashKingAccount": "إنشاء حساب ClashKing",
+  "authCreateAccountToGetStarted": "أنشئ حساباً للبدء",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "Are you sure you want to log out?",
   "@authConfirmLogout": {

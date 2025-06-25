@@ -1,103 +1,103 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "generalLoading": "Loading...",
-  "generalError": "Error",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
-  "generalClose": "Close",
-  "generalCancel": "Cancel",
+  "appDescription": "Tovarășul tău suprem Clash of Clans pentru urmărirea statisticilor, gestionarea clanurilor și analizarea performanței.",
+  "generalLoading": "Se încarcă...",
+  "generalError": "Eroare",
+  "generalRetry": "Reîncearcă",
+  "generalTryAgain": "Încearcă din nou",
+  "generalClose": "Închide",
+  "generalCancel": "Anulează",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
   },
-  "generalApply": "Apply",
-  "generalConfirm": "Confirm",
-  "generalAdd": "Add",
+  "generalApply": "Aplică",
+  "generalConfirm": "Confirmă",
+  "generalAdd": "Adaugă",
   "@generalAdd": {
     "description": "Add an account"
   },
-  "generalDelete": "Delete",
+  "generalDelete": "Șterge",
   "@generalDelete": {
     "description": "Delete an account"
   },
-  "generalManage": "Manage",
-  "generalManagement": "Management",
-  "generalSettings": "Settings",
-  "generalCopiedToClipboard": "Copied to clipboard",
-  "generalComingSoon": "Coming soon!",
-  "generalAll": "All",
+  "generalManage": "Gestionează",
+  "generalManagement": "Gestionare",
+  "generalSettings": "Setări",
+  "generalCopiedToClipboard": "Copiat în clipboard",
+  "generalComingSoon": "În curând!",
+  "generalAll": "Toate",
   "@generalAll": {
     "description": "all items"
   },
   "generalTotal": "Total",
-  "generalBest": "Best",
+  "generalBest": "Cel mai bun",
   "@generalBest": {
     "description": "Best end of day trophies"
   },
-  "generalWorst": "Worst",
+  "generalWorst": "Cel mai rău",
   "@generalWorst": {
     "description": "Worst end of day trophies"
   },
-  "generalAverage": "Average",
+  "generalAverage": "Medie",
   "@generalAverage": {
     "description": "Average value of legend trophies (defense and attack)"
   },
-  "generalRemaining": "Remaining",
+  "generalRemaining": "Rămas",
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Active",
-  "generalInactive": "Inactive",
-  "generalStarted": "Started",
+  "generalActive": "Activ",
+  "generalInactive": "Inactiv",
+  "generalStarted": "Început",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
   },
-  "generalEnded": "Ended",
+  "generalEnded": "Terminat",
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
-  "generalRole": "Role",
-  "generalDate": "Date",
-  "generalStats": "Stats",
-  "generalFullStats": "Full Stats",
-  "generalDetails": "Details",
-  "generalHistory": "History",
+  "generalLevel": "Nivel",
+  "generalRole": "Rol",
+  "generalDate": "Dată",
+  "generalStats": "Statistici",
+  "generalFullStats": "Statistici complete",
+  "generalDetails": "Detalii",
+  "generalHistory": "Istoric",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Charts",
-  "generalFilters": "Filters",
-  "generalWhatever": "Whatever",
+  "generalCharts": "Grafice",
+  "generalFilters": "Filtre",
+  "generalWhatever": "Orice",
   "@generalWhatever": {
     "description": "Whatever the value"
   },
-  "generalAny": "Any",
+  "generalAny": "Oricare",
   "@generalAny": {
     "description": "Any value is accepted"
   },
-  "generalNotSet": "Not set",
+  "generalNotSet": "Nesetat",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Warning",
-  "generalNoDataAvailable": "No data available.",
-  "generalClosed": "Closed",
+  "generalWarning": "Avertisment",
+  "generalNoDataAvailable": "Nu sunt date disponibile.",
+  "generalClosed": "Închis",
   "@generalClosed": {
     "description": "WarLog closed"
   },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignUp": "Sign up",
-  "authLogin": "Login",
-  "authLogout": "Log out",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateClashKingAccount": "Create ClashKing Account",
-  "authCreateAccountToGetStarted": "Create your account to get started",
+  "authWelcomeBack": "Bine ai revenit",
+  "authClashKingDescription": "Tovarășul tău suprem Clash of Clans pentru urmărirea statisticilor, gestionarea clanurilor și analizarea performanței.",
+  "authChooseSignInMethod": "Alege metoda ta preferată de conectare",
+  "authSignUp": "Înregistrează-te",
+  "authLogin": "Conectare",
+  "authLogout": "Deconectare",
+  "authCreateAccount": "Creează cont",
+  "authJoinClashKing": "Alătură-te ClashKing",
+  "authCreateClashKingAccount": "Creează cont ClashKing",
+  "authCreateAccountToGetStarted": "Creează-ți contul pentru a începe",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "Are you sure you want to log out?",
   "@authConfirmLogout": {

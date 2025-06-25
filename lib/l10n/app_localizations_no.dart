@@ -10,125 +10,125 @@ class AppLocalizationsNo extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'Din ultimate Clash of Clans-følgesvenn for å spore statistikk, administrere klaner og analysere ytelse.';
 
   @override
-  String get generalLoading => 'Loading...';
+  String get generalLoading => 'Laster...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => 'Prøv igjen';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => 'Prøv igjen';
 
   @override
-  String get generalCancel => 'Cancel';
+  String get generalCancel => 'Avbryt';
 
   @override
   String get generalOk => 'OK';
 
   @override
-  String get generalApply => 'Apply';
+  String get generalApply => 'Bruk';
 
   @override
-  String get generalConfirm => 'Confirm';
+  String get generalConfirm => 'Bekreft';
 
   @override
-  String get generalManage => 'Manage';
+  String get generalManage => 'Administrer';
 
   @override
-  String get generalSettings => 'Settings';
+  String get generalSettings => 'Innstillinger';
 
   @override
-  String get generalCopiedToClipboard => 'Copied to clipboard';
+  String get generalCopiedToClipboard => 'Kopiert til utklippstavlen';
 
   @override
-  String get generalComingSoon => 'Coming soon!';
+  String get generalComingSoon => 'Kommer snart!';
 
   @override
-  String get generalAll => 'All';
+  String get generalAll => 'Alle';
 
   @override
-  String get generalTotal => 'Total';
+  String get generalTotal => 'Totalt';
 
   @override
-  String get generalBest => 'Best';
+  String get generalBest => 'Beste';
 
   @override
-  String get generalWorst => 'Worst';
+  String get generalWorst => 'Verste';
 
   @override
-  String get generalAverage => 'Average';
+  String get generalAverage => 'Gjennomsnitt';
 
   @override
-  String get generalRemaining => 'Remaining';
+  String get generalRemaining => 'Gjenstår';
 
   @override
-  String get generalActive => 'Active';
+  String get generalActive => 'Aktiv';
 
   @override
-  String get generalInactive => 'Inactive';
+  String get generalInactive => 'Inaktiv';
 
   @override
-  String get generalStarted => 'Started';
+  String get generalStarted => 'Startet';
 
   @override
-  String get generalEnded => 'Ended';
+  String get generalEnded => 'Avsluttet';
 
   @override
-  String get generalRole => 'Role';
+  String get generalRole => 'Rolle';
 
   @override
-  String get generalStats => 'Stats';
+  String get generalStats => 'Statistikk';
 
   @override
-  String get generalFullStats => 'Full Stats';
+  String get generalFullStats => 'Full statistikk';
 
   @override
-  String get generalDetails => 'Details';
+  String get generalDetails => 'Detaljer';
 
   @override
-  String get generalHistory => 'History';
+  String get generalHistory => 'Historie';
 
   @override
-  String get generalFilters => 'Filters';
+  String get generalFilters => 'Filtre';
 
   @override
-  String get generalNotSet => 'Not set';
+  String get generalNotSet => 'Ikke satt';
 
   @override
-  String get generalWarning => 'Warning';
+  String get generalWarning => 'Advarsel';
 
   @override
-  String get generalNoDataAvailable => 'No data available.';
+  String get generalNoDataAvailable => 'Ingen data tilgjengelig.';
 
   @override
-  String get authSignUp => 'Sign up';
+  String get authSignUp => 'Registrer deg';
 
   @override
-  String get authLogin => 'Login';
+  String get authLogin => 'Logg inn';
 
   @override
-  String get authLogout => 'Log out';
+  String get authLogout => 'Logg ut';
 
   @override
-  String get authCreateAccount => 'Create Account';
+  String get authCreateAccount => 'Opprett konto';
 
   @override
-  String get authJoinClashKing => 'Join ClashKing';
+  String get authJoinClashKing => 'Bli med ClashKing';
 
   @override
-  String get authCreateClashKingAccount => 'Create ClashKing Account';
+  String get authCreateClashKingAccount => 'Opprett ClashKing-konto';
 
   @override
   String get authCreateAccountToGetStarted =>
-      'Create your account to get started';
+      'Opprett din konto for å komme i gang';
 
   @override
-  String get authAlreadyHaveAccount => 'Already have an account? Sign in';
+  String get authAlreadyHaveAccount => 'Har du allerede en konto? Logg inn';
 
   @override
-  String get authConfirmLogout => 'Are you sure you want to log out?';
+  String get authConfirmLogout => 'Er du sikker på at du vil logge ut?';
 
   @override
   String get authDiscordTitle => 'Discord';

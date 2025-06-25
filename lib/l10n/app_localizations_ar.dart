@@ -10,119 +10,118 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'رفيقك النهائي في Clash of Clans لتتبع الإحصائيات وإدارة العشائر وتحليل الأداء.';
 
   @override
-  String get generalLoading => 'Loading...';
+  String get generalLoading => 'جاري التحميل...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => 'إعادة المحاولة';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => 'حاول مرة أخرى';
 
   @override
-  String get generalCancel => 'Cancel';
+  String get generalCancel => 'إلغاء';
 
   @override
-  String get generalOk => 'OK';
+  String get generalOk => 'موافق';
 
   @override
-  String get generalApply => 'Apply';
+  String get generalApply => 'تطبيق';
 
   @override
-  String get generalConfirm => 'Confirm';
+  String get generalConfirm => 'تأكيد';
 
   @override
-  String get generalManage => 'Manage';
+  String get generalManage => 'إدارة';
 
   @override
-  String get generalSettings => 'Settings';
+  String get generalSettings => 'الإعدادات';
 
   @override
-  String get generalCopiedToClipboard => 'Copied to clipboard';
+  String get generalCopiedToClipboard => 'تم النسخ إلى الحافظة';
 
   @override
-  String get generalComingSoon => 'Coming soon!';
+  String get generalComingSoon => 'قريباً!';
 
   @override
-  String get generalAll => 'All';
+  String get generalAll => 'الكل';
 
   @override
-  String get generalTotal => 'Total';
+  String get generalTotal => 'المجموع';
 
   @override
-  String get generalBest => 'Best';
+  String get generalBest => 'أفضل';
 
   @override
-  String get generalWorst => 'Worst';
+  String get generalWorst => 'أسوأ';
 
   @override
-  String get generalAverage => 'Average';
+  String get generalAverage => 'متوسط';
 
   @override
-  String get generalRemaining => 'Remaining';
+  String get generalRemaining => 'متبقي';
 
   @override
-  String get generalActive => 'Active';
+  String get generalActive => 'نشط';
 
   @override
-  String get generalInactive => 'Inactive';
+  String get generalInactive => 'غير نشط';
 
   @override
-  String get generalStarted => 'Started';
+  String get generalStarted => 'بدأ';
 
   @override
-  String get generalEnded => 'Ended';
+  String get generalEnded => 'انتهى';
 
   @override
-  String get generalRole => 'Role';
+  String get generalRole => 'الدور';
 
   @override
-  String get generalStats => 'Stats';
+  String get generalStats => 'الإحصائيات';
 
   @override
-  String get generalFullStats => 'Full Stats';
+  String get generalFullStats => 'الإحصائيات الكاملة';
 
   @override
-  String get generalDetails => 'Details';
+  String get generalDetails => 'التفاصيل';
 
   @override
-  String get generalHistory => 'History';
+  String get generalHistory => 'التاريخ';
 
   @override
-  String get generalFilters => 'Filters';
+  String get generalFilters => 'المرشحات';
 
   @override
-  String get generalNotSet => 'Not set';
+  String get generalNotSet => 'غير محدد';
 
   @override
-  String get generalWarning => 'Warning';
+  String get generalWarning => 'تحذير';
 
   @override
-  String get generalNoDataAvailable => 'No data available.';
+  String get generalNoDataAvailable => 'لا توجد بيانات متاحة.';
 
   @override
-  String get authSignUp => 'Sign up';
+  String get authSignUp => 'إنشاء حساب';
 
   @override
-  String get authLogin => 'Login';
+  String get authLogin => 'تسجيل الدخول';
 
   @override
-  String get authLogout => 'Log out';
+  String get authLogout => 'تسجيل الخروج';
 
   @override
-  String get authCreateAccount => 'Create Account';
+  String get authCreateAccount => 'إنشاء حساب';
 
   @override
-  String get authJoinClashKing => 'Join ClashKing';
+  String get authJoinClashKing => 'انضم إلى ClashKing';
 
   @override
-  String get authCreateClashKingAccount => 'Create ClashKing Account';
+  String get authCreateClashKingAccount => 'إنشاء حساب ClashKing';
 
   @override
-  String get authCreateAccountToGetStarted =>
-      'Create your account to get started';
+  String get authCreateAccountToGetStarted => 'أنشئ حساباً للبدء';
 
   @override
   String get authAlreadyHaveAccount => 'Already have an account? Sign in';

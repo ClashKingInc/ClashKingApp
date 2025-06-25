@@ -1,19 +1,19 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "appDescription": "Ваш идеальный спутник Clash of Clans для отслеживания статистики, управления кланами и анализа производительности.",
   "generalLoading": "Загрузка...",
   "generalError": "Ошибка",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
+  "generalRetry": "Повторить",
+  "generalTryAgain": "Попробовать снова",
   "generalClose": "Закрыть",
-  "generalCancel": "Cancel",
+  "generalCancel": "Отмена",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
   },
   "generalApply": "Применить",
-  "generalConfirm": "Confirm",
+  "generalConfirm": "Подтвердить",
   "generalAdd": "Добавить",
   "@generalAdd": {
     "description": "Add an account"
@@ -23,10 +23,10 @@
     "description": "Delete an account"
   },
   "generalManage": "Управление",
-  "generalManagement": "Management",
+  "generalManagement": "Управление",
   "generalSettings": "Настройки",
   "generalCopiedToClipboard": "Скопировано в буфер обмена",
-  "generalComingSoon": "Coming soon!",
+  "generalComingSoon": "Скоро!",
   "generalAll": "Все",
   "@generalAll": {
     "description": "all items"
@@ -48,8 +48,8 @@
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Active",
-  "generalInactive": "Inactive",
+  "generalActive": "Активный",
+  "generalInactive": "Неактивный",
   "generalStarted": "Запущен",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
@@ -58,11 +58,11 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
-  "generalRole": "Role",
+  "generalLevel": "Уровень",
+  "generalRole": "Роль",
   "generalDate": "Дата",
   "generalStats": "Статистика",
-  "generalFullStats": "Full Stats",
+  "generalFullStats": "Полная статистика",
   "generalDetails": "Детали",
   "generalHistory": "Журнал",
   "@generalHistory": {
@@ -74,11 +74,11 @@
   "@generalWhatever": {
     "description": "Whatever the value"
   },
-  "generalAny": "Any",
+  "generalAny": "Любой",
   "@generalAny": {
     "description": "Any value is accepted"
   },
-  "generalNotSet": "Not set",
+  "generalNotSet": "Не установлено",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
@@ -88,43 +88,44 @@
   "@generalClosed": {
     "description": "WarLog closed"
   },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignUp": "Sign up",
+  "authWelcomeBack": "Добро пожаловать обратно",
+  "authClashKingDescription": "Ваш идеальный спутник Clash of Clans для отслеживания статистики, управления кланами и анализа производительности.",
+  "authChooseSignInMethod": "Выберите предпочитаемый способ входа",
+  "authSignUp": "Регистрация",
   "authLogin": "Вход",
   "authLogout": "Выход",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateClashKingAccount": "Create ClashKing Account",
-  "authCreateAccountToGetStarted": "Create your account to get started",
-  "authAlreadyHaveAccount": "Already have an account? Sign in",
+  "authCreateAccount": "Создать аккаунт",
+  "authJoinClashKing": "Присоединиться к ClashKing",
+  "authCreateClashKingAccount": "Создать аккаунт ClashKing",
+  "authCreateAccountToGetStarted": "Создайте свой аккаунт, чтобы начать",
+  "authDontHaveAccount": "У вас нет аккаунта? Создайте его",
+  "authAlreadyHaveAccount": "Уже есть аккаунт? Войдите",
   "authConfirmLogout": "Вы уверены, что хотите выйти?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
   "authDiscordSignIn": "Вход через Discord",
-  "authDiscordContinue": "Continue with Discord",
-  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authEmailTitle": "Email",
-  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailRequired": "Please enter your email",
-  "authEmailInvalid": "Please enter a valid email",
-  "authPasswordLabel": "Password",
-  "authPasswordConfirm": "Confirm Password",
-  "authPasswordRequired": "Please enter your password",
-  "authPasswordConfirmRequired": "Please confirm your password",
-  "authPasswordMismatch": "Passwords do not match",
-  "authPasswordTooShort": "Password must be at least 8 characters",
-  "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
-  "authPasswordForgot": "Forgot password?",
+  "authDiscordContinue": "Продолжить с Discord",
+  "authDiscordDescription": "Синхронизируйте свои данные с ClashKing Bot и раскройте весь потенциал ClashKing!",
+  "authEmailTitle": "Электронная почта",
+  "authEmailDescription": "Используйте электронную почту, если вы не можете получить доступ к Discord или предпочитаете функции только приложения",
+  "authEmailRequired": "Пожалуйста, введите ваш email",
+  "authEmailInvalid": "Пожалуйста, введите действительный email",
+  "authPasswordLabel": "Пароль",
+  "authPasswordConfirm": "Подтвердите пароль",
+  "authPasswordRequired": "Пожалуйста, введите ваш пароль",
+  "authPasswordConfirmRequired": "Пожалуйста, подтвердите ваш пароль",
+  "authPasswordMismatch": "Пароли не совпадают",
+  "authPasswordTooShort": "Пароль должен содержать не менее 8 символов",
+  "authPasswordRequirements": "Пароль должен содержать: заглавные буквы, строчные буквы, цифры и специальные символы",
+  "authPasswordForgot": "Забыли пароль?",
   "authUsernameLabel": "Имя пользователя",
   "authUsernameRequired": "Пожалуйста, введите имя пользователя",
-  "authUsernameTooShort": "Username must be at least 3 characters",
-  "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
-  "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-  "authAccountManagement": "Account Management",
+  "authUsernameTooShort": "Имя пользователя должно содержать не менее 3 символов",
+  "authErrorConnection": "Произошла ошибка. Пожалуйста, проверьте ваше интернет-соединение и попробуйте снова.",
+  "authErrorConnectionRelaunch": "Произошла ошибка. Пожалуйста, проверьте ваше интернет-соединение и перезапустите приложение.",
+  "authAccountManagement": "Управление аккаунтом",
   "authAccountConnected": "Connected Accounts",
   "authAccountConnectedStatus": "Connected",
   "authAccountNotConnected": "Not connected",

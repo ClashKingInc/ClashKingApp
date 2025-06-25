@@ -1,13 +1,13 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "generalLoading": "Loading...",
+  "appDescription": "통계 추적, 클랜 관리 및 성능 분석을 위한 최고의 Clash of Clans 동반자.",
+  "generalLoading": "로딩 중...",
   "generalError": "Error",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
+  "generalRetry": "다시 시도",
+  "generalTryAgain": "다시 시도하기",
   "generalClose": "Close",
-  "generalCancel": "Cancel",
+  "generalCancel": "취소",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
@@ -89,7 +89,7 @@
     "description": "WarLog closed"
   },
   "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "authClashKingDescription": "통계 추적, 클랜 관리 및 성능 분석을 위한 최고의 Clash of Clans 동반자.",
   "authChooseSignInMethod": "Choose your preferred sign-in method",
   "authSignUp": "Sign up",
   "authLogin": "Login",

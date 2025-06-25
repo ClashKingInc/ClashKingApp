@@ -386,7 +386,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get gameTownHall => 'SH';
 
   @override
-  String get gameTownHallLevel => 'SH level';
+  String get gameTownHallLevel => 'SH niveau';
 
   @override
   String gameTownHallLevelNumber(int level) {
@@ -418,7 +418,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String gameLevel(int level, int maxLevel) {
-    return 'Level: $level/$maxLevel';
+    return 'Niveau: $level/$maxLevel';
   }
 
   @override
@@ -449,10 +449,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get gameAchievements => 'Prestaties';
 
   @override
-  String get gameClanGames => 'Clan Games';
+  String get gameClanGames => 'Clan Spellen';
 
   @override
-  String get gameSeasonPass => 'Season Pass';
+  String get gameSeasonPass => 'Seizoenspas';
 
   @override
   String get gameCreatorCode => 'Makerscode: ClashKing';
@@ -790,11 +790,11 @@ class AppLocalizationsNl extends AppLocalizations {
       'Gewicht van 1 punt per account, 1 aanval = 1 punt. CWL kan niet worden gevolgd als de speler niet in zijn ligaclan zit.';
 
   @override
-  String get todoExplanationPassAndGamesTitle => 'Seizoenspas & Clan Games:';
+  String get todoExplanationPassAndGamesTitle => 'Seizoenspas & Clan Spellen:';
 
   @override
   String get todoExplanationPassAndGames =>
-      'Gewicht van elk 2 punten per account. De verhouding is gebaseerd op het aantal resterende dagen (1 maand voor de pas en 6 dagen voor de games). Groen = op schema om de pas of games te voltooien, rood = achter op schema.';
+      'Gewicht van elk 2 punten per account. De verhouding is gebaseerd op het aantal resterende dagen (1 maand voor de pas en 6 dagen voor de spellen). Groen = op schema om de pas of spellen te voltooien, rood = achter op schema.';
 
   @override
   String get todoExplanationConclusion =>
@@ -1309,7 +1309,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get downloadError => 'Bestand downloaden mislukt';
 
   @override
-  String get dashboardTitle => 'Dashboard';
+  String get dashboardTitle => 'Hoofdpaneel';
 
   @override
   String get toolsTitle => 'Hulpmiddelen';
@@ -1367,7 +1367,7 @@ class AppLocalizationsNl extends AppLocalizations {
       'ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan de ClashKing Bot uit op je Discord-server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.';
 
   @override
-  String get faqTrackingDown => 'Tracking down';
+  String get faqTrackingDown => 'Volgen gestopt';
 
   @override
   String get faqTrackingDownAnswer =>

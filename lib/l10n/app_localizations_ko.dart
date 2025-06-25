@@ -10,19 +10,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      '통계 추적, 클랜 관리 및 성능 분석을 위한 최고의 Clash of Clans 동반자.';
 
   @override
-  String get generalLoading => 'Loading...';
+  String get generalLoading => '로딩 중...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => '다시 시도';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => '다시 시도하기';
 
   @override
-  String get generalCancel => 'Cancel';
+  String get generalCancel => '취소';
 
   @override
   String get generalOk => 'OK';

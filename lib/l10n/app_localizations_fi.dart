@@ -10,19 +10,19 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'Sinun lopullinen Clash of Clans -kumppanisi tilastojen seurantaan, klaanien hallintaan ja suorituskyvyn analysointiin.';
 
   @override
-  String get generalLoading => 'Loading...';
+  String get generalLoading => 'Ladataan...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => 'Yritä uudelleen';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => 'Yritä uudelleen';
 
   @override
-  String get generalCancel => 'Cancel';
+  String get generalCancel => 'Peruuta';
 
   @override
   String get generalOk => 'OK';

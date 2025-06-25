@@ -1,13 +1,13 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "generalLoading": "Loading...",
+  "appDescription": "Din ultimative Clash of Clans-ledsager til sporing af statistikker, håndtering af klaner og analyse af ydeevne.",
+  "generalLoading": "Indlæser...",
   "generalError": "Error",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
+  "generalRetry": "Prøv igen",
+  "generalTryAgain": "Prøv igen",
   "generalClose": "Close",
-  "generalCancel": "Cancel",
+  "generalCancel": "Annuller",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
@@ -89,7 +89,7 @@
     "description": "WarLog closed"
   },
   "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "authClashKingDescription": "Din ultimative Clash of Clans-ledsager til sporing af statistikker, håndtering af klaner og analyse af ydeevne.",
   "authChooseSignInMethod": "Choose your preferred sign-in method",
   "authSignUp": "Sign up",
   "authLogin": "Login",

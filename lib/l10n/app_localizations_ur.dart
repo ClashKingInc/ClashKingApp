@@ -10,16 +10,16 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'شماریات کی ٹریکنگ، کلینز کے انتظام اور کارکردگی کے تجزیے کے لیے آپ کا حتمی Clash of Clans ساتھی۔';
 
   @override
   String get generalLoading => 'لوڈ ہو رہا ہے...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => 'دوبارہ کوشش کریں';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => 'دوبارہ کوشش کریں';
 
   @override
   String get generalCancel => 'منسوخ کریں۔';
@@ -31,7 +31,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get generalApply => 'لگائیں';
 
   @override
-  String get generalConfirm => 'Confirm';
+  String get generalConfirm => 'تصدیق کریں';
 
   @override
   String get generalManage => 'انتظام کریں۔';
@@ -64,10 +64,10 @@ class AppLocalizationsUr extends AppLocalizations {
   String get generalRemaining => 'باقی';
 
   @override
-  String get generalActive => 'Active';
+  String get generalActive => 'فعال';
 
   @override
-  String get generalInactive => 'Inactive';
+  String get generalInactive => 'غیر فعال';
 
   @override
   String get generalStarted => 'شروع کر دیا۔';
@@ -82,7 +82,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get generalStats => 'اعدادوشمار';
 
   @override
-  String get generalFullStats => 'Full Stats';
+  String get generalFullStats => 'مکمل اعدادوشمار';
 
   @override
   String get generalDetails => 'تفصیلات';
@@ -103,7 +103,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get generalNoDataAvailable => 'کوئی ڈیٹا دستیاب نہیں ہے.';
 
   @override
-  String get authSignUp => 'Sign up';
+  String get authSignUp => 'رجسٹر کریں';
 
   @override
   String get authLogin => 'لاگ ان';
@@ -112,20 +112,20 @@ class AppLocalizationsUr extends AppLocalizations {
   String get authLogout => 'لاگ آؤٹ کریں۔';
 
   @override
-  String get authCreateAccount => 'Create Account';
+  String get authCreateAccount => 'اکاؤنٹ بنائیں';
 
   @override
-  String get authJoinClashKing => 'Join ClashKing';
+  String get authJoinClashKing => 'ClashKing میں شامل ہوں';
 
   @override
-  String get authCreateClashKingAccount => 'Create ClashKing Account';
+  String get authCreateClashKingAccount => 'ClashKing اکاؤنٹ بنائیں';
 
   @override
   String get authCreateAccountToGetStarted =>
-      'Create your account to get started';
+      'شروع کرنے کے لیے اپنا اکاؤنٹ بنائیں';
 
   @override
-  String get authAlreadyHaveAccount => 'Already have an account? Sign in';
+  String get authAlreadyHaveAccount => 'پہلے سے اکاؤنٹ ہے؟ سائن ان کریں';
 
   @override
   String get authConfirmLogout => 'کیا آپ واقعی لاگ آؤٹ کرنا چاہتے ہیں؟';
@@ -137,49 +137,50 @@ class AppLocalizationsUr extends AppLocalizations {
   String get authDiscordSignIn => 'Discord کے ساتھ سائن ان کریں۔';
 
   @override
-  String get authDiscordContinue => 'Continue with Discord';
+  String get authDiscordContinue => 'Discord کے ساتھ جاری رکھیں';
 
   @override
   String get authDiscordDescription =>
-      'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!';
+      'ClashKing Bot کے ساتھ اپنا ڈیٹا ہم آہنگ کریں اور ClashKing کی مکمل صلاحیت کو غیر مقفل کریں!';
 
   @override
-  String get authEmailTitle => 'Email';
+  String get authEmailTitle => 'ای میل';
 
   @override
   String get authEmailDescription =>
-      'Use email if you can\'t access Discord or prefer app-only features';
+      'اگر آپ Discord تک رسائی نہیں رکھ سکتے یا صرف ایپ کی خصوصیات کو ترجیح دیتے ہیں تو ای میل استعمال کریں';
 
   @override
-  String get authEmailRequired => 'Please enter your email';
+  String get authEmailRequired => 'براہ کرم اپنا ای میل درج کریں';
 
   @override
-  String get authEmailInvalid => 'Please enter a valid email';
+  String get authEmailInvalid => 'براہ کرم ایک درست ای میل درج کریں';
 
   @override
-  String get authPasswordLabel => 'Password';
+  String get authPasswordLabel => 'پاس ورڈ';
 
   @override
-  String get authPasswordConfirm => 'Confirm Password';
+  String get authPasswordConfirm => 'پاس ورڈ کی تصدیق کریں';
 
   @override
-  String get authPasswordRequired => 'Please enter your password';
+  String get authPasswordRequired => 'براہ کرم اپنا پاس ورڈ درج کریں';
 
   @override
-  String get authPasswordConfirmRequired => 'Please confirm your password';
+  String get authPasswordConfirmRequired =>
+      'براہ کرم اپنے پاس ورڈ کی تصدیق کریں';
 
   @override
-  String get authPasswordMismatch => 'Passwords do not match';
+  String get authPasswordMismatch => 'پاس ورڈ میل نہیں کھاتے';
 
   @override
-  String get authPasswordTooShort => 'Password must be at least 8 characters';
+  String get authPasswordTooShort => 'پاس ورڈ کم از کم 8 حروف کا ہونا چاہیے';
 
   @override
   String get authPasswordRequirements =>
-      'Password must contain: uppercase, lowercase, digit, and special character';
+      'پاس ورڈ میں ہونا چاہیے: بڑے حروف، چھوٹے حروف، ہندسہ، اور خصوصی حرف';
 
   @override
-  String get authPasswordForgot => 'Forgot password?';
+  String get authPasswordForgot => 'پاس ورڈ بھول گئے؟';
 
   @override
   String get authUsernameLabel => 'صارف نام';
@@ -188,7 +189,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get authUsernameRequired => 'براہ کرم ایک صارف نام درج کریں';
 
   @override
-  String get authUsernameTooShort => 'Username must be at least 3 characters';
+  String get authUsernameTooShort => 'صارف نام کم از کم 3 حروف کا ہونا چاہیے';
 
   @override
   String get authErrorConnection =>
@@ -199,43 +200,43 @@ class AppLocalizationsUr extends AppLocalizations {
       'ایک خرابی پیش آگئی۔ براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور ایپ کو دوبارہ لانچ کریں.';
 
   @override
-  String get authAccountManagement => 'Account Management';
+  String get authAccountManagement => 'اکاؤنٹ کا انتظام';
 
   @override
-  String get authAccountConnected => 'Connected Accounts';
+  String get authAccountConnected => 'منسلک اکاؤنٹس';
 
   @override
-  String get authAccountConnectedStatus => 'Connected';
+  String get authAccountConnectedStatus => 'منسلک';
 
   @override
-  String get authAccountNotConnected => 'Not connected';
+  String get authAccountNotConnected => 'غیر منسلک';
 
   @override
-  String get authAccountEmailAndPassword => 'Email & Password';
+  String get authAccountEmailAndPassword => 'ای میل اور پاس ورڈ';
 
   @override
   String get authAccountSecured =>
-      'Your account is secured with multiple authentication methods';
+      'آپ کا اکاؤنٹ متعدد تصدیقی طریقوں کے ساتھ محفوظ ہے';
 
   @override
-  String get authAccountLinkEmail => 'Link Email Account';
+  String get authAccountLinkEmail => 'ای میل اکاؤنٹ لنک کریں';
 
   @override
   String get authAccountAddEmailAuth =>
-      'Add email & password authentication to your account for additional security.';
+      'اضافی سیکیورٹی کے لیے اپنے اکاؤنٹ میں ای میل اور پاس ورڈ تصدیق شامل کریں۔';
 
   @override
   String get authAccountEmailLinkedSuccess =>
-      'Email account successfully linked!';
+      'ای میل اکاؤنٹ کامیابی سے لنک ہو گیا!';
 
   @override
-  String get helpTitle => 'Need help?';
+  String get helpTitle => 'مدد درکار ہے؟';
 
   @override
-  String get helpJoinDiscord => 'Join Discord';
+  String get helpJoinDiscord => 'Discord ہاکمین شامل ہوں';
 
   @override
-  String get helpEmailUs => 'Email Us';
+  String get helpEmailUs => 'ہمیں ای میل کریں';
 
   @override
   String get accountsWelcome => 'خوش آمدید!';
@@ -245,13 +246,13 @@ class AppLocalizationsUr extends AppLocalizations {
       'براہ کرم اپنے پروفائل میں ایک یا زیادہ Clash of Clans اکاؤنٹس شامل کریں۔ آپ بعد میں اکاؤنٹس کو شامل یا ہٹا سکتے ہیں.';
 
   @override
-  String get accountsManageTitle => 'Manage your accounts';
+  String get accountsManageTitle => 'اپنے اکاؤنٹس کا انتظام کریں';
 
   @override
   String get accountsNoneFound => 'آپ کے پروفائل سے منسلک کوئی اکاؤنٹ نہیں ملا';
 
   @override
-  String get accountsPlayerTag => 'Player Tag (#ABC123)';
+  String get accountsPlayerTag => 'پلیئر ٹیگ (#ABC123)';
 
   @override
   String get accountsEnterPlayerTag => 'پلیئر ٹیگ درج کریں۔';
@@ -270,7 +271,7 @@ class AppLocalizationsUr extends AppLocalizations {
       'یہ تصدیق کرنے کے لیے کہ یہ آپ کا اکاؤنٹ API ٹوکن درج کریں۔ آپ اسے Clash of Clans Settings > More Settings > API Token میں تلاش کر سکتے ہیں.';
 
   @override
-  String get accountsFillAllFields => 'Please fill all fields.';
+  String get accountsFillAllFields => 'براہ کرم تمام فیلڈز بھریں۔';
 
   @override
   String get accountsErrorTagNotExists => 'درج کردہ پلیئر ٹیگ موجود نہیں ہے.';
@@ -289,7 +290,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get accountsErrorFailedToAdd =>
-      'Failed to add the account. Please try again later.';
+      'اکاؤنٹ شامل کرنے میں ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں۔';
 
   @override
   String get accountsErrorFailedToDelete =>
@@ -444,10 +445,10 @@ class AppLocalizationsUr extends AppLocalizations {
   String get gameAchievements => 'کامیابیاں';
 
   @override
-  String get gameClanGames => 'Clan Games';
+  String get gameClanGames => 'کلان گیمز';
 
   @override
-  String get gameSeasonPass => 'Season Pass';
+  String get gameSeasonPass => 'سیزن پاس';
 
   @override
   String get gameCreatorCode => 'خالق کوڈ: ClashKing';
@@ -459,7 +460,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get clanSearchTitle => 'قبیلہ تلاش کریں۔';
 
   @override
-  String get clanSearchPlaceholder => 'Clan\'s name';
+  String get clanSearchPlaceholder => 'قبیلے کا نام';
 
   @override
   String get clanNone => 'کوئی قبیلہ نہیں۔';
@@ -523,7 +524,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get clanWarFrequencyOncePerWeek => '1/ہفتہ';
 
   @override
-  String get clanWarFrequencyMoreThanOncePerWeek => 'More than 1/week';
+  String get clanWarFrequencyMoreThanOncePerWeek => '1/ہفتہ سے زیادہ';
 
   @override
   String get clanWarFrequencyRarely => 'کبھی کبھار';
@@ -565,21 +566,21 @@ class AppLocalizationsUr extends AppLocalizations {
   String get timeJustNow => 'ابھی ابھی';
 
   @override
-  String get timeEndedJustNow => 'Ended just now';
+  String get timeEndedJustNow => 'ابھی ابھی ختم ہوا';
 
   @override
   String timeEndedMinutesAgo(int minutes) {
-    return 'Ended $minutes minutes ago';
+    return '$minutes منٹ پہلے ختم ہوا';
   }
 
   @override
   String timeEndedHoursAgo(int hours) {
-    return 'Ended $hours hours ago';
+    return '$hours گھنٹے پہلے ختم ہوا';
   }
 
   @override
   String timeEndedDaysAgo(int days) {
-    return 'Ended $days days ago';
+    return '$days دن پہلے ختم ہوا';
   }
 
   @override
@@ -610,7 +611,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get legendsNoDataToday =>
-      'You\'re not in Legend League, but past seasons are available.';
+      'آپ لیجنڈ لیگ میں نہیں ہیں، لیکن پچھلے سیزن دستیاب ہیں۔';
 
   @override
   String legendsStartDescription(String trophies) {
@@ -644,7 +645,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String legendsGlobalRankDescription(int rank, int trophies) {
-    return 'You are currently ranked $rank globally with $trophies trophies.';
+    return 'آپ فی الحال $trophies ٹرافیوں کے ساتھ عالمی سطح پر $rank نمبر پر ہیں۔';
   }
 
   @override
@@ -669,7 +670,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get legendsEosTrophies => 'سیزن ٹرافی کا اختتام';
 
   @override
-  String get legendsEosDetails => 'End Of Season Details';
+  String get legendsEosDetails => 'سیزن کے اختتام کی تفصیلات';
 
   @override
   String get legendsInaccurateTitle => 'غلط ڈیٹا؟';
@@ -821,27 +822,27 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String todoAttacksLeftDescription(int attacks, String type) {
-    return 'You have $attacks attack(s) left ($type).';
+    return 'آپ کے پاس $attacks حملے باقی ہیں ($type)۔';
   }
 
   @override
   String todoDefensesLeftDescription(int defenses, String type) {
-    return 'You have $defenses defense(s) left ($type).';
+    return 'آپ کے پاس $defenses دفاع باقی ہیں ($type)۔';
   }
 
   @override
   String todoNoAttacksLeftDescription(String type) {
-    return 'Congratulations, you have done all your attacks ($type)!';
+    return 'مبارک ہو، آپ نے اپنے تمام حملے کیے ہیں ($type)!';
   }
 
   @override
   String todoPointsLeftDescription(int points, String type) {
-    return 'You have $points points left to get today to be in time for the end of the event ($type).';
+    return 'آپ کے پاس ایونٹ کے اختتام کے لیے آج $points پوائنٹس حاصل کرنے باقی ہیں ($type)۔';
   }
 
   @override
   String todoPointsLeftDescriptionNoPoints(String type) {
-    return 'Congratulations, you are on time to get the maximum rewards at the end of the event ($type)!';
+    return 'مبارک ہو، آپ ایونٹ کے اختتام پر زیادہ سے زیادہ انعامات حاصل کرنے کے لیے وقت پر ہیں ($type)!';
   }
 
   @override
@@ -952,59 +953,59 @@ class AppLocalizationsUr extends AppLocalizations {
   String get warAttacksTitle => 'حملے';
 
   @override
-  String get warAttacksNone => 'No attack yet';
+  String get warAttacksNone => 'ابھی تک کوئی حملہ نہیں';
 
   @override
-  String get warAttacksBest => 'Best attacks';
+  String get warAttacksBest => 'بہترین حملے';
 
   @override
-  String get warAttacksCount => 'Attack Count';
+  String get warAttacksCount => 'حملوں کی تعداد';
 
   @override
-  String get warAttacksMissed => 'Missed Attacks';
+  String get warAttacksMissed => 'مفقود حملے';
 
   @override
   String warAttacksNumber(int number_time, int number_war) {
-    return 'You attacked $number_time time(s) during the last $number_war wars.';
+    return 'آپ نے پچھلی $number_war جنگوں کے دوران $number_time بار حملہ کیا۔';
   }
 
   @override
   String warAttacksAverageStars(String stars) {
-    return 'You had an average of $stars stars per war.';
+    return 'آپ کے پاس فی جنگ $stars ستاروں کا اوسط تھا۔';
   }
 
   @override
   String warAttacksAverageDestruction(String percent) {
-    return 'You had an average of $percent% destruction rate per war.';
+    return 'آپ کے پاس فی جنگ $percent% تباہی کی شرح کا اوسط تھا۔';
   }
 
   @override
   String get warDefensesTitle => 'دفاع';
 
   @override
-  String get warDefensesNone => 'No defense yet';
+  String get warDefensesNone => 'ابھی تک کوئی دفاع نہیں';
 
   @override
-  String get warDefensesBest => 'Best defenses';
+  String get warDefensesBest => 'بہترین دفاع';
 
   @override
   String warDefensesBestOutOf(int number) {
-    return 'Best defense (out of $number)';
+    return 'بہترین دفاع ($number میں سے)';
   }
 
   @override
   String warDefensesNumber(int number_time, int number_war) {
-    return 'You defended $number_time time(s) during the last $number_war wars.';
+    return 'آپ نے پچھلی $number_war جنگوں کے دوران $number_time بار دفاع کیا۔';
   }
 
   @override
   String warDefensesAverageStars(double stars) {
-    return 'You had an average of $stars stars per defense.';
+    return 'آپ کے پاس فی دفاع $stars ستاروں کا اوسط تھا۔';
   }
 
   @override
   String warDefensesAverageDestruction(String percent) {
-    return 'You had an average of $percent% destruction rate per defense.';
+    return 'آپ کے پاس فی دفاع $percent% تباہی کی شرح کا اوسط تھا۔';
   }
 
   @override
@@ -1026,13 +1027,13 @@ class AppLocalizationsUr extends AppLocalizations {
   String get warStarsThree => '3 ستارے';
 
   @override
-  String get warStarsZero => '0 Star';
+  String get warStarsZero => '0 ستارہ';
 
   @override
-  String get warStarsBestPerformance => 'Best performance';
+  String get warStarsBestPerformance => 'بہترین کارکردگی';
 
   @override
-  String get warDestructionTitle => 'Destruction';
+  String get warDestructionTitle => 'تباہی';
 
   @override
   String get warDestructionAverage => 'اوسط تباہی';

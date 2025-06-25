@@ -1,13 +1,13 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "generalLoading": "Loading...",
+  "appDescription": "統計の追跡、クランの管理、パフォーマンスの分析のためのあなたの究極のClash of Clansコンパニオン。",
+  "generalLoading": "読み込み中...",
   "generalError": "Error",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
+  "generalRetry": "再試行",
+  "generalTryAgain": "もう一度試す",
   "generalClose": "Close",
-  "generalCancel": "Cancel",
+  "generalCancel": "キャンセル",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
@@ -89,7 +89,7 @@
     "description": "WarLog closed"
   },
   "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "authClashKingDescription": "統計の追跡、クランの管理、パフォーマンスの分析のためのあなたの究極のClash of Clansコンパニオン。",
   "authChooseSignInMethod": "Choose your preferred sign-in method",
   "authSignUp": "Sign up",
   "authLogin": "Login",

@@ -1,103 +1,103 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "generalLoading": "Loading...",
-  "generalError": "Error",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
-  "generalClose": "Close",
-  "generalCancel": "Cancel",
+  "appDescription": "Váš dokonalý průvodce Clash of Clans pro sledování statistik, správu klanů a analýzu výkonu.",
+  "generalLoading": "Načítání...",
+  "generalError": "Chyba",
+  "generalRetry": "Opakovat",
+  "generalTryAgain": "Zkusit znovu",
+  "generalClose": "Zavřít",
+  "generalCancel": "Zrušit",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
   },
-  "generalApply": "Apply",
-  "generalConfirm": "Confirm",
-  "generalAdd": "Add",
+  "generalApply": "Použít",
+  "generalConfirm": "Potvrdit",
+  "generalAdd": "Přidat",
   "@generalAdd": {
     "description": "Add an account"
   },
-  "generalDelete": "Delete",
+  "generalDelete": "Smazat",
   "@generalDelete": {
     "description": "Delete an account"
   },
-  "generalManage": "Manage",
-  "generalManagement": "Management",
-  "generalSettings": "Settings",
-  "generalCopiedToClipboard": "Copied to clipboard",
-  "generalComingSoon": "Coming soon!",
-  "generalAll": "All",
+  "generalManage": "Spravovat",
+  "generalManagement": "Správa",
+  "generalSettings": "Nastavení",
+  "generalCopiedToClipboard": "Zkopírováno do schránky",
+  "generalComingSoon": "Již brzy!",
+  "generalAll": "Vše",
   "@generalAll": {
     "description": "all items"
   },
-  "generalTotal": "Total",
-  "generalBest": "Best",
+  "generalTotal": "Celkem",
+  "generalBest": "Nejlepší",
   "@generalBest": {
     "description": "Best end of day trophies"
   },
-  "generalWorst": "Worst",
+  "generalWorst": "Nejhorší",
   "@generalWorst": {
     "description": "Worst end of day trophies"
   },
-  "generalAverage": "Average",
+  "generalAverage": "Průměr",
   "@generalAverage": {
     "description": "Average value of legend trophies (defense and attack)"
   },
-  "generalRemaining": "Remaining",
+  "generalRemaining": "Zbývající",
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Active",
-  "generalInactive": "Inactive",
-  "generalStarted": "Started",
+  "generalActive": "Aktivní",
+  "generalInactive": "Neaktivní",
+  "generalStarted": "Započato",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
   },
-  "generalEnded": "Ended",
+  "generalEnded": "Ukončeno",
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
+  "generalLevel": "Úroveň",
   "generalRole": "Role",
-  "generalDate": "Date",
-  "generalStats": "Stats",
-  "generalFullStats": "Full Stats",
-  "generalDetails": "Details",
-  "generalHistory": "History",
+  "generalDate": "Datum",
+  "generalStats": "Statistiky",
+  "generalFullStats": "Úplné statistiky",
+  "generalDetails": "Podrobnosti",
+  "generalHistory": "Historie",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Charts",
-  "generalFilters": "Filters",
-  "generalWhatever": "Whatever",
+  "generalCharts": "Grafy",
+  "generalFilters": "Filtry",
+  "generalWhatever": "Cokoliv",
   "@generalWhatever": {
     "description": "Whatever the value"
   },
-  "generalAny": "Any",
+  "generalAny": "Jakýkoliv",
   "@generalAny": {
     "description": "Any value is accepted"
   },
-  "generalNotSet": "Not set",
+  "generalNotSet": "Nenastaveno",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Warning",
-  "generalNoDataAvailable": "No data available.",
-  "generalClosed": "Closed",
+  "generalWarning": "Varování",
+  "generalNoDataAvailable": "Žádná data nejsou k dispozici.",
+  "generalClosed": "Uzavřeno",
   "@generalClosed": {
     "description": "WarLog closed"
   },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignUp": "Sign up",
-  "authLogin": "Login",
-  "authLogout": "Log out",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateClashKingAccount": "Create ClashKing Account",
-  "authCreateAccountToGetStarted": "Create your account to get started",
+  "authWelcomeBack": "Vítejte zpět",
+  "authClashKingDescription": "Váš dokonaly společník pro Clash of Clans pro sledování statistik, správu klanů a analýzu výkonu.",
+  "authChooseSignInMethod": "Vyberte svůj preferovaný způsob přihlášení",
+  "authSignUp": "Registrovat se",
+  "authLogin": "Přihlásit se",
+  "authLogout": "Odhlásit se",
+  "authCreateAccount": "Vytvořit účet",
+  "authJoinClashKing": "Připojit se k ClashKing",
+  "authCreateClashKingAccount": "Vytvořit ClashKing účet",
+  "authCreateAccountToGetStarted": "Vytvořte si účet pro začátek",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "Are you sure you want to log out?",
   "@authConfirmLogout": {

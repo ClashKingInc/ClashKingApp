@@ -10,109 +10,109 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'Il tuo compagno definitivo di Clash of Clans per tracciare statistiche, gestire clan e analizzare le prestazioni.';
 
   @override
-  String get generalLoading => 'Loading...';
+  String get generalLoading => 'Caricamento...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => 'Riprova';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => 'Riprova di nuovo';
 
   @override
-  String get generalCancel => 'Cancel';
+  String get generalCancel => 'Annulla';
 
   @override
   String get generalOk => 'OK';
 
   @override
-  String get generalApply => 'Apply';
+  String get generalApply => 'Applica';
 
   @override
-  String get generalConfirm => 'Confirm';
+  String get generalConfirm => 'Conferma';
 
   @override
-  String get generalManage => 'Manage';
+  String get generalManage => 'Gestisci';
 
   @override
-  String get generalSettings => 'Settings';
+  String get generalSettings => 'Impostazioni';
 
   @override
-  String get generalCopiedToClipboard => 'Copied to clipboard';
+  String get generalCopiedToClipboard => 'Copiato negli appunti';
 
   @override
-  String get generalComingSoon => 'Coming soon!';
+  String get generalComingSoon => 'In arrivo presto!';
 
   @override
-  String get generalAll => 'All';
+  String get generalAll => 'Tutti';
 
   @override
-  String get generalTotal => 'Total';
+  String get generalTotal => 'Totale';
 
   @override
-  String get generalBest => 'Best';
+  String get generalBest => 'Migliore';
 
   @override
-  String get generalWorst => 'Worst';
+  String get generalWorst => 'Peggiore';
 
   @override
-  String get generalAverage => 'Average';
+  String get generalAverage => 'Media';
 
   @override
-  String get generalRemaining => 'Remaining';
+  String get generalRemaining => 'Rimanenti';
 
   @override
-  String get generalActive => 'Active';
+  String get generalActive => 'Attivo';
 
   @override
-  String get generalInactive => 'Inactive';
+  String get generalInactive => 'Inattivo';
 
   @override
-  String get generalStarted => 'Started';
+  String get generalStarted => 'Iniziato';
 
   @override
-  String get generalEnded => 'Ended';
+  String get generalEnded => 'Terminato';
 
   @override
-  String get generalRole => 'Role';
+  String get generalRole => 'Ruolo';
 
   @override
-  String get generalStats => 'Stats';
+  String get generalStats => 'Statistiche';
 
   @override
-  String get generalFullStats => 'Full Stats';
+  String get generalFullStats => 'Statistiche Complete';
 
   @override
-  String get generalDetails => 'Details';
+  String get generalDetails => 'Dettagli';
 
   @override
-  String get generalHistory => 'History';
+  String get generalHistory => 'Cronologia';
 
   @override
-  String get generalFilters => 'Filters';
+  String get generalFilters => 'Filtri';
 
   @override
-  String get generalNotSet => 'Not set';
+  String get generalNotSet => 'Non impostato';
 
   @override
-  String get generalWarning => 'Warning';
+  String get generalWarning => 'Avviso';
 
   @override
-  String get generalNoDataAvailable => 'No data available.';
+  String get generalNoDataAvailable => 'Nessun dato disponibile.';
 
   @override
-  String get authSignUp => 'Sign up';
+  String get authSignUp => 'Registrati';
 
   @override
-  String get authLogin => 'Login';
+  String get authLogin => 'Accedi';
 
   @override
-  String get authLogout => 'Log out';
+  String get authLogout => 'Esci';
 
   @override
-  String get authCreateAccount => 'Create Account';
+  String get authCreateAccount => 'Crea Account';
 
   @override
   String get authJoinClashKing => 'Join ClashKing';

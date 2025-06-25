@@ -1314,7 +1314,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get navigationStatistics => 'Statistics';
 
   @override
-  String get versionDevice => 'Version & Device';
+  String get versionDevice => 'Versión y Dispositivo';
 
   @override
   String get betaFeature => 'Función beta';
@@ -1324,7 +1324,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get betaDescription =>
-      'This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.';
+      'Esta función está actualmente en beta, puede tener algunos errores o estar incompleta. Estamos trabajando activamente en mejoras y damos la bienvenida a sus comentarios. Por favor comparte tus ideas e informa cualquier problema en nuestro Servidor de Discord para ayudarnos a mejorarlo.';
 
   @override
   String get settingsLanguage => 'Language';
@@ -1421,7 +1421,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get faqCannotOpenMailClient =>
-      'For some reasons we can\'t open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.';
+      'Por alguna razón no podemos abrir tu cliente de correo. Hemos copiado la dirección de email para ti. Puedes escribir un correo y pegar la dirección en el campo de destinatario.';
 
   @override
   String get translationHelpUsTranslate => 'Help us translate';
@@ -1453,16 +1453,16 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'Tu compañero definitivo de Clash of Clans para hacer seguimiento de estadísticas, gestionar clanes y analizar el rendimiento.';
 
   @override
   String get generalLoading => 'Cargando...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => 'Reintentar';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => 'Inténtalo de nuevo';
 
   @override
   String get generalCancel => 'Cancelar';

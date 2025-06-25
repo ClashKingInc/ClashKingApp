@@ -1,11 +1,11 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "appDescription": "Ваш кращий супутник Clash of Clans для відстеження статистики, управління кланами та аналізу продуктивності.",
   "generalLoading": "Завантаження...",
   "generalError": "Помилка",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
+  "generalRetry": "Повторити",
+  "generalTryAgain": "Спробуйте ще раз",
   "generalClose": "Закрити",
   "generalCancel": "Скасувати",
   "generalOk": "ОК",
@@ -89,7 +89,7 @@
     "description": "WarLog closed"
   },
   "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "authClashKingDescription": "Ваш кращий супутник Clash of Clans для відстеження статистики, управління кланами та аналізу продуктивності.",
   "authChooseSignInMethod": "Choose your preferred sign-in method",
   "authSignUp": "Sign up",
   "authLogin": "Увійти",

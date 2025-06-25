@@ -9,17 +9,16 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+  String get appDescription => '您的终极部落冲突伴侣，用于追踪统计数据、管理部落和分析性能。';
 
   @override
   String get generalLoading => '加载中...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => '重试';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => '再试一次';
 
   @override
   String get generalCancel => '取消';
@@ -31,7 +30,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get generalApply => '需要申请';
 
   @override
-  String get generalConfirm => 'Confirm';
+  String get generalConfirm => '确认';
 
   @override
   String get generalManage => '管理';
@@ -64,10 +63,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get generalRemaining => '剩余时间';
 
   @override
-  String get generalActive => 'Active';
+  String get generalActive => '活跃';
 
   @override
-  String get generalInactive => 'Inactive';
+  String get generalInactive => '非活跃';
 
   @override
   String get generalStarted => '已激活';
@@ -82,7 +81,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get generalStats => '统计数据';
 
   @override
-  String get generalFullStats => 'Full Stats';
+  String get generalFullStats => '完整统计';
 
   @override
   String get generalDetails => '详细信息';
@@ -103,7 +102,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get generalNoDataAvailable => '没有可用数据';
 
   @override
-  String get authSignUp => 'Sign up';
+  String get authSignUp => '注册';
 
   @override
   String get authLogin => '登录';
@@ -112,17 +111,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get authLogout => '注销';
 
   @override
-  String get authCreateAccount => 'Create Account';
+  String get authCreateAccount => '创建账户';
 
   @override
-  String get authJoinClashKing => 'Join ClashKing';
+  String get authJoinClashKing => '加入 ClashKing';
 
   @override
-  String get authCreateClashKingAccount => 'Create ClashKing Account';
+  String get authCreateClashKingAccount => '创建 ClashKing 账户';
 
   @override
-  String get authCreateAccountToGetStarted =>
-      'Create your account to get started';
+  String get authCreateAccountToGetStarted => '创建您的账户以开始';
 
   @override
   String get authAlreadyHaveAccount => 'Already have an account? Sign in';

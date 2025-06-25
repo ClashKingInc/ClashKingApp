@@ -10,40 +10,40 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'El teu company definitiu de Clash of Clans per fer seguiment d\'estadístiques, gestionar clans i analitzar el rendiment.';
 
   @override
-  String get generalLoading => 'Loading...';
+  String get generalLoading => 'Carregant...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => 'Tornar a intentar';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => 'Torna-ho a provar';
 
   @override
-  String get generalCancel => 'Cancel';
+  String get generalCancel => 'Cancel·lar';
 
   @override
   String get generalOk => 'OK';
 
   @override
-  String get generalApply => 'Apply';
+  String get generalApply => 'Aplicar';
 
   @override
-  String get generalConfirm => 'Confirm';
+  String get generalConfirm => 'Confirmar';
 
   @override
-  String get generalManage => 'Manage';
+  String get generalManage => 'Gestionar';
 
   @override
-  String get generalSettings => 'Settings';
+  String get generalSettings => 'Configuració';
 
   @override
   String get generalCopiedToClipboard => 'Copied to clipboard';
 
   @override
-  String get generalComingSoon => 'Coming soon!';
+  String get generalComingSoon => 'Properament!';
 
   @override
   String get generalAll => 'All';

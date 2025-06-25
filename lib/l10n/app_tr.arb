@@ -1,11 +1,11 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "appDescription": "İstatistikleri takip etmek, klanları yönetmek ve performansı analiz etmek için nihai Clash of Clans yardımcınız.",
   "generalLoading": "Yükleniyor...",
   "generalError": "Hata",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
+  "generalRetry": "Yeniden dene",
+  "generalTryAgain": "Tekrar dene",
   "generalClose": "Kapat",
   "generalCancel": "İptal",
   "generalOk": "Tamam",
@@ -88,57 +88,58 @@
   "@generalClosed": {
     "description": "WarLog closed"
   },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignUp": "Sign up",
+  "authWelcomeBack": "Tekrar Hoş Geldin",
+  "authClashKingDescription": "İstatistikleri takip etmek, klanları yönetmek ve performansı analiz etmek için nihai Clash of Clans yoldaşın.",
+  "authChooseSignInMethod": "Tercih ettiğin giriş yöntemini seç",
+  "authSignUp": "Kaydol",
   "authLogin": "Oturum aç",
   "authLogout": "Oturumu kapat",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateClashKingAccount": "Create ClashKing Account",
-  "authCreateAccountToGetStarted": "Create your account to get started",
-  "authAlreadyHaveAccount": "Already have an account? Sign in",
+  "authCreateAccount": "Hesap Oluştur",
+  "authJoinClashKing": "ClashKing'e Katıl",
+  "authCreateClashKingAccount": "ClashKing Hesabı Oluştur",
+  "authCreateAccountToGetStarted": "Başlamak için hesabını oluştur",
+  "authAlreadyHaveAccount": "Zaten hesabın var mı? Giriş yap",
+  "authDontHaveAccount": "Hesabın yok mu? Bir tane oluştur",
   "authConfirmLogout": "Çıkış yapmak istediğinizden emin misiniz?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
   "authDiscordSignIn": "Discord ile giriş yap",
-  "authDiscordContinue": "Continue with Discord",
-  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
+  "authDiscordContinue": "Discord ile Devam Et",
+  "authDiscordDescription": "Verilerini ClashKing Bot ile senkronize et ve ClashKing'in tüm potansiyelini aç!",
   "authEmailTitle": "Email",
-  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailRequired": "Please enter your email",
-  "authEmailInvalid": "Please enter a valid email",
-  "authPasswordLabel": "Password",
-  "authPasswordConfirm": "Confirm Password",
-  "authPasswordRequired": "Please enter your password",
-  "authPasswordConfirmRequired": "Please confirm your password",
-  "authPasswordMismatch": "Passwords do not match",
-  "authPasswordTooShort": "Password must be at least 8 characters",
-  "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
-  "authPasswordForgot": "Forgot password?",
+  "authEmailDescription": "Discord'a erişemiyorsan veya sadece uygulama özelliklerini tercih ediyorsan e-posta kullan",
+  "authEmailRequired": "Lütfen e-postanı gir",
+  "authEmailInvalid": "Lütfen geçerli bir e-posta gir",
+  "authPasswordLabel": "Şifre",
+  "authPasswordConfirm": "Şifreyi Onayla",
+  "authPasswordRequired": "Lütfen şifreni gir",
+  "authPasswordConfirmRequired": "Lütfen şifreni onayla",
+  "authPasswordMismatch": "Şifreler eşleşmiyor",
+  "authPasswordTooShort": "Şifre en az 8 karakter olmalı",
+  "authPasswordRequirements": "Şifre şunları içermeli: büyük harf, küçük harf, rakam ve özel karakter",
+  "authPasswordForgot": "Şifreni mi unuttun?",
   "authUsernameLabel": "Kullanıcı Adı",
   "authUsernameRequired": "Lütfen bir kullanıcı adı girin",
-  "authUsernameTooShort": "Username must be at least 3 characters",
+  "authUsernameTooShort": "Kullanıcı adı en az 3 karakter olmalı",
   "authErrorConnection": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.",
   "authErrorConnectionRelaunch": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve uygulamayı yeniden başlatın.",
-  "authAccountManagement": "Account Management",
-  "authAccountConnected": "Connected Accounts",
-  "authAccountConnectedStatus": "Connected",
-  "authAccountNotConnected": "Not connected",
-  "authAccountEmailAndPassword": "Email & Password",
-  "authAccountSecured": "Your account is secured with multiple authentication methods",
-  "authAccountLinkEmail": "Link Email Account",
-  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
-  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "helpTitle": "Need help?",
-  "helpJoinDiscord": "Join Discord",
-  "helpEmailUs": "Email Us",
+  "authAccountManagement": "Hesap Yönetimi",
+  "authAccountConnected": "Bağlı Hesaplar",
+  "authAccountConnectedStatus": "Bağlı",
+  "authAccountNotConnected": "Bağlı değil",
+  "authAccountEmailAndPassword": "E-posta ve Şifre",
+  "authAccountSecured": "Hesabın birden fazla kimlik doğrulama yöntemiyle güvence altında",
+  "authAccountLinkEmail": "E-posta Hesabını Bağla",
+  "authAccountAddEmailAuth": "Ek güvenlik için hesabına e-posta ve şifre kimlik doğrulaması ekle.",
+  "authAccountEmailLinkedSuccess": "E-posta hesabı başarıyla bağlandı!",
+  "helpTitle": "Yardıma mı ihtiyacın var?",
+  "helpJoinDiscord": "Discord'a Katıl",
+  "helpEmailUs": "Bize E-posta Gönder",
   "accountsWelcome": "Hoşgeldiniz!",
   "accountsWelcomeMessage": "Lütfen profilinize bir veya daha fazla Clash of Clans hesabı ekleyin. Daha sonra hesap ekleyebilir veya kaldırabilirsiniz.",
-  "accountsManageTitle": "Manage your accounts",
+  "accountsManageTitle": "Hesaplarını yönet",
   "accountsNoneFound": "Profilinize bağlı bir hesap bulunamadı",
   "accountsPlayerTag": "Player Tag (#ABC123)",
   "accountsEnterPlayerTag": "Bir oyuncu etiketi girin",
@@ -146,16 +147,16 @@
   "accountsDelete": "Hesabı sil",
   "accountsApiToken": "Hesap API Tokeni",
   "accountsEnterApiToken": "Lütfen hesabınızın API token'ını girin ve sizin olduğunu doğrulayın. Bunu Clash of Clans Ayarları > Diğer Ayarlar > API Token'ında bulabilirsiniz.",
-  "accountsFillAllFields": "Please fill all fields.",
+  "accountsFillAllFields": "Lütfen tüm alanları doldur.",
   "accountsErrorTagNotExists": "Girilen oyuncu etiketi mevcut değil.",
   "accountsErrorAlreadyLinked": "Oyuncu etiketi zaten birine bağlı.",
   "accountsErrorAlreadyLinkedToYou": "Oyuncu etiketi zaten size bağlı.",
   "accountsErrorWrongApiToken": "Girilen API belirteci yanlış",
-  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
+  "accountsErrorFailedToAdd": "Hesap eklenemedi. Lütfen daha sonra tekrar dene.",
   "accountsErrorFailedToDelete": "Bağlantı silinemedi. Lütfen daha sonra tekrar deneyin.",
-  "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
-  "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
-  "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
+  "accountsErrorFailedToUpdateOrder": "Hesap sırası güncellenemedi.",
+  "errorTitle": "Ops! Sunucularımız yüzüne bir ateş topu almış olabilir! İyileştirme büyüsü yapıyoruz... Birazdan tekrar dene.",
+  "errorSubtitle": "Sorun devam ederse, bunun farkında olup olmadığımızı görmek için Discord Sunucumuzu kontrol et.",
   "errorLoadingVersion": "Sürüm yüklenirken hata oluştu",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
@@ -296,7 +297,7 @@
   "gameCreatorCode": "İçerik Üretici Kodu: ClashKing",
   "clanTitle": "Klan",
   "clanSearchTitle": "Klan ara",
-  "clanSearchPlaceholder": "Clan's name",
+  "clanSearchPlaceholder": "Klan adı",
   "clanNone": "Klan yok",
   "clanJoinToUnlock": "Yeni özelliklerin kilidini açmak için bir klana katılın.",
   "clanMembers": "Üyeler",
@@ -326,7 +327,7 @@
   "clanWarFrequencyNever": "Hiçbir zaman",
   "clanWarFrequencyUnknown": "Bilinmeyen",
   "clanWarFrequencyOncePerWeek": "1/hafta",
-  "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
+  "clanWarFrequencyMoreThanOncePerWeek": "Haftada 1'den fazla",
   "clanWarFrequencyRarely": "Nadiren",
   "timeHourIndicator": "sa",
   "timeDaysAgo": "{days} gün önce",
@@ -378,8 +379,8 @@
     }
   },
   "timeJustNow": "Az Önce",
-  "timeEndedJustNow": "Ended just now",
-  "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
+  "timeEndedJustNow": "Az önce bitti",
+  "timeEndedMinutesAgo": "{minutes} dakika önce bitti",
   "@timeEndedMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -387,7 +388,7 @@
       }
     }
   },
-  "timeEndedHoursAgo": "Ended {hours} hours ago",
+  "timeEndedHoursAgo": "{hours} saat önce bitti",
   "@timeEndedHoursAgo": {
     "placeholders": {
       "hours": {
@@ -395,7 +396,7 @@
       }
     }
   },
-  "timeEndedDaysAgo": "Ended {days} days ago",
+  "timeEndedDaysAgo": "{days} gün önce bitti",
   "@timeEndedDaysAgo": {
     "placeholders": {
       "days": {
@@ -437,7 +438,7 @@
   },
   "legendsTitle": "Veri yanlış mı?",
   "legendsNotInLeague": "Efsane ligde değil",
-  "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
+  "legendsNoDataToday": "Efsane Liginde değilsin, ancak geçmiş sezonlar mevcut.",
   "legendsStartDescription": "Güne {trophies} kupayla başladın.",
   "@legendsStartDescription": {
     "placeholders": {
@@ -495,7 +496,7 @@
       }
     }
   },
-  "legendsGlobalRankDescription": "You are currently ranked {rank} globally with {trophies} trophies.",
+  "legendsGlobalRankDescription": "Şu anda {trophies} kupa ile küresel olarak {rank}. sıradasın.",
   "@legendsGlobalRankDescription": {
     "placeholders": {
       "rank": {
@@ -513,7 +514,7 @@
   "legendsBestRank": "En İyi Küresel Sıralama",
   "legendsTrophiesBySeason": "Sezonlara göre kupalar",
   "legendsEosTrophies": "Sezon Sonu Kupaları",
-  "legendsEosDetails": "End Of Season Details",
+  "legendsEosDetails": "Sezon Sonu Detayları",
   "legendsInaccurateTitle": "Veri yanlış mı?",
   "legendsInaccurateIntro": "Clash of Clans API'sinin sınırlamaları nedeniyle, verilerimiz her zaman mükemmel derecede doğru olmayabilir. İşte nedeni:",
   "legendsInaccurateApiDelayTitle": "1. API Gecikmesi:",
@@ -605,7 +606,7 @@
   "todoAccountsInactive": "İnaktif hesaplar",
   "todoAccountsNoInactive": "İnaktif hesap yok.",
   "todoAccountsNoActive": "Aktif hesap yok.",
-  "todoAttacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
+  "todoAttacksLeftDescription": "{attacks} saldırın kaldı ({type}).",
   "@todoAttacksLeftDescription": {
     "placeholders": {
       "attacks": {
@@ -616,7 +617,7 @@
       }
     }
   },
-  "todoDefensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
+  "todoDefensesLeftDescription": "{defenses} savunman kaldı ({type}).",
   "@todoDefensesLeftDescription": {
     "placeholders": {
       "defenses": {
@@ -627,7 +628,7 @@
       }
     }
   },
-  "todoNoAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+  "todoNoAttacksLeftDescription": "Tebrikler, tüm saldırılarını tamamladın ({type})!",
   "@todoNoAttacksLeftDescription": {
     "placeholders": {
       "type": {
@@ -635,7 +636,7 @@
       }
     }
   },
-  "todoPointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+  "todoPointsLeftDescription": "Etkinliğin sonuna yetişmek için bugün {points} puan daha alman gerekiyor ({type}).",
   "@todoPointsLeftDescription": {
     "placeholders": {
       "points": {
@@ -646,7 +647,7 @@
       }
     }
   },
-  "todoPointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+  "todoPointsLeftDescriptionNoPoints": "Tebrikler, etkinliğin sonunda maksimum ödülleri almak için zamanındasın ({type})!",
   "@todoPointsLeftDescriptionNoPoints": {
     "placeholders": {
       "type": {
@@ -738,14 +739,14 @@
   "warCalculatorNeededOverall": "% Genel olarak ihtiyaç duyuluyor",
   "warCalculatorCalculate": "Hesapla",
   "warAttacksTitle": "Saldırılar",
-  "warAttacksNone": "No attack yet",
+  "warAttacksNone": "Henüz saldırı yok",
   "@warAttacksNone": {
     "description": "No attack yet in war"
   },
-  "warAttacksBest": "Best attacks",
-  "warAttacksCount": "Attack Count",
-  "warAttacksMissed": "Missed Attacks",
-  "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
+  "warAttacksBest": "En iyi saldırılar",
+  "warAttacksCount": "Saldırı Sayısı",
+  "warAttacksMissed": "Kaçırılan Saldırılar",
+  "warAttacksNumber": "Son {number_war} savaşta {number_time} kez saldırdın.",
   "@warAttacksNumber": {
     "placeholders": {
       "number_time": {
@@ -756,7 +757,7 @@
       }
     }
   },
-  "warAttacksAverageStars": "You had an average of {stars} stars per war.",
+  "warAttacksAverageStars": "Savaş başına ortalama {stars} yıldızın vardı.",
   "@warAttacksAverageStars": {
     "placeholders": {
       "stars": {
@@ -764,7 +765,7 @@
       }
     }
   },
-  "warAttacksAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+  "warAttacksAverageDestruction": "Savaş başına ortalama {percent}% yıkım oranın vardı.",
   "@warAttacksAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -773,12 +774,12 @@
     }
   },
   "warDefensesTitle": "Savunmalar",
-  "warDefensesNone": "No defense yet",
+  "warDefensesNone": "Henüz savunma yok",
   "@warDefensesNone": {
     "description": "No defense yet in war"
   },
-  "warDefensesBest": "Best defenses",
-  "warDefensesBestOutOf": "Best defense (out of {number})",
+  "warDefensesBest": "En iyi savunmalar",
+  "warDefensesBestOutOf": "En iyi savunma ({number} savunmadan)",
   "@warDefensesBestOutOf": {
     "placeholders": {
       "number": {
@@ -787,7 +788,7 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
+  "warDefensesNumber": "Son {number_war} savaşta {number_time} kez savunma yaptın.",
   "@warDefensesNumber": {
     "placeholders": {
       "number_time": {
@@ -798,7 +799,7 @@
       }
     }
   },
-  "warDefensesAverageStars": "You had an average of {stars} stars per defense.",
+  "warDefensesAverageStars": "Savunma başına ortalama {stars} yıldızın vardı.",
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
@@ -806,7 +807,7 @@
       }
     }
   },
-  "warDefensesAverageDestruction": "You had an average of {percent}% destruction rate per defense.",
+  "warDefensesAverageDestruction": "Savunma başına ortalama {percent}% yıkım oranın vardı.",
   "@warDefensesAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -820,12 +821,12 @@
   "warStarsOne": "1 yıldız",
   "warStarsTwo": "2 yıldız",
   "warStarsThree": "3 yıldız",
-  "warStarsZero": "0 Star",
-  "warStarsBestPerformance": "Best performance",
+  "warStarsZero": "0 Yıldız",
+  "warStarsBestPerformance": "En iyi performans",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
   },
-  "warDestructionTitle": "Destruction",
+  "warDestructionTitle": "Yıkım",
   "warDestructionAverage": "Ortalama Yıkım",
   "warDestructionRate": "Yıkım oranı",
   "@warDestructionRate": {
@@ -891,24 +892,24 @@
       }
     }
   },
-  "warPositionMap": "Map Position",
+  "warPositionMap": "Harita Pozisyonu",
   "@warPositionMap": {
     "description": "Map position in war"
   },
-  "warPositionAbbr": "Pos",
+  "warPositionAbbr": "Poz",
   "@warPositionAbbr": {
     "description": "Abbreviation for map position"
   },
-  "warPositionOrder": "Order",
+  "warPositionOrder": "Sıralama",
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
-  "warOpponentTownhall": "Opp TH",
+  "warOpponentTownhall": "Rakip BB",
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
   },
-  "warOpponentLowerTownhall": "Lower TH",
-  "warOpponentUpperTownhall": "Upper TH",
+  "warOpponentLowerTownhall": "Düşük BB",
+  "warOpponentUpperTownhall": "Yüksek BB",
   "warOpponentEqualThLevel": "Eşit BB",
   "warOpponentSelectMembersThLevel": "Üyelerin BB Seviyesi",
   "warOpponentSelectOpponentsThLevel": "Rakiplerin BB Seviyesi",
@@ -947,15 +948,15 @@
   "@warStatusUnready": {
     "description": "Opted Out for war"
   },
-  "warStatusMissed": "Missed",
+  "warStatusMissed": "Kaçırıldı",
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warAbbreviationAvg": "Avg",
+  "warAbbreviationAvg": "Ort",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
   },
-  "warAbbreviationAvgPercentage": "Avg %",
+  "warAbbreviationAvgPercentage": "Ort %",
   "@warAbbreviationAvgPercentage": {
     "description": "Abbreviation for average percentage"
   },
@@ -963,7 +964,7 @@
   "cwlClanWarLeague": "Klan Savaş Ligi",
   "cwlOngoing": "Devam eden KSL",
   "cwlRounds": "Turlar",
-  "cwlRoundNumber": "Round {number}",
+  "cwlRoundNumber": "Tur {number}",
   "@cwlRoundNumber": {
     "placeholders": {
       "number": {
@@ -1003,7 +1004,7 @@
       }
     }
   },
-  "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+  "cwlTotalAttacks": "Klanının toplam {totalAttacks} olası saldırıdan {attacks} saldırısı var.",
   "@cwlTotalAttacks": {
     "placeholders": {
       "attacks": {
@@ -1014,21 +1015,21 @@
       }
     }
   },
-  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
+  "joinLeaveTitle": "Katılma/Ayrılma Kayıtları (Mevcut Sezon)",
   "joinLeaveJoin": "Katıl",
   "joinLeaveLeave": "Ayrıl",
   "joinLeaveReset": "Sıfırla",
-  "joinLeaveJoins": "Joins",
-  "joinLeaveLeaves": "Leaves",
-  "joinLeaveUniquePlayers": "Unique Players",
-  "joinLeaveMovingPlayers": "Moving Players",
-  "joinLeaveMostMovingPlayers": "Most Moving Players",
-  "joinLeaveStillInClan": "Still in Clan",
-  "joinLeaveLeftForever": "Left Forever",
-  "joinLeaveRejoinedPlayers": "Rejoined Players",
-  "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
-  "joinLeavePeakHour": "Most Active Hour",
-  "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
+  "joinLeaveJoins": "Katılımlar",
+  "joinLeaveLeaves": "Ayrılmalar",
+  "joinLeaveUniquePlayers": "Benzersiz Oyuncular",
+  "joinLeaveMovingPlayers": "Hareketli Oyuncular",
+  "joinLeaveMostMovingPlayers": "En Hareketli Oyuncular",
+  "joinLeaveStillInClan": "Hala Klanda",
+  "joinLeaveLeftForever": "Sonsuza Dek Ayrıldı",
+  "joinLeaveRejoinedPlayers": "Yeniden Katılan Oyuncular",
+  "joinLeaveAvgTimeJoinLeave": "Ort Katılma/Ayrılma Zamanı",
+  "joinLeavePeakHour": "En Aktif Saat",
+  "joinLeaveNumberDescription": "Mevcut sezon boyunca {number} ayrılma olayı gerçekleşti ({date}).",
   "@joinLeaveNumberDescription": {
     "placeholders": {
       "number": {
@@ -1039,7 +1040,7 @@
       }
     }
   },
-  "joinLeaveJoinNumberDescription": "{number} join events occurred during the current season ({date}).",
+  "joinLeaveJoinNumberDescription": "Mevcut sezon boyunca {number} katılma olayı gerçekleşti ({date}).",
   "@joinLeaveJoinNumberDescription": {
     "placeholders": {
       "number": {
@@ -1050,7 +1051,7 @@
       }
     }
   },
-  "joinLeaveMovingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
+  "joinLeaveMovingNumberDescription": "Mevcut sezon boyunca {number} oyuncu klanı terk etti ve yeniden katıldı ({date}).",
   "@joinLeaveMovingNumberDescription": {
     "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
@@ -1062,7 +1063,7 @@
       }
     }
   },
-  "joinLeaveUniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
+  "joinLeaveUniqueNumberDescription": "Mevcut sezon boyunca {number} benzersiz oyuncu klana katıldı/ayrıldı ({date}).",
   "@joinLeaveUniqueNumberDescription": {
     "description": "Number of unique players who joined/left the clan during the current season.",
     "placeholders": {
@@ -1074,7 +1075,7 @@
       }
     }
   },
-  "joinLeaveStillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
+  "joinLeaveStillInClanNumberDescription": "{number} oyuncu katıldı ve hala klanda.",
   "@joinLeaveStillInClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1082,7 +1083,7 @@
       }
     }
   },
-  "joinLeaveLeftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
+  "joinLeaveLeftClanNumberDescription": "{number} oyuncu katıldı, sonra klanı terk etti ve bir daha katılmadı.",
   "@joinLeaveLeftClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1117,17 +1118,17 @@
       }
     }
   },
-  "raidsTitle": "Raids",
+  "raidsTitle": "Baskınlar",
   "raidsLast": "Son baskınlar",
   "raidsOngoing": "Devam eden baskınlar",
   "raidsDistrictsDestroyed": "Yıkılan bölgeler",
   "raidsCompleted": "Tamamlanan baskınlar",
   "searchNoResult": "Sonuç yok.",
-  "maintenanceTitle": "Maintenance",
-  "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-  "downloadTooltip": "Download CWL summary",
-  "downloadInProgress": "Downloading file... It can take a few seconds...",
-  "downloadSuccess": "File saved successfully in {path}",
+  "maintenanceTitle": "Bakım",
+  "maintenanceDescription": "Clash of Clans şu anda bakımda, bu yüzden API'ye erişemiyoruz. Lütfen daha sonra tekrar kontrol et.",
+  "downloadTooltip": "KSL özetini indir",
+  "downloadInProgress": "Dosya indiriliyor... Birkaç saniye sürebilir...",
+  "downloadSuccess": "Dosya başarıyla {path} konumuna kaydedildi",
   "@downloadSuccess": {
     "placeholders": {
       "path": {
@@ -1135,7 +1136,7 @@
       }
     }
   },
-  "downloadError": "Failed to download file",
+  "downloadError": "Dosya indirilemedi",
   "dashboardTitle": "Kontrol Paneli",
   "toolsTitle": "Araçlar",
   "navigationTeam": "Takımlar",

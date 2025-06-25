@@ -1,13 +1,13 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "generalLoading": "Loading...",
+  "appDescription": "Bạn đồng hành Clash of Clans hoàn hảo của bạn để theo dõi thống kê, quản lý clan và phân tích hiệu suất.",
+  "generalLoading": "Đang tải...",
   "generalError": "Error",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
+  "generalRetry": "Thử lại",
+  "generalTryAgain": "Thử lại",
   "generalClose": "Close",
-  "generalCancel": "Cancel",
+  "generalCancel": "Hủy",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
@@ -89,7 +89,7 @@
     "description": "WarLog closed"
   },
   "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "authClashKingDescription": "Bạn đồng hành Clash of Clans hoàn hảo của bạn để theo dõi thống kê, quản lý clan và phân tích hiệu suất.",
   "authChooseSignInMethod": "Choose your preferred sign-in method",
   "authSignUp": "Sign up",
   "authLogin": "Login",

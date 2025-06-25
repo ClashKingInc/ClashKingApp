@@ -1,11 +1,11 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "appDescription": "आंकड़ों को ट्रैक करने, क्लैन्स का प्रबंधन करने और प्रदर्शन का विश्लेषण करने के लिए आपका अंतिम Clash of Clans साथी।",
   "generalLoading": "लोड हो रहा है...",
   "generalError": "गलती",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
+  "generalRetry": "पुनः प्रयास करें",
+  "generalTryAgain": "फिर से कोशिश करें",
   "generalClose": "बंद करना",
   "generalCancel": "रद्द करना",
   "generalOk": "ठीक है",
@@ -89,7 +89,7 @@
     "description": "WarLog closed"
   },
   "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "authClashKingDescription": "आंकड़ों को ट्रैक करने, क्लैन्स का प्रबंधन करने और प्रदर्शन का विश्लेषण करने के लिए आपका अंतिम Clash of Clans साथी।",
   "authChooseSignInMethod": "Choose your preferred sign-in method",
   "authSignUp": "Sign up",
   "authLogin": "लॉग इन करें",

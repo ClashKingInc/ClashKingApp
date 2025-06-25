@@ -10,119 +10,119 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'Tovarășul tău suprem Clash of Clans pentru urmărirea statisticilor, gestionarea clanurilor și analizarea performanței.';
 
   @override
-  String get generalLoading => 'Loading...';
+  String get generalLoading => 'Se încarcă...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => 'Reîncearcă';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => 'Încearcă din nou';
 
   @override
-  String get generalCancel => 'Cancel';
+  String get generalCancel => 'Anulează';
 
   @override
   String get generalOk => 'OK';
 
   @override
-  String get generalApply => 'Apply';
+  String get generalApply => 'Aplică';
 
   @override
-  String get generalConfirm => 'Confirm';
+  String get generalConfirm => 'Confirmă';
 
   @override
-  String get generalManage => 'Manage';
+  String get generalManage => 'Gestionează';
 
   @override
-  String get generalSettings => 'Settings';
+  String get generalSettings => 'Setări';
 
   @override
-  String get generalCopiedToClipboard => 'Copied to clipboard';
+  String get generalCopiedToClipboard => 'Copiat în clipboard';
 
   @override
-  String get generalComingSoon => 'Coming soon!';
+  String get generalComingSoon => 'În curând!';
 
   @override
-  String get generalAll => 'All';
+  String get generalAll => 'Toate';
 
   @override
   String get generalTotal => 'Total';
 
   @override
-  String get generalBest => 'Best';
+  String get generalBest => 'Cel mai bun';
 
   @override
-  String get generalWorst => 'Worst';
+  String get generalWorst => 'Cel mai rău';
 
   @override
-  String get generalAverage => 'Average';
+  String get generalAverage => 'Medie';
 
   @override
-  String get generalRemaining => 'Remaining';
+  String get generalRemaining => 'Rămas';
 
   @override
-  String get generalActive => 'Active';
+  String get generalActive => 'Activ';
 
   @override
-  String get generalInactive => 'Inactive';
+  String get generalInactive => 'Inactiv';
 
   @override
-  String get generalStarted => 'Started';
+  String get generalStarted => 'Început';
 
   @override
-  String get generalEnded => 'Ended';
+  String get generalEnded => 'Terminat';
 
   @override
-  String get generalRole => 'Role';
+  String get generalRole => 'Rol';
 
   @override
-  String get generalStats => 'Stats';
+  String get generalStats => 'Statistici';
 
   @override
-  String get generalFullStats => 'Full Stats';
+  String get generalFullStats => 'Statistici complete';
 
   @override
-  String get generalDetails => 'Details';
+  String get generalDetails => 'Detalii';
 
   @override
-  String get generalHistory => 'History';
+  String get generalHistory => 'Istoric';
 
   @override
-  String get generalFilters => 'Filters';
+  String get generalFilters => 'Filtre';
 
   @override
-  String get generalNotSet => 'Not set';
+  String get generalNotSet => 'Nesetat';
 
   @override
-  String get generalWarning => 'Warning';
+  String get generalWarning => 'Avertisment';
 
   @override
-  String get generalNoDataAvailable => 'No data available.';
+  String get generalNoDataAvailable => 'Nu sunt date disponibile.';
 
   @override
-  String get authSignUp => 'Sign up';
+  String get authSignUp => 'Înregistrează-te';
 
   @override
-  String get authLogin => 'Login';
+  String get authLogin => 'Conectare';
 
   @override
-  String get authLogout => 'Log out';
+  String get authLogout => 'Deconectare';
 
   @override
-  String get authCreateAccount => 'Create Account';
+  String get authCreateAccount => 'Creează cont';
 
   @override
-  String get authJoinClashKing => 'Join ClashKing';
+  String get authJoinClashKing => 'Alătură-te ClashKing';
 
   @override
-  String get authCreateClashKingAccount => 'Create ClashKing Account';
+  String get authCreateClashKingAccount => 'Creează cont ClashKing';
 
   @override
   String get authCreateAccountToGetStarted =>
-      'Create your account to get started';
+      'Creează-ți contul pentru a începe';
 
   @override
   String get authAlreadyHaveAccount => 'Already have an account? Sign in';

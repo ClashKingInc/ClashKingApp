@@ -10,383 +10,385 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'Jou uiteindelike Clash of Clans metgesel vir die navolg van statistieke, bestuur van klans, en analisering van prestasie.';
 
   @override
-  String get generalLoading => 'Loading...';
+  String get generalLoading => 'Laai...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => 'Probeer weer';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => 'Probeer weer';
 
   @override
-  String get generalCancel => 'Cancel';
+  String get generalCancel => 'Kanselleer';
 
   @override
   String get generalOk => 'OK';
 
   @override
-  String get generalApply => 'Apply';
+  String get generalApply => 'Pas toe';
 
   @override
-  String get generalConfirm => 'Confirm';
+  String get generalConfirm => 'Bevestig';
 
   @override
-  String get generalManage => 'Manage';
+  String get generalManage => 'Bestuur';
 
   @override
-  String get generalSettings => 'Settings';
+  String get generalSettings => 'Instellings';
 
   @override
-  String get generalCopiedToClipboard => 'Copied to clipboard';
+  String get generalCopiedToClipboard => 'Gekopieer na knipbord';
 
   @override
-  String get generalComingSoon => 'Coming soon!';
+  String get generalComingSoon => 'Kom binnekort!';
 
   @override
-  String get generalAll => 'All';
+  String get generalAll => 'Alles';
 
   @override
-  String get generalTotal => 'Total';
+  String get generalTotal => 'Totaal';
 
   @override
-  String get generalBest => 'Best';
+  String get generalBest => 'Beste';
 
   @override
-  String get generalWorst => 'Worst';
+  String get generalWorst => 'Slegste';
 
   @override
-  String get generalAverage => 'Average';
+  String get generalAverage => 'Gemiddeld';
 
   @override
-  String get generalRemaining => 'Remaining';
+  String get generalRemaining => 'Oorblywend';
 
   @override
-  String get generalActive => 'Active';
+  String get generalActive => 'Aktief';
 
   @override
-  String get generalInactive => 'Inactive';
+  String get generalInactive => 'Onaktief';
 
   @override
-  String get generalStarted => 'Started';
+  String get generalStarted => 'Begin';
 
   @override
-  String get generalEnded => 'Ended';
+  String get generalEnded => 'Geëindig';
 
   @override
-  String get generalRole => 'Role';
+  String get generalRole => 'Rol';
 
   @override
-  String get generalStats => 'Stats';
+  String get generalStats => 'Statistieke';
 
   @override
-  String get generalFullStats => 'Full Stats';
+  String get generalFullStats => 'Volledige Statistieke';
 
   @override
-  String get generalDetails => 'Details';
+  String get generalDetails => 'Besonderhede';
 
   @override
-  String get generalHistory => 'History';
+  String get generalHistory => 'Geskiedenis';
 
   @override
   String get generalFilters => 'Filters';
 
   @override
-  String get generalNotSet => 'Not set';
+  String get generalNotSet => 'Nie gestel nie';
 
   @override
-  String get generalWarning => 'Warning';
+  String get generalWarning => 'Waarskuwing';
 
   @override
-  String get generalNoDataAvailable => 'No data available.';
+  String get generalNoDataAvailable => 'Geen data beskikbaar nie.';
 
   @override
-  String get authSignUp => 'Sign up';
+  String get authSignUp => 'Registreer';
 
   @override
-  String get authLogin => 'Login';
+  String get authLogin => 'Meld aan';
 
   @override
-  String get authLogout => 'Log out';
+  String get authLogout => 'Meld af';
 
   @override
-  String get authCreateAccount => 'Create Account';
+  String get authCreateAccount => 'Skep Rekening';
 
   @override
-  String get authJoinClashKing => 'Join ClashKing';
+  String get authJoinClashKing => 'Sluit aan by ClashKing';
 
   @override
-  String get authCreateClashKingAccount => 'Create ClashKing Account';
+  String get authCreateClashKingAccount => 'Skep ClashKing Rekening';
 
   @override
-  String get authCreateAccountToGetStarted =>
-      'Create your account to get started';
+  String get authCreateAccountToGetStarted => 'Skep jou rekening om te begin';
 
   @override
-  String get authAlreadyHaveAccount => 'Already have an account? Sign in';
+  String get authAlreadyHaveAccount => 'Het jy reeds \'n rekening? Meld aan';
 
   @override
-  String get authConfirmLogout => 'Are you sure you want to log out?';
+  String get authConfirmLogout => 'Is jy seker jy wil afmeld?';
 
   @override
   String get authDiscordTitle => 'Discord';
 
   @override
-  String get authDiscordSignIn => 'Sign In with Discord';
+  String get authDiscordSignIn => 'Meld aan met Discord';
 
   @override
-  String get authDiscordContinue => 'Continue with Discord';
+  String get authDiscordContinue => 'Gaan voort met Discord';
 
   @override
   String get authDiscordDescription =>
-      'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!';
+      'Sinchroniseer jou data met ClashKing Bot en ontsluit die volle potensiaal van ClashKing!';
 
   @override
-  String get authEmailTitle => 'Email';
+  String get authEmailTitle => 'E-pos';
 
   @override
   String get authEmailDescription =>
-      'Use email if you can\'t access Discord or prefer app-only features';
+      'Gebruik e-pos as jy nie Discord kan bereik nie of slegs app-funksies verkies';
 
   @override
-  String get authEmailRequired => 'Please enter your email';
+  String get authEmailRequired => 'Voer asseblief jou e-pos in';
 
   @override
-  String get authEmailInvalid => 'Please enter a valid email';
+  String get authEmailInvalid => 'Voer asseblief \'n geldige e-pos in';
 
   @override
-  String get authPasswordLabel => 'Password';
+  String get authPasswordLabel => 'Wagwoord';
 
   @override
-  String get authPasswordConfirm => 'Confirm Password';
+  String get authPasswordConfirm => 'Bevestig Wagwoord';
 
   @override
-  String get authPasswordRequired => 'Please enter your password';
+  String get authPasswordRequired => 'Voer asseblief jou wagwoord in';
 
   @override
-  String get authPasswordConfirmRequired => 'Please confirm your password';
+  String get authPasswordConfirmRequired => 'Bevestig asseblief jou wagwoord';
 
   @override
-  String get authPasswordMismatch => 'Passwords do not match';
+  String get authPasswordMismatch => 'Wagwoorde stem nie ooreen nie';
 
   @override
-  String get authPasswordTooShort => 'Password must be at least 8 characters';
+  String get authPasswordTooShort => 'Wagwoord moet minstens 8 karakters wees';
 
   @override
   String get authPasswordRequirements =>
-      'Password must contain: uppercase, lowercase, digit, and special character';
+      'Wagwoord moet bevat: hoofletter, kleinletter, syfer, en spesiale karakter';
 
   @override
-  String get authPasswordForgot => 'Forgot password?';
+  String get authPasswordForgot => 'Wagwoord vergeet?';
 
   @override
-  String get authUsernameLabel => 'Username';
+  String get authUsernameLabel => 'Gebruikersnaam';
 
   @override
-  String get authUsernameRequired => 'Please enter a username';
+  String get authUsernameRequired => 'Voer asseblief \'n gebruikersnaam in';
 
   @override
-  String get authUsernameTooShort => 'Username must be at least 3 characters';
+  String get authUsernameTooShort =>
+      'Gebruikersnaam moet minstens 3 karakters wees';
 
   @override
   String get authErrorConnection =>
-      'An error occurred. Please check your internet connection and try again.';
+      '\'n Fout het voorgekom. Gaan jou internetverbinding na en probeer weer.';
 
   @override
   String get authErrorConnectionRelaunch =>
-      'An error occurred. Please check your internet connection and relaunch the app.';
+      '\'n Fout het voorgekom. Gaan jou internetverbinding na en herlaai die app.';
 
   @override
-  String get authAccountManagement => 'Account Management';
+  String get authAccountManagement => 'Rekeningbestuur';
 
   @override
-  String get authAccountConnected => 'Connected Accounts';
+  String get authAccountConnected => 'Gekoppelde Rekeninge';
 
   @override
-  String get authAccountConnectedStatus => 'Connected';
+  String get authAccountConnectedStatus => 'Gekoppel';
 
   @override
-  String get authAccountNotConnected => 'Not connected';
+  String get authAccountNotConnected => 'Nie gekoppel nie';
 
   @override
-  String get authAccountEmailAndPassword => 'Email & Password';
+  String get authAccountEmailAndPassword => 'E-pos & Wagwoord';
 
   @override
   String get authAccountSecured =>
-      'Your account is secured with multiple authentication methods';
+      'Jou rekening is beveilig met veelvuldige verifikasie metodes';
 
   @override
-  String get authAccountLinkEmail => 'Link Email Account';
+  String get authAccountLinkEmail => 'Koppel E-pos Rekening';
 
   @override
   String get authAccountAddEmailAuth =>
-      'Add email & password authentication to your account for additional security.';
+      'Voeg e-pos & wagwoord verifikasie by jou rekening vir addisionele sekuriteit.';
 
   @override
   String get authAccountEmailLinkedSuccess =>
-      'Email account successfully linked!';
+      'E-pos rekening suksesvol gekoppel!';
 
   @override
-  String get helpTitle => 'Need help?';
+  String get helpTitle => 'Benodig hulp?';
 
   @override
-  String get helpJoinDiscord => 'Join Discord';
+  String get helpJoinDiscord => 'Sluit aan by Discord';
 
   @override
-  String get helpEmailUs => 'Email Us';
+  String get helpEmailUs => 'Stuur vir ons \'n E-pos';
 
   @override
-  String get accountsWelcome => 'Welcome!';
+  String get accountsWelcome => 'Welkom!';
 
   @override
   String get accountsWelcomeMessage =>
-      'Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.';
+      'Voeg asseblief een of meer Clash of Clans rekeninge by jou profiel. Jy kan later rekeninge byvoeg of verwyder.';
 
   @override
-  String get accountsManageTitle => 'Manage your accounts';
+  String get accountsManageTitle => 'Bestuur jou rekeninge';
 
   @override
-  String get accountsNoneFound => 'No account linked to your profile found';
+  String get accountsNoneFound =>
+      'Geen rekening gekoppel aan jou profiel gevind nie';
 
   @override
-  String get accountsPlayerTag => 'Player Tag (#ABC123)';
+  String get accountsPlayerTag => 'Speler Etiket (#ABC123)';
 
   @override
-  String get accountsEnterPlayerTag => 'Enter a player tag';
+  String get accountsEnterPlayerTag => 'Voer \'n speler etiket in';
 
   @override
-  String get accountsAdd => 'Add account';
+  String get accountsAdd => 'Voeg rekening by';
 
   @override
-  String get accountsDelete => 'Delete account';
+  String get accountsDelete => 'Skrap rekening';
 
   @override
-  String get accountsApiToken => 'Account API Token';
+  String get accountsApiToken => 'Rekening API Sleutel';
 
   @override
   String get accountsEnterApiToken =>
-      'Please enter the account API token to confirm it\'s yours. You can find it in Clash of Clans Settings > More Settings > API Token.';
+      'Voer asseblief die rekening API sleutel in om te bevestig dit is joune. Jy kan dit vind in Clash of Clans Instellings > Meer Instellings > API Sleutel.';
 
   @override
-  String get accountsFillAllFields => 'Please fill all fields.';
+  String get accountsFillAllFields => 'Vul asseblief alle velde in.';
 
   @override
   String get accountsErrorTagNotExists =>
-      'The player tag entered does not exist.';
+      'Die speler etiket wat ingevoer is bestaan nie.';
 
   @override
   String accountsErrorAlreadyLinked(Object tag) {
-    return 'The player tag is already linked to someone.';
+    return 'Die speler etiket is reeds aan iemand gekoppel.';
   }
 
   @override
   String get accountsErrorAlreadyLinkedToYou =>
-      'The player tag is already linked to you.';
+      'Die speler etiket is reeds aan jou gekoppel.';
 
   @override
-  String get accountsErrorWrongApiToken => 'The API token entered is incorrect';
+  String get accountsErrorWrongApiToken =>
+      'Die API sleutel wat ingevoer is is verkeerd';
 
   @override
   String get accountsErrorFailedToAdd =>
-      'Failed to add the account. Please try again later.';
+      'Kon nie die rekening byvoeg nie. Probeer asseblief later weer.';
 
   @override
   String get accountsErrorFailedToDelete =>
-      'Failed to delete link. Please try again later.';
+      'Kon nie die skakel skrap nie. Probeer asseblief later weer.';
 
   @override
   String get accountsErrorFailedToUpdateOrder =>
-      'Failed to update the order of accounts.';
+      'Kon nie die volgorde van rekeninge opdateer nie.';
 
   @override
   String get errorTitle =>
-      'Oops! Our servers might have taken a fireball to the face! We\'re casting a healing spell... Try again in a moment.';
+      'Oeps! Ons bedieners het dalk \'n vuurbal in die gesig gekry! Ons toor \'n genesing betowering... Probeer oor \'n rukkie weer.';
 
   @override
   String get errorSubtitle =>
-      'If the issue persists, check our Discord Server to see if we\'re aware of it.';
+      'As die probleem voortduur, gaan kyk op ons Discord Bediener om te sien of ons daarvan bewus is.';
 
   @override
-  String get errorLoadingVersion => 'Error loading version';
+  String get errorLoadingVersion => 'Fout met laai van weergawe';
 
   @override
-  String get errorCannotOpenLink => 'We can\'t open this link.';
+  String get errorCannotOpenLink => 'Ons kan nie hierdie skakel oopmaak nie.';
 
   @override
   String get errorExitAppToOpenClash =>
-      'You are about to leave the app to open Clash of Clans.';
+      'Jy gaan die app verlaat om Clash of Clans oop te maak.';
 
   @override
-  String get playerSearchTitle => 'Search player';
+  String get playerSearchTitle => 'Soek speler';
 
   @override
-  String get playerSearchPlaceholder => 'Player\'s name or tag';
+  String get playerSearchPlaceholder => 'Speler se naam of etiket';
 
   @override
   String playerLastActive(String date) {
-    return 'Last active: $date';
+    return 'Laas aktief: $date';
   }
 
   @override
   String get playerNotTracked =>
-      'This player is not tracked. Data may be inaccurate.';
+      'Hierdie speler word nie nagevolg nie. Data mag onakkuraat wees.';
 
   @override
   String playerClanDescription(String clan, String tag) {
-    return 'Your clan is \"$clan\" ($tag).';
+    return 'Jou klan is \"$clan\" ($tag).';
   }
 
   @override
   String playerRatioDescription(
       String ratio, String donations, String received) {
-    return 'Your donation ratio is $ratio. You have donated $donations troops and received $received troops.';
+    return 'Jou skenkingsverhouding is $ratio. Jy het $donations troepe geskenk en $received troepe ontvang.';
   }
 
   @override
   String playerWarPreferenceDescription(String preference) {
-    return 'Your war preference is \"$preference\".';
+    return 'Jou oorlogsvoorkeur is \"$preference\".';
   }
 
   @override
   String playerWarStarsDescription(int stars) {
-    return 'You have $stars war stars.';
+    return 'Jy het $stars oorlogsterre.';
   }
 
   @override
   String playerTrophiesDescription(int trophies, String league) {
-    return 'You have $trophies trophies. You\'re currently in $league.';
+    return 'Jy het $trophies trofees. Jy is tans in $league.';
   }
 
   @override
   String playerTownHallLevelDescription(int level) {
-    return 'Your Town Hall level is $level.';
+    return 'Jou Stadsaal vlak is $level.';
   }
 
   @override
   String playerBuilderBaseDescription(int level, int trophies) {
-    return 'Your Builder Hall level is $level and you have $trophies trophies.';
+    return 'Jou Bouersaal vlak is $level en jy het $trophies trofees.';
   }
 
   @override
-  String get gameBaseHome => 'Home Base';
+  String get gameBaseHome => 'Tuisbasis';
 
   @override
-  String get gameBaseBuilder => 'Builder Base';
+  String get gameBaseBuilder => 'Bouerbasis';
 
   @override
-  String get gameClanCapital => 'Clan Capital';
+  String get gameClanCapital => 'Klanhoofstad';
 
   @override
   String get gameTownHall => 'TH';
 
   @override
-  String get gameTownHallLevel => 'TH Level';
+  String get gameTownHallLevel => 'SS Vlak';
 
   @override
   String gameTownHallLevelNumber(int level) {
-    return 'Town Hall $level';
+    return 'Stadsaal $level';
   }
 
   @override
@@ -395,22 +397,22 @@ class AppLocalizationsAf extends AppLocalizations {
   }
 
   @override
-  String get gameExpLevel => 'Experience Level';
+  String get gameExpLevel => 'Ervaringsvlak';
 
   @override
-  String get gameTrophies => 'Trophies';
+  String get gameTrophies => 'Trofees';
 
   @override
-  String get gameBuilderBaseTrophies => 'BB Trophies';
+  String get gameBuilderBaseTrophies => 'BB Trofees';
 
   @override
-  String get gameDonations => 'Donations';
+  String get gameDonations => 'Skenkings';
 
   @override
-  String get gameDonationsReceived => 'Donations Received';
+  String get gameDonationsReceived => 'Skenkings Ontvang';
 
   @override
-  String get gameDonationsRatio => 'Donation Ratio';
+  String get gameDonationsRatio => 'Skenkingsverhouding';
 
   @override
   String gameLevel(int level, int maxLevel) {
@@ -418,106 +420,107 @@ class AppLocalizationsAf extends AppLocalizations {
   }
 
   @override
-  String get gameHeroes => 'Heroes';
+  String get gameHeroes => 'Helde';
 
   @override
-  String get gameEquipment => 'Equipments';
+  String get gameEquipment => 'Toerusting';
 
   @override
-  String get gameHeroesEquipments => 'Hero equipments';
+  String get gameHeroesEquipments => 'Held toerusting';
 
   @override
-  String get gameTroops => 'Troops';
+  String get gameTroops => 'Troepe';
 
   @override
-  String get gameActiveSuperTroops => 'Active Super Troops';
+  String get gameActiveSuperTroops => 'Aktiewe Super Troepe';
 
   @override
-  String get gamePets => 'Pets';
+  String get gamePets => 'Troeteldiere';
 
   @override
-  String get gameSiegeMachines => 'Siege Machines';
+  String get gameSiegeMachines => 'Beleëringsmasjiene';
 
   @override
-  String get gameSpells => 'Spells';
+  String get gameSpells => 'Towerspreuke';
 
   @override
-  String get gameAchievements => 'Achievements';
+  String get gameAchievements => 'Prestasies';
 
   @override
-  String get gameClanGames => 'Clan Games';
+  String get gameClanGames => 'Klanspele';
 
   @override
-  String get gameSeasonPass => 'Season Pass';
+  String get gameSeasonPass => 'Seisoenkaartjie';
 
   @override
   String get gameCreatorCode => 'Creator Code: ClashKing';
 
   @override
-  String get clanTitle => 'Clan';
+  String get clanTitle => 'Klan';
 
   @override
-  String get clanSearchTitle => 'Search clan';
+  String get clanSearchTitle => 'Soek klan';
 
   @override
-  String get clanSearchPlaceholder => 'Clan\'s name';
+  String get clanSearchPlaceholder => 'Klan se naam';
 
   @override
-  String get clanNone => 'No clan';
+  String get clanNone => 'Geen klan';
 
   @override
-  String get clanJoinToUnlock => 'Join a clan to unlock new features.';
+  String get clanJoinToUnlock =>
+      'Sluit aan by \'n klan om nuwe funksies te ontsluit.';
 
   @override
-  String get clanMembers => 'Members';
+  String get clanMembers => 'Lede';
 
   @override
-  String get clanWarFrequency => 'War frequency';
+  String get clanWarFrequency => 'Oorlogsfrekwensie';
 
   @override
-  String get clanMinimumMembers => 'Minimum members';
+  String get clanMinimumMembers => 'Minimum lede';
 
   @override
-  String get clanMaximumMembers => 'Maximum members';
+  String get clanMaximumMembers => 'Maksimum lede';
 
   @override
-  String get clanLocation => 'Location';
+  String get clanLocation => 'Ligging';
 
   @override
-  String get clanMinimumPoints => 'Minimum clan points';
+  String get clanMinimumPoints => 'Minimum klanpunte';
 
   @override
-  String get clanMinimumLevel => 'Minimum clan level';
+  String get clanMinimumLevel => 'Minimum klanvlak';
 
   @override
-  String get clanInviteOnly => 'Invite Only';
+  String get clanInviteOnly => 'Slegs op uitnodiging';
 
   @override
-  String get clanOpened => 'Opened';
+  String get clanOpened => 'Oop';
 
   @override
-  String get clanClosed => 'Closed';
+  String get clanClosed => 'Gesluit';
 
   @override
-  String get clanRoleLeader => 'Leader';
+  String get clanRoleLeader => 'Leier';
 
   @override
-  String get clanRoleCoLeader => 'Co-Leader';
+  String get clanRoleCoLeader => 'Mede-leier';
 
   @override
-  String get clanRoleElder => 'Elder';
+  String get clanRoleElder => 'Ouderling';
 
   @override
-  String get clanRoleMember => 'Member';
+  String get clanRoleMember => 'Lid';
 
   @override
-  String get clanWarFrequencyAlways => 'Always';
+  String get clanWarFrequencyAlways => 'Altyd';
 
   @override
-  String get clanWarFrequencyNever => 'Never';
+  String get clanWarFrequencyNever => 'Nooit';
 
   @override
-  String get clanWarFrequencyUnknown => 'Unknown';
+  String get clanWarFrequencyUnknown => 'Onbekend';
 
   @override
   String get clanWarFrequencyOncePerWeek => '1/week';
@@ -526,203 +529,204 @@ class AppLocalizationsAf extends AppLocalizations {
   String get clanWarFrequencyMoreThanOncePerWeek => 'More than 1/week';
 
   @override
-  String get clanWarFrequencyRarely => 'Rarely';
+  String get clanWarFrequencyRarely => 'Selde';
 
   @override
   String get timeHourIndicator => 'h';
 
   @override
   String timeDaysAgo(int days) {
-    return '$days days ago';
+    return '$days dae gelede';
   }
 
   @override
   String timeDayAgo(int day) {
-    return '$day day ago';
+    return '$day dag gelede';
   }
 
   @override
   String timeHourAgo(int hour) {
-    return '$hour hour ago';
+    return '$hour uur gelede';
   }
 
   @override
   String timeHoursAgo(int hours) {
-    return '$hours hours ago';
+    return '$hours ure gelede';
   }
 
   @override
   String timeMinuteAgo(int minute) {
-    return '$minute minute ago';
+    return '$minute minuut gelede';
   }
 
   @override
   String timeMinutesAgo(int minutes) {
-    return '$minutes minutes ago';
+    return '$minutes minute gelede';
   }
 
   @override
-  String get timeJustNow => 'Just Now';
+  String get timeJustNow => 'Nou net';
 
   @override
-  String get timeEndedJustNow => 'Ended just now';
+  String get timeEndedJustNow => 'Geëindig nou net';
 
   @override
   String timeEndedMinutesAgo(int minutes) {
-    return 'Ended $minutes minutes ago';
+    return 'Geëindig $minutes minute gelede';
   }
 
   @override
   String timeEndedHoursAgo(int hours) {
-    return 'Ended $hours hours ago';
+    return 'Geëindig $hours ure gelede';
   }
 
   @override
   String timeEndedDaysAgo(int days) {
-    return 'Ended $days days ago';
+    return 'Geëindig $days dae gelede';
   }
 
   @override
   String timeStartsIn(String time) {
-    return 'Starts in $time';
+    return 'Begin oor $time';
   }
 
   @override
   String timeStartsAt(String time) {
-    return 'Starts at $time';
+    return 'Begin om $time';
   }
 
   @override
   String timeEndsIn(String time) {
-    return 'Ends in $time';
+    return 'Eindig oor $time';
   }
 
   @override
   String timeEndsAt(String time) {
-    return 'Ends at $time';
+    return 'Eindig om $time';
   }
 
   @override
-  String get legendsTitle => 'Inaccurate data?';
+  String get legendsTitle => 'Onakkurate data?';
 
   @override
-  String get legendsNotInLeague => 'Not in Legend League';
+  String get legendsNotInLeague => 'Nie in Legende Liga nie';
 
   @override
   String get legendsNoDataToday =>
-      'You\'re not in Legend League, but past seasons are available.';
+      'Jy is nie in Legende Liga nie, maar vorige seisoene is beskikbaar.';
 
   @override
   String legendsStartDescription(String trophies) {
-    return 'You started the day with $trophies trophies.';
+    return 'Jy het die dag begin met $trophies trofees.';
   }
 
   @override
   String legendsNoRankLocalDescription(String country, int trophies) {
-    return 'You are currently not ranked ($country) with $trophies trophies.';
+    return 'Jy is tans nie gerangskik nie ($country) met $trophies trofees.';
   }
 
   @override
   String legendsRankLocalDescription(int rank, String country, int trophies) {
-    return 'You are currently ranked $rank ($country) with $trophies trophies.';
+    return 'Jy is tans gerangskik $rank ($country) met $trophies trofees.';
   }
 
   @override
   String legendsGainDescription(int trophies) {
-    return 'You gained $trophies trophies for now.';
+    return 'Jy het $trophies trofees vir nou gewen.';
   }
 
   @override
   String legendsLossDescription(int trophies) {
-    return 'You lost $trophies trophies for now.';
+    return 'Jy het $trophies trofees vir nou verloor.';
   }
 
   @override
   String legendsNoGlobalRankDescription(int trophies) {
-    return 'You are currently not ranked globally with $trophies trophies.';
+    return 'Jy is tans nie wêreldwyd gerangskik nie met $trophies trofees.';
   }
 
   @override
   String legendsGlobalRankDescription(int rank, int trophies) {
-    return 'You are currently ranked $rank globally with $trophies trophies.';
+    return 'Jy is tans gerangskik $rank wêreldwyd met $trophies trofees.';
   }
 
   @override
-  String get legendsNoRank => 'No ranking';
+  String get legendsNoRank => 'Geen rangskikking';
 
   @override
-  String get legendsBestTrophies => 'Best Trophies';
+  String get legendsBestTrophies => 'Beste Trofees';
 
   @override
-  String get legendsMostAttacks => 'Most Attacks';
+  String get legendsMostAttacks => 'Meeste Aanvalle';
 
   @override
-  String get legendsLastSeason => 'Last Season';
+  String get legendsLastSeason => 'Laaste Seisoen';
 
   @override
-  String get legendsBestRank => 'Best Global Rank';
+  String get legendsBestRank => 'Beste Wêreldrangskikking';
 
   @override
-  String get legendsTrophiesBySeason => 'Trophies by season';
+  String get legendsTrophiesBySeason => 'Trofees per seisoen';
 
   @override
-  String get legendsEosTrophies => 'End Of Season Trophies';
+  String get legendsEosTrophies => 'Einde van Seisoen Trofees';
 
   @override
-  String get legendsEosDetails => 'End Of Season Details';
+  String get legendsEosDetails => 'Einde van Seisoen Besonderhede';
 
   @override
-  String get legendsInaccurateTitle => 'Inaccurate data?';
+  String get legendsInaccurateTitle => 'Onakkurate data?';
 
   @override
   String get legendsInaccurateIntro =>
-      'Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here\'s why:\n';
+      'Weens beperkings van die Clash of Clans API, mag ons data nie altyd perfek akkuraat wees nie. Hier is hoekom:\n';
 
   @override
-  String get legendsInaccurateApiDelayTitle => '1. API Delay: ';
+  String get legendsInaccurateApiDelayTitle => '1. API Vertraging: ';
 
   @override
   String get legendsInaccurateApiDelayBody =>
-      'The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n';
+      'Die API kan tot 5 minute neem om op te dateer, wat \'n vertraging veroorsaak in die weerspieëling van intydse trofee veranderinge.\n';
 
   @override
-  String get legendsInaccurateConcurrentTitle => '2. Concurrent Changes: \n';
+  String get legendsInaccurateConcurrentTitle =>
+      '2. Gelyktydige Veranderinge: \n';
 
   @override
   String get legendsInaccurateMultipleAttacksTitle =>
-      '- Multiple Attacks/Defenses: ';
+      '- Veelvuldige Aanvalle/Verdedigings: ';
 
   @override
   String get legendsInaccurateMultipleAttacksBody =>
-      'If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n';
+      'As veelvuldige aanvalle of verdedigings vinnig op mekaar volg, mag die API gekombineerde resultate toon (bv. +68 of -68).\n';
 
   @override
   String get legendsInaccurateSimultaneousTitle =>
-      '- Simultaneous Attack and Defense: ';
+      '- Gelyktydige Aanval en Verdediging: ';
 
   @override
   String get legendsInaccurateSimultaneousBody =>
-      'If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n';
+      'As \'n aanval en verdediging op dieselfde tyd plaasvind, kan jy \'n gemengde resultaat sien (bv. +4).\n';
 
   @override
-  String get legendsInaccurateNetGainTitle => '3. Net Gain/Loss: ';
+  String get legendsInaccurateNetGainTitle => '3. Netto Wins/Verlies: ';
 
   @override
   String get legendsInaccurateNetGainBody =>
-      'Despite timing issues, the overall net gain or loss for the day is accurate. ';
+      'Ten spyte van tydberekening probleme, is die algehele netto wins of verlies vir die dag akkuraat. ';
 
   @override
   String get legendsInaccurateConclusion =>
-      'These limitations are common across all tools using the Clash of Clans API. We sadly can\'t fix that as it is in Supercell\'s hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!';
+      'Hierdie beperkings is algemeen onder alle instrumente wat die Clash of Clans API gebruik. Ons kan dit ongelukkig nie regmaak nie aangesien dit in Supercell se hande is. Ons doen ons beste om vir hierdie beperkings te kompenseer en resultate so na as moontlik aan die werklikheid te verskaf. Dankie vir jou begrip!';
 
   @override
-  String get statsSeasonStats => 'Season Stats';
+  String get statsSeasonStats => 'Seisoen Statistieke';
 
   @override
-  String get statsByDay => 'By Day';
+  String get statsByDay => 'Per Dag';
 
   @override
-  String get statsBySeason => 'By Season';
+  String get statsBySeason => 'Per Seisoen';
 
   @override
   String statsDayIndex(int index) {
@@ -740,73 +744,73 @@ class AppLocalizationsAf extends AppLocalizations {
   }
 
   @override
-  String get statsAllTownHalls => 'All Town Halls';
+  String get statsAllTownHalls => 'Alle Stadsale';
 
   @override
-  String get statsMembers => 'Members Stats';
+  String get statsMembers => 'Lede Statistieke';
 
   @override
-  String get todoTitle => 'To-do list';
+  String get todoTitle => 'Om-te-doen lys';
 
   @override
-  String get todoExplanationTitle => 'Task Calculation';
+  String get todoExplanationTitle => 'Taak Berekening';
 
   @override
   String get todoExplanationIntro =>
-      'The task completion percentage is calculated based on the following activities with specific weightings:';
+      'Die taak voltooiingspersentasie word bereken gebaseer op die volgende aktiwiteite met spesifieke wegings:';
 
   @override
-  String get todoExplanationLegendsTitle => 'Legend League:';
+  String get todoExplanationLegendsTitle => 'Legende Liga:';
 
   @override
   String get todoExplanationLegends =>
-      'Weight of 8 points per account, 1 attack = 1 point.';
+      'Gewig van 8 punte per rekening, 1 aanval = 1 punt.';
 
   @override
-  String get todoExplanationRaidsTitle => 'Raids:';
+  String get todoExplanationRaidsTitle => 'Invalle:';
 
   @override
   String get todoExplanationRaids =>
-      'Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.';
+      'Gewig van 5 punte per rekening (of 6 indien die laaste aanval ontsluit is), 1 aanval = 1 punt.';
 
   @override
-  String get todoExplanationClanWarsTitle => 'Clan Wars:';
+  String get todoExplanationClanWarsTitle => 'Klanoorloë:';
 
   @override
   String get todoExplanationClanWars =>
-      'Weight of 2 points per account, 1 attack = 1 point.';
+      'Gewig van 2 punte per rekening, 1 aanval = 1 punt.';
 
   @override
-  String get todoExplanationCwlTitle => 'Clan War League:';
+  String get todoExplanationCwlTitle => 'Klanoorlog Liga:';
 
   @override
   String get todoExplanationCwl =>
-      'Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.';
+      'Gewig van 1 punt per rekening, 1 aanval = 1 punt. KOL kan nie nagevolg word as die speler nie in hul liga klan is nie.';
 
   @override
-  String get todoExplanationPassAndGamesTitle => 'Season Pass & Clan Games:';
+  String get todoExplanationPassAndGamesTitle => 'Seisoenkaartjie & Klanspele:';
 
   @override
   String get todoExplanationPassAndGames =>
-      'Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.';
+      'Gewig van 2 punte elk per rekening. Die verhouding is gebaseer op die aantal dae oor (1 maand vir die kaartjie en 6 dae vir die spele). Groen = op koers om die kaartjie of spele te voltooi, rooi = agter skedule.';
 
   @override
   String get todoExplanationConclusion =>
-      'The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.';
+      'Die finale persentasie word bereken deur die totale aksies voltooi gedurende voortdurende gebeure te deel deur die totale vereiste aksies. Rekeninge onaktief vir meer as 14 dae word uitgesluit van die berekening.';
 
   @override
   String todoAccountsNumber(int number) {
-    return '$number accounts';
+    return '$number rekeninge';
   }
 
   @override
   String todoAccountsNumberActive(int number) {
-    return '$number active accounts';
+    return '$number aktiewe rekeninge';
   }
 
   @override
   String todoAccountsNumberInactive(int number) {
-    return '$number inactive accounts';
+    return '$number onaktiewe rekeninge';
   }
 
   @override

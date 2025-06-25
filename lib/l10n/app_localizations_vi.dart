@@ -10,19 +10,19 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'Bạn đồng hành Clash of Clans hoàn hảo của bạn để theo dõi thống kê, quản lý clan và phân tích hiệu suất.';
 
   @override
-  String get generalLoading => 'Loading...';
+  String get generalLoading => 'Đang tải...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => 'Thử lại';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => 'Thử lại';
 
   @override
-  String get generalCancel => 'Cancel';
+  String get generalCancel => 'Hủy';
 
   @override
   String get generalOk => 'OK';

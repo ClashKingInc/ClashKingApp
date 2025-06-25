@@ -1,105 +1,105 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "generalLoading": "Loading...",
-  "generalError": "Error",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
-  "generalClose": "Close",
-  "generalCancel": "Cancel",
+  "appDescription": "Din ultimate Clash of Clans-følgesvenn for å spore statistikk, administrere klaner og analysere ytelse.",
+  "generalLoading": "Laster...",
+  "generalError": "Feil",
+  "generalRetry": "Prøv igjen",
+  "generalTryAgain": "Prøv igjen",
+  "generalClose": "Lukk",
+  "generalCancel": "Avbryt",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
   },
-  "generalApply": "Apply",
-  "generalConfirm": "Confirm",
-  "generalAdd": "Add",
+  "generalApply": "Bruk",
+  "generalConfirm": "Bekreft",
+  "generalAdd": "Legg til",
   "@generalAdd": {
     "description": "Add an account"
   },
-  "generalDelete": "Delete",
+  "generalDelete": "Slett",
   "@generalDelete": {
     "description": "Delete an account"
   },
-  "generalManage": "Manage",
-  "generalManagement": "Management",
-  "generalSettings": "Settings",
-  "generalCopiedToClipboard": "Copied to clipboard",
-  "generalComingSoon": "Coming soon!",
-  "generalAll": "All",
+  "generalManage": "Administrer",
+  "generalManagement": "Forvaltning",
+  "generalSettings": "Innstillinger",
+  "generalCopiedToClipboard": "Kopiert til utklippstavlen",
+  "generalComingSoon": "Kommer snart!",
+  "generalAll": "Alle",
   "@generalAll": {
     "description": "all items"
   },
-  "generalTotal": "Total",
-  "generalBest": "Best",
+  "generalTotal": "Totalt",
+  "generalBest": "Beste",
   "@generalBest": {
     "description": "Best end of day trophies"
   },
-  "generalWorst": "Worst",
+  "generalWorst": "Verste",
   "@generalWorst": {
     "description": "Worst end of day trophies"
   },
-  "generalAverage": "Average",
+  "generalAverage": "Gjennomsnitt",
   "@generalAverage": {
     "description": "Average value of legend trophies (defense and attack)"
   },
-  "generalRemaining": "Remaining",
+  "generalRemaining": "Gjenstår",
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Active",
-  "generalInactive": "Inactive",
-  "generalStarted": "Started",
+  "generalActive": "Aktiv",
+  "generalInactive": "Inaktiv",
+  "generalStarted": "Startet",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
   },
-  "generalEnded": "Ended",
+  "generalEnded": "Avsluttet",
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
-  "generalRole": "Role",
-  "generalDate": "Date",
-  "generalStats": "Stats",
-  "generalFullStats": "Full Stats",
-  "generalDetails": "Details",
-  "generalHistory": "History",
+  "generalLevel": "Nivå",
+  "generalRole": "Rolle",
+  "generalDate": "Dato",
+  "generalStats": "Statistikk",
+  "generalFullStats": "Full statistikk",
+  "generalDetails": "Detaljer",
+  "generalHistory": "Historie",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Charts",
-  "generalFilters": "Filters",
-  "generalWhatever": "Whatever",
+  "generalCharts": "Diagrammer",
+  "generalFilters": "Filtre",
+  "generalWhatever": "Hva som helst",
   "@generalWhatever": {
     "description": "Whatever the value"
   },
-  "generalAny": "Any",
+  "generalAny": "Alle",
   "@generalAny": {
     "description": "Any value is accepted"
   },
-  "generalNotSet": "Not set",
+  "generalNotSet": "Ikke satt",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Warning",
-  "generalNoDataAvailable": "No data available.",
-  "generalClosed": "Closed",
+  "generalWarning": "Advarsel",
+  "generalNoDataAvailable": "Ingen data tilgjengelig.",
+  "generalClosed": "Lukket",
   "@generalClosed": {
     "description": "WarLog closed"
   },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignUp": "Sign up",
-  "authLogin": "Login",
-  "authLogout": "Log out",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateClashKingAccount": "Create ClashKing Account",
-  "authCreateAccountToGetStarted": "Create your account to get started",
-  "authAlreadyHaveAccount": "Already have an account? Sign in",
-  "authConfirmLogout": "Are you sure you want to log out?",
+  "authWelcomeBack": "Velkommen tilbake",
+  "authClashKingDescription": "Din ultimate Clash of Clans-følgesvenn for å spore statistikk, administrere klaner og analysere ytelse.",
+  "authChooseSignInMethod": "Velg din foretrukne påloggingsmåte",
+  "authSignUp": "Registrer deg",
+  "authLogin": "Logg inn",
+  "authLogout": "Logg ut",
+  "authCreateAccount": "Opprett konto",
+  "authJoinClashKing": "Bli med ClashKing",
+  "authCreateClashKingAccount": "Opprett ClashKing-konto",
+  "authCreateAccountToGetStarted": "Opprett din konto for å komme i gang",
+  "authAlreadyHaveAccount": "Har du allerede en konto? Logg inn",
+  "authConfirmLogout": "Er du sikker på at du vil logge ut?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },

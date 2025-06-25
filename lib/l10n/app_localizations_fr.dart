@@ -10,7 +10,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'Ton compagnon Clash of Clans préféré pour suivre tes statistiques, gérer tes clans et analyser tes performances.';
 
   @override
   String get generalLoading => 'Chargement...';

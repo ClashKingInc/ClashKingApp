@@ -99,6 +99,7 @@
   "authCreateClashKingAccount": "ClashKing-Konto erstellen",
   "authCreateAccountToGetStarted": "Erstelle dein Konto, um zu beginnen",
   "authAlreadyHaveAccount": "Du hast bereits ein Konto? Melde dich an",
+  "authDontHaveAccount": "Du hast noch kein Konto? Erstelle eins",
   "authConfirmLogout": "Bist du dir sicher, dass du dich abmelden möchtest?",
   "@authConfirmLogout": {
     "description": "Aufforderung an den Nutzer, die Abmeldung zu bestätigen"

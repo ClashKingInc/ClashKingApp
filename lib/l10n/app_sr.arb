@@ -1,103 +1,103 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "generalLoading": "Loading...",
-  "generalError": "Error",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
-  "generalClose": "Close",
-  "generalCancel": "Cancel",
+  "appDescription": "Vaš najbolji Clash of Clans saputnik za praćenje statistika, upravljanje klanova i analizu performansi.",
+  "generalLoading": "Učitava...",
+  "generalError": "Greška",
+  "generalRetry": "Pokušaj ponovo",
+  "generalTryAgain": "Pokušaj ponovo",
+  "generalClose": "Zatvori",
+  "generalCancel": "Otkaži",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
   },
-  "generalApply": "Apply",
-  "generalConfirm": "Confirm",
-  "generalAdd": "Add",
+  "generalApply": "Primeni",
+  "generalConfirm": "Potvrdi",
+  "generalAdd": "Dodaj",
   "@generalAdd": {
     "description": "Add an account"
   },
-  "generalDelete": "Delete",
+  "generalDelete": "Obriši",
   "@generalDelete": {
     "description": "Delete an account"
   },
-  "generalManage": "Manage",
-  "generalManagement": "Management",
-  "generalSettings": "Settings",
-  "generalCopiedToClipboard": "Copied to clipboard",
-  "generalComingSoon": "Coming soon!",
-  "generalAll": "All",
+  "generalManage": "Upravljaj",
+  "generalManagement": "Upravljanje",
+  "generalSettings": "Podešavanja",
+  "generalCopiedToClipboard": "Kopirano u klipbord",
+  "generalComingSoon": "Uskoro!",
+  "generalAll": "Sve",
   "@generalAll": {
     "description": "all items"
   },
-  "generalTotal": "Total",
-  "generalBest": "Best",
+  "generalTotal": "Ukupno",
+  "generalBest": "Najbolji",
   "@generalBest": {
     "description": "Best end of day trophies"
   },
-  "generalWorst": "Worst",
+  "generalWorst": "Najgori",
   "@generalWorst": {
     "description": "Worst end of day trophies"
   },
-  "generalAverage": "Average",
+  "generalAverage": "Prosek",
   "@generalAverage": {
     "description": "Average value of legend trophies (defense and attack)"
   },
-  "generalRemaining": "Remaining",
+  "generalRemaining": "Preostalo",
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Active",
-  "generalInactive": "Inactive",
-  "generalStarted": "Started",
+  "generalActive": "Aktivan",
+  "generalInactive": "Neaktivan",
+  "generalStarted": "Započeto",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
   },
-  "generalEnded": "Ended",
+  "generalEnded": "Završeno",
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
-  "generalRole": "Role",
-  "generalDate": "Date",
-  "generalStats": "Stats",
-  "generalFullStats": "Full Stats",
-  "generalDetails": "Details",
-  "generalHistory": "History",
+  "generalLevel": "Nivo",
+  "generalRole": "Uloga",
+  "generalDate": "Datum",
+  "generalStats": "Statistike",
+  "generalFullStats": "Pune statistike",
+  "generalDetails": "Detalji",
+  "generalHistory": "Istorija",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Charts",
-  "generalFilters": "Filters",
-  "generalWhatever": "Whatever",
+  "generalCharts": "Grafikoni",
+  "generalFilters": "Filteri",
+  "generalWhatever": "Šta god",
   "@generalWhatever": {
     "description": "Whatever the value"
   },
-  "generalAny": "Any",
+  "generalAny": "Bilo koji",
   "@generalAny": {
     "description": "Any value is accepted"
   },
-  "generalNotSet": "Not set",
+  "generalNotSet": "Nije podešeno",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Warning",
-  "generalNoDataAvailable": "No data available.",
-  "generalClosed": "Closed",
+  "generalWarning": "Upozorenje",
+  "generalNoDataAvailable": "Nema dostupnih podataka.",
+  "generalClosed": "Zatvoreno",
   "@generalClosed": {
     "description": "WarLog closed"
   },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignUp": "Sign up",
-  "authLogin": "Login",
-  "authLogout": "Log out",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateClashKingAccount": "Create ClashKing Account",
-  "authCreateAccountToGetStarted": "Create your account to get started",
+  "authWelcomeBack": "Dobro došli nazad",
+  "authClashKingDescription": "Vaš najbolji Clash of Clans saputnik za praćenje statistika, upravljanje klanova i analizu performansi.",
+  "authChooseSignInMethod": "Izaberite željeni način prijavljivanja",
+  "authSignUp": "Registruj se",
+  "authLogin": "Prijavi se",
+  "authLogout": "Odjavi se",
+  "authCreateAccount": "Napravi nalog",
+  "authJoinClashKing": "Pridruži se ClashKing",
+  "authCreateClashKingAccount": "Napravi ClashKing nalog",
+  "authCreateAccountToGetStarted": "Napravite vaš nalog da počnete",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "Are you sure you want to log out?",
   "@authConfirmLogout": {

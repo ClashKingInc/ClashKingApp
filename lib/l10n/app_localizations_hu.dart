@@ -10,16 +10,16 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'A végső Clash of Clans társád a statisztikák követéséhez, klánok kezeléséhez és teljesítmény elemzéséhez.';
 
   @override
   String get generalLoading => 'Betöltés...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => 'Újrapróbálás';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => 'Próbáld újra';
 
   @override
   String get generalCancel => 'Mégse';
@@ -28,10 +28,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get generalOk => 'OK';
 
   @override
-  String get generalApply => 'Jelentkezés';
+  String get generalApply => 'Alkalmaz';
 
   @override
-  String get generalConfirm => 'Confirm';
+  String get generalConfirm => 'Megerősítés';
 
   @override
   String get generalManage => 'Kezelés';
@@ -64,10 +64,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get generalRemaining => 'Hátralévő idő';
 
   @override
-  String get generalActive => 'Active';
+  String get generalActive => 'Aktív';
 
   @override
-  String get generalInactive => 'Inactive';
+  String get generalInactive => 'Inaktív';
 
   @override
   String get generalStarted => 'Elkezdődött';
@@ -79,13 +79,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get generalRole => 'Szerepkör';
 
   @override
-  String get generalStats => 'Stats';
+  String get generalStats => 'Statisztikák';
 
   @override
-  String get generalFullStats => 'Full Stats';
+  String get generalFullStats => 'Teljes statisztikák';
 
   @override
-  String get generalDetails => 'Details';
+  String get generalDetails => 'Részletek';
 
   @override
   String get generalHistory => 'Előzmények';
@@ -94,16 +94,16 @@ class AppLocalizationsHu extends AppLocalizations {
   String get generalFilters => 'Szűrők';
 
   @override
-  String get generalNotSet => 'Not set';
+  String get generalNotSet => 'Nincs beállítva';
 
   @override
-  String get generalWarning => 'Warning';
+  String get generalWarning => 'Figyelmeztetés';
 
   @override
   String get generalNoDataAvailable => 'Nincs rendelkezésre álló adat.';
 
   @override
-  String get authSignUp => 'Sign up';
+  String get authSignUp => 'Regisztráció';
 
   @override
   String get authLogin => 'Bejelentkezés';
@@ -112,23 +112,23 @@ class AppLocalizationsHu extends AppLocalizations {
   String get authLogout => 'Kijelentkezés';
 
   @override
-  String get authCreateAccount => 'Create Account';
+  String get authCreateAccount => 'Fiók létrehozása';
 
   @override
-  String get authJoinClashKing => 'Join ClashKing';
+  String get authJoinClashKing => 'Csatlakozz a ClashKing-hez';
 
   @override
-  String get authCreateClashKingAccount => 'Create ClashKing Account';
+  String get authCreateClashKingAccount => 'ClashKing fiók létrehozása';
 
   @override
   String get authCreateAccountToGetStarted =>
-      'Create your account to get started';
+      'Hozd létre a fiókodat az induláshoz';
 
   @override
-  String get authAlreadyHaveAccount => 'Already have an account? Sign in';
+  String get authAlreadyHaveAccount => 'Már van fiókod? Jelentkezz be';
 
   @override
-  String get authConfirmLogout => 'Are you sure you want to log out?';
+  String get authConfirmLogout => 'Biztosan ki szeretnél jelentkezni?';
 
   @override
   String get authDiscordTitle => 'Discord';
@@ -137,49 +137,51 @@ class AppLocalizationsHu extends AppLocalizations {
   String get authDiscordSignIn => 'Bejelentkezés Discord-dal';
 
   @override
-  String get authDiscordContinue => 'Continue with Discord';
+  String get authDiscordContinue => 'Folytatás Discord-dal';
 
   @override
   String get authDiscordDescription =>
-      'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!';
+      'Szinkronizáld az adataidat a ClashKing Bot-tal és oldja fel a ClashKing teljes potenciálját!';
 
   @override
-  String get authEmailTitle => 'Email';
+  String get authEmailTitle => 'E-mail';
 
   @override
   String get authEmailDescription =>
-      'Use email if you can\'t access Discord or prefer app-only features';
+      'Használj e-mailt, ha nem férsz hozzá a Discord-hoz, vagy inkább csak az alkalmazás funkcióit szeretnéd';
 
   @override
-  String get authEmailRequired => 'Please enter your email';
+  String get authEmailRequired => 'Kérjük, add meg az e-mail címedet';
 
   @override
-  String get authEmailInvalid => 'Please enter a valid email';
+  String get authEmailInvalid => 'Kérjük, adj meg egy érvényes e-mail címet';
 
   @override
-  String get authPasswordLabel => 'Password';
+  String get authPasswordLabel => 'Jelszó';
 
   @override
-  String get authPasswordConfirm => 'Confirm Password';
+  String get authPasswordConfirm => 'Jelszó megerősítése';
 
   @override
-  String get authPasswordRequired => 'Please enter your password';
+  String get authPasswordRequired => 'Kérjük, add meg a jelszavadat';
 
   @override
-  String get authPasswordConfirmRequired => 'Please confirm your password';
+  String get authPasswordConfirmRequired =>
+      'Kérjük, erősítsd meg a jelszavadat';
 
   @override
-  String get authPasswordMismatch => 'Passwords do not match';
+  String get authPasswordMismatch => 'A jelszavak nem egyeznek';
 
   @override
-  String get authPasswordTooShort => 'Password must be at least 8 characters';
+  String get authPasswordTooShort =>
+      'A jelszónak legalább 8 karakterből kell állnia';
 
   @override
   String get authPasswordRequirements =>
-      'Password must contain: uppercase, lowercase, digit, and special character';
+      'A jelszónak tartalmaznia kell: nagybetűt, kisbetűt, számot és speciális karaktert';
 
   @override
-  String get authPasswordForgot => 'Forgot password?';
+  String get authPasswordForgot => 'Elfelejtett jelszó?';
 
   @override
   String get authUsernameLabel => 'Felhasználónév';
@@ -188,54 +190,55 @@ class AppLocalizationsHu extends AppLocalizations {
   String get authUsernameRequired => 'Kérjük, adja meg a felhasználónevet';
 
   @override
-  String get authUsernameTooShort => 'Username must be at least 3 characters';
+  String get authUsernameTooShort =>
+      'A felhasználónévnek legalább 3 karakterből kell állnia';
 
   @override
   String get authErrorConnection =>
-      'An error occurred. Please check your internet connection and try again.';
+      'Hiba történt. Kérjük, ellenőrizd az internetkapcsolatodat és próbáld újra.';
 
   @override
   String get authErrorConnectionRelaunch =>
-      'An error occurred. Please check your internet connection and relaunch the app.';
+      'Hiba történt. Kérjük, ellenőrizd az internetkapcsolatodat és indítsd újra az alkalmazást.';
 
   @override
-  String get authAccountManagement => 'Account Management';
+  String get authAccountManagement => 'Fiókkezelés';
 
   @override
-  String get authAccountConnected => 'Connected Accounts';
+  String get authAccountConnected => 'Csatlakoztatott fiókok';
 
   @override
-  String get authAccountConnectedStatus => 'Connected';
+  String get authAccountConnectedStatus => 'Csatlakoztatva';
 
   @override
-  String get authAccountNotConnected => 'Not connected';
+  String get authAccountNotConnected => 'Nincs csatlakoztatva';
 
   @override
-  String get authAccountEmailAndPassword => 'Email & Password';
+  String get authAccountEmailAndPassword => 'E-mail és jelszó';
 
   @override
   String get authAccountSecured =>
-      'Your account is secured with multiple authentication methods';
+      'A fiókod több hitelesítési módszerrel van biztosítva';
 
   @override
-  String get authAccountLinkEmail => 'Link Email Account';
+  String get authAccountLinkEmail => 'E-mail fiók csatlakoztatása';
 
   @override
   String get authAccountAddEmailAuth =>
-      'Add email & password authentication to your account for additional security.';
+      'Adj hozzá e-mail és jelszó hitelesítést a fiókodhoz a további biztonság érdekében.';
 
   @override
   String get authAccountEmailLinkedSuccess =>
-      'Email account successfully linked!';
+      'E-mail fiók sikeresen csatlakoztatva!';
 
   @override
-  String get helpTitle => 'Need help?';
+  String get helpTitle => 'Segítségre van szükséged?';
 
   @override
-  String get helpJoinDiscord => 'Join Discord';
+  String get helpJoinDiscord => 'Csatlakozz a Discord-hoz';
 
   @override
-  String get helpEmailUs => 'Email Us';
+  String get helpEmailUs => 'Írj nekünk e-mailt';
 
   @override
   String get accountsWelcome => 'Üdv!';
@@ -245,7 +248,7 @@ class AppLocalizationsHu extends AppLocalizations {
       'Kérjük adj egy vagy több Clash Of Clans fiókot a profilodhoz. Később tudsz további fiókokat hozzáadni.';
 
   @override
-  String get accountsManageTitle => 'Manage your accounts';
+  String get accountsManageTitle => 'Kezeld a fiókjaidat';
 
   @override
   String get accountsNoneFound => 'A profilhoz nem található csatolt fiók';

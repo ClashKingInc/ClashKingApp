@@ -10,19 +10,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+      'Ваш идеальный спутник Clash of Clans для отслеживания статистики, управления кланами и анализа производительности.';
 
   @override
   String get generalLoading => 'Загрузка...';
 
   @override
-  String get generalRetry => 'Retry';
+  String get generalRetry => 'Повторить';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalTryAgain => 'Попробовать снова';
 
   @override
-  String get generalCancel => 'Cancel';
+  String get generalCancel => 'Отмена';
 
   @override
   String get generalOk => 'OK';
@@ -31,7 +31,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get generalApply => 'Применить';
 
   @override
-  String get generalConfirm => 'Confirm';
+  String get generalConfirm => 'Подтвердить';
 
   @override
   String get generalManage => 'Управление';
@@ -43,7 +43,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get generalCopiedToClipboard => 'Скопировано в буфер обмена';
 
   @override
-  String get generalComingSoon => 'Coming soon!';
+  String get generalComingSoon => 'Скоро!';
 
   @override
   String get generalAll => 'Все';
@@ -64,10 +64,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get generalRemaining => 'Осталось';
 
   @override
-  String get generalActive => 'Active';
+  String get generalActive => 'Активный';
 
   @override
-  String get generalInactive => 'Inactive';
+  String get generalInactive => 'Неактивный';
 
   @override
   String get generalStarted => 'Запущен';
@@ -76,13 +76,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get generalEnded => 'Завершен';
 
   @override
-  String get generalRole => 'Role';
+  String get generalRole => 'Роль';
 
   @override
   String get generalStats => 'Статистика';
 
   @override
-  String get generalFullStats => 'Full Stats';
+  String get generalFullStats => 'Полная статистика';
 
   @override
   String get generalDetails => 'Детали';
@@ -94,7 +94,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get generalFilters => 'Фильтры';
 
   @override
-  String get generalNotSet => 'Not set';
+  String get generalNotSet => 'Не установлено';
 
   @override
   String get generalWarning => 'Внимание';
@@ -103,7 +103,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get generalNoDataAvailable => 'Данные отсутствуют.';
 
   @override
-  String get authSignUp => 'Sign up';
+  String get authSignUp => 'Регистрация';
 
   @override
   String get authLogin => 'Вход';
@@ -112,20 +112,20 @@ class AppLocalizationsRu extends AppLocalizations {
   String get authLogout => 'Выход';
 
   @override
-  String get authCreateAccount => 'Create Account';
+  String get authCreateAccount => 'Создать аккаунт';
 
   @override
-  String get authJoinClashKing => 'Join ClashKing';
+  String get authJoinClashKing => 'Присоединиться к ClashKing';
 
   @override
-  String get authCreateClashKingAccount => 'Create ClashKing Account';
+  String get authCreateClashKingAccount => 'Создать аккаунт ClashKing';
 
   @override
   String get authCreateAccountToGetStarted =>
-      'Create your account to get started';
+      'Создайте свой аккаунт, чтобы начать';
 
   @override
-  String get authAlreadyHaveAccount => 'Already have an account? Sign in';
+  String get authAlreadyHaveAccount => 'Уже есть аккаунт? Войдите';
 
   @override
   String get authConfirmLogout => 'Вы уверены, что хотите выйти?';
@@ -137,49 +137,51 @@ class AppLocalizationsRu extends AppLocalizations {
   String get authDiscordSignIn => 'Вход через Discord';
 
   @override
-  String get authDiscordContinue => 'Continue with Discord';
+  String get authDiscordContinue => 'Продолжить с Discord';
 
   @override
   String get authDiscordDescription =>
-      'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!';
+      'Синхронизируйте свои данные с ClashKing Bot и раскройте весь потенциал ClashKing!';
 
   @override
-  String get authEmailTitle => 'Email';
+  String get authEmailTitle => 'Электронная почта';
 
   @override
   String get authEmailDescription =>
-      'Use email if you can\'t access Discord or prefer app-only features';
+      'Используйте электронную почту, если вы не можете получить доступ к Discord или предпочитаете функции только приложения';
 
   @override
-  String get authEmailRequired => 'Please enter your email';
+  String get authEmailRequired => 'Пожалуйста, введите ваш email';
 
   @override
-  String get authEmailInvalid => 'Please enter a valid email';
+  String get authEmailInvalid => 'Пожалуйста, введите действительный email';
 
   @override
-  String get authPasswordLabel => 'Password';
+  String get authPasswordLabel => 'Пароль';
 
   @override
-  String get authPasswordConfirm => 'Confirm Password';
+  String get authPasswordConfirm => 'Подтвердите пароль';
 
   @override
-  String get authPasswordRequired => 'Please enter your password';
+  String get authPasswordRequired => 'Пожалуйста, введите ваш пароль';
 
   @override
-  String get authPasswordConfirmRequired => 'Please confirm your password';
+  String get authPasswordConfirmRequired =>
+      'Пожалуйста, подтвердите ваш пароль';
 
   @override
-  String get authPasswordMismatch => 'Passwords do not match';
+  String get authPasswordMismatch => 'Пароли не совпадают';
 
   @override
-  String get authPasswordTooShort => 'Password must be at least 8 characters';
+  String get authPasswordTooShort =>
+      'Пароль должен содержать не менее 8 символов';
 
   @override
   String get authPasswordRequirements =>
-      'Password must contain: uppercase, lowercase, digit, and special character';
+      'Пароль должен содержать: заглавные буквы, строчные буквы, цифры и специальные символы';
 
   @override
-  String get authPasswordForgot => 'Forgot password?';
+  String get authPasswordForgot => 'Забыли пароль?';
 
   @override
   String get authUsernameLabel => 'Имя пользователя';
@@ -188,18 +190,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get authUsernameRequired => 'Пожалуйста, введите имя пользователя';
 
   @override
-  String get authUsernameTooShort => 'Username must be at least 3 characters';
+  String get authUsernameTooShort =>
+      'Имя пользователя должно содержать не менее 3 символов';
 
   @override
   String get authErrorConnection =>
-      'An error occurred. Please check your internet connection and try again.';
+      'Произошла ошибка. Пожалуйста, проверьте ваше интернет-соединение и попробуйте снова.';
 
   @override
   String get authErrorConnectionRelaunch =>
-      'An error occurred. Please check your internet connection and relaunch the app.';
+      'Произошла ошибка. Пожалуйста, проверьте ваше интернет-соединение и перезапустите приложение.';
 
   @override
-  String get authAccountManagement => 'Account Management';
+  String get authAccountManagement => 'Управление аккаунтом';
 
   @override
   String get authAccountConnected => 'Connected Accounts';
