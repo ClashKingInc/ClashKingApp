@@ -1,12 +1,9 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
-  "appTitle": "ClashKing",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "लोड हो रहा है...",
-  "generalError": "गलती",
   "generalRetry": "Retry",
   "generalTryAgain": "Try again",
-  "generalClose": "बंद करना",
   "generalCancel": "रद्द करना",
   "generalOk": "ठीक है",
   "@generalOk": {
@@ -14,16 +11,7 @@
   },
   "generalApply": "आवेदन करना",
   "generalConfirm": "Confirm",
-  "generalAdd": "जोड़ना",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "मिटाना",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
   "generalManage": "प्रबंधित करना",
-  "generalManagement": "प्रबंध ",
   "generalSettings": "सेटिंग्स",
   "generalCopiedToClipboard": "क्लिपबोर्ड पर कॉपी किया गया",
   "generalComingSoon": "जल्द आ रहा है!",
@@ -58,9 +46,7 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
   "generalRole": "भूमिका",
-  "generalDate": "तारीख",
   "generalStats": "आँकड़े",
   "generalFullStats": "Full Stats",
   "generalDetails": "विवरण",
@@ -68,30 +54,13 @@
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "चार्ट",
   "generalFilters": "फिल्टर",
-  "generalWhatever": "जो कुछ भी",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "कोई",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
   "generalNotSet": "सेट नहीं",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
   "generalWarning": "चेतावनी ",
   "generalNoDataAvailable": "कोई डेटा मौजूद नहीं ",
-  "generalClosed": "बंद किया हुआ",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignIn": "Sign In",
   "authSignUp": "Sign up",
   "authLogin": "लॉग इन करें",
   "authLogout": "लॉग आउट",
@@ -99,7 +68,6 @@
   "authJoinClashKing": "Join ClashKing",
   "authCreateClashKingAccount": "Create ClashKing Account",
   "authCreateAccountToGetStarted": "Create your account to get started",
-  "authDontHaveAccount": "Don't have an account? Create one",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "क्या आप लॉग आउट करना चाहते हैं?",
   "@authConfirmLogout": {
@@ -109,16 +77,10 @@
   "authDiscordSignIn": "Discord के साथ साइन इन करें.",
   "authDiscordContinue": "Continue with Discord",
   "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authDiscordError": "Discord login failed. Please try again.",
   "authEmailTitle": "Email",
-  "authEmailSignIn": "Sign in with Email",
   "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailLabel": "Email",
-  "authEmailPlaceholder": "Enter your email",
   "authEmailRequired": "Please enter your email",
   "authEmailInvalid": "Please enter a valid email",
-  "authEmailAlreadyInUse": "Email may already be in use",
-  "authEmailError": "Email login failed. Please check your credentials.",
   "authPasswordLabel": "Password",
   "authPasswordConfirm": "Confirm Password",
   "authPasswordRequired": "Please enter your password",
@@ -127,12 +89,9 @@
   "authPasswordTooShort": "Password must be at least 8 characters",
   "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
   "authPasswordForgot": "Forgot password?",
-  "authPasswordInvalid": "Invalid email or password",
   "authUsernameLabel": "उपयोगकर्ता नाम",
   "authUsernameRequired": "कृपया उपयोगकर्ता नाम दर्ज करें",
   "authUsernameTooShort": "Username must be at least 3 characters",
-  "authErrorGeneral": "An error occurred while logging in. Please try again later.",
-  "authErrorRegistration": "Registration failed. Email may already be in use.",
   "authErrorConnection": "एक त्रुटि हुई। कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।",
   "authErrorConnectionRelaunch": "एक त्रुटि हुई। कृपया अपना इंटरनेट कनेक्शन जांचें और ऐप पुनः लॉन्च करें।",
   "authAccountManagement": "Account Management",
@@ -144,19 +103,14 @@
   "authAccountLinkEmail": "Link Email Account",
   "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
   "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "authAccountEmailLinkFailed": "Failed to link email account. Email may already be in use.",
   "helpTitle": "Need help?",
   "helpJoinDiscord": "Join Discord",
   "helpEmailUs": "Email Us",
-  "helpJoinDiscordServer": "मदद चाहिए? डिस्कॉर्ड पर हमसे जुड़ें।",
-  "helpCannotOpenMailClient": "कुछ कारणों से हम आपका मेल क्लाइंट नहीं खोल पा रहे हैं। हमने आपके लिए ईमेल पता कॉपी कर लिया है। आप ईमेल लिखकर प्राप्तकर्ता फ़ील्ड में पता पेस्ट कर सकते हैं।",
   "accountsWelcome": "स्वागत!",
   "accountsWelcomeMessage": "कृपया अपनी प्रोफ़ाइल में एक या अधिक Clash of Clans खाते जोड़ें। आप बाद में खाते जोड़ या हटा सकते हैं।",
   "accountsManageTitle": "Manage your accounts",
-  "accountsManageDescription": "You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.",
   "accountsNoneFound": "आपकी प्रोफ़ाइल से जुड़ा कोई खाता नहीं मिला",
   "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsPlayerTags": "खिलाड़ी टैग",
   "accountsEnterPlayerTag": "खिलाड़ी टैग दर्ज करें",
   "accountsAdd": "खाता जोड़ें ",
   "accountsDelete": "खाता हटा दो ",
@@ -176,11 +130,8 @@
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorConnectionGeneral": "एक त्रुटि हुई। कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।",
-  "errorConnectionRelaunch": "एक त्रुटि हुई। कृपया अपना इंटरनेट कनेक्शन जांचें और ऐप पुनः लॉन्च करें।",
   "errorCannotOpenLink": "हम यह लिंक नहीं खोल सकते.",
   "errorExitAppToOpenClash": "आप क्लैश ऑफ क्लैंस खोलने के लिए ऐप छोड़ने वाले हैं।",
-  "playerTitle": "खिलाड़ी",
   "playerSearchTitle": "खिलाड़ी खोजें",
   "playerSearchPlaceholder": "खिलाड़ी का नाम या टैग",
   "playerLastActive": "अंतिम सक्रिय: {date}",
@@ -267,7 +218,6 @@
   "gameBaseBuilder": "बिल्डर बेस",
   "gameClanCapital": "कबीले की राजधानी",
   "gameTownHall": "वां",
-  "gameBuilderHall": "बी एच",
   "gameTownHallLevel": "TH स्तर",
   "gameTownHallLevelNumber": "टाउन हॉल {level}",
   "@gameTownHallLevelNumber": {
@@ -279,14 +229,6 @@
   },
   "gameTHLevel": "TH{level}",
   "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "gameBHLevel": "बीएच{level}",
-  "@gameBHLevel": {
     "placeholders": {
       "level": {
         "type": "int"
@@ -314,7 +256,6 @@
   "gameEquipment": "उपकरणों",
   "gameHeroesEquipments": "हीरो उपकरण",
   "gameTroops": "सैनिकों",
-  "gameSuperTroops": "सुपर ट्रूप्स",
   "gameActiveSuperTroops": "सक्रिय सुपर सैनिक",
   "gamePets": "पालतू जानवर",
   "gameSiegeMachines": "घेराबंदी मशीनें ",
@@ -324,7 +265,6 @@
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "क्रिएटर कोड: ClashKing",
   "clanTitle": "कबेला",
-  "clansTitle": "कुलों",
   "clanSearchTitle": "कबीला खोजें",
   "clanSearchPlaceholder": "Clan's name",
   "clanNone": "कोई कबेला नहीं",
@@ -359,15 +299,6 @@
   "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
   "clanWarFrequencyRarely": "कभी-कभार",
   "timeHourIndicator": "एच",
-  "timeMinIndicator": "एम",
-  "timeDaysLeft": "{days} दिन बचे हैं",
-  "@timeDaysLeft": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
   "timeDaysAgo": "{days} दिन पहले",
   "@timeDaysAgo": {
     "placeholders": {
@@ -412,14 +343,6 @@
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "timeSecondAgo": "{seconds}s पहले",
-  "@timeSecondAgo": {
-    "placeholders": {
-      "seconds": {
         "type": "int"
       }
     }
@@ -476,14 +399,6 @@
   },
   "timeEndsAt": "{time} पर समाप्त होगा",
   "@timeEndsAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "timeUpdatedAt": "{time} पर अपडेट किया गया",
-  "@timeUpdatedAt": {
     "placeholders": {
       "time": {
         "type": "String"
@@ -606,8 +521,6 @@
       }
     }
   },
-  "statsYear": "वर्ष",
-  "statsMonth": "महीना",
   "statsSeasonDate": "{date} सीज़न",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
@@ -616,10 +529,6 @@
         "type": "String"
       }
     }
-  },
-  "statsSelectSeason": "कोई सीज़न चुनें",
-  "@statsSelectSeason": {
-    "description": "Ask player to select a season"
   },
   "statsAllTownHalls": "सभी टाउन हॉल",
   "statsMembers": "सदस्य आँकड़े",
@@ -721,8 +630,6 @@
   "warLeague": "युद्ध/लीग",
   "warHistory": "युद्ध इतिहास",
   "warLog": "युद्ध लॉग",
-  "warLogPublic": "सार्वजनिक युद्ध लॉग",
-  "warLogPrivate": "निजी युद्ध लॉग",
   "warLogClosed": "युद्ध लॉग बंद",
   "@warLogClosed": {
     "placeholders": {
@@ -733,7 +640,6 @@
   },
   "warStats": "युद्ध आँकड़े",
   "warOngoing": "जारी युद्ध",
-  "warNotInWar": "युद्ध में नहीं",
   "warIsNotInWar": "{clan} युद्ध में नहीं है",
   "@warIsNotInWar": {
     "placeholders": {
@@ -836,7 +742,6 @@
       }
     }
   },
-  "warDefenseTitle": "रक्षा",
   "warDefensesTitle": "गढ़",
   "warDefensesNone": "No defense yet",
   "@warDefensesNone": {
@@ -852,7 +757,6 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefenseStars": "Defense Stars",
   "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
   "@warDefensesNumber": {
     "placeholders": {
@@ -881,7 +785,6 @@
     }
   },
   "warStarsTitle": "सितारे",
-  "warStarsTotal": "कुल",
   "warStarsAverage": "औसत सितारे",
   "warStarsNumber": "सितारों की संख्या",
   "warStarsOne": "1 सितारा",
@@ -979,14 +882,6 @@
   "warOpponentEqualThLevel": "बराबर TH",
   "warOpponentSelectMembersThLevel": "सदस्य TH स्तर",
   "warOpponentSelectOpponentsThLevel": "प्रतिद्वंदी TH स्तर",
-  "warFiltersByNumberOfWars": "युद्धों की संख्या के अनुसार",
-  "@warFiltersByNumberOfWars": {
-    "description": "filter by number of wars"
-  },
-  "warFiltersByDateRange": "तिथि सीमा के अनुसार",
-  "@warFiltersByDateRange": {
-    "description": "filter by date range"
-  },
   "warFiltersLastXwars": "पिछले {number} युद्ध",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
@@ -1085,14 +980,6 @@
         "type": "int"
       },
       "totalAttacks": {
-        "type": "int"
-      }
-    }
-  },
-  "cwlCurrentRoundDescription": "यह वर्तमान में गोल {round} है।",
-  "@cwlCurrentRoundDescription": {
-    "placeholders": {
-      "round": {
         "type": "int"
       }
     }
@@ -1205,10 +1092,6 @@
   "raidsOngoing": "जारी छापे",
   "raidsDistrictsDestroyed": "नष्ट हुए जिले",
   "raidsCompleted": "छापे पूरे हुए",
-  "searchTitle": "खोज",
-  "@searchTitle": {
-    "description": "Search for a player or a clan"
-  },
   "searchNoResult": "कोई परिणाम नहीं",
   "maintenanceTitle": "Maintenance",
   "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
@@ -1225,11 +1108,8 @@
   "downloadError": "Failed to download file",
   "dashboardTitle": "डैशबोर्ड",
   "toolsTitle": "औजार",
-  "communityTitle": "समुदाय",
   "navigationTeam": "टीमें",
   "navigationStatistics": "आंकड़े",
-  "navigationLeague": "लीग",
-  "navigationWars": "युद्धों",
   "versionDevice": "संस्करण और डिवाइस",
   "@versionDevice": {
     "description": "Version of the app and device information"
@@ -1237,7 +1117,6 @@
   "betaFeature": "बीटा सुविधा",
   "betaLabel": "बीटा",
   "betaDescription": "यह सुविधा अभी बीटा में है, इसमें कुछ बग हो सकते हैं या यह अधूरी हो सकती है। हम सक्रिय रूप से सुधार पर काम कर रहे हैं और आपकी प्रतिक्रिया का स्वागत करते हैं। कृपया अपने विचार साझा करें और हमारे डिस्कॉर्ड सर्वर में किसी भी समस्या की रिपोर्ट करें ताकि हमें इसे बेहतर बनाने में मदद मिल सके।",
-  "settingsTitle": "सेटिंग्स",
   "settingsLanguage": "भाषा",
   "settingsSelectLanguage": "भाषा चुनें",
   "settingsToggleTheme": "थीम टॉगल करें",
