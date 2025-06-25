@@ -1,12 +1,9 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
-  "appTitle": "ClashKing",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Betöltés...",
-  "generalError": "Hiba",
   "generalRetry": "Retry",
   "generalTryAgain": "Try again",
-  "generalClose": "Bezárás",
   "generalCancel": "Mégse",
   "generalOk": "OK",
   "@generalOk": {
@@ -14,16 +11,7 @@
   },
   "generalApply": "Jelentkezés",
   "generalConfirm": "Confirm",
-  "generalAdd": "Hozzáadás",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "Törlés",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
   "generalManage": "Kezelés",
-  "generalManagement": "Kezelés",
   "generalSettings": "Beállítások",
   "generalCopiedToClipboard": "Vágólapra másolva",
   "generalComingSoon": "Hamarosan!",
@@ -58,9 +46,7 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
   "generalRole": "Szerepkör",
-  "generalDate": "Date",
   "generalStats": "Stats",
   "generalFullStats": "Full Stats",
   "generalDetails": "Details",
@@ -68,30 +54,13 @@
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Diagramok",
   "generalFilters": "Szűrők",
-  "generalWhatever": "Mindegy",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Bármely",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
   "generalNotSet": "Not set",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
   "generalWarning": "Warning",
   "generalNoDataAvailable": "Nincs rendelkezésre álló adat.",
-  "generalClosed": "Bezárva",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignIn": "Sign In",
   "authSignUp": "Sign up",
   "authLogin": "Bejelentkezés",
   "authLogout": "Kijelentkezés",
@@ -99,7 +68,6 @@
   "authJoinClashKing": "Join ClashKing",
   "authCreateClashKingAccount": "Create ClashKing Account",
   "authCreateAccountToGetStarted": "Create your account to get started",
-  "authDontHaveAccount": "Don't have an account? Create one",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "Are you sure you want to log out?",
   "@authConfirmLogout": {
@@ -109,16 +77,10 @@
   "authDiscordSignIn": "Bejelentkezés Discord-dal",
   "authDiscordContinue": "Continue with Discord",
   "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authDiscordError": "Discord login failed. Please try again.",
   "authEmailTitle": "Email",
-  "authEmailSignIn": "Sign in with Email",
   "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailLabel": "Email",
-  "authEmailPlaceholder": "Enter your email",
   "authEmailRequired": "Please enter your email",
   "authEmailInvalid": "Please enter a valid email",
-  "authEmailAlreadyInUse": "Email may already be in use",
-  "authEmailError": "Email login failed. Please check your credentials.",
   "authPasswordLabel": "Password",
   "authPasswordConfirm": "Confirm Password",
   "authPasswordRequired": "Please enter your password",
@@ -127,12 +89,9 @@
   "authPasswordTooShort": "Password must be at least 8 characters",
   "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
   "authPasswordForgot": "Forgot password?",
-  "authPasswordInvalid": "Invalid email or password",
   "authUsernameLabel": "Felhasználónév",
   "authUsernameRequired": "Kérjük, adja meg a felhasználónevet",
   "authUsernameTooShort": "Username must be at least 3 characters",
-  "authErrorGeneral": "An error occurred while logging in. Please try again later.",
-  "authErrorRegistration": "Registration failed. Email may already be in use.",
   "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
   "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
   "authAccountManagement": "Account Management",
@@ -144,19 +103,14 @@
   "authAccountLinkEmail": "Link Email Account",
   "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
   "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "authAccountEmailLinkFailed": "Failed to link email account. Email may already be in use.",
   "helpTitle": "Need help?",
   "helpJoinDiscord": "Join Discord",
   "helpEmailUs": "Email Us",
-  "helpJoinDiscordServer": "Szükség van segítségre? Érj el minket Discordon.",
-  "helpCannotOpenMailClient": "Valamijen oknál fogva nem tudtuk a levelező kliensedet kinyitni. Vágólapra másoltuk a címet. Irhatsz egy emailt és bemásolhatod a címet.",
   "accountsWelcome": "Üdv!",
   "accountsWelcomeMessage": "Kérjük adj egy vagy több Clash Of Clans fiókot a profilodhoz. Később tudsz további fiókokat hozzáadni.",
   "accountsManageTitle": "Manage your accounts",
-  "accountsManageDescription": "You can add, remove and reorder your accounts here. The first account will be used as the default account in the app.",
   "accountsNoneFound": "A profilhoz nem található csatolt fiók",
   "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsPlayerTags": "Játékos tag",
   "accountsEnterPlayerTag": "Adjon meg egy játékos tag-et",
   "accountsAdd": "Fiók hozzáadása",
   "accountsDelete": "Fiók törlése",
@@ -176,11 +130,8 @@
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorConnectionGeneral": "An error occurred. Please check your internet connection and try again.",
-  "errorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
   "errorCannotOpenLink": "We can't open this link.",
   "errorExitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-  "playerTitle": "Játékos",
   "playerSearchTitle": "Játékos keresése",
   "playerSearchPlaceholder": "Player's name or tag",
   "playerLastActive": "Last active: {date}",
@@ -267,7 +218,6 @@
   "gameBaseBuilder": "Építő Bázis",
   "gameClanCapital": "Klán Főváros",
   "gameTownHall": "TH",
-  "gameBuilderHall": "BH",
   "gameTownHallLevel": "TH szint",
   "gameTownHallLevelNumber": "Town Hall {level}",
   "@gameTownHallLevelNumber": {
@@ -279,14 +229,6 @@
   },
   "gameTHLevel": "TH{level}",
   "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "gameBHLevel": "BH{level}",
-  "@gameBHLevel": {
     "placeholders": {
       "level": {
         "type": "int"
@@ -314,7 +256,6 @@
   "gameEquipment": "Felszerelések",
   "gameHeroesEquipments": "Hero equipments",
   "gameTroops": "Csapatok",
-  "gameSuperTroops": "Szuper katonák",
   "gameActiveSuperTroops": "Active Super Troops",
   "gamePets": "Háziállatok",
   "gameSiegeMachines": "Ostromgépek",
@@ -324,7 +265,6 @@
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Alkotói kód: ClashKing",
   "clanTitle": "Klán",
-  "clansTitle": "Klánok",
   "clanSearchTitle": "Klán keresése",
   "clanSearchPlaceholder": "Clan's name",
   "clanNone": "Nincs klán",
@@ -359,15 +299,6 @@
   "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
   "clanWarFrequencyRarely": "Ritkán",
   "timeHourIndicator": "ó",
-  "timeMinIndicator": "p",
-  "timeDaysLeft": "{days} days left",
-  "@timeDaysLeft": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
   "timeDaysAgo": "{days} napja",
   "@timeDaysAgo": {
     "placeholders": {
@@ -412,14 +343,6 @@
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "timeSecondAgo": "{seconds} másodperce",
-  "@timeSecondAgo": {
-    "placeholders": {
-      "seconds": {
         "type": "int"
       }
     }
@@ -476,14 +399,6 @@
   },
   "timeEndsAt": "Ends at {time}",
   "@timeEndsAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "timeUpdatedAt": "Updated at {time}",
-  "@timeUpdatedAt": {
     "placeholders": {
       "time": {
         "type": "String"
@@ -606,8 +521,6 @@
       }
     }
   },
-  "statsYear": "Year",
-  "statsMonth": "Month",
   "statsSeasonDate": "{date} season",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
@@ -616,10 +529,6 @@
         "type": "String"
       }
     }
-  },
-  "statsSelectSeason": "Select a season",
-  "@statsSelectSeason": {
-    "description": "Ask player to select a season"
   },
   "statsAllTownHalls": "All Town Halls",
   "statsMembers": "Members Stats",
@@ -721,8 +630,6 @@
   "warLeague": "Háború/Rang",
   "warHistory": "Háború lista",
   "warLog": "Háború napló",
-  "warLogPublic": "Public War Log",
-  "warLogPrivate": "Private War Log",
   "warLogClosed": "Háborúnapló lezárva.",
   "@warLogClosed": {
     "placeholders": {
@@ -733,7 +640,6 @@
   },
   "warStats": "Háború Statisztika",
   "warOngoing": "Ongoing war",
-  "warNotInWar": "Not in war",
   "warIsNotInWar": "A(z) {clan} nincs háborúban.",
   "@warIsNotInWar": {
     "placeholders": {
@@ -836,7 +742,6 @@
       }
     }
   },
-  "warDefenseTitle": "Védelem",
   "warDefensesTitle": "Védekezések",
   "warDefensesNone": "No defense yet",
   "@warDefensesNone": {
@@ -852,7 +757,6 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefenseStars": "Defense Stars",
   "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
   "@warDefensesNumber": {
     "placeholders": {
@@ -881,7 +785,6 @@
     }
   },
   "warStarsTitle": "Csillagok",
-  "warStarsTotal": "Összes",
   "warStarsAverage": "Average stars",
   "warStarsNumber": "Csillagok száma",
   "warStarsOne": "1 star",
@@ -979,14 +882,6 @@
   "warOpponentEqualThLevel": "Equal TH",
   "warOpponentSelectMembersThLevel": "Members TH Level",
   "warOpponentSelectOpponentsThLevel": "Opponents TH Level",
-  "warFiltersByNumberOfWars": "By number of wars",
-  "@warFiltersByNumberOfWars": {
-    "description": "filter by number of wars"
-  },
-  "warFiltersByDateRange": "By date range",
-  "@warFiltersByDateRange": {
-    "description": "filter by date range"
-  },
   "warFiltersLastXwars": "Last {number} wars",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
@@ -1085,14 +980,6 @@
         "type": "int"
       },
       "totalAttacks": {
-        "type": "int"
-      }
-    }
-  },
-  "cwlCurrentRoundDescription": "It's currently round {round}.",
-  "@cwlCurrentRoundDescription": {
-    "placeholders": {
-      "round": {
         "type": "int"
       }
     }
@@ -1205,10 +1092,6 @@
   "raidsOngoing": "Ongoing raids",
   "raidsDistrictsDestroyed": "Districts destroyed",
   "raidsCompleted": "Sikeres portyázások",
-  "searchTitle": "Keresés",
-  "@searchTitle": {
-    "description": "Search for a player or a clan"
-  },
   "searchNoResult": "Nincs találat.",
   "maintenanceTitle": "Maintenance",
   "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
@@ -1225,11 +1108,8 @@
   "downloadError": "Failed to download file",
   "dashboardTitle": "Vezérlőpult",
   "toolsTitle": "Tools",
-  "communityTitle": "Community",
   "navigationTeam": "Csapatok",
   "navigationStatistics": "Statisztikák",
-  "navigationLeague": "Rangok",
-  "navigationWars": "Háborúk",
   "versionDevice": "Verzió & Eszköz",
   "@versionDevice": {
     "description": "Version of the app and device information"
@@ -1237,7 +1117,6 @@
   "betaFeature": "Béta Funkció",
   "betaLabel": "BÉTA",
   "betaDescription": "Ez a funkció jelenleg báta fázisban van, lehetnek benne hibák vagy lehet nincs befejezve. Aktívan dolgozunk a javításokon és szívesen fogadunk megjegyzéseket. Kérjük oszd meg az ötleteided vagy jelentsd a hibákat a Discord szerverünkön hogy segíts minket.",
-  "settingsTitle": "Beállítások",
   "settingsLanguage": "Nyelv",
   "settingsSelectLanguage": "Nyelv kiválasztása",
   "settingsToggleTheme": "Téma váltása",
