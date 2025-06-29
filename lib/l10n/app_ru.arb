@@ -2,6 +2,19 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Загрузка...",
+  "loadingVillages": "Loading your villages...",
+  "loadingClanData": "Fetching clan data...",
+  "loadingWarStats": "Analyzing war stats...",
+  "loadingLegendsData": "Preparing legends data...",
+  "loadingCapitalRaids": "Loading capital raids...",
+  "loadingAlmostReady": "Almost ready...",
+  "accountVerificationTitle": "Verify Account",
+  "accountVerificationMessage": "Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.",
+  "accountVerified": "Account verified",
+  "accountNotVerified": "Account not verified",
+  "accountVerifyButton": "Verify",
+  "accountVerificationSuccess": "Account verified successfully!",
+  "accountVerificationFailed": "Verification failed. Please check your API token.",
   "generalRetry": "Retry",
   "generalTryAgain": "Try again",
   "generalCancel": "Cancel",
@@ -15,6 +28,26 @@
   "generalSettings": "Настройки",
   "generalCopiedToClipboard": "Скопировано в буфер обмена",
   "generalComingSoon": "Coming soon!",
+  "generalLastRefresh": "Last refresh: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
   "generalAll": "Все",
   "@generalAll": {
     "description": "all items"
@@ -94,7 +127,7 @@
   "authUsernameTooShort": "Username must be at least 3 characters",
   "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
   "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-  "authAccountManagement": "Account Management",
+  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.",
   "authAccountConnected": "Connected Accounts",
   "authAccountConnectedStatus": "Connected",
   "authAccountNotConnected": "Not connected",
@@ -348,6 +381,9 @@
     }
   },
   "timeJustNow": "Сейчас",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
   "timeEndedJustNow": "Ended just now",
   "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
   "@timeEndedMinutesAgo": {
