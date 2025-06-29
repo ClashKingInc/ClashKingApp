@@ -2,6 +2,19 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appDescription": "Ton compagnon Clash of Clans préféré pour suivre tes statistiques, gérer ton clan et analyser tes performances.",
   "generalLoading": "Chargement...",
+  "loadingVillages": "Loading your villages...",
+  "loadingClanData": "Fetching clan data...",
+  "loadingWarStats": "Analyzing war stats...",
+  "loadingLegendsData": "Preparing legends data...",
+  "loadingCapitalRaids": "Loading capital raids...",
+  "loadingAlmostReady": "Almost ready...",
+  "accountVerificationTitle": "Verify Account",
+  "accountVerificationMessage": "Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.",
+  "accountVerified": "Account verified",
+  "accountNotVerified": "Account not verified",
+  "accountVerifyButton": "Verify",
+  "accountVerificationSuccess": "Account verified successfully!",
+  "accountVerificationFailed": "Verification failed. Please check your API token.",
   "generalRetry": "Réessayer",
   "generalTryAgain": "Réessayer",
   "generalCancel": "Annuler",
@@ -15,6 +28,26 @@
   "generalSettings": "Paramètres",
   "generalCopiedToClipboard": "Copié dans le presse-papiers",
   "generalComingSoon": "Bientôt disponible !",
+  "generalLastRefresh": "Last refresh: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
   "generalAll": "Tous",
   "@generalAll": {
     "description": "all items"
@@ -94,7 +127,7 @@
   "authUsernameTooShort": "Le nom d'utilisateur doit contenir au moins 3 caractères",
   "authErrorConnection": "Une erreur est survenue. Vérifie ta connexion internet et réessaye.",
   "authErrorConnectionRelaunch": "Une erreur s'est produite, vérifie ta connexion internet et relance l'application.",
-  "authAccountManagement": "Gestion des comptes",
+  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.",
   "authAccountConnected": "Comptes connectés",
   "authAccountConnectedStatus": "Connecté",
   "authAccountNotConnected": "Non connecté",
@@ -348,6 +381,9 @@
     }
   },
   "timeJustNow": "À l'instant",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
   "timeEndedJustNow": "Terminé à l'instant",
   "timeEndedMinutesAgo": "Terminé depuis {minutes} minutes",
   "@timeEndedMinutesAgo": {
