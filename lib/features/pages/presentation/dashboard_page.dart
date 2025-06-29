@@ -9,6 +9,7 @@ import 'package:clashkingapp/features/pages/widgets/player_legend_card.dart';
 import 'package:clashkingapp/features/player/presentation/legend/player_legend_page.dart'
     show PlayerLegendScreen;
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
+import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
@@ -18,8 +19,8 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playerService = context.watch<PlayerService>();
-    final warCwlService = context.read<WarCwlService>();
     final clanService = context.watch<ClanService>();
+    final warCwlService = context.read<WarCwlService>();
     final cocService = context.watch<CocAccountService>();
     final player = playerService.getSelectedProfile(cocService);
 
@@ -27,8 +28,22 @@ class DashboardPage extends StatelessWidget {
       body: RefreshIndicator(
         backgroundColor: Theme.of(context).colorScheme.surface,
         onRefresh: () async {
-          await cocService.loadApiData(
-              playerService, clanService, warCwlService);
+          try {
+            // Use bulk endpoint for consistent data structure
+            final playerTags = cocService.getAccountTags();
+            if (playerTags.isNotEmpty) {
+              await cocService.refreshPageData(
+                playerTags, playerService, clanService, warCwlService);
+            }
+          } catch (e) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text(AppLocalizations.of(context)!
+                        .generalRefreshFailed(e.toString()))),
+              );
+            }
+          }
         },
         child: Consumer<PlayerService>(
           builder: (context, playerService, child) {
@@ -48,6 +63,7 @@ class DashboardPage extends StatelessWidget {
 
             return ListView(
               children: <Widget>[
+                LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
                 Padding(
                   padding: EdgeInsets.all(8.0),
                   child: CreatorCodeCard(),
@@ -96,6 +112,7 @@ class DashboardPage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
                   child: PlayerWarStatsCard(),
                 ),
+                const SizedBox(height: 16),
               ],
             );
           },

@@ -169,6 +169,84 @@ abstract class AppLocalizations {
   /// **'Loading...'**
   String get generalLoading;
 
+  /// No description provided for @loadingVillages.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading your villages...'**
+  String get loadingVillages;
+
+  /// No description provided for @loadingClanData.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetching clan data...'**
+  String get loadingClanData;
+
+  /// No description provided for @loadingWarStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing war stats...'**
+  String get loadingWarStats;
+
+  /// No description provided for @loadingLegendsData.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing legends data...'**
+  String get loadingLegendsData;
+
+  /// No description provided for @loadingCapitalRaids.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading capital raids...'**
+  String get loadingCapitalRaids;
+
+  /// No description provided for @loadingAlmostReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost ready...'**
+  String get loadingAlmostReady;
+
+  /// No description provided for @accountVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Account'**
+  String get accountVerificationTitle;
+
+  /// No description provided for @accountVerificationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.'**
+  String get accountVerificationMessage;
+
+  /// No description provided for @accountVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Account verified'**
+  String get accountVerified;
+
+  /// No description provided for @accountNotVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Account not verified'**
+  String get accountNotVerified;
+
+  /// No description provided for @accountVerifyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get accountVerifyButton;
+
+  /// No description provided for @accountVerificationSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Account verified successfully!'**
+  String get accountVerificationSuccess;
+
+  /// No description provided for @accountVerificationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification failed. Please check your API token.'**
+  String get accountVerificationFailed;
+
   /// No description provided for @generalRetry.
   ///
   /// In en, this message translates to:
@@ -228,6 +306,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Coming soon!'**
   String get generalComingSoon;
+
+  /// Last refresh time indicator
+  ///
+  /// In en, this message translates to:
+  /// **'Last refresh: {time}'**
+  String generalLastRefresh(String time);
+
+  /// Error message when refresh fails
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh failed: {error}'**
+  String generalRefreshFailed(String error);
 
   /// all items
   ///
@@ -526,7 +616,7 @@ abstract class AppLocalizations {
   /// No description provided for @authAccountManagement.
   ///
   /// In en, this message translates to:
-  /// **'Account Management'**
+  /// **'Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.'**
   String get authAccountManagement;
 
   /// No description provided for @authAccountConnected.
@@ -1148,7 +1238,7 @@ abstract class AppLocalizations {
   /// **'{minutes} minutes ago'**
   String timeMinutesAgo(int minutes);
 
-  /// No description provided for @timeJustNow.
+  /// Indicates something happened just now
   ///
   /// In en, this message translates to:
   /// **'Just Now'**

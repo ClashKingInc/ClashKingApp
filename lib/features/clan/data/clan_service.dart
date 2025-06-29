@@ -222,7 +222,9 @@ class ClanService extends ChangeNotifier {
           final responseBody = utf8.decode(response.bodyBytes);
           final data = jsonDecode(responseBody);
           if (data.containsKey("items") && data["items"] is List) {
-            final tagHistory = CapitalHistoryItems.fromJson(data, tag);
+            // Convert API response format to expected format
+            final historyData = {"history": data["items"]};
+            final tagHistory = CapitalHistoryItems.fromJson(historyData, tag);
             history.add(tagHistory);
           } else {
             Sentry.captureMessage("Error loading clan data: $data",

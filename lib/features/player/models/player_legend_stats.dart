@@ -19,9 +19,11 @@ class PlayerLegendStats {
   PlayerLegendSeason? get currentSeason {
     try {
       final now = DateTime.now();
-      return seasons.values.firstWhere((season) =>
+      return seasons.values.cast<PlayerLegendSeason?>().firstWhere((season) =>
+          season != null &&
           now.isAfter(season.start) &&
-          now.isBefore(season.end.add(Duration(days: 1))));
+          now.isBefore(season.end.add(Duration(days: 1))),
+          orElse: () => null);
     } catch (_) {
       return null;
     }
@@ -29,11 +31,13 @@ class PlayerLegendStats {
 
   PlayerLegendSeason? getSpecificSeason(DateTime date) {
     try {
-      return seasons.values.firstWhere(
+      return seasons.values.cast<PlayerLegendSeason?>().firstWhere(
         (season) =>
+            season != null &&
             (date.isAtSameMomentAs(season.start) ||
                 date.isAfter(season.start)) &&
             (date.isAtSameMomentAs(season.end) || date.isBefore(season.end)),
+        orElse: () => null,
       );
     } catch (_) {
       return null;

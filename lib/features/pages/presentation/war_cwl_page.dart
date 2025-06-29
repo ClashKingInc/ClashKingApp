@@ -7,6 +7,7 @@ import 'package:clashkingapp/features/pages/widgets/war_history_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_not_in_war_card.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
+import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,11 +39,26 @@ class WarCwlPage extends StatelessWidget {
       body: RefreshIndicator(
         backgroundColor: Theme.of(context).colorScheme.surface,
         onRefresh: () async {
-          await cocService.loadApiData(
-              playerService, clanService, warCwlService);
+          try {
+            // Use bulk endpoint for consistent data structure
+            final playerTags = cocService.getAccountTags();
+            if (playerTags.isNotEmpty) {
+              await cocService.refreshPageData(
+                playerTags, playerService, clanService, warCwlService);
+            }
+          } catch (e) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text(AppLocalizations.of(context)!
+                        .generalRefreshFailed(e.toString()))),
+              );
+            }
+          }
         },
         child: ListView(
           children: [
+            LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
             const SizedBox(height: 4),
             if (!hasClan)
               Padding(
@@ -147,6 +163,7 @@ class WarCwlPage extends StatelessWidget {
                 clan.isWarLogPublic == true &&
                 clan.clanWarStats != null)
               WarHistoryCard(clan: clan),
+            const SizedBox(height: 16),
           ],
         ),
       ),

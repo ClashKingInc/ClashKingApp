@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
+import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
 
 class StartupWidget extends StatefulWidget {
   @override
@@ -100,7 +101,7 @@ class StartupWidgetState extends State<StartupWidget> {
   @override
   Widget build(BuildContext context) {
     return _isInitializing
-        ? const Scaffold(body: Center(child: CircularProgressIndicator()))
+        ? const AppLoadingScreen()
         : const SizedBox.shrink();
   }
 }

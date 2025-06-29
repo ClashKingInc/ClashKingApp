@@ -9,6 +9,8 @@ import 'package:clashkingapp/features/pages/widgets/clan_no_clan_card.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_search_card.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
+import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
@@ -31,15 +33,27 @@ class ClanPage extends StatelessWidget {
       body: RefreshIndicator(
         backgroundColor: Theme.of(context).colorScheme.surface,
         onRefresh: () async {
-          await cocService.loadApiData(
-            playerService,
-            clanService,
-            warCwlService,
-          );
+          try {
+            // Use bulk endpoint for consistent data structure
+            final playerTags = cocService.getAccountTags();
+            if (playerTags.isNotEmpty) {
+              await cocService.refreshPageData(
+                playerTags, playerService, clanService, warCwlService);
+            }
+          } catch (e) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text(AppLocalizations.of(context)!
+                        .generalRefreshFailed(e.toString()))),
+              );
+            }
+          }
         },
         child:
             Consumer<PlayerService>(builder: (context, playerService, child) {
           return ListView(children: <Widget>[
+            LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
             const SizedBox(height: 4),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -52,9 +66,8 @@ class ClanPage extends StatelessWidget {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ClanInfoScreen(
-                          clanInfo: clanInfo
-                        ),
+                        builder: (context) =>
+                            ClanInfoScreen(clanInfo: clanInfo),
                       ),
                     ),
                     child: Padding(
@@ -66,7 +79,8 @@ class ClanPage extends StatelessWidget {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ClanJoinLeaveScreen(clanInfo: clanInfo),
+                        builder: (context) =>
+                            ClanJoinLeaveScreen(clanInfo: clanInfo),
                       ),
                     ),
                     child: Padding(
@@ -78,7 +92,9 @@ class ClanPage extends StatelessWidget {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ClanCapitalScreen(clanInfo: clanInfo,),
+                        builder: (context) => ClanCapitalScreen(
+                          clanInfo: clanInfo,
+                        ),
                       ),
                     ),
                     child: Padding(
@@ -143,6 +159,7 @@ class ClanPage extends StatelessWidget {
                   ),
                 ),
               ),*/
+            const SizedBox(height: 16),
           ]);
         }),
       ),

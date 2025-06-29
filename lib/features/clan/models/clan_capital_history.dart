@@ -9,8 +9,10 @@ class CapitalHistoryItems {
       Map<String, dynamic> json, String clanTag, {Map<String, dynamic>? statsData}) {
     try {
       return CapitalHistoryItems(
-        items: List<CapitalHistoryItem>.from(
-            json['history'].map((x) => CapitalHistoryItem.fromJson(x))),
+        items: json['history'] != null 
+            ? List<CapitalHistoryItem>.from(
+                json['history'].map((x) => CapitalHistoryItem.fromJson(x)))
+            : [],
         clanTag: clanTag,
         stats: statsData != null ? CapitalStats.fromJson(statsData) : null,
       );

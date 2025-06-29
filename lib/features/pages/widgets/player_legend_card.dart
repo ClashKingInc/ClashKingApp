@@ -49,7 +49,7 @@ class PlayerLegendCard extends StatelessWidget {
                               Column(
                                 children: [
                                   Text(
-                                    AppLocalizations.of(context)!.legendsInaccurateTitle,
+                                    AppLocalizations.of(context)!.legendsTitle,
                                     style:
                                         Theme.of(context).textTheme.labelLarge,
                                   ),

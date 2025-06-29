@@ -16,10 +16,12 @@ class CocAccountService extends ChangeNotifier {
   List<Map<String, dynamic>> _cocAccounts = [];
   bool _isLoading = false;
   String? _selectedTag;
+  DateTime? _lastRefresh;
   ValueNotifier<String?> selectedTagNotifier = ValueNotifier(null);
   List<Map<String, dynamic>> get cocAccounts => _cocAccounts;
   bool get isLoading => _isLoading;
   String? get selectedTag => _selectedTag;
+  DateTime? get lastRefresh => _lastRefresh;
   List<Player> profiles = [];
   List<String> get accounts =>
       _cocAccounts.map((account) => account["player_tag"].toString()).toList();
@@ -31,6 +33,7 @@ class CocAccountService extends ChangeNotifier {
     selectedTagNotifier.value = null;
     profiles = [];
     _isLoading = false;
+    _lastRefresh = null;
     notifyListeners();
   }
 
@@ -54,6 +57,7 @@ class CocAccountService extends ChangeNotifier {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         _cocAccounts = List<Map<String, dynamic>>.from(data["coc_accounts"]);
+        // Verification status is now included in the API response
       } else {
         Sentry.captureMessage(
             "Error fetching CoC accounts, status code: ${response.statusCode}, body: ${response.body}",
@@ -229,6 +233,34 @@ class CocAccountService extends ChangeNotifier {
     // To Do: Implement
   }
 
+  /// Updates the last refresh timestamp and notifies listeners
+  void updateRefreshTime() {
+    _lastRefresh = DateTime.now();
+    notifyListeners();
+  }
+
+  /// Refresh data for specific page using bulk endpoint for consistency
+  Future<void> refreshPageData(
+    List<String> playerTags,
+    PlayerService playerService,
+    ClanService clanService,
+    WarCwlService warCwlService,
+  ) async {
+    if (playerTags.isEmpty) return;
+
+    print("🔄 Refreshing page data using bulk endpoint for ${playerTags.length} players");
+    
+    try {
+      await _loadDataWithBulkEndpoint(playerTags, playerService, clanService, warCwlService);
+      _lastRefresh = DateTime.now();
+      notifyListeners();
+      print("✅ Page refresh completed successfully");
+    } catch (e) {
+      print("❌ Page refresh failed: $e");
+      rethrow;
+    }
+  }
+
   List<String> getAccountTags() {
     return _cocAccounts
         .map((account) => account["player_tag"].toString())
@@ -269,6 +301,7 @@ class CocAccountService extends ChangeNotifier {
       spanBulkLoad.finish();
 
       transaction.finish(status: SpanStatus.ok());
+      _lastRefresh = DateTime.now();
       initializeSelectedTag();
     } on HttpException catch (e) {
       if (e.message.contains("503")) {
@@ -314,16 +347,6 @@ class CocAccountService extends ChangeNotifier {
         final data = jsonDecode(responseBody);
 
         print("✅ Bulk data loaded successfully");
-        
-        // Debug: Print what data we received
-        print("🔍 Debug - Data keys received: ${data.keys.toList()}");
-        if (data["clans"] != null) {
-          final clansData = data["clans"] as Map<String, dynamic>;
-          print("🔍 Debug - Clans data keys: ${clansData.keys.toList()}");
-          print("🔍 Debug - War data count: ${clansData['war_data']?.length ?? 0}");
-          print("🔍 Debug - War log data count: ${clansData['war_log_data']?.length ?? 0}");
-          print("🔍 Debug - Clan war stats count: ${clansData['clan_war_stats']?.length ?? 0}");
-        }
 
         // Process player data
         if (data["players"] != null) {
@@ -460,6 +483,67 @@ class CocAccountService extends ChangeNotifier {
         print("❌ Background widget refresh error: $error");
       });
     }
+  }
+
+  /// Verifies an existing account using API token
+  Future<bool> verifyAccount(String playerTag, String apiToken, Function(String) updateErrorMessage) async {
+    try {
+      final token = await TokenService().getAccessToken();
+      if (token == null) {
+        updateErrorMessage("User not authenticated");
+        return false;
+      }
+
+      final response = await http.post(
+        Uri.parse("${ApiService.apiUrlV2}/users/verify-coc-account"),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({
+          "player_tag": playerTag,
+          "player_token": apiToken,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data["verified"] == true) {
+          // Update local verification status
+          updateAccountVerificationStatus(playerTag, true);
+          return true;
+        }
+      } else if (response.statusCode == 403) {
+        updateErrorMessage("Invalid API token for this account");
+      } else if (response.statusCode == 404) {
+        updateErrorMessage("Account not found");
+      } else {
+        updateErrorMessage("Verification failed. Please try again.");
+      }
+      
+      return false;
+    } catch (e) {
+      updateErrorMessage("Verification failed: $e");
+      return false;
+    }
+  }
+
+  /// Updates the verification status of an account locally
+  void updateAccountVerificationStatus(String playerTag, bool isVerified) {
+    final accountIndex = _cocAccounts.indexWhere((account) => account["player_tag"] == playerTag);
+    if (accountIndex != -1) {
+      _cocAccounts[accountIndex]["is_verified"] = isVerified;
+      notifyListeners();
+    }
+  }
+
+  /// Gets the verification status for an account
+  bool getAccountVerificationStatus(String playerTag) {
+    final account = _cocAccounts.firstWhere(
+      (account) => account["player_tag"] == playerTag,
+      orElse: () => <String, dynamic>{},
+    );
+    return account["is_verified"] ?? false;
   }
 
   void clearAccounts() {

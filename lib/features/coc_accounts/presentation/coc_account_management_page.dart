@@ -7,6 +7,7 @@ import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
+import 'package:clashkingapp/features/coc_accounts/presentation/widgets/account_verification_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -264,6 +265,27 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                           trailing: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
+                                              // Verification status icon
+                                              IconButton(
+                                                icon: Icon(
+                                                  _tempUserAccounts[index]["isVerified"] == true
+                                                      ? Icons.verified
+                                                      : Icons.warning_outlined,
+                                                  color: _tempUserAccounts[index]["isVerified"] == true
+                                                      ? Colors.green
+                                                      : Colors.orange,
+                                                ),
+                                                tooltip: _tempUserAccounts[index]["isVerified"] == true
+                                                    ? AppLocalizations.of(context)!.accountVerified
+                                                    : AppLocalizations.of(context)!.accountNotVerified,
+                                                onPressed: _tempUserAccounts[index]["isVerified"] == true
+                                                    ? null // Already verified, disable button
+                                                    : () => _showVerificationDialog(
+                                                          _tempUserAccounts[index]["player_tag"],
+                                                          _tempUserAccounts[index]["name"] ?? "Unknown Player",
+                                                          _tempUserAccounts[index]["townHallLevel"] ?? 1, 
+                                                        ),
+                                              ),
                                               Icon(Icons.drag_handle),
                                               IconButton(
                                                 icon: _deletingPlayerTag ==
@@ -485,11 +507,28 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     });
   }
 
+  Future<void> _showVerificationDialog(String playerTag, String playerName, int playerTownHall) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AccountVerificationDialog(
+        playerTag: playerTag,
+        playerName: playerName,
+        playerTownHall: playerTownHall,
+      ),
+    );
+
+    if (result == true) {
+      // Refresh the temp accounts to show updated verification status
+      _syncTempAccountsWithPlayerService();
+    }
+  }
+
   void _syncTempAccountsWithPlayerService() {
     final playerService = context.read<PlayerService>();
+    final cocService = context.read<CocAccountService>();
     setState(() {
       _tempUserAccounts =
-          context.read<CocAccountService>().cocAccounts.map((account) {
+          cocService.cocAccounts.map((account) {
         String playerTag = account["player_tag"];
         
         // Try to find the player data from PlayerService
@@ -501,6 +540,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
             "player_tag": playerTag,
             "name": player.name,
             "townHallLevel": player.townHallLevel,
+            "isVerified": cocService.getAccountVerificationStatus(playerTag),
           };
         } catch (e) {
           // Fallback to account data if player not found in PlayerService
@@ -509,6 +549,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
             "player_tag": playerTag,
             "name": account["name"] ?? "Unknown Player",
             "townHallLevel": account["townHallLevel"] ?? 1,
+            "isVerified": cocService.getAccountVerificationStatus(playerTag),
           };
         }
       }).toList();

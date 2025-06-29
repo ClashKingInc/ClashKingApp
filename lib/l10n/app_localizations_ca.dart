@@ -16,6 +16,47 @@ class AppLocalizationsCa extends AppLocalizations {
   String get generalLoading => 'Carregant...';
 
   @override
+  String get loadingVillages => 'Loading your villages...';
+
+  @override
+  String get loadingClanData => 'Fetching clan data...';
+
+  @override
+  String get loadingWarStats => 'Analyzing war stats...';
+
+  @override
+  String get loadingLegendsData => 'Preparing legends data...';
+
+  @override
+  String get loadingCapitalRaids => 'Loading capital raids...';
+
+  @override
+  String get loadingAlmostReady => 'Almost ready...';
+
+  @override
+  String get accountVerificationTitle => 'Verify Account';
+
+  @override
+  String get accountVerificationMessage =>
+      'Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.';
+
+  @override
+  String get accountVerified => 'Account verified';
+
+  @override
+  String get accountNotVerified => 'Account not verified';
+
+  @override
+  String get accountVerifyButton => 'Verify';
+
+  @override
+  String get accountVerificationSuccess => 'Account verified successfully!';
+
+  @override
+  String get accountVerificationFailed =>
+      'Verification failed. Please check your API token.';
+
+  @override
   String get generalRetry => 'Tornar a intentar';
 
   @override
@@ -44,6 +85,16 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get generalComingSoon => 'Properament!';
+
+  @override
+  String generalLastRefresh(String time) {
+    return 'Last refresh: $time';
+  }
+
+  @override
+  String generalRefreshFailed(String error) {
+    return 'Refresh failed: $error';
+  }
 
   @override
   String get generalAll => 'All';
