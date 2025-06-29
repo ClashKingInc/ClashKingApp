@@ -486,14 +486,31 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
   }
 
   void _syncTempAccountsWithPlayerService() {
+    final playerService = context.read<PlayerService>();
     setState(() {
       _tempUserAccounts =
           context.read<CocAccountService>().cocAccounts.map((account) {
-        return {
-          "player_tag": account["player_tag"],
-          "name": account["name"],
-          "townHallLevel": account["townHallLevel"] ?? 1,
-        };
+        String playerTag = account["player_tag"];
+        
+        // Try to find the player data from PlayerService
+        try {
+          final player = playerService.profiles.firstWhere(
+            (p) => p.tag == playerTag,
+          );
+          return {
+            "player_tag": playerTag,
+            "name": player.name,
+            "townHallLevel": player.townHallLevel,
+          };
+        } catch (e) {
+          // Fallback to account data if player not found in PlayerService
+          print("Player not found in PlayerService for tag: $playerTag, using fallback");
+          return {
+            "player_tag": playerTag,
+            "name": account["name"] ?? "Unknown Player",
+            "townHallLevel": account["townHallLevel"] ?? 1,
+          };
+        }
       }).toList();
     });
   }

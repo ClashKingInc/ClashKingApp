@@ -265,91 +265,87 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                   padding: const EdgeInsets.all(8),
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          FilterDropdown(
-                              sortBy: filterBy,
-                              updateSortBy: (value) {
-                                setState(() {
-                                  filterBy = value;
-                                });
-                              },
-                              sortByOptions: {
-                                AppLocalizations.of(context)!.warPositionMap:
-                                    'all',
-                                AppLocalizations.of(context)!.warAttacksTitle:
-                                    'rattacks',
-                                AppLocalizations.of(context)!.warDefensesTitle:
-                                    'rdefenses',
-                                AppLocalizations.of(context)!.warAttacksBest:
-                                    'bestAttacks',
-                                AppLocalizations.of(context)!.warDefensesBest:
-                                    'bestDefenses',
-                                AppLocalizations.of(context)!.warStarsBestPerformance:
-                                    'bestPerformance',
-                                AppLocalizations.of(context)!.warAttacksNone:
-                                    'noattacks',
-                                AppLocalizations.of(context)!.warDefensesNone:
-                                    'nodefenses',
-                                generateStarsWithIconBefore(
-                                    3, 16, ImageAssets.sword): '3stars',
-                                generateStarsWithIconBefore(
-                                    2, 16, ImageAssets.sword): '2stars',
-                                generateStarsWithIconBefore(
-                                    1, 16, ImageAssets.sword): '1star',
-                                generateStarsWithIconBefore(
-                                    0, 16, ImageAssets.sword): '0star',
-                                generateStarsWithIconBefore(
-                                        3, 16, ImageAssets.shieldWithArrow):
-                                    'def_3stars',
-                                generateStarsWithIconBefore(
-                                        2, 16, ImageAssets.shieldWithArrow):
-                                    'def_2stars',
-                                generateStarsWithIconBefore(
-                                        1, 16, ImageAssets.shieldWithArrow):
-                                    'def_1star',
-                                generateStarsWithIconBefore(
-                                        0, 16, ImageAssets.shieldWithArrow):
-                                    'def_0star',
-                              }),
-                          CustomSlidingSegmentedControl<int>(
-                            initialValue: _currentSegment,
-                            children: {
-                              1: Text(AppLocalizations.of(context)!.warMyTeam),
-                              2: Text(
-                                  AppLocalizations.of(context)!.warEnemiesTeam),
-                            },
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .tertiary
-                                  .withAlpha(50),
-                              borderRadius: BorderRadius.circular(8),
+                      FilterDropdown(
+                          sortBy: filterBy,
+                          updateSortBy: (value) {
+                            setState(() {
+                              filterBy = value;
+                            });
+                          },
+                          sortByOptions: {
+                            AppLocalizations.of(context)!.warPositionMap:
+                                'all',
+                            AppLocalizations.of(context)!.warAttacksTitle:
+                                'rattacks',
+                            AppLocalizations.of(context)!.warDefensesTitle:
+                                'rdefenses',
+                            AppLocalizations.of(context)!.warAttacksBest:
+                                'bestAttacks',
+                            AppLocalizations.of(context)!.warDefensesBest:
+                                'bestDefenses',
+                            AppLocalizations.of(context)!.warStarsBestPerformance:
+                                'bestPerformance',
+                            AppLocalizations.of(context)!.warAttacksNone:
+                                'noattacks',
+                            AppLocalizations.of(context)!.warDefensesNone:
+                                'nodefenses',
+                            generateStarsWithIconBefore(
+                                3, 16, ImageAssets.sword): '3stars',
+                            generateStarsWithIconBefore(
+                                2, 16, ImageAssets.sword): '2stars',
+                            generateStarsWithIconBefore(
+                                1, 16, ImageAssets.sword): '1star',
+                            generateStarsWithIconBefore(
+                                0, 16, ImageAssets.sword): '0star',
+                            generateStarsWithIconBefore(
+                                    3, 16, ImageAssets.shieldWithArrow):
+                                'def_3stars',
+                            generateStarsWithIconBefore(
+                                    2, 16, ImageAssets.shieldWithArrow):
+                                'def_2stars',
+                            generateStarsWithIconBefore(
+                                    1, 16, ImageAssets.shieldWithArrow):
+                                'def_1star',
+                            generateStarsWithIconBefore(
+                                    0, 16, ImageAssets.shieldWithArrow):
+                                'def_0star',
+                          }),
+                      const SizedBox(height: 8),
+                      CustomSlidingSegmentedControl<int>(
+                        initialValue: _currentSegment,
+                        children: {
+                          1: Text(AppLocalizations.of(context)!.warMyTeam),
+                          2: Text(
+                              AppLocalizations.of(context)!.warEnemiesTeam),
+                        },
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .tertiary
+                              .withAlpha(50),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        thumbDecoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
+                          borderRadius: BorderRadius.circular(6),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.3),
+                              blurRadius: 4,
+                              spreadRadius: 1,
+                              offset: Offset(0, 2),
                             ),
-                            thumbDecoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.surface,
-                              borderRadius: BorderRadius.circular(6),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.3),
-                                  blurRadius: 4,
-                                  spreadRadius: 1,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                            onValueChanged: (v) {
-                              setState(() {
-                                _currentSegment = v;
-                              });
-                            },
-                          ),
-                        ],
+                          ],
+                        ),
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        onValueChanged: (v) {
+                          setState(() {
+                            _currentSegment = v;
+                          });
+                        },
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 8),
                       WarTeamTab(
                         members: filteredMembers,
                         warInfo: widget.war,

@@ -159,8 +159,10 @@ class PlayerWarStats {
         }
       });
 
-      // Ce compteur global peut rester inchangé
+      // Add missed attacks and defenses from each war type
       warsCounts += s.warsCounts;
+      missedAttacks += s.missedAttacks;
+      missedDefenses += s.missedDefenses;
     }
 
     return PlayerWarTypeStats(

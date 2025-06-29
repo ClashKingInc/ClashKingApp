@@ -14,6 +14,8 @@ class MembersCard extends StatelessWidget {
   final String sortBy;
   final bool showFullStats;
   final VoidCallback onToggleFullStats;
+  final int warsPlayed;
+  final int attacksPerWar;
 
   const MembersCard({
     super.key,
@@ -22,6 +24,8 @@ class MembersCard extends StatelessWidget {
     required this.sortBy,
     required this.showFullStats,
     required this.onToggleFullStats,
+    required this.warsPlayed,
+    required this.attacksPerWar,
   });
 
   Widget formatStatWithAverage(

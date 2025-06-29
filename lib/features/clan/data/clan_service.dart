@@ -350,4 +350,117 @@ class ClanService extends ChangeNotifier {
       }
     }
   }
+
+  /// Process bulk clan data from the optimized API endpoint
+  Future<void> processBulkClanData(Map<String, dynamic> clanData, List<String> clanTags) async {
+    print("🔄 Processing bulk clan data for ${clanTags.length} clans");
+    
+    // Process clan details
+    if (clanData["clan_details"] != null) {
+      final clanDetails = clanData["clan_details"] as Map<String, dynamic>;
+      for (final entry in clanDetails.entries) {
+        try {
+          final clan = Clan.fromJson(entry.value);
+          _clans[entry.key] = clan;
+          print("✅ Processed clan: ${clan.name} (${clan.tag})");
+        } catch (e) {
+          print("❌ Error processing clan ${entry.key}: $e");
+        }
+      }
+    }
+
+    // Process join/leave data
+    if (clanData["join_leave_data"] != null) {
+      final joinLeaveData = clanData["join_leave_data"] as Map<String, dynamic>;
+      joinLeaveList = joinLeaveData.entries
+          .map((entry) {
+            try {
+              return ClanJoinLeave.fromJson(entry.value);
+            } catch (e) {
+              print("❌ Error processing join/leave data for ${entry.key}: $e");
+              return null;
+            }
+          })
+          .whereType<ClanJoinLeave>()
+          .toList();
+      print("✅ Processed ${joinLeaveList.length} join/leave records");
+    }
+
+    // Process capital data
+    if (clanData["capital_data"] != null) {
+      final capitalData = clanData["capital_data"] as List<dynamic>;
+      capitalHistory = capitalData
+          .whereType<Map<String, dynamic>>()
+          .map((item) {
+            try {
+              final clanTag = item["clan_tag"]?.toString();
+              if (clanTag == null || clanTag.isEmpty) {
+                print("⚠️ Skipping capital data item with missing clan_tag");
+                return null;
+              }
+              
+              // The history data is in the 'history' field, not at the top level
+              final historyData = {"history": item["history"] ?? []};
+              final statsData = item["stats"] as Map<String, dynamic>?;
+              return CapitalHistoryItems.fromJson(historyData, clanTag, statsData: statsData);
+            } catch (e) {
+              print("❌ Error processing capital data: $e");
+              return null;
+            }
+          })
+          .whereType<CapitalHistoryItems>()
+          .toList();
+      print("✅ Processed ${capitalHistory.length} capital history items");
+    }
+
+    // Process war log data
+    if (clanData["war_log_data"] != null) {
+      final warLogData = clanData["war_log_data"] as List<dynamic>;
+      final futures = warLogData
+          .whereType<Map<String, dynamic>>()
+          .map((item) async {
+            try {
+              final warLog = ClanWarLog.fromJson(item, item["clan_tag"]);
+              // Initialize warLogStats for bulk loaded data
+              warLog.warLogStats = await WarLogStatsService.analyzeWarLogs(warLog.items);
+              return warLog;
+            } catch (e) {
+              print("❌ Error processing war log data: $e");
+              return null;
+            }
+          });
+      
+      final results = await Future.wait(futures);
+      warLogList = results.whereType<ClanWarLog>().toList();
+      print("✅ Processed ${warLogList.length} war log items");
+    }
+
+    // Process war data (current wars and CWL)
+    if (clanData["war_data"] != null) {
+      print("🔄 Processing war data...");
+      // War data processing should be handled by WarCwlService
+      // This is typically linked in the parent call
+    }
+
+    // Process clan war stats
+    if (clanData["clan_war_stats"] != null) {
+      final clanWarStatsData = clanData["clan_war_stats"] as List<dynamic>;
+      warStatsList = clanWarStatsData
+          .whereType<Map<String, dynamic>>()
+          .map((item) {
+            try {
+              return ClanWarStats.fromJson(item);
+            } catch (e) {
+              print("❌ Error processing clan war stats: $e");
+              return null;
+            }
+          })
+          .whereType<ClanWarStats>()
+          .toList();
+      print("✅ Processed ${warStatsList.length} clan war stats items");
+    }
+
+    print("✅ Processed all bulk clan data");
+    notifyListeners();
+  }
 }

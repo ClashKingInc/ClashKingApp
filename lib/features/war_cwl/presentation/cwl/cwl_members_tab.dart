@@ -55,6 +55,10 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
     final members =
         widget.warCwl.leagueInfo?.getClanDetails(widget.clanTag)?.members ?? [];
     sortCwlMembers(members, sortBy);
+    
+    final clanDetails = widget.warCwl.leagueInfo?.getClanDetails(widget.clanTag);
+    final warsPlayed = clanDetails?.warsPlayed ?? 0;
+    final attacksPerWar = 1; // Standard CWL attacks per war
 
     return Column(
       children: [
@@ -147,6 +151,8 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
             onToggleFullStats: () => toggleShowStats(key),
             member: member,
             index: index,
+            warsPlayed: warsPlayed,
+            attacksPerWar: attacksPerWar,
           );
         }),
       ],

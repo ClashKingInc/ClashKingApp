@@ -70,20 +70,24 @@ class CwlTeamCard extends StatelessWidget {
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                   SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(clan.name,
-                          style: Theme.of(context).textTheme.titleMedium),
-                      Text(clan.tag,
-                          style: Theme.of(context).textTheme.bodySmall),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(clan.name,
+                            style: Theme.of(context).textTheme.titleMedium,
+                            overflow: TextOverflow.ellipsis),
+                        Text(clan.tag,
+                            style: Theme.of(context).textTheme.bodySmall,
+                            overflow: TextOverflow.ellipsis),
+                      ],
+                    ),
                   ),
-                  Spacer(),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Text("${clan.stars}  "),
                           SizedBox(
@@ -96,6 +100,7 @@ class CwlTeamCard extends StatelessWidget {
                         ],
                       ),
                       Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                               "${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(clan.destructionPercentageInflicted)}  "),

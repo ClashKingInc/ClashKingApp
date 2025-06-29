@@ -1,16 +1,18 @@
 class CapitalHistoryItems {
   final List<CapitalHistoryItem> items;
   final String? clanTag;
+  final CapitalStats? stats;
 
-  CapitalHistoryItems({required this.items, required this.clanTag});
+  CapitalHistoryItems({required this.items, required this.clanTag, this.stats});
 
   factory CapitalHistoryItems.fromJson(
-      Map<String, dynamic> json, String clanTag) {
+      Map<String, dynamic> json, String clanTag, {Map<String, dynamic>? statsData}) {
     try {
       return CapitalHistoryItems(
         items: List<CapitalHistoryItem>.from(
-            json['items'].map((x) => CapitalHistoryItem.fromJson(x))),
+            json['history'].map((x) => CapitalHistoryItem.fromJson(x))),
         clanTag: clanTag,
+        stats: statsData != null ? CapitalStats.fromJson(statsData) : null,
       );
     } catch (e) {
       print("Error parsing CapitalHistoryItems: $e");
@@ -208,6 +210,100 @@ class Attack {
       name: json['attacker']['name'],
       destructionPercent: json['destructionPercent'],
       stars: json['stars'],
+    );
+  }
+}
+
+class CapitalStats {
+  final int totalLoot;
+  final int totalAttacks;
+  final int numberOfWeeks;
+  final int totalRaids;
+  final int totalDistrictsDestroyed;
+  final int totalOffensiveRewards;
+  final int totalDefensiveRewards;
+  final double avgLootPerAttack;
+  final double avgLootPerWeek;
+  final double avgAttacksPerWeek;
+  final double avgAttacksPerRaid;
+  final double avgAttacksPerDistrict;
+  final double avgOffensiveRewards;
+  final double avgDefensiveRewards;
+  final CapitalRaidSummary? bestRaid;
+  final CapitalRaidSummary? worstRaid;
+
+  CapitalStats({
+    required this.totalLoot,
+    required this.totalAttacks,
+    required this.numberOfWeeks,
+    required this.totalRaids,
+    required this.totalDistrictsDestroyed,
+    required this.totalOffensiveRewards,
+    required this.totalDefensiveRewards,
+    required this.avgLootPerAttack,
+    required this.avgLootPerWeek,
+    required this.avgAttacksPerWeek,
+    required this.avgAttacksPerRaid,
+    required this.avgAttacksPerDistrict,
+    required this.avgOffensiveRewards,
+    required this.avgDefensiveRewards,
+    this.bestRaid,
+    this.worstRaid,
+  });
+
+  factory CapitalStats.fromJson(Map<String, dynamic> json) {
+    return CapitalStats(
+      totalLoot: json['totalLoot'] ?? 0,
+      totalAttacks: json['totalAttacks'] ?? 0,
+      numberOfWeeks: json['numberOfWeeks'] ?? 0,
+      totalRaids: json['totalRaids'] ?? 0,
+      totalDistrictsDestroyed: json['totalDistrictsDestroyed'] ?? 0,
+      totalOffensiveRewards: json['totalOffensiveRewards'] ?? 0,
+      totalDefensiveRewards: json['totalDefensiveRewards'] ?? 0,
+      avgLootPerAttack: (json['avgLootPerAttack'] as num?)?.toDouble() ?? 0.0,
+      avgLootPerWeek: (json['avgLootPerWeek'] as num?)?.toDouble() ?? 0.0,
+      avgAttacksPerWeek: (json['avgAttacksPerWeek'] as num?)?.toDouble() ?? 0.0,
+      avgAttacksPerRaid: (json['avgAttacksPerRaid'] as num?)?.toDouble() ?? 0.0,
+      avgAttacksPerDistrict: (json['avgAttacksPerDistrict'] as num?)?.toDouble() ?? 0.0,
+      avgOffensiveRewards: (json['avgOffensiveRewards'] as num?)?.toDouble() ?? 0.0,
+      avgDefensiveRewards: (json['avgDefensiveRewards'] as num?)?.toDouble() ?? 0.0,
+      bestRaid: json['bestRaid'] != null ? CapitalRaidSummary.fromJson(json['bestRaid']) : null,
+      worstRaid: json['worstRaid'] != null ? CapitalRaidSummary.fromJson(json['worstRaid']) : null,
+    );
+  }
+}
+
+class CapitalRaidSummary {
+  final String startTime;
+  final int capitalTotalLoot;
+  final int totalRewards;
+  final int raidsCompleted;
+  final int totalAttacks;
+  final int enemyDistrictsDestroyed;
+  final double avgAttacksPerRaid;
+  final double avgAttacksPerDistrict;
+
+  CapitalRaidSummary({
+    required this.startTime,
+    required this.capitalTotalLoot,
+    required this.totalRewards,
+    required this.raidsCompleted,
+    required this.totalAttacks,
+    required this.enemyDistrictsDestroyed,
+    required this.avgAttacksPerRaid,
+    required this.avgAttacksPerDistrict,
+  });
+
+  factory CapitalRaidSummary.fromJson(Map<String, dynamic> json) {
+    return CapitalRaidSummary(
+      startTime: json['startTime'] ?? '',
+      capitalTotalLoot: json['capitalTotalLoot'] ?? 0,
+      totalRewards: json['totalRewards'] ?? 0,
+      raidsCompleted: json['raidsCompleted'] ?? 0,
+      totalAttacks: json['totalAttacks'] ?? 0,
+      enemyDistrictsDestroyed: json['enemyDistrictsDestroyed'] ?? 0,
+      avgAttacksPerRaid: (json['avgAttacksPerRaid'] as num?)?.toDouble() ?? 0.0,
+      avgAttacksPerDistrict: (json['avgAttacksPerDistrict'] as num?)?.toDouble() ?? 0.0,
     );
   }
 }

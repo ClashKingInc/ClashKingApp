@@ -360,4 +360,68 @@ class PlayerService extends ChangeNotifier {
     }
     return "{}";
   }
+
+  /// Process bulk player data from the optimized API endpoint
+  void processBulkPlayerData(List<dynamic> playersExtended, List<dynamic> playersBasic) {
+    print("🔄 Processing bulk player data: ${playersExtended.length} extended, ${playersBasic.length} basic");
+    
+    // First, create basic player profiles from basic data
+    _profiles = playersBasic
+        .whereType<Map<String, dynamic>>()
+        .map((account) {
+      print("🔄 Processing basic player: ${account['tag']}");
+      final player = Player.fromJson(account);
+      if (player.clanOverview.tag.isNotEmpty) {
+        // Cache clan tag for widget use
+        storePrefs('player_${player.tag}_clan_tag', player.clanOverview.tag);
+      }
+      return player;
+    }).toList();
+
+    print("✅ Created ${_profiles.length} basic player profiles");
+
+    // Then enrich with extended data
+    for (final extendedData in playersExtended.whereType<Map<String, dynamic>>()) {
+      final tag = extendedData["tag"];
+      try {
+        final existing = _profiles.firstWhere((p) => p.tag == tag);
+        existing.enrichWithFullStats(extendedData);
+        print("✅ Enriched player: ${existing.name} (${existing.tag})");
+      } catch (e) {
+        print("❌ Error enriching player $tag: $e");
+        // Create a new player if not found in basic data
+        try {
+          final player = Player.fromJson(extendedData);
+          player.enrichWithFullStats(extendedData);
+          _profiles.add(player);
+          print("✅ Created & enriched new player: ${player.name} (${player.tag})");
+        } catch (e2) {
+          print("❌ Error creating player from extended data $tag: $e2");
+        }
+      }
+    }
+
+    print("✅ Processed all bulk player data: ${_profiles.map((p) => p.tag).toList()}");
+    notifyListeners();
+  }
+
+  /// Process bulk war statistics data
+  void processBulkWarStats(List<dynamic> warStatsData) {
+    print("🔄 Processing bulk war stats for ${warStatsData.length} players");
+    
+    for (final item in warStatsData.whereType<Map<String, dynamic>>()) {
+      final String tag = item["tag"];
+      try {
+        final Player player = _profiles.firstWhere((p) => p.tag == tag);
+        player.warStats = PlayerWarStats.fromJson(item, tag, item["wars"]);
+        print("✅ Linked war stats for ${player.name} (${tag})");
+      } catch (e) {
+        print("❌ Error processing war stats for $tag: $e");
+        continue;
+      }
+    }
+    
+    print("✅ Processed all bulk war stats");
+    notifyListeners();
+  }
 }

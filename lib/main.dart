@@ -47,6 +47,8 @@ void callbackDispatcher() {
 }
 
 Future<void> main() async {
+  // Initialize Flutter binding BEFORE Sentry
+  WidgetsFlutterBinding.ensureInitialized();
 
   await SentryFlutter.init(
     (options) {
@@ -55,8 +57,6 @@ Future<void> main() async {
       options.debug = false;
     },
     appRunner: () async {
-
-      WidgetsFlutterBinding.ensureInitialized();
 
       await dotenv.load(fileName: ".env");
 

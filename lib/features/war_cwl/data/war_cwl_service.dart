@@ -50,6 +50,26 @@ class WarCwlService extends ChangeNotifier {
     return summaries[tag];
   }
 
+  /// Process bulk war data from the optimized API endpoint
+  void processBulkWarData(List<dynamic> warData) {
+    print("🔄 Processing ${warData.length} bulk war data items");
+    
+    for (final warItem in warData) {
+      try {
+        if (warItem is Map<String, dynamic>) {
+          final warSummary = WarCwl.fromJson(warItem, null);
+          summaries[warSummary.tag] = warSummary;
+          print("✅ Processed bulk war data for clan: ${warSummary.tag}");
+        }
+      } catch (e) {
+        print("❌ Error processing bulk war data item: $e");
+      }
+    }
+    
+    print("✅ Processed all bulk war data, total summaries: ${summaries.length}");
+    notifyListeners();
+  }
+
   static Future<WarInfo?> fetchWarDataFromTime(String tag, DateTime end) async {
     String endTime = end.toIso8601String();
     endTime = endTime.replaceAll('-', '').replaceAll(':', '');

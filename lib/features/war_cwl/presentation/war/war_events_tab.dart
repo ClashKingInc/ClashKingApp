@@ -49,20 +49,28 @@ class _WarEventsTabState extends State<WarEventsTab> {
       }
     }
 
-    if (filterOption == 'All') {
-      add(widget.warInfo.clan!.members, widget.warInfo.clan!.tag);
-      add(widget.warInfo.opponent!.members, widget.warInfo.opponent!.tag);
-    } else if (filterOption == '5') {
-      add(widget.warInfo.clan!.members, widget.warInfo.clan!.tag);
+    // Always collect all attacks first
+    add(widget.warInfo.clan!.members, widget.warInfo.clan!.tag);
+    add(widget.warInfo.opponent!.members, widget.warInfo.opponent!.tag);
+
+    // Then filter based on the selected option
+    if (filterOption == '5') {
+      // Show only attacks BY clan members
+      attacks = attacks.where((attack) {
+        final attackerClanTag = attack['clanTag'];
+        return attackerClanTag == widget.warInfo.clan!.tag;
+      }).toList();
     } else if (filterOption == '4') {
-      add(widget.warInfo.opponent!.members, widget.warInfo.opponent!.tag);
-    } else {
+      // Show only attacks BY opponent members
+      attacks = attacks.where((attack) {
+        final attackerClanTag = attack['clanTag'];
+        return attackerClanTag == widget.warInfo.opponent!.tag;
+      }).toList();
+    } else if (filterOption != 'All') {
+      // Filter by star count
       final starFilter = int.tryParse(filterOption);
       if (starFilter != null) {
-        add(widget.warInfo.clan!.members, widget.warInfo.clan!.tag,
-            starFilter: starFilter);
-        add(widget.warInfo.opponent!.members, widget.warInfo.opponent!.tag,
-            starFilter: starFilter);
+        attacks = attacks.where((attack) => attack['attack'].stars == starFilter).toList();
       }
     }
 

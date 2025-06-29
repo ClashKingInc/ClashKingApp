@@ -74,11 +74,11 @@ class CwlMember {
           defenseLowerTHLevel: json['defenseLowerTHLevel']?.toDouble(),
           attackUpperTHLevel: json['attackUpperTHLevel']?.toDouble(),
           defenseUpperTHLevel: json['defenseUpperTHLevel']?.toDouble(),
-          attackStats: json['attacks'] != null
-              ? CwlAttackStats.fromJson(json['attacks'])
+          attackStats: json['stats']?['cwl'] != null
+              ? CwlAttackStats.fromJson(json['stats']['cwl'])
               : null,
-          defenseStats: json['defense'] != null
-              ? CwlDefenseStats.fromJson(json['defense'])
+          defenseStats: json['stats']?['cwl'] != null
+              ? CwlDefenseStats.fromJson(json['stats']['cwl'])
               : null);
     } catch (e) {
       print("❌ Error parsing CwlMember: $e");

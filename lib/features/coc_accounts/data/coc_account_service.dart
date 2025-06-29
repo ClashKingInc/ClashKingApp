@@ -190,10 +190,15 @@ class CocAccountService extends ChangeNotifier {
     
     // Persist to SharedPreferences for widget access
     if (tag != null) {
-      await storePrefs('selectedTag', tag);
-      
-      // Check if we need to refresh the war widget due to clan change
-      await _checkAndRefreshWarWidget(previousTag, tag);
+      try {
+        await storePrefs('selectedTag', tag);
+        
+        // Check if we need to refresh the war widget due to clan change
+        await _checkAndRefreshWarWidget(previousTag, tag);
+      } catch (e) {
+        print("⚠️ Could not store selected tag: $e");
+        // Continue without storing - not critical for app functionality
+      }
     }
     
     notifyListeners();
@@ -207,11 +212,16 @@ class CocAccountService extends ChangeNotifier {
 
   // Load selected tag from SharedPreferences on app start
   Future<void> loadSelectedTag() async {
-    final storedTag = await getPrefs('selectedTag');
-    if (storedTag != null && storedTag.isNotEmpty) {
-      _selectedTag = storedTag;
-      selectedTagNotifier.value = storedTag;
-      print("🔄 Loaded selected tag from preferences: $storedTag");
+    try {
+      final storedTag = await getPrefs('selectedTag');
+      if (storedTag != null && storedTag.isNotEmpty) {
+        _selectedTag = storedTag;
+        selectedTagNotifier.value = storedTag;
+        print("🔄 Loaded selected tag from preferences: $storedTag");
+      }
+    } catch (e) {
+      print("⚠️ Could not load selected tag from preferences: $e");
+      // Continue without stored tag - will use first account as default
     }
   }
 
@@ -250,109 +260,15 @@ class CocAccountService extends ChangeNotifier {
           .map((account) => account["player_tag"].toString())
           .toList();
 
-      final spanInitPlayers = transaction.startChild("initPlayerData");
-      final clanTagsByPlayer = await playerService.initPlayerData(playerTags);
-      spanInitPlayers.finish();
-
-      final Set<String> clanTags = playerService.profiles
-          .map((profile) => profile.clanTag)
-          .where((tag) => tag.isNotEmpty)
-          .toSet();
-
       transaction.setTag("playerTags", playerTags.toString());
       transaction.setTag("playerTagsCount", playerTags.length.toString());
-      transaction.setTag("clanTags", clanTags.toString());
-      transaction.setTag("clanTagsCount", clanTags.length.toString());
 
-      final spanParallel = transaction.startChild("load.parallelTasks");
-
-      await Future.wait([
-        () async {
-          final span = spanParallel.startChild("loadPlayerData");
-          await playerService.loadPlayerData(playerTags, clanTagsByPlayer);
-          span.finish();
-        }(),
-        () async {
-          final span = spanParallel.startChild("loadPlayerWarStats");
-          await playerService.loadPlayerWarStats(playerTags);
-          span.finish();
-        }(),
-        if (clanTags.isNotEmpty)
-          () async {
-            final span = spanParallel.startChild("loadAllClanData");
-            await clanService.loadAllClanData(clanTags.toList());
-            span.finish();
-          }(),
-        if (clanTags.isNotEmpty)
-          () async {
-            final span = spanParallel.startChild("loadClanJoinLeaveData");
-            await clanService.loadClanJoinLeaveData(clanTags.toList());
-            span.finish();
-          }(),
-        if (clanTags.isNotEmpty)
-          () async {
-            final span = spanParallel.startChild("loadAllWarData");
-            await warCwlService.loadAllWarData(clanTags.toList());
-            span.finish();
-          }(),
-        if (clanTags.isNotEmpty)
-          () async {
-            final span = spanParallel.startChild("loadClanCapitalData");
-            await clanService.loadCapitalData(clanTags.toList(), 10);
-            span.finish();
-          }(),
-        if (clanTags.isNotEmpty)
-          () async {
-            final span = spanParallel.startChild("loadAllWarCwlData");
-            await clanService.loadWarLogData(clanTags.toList());
-            span.finish();
-          }(),
-        if (clanTags.isNotEmpty)
-          () async {
-            final span = spanParallel.startChild("loadClanWarStatsData");
-            await clanService.loadClanWarStatsData(clanTags.toList());
-            span.finish();
-          }(),
-      ]);
-
-      spanParallel.finish();
-
-      // Link players to clans and link wars to clans
-      if (clanTags.isNotEmpty) {
-        final spanLinkClans = transaction.startChild("linkClansToPlayers");
-        playerService.linkClansToPlayer(
-          playerService.profiles,
-          clanService.clans.values.toList(),
-        );
-        spanLinkClans.finish();
-
-        final spanLinkWars = transaction.startChild("linkWarsToClans");
-        clanService.linkWarsToClans(
-          clanService.clans.values.toList(),
-          warCwlService.summaries.values.toList(),
-        );
-        spanLinkWars.finish();
-
-        final spanLinkJoinLeave =
-            transaction.startChild("linkJoinLeaveToClans");
-        clanService.linkJoinLeaveToClans();
-        spanLinkJoinLeave.finish();
-
-        final spanLinkCapital = transaction.startChild("linkCapitalToClans");
-        clanService.linkCapitalToClans();
-        spanLinkCapital.finish();
-
-        final spanLinkWarCwl = transaction.startChild("linkWarCwlToClans");
-        clanService.linkWarLogToClans();
-        spanLinkWarCwl.finish();
-
-        final spanLinkWarStats = transaction.startChild("linkWarStatsToClans");
-        clanService.linkWarStatsToClans();
-        spanLinkWarStats.finish();
-      }
+      // Use the new optimized bulk endpoint
+      final spanBulkLoad = transaction.startChild("bulkAccountInitialization");
+      await _loadDataWithBulkEndpoint(playerTags, playerService, clanService, warCwlService);
+      spanBulkLoad.finish();
 
       transaction.finish(status: SpanStatus.ok());
-
       initializeSelectedTag();
     } on HttpException catch (e) {
       if (e.message.contains("503")) {
@@ -368,6 +284,147 @@ class CocAccountService extends ChangeNotifier {
       transaction.finish();
       Sentry.captureException(e, stackTrace: stack);
       rethrow;
+    }
+  }
+
+  /// Optimized bulk data loading using the new API endpoint
+  Future<void> _loadDataWithBulkEndpoint(
+    List<String> playerTags,
+    PlayerService playerService,
+    ClanService clanService,
+    WarCwlService warCwlService,
+  ) async {
+    final token = await TokenService().getAccessToken();
+    if (token == null) throw Exception("User not authenticated");
+
+    print("🚀 Using optimized bulk endpoint for ${playerTags.length} players");
+
+    try {
+      final response = await http.post(
+        Uri.parse("${ApiService.apiUrlV2}/app/initialization"),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({"player_tags": playerTags}),
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = utf8.decode(response.bodyBytes);
+        final data = jsonDecode(responseBody);
+
+        print("✅ Bulk data loaded successfully");
+        
+        // Debug: Print what data we received
+        print("🔍 Debug - Data keys received: ${data.keys.toList()}");
+        if (data["clans"] != null) {
+          final clansData = data["clans"] as Map<String, dynamic>;
+          print("🔍 Debug - Clans data keys: ${clansData.keys.toList()}");
+          print("🔍 Debug - War data count: ${clansData['war_data']?.length ?? 0}");
+          print("🔍 Debug - War log data count: ${clansData['war_log_data']?.length ?? 0}");
+          print("🔍 Debug - Clan war stats count: ${clansData['clan_war_stats']?.length ?? 0}");
+        }
+
+        // Process player data
+        if (data["players"] != null) {
+          playerService.processBulkPlayerData(data["players"], data["players_basic"]);
+        }
+
+        // Process clan data
+        if (data["clans"] != null && data["clan_tags"] != null) {
+          final clanTags = List<String>.from(data["clan_tags"]);
+          await clanService.processBulkClanData(data["clans"], clanTags);
+        }
+
+        // Process war stats
+        if (data["war_stats"] != null) {
+          playerService.processBulkWarStats(data["war_stats"]);
+        }
+
+        // Process war/CWL data
+        if (data["clans"] != null && data["clans"]["war_data"] != null) {
+          final warData = data["clans"]["war_data"] as List<dynamic>;
+          print("🔄 Processing ${warData.length} war data items");
+          warCwlService.processBulkWarData(warData);
+        }
+
+        print("🔗 Linking data relationships...");
+        
+        // Link relationships
+        final clanTags = List<String>.from(data["clan_tags"] ?? []);
+        if (clanTags.isNotEmpty) {
+          playerService.linkClansToPlayer(
+            playerService.profiles,
+            clanService.clans.values.toList(),
+          );
+
+          clanService.linkWarsToClans(
+            clanService.clans.values.toList(),
+            warCwlService.summaries.values.toList(),
+          );
+
+          clanService.linkJoinLeaveToClans();
+          clanService.linkCapitalToClans();
+          clanService.linkWarLogToClans();
+          clanService.linkWarStatsToClans();
+        }
+
+        print("✅ All data linked successfully");
+      } else if (response.statusCode == 503 || response.statusCode == 500) {
+        throw HttpException(response.statusCode.toString(), uri: response.request!.url);
+      } else {
+        print("❌ Bulk endpoint failed, falling back to individual calls");
+        await _loadDataWithFallback(playerTags, playerService, clanService, warCwlService);
+      }
+    } catch (e) {
+      print("❌ Bulk endpoint error: $e, falling back to individual calls");
+      await _loadDataWithFallback(playerTags, playerService, clanService, warCwlService);
+    }
+  }
+
+  /// Fallback to the original individual API calls if bulk endpoint fails
+  Future<void> _loadDataWithFallback(
+    List<String> playerTags,
+    PlayerService playerService,
+    ClanService clanService,
+    WarCwlService warCwlService,
+  ) async {
+    print("🔄 Using fallback individual API calls");
+
+    final clanTagsByPlayer = await playerService.initPlayerData(playerTags);
+
+    final Set<String> clanTags = playerService.profiles
+        .map((profile) => profile.clanTag)
+        .where((tag) => tag.isNotEmpty)
+        .toSet();
+
+    await Future.wait([
+      playerService.loadPlayerData(playerTags, clanTagsByPlayer),
+      playerService.loadPlayerWarStats(playerTags),
+      if (clanTags.isNotEmpty) clanService.loadAllClanData(clanTags.toList()),
+      if (clanTags.isNotEmpty) clanService.loadClanJoinLeaveData(clanTags.toList()),
+      if (clanTags.isNotEmpty) warCwlService.loadAllWarData(clanTags.toList()),
+      if (clanTags.isNotEmpty) clanService.loadCapitalData(clanTags.toList(), 10),
+      if (clanTags.isNotEmpty) clanService.loadWarLogData(clanTags.toList()),
+      if (clanTags.isNotEmpty) clanService.loadClanWarStatsData(clanTags.toList()),
+    ]);
+
+    // Link relationships (same as before)
+    if (clanTags.isNotEmpty) {
+      playerService.linkClansToPlayer(
+        playerService.profiles,
+        clanService.clans.values.toList(),
+      );
+
+      clanService.linkWarsToClans(
+        clanService.clans.values.toList(),
+        warCwlService.summaries.values.toList(),
+      );
+
+      clanService.linkJoinLeaveToClans();
+      clanService.linkCapitalToClans();
+      clanService.linkWarLogToClans();
+      clanService.linkWarStatsToClans();
     }
   }
 

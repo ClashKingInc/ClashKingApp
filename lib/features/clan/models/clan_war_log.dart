@@ -5,9 +5,37 @@ import 'package:http/http.dart' as http;
 class ClanWarLog {
   final List<WarLogDetails> items;
   final String clanTag;
-  late WarLogStats warLogStats;
+  WarLogStats? _warLogStats;
+  
+  // Getter with fallback to avoid LateInitializationError
+  WarLogStats get warLogStats => _warLogStats ?? _createEmptyStats();
+  
+  // Setter
+  set warLogStats(WarLogStats stats) => _warLogStats = stats;
 
   ClanWarLog({required this.items, required this.clanTag});
+  
+  // Create empty stats as fallback
+  WarLogStats _createEmptyStats() {
+    return WarLogStats(
+      totalWins: 0,
+      totalLosses: 0,
+      totalTies: 0,
+      totalWars: 0,
+      averageMembers: 0,
+      averageClanDestruction: 0.0,
+      averageClanStarsPerMember: 0.0,
+      averageOpponentDestruction: 0.0,
+      averageOpponentStarsPerMember: 0.0,
+      averageAttacksPerMember: 0.0,
+      winPercentage: "0",
+      lossPercentage: "0",
+      tiePercentage: "0",
+      averageDestructionDifference: 0.0,
+      averageClanStarsPercentage: 0.0,
+      averageOpponentStarsPercentage: 0.0,
+    );
+  }
 
   factory ClanWarLog.fromJson(Map<String, dynamic> json, String clanTag) {
     var itemList = json['items'] != null

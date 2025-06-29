@@ -7,6 +7,8 @@ class CwlAttackStats {
   final double totalDestruction;
   final int attackCount;
   final int missedAttacks;
+  final int? warsParticipated;
+  final int? attacksPerWar;
 
   CwlAttackStats({
     required this.stars,
@@ -17,6 +19,8 @@ class CwlAttackStats {
     required this.totalDestruction,
     required this.attackCount,
     required this.missedAttacks,
+    this.warsParticipated,
+    this.attacksPerWar,
   });
 
   double get averageStars {
@@ -29,18 +33,35 @@ class CwlAttackStats {
     return totalDestruction / attackCount;
   }
 
+  /// Calculate missed attacks based on wars participated and expected attacks
+  int get calculatedMissedAttacks {
+    if (warsParticipated == null || attacksPerWar == null) {
+      return missedAttacks; // Fallback to API value
+    }
+    final expectedAttacks = (warsParticipated! * attacksPerWar!);
+    final missed = expectedAttacks - attackCount;
+    return missed > 0 ? missed : 0;
+  }
+
   factory CwlAttackStats.fromJson(Map<String, dynamic> json) {
     try {
+      // Calculate total stars from individual star counts
+      final starsCount = Map<String, int>.from(json['starsCount'] ?? {});
+      final totalStars = (starsCount['3'] ?? 0) * 3 + 
+                        (starsCount['2'] ?? 0) * 2 + 
+                        (starsCount['1'] ?? 0) * 1;
+      
       return CwlAttackStats(
-        stars: json['stars'] ?? 0,
-        threeStars: Map<String, int>.from(json['3_stars'] ?? {}),
-        twoStars: Map<String, int>.from(json['2_stars'] ?? {}),
-        oneStar: Map<String, int>.from(json['1_star'] ?? {}),
-        zeroStar: Map<String, int>.from(json['0_star'] ?? {}),
-        totalDestruction:
-            (json['total_destruction'] as num?)?.toDouble() ?? 0.0,
-        attackCount: json['attack_count'] ?? 0,
-        missedAttacks: json['missed_attacks'] ?? 0,
+        stars: totalStars,
+        threeStars: {'3': starsCount['3'] ?? 0},
+        twoStars: {'2': starsCount['2'] ?? 0},
+        oneStar: {'1': starsCount['1'] ?? 0},
+        zeroStar: {'0': starsCount['0'] ?? 0},
+        totalDestruction: 0.0, // Not directly available in this format
+        attackCount: json['totalAttacks'] ?? 0,
+        missedAttacks: json['missedAttacks'] ?? 0,
+        warsParticipated: json['warsCounts'],
+        attacksPerWar: null, // Could be calculated if needed
       );
     } catch (e) {
       print("❌ Error parsing CwlAttackStats: $e");
@@ -53,6 +74,8 @@ class CwlAttackStats {
         totalDestruction: 0.0,
         attackCount: 0,
         missedAttacks: 0,
+        warsParticipated: null,
+        attacksPerWar: null,
       );
     }
   }
@@ -102,16 +125,21 @@ class CwlDefenseStats {
 
   factory CwlDefenseStats.fromJson(Map<String, dynamic> json) {
     try {
+      // Calculate total stars from individual star counts (defense perspective)
+      final starsCountDef = Map<String, int>.from(json['starsCountDef'] ?? {});
+      final totalStars = (starsCountDef['3'] ?? 0) * 3 + 
+                        (starsCountDef['2'] ?? 0) * 2 + 
+                        (starsCountDef['1'] ?? 0) * 1;
+      
       return CwlDefenseStats(
-        stars: json['stars'] ?? 0,
-        threeStars: Map<String, int>.from(json['3_stars'] ?? {}),
-        twoStars: Map<String, int>.from(json['2_stars'] ?? {}),
-        oneStar: Map<String, int>.from(json['1_star'] ?? {}),
-        zeroStar: Map<String, int>.from(json['0_star'] ?? {}),
-        totalDestruction:
-            (json['total_destruction'] as num?)?.toDouble() ?? 0.0,
-        defenseCount: json['defense_count'] ?? 0,
-        missedDefenses: json['missed_defenses'] ?? 0,
+        stars: totalStars,
+        threeStars: {'3': starsCountDef['3'] ?? 0},
+        twoStars: {'2': starsCountDef['2'] ?? 0},
+        oneStar: {'1': starsCountDef['1'] ?? 0},
+        zeroStar: {'0': starsCountDef['0'] ?? 0},
+        totalDestruction: 0.0, // Not directly available in this format
+        defenseCount: json['totalDefenses'] ?? 0,
+        missedDefenses: json['missedDefenses'] ?? 0,
       );
     } catch (e) {
       print("❌ Error parsing CwlDefenseStats: $e");

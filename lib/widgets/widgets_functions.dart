@@ -35,7 +35,6 @@ Future<String> fetchWarSummary(String? clanTag) async {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(utf8.decode(response.bodyBytes));
-      print("🔍 War API Response: ${jsonEncode(data)}");
       return _buildWarWidgetData(data);
     } else {
       Sentry.captureMessage("War summary API returned status ${response.statusCode} for clan $clanTag");
@@ -117,7 +116,7 @@ String _buildRegularWarData(Map<String, dynamic> warInfo, String updatedAt) {
   if (state == "preparation") {
     statusIcon = "🛡️";
     primaryText = "War Preparation";
-    secondaryText = "vs ${currentWar["opponent"]?["name"] ?? "Unknown"}";
+    secondaryText = "";
     colorTheme = "preparation";
     if (currentWar["startTime"] != null) {
       final startTime = DateTime.parse(currentWar["startTime"]);
@@ -130,7 +129,7 @@ String _buildRegularWarData(Map<String, dynamic> warInfo, String updatedAt) {
         primaryText = timeState;
       }
     }
-    score = "vs ${currentWar["opponent"]?["name"] ?? "Unknown"}";
+    score = "";
   } else if (state == "inWar") {
     statusIcon = "⚔️";
     secondaryText = "$clanStars - $opponentStars";
@@ -245,7 +244,7 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt) {
   if (state == "preparation") {
     statusIcon = "🏅";
     primaryText = "CWL Preparation";
-    secondaryText = "vs ${currentWar["opponent"]?["name"] ?? "Unknown"}";
+    secondaryText = "";
     colorTheme = "cwl";
     if (currentWar["startTime"] != null) {
       final startTime = DateTime.parse(currentWar["startTime"]);
@@ -258,7 +257,7 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt) {
         primaryText = timeState;
       }
     }
-    score = "vs ${currentWar["opponent"]?["name"] ?? "Unknown"}";
+    score = "";
   } else if (state == "inWar") {
     statusIcon = "🏅";
     secondaryText = "$clanStars - $opponentStars";

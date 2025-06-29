@@ -67,13 +67,24 @@ class WarInfo {
 
   /// Return a WarMember from either clan or opponent by tag
   WarMember? getMemberByTag(String tag) {
-    try {
-      return (clan?.members ?? []).firstWhere((m) => m.tag == tag,
-          orElse: () =>
-              (opponent?.members ?? []).firstWhere((m) => m.tag == tag));
-    } catch (e) {
-      return null;
+    // First check clan members
+    final clanMembers = clan?.members ?? [];
+    for (final member in clanMembers) {
+      if (member.tag == tag) {
+        return member;
+      }
     }
+    
+    // Then check opponent members
+    final opponentMembers = opponent?.members ?? [];
+    for (final member in opponentMembers) {
+      if (member.tag == tag) {
+        return member;
+      }
+    }
+    
+    // Member not found in either clan
+    return null;
   }
 
   /// Get the TH level from a tag

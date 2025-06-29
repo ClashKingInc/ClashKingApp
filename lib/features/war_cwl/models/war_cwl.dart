@@ -52,15 +52,12 @@ class WarCwl {
   }
 
   WarInfo? getActiveWarByTag(String tag) {
-    try {
-      return warLeagueInfos.firstWhere(
-        (warInfo) =>
-            warInfo.state == 'inWar' &&
-            (warInfo.clan!.tag == tag || warInfo.opponent!.tag == tag),
-      );
-    } catch (e) {
-      return warLeagueInfos.last;
-    }
+    return warLeagueInfos.firstWhere(
+      (warInfo) =>
+          warInfo.state == 'inWar' &&
+          (warInfo.clan!.tag == tag || warInfo.opponent!.tag == tag),
+      orElse: () => warLeagueInfos.isNotEmpty ? warLeagueInfos.last : WarInfo(state: 'unknown'),
+    );
   }
 
   CwlLeagueRound? getRoundForWarTag(String? warTag) {
@@ -71,24 +68,19 @@ class WarCwl {
   }
 
   WarInfo? getWarInfoFromTag(String tag) {
-    try {
-      return warLeagueInfos.firstWhere((warInfo) => warInfo.tag == tag);
-    } catch (e) {
-      print("❌ Error getting war info from tag: $e");
-      return null;
-    }
+    return warLeagueInfos.firstWhere(
+      (warInfo) => warInfo.tag == tag,
+      orElse: () => WarInfo(state: 'unknown'),
+    );
   }
 
   WarInfo getActiveWarForClan(String clanTag) {
-    try {
-      return warLeagueInfos.firstWhere(
-        (warInfo) =>
-            warInfo.state == 'inWar' &&
-            (warInfo.clan!.tag == clanTag || warInfo.opponent!.tag == clanTag),
-      );
-    } catch (e) {
-      return WarInfo(state: 'unknown');
-    }
+    return warLeagueInfos.firstWhere(
+      (warInfo) =>
+          warInfo.state == 'inWar' &&
+          (warInfo.clan!.tag == clanTag || warInfo.opponent!.tag == clanTag),
+      orElse: () => WarInfo(state: 'unknown'),
+    );
   }
 
   WarMemberPresence getMemberPresence(String memberTag, String clanTag) {
