@@ -2,6 +2,19 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "لوڈ ہو رہا ہے...",
+  "loadingVillages": "Loading your villages...",
+  "loadingClanData": "Fetching clan data...",
+  "loadingWarStats": "Analyzing war stats...",
+  "loadingLegendsData": "Preparing legends data...",
+  "loadingCapitalRaids": "Loading capital raids...",
+  "loadingAlmostReady": "Almost ready...",
+  "accountVerificationTitle": "Verify Account",
+  "accountVerificationMessage": "Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.",
+  "accountVerified": "Account verified",
+  "accountNotVerified": "Account not verified",
+  "accountVerifyButton": "Verify",
+  "accountVerificationSuccess": "Account verified successfully!",
+  "accountVerificationFailed": "Verification failed. Please check your API token.",
   "generalRetry": "Retry",
   "generalTryAgain": "Try again",
   "generalCancel": "منسوخ کریں۔",
@@ -15,6 +28,26 @@
   "generalSettings": "ترتیبات",
   "generalCopiedToClipboard": "کلپ بورڈ پر کاپی ہو گیا۔",
   "generalComingSoon": "جلد آ رہا ہے!",
+  "generalLastRefresh": "Last refresh: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
   "generalAll": "تمام",
   "@generalAll": {
     "description": "all items"
@@ -94,7 +127,7 @@
   "authUsernameTooShort": "Username must be at least 3 characters",
   "authErrorConnection": "ایک خرابی پیش آگئی۔ براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور دوبارہ کوشش کریں.",
   "authErrorConnectionRelaunch": "ایک خرابی پیش آگئی۔ براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور ایپ کو دوبارہ لانچ کریں.",
-  "authAccountManagement": "Account Management",
+  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.",
   "authAccountConnected": "Connected Accounts",
   "authAccountConnectedStatus": "Connected",
   "authAccountNotConnected": "Not connected",
@@ -348,6 +381,9 @@
     }
   },
   "timeJustNow": "ابھی ابھی",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
   "timeEndedJustNow": "Ended just now",
   "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
   "@timeEndedMinutesAgo": {
