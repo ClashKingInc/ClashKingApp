@@ -674,7 +674,7 @@
       }
     }
   },
-  "warStats": "War Stats",
+  "warStats": "Krig Statistik",
   "warOngoing": "Igangværende krig",
   "warIsNotInWar": "{clan} er ikke i krig.",
   "@warIsNotInWar": {
@@ -686,7 +686,7 @@
   },
   "warAskForWar": "Kontakt lederen eller en medleder for at starte en krig.",
   "warAskForWarLogOpening": "Kontakt en leder eller en medleder for at åbne krigsloggen.",
-  "warEnded": "War ended",
+  "warEnded": "Krig sluttede",
   "warPreparation": "Forberedelse",
   "warPerfectWar": "Perfekt krig",
   "warVictory": "Sejr",
@@ -837,7 +837,7 @@
   "@warDestructionRate": {
     "description": "Percentage of destruction in war"
   },
-  "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryWinsDescription": "Din klan vandt {wins} krige ({percent}%) ud af de sidste 50 krige.",
   "@warHistoryWinsDescription": {
     "placeholders": {
       "wins": {
@@ -848,7 +848,7 @@
       }
     }
   },
-  "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryLossesDescription": "Din klan mistede {losses} krige ({percent}%) ud af de sidste 50 krige.",
   "@warHistoryLossesDescription": {
     "placeholders": {
       "losses": {
@@ -859,7 +859,7 @@
       }
     }
   },
-  "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) out of the last 50 wars.",
+  "warHistoryDrawsDescription": "Din klan havde {draws} trækker ({percent}%) ud af de sidste 50 krige.",
   "@warHistoryDrawsDescription": {
     "placeholders": {
       "draws": {
@@ -870,7 +870,7 @@
       }
     }
   },
-  "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
+  "warHistoryAverageMembersDescription": "Din klan har i gennemsnit {members} medlemmer, der deltager ud af de sidste 50 krige.",
   "@warHistoryAverageMembersDescription": {
     "placeholders": {
       "members": {
@@ -878,7 +878,7 @@
       }
     }
   },
-  "warHistoryAverageWarStarsDescription": "Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.",
+  "warHistoryAverageWarStarsDescription": "Din klan havde i gennemsnit {stars} stjerner per krig fra de sidste 50 krige. Den repræsenterer {percent} af de samlede stjerner.",
   "@warHistoryAverageWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -889,7 +889,7 @@
       }
     }
   },
-  "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
+  "warHistoryAverageHitRateDescription": "Din klan havde i gennemsnit {percent}% destruktionsrate fra de sidste 50 krige.",
   "@warHistoryAverageHitRateDescription": {
     "placeholders": {
       "percent": {
@@ -977,7 +977,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Aktuel runde (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -985,7 +985,7 @@
       }
     }
   },
-  "cwlRank": "Your clan is currently ranked {rank}.",
+  "cwlRank": "Din klan er i øjeblikket rangeret {rank}.",
   "@cwlRank": {
     "placeholders": {
       "rank": {
@@ -993,7 +993,7 @@
       }
     }
   },
-  "cwlStars": "Your clan has a total of {stars} stars.",
+  "cwlStars": "Din klan har i alt {stars} stjerner.",
   "@cwlStars": {
     "placeholders": {
       "stars": {
@@ -1001,7 +1001,7 @@
       }
     }
   },
-  "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
+  "cwlDestructionPercentage": "Din klan har en total ødelæggelse på {percent}%.",
   "@cwlDestructionPercentage": {
     "placeholders": {
       "percent": {
@@ -1127,7 +1127,7 @@
   "raidsLast": "Sidste razziaer",
   "raidsOngoing": "Igangværende razziaer",
   "raidsDistrictsDestroyed": "Distrikter ødelagt",
-  "raidsCompleted": "Raids completed",
+  "raidsCompleted": "Raids fuldført",
   "searchNoResult": "Intet resultat.",
   "maintenanceTitle": "Vedligeholdelse",
   "maintenanceDescription": "Sammenstød af klaner er i øjeblikket under vedligeholdelse, så vi kan ikke få adgang til API'en. Tjek venligst tilbage senere.",
@@ -1146,42 +1146,42 @@
   "toolsTitle": "Værktøjer",
   "navigationTeam": "Hold",
   "navigationStatistics": "Statistik",
-  "versionDevice": "Version & Device",
+  "versionDevice": "Version & Enhed",
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  "betaFeature": "Beta Feature",
+  "betaFeature": "Beta Funktion",
   "betaLabel": "INDSATS",
-  "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
+  "betaDescription": "Denne funktion er i øjeblikket i beta, den kan have nogle fejl eller være ufuldstændig. Vi arbejder aktivt på forbedringer og hilser din feedback velkommen. Del dine ideer og rapporter eventuelle problemer i vores Discord Server for at hjælpe os med at gøre det bedre.",
   "settingsLanguage": "Sprog",
   "settingsSelectLanguage": "Vælg et sprog",
   "settingsToggleTheme": "Skift Tema",
   "faqTitle": "OSS",
-  "faqSubtitle": "Frequently Asked Questions",
-  "faqIsThisFromSupercell": "Is this App from Supercell?",
-  "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-  "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
-  "faqClanNotTracked": "Clan not tracked",
-  "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
-  "faqTrackingDown": "Tracking down",
-  "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
-  "faqApiLimitation": "Clash of Clans API limitation",
-  "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
-  "faqSupportWork": "How can I support your work?",
-  "faqSupportWorkAnswer": "There are several ways to support us:",
-  "faqUseCodeClashKing": "Use code \"ClashKing\"",
-  "faqSupportUsOnPatreon": "Support us on Patreon",
-  "faqShareTheApp": "Share the app with your friends",
-  "faqRateTheApp": "Rate the app in the store",
-  "faqHelpUsTranslate": "Help us translate the app",
-  "faqHowToInviteTheBot": "How can I invite your bot to my Discord Server?",
-  "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
+  "faqSubtitle": "Ofte Stillede Spørgsmål",
+  "faqIsThisFromSupercell": "Er denne app fra Supercell?",
+  "faqFanContentPolicy": "Dette materiale er uofficielt og er ikke godkendt af Supercell. For mere information se Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
+  "faqWhyNotAccurate": "Hvorfor mangler dataene nogle gange unøjagtigt?",
+  "faqClanNotTracked": "Klan ikke sporet",
+  "faqClanNotTrackedAnswer": "ClashKing kan kun hente denne info hvis klanen er sporet. Hvis din klan ikke spores, bedes du invitere ClashKing Bot til din Discord Server og bruge kommandoen /addclan. Vi arbejder på at gøre denne funktion tilgængelig i appen snart.",
+  "faqTrackingDown": "Sporing ned",
+  "faqTrackingDownAnswer": "Sporingen kan stoppe med at arbejde i en vis periode. Det er derfor, du nogle gange kan have huller i dine data. Vi arbejder på at forbedre dette.",
+  "faqApiLimitation": "Sammenstød mellem klaner API begrænsning",
+  "faqApiLimitationAnswer": "Nogle data leveres af Clash of Clans og deres API har nogle begrænsninger. Dette er tilfældet for legender tracking, det undertiden stakker trofæet gevinst og tab, som om det var et enkelt angreb. Det er også derfor, vi ikke har nogen oplysninger om din bygning niveauer.",
+  "faqSupportWork": "Hvordan kan jeg støtte dit arbejde?",
+  "faqSupportWorkAnswer": "Der er flere måder at støtte os:",
+  "faqUseCodeClashKing": "Brug koden \"ClashKing\"",
+  "faqSupportUsOnPatreon": "Støt os på Patreon",
+  "faqShareTheApp": "Del appen med dine venner",
+  "faqRateTheApp": "Bedøm appen i butikken",
+  "faqHelpUsTranslate": "Hjælp os med at oversætte appen",
+  "faqHowToInviteTheBot": "Hvordan kan jeg invitere din bot til min Discord Server?",
+  "faqHowToInviteTheBotAnswer": "Du kan invitere vores bot til din server ved at klikke på knappen nedenfor. Du skal bruge tilladelsen \"Administrer Server\" for at tilføje bot.",
   "faqInviteTheBot": "Invite ClashKing Bot",
-  "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
-  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.",
-  "faqSendEmail": "Send an email",
-  "faqJoinDiscord": "Join our Discord Server",
-  "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
+  "faqNeedHelp": "Jeg har brug for hjælp, eller jeg vil gerne komme med et forslag. Hvordan kan jeg kontakte dig?",
+  "faqNeedHelpAnswer": "Du kan deltage i vores Discord Server for at bede om hjælp eller give feedback, eller du kan e-maile os på devs@clashkingbot. om. Skriv kun på engelsk eller fransk.",
+  "faqSendEmail": "Send en e-mail",
+  "faqJoinDiscord": "Tilmeld dig vores Discord Server",
+  "faqCannotOpenMailClient": "Af nogle grunde kan vi ikke åbne din mailklient. Vi kopierede e-mailadressen for dig. Du kan skrive en e-mail og indsætte adressen i modtagerfeltet.",
   "translationHelpUsTranslate": "Hjælp os med at oversætte",
   "translationSuggestFeatures": "Foreslå funktioner",
   "translationThankYou": "Mange tak!",
