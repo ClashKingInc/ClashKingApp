@@ -154,7 +154,7 @@
   "accountsErrorAlreadyLinked": "The player tag is already linked to someone.",
   "accountsErrorAlreadyLinkedToYou": "The player tag is already linked to you.",
   "accountsErrorWrongApiToken": "The API token entered is incorrect",
-  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
+  "accountsErrorFailedToAdd": "Failed to add link. Please try again later.",
   "accountsErrorFailedToDelete": "Failed to delete link. Please try again later.",
   "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
   "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
@@ -273,7 +273,7 @@
   "gameBuilderBaseTrophies": "BB Trophies",
   "gameDonations": "Donations",
   "gameDonationsReceived": "Donations Received",
-  "gameDonationsRatio": "Donation Ratio",
+  "gameDonationsRatio": "Donations Ratio",
   "gameLevel": "Level: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
@@ -1020,7 +1020,7 @@
       }
     }
   },
-  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
+  "joinLeaveTitle": "Join/Leave Logs",
   "joinLeaveJoin": "Join",
   "joinLeaveLeave": "Leave",
   "joinLeaveReset": "Reset",
@@ -1034,7 +1034,7 @@
   "joinLeaveRejoinedPlayers": "Rejoined Players",
   "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
   "joinLeavePeakHour": "Most Active Hour",
-  "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
+  "joinLeaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
   "@joinLeaveNumberDescription": {
     "placeholders": {
       "number": {
@@ -1045,7 +1045,7 @@
       }
     }
   },
-  "joinLeaveJoinNumberDescription": "{number} join events occurred during the current season ({date}).",
+  "joinLeaveJoinNumberDescription": "{number} player(s) joined the clan during the current season ({date}).",
   "@joinLeaveJoinNumberDescription": {
     "placeholders": {
       "number": {
