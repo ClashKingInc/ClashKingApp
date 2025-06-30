@@ -51,8 +51,13 @@ jobs:
           # Create certificates directory
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           
-          # Decode and install certificate
-          echo "$P12_FILE" | base64 --decode > certificate.p12
+          # Install certificate (try base64 decode first, fallback to raw)
+          if echo "$P12_FILE" | base64 --decode > certificate.p12 2>/dev/null; then
+            echo "Successfully decoded P12 as base64"
+          else
+            echo "Using P12 as raw content"
+            echo "$P12_FILE" > certificate.p12
+          fi
           security create-keychain -p "" build.keychain
           security import certificate.p12 -k build.keychain -P "$P12_PASSWORD" -T /usr/bin/codesign
           security set-keychain-settings build.keychain
@@ -61,8 +66,13 @@ jobs:
           security unlock-keychain -p "" build.keychain
           security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
           
-          # Install provisioning profile
-          echo "$PROVISIONING_PROFILE" | base64 --decode > profile.mobileprovision
+          # Install provisioning profile (try base64 decode first, fallback to raw)
+          if echo "$PROVISIONING_PROFILE" | base64 --decode > profile.mobileprovision 2>/dev/null; then
+            echo "Successfully decoded provisioning profile as base64"
+          else
+            echo "Using provisioning profile as raw content"
+            echo "$PROVISIONING_PROFILE" > profile.mobileprovision
+          fi
           cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
       - name: Build iOS app
