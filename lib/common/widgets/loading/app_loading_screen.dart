@@ -82,14 +82,17 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
     _textController.reverse().then((_) {
       if (mounted) {
         setState(() {
-          _currentTextIndex = (_currentTextIndex + 1) % _loadingTexts.length;
+          _currentTextIndex = _currentTextIndex + 1;
         });
         _textController.forward().then((_) {
-          Future.delayed(const Duration(milliseconds: 800), () {
-            if (mounted) {
-              _cycleText();
-            }
-          });
+          // Only continue cycling if we haven't reached the last text
+          if (_currentTextIndex < _loadingTexts.length - 1) {
+            Future.delayed(const Duration(milliseconds: 800), () {
+              if (mounted) {
+                _cycleText();
+              }
+            });
+          }
         });
       }
     });
@@ -165,7 +168,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(6, (index) {
-                final isActive = index <= (_currentTextIndex % 6);
+                final isActive = index <= _currentTextIndex;
                 return AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   margin: const EdgeInsets.symmetric(horizontal: 4),

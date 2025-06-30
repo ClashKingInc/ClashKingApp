@@ -14,6 +14,10 @@ class ApiService {
   static const String bunnyUrl = "https://cdn.clashk.ing";
   static const String discordUrl = "https://discord.gg/clashking";
 
+  // Config storage
+  static String? _sentryDsn;
+  static String? get sentryDsn => _sentryDsn;
+
   Future<Map<String, dynamic>> get(String endpoint) async {
     try {
       final token = await TokenService().getAccessToken();
@@ -98,6 +102,24 @@ class ApiService {
       );
     }
     return url;
+  }
+
+  static Future<void> loadConfig() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$apiUrlV2/app/public-config'),
+        headers: {'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 10));
+      
+      if (response.statusCode == 200) {
+        final config = json.decode(response.body);
+        _sentryDsn = config['sentry_dsn'];
+      } else {
+        print('Failed to load config: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error loading config: $e');
+    }
   }
 }
 

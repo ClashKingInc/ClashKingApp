@@ -1,11 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart' as material;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:crypto/crypto.dart';
-import 'package:encrypt/encrypt.dart';
-import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:collection/collection.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -16,84 +11,20 @@ final storage = FlutterSecureStorage();
 
 Future<void> storePrefs(String name, String token) async {
   try {
-    // Load the keys from the .env file
-    await dotenv.load(fileName: ".env");
-    final encryptionKey = Key.fromBase64(
-        dotenv.env['ENCRYPTION_KEY']!); // 32 bytes key for AES-256
-    final hmacKey = base64.decode(dotenv.env['HMAC_KEY']!); // Key for HMAC
-
-    if (encryptionKey.bytes.length != 32) {
-      throw Exception(
-          'Invalid encryption key length: ${encryptionKey.bytes.length}');
-    }
-
-    if (hmacKey.length != 32) {
-      throw Exception('Invalid HMAC key length: ${hmacKey.length}');
-    }
-
-    // Encrypt the token
-    final iv = IV.fromLength(16); // Initialization vector
-    final encrypter = Encrypter(AES(encryptionKey, mode: AESMode.cbc));
-    final encrypted = encrypter.encrypt(token, iv: iv);
-
-    // Combine IV and encrypted data for HMAC
-    final combinedData = iv.bytes + encrypted.bytes;
-
-    // Compute HMAC for integrity
-    final hmac = Hmac(sha256, hmacKey);
-    final hmacDigest = hmac.convert(combinedData).bytes;
-
-    // Combine IV, encrypted data, and HMAC for storage
-    final combined = base64.encode(combinedData + hmacDigest);
-
-    // Store the combined data
-    await storage.write(key: name, value: combined);
+    await storage.write(key: name, value: token);
   } catch (exception, stackTrace) {
     final hint = Hint.withMap(
         {'message': 'Error storing prefs', 'name': name, 'token': token});
     Sentry.captureException(exception, stackTrace: stackTrace,
         withScope: (scope) {
-      scope.setContexts('Encryption Context', hint);
+      scope.setContexts('Storage Context', hint);
     });
   }
 }
 
 Future<String?> getPrefs(String name) async {
   try {
-    // Retrieve the combined data
-    final combined = await storage.read(key: name);
-    if (combined == null) {
-      return null;
-    }
-
-    final data = base64.decode(combined);
-
-    // Extract IV, encrypted data, and HMAC
-    final iv = IV(data.sublist(0, 16));
-    final encryptedData = data.sublist(16, data.length - 32);
-    final hmacDigest = data.sublist(data.length - 32);
-    // Combine IV and encrypted data for HMAC
-    final combinedData = iv.bytes + encryptedData;
-
-    // Verify HMAC
-    final hmacKey = base64.decode(dotenv.env['HMAC_KEY']!); // Key for HMAC
-    final hmac = Hmac(sha256, hmacKey);
-    final newHmacDigest =
-        hmac.convert(combinedData).bytes; // Use IV + encryptedData
-
-    if (!ListEquality().equals(hmacDigest, newHmacDigest)) {
-      throw Exception('HMAC verification failed');
-    }
-
-    // Decrypt the access token
-    final encryptionKey = Key.fromBase64(
-        dotenv.env['ENCRYPTION_KEY']!); // 32 bytes key for AES-256
-    final encrypter = Encrypter(AES(encryptionKey, mode: AESMode.cbc));
-    final encrypted = Encrypted(encryptedData);
-
-    final decrypted = encrypter.decrypt(encrypted, iv: iv);
-
-    return decrypted;
+    return await storage.read(key: name);
   } catch (exception, stackTrace) {
     Sentry.captureException(exception, stackTrace: stackTrace);
     Sentry.captureMessage('Error retrieving prefs, name: $name');

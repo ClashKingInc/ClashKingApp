@@ -32,7 +32,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   provider: ^6.1.5
-  flutter_dotenv: ^5.2.1
   flutter_web_auth_2: ^4.1.0
   shared_preferences: ^2.5.3 
   http: ^1.4.0
@@ -51,7 +50,6 @@ dependencies:
   sentry_flutter: ^9.1.0
   retry: ^3.1.2
   flutter_secure_storage: ^9.2.4
-  encrypt: ^5.0.3
   collection: ^1.19.1
   flutter_gif: ^0.0.4
   package_info_plus: ^8.3.0
@@ -103,7 +101,6 @@ flutter:
 
   assets:
     - assets/icons/
-    - .env
 
 
   # To add assets to your application, add an assets section, like this:

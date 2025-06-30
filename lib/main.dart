@@ -9,7 +9,6 @@ import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/auth/data/user_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clashkingapp/core/app/my_app.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
@@ -26,7 +25,7 @@ void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     try {
       WidgetsFlutterBinding.ensureInitialized();
-      await dotenv.load(fileName: ".env");
+      await ApiService.loadConfig();
       
       // Handle different background tasks
       if (task == 'simplePeriodicTask') {
@@ -50,15 +49,16 @@ Future<void> main() async {
   // Initialize Flutter binding BEFORE Sentry
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Load config from backend first
+  await ApiService.loadConfig();
+
   await SentryFlutter.init(
     (options) {
-      options.dsn = const String.fromEnvironment('SENTRY_DSN', defaultValue: '');
+      options.dsn = ApiService.sentryDsn ?? '';
       options.tracesSampleRate = 1.0;
       options.debug = false;
     },
     appRunner: () async {
-
-      await dotenv.load(fileName: ".env");
 
       if (!kIsWeb) {
         Workmanager().initialize(callbackDispatcher);

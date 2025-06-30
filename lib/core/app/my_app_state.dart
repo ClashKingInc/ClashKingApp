@@ -11,7 +11,6 @@ import 'dart:async';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   Future<void>? initializeUserFuture;
@@ -116,7 +115,6 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   // Update the war widget
   Future<void> updateWarWidget() async {
     try {
-      await dotenv.load(fileName: ".env");
       
       // Get clan tag from the currently selected player
       clanTag = await getCurrentPlayerClanTag();
