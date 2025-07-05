@@ -122,8 +122,8 @@
   "authPasswordTooShort": "Password must be at least 8 characters",
   "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
   "authPasswordForgot": "Forgot password?",
-  "authUsernameLabel": "Felhasználónév",
-  "authUsernameRequired": "Kérjük, adja meg a felhasználónevet",
+  "authUsernameLabel": "Username",
+  "authUsernameRequired": "Please enter a username",
   "authUsernameTooShort": "Username must be at least 3 characters",
   "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
   "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
@@ -151,15 +151,15 @@
   "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
   "accountsFillAllFields": "Please fill all fields.",
   "accountsErrorTagNotExists": "A megadott játékos tag nem létezik.",
-  "accountsErrorAlreadyLinked": "A játékos tag-je már csatolva van valakihez.",
+  "accountsErrorAlreadyLinked": "The player tag is already linked to someone.",
   "accountsErrorAlreadyLinkedToYou": "The player tag is already linked to you.",
   "accountsErrorWrongApiToken": "The API token entered is incorrect",
   "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
-  "accountsErrorFailedToDelete": "A kapcsolat törlése nem sikerült. Kérjük, próbálja meg később újra.",
+  "accountsErrorFailedToDelete": "Failed to delete link. Please try again later.",
   "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
   "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
   "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
-  "errorLoadingVersion": "Hiba verzió betöltése közben",
+  "errorLoadingVersion": "Error loading version",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
@@ -441,7 +441,7 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
+  "legendsTitle": "Legend League",
   "legendsNotInLeague": "Not in Legend League",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "You started the day with {trophies} trophies.",
@@ -533,7 +533,7 @@
   "legendsInaccurateNetGainBody": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
   "legendsInaccurateConclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
   "statsSeasonStats": "Season Stats",
-  "statsByDay": "Naponta",
+  "statsByDay": "By Day",
   "@statsByDay": {
     "description": "Shows stats by day"
   },
@@ -977,7 +977,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Current round (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
