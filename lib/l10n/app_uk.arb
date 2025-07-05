@@ -102,7 +102,7 @@
   "authCreateClashKingAccount": "Create ClashKing Account",
   "authCreateAccountToGetStarted": "Create your account to get started",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
-  "authConfirmLogout": "Впевнені, що хочете вийти?",
+  "authConfirmLogout": "Are you sure you want to log out?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
@@ -139,7 +139,7 @@
   "helpTitle": "Need help?",
   "helpJoinDiscord": "Join Discord",
   "helpEmailUs": "Email Us",
-  "accountsWelcome": "Вітаємо!",
+  "accountsWelcome": "Welcome!",
   "accountsWelcomeMessage": "Будь ласка, додайте один або кілька облікових записів Clash of Clans до свого профілю. Ви можете додати або видалити облікові записи пізніше.",
   "accountsManageTitle": "Manage your accounts",
   "accountsNoneFound": "Не знайдено облікового запису, пов'язаного з вашим профілем",
