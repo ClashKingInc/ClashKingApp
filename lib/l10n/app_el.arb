@@ -1,5 +1,6 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "appTitle": "ClashKing",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Φορτώνει...",
   "loadingVillages": "Loading your villages...",
@@ -297,6 +298,10 @@
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Κωδικός Δημιουργού: ClashKing",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn't cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "Clan",
   "clanSearchTitle": "Search clan",
   "clanSearchPlaceholder": "Clan's name",
@@ -1150,6 +1155,10 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
   "betaFeature": "Χαρακτηριστικό εκδοχής Βήτα",
   "betaLabel": "BETA",
   "betaDescription": "Αυτό το χαρακτηριστικό βρίσκεται ακόμη στην εκδοχή βήτα, οπότε μπορεί να αντιμετωπίσετε μερικά σφάλματα ή να μην είναι ολοκληρωμένο. Δουλεύουμε ενεργά για τη βελτίωση της εφαρμογής και σας προσκαλούμε, να μοιραστείτε τις ιδέες σας και να αναφέρετε οποιαδήποτε σφάλματα αντιμετωπίζετε, στην ομάδα μας στο Discord.",
@@ -1178,7 +1187,7 @@
   "faqHowToInviteTheBotAnswer": "Μπορείτε να προσθέσετε το εργαλείο Clashking στην ομάδα σας πατώντας το παρακάτω κουμπί. Θα χρειαστεί να επιτρέψετε την άδεια \"Διαχείριση Ομάδας\" για να προσθέσετε το εργαλείο.",
   "faqInviteTheBot": "Προσθέστε το εργαλείο Clashking",
   "faqNeedHelp": "Χρειάζομαι βοήθεια ή θα ήθελα να κάνω μία πρόταση. Πώς μπορώ να επικοινωνήσω μαζί σας;",
-  "faqNeedHelpAnswer": "Μπορείτε να μας βρείτε στην ομάδα μας στο Discord για να ζητήσετε βοήθεια ή να μας μεταφέρετε τα σχόλιά σας, αλλιώς μπορείτε να μας στείλετε ένα email στο devs@clashkingbot.com. Σας παρακαλούμε να γράφετε μόνο στα Αγγλικά ή στα Γαλλικά.",
+  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
   "faqSendEmail": "Στείλτε μας ένα email",
   "faqJoinDiscord": "Εισέλθετε στην ομάδα μας στο Discord",
   "faqCannotOpenMailClient": "Για κάποιους λόγους δεν μπορέσαμε να ανοίξουμε το mail σας. Έχουμε αντιγράψει τη διεύθυνση ηλεκτρονικού ταχυδρομείου για εσάς. Μπορείτε να γράψετε ένα email και να αποκολλήσετε τη διεύθυνση στο πεδίο του παραλήπτη.",
