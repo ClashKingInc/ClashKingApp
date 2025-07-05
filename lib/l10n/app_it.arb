@@ -147,7 +147,7 @@
   "accountsEnterPlayerTag": "Inserisci un tag giocatore",
   "accountsAdd": "Aggiungi account",
   "accountsDelete": "Elimina account",
-  "accountsApiToken": "Token API Account",
+  "accountsApiToken": "Account API Token",
   "accountsEnterApiToken": "Inserisci il token API dell'account per confermare che è tuo. Puoi trovarlo in Impostazioni di Clash of Clans > Altre impostazioni > Token API.",
   "accountsFillAllFields": "Riempire tutti i campi.",
   "accountsErrorTagNotExists": "Il tag del giocatore inserito non esiste.",
@@ -247,7 +247,7 @@
       }
     }
   },
-  "gameBaseHome": "Base Home",
+  "gameBaseHome": "Home Base",
   "gameBaseBuilder": "Base Del Costruttore",
   "gameClanCapital": "Capitale Del Clan",
   "gameTownHall": "TH",
