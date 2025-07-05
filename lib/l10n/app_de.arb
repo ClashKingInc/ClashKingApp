@@ -1,5 +1,6 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "appTitle": "ClashKing",
   "appDescription": "Dein ultimativer Clash of Clans Begleiter zum Verfolgen von Statistiken, Verwalten von Clans und Analysieren der Leistung.",
   "generalLoading": "Laden...",
   "loadingVillages": "Loading your villages...",
@@ -297,6 +298,10 @@
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Creator-Code: ClashKing",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn't cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "Clan",
   "clanSearchTitle": "Clan suchen",
   "clanSearchPlaceholder": "Clanname",
@@ -1150,6 +1155,10 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
   "betaFeature": "Beta-Funktion",
   "betaLabel": "BETA",
   "betaDescription": "Diese Option ist aktuell in der Beta, es kann also zu Fehlern kommen oder unvollständig sein. Wir arbeiten aktiv an Verbesserungen und sind dankbar für dein Feedback. Bitte teile uns deine Ideen sowie Fragen und Probleme auf unserem Discord-Server mit, damit wir es besser machen können.",
@@ -1178,7 +1187,7 @@
   "faqHowToInviteTheBotAnswer": "Du kannst unseren Bot auf deinen Server einladen, indem du auf den unten stehenden Button klickst. Du benötigst die Berechtigung \"Server verwalten\", um den Bot hinzuzufügen.",
   "faqInviteTheBot": "ClashKing Bot einladen",
   "faqNeedHelp": "Ich brauche Hilfe oder möchte einen Vorschlag machen. Wie kann ich euch erreichen?",
-  "faqNeedHelpAnswer": "Du kannst unserem Discord-Server beitreten und dort um Hilfe bitten, oder Feedback geben oder uns eine E-Mail an devs@clashkingbot.com senden. Bitte schreib uns, wenn möglich, nur auf Englisch oder Französisch.",
+  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
   "faqSendEmail": "Sende eine E-Mail",
   "faqJoinDiscord": "Unserem Discord-Server beitreten",
   "faqCannotOpenMailClient": "Aus irgendeinem Grund können wir deinen E-Mail-Client nicht öffnen. Wir haben die E-Mail-Adresse für dich kopiert. Du kannst eine E-Mail schreiben und die Adresse im Empfängerfeld einfügen.",
