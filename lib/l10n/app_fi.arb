@@ -822,7 +822,7 @@
   },
   "warStarsTitle": "Tähdet",
   "warStarsAverage": "Keskimääräiset tähdet",
-  "warStarsNumber": "Tähtien määrä",
+  "warStarsNumber": "Number of stars",
   "warStarsOne": "1 tähti",
   "warStarsTwo": "2 tähteä",
   "warStarsThree": "3 tähteä",
@@ -977,7 +977,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Current round (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
