@@ -251,7 +251,7 @@
   "gameBaseBuilder": "Base del constructor",
   "gameClanCapital": "Capital del Clan",
   "gameTownHall": "TH",
-  "gameTownHallLevel": "Nivel TH",
+  "gameTownHallLevel": "TH Level",
   "gameTownHallLevelNumber": "Town Hall {level}",
   "@gameTownHallLevelNumber": {
     "placeholders": {
@@ -285,7 +285,7 @@
       }
     }
   },
-  "gameHeroes": "Héroes",
+  "gameHeroes": "Heroes",
   "gameEquipment": "Equipos",
   "gameHeroesEquipments": "Hero equipments",
   "gameTroops": "Tropas",
@@ -833,7 +833,7 @@
   },
   "warDestructionTitle": "Destruction",
   "warDestructionAverage": "Average destruction",
-  "warDestructionRate": "Tasa de destrucción",
+  "warDestructionRate": "Destruction rate",
   "@warDestructionRate": {
     "description": "Percentage of destruction in war"
   },
@@ -977,7 +977,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Current round (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
