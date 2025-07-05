@@ -1,5 +1,6 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "appTitle": "ClashKing",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "लोड हो रहा है...",
   "loadingVillages": "Loading your villages...",
@@ -297,6 +298,10 @@
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "क्रिएटर कोड: ClashKing",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn't cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "कबेला",
   "clanSearchTitle": "कबीला खोजें",
   "clanSearchPlaceholder": "Clan's name",
@@ -1150,6 +1155,10 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
   "betaFeature": "बीटा सुविधा",
   "betaLabel": "बीटा",
   "betaDescription": "यह सुविधा अभी बीटा में है, इसमें कुछ बग हो सकते हैं या यह अधूरी हो सकती है। हम सक्रिय रूप से सुधार पर काम कर रहे हैं और आपकी प्रतिक्रिया का स्वागत करते हैं। कृपया अपने विचार साझा करें और हमारे डिस्कॉर्ड सर्वर में किसी भी समस्या की रिपोर्ट करें ताकि हमें इसे बेहतर बनाने में मदद मिल सके।",
@@ -1178,7 +1187,7 @@
   "faqHowToInviteTheBotAnswer": "आप नीचे दिए गए बटन पर क्लिक करके हमारे बॉट को अपने सर्वर पर आमंत्रित कर सकते हैं। बॉट को जोड़ने के लिए आपको \"सर्वर प्रबंधित करें\" अनुमति की आवश्यकता होगी।",
   "faqInviteTheBot": "क्लैशकिंग बॉट को आमंत्रित करें",
   "faqNeedHelp": "मुझे मदद चाहिए या मैं कोई सुझाव देना चाहता हूँ। मैं आपसे कैसे संपर्क कर सकता हूँ?",
-  "faqNeedHelpAnswer": "आप मदद मांगने या प्रतिक्रिया देने के लिए हमारे डिस्कॉर्ड सर्वर से जुड़ सकते हैं, या आप हमें devs@clashkingbot.com पर ईमेल कर सकते हैं। कृपया केवल अंग्रेज़ी या फ़्रेंच में ही लिखें।",
+  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
   "faqSendEmail": "हमें एक ईमेल भेजो",
   "faqJoinDiscord": "हमारे डिस्कॉर्ड सर्वर से जुड़ें",
   "faqCannotOpenMailClient": "कुछ कारणों से हम आपका मेल क्लाइंट नहीं खोल पा रहे हैं। हमने आपके लिए ईमेल पता कॉपी कर लिया है। आप ईमेल लिखकर प्राप्तकर्ता फ़ील्ड में पता पेस्ट कर सकते हैं।",
