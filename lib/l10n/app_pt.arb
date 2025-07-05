@@ -17,7 +17,7 @@
   "accountVerificationFailed": "Verification failed. Please check your API token.",
   "generalRetry": "Retry",
   "generalTryAgain": "Try again",
-  "generalCancel": "Cancelar",
+  "generalCancel": "Cancel",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
@@ -102,7 +102,7 @@
   "authCreateClashKingAccount": "Create ClashKing Account",
   "authCreateAccountToGetStarted": "Create your account to get started",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
-  "authConfirmLogout": "Tem a certeza de que pretende terminar a sessão?",
+  "authConfirmLogout": "Are you sure you want to log out?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
@@ -778,7 +778,7 @@
       }
     }
   },
-  "warDefensesTitle": "Defesas",
+  "warDefensesTitle": "Defenses",
   "warDefensesNone": "No defense yet",
   "@warDefensesNone": {
     "description": "No defense yet in war"
