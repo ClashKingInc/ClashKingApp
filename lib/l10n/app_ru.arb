@@ -92,11 +92,11 @@
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Внимание",
-  "generalNoDataAvailable": "Данные отсутствуют.",
+  "generalWarning": "Warning",
+  "generalNoDataAvailable": "No data available.",
   "authSignUp": "Sign up",
-  "authLogin": "Вход",
-  "authLogout": "Выход",
+  "authLogin": "Login",
+  "authLogout": "Log out",
   "authCreateAccount": "Create Account",
   "authJoinClashKing": "Join ClashKing",
   "authCreateClashKingAccount": "Create ClashKing Account",
@@ -250,7 +250,7 @@
   "gameBaseHome": "Родная деревня",
   "gameBaseBuilder": "Деревня Строителя",
   "gameClanCapital": "Столица клана",
-  "gameTownHall": "ТХ",
+  "gameTownHall": "TH",
   "gameTownHallLevel": "TH Level",
   "gameTownHallLevelNumber": "Town Hall {level}",
   "@gameTownHallLevelNumber": {
@@ -441,7 +441,7 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
+  "legendsTitle": "Legend League",
   "legendsNotInLeague": "Not in Legend League",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "You started the day with {trophies} trophies.",
@@ -532,8 +532,8 @@
   "legendsInaccurateNetGainTitle": "3. Net Gain/Loss: ",
   "legendsInaccurateNetGainBody": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
   "legendsInaccurateConclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-  "statsSeasonStats": "Статистика сезона",
-  "statsByDay": "За день",
+  "statsSeasonStats": "Season Stats",
+  "statsByDay": "By Day",
   "@statsByDay": {
     "description": "Shows stats by day"
   },
@@ -666,7 +666,7 @@
   "warLeague": "War/League",
   "warHistory": "War History",
   "warLog": "War Log",
-  "warLogClosed": "War log closed.",
+  "warLogClosed": "{clan}'s war log is closed.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -688,10 +688,10 @@
   "warAskForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
   "warEnded": "War ended",
   "warPreparation": "Preparation",
-  "warPerfectWar": "Идеальная война",
-  "warVictory": "Победа",
-  "warDefeat": "Поражение",
-  "warDraw": "Ничья",
+  "warPerfectWar": "Perfect war",
+  "warVictory": "Victory",
+  "warDefeat": "Defeat",
+  "warDraw": "Draw",
   "@warDraw": {
     "description": "War ended in a draw"
   },
@@ -977,7 +977,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Current round (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -1128,7 +1128,7 @@
   "raidsOngoing": "Ongoing raids",
   "raidsDistrictsDestroyed": "Districts destroyed",
   "raidsCompleted": "Raids completed",
-  "searchNoResult": "Нет результатов.",
+  "searchNoResult": "No result.",
   "maintenanceTitle": "Maintenance",
   "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
   "downloadTooltip": "Download CWL summary",
