@@ -132,7 +132,7 @@
   "authAccountConnected": "Connected Accounts",
   "authAccountConnectedStatus": "Connected",
   "authAccountNotConnected": "Not connected",
-  "authAccountEmailAndPassword": "Email & Password",
+  "authAccountEmailAndPassword": "E-posta ve Şifre",
   "authAccountSecured": "Your account is secured with multiple authentication methods",
   "authAccountLinkEmail": "Link Email Account",
   "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
@@ -836,7 +836,7 @@
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
   },
-  "warDestructionTitle": "Destruction",
+  "warDestructionTitle": "Yıkım",
   "warDestructionAverage": "Ortalama Yıkım",
   "warDestructionRate": "Yıkım oranı",
   "@warDestructionRate": {
