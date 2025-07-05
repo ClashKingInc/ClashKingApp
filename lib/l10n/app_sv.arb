@@ -107,7 +107,7 @@
     "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
-  "authDiscordSignIn": "Logga in med Discord",
+  "authDiscordSignIn": "Sign In with Discord",
   "authDiscordContinue": "Continue with Discord",
   "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
   "authEmailTitle": "Email",
@@ -441,7 +441,7 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
+  "legendsTitle": "Legend League",
   "legendsNotInLeague": "Not in Legend League",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "You started the day with {trophies} trophies.",
@@ -666,7 +666,7 @@
   "warLeague": "War/League",
   "warHistory": "War History",
   "warLog": "War Log",
-  "warLogClosed": "War log closed.",
+  "warLogClosed": "{clan}'s war log is closed.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -977,7 +977,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Current round (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
