@@ -53,7 +53,7 @@
     "description": "all items"
   },
   "generalTotal": "Insgesamt",
-  "generalBest": "Am besten",
+  "generalBest": "Beste",
   "@generalBest": {
     "description": "Best end of day trophies"
   },
@@ -144,14 +144,14 @@
   "accountsManageTitle": "Verwalte deine Konten",
   "accountsNoneFound": "Kein mit deinem Profil verknüpftes Konto gefunden",
   "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsEnterPlayerTag": "Spielerkürzel eingeben",
-  "accountsAdd": "Account hinzufügen",
-  "accountsDelete": "Account löschen",
+  "accountsEnterPlayerTag": "Spielertag eingeben",
+  "accountsAdd": "Konto hinzufügen",
+  "accountsDelete": "Konto löschen",
   "accountsApiToken": "Konto API-Token",
   "accountsEnterApiToken": "Bitte gib einen API-Token ein, um zu bestätigen, dass das Konto dir gehört. Du findest ihn in Clash of Clans unter Einstellungen > Weitere Einstellungen > API-Token.",
   "accountsFillAllFields": "Bitte fülle alle Felder aus.",
-  "accountsErrorTagNotExists": "Das eingegebene Spielerkürzel existiert nicht.",
-  "accountsErrorAlreadyLinked": "Dieses Spielerkürzel ist bereits mit jemand anderem verknüpft.",
+  "accountsErrorTagNotExists": "Der eingegebene Spielertag existiert nicht.",
+  "accountsErrorAlreadyLinked": "Dieser Spielertag ist bereits mit jemand anderem verknüpft.",
   "accountsErrorAlreadyLinkedToYou": "Der Spielertag ist bereits mit dir verknüpft.",
   "accountsErrorWrongApiToken": "Der eingegebene API-Token ist falsch",
   "accountsErrorFailedToAdd": "Konto konnte nicht hinzugefügt werden. Bitte versuche es später erneut.",
@@ -236,7 +236,7 @@
       }
     }
   },
-  "playerBuilderBaseDescription": "Dein Meisterhütten-Level ist {level} und du hast {trophies} Trophäen.",
+  "playerBuilderBaseDescription": "Dein Meisterhüttenlevel ist {level} und du hast {trophies} Trophäen.",
   "@playerBuilderBaseDescription": {
     "placeholders": {
       "level": {
@@ -664,9 +664,9 @@
   "warFrequency": "Kriegshäufigkeit",
   "warParticipation": "Kriegsbeteiligung",
   "warLeague": "Krieg/Clankriegsliga",
-  "warHistory": "Kriegsvergangenheit",
+  "warHistory": "Kriegsgeschichte",
   "warLog": "Kriegsverlauf",
-  "warLogClosed": "Kriegslog geschlossen.",
+  "warLogClosed": "{clan}s Kriegslog ist geschlossen.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -1152,11 +1152,11 @@
   },
   "betaFeature": "Beta-Funktion",
   "betaLabel": "BETA",
-  "betaDescription": "Diese Option ist aktuell in der Beta, es kann also zu Fehlern kommen oder unvollständig sein. Wir arbeiten aktiv an Verbesserungen und sind dankbar für dein Feedback. Bitte teile uns deine Ideen sowie Fragen und Probleme auf unserem Discord Server mit, damit wir es besser machen können.",
+  "betaDescription": "Diese Option ist aktuell in der Beta, es kann also zu Fehlern kommen oder unvollständig sein. Wir arbeiten aktiv an Verbesserungen und sind dankbar für dein Feedback. Bitte teile uns deine Ideen sowie Fragen und Probleme auf unserem Discord-Server mit, damit wir es besser machen können.",
   "settingsLanguage": "Sprache",
   "settingsSelectLanguage": "Wähle eine Sprache aus",
   "settingsToggleTheme": "Design wechseln",
-  "faqTitle": "FAQ",
+  "faqTitle": "FAQ (Häufig gestellte Fragen)",
   "faqSubtitle": "Häufig gestellte Fragen",
   "faqIsThisFromSupercell": "Ist diese App von Supercell?",
   "faqFanContentPolicy": "Dieses Material ist nicht offiziell und nicht von Supercell bewilligt. Weitere Informationen findest du in Supercells Richtlinien für Fan-Content unter https://supercell.com/en/fan-content-policy/de",
@@ -1166,7 +1166,7 @@
   "faqTrackingDown": "Tracking nicht aktiv",
   "faqTrackingDownAnswer": "Das Tracking kann für eine gewisse Zeit nicht funktionieren. Deshalb kann es manchmal Lücken in den Daten geben. Wir arbeiten daran, dies zu verbessern.",
   "faqApiLimitation": "Clash of Clans API-Einschränkung",
-  "faqApiLimitationAnswer": "Einige Daten werden von Clash of Clans bereitgestellt und ihre API hat gewisse Limitierungen. Dies ist der Fall beim Legenden-Tracking, bei dem manchmal Trophäen-Gewinne und -Verluste verrechnet werden, als wäre es ein einzelner Angriff. Das ist auch der Grund, warum wir keine Daten über eure Gebäude-Level haben.",
+  "faqApiLimitationAnswer": "Einige Daten werden von Clash of Clans bereitgestellt und ihre API hat gewisse Limitierungen. Dies ist der Fall beim Legenden-Tracking, bei dem manchmal Trophäen-Gewinne und -Verluste verrechnet werden, als wäre es ein einzelner Angriff. Das ist auch der Grund, warum wir keine Daten über die Level deiner Gebäude haben.",
   "faqSupportWork": "Wie kann ich eure Arbeit unterstützen?",
   "faqSupportWorkAnswer": "Es gibt mehrere Möglichkeiten, uns zu unterstützen:",
   "faqUseCodeClashKing": "Creator-Code \"ClashKing\" verwenden",
@@ -1178,7 +1178,7 @@
   "faqHowToInviteTheBotAnswer": "Du kannst unseren Bot auf deinen Server einladen, indem du auf den unten stehenden Button klickst. Du benötigst die Berechtigung \"Server verwalten\", um den Bot hinzuzufügen.",
   "faqInviteTheBot": "ClashKing Bot einladen",
   "faqNeedHelp": "Ich brauche Hilfe oder möchte einen Vorschlag machen. Wie kann ich euch erreichen?",
-  "faqNeedHelpAnswer": "Kannst unserem Discord-Server beitreten und dort um Hilfe bitten, oder Feedback geben oder uns eine E-Mail an devs@clashkingbot.com senden. Bitte schreib uns, wenn möglich nur auf Englisch oder Französisch.",
+  "faqNeedHelpAnswer": "Du kannst unserem Discord-Server beitreten und dort um Hilfe bitten, oder Feedback geben oder uns eine E-Mail an devs@clashkingbot.com senden. Bitte schreib uns, wenn möglich, nur auf Englisch oder Französisch.",
   "faqSendEmail": "Sende eine E-Mail",
   "faqJoinDiscord": "Unserem Discord-Server beitreten",
   "faqCannotOpenMailClient": "Aus irgendeinem Grund können wir deinen E-Mail-Client nicht öffnen. Wir haben die E-Mail-Adresse für dich kopiert. Du kannst eine E-Mail schreiben und die Adresse im Empfängerfeld einfügen.",
