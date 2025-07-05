@@ -9,6 +9,9 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
   String get appDescription =>
       'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
 
@@ -504,6 +507,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'Creator Code: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -1369,6 +1386,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get versionDevice => 'Version & Device';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
   String get betaFeature => 'Beta Feature';
 
   @override
@@ -1463,7 +1487,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.';
+      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.';
 
   @override
   String get faqSendEmail => 'Send an email';
@@ -1502,6 +1526,9 @@ class AppLocalizationsEn extends AppLocalizations {
 /// The translations for English, as used in the United Kingdom (`en_GB`).
 class AppLocalizationsEnGb extends AppLocalizationsEn {
   AppLocalizationsEnGb() : super('en_GB');
+
+  @override
+  String get appTitle => 'ClashKing';
 
   @override
   String get appDescription =>
@@ -1947,6 +1974,20 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get gameCreatorCode => 'Creator Code: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -2812,6 +2853,13 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get versionDevice => 'Version & Device';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
   String get betaFeature => 'Beta Feature';
 
   @override
@@ -2906,7 +2954,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get faqNeedHelpAnswer =>
-      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.';
+      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.';
 
   @override
   String get faqSendEmail => 'Send an email';
@@ -2945,6 +2993,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 /// The translations for English, as used in the United States (`en_US`).
 class AppLocalizationsEnUs extends AppLocalizationsEn {
   AppLocalizationsEnUs() : super('en_US');
+
+  @override
+  String get appTitle => 'ClashKing';
 
   @override
   String get appDescription =>
@@ -3400,6 +3451,20 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get gameCreatorCode => 'Creator Code: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -4265,6 +4330,13 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get versionDevice => 'Version & Device';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
   String get betaFeature => 'Beta Feature';
 
   @override
@@ -4359,7 +4431,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get faqNeedHelpAnswer =>
-      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.';
+      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.';
 
   @override
   String get faqSendEmail => 'Send an email';

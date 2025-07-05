@@ -87,21 +87,25 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
                     views.setTextViewText(R.id.text_score, if (primaryText.isNotEmpty()) primaryText else score)
                     views.setTextViewText(R.id.text_state, if (secondaryText.isNotEmpty()) secondaryText else warInfo.optString("timeState", "CWL"))
 
-                    val clanInfo = warInfo.getJSONObject("clan")
-                    val opponentInfo = warInfo.getJSONObject("opponent")
+                    val clanInfo = warInfo.optJSONObject("clan")
+                    val opponentInfo = warInfo.optJSONObject("opponent")
 
-                    val clanDetails = getClanOrOpponentDetails(clanInfo)
-                    val opponentDetails = getClanOrOpponentDetails(opponentInfo)
+                    if (clanInfo != null && opponentInfo != null) {
+                        val clanDetails = getClanOrOpponentDetails(clanInfo)
+                        val opponentDetails = getClanOrOpponentDetails(opponentInfo)
 
-                    setDetailsToViews(views, clanDetails, opponentDetails)
+                        setDetailsToViews(views, clanDetails, opponentDetails)
 
-                    Thread {
-                        val clanBitmap = downloadBitmap(clanDetails.badgeUrl)
-                        val opponentBitmap = downloadBitmap(opponentDetails.badgeUrl)
-                        views.setImageViewBitmap(R.id.clan_flag, clanBitmap)
-                        views.setImageViewBitmap(R.id.opponent_flag, opponentBitmap)
-                        appWidgetManager.updateAppWidget(appWidgetId, views)
-                    }.start()
+                        Thread {
+                            val clanBitmap = downloadBitmap(clanDetails.badgeUrl)
+                            val opponentBitmap = downloadBitmap(opponentDetails.badgeUrl)
+                            views.setImageViewBitmap(R.id.clan_flag, clanBitmap)
+                            views.setImageViewBitmap(R.id.opponent_flag, opponentBitmap)
+                            appWidgetManager.updateAppWidget(appWidgetId, views)
+                        }.start()
+                    } else {
+                        setWidgetText(views, "CWL data incomplete", "Missing clan or opponent info")
+                    }
                 }
 
                 else -> {
@@ -112,21 +116,25 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
                     views.setTextViewText(R.id.text_score, if (primaryText.isNotEmpty()) primaryText else score)
                     views.setTextViewText(R.id.text_state, if (secondaryText.isNotEmpty()) secondaryText else warInfo.optString("timeState", "notInWar"))
 
-                    val clanInfo = warInfo.getJSONObject("clan")
-                    val opponentInfo = warInfo.getJSONObject("opponent")
+                    val clanInfo = warInfo.optJSONObject("clan")
+                    val opponentInfo = warInfo.optJSONObject("opponent")
 
-                    val clanDetails = getClanOrOpponentDetails(clanInfo)
-                    val opponentDetails = getClanOrOpponentDetails(opponentInfo)
+                    if (clanInfo != null && opponentInfo != null) {
+                        val clanDetails = getClanOrOpponentDetails(clanInfo)
+                        val opponentDetails = getClanOrOpponentDetails(opponentInfo)
 
-                    setDetailsToViews(views, clanDetails, opponentDetails)
+                        setDetailsToViews(views, clanDetails, opponentDetails)
 
-                    Thread {
-                        val clanBitmap = downloadBitmap(clanDetails.badgeUrl)
-                        val opponentBitmap = downloadBitmap(opponentDetails.badgeUrl)
-                        views.setImageViewBitmap(R.id.clan_flag, clanBitmap)
-                        views.setImageViewBitmap(R.id.opponent_flag, opponentBitmap)
-                        appWidgetManager.updateAppWidget(appWidgetId, views)
-                    }.start()
+                        Thread {
+                            val clanBitmap = downloadBitmap(clanDetails.badgeUrl)
+                            val opponentBitmap = downloadBitmap(opponentDetails.badgeUrl)
+                            views.setImageViewBitmap(R.id.clan_flag, clanBitmap)
+                            views.setImageViewBitmap(R.id.opponent_flag, opponentBitmap)
+                            appWidgetManager.updateAppWidget(appWidgetId, views)
+                        }.start()
+                    } else {
+                        setWidgetText(views, "War data incomplete", "Missing clan or opponent info")
+                    }
                 }
             }
         }

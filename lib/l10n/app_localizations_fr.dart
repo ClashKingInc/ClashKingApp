@@ -9,6 +9,9 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
   String get appDescription =>
       'Ton compagnon Clash of Clans préféré pour suivre tes statistiques, gérer tes clans et analyser tes performances.';
 
@@ -501,6 +504,20 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'Code créateur : ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Touchez pour info • Soutenez-nous gratuitement !';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Soutenir ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Utiliser notre code créateur aide à financer le développement, garde l\'app & bot gratuits pour tous, et nous permet d\'ajouter de nouvelles fonctionnalités.\n\nNous recevons 5% de ce que vous dépensez en jeu, mais cela ne vous coûte rien de plus - utilisez simplement \"ClashKing\" comme code créateur dans la boutique Clash of Clans !';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Utiliser le Code Créateur';
 
   @override
   String get clanTitle => 'Clan';
@@ -1370,6 +1387,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get versionDevice => 'Version & Appareil';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
   String get betaFeature => 'Fonctionnalité Bêta';
 
   @override
@@ -1466,7 +1490,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Tu peux rejoindre notre serveur Discord et demander de l\'aide, y faire un retour ou nous envoyer un e-mail à devs@clashkingbot.com. Tu peux nous écrire en français ou en anglais !';
+      'Tu peux rejoindre notre serveur Discord et demander de l\'aide, y faire un retour ou nous envoyer un e-mail à devs@clashk.ing. Tu peux nous écrire en français ou en anglais !';
 
   @override
   String get faqSendEmail => 'Envoyer un e-mail';

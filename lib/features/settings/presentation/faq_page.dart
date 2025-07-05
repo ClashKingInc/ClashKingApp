@@ -303,7 +303,7 @@ class _FaqScreenState extends State<FaqScreen> {
                         onPressed: () async {
                           final Uri params = Uri(
                             scheme: 'mailto',
-                            path: 'devs@clashkingbot.com',
+                            path: 'devs@clashk.ing',
                             query:
                                 'subject=App%20Inquiry', // Add additional query parameters if needed
                           );
@@ -339,7 +339,7 @@ class _FaqScreenState extends State<FaqScreen> {
 
                               // Copy the email to the clipboard or show a Snackbar message
                               Clipboard.setData(
-                                  ClipboardData(text: 'devs@clashkingbot.com'));
+                                  ClipboardData(text: 'devs@clashk.ing'));
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content:

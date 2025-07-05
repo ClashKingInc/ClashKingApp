@@ -9,6 +9,9 @@ class AppLocalizationsEl extends AppLocalizations {
   AppLocalizationsEl([String locale = 'el']) : super(locale);
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
   String get appDescription =>
       'Ο υπέροχος σύντροφός σας στο Clash of Clans για παρακολούθηση στατιστικών, διαχείριση κλάν και ανάλυση απόδοσης.';
 
@@ -505,6 +508,20 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'Κωδικός Δημιουργού: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -1371,6 +1388,13 @@ class AppLocalizationsEl extends AppLocalizations {
   String get versionDevice => 'Εκδοχή & Συσκευή';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
   String get betaFeature => 'Χαρακτηριστικό εκδοχής Βήτα';
 
   @override
@@ -1467,7 +1491,7 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Μπορείτε να μας βρείτε στην ομάδα μας στο Discord για να ζητήσετε βοήθεια ή να μας μεταφέρετε τα σχόλιά σας, αλλιώς μπορείτε να μας στείλετε ένα email στο devs@clashkingbot.com. Σας παρακαλούμε να γράφετε μόνο στα Αγγλικά ή στα Γαλλικά.';
+      'Μπορείτε να μας βρείτε στην ομάδα μας στο Discord για να ζητήσετε βοήθεια ή να μας μεταφέρετε τα σχόλιά σας, αλλιώς μπορείτε να μας στείλετε ένα email στο devs@clashk.ing. Σας παρακαλούμε να γράφετε μόνο στα Αγγλικά ή στα Γαλλικά.';
 
   @override
   String get faqSendEmail => 'Στείλτε μας ένα email';

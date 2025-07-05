@@ -9,6 +9,9 @@ class AppLocalizationsHu extends AppLocalizations {
   AppLocalizationsHu([String locale = 'hu']) : super(locale);
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
   String get appDescription =>
       'A végső Clash of Clans társád a statisztikák követéséhez, klánok kezeléséhez és teljesítmény elemzéséhez.';
 
@@ -505,6 +508,20 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'Alkotói kód: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Klán';
@@ -1372,6 +1389,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get versionDevice => 'Verzió & Eszköz';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
   String get betaFeature => 'Béta Funkció';
 
   @override
@@ -1468,7 +1492,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Csatlakozhatsz a Discord szerverünkhöz és kérhetsz segítset, vagy küldhetsz emailt a devs@clashkingbot.com címre.\nKérjük csak angolul vagy franciául írj.';
+      'Csatlakozhatsz a Discord szerverünkhöz és kérhetsz segítset, vagy küldhetsz emailt a devs@clashk.ing címre.\nKérjük csak angolul vagy franciául írj.';
 
   @override
   String get faqSendEmail => 'Küldjön egy e-mailt';

@@ -9,6 +9,9 @@ class AppLocalizationsNl extends AppLocalizations {
   AppLocalizationsNl([String locale = 'nl']) : super(locale);
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
   String get appDescription =>
       'Jouw ultieme Clash of Clans metgezel voor het bijhouden van statistieken, beheren van clans en analyseren van prestaties.';
 
@@ -507,6 +510,20 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'Makerscode: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -1375,6 +1392,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get versionDevice => 'Versie & apparaat';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
   String get betaFeature => 'Beta-functie';
 
   @override
@@ -1470,7 +1494,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven, of je kunt ons een e-mail sturen naar devs@clashkingbot.com. Schrijf alleen in het Engels of Frans.';
+      'Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven, of je kunt ons een e-mail sturen naar devs@clashk.ing. Schrijf alleen in het Engels of Frans.';
 
   @override
   String get faqSendEmail => 'Stuur een e-mail';

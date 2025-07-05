@@ -9,6 +9,9 @@ class AppLocalizationsSr extends AppLocalizations {
   AppLocalizationsSr([String locale = 'sr']) : super(locale);
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
   String get appDescription =>
       'Vaš najbolji Clash of Clans saputnik za praćenje statistika, upravljanje klanova i analizu performansi.';
 
@@ -502,6 +505,20 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'Creator Code: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -1367,6 +1384,13 @@ class AppLocalizationsSr extends AppLocalizations {
   String get versionDevice => 'Version & Device';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
   String get betaFeature => 'Beta Feature';
 
   @override
@@ -1461,7 +1485,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.';
+      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.';
 
   @override
   String get faqSendEmail => 'Send an email';

@@ -123,6 +123,44 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
             },
           ),
           Divider(),
+          _buildListTile(
+            context,
+            title: AppLocalizations.of(context)!.settingsLicenses,
+            subtitle: AppLocalizations.of(context)!.settingsLicensesSubtitle,
+            leadingIcon: Icons.article_outlined,
+            onTap: () {
+              showLicensePage(
+                context: context,
+                applicationName: AppLocalizations.of(context)!.appTitle,
+                applicationVersion: '1.0.0+22',
+                applicationIcon: SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: CachedNetworkImage(
+                    imageUrl: Theme.of(context).brightness == Brightness.dark
+                        ? "https://assets.clashk.ing/logos/crown-arrow-dark-bg/ClashKing-1.png"
+                        : "https://assets.clashk.ing/logos/crown-arrow-white-bg/ClashKing-2.png",
+                    errorWidget: (context, url, error) => Icon(Icons.apps),
+                  ),
+                ),
+                applicationLegalese: '© ${DateTime.now().year} ClashKing',
+              );
+            },
+          ),
+          Divider(),
+          _buildListTile(
+            context,
+            title: AppLocalizations.of(context)!.settingsPrivacyPolicy,
+            subtitle: AppLocalizations.of(context)!.settingsPrivacyPolicySubtitle,
+            leadingIcon: Icons.privacy_tip_outlined,
+            onTap: () {
+              launchUrl(
+                Uri.parse('https://clashk.ing/'),
+                mode: LaunchMode.externalApplication,
+              );
+            },
+          ),
+          Divider(),
           _buildVersionInfoTile(context),
         ],
       ),

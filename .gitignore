@@ -107,3 +107,4 @@ android/app/release/*
 
 # claude
 .claude/
+CLAUDE.md

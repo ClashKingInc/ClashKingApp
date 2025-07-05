@@ -9,6 +9,9 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
   String get appDescription =>
       'Ваш идеальный спутник Clash of Clans для отслеживания статистики, управления кланами и анализа производительности.';
 
@@ -505,6 +508,20 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'Код Создателя: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -1371,6 +1388,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get versionDevice => 'Версия и устройство';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
   String get betaFeature => 'Бета-Функция';
 
   @override
@@ -1465,7 +1489,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Вы можете присоединиться к нашему Discord-серверу, чтобы попросить о помощи или оставить отзыв, или вы можете написать нам по адресу devs@clashkingbot.com. Пожалуйста, пишите только на английском или французском языке.';
+      'Вы можете присоединиться к нашему Discord-серверу, чтобы попросить о помощи или оставить отзыв, или вы можете написать нам по адресу devs@clashk.ing. Пожалуйста, пишите только на английском или французском языке.';
 
   @override
   String get faqSendEmail => 'Отправить e-mail';

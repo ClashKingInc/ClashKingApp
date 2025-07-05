@@ -9,6 +9,9 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
   String get appDescription =>
       'İstatistikleri takip etmek, klanları yönetmek ve performansı analiz etmek için nihai Clash of Clans yardımcınız.';
 
@@ -501,6 +504,20 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'İçerik Üretici Kodu: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Klan';
@@ -1368,6 +1385,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get versionDevice => 'Sürüm & Cihaz';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
   String get betaFeature => 'Beta Özellikleri';
 
   @override
@@ -1462,7 +1486,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Yardım istemek veya geri bildirim sağlamak için Discord Sunucumuza katılabilir veya devs@clashkingbot.com adresine e-posta gönderebilirsiniz. Lütfen yalnızca İngilizce veya Fransızca yazın.';
+      'Yardım istemek veya geri bildirim sağlamak için Discord Sunucumuza katılabilir veya devs@clashk.ing adresine e-posta gönderebilirsiniz. Lütfen yalnızca İngilizce veya Fransızca yazın.';
 
   @override
   String get faqSendEmail => 'E-posta gönderin';

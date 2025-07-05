@@ -1172,7 +1172,7 @@
   "faqHowToInviteTheBotAnswer": "您可以通过单击下面的按钮邀请我们的机器人到您的服务器。您需要“管理服务器”权限才能添加机器人。",
   "faqInviteTheBot": "邀请ClashKing机器人",
   "faqNeedHelp": "我需要帮助，或者我想提个建议。我怎样才能联系到你？",
-  "faqNeedHelpAnswer": "您可以加入我们的Discord服务器以寻求帮助或提供反馈，也可以发送电子邮件至devs@clashkingbot.com.请用英语或法语书写。",
+  "faqNeedHelpAnswer": "您可以加入我们的Discord服务器以寻求帮助或提供反馈，也可以发送电子邮件至devs@clashk.ing.请用英语或法语书写。",
   "faqSendEmail": "发送电子邮件",
   "faqJoinDiscord": "加入我们的Discord服务器",
   "faqCannotOpenMailClient": "由于某些原因，我们无法打开您的邮件客户端。我们为您复制了电子邮件地址。您可以编写电子邮件并将地址粘贴到收件人字段中。",

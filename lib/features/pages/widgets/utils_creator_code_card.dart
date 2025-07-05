@@ -21,17 +21,47 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
 
     return GestureDetector(
       onTap: () async {
-        final languageCode =
-            Localizations.localeOf(context).languageCode.toLowerCase();
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            final url = Uri.https('link.clashofclans.com', '/$languageCode', {
-              'action': 'SupportCreator',
-              'id': 'Clashking',
-            });
+            return AlertDialog(
+              title: Text(
+                AppLocalizations.of(context)?.gameCreatorCodeDialogTitle ?? 'Support ClashKing',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              content: Text(
+                AppLocalizations.of(context)?.gameCreatorCodeDialogDescription ??
+                    'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nIt doesn\'t cost you anything - just use "ClashKing" as your creator code in the Clash of Clans shop!',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(AppLocalizations.of(context)?.generalCancel ?? 'Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                    
+                    final languageCode =
+                        Localizations.localeOf(context).languageCode.toLowerCase();
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        final url = Uri.https('link.clashofclans.com', '/$languageCode', {
+                          'action': 'SupportCreator',
+                          'id': 'Clashking',
+                        });
 
-            return OpenClashDialog(url: url);
+                        return OpenClashDialog(url: url);
+                      },
+                    );
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)?.gameCreatorCodeDialogButton ?? 'Use Creator Code',
+                  ),
+                ),
+              ],
+            );
           },
         );
       },
@@ -46,14 +76,30 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
   errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: logoUrl, height: 80),
               SizedBox(width: 16),
               Expanded(
-                child: Text(
-                  AppLocalizations.of(context)?.gameCreatorCode ??
-                      'Creator Code : ClashKing',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)?.gameCreatorCode ??
+                          'Creator Code : ClashKing',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      AppLocalizations.of(context)?.gameCreatorCodeDescription ??
+                          'Tap for info • Support us for free!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

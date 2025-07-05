@@ -9,6 +9,9 @@ class AppLocalizationsUr extends AppLocalizations {
   AppLocalizationsUr([String locale = 'ur']) : super(locale);
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
   String get appDescription =>
       'شماریات کی ٹریکنگ، کلینز کے انتظام اور کارکردگی کے تجزیے کے لیے آپ کا حتمی Clash of Clans ساتھی۔';
 
@@ -503,6 +506,20 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'خالق کوڈ: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'قبیلہ';
@@ -1368,6 +1385,13 @@ class AppLocalizationsUr extends AppLocalizations {
   String get versionDevice => 'ورژن اور ڈیوائس';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
   String get betaFeature => 'بیٹا فیچر';
 
   @override
@@ -1461,7 +1485,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'آپ مدد طلب کرنے یا رائے دینے کے لیے ہمارے Discord سرور میں شامل ہو سکتے ہیں، یا آپ ہمیں devs@clashkingbot.com پر ای میل کر سکتے ہیں۔ براہ کرم صرف انگریزی یا فرانسیسی میں لکھیں.';
+      'آپ مدد طلب کرنے یا رائے دینے کے لیے ہمارے Discord سرور میں شامل ہو سکتے ہیں، یا آپ ہمیں devs@clashk.ing پر ای میل کر سکتے ہیں۔ براہ کرم صرف انگریزی یا فرانسیسی میں لکھیں.';
 
   @override
   String get faqSendEmail => 'ای میل بھیجیں۔';

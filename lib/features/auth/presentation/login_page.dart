@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -45,29 +46,11 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   Future<void> _navigateAfterAuth() async {
-    final accessToken = await TokenService().getAccessToken();
-    if (accessToken != null && mounted) {
-      final cocService = context.read<CocAccountService>();
-      final playerService = context.read<PlayerService>();
-      final clanService = context.read<ClanService>();
-      final warCwlService = context.read<WarCwlService>();
-
-      await cocService.loadApiData(playerService, clanService, warCwlService);
-
-      if (mounted) {
-        // Check if user has any CoC accounts linked
-        if (cocService.cocAccounts.isNotEmpty) {
-          // User has accounts → go to main app
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => MyHomePage()),
-          );
-        } else {
-          // User has no accounts → go to account management/setup page
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => AddCocAccountPage()),
-          );
-        }
-      }
+    if (mounted) {
+      // Navigate to loading screen and let it handle the data loading and navigation
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => _PostAuthLoadingScreen()),
+      );
     }
   }
 
@@ -78,13 +61,13 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     try {
       await authService.signInWithDiscord();
       await _navigateAfterAuth();
+      // Don't set loading to false here - navigation will handle it
     } catch (e) {
       if (context.mounted) {
         _handleAuthError(e);
+        setState(() => _isLoading = false);
       }
     }
-
-    if (mounted) setState(() => _isLoading = false);
   }
 
   Future<void> _signInWithEmail() async {
@@ -99,13 +82,13 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         _passwordController.text,
       );
       await _navigateAfterAuth();
+      // Don't set loading to false here - navigation will handle it
     } catch (e) {
       if (context.mounted) {
         _handleAuthError(e);
+        setState(() => _isLoading = false);
       }
     }
-
-    if (mounted) setState(() => _isLoading = false);
   }
 
   void _handleAuthError(dynamic e) {
@@ -561,5 +544,76 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         ],
       ),
     );
+  }
+}
+
+class _PostAuthLoadingScreen extends StatefulWidget {
+  @override
+  _PostAuthLoadingScreenState createState() => _PostAuthLoadingScreenState();
+}
+
+class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
+  bool _isInitializing = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initPostAuth();
+  }
+
+  Future<void> _initPostAuth() async {
+    final accessToken = await TokenService().getAccessToken();
+    if (accessToken != null && mounted) {
+      final cocService = context.read<CocAccountService>();
+      final playerService = context.read<PlayerService>();
+      final clanService = context.read<ClanService>();
+      final warCwlService = context.read<WarCwlService>();
+
+      try {
+        // Load the selected tag from SharedPreferences first
+        await cocService.loadSelectedTag();
+        await cocService.loadApiData(playerService, clanService, warCwlService);
+      } catch (e) {
+        if (mounted) {
+          if (e.toString().contains("503") || e.toString().contains("500")) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => MaintenanceScreen()),
+            );
+            return;
+          }
+        }
+      }
+    }
+
+    setState(() {
+      _isInitializing = false;
+    });
+
+    _navigateToNextScreen();
+  }
+
+  void _navigateToNextScreen() {
+    Future.microtask(() {
+      Widget nextPage;
+      if (mounted) {
+        if (context.read<CocAccountService>().cocAccounts.isNotEmpty) {
+          // ✅ User has CoC account → Go to home page
+          nextPage = MyHomePage();
+        } else {
+          // ❌ No account → Go to add account page
+          nextPage = AddCocAccountPage();
+        }
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => nextPage),
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _isInitializing
+        ? const AppLoadingScreen()
+        : const SizedBox.shrink();
   }
 }

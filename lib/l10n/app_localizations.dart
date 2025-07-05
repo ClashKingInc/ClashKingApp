@@ -157,6 +157,12 @@ abstract class AppLocalizations {
     Locale('zh')
   ];
 
+  /// No description provided for @appTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ClashKing'**
+  String get appTitle;
+
   /// No description provided for @appDescription.
   ///
   /// In en, this message translates to:
@@ -1045,6 +1051,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Creator Code: ClashKing'**
   String get gameCreatorCode;
+
+  /// No description provided for @gameCreatorCodeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap for info • Support us for free!'**
+  String get gameCreatorCodeDescription;
+
+  /// No description provided for @gameCreatorCodeDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Support ClashKing'**
+  String get gameCreatorCodeDialogTitle;
+
+  /// No description provided for @gameCreatorCodeDialogDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!'**
+  String get gameCreatorCodeDialogDescription;
+
+  /// No description provided for @gameCreatorCodeDialogButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Creator Code'**
+  String get gameCreatorCodeDialogButton;
 
   /// No description provided for @clanTitle.
   ///
@@ -2469,6 +2499,18 @@ abstract class AppLocalizations {
   /// **'Version & Device'**
   String get versionDevice;
 
+  /// No description provided for @settingsLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Source Licenses'**
+  String get settingsLicenses;
+
+  /// No description provided for @settingsLicensesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View licenses for third-party libraries'**
+  String get settingsLicensesSubtitle;
+
   /// No description provided for @betaFeature.
   ///
   /// In en, this message translates to:
@@ -2640,7 +2682,7 @@ abstract class AppLocalizations {
   /// No description provided for @faqNeedHelpAnswer.
   ///
   /// In en, this message translates to:
-  /// **'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.'**
+  /// **'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.'**
   String get faqNeedHelpAnswer;
 
   /// No description provided for @faqSendEmail.

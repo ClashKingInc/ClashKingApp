@@ -9,6 +9,9 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
   String get appDescription => '您的终极部落冲突伴侣，用于追踪统计数据、管理部落和分析性能。';
 
   @override
@@ -493,6 +496,20 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get gameCreatorCode => '创作者代码：ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => '部落';
@@ -1347,6 +1364,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get versionDevice => '版本&设备';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
   String get betaFeature => 'Beta功能';
 
   @override
@@ -1438,7 +1462,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      '您可以加入我们的Discord服务器以寻求帮助或提供反馈，也可以发送电子邮件至devs@clashkingbot.com.请用英语或法语书写。';
+      '您可以加入我们的Discord服务器以寻求帮助或提供反馈，也可以发送电子邮件至devs@clashk.ing.请用英语或法语书写。';
 
   @override
   String get faqSendEmail => '发送电子邮件';

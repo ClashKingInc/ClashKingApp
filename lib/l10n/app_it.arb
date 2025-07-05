@@ -1172,7 +1172,7 @@
   "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
   "faqInviteTheBot": "Invite ClashKing Bot",
   "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
-  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.",
+  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
   "faqSendEmail": "Send an email",
   "faqJoinDiscord": "Join our Discord Server",
   "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",

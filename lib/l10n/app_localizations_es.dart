@@ -9,6 +9,9 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
   String get appDescription =>
       'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
 
@@ -504,6 +507,20 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'Creator Code: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -1369,6 +1386,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get versionDevice => 'Versión y Dispositivo';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
   String get betaFeature => 'Función beta';
 
   @override
@@ -1463,7 +1487,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Puedes unirte a nuestro servidor de Discord y pedir ayuda o hacer un comentario allí, o enviarnos un correo a devs@clashkingbot.com. Por favor, escribe solo en inglés o francés.';
+      'Puedes unirte a nuestro servidor de Discord y pedir ayuda o hacer un comentario allí, o enviarnos un correo a devs@clashk.ing. Por favor, escribe solo en inglés o francés.';
 
   @override
   String get faqSendEmail => 'Enviar un correo';
@@ -1502,6 +1526,9 @@ class AppLocalizationsEs extends AppLocalizations {
 /// The translations for Spanish Castilian, as used in Spain (`es_ES`).
 class AppLocalizationsEsEs extends AppLocalizationsEs {
   AppLocalizationsEsEs() : super('es_ES');
+
+  @override
+  String get appTitle => 'ClashKing';
 
   @override
   String get appDescription =>
@@ -1948,6 +1975,19 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get gameCreatorCode => 'Código de Creador: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription => 'Toca para info • ¡Apóyanos gratis!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Apoyar ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'Usar nuestro código de creador ayuda a financiar el desarrollo, mantiene la app & bot gratis para todos, y nos permite añadir nuevas funciones.\n\nRecibimos el 5% de lo que gastas en el juego, pero no te cuesta nada extra - ¡simplemente usa \"ClashKing\" como código de creador en la tienda de Clash of Clans!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Usar Código de Creador';
 
   @override
   String get clanTitle => 'Clan';
@@ -2909,7 +2949,7 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Puedes unirte a nuestro servidor de Discord y pedir ayuda o hacer un comentario allí, o enviarnos un correo a devs@clashkingbot.com. Por favor, escribe solo en inglés o francés.';
+      'Puedes unirte a nuestro servidor de Discord y pedir ayuda o hacer un comentario allí, o enviarnos un correo a devs@clashk.ing. Por favor, escribe solo en inglés o francés.';
 
   @override
   String get faqSendEmail => 'Enviar un correo';
