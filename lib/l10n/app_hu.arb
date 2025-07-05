@@ -1,5 +1,6 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "appTitle": "ClashKing",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Betöltés...",
   "loadingVillages": "Loading your villages...",
@@ -297,6 +298,10 @@
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Alkotói kód: ClashKing",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn't cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "Klán",
   "clanSearchTitle": "Klán keresése",
   "clanSearchPlaceholder": "Clan's name",
@@ -1150,6 +1155,10 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
   "betaFeature": "Béta Funkció",
   "betaLabel": "BÉTA",
   "betaDescription": "Ez a funkció jelenleg báta fázisban van, lehetnek benne hibák vagy lehet nincs befejezve. Aktívan dolgozunk a javításokon és szívesen fogadunk megjegyzéseket. Kérjük oszd meg az ötleteided vagy jelentsd a hibákat a Discord szerverünkön hogy segíts minket.",
@@ -1178,7 +1187,7 @@
   "faqHowToInviteTheBotAnswer": "Meg tudod hívni a bot-ot a lent lévő gomb megnyomásával. Ehhez \"Manage Server\" joghoz van szükséged.",
   "faqInviteTheBot": "Hívd meg a ClashKing bot-ot",
   "faqNeedHelp": "Segítségre van szükségem, vagy szeretnék egy javaslatot tenni. Hogyan tudok kapcsolatba lépni?",
-  "faqNeedHelpAnswer": "Csatlakozhatsz a Discord szerverünkhöz és kérhetsz segítset, vagy küldhetsz emailt a devs@clashkingbot.com címre.\nKérjük csak angolul vagy franciául írj.",
+  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
   "faqSendEmail": "Küldjön egy e-mailt",
   "faqJoinDiscord": "Csatlakozz a Discord szerverünkhöz",
   "faqCannotOpenMailClient": "Valamijen oknál fogva nem tudtuk a levelező kliensedet kinyitni. Vágólapra másoltuk a címet. Irhatsz egy emailt és bemásolhatod a címet.",
