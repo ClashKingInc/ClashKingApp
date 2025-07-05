@@ -441,7 +441,7 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
+  "legendsTitle": "Legend League",
   "legendsNotInLeague": "Not in Legend League",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "You started the day with {trophies} trophies.",
@@ -666,7 +666,7 @@
   "warLeague": "War/League",
   "warHistory": "War History",
   "warLog": "War Log",
-  "warLogClosed": "War log closed.",
+  "warLogClosed": "{clan}'s war log is closed.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -977,7 +977,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Current round (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -993,7 +993,7 @@
       }
     }
   },
-  "cwlStars": "عصابتك لديها مجموع النجوم {stars}.",
+  "cwlStars": "Your clan has a total of {stars} stars.",
   "@cwlStars": {
     "placeholders": {
       "stars": {
@@ -1001,7 +1001,7 @@
       }
     }
   },
-  "cwlDestructionPercentage": "عصابتك لديها معدل تدمير إجمالي {percent}%.",
+  "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
   "@cwlDestructionPercentage": {
     "placeholders": {
       "percent": {
@@ -1127,7 +1127,7 @@
   "raidsLast": "Last raids",
   "raidsOngoing": "Ongoing raids",
   "raidsDistrictsDestroyed": "Districts destroyed",
-  "raidsCompleted": "اكتملت الغارات",
+  "raidsCompleted": "Raids completed",
   "searchNoResult": "No result.",
   "maintenanceTitle": "Maintenance",
   "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
@@ -1146,25 +1146,25 @@
   "toolsTitle": "Tools",
   "navigationTeam": "Teams",
   "navigationStatistics": "Statistics",
-  "versionDevice": "الإصدار والجهاز",
+  "versionDevice": "Version & Device",
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  "betaFeature": "ميزة بيتا",
+  "betaFeature": "Beta Feature",
   "betaLabel": "BETA",
-  "betaDescription": "هذه الميزة حاليا في بيتا، قد يكون لديها بعض الأخطاء أو غير مكتملة. نحن نعمل بنشاط على التحسينات ونرحب بملاحظاتك. يرجى مشاركة أفكارك والإبلاغ عن أي مشاكل في خادم ديسكورد لمساعدتنا على جعلها أفضل.",
+  "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
   "settingsLanguage": "Language",
   "settingsSelectLanguage": "Select a language",
   "settingsToggleTheme": "Toggle Theme",
   "faqTitle": "FAQ",
-  "faqSubtitle": "الأسئلة المتكررة",
-  "faqIsThisFromSupercell": "هل هذا التطبيق من الخارق؟",
-  "faqFanContentPolicy": "هذه المادة غير رسمية وغير معتمدة من قبل Supercell. لمزيد من المعلومات، انظر Supercell's Han Content Policy: www.supercell.com/fan-content-policy",
-  "faqWhyNotAccurate": "لماذا تكون البيانات في بعض الأحيان غير دقيقة أو مفقودة؟",
-  "faqClanNotTracked": "لم يتم تتبع العصابة",
-  "faqClanNotTrackedAnswer": "يمكن لـ ClashKing استرداد هذه المعلومات فقط إذا تم تتبع العصابة. إذا لم يتم تتبع عصابتك ، يرجى دعوة بوت ClashKing إلى خادم ديسكورد الخاص بك واستخدام الأمر /addclan. نحن نعمل على جعل هذه الميزة متاحة في التطبيق قريبا.",
-  "faqTrackingDown": "تتبع للأسفل",
-  "faqTrackingDownAnswer": "ويمكن أن يتوقف التتبع عن العمل لفترة معينة من الزمن. هذا هو السبب في أنه يمكن أحيانا أن يكون لديك ثقوب في بياناتك. نحن نعمل على تحسين هذا.",
+  "faqSubtitle": "Frequently Asked Questions",
+  "faqIsThisFromSupercell": "Is this App from Supercell?",
+  "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
+  "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
+  "faqClanNotTracked": "Clan not tracked",
+  "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
+  "faqTrackingDown": "Tracking down",
+  "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
   "faqApiLimitation": "حدود API لمعركة حرب العصابات",
   "faqApiLimitationAnswer": "بعض البيانات مقدمة من Clash of العصابات، و API لديها بعض القيود. وهذه هي الحالة فيما يتعلق بتعقب الأسطورة، فهي في بعض الأحيان تكبح الكأس والخسارة كما لو كانت هجوما واحدا. هذا أيضا هو السبب في أننا لا نملك أي معلومات عن مستوى المبنى الخاص بك.",
   "faqSupportWork": "كيف يمكنني دعم عملك؟",
