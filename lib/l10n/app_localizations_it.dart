@@ -1392,6 +1392,12 @@ class AppLocalizationsIt extends AppLocalizations {
       'View licenses for third-party libraries';
 
   @override
+  String get settingsPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
+
+  @override
   String get betaFeature => 'Beta Feature';
 
   @override

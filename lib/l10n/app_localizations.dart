@@ -2511,6 +2511,18 @@ abstract class AppLocalizations {
   /// **'View licenses for third-party libraries'**
   String get settingsLicensesSubtitle;
 
+  /// No description provided for @settingsPrivacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get settingsPrivacyPolicy;
+
+  /// No description provided for @settingsPrivacyPolicySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How we handle your data'**
+  String get settingsPrivacyPolicySubtitle;
+
   /// No description provided for @betaFeature.
   ///
   /// In en, this message translates to:

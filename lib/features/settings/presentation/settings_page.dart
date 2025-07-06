@@ -109,22 +109,6 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           Divider(),
           _buildListTile(
             context,
-            title: AppLocalizations.of(context)!.authLogout,
-            leadingIcon: Icons.exit_to_app,
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return ConfirmLogoutDialog(
-                    onConfirm: _logOut,
-                  );
-                },
-              );
-            },
-          ),
-          Divider(),
-          _buildListTile(
-            context,
             title: AppLocalizations.of(context)!.settingsLicenses,
             subtitle: AppLocalizations.of(context)!.settingsLicensesSubtitle,
             leadingIcon: Icons.article_outlined,
@@ -151,12 +135,29 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           _buildListTile(
             context,
             title: AppLocalizations.of(context)!.settingsPrivacyPolicy,
-            subtitle: AppLocalizations.of(context)!.settingsPrivacyPolicySubtitle,
+            subtitle:
+                AppLocalizations.of(context)!.settingsPrivacyPolicySubtitle,
             leadingIcon: Icons.privacy_tip_outlined,
             onTap: () {
               launchUrl(
                 Uri.parse('https://clashk.ing/'),
                 mode: LaunchMode.externalApplication,
+              );
+            },
+          ),
+          Divider(),
+          _buildListTile(
+            context,
+            title: AppLocalizations.of(context)!.authLogout,
+            leadingIcon: Icons.exit_to_app,
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return ConfirmLogoutDialog(
+                    onConfirm: _logOut,
+                  );
+                },
               );
             },
           ),
@@ -237,22 +238,22 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     print("SettingsInfoScreen: _logOut called, clearing all service data.");
     if (mounted) {
       final authService = Provider.of<AuthService>(context, listen: false);
-      final cocAccountService = Provider.of<CocAccountService>(context, listen: false);
-      
+      final cocAccountService =
+          Provider.of<CocAccountService>(context, listen: false);
+
       // Clear all authentication and user data
       await authService.logoutAndClearAllData();
-      
+
       // Clear all COC account service data
       cocAccountService.clearAccountData();
-      
+
       // Navigate to login page
       globalNavigatorKey.currentState?.pushReplacement(
         MaterialPageRoute(builder: (context) => LoginPage()),
       );
-      
+
       print("SettingsInfoScreen: All service data cleared successfully.");
-    }
-    else {
+    } else {
       print("SettingsInfoScreen: _logOut called but context is not mounted.");
     }
   }
@@ -280,7 +281,8 @@ Widget _buildVersionInfoTile(BuildContext context) {
             Clipboard.setData(ClipboardData(text: snapshot.data ?? ''));
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(AppLocalizations.of(context)!.generalCopiedToClipboard),
+                content: Text(
+                    AppLocalizations.of(context)!.generalCopiedToClipboard),
               ),
             );
           },

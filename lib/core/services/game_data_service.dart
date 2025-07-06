@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class GameDataService {
   static const String _baseUrl = "${ApiService.assetUrl}/app-data";
@@ -28,16 +29,46 @@ class GameDataService {
   }
 
   static Future<void> _fetchJson(String fileName, Map<String, dynamic> storage) async {
-    try {
-      final response = await http.get(Uri.parse("$_baseUrl/$fileName"));
-      if (response.statusCode == 200) {
-        storage.addAll(jsonDecode(response.body));
-        print("✅ Loaded : $fileName");
-      } else {
-        print("❌ Erreur ${response.statusCode} lors du chargement de $fileName");
+    const int maxRetries = 3;
+    const Duration initialDelay = Duration(seconds: 1);
+    
+    for (int attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        final response = await http.get(
+          Uri.parse("$_baseUrl/$fileName"),
+          headers: {
+            'User-Agent': 'ClashKing-App/1.0',
+          },
+        ).timeout(const Duration(seconds: 10));
+        
+        if (response.statusCode == 200) {
+          storage.clear(); // Clear existing data before adding new
+          storage.addAll(jsonDecode(response.body));
+          DebugUtils.debugSuccess("Loaded $fileName (attempt $attempt)");
+          return; // Success, exit retry loop
+        } else {
+          DebugUtils.debugError("HTTP ${response.statusCode} for $fileName (attempt $attempt/$maxRetries)");
+          if (attempt == maxRetries) {
+            DebugUtils.debugError("Failed to load $fileName after $maxRetries attempts");
+            return;
+          }
+        }
+      } catch (e) {
+        DebugUtils.debugError("Exception loading $fileName (attempt $attempt/$maxRetries): ${e.toString()}");
+        
+        if (attempt == maxRetries) {
+          DebugUtils.debugError("Final failure for $fileName after $maxRetries attempts");
+          return;
+        }
+        
+        // Calculate exponential backoff delay (1s, 2s, 4s)
+        final delay = Duration(
+          milliseconds: initialDelay.inMilliseconds * (1 << (attempt - 1)),
+        );
+        
+        DebugUtils.debugInfo("🔄 Retrying $fileName in ${delay.inSeconds}s...");
+        await Future.delayed(delay);
       }
-    } catch (e) {
-      print("❌ Exception dans _fetchJson pour $fileName : $e");
     }
   }
 

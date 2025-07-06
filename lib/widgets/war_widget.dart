@@ -35,8 +35,9 @@ class WarWidgetService {
       
       // Update the widget
       await HomeWidget.updateWidget(
-        name: 'WarAppWidgetProvider',
+        name: 'WarWidget',
         androidName: 'WarAppWidgetProvider',
+        iOSName: 'WarWidget',
       );
       
       print("✅ War widget refresh completed");
@@ -49,7 +50,7 @@ class WarWidgetService {
   // Initialize widget background callbacks
   static void initialize() {
     // Set up the callback for when the widget refresh button is tapped
-    HomeWidget.setAppGroupId('group.clashking.warwidget');
+    HomeWidget.setAppGroupId('group.com.clashking.clashkingapp');
     
     // Register callback for widget interactions
     HomeWidget.registerInteractivityCallback(_backgroundCallback);

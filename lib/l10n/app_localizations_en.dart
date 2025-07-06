@@ -1393,6 +1393,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'View licenses for third-party libraries';
 
   @override
+  String get settingsPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
+
+  @override
   String get betaFeature => 'Beta Feature';
 
   @override
@@ -2858,6 +2864,12 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   @override
   String get settingsLicensesSubtitle =>
       'View licenses for third-party libraries';
+
+  @override
+  String get settingsPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
 
   @override
   String get betaFeature => 'Beta Feature';
@@ -4335,6 +4347,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String get settingsLicensesSubtitle =>
       'View licenses for third-party libraries';
+
+  @override
+  String get settingsPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
 
   @override
   String get betaFeature => 'Beta Feature';

@@ -52,12 +52,70 @@ class WarCwl {
   }
 
   WarInfo? getActiveWarByTag(String tag) {
-    return warLeagueInfos.firstWhere(
-      (warInfo) =>
-          warInfo.state == 'inWar' &&
-          (warInfo.clan!.tag == tag || warInfo.opponent!.tag == tag),
-      orElse: () => warLeagueInfos.isNotEmpty ? warLeagueInfos.last : WarInfo(state: 'unknown'),
-    );
+    try {
+      // Normalize clan tag for comparison (ensure # prefix)
+      String normalizeClanTag(String clanTag) {
+        if (!clanTag.startsWith('#')) return '#$clanTag';
+        return clanTag;
+      }
+      
+      final normalizedTag = normalizeClanTag(tag);
+      print("🔍 Looking for CWL war for clan: $normalizedTag");
+      
+      // First try to find active war (inWar)
+      final activeWar = warLeagueInfos.firstWhere(
+        (warInfo) =>
+            warInfo.state == 'inWar' &&
+            (normalizeClanTag(warInfo.clan!.tag) == normalizedTag || 
+             normalizeClanTag(warInfo.opponent!.tag) == normalizedTag),
+        orElse: () => WarInfo(state: 'notFound'),
+      );
+      
+      if (activeWar.state != 'notFound') {
+        print("✅ Found active CWL war for clan $tag");
+        return activeWar;
+      }
+      
+      // If no active war, try preparation war
+      final prepWar = warLeagueInfos.firstWhere(
+        (warInfo) =>
+            warInfo.state == 'preparation' &&
+            (normalizeClanTag(warInfo.clan!.tag) == normalizedTag || 
+             normalizeClanTag(warInfo.opponent!.tag) == normalizedTag),
+        orElse: () => WarInfo(state: 'notFound'),
+      );
+      
+      if (prepWar.state != 'notFound') {
+        print("✅ Found preparation CWL war for clan $normalizedTag");
+        return prepWar;
+      }
+      
+      // If no active or prep war, try most recent ended war
+      final endedWars = warLeagueInfos.where(
+        (warInfo) =>
+            warInfo.state == 'warEnded' &&
+            (normalizeClanTag(warInfo.clan!.tag) == normalizedTag || 
+             normalizeClanTag(warInfo.opponent!.tag) == normalizedTag),
+      ).toList();
+      
+      if (endedWars.isNotEmpty) {
+        // Sort by end time to get most recent
+        endedWars.sort((a, b) => (b.endTime ?? '').toString().compareTo((a.endTime ?? '').toString()));
+        print("✅ Found recent ended CWL war for clan $normalizedTag");
+        return endedWars.first;
+      }
+      
+      print("❌ No CWL wars found for clan $normalizedTag");
+      print("🔍 Available wars in warLeagueInfos:");
+      for (final war in warLeagueInfos) {
+        print("   War: ${war.state}, Clan: ${war.clan?.tag}, Opponent: ${war.opponent?.tag}");
+      }
+      return null;
+      
+    } catch (e) {
+      print("❌ Error finding CWL war for clan $tag: $e");
+      return null;
+    }
   }
 
   CwlLeagueRound? getRoundForWarTag(String? warTag) {
@@ -75,12 +133,9 @@ class WarCwl {
   }
 
   WarInfo getActiveWarForClan(String clanTag) {
-    return warLeagueInfos.firstWhere(
-      (warInfo) =>
-          warInfo.state == 'inWar' &&
-          (warInfo.clan!.tag == clanTag || warInfo.opponent!.tag == clanTag),
-      orElse: () => WarInfo(state: 'unknown'),
-    );
+    // Use the improved logic from getActiveWarByTag
+    final war = getActiveWarByTag(clanTag);
+    return war ?? WarInfo(state: 'notInCwl');
   }
 
   WarMemberPresence getMemberPresence(String memberTag, String clanTag) {
