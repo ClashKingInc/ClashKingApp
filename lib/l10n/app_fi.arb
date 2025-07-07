@@ -1,7 +1,7 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Sinun lopullinen Clash of klaanit kumppani seuranta tilastoja, hallita klaaneja, ja analysoida suorituskykyä.",
+  "appDescription": "Sinun lopullinen Clash of Clans -kumppanisi tilastojen seurantaan, klaanien hallintaan ja suorituskyvyn analysointiin.",
   "generalLoading": "Ladataan...",
   "loadingVillages": "Ladataan kyliäsi...",
   "loadingClanData": "Haetaan klaanin tietoja...",
@@ -16,7 +16,7 @@
   "accountVerifyButton": "Vahvista",
   "accountVerificationSuccess": "Tili vahvistettu onnistuneesti!",
   "accountVerificationFailed": "Vahvistus epäonnistui. Tarkista API token.",
-  "generalRetry": "Yritä Uudelleen",
+  "generalRetry": "Yritä uudelleen",
   "generalTryAgain": "Yritä uudelleen",
   "generalCancel": "Peruuta",
   "generalOk": "Ok",
@@ -128,7 +128,7 @@
   "authUsernameTooShort": "Käyttäjänimen tulee olla vähintään 3 merkkiä pitkä",
   "authErrorConnection": "Tapahtui virhe. Tarkista internet-yhteytesi ja yritä uudelleen.",
   "authErrorConnectionRelaunch": "Tapahtui virhe. Tarkista internet-yhteytesi ja käynnistä sovellus uudelleen.",
-  "authAccountManagement": "Lisää, poista ja järjestä uudelleen Clash of klaanit -tilit. Tarkista tilisi käyttääksesi kaikkia ominaisuuksia.",
+  "authAccountManagement": "Account Management",
   "authAccountConnected": "Yhdistetyt Tilit",
   "authAccountConnectedStatus": "Yhdistetty",
   "authAccountNotConnected": "Ei yhdistetty",
@@ -982,7 +982,7 @@
       }
     }
   },
-  "cwlCurrentRound": "Current round (Round {round})",
+  "cwlCurrentRound": "It's currently round {round}.",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
