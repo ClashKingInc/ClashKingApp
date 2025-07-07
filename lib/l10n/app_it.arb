@@ -1,7 +1,7 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Il tuo ultimo compagno Clash of Clans per tracciare le statistiche, gestire i clan e analizzare le prestazioni.",
+  "appDescription": "Il tuo compagno definitivo di Clash of Clans per tracciare statistiche, gestire clan e analizzare le prestazioni.",
   "generalLoading": "Caricamento...",
   "loadingVillages": "Caricamento dei villaggi...",
   "loadingClanData": "Recupero dati clan...",
@@ -17,7 +17,7 @@
   "accountVerificationSuccess": "Account verificato con successo!",
   "accountVerificationFailed": "Verifica non riuscita. Controlla il tuo token API.",
   "generalRetry": "Riprova",
-  "generalTryAgain": "Riprova",
+  "generalTryAgain": "Riprova di nuovo",
   "generalCancel": "Annulla",
   "generalOk": "OK",
   "@generalOk": {
@@ -28,7 +28,7 @@
   "generalManage": "Gestisci",
   "generalSettings": "Impostazioni",
   "generalCopiedToClipboard": "Copiato negli appunti",
-  "generalComingSoon": "In arrivo!",
+  "generalComingSoon": "In arrivo presto!",
   "generalLastRefresh": "Ultimo aggiornamento: {time}",
   "@generalLastRefresh": {
     "description": "Last refresh time indicator",
@@ -66,7 +66,7 @@
   "@generalAverage": {
     "description": "Average value of legend trophies (defense and attack)"
   },
-  "generalRemaining": "Rimanente",
+  "generalRemaining": "Rimanenti",
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
@@ -82,9 +82,9 @@
   },
   "generalRole": "Ruolo",
   "generalStats": "Statistiche",
-  "generalFullStats": "Statistiche Completa",
+  "generalFullStats": "Statistiche Complete",
   "generalDetails": "Dettagli",
-  "generalHistory": "Storico",
+  "generalHistory": "Cronologia",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
@@ -93,11 +93,11 @@
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Attenzione",
+  "generalWarning": "Avviso",
   "generalNoDataAvailable": "Nessun dato disponibile.",
   "authSignUp": "Registrati",
   "authLogin": "Accedi",
-  "authLogout": "Log out",
+  "authLogout": "Esci",
   "authCreateAccount": "Crea Account",
   "authJoinClashKing": "Unisciti A ClashKing",
   "authCreateClashKingAccount": "Crea Account ClashKing",
@@ -128,7 +128,7 @@
   "authUsernameTooShort": "Il nome utente deve contenere almeno 3 caratteri",
   "authErrorConnection": "Si è verificato un errore. Si prega di controllare la connessione internet e riprovare.",
   "authErrorConnectionRelaunch": "Si è verificato un errore. Controlla la tua connessione internet e riavvia l'app.",
-  "authAccountManagement": "Aggiungi, rimuovi e riordina i tuoi account Clash of Clans. Verifica i tuoi account per accedere a tutte le funzionalità.",
+  "authAccountManagement": "Account Management",
   "authAccountConnected": "Account Connessi",
   "authAccountConnectedStatus": "Connesso",
   "authAccountNotConnected": "Non connesso",
