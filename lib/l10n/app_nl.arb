@@ -128,7 +128,7 @@
   "authUsernameTooShort": "Gebruikersnaam moet minimaal 3 tekens lang zijn",
   "authErrorConnection": "Er is een fout opgetreden. Controleer je internetverbinding en probeer het opnieuw.",
   "authErrorConnectionRelaunch": "Er is een fout opgetreden. Controleer je internetverbinding en start de app opnieuw op.",
-  "authAccountManagement": "Voeg je Clash of Clans-accounts toe, verwijder ze of wijzig de volgorde. Verifieer je accounts om toegang te krijgen tot alle functies.",
+  "authAccountManagement": "Accountbeheer",
   "authAccountConnected": "Verbonden accounts",
   "authAccountConnectedStatus": "Verbonden",
   "authAccountNotConnected": "Niet verbonden",
@@ -252,7 +252,7 @@
   "gameBaseBuilder": "Bouwerbasis",
   "gameClanCapital": "Clan Hoofdstad",
   "gameTownHall": "SH",
-  "gameTownHallLevel": "SH level",
+  "gameTownHallLevel": "SH niveau",
   "gameTownHallLevelNumber": "Stadhuis {level}",
   "@gameTownHallLevelNumber": {
     "placeholders": {
@@ -275,7 +275,7 @@
   "gameDonations": "Donaties",
   "gameDonationsReceived": "Donaties ontvangen",
   "gameDonationsRatio": "Donatieverhouding",
-  "gameLevel": "Level: {level}/{maxLevel}",
+  "gameLevel": "Niveau: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
       "level": {
@@ -295,8 +295,8 @@
   "gameSiegeMachines": "Belegeringsmachines",
   "gameSpells": "Spreuken",
   "gameAchievements": "Prestaties",
-  "gameClanGames": "Clan Games",
-  "gameSeasonPass": "Season Pass",
+  "gameClanGames": "Clan Spellen",
+  "gameSeasonPass": "Seizoenspas",
   "gameCreatorCode": "Makerscode: ClashKing",
   "gameCreatorCodeDescription": "Tik voor info • Steun ons gratis!",
   "gameCreatorCodeDialogTitle": "Steun ClashKing",
@@ -584,8 +584,8 @@
   "todoExplanationClanWars": "Gewicht van 2 punten per account, 1 aanval = 1 punt.",
   "todoExplanationCwlTitle": "Clanoorlogliga:",
   "todoExplanationCwl": "Gewicht van 1 punt per account, 1 aanval = 1 punt. CWL kan niet worden gevolgd als de speler niet in zijn ligaclan zit.",
-  "todoExplanationPassAndGamesTitle": "Seizoenspas & Clan Games:",
-  "todoExplanationPassAndGames": "Gewicht van elk 2 punten per account. De verhouding is gebaseerd op het aantal resterende dagen (1 maand voor de pas en 6 dagen voor de games). Groen = op schema om de pas of games te voltooien, rood = achter op schema.",
+  "todoExplanationPassAndGamesTitle": "Seizoenspas & Clan Spellen:",
+  "todoExplanationPassAndGames": "Gewicht van elk 2 punten per account. De verhouding is gebaseerd op het aantal resterende dagen (1 maand voor de pas en 6 dagen voor de spellen). Groen = op schema om de pas of spellen te voltooien, rood = achter op schema.",
   "todoExplanationConclusion": "Het uiteindelijke percentage wordt berekend door het totaal aantal voltooide acties tijdens lopende evenementen te delen door het totaal aantal vereiste acties. Accounts die langer dan 14 dagen inactief zijn worden uitgesloten van de berekening.",
   "todoAccountsNumber": "{number} accounts",
   "@todoAccountsNumber": {
@@ -1147,7 +1147,7 @@
     }
   },
   "downloadError": "Bestand downloaden mislukt",
-  "dashboardTitle": "Dashboard",
+  "dashboardTitle": "Hoofdpaneel",
   "toolsTitle": "Hulpmiddelen",
   "navigationTeam": "Teams",
   "navigationStatistics": "Statistieken",
@@ -1172,7 +1172,7 @@
   "faqWhyNotAccurate": "Waarom zijn de gegevens soms onnauwkeurig of ontbreken ze?",
   "faqClanNotTracked": "Clan niet gevolgd",
   "faqClanNotTrackedAnswer": "ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan de ClashKing Bot uit op je Discord-server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.",
-  "faqTrackingDown": "Tracking down",
+  "faqTrackingDown": "Volgen gestopt",
   "faqTrackingDownAnswer": "Het volgen kan gedurende een bepaalde periode stoppen met werken. Daarom kun je soms gaten in je gegevens hebben. We werken eraan om dit te verbeteren.",
   "faqApiLimitation": "Clash of Clans API-beperking",
   "faqApiLimitationAnswer": "Sommige gegevens worden geleverd door Clash of Clans en hun API heeft enkele beperkingen. Dit is het geval bij legend tracking, waarbij soms trofeewinst en -verlies worden gestapeld alsof het een enkele aanval was. Dit is ook waarom we geen informatie hebben over de niveaus van je gebouwen.",
@@ -1187,7 +1187,7 @@
   "faqHowToInviteTheBotAnswer": "Je kunt onze bot uitnodigen op je server door op de onderstaande knop te klikken. Je hebt de \"Server beheren\" toestemming nodig om de bot toe te voegen.",
   "faqInviteTheBot": "ClashKing Bot uitnodigen",
   "faqNeedHelp": "Ik heb hulp nodig of wil graag een suggestie doen. Hoe kan ik contact met jullie opnemen?",
-  "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven, of je kunt ons mailen op devs@clashk.ing. Schrijf alstublieft alleen in het Engels of Frans.",
+  "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven, of je kunt ons een e-mail sturen naar devs@clashk.ing. Schrijf alleen in het Engels of Frans.",
   "faqSendEmail": "Stuur een e-mail",
   "faqJoinDiscord": "Word lid van onze Discord-server",
   "faqCannotOpenMailClient": "Om een of andere reden kunnen we je mailclient niet openen. We hebben het e-mailadres voor je gekopieerd. Je kunt een e-mail schrijven en het adres plakken in het ontvangerveld.",
