@@ -1,8 +1,8 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Vaše konečné Clash klanů společník pro sledování statistik, správu klanů a analýzu výkonu.",
-  "generalLoading": "Načítám...",
+  "appDescription": "Váš dokonalý průvodce Clash of Clans pro sledování statistik, správu klanů a analýzu výkonu.",
+  "generalLoading": "Načítání...",
   "loadingVillages": "Načítání vesnic...",
   "loadingClanData": "Načítání dat o klanu...",
   "loadingWarStats": "Analyzuji válečné statistiky...",
@@ -17,7 +17,7 @@
   "accountVerificationSuccess": "Účet byl úspěšně ověřen!",
   "accountVerificationFailed": "Ověření se nezdařilo. Zkontrolujte prosím váš API token.",
   "generalRetry": "Opakovat",
-  "generalTryAgain": "Zkuste to znovu",
+  "generalTryAgain": "Zkusit znovu",
   "generalCancel": "Zrušit",
   "generalOk": "OK",
   "@generalOk": {
@@ -72,7 +72,7 @@
   },
   "generalActive": "Aktivní",
   "generalInactive": "Neaktivní",
-  "generalStarted": "Začínáno",
+  "generalStarted": "Započato",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
   },
@@ -83,7 +83,7 @@
   "generalRole": "Role",
   "generalStats": "Statistiky",
   "generalFullStats": "Úplné statistiky",
-  "generalDetails": "Detaily",
+  "generalDetails": "Podrobnosti",
   "generalHistory": "Historie",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
@@ -94,14 +94,14 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Varování",
-  "generalNoDataAvailable": "Nejsou k dispozici žádná data.",
-  "authSignUp": "Zaregistrovat se",
+  "generalNoDataAvailable": "Žádná data nejsou k dispozici.",
+  "authSignUp": "Registrovat se",
   "authLogin": "Přihlásit se",
   "authLogout": "Odhlásit se",
   "authCreateAccount": "Vytvořit účet",
   "authJoinClashKing": "Připojit se k ClashKing",
   "authCreateClashKingAccount": "Vytvořit ClashKing účet",
-  "authCreateAccountToGetStarted": "Vytvořte si účet, abyste mohli začít",
+  "authCreateAccountToGetStarted": "Vytvořte si účet pro začátek",
   "authAlreadyHaveAccount": "Již máte účet? Přihlaste se",
   "authConfirmLogout": "Jste si jisti, že se chcete odhlásit?",
   "@authConfirmLogout": {
@@ -128,7 +128,7 @@
   "authUsernameTooShort": "Uživatelské jméno musí mít alespoň 3 znaky",
   "authErrorConnection": "Došlo k chybě. Zkontrolujte připojení k internetu a zkuste to znovu.",
   "authErrorConnectionRelaunch": "Došlo k chybě. Zkontrolujte připojení k internetu a restartujte aplikaci.",
-  "authAccountManagement": "Přidejte, odeberte a upravte pořadí účtů Clash z Clans. Ověřte své účty pro přístup ke všem funkcím.",
+  "authAccountManagement": "Account Management",
   "authAccountConnected": "Připojené účty",
   "authAccountConnectedStatus": "Připojeno",
   "authAccountNotConnected": "Nepřipojeno",
