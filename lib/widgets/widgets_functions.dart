@@ -6,6 +6,7 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 // Get the current war data for a clan using the new /war/war-summary endpoint
 Future<String> fetchWarSummary(String? clanTag) async {
@@ -52,17 +53,17 @@ Future<String> fetchWarSummary(String? clanTag) async {
 String _buildWarWidgetData(Map<String, dynamic> data, String clanTag) {
   final String updatedAt = "Updated at ${DateFormat('HH:mm').format(DateTime.now())}";
   
-  print("🔍 API data - isInWar: ${data["isInWar"]}, isInCwl: ${data["isInCwl"]}");
+  DebugUtils.debugWidget("🔍 API data - isInWar: ${data["isInWar"]}, isInCwl: ${data["isInCwl"]}");
   
   // Check if in regular war
   if (data["isInWar"] == true) {
-    print("✅ Building regular war data");
+    DebugUtils.debugWidget("✅ Building regular war data");
     return _buildRegularWarData(data["war_info"], updatedAt);
   }
   
   // Check if in CWL
   if (data["isInCwl"] == true && data["league_info"] != null) {
-    print("✅ Building CWL war data");
+    DebugUtils.debugWidget("✅ Building CWL war data");
     return _buildCwlWarData(data, updatedAt, clanTag);
   }
   
@@ -70,7 +71,7 @@ String _buildWarWidgetData(Map<String, dynamic> data, String clanTag) {
   final warInfo = data["war_info"] ?? {};
   final state = warInfo["state"] ?? "notInWar";
   
-  print("⚠️ Not in war or CWL - state: $state, war_info: ${jsonEncode(warInfo)}");
+  DebugUtils.debugWidget("⚠️ Not in war or CWL - state: $state, war_info: ${jsonEncode(warInfo)}");
   
   switch (state) {
     case "accessDenied":
@@ -189,16 +190,16 @@ String _buildRegularWarData(Map<String, dynamic> warInfo, String updatedAt) {
 
 // Build data for CWL war
 String _buildCwlWarData(Map<String, dynamic> data, String updatedAt, String clanTag) {
-  print("🏅 CWL Debug - clan_tag: '$clanTag'");
-  print("🏅 CWL Debug - clan_tag length: ${clanTag.length}");
+  DebugUtils.debugCwl("🏅 CWL Debug - clan_tag: '$clanTag'");
+  DebugUtils.debugCwl("🏅 CWL Debug - clan_tag length: ${clanTag.length}");
   
   // Use WarCwl class to properly find the war for this clan
   final warCwl = WarCwl.fromJson(data, clanTag);
-  print("🔍 WarCwl created with ${warCwl.warLeagueInfos.length} wars");
+  DebugUtils.debugCwl("🔍 WarCwl created with ${warCwl.warLeagueInfos.length} wars");
   final activeWar = warCwl.getActiveWarByTag(clanTag);
   
   if (activeWar == null) {
-    print("⚠️ No wars found with our clan in CWL data");
+    DebugUtils.debugWarning("⚠️ No wars found with our clan in CWL data");
     return jsonEncode({
       "updatedAt": updatedAt,
       "timeState": "CWL Period",
@@ -216,10 +217,10 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt, String clan
   // Use WarInfo properties directly
   final currentWar = activeWar;
   
-  print("🏅 CWL Processing war with state: ${currentWar.state}");
+  DebugUtils.debugCwl("🏅 CWL Processing war with state: ${currentWar.state}");
   
   final state = currentWar.state;
-  print("🏅 CWL Processing war with state: $state");
+  DebugUtils.debugCwl("🏅 CWL Processing war with state: $state");
   
   String timeState = "CWL";
   String score = "";
@@ -231,7 +232,7 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt, String clan
   final clanStars = currentWar.clan?.stars ?? 0;
   final opponentStars = currentWar.opponent?.stars ?? 0;
   
-  print("🏅 CWL Stars - Clan: $clanStars, Opponent: $opponentStars");
+  DebugUtils.debugCwl("🏅 CWL Stars - Clan: $clanStars, Opponent: $opponentStars");
   
   if (state == "preparation") {
     statusIcon = "🏅";
@@ -295,8 +296,8 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt, String clan
   final ourStars = isOurClanFirst ? clanStars : opponentStars;
   final theirStars = isOurClanFirst ? opponentStars : clanStars;
   
-  print("🏅 CWL Final data - Our Clan: ${ourClan?.name ?? "Unknown"}, Their Clan: ${theirClan?.name ?? "Unknown"}");
-  print("🏅 CWL Position - Our clan is ${isOurClanFirst ? 'first' : 'second'} in war data");
+  DebugUtils.debugCwl("🏅 CWL Final data - Our Clan: ${ourClan?.name ?? "Unknown"}, Their Clan: ${theirClan?.name ?? "Unknown"}");
+  DebugUtils.debugCwl("🏅 CWL Position - Our clan is ${isOurClanFirst ? 'first' : 'second'} in war data");
 
   // Update score and color theme based on our clan's position
   if (state == "inWar") {
@@ -344,7 +345,7 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt, String clan
     "opponent": opponentData
   };
   
-  print("🏅 CWL Widget data created: ${jsonEncode(result)}");
+  DebugUtils.debugWidget("🏅 CWL Widget data created: ${jsonEncode(result)}");
   return jsonEncode(result);
 }
 

@@ -7,6 +7,7 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class WarWidgetService {
   static final WarWidgetService _instance = WarWidgetService._internal();
@@ -16,16 +17,16 @@ class WarWidgetService {
   // Handle widget refresh requests from the Android widget
   static Future<void> handleWidgetRefresh() async {
     try {
-      print("🔄 War widget refresh requested");
+      DebugUtils.debugWidget("🔄 War widget refresh requested");
       
       // Get clan tag from current context
       final clanTag = await WarWidgetService.getCurrentPlayerClanTag();
       if (clanTag == null || clanTag.isEmpty) {
-        print("⚠️ No clan tag found for widget refresh");
+        DebugUtils.debugWarning("⚠️ No clan tag found for widget refresh");
         return;
       }
 
-      print("🔍 Using clan tag for widget refresh: $clanTag");
+      DebugUtils.debugWidget("🔍 Using clan tag for widget refresh: $clanTag");
       
       // Fetch fresh war data
       final warInfo = await fetchWarSummary(clanTag);
@@ -40,10 +41,10 @@ class WarWidgetService {
         iOSName: 'WarWidget',
       );
       
-      print("✅ War widget refresh completed");
+      DebugUtils.debugSuccess("✅ War widget refresh completed");
     } catch (e, stackTrace) {
       Sentry.captureException(e, stackTrace: stackTrace);
-      print("❌ Error refreshing war widget: $e");
+      DebugUtils.debugError("❌ Error refreshing war widget: $e");
     }
   }
 
@@ -60,11 +61,11 @@ class WarWidgetService {
   @pragma('vm:entry-point')
   static Future<void> _backgroundCallback(Uri? uri) async {
     if (uri == null) {
-      print("⚠️ Widget background callback received null URI");
+      DebugUtils.debugWarning("⚠️ Widget background callback received null URI");
       return;
     }
     
-    print("📱 Widget background callback: ${uri.toString()}");
+    DebugUtils.debugWidget("📱 Widget background callback: ${uri.toString()}");
     
     if (uri.host == 'refreshClicked') {
       await handleWidgetRefresh();
@@ -85,12 +86,12 @@ class WarWidgetService {
       }
       
       if (selectedPlayerTag == null || selectedPlayerTag.isEmpty) {
-        print("⚠️ No selected player tag found in any preference key");
+        DebugUtils.debugWarning("⚠️ No selected player tag found in any preference key");
         
         // If still no selected tag, try to get the first available CoC account
         final firstAccountTag = await _getFirstAvailableAccount();
         if (firstAccountTag != null) {
-          print("🔄 Using first available account: $firstAccountTag");
+          DebugUtils.debugInfo("🔄 Using first available account: $firstAccountTag");
           selectedPlayerTag = firstAccountTag;
           // Store it for future use
           await storePrefs('selectedTag', firstAccountTag);
@@ -99,21 +100,21 @@ class WarWidgetService {
         }
       }
 
-      print("🔍 Using selected player tag: $selectedPlayerTag");
+      DebugUtils.debugInfo("🔍 Using selected player tag: $selectedPlayerTag");
 
       // Get player data to extract clan tag
       final playerClanTag = await _getPlayerClanTag(selectedPlayerTag);
       
       if (playerClanTag != null && playerClanTag.isNotEmpty) {
-        print("✅ Got clan tag for selected player $selectedPlayerTag: $playerClanTag");
+        DebugUtils.debugSuccess("✅ Got clan tag for selected player $selectedPlayerTag: $playerClanTag");
         return playerClanTag;
       } else {
-        print("⚠️ Player $selectedPlayerTag is not in a clan");
+        DebugUtils.debugWarning("⚠️ Player $selectedPlayerTag is not in a clan");
         return null;
       }
       
     } catch (e) {
-      print("❌ Error getting current player clan tag: $e");
+      DebugUtils.debugError("❌ Error getting current player clan tag: $e");
       return null;
     }
   }
@@ -123,7 +124,7 @@ class WarWidgetService {
     try {
       final token = await TokenService().getAccessToken();
       if (token == null) {
-        print("⚠️ User not authenticated");
+        DebugUtils.debugWarning("⚠️ User not authenticated");
         return null;
       }
 
@@ -142,18 +143,18 @@ class WarWidgetService {
         if (accounts != null && accounts.isNotEmpty) {
           final firstAccount = accounts.first;
           final playerTag = firstAccount['player_tag'];
-          print("🎯 Found first account: $playerTag");
+          DebugUtils.debugSuccess("🎯 Found first account: $playerTag");
           return playerTag;
         } else {
-          print("⚠️ No CoC accounts found");
+          DebugUtils.debugWarning("⚠️ No CoC accounts found");
           return null;
         }
       } else {
-        print("⚠️ Failed to get CoC accounts: ${response.statusCode}");
+        DebugUtils.debugWarning("⚠️ Failed to get CoC accounts: ${response.statusCode}");
         return null;
       }
     } catch (e) {
-      print("❌ Error getting first available account: $e");
+      DebugUtils.debugError("❌ Error getting first available account: $e");
       return null;
     }
   }
@@ -164,16 +165,16 @@ class WarWidgetService {
       // First try to get from cached player data in SharedPreferences
       final cachedClanTag = await getPrefs('player_${playerTag}_clan_tag');
       if (cachedClanTag != null && cachedClanTag.isNotEmpty) {
-        print("💾 Using cached clan tag for $playerTag: $cachedClanTag");
+        DebugUtils.debugInfo("💾 Using cached clan tag for $playerTag: $cachedClanTag");
         return cachedClanTag;
       }
 
       // If not cached, we need to make an API call as fallback
-      print("🔍 No cached clan tag found, making API call for $playerTag");
+      DebugUtils.debugInfo("🔍 No cached clan tag found, making API call for $playerTag");
       
       final token = await TokenService().getAccessToken();
       if (token == null) {
-        print("⚠️ User not authenticated - no token available");
+        DebugUtils.debugWarning("⚠️ User not authenticated - no token available");
         return null;
       }
       
@@ -195,22 +196,22 @@ class WarWidgetService {
           if (clanTag.isNotEmpty) {
             // Cache the clan tag for future use
             await storePrefs('player_${playerTag}_clan_tag', clanTag);
-            print("✅ Got and cached clan tag: $clanTag");
+            DebugUtils.debugSuccess("✅ Got and cached clan tag: $clanTag");
             return clanTag;
           } else {
-            print("⚠️ Player $playerTag is not in a clan");
+            DebugUtils.debugWarning("⚠️ Player $playerTag is not in a clan");
             return null;
           }
         } else {
-          print("⚠️ No player data found for tag: $playerTag");
+          DebugUtils.debugWarning("⚠️ No player data found for tag: $playerTag");
           return null;
         }
       } else {
-        print("⚠️ Failed to get player data: ${response.statusCode} - ${response.body}");
+        DebugUtils.debugWarning("⚠️ Failed to get player data: ${response.statusCode} - ${response.body}");
         return null;
       }
     } catch (e) {
-      print("❌ Error fetching player clan tag: $e");
+      DebugUtils.debugError("❌ Error fetching player clan tag: $e");
       return null;
     }
   }
@@ -257,7 +258,7 @@ class WarDisplayWidgetState extends State<WarDisplayWidget> {
           isLoading = false;
         });
       }
-      print("Error loading war data: $e");
+      DebugUtils.debugError("❌ Error loading war data: $e");
     }
   }
 

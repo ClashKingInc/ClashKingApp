@@ -11,6 +11,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:flutter/foundation.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class CocAccountService extends ChangeNotifier {
   List<Map<String, dynamic>> _cocAccounts = [];
@@ -78,7 +79,7 @@ class CocAccountService extends ChangeNotifier {
       return {"code": 401, "message": "User not authenticated"};
     }
 
-    print("Adding CoC account with tag: $playerTag");
+    DebugUtils.debugInfo("🔄 Adding CoC account with tag: $playerTag");
 
     try {
       final response = await http.post(
@@ -200,7 +201,7 @@ class CocAccountService extends ChangeNotifier {
         // Check if we need to refresh the war widget due to clan change
         await _checkAndRefreshWarWidget(previousTag, tag);
       } catch (e) {
-        print("⚠️ Could not store selected tag: $e");
+        DebugUtils.debugWarning("⚠️ Could not store selected tag: $e");
         // Continue without storing - not critical for app functionality
       }
     }
@@ -221,10 +222,10 @@ class CocAccountService extends ChangeNotifier {
       if (storedTag != null && storedTag.isNotEmpty) {
         _selectedTag = storedTag;
         selectedTagNotifier.value = storedTag;
-        print("🔄 Loaded selected tag from preferences: $storedTag");
+        DebugUtils.debugInfo("🔄 Loaded selected tag from preferences: $storedTag");
       }
     } catch (e) {
-      print("⚠️ Could not load selected tag from preferences: $e");
+      DebugUtils.debugWarning("⚠️ Could not load selected tag from preferences: $e");
       // Continue without stored tag - will use first account as default
     }
   }
@@ -248,15 +249,15 @@ class CocAccountService extends ChangeNotifier {
   ) async {
     if (playerTags.isEmpty) return;
 
-    print("🔄 Refreshing page data using bulk endpoint for ${playerTags.length} players");
+    DebugUtils.debugInfo("🔄 Refreshing page data using bulk endpoint for ${playerTags.length} players");
     
     try {
       await _loadDataWithBulkEndpoint(playerTags, playerService, clanService, warCwlService);
       _lastRefresh = DateTime.now();
       notifyListeners();
-      print("✅ Page refresh completed successfully");
+      DebugUtils.debugSuccess("✅ Page refresh completed successfully");
     } catch (e) {
-      print("❌ Page refresh failed: $e");
+      DebugUtils.debugError("❌ Page refresh failed: $e");
       rethrow;
     }
   }
@@ -330,7 +331,7 @@ class CocAccountService extends ChangeNotifier {
     final token = await TokenService().getAccessToken();
     if (token == null) throw Exception("User not authenticated");
 
-    print("🚀 Using optimized bulk endpoint for ${playerTags.length} players");
+    DebugUtils.debugInfo("🚀 Using optimized bulk endpoint for ${playerTags.length} players");
 
     try {
       final response = await http.post(
@@ -346,7 +347,7 @@ class CocAccountService extends ChangeNotifier {
         final responseBody = utf8.decode(response.bodyBytes);
         final data = jsonDecode(responseBody);
 
-        print("✅ Bulk data loaded successfully");
+        DebugUtils.debugSuccess("✅ Bulk data loaded successfully");
 
         // Process player data
         if (data["players"] != null) {
@@ -367,11 +368,11 @@ class CocAccountService extends ChangeNotifier {
         // Process war/CWL data
         if (data["clans"] != null && data["clans"]["war_data"] != null) {
           final warData = data["clans"]["war_data"] as List<dynamic>;
-          print("🔄 Processing ${warData.length} war data items");
+          DebugUtils.debugInfo("🔄 Processing ${warData.length} war data items");
           warCwlService.processBulkWarData(warData);
         }
 
-        print("🔗 Linking data relationships...");
+        DebugUtils.debugInfo("🔗 Linking data relationships...");
         
         // Link relationships
         final clanTags = List<String>.from(data["clan_tags"] ?? []);
@@ -392,15 +393,15 @@ class CocAccountService extends ChangeNotifier {
           clanService.linkWarStatsToClans();
         }
 
-        print("✅ All data linked successfully");
+        DebugUtils.debugSuccess("✅ All data linked successfully");
       } else if (response.statusCode == 503 || response.statusCode == 500) {
         throw HttpException(response.statusCode.toString(), uri: response.request!.url);
       } else {
-        print("❌ Bulk endpoint failed, falling back to individual calls");
+        DebugUtils.debugError("❌ Bulk endpoint failed, falling back to individual calls");
         await _loadDataWithFallback(playerTags, playerService, clanService, warCwlService);
       }
     } catch (e) {
-      print("❌ Bulk endpoint error: $e, falling back to individual calls");
+      DebugUtils.debugError("❌ Bulk endpoint error: $e, falling back to individual calls");
       await _loadDataWithFallback(playerTags, playerService, clanService, warCwlService);
     }
   }
@@ -412,7 +413,7 @@ class CocAccountService extends ChangeNotifier {
     ClanService clanService,
     WarCwlService warCwlService,
   ) async {
-    print("🔄 Using fallback individual API calls");
+        DebugUtils.debugInfo("🔄 Using fallback individual API calls");
 
     final clanTagsByPlayer = await playerService.initPlayerData(playerTags);
 
@@ -464,23 +465,23 @@ class CocAccountService extends ChangeNotifier {
       final previousClanTag = await getPrefs('player_${previousTag}_clan_tag');
       final newClanTag = await getPrefs('player_${newTag}_clan_tag');
       
-      print("🔄 Account switch - Previous: $previousTag (clan: $previousClanTag) → New: $newTag (clan: $newClanTag)");
+      DebugUtils.debugInfo("🔄 Account switch - Previous: $previousTag (clan: $previousClanTag) → New: $newTag (clan: $newClanTag)");
       
       // If clan tags are different, refresh the war widget in background
       if (previousClanTag != newClanTag) {
-        print("🔄 Clan changed! Refreshing war widget in background...");
+        DebugUtils.debugInfo("🔄 Clan changed! Refreshing war widget in background...");
         // Don't await - let it run in background
         WarWidgetService.handleWidgetRefresh().catchError((error) {
-          print("❌ Background widget refresh error: $error");
+          DebugUtils.debugError("❌ Background widget refresh error: $error");
         });
       } else {
-        print("✅ Same clan, no widget refresh needed");
+        DebugUtils.debugInfo("✅ Same clan, no widget refresh needed");
       }
     } catch (e) {
-      print("⚠️ Error checking clan change: $e");
+      DebugUtils.debugWarning("⚠️ Error checking clan change: $e");
       // If there's an error, refresh anyway to be safe (in background)
       WarWidgetService.handleWidgetRefresh().catchError((error) {
-        print("❌ Background widget refresh error: $error");
+        DebugUtils.debugError("❌ Background widget refresh error: $error");
       });
     }
   }

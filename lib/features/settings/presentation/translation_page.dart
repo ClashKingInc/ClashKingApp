@@ -32,8 +32,7 @@ class TranslationScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16.0),
                   child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl:
                         "https://www.icegif.com/wp-content/uploads/2023/06/icegif-202.gif", // remplacez par votre URL d'image
                     height: 200,
@@ -51,7 +50,8 @@ class TranslationScreen extends StatelessWidget {
                     ),
               ),
               SizedBox(height: 16),
-              Text(AppLocalizations.of(context)!.translationHelpTranslateContent,
+              Text(
+                  AppLocalizations.of(context)!.translationHelpTranslateContent,
                   style: Theme.of(context).textTheme.bodyMedium),
               SizedBox(height: 16),
               Center(
@@ -65,7 +65,8 @@ class TranslationScreen extends StatelessWidget {
                   ),
                   icon: Icon(Icons.language),
                   label: Text(
-                    AppLocalizations.of(context)!.translationHelpTranslateButton,
+                    AppLocalizations.of(context)!
+                        .translationHelpTranslateButton,
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
@@ -101,9 +102,32 @@ class TranslationScreen extends StatelessWidget {
                     ),
               ),
               SizedBox(height: 16),
-              // Replace the following with actual translator names
               Text(
-                "• Joelsuperstar \n• niklas312 \n• ColinSchmale \n• athype \n• Nemo_64\n• Dinki/Krakakus \n• SudetiZ \n• MRocha01 \n• GodOfGods \n• DeafToDeath \n• Wraxu \n• MixxStar \n• SamGo \n• AlejandroMoc ",
+                '''
+  • AlejandroMoc
+  • athype
+  • bhatzuhaib
+  • ColinSchmale
+  • DeafToDeath
+  • Dinki/Krakakus
+  • dobryakoff
+  • GodOfGods
+  • Joelsuperstar
+  • lucaschuab2015
+  • mango_wz
+  • MixxStar
+  • MechanicaL
+  • MRocha01
+  • Nemo_64
+  • niklas312
+  • niku998
+  • Pottmichel
+  • retrock
+  • SamGo
+  • SudetiZ
+  • Wraxu
+  • zombie23304
+                ''',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],

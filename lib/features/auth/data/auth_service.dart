@@ -8,6 +8,7 @@ import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class AuthService extends ChangeNotifier {
   final ApiService _apiService = ApiService();
@@ -40,17 +41,17 @@ class AuthService extends ChangeNotifier {
 
   Future<void> signInWithDiscord() async {
     try {
-      print("🔄 Starting Discord login process...");
+      DebugUtils.debugInfo("🔄 Starting Discord login process...");
       final result = await DiscordAuthHelper.getDiscordAuthCode();
-      print("🔄 Discord auth result: $result");
+      DebugUtils.debugInfo("🔄 Discord auth result: $result");
       if (result == null) throw Exception("User cancelled Discord login.");
 
       final deviceId = await _tokenService.getDeviceId();
-      print("🔄 Device ID: $deviceId");
+      DebugUtils.debugInfo("🔄 Device ID: $deviceId");
       final deviceName = await _tokenService.getDeviceName();
-      print("🔄 Device Name: $deviceName");
-      print("🔄 Discord code_verifier : ${result['code_verifier']}");
-      print("🔄 Discord code: ${result['code']}");
+      DebugUtils.debugInfo("🔄 Device Name: $deviceName");
+      DebugUtils.debugInfo("🔄 Discord code_verifier : ${result['code_verifier']}");
+      DebugUtils.debugInfo("🔄 Discord code: ${result['code']}");
       final response = await _apiService.post('/auth/discord', {
         'code': result['code']!,
         'redirect_uri': DiscordAuthHelper.getRedirectUri(),
@@ -59,22 +60,22 @@ class AuthService extends ChangeNotifier {
         'device_name': deviceName,
       });
       
-      print("🔄 Discord login response: $response");
+      DebugUtils.debugInfo("🔄 Discord login response: $response");
 
       await _tokenService.saveTokens(
           response['access_token'], response['refresh_token']);
       _currentUser = User.fromJson(response['user']);
-      print("🔄 Tokens saved successfully.");
+      DebugUtils.debugSuccess("🔄 Tokens saved successfully.");
       notifyListeners();
     } catch (e) {
-      print("❌ Discord login error: $e");
+      DebugUtils.debugError("❌ Discord login error: $e");
       throw Exception("Discord login failed. Please try again.");
     }
   }
 
   Future<void> signInWithEmail(String email, String password) async {
     try {
-      print("🔄 Starting email login process...");
+      DebugUtils.debugInfo("🔄 Starting email login process...");
       final deviceId = await _tokenService.getDeviceId();
       final deviceName = await _tokenService.getDeviceName();
       
@@ -85,7 +86,7 @@ class AuthService extends ChangeNotifier {
         'device_name': deviceName,
       });
       
-      print("🔄 Email login response: $response");
+      DebugUtils.debugInfo("🔄 Email login response: $response");
       
       await _tokenService.saveTokens(
           response['access_token'], response['refresh_token']);
@@ -93,17 +94,17 @@ class AuthService extends ChangeNotifier {
       _isAuthenticated = true;
       _accessToken = response['access_token'];
       
-      print("🔄 Email login completed successfully");
+      DebugUtils.debugSuccess("🔄 Email login completed successfully");
       notifyListeners();
     } catch (e) {
-      print("❌ Email login error: $e");
+      DebugUtils.debugError("❌ Email login error: $e");
       throw Exception("Email login failed. Please check your credentials.");
     }
   }
 
   Future<void> registerWithEmail(String email, String password, String username) async {
     try {
-      print("🔄 Starting email registration process...");
+      DebugUtils.debugInfo("🔄 Starting email registration process...");
       final deviceId = await _tokenService.getDeviceId();
       final deviceName = await _tokenService.getDeviceName();
       
@@ -115,7 +116,7 @@ class AuthService extends ChangeNotifier {
         'device_name': deviceName,
       });
       
-      print("🔄 Email registration response: $response");
+      DebugUtils.debugInfo("🔄 Email registration response: $response");
       
       await _tokenService.saveTokens(
           response['access_token'], response['refresh_token']);
@@ -123,17 +124,17 @@ class AuthService extends ChangeNotifier {
       _isAuthenticated = true;
       _accessToken = response['access_token'];
       
-      print("🔄 Email registration completed successfully");
+      DebugUtils.debugSuccess("🔄 Email registration completed successfully");
       notifyListeners();
     } catch (e) {
-      print("❌ Email registration error: $e");
+      DebugUtils.debugError("❌ Email registration error: $e");
       throw Exception("Registration failed. Email may already be in use.");
     }
   }
 
   Future<void> linkDiscordAccount(String discordAccessToken, String? refreshToken, int? expiresIn) async {
     try {
-      print("🔄 Linking Discord account...");
+      DebugUtils.debugInfo("🔄 Linking Discord account...");
       final deviceId = await _tokenService.getDeviceId();
       final deviceName = await _tokenService.getDeviceName();
       
@@ -145,18 +146,18 @@ class AuthService extends ChangeNotifier {
         'device_name': deviceName,
       });
       
-      print("🔄 Discord linking completed: $response");
+      DebugUtils.debugSuccess("🔄 Discord linking completed: $response");
       // Refresh user data to get updated auth methods
       await initializeAuth();
     } catch (e) {
-      print("❌ Discord linking error: $e");
+      DebugUtils.debugError("❌ Discord linking error: $e");
       throw Exception("Failed to link Discord account. It may already be linked to another account.");
     }
   }
 
   Future<void> linkEmailAccount(String email, String password, String username) async {
     try {
-      print("🔄 Linking email account...");
+      DebugUtils.debugInfo("🔄 Linking email account...");
       final deviceId = await _tokenService.getDeviceId();
       final deviceName = await _tokenService.getDeviceName();
       
@@ -168,11 +169,11 @@ class AuthService extends ChangeNotifier {
         'device_name': deviceName,
       });
       
-      print("🔄 Email linking completed: $response");
+      DebugUtils.debugSuccess("🔄 Email linking completed: $response");
       // Refresh user data to get updated auth methods
       await initializeAuth();
     } catch (e) {
-      print("❌ Email linking error: $e");
+      DebugUtils.debugError("❌ Email linking error: $e");
       throw Exception("Failed to link email account. Email may already be in use.");
     }
   }
@@ -260,6 +261,6 @@ class AuthService extends ChangeNotifier {
     notifyListeners();
     
     // Note: Also call CocAccountService.clearAccountData() after this
-    print("🔄 AuthService data cleared. Make sure to also clear CocAccountService data.");
+    DebugUtils.debugInfo("🔄 AuthService data cleared. Make sure to also clear CocAccountService data.");
   }
 }
