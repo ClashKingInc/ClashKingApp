@@ -1,7 +1,7 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "appDescription": "Seu companheiro definitivo do Clash of Clans para acompanhar estatísticas, gerenciar clãs e analisar desempenho.",
   "generalLoading": "Carregando...",
   "loadingVillages": "Loading your villages...",
   "loadingClanData": "Fetching clan data...",
@@ -16,15 +16,15 @@
   "accountVerifyButton": "Verify",
   "accountVerificationSuccess": "Account verified successfully!",
   "accountVerificationFailed": "Verification failed. Please check your API token.",
-  "generalRetry": "Retry",
-  "generalTryAgain": "Try again",
-  "generalCancel": "Cancel",
+  "generalRetry": "Tentar novamente",
+  "generalTryAgain": "Tente novamente",
+  "generalCancel": "Cancelar",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
   },
   "generalApply": "Aplicar",
-  "generalConfirm": "Confirm",
+  "generalConfirm": "Confirmar",
   "generalManage": "Gerir",
   "generalSettings": "Definições",
   "generalCopiedToClipboard": "Copiado para a área de transferência",
@@ -70,8 +70,8 @@
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Active",
-  "generalInactive": "Inactive",
+  "generalActive": "Ativo",
+  "generalInactive": "Inativo",
   "generalStarted": "Começado",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
@@ -82,7 +82,7 @@
   },
   "generalRole": "Cargo",
   "generalStats": "Estatísticas",
-  "generalFullStats": "Full Stats",
+  "generalFullStats": "Estatísticas Completas",
   "generalDetails": "Detalhes",
   "generalHistory": "Histórico",
   "@generalHistory": {
@@ -95,54 +95,54 @@
   },
   "generalWarning": "Atenção",
   "generalNoDataAvailable": "Sem dados disponíveis.",
-  "authSignUp": "Sign up",
+  "authSignUp": "Registar",
   "authLogin": "Iniciar Sessão",
   "authLogout": "Terminar sessão",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateClashKingAccount": "Create ClashKing Account",
-  "authCreateAccountToGetStarted": "Create your account to get started",
-  "authAlreadyHaveAccount": "Already have an account? Sign in",
-  "authConfirmLogout": "Are you sure you want to log out?",
+  "authCreateAccount": "Criar Conta",
+  "authJoinClashKing": "Juntar-se ao ClashKing",
+  "authCreateClashKingAccount": "Criar Conta ClashKing",
+  "authCreateAccountToGetStarted": "Crie a sua conta para começar",
+  "authAlreadyHaveAccount": "Já tem uma conta? Iniciar sessão",
+  "authConfirmLogout": "Tem a certeza de que pretende terminar a sessão?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
   "authDiscordSignIn": "Iniciar sessão com Discord",
-  "authDiscordContinue": "Continue with Discord",
+  "authDiscordContinue": "Continuar com Discord",
   "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authEmailTitle": "Email",
-  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailRequired": "Please enter your email",
-  "authEmailInvalid": "Please enter a valid email",
-  "authPasswordLabel": "Password",
-  "authPasswordConfirm": "Confirm Password",
-  "authPasswordRequired": "Please enter your password",
-  "authPasswordConfirmRequired": "Please confirm your password",
-  "authPasswordMismatch": "Passwords do not match",
-  "authPasswordTooShort": "Password must be at least 8 characters",
-  "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
-  "authPasswordForgot": "Forgot password?",
+  "authEmailTitle": "E-mail",
+  "authEmailDescription": "Use e-mail se não conseguir aceder ao Discord ou preferir funcionalidades apenas da aplicação",
+  "authEmailRequired": "Por favor, insira o seu e-mail",
+  "authEmailInvalid": "Por favor, insira um e-mail válido",
+  "authPasswordLabel": "Palavra-passe",
+  "authPasswordConfirm": "Confirmar Palavra-passe",
+  "authPasswordRequired": "Por favor, insira a sua palavra-passe",
+  "authPasswordConfirmRequired": "Por favor, confirme a sua palavra-passe",
+  "authPasswordMismatch": "As palavras-passe não coincidem",
+  "authPasswordTooShort": "A palavra-passe deve ter pelo menos 8 caracteres",
+  "authPasswordRequirements": "A palavra-passe deve conter: maiúscula, minúscula, dígito e carácter especial",
+  "authPasswordForgot": "Esqueceu-se da palavra-passe?",
   "authUsernameLabel": "Nome de utilizador",
   "authUsernameRequired": "Por favor, insira um nome de utilizador",
-  "authUsernameTooShort": "Username must be at least 3 characters",
+  "authUsernameTooShort": "O nome de utilizador deve ter pelo menos 3 caracteres",
   "authErrorConnection": "Ocorreu um erro. Por favor, verifique a sua conexão de internet e tente novamente.",
   "authErrorConnectionRelaunch": "Ocorreu um erro. Por favor, verifique a sua conexão de internet e reinicie a aplicação.",
-  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.",
-  "authAccountConnected": "Connected Accounts",
-  "authAccountConnectedStatus": "Connected",
-  "authAccountNotConnected": "Not connected",
-  "authAccountEmailAndPassword": "Email & Password",
-  "authAccountSecured": "Your account is secured with multiple authentication methods",
-  "authAccountLinkEmail": "Link Email Account",
-  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
-  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "helpTitle": "Need help?",
-  "helpJoinDiscord": "Join Discord",
-  "helpEmailUs": "Email Us",
+  "authAccountManagement": "Gestão de Conta",
+  "authAccountConnected": "Contas Ligadas",
+  "authAccountConnectedStatus": "Ligado",
+  "authAccountNotConnected": "Não ligado",
+  "authAccountEmailAndPassword": "E-mail e Palavra-passe",
+  "authAccountSecured": "A sua conta está protegida com múltiplos métodos de autenticação",
+  "authAccountLinkEmail": "Ligar Conta de E-mail",
+  "authAccountAddEmailAuth": "Adicione autenticação por e-mail e palavra-passe à sua conta para segurança adicional.",
+  "authAccountEmailLinkedSuccess": "Conta de e-mail ligada com sucesso!",
+  "helpTitle": "Precisa de ajuda?",
+  "helpJoinDiscord": "Juntar-se ao Discord",
+  "helpEmailUs": "Envie-nos um E-mail",
   "accountsWelcome": "Bem-vindo!",
   "accountsWelcomeMessage": "Por favor, adicione uma ou mais contas de Clash of Clans ao seu perfil. Pode adicionar ou remover contas depois.",
-  "accountsManageTitle": "Manage your accounts",
+  "accountsManageTitle": "Gerir as suas contas",
   "accountsNoneFound": "Nenhuma conta vinculada ao seu perfil foi encontrada",
   "accountsPlayerTag": "Player Tag (#ABC123)",
   "accountsEnterPlayerTag": "Introduza a tag de jogador",
@@ -150,14 +150,14 @@
   "accountsDelete": "Apagar conta",
   "accountsApiToken": "Token API de conta",
   "accountsEnterApiToken": "Por favor, insira o token de API da conta para confirmar ser sua. Pode encontrá-lo no jogo em Configurações > Mais configurações > Token de API.",
-  "accountsFillAllFields": "Please fill all fields.",
+  "accountsFillAllFields": "Por favor, preencha todos os campos.",
   "accountsErrorTagNotExists": "A tag de jogador inserida não existe.",
   "accountsErrorAlreadyLinked": "A tag de jogador já está vinculada a alguém.",
   "accountsErrorAlreadyLinkedToYou": "A tag de jogador já está vinculada a si.",
   "accountsErrorWrongApiToken": "O token da API inserido está incorreto",
-  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
+  "accountsErrorFailedToAdd": "Falha ao adicionar a conta. Por favor, tente novamente mais tarde.",
   "accountsErrorFailedToDelete": "Falha ao apagar link. Por favor, tente novamente mais tarde.",
-  "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
+  "accountsErrorFailedToUpdateOrder": "Falha ao atualizar a ordem das contas.",
   "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
   "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
   "errorLoadingVersion": "Erro ao carregar versão",
@@ -275,7 +275,7 @@
   "gameDonations": "Doações",
   "gameDonationsReceived": "Doações recebidas",
   "gameDonationsRatio": "Proporção de doações",
-  "gameLevel": "Level: {level}/{maxLevel}",
+  "gameLevel": "Nível: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
       "level": {
@@ -295,8 +295,8 @@
   "gameSiegeMachines": "Máquinas de Cerco",
   "gameSpells": "Feitiços",
   "gameAchievements": "Conquistas",
-  "gameClanGames": "Clan Games",
-  "gameSeasonPass": "Season Pass",
+  "gameClanGames": "Jogos de Clã",
+  "gameSeasonPass": "Passe de Temporada",
   "gameCreatorCode": "Código de Criador: ClashKing",
   "gameCreatorCodeDescription": "Tap for info • Support us for free!",
   "gameCreatorCodeDialogTitle": "Support ClashKing",
@@ -304,7 +304,7 @@
   "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "Clã",
   "clanSearchTitle": "Procurar clã",
-  "clanSearchPlaceholder": "Clan's name",
+  "clanSearchPlaceholder": "Nome do clã",
   "clanNone": "Sem clã",
   "clanJoinToUnlock": "Entre num clã para desbloquear novos recursos.",
   "clanMembers": "Membros",
@@ -334,7 +334,7 @@
   "clanWarFrequencyNever": "Nunca",
   "clanWarFrequencyUnknown": "Desconhecido",
   "clanWarFrequencyOncePerWeek": "1/semana",
-  "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
+  "clanWarFrequencyMoreThanOncePerWeek": "Mais de 1/semana",
   "clanWarFrequencyRarely": "Raramente",
   "timeHourIndicator": "h",
   "timeDaysAgo": "{days} dias atrás",
@@ -389,8 +389,8 @@
   "@timeJustNow": {
     "description": "Indicates something happened just now"
   },
-  "timeEndedJustNow": "Ended just now",
-  "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
+  "timeEndedJustNow": "Terminou agora mesmo",
+  "timeEndedMinutesAgo": "Terminou há {minutes} minutos",
   "@timeEndedMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -398,7 +398,7 @@
       }
     }
   },
-  "timeEndedHoursAgo": "Ended {hours} hours ago",
+  "timeEndedHoursAgo": "Terminou há {hours} horas",
   "@timeEndedHoursAgo": {
     "placeholders": {
       "hours": {
@@ -406,7 +406,7 @@
       }
     }
   },
-  "timeEndedDaysAgo": "Ended {days} days ago",
+  "timeEndedDaysAgo": "Terminou há {days} dias",
   "@timeEndedDaysAgo": {
     "placeholders": {
       "days": {
@@ -448,7 +448,7 @@
   },
   "legendsTitle": "Dados imprecisos?",
   "legendsNotInLeague": "Não está na Liga Lendária",
-  "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
+  "legendsNoDataToday": "Não está na Liga Lendária, mas temporadas passadas estão disponíveis.",
   "legendsStartDescription": "Começou o dia com {trophies} troféus.",
   "@legendsStartDescription": {
     "placeholders": {
@@ -506,7 +506,7 @@
       }
     }
   },
-  "legendsGlobalRankDescription": "You are currently ranked {rank} globally with {trophies} trophies.",
+  "legendsGlobalRankDescription": "Está atualmente classificado {rank} globalmente com {trophies} troféus.",
   "@legendsGlobalRankDescription": {
     "placeholders": {
       "rank": {
@@ -524,7 +524,7 @@
   "legendsBestRank": "Melhor Rank Global",
   "legendsTrophiesBySeason": "Troféus por temporada",
   "legendsEosTrophies": "Troféus de fim de temporada",
-  "legendsEosDetails": "End Of Season Details",
+  "legendsEosDetails": "Detalhes do Fim de Temporada",
   "legendsInaccurateTitle": "Dados imprecisos?",
   "legendsInaccurateIntro": "Devido às limitações da API do Clash of Clãs, nossos dados nem sempre podem ser perfeitamente precisos. Veja o porque:\n",
   "legendsInaccurateApiDelayTitle": "1. Atraso da API: ",
@@ -616,7 +616,7 @@
   "todoAccountsInactive": "Contas inativas",
   "todoAccountsNoInactive": "Sem contas inativas.",
   "todoAccountsNoActive": "Sem contas ativas.",
-  "todoAttacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
+  "todoAttacksLeftDescription": "Tem {attacks} ataque(s) restante(s) ({type}).",
   "@todoAttacksLeftDescription": {
     "placeholders": {
       "attacks": {
@@ -627,7 +627,7 @@
       }
     }
   },
-  "todoDefensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
+  "todoDefensesLeftDescription": "Tem {defenses} defesa(s) restante(s) ({type}).",
   "@todoDefensesLeftDescription": {
     "placeholders": {
       "defenses": {
@@ -638,7 +638,7 @@
       }
     }
   },
-  "todoNoAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+  "todoNoAttacksLeftDescription": "Parabéns, fez todos os seus ataques ({type})!",
   "@todoNoAttacksLeftDescription": {
     "placeholders": {
       "type": {
@@ -646,7 +646,7 @@
       }
     }
   },
-  "todoPointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+  "todoPointsLeftDescription": "Tem {points} pontos restantes para obter hoje para estar a tempo do fim do evento ({type}).",
   "@todoPointsLeftDescription": {
     "placeholders": {
       "points": {
@@ -657,7 +657,7 @@
       }
     }
   },
-  "todoPointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+  "todoPointsLeftDescriptionNoPoints": "Parabéns, está a tempo de obter as recompensas máximas no fim do evento ({type})!",
   "@todoPointsLeftDescriptionNoPoints": {
     "placeholders": {
       "type": {
@@ -749,14 +749,14 @@
   "warCalculatorNeededOverall": "% Necessário, em geral",
   "warCalculatorCalculate": "Calcular",
   "warAttacksTitle": "Ataques",
-  "warAttacksNone": "No attack yet",
+  "warAttacksNone": "Ainda sem ataques",
   "@warAttacksNone": {
     "description": "No attack yet in war"
   },
-  "warAttacksBest": "Best attacks",
-  "warAttacksCount": "Attack Count",
-  "warAttacksMissed": "Missed Attacks",
-  "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
+  "warAttacksBest": "Melhores ataques",
+  "warAttacksCount": "Contagem de Ataques",
+  "warAttacksMissed": "Ataques Perdidos",
+  "warAttacksNumber": "Atacou {number_time} vez(es) durante as últimas {number_war} guerras.",
   "@warAttacksNumber": {
     "placeholders": {
       "number_time": {
@@ -767,7 +767,7 @@
       }
     }
   },
-  "warAttacksAverageStars": "You had an average of {stars} stars per war.",
+  "warAttacksAverageStars": "Teve uma média de {stars} estrelas por guerra.",
   "@warAttacksAverageStars": {
     "placeholders": {
       "stars": {
@@ -775,7 +775,7 @@
       }
     }
   },
-  "warAttacksAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+  "warAttacksAverageDestruction": "Teve uma média de {percent}% de taxa de destruição por guerra.",
   "@warAttacksAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -783,13 +783,13 @@
       }
     }
   },
-  "warDefensesTitle": "Defenses",
-  "warDefensesNone": "No defense yet",
+  "warDefensesTitle": "Defesas",
+  "warDefensesNone": "Ainda sem defesas",
   "@warDefensesNone": {
     "description": "No defense yet in war"
   },
-  "warDefensesBest": "Best defenses",
-  "warDefensesBestOutOf": "Best defense (out of {number})",
+  "warDefensesBest": "Melhores defesas",
+  "warDefensesBestOutOf": "Melhor defesa (de {number})",
   "@warDefensesBestOutOf": {
     "placeholders": {
       "number": {
@@ -798,7 +798,7 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
+  "warDefensesNumber": "Defendeu {number_time} vez(es) durante as últimas {number_war} guerras.",
   "@warDefensesNumber": {
     "placeholders": {
       "number_time": {
@@ -809,7 +809,7 @@
       }
     }
   },
-  "warDefensesAverageStars": "You had an average of {stars} stars per defense.",
+  "warDefensesAverageStars": "Teve uma média de {stars} estrelas por defesa.",
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
@@ -817,7 +817,7 @@
       }
     }
   },
-  "warDefensesAverageDestruction": "You had an average of {percent}% destruction rate per defense.",
+  "warDefensesAverageDestruction": "Teve uma média de {percent}% de taxa de destruição por defesa.",
   "@warDefensesAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -831,12 +831,12 @@
   "warStarsOne": "1 estrela",
   "warStarsTwo": "2 estrelas",
   "warStarsThree": "3 estrelas",
-  "warStarsZero": "0 Star",
-  "warStarsBestPerformance": "Best performance",
+  "warStarsZero": "0 Estrelas",
+  "warStarsBestPerformance": "Melhor desempenho",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
   },
-  "warDestructionTitle": "Destruction",
+  "warDestructionTitle": "Destruição",
   "warDestructionAverage": "Destruição média",
   "warDestructionRate": "Taxa de destruição",
   "@warDestructionRate": {
@@ -902,7 +902,7 @@
       }
     }
   },
-  "warPositionMap": "Map Position",
+  "warPositionMap": "Posição no Mapa",
   "@warPositionMap": {
     "description": "Map position in war"
   },
@@ -910,7 +910,7 @@
   "@warPositionAbbr": {
     "description": "Abbreviation for map position"
   },
-  "warPositionOrder": "Order",
+  "warPositionOrder": "Ordem",
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
@@ -918,8 +918,8 @@
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
   },
-  "warOpponentLowerTownhall": "Lower TH",
-  "warOpponentUpperTownhall": "Upper TH",
+  "warOpponentLowerTownhall": "CV Inferior",
+  "warOpponentUpperTownhall": "CV Superior",
   "warOpponentEqualThLevel": "Mesmo CV",
   "warOpponentSelectMembersThLevel": "Nível CV de membros",
   "warOpponentSelectOpponentsThLevel": "Nível CV de oponentes",
@@ -958,7 +958,7 @@
   "@warStatusUnready": {
     "description": "Opted Out for war"
   },
-  "warStatusMissed": "Missed",
+  "warStatusMissed": "Perdido",
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
@@ -1014,7 +1014,7 @@
       }
     }
   },
-  "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+  "cwlTotalAttacks": "O seu clã tem um total de {attacks} ataques de {totalAttacks} ataques possíveis.",
   "@cwlTotalAttacks": {
     "placeholders": {
       "attacks": {
@@ -1025,20 +1025,20 @@
       }
     }
   },
-  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
+  "joinLeaveTitle": "Registos de Entrada/Saída (Temporada Atual)",
   "joinLeaveJoin": "Entrar",
   "joinLeaveLeave": "Sair",
   "joinLeaveReset": "Reiniciar",
-  "joinLeaveJoins": "Joins",
-  "joinLeaveLeaves": "Leaves",
-  "joinLeaveUniquePlayers": "Unique Players",
-  "joinLeaveMovingPlayers": "Moving Players",
-  "joinLeaveMostMovingPlayers": "Most Moving Players",
-  "joinLeaveStillInClan": "Still in Clan",
-  "joinLeaveLeftForever": "Left Forever",
-  "joinLeaveRejoinedPlayers": "Rejoined Players",
-  "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
-  "joinLeavePeakHour": "Most Active Hour",
+  "joinLeaveJoins": "Entradas",
+  "joinLeaveLeaves": "Saídas",
+  "joinLeaveUniquePlayers": "Jogadores Únicos",
+  "joinLeaveMovingPlayers": "Jogadores em Movimento",
+  "joinLeaveMostMovingPlayers": "Jogadores que Mais se Movem",
+  "joinLeaveStillInClan": "Ainda no Clã",
+  "joinLeaveLeftForever": "Saíram para Sempre",
+  "joinLeaveRejoinedPlayers": "Jogadores que Voltaram",
+  "joinLeaveAvgTimeJoinLeave": "Tempo Médio de Entrada/Saída",
+  "joinLeavePeakHour": "Hora Mais Ativa",
   "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
   "@joinLeaveNumberDescription": {
     "placeholders": {
@@ -1128,17 +1128,17 @@
       }
     }
   },
-  "raidsTitle": "Raids",
+  "raidsTitle": "Ataques",
   "raidsLast": "Últimos raides",
   "raidsOngoing": "Raides em curso",
   "raidsDistrictsDestroyed": "Distritos destruídos",
   "raidsCompleted": "Raides finalizados",
   "searchNoResult": "Sem resultado.",
-  "maintenanceTitle": "Maintenance",
-  "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-  "downloadTooltip": "Download CWL summary",
-  "downloadInProgress": "Downloading file... It can take a few seconds...",
-  "downloadSuccess": "File saved successfully in {path}",
+  "maintenanceTitle": "Manutenção",
+  "maintenanceDescription": "Clash of Clans está atualmente em manutenção, portanto não conseguimos aceder à API. Por favor, volte mais tarde.",
+  "downloadTooltip": "Descarregar resumo CWL",
+  "downloadInProgress": "A descarregar ficheiro... Pode demorar alguns segundos...",
+  "downloadSuccess": "Ficheiro guardado com sucesso em {path}",
   "@downloadSuccess": {
     "placeholders": {
       "path": {
@@ -1146,7 +1146,7 @@
       }
     }
   },
-  "downloadError": "Failed to download file",
+  "downloadError": "Falha ao descarregar ficheiro",
   "dashboardTitle": "Painel",
   "toolsTitle": "Ferramentas",
   "navigationTeam": "Equipas",
@@ -1187,7 +1187,7 @@
   "faqHowToInviteTheBotAnswer": "Pode convidar o nosso bot para o seu servidor de Discord, clicando no botão abaixo. É preciso ter a permissão \"Gerir Servidor\" para adicionar o bot.",
   "faqInviteTheBot": "Convide o bot ClashKing",
   "faqNeedHelp": "Preciso de ajuda ou gostaria de fazer uma sugestão. Como posso contactar-vos?",
-  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
+  "faqNeedHelpAnswer": "Pode entrar no nosso servidor de Discord para pedir ajuda ou fornecer opiniões, ou pode enviar um e-mail para devs@clashk.ing. Por favor, escreva apenas em Inglês ou Francês.",
   "faqSendEmail": "Envie um e-mail",
   "faqJoinDiscord": "Entra no nosso servidor de Discord",
   "faqCannotOpenMailClient": "Por algumas razões, não podemos abrir o seu cliente de e-mail. Copiamos o endereço de e-mail para você. Pode escrever um e-mail e colar o endereço no campo do destinatário.",
