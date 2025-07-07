@@ -6,6 +6,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class WarCwlService extends ChangeNotifier {
   final Map<String, WarCwl> summaries = {};
@@ -16,7 +17,7 @@ class WarCwlService extends ChangeNotifier {
     notifyListeners();
 
     try {
-      print("🏰 Loading war data for tags: $clanTags");
+      DebugUtils.debugInfo("🏰 Loading war data for tags: $clanTags");
       final token = await TokenService().getAccessToken();
       if (token == null) throw Exception("User not authenticated");
 
@@ -35,13 +36,13 @@ class WarCwlService extends ChangeNotifier {
         for (final summary in data) {
           final warSummary = WarCwl.fromJson(summary, null);
           summaries[warSummary.tag] = warSummary;
-          print("✅ Loaded war data for clan: ${warSummary.tag}");
+          DebugUtils.debugSuccess("✅ Loaded war data for clan: ${warSummary.tag}");
         }
         notifyListeners();
       }
     } catch (e) {
       Sentry.captureException(e);
-      print("❌ Error loading war data: $e");
+      DebugUtils.debugError("❌ Error loading war data: $e");
     }
   }
 
@@ -52,21 +53,21 @@ class WarCwlService extends ChangeNotifier {
 
   /// Process bulk war data from the optimized API endpoint
   void processBulkWarData(List<dynamic> warData) {
-    print("🔄 Processing ${warData.length} bulk war data items");
+    DebugUtils.debugInfo("🔄 Processing ${warData.length} bulk war data items");
     
     for (final warItem in warData) {
       try {
         if (warItem is Map<String, dynamic>) {
           final warSummary = WarCwl.fromJson(warItem, null);
           summaries[warSummary.tag] = warSummary;
-          print("✅ Processed bulk war data for clan: ${warSummary.tag}");
+          DebugUtils.debugSuccess("✅ Processed bulk war data for clan: ${warSummary.tag}");
         }
       } catch (e) {
-        print("❌ Error processing bulk war data item: $e");
+        DebugUtils.debugError("❌ Error processing bulk war data item: $e");
       }
     }
     
-    print("✅ Processed all bulk war data, total summaries: ${summaries.length}");
+    DebugUtils.debugSuccess("✅ Processed all bulk war data, total summaries: ${summaries.length}");
     notifyListeners();
   }
 

@@ -18,6 +18,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter/foundation.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 // CallbackDispatcher for background execution (Android only)
 @pragma('vm:entry-point')
@@ -39,7 +40,7 @@ void callbackDispatcher() {
       
       return Future.value(true);
     } catch (e) {
-      print("❌ Background task error: $e");
+      DebugUtils.debugError("❌ Background task error: $e");
       return Future.value(false);
     }
   });
@@ -67,7 +68,7 @@ Future<void> main() async {
       }
 
       await Future.wait([
-        GameDataService.loadGameData().then((_) => print("✅ GameDataService OK")),
+        GameDataService.loadGameData().then((_) => DebugUtils.debugSuccess("✅ GameDataService OK")),
       ]);
 
       FlutterNativeSplash.remove();

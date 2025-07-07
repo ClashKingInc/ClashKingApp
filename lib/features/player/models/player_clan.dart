@@ -1,4 +1,5 @@
 import 'package:clashkingapp/features/clan/models/clan_badge.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class PlayerClanOverview {
   final String tag;
@@ -22,7 +23,7 @@ class PlayerClanOverview {
         badgeUrls: ClanBadgeUrls.fromJson(json['badgeUrls']),
       );
     } catch (e) {
-      print("❌ Error parsing PlayerClanOverview: $e");
+      DebugUtils.debugError("❌ Error parsing PlayerClanOverview: $e");
       return PlayerClanOverview.empty();
     }
   }

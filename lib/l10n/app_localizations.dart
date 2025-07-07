@@ -157,11 +157,101 @@ abstract class AppLocalizations {
     Locale('zh')
   ];
 
+  /// No description provided for @appTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ClashKing'**
+  String get appTitle;
+
+  /// No description provided for @appDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.'**
+  String get appDescription;
+
   /// No description provided for @generalLoading.
   ///
   /// In en, this message translates to:
   /// **'Loading...'**
   String get generalLoading;
+
+  /// No description provided for @loadingVillages.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading your villages...'**
+  String get loadingVillages;
+
+  /// No description provided for @loadingClanData.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetching clan data...'**
+  String get loadingClanData;
+
+  /// No description provided for @loadingWarStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing war stats...'**
+  String get loadingWarStats;
+
+  /// No description provided for @loadingLegendsData.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing legends data...'**
+  String get loadingLegendsData;
+
+  /// No description provided for @loadingCapitalRaids.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading capital raids...'**
+  String get loadingCapitalRaids;
+
+  /// No description provided for @loadingAlmostReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost ready...'**
+  String get loadingAlmostReady;
+
+  /// No description provided for @accountVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Account'**
+  String get accountVerificationTitle;
+
+  /// No description provided for @accountVerificationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.'**
+  String get accountVerificationMessage;
+
+  /// No description provided for @accountVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Account verified'**
+  String get accountVerified;
+
+  /// No description provided for @accountNotVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Account not verified'**
+  String get accountNotVerified;
+
+  /// No description provided for @accountVerifyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get accountVerifyButton;
+
+  /// No description provided for @accountVerificationSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Account verified successfully!'**
+  String get accountVerificationSuccess;
+
+  /// No description provided for @accountVerificationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification failed. Please check your API token.'**
+  String get accountVerificationFailed;
 
   /// No description provided for @generalRetry.
   ///
@@ -222,6 +312,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Coming soon!'**
   String get generalComingSoon;
+
+  /// Last refresh time indicator
+  ///
+  /// In en, this message translates to:
+  /// **'Last refresh: {time}'**
+  String generalLastRefresh(String time);
+
+  /// Error message when refresh fails
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh failed: {error}'**
+  String generalRefreshFailed(String error);
 
   /// all items
   ///
@@ -337,23 +439,17 @@ abstract class AppLocalizations {
   /// **'No data available.'**
   String get generalNoDataAvailable;
 
-  /// No description provided for @authClashKingDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.'**
-  String get authClashKingDescription;
-
-  /// No description provided for @authSignIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign In'**
-  String get authSignIn;
-
   /// No description provided for @authSignUp.
   ///
   /// In en, this message translates to:
   /// **'Sign up'**
   String get authSignUp;
+
+  /// No description provided for @authLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get authLogin;
 
   /// No description provided for @authLogout.
   ///
@@ -526,7 +622,7 @@ abstract class AppLocalizations {
   /// No description provided for @authAccountManagement.
   ///
   /// In en, this message translates to:
-  /// **'Account Management'**
+  /// **'Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.'**
   String get authAccountManagement;
 
   /// No description provided for @authAccountConnected.
@@ -956,6 +1052,30 @@ abstract class AppLocalizations {
   /// **'Creator Code: ClashKing'**
   String get gameCreatorCode;
 
+  /// No description provided for @gameCreatorCodeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap for info • Support us for free!'**
+  String get gameCreatorCodeDescription;
+
+  /// No description provided for @gameCreatorCodeDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Support ClashKing'**
+  String get gameCreatorCodeDialogTitle;
+
+  /// No description provided for @gameCreatorCodeDialogDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!'**
+  String get gameCreatorCodeDialogDescription;
+
+  /// No description provided for @gameCreatorCodeDialogButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Creator Code'**
+  String get gameCreatorCodeDialogButton;
+
   /// No description provided for @clanTitle.
   ///
   /// In en, this message translates to:
@@ -1148,7 +1268,7 @@ abstract class AppLocalizations {
   /// **'{minutes} minutes ago'**
   String timeMinutesAgo(int minutes);
 
-  /// No description provided for @timeJustNow.
+  /// Indicates something happened just now
   ///
   /// In en, this message translates to:
   /// **'Just Now'**
@@ -2378,6 +2498,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Version & Device'**
   String get versionDevice;
+
+  /// No description provided for @settingsLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Source Licenses'**
+  String get settingsLicenses;
+
+  /// No description provided for @settingsLicensesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View licenses for third-party libraries'**
+  String get settingsLicensesSubtitle;
+
+  /// No description provided for @settingsPrivacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get settingsPrivacyPolicy;
+
+  /// No description provided for @settingsPrivacyPolicySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How we handle your data'**
+  String get settingsPrivacyPolicySubtitle;
 
   /// No description provided for @betaFeature.
   ///

@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class TokenService {
   Future<String?> getAccessToken() async {
@@ -19,13 +20,13 @@ class TokenService {
     }
 
     if (isTokenExpired(accessToken)) {
-      print("🔄 Access Token has expired. Trying to refresh...");
+      DebugUtils.debugInfo("🔄 Access Token has expired. Trying to refresh...");
       final newAccessToken = await refreshAccessToken(refreshToken, deviceId);
 
       if (newAccessToken != null) {
         return newAccessToken;
       } else {
-        print("❌ Failed to refresh token, user must re-authenticate");
+        DebugUtils.debugError("❌ Failed to refresh token, user must re-authenticate");
         await clearTokens();
         return null;
       }
@@ -55,7 +56,7 @@ class TokenService {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('access_token', newAccessToken);
 
-        print("✅ Token refreshed successfully");
+        DebugUtils.debugSuccess("✅ Token refreshed successfully");
         return newAccessToken;
       } else {
         Sentry.captureMessage("Token refresh failed with status ${response.statusCode}: ${response.body}");
@@ -89,7 +90,7 @@ class TokenService {
       
       final parts = token.split('.');
       if (parts.length != 3) {
-        print("⚠️ Invalid JWT token format: expected 3 parts, got ${parts.length}");
+        DebugUtils.debugWarning("⚠️ Invalid JWT token format: expected 3 parts, got ${parts.length}");
         return true;
       }
       
@@ -98,7 +99,7 @@ class TokenService {
       
       final exp = payload['exp'];
       if (exp == null) {
-        print("⚠️ JWT token missing expiration claim");
+        DebugUtils.debugWarning("⚠️ JWT token missing expiration claim");
         return true;
       }
       
@@ -152,7 +153,7 @@ class TokenService {
         return "unsupported-platform";
       }
     } catch (e) {
-      print("❌ Erreur getDeviceName: $e");
+      DebugUtils.debugError("❌ Erreur getDeviceName: $e");
       return "unknown-device";
     }
   }

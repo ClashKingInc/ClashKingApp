@@ -27,6 +27,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class Player {
   String name;
@@ -410,8 +411,8 @@ class Player {
 
       return profile;
     } catch (e, stacktrace) {
-      print("❌ Exception in Player.fromJson: $e");
-      print(stacktrace);
+      DebugUtils.debugError("❌ Exception in Player.fromJson: $e");
+      DebugUtils.debugError(stacktrace.toString());
       return Player(
           name: "Unknown",
           tag: "Unknown",

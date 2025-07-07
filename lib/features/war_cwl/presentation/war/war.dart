@@ -15,6 +15,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class WarScreen extends StatefulWidget {
   final WarInfo war;
@@ -53,7 +54,7 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print("war data ${widget.war.clan?.name} ${widget.war.opponent?.name}");
+    DebugUtils.debugInfo("war data ${widget.war.clan?.name} ${widget.war.opponent?.name}");
     final clanMembers = widget.war.clan?.members ?? [];
     final opponentMembers = widget.war.opponent?.members ?? [];
 

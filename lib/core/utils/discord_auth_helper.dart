@@ -3,6 +3,7 @@ import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'dart:convert';
 import 'dart:math';
 import 'package:crypto/crypto.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 import 'discord_auth_helper_web.dart'
     if (dart.library.io) 'discord_auth_helper_mobile.dart';
@@ -16,7 +17,7 @@ class DiscordAuthHelper {
     final codeChallenge = _generateCodeChallenge(codeVerifier);
     final redirectUri = getRedirectUri();
 
-    print("🔄 Redirect URI: $redirectUri");
+    DebugUtils.debugInfo("🔄 Redirect URI: $redirectUri");
 
     final url = Uri.https('discord.com', '/api/oauth2/authorize', {
       'response_type': 'code',
@@ -27,12 +28,12 @@ class DiscordAuthHelper {
       'code_challenge_method': 'S256',
     });
 
-    print("🔄 Discord auth URL: $url");
+    DebugUtils.debugInfo("🔄 Discord auth URL: $url");
 
     try {
       if (kIsWeb) {
         final code = await getDiscordAuthCodeWeb(url);
-        print("🔄 Discord auth code (Web): $code");
+        DebugUtils.debugInfo("🔄 Discord auth code (Web): $code");
         return code != null
             ? {'code': code, 'code_verifier': codeVerifier}
             : null;
@@ -41,15 +42,15 @@ class DiscordAuthHelper {
           url: url.toString(),
           callbackUrlScheme: callbackUrlScheme,
         );
-        print("🔄 Discord auth result (Mobile): $result");
+        DebugUtils.debugInfo("🔄 Discord auth result (Mobile): $result");
         final code = Uri.parse(result).queryParameters['code'];
-        print("🔄 Discord auth code (Mobile): $code");
+        DebugUtils.debugInfo("🔄 Discord auth code (Mobile): $code");
         return code != null
             ? {'code': code, 'code_verifier': codeVerifier}
             : null;
       }
     } catch (e) {
-      print('❌ Error getting Discord auth code: $e');
+      DebugUtils.debugError('❌ Error getting Discord auth code: $e');
       return null;
     }
   }

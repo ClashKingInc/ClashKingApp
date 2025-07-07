@@ -1,3 +1,5 @@
+import 'package:clashkingapp/core/utils/debug_utils.dart';
+
 class CapitalHistoryItems {
   final List<CapitalHistoryItem> items;
   final String? clanTag;
@@ -17,7 +19,7 @@ class CapitalHistoryItems {
         stats: statsData != null ? CapitalStats.fromJson(statsData) : null,
       );
     } catch (e) {
-      print("Error parsing CapitalHistoryItems: $e");
+      DebugUtils.debugError("❌ Error parsing CapitalHistoryItems: $e");
       return CapitalHistoryItems.empty();
     }
   }

@@ -1,4 +1,5 @@
 import 'package:clashkingapp/features/war_cwl/models/cwl_attacks_defenses_stats.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class CwlMember {
   final String tag;
@@ -81,7 +82,7 @@ class CwlMember {
               ? CwlDefenseStats.fromJson(json['stats']['cwl'])
               : null);
     } catch (e) {
-      print("❌ Error parsing CwlMember: $e");
+      DebugUtils.debugError("❌ Error parsing CwlMember: $e");
       return CwlMember(
         tag: 'No tag',
         name: 'No name',

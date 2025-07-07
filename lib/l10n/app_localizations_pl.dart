@@ -9,7 +9,55 @@ class AppLocalizationsPl extends AppLocalizations {
   AppLocalizationsPl([String locale = 'pl']) : super(locale);
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
+  String get appDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+
+  @override
   String get generalLoading => 'Wczytywanie...';
+
+  @override
+  String get loadingVillages => 'Loading your villages...';
+
+  @override
+  String get loadingClanData => 'Fetching clan data...';
+
+  @override
+  String get loadingWarStats => 'Analyzing war stats...';
+
+  @override
+  String get loadingLegendsData => 'Preparing legends data...';
+
+  @override
+  String get loadingCapitalRaids => 'Loading capital raids...';
+
+  @override
+  String get loadingAlmostReady => 'Almost ready...';
+
+  @override
+  String get accountVerificationTitle => 'Verify Account';
+
+  @override
+  String get accountVerificationMessage =>
+      'Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.';
+
+  @override
+  String get accountVerified => 'Account verified';
+
+  @override
+  String get accountNotVerified => 'Account not verified';
+
+  @override
+  String get accountVerifyButton => 'Verify';
+
+  @override
+  String get accountVerificationSuccess => 'Account verified successfully!';
+
+  @override
+  String get accountVerificationFailed =>
+      'Verification failed. Please check your API token.';
 
   @override
   String get generalRetry => 'Retry';
@@ -40,6 +88,16 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get generalComingSoon => 'Dostępne wkrótce!';
+
+  @override
+  String generalLastRefresh(String time) {
+    return 'Last refresh: $time';
+  }
+
+  @override
+  String generalRefreshFailed(String error) {
+    return 'Refresh failed: $error';
+  }
 
   @override
   String get generalAll => 'Wszystkie';
@@ -99,14 +157,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get generalNoDataAvailable => 'Brak dostępnych danych.';
 
   @override
-  String get authClashKingDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get authSignIn => 'Sign In';
-
-  @override
   String get authSignUp => 'Sign up';
+
+  @override
+  String get authLogin => 'Zaloguj się';
 
   @override
   String get authLogout => 'Wyloguj';
@@ -199,7 +253,8 @@ class AppLocalizationsPl extends AppLocalizations {
       'Wystąpił błąd. Sprawdź swoje połączenie internetowe i uruchom aplikację ponownie.';
 
   @override
-  String get authAccountManagement => 'Account Management';
+  String get authAccountManagement =>
+      'Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.';
 
   @override
   String get authAccountConnected => 'Connected Accounts';
@@ -238,7 +293,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get helpEmailUs => 'Email Us';
 
   @override
-  String get accountsWelcome => 'Witamy!';
+  String get accountsWelcome => 'Welcome!';
 
   @override
   String get accountsWelcomeMessage =>
@@ -264,7 +319,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get accountsDelete => 'Usuń konto';
 
   @override
-  String get accountsApiToken => 'Token API konta';
+  String get accountsApiToken => 'Account API Token';
 
   @override
   String get accountsEnterApiToken =>
@@ -454,6 +509,20 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'Kod twórcy: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Klan';
@@ -1020,7 +1089,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get warStarsAverage => 'Średnie gwiazdki';
 
   @override
-  String get warStarsNumber => 'Liczba gwiazdek';
+  String get warStarsNumber => 'Number of stars';
 
   @override
   String get warStarsOne => '1 gwiazdka';
@@ -1322,6 +1391,19 @@ class AppLocalizationsPl extends AppLocalizations {
   String get versionDevice => 'Wersja i Urządzenie';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
+  String get settingsPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
+
+  @override
   String get betaFeature => 'Funkcja Beta';
 
   @override
@@ -1418,7 +1500,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Możesz dołączyć do naszego serwera Discord, aby poprosić o pomoc lub przekazać informacje zwrotne, lub możesz napisać do nas e-maila na adres devs@clashkingbot.com. Prosimy pisać tylko po angielsku lub francusku.';
+      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.';
 
   @override
   String get faqSendEmail => 'Wyślij wiadomość e-mail';

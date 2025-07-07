@@ -705,7 +705,7 @@
   "warEnemiesTeam": "Ennemis",
   "warClanDraw": "Les deux clans sont à égalité",
   "warStateOfTheWar": "État de la guerre",
-  "warStarsNeededToTakeTheLead": "{clan} a besoin de {star} étoile(s) supplémentaire(s) ou {star2} étoiles et {percent}% pour prendre l'avantage.",
+  "warStarsNeededToTakeTheLead": "{clan} a besoin de {star} étoile(s) supplémentaire(s) ou {stars2} étoiles et {percent}% pour prendre l'avantage.",
   "@warStarsNeededToTakeTheLead": {
     "placeholders": {
       "clan": {
@@ -789,7 +789,7 @@
     "description": "No defense yet in war"
   },
   "warDefensesBest": "Meilleures défenses",
-  "warDefensesBestOutOf": "Meilleure défense sur {attacks}",
+  "warDefensesBestOutOf": "Meilleure défense sur {number}",
   "@warDefensesBestOutOf": {
     "placeholders": {
       "number": {
@@ -974,7 +974,7 @@
   "cwlClanWarLeague": "Ligue de clan",
   "cwlOngoing": "Ligue en cours",
   "cwlRounds": "Tours",
-  "cwlRoundNumber": "Tour {round}",
+  "cwlRoundNumber": "Tour {number}",
   "@cwlRoundNumber": {
     "placeholders": {
       "number": {
@@ -1014,7 +1014,7 @@
       }
     }
   },
-  "cwlTotalAttacks": "Attaques totales : {attacks}/{total}",
+  "cwlTotalAttacks": "Attaques totales : {attacks}/{totalAttacks}",
   "@cwlTotalAttacks": {
     "placeholders": {
       "attacks": {
