@@ -1,32 +1,54 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Ваш идеальный спутник Clash of Clans для отслеживания статистики, управления кланами и анализа производительности.",
+  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Загрузка...",
-  "generalError": "Ошибка",
-  "generalRetry": "Повторить",
-  "generalTryAgain": "Попробовать снова",
-  "generalClose": "Закрыть",
-  "generalCancel": "Отмена",
+  "loadingVillages": "Loading your villages...",
+  "loadingClanData": "Fetching clan data...",
+  "loadingWarStats": "Analyzing war stats...",
+  "loadingLegendsData": "Preparing legends data...",
+  "loadingCapitalRaids": "Loading capital raids...",
+  "loadingAlmostReady": "Almost ready...",
+  "accountVerificationTitle": "Verify Account",
+  "accountVerificationMessage": "Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.",
+  "accountVerified": "Account verified",
+  "accountNotVerified": "Account not verified",
+  "accountVerifyButton": "Verify",
+  "accountVerificationSuccess": "Account verified successfully!",
+  "accountVerificationFailed": "Verification failed. Please check your API token.",
+  "generalRetry": "Retry",
+  "generalTryAgain": "Try again",
+  "generalCancel": "Cancel",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
   },
   "generalApply": "Применить",
-  "generalConfirm": "Подтвердить",
-  "generalAdd": "Добавить",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "Удалить",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
+  "generalConfirm": "Confirm",
   "generalManage": "Управление",
-  "generalManagement": "Управление",
   "generalSettings": "Настройки",
   "generalCopiedToClipboard": "Скопировано в буфер обмена",
-  "generalComingSoon": "Скоро!",
+  "generalComingSoon": "Coming soon!",
+  "generalLastRefresh": "Last refresh: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
   "generalAll": "Все",
   "@generalAll": {
     "description": "all items"
@@ -48,8 +70,8 @@
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Активный",
-  "generalInactive": "Неактивный",
+  "generalActive": "Active",
+  "generalInactive": "Inactive",
   "generalStarted": "Запущен",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
@@ -58,74 +80,55 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Уровень",
-  "generalRole": "Роль",
-  "generalDate": "Дата",
+  "generalRole": "Role",
   "generalStats": "Статистика",
-  "generalFullStats": "Полная статистика",
+  "generalFullStats": "Full Stats",
   "generalDetails": "Детали",
   "generalHistory": "Журнал",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Диаграммы",
   "generalFilters": "Фильтры",
-  "generalWhatever": "Не важно",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Любой",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
-  "generalNotSet": "Не установлено",
+  "generalNotSet": "Not set",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Внимание",
-  "generalNoDataAvailable": "Данные отсутствуют.",
-  "generalClosed": "Закрыт",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Добро пожаловать обратно",
-  "authClashKingDescription": "Ваш идеальный спутник Clash of Clans для отслеживания статистики, управления кланами и анализа производительности.",
-  "authChooseSignInMethod": "Выберите предпочитаемый способ входа",
-  "authSignUp": "Регистрация",
-  "authLogin": "Вход",
-  "authLogout": "Выход",
-  "authCreateAccount": "Создать аккаунт",
-  "authJoinClashKing": "Присоединиться к ClashKing",
-  "authCreateClashKingAccount": "Создать аккаунт ClashKing",
-  "authCreateAccountToGetStarted": "Создайте свой аккаунт, чтобы начать",
-  "authDontHaveAccount": "У вас нет аккаунта? Создайте его",
-  "authAlreadyHaveAccount": "Уже есть аккаунт? Войдите",
+  "generalWarning": "Warning",
+  "generalNoDataAvailable": "No data available.",
+  "authSignUp": "Sign up",
+  "authLogin": "Login",
+  "authLogout": "Log out",
+  "authCreateAccount": "Create Account",
+  "authJoinClashKing": "Join ClashKing",
+  "authCreateClashKingAccount": "Create ClashKing Account",
+  "authCreateAccountToGetStarted": "Create your account to get started",
+  "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "Вы уверены, что хотите выйти?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
   "authDiscordSignIn": "Вход через Discord",
-  "authDiscordContinue": "Продолжить с Discord",
-  "authDiscordDescription": "Синхронизируйте свои данные с ClashKing Bot и раскройте весь потенциал ClashKing!",
-  "authEmailTitle": "Электронная почта",
-  "authEmailDescription": "Используйте электронную почту, если вы не можете получить доступ к Discord или предпочитаете функции только приложения",
-  "authEmailRequired": "Пожалуйста, введите ваш email",
-  "authEmailInvalid": "Пожалуйста, введите действительный email",
-  "authPasswordLabel": "Пароль",
-  "authPasswordConfirm": "Подтвердите пароль",
-  "authPasswordRequired": "Пожалуйста, введите ваш пароль",
-  "authPasswordConfirmRequired": "Пожалуйста, подтвердите ваш пароль",
-  "authPasswordMismatch": "Пароли не совпадают",
-  "authPasswordTooShort": "Пароль должен содержать не менее 8 символов",
-  "authPasswordRequirements": "Пароль должен содержать: заглавные буквы, строчные буквы, цифры и специальные символы",
-  "authPasswordForgot": "Забыли пароль?",
+  "authDiscordContinue": "Continue with Discord",
+  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
+  "authEmailTitle": "Email",
+  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
+  "authEmailRequired": "Please enter your email",
+  "authEmailInvalid": "Please enter a valid email",
+  "authPasswordLabel": "Password",
+  "authPasswordConfirm": "Confirm Password",
+  "authPasswordRequired": "Please enter your password",
+  "authPasswordConfirmRequired": "Please confirm your password",
+  "authPasswordMismatch": "Passwords do not match",
+  "authPasswordTooShort": "Password must be at least 8 characters",
+  "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
+  "authPasswordForgot": "Forgot password?",
   "authUsernameLabel": "Имя пользователя",
   "authUsernameRequired": "Пожалуйста, введите имя пользователя",
-  "authUsernameTooShort": "Имя пользователя должно содержать не менее 3 символов",
-  "authErrorConnection": "Произошла ошибка. Пожалуйста, проверьте ваше интернет-соединение и попробуйте снова.",
-  "authErrorConnectionRelaunch": "Произошла ошибка. Пожалуйста, проверьте ваше интернет-соединение и перезапустите приложение.",
-  "authAccountManagement": "Управление аккаунтом",
+  "authUsernameTooShort": "Username must be at least 3 characters",
+  "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
+  "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
+  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.",
   "authAccountConnected": "Connected Accounts",
   "authAccountConnectedStatus": "Connected",
   "authAccountNotConnected": "Not connected",
@@ -248,7 +251,7 @@
   "gameBaseHome": "Родная деревня",
   "gameBaseBuilder": "Деревня Строителя",
   "gameClanCapital": "Столица клана",
-  "gameTownHall": "ТХ",
+  "gameTownHall": "TH",
   "gameTownHallLevel": "TH Level",
   "gameTownHallLevelNumber": "Town Hall {level}",
   "@gameTownHallLevelNumber": {
@@ -295,6 +298,10 @@
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Код Создателя: ClashKing",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "Clan",
   "clanSearchTitle": "Найти клан",
   "clanSearchPlaceholder": "Clan's name",
@@ -379,6 +386,9 @@
     }
   },
   "timeJustNow": "Сейчас",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
   "timeEndedJustNow": "Ended just now",
   "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
   "@timeEndedMinutesAgo": {
@@ -436,7 +446,7 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
+  "legendsTitle": "Legend League",
   "legendsNotInLeague": "Not in Legend League",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "You started the day with {trophies} trophies.",
@@ -527,8 +537,8 @@
   "legendsInaccurateNetGainTitle": "3. Net Gain/Loss: ",
   "legendsInaccurateNetGainBody": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
   "legendsInaccurateConclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-  "statsSeasonStats": "Статистика сезона",
-  "statsByDay": "За день",
+  "statsSeasonStats": "Season Stats",
+  "statsByDay": "By Day",
   "@statsByDay": {
     "description": "Shows stats by day"
   },
@@ -661,7 +671,7 @@
   "warLeague": "War/League",
   "warHistory": "War History",
   "warLog": "War Log",
-  "warLogClosed": "War log closed.",
+  "warLogClosed": "{clan}'s war log is closed.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -683,10 +693,10 @@
   "warAskForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
   "warEnded": "War ended",
   "warPreparation": "Preparation",
-  "warPerfectWar": "Идеальная война",
-  "warVictory": "Победа",
-  "warDefeat": "Поражение",
-  "warDraw": "Ничья",
+  "warPerfectWar": "Perfect war",
+  "warVictory": "Victory",
+  "warDefeat": "Defeat",
+  "warDraw": "Draw",
   "@warDraw": {
     "description": "War ended in a draw"
   },
@@ -972,7 +982,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Current round (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -1123,7 +1133,7 @@
   "raidsOngoing": "Ongoing raids",
   "raidsDistrictsDestroyed": "Districts destroyed",
   "raidsCompleted": "Raids completed",
-  "searchNoResult": "Нет результатов.",
+  "searchNoResult": "No result.",
   "maintenanceTitle": "Maintenance",
   "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
   "downloadTooltip": "Download CWL summary",
@@ -1145,6 +1155,10 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
   "betaFeature": "Бета-Функция",
   "betaLabel": "Бета",
   "betaDescription": "Эта функция в настоящее время находится в стадии бета-тестирования, она может содержать некоторые ошибки или быть неполной. Мы активно работаем над улучшениями и приветствуем ваши отзывы. Пожалуйста, делитесь своими идеями и сообщайте о любых проблемах на нашем сервере Дискорд, чтобы помочь нам сделать его лучше.",
@@ -1173,7 +1187,7 @@
   "faqHowToInviteTheBotAnswer": "Вы можете пригласить нашего бота на свой сервер, нажав на кнопку ниже. Вам понадобится разрешение «Управление сервером», чтобы добавить бота.",
   "faqInviteTheBot": "Пригласить бота ClashKing",
   "faqNeedHelp": "Мне нужна помощь или я хотел бы внести предложение. Как я могу связаться с вами?",
-  "faqNeedHelpAnswer": "Вы можете присоединиться к нашему Discord-серверу, чтобы попросить о помощи или оставить отзыв, или вы можете написать нам по адресу devs@clashk.ing. Пожалуйста, пишите только на английском или французском языке.",
+  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
   "faqSendEmail": "Отправить e-mail",
   "faqJoinDiscord": "Присоединяйтесь к нашему Discord серверу",
   "faqCannotOpenMailClient": "По некоторым причинам мы не можем открыть ваш почтовый клиент. Мы скопировали адрес электронной почты для вас. Вы можете написать письмо и вставить адрес в поле получателя.",

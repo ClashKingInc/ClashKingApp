@@ -1,12 +1,23 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Tu compañero definitivo de Clash of Clans para hacer seguimiento de estadísticas, gestionar clanes y analizar el rendimiento.",
+  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Cargando...",
-  "generalError": "Error",
-  "generalRetry": "Reintentar",
-  "generalTryAgain": "Inténtalo de nuevo",
-  "generalClose": "Cerrar",
+  "loadingVillages": "Loading your villages...",
+  "loadingClanData": "Fetching clan data...",
+  "loadingWarStats": "Analyzing war stats...",
+  "loadingLegendsData": "Preparing legends data...",
+  "loadingCapitalRaids": "Loading capital raids...",
+  "loadingAlmostReady": "Almost ready...",
+  "accountVerificationTitle": "Verify Account",
+  "accountVerificationMessage": "Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.",
+  "accountVerified": "Account verified",
+  "accountNotVerified": "Account not verified",
+  "accountVerifyButton": "Verify",
+  "accountVerificationSuccess": "Account verified successfully!",
+  "accountVerificationFailed": "Verification failed. Please check your API token.",
+  "generalRetry": "Retry",
+  "generalTryAgain": "Try again",
   "generalCancel": "Cancelar",
   "generalOk": "Ok",
   "@generalOk": {
@@ -14,19 +25,30 @@
   },
   "generalApply": "Aplicar",
   "generalConfirm": "Confirm",
-  "generalAdd": "Añadir",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "Eliminar",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
   "generalManage": "Gestionar",
-  "generalManagement": "Administración",
   "generalSettings": "Ajustes",
   "generalCopiedToClipboard": "Copiado al portapapeles",
   "generalComingSoon": "¡Próximamente!",
+  "generalLastRefresh": "Last refresh: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
   "generalAll": "Todo",
   "@generalAll": {
     "description": "all items"
@@ -58,9 +80,7 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
   "generalRole": "Rol",
-  "generalDate": "Fecha",
   "generalStats": "Estadísticas",
   "generalFullStats": "Full Stats",
   "generalDetails": "Detalles",
@@ -68,29 +88,13 @@
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Gráficos",
   "generalFilters": "Filtros",
-  "generalWhatever": "Como sea",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Cualquiera",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
   "generalNotSet": "No establecido",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
   "generalWarning": "Advertencia",
   "generalNoDataAvailable": "No hay datos disponibles.",
-  "generalClosed": "Cerrado",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Tu compañero definitivo de Clash of Clans para hacer seguimiento de estadísticas, gestionar clanes y analizar el rendimiento.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
   "authSignUp": "Sign up",
   "authLogin": "Iniciar sesión",
   "authLogout": "Cerrar sesión",
@@ -119,12 +123,12 @@
   "authPasswordTooShort": "Password must be at least 8 characters",
   "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
   "authPasswordForgot": "Forgot password?",
-  "authUsernameLabel": "Usuario",
-  "authUsernameRequired": "Por favor ingrese un usuario",
+  "authUsernameLabel": "Username",
+  "authUsernameRequired": "Please enter a username",
   "authUsernameTooShort": "Username must be at least 3 characters",
   "authErrorConnection": "Se ha producido un error. Por favor, comprueba tu conexión a internet e inténtalo de nuevo.",
   "authErrorConnectionRelaunch": "Se ha producido un error. Por favor, verifica tu conexión a internet y vuelve a iniciar la aplicación.",
-  "authAccountManagement": "Account Management",
+  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.",
   "authAccountConnected": "Connected Accounts",
   "authAccountConnectedStatus": "Connected",
   "authAccountNotConnected": "Not connected",
@@ -136,7 +140,7 @@
   "helpTitle": "Need help?",
   "helpJoinDiscord": "Join Discord",
   "helpEmailUs": "Email Us",
-  "accountsWelcome": "¡Bienvenido!",
+  "accountsWelcome": "Welcome!",
   "accountsWelcomeMessage": "Por favor, añade una o más cuentas de Clash Of Clan a tu perfil. Puedes añadir o eliminar cuentas más tarde.",
   "accountsManageTitle": "Manage your accounts",
   "accountsNoneFound": "No se encontró ninguna cuenta vinculada a su perfil",
@@ -248,7 +252,7 @@
   "gameBaseBuilder": "Base del constructor",
   "gameClanCapital": "Capital del Clan",
   "gameTownHall": "TH",
-  "gameTownHallLevel": "Nivel TH",
+  "gameTownHallLevel": "TH Level",
   "gameTownHallLevelNumber": "Town Hall {level}",
   "@gameTownHallLevelNumber": {
     "placeholders": {
@@ -282,7 +286,7 @@
       }
     }
   },
-  "gameHeroes": "Héroes",
+  "gameHeroes": "Heroes",
   "gameEquipment": "Equipos",
   "gameHeroesEquipments": "Hero equipments",
   "gameTroops": "Tropas",
@@ -294,10 +298,10 @@
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Código de Creador: ClashKing",
-  "gameCreatorCodeDescription": "Toca para info • ¡Apóyanos gratis!",
-  "gameCreatorCodeDialogTitle": "Apoyar ClashKing",
-  "gameCreatorCodeDialogDescription": "Usar nuestro código de creador ayuda a financiar el desarrollo, mantiene la app & bot gratis para todos, y nos permite añadir nuevas funciones.\n\nRecibimos el 5% de lo que gastas en el juego, pero no te cuesta nada extra - ¡simplemente usa \"ClashKing\" como código de creador en la tienda de Clash of Clans!",
-  "gameCreatorCodeDialogButton": "Usar Código de Creador",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "Clan",
   "clanSearchTitle": "Buscar clan",
   "clanSearchPlaceholder": "Clan's name",
@@ -382,6 +386,9 @@
     }
   },
   "timeJustNow": "Ahora mismo",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
   "timeEndedJustNow": "Ended just now",
   "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
   "@timeEndedMinutesAgo": {
@@ -831,7 +838,7 @@
   },
   "warDestructionTitle": "Destruction",
   "warDestructionAverage": "Average destruction",
-  "warDestructionRate": "Tasa de destrucción",
+  "warDestructionRate": "Destruction rate",
   "@warDestructionRate": {
     "description": "Percentage of destruction in war"
   },
@@ -975,7 +982,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Current round (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -1148,6 +1155,10 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
   "betaFeature": "Función beta",
   "betaLabel": "BETA",
   "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
@@ -1176,7 +1187,7 @@
   "faqHowToInviteTheBotAnswer": "Puedes invitar a nuestro bot en tu servidor haciendo clic en el botón de abajo. Necesitarás tener el permiso \"Administrar Servidor\" para añadir el bot.",
   "faqInviteTheBot": "Invitar al Bot \"ClashKing\"",
   "faqNeedHelp": "Necesito ayuda o me gustaría hacer una sugerencia. ¿Cómo puedo contactarte?",
-  "faqNeedHelpAnswer": "Puedes unirte a nuestro servidor de Discord y pedir ayuda o hacer un comentario allí, o enviarnos un correo a devs@clashk.ing. Por favor, escribe solo en inglés o francés.",
+  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
   "faqSendEmail": "Enviar un correo",
   "faqJoinDiscord": "Unirse al Servidor de Discord",
   "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",

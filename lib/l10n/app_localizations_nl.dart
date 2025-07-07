@@ -9,55 +9,7 @@ class AppLocalizationsNl extends AppLocalizations {
   AppLocalizationsNl([String locale = 'nl']) : super(locale);
 
   @override
-  String get appTitle => 'ClashKing';
-
-  @override
-  String get appDescription =>
-      'Jouw ultieme Clash of Clans metgezel voor het bijhouden van statistieken, beheren van clans en analyseren van prestaties.';
-
-  @override
   String get generalLoading => 'Laden...';
-
-  @override
-  String get loadingVillages => 'Loading your villages...';
-
-  @override
-  String get loadingClanData => 'Fetching clan data...';
-
-  @override
-  String get loadingWarStats => 'Analyzing war stats...';
-
-  @override
-  String get loadingLegendsData => 'Preparing legends data...';
-
-  @override
-  String get loadingCapitalRaids => 'Loading capital raids...';
-
-  @override
-  String get loadingAlmostReady => 'Almost ready...';
-
-  @override
-  String get accountVerificationTitle => 'Verify Account';
-
-  @override
-  String get accountVerificationMessage =>
-      'Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.';
-
-  @override
-  String get accountVerified => 'Account verified';
-
-  @override
-  String get accountNotVerified => 'Account not verified';
-
-  @override
-  String get accountVerifyButton => 'Verify';
-
-  @override
-  String get accountVerificationSuccess => 'Account verified successfully!';
-
-  @override
-  String get accountVerificationFailed =>
-      'Verification failed. Please check your API token.';
 
   @override
   String get generalRetry => 'Opnieuw proberen';
@@ -88,16 +40,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get generalComingSoon => 'Binnenkort beschikbaar!';
-
-  @override
-  String generalLastRefresh(String time) {
-    return 'Last refresh: $time';
-  }
-
-  @override
-  String generalRefreshFailed(String error) {
-    return 'Refresh failed: $error';
-  }
 
   @override
   String get generalAll => 'Alle';
@@ -157,10 +99,14 @@ class AppLocalizationsNl extends AppLocalizations {
   String get generalNoDataAvailable => 'Geen gegevens beschikbaar.';
 
   @override
-  String get authSignUp => 'Registreren';
+  String get authClashKingDescription =>
+      'Jouw ultieme Clash of Clans metgezel voor het bijhouden van statistieken, beheren van clans en analyseren van prestaties.';
 
   @override
-  String get authLogin => 'Inloggen';
+  String get authSignIn => 'Inloggen';
+
+  @override
+  String get authSignUp => 'Registreren';
 
   @override
   String get authLogout => 'Uitloggen';
@@ -440,7 +386,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get gameTownHall => 'SH';
 
   @override
-  String get gameTownHallLevel => 'SH niveau';
+  String get gameTownHallLevel => 'SH level';
 
   @override
   String gameTownHallLevelNumber(int level) {
@@ -472,7 +418,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String gameLevel(int level, int maxLevel) {
-    return 'Niveau: $level/$maxLevel';
+    return 'Level: $level/$maxLevel';
   }
 
   @override
@@ -503,27 +449,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get gameAchievements => 'Prestaties';
 
   @override
-  String get gameClanGames => 'Clan Spellen';
+  String get gameClanGames => 'Clan Games';
 
   @override
-  String get gameSeasonPass => 'Seizoenspas';
+  String get gameSeasonPass => 'Season Pass';
 
   @override
   String get gameCreatorCode => 'Makerscode: ClashKing';
-
-  @override
-  String get gameCreatorCodeDescription =>
-      'Tap for info • Support us for free!';
-
-  @override
-  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
-
-  @override
-  String get gameCreatorCodeDialogDescription =>
-      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
-
-  @override
-  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -858,11 +790,11 @@ class AppLocalizationsNl extends AppLocalizations {
       'Gewicht van 1 punt per account, 1 aanval = 1 punt. CWL kan niet worden gevolgd als de speler niet in zijn ligaclan zit.';
 
   @override
-  String get todoExplanationPassAndGamesTitle => 'Seizoenspas & Clan Spellen:';
+  String get todoExplanationPassAndGamesTitle => 'Seizoenspas & Clan Games:';
 
   @override
   String get todoExplanationPassAndGames =>
-      'Gewicht van elk 2 punten per account. De verhouding is gebaseerd op het aantal resterende dagen (1 maand voor de pas en 6 dagen voor de spellen). Groen = op schema om de pas of spellen te voltooien, rood = achter op schema.';
+      'Gewicht van elk 2 punten per account. De verhouding is gebaseerd op het aantal resterende dagen (1 maand voor de pas en 6 dagen voor de games). Groen = op schema om de pas of games te voltooien, rood = achter op schema.';
 
   @override
   String get todoExplanationConclusion =>
@@ -1377,7 +1309,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get downloadError => 'Bestand downloaden mislukt';
 
   @override
-  String get dashboardTitle => 'Hoofdpaneel';
+  String get dashboardTitle => 'Dashboard';
 
   @override
   String get toolsTitle => 'Hulpmiddelen';
@@ -1390,19 +1322,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get versionDevice => 'Versie & apparaat';
-
-  @override
-  String get settingsLicenses => 'Open Source Licenses';
-
-  @override
-  String get settingsLicensesSubtitle =>
-      'View licenses for third-party libraries';
-
-  @override
-  String get settingsPrivacyPolicy => 'Privacy Policy';
-
-  @override
-  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
 
   @override
   String get betaFeature => 'Beta-functie';
@@ -1448,7 +1367,7 @@ class AppLocalizationsNl extends AppLocalizations {
       'ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan de ClashKing Bot uit op je Discord-server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.';
 
   @override
-  String get faqTrackingDown => 'Volgen gestopt';
+  String get faqTrackingDown => 'Tracking down';
 
   @override
   String get faqTrackingDownAnswer =>
@@ -1500,7 +1419,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven, of je kunt ons een e-mail sturen naar devs@clashk.ing. Schrijf alleen in het Engels of Frans.';
+      'Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven, of je kunt ons een e-mail sturen naar devs@clashkingbot.com. Schrijf alleen in het Engels of Frans.';
 
   @override
   String get faqSendEmail => 'Stuur een e-mail';

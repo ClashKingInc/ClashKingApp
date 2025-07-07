@@ -1,32 +1,54 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "A végső Clash of Clans társád a statisztikák követéséhez, klánok kezeléséhez és teljesítmény elemzéséhez.",
+  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Betöltés...",
-  "generalError": "Hiba",
-  "generalRetry": "Újrapróbálás",
-  "generalTryAgain": "Próbáld újra",
-  "generalClose": "Bezárás",
+  "loadingVillages": "Loading your villages...",
+  "loadingClanData": "Fetching clan data...",
+  "loadingWarStats": "Analyzing war stats...",
+  "loadingLegendsData": "Preparing legends data...",
+  "loadingCapitalRaids": "Loading capital raids...",
+  "loadingAlmostReady": "Almost ready...",
+  "accountVerificationTitle": "Verify Account",
+  "accountVerificationMessage": "Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.",
+  "accountVerified": "Account verified",
+  "accountNotVerified": "Account not verified",
+  "accountVerifyButton": "Verify",
+  "accountVerificationSuccess": "Account verified successfully!",
+  "accountVerificationFailed": "Verification failed. Please check your API token.",
+  "generalRetry": "Retry",
+  "generalTryAgain": "Try again",
   "generalCancel": "Mégse",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
   },
-  "generalApply": "Alkalmaz",
-  "generalConfirm": "Megerősítés",
-  "generalAdd": "Hozzáadás",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "Törlés",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
+  "generalApply": "Jelentkezés",
+  "generalConfirm": "Confirm",
   "generalManage": "Kezelés",
-  "generalManagement": "Kezelés",
   "generalSettings": "Beállítások",
   "generalCopiedToClipboard": "Vágólapra másolva",
   "generalComingSoon": "Hamarosan!",
+  "generalLastRefresh": "Last refresh: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
   "generalAll": "Összes",
   "@generalAll": {
     "description": "all items"
@@ -48,8 +70,8 @@
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Aktív",
-  "generalInactive": "Inaktív",
+  "generalActive": "Active",
+  "generalInactive": "Inactive",
   "generalStarted": "Elkezdődött",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
@@ -58,87 +80,69 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Szint",
   "generalRole": "Szerepkör",
-  "generalDate": "Dátum",
-  "generalStats": "Statisztikák",
-  "generalFullStats": "Teljes statisztikák",
-  "generalDetails": "Részletek",
+  "generalStats": "Stats",
+  "generalFullStats": "Full Stats",
+  "generalDetails": "Details",
   "generalHistory": "Előzmények",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Diagramok",
   "generalFilters": "Szűrők",
-  "generalWhatever": "Mindegy",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Bármely",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
-  "generalNotSet": "Nincs beállítva",
+  "generalNotSet": "Not set",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Figyelmeztetés",
+  "generalWarning": "Warning",
   "generalNoDataAvailable": "Nincs rendelkezésre álló adat.",
-  "generalClosed": "Bezárva",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Üdvözlünk vissza",
-  "authClashKingDescription": "A végső Clash of Clans társád a statisztikák követéséhez, klánok kezeléséhez és teljesítmény elemzéséhez.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignUp": "Regisztráció",
+  "authSignUp": "Sign up",
   "authLogin": "Bejelentkezés",
   "authLogout": "Kijelentkezés",
-  "authCreateAccount": "Fiók létrehozása",
-  "authJoinClashKing": "Csatlakozz a ClashKing-hez",
-  "authCreateClashKingAccount": "ClashKing fiók létrehozása",
-  "authCreateAccountToGetStarted": "Hozd létre a fiókodat az induláshoz",
-  "authAlreadyHaveAccount": "Már van fiókod? Jelentkezz be",
-  "authConfirmLogout": "Biztosan ki szeretnél jelentkezni?",
+  "authCreateAccount": "Create Account",
+  "authJoinClashKing": "Join ClashKing",
+  "authCreateClashKingAccount": "Create ClashKing Account",
+  "authCreateAccountToGetStarted": "Create your account to get started",
+  "authAlreadyHaveAccount": "Already have an account? Sign in",
+  "authConfirmLogout": "Are you sure you want to log out?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
   "authDiscordSignIn": "Bejelentkezés Discord-dal",
-  "authDiscordContinue": "Folytatás Discord-dal",
-  "authDiscordDescription": "Szinkronizáld az adataidat a ClashKing Bot-tal és oldja fel a ClashKing teljes potenciálját!",
-  "authEmailTitle": "E-mail",
-  "authEmailDescription": "Használj e-mailt, ha nem férsz hozzá a Discord-hoz, vagy inkább csak az alkalmazás funkcióit szeretnéd",
-  "authEmailRequired": "Kérjük, add meg az e-mail címedet",
-  "authEmailInvalid": "Kérjük, adj meg egy érvényes e-mail címet",
-  "authPasswordLabel": "Jelszó",
-  "authPasswordConfirm": "Jelszó megerősítése",
-  "authPasswordRequired": "Kérjük, add meg a jelszavadat",
-  "authPasswordConfirmRequired": "Kérjük, erősítsd meg a jelszavadat",
-  "authPasswordMismatch": "A jelszavak nem egyeznek",
-  "authPasswordTooShort": "A jelszónak legalább 8 karakterből kell állnia",
-  "authPasswordRequirements": "A jelszónak tartalmaznia kell: nagybetűt, kisbetűt, számot és speciális karaktert",
-  "authPasswordForgot": "Elfelejtett jelszó?",
-  "authUsernameLabel": "Felhasználónév",
-  "authUsernameRequired": "Kérjük, adja meg a felhasználónevet",
-  "authUsernameTooShort": "A felhasználónévnek legalább 3 karakterből kell állnia",
-  "authErrorConnection": "Hiba történt. Kérjük, ellenőrizd az internetkapcsolatodat és próbáld újra.",
-  "authErrorConnectionRelaunch": "Hiba történt. Kérjük, ellenőrizd az internetkapcsolatodat és indítsd újra az alkalmazást.",
-  "authAccountManagement": "Fiókkezelés",
-  "authAccountConnected": "Csatlakoztatott fiókok",
-  "authAccountConnectedStatus": "Csatlakoztatva",
-  "authAccountNotConnected": "Nincs csatlakoztatva",
-  "authAccountEmailAndPassword": "E-mail és jelszó",
-  "authAccountSecured": "A fiókod több hitelesítési módszerrel van biztosítva",
-  "authAccountLinkEmail": "E-mail fiók csatlakoztatása",
-  "authAccountAddEmailAuth": "Adj hozzá e-mail és jelszó hitelesítést a fiókodhoz a további biztonság érdekében.",
-  "authAccountEmailLinkedSuccess": "E-mail fiók sikeresen csatlakoztatva!",
-  "helpTitle": "Segítségre van szükséged?",
-  "helpJoinDiscord": "Csatlakozz a Discord-hoz",
-  "helpEmailUs": "Írj nekünk e-mailt",
+  "authDiscordContinue": "Continue with Discord",
+  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
+  "authEmailTitle": "Email",
+  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
+  "authEmailRequired": "Please enter your email",
+  "authEmailInvalid": "Please enter a valid email",
+  "authPasswordLabel": "Password",
+  "authPasswordConfirm": "Confirm Password",
+  "authPasswordRequired": "Please enter your password",
+  "authPasswordConfirmRequired": "Please confirm your password",
+  "authPasswordMismatch": "Passwords do not match",
+  "authPasswordTooShort": "Password must be at least 8 characters",
+  "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
+  "authPasswordForgot": "Forgot password?",
+  "authUsernameLabel": "Username",
+  "authUsernameRequired": "Please enter a username",
+  "authUsernameTooShort": "Username must be at least 3 characters",
+  "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
+  "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
+  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.",
+  "authAccountConnected": "Connected Accounts",
+  "authAccountConnectedStatus": "Connected",
+  "authAccountNotConnected": "Not connected",
+  "authAccountEmailAndPassword": "Email & Password",
+  "authAccountSecured": "Your account is secured with multiple authentication methods",
+  "authAccountLinkEmail": "Link Email Account",
+  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
+  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
+  "helpTitle": "Need help?",
+  "helpJoinDiscord": "Join Discord",
+  "helpEmailUs": "Email Us",
   "accountsWelcome": "Üdv!",
   "accountsWelcomeMessage": "Kérjük adj egy vagy több Clash Of Clans fiókot a profilodhoz. Később tudsz további fiókokat hozzáadni.",
-  "accountsManageTitle": "Kezeld a fiókjaidat",
+  "accountsManageTitle": "Manage your accounts",
   "accountsNoneFound": "A profilhoz nem található csatolt fiók",
   "accountsPlayerTag": "Player Tag (#ABC123)",
   "accountsEnterPlayerTag": "Adjon meg egy játékos tag-et",
@@ -148,15 +152,15 @@
   "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
   "accountsFillAllFields": "Please fill all fields.",
   "accountsErrorTagNotExists": "A megadott játékos tag nem létezik.",
-  "accountsErrorAlreadyLinked": "A játékos tag-je már csatolva van valakihez.",
+  "accountsErrorAlreadyLinked": "The player tag is already linked to someone.",
   "accountsErrorAlreadyLinkedToYou": "The player tag is already linked to you.",
   "accountsErrorWrongApiToken": "The API token entered is incorrect",
   "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
-  "accountsErrorFailedToDelete": "A kapcsolat törlése nem sikerült. Kérjük, próbálja meg később újra.",
+  "accountsErrorFailedToDelete": "Failed to delete link. Please try again later.",
   "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
   "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
   "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
-  "errorLoadingVersion": "Hiba verzió betöltése közben",
+  "errorLoadingVersion": "Error loading version",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
@@ -294,6 +298,10 @@
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Alkotói kód: ClashKing",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "Klán",
   "clanSearchTitle": "Klán keresése",
   "clanSearchPlaceholder": "Clan's name",
@@ -378,6 +386,9 @@
     }
   },
   "timeJustNow": "Épp most",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
   "timeEndedJustNow": "Ended just now",
   "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
   "@timeEndedMinutesAgo": {
@@ -435,7 +446,7 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
+  "legendsTitle": "Legend League",
   "legendsNotInLeague": "Not in Legend League",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "You started the day with {trophies} trophies.",
@@ -527,7 +538,7 @@
   "legendsInaccurateNetGainBody": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
   "legendsInaccurateConclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
   "statsSeasonStats": "Season Stats",
-  "statsByDay": "Naponta",
+  "statsByDay": "By Day",
   "@statsByDay": {
     "description": "Shows stats by day"
   },
@@ -971,7 +982,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Current round (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -1144,6 +1155,10 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
   "betaFeature": "Béta Funkció",
   "betaLabel": "BÉTA",
   "betaDescription": "Ez a funkció jelenleg báta fázisban van, lehetnek benne hibák vagy lehet nincs befejezve. Aktívan dolgozunk a javításokon és szívesen fogadunk megjegyzéseket. Kérjük oszd meg az ötleteided vagy jelentsd a hibákat a Discord szerverünkön hogy segíts minket.",
@@ -1172,7 +1187,7 @@
   "faqHowToInviteTheBotAnswer": "Meg tudod hívni a bot-ot a lent lévő gomb megnyomásával. Ehhez \"Manage Server\" joghoz van szükséged.",
   "faqInviteTheBot": "Hívd meg a ClashKing bot-ot",
   "faqNeedHelp": "Segítségre van szükségem, vagy szeretnék egy javaslatot tenni. Hogyan tudok kapcsolatba lépni?",
-  "faqNeedHelpAnswer": "Csatlakozhatsz a Discord szerverünkhöz és kérhetsz segítset, vagy küldhetsz emailt a devs@clashk.ing címre.\nKérjük csak angolul vagy franciául írj.",
+  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
   "faqSendEmail": "Küldjön egy e-mailt",
   "faqJoinDiscord": "Csatlakozz a Discord szerverünkhöz",
   "faqCannotOpenMailClient": "Valamijen oknál fogva nem tudtuk a levelező kliensedet kinyitni. Vágólapra másoltuk a címet. Irhatsz egy emailt és bemásolhatod a címet.",

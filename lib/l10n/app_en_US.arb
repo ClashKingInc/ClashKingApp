@@ -3,10 +3,21 @@
   "appTitle": "ClashKing",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Loading...",
-  "generalError": "Error",
+  "loadingVillages": "Loading your villages...",
+  "loadingClanData": "Fetching clan data...",
+  "loadingWarStats": "Analyzing war stats...",
+  "loadingLegendsData": "Preparing legends data...",
+  "loadingCapitalRaids": "Loading capital raids...",
+  "loadingAlmostReady": "Almost ready...",
+  "accountVerificationTitle": "Verify Account",
+  "accountVerificationMessage": "Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.",
+  "accountVerified": "Account verified",
+  "accountNotVerified": "Account not verified",
+  "accountVerifyButton": "Verify",
+  "accountVerificationSuccess": "Account verified successfully!",
+  "accountVerificationFailed": "Verification failed. Please check your API token.",
   "generalRetry": "Retry",
   "generalTryAgain": "Try again",
-  "generalClose": "Close",
   "generalCancel": "Cancel",
   "generalOk": "OK",
   "@generalOk": {
@@ -14,19 +25,30 @@
   },
   "generalApply": "Apply",
   "generalConfirm": "Confirm",
-  "generalAdd": "Add",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "Delete",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
   "generalManage": "Manage",
-  "generalManagement": "Management",
   "generalSettings": "Settings",
   "generalCopiedToClipboard": "Copied to clipboard",
   "generalComingSoon": "Coming soon!",
+  "generalLastRefresh": "Last refresh: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
   "generalAll": "All",
   "@generalAll": {
     "description": "all items"
@@ -48,26 +70,6 @@
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalLastRefresh": "Last refresh: {time}",
-  "@generalLastRefresh": {
-    "description": "Last refresh time indicator",
-    "placeholders": {
-      "time": {
-        "type": "String",
-        "description": "Formatted time of last refresh"
-      }
-    }
-  },
-  "generalRefreshFailed": "Refresh failed: {error}",
-  "@generalRefreshFailed": {
-    "description": "Error message when refresh fails",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "description": "Error message"
-      }
-    }
-  },
   "generalActive": "Active",
   "generalInactive": "Inactive",
   "generalStarted": "Started",
@@ -78,9 +80,7 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
   "generalRole": "Role",
-  "generalDate": "Date",
   "generalStats": "Stats",
   "generalFullStats": "Full Stats",
   "generalDetails": "Details",
@@ -88,29 +88,13 @@
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Charts",
   "generalFilters": "Filters",
-  "generalWhatever": "Whatever",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Any",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
   "generalNotSet": "Not set",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
   "generalWarning": "Warning",
   "generalNoDataAvailable": "No data available.",
-  "generalClosed": "Closed",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
   "authSignUp": "Sign up",
   "authLogin": "Login",
   "authLogout": "Log out",
@@ -144,7 +128,7 @@
   "authUsernameTooShort": "Username must be at least 3 characters",
   "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
   "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-  "authAccountManagement": "Account Management",
+  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.",
   "authAccountConnected": "Connected Accounts",
   "authAccountConnectedStatus": "Connected",
   "authAccountNotConnected": "Not connected",
@@ -316,7 +300,7 @@
   "gameCreatorCode": "Creator Code: ClashKing",
   "gameCreatorCodeDescription": "Tap for info • Support us for free!",
   "gameCreatorCodeDialogTitle": "Support ClashKing",
-  "gameCreatorCodeDialogDescription": "Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn't cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!",
+  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
   "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "Clan",
   "clanSearchTitle": "Search clan",
@@ -402,6 +386,9 @@
     }
   },
   "timeJustNow": "Just Now",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
   "timeEndedJustNow": "Ended just now",
   "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
   "@timeEndedMinutesAgo": {

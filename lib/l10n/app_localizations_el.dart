@@ -9,64 +9,16 @@ class AppLocalizationsEl extends AppLocalizations {
   AppLocalizationsEl([String locale = 'el']) : super(locale);
 
   @override
-  String get appTitle => 'ClashKing';
-
-  @override
-  String get appDescription =>
-      'Ο υπέροχος σύντροφός σας στο Clash of Clans για παρακολούθηση στατιστικών, διαχείριση κλάν και ανάλυση απόδοσης.';
-
-  @override
   String get generalLoading => 'Φορτώνει...';
 
   @override
-  String get loadingVillages => 'Loading your villages...';
+  String get generalRetry => 'Retry';
 
   @override
-  String get loadingClanData => 'Fetching clan data...';
+  String get generalTryAgain => 'Try again';
 
   @override
-  String get loadingWarStats => 'Analyzing war stats...';
-
-  @override
-  String get loadingLegendsData => 'Preparing legends data...';
-
-  @override
-  String get loadingCapitalRaids => 'Loading capital raids...';
-
-  @override
-  String get loadingAlmostReady => 'Almost ready...';
-
-  @override
-  String get accountVerificationTitle => 'Verify Account';
-
-  @override
-  String get accountVerificationMessage =>
-      'Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.';
-
-  @override
-  String get accountVerified => 'Account verified';
-
-  @override
-  String get accountNotVerified => 'Account not verified';
-
-  @override
-  String get accountVerifyButton => 'Verify';
-
-  @override
-  String get accountVerificationSuccess => 'Account verified successfully!';
-
-  @override
-  String get accountVerificationFailed =>
-      'Verification failed. Please check your API token.';
-
-  @override
-  String get generalRetry => 'Επανάληψη';
-
-  @override
-  String get generalTryAgain => 'Δοκιμάστε ξανά';
-
-  @override
-  String get generalCancel => 'Ακύρωση';
+  String get generalCancel => 'Cancel';
 
   @override
   String get generalOk => 'OK';
@@ -88,16 +40,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get generalComingSoon => 'Coming soon!';
-
-  @override
-  String generalLastRefresh(String time) {
-    return 'Last refresh: $time';
-  }
-
-  @override
-  String generalRefreshFailed(String error) {
-    return 'Refresh failed: $error';
-  }
 
   @override
   String get generalAll => 'Όλα';
@@ -157,10 +99,14 @@ class AppLocalizationsEl extends AppLocalizations {
   String get generalNoDataAvailable => 'Δεν υπάρχουν διαθέσιμα δεδομένα.';
 
   @override
-  String get authSignUp => 'Sign up';
+  String get authClashKingDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
 
   @override
-  String get authLogin => 'Είσοδος';
+  String get authSignIn => 'Sign In';
+
+  @override
+  String get authSignUp => 'Sign up';
 
   @override
   String get authLogout => 'Έξοδος';
@@ -508,20 +454,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'Κωδικός Δημιουργού: ClashKing';
-
-  @override
-  String get gameCreatorCodeDescription =>
-      'Tap for info • Support us for free!';
-
-  @override
-  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
-
-  @override
-  String get gameCreatorCodeDialogDescription =>
-      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
-
-  @override
-  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -1388,19 +1320,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get versionDevice => 'Εκδοχή & Συσκευή';
 
   @override
-  String get settingsLicenses => 'Open Source Licenses';
-
-  @override
-  String get settingsLicensesSubtitle =>
-      'View licenses for third-party libraries';
-
-  @override
-  String get settingsPrivacyPolicy => 'Privacy Policy';
-
-  @override
-  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
-
-  @override
   String get betaFeature => 'Χαρακτηριστικό εκδοχής Βήτα';
 
   @override
@@ -1497,7 +1416,7 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Μπορείτε να μας βρείτε στην ομάδα μας στο Discord για να ζητήσετε βοήθεια ή να μας μεταφέρετε τα σχόλιά σας, αλλιώς μπορείτε να μας στείλετε ένα email στο devs@clashk.ing. Σας παρακαλούμε να γράφετε μόνο στα Αγγλικά ή στα Γαλλικά.';
+      'Μπορείτε να μας βρείτε στην ομάδα μας στο Discord για να ζητήσετε βοήθεια ή να μας μεταφέρετε τα σχόλιά σας, αλλιώς μπορείτε να μας στείλετε ένα email στο devs@clashkingbot.com. Σας παρακαλούμε να γράφετε μόνο στα Αγγλικά ή στα Γαλλικά.';
 
   @override
   String get faqSendEmail => 'Στείλτε μας ένα email';

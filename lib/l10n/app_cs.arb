@@ -1,12 +1,23 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Váš dokonalý průvodce Clash of Clans pro sledování statistik, správu klanů a analýzu výkonu.",
-  "generalLoading": "Načítání...",
-  "generalError": "Chyba",
+  "appDescription": "Vaše konečné Clash klanů společník pro sledování statistik, správu klanů a analýzu výkonu.",
+  "generalLoading": "Načítám...",
+  "loadingVillages": "Načítání vesnic...",
+  "loadingClanData": "Načítání dat o klanu...",
+  "loadingWarStats": "Analyzuji válečné statistiky...",
+  "loadingLegendsData": "Příprava legendových dat...",
+  "loadingCapitalRaids": "Načítám údery kapitálu...",
+  "loadingAlmostReady": "Téměř připraveno...",
+  "accountVerificationTitle": "Ověřit účet",
+  "accountVerificationMessage": "Zadejte svůj API token pro ověření vašeho účtu. Najdete ho v Clash of Clans Nastavení > Další nastavení > API Token.",
+  "accountVerified": "Účet ověřen",
+  "accountNotVerified": "Účet nebyl ověřen",
+  "accountVerifyButton": "Ověřit",
+  "accountVerificationSuccess": "Účet byl úspěšně ověřen!",
+  "accountVerificationFailed": "Ověření se nezdařilo. Zkontrolujte prosím váš API token.",
   "generalRetry": "Opakovat",
-  "generalTryAgain": "Zkusit znovu",
-  "generalClose": "Zavřít",
+  "generalTryAgain": "Zkuste to znovu",
   "generalCancel": "Zrušit",
   "generalOk": "OK",
   "@generalOk": {
@@ -14,19 +25,30 @@
   },
   "generalApply": "Použít",
   "generalConfirm": "Potvrdit",
-  "generalAdd": "Přidat",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "Smazat",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
   "generalManage": "Spravovat",
-  "generalManagement": "Správa",
   "generalSettings": "Nastavení",
   "generalCopiedToClipboard": "Zkopírováno do schránky",
   "generalComingSoon": "Již brzy!",
+  "generalLastRefresh": "Poslední aktualizace: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Obnovení selhalo: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
   "generalAll": "Vše",
   "@generalAll": {
     "description": "all items"
@@ -50,7 +72,7 @@
   },
   "generalActive": "Aktivní",
   "generalInactive": "Neaktivní",
-  "generalStarted": "Započato",
+  "generalStarted": "Začínáno",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
   },
@@ -58,113 +80,95 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Úroveň",
   "generalRole": "Role",
-  "generalDate": "Datum",
   "generalStats": "Statistiky",
   "generalFullStats": "Úplné statistiky",
-  "generalDetails": "Podrobnosti",
+  "generalDetails": "Detaily",
   "generalHistory": "Historie",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Grafy",
   "generalFilters": "Filtry",
-  "generalWhatever": "Cokoliv",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Jakýkoliv",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
   "generalNotSet": "Nenastaveno",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
   "generalWarning": "Varování",
-  "generalNoDataAvailable": "Žádná data nejsou k dispozici.",
-  "generalClosed": "Uzavřeno",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Vítejte zpět",
-  "authClashKingDescription": "Váš dokonaly společník pro Clash of Clans pro sledování statistik, správu klanů a analýzu výkonu.",
-  "authChooseSignInMethod": "Vyberte svůj preferovaný způsob přihlášení",
-  "authSignUp": "Registrovat se",
+  "generalNoDataAvailable": "Nejsou k dispozici žádná data.",
+  "authSignUp": "Zaregistrovat se",
   "authLogin": "Přihlásit se",
   "authLogout": "Odhlásit se",
   "authCreateAccount": "Vytvořit účet",
   "authJoinClashKing": "Připojit se k ClashKing",
   "authCreateClashKingAccount": "Vytvořit ClashKing účet",
-  "authCreateAccountToGetStarted": "Vytvořte si účet pro začátek",
-  "authAlreadyHaveAccount": "Already have an account? Sign in",
-  "authConfirmLogout": "Are you sure you want to log out?",
+  "authCreateAccountToGetStarted": "Vytvořte si účet, abyste mohli začít",
+  "authAlreadyHaveAccount": "Již máte účet? Přihlaste se",
+  "authConfirmLogout": "Jste si jisti, že se chcete odhlásit?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
-  "authDiscordSignIn": "Sign In with Discord",
-  "authDiscordContinue": "Continue with Discord",
-  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authEmailTitle": "Email",
-  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailRequired": "Please enter your email",
-  "authEmailInvalid": "Please enter a valid email",
-  "authPasswordLabel": "Password",
-  "authPasswordConfirm": "Confirm Password",
-  "authPasswordRequired": "Please enter your password",
-  "authPasswordConfirmRequired": "Please confirm your password",
-  "authPasswordMismatch": "Passwords do not match",
-  "authPasswordTooShort": "Password must be at least 8 characters",
-  "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
-  "authPasswordForgot": "Forgot password?",
-  "authUsernameLabel": "Username",
-  "authUsernameRequired": "Please enter a username",
-  "authUsernameTooShort": "Username must be at least 3 characters",
-  "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
-  "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-  "authAccountManagement": "Account Management",
-  "authAccountConnected": "Connected Accounts",
-  "authAccountConnectedStatus": "Connected",
-  "authAccountNotConnected": "Not connected",
-  "authAccountEmailAndPassword": "Email & Password",
-  "authAccountSecured": "Your account is secured with multiple authentication methods",
-  "authAccountLinkEmail": "Link Email Account",
-  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
-  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "helpTitle": "Need help?",
-  "helpJoinDiscord": "Join Discord",
-  "helpEmailUs": "Email Us",
-  "accountsWelcome": "Welcome!",
-  "accountsWelcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
-  "accountsManageTitle": "Manage your accounts",
-  "accountsNoneFound": "No account linked to your profile found",
-  "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsEnterPlayerTag": "Enter a player tag",
-  "accountsAdd": "Add account",
-  "accountsDelete": "Delete account",
-  "accountsApiToken": "Account API Token",
-  "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
-  "accountsFillAllFields": "Please fill all fields.",
-  "accountsErrorTagNotExists": "The player tag entered does not exist.",
-  "accountsErrorAlreadyLinked": "The player tag is already linked to someone.",
-  "accountsErrorAlreadyLinkedToYou": "The player tag is already linked to you.",
-  "accountsErrorWrongApiToken": "The API token entered is incorrect",
-  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
-  "accountsErrorFailedToDelete": "Failed to delete link. Please try again later.",
-  "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
-  "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
-  "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
-  "errorLoadingVersion": "Error loading version",
+  "authDiscordSignIn": "Přihlásit se pomocí Discordu",
+  "authDiscordContinue": "Pokračovat s Discord",
+  "authDiscordDescription": "Synchronizujte svá data s ClashKing Bot a odemkněte plný potenciál ClashKing!",
+  "authEmailTitle": "E-mailová adresa",
+  "authEmailDescription": "Pokud nemáte přístup k Discordu nebo preferováte funkce pouze pro aplikace",
+  "authEmailRequired": "Prosím, zadejte svůj e-mail",
+  "authEmailInvalid": "Zadejte prosím platný e-mail",
+  "authPasswordLabel": "Heslo",
+  "authPasswordConfirm": "Potvrzení hesla",
+  "authPasswordRequired": "Zadejte prosím své heslo",
+  "authPasswordConfirmRequired": "Potvrďte prosím své heslo",
+  "authPasswordMismatch": "Hesla se neshodují",
+  "authPasswordTooShort": "Heslo musí mít alespoň 8 znaků",
+  "authPasswordRequirements": "Heslo musí obsahovat: velká písmena, malá písmena, číslice a speciální znak",
+  "authPasswordForgot": "Zapomněli jste heslo?",
+  "authUsernameLabel": "Uživatelské jméno",
+  "authUsernameRequired": "Zadejte prosím uživatelské jméno",
+  "authUsernameTooShort": "Uživatelské jméno musí mít alespoň 3 znaky",
+  "authErrorConnection": "Došlo k chybě. Zkontrolujte připojení k internetu a zkuste to znovu.",
+  "authErrorConnectionRelaunch": "Došlo k chybě. Zkontrolujte připojení k internetu a restartujte aplikaci.",
+  "authAccountManagement": "Přidejte, odeberte a upravte pořadí účtů Clash z Clans. Ověřte své účty pro přístup ke všem funkcím.",
+  "authAccountConnected": "Připojené účty",
+  "authAccountConnectedStatus": "Připojeno",
+  "authAccountNotConnected": "Nepřipojeno",
+  "authAccountEmailAndPassword": "E-mail & heslo",
+  "authAccountSecured": "Váš účet je zabezpečen více metodami ověřování",
+  "authAccountLinkEmail": "Propojit e-mailový účet",
+  "authAccountAddEmailAuth": "Přidejte do svého účtu e-mail a heslo pro další zabezpečení.",
+  "authAccountEmailLinkedSuccess": "E-mailový účet byl úspěšně propojen!",
+  "helpTitle": "Potřebujete pomoc?",
+  "helpJoinDiscord": "Připojit se k Discordu",
+  "helpEmailUs": "Napište nám",
+  "accountsWelcome": "Vítejte!",
+  "accountsWelcomeMessage": "Přidejte do svého profilu jeden nebo více účtů Clash Clans. Účty můžete přidat nebo odebrat později.",
+  "accountsManageTitle": "Spravovat své účty",
+  "accountsNoneFound": "S Vaším profilem nebyl nalezen žádný účet",
+  "accountsPlayerTag": "Tag hráče (#ABC123)",
+  "accountsEnterPlayerTag": "Zadejte štítek hráče",
+  "accountsAdd": "Přidat účet",
+  "accountsDelete": "Odstranit účet",
+  "accountsApiToken": "API token účtu",
+  "accountsEnterApiToken": "Zadejte prosím API token účtu pro potvrzení vašeho účtu. Najdete ho v Clash of Clans Nastavení > Další nastavení > API Token.",
+  "accountsFillAllFields": "Vyplňte prosím všechna pole.",
+  "accountsErrorTagNotExists": "Zadaný štítek hráče neexistuje.",
+  "accountsErrorAlreadyLinked": "Štítek hráče je již s někým propojen.",
+  "accountsErrorAlreadyLinkedToYou": "Štítek hráče je s vámi již propojen.",
+  "accountsErrorWrongApiToken": "Zadaný API token je nesprávný",
+  "accountsErrorFailedToAdd": "Přidání účtu se nezdařilo. Opakujte akci později.",
+  "accountsErrorFailedToDelete": "Nepodařilo se odstranit odkaz. Opakujte akci později.",
+  "accountsErrorFailedToUpdateOrder": "Nepodařilo se aktualizovat pořadí účtů.",
+  "errorTitle": "Jejda! Naše servery možná vzaly ohnivou kouli na tvář! Vrháme uzdravující kouzel... Zkuste to znovu za chvíli.",
+  "errorSubtitle": "Pokud problém přetrvává, podívejte se na náš Discord server, abyste zjistili, zda ho známe.",
+  "errorLoadingVersion": "Chyba při načítání verze",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorCannotOpenLink": "We can't open this link.",
-  "errorExitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-  "playerSearchTitle": "Search player",
-  "playerSearchPlaceholder": "Player's name or tag",
-  "playerLastActive": "Last active: {date}",
+  "errorCannotOpenLink": "Tento odkaz nelze otevřít.",
+  "errorExitAppToOpenClash": "Chystáte se opustit aplikaci a otevřít Clash z Clans.",
+  "playerSearchTitle": "Hledat hráče",
+  "playerSearchPlaceholder": "Jméno nebo značka hráče",
+  "playerLastActive": "Poslední aktivní: {date}",
   "@playerLastActive": {
     "placeholders": {
       "date": {
@@ -172,8 +176,8 @@
       }
     }
   },
-  "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
-  "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+  "playerNotTracked": "Tento hráč není sledován. Data mohou být nepřesná.",
+  "playerClanDescription": "Váš klan je \"{clan}\" ({tag}).",
   "@playerClanDescription": {
     "placeholders": {
       "clan": {
@@ -184,7 +188,7 @@
       }
     }
   },
-  "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+  "playerRatioDescription": "Váš poměr příspěvků je {ratio}. Darovali jste {donations} a obdrželi jste jednotky {received}.",
   "@playerRatioDescription": {
     "placeholders": {
       "ratio": {
@@ -198,7 +202,7 @@
       }
     }
   },
-  "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+  "playerWarPreferenceDescription": "Vaše preference války jsou \"{preference}\".",
   "@playerWarPreferenceDescription": {
     "placeholders": {
       "preference": {
@@ -206,7 +210,7 @@
       }
     }
   },
-  "playerWarStarsDescription": "You have {stars} war stars.",
+  "playerWarStarsDescription": "Máte {stars} válečné hvězdy.",
   "@playerWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -214,7 +218,7 @@
       }
     }
   },
-  "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+  "playerTrophiesDescription": "Máš {trophies} trofejí. Momentálně jsi v {league}.",
   "@playerTrophiesDescription": {
     "placeholders": {
       "trophies": {
@@ -225,7 +229,7 @@
       }
     }
   },
-  "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+  "playerTownHallLevelDescription": "Tvá úroveň radnice je {level}.",
   "@playerTownHallLevelDescription": {
     "placeholders": {
       "level": {
@@ -233,7 +237,7 @@
       }
     }
   },
-  "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+  "playerBuilderBaseDescription": "Tvá úroveň tvého stavitele je {level} a máš {trophies} trofejí.",
   "@playerBuilderBaseDescription": {
     "placeholders": {
       "level": {
@@ -244,11 +248,11 @@
       }
     }
   },
-  "gameBaseHome": "Home Base",
-  "gameBaseBuilder": "Builder Base",
-  "gameClanCapital": "Clan Capital",
+  "gameBaseHome": "Domovská základna",
+  "gameBaseBuilder": "Stavitelská základna",
+  "gameClanCapital": "Kapitál klanu",
   "gameTownHall": "TH",
-  "gameTownHallLevel": "TH Level",
+  "gameTownHallLevel": "TH úroveň",
   "gameTownHallLevelNumber": "Town Hall {level}",
   "@gameTownHallLevelNumber": {
     "placeholders": {
@@ -265,13 +269,13 @@
       }
     }
   },
-  "gameExpLevel": "Experience Level",
-  "gameTrophies": "Trophies",
-  "gameBuilderBaseTrophies": "BB Trophies",
-  "gameDonations": "Donations",
-  "gameDonationsReceived": "Donations Received",
-  "gameDonationsRatio": "Donation Ratio",
-  "gameLevel": "Level: {level}/{maxLevel}",
+  "gameExpLevel": "Úroveň zkušenosti",
+  "gameTrophies": "Trofeje",
+  "gameBuilderBaseTrophies": "BB trofeje",
+  "gameDonations": "Příspěvky",
+  "gameDonationsReceived": "Obdržené dary",
+  "gameDonationsRatio": "Poměr příspěvku",
+  "gameLevel": "Úroveň: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
       "level": {
@@ -282,52 +286,56 @@
       }
     }
   },
-  "gameHeroes": "Heroes",
-  "gameEquipment": "Equipments",
-  "gameHeroesEquipments": "Hero equipments",
-  "gameTroops": "Troops",
-  "gameActiveSuperTroops": "Active Super Troops",
-  "gamePets": "Pets",
-  "gameSiegeMachines": "Siege Machines",
+  "gameHeroes": "Hrdinové",
+  "gameEquipment": "Vybavení",
+  "gameHeroesEquipments": "Zařízení hrdinů",
+  "gameTroops": "Vojenské jednotky",
+  "gameActiveSuperTroops": "Aktivní Super jednotky",
+  "gamePets": "Domácí zvířata",
+  "gameSiegeMachines": "Obléhací stroje",
   "gameSpells": "Spells",
-  "gameAchievements": "Achievements",
-  "gameClanGames": "Clan Games",
-  "gameSeasonPass": "Season Pass",
-  "gameCreatorCode": "Creator Code: ClashKing",
-  "clanTitle": "Clan",
-  "clanSearchTitle": "Search clan",
-  "clanSearchPlaceholder": "Clan's name",
-  "clanNone": "No clan",
-  "clanJoinToUnlock": "Join a clan to unlock new features.",
-  "clanMembers": "Members",
-  "clanWarFrequency": "War frequency",
-  "clanMinimumMembers": "Minimum members",
-  "clanMaximumMembers": "Maximum members",
-  "clanLocation": "Location",
-  "clanMinimumPoints": "Minimum clan points",
-  "clanMinimumLevel": "Minimum clan level",
-  "clanInviteOnly": "Invite Only",
+  "gameAchievements": "Úspěchy",
+  "gameClanGames": "Klanové hry",
+  "gameSeasonPass": "Sezónní průchod",
+  "gameCreatorCode": "Kód tvůrce: ClashKing",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
+  "clanTitle": "klan",
+  "clanSearchTitle": "Hledat klan",
+  "clanSearchPlaceholder": "Jméno klanu",
+  "clanNone": "Bez klanu",
+  "clanJoinToUnlock": "Připojte se k klanu a odemkněte nové funkce.",
+  "clanMembers": "Členové",
+  "clanWarFrequency": "Válečná frekvence",
+  "clanMinimumMembers": "Minimální počet členů",
+  "clanMaximumMembers": "Maximální počet členů",
+  "clanLocation": "Poloha",
+  "clanMinimumPoints": "Minimální počet bodů klanu",
+  "clanMinimumLevel": "Minimální úroveň klanu",
+  "clanInviteOnly": "Pouze pozvání",
   "@clanInviteOnly": {
     "description": "Clan is invite only"
   },
-  "clanOpened": "Opened",
+  "clanOpened": "Otevřeno",
   "@clanOpened": {
     "description": "Clan is opened"
   },
-  "clanClosed": "Closed",
+  "clanClosed": "Uzavřeno",
   "@clanClosed": {
     "description": "Clan is closed"
   },
-  "clanRoleLeader": "Leader",
-  "clanRoleCoLeader": "Co-Leader",
-  "clanRoleElder": "Elder",
-  "clanRoleMember": "Member",
-  "clanWarFrequencyAlways": "Always",
-  "clanWarFrequencyNever": "Never",
-  "clanWarFrequencyUnknown": "Unknown",
-  "clanWarFrequencyOncePerWeek": "1/week",
-  "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
-  "clanWarFrequencyRarely": "Rarely",
+  "clanRoleLeader": "Vůdce",
+  "clanRoleCoLeader": "Spoluvůdce",
+  "clanRoleElder": "Starší",
+  "clanRoleMember": "Člen",
+  "clanWarFrequencyAlways": "Vždy",
+  "clanWarFrequencyNever": "Nikdy",
+  "clanWarFrequencyUnknown": "Neznámý",
+  "clanWarFrequencyOncePerWeek": "1/týden",
+  "clanWarFrequencyMoreThanOncePerWeek": "Více než 1/týden",
+  "clanWarFrequencyRarely": "Zřídka",
   "timeHourIndicator": "h",
   "timeDaysAgo": "{days} days ago",
   "@timeDaysAgo": {
@@ -345,7 +353,7 @@
       }
     }
   },
-  "timeHourAgo": "{hour} hour ago",
+  "timeHourAgo": "{hour} hodinou",
   "@timeHourAgo": {
     "placeholders": {
       "hour": {
@@ -353,7 +361,7 @@
       }
     }
   },
-  "timeHoursAgo": "{hours} hours ago",
+  "timeHoursAgo": "{hours} hodin",
   "@timeHoursAgo": {
     "placeholders": {
       "hours": {
@@ -361,7 +369,7 @@
       }
     }
   },
-  "timeMinuteAgo": "{minute} minute ago",
+  "timeMinuteAgo": "{minute} minutou",
   "@timeMinuteAgo": {
     "placeholders": {
       "minute": {
@@ -369,7 +377,7 @@
       }
     }
   },
-  "timeMinutesAgo": "{minutes} minutes ago",
+  "timeMinutesAgo": "{minutes} minut",
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -377,8 +385,11 @@
       }
     }
   },
-  "timeJustNow": "Just Now",
-  "timeEndedJustNow": "Ended just now",
+  "timeJustNow": "Právě teď",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
+  "timeEndedJustNow": "Právě skončilo",
   "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
   "@timeEndedMinutesAgo": {
     "placeholders": {
@@ -403,7 +414,7 @@
       }
     }
   },
-  "timeStartsIn": "Starts in {time}",
+  "timeStartsIn": "Začíná v {time}",
   "@timeStartsIn": {
     "placeholders": {
       "time": {
@@ -411,7 +422,7 @@
       }
     }
   },
-  "timeStartsAt": "Starts at {time}",
+  "timeStartsAt": "Začíná v {time}",
   "@timeStartsAt": {
     "placeholders": {
       "time": {
@@ -419,7 +430,7 @@
       }
     }
   },
-  "timeEndsIn": "Ends in {time}",
+  "timeEndsIn": "Končí v {time}",
   "@timeEndsIn": {
     "placeholders": {
       "time": {
@@ -427,7 +438,7 @@
       }
     }
   },
-  "timeEndsAt": "Ends at {time}",
+  "timeEndsAt": "Končí v {time}",
   "@timeEndsAt": {
     "placeholders": {
       "time": {
@@ -435,10 +446,10 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
-  "legendsNotInLeague": "Not in Legend League",
-  "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
-  "legendsStartDescription": "You started the day with {trophies} trophies.",
+  "legendsTitle": "Legendární liga",
+  "legendsNotInLeague": "Není v legendové ligě",
+  "legendsNoDataToday": "Nejste v Legend League, ale poslední sezóny jsou k dispozici.",
+  "legendsStartDescription": "Začal jsi den s {trophies} trofejemi.",
   "@legendsStartDescription": {
     "placeholders": {
       "trophies": {
@@ -446,7 +457,7 @@
       }
     }
   },
-  "legendsNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
+  "legendsNoRankLocalDescription": "Momentálně nemáš hodnocení ({country}) s {trophies} trofejemi.",
   "@legendsNoRankLocalDescription": {
     "placeholders": {
       "country": {
@@ -457,7 +468,7 @@
       }
     }
   },
-  "legendsRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+  "legendsRankLocalDescription": "Momentálně jste v pořadí {rank} ({country}) s {trophies} trofejemi.",
   "@legendsRankLocalDescription": {
     "placeholders": {
       "rank": {
@@ -471,7 +482,7 @@
       }
     }
   },
-  "legendsGainDescription": "You gained {trophies} trophies for now.",
+  "legendsGainDescription": "Zatím jsi získal {trophies} trofejí.",
   "@legendsGainDescription": {
     "placeholders": {
       "trophies": {
@@ -479,7 +490,7 @@
       }
     }
   },
-  "legendsLossDescription": "You lost {trophies} trophies for now.",
+  "legendsLossDescription": "Zatím jsi ztratil {trophies} trofejí.",
   "@legendsLossDescription": {
     "placeholders": {
       "trophies": {
@@ -487,7 +498,7 @@
       }
     }
   },
-  "legendsNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+  "legendsNoGlobalRankDescription": "V současné době nemáš globální pořadí s {trophies} trofejemi.",
   "@legendsNoGlobalRankDescription": {
     "placeholders": {
       "trophies": {
@@ -495,7 +506,7 @@
       }
     }
   },
-  "legendsGlobalRankDescription": "You are currently ranked {rank} globally with {trophies} trophies.",
+  "legendsGlobalRankDescription": "Momentálně jste {rank} globálně s {trophies} trofejemi.",
   "@legendsGlobalRankDescription": {
     "placeholders": {
       "rank": {
@@ -506,36 +517,36 @@
       }
     }
   },
-  "legendsNoRank": "No ranking",
-  "legendsBestTrophies": "Best Trophies",
-  "legendsMostAttacks": "Most Attacks",
-  "legendsLastSeason": "Last Season",
-  "legendsBestRank": "Best Global Rank",
-  "legendsTrophiesBySeason": "Trophies by season",
-  "legendsEosTrophies": "End Of Season Trophies",
-  "legendsEosDetails": "End Of Season Details",
-  "legendsInaccurateTitle": "Inaccurate data?",
-  "legendsInaccurateIntro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
-  "legendsInaccurateApiDelayTitle": "1. API Delay: ",
-  "legendsInaccurateApiDelayBody": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
-  "legendsInaccurateConcurrentTitle": "2. Concurrent Changes: \n",
-  "legendsInaccurateMultipleAttacksTitle": "- Multiple Attacks/Defenses: ",
-  "legendsInaccurateMultipleAttacksBody": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
-  "legendsInaccurateSimultaneousTitle": "- Simultaneous Attack and Defense: ",
-  "legendsInaccurateSimultaneousBody": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
-  "legendsInaccurateNetGainTitle": "3. Net Gain/Loss: ",
-  "legendsInaccurateNetGainBody": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
-  "legendsInaccurateConclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-  "statsSeasonStats": "Season Stats",
-  "statsByDay": "By Day",
+  "legendsNoRank": "Žádné hodnocení",
+  "legendsBestTrophies": "Nejlepší trofeje",
+  "legendsMostAttacks": "Nejvíce útoků",
+  "legendsLastSeason": "Poslední sezóna",
+  "legendsBestRank": "Nejlepší globální hodnost",
+  "legendsTrophiesBySeason": "Trofeje podle sezóny",
+  "legendsEosTrophies": "Konec sezonních trofejí",
+  "legendsEosDetails": "Detaily konce sezóny",
+  "legendsInaccurateTitle": "Nepřesná data?",
+  "legendsInaccurateIntro": "Vzhledem k omezením Clash of Clans API nemusí být naše data vždy zcela přesná. Zde je proč:\n",
+  "legendsInaccurateApiDelayTitle": "1. API zpoždění: ",
+  "legendsInaccurateApiDelayBody": "Aktualizace API může trvat až 5 minut, což způsobí zaostávání odrážející změny trofeje v reálném čase.\n",
+  "legendsInaccurateConcurrentTitle": "2. Souběžné změny: \n",
+  "legendsInaccurateMultipleAttacksTitle": "- Více úderů/obran: ",
+  "legendsInaccurateMultipleAttacksBody": "Pokud dojde k více útokům nebo obranám v rychlém sledování, může API zobrazit kombinované výsledky (např. +68 nebo -68).\n",
+  "legendsInaccurateSimultaneousTitle": "- Současný útok a obrana: ",
+  "legendsInaccurateSimultaneousBody": "Pokud se současně objeví útok a obrana, můžete vidět smíšený výsledek (např. +4).\n",
+  "legendsInaccurateNetGainTitle": "3. Čistý zisk/ztráta: ",
+  "legendsInaccurateNetGainBody": "Navzdory problémům s časováním je celkový čistý zisk nebo ztráta za den přesný. ",
+  "legendsInaccurateConclusion": "Tato omezení jsou běžná pro všechny nástroje, které používají Clash z Clans API. Bohužel to nemůžeme opravit tak, jak je to v Superceleru rukou. Děláme vše, co je v našich silách, abychom tyto limity kompenzovali a poskytovali výsledky co nejblíže realitě. Děkujeme za pochopení!",
+  "statsSeasonStats": "Statistiky sezony",
+  "statsByDay": "Podle dne",
   "@statsByDay": {
     "description": "Shows stats by day"
   },
-  "statsBySeason": "By Season",
+  "statsBySeason": "Podle sezony",
   "@statsBySeason": {
     "description": "Shows stats by season"
   },
-  "statsDayIndex": "Day {index}",
+  "statsDayIndex": "Den {index}",
   "@statsDayIndex": {
     "placeholders": {
       "index": {
@@ -543,7 +554,7 @@
       }
     }
   },
-  "statsIndexDays": "{index} days",
+  "statsIndexDays": "{index} dnů",
   "@statsIndexDays": {
     "placeholders": {
       "index": {
@@ -551,7 +562,7 @@
       }
     }
   },
-  "statsSeasonDate": "{date} season",
+  "statsSeasonDate": "sezóna {date}",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
     "placeholders": {
@@ -560,23 +571,23 @@
       }
     }
   },
-  "statsAllTownHalls": "All Town Halls",
-  "statsMembers": "Members Stats",
-  "todoTitle": "To-do list",
-  "todoExplanationTitle": "Task Calculation",
-  "todoExplanationIntro": "The task completion percentage is calculated based on the following activities with specific weightings:",
-  "todoExplanationLegendsTitle": "Legend League:",
-  "todoExplanationLegends": "Weight of 8 points per account, 1 attack = 1 point.",
-  "todoExplanationRaidsTitle": "Raids:",
-  "todoExplanationRaids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-  "todoExplanationClanWarsTitle": "Clan Wars:",
-  "todoExplanationClanWars": "Weight of 2 points per account, 1 attack = 1 point.",
-  "todoExplanationCwlTitle": "Clan War League:",
-  "todoExplanationCwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
-  "todoExplanationPassAndGamesTitle": "Season Pass & Clan Games:",
-  "todoExplanationPassAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
-  "todoExplanationConclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
-  "todoAccountsNumber": "{number} accounts",
+  "statsAllTownHalls": "Všechny radnice",
+  "statsMembers": "Statistiky členů",
+  "todoTitle": "Seznam úkolů",
+  "todoExplanationTitle": "Výpočet úlohy",
+  "todoExplanationIntro": "Procentní podíl plnění úkolu se vypočítá na základě následujících činností s konkrétními váhami:",
+  "todoExplanationLegendsTitle": "Legendární liga:",
+  "todoExplanationLegends": "Hmotnost 8 bodů na účet, 1 útok = 1 bod.",
+  "todoExplanationRaidsTitle": "Náklady:",
+  "todoExplanationRaids": "Váha 5 bodů na účet (nebo 6, pokud byl odblokován poslední útok), 1 útok = 1 bod.",
+  "todoExplanationClanWarsTitle": "Klanové války:",
+  "todoExplanationClanWars": "Hmotnost 2 bodů na účet, 1 útok = 1 bod.",
+  "todoExplanationCwlTitle": "Klan válečná liga:",
+  "todoExplanationCwl": "Hmotnost 1 bodu na účet, 1 útok = 1 bod. CWL nemůže být sledována, pokud hráč není v liště.",
+  "todoExplanationPassAndGamesTitle": "Hry na sezonu a klany:",
+  "todoExplanationPassAndGames": "Hmotnost 2 body za každý účet. Poměr je založen na počtu zbývajících dnů (1 měsíc pro průchod a 6 dní pro hry). Zelená = na skladbě, aby dokončila průchod nebo hry, červená = za plánem.",
+  "todoExplanationConclusion": "Konečný procentní podíl se vypočítá vydělením celkových akcí provedených v průběhu probíhajících akcí celkovým požadovaným akcím. Účty, které jsou neaktivní déle než 14 dní, jsou z výpočtu vyloučeny.",
+  "todoAccountsNumber": "{number} účty",
   "@todoAccountsNumber": {
     "placeholders": {
       "number": {
@@ -585,7 +596,7 @@
     },
     "description": "Number of accounts (ex: 4 accounts)"
   },
-  "todoAccountsNumberActive": "{number} active accounts",
+  "todoAccountsNumberActive": "{number} aktivní účty",
   "@todoAccountsNumberActive": {
     "placeholders": {
       "number": {
@@ -593,7 +604,7 @@
       }
     }
   },
-  "todoAccountsNumberInactive": "{number} inactive accounts",
+  "todoAccountsNumberInactive": "{number} neaktivní účty",
   "@todoAccountsNumberInactive": {
     "placeholders": {
       "number": {
@@ -601,11 +612,11 @@
       }
     }
   },
-  "todoAccountsActive": "Active accounts",
-  "todoAccountsInactive": "Inactive accounts",
-  "todoAccountsNoInactive": "No inactive accounts.",
-  "todoAccountsNoActive": "No active accounts.",
-  "todoAttacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
+  "todoAccountsActive": "Aktivní účty",
+  "todoAccountsInactive": "Neaktivní účty",
+  "todoAccountsNoInactive": "Žádné neaktivní účty.",
+  "todoAccountsNoActive": "Žádné aktivní účty.",
+  "todoAttacksLeftDescription": "Zbývá vám {attacks} útoků ({type}).",
   "@todoAttacksLeftDescription": {
     "placeholders": {
       "attacks": {
@@ -616,7 +627,7 @@
       }
     }
   },
-  "todoDefensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
+  "todoDefensesLeftDescription": "Zbývá vám {defenses} obrana ({type}).",
   "@todoDefensesLeftDescription": {
     "placeholders": {
       "defenses": {
@@ -627,7 +638,7 @@
       }
     }
   },
-  "todoNoAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+  "todoNoAttacksLeftDescription": "Gratulujeme, udělali jste všechny vaše útoky ({type})!",
   "@todoNoAttacksLeftDescription": {
     "placeholders": {
       "type": {
@@ -635,7 +646,7 @@
       }
     }
   },
-  "todoPointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+  "todoPointsLeftDescription": "Zbývá vám {points} bodů, abyste se dnes dostali do konce události ({type}).",
   "@todoPointsLeftDescription": {
     "placeholders": {
       "points": {
@@ -646,7 +657,7 @@
       }
     }
   },
-  "todoPointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+  "todoPointsLeftDescriptionNoPoints": "Gratulujeme, máte čas získat maximální odměny na konci události ({type})!",
   "@todoPointsLeftDescriptionNoPoints": {
     "placeholders": {
       "type": {
@@ -654,13 +665,13 @@
       }
     }
   },
-  "warTitle": "War",
-  "warFrequency": "War frequency",
-  "warParticipation": "War Participation",
-  "warLeague": "War/League",
-  "warHistory": "War History",
-  "warLog": "War Log",
-  "warLogClosed": "War log closed.",
+  "warTitle": "Válka",
+  "warFrequency": "Válečná frekvence",
+  "warParticipation": "Účast na válce",
+  "warLeague": "Válka/Liga",
+  "warHistory": "Válečná historie",
+  "warLog": "Válečný deník",
+  "warLogClosed": "Protokol války {clan}je uzavřen.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -668,9 +679,9 @@
       }
     }
   },
-  "warStats": "War Stats",
-  "warOngoing": "Ongoing war",
-  "warIsNotInWar": "{clan} is not in war.",
+  "warStats": "Válečné statistiky",
+  "warOngoing": "Probíhající válka",
+  "warIsNotInWar": "{clan} není ve válce.",
   "@warIsNotInWar": {
     "placeholders": {
       "clan": {
@@ -678,23 +689,23 @@
       }
     }
   },
-  "warAskForWar": "Contact the leader or a co-leader to start a war.",
-  "warAskForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-  "warEnded": "War ended",
-  "warPreparation": "Preparation",
-  "warPerfectWar": "Perfect war",
-  "warVictory": "Victory",
-  "warDefeat": "Defeat",
-  "warDraw": "Draw",
+  "warAskForWar": "Kontaktujte vedoucího nebo druhého vedoucího pro zahájení války.",
+  "warAskForWarLogOpening": "Kontaktujte vedoucího nebo druhého vůdce pro otevření válečné lodi.",
+  "warEnded": "Válka skončila",
+  "warPreparation": "Příprava",
+  "warPerfectWar": "Dokonalá válka",
+  "warVictory": "Vítězství",
+  "warDefeat": "Poraz",
+  "warDraw": "Nakreslit",
   "@warDraw": {
     "description": "War ended in a draw"
   },
-  "warTeamSize": "Team size",
-  "warMyTeam": "My team",
+  "warTeamSize": "Velikost týmu",
+  "warMyTeam": "Můj tým",
   "warEnemiesTeam": "Enemies",
-  "warClanDraw": "The two clans are tied",
-  "warStateOfTheWar": "State of the war",
-  "warStarsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+  "warClanDraw": "Oba klany jsou svázány",
+  "warStateOfTheWar": "Stav války",
+  "warStarsNeededToTakeTheLead": "{clan} stále potřebuje {star} další hvězdy nebo {stars2} hvězdy a {percent}%, aby se ujal vedení.",
   "@warStarsNeededToTakeTheLead": {
     "placeholders": {
       "clan": {
@@ -711,7 +722,7 @@
       }
     }
   },
-  "warStarsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+  "warStarsAndPercentNeededToTakeTheLead": "{clan} stále potřebuje {percent}% nebo 1 hvězdičku k převzetí vedení",
   "@warStarsAndPercentNeededToTakeTheLead": {
     "placeholders": {
       "clan": {
@@ -722,9 +733,9 @@
       }
     }
   },
-  "warNoDataAvailableForThisWar": "No data available for this war",
-  "warCalculatorFast": "Fast calculator",
-  "warCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
+  "warNoDataAvailableForThisWar": "Pro tuto válku nejsou k dispozici žádná data",
+  "warCalculatorFast": "Rychlá kalkulačka",
+  "warCalculatorAnswer": "K dosažení míry zničení {percentNeeded}% je zapotřebí celkem {result}%.",
   "@warCalculatorAnswer": {
     "placeholders": {
       "percentNeeded": {
@@ -735,17 +746,17 @@
       }
     }
   },
-  "warCalculatorNeededOverall": "% Needed overall",
-  "warCalculatorCalculate": "Calculate",
-  "warAttacksTitle": "Attacks",
-  "warAttacksNone": "No attack yet",
+  "warCalculatorNeededOverall": "% potřeba celkem",
+  "warCalculatorCalculate": "Vypočítat",
+  "warAttacksTitle": "Útoky",
+  "warAttacksNone": "Zatím žádný útok",
   "@warAttacksNone": {
     "description": "No attack yet in war"
   },
-  "warAttacksBest": "Best attacks",
-  "warAttacksCount": "Attack Count",
-  "warAttacksMissed": "Missed Attacks",
-  "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
+  "warAttacksBest": "Nejlepší útoky",
+  "warAttacksCount": "Počet útoků",
+  "warAttacksMissed": "Zmeškané útoky",
+  "warAttacksNumber": "Během posledních válek {number_war} jsi napadl {number_time} krát.",
   "@warAttacksNumber": {
     "placeholders": {
       "number_time": {
@@ -756,7 +767,7 @@
       }
     }
   },
-  "warAttacksAverageStars": "You had an average of {stars} stars per war.",
+  "warAttacksAverageStars": "Za válku máš průměr {stars} hvězd.",
   "@warAttacksAverageStars": {
     "placeholders": {
       "stars": {
@@ -764,7 +775,7 @@
       }
     }
   },
-  "warAttacksAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+  "warAttacksAverageDestruction": "Za válku došlo v průměru ke zničení {percent}%.",
   "@warAttacksAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -772,13 +783,13 @@
       }
     }
   },
-  "warDefensesTitle": "Defenses",
-  "warDefensesNone": "No defense yet",
+  "warDefensesTitle": "Obrana",
+  "warDefensesNone": "Zatím žádná obrana",
   "@warDefensesNone": {
     "description": "No defense yet in war"
   },
-  "warDefensesBest": "Best defenses",
-  "warDefensesBestOutOf": "Best defense (out of {number})",
+  "warDefensesBest": "Nejlepší obrana",
+  "warDefensesBestOutOf": "Nejlepší obrana (mimo {number})",
   "@warDefensesBestOutOf": {
     "placeholders": {
       "number": {
@@ -787,7 +798,7 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
+  "warDefensesNumber": "Během posledních válek {number_war} jste bránili {number_time} krát.",
   "@warDefensesNumber": {
     "placeholders": {
       "number_time": {
@@ -798,7 +809,7 @@
       }
     }
   },
-  "warDefensesAverageStars": "You had an average of {stars} stars per defense.",
+  "warDefensesAverageStars": "Měl jsi průměr {stars} hvězd na obranu.",
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
@@ -806,7 +817,7 @@
       }
     }
   },
-  "warDefensesAverageDestruction": "You had an average of {percent}% destruction rate per defense.",
+  "warDefensesAverageDestruction": "Na obranu máte v průměru hodnotu {percent}% destrukce.",
   "@warDefensesAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -814,24 +825,24 @@
       }
     }
   },
-  "warStarsTitle": "Stars",
-  "warStarsAverage": "Average stars",
-  "warStarsNumber": "Number of stars",
-  "warStarsOne": "1 star",
-  "warStarsTwo": "2 stars",
-  "warStarsThree": "3 stars",
-  "warStarsZero": "0 Star",
-  "warStarsBestPerformance": "Best performance",
+  "warStarsTitle": "Hvězdy",
+  "warStarsAverage": "Průměrné hvězdičky",
+  "warStarsNumber": "Počet hvězd",
+  "warStarsOne": "1 hvězdička",
+  "warStarsTwo": "2 hvězdičky",
+  "warStarsThree": "3 hvězdičky",
+  "warStarsZero": "0 hvězdiček",
+  "warStarsBestPerformance": "Nejlepší výkon",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
   },
-  "warDestructionTitle": "Destruction",
-  "warDestructionAverage": "Average destruction",
-  "warDestructionRate": "Destruction rate",
+  "warDestructionTitle": "Zničení",
+  "warDestructionAverage": "Průměrné zničení",
+  "warDestructionRate": "Míra zničení",
   "@warDestructionRate": {
     "description": "Percentage of destruction in war"
   },
-  "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryWinsDescription": "Váš klan vyhrál {wins} války ({percent}%) z posledních 50 válek.",
   "@warHistoryWinsDescription": {
     "placeholders": {
       "wins": {
@@ -842,7 +853,7 @@
       }
     }
   },
-  "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryLossesDescription": "Váš klan prohrál válku {losses} ({percent}%) z posledních 50 válek.",
   "@warHistoryLossesDescription": {
     "placeholders": {
       "losses": {
@@ -853,7 +864,7 @@
       }
     }
   },
-  "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) out of the last 50 wars.",
+  "warHistoryDrawsDescription": "Váš klan měl {draws} kreslení ({percent}%) z posledních 50 válek.",
   "@warHistoryDrawsDescription": {
     "placeholders": {
       "draws": {
@@ -864,7 +875,7 @@
       }
     }
   },
-  "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
+  "warHistoryAverageMembersDescription": "Váš klan má průměrnou hodnotu {members} členů účastnících se posledních 50 válek.",
   "@warHistoryAverageMembersDescription": {
     "placeholders": {
       "members": {
@@ -872,7 +883,7 @@
       }
     }
   },
-  "warHistoryAverageWarStarsDescription": "Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.",
+  "warHistoryAverageWarStarsDescription": "Tvůj klan měl průměr {stars} hvězd za válku z posledních 50 válek. Představuje {percent} celkových hvězd.",
   "@warHistoryAverageWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -883,7 +894,7 @@
       }
     }
   },
-  "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
+  "warHistoryAverageHitRateDescription": "Tvůj klan měl z posledních 50 válek v průměru {percent}% destrukci.",
   "@warHistoryAverageHitRateDescription": {
     "placeholders": {
       "percent": {
@@ -891,28 +902,28 @@
       }
     }
   },
-  "warPositionMap": "Map Position",
+  "warPositionMap": "Pozice mapy",
   "@warPositionMap": {
     "description": "Map position in war"
   },
-  "warPositionAbbr": "Pos",
+  "warPositionAbbr": "Pozice",
   "@warPositionAbbr": {
     "description": "Abbreviation for map position"
   },
-  "warPositionOrder": "Order",
+  "warPositionOrder": "Objednávka",
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
-  "warOpponentTownhall": "Opp TH",
+  "warOpponentTownhall": "Přihlásit se k TH",
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
   },
-  "warOpponentLowerTownhall": "Lower TH",
-  "warOpponentUpperTownhall": "Upper TH",
-  "warOpponentEqualThLevel": "Equal TH",
-  "warOpponentSelectMembersThLevel": "Members TH Level",
-  "warOpponentSelectOpponentsThLevel": "Opponents TH Level",
-  "warFiltersLastXwars": "Last {number} wars",
+  "warOpponentLowerTownhall": "Dolní TH",
+  "warOpponentUpperTownhall": "Horní TH",
+  "warOpponentEqualThLevel": "Rovná se TH",
+  "warOpponentSelectMembersThLevel": "Členové TH úroveň",
+  "warOpponentSelectOpponentsThLevel": "Odpůrci TH úroveň",
+  "warFiltersLastXwars": "Poslední {number} války",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
     "placeholders": {
@@ -921,49 +932,49 @@
       }
     }
   },
-  "warFiltersFriendly": "Friendly",
+  "warFiltersFriendly": "Přátelské",
   "@warFiltersFriendly": {
     "description": "Friendly war"
   },
-  "warFiltersRandom": "Random",
+  "warFiltersRandom": "Náhodný",
   "@warFiltersRandom": {
     "description": "Random/basic war (not friendly or cwl)"
   },
-  "warVisibilityToggleTownHall": "Hide/Show stats from former TH levels",
+  "warVisibilityToggleTownHall": "Skrýt/zobrazit statistiky z dřívějších TH úrovní",
   "@warVisibilityToggleTownHall": {
     "description": "For example, hide stats from TH15 and below if the player is now TH16"
   },
-  "warEventsTitle": "Events",
+  "warEventsTitle": "Události",
   "@warEventsTitle": {
     "description": "War events"
   },
-  "warEventsNewest": "Newest",
-  "warEventsOldest": "Oldest",
-  "warStatusReady": "Opted In",
+  "warEventsNewest": "Nejnovější",
+  "warEventsOldest": "Nejstarší",
+  "warStatusReady": "Přihlášen",
   "@warStatusReady": {
     "description": "Opted In for war"
   },
-  "warStatusUnready": "Opted Out",
+  "warStatusUnready": "Vybráno",
   "@warStatusUnready": {
     "description": "Opted Out for war"
   },
-  "warStatusMissed": "Missed",
+  "warStatusMissed": "Zmeškané",
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warAbbreviationAvg": "Avg",
+  "warAbbreviationAvg": "Prům.",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
   },
-  "warAbbreviationAvgPercentage": "Avg %",
+  "warAbbreviationAvgPercentage": "Prům. %",
   "@warAbbreviationAvgPercentage": {
     "description": "Abbreviation for average percentage"
   },
   "cwlTitle": "CWL",
-  "cwlClanWarLeague": "Clan War League",
-  "cwlOngoing": "Ongoing CWL",
-  "cwlRounds": "Rounds",
-  "cwlRoundNumber": "Round {number}",
+  "cwlClanWarLeague": "Válečná liga klanu",
+  "cwlOngoing": "Probíhající CWL",
+  "cwlRounds": "Kola",
+  "cwlRoundNumber": "Kolo {number}",
   "@cwlRoundNumber": {
     "placeholders": {
       "number": {
@@ -971,7 +982,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Aktuální kolo (Kolo {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -979,7 +990,7 @@
       }
     }
   },
-  "cwlRank": "Your clan is currently ranked {rank}.",
+  "cwlRank": "Váš klan je v současné době v žebříčku {rank}.",
   "@cwlRank": {
     "placeholders": {
       "rank": {
@@ -987,7 +998,7 @@
       }
     }
   },
-  "cwlStars": "Your clan has a total of {stars} stars.",
+  "cwlStars": "Váš klan má celkem {stars} hvězd.",
   "@cwlStars": {
     "placeholders": {
       "stars": {
@@ -995,7 +1006,7 @@
       }
     }
   },
-  "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
+  "cwlDestructionPercentage": "Tvůj klan má celkovou destrukci {percent}%.",
   "@cwlDestructionPercentage": {
     "placeholders": {
       "percent": {
@@ -1003,7 +1014,7 @@
       }
     }
   },
-  "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+  "cwlTotalAttacks": "Váš klan má celkem útok {attacks} z možných útoků {totalAttacks}.",
   "@cwlTotalAttacks": {
     "placeholders": {
       "attacks": {
@@ -1014,21 +1025,21 @@
       }
     }
   },
-  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
-  "joinLeaveJoin": "Join",
-  "joinLeaveLeave": "Leave",
+  "joinLeaveTitle": "Připojit/odejít logy (příchozí sezona)",
+  "joinLeaveJoin": "Připojit se",
+  "joinLeaveLeave": "Opustit",
   "joinLeaveReset": "Reset",
-  "joinLeaveJoins": "Joins",
-  "joinLeaveLeaves": "Leaves",
-  "joinLeaveUniquePlayers": "Unique Players",
-  "joinLeaveMovingPlayers": "Moving Players",
-  "joinLeaveMostMovingPlayers": "Most Moving Players",
-  "joinLeaveStillInClan": "Still in Clan",
-  "joinLeaveLeftForever": "Left Forever",
-  "joinLeaveRejoinedPlayers": "Rejoined Players",
-  "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
-  "joinLeavePeakHour": "Most Active Hour",
-  "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
+  "joinLeaveJoins": "Připojit se",
+  "joinLeaveLeaves": "Listová zelenina a čerstvé bylinky",
+  "joinLeaveUniquePlayers": "Unikátní hráči",
+  "joinLeaveMovingPlayers": "Přesouvání hráčů",
+  "joinLeaveMostMovingPlayers": "Nejvíce se pohybující hráči",
+  "joinLeaveStillInClan": "Stále v klanu",
+  "joinLeaveLeftForever": "Vždy vlevo",
+  "joinLeaveRejoinedPlayers": "Odmítnutí hráči",
+  "joinLeaveAvgTimeJoinLeave": "Prům. čas připojení/odchodu",
+  "joinLeavePeakHour": "Nejaktivnější Hodina",
+  "joinLeaveNumberDescription": "Události {number} se odehrály během aktuální sezóny ({date}).",
   "@joinLeaveNumberDescription": {
     "placeholders": {
       "number": {
@@ -1039,7 +1050,7 @@
       }
     }
   },
-  "joinLeaveJoinNumberDescription": "{number} join events occurred during the current season ({date}).",
+  "joinLeaveJoinNumberDescription": "Během aktuální sezóny ({date} ) se objevily události {number}.",
   "@joinLeaveJoinNumberDescription": {
     "placeholders": {
       "number": {
@@ -1050,7 +1061,7 @@
       }
     }
   },
-  "joinLeaveMovingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
+  "joinLeaveMovingNumberDescription": "{number} hráči vlevo a znovu se připojili ke klanu během aktuální sezóny ({date}).",
   "@joinLeaveMovingNumberDescription": {
     "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
@@ -1062,7 +1073,7 @@
       }
     }
   },
-  "joinLeaveUniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
+  "joinLeaveUniqueNumberDescription": "{number} unikátní hráč se připojil/opustil klan během aktuální sezóny ({date}).",
   "@joinLeaveUniqueNumberDescription": {
     "description": "Number of unique players who joined/left the clan during the current season.",
     "placeholders": {
@@ -1074,7 +1085,7 @@
       }
     }
   },
-  "joinLeaveStillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
+  "joinLeaveStillInClanNumberDescription": "{number} hráči se připojili a jsou stále v klanu.",
   "@joinLeaveStillInClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1082,7 +1093,7 @@
       }
     }
   },
-  "joinLeaveLeftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
+  "joinLeaveLeftClanNumberDescription": "{number} hráči se připojili, poté opustili klan a nikdy se nepřipojili.",
   "@joinLeaveLeftClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1093,7 +1104,7 @@
   "@joinLeaveTitle": {
     "description": "Logs of players joining or leaving the clan."
   },
-  "joinLeaveLeftOnAt": "Left on {date} at {time}.",
+  "joinLeaveLeftOnAt": "Vlevo na {date} v {time}.",
   "@joinLeaveLeftOnAt": {
     "description": "[The player] left the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1105,7 +1116,7 @@
       }
     }
   },
-  "joinLeaveJoinedOnAt": "Joined on {date} at {time}.",
+  "joinLeaveJoinedOnAt": "Přidal/a se na {date} v {time}.",
   "@joinLeaveJoinedOnAt": {
     "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1117,17 +1128,17 @@
       }
     }
   },
-  "raidsTitle": "Raids",
-  "raidsLast": "Last raids",
-  "raidsOngoing": "Ongoing raids",
-  "raidsDistrictsDestroyed": "Districts destroyed",
-  "raidsCompleted": "Raids completed",
-  "searchNoResult": "No result.",
-  "maintenanceTitle": "Maintenance",
-  "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-  "downloadTooltip": "Download CWL summary",
-  "downloadInProgress": "Downloading file... It can take a few seconds...",
-  "downloadSuccess": "File saved successfully in {path}",
+  "raidsTitle": "Nájezdy",
+  "raidsLast": "Poslední nájezdy",
+  "raidsOngoing": "Probíhající srážky",
+  "raidsDistrictsDestroyed": "Okresy zničeny",
+  "raidsCompleted": "Plnění nájezdů",
+  "searchNoResult": "Bez výsledku.",
+  "maintenanceTitle": "Údržba",
+  "maintenanceDescription": "Stlačení Clans je v současné době v údržbě, takže nemůžeme přistupovat k API. Zkuste to prosím později.",
+  "downloadTooltip": "Stáhnout shrnutí CWL",
+  "downloadInProgress": "Stahování souboru... Může to trvat několik sekund...",
+  "downloadSuccess": "Soubor byl úspěšně uložen v {path}",
   "@downloadSuccess": {
     "placeholders": {
       "path": {
@@ -1135,52 +1146,56 @@
       }
     }
   },
-  "downloadError": "Failed to download file",
-  "dashboardTitle": "Dashboard",
-  "toolsTitle": "Tools",
-  "navigationTeam": "Teams",
-  "navigationStatistics": "Statistics",
-  "versionDevice": "Version & Device",
+  "downloadError": "Nepodařilo se stáhnout soubor",
+  "dashboardTitle": "Nástěnka",
+  "toolsTitle": "Nástroje a nářadí",
+  "navigationTeam": "Týmy",
+  "navigationStatistics": "Statistiky",
+  "versionDevice": "Verze & Zařízení",
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  "betaFeature": "Beta Feature",
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
+  "betaFeature": "Beta funkce",
   "betaLabel": "BETA",
-  "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
-  "settingsLanguage": "Language",
-  "settingsSelectLanguage": "Select a language",
-  "settingsToggleTheme": "Toggle Theme",
-  "faqTitle": "FAQ",
-  "faqSubtitle": "Frequently Asked Questions",
-  "faqIsThisFromSupercell": "Is this App from Supercell?",
-  "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-  "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
-  "faqClanNotTracked": "Clan not tracked",
-  "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
-  "faqTrackingDown": "Tracking down",
-  "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
-  "faqApiLimitation": "Clash of Clans API limitation",
-  "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
-  "faqSupportWork": "How can I support your work?",
-  "faqSupportWorkAnswer": "There are several ways to support us:",
-  "faqUseCodeClashKing": "Use code \"ClashKing\"",
-  "faqSupportUsOnPatreon": "Support us on Patreon",
-  "faqShareTheApp": "Share the app with your friends",
-  "faqRateTheApp": "Rate the app in the store",
-  "faqHelpUsTranslate": "Help us translate the app",
-  "faqHowToInviteTheBot": "How can I invite your bot to my Discord Server?",
-  "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
+  "betaDescription": "Tato funkce je momentálně v beta verzi, může mít nějaké chyby nebo být neúplná. Aktivně pracujeme na vylepšení a vítáme vaši zpětnou vazbu. Prosím, sdílejte své nápady a nahlaste jakékoliv problémy na našem Discord serveru, abyste nám pomohli je zlepšit.",
+  "settingsLanguage": "Jazyk",
+  "settingsSelectLanguage": "Vyberte jazyk",
+  "settingsToggleTheme": "Přepnout motiv",
+  "faqTitle": "Nejčastější dotazy",
+  "faqSubtitle": "Často kladené otázky",
+  "faqIsThisFromSupercell": "Je tato aplikace z Supercellu?",
+  "faqFanContentPolicy": "Tento materiál je neoficiální a není podporován aplikací Supercell. Další informace naleznete v Zásadách obsahu Supercell's Fan: www.supercell.com/fan-content-policy",
+  "faqWhyNotAccurate": "Proč jsou data někdy nepřesná nebo chybí?",
+  "faqClanNotTracked": "Klan není sledován",
+  "faqClanNotTrackedAnswer": "ClashKing může načíst tyto informace pouze v případě, že je klan sledován. Pokud tvůj klan není sledován, pozvej ClashKing Bot na tvůj Discord server a použij příkaz /addclan. Pracujeme na tom, aby byla tato funkce brzy k dispozici v aplikaci.",
+  "faqTrackingDown": "Sledování dolů",
+  "faqTrackingDownAnswer": "Sledování může přestat fungovat po určitou dobu. Proto někdy můžete mít díry ve svých údajích. Pracujeme na tom, abychom to zlepšili.",
+  "faqApiLimitation": "Střet omezení Clans API",
+  "faqApiLimitationAnswer": "Některá data poskytuje Clash of Clans a jejich API mají určitá omezení. To je případ legendy sledování, občas je to trofej zisk a ztráta, jako by to byl jediný útok. To je také důvod, proč nemáme žádné informace o vaší úrovni budov.",
+  "faqSupportWork": "Jak mohu podpořit vaši práci?",
+  "faqSupportWorkAnswer": "Existuje několik způsobů, jak nás podpořit:",
+  "faqUseCodeClashKing": "Použít kód \"ClashKing\"",
+  "faqSupportUsOnPatreon": "Podpořte nás na Patreonu",
+  "faqShareTheApp": "Sdílejte aplikaci s přáteli",
+  "faqRateTheApp": "Ohodnoťte aplikaci v obchodě",
+  "faqHelpUsTranslate": "Pomozte nám přeložit aplikaci",
+  "faqHowToInviteTheBot": "Jak mohu pozvat tvého bota na můj Discord server?",
+  "faqHowToInviteTheBotAnswer": "Můžete pozvat našeho bota na váš server kliknutím na tlačítko níže. Pro přidání bota budete potřebovat oprávnění \"Manage Server\".",
   "faqInviteTheBot": "Invite ClashKing Bot",
-  "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
+  "faqNeedHelp": "Potřebuji pomoc, nebo bych chtěl něco navrhnout. Jak vás mohu kontaktovat?",
   "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
-  "faqSendEmail": "Send an email",
-  "faqJoinDiscord": "Join our Discord Server",
-  "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
-  "translationHelpUsTranslate": "Help us translate",
-  "translationSuggestFeatures": "Suggest features",
-  "translationThankYou": "Thank you!",
-  "translationThankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-  "translationHelpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
-  "translationHelpTranslateButton": "Help Translate on Crowdin",
-  "translationCurrentTranslators": "Current Translators"
+  "faqSendEmail": "Poslat e-mail",
+  "faqJoinDiscord": "Připojte se k našemu Discord serveru",
+  "faqCannotOpenMailClient": "Z některých důvodů nemůžeme otevřít Vašeho poštovního klienta. Zkopírovali jsme pro Vás e-mailovou adresu. Můžete napsat e-mail a vložit adresu do pole příjemce.",
+  "translationHelpUsTranslate": "Pomozte nám s překladem",
+  "translationSuggestFeatures": "Navrhnout funkce",
+  "translationThankYou": "Děkujeme!",
+  "translationThankYouContent": "Velice vám děkuji všem našim úžasným překladatelům, kteří nám pomáhají zpřístupnit tuto aplikaci více lidí po celém světě!",
+  "translationHelpTranslateContent": "Můžete nám pomoci přeložit aplikaci na Crowdin. Pokud tvůj jazyk není k dispozici na Crowdinu, neváhej se o něj požádat na našem Discord serveru. Mnohokrát ti děkujeme za pomoc!",
+  "translationHelpTranslateButton": "Pomozte přeložit na Crowdin",
+  "translationCurrentTranslators": "Aktuální překladatelé"
 }

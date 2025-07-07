@@ -9,64 +9,16 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get appTitle => 'ClashKing';
-
-  @override
-  String get appDescription =>
-      'Ваш идеальный спутник Clash of Clans для отслеживания статистики, управления кланами и анализа производительности.';
-
-  @override
   String get generalLoading => 'Загрузка...';
 
   @override
-  String get loadingVillages => 'Loading your villages...';
+  String get generalRetry => 'Retry';
 
   @override
-  String get loadingClanData => 'Fetching clan data...';
+  String get generalTryAgain => 'Try again';
 
   @override
-  String get loadingWarStats => 'Analyzing war stats...';
-
-  @override
-  String get loadingLegendsData => 'Preparing legends data...';
-
-  @override
-  String get loadingCapitalRaids => 'Loading capital raids...';
-
-  @override
-  String get loadingAlmostReady => 'Almost ready...';
-
-  @override
-  String get accountVerificationTitle => 'Verify Account';
-
-  @override
-  String get accountVerificationMessage =>
-      'Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.';
-
-  @override
-  String get accountVerified => 'Account verified';
-
-  @override
-  String get accountNotVerified => 'Account not verified';
-
-  @override
-  String get accountVerifyButton => 'Verify';
-
-  @override
-  String get accountVerificationSuccess => 'Account verified successfully!';
-
-  @override
-  String get accountVerificationFailed =>
-      'Verification failed. Please check your API token.';
-
-  @override
-  String get generalRetry => 'Повторить';
-
-  @override
-  String get generalTryAgain => 'Попробовать снова';
-
-  @override
-  String get generalCancel => 'Отмена';
+  String get generalCancel => 'Cancel';
 
   @override
   String get generalOk => 'OK';
@@ -75,7 +27,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get generalApply => 'Применить';
 
   @override
-  String get generalConfirm => 'Подтвердить';
+  String get generalConfirm => 'Confirm';
 
   @override
   String get generalManage => 'Управление';
@@ -87,17 +39,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get generalCopiedToClipboard => 'Скопировано в буфер обмена';
 
   @override
-  String get generalComingSoon => 'Скоро!';
-
-  @override
-  String generalLastRefresh(String time) {
-    return 'Last refresh: $time';
-  }
-
-  @override
-  String generalRefreshFailed(String error) {
-    return 'Refresh failed: $error';
-  }
+  String get generalComingSoon => 'Coming soon!';
 
   @override
   String get generalAll => 'Все';
@@ -118,10 +60,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get generalRemaining => 'Осталось';
 
   @override
-  String get generalActive => 'Активный';
+  String get generalActive => 'Active';
 
   @override
-  String get generalInactive => 'Неактивный';
+  String get generalInactive => 'Inactive';
 
   @override
   String get generalStarted => 'Запущен';
@@ -130,13 +72,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get generalEnded => 'Завершен';
 
   @override
-  String get generalRole => 'Роль';
+  String get generalRole => 'Role';
 
   @override
   String get generalStats => 'Статистика';
 
   @override
-  String get generalFullStats => 'Полная статистика';
+  String get generalFullStats => 'Full Stats';
 
   @override
   String get generalDetails => 'Детали';
@@ -148,7 +90,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get generalFilters => 'Фильтры';
 
   @override
-  String get generalNotSet => 'Не установлено';
+  String get generalNotSet => 'Not set';
 
   @override
   String get generalWarning => 'Внимание';
@@ -157,29 +99,33 @@ class AppLocalizationsRu extends AppLocalizations {
   String get generalNoDataAvailable => 'Данные отсутствуют.';
 
   @override
-  String get authSignUp => 'Регистрация';
+  String get authClashKingDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
 
   @override
-  String get authLogin => 'Вход';
+  String get authSignIn => 'Sign In';
+
+  @override
+  String get authSignUp => 'Sign up';
 
   @override
   String get authLogout => 'Выход';
 
   @override
-  String get authCreateAccount => 'Создать аккаунт';
+  String get authCreateAccount => 'Create Account';
 
   @override
-  String get authJoinClashKing => 'Присоединиться к ClashKing';
+  String get authJoinClashKing => 'Join ClashKing';
 
   @override
-  String get authCreateClashKingAccount => 'Создать аккаунт ClashKing';
+  String get authCreateClashKingAccount => 'Create ClashKing Account';
 
   @override
   String get authCreateAccountToGetStarted =>
-      'Создайте свой аккаунт, чтобы начать';
+      'Create your account to get started';
 
   @override
-  String get authAlreadyHaveAccount => 'Уже есть аккаунт? Войдите';
+  String get authAlreadyHaveAccount => 'Already have an account? Sign in';
 
   @override
   String get authConfirmLogout => 'Вы уверены, что хотите выйти?';
@@ -191,51 +137,49 @@ class AppLocalizationsRu extends AppLocalizations {
   String get authDiscordSignIn => 'Вход через Discord';
 
   @override
-  String get authDiscordContinue => 'Продолжить с Discord';
+  String get authDiscordContinue => 'Continue with Discord';
 
   @override
   String get authDiscordDescription =>
-      'Синхронизируйте свои данные с ClashKing Bot и раскройте весь потенциал ClashKing!';
+      'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!';
 
   @override
-  String get authEmailTitle => 'Электронная почта';
+  String get authEmailTitle => 'Email';
 
   @override
   String get authEmailDescription =>
-      'Используйте электронную почту, если вы не можете получить доступ к Discord или предпочитаете функции только приложения';
+      'Use email if you can\'t access Discord or prefer app-only features';
 
   @override
-  String get authEmailRequired => 'Пожалуйста, введите ваш email';
+  String get authEmailRequired => 'Please enter your email';
 
   @override
-  String get authEmailInvalid => 'Пожалуйста, введите действительный email';
+  String get authEmailInvalid => 'Please enter a valid email';
 
   @override
-  String get authPasswordLabel => 'Пароль';
+  String get authPasswordLabel => 'Password';
 
   @override
-  String get authPasswordConfirm => 'Подтвердите пароль';
+  String get authPasswordConfirm => 'Confirm Password';
 
   @override
-  String get authPasswordRequired => 'Пожалуйста, введите ваш пароль';
+  String get authPasswordRequired => 'Please enter your password';
 
   @override
-  String get authPasswordConfirmRequired =>
-      'Пожалуйста, подтвердите ваш пароль';
+  String get authPasswordConfirmRequired => 'Please confirm your password';
 
   @override
-  String get authPasswordMismatch => 'Пароли не совпадают';
+  String get authPasswordMismatch => 'Passwords do not match';
 
   @override
-  String get authPasswordTooShort =>
-      'Пароль должен содержать не менее 8 символов';
+  String get authPasswordTooShort => 'Password must be at least 8 characters';
 
   @override
   String get authPasswordRequirements =>
-      'Пароль должен содержать: заглавные буквы, строчные буквы, цифры и специальные символы';
+      'Password must contain: uppercase, lowercase, digit, and special character';
 
   @override
-  String get authPasswordForgot => 'Забыли пароль?';
+  String get authPasswordForgot => 'Forgot password?';
 
   @override
   String get authUsernameLabel => 'Имя пользователя';
@@ -244,19 +188,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get authUsernameRequired => 'Пожалуйста, введите имя пользователя';
 
   @override
-  String get authUsernameTooShort =>
-      'Имя пользователя должно содержать не менее 3 символов';
+  String get authUsernameTooShort => 'Username must be at least 3 characters';
 
   @override
   String get authErrorConnection =>
-      'Произошла ошибка. Пожалуйста, проверьте ваше интернет-соединение и попробуйте снова.';
+      'An error occurred. Please check your internet connection and try again.';
 
   @override
   String get authErrorConnectionRelaunch =>
-      'Произошла ошибка. Пожалуйста, проверьте ваше интернет-соединение и перезапустите приложение.';
+      'An error occurred. Please check your internet connection and relaunch the app.';
 
   @override
-  String get authAccountManagement => 'Управление аккаунтом';
+  String get authAccountManagement => 'Account Management';
 
   @override
   String get authAccountConnected => 'Connected Accounts';
@@ -508,20 +451,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'Код Создателя: ClashKing';
-
-  @override
-  String get gameCreatorCodeDescription =>
-      'Tap for info • Support us for free!';
-
-  @override
-  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
-
-  @override
-  String get gameCreatorCodeDialogDescription =>
-      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
-
-  @override
-  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -1388,19 +1317,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get versionDevice => 'Версия и устройство';
 
   @override
-  String get settingsLicenses => 'Open Source Licenses';
-
-  @override
-  String get settingsLicensesSubtitle =>
-      'View licenses for third-party libraries';
-
-  @override
-  String get settingsPrivacyPolicy => 'Privacy Policy';
-
-  @override
-  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
-
-  @override
   String get betaFeature => 'Бета-Функция';
 
   @override
@@ -1495,7 +1411,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Вы можете присоединиться к нашему Discord-серверу, чтобы попросить о помощи или оставить отзыв, или вы можете написать нам по адресу devs@clashk.ing. Пожалуйста, пишите только на английском или французском языке.';
+      'Вы можете присоединиться к нашему Discord-серверу, чтобы попросить о помощи или оставить отзыв, или вы можете написать нам по адресу devs@clashkingbot.com. Пожалуйста, пишите только на английском или французском языке.';
 
   @override
   String get faqSendEmail => 'Отправить e-mail';

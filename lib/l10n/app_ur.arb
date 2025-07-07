@@ -1,32 +1,54 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "شماریات کی ٹریکنگ، کلینز کے انتظام اور کارکردگی کے تجزیے کے لیے آپ کا حتمی Clash of Clans ساتھی۔",
+  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "لوڈ ہو رہا ہے...",
-  "generalError": "خرابی",
-  "generalRetry": "دوبارہ کوشش کریں",
-  "generalTryAgain": "دوبارہ کوشش کریں",
-  "generalClose": "بند",
+  "loadingVillages": "Loading your villages...",
+  "loadingClanData": "Fetching clan data...",
+  "loadingWarStats": "Analyzing war stats...",
+  "loadingLegendsData": "Preparing legends data...",
+  "loadingCapitalRaids": "Loading capital raids...",
+  "loadingAlmostReady": "Almost ready...",
+  "accountVerificationTitle": "Verify Account",
+  "accountVerificationMessage": "Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.",
+  "accountVerified": "Account verified",
+  "accountNotVerified": "Account not verified",
+  "accountVerifyButton": "Verify",
+  "accountVerificationSuccess": "Account verified successfully!",
+  "accountVerificationFailed": "Verification failed. Please check your API token.",
+  "generalRetry": "Retry",
+  "generalTryAgain": "Try again",
   "generalCancel": "منسوخ کریں۔",
   "generalOk": "ٹھیک ہے",
   "@generalOk": {
     "description": "OK button on pop up"
   },
   "generalApply": "لگائیں",
-  "generalConfirm": "تصدیق کریں",
-  "generalAdd": "شامل کریں۔",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "حذف کریں۔",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
+  "generalConfirm": "Confirm",
   "generalManage": "انتظام کریں۔",
-  "generalManagement": "انتظام",
   "generalSettings": "ترتیبات",
   "generalCopiedToClipboard": "کلپ بورڈ پر کاپی ہو گیا۔",
   "generalComingSoon": "جلد آ رہا ہے!",
+  "generalLastRefresh": "Last refresh: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
   "generalAll": "تمام",
   "@generalAll": {
     "description": "all items"
@@ -48,8 +70,8 @@
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "فعال",
-  "generalInactive": "غیر فعال",
+  "generalActive": "Active",
+  "generalInactive": "Inactive",
   "generalStarted": "شروع کر دیا۔",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
@@ -58,100 +80,82 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "سطح",
   "generalRole": "کردار",
-  "generalDate": "تاریخ",
   "generalStats": "اعدادوشمار",
-  "generalFullStats": "مکمل اعدادوشمار",
+  "generalFullStats": "Full Stats",
   "generalDetails": "تفصیلات",
   "generalHistory": "اتحاد",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "چارٹس",
   "generalFilters": "فلٹرز",
-  "generalWhatever": "جو بھی ہو۔",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "کوئی بھی",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
   "generalNotSet": "سیٹ نہیں ہے۔",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
   "generalWarning": "وارننگ",
   "generalNoDataAvailable": "کوئی ڈیٹا دستیاب نہیں ہے.",
-  "generalClosed": "بند",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "واپس آئیے",
-  "authClashKingDescription": "اعدادوشمار کی پیروی، کلانز کے انتظام، اور کارکردگی کا تجزیہ کرنے کے لیے آپ کا حتمی Clash of Clans ساتھی۔",
-  "authChooseSignInMethod": "اپنا پسندیدہ سائن ان طریقہ منتخب کریں",
-  "authSignUp": "رجسٹر کریں",
+  "authSignUp": "Sign up",
   "authLogin": "لاگ ان",
   "authLogout": "لاگ آؤٹ کریں۔",
-  "authCreateAccount": "اکاؤنٹ بنائیں",
-  "authJoinClashKing": "ClashKing میں شامل ہوں",
-  "authCreateClashKingAccount": "ClashKing اکاؤنٹ بنائیں",
-  "authCreateAccountToGetStarted": "شروع کرنے کے لیے اپنا اکاؤنٹ بنائیں",
-  "authAlreadyHaveAccount": "پہلے سے اکاؤنٹ ہے؟ سائن ان کریں",
+  "authCreateAccount": "Create Account",
+  "authJoinClashKing": "Join ClashKing",
+  "authCreateClashKingAccount": "Create ClashKing Account",
+  "authCreateAccountToGetStarted": "Create your account to get started",
+  "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "کیا آپ واقعی لاگ آؤٹ کرنا چاہتے ہیں؟",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
   "authDiscordSignIn": "Discord کے ساتھ سائن ان کریں۔",
-  "authDiscordContinue": "Discord کے ساتھ جاری رکھیں",
-  "authDiscordDescription": "ClashKing Bot کے ساتھ اپنا ڈیٹا ہم آہنگ کریں اور ClashKing کی مکمل صلاحیت کو غیر مقفل کریں!",
-  "authEmailTitle": "ای میل",
-  "authEmailDescription": "اگر آپ Discord تک رسائی نہیں رکھ سکتے یا صرف ایپ کی خصوصیات کو ترجیح دیتے ہیں تو ای میل استعمال کریں",
-  "authEmailRequired": "براہ کرم اپنا ای میل درج کریں",
-  "authEmailInvalid": "براہ کرم ایک درست ای میل درج کریں",
-  "authPasswordLabel": "پاس ورڈ",
-  "authPasswordConfirm": "پاس ورڈ کی تصدیق کریں",
-  "authPasswordRequired": "براہ کرم اپنا پاس ورڈ درج کریں",
-  "authPasswordConfirmRequired": "براہ کرم اپنے پاس ورڈ کی تصدیق کریں",
-  "authPasswordMismatch": "پاس ورڈ میل نہیں کھاتے",
-  "authPasswordTooShort": "پاس ورڈ کم از کم 8 حروف کا ہونا چاہیے",
-  "authPasswordRequirements": "پاس ورڈ میں ہونا چاہیے: بڑے حروف، چھوٹے حروف، ہندسہ، اور خصوصی حرف",
-  "authPasswordForgot": "پاس ورڈ بھول گئے؟",
+  "authDiscordContinue": "Continue with Discord",
+  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
+  "authEmailTitle": "Email",
+  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
+  "authEmailRequired": "Please enter your email",
+  "authEmailInvalid": "Please enter a valid email",
+  "authPasswordLabel": "Password",
+  "authPasswordConfirm": "Confirm Password",
+  "authPasswordRequired": "Please enter your password",
+  "authPasswordConfirmRequired": "Please confirm your password",
+  "authPasswordMismatch": "Passwords do not match",
+  "authPasswordTooShort": "Password must be at least 8 characters",
+  "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
+  "authPasswordForgot": "Forgot password?",
   "authUsernameLabel": "صارف نام",
   "authUsernameRequired": "براہ کرم ایک صارف نام درج کریں",
-  "authUsernameTooShort": "صارف نام کم از کم 3 حروف کا ہونا چاہیے",
+  "authUsernameTooShort": "Username must be at least 3 characters",
   "authErrorConnection": "ایک خرابی پیش آگئی۔ براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور دوبارہ کوشش کریں.",
   "authErrorConnectionRelaunch": "ایک خرابی پیش آگئی۔ براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور ایپ کو دوبارہ لانچ کریں.",
-  "authAccountManagement": "اکاؤنٹ کا انتظام",
-  "authAccountConnected": "منسلک اکاؤنٹس",
-  "authAccountConnectedStatus": "منسلک",
-  "authAccountNotConnected": "غیر منسلک",
-  "authAccountEmailAndPassword": "ای میل اور پاس ورڈ",
-  "authAccountSecured": "آپ کا اکاؤنٹ متعدد تصدیقی طریقوں کے ساتھ محفوظ ہے",
-  "authAccountLinkEmail": "ای میل اکاؤنٹ لنک کریں",
-  "authAccountAddEmailAuth": "اضافی سیکیورٹی کے لیے اپنے اکاؤنٹ میں ای میل اور پاس ورڈ تصدیق شامل کریں۔",
-  "authAccountEmailLinkedSuccess": "ای میل اکاؤنٹ کامیابی سے لنک ہو گیا!",
-  "helpTitle": "مدد درکار ہے؟",
-  "helpJoinDiscord": "Discord ہاکمین شامل ہوں",
-  "helpEmailUs": "ہمیں ای میل کریں",
+  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.",
+  "authAccountConnected": "Connected Accounts",
+  "authAccountConnectedStatus": "Connected",
+  "authAccountNotConnected": "Not connected",
+  "authAccountEmailAndPassword": "Email & Password",
+  "authAccountSecured": "Your account is secured with multiple authentication methods",
+  "authAccountLinkEmail": "Link Email Account",
+  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
+  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
+  "helpTitle": "Need help?",
+  "helpJoinDiscord": "Join Discord",
+  "helpEmailUs": "Email Us",
   "accountsWelcome": "خوش آمدید!",
   "accountsWelcomeMessage": "براہ کرم اپنے پروفائل میں ایک یا زیادہ Clash of Clans اکاؤنٹس شامل کریں۔ آپ بعد میں اکاؤنٹس کو شامل یا ہٹا سکتے ہیں.",
-  "accountsManageTitle": "اپنے اکاؤنٹس کا انتظام کریں",
+  "accountsManageTitle": "Manage your accounts",
   "accountsNoneFound": "آپ کے پروفائل سے منسلک کوئی اکاؤنٹ نہیں ملا",
-  "accountsPlayerTag": "پلیئر ٹیگ (#ABC123)",
+  "accountsPlayerTag": "Player Tag (#ABC123)",
   "accountsEnterPlayerTag": "پلیئر ٹیگ درج کریں۔",
   "accountsAdd": "اکاؤنٹ شامل کریں۔",
   "accountsDelete": "اکاؤنٹ حذف کریں۔",
   "accountsApiToken": "اکاؤنٹ API ٹوکن",
   "accountsEnterApiToken": "یہ تصدیق کرنے کے لیے کہ یہ آپ کا اکاؤنٹ API ٹوکن درج کریں۔ آپ اسے Clash of Clans Settings > More Settings > API Token میں تلاش کر سکتے ہیں.",
-  "accountsFillAllFields": "براہ کرم تمام فیلڈز بھریں۔",
+  "accountsFillAllFields": "Please fill all fields.",
   "accountsErrorTagNotExists": "درج کردہ پلیئر ٹیگ موجود نہیں ہے.",
   "accountsErrorAlreadyLinked": "کھلاڑی کا ٹیگ پہلے ہی کسی سے منسلک ہے.",
   "accountsErrorAlreadyLinkedToYou": "پلیئر ٹیگ پہلے ہی آپ سے منسلک ہے.",
   "accountsErrorWrongApiToken": "درج کردہ API ٹوکن غلط ہے.",
-  "accountsErrorFailedToAdd": "اکاؤنٹ شامل کرنے میں ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں۔",
+  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
   "accountsErrorFailedToDelete": "لنک کو حذف کرنے میں ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں.",
   "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
   "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
@@ -291,12 +295,16 @@
   "gameSiegeMachines": "سیج مشینیں",
   "gameSpells": "منتر",
   "gameAchievements": "کامیابیاں",
-  "gameClanGames": "کلان گیمز",
-  "gameSeasonPass": "سیزن پاس",
+  "gameClanGames": "Clan Games",
+  "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "خالق کوڈ: ClashKing",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "قبیلہ",
   "clanSearchTitle": "قبیلہ تلاش کریں۔",
-  "clanSearchPlaceholder": "قبیلے کا نام",
+  "clanSearchPlaceholder": "Clan's name",
   "clanNone": "کوئی قبیلہ نہیں۔",
   "clanJoinToUnlock": "نئی خصوصیات کو غیر مقفل کرنے کے لیے ایک قبیلے میں شامل ہوں.",
   "clanMembers": "ممبران",
@@ -326,7 +334,7 @@
   "clanWarFrequencyNever": "کبھی نہیں",
   "clanWarFrequencyUnknown": "نامعلوم",
   "clanWarFrequencyOncePerWeek": "1/ہفتہ",
-  "clanWarFrequencyMoreThanOncePerWeek": "1/ہفتہ سے زیادہ",
+  "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
   "clanWarFrequencyRarely": "کبھی کبھار",
   "timeHourIndicator": "ایچ",
   "timeDaysAgo": "{days} دن پہلے",
@@ -378,8 +386,11 @@
     }
   },
   "timeJustNow": "ابھی ابھی",
-  "timeEndedJustNow": "ابھی ابھی ختم ہوا",
-  "timeEndedMinutesAgo": "{minutes} منٹ پہلے ختم ہوا",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
+  "timeEndedJustNow": "Ended just now",
+  "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
   "@timeEndedMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -387,7 +398,7 @@
       }
     }
   },
-  "timeEndedHoursAgo": "{hours} گھنٹے پہلے ختم ہوا",
+  "timeEndedHoursAgo": "Ended {hours} hours ago",
   "@timeEndedHoursAgo": {
     "placeholders": {
       "hours": {
@@ -395,7 +406,7 @@
       }
     }
   },
-  "timeEndedDaysAgo": "{days} دن پہلے ختم ہوا",
+  "timeEndedDaysAgo": "Ended {days} days ago",
   "@timeEndedDaysAgo": {
     "placeholders": {
       "days": {
@@ -437,7 +448,7 @@
   },
   "legendsTitle": "غلط ڈیٹا؟",
   "legendsNotInLeague": "لیجنڈ لیگ میں نہیں۔",
-  "legendsNoDataToday": "آپ لیجنڈ لیگ میں نہیں ہیں، لیکن پچھلے سیزن دستیاب ہیں۔",
+  "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "آپ نے دن کا آغاز {trophies} ٹرافیوں سے کیا.",
   "@legendsStartDescription": {
     "placeholders": {
@@ -495,7 +506,7 @@
       }
     }
   },
-  "legendsGlobalRankDescription": "آپ فی الحال {trophies} ٹرافیوں کے ساتھ عالمی سطح پر {rank} نمبر پر ہیں۔",
+  "legendsGlobalRankDescription": "You are currently ranked {rank} globally with {trophies} trophies.",
   "@legendsGlobalRankDescription": {
     "placeholders": {
       "rank": {
@@ -513,7 +524,7 @@
   "legendsBestRank": "بہترین عالمی درجہ بندی",
   "legendsTrophiesBySeason": "سیزن کی حساب سے ٹرافی",
   "legendsEosTrophies": "سیزن ٹرافی کا اختتام",
-  "legendsEosDetails": "سیزن کے اختتام کی تفصیلات",
+  "legendsEosDetails": "End Of Season Details",
   "legendsInaccurateTitle": "غلط ڈیٹا؟",
   "legendsInaccurateIntro": "Clash of Clans API کی حدود کی وجہ سے، ہمارا ڈیٹا ہمیشہ بالکل درست نہیں ہو سکتا۔ یہاں کیوں ہے:\n",
   "legendsInaccurateApiDelayTitle": "1. API تاخیر: ",
@@ -605,7 +616,7 @@
   "todoAccountsInactive": "غیر فعال اکاؤنٹس",
   "todoAccountsNoInactive": "کوئی غیر فعال اکاؤنٹس نہیں.",
   "todoAccountsNoActive": "کوئی فعال اکاؤنٹس نہیں ہیں.",
-  "todoAttacksLeftDescription": "آپ کے پاس {attacks} حملے باقی ہیں ({type})۔",
+  "todoAttacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
   "@todoAttacksLeftDescription": {
     "placeholders": {
       "attacks": {
@@ -616,7 +627,7 @@
       }
     }
   },
-  "todoDefensesLeftDescription": "آپ کے پاس {defenses} دفاع باقی ہیں ({type})۔",
+  "todoDefensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
   "@todoDefensesLeftDescription": {
     "placeholders": {
       "defenses": {
@@ -627,7 +638,7 @@
       }
     }
   },
-  "todoNoAttacksLeftDescription": "مبارک ہو، آپ نے اپنے تمام حملے کیے ہیں ({type})!",
+  "todoNoAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
   "@todoNoAttacksLeftDescription": {
     "placeholders": {
       "type": {
@@ -635,7 +646,7 @@
       }
     }
   },
-  "todoPointsLeftDescription": "آپ کے پاس ایونٹ کے اختتام کے لیے آج {points} پوائنٹس حاصل کرنے باقی ہیں ({type})۔",
+  "todoPointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
   "@todoPointsLeftDescription": {
     "placeholders": {
       "points": {
@@ -646,7 +657,7 @@
       }
     }
   },
-  "todoPointsLeftDescriptionNoPoints": "مبارک ہو، آپ ایونٹ کے اختتام پر زیادہ سے زیادہ انعامات حاصل کرنے کے لیے وقت پر ہیں ({type})!",
+  "todoPointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
   "@todoPointsLeftDescriptionNoPoints": {
     "placeholders": {
       "type": {
@@ -738,14 +749,14 @@
   "warCalculatorNeededOverall": "مجموعی طور پر % کی ضرورت ہے۔",
   "warCalculatorCalculate": "حساب لگانا",
   "warAttacksTitle": "حملے",
-  "warAttacksNone": "ابھی تک کوئی حملہ نہیں",
+  "warAttacksNone": "No attack yet",
   "@warAttacksNone": {
     "description": "No attack yet in war"
   },
-  "warAttacksBest": "بہترین حملے",
-  "warAttacksCount": "حملوں کی تعداد",
-  "warAttacksMissed": "مفقود حملے",
-  "warAttacksNumber": "آپ نے پچھلی {number_war} جنگوں کے دوران {number_time} بار حملہ کیا۔",
+  "warAttacksBest": "Best attacks",
+  "warAttacksCount": "Attack Count",
+  "warAttacksMissed": "Missed Attacks",
+  "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
   "@warAttacksNumber": {
     "placeholders": {
       "number_time": {
@@ -756,7 +767,7 @@
       }
     }
   },
-  "warAttacksAverageStars": "آپ کے پاس فی جنگ {stars} ستاروں کا اوسط تھا۔",
+  "warAttacksAverageStars": "You had an average of {stars} stars per war.",
   "@warAttacksAverageStars": {
     "placeholders": {
       "stars": {
@@ -764,7 +775,7 @@
       }
     }
   },
-  "warAttacksAverageDestruction": "آپ کے پاس فی جنگ {percent}% تباہی کی شرح کا اوسط تھا۔",
+  "warAttacksAverageDestruction": "You had an average of {percent}% destruction rate per war.",
   "@warAttacksAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -773,12 +784,12 @@
     }
   },
   "warDefensesTitle": "دفاع",
-  "warDefensesNone": "ابھی تک کوئی دفاع نہیں",
+  "warDefensesNone": "No defense yet",
   "@warDefensesNone": {
     "description": "No defense yet in war"
   },
-  "warDefensesBest": "بہترین دفاع",
-  "warDefensesBestOutOf": "بہترین دفاع ({number} میں سے)",
+  "warDefensesBest": "Best defenses",
+  "warDefensesBestOutOf": "Best defense (out of {number})",
   "@warDefensesBestOutOf": {
     "placeholders": {
       "number": {
@@ -787,7 +798,7 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefensesNumber": "آپ نے پچھلی {number_war} جنگوں کے دوران {number_time} بار دفاع کیا۔",
+  "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
   "@warDefensesNumber": {
     "placeholders": {
       "number_time": {
@@ -798,7 +809,7 @@
       }
     }
   },
-  "warDefensesAverageStars": "آپ کے پاس فی دفاع {stars} ستاروں کا اوسط تھا۔",
+  "warDefensesAverageStars": "You had an average of {stars} stars per defense.",
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
@@ -806,7 +817,7 @@
       }
     }
   },
-  "warDefensesAverageDestruction": "آپ کے پاس فی دفاع {percent}% تباہی کی شرح کا اوسط تھا۔",
+  "warDefensesAverageDestruction": "You had an average of {percent}% destruction rate per defense.",
   "@warDefensesAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -820,12 +831,12 @@
   "warStarsOne": "1 ستارہ",
   "warStarsTwo": "2 ستارے",
   "warStarsThree": "3 ستارے",
-  "warStarsZero": "0 ستارہ",
-  "warStarsBestPerformance": "بہترین کارکردگی",
+  "warStarsZero": "0 Star",
+  "warStarsBestPerformance": "Best performance",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
   },
-  "warDestructionTitle": "تباہی",
+  "warDestructionTitle": "Destruction",
   "warDestructionAverage": "اوسط تباہی",
   "warDestructionRate": "تباہی کی شرح",
   "@warDestructionRate": {
@@ -1144,6 +1155,10 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
   "betaFeature": "بیٹا فیچر",
   "betaLabel": "BETA",
   "betaDescription": "یہ فیچر فی الحال بیٹا میں ہے، اس میں کچھ کیڑے ہو سکتے ہیں یا نامکمل ہیں۔ ہم بہتری پر سرگرمی سے کام کر رہے ہیں اور آپ کے تاثرات کا خیرمقدم کرتے ہیں۔ براہ کرم اپنے خیالات کا اشتراک کریں اور اسے بہتر بنانے میں ہماری مدد کرنے کے لیے ہمارے Discord Server میں کسی بھی مسئلے کی اطلاع دیں.",
@@ -1172,7 +1187,7 @@
   "faqHowToInviteTheBotAnswer": "آپ نیچے دیئے گئے بٹن پر کلک کر کے ہمارے بوٹ کو اپنے سرور پر مدعو کر سکتے ہیں۔ بوٹ کو شامل کرنے کے لیے آپ کو \"سرور کا نظم کریں\" کی اجازت درکار ہوگی.",
   "faqInviteTheBot": "ClashKing Bot کو مدعو کریں۔",
   "faqNeedHelp": "مجھے مدد کی ضرورت ہے یا میں کوئی تجویز دینا چاہوں گا۔ میں آپ سے کیسے رابطہ کر سکتا ہوں؟",
-  "faqNeedHelpAnswer": "آپ مدد طلب کرنے یا رائے دینے کے لیے ہمارے Discord سرور میں شامل ہو سکتے ہیں، یا آپ ہمیں devs@clashk.ing پر ای میل کر سکتے ہیں۔ براہ کرم صرف انگریزی یا فرانسیسی میں لکھیں.",
+  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
   "faqSendEmail": "ای میل بھیجیں۔",
   "faqJoinDiscord": "ہمارے ڈسکارڈ سرور میں شامل ہوں۔",
   "faqCannotOpenMailClient": "کچھ وجوہات کی بنا پر ہم آپ کے میل کلائنٹ کو نہیں کھول سکتے۔ ہم نے آپ کے لیے ای میل ایڈریس کاپی کیا ہے۔ آپ ایک ای میل لکھ سکتے ہیں اور وصول کنندہ کے خانے میں پتہ چسپاں کر سکتے ہیں.",

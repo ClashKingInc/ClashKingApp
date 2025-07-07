@@ -9,61 +9,13 @@ class AppLocalizationsPl extends AppLocalizations {
   AppLocalizationsPl([String locale = 'pl']) : super(locale);
 
   @override
-  String get appTitle => 'ClashKing';
-
-  @override
-  String get appDescription =>
-      'Twój najlepszy towarzysz Clash of Clans do śledzenia statystyk, zarządzania klanami i analizowania wydajności.';
-
-  @override
   String get generalLoading => 'Wczytywanie...';
 
   @override
-  String get loadingVillages => 'Loading your villages...';
+  String get generalRetry => 'Retry';
 
   @override
-  String get loadingClanData => 'Fetching clan data...';
-
-  @override
-  String get loadingWarStats => 'Analyzing war stats...';
-
-  @override
-  String get loadingLegendsData => 'Preparing legends data...';
-
-  @override
-  String get loadingCapitalRaids => 'Loading capital raids...';
-
-  @override
-  String get loadingAlmostReady => 'Almost ready...';
-
-  @override
-  String get accountVerificationTitle => 'Verify Account';
-
-  @override
-  String get accountVerificationMessage =>
-      'Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.';
-
-  @override
-  String get accountVerified => 'Account verified';
-
-  @override
-  String get accountNotVerified => 'Account not verified';
-
-  @override
-  String get accountVerifyButton => 'Verify';
-
-  @override
-  String get accountVerificationSuccess => 'Account verified successfully!';
-
-  @override
-  String get accountVerificationFailed =>
-      'Verification failed. Please check your API token.';
-
-  @override
-  String get generalRetry => 'Spróbuj ponownie';
-
-  @override
-  String get generalTryAgain => 'Spróbuj ponownie';
+  String get generalTryAgain => 'Try again';
 
   @override
   String get generalCancel => 'Anuluj';
@@ -75,7 +27,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get generalApply => 'Zastosuj';
 
   @override
-  String get generalConfirm => 'Potwierdź';
+  String get generalConfirm => 'Confirm';
 
   @override
   String get generalManage => 'Zarządzaj';
@@ -88,16 +40,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get generalComingSoon => 'Dostępne wkrótce!';
-
-  @override
-  String generalLastRefresh(String time) {
-    return 'Last refresh: $time';
-  }
-
-  @override
-  String generalRefreshFailed(String error) {
-    return 'Refresh failed: $error';
-  }
 
   @override
   String get generalAll => 'Wszystkie';
@@ -118,10 +60,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get generalRemaining => 'Pozostało';
 
   @override
-  String get generalActive => 'Aktywny';
+  String get generalActive => 'Active';
 
   @override
-  String get generalInactive => 'Nieaktywny';
+  String get generalInactive => 'Inactive';
 
   @override
   String get generalStarted => 'Rozpoczęto';
@@ -136,7 +78,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get generalStats => 'Statystyki';
 
   @override
-  String get generalFullStats => 'Pełne statystyki';
+  String get generalFullStats => 'Full Stats';
 
   @override
   String get generalDetails => 'Szczegóły';
@@ -157,29 +99,33 @@ class AppLocalizationsPl extends AppLocalizations {
   String get generalNoDataAvailable => 'Brak dostępnych danych.';
 
   @override
-  String get authSignUp => 'Zarejestruj się';
+  String get authClashKingDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
 
   @override
-  String get authLogin => 'Zaloguj się';
+  String get authSignIn => 'Sign In';
+
+  @override
+  String get authSignUp => 'Sign up';
 
   @override
   String get authLogout => 'Wyloguj';
 
   @override
-  String get authCreateAccount => 'Utwórz konto';
+  String get authCreateAccount => 'Create Account';
 
   @override
-  String get authJoinClashKing => 'Dołącz do ClashKing';
+  String get authJoinClashKing => 'Join ClashKing';
 
   @override
-  String get authCreateClashKingAccount => 'Utwórz konto ClashKing';
+  String get authCreateClashKingAccount => 'Create ClashKing Account';
 
   @override
   String get authCreateAccountToGetStarted =>
-      'Utwórz swoje konto, aby rozpocząć';
+      'Create your account to get started';
 
   @override
-  String get authAlreadyHaveAccount => 'Masz już konto? Zaloguj się';
+  String get authAlreadyHaveAccount => 'Already have an account? Sign in';
 
   @override
   String get authConfirmLogout => 'Czy na pewno chcesz się wylogować?';
@@ -191,49 +137,49 @@ class AppLocalizationsPl extends AppLocalizations {
   String get authDiscordSignIn => 'Zaloguj się za pomocą Discorda';
 
   @override
-  String get authDiscordContinue => 'Kontynuuj z Discord';
+  String get authDiscordContinue => 'Continue with Discord';
 
   @override
   String get authDiscordDescription =>
-      'Zsynchronizuj swoje dane z ClashKing Bot i odblokuj pełen potencjał ClashKing!';
+      'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!';
 
   @override
   String get authEmailTitle => 'Email';
 
   @override
   String get authEmailDescription =>
-      'Użyj e-maila, jeśli nie możesz uzyskać dostępu do Discord lub wolisz funkcje tylko aplikacji';
+      'Use email if you can\'t access Discord or prefer app-only features';
 
   @override
-  String get authEmailRequired => 'Wprowadź swój adres e-mail';
+  String get authEmailRequired => 'Please enter your email';
 
   @override
-  String get authEmailInvalid => 'Wprowadź prawidłowy adres e-mail';
+  String get authEmailInvalid => 'Please enter a valid email';
 
   @override
-  String get authPasswordLabel => 'Hasło';
+  String get authPasswordLabel => 'Password';
 
   @override
-  String get authPasswordConfirm => 'Potwierdź hasło';
+  String get authPasswordConfirm => 'Confirm Password';
 
   @override
-  String get authPasswordRequired => 'Wprowadź swoje hasło';
+  String get authPasswordRequired => 'Please enter your password';
 
   @override
-  String get authPasswordConfirmRequired => 'Potwierdź swoje hasło';
+  String get authPasswordConfirmRequired => 'Please confirm your password';
 
   @override
-  String get authPasswordMismatch => 'Hasła się nie zgadzają';
+  String get authPasswordMismatch => 'Passwords do not match';
 
   @override
-  String get authPasswordTooShort => 'Hasło musi mieć co najmniej 8 znaków';
+  String get authPasswordTooShort => 'Password must be at least 8 characters';
 
   @override
   String get authPasswordRequirements =>
-      'Hasło musi zawierać: wielką literę, małą literę, cyfrę i znak specjalny';
+      'Password must contain: uppercase, lowercase, digit, and special character';
 
   @override
-  String get authPasswordForgot => 'Zapomniałeś hasła?';
+  String get authPasswordForgot => 'Forgot password?';
 
   @override
   String get authUsernameLabel => 'Nazwa użytkownika';
@@ -242,8 +188,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get authUsernameRequired => 'Wprowadź nazwę użytkownika';
 
   @override
-  String get authUsernameTooShort =>
-      'Nazwa użytkownika musi mieć co najmniej 3 znaki';
+  String get authUsernameTooShort => 'Username must be at least 3 characters';
 
   @override
   String get authErrorConnection =>
@@ -254,43 +199,43 @@ class AppLocalizationsPl extends AppLocalizations {
       'Wystąpił błąd. Sprawdź swoje połączenie internetowe i uruchom aplikację ponownie.';
 
   @override
-  String get authAccountManagement => 'Zarządzanie kontem';
+  String get authAccountManagement => 'Account Management';
 
   @override
-  String get authAccountConnected => 'Połączone konta';
+  String get authAccountConnected => 'Connected Accounts';
 
   @override
-  String get authAccountConnectedStatus => 'Połączony';
+  String get authAccountConnectedStatus => 'Connected';
 
   @override
-  String get authAccountNotConnected => 'Nie połączony';
+  String get authAccountNotConnected => 'Not connected';
 
   @override
-  String get authAccountEmailAndPassword => 'E-mail i hasło';
+  String get authAccountEmailAndPassword => 'Email & Password';
 
   @override
   String get authAccountSecured =>
-      'Twoje konto jest zabezpieczone wieloma metodami uwierzytelniania';
+      'Your account is secured with multiple authentication methods';
 
   @override
-  String get authAccountLinkEmail => 'Połącz konto e-mail';
+  String get authAccountLinkEmail => 'Link Email Account';
 
   @override
   String get authAccountAddEmailAuth =>
-      'Dodaj uwierzytelnianie e-mail i hasło do swojego konta dla dodatkowego bezpieczeństwa.';
+      'Add email & password authentication to your account for additional security.';
 
   @override
   String get authAccountEmailLinkedSuccess =>
-      'Konto e-mail zostało pomyślnie połączone!';
+      'Email account successfully linked!';
 
   @override
-  String get helpTitle => 'Potrzebujesz pomocy?';
+  String get helpTitle => 'Need help?';
 
   @override
-  String get helpJoinDiscord => 'Dołącz do Discord';
+  String get helpJoinDiscord => 'Join Discord';
 
   @override
-  String get helpEmailUs => 'Wyślij nam e-mail';
+  String get helpEmailUs => 'Email Us';
 
   @override
   String get accountsWelcome => 'Witamy!';
@@ -300,14 +245,14 @@ class AppLocalizationsPl extends AppLocalizations {
       'Proszę dodać jeden lub więcej kont Clash Of Clans do swojego profilu. Możesz później dodać lub usunąć konta.';
 
   @override
-  String get accountsManageTitle => 'Zarządzaj swoimi kontami';
+  String get accountsManageTitle => 'Manage your accounts';
 
   @override
   String get accountsNoneFound =>
       'Nie znaleziono konta powiązanego z Twoim profilem';
 
   @override
-  String get accountsPlayerTag => 'Tag gracza (#ABC123)';
+  String get accountsPlayerTag => 'Player Tag (#ABC123)';
 
   @override
   String get accountsEnterPlayerTag => 'Wprowadź tag gracza';
@@ -326,7 +271,7 @@ class AppLocalizationsPl extends AppLocalizations {
       'Proszę wprowadzić token API konta, aby potwierdzić, że należy do Ciebie. Możesz znaleźć go w ustawieniach Clash of Clans > Więcej ustawień > Token API.';
 
   @override
-  String get accountsFillAllFields => 'Wypełnij wszystkie pola.';
+  String get accountsFillAllFields => 'Please fill all fields.';
 
   @override
   String get accountsErrorTagNotExists =>
@@ -347,7 +292,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get accountsErrorFailedToAdd =>
-      'Nie udało się dodać konta. Spróbuj ponownie później.';
+      'Failed to add the account. Please try again later.';
 
   @override
   String get accountsErrorFailedToDelete =>
@@ -355,15 +300,15 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get accountsErrorFailedToUpdateOrder =>
-      'Nie udało się zaktualizować kolejności kont.';
+      'Failed to update the order of accounts.';
 
   @override
   String get errorTitle =>
-      'Ups! Nasze serwery mogły oberwać ognistą kulą w twarz! Rzucamy czar uzdrowienia... Spróbuj ponownie za chwilę.';
+      'Oops! Our servers might have taken a fireball to the face! We\'re casting a healing spell... Try again in a moment.';
 
   @override
   String get errorSubtitle =>
-      'Jeśli problem nie ustąpi, sprawdź nasz serwer Discord, aby zobaczyć, czy jesteśmy tego świadomi.';
+      'If the issue persists, check our Discord Server to see if we\'re aware of it.';
 
   @override
   String get errorLoadingVersion => 'Błąd ładowania wersji';
@@ -511,27 +456,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get gameCreatorCode => 'Kod twórcy: ClashKing';
 
   @override
-  String get gameCreatorCodeDescription =>
-      'Tap for info • Support us for free!';
-
-  @override
-  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
-
-  @override
-  String get gameCreatorCodeDialogDescription =>
-      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
-
-  @override
-  String get gameCreatorCodeDialogButton => 'Use Creator Code';
-
-  @override
   String get clanTitle => 'Klan';
 
   @override
   String get clanSearchTitle => 'Wyszukaj klan';
 
   @override
-  String get clanSearchPlaceholder => 'Nazwa klanu';
+  String get clanSearchPlaceholder => 'Clan\'s name';
 
   @override
   String get clanNone => 'Brak klanu';
@@ -595,7 +526,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get clanWarFrequencyOncePerWeek => '1/tydzień';
 
   @override
-  String get clanWarFrequencyMoreThanOncePerWeek => 'Więcej niż 1/tydzień';
+  String get clanWarFrequencyMoreThanOncePerWeek => 'More than 1/week';
 
   @override
   String get clanWarFrequencyRarely => 'Rzadko';
@@ -637,21 +568,21 @@ class AppLocalizationsPl extends AppLocalizations {
   String get timeJustNow => 'Właśnie teraz';
 
   @override
-  String get timeEndedJustNow => 'Zakończyło się właśnie teraz';
+  String get timeEndedJustNow => 'Ended just now';
 
   @override
   String timeEndedMinutesAgo(int minutes) {
-    return 'Zakończyło się $minutes minut temu';
+    return 'Ended $minutes minutes ago';
   }
 
   @override
   String timeEndedHoursAgo(int hours) {
-    return 'Zakończyło się $hours godzin temu';
+    return 'Ended $hours hours ago';
   }
 
   @override
   String timeEndedDaysAgo(int days) {
-    return 'Zakończyło się $days dni temu';
+    return 'Ended $days days ago';
   }
 
   @override
@@ -682,7 +613,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get legendsNoDataToday =>
-      'Nie jesteś w Lidze Legend, ale dostępne są poprzednie sezony.';
+      'You\'re not in Legend League, but past seasons are available.';
 
   @override
   String legendsStartDescription(String trophies) {
@@ -716,7 +647,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String legendsGlobalRankDescription(int rank, int trophies) {
-    return 'Aktualnie zajmujesz $rank miejsce na świecie z $trophies puszkami.';
+    return 'You are currently ranked $rank globally with $trophies trophies.';
   }
 
   @override
@@ -741,7 +672,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get legendsEosTrophies => 'Puszki Na Koniec Sezonu';
 
   @override
-  String get legendsEosDetails => 'Szczegóły końca sezonu';
+  String get legendsEosDetails => 'End Of Season Details';
 
   @override
   String get legendsInaccurateTitle => 'Nieprecyzyjne dane?';
@@ -896,27 +827,27 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String todoAttacksLeftDescription(int attacks, String type) {
-    return 'Pozostało ci $attacks ataków ($type).';
+    return 'You have $attacks attack(s) left ($type).';
   }
 
   @override
   String todoDefensesLeftDescription(int defenses, String type) {
-    return 'Pozostało ci $defenses obrón ($type).';
+    return 'You have $defenses defense(s) left ($type).';
   }
 
   @override
   String todoNoAttacksLeftDescription(String type) {
-    return 'Gratulacje, wykonałeś wszystkie swoje ataki ($type)!';
+    return 'Congratulations, you have done all your attacks ($type)!';
   }
 
   @override
   String todoPointsLeftDescription(int points, String type) {
-    return 'Musisz dzisiaj uzyskać jeszcze $points punktów, aby zdążyć na koniec wydarzenia ($type).';
+    return 'You have $points points left to get today to be in time for the end of the event ($type).';
   }
 
   @override
   String todoPointsLeftDescriptionNoPoints(String type) {
-    return 'Gratulacje, jesteś na czas, aby otrzymać maksymalne nagrody na koniec wydarzenia ($type)!';
+    return 'Congratulations, you are on time to get the maximum rewards at the end of the event ($type)!';
   }
 
   @override
@@ -1027,59 +958,59 @@ class AppLocalizationsPl extends AppLocalizations {
   String get warAttacksTitle => 'Ataki';
 
   @override
-  String get warAttacksNone => 'Jeszcze brak ataków';
+  String get warAttacksNone => 'No attack yet';
 
   @override
-  String get warAttacksBest => 'Najlepsze ataki';
+  String get warAttacksBest => 'Best attacks';
 
   @override
-  String get warAttacksCount => 'Liczba ataków';
+  String get warAttacksCount => 'Attack Count';
 
   @override
-  String get warAttacksMissed => 'Pominione ataki';
+  String get warAttacksMissed => 'Missed Attacks';
 
   @override
   String warAttacksNumber(int number_time, int number_war) {
-    return 'Atakowałeś $number_time razy podczas ostatnich $number_war wojen.';
+    return 'You attacked $number_time time(s) during the last $number_war wars.';
   }
 
   @override
   String warAttacksAverageStars(String stars) {
-    return 'Miałeś średnio $stars gwiazdek na wojnę.';
+    return 'You had an average of $stars stars per war.';
   }
 
   @override
   String warAttacksAverageDestruction(String percent) {
-    return 'Miałeś średnio $percent% wskaznk zniszczenia na wojnę.';
+    return 'You had an average of $percent% destruction rate per war.';
   }
 
   @override
   String get warDefensesTitle => 'Obrona';
 
   @override
-  String get warDefensesNone => 'Jeszcze brak obrón';
+  String get warDefensesNone => 'No defense yet';
 
   @override
-  String get warDefensesBest => 'Najlepsze obrony';
+  String get warDefensesBest => 'Best defenses';
 
   @override
   String warDefensesBestOutOf(int number) {
-    return 'Najlepsza obrona (z $number)';
+    return 'Best defense (out of $number)';
   }
 
   @override
   String warDefensesNumber(int number_time, int number_war) {
-    return 'Broniłeś się $number_time razy podczas ostatnich $number_war wojen.';
+    return 'You defended $number_time time(s) during the last $number_war wars.';
   }
 
   @override
   String warDefensesAverageStars(double stars) {
-    return 'Miałeś średnio $stars gwiazdek na obronę.';
+    return 'You had an average of $stars stars per defense.';
   }
 
   @override
   String warDefensesAverageDestruction(String percent) {
-    return 'Miałeś średnio $percent% wskaźnik zniszczenia na obronę.';
+    return 'You had an average of $percent% destruction rate per defense.';
   }
 
   @override
@@ -1101,13 +1032,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get warStarsThree => '3 gwiazdki';
 
   @override
-  String get warStarsZero => '0 gwiazdek';
+  String get warStarsZero => '0 Star';
 
   @override
-  String get warStarsBestPerformance => 'Najlepsza wydajność';
+  String get warStarsBestPerformance => 'Best performance';
 
   @override
-  String get warDestructionTitle => 'Zniszczenie';
+  String get warDestructionTitle => 'Destruction';
 
   @override
   String get warDestructionAverage => 'Średnie zniszczenia';
@@ -1146,22 +1077,22 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get warPositionMap => 'Pozycja na mapie';
+  String get warPositionMap => 'Map Position';
 
   @override
-  String get warPositionAbbr => 'Poz';
+  String get warPositionAbbr => 'Pos';
 
   @override
-  String get warPositionOrder => 'Kolejność';
+  String get warPositionOrder => 'Order';
 
   @override
-  String get warOpponentTownhall => 'Przeciwnik TH';
+  String get warOpponentTownhall => 'Opp TH';
 
   @override
-  String get warOpponentLowerTownhall => 'Niższy TH';
+  String get warOpponentLowerTownhall => 'Lower TH';
 
   @override
-  String get warOpponentUpperTownhall => 'Wyższy TH';
+  String get warOpponentUpperTownhall => 'Upper TH';
 
   @override
   String get warOpponentEqualThLevel => 'Równy TH';
@@ -1203,13 +1134,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get warStatusUnready => 'Nie wyrażono zgody';
 
   @override
-  String get warStatusMissed => 'Pominione';
+  String get warStatusMissed => 'Missed';
 
   @override
-  String get warAbbreviationAvg => 'Śr';
+  String get warAbbreviationAvg => 'Avg';
 
   @override
-  String get warAbbreviationAvgPercentage => 'Śr %';
+  String get warAbbreviationAvgPercentage => 'Avg %';
 
   @override
   String get cwlTitle => 'CWL';
@@ -1225,7 +1156,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String cwlRoundNumber(int number) {
-    return 'Runda $number';
+    return 'Round $number';
   }
 
   @override
@@ -1250,11 +1181,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String cwlTotalAttacks(int attacks, int totalAttacks) {
-    return 'Twój klan ma łącznie $attacks ataków z $totalAttacks możliwych ataków.';
+    return 'Your clan has a total of $attacks attacks out of $totalAttacks possible attacks.';
   }
 
   @override
-  String get joinLeaveTitle => 'Logi dołączeń/opuśczeń (aktualny sezon)';
+  String get joinLeaveTitle => 'Join/Leave Logs (Current Season)';
 
   @override
   String get joinLeaveJoin => 'Dołącz';
@@ -1266,63 +1197,63 @@ class AppLocalizationsPl extends AppLocalizations {
   String get joinLeaveReset => 'Zresetuj';
 
   @override
-  String get joinLeaveJoins => 'Dołączenia';
+  String get joinLeaveJoins => 'Joins';
 
   @override
-  String get joinLeaveLeaves => 'Opuśzczenia';
+  String get joinLeaveLeaves => 'Leaves';
 
   @override
-  String get joinLeaveUniquePlayers => 'Unikalni gracze';
+  String get joinLeaveUniquePlayers => 'Unique Players';
 
   @override
-  String get joinLeaveMovingPlayers => 'Ruchomi gracze';
+  String get joinLeaveMovingPlayers => 'Moving Players';
 
   @override
-  String get joinLeaveMostMovingPlayers => 'Najbardziej ruchomi gracze';
+  String get joinLeaveMostMovingPlayers => 'Most Moving Players';
 
   @override
-  String get joinLeaveStillInClan => 'Nadal w klanie';
+  String get joinLeaveStillInClan => 'Still in Clan';
 
   @override
-  String get joinLeaveLeftForever => 'Opuścił na zawsze';
+  String get joinLeaveLeftForever => 'Left Forever';
 
   @override
-  String get joinLeaveRejoinedPlayers => 'Gracze, którzy ponownie dołączyli';
+  String get joinLeaveRejoinedPlayers => 'Rejoined Players';
 
   @override
-  String get joinLeaveAvgTimeJoinLeave => 'Śr czas dołączenia/opuśzczenia';
+  String get joinLeaveAvgTimeJoinLeave => 'Avg Join/Leave Time';
 
   @override
-  String get joinLeavePeakHour => 'Najbardziej aktywna godzina';
+  String get joinLeavePeakHour => 'Most Active Hour';
 
   @override
   String joinLeaveNumberDescription(int number, String date) {
-    return 'W czasie aktualnego sezonu wystąpiło $number zdarzeń opuśzczenia ($date).';
+    return '$number leave events occurred during the current season ($date).';
   }
 
   @override
   String joinLeaveJoinNumberDescription(int number, String date) {
-    return 'W czasie aktualnego sezonu wystąpiło $number zdarzeń dołączenia ($date).';
+    return '$number join events occurred during the current season ($date).';
   }
 
   @override
   String joinLeaveMovingNumberDescription(int number, String date) {
-    return '$number graczy opuściło i ponownie dołączyło do klanu podczas aktualnego sezonu ($date).';
+    return '$number player(s) left and rejoined the clan during the current season ($date).';
   }
 
   @override
   String joinLeaveUniqueNumberDescription(int number, String date) {
-    return '$number unikalnych graczy dołączyło/opuściło klan podczas aktualnego sezonu ($date).';
+    return '$number unique player(s) joined/left the clan during the current season ($date).';
   }
 
   @override
   String joinLeaveStillInClanNumberDescription(int number) {
-    return '$number graczy dołączyło i nadal jest w klanie.';
+    return '$number player(s) joined and are still in the clan.';
   }
 
   @override
   String joinLeaveLeftClanNumberDescription(int number) {
-    return '$number graczy dołączyło, następnie opuściło klan i już nigdy nie wróciło.';
+    return '$number player(s) joined, then left the clan and never rejoined.';
   }
 
   @override
@@ -1336,7 +1267,7 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get raidsTitle => 'Najazdy';
+  String get raidsTitle => 'Raids';
 
   @override
   String get raidsLast => 'Ostatnie rajdy';
@@ -1354,26 +1285,26 @@ class AppLocalizationsPl extends AppLocalizations {
   String get searchNoResult => 'Brak wyników.';
 
   @override
-  String get maintenanceTitle => 'Konserwacja';
+  String get maintenanceTitle => 'Maintenance';
 
   @override
   String get maintenanceDescription =>
-      'Clash of Clans jest obecnie w konserwacji, więc nie możemy uzyskać dostępu do API. Sprawdź ponownie później.';
+      'Clash of Clans is currently under maintenance, so we can\'t access the API. Please check back later.';
 
   @override
-  String get downloadTooltip => 'Pobierz podsumowanie CWL';
+  String get downloadTooltip => 'Download CWL summary';
 
   @override
   String get downloadInProgress =>
-      'Pobieranie pliku... Może to potrwać kilka sekund...';
+      'Downloading file... It can take a few seconds...';
 
   @override
   String downloadSuccess(String path) {
-    return 'Plik został pomyślnie zapisany w $path';
+    return 'File saved successfully in $path';
   }
 
   @override
-  String get downloadError => 'Nie udało się pobrać pliku';
+  String get downloadError => 'Failed to download file';
 
   @override
   String get dashboardTitle => 'Pulpit';
@@ -1389,19 +1320,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get versionDevice => 'Wersja i Urządzenie';
-
-  @override
-  String get settingsLicenses => 'Open Source Licenses';
-
-  @override
-  String get settingsLicensesSubtitle =>
-      'View licenses for third-party libraries';
-
-  @override
-  String get settingsPrivacyPolicy => 'Privacy Policy';
-
-  @override
-  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
 
   @override
   String get betaFeature => 'Funkcja Beta';
@@ -1500,7 +1418,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Możesz dołączyć do naszego serwera Discord, aby poprosić o pomoc lub przekazać informacje zwrotne, lub możesz napisać do nas e-maila na adres devs@clashk.ing. Prosimy pisać tylko po angielsku lub francusku.';
+      'Możesz dołączyć do naszego serwera Discord, aby poprosić o pomoc lub przekazać informacje zwrotne, lub możesz napisać do nas e-maila na adres devs@clashkingbot.com. Prosimy pisać tylko po angielsku lub francusku.';
 
   @override
   String get faqSendEmail => 'Wyślij wiadomość e-mail';

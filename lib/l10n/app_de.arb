@@ -3,94 +3,98 @@
   "appTitle": "ClashKing",
   "appDescription": "Dein ultimativer Clash of Clans Begleiter zum Verfolgen von Statistiken, Verwalten von Clans und Analysieren der Leistung.",
   "generalLoading": "Laden...",
-  "generalError": "Fehler",
+  "loadingVillages": "Loading your villages...",
+  "loadingClanData": "Fetching clan data...",
+  "loadingWarStats": "Analyzing war stats...",
+  "loadingLegendsData": "Preparing legends data...",
+  "loadingCapitalRaids": "Loading capital raids...",
+  "loadingAlmostReady": "Almost ready...",
+  "accountVerificationTitle": "Verify Account",
+  "accountVerificationMessage": "Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.",
+  "accountVerified": "Account verified",
+  "accountNotVerified": "Account not verified",
+  "accountVerifyButton": "Verify",
+  "accountVerificationSuccess": "Account verified successfully!",
+  "accountVerificationFailed": "Verification failed. Please check your API token.",
   "generalRetry": "Wiederholen",
   "generalTryAgain": "Versuche es später nochmal",
-  "generalClose": "Schließen",
   "generalCancel": "Abbrechen",
   "generalOk": "OK",
   "@generalOk": {
-    "description": "OK-Button im Popup"
+    "description": "OK button on pop up"
   },
   "generalApply": "Anwenden",
   "generalConfirm": "Bestätigen",
-  "generalAdd": "Hinzufügen",
-  "@generalAdd": {
-    "description": "Ein Konto hinzufügen"
-  },
-  "generalDelete": "Löschen",
-  "@generalDelete": {
-    "description": "Ein Konto löschen"
-  },
   "generalManage": "Verwalten",
-  "generalManagement": "Verwaltung",
   "generalSettings": "Einstellungen",
   "generalCopiedToClipboard": "In die Zwischenablage kopiert",
   "generalComingSoon": "Bald verfügbar!",
+  "generalLastRefresh": "Last refresh: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
   "generalAll": "Alle",
   "@generalAll": {
-    "description": "alle Elemente"
+    "description": "all items"
   },
   "generalTotal": "Insgesamt",
   "generalBest": "Beste",
   "@generalBest": {
-    "description": "Beste Trophäen am Ende des Tages"
+    "description": "Best end of day trophies"
   },
-  "generalWorst": "Schlechteste",
+  "generalWorst": "Am schlechtesten",
   "@generalWorst": {
-    "description": "Schlechteste Trophäen am Ende des Tages"
+    "description": "Worst end of day trophies"
   },
   "generalAverage": "Durchschnitt",
   "@generalAverage": {
-    "description": "Durchschnittswert der Legenden-Trophäen (Verteidigung und Angriff)"
+    "description": "Average value of legend trophies (defense and attack)"
   },
   "generalRemaining": "Verbleibend",
   "@generalRemaining": {
-    "description": "Verbleibende Angriffe oder Verteidigungen"
+    "description": "Remaining attacks or defenses"
   },
   "generalActive": "Aktiv",
   "generalInactive": "Inaktiv",
   "generalStarted": "Begonnen",
   "@generalStarted": {
-    "description": "Titel für die Anzahl der Trophäen zu Beginn des Tages"
+    "description": "Title for the number of trophies at the beginning of the day"
   },
   "generalEnded": "Beendet",
   "@generalEnded": {
-    "description": "Titel für die Anzahl der Trophäen am Ende des Tages"
+    "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
   "generalRole": "Rolle",
-  "generalDate": "Datum",
   "generalStats": "Statistiken",
   "generalFullStats": "Vollständige Statistiken",
   "generalDetails": "Details",
   "generalHistory": "Verlauf",
   "@generalHistory": {
-    "description": "Zeigt EOS-Trophäenverlauf"
+    "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Diagramme",
   "generalFilters": "Filter",
-  "generalWhatever": "Egal",
-  "@generalWhatever": {
-    "description": "Egal welcher Wert"
-  },
-  "generalAny": "Alle",
-  "@generalAny": {
-    "description": "Jeder Wert wird akzeptiert"
-  },
   "generalNotSet": "Nicht festgelegt",
   "@generalNotSet": {
-    "description": "Filterwert ist nicht festgelegt"
+    "description": "Filter value is not set"
   },
   "generalWarning": "Warnung",
   "generalNoDataAvailable": "Keine Daten verfügbar.",
-  "generalClosed": "Geschlossen",
-  "@generalClosed": {
-    "description": "Kriegslog geschlossen"
-  },
-  "authWelcomeBack": "Willkommen zurück!",
-  "authClashKingDescription": "Dein ultimativer Clash of Clans Begleiter zum Verfolgen von Statistiken, Verwalten von Clans und Analysieren der Leistung.",
-  "authChooseSignInMethod": "Wähle deine bevorzugte Anmeldmethode",
   "authSignUp": "Registrieren",
   "authLogin": "Anmelden",
   "authLogout": "Abmelden",
@@ -99,10 +103,9 @@
   "authCreateClashKingAccount": "ClashKing-Konto erstellen",
   "authCreateAccountToGetStarted": "Erstelle dein Konto, um zu beginnen",
   "authAlreadyHaveAccount": "Du hast bereits ein Konto? Melde dich an",
-  "authDontHaveAccount": "Du hast noch kein Konto? Erstelle eins",
   "authConfirmLogout": "Bist du dir sicher, dass du dich abmelden möchtest?",
   "@authConfirmLogout": {
-    "description": "Aufforderung an den Nutzer, die Abmeldung zu bestätigen"
+    "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
   "authDiscordSignIn": "Mit Discord anmelden",
@@ -125,7 +128,7 @@
   "authUsernameTooShort": "Benutzername muss mindestens 3 Zeichen lang sein",
   "authErrorConnection": "Es ist ein Fehler aufgetreten. Bitte überprüfe deine Internetverbindung und versuche es erneut.",
   "authErrorConnectionRelaunch": "Es ist ein Fehler aufgetreten. Bitte überprüfe deine Internetverbindung und starte die App erneut.",
-  "authAccountManagement": "Kontoverwaltung",
+  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.",
   "authAccountConnected": "Verbundene Konten",
   "authAccountConnectedStatus": "Verbunden",
   "authAccountNotConnected": "Nicht verbunden",
@@ -159,7 +162,7 @@
   "errorSubtitle": "Wenn das Problem weiterhin besteht, schaue auf unserem Discord-Server nach, ob wir davon wissen.",
   "errorLoadingVersion": "Fehler beim Laden der Version",
   "@errorLoadingVersion": {
-    "description": "Fehlermeldung, wenn die App-Version nicht geladen werden kann"
+    "description": "Error message when the app version cannot be loaded"
   },
   "errorCannotOpenLink": "Wir können diesen Link nicht öffnen.",
   "errorExitAppToOpenClash": "Du verlässt die App, um Clash of Clans zu öffnen.",
@@ -295,15 +298,15 @@
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Creator-Code: ClashKing",
-  "gameCreatorCodeDescription": "Tippen für Info • Unterstütze uns kostenlos!",
-  "gameCreatorCodeDialogTitle": "ClashKing unterstützen",
-  "gameCreatorCodeDialogDescription": "Die Verwendung unseres Creator-Codes hilft bei der Finanzierung der Entwicklung, hält die App & Bot für alle kostenlos und ermöglicht es uns, neue Features hinzuzufügen.\n\nWir erhalten 5% von dem, was du im Spiel ausgibst, aber es kostet dich nichts extra - verwende einfach \"ClashKing\" als Creator-Code im Clash of Clans Shop!",
-  "gameCreatorCodeDialogButton": "Creator-Code verwenden",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "Clan",
   "clanSearchTitle": "Clan suchen",
   "clanSearchPlaceholder": "Clanname",
   "clanNone": "Kein Clan",
-  "clanJoinToUnlock": "Tritt einem Clan bei, um neue Funktionen freizuschalten.",
+  "clanJoinToUnlock": "Trete einem Clan bei, um neue Funktionen freizuschalten.",
   "clanMembers": "Mitglieder",
   "clanWarFrequency": "Kriegshäufigkeit",
   "clanMinimumMembers": "Mindestanzahl von Mitgliedern",
@@ -313,15 +316,15 @@
   "clanMinimumLevel": "Erforderlicher Clanlevel",
   "clanInviteOnly": "Nur auf Einladung",
   "@clanInviteOnly": {
-    "description": "Clan ist nur auf Einladung"
+    "description": "Clan is invite only"
   },
   "clanOpened": "Geöffnet",
   "@clanOpened": {
-    "description": "Clan ist geöffnet"
+    "description": "Clan is opened"
   },
   "clanClosed": "Geschlossen",
   "@clanClosed": {
-    "description": "Clan ist geschlossen"
+    "description": "Clan is closed"
   },
   "clanRoleLeader": "Anführer",
   "clanRoleCoLeader": "Vize-Anführer",
@@ -383,6 +386,9 @@
     }
   },
   "timeJustNow": "Gerade eben",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
   "timeEndedJustNow": "Gerade eben beendet",
   "timeEndedMinutesAgo": "Vor {minutes} Minuten beendet",
   "@timeEndedMinutesAgo": {
@@ -534,11 +540,11 @@
   "statsSeasonStats": "Saison-Statistiken",
   "statsByDay": "Nach Tag",
   "@statsByDay": {
-    "description": "Zeigt Statistiken nach Tag"
+    "description": "Shows stats by day"
   },
   "statsBySeason": "Nach Saison",
   "@statsBySeason": {
-    "description": "Zeigt Statistiken nach Saison"
+    "description": "Shows stats by season"
   },
   "statsDayIndex": "Tag {index}",
   "@statsDayIndex": {
@@ -558,7 +564,7 @@
   },
   "statsSeasonDate": "{date} Saison",
   "@statsSeasonDate": {
-    "description": "Beispiel: August 2024 Saison",
+    "description": "Example: August 2024 season",
     "placeholders": {
       "date": {
         "type": "String"
@@ -588,7 +594,7 @@
         "type": "int"
       }
     },
-    "description": "Anzahl der Konten (z.B.: 4 Konten)"
+    "description": "Number of accounts (ex: 4 accounts)"
   },
   "todoAccountsNumberActive": "{number} aktive Konten",
   "@todoAccountsNumberActive": {
@@ -664,7 +670,7 @@
   "warParticipation": "Kriegsbeteiligung",
   "warLeague": "Krieg/Clankriegsliga",
   "warHistory": "Kriegsgeschichte",
-  "warLog": "Kriegslog",
+  "warLog": "Kriegsverlauf",
   "warLogClosed": "{clan}s Kriegslog ist geschlossen.",
   "@warLogClosed": {
     "placeholders": {
@@ -692,7 +698,7 @@
   "warDefeat": "Niederlage",
   "warDraw": "Unentschieden",
   "@warDraw": {
-    "description": "Krieg endete unentschieden"
+    "description": "War ended in a draw"
   },
   "warTeamSize": "Teamgröße",
   "warMyTeam": "Mein Team",
@@ -728,9 +734,9 @@
     }
   },
   "warNoDataAvailableForThisWar": "Keine Daten für diesen Krieg verfügbar",
-  "fastCalculator": "Schnellrechner",
-  "fastCalculatorAnswer": "Um die Zerstörungsrate von {percentNeeded}% zu erreichen, benötigst du insgesamt {result}%.",
-  "@fastCalculatorAnswer": {
+  "warCalculatorFast": "Schnellrechner",
+  "warCalculatorAnswer": "Um die Zerstörungsrate von {percentNeeded}% zu erreichen, benötigst du insgesamt {result}%.",
+  "@warCalculatorAnswer": {
     "placeholders": {
       "percentNeeded": {
         "type": "String"
@@ -740,13 +746,12 @@
       }
     }
   },
-  "teamSize": "Teamgröße",
-  "neededOverall": "Benötigte % insgesamt",
-  "calculate": "Berechnen",
+  "warCalculatorNeededOverall": "Benötigte %",
+  "warCalculatorCalculate": "Berechnen",
   "warAttacksTitle": "Angriffe",
   "warAttacksNone": "Noch kein Angriff",
   "@warAttacksNone": {
-    "description": "Noch kein Angriff im Krieg"
+    "description": "No attack yet in war"
   },
   "warAttacksBest": "Beste Angriffe",
   "warAttacksCount": "Anzahl Angriffe",
@@ -781,7 +786,7 @@
   "warDefensesTitle": "Verteidigungen",
   "warDefensesNone": "Noch keine Verteidigung",
   "@warDefensesNone": {
-    "description": "Noch keine Verteidigung im Krieg"
+    "description": "No defense yet in war"
   },
   "warDefensesBest": "Beste Verteidigungen",
   "warDefensesBestOutOf": "Beste Verteidigung (von {number})",
@@ -791,7 +796,7 @@
         "type": "int"
       }
     },
-    "description": "Beste Kriegsverteidigung (von 3 Verteidigungen)"
+    "description": "Best war defense (out of 3 defenses)"
   },
   "warDefensesNumber": "Du hast {number_time} mal in den letzten {number_war} Kriegen verteidigt.",
   "@warDefensesNumber": {
@@ -829,13 +834,13 @@
   "warStarsZero": "0 Sterne",
   "warStarsBestPerformance": "Beste Leistung",
   "@warStarsBestPerformance": {
-    "description": "Beste Leistung im Krieg"
+    "description": "Best performance in war"
   },
   "warDestructionTitle": "Zerstörung",
   "warDestructionAverage": "Durchschnittliche Zerstörung",
   "warDestructionRate": "Zerstörungsrate",
   "@warDestructionRate": {
-    "description": "Prozentsatz der Zerstörung im Krieg"
+    "description": "Percentage of destruction in war"
   },
   "warHistoryWinsDescription": "Dein Clan hat {wins} Kriege ({percent}%) der letzten 50 Kriege gewonnen.",
   "@warHistoryWinsDescription": {
@@ -899,28 +904,28 @@
   },
   "warPositionMap": "Kartenposition",
   "@warPositionMap": {
-    "description": "Kartenposition im Krieg"
+    "description": "Map position in war"
   },
   "warPositionAbbr": "Pos",
   "@warPositionAbbr": {
-    "description": "Abkürzung für Kartenposition"
+    "description": "Abbreviation for map position"
   },
   "warPositionOrder": "Reihenfolge",
   "@warPositionOrder": {
-    "description": "Reihenfolge des Spielers im Clan"
+    "description": "Order of the player in the clan"
   },
   "warOpponentTownhall": "Gegner RH",
   "@warOpponentTownhall": {
-    "description": "Abkürzung für Gegner-Rathauslevel"
+    "description": "Abbreviation for opponent's town hall level"
   },
   "warOpponentLowerTownhall": "Niedrigeres RH",
   "warOpponentUpperTownhall": "Höheres RH",
-  "equalThLevel": "Gleiches Rathaus",
-  "selectMembersThLevel": "Mitglieder Rathauslevel",
-  "selectOpponentsThLevel": "Gegnerische Rathauslevel",
+  "warOpponentEqualThLevel": "Gleiches Rathaus",
+  "warOpponentSelectMembersThLevel": "Mitglieder Rathauslevel",
+  "warOpponentSelectOpponentsThLevel": "Gegnerische Rathauslevel",
   "warFiltersLastXwars": "Letzte {number} Kriege",
   "@warFiltersLastXwars": {
-    "description": "Beispiel: Zeigt die letzten 25 Kriege",
+    "description": "Example: Shows the last 25 wars",
     "placeholders": {
       "number": {
         "type": "int"
@@ -929,41 +934,41 @@
   },
   "warFiltersFriendly": "Freundschaftsspiel",
   "@warFiltersFriendly": {
-    "description": "Freundschaftskrieg"
+    "description": "Friendly war"
   },
   "warFiltersRandom": "Zufällig",
   "@warFiltersRandom": {
-    "description": "Zufälliger/normaler Krieg (nicht freundschaftlich oder CWL)"
+    "description": "Random/basic war (not friendly or cwl)"
   },
   "warVisibilityToggleTownHall": "Statistik früherer Rathauslevel",
   "@warVisibilityToggleTownHall": {
-    "description": "Zum Beispiel, verstecke Statistiken von RH15 und darunter, wenn der Spieler jetzt RH16 ist"
+    "description": "For example, hide stats from TH15 and below if the player is now TH16"
   },
   "warEventsTitle": "Ereignisse",
   "@warEventsTitle": {
-    "description": "Kriegsereignisse"
+    "description": "War events"
   },
   "warEventsNewest": "Neueste",
   "warEventsOldest": "Älteste",
   "warStatusReady": "Angemeldet",
   "@warStatusReady": {
-    "description": "Für Krieg angemeldet"
+    "description": "Opted In for war"
   },
   "warStatusUnready": "Abgemeldet",
   "@warStatusUnready": {
-    "description": "Vom Krieg abgemeldet"
+    "description": "Opted Out for war"
   },
   "warStatusMissed": "Verpasst",
   "@warStatusMissed": {
-    "description": "Verpasste Angriffe"
+    "description": "Missed attacks"
   },
   "warAbbreviationAvg": "Ø",
   "@warAbbreviationAvg": {
-    "description": "Abkürzung für Durchschnitt"
+    "description": "Abbreviation for average"
   },
   "warAbbreviationAvgPercentage": "Ø %",
   "@warAbbreviationAvgPercentage": {
-    "description": "Abkürzung für Durchschnittsprozent"
+    "description": "Abbreviation for average percentage"
   },
   "cwlTitle": "Clankriegsliga",
   "cwlClanWarLeague": "Clankriegsliga",
@@ -1058,7 +1063,7 @@
   },
   "joinLeaveMovingNumberDescription": "{number} Spieler verließen den Clan und traten während der aktuellen Saison wieder bei ({date}).",
   "@joinLeaveMovingNumberDescription": {
-    "description": "Anzahl der Spieler, die den Clan verließen und während der aktuellen Saison wieder beitraten.",
+    "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
       "number": {
         "type": "int"
@@ -1070,7 +1075,7 @@
   },
   "joinLeaveUniqueNumberDescription": "{number} einzigartige Spieler traten dem Clan bei/verließen ihn während der aktuellen Saison ({date}).",
   "@joinLeaveUniqueNumberDescription": {
-    "description": "Anzahl der einzigartigen Spieler, die dem Clan während der aktuellen Saison beitraten/ihn verließen.",
+    "description": "Number of unique players who joined/left the clan during the current season.",
     "placeholders": {
       "number": {
         "type": "int"
@@ -1097,11 +1102,11 @@
     }
   },
   "@joinLeaveTitle": {
-    "description": "Logs von Spielern, die dem Clan beitreten oder ihn verlassen."
+    "description": "Logs of players joining or leaving the clan."
   },
   "joinLeaveLeftOnAt": "Verlassen am {date} um {time}.",
   "@joinLeaveLeftOnAt": {
-    "description": "[Der Spieler] verließ den Clan am 16/06/2024 um 10:35.",
+    "description": "[The player] left the clan on 16/06/2024 at 10:35.",
     "placeholders": {
       "date": {
         "type": "String"
@@ -1113,7 +1118,7 @@
   },
   "joinLeaveJoinedOnAt": "Beigetreten am {date} um {time}.",
   "@joinLeaveJoinedOnAt": {
-    "description": "[Der Spieler] trat dem Clan am 16/06/2024 um 10:35 bei.",
+    "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
     "placeholders": {
       "date": {
         "type": "String"
@@ -1145,18 +1150,22 @@
   "dashboardTitle": "Übersicht",
   "toolsTitle": "Werkzeuge",
   "navigationTeam": "Teams",
-  "statistics": "Statistiken",
+  "navigationStatistics": "Statistiken",
   "versionDevice": "Version & Gerät",
   "@versionDevice": {
-    "description": "Version der App und Geräteinformationen"
+    "description": "Version of the app and device information"
   },
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
   "betaFeature": "Beta-Funktion",
   "betaLabel": "BETA",
   "betaDescription": "Diese Option ist aktuell in der Beta, es kann also zu Fehlern kommen oder unvollständig sein. Wir arbeiten aktiv an Verbesserungen und sind dankbar für dein Feedback. Bitte teile uns deine Ideen sowie Fragen und Probleme auf unserem Discord-Server mit, damit wir es besser machen können.",
   "settingsLanguage": "Sprache",
   "settingsSelectLanguage": "Wähle eine Sprache aus",
   "settingsToggleTheme": "Design wechseln",
-  "faqTitle": "FAQ",
+  "faqTitle": "FAQ (Häufig gestellte Fragen)",
   "faqSubtitle": "Häufig gestellte Fragen",
   "faqIsThisFromSupercell": "Ist diese App von Supercell?",
   "faqFanContentPolicy": "Dieses Material ist nicht offiziell und nicht von Supercell bewilligt. Weitere Informationen findest du in Supercells Richtlinien für Fan-Content unter https://supercell.com/en/fan-content-policy/de",
@@ -1178,8 +1187,8 @@
   "faqHowToInviteTheBotAnswer": "Du kannst unseren Bot auf deinen Server einladen, indem du auf den unten stehenden Button klickst. Du benötigst die Berechtigung \"Server verwalten\", um den Bot hinzuzufügen.",
   "faqInviteTheBot": "ClashKing Bot einladen",
   "faqNeedHelp": "Ich brauche Hilfe oder möchte einen Vorschlag machen. Wie kann ich euch erreichen?",
-  "faqNeedHelpAnswer": "Du kannst unserem Discord-Server beitreten und dort um Hilfe bitten, oder Feedback geben oder uns eine E-Mail an devs@clashk.ing senden. Bitte schreib uns, wenn möglich, nur auf Englisch oder Französisch.",
-  "faqSendEmail": "E-Mail senden",
+  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
+  "faqSendEmail": "Sende eine E-Mail",
   "faqJoinDiscord": "Unserem Discord-Server beitreten",
   "faqCannotOpenMailClient": "Aus irgendeinem Grund können wir deinen E-Mail-Client nicht öffnen. Wir haben die E-Mail-Adresse für dich kopiert. Du kannst eine E-Mail schreiben und die Adresse im Empfängerfeld einfügen.",
   "translationHelpUsTranslate": "Hilf uns bei der Übersetzung",
@@ -1188,8 +1197,5 @@
   "translationThankYouContent": "Ein großes Dankeschön an all unsere großartigen Übersetzer, die uns helfen, diese App mehr Menschen auf der ganzen Welt zugänglich zu machen!",
   "translationHelpTranslateContent": "Du kannst uns helfen, die App auf Crowdin zu übersetzen. Wenn deine Sprache auf Crowdin nicht verfügbar ist, kannst du diese gerne auf unserem Discord-Server anfordern. Vielen Dank für deine Hilfe!",
   "translationHelpTranslateButton": "Hilf bei der Übersetzung auf Crowdin",
-  "translationCurrentTranslators": "Aktuelle Übersetzer",
-  "filters": "Filter",
-  "cancel": "Abbrechen",
-  "apply": "Anwenden"
+  "translationCurrentTranslators": "Aktuelle Übersetzer"
 }

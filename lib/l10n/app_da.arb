@@ -1,170 +1,174 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Din ultimative Clash of Clans-ledsager til sporing af statistikker, håndtering af klaner og analyse af ydeevne.",
+  "appDescription": "Din ultimative sammenstød mellem klaner følgesvend til sporing statistik, styring klaner og analyse af ydeevne.",
   "generalLoading": "Indlæser...",
-  "generalError": "Error",
-  "generalRetry": "Prøv igen",
+  "loadingVillages": "Indlæser dine landsbyer...",
+  "loadingClanData": "Henter klan data...",
+  "loadingWarStats": "Analyserer krigsstatistik...",
+  "loadingLegendsData": "Forbereder sagndata...",
+  "loadingCapitalRaids": "Indlæser store razziaer...",
+  "loadingAlmostReady": "Næsten klar...",
+  "accountVerificationTitle": "Bekræft Konto",
+  "accountVerificationMessage": "Indtast dit API-token for at bekræfte at du ejer denne konto. Du kan finde det i Sammenstød mellem klaner indstillinger > Flere indstillinger > API Token.",
+  "accountVerified": "Konto bekræftet",
+  "accountNotVerified": "Konto ikke bekræftet",
+  "accountVerifyButton": "Verificér",
+  "accountVerificationSuccess": "Konto bekræftet!",
+  "accountVerificationFailed": "Bekræftelse mislykkedes. Tjek venligst din API-token.",
+  "generalRetry": "Forsøg igen",
   "generalTryAgain": "Prøv igen",
-  "generalClose": "Close",
   "generalCancel": "Annuller",
-  "generalOk": "OK",
+  "generalOk": "Ok",
   "@generalOk": {
     "description": "OK button on pop up"
   },
-  "generalApply": "Apply",
-  "generalConfirm": "Confirm",
-  "generalAdd": "Add",
-  "@generalAdd": {
-    "description": "Add an account"
+  "generalApply": "Anvend",
+  "generalConfirm": "Bekræft",
+  "generalManage": "Administrer",
+  "generalSettings": "Indstillinger",
+  "generalCopiedToClipboard": "Kopieret til udklipsholder",
+  "generalComingSoon": "Kommer snart!",
+  "generalLastRefresh": "Seneste opdatering: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
   },
-  "generalDelete": "Delete",
-  "@generalDelete": {
-    "description": "Delete an account"
+  "generalRefreshFailed": "Opdatering mislykkedes: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
   },
-  "generalManage": "Manage",
-  "generalManagement": "Management",
-  "generalSettings": "Settings",
-  "generalCopiedToClipboard": "Copied to clipboard",
-  "generalComingSoon": "Coming soon!",
-  "generalAll": "All",
+  "generalAll": "Alle",
   "@generalAll": {
     "description": "all items"
   },
-  "generalTotal": "Total",
-  "generalBest": "Best",
+  "generalTotal": "I Alt",
+  "generalBest": "Bedste",
   "@generalBest": {
     "description": "Best end of day trophies"
   },
-  "generalWorst": "Worst",
+  "generalWorst": "Værst",
   "@generalWorst": {
     "description": "Worst end of day trophies"
   },
-  "generalAverage": "Average",
+  "generalAverage": "Gennemsnit",
   "@generalAverage": {
     "description": "Average value of legend trophies (defense and attack)"
   },
-  "generalRemaining": "Remaining",
+  "generalRemaining": "Resterende",
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Active",
-  "generalInactive": "Inactive",
-  "generalStarted": "Started",
+  "generalActive": "Aktiv",
+  "generalInactive": "Inaktiv",
+  "generalStarted": "Startet",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
   },
-  "generalEnded": "Ended",
+  "generalEnded": "Afsluttet",
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
-  "generalRole": "Role",
-  "generalDate": "Date",
-  "generalStats": "Stats",
-  "generalFullStats": "Full Stats",
-  "generalDetails": "Details",
-  "generalHistory": "History",
+  "generalRole": "Rolle",
+  "generalStats": "Statistik",
+  "generalFullStats": "Fuld Statistik",
+  "generalDetails": "Detaljer",
+  "generalHistory": "Historik",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Charts",
-  "generalFilters": "Filters",
-  "generalWhatever": "Whatever",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Any",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
-  "generalNotSet": "Not set",
+  "generalFilters": "Filtre",
+  "generalNotSet": "Ikke angivet",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Warning",
-  "generalNoDataAvailable": "No data available.",
-  "generalClosed": "Closed",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Din ultimative Clash of Clans-ledsager til sporing af statistikker, håndtering af klaner og analyse af ydeevne.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignUp": "Sign up",
+  "generalWarning": "Advarsel",
+  "generalNoDataAvailable": "Ingen tilgængelige data.",
+  "authSignUp": "Tilmeld dig",
   "authLogin": "Login",
-  "authLogout": "Log out",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateClashKingAccount": "Create ClashKing Account",
-  "authCreateAccountToGetStarted": "Create your account to get started",
-  "authAlreadyHaveAccount": "Already have an account? Sign in",
-  "authConfirmLogout": "Are you sure you want to log out?",
+  "authLogout": "Log ud",
+  "authCreateAccount": "Opret Konto",
+  "authJoinClashKing": "Deltag I ClashKing",
+  "authCreateClashKingAccount": "Opret ClashKing Konto",
+  "authCreateAccountToGetStarted": "Opret din konto for at komme i gang",
+  "authAlreadyHaveAccount": "Har du allerede en konto? Log ind",
+  "authConfirmLogout": "Er du sikker på, at du vil logge ud?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
-  "authDiscordTitle": "Discord",
-  "authDiscordSignIn": "Sign In with Discord",
-  "authDiscordContinue": "Continue with Discord",
-  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authEmailTitle": "Email",
-  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailRequired": "Please enter your email",
-  "authEmailInvalid": "Please enter a valid email",
-  "authPasswordLabel": "Password",
-  "authPasswordConfirm": "Confirm Password",
-  "authPasswordRequired": "Please enter your password",
-  "authPasswordConfirmRequired": "Please confirm your password",
-  "authPasswordMismatch": "Passwords do not match",
-  "authPasswordTooShort": "Password must be at least 8 characters",
-  "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
-  "authPasswordForgot": "Forgot password?",
-  "authUsernameLabel": "Username",
-  "authUsernameRequired": "Please enter a username",
-  "authUsernameTooShort": "Username must be at least 3 characters",
-  "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
-  "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-  "authAccountManagement": "Account Management",
-  "authAccountConnected": "Connected Accounts",
-  "authAccountConnectedStatus": "Connected",
-  "authAccountNotConnected": "Not connected",
-  "authAccountEmailAndPassword": "Email & Password",
-  "authAccountSecured": "Your account is secured with multiple authentication methods",
-  "authAccountLinkEmail": "Link Email Account",
-  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
-  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "helpTitle": "Need help?",
-  "helpJoinDiscord": "Join Discord",
-  "helpEmailUs": "Email Us",
-  "accountsWelcome": "Welcome!",
-  "accountsWelcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
-  "accountsManageTitle": "Manage your accounts",
-  "accountsNoneFound": "No account linked to your profile found",
-  "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsEnterPlayerTag": "Enter a player tag",
-  "accountsAdd": "Add account",
-  "accountsDelete": "Delete account",
-  "accountsApiToken": "Account API Token",
-  "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
-  "accountsFillAllFields": "Please fill all fields.",
-  "accountsErrorTagNotExists": "The player tag entered does not exist.",
-  "accountsErrorAlreadyLinked": "The player tag is already linked to someone.",
-  "accountsErrorAlreadyLinkedToYou": "The player tag is already linked to you.",
-  "accountsErrorWrongApiToken": "The API token entered is incorrect",
-  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
-  "accountsErrorFailedToDelete": "Failed to delete link. Please try again later.",
-  "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
-  "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
-  "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
-  "errorLoadingVersion": "Error loading version",
+  "authDiscordTitle": "Uenighed",
+  "authDiscordSignIn": "Log ind med Discord",
+  "authDiscordContinue": "Fortsæt med Discord",
+  "authDiscordDescription": "Synkroniser dine data med ClashKing Bot og lås op for det fulde potentiale af ClashKing!",
+  "authEmailTitle": "E-mail",
+  "authEmailDescription": "Brug e-mail, hvis du ikke kan få adgang til Discord eller foretrækker app-only funktioner",
+  "authEmailRequired": "Indtast venligst din e-mail",
+  "authEmailInvalid": "Indtast venligst en gyldig e-mail",
+  "authPasswordLabel": "Adgangskode",
+  "authPasswordConfirm": "Bekræft Adgangskode",
+  "authPasswordRequired": "Indtast venligst din adgangskode",
+  "authPasswordConfirmRequired": "Bekræft venligst din adgangskode",
+  "authPasswordMismatch": "Adgangskoder stemmer ikke overens",
+  "authPasswordTooShort": "Adgangskoden skal være på mindst 8 tegn",
+  "authPasswordRequirements": "Adgangskoden skal indeholde: store bogstaver, små bogstaver, tal og specialtegn",
+  "authPasswordForgot": "Glemt adgangskode?",
+  "authUsernameLabel": "Brugernavn",
+  "authUsernameRequired": "Indtast venligst et brugernavn",
+  "authUsernameTooShort": "Brugernavn skal være på mindst 3 tegn",
+  "authErrorConnection": "Der opstod en fejl. Kontroller din internetforbindelse og prøv igen.",
+  "authErrorConnectionRelaunch": "Der opstod en fejl. Kontroller din internetforbindelse og genstart appen.",
+  "authAccountManagement": "Tilføj, fjern og genbestil dine Clash of Clans konti. Bekræft dine konti for at få adgang til alle funktioner.",
+  "authAccountConnected": "Tilsluttede Konti",
+  "authAccountConnectedStatus": "Forbundet",
+  "authAccountNotConnected": "Ikke forbundet",
+  "authAccountEmailAndPassword": "Email & Adgangskode",
+  "authAccountSecured": "Din konto er sikret med flere godkendelsesmetoder",
+  "authAccountLinkEmail": "Link E-Mail Konto",
+  "authAccountAddEmailAuth": "Tilføj godkendelse af e- mail og kodeord til din konto for yderligere sikkerhed.",
+  "authAccountEmailLinkedSuccess": "E-mail-konto linket sammen!",
+  "helpTitle": "Brug for hjælp?",
+  "helpJoinDiscord": "Deltag I Discord",
+  "helpEmailUs": "E-mail Os",
+  "accountsWelcome": "Velkommen!",
+  "accountsWelcomeMessage": "Tilføj venligst en eller flere Clash of Clans konti til din profil. Du kan tilføje eller fjerne konti senere.",
+  "accountsManageTitle": "Administrer dine konti",
+  "accountsNoneFound": "Ingen konto forbundet til din profil fundet",
+  "accountsPlayerTag": "Spiller Tag (# ABC123)",
+  "accountsEnterPlayerTag": "Indtast en spiller tag",
+  "accountsAdd": "Tilføj konto",
+  "accountsDelete": "Slet konto",
+  "accountsApiToken": "Konto API Token",
+  "accountsEnterApiToken": "Indtast venligst konto API token for at bekræfte det er din. Du kan finde det i Sammenstød mellem klaner indstillinger > Flere indstillinger > API Token.",
+  "accountsFillAllFields": "Udfyld venligst alle felter.",
+  "accountsErrorTagNotExists": "Det indtastede afspiller-tag eksisterer ikke.",
+  "accountsErrorAlreadyLinked": "Spilleren tag er allerede knyttet til nogen.",
+  "accountsErrorAlreadyLinkedToYou": "Spilleren tag er allerede knyttet til dig.",
+  "accountsErrorWrongApiToken": "Den indtastede API-token er forkert",
+  "accountsErrorFailedToAdd": "Kunne ikke tilføje kontoen. Prøv igen senere.",
+  "accountsErrorFailedToDelete": "Kunne ikke slette linket. Prøv igen senere.",
+  "accountsErrorFailedToUpdateOrder": "Kunne ikke opdatere rækkefølgen af konti.",
+  "errorTitle": "Ups! Vores servere har måske taget en ildkugle til ansigtet! Vi kaster en healing magi ... Prøv igen om et øjeblik.",
+  "errorSubtitle": "Hvis problemet fortsætter, tjek vores Discord Server for at se, om vi er klar over det.",
+  "errorLoadingVersion": "Fejl under indlæsning af version",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorCannotOpenLink": "We can't open this link.",
-  "errorExitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-  "playerSearchTitle": "Search player",
-  "playerSearchPlaceholder": "Player's name or tag",
-  "playerLastActive": "Last active: {date}",
+  "errorCannotOpenLink": "Vi kan ikke åbne dette link.",
+  "errorExitAppToOpenClash": "Du er ved at forlade appen for at åbne Clash of Clans.",
+  "playerSearchTitle": "Søg spiller",
+  "playerSearchPlaceholder": "Spillerens navn eller tag",
+  "playerLastActive": "Seneste aktiv: {date}",
   "@playerLastActive": {
     "placeholders": {
       "date": {
@@ -172,8 +176,8 @@
       }
     }
   },
-  "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
-  "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+  "playerNotTracked": "Denne spiller er ikke sporet. Data kan være unøjagtige.",
+  "playerClanDescription": "Din klan er \"{clan}\" ({tag}).",
   "@playerClanDescription": {
     "placeholders": {
       "clan": {
@@ -184,7 +188,7 @@
       }
     }
   },
-  "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+  "playerRatioDescription": "Dit donationsforhold er {ratio}. Du har doneret {donations} tropper og modtaget {received} tropper.",
   "@playerRatioDescription": {
     "placeholders": {
       "ratio": {
@@ -198,7 +202,7 @@
       }
     }
   },
-  "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+  "playerWarPreferenceDescription": "Din krigspræference er \"{preference}\".",
   "@playerWarPreferenceDescription": {
     "placeholders": {
       "preference": {
@@ -206,7 +210,7 @@
       }
     }
   },
-  "playerWarStarsDescription": "You have {stars} war stars.",
+  "playerWarStarsDescription": "Du har {stars} krigsstjerner.",
   "@playerWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -214,7 +218,7 @@
       }
     }
   },
-  "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+  "playerTrophiesDescription": "Du har {trophies} trofæer. Du er i øjeblikket {league}.",
   "@playerTrophiesDescription": {
     "placeholders": {
       "trophies": {
@@ -225,7 +229,7 @@
       }
     }
   },
-  "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+  "playerTownHallLevelDescription": "Dit rådhusniveau er {level}.",
   "@playerTownHallLevelDescription": {
     "placeholders": {
       "level": {
@@ -233,7 +237,7 @@
       }
     }
   },
-  "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+  "playerBuilderBaseDescription": "Dit Builder Hall niveau er {level} og du har {trophies} trofæer.",
   "@playerBuilderBaseDescription": {
     "placeholders": {
       "level": {
@@ -244,12 +248,12 @@
       }
     }
   },
-  "gameBaseHome": "Home Base",
+  "gameBaseHome": "Hjemme Base",
   "gameBaseBuilder": "Builder Base",
-  "gameClanCapital": "Clan Capital",
+  "gameClanCapital": "Klan Kapital",
   "gameTownHall": "TH",
-  "gameTownHallLevel": "TH Level",
-  "gameTownHallLevelNumber": "Town Hall {level}",
+  "gameTownHallLevel": "TH Niveau",
+  "gameTownHallLevelNumber": "Rådhuset {level}",
   "@gameTownHallLevelNumber": {
     "placeholders": {
       "level": {
@@ -265,13 +269,13 @@
       }
     }
   },
-  "gameExpLevel": "Experience Level",
-  "gameTrophies": "Trophies",
-  "gameBuilderBaseTrophies": "BB Trophies",
-  "gameDonations": "Donations",
-  "gameDonationsReceived": "Donations Received",
-  "gameDonationsRatio": "Donation Ratio",
-  "gameLevel": "Level: {level}/{maxLevel}",
+  "gameExpLevel": "Oplevelses Niveau",
+  "gameTrophies": "Trofæer",
+  "gameBuilderBaseTrophies": "BB Trofæer",
+  "gameDonations": "Donationer",
+  "gameDonationsReceived": "Donationer Modtaget",
+  "gameDonationsRatio": "Donationsforhold",
+  "gameLevel": "Niveau: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
       "level": {
@@ -282,54 +286,58 @@
       }
     }
   },
-  "gameHeroes": "Heroes",
-  "gameEquipment": "Equipments",
-  "gameHeroesEquipments": "Hero equipments",
-  "gameTroops": "Troops",
-  "gameActiveSuperTroops": "Active Super Troops",
-  "gamePets": "Pets",
-  "gameSiegeMachines": "Siege Machines",
+  "gameHeroes": "Helte",
+  "gameEquipment": "Udstyr",
+  "gameHeroesEquipments": "Helt udstyr",
+  "gameTroops": "Tropper",
+  "gameActiveSuperTroops": "Aktive Supertropper",
+  "gamePets": "Kæledyr",
+  "gameSiegeMachines": "Belejningsmaskiner",
   "gameSpells": "Spells",
-  "gameAchievements": "Achievements",
-  "gameClanGames": "Clan Games",
-  "gameSeasonPass": "Season Pass",
-  "gameCreatorCode": "Creator Code: ClashKing",
-  "clanTitle": "Clan",
-  "clanSearchTitle": "Search clan",
-  "clanSearchPlaceholder": "Clan's name",
-  "clanNone": "No clan",
-  "clanJoinToUnlock": "Join a clan to unlock new features.",
-  "clanMembers": "Members",
-  "clanWarFrequency": "War frequency",
-  "clanMinimumMembers": "Minimum members",
-  "clanMaximumMembers": "Maximum members",
-  "clanLocation": "Location",
-  "clanMinimumPoints": "Minimum clan points",
-  "clanMinimumLevel": "Minimum clan level",
-  "clanInviteOnly": "Invite Only",
+  "gameAchievements": "Bedrifter",
+  "gameClanGames": "Klan Spil",
+  "gameSeasonPass": "Sæson Pass",
+  "gameCreatorCode": "Skaber Kode: Sammenstød",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
+  "clanTitle": "Klan",
+  "clanSearchTitle": "Søg klan",
+  "clanSearchPlaceholder": "Klans navn",
+  "clanNone": "Ingen klan",
+  "clanJoinToUnlock": "Deltag i en klan for at låse op for nye funktioner.",
+  "clanMembers": "Medlemmer",
+  "clanWarFrequency": "Krig frekvens",
+  "clanMinimumMembers": "Minimum medlemmer",
+  "clanMaximumMembers": "Maksimum medlemmer",
+  "clanLocation": "Placering",
+  "clanMinimumPoints": "Minimum klan punkter",
+  "clanMinimumLevel": "Mindste klan niveau",
+  "clanInviteOnly": "Kun Invitation",
   "@clanInviteOnly": {
     "description": "Clan is invite only"
   },
-  "clanOpened": "Opened",
+  "clanOpened": "Åbnet",
   "@clanOpened": {
     "description": "Clan is opened"
   },
-  "clanClosed": "Closed",
+  "clanClosed": "Lukket",
   "@clanClosed": {
     "description": "Clan is closed"
   },
-  "clanRoleLeader": "Leader",
-  "clanRoleCoLeader": "Co-Leader",
-  "clanRoleElder": "Elder",
-  "clanRoleMember": "Member",
-  "clanWarFrequencyAlways": "Always",
-  "clanWarFrequencyNever": "Never",
-  "clanWarFrequencyUnknown": "Unknown",
-  "clanWarFrequencyOncePerWeek": "1/week",
-  "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
-  "clanWarFrequencyRarely": "Rarely",
+  "clanRoleLeader": "Leder",
+  "clanRoleCoLeader": "Medleder",
+  "clanRoleElder": "Ældre",
+  "clanRoleMember": "Medlem",
+  "clanWarFrequencyAlways": "Altid",
+  "clanWarFrequencyNever": "Aldrig",
+  "clanWarFrequencyUnknown": "Ukendt",
+  "clanWarFrequencyOncePerWeek": "1/uge",
+  "clanWarFrequencyMoreThanOncePerWeek": "Mere end 1/uge",
+  "clanWarFrequencyRarely": "Sjældent",
   "timeHourIndicator": "h",
-  "timeDaysAgo": "{days} days ago",
+  "timeDaysAgo": "{days} dage siden",
   "@timeDaysAgo": {
     "placeholders": {
       "days": {
@@ -337,7 +345,7 @@
       }
     }
   },
-  "timeDayAgo": "{day} day ago",
+  "timeDayAgo": "{day} dag siden",
   "@timeDayAgo": {
     "placeholders": {
       "day": {
@@ -345,7 +353,7 @@
       }
     }
   },
-  "timeHourAgo": "{hour} hour ago",
+  "timeHourAgo": "{hour} time siden",
   "@timeHourAgo": {
     "placeholders": {
       "hour": {
@@ -353,7 +361,7 @@
       }
     }
   },
-  "timeHoursAgo": "{hours} hours ago",
+  "timeHoursAgo": "{hours} timer siden",
   "@timeHoursAgo": {
     "placeholders": {
       "hours": {
@@ -361,7 +369,7 @@
       }
     }
   },
-  "timeMinuteAgo": "{minute} minute ago",
+  "timeMinuteAgo": "{minute} minut siden",
   "@timeMinuteAgo": {
     "placeholders": {
       "minute": {
@@ -369,7 +377,7 @@
       }
     }
   },
-  "timeMinutesAgo": "{minutes} minutes ago",
+  "timeMinutesAgo": "{minutes} minutter siden",
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -377,9 +385,12 @@
       }
     }
   },
-  "timeJustNow": "Just Now",
-  "timeEndedJustNow": "Ended just now",
-  "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
+  "timeJustNow": "Lige Nu",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
+  "timeEndedJustNow": "Sluttede lige nu",
+  "timeEndedMinutesAgo": "Sluttede {minutes} minutter siden",
   "@timeEndedMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -387,7 +398,7 @@
       }
     }
   },
-  "timeEndedHoursAgo": "Ended {hours} hours ago",
+  "timeEndedHoursAgo": "Sluttede {hours} timer siden",
   "@timeEndedHoursAgo": {
     "placeholders": {
       "hours": {
@@ -395,7 +406,7 @@
       }
     }
   },
-  "timeEndedDaysAgo": "Ended {days} days ago",
+  "timeEndedDaysAgo": "Afsluttede {days} dage siden",
   "@timeEndedDaysAgo": {
     "placeholders": {
       "days": {
@@ -403,7 +414,7 @@
       }
     }
   },
-  "timeStartsIn": "Starts in {time}",
+  "timeStartsIn": "Starter i {time}",
   "@timeStartsIn": {
     "placeholders": {
       "time": {
@@ -411,7 +422,7 @@
       }
     }
   },
-  "timeStartsAt": "Starts at {time}",
+  "timeStartsAt": "Starter ved {time}",
   "@timeStartsAt": {
     "placeholders": {
       "time": {
@@ -419,7 +430,7 @@
       }
     }
   },
-  "timeEndsIn": "Ends in {time}",
+  "timeEndsIn": "Slutter i {time}",
   "@timeEndsIn": {
     "placeholders": {
       "time": {
@@ -427,7 +438,7 @@
       }
     }
   },
-  "timeEndsAt": "Ends at {time}",
+  "timeEndsAt": "Slutter på {time}",
   "@timeEndsAt": {
     "placeholders": {
       "time": {
@@ -435,10 +446,10 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
-  "legendsNotInLeague": "Not in Legend League",
-  "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
-  "legendsStartDescription": "You started the day with {trophies} trophies.",
+  "legendsTitle": "Forklarende Liga",
+  "legendsNotInLeague": "Ikke i Legend League",
+  "legendsNoDataToday": "Du er ikke i Legend League, men tidligere årstider er tilgængelige.",
+  "legendsStartDescription": "Du startede dagen med {trophies} trofæer.",
   "@legendsStartDescription": {
     "placeholders": {
       "trophies": {
@@ -446,7 +457,7 @@
       }
     }
   },
-  "legendsNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
+  "legendsNoRankLocalDescription": "Du er i øjeblikket ikke rangeret ({country}) med {trophies} trofæer.",
   "@legendsNoRankLocalDescription": {
     "placeholders": {
       "country": {
@@ -457,7 +468,7 @@
       }
     }
   },
-  "legendsRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+  "legendsRankLocalDescription": "Du er i øjeblikket rangeret {rank} ({country}) med {trophies} trofæer.",
   "@legendsRankLocalDescription": {
     "placeholders": {
       "rank": {
@@ -471,7 +482,7 @@
       }
     }
   },
-  "legendsGainDescription": "You gained {trophies} trophies for now.",
+  "legendsGainDescription": "Du fik {trophies} trofæer for nu.",
   "@legendsGainDescription": {
     "placeholders": {
       "trophies": {
@@ -479,7 +490,7 @@
       }
     }
   },
-  "legendsLossDescription": "You lost {trophies} trophies for now.",
+  "legendsLossDescription": "Du har mistet {trophies} trofæer for nu.",
   "@legendsLossDescription": {
     "placeholders": {
       "trophies": {
@@ -487,7 +498,7 @@
       }
     }
   },
-  "legendsNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+  "legendsNoGlobalRankDescription": "Du er i øjeblikket ikke rangeret globalt med {trophies} trofæer.",
   "@legendsNoGlobalRankDescription": {
     "placeholders": {
       "trophies": {
@@ -495,7 +506,7 @@
       }
     }
   },
-  "legendsGlobalRankDescription": "You are currently ranked {rank} globally with {trophies} trophies.",
+  "legendsGlobalRankDescription": "Du er i øjeblikket rangeret {rank} globalt med {trophies} trofæer.",
   "@legendsGlobalRankDescription": {
     "placeholders": {
       "rank": {
@@ -506,36 +517,36 @@
       }
     }
   },
-  "legendsNoRank": "No ranking",
-  "legendsBestTrophies": "Best Trophies",
-  "legendsMostAttacks": "Most Attacks",
-  "legendsLastSeason": "Last Season",
-  "legendsBestRank": "Best Global Rank",
-  "legendsTrophiesBySeason": "Trophies by season",
-  "legendsEosTrophies": "End Of Season Trophies",
-  "legendsEosDetails": "End Of Season Details",
-  "legendsInaccurateTitle": "Inaccurate data?",
-  "legendsInaccurateIntro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
-  "legendsInaccurateApiDelayTitle": "1. API Delay: ",
-  "legendsInaccurateApiDelayBody": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
-  "legendsInaccurateConcurrentTitle": "2. Concurrent Changes: \n",
-  "legendsInaccurateMultipleAttacksTitle": "- Multiple Attacks/Defenses: ",
-  "legendsInaccurateMultipleAttacksBody": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
-  "legendsInaccurateSimultaneousTitle": "- Simultaneous Attack and Defense: ",
-  "legendsInaccurateSimultaneousBody": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
-  "legendsInaccurateNetGainTitle": "3. Net Gain/Loss: ",
-  "legendsInaccurateNetGainBody": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
-  "legendsInaccurateConclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-  "statsSeasonStats": "Season Stats",
-  "statsByDay": "By Day",
+  "legendsNoRank": "Ingen placering",
+  "legendsBestTrophies": "Bedste Trofæer",
+  "legendsMostAttacks": "Flest Angreb",
+  "legendsLastSeason": "Sidste Sæson",
+  "legendsBestRank": "Bedste Globale Rang",
+  "legendsTrophiesBySeason": "Trofæer efter sæson",
+  "legendsEosTrophies": "Afslutning Af Sæson Trofæer",
+  "legendsEosDetails": "Afslutning Af Sæson Detaljer",
+  "legendsInaccurateTitle": "Unøjagtige data?",
+  "legendsInaccurateIntro": "På grund af begrænsninger i sammenstød mellem klaner API, vores data måske ikke altid være helt nøjagtige. Her er hvorfor:\n",
+  "legendsInaccurateApiDelayTitle": "1. Api Forsinkelse: ",
+  "legendsInaccurateApiDelayBody": "API kan tage op til 5 minutter at opdatere, hvilket forårsager en forsinkelse i afspejler real-time trofæ ændringer.\n",
+  "legendsInaccurateConcurrentTitle": "2. Samtidige Ændringer: \n",
+  "legendsInaccurateMultipleAttacksTitle": "- Flere Angreb/Forsvar: ",
+  "legendsInaccurateMultipleAttacksBody": "Hvis flere angreb eller forsvar sker i hurtig rækkefølge, API kan vise kombinerede resultater (f.eks. +68 eller -68).\n",
+  "legendsInaccurateSimultaneousTitle": "- Samtidig angreb og forsvar: ",
+  "legendsInaccurateSimultaneousBody": "Hvis et angreb og forsvar opstår på samme tid, kan du se et blandet resultat (fx, +4).\n",
+  "legendsInaccurateNetGainTitle": "3. Nettogevinst/-tab: ",
+  "legendsInaccurateNetGainBody": "Trods timing problemer, den samlede netto gevinst eller tab for dagen er nøjagtig. ",
+  "legendsInaccurateConclusion": "Disse begrænsninger er fælles på tværs af alle værktøjer ved hjælp af Clash of Clans API. Vi kan desværre ikke ordne det, som det er i Supercell's hænder. Vi gør vores bedste for at kompensere for disse grænser og give resultater så tæt på virkeligheden som muligt. Tak for forståelsen!",
+  "statsSeasonStats": "Sæson Statistik",
+  "statsByDay": "Efter Dag",
   "@statsByDay": {
     "description": "Shows stats by day"
   },
-  "statsBySeason": "By Season",
+  "statsBySeason": "Efter Sæson",
   "@statsBySeason": {
     "description": "Shows stats by season"
   },
-  "statsDayIndex": "Day {index}",
+  "statsDayIndex": "Dag {index}",
   "@statsDayIndex": {
     "placeholders": {
       "index": {
@@ -543,7 +554,7 @@
       }
     }
   },
-  "statsIndexDays": "{index} days",
+  "statsIndexDays": "{index} dage",
   "@statsIndexDays": {
     "placeholders": {
       "index": {
@@ -551,7 +562,7 @@
       }
     }
   },
-  "statsSeasonDate": "{date} season",
+  "statsSeasonDate": "{date} sæson",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
     "placeholders": {
@@ -560,23 +571,23 @@
       }
     }
   },
-  "statsAllTownHalls": "All Town Halls",
-  "statsMembers": "Members Stats",
-  "todoTitle": "To-do list",
-  "todoExplanationTitle": "Task Calculation",
-  "todoExplanationIntro": "The task completion percentage is calculated based on the following activities with specific weightings:",
-  "todoExplanationLegendsTitle": "Legend League:",
-  "todoExplanationLegends": "Weight of 8 points per account, 1 attack = 1 point.",
+  "statsAllTownHalls": "Alle Rådhuse",
+  "statsMembers": "Medlems Statistik",
+  "todoTitle": "Gøremålsliste",
+  "todoExplanationTitle": "Beregning Af Opgave",
+  "todoExplanationIntro": "Procentdelen for afslutning af opgaven beregnes ud fra følgende aktiviteter med specifikke vægtninger:",
+  "todoExplanationLegendsTitle": "Forklarende Liga:",
+  "todoExplanationLegends": "Vægt på 8 point pr. konto, 1 angreb = 1 point.",
   "todoExplanationRaidsTitle": "Raids:",
-  "todoExplanationRaids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-  "todoExplanationClanWarsTitle": "Clan Wars:",
-  "todoExplanationClanWars": "Weight of 2 points per account, 1 attack = 1 point.",
-  "todoExplanationCwlTitle": "Clan War League:",
-  "todoExplanationCwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
-  "todoExplanationPassAndGamesTitle": "Season Pass & Clan Games:",
-  "todoExplanationPassAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
-  "todoExplanationConclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
-  "todoAccountsNumber": "{number} accounts",
+  "todoExplanationRaids": "Vægt på 5 point pr. konto (eller 6 hvis det sidste angreb er blevet låst), 1 angreb = 1 point.",
+  "todoExplanationClanWarsTitle": "Klan Krig:",
+  "todoExplanationClanWars": "Vægt på 2 point pr. konto, 1 angreb = 1 point.",
+  "todoExplanationCwlTitle": "Klan Krigsliga:",
+  "todoExplanationCwl": "Vægt på 1 point pr. konto, 1 angreb = 1 point. CWL kan ikke spores, hvis spilleren ikke er i deres liga klan.",
+  "todoExplanationPassAndGamesTitle": "Sæson Pass & Klan Spil:",
+  "todoExplanationPassAndGames": "Vægt på 2 point pr. konto. Forholdet er baseret på antallet af dage, der er tilbage (1 måned for pass og 6 dage for spillet). Grøn = på sporet for at fuldføre passet eller spillet, rød = bag tidsplanen.",
+  "todoExplanationConclusion": "Den endelige procentdel beregnes ved at dividere de samlede handlinger, der er gennemført under igangværende begivenheder, med de samlede påkrævede handlinger. Konti inaktiv i mere end 14 dage er udelukket fra beregningen.",
+  "todoAccountsNumber": "{number} konti",
   "@todoAccountsNumber": {
     "placeholders": {
       "number": {
@@ -585,7 +596,7 @@
     },
     "description": "Number of accounts (ex: 4 accounts)"
   },
-  "todoAccountsNumberActive": "{number} active accounts",
+  "todoAccountsNumberActive": "{number} aktive konti",
   "@todoAccountsNumberActive": {
     "placeholders": {
       "number": {
@@ -593,7 +604,7 @@
       }
     }
   },
-  "todoAccountsNumberInactive": "{number} inactive accounts",
+  "todoAccountsNumberInactive": "{number} inaktive konti",
   "@todoAccountsNumberInactive": {
     "placeholders": {
       "number": {
@@ -601,11 +612,11 @@
       }
     }
   },
-  "todoAccountsActive": "Active accounts",
-  "todoAccountsInactive": "Inactive accounts",
-  "todoAccountsNoInactive": "No inactive accounts.",
-  "todoAccountsNoActive": "No active accounts.",
-  "todoAttacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
+  "todoAccountsActive": "Aktive konti",
+  "todoAccountsInactive": "Inaktive konti",
+  "todoAccountsNoInactive": "Ingen inaktive konti.",
+  "todoAccountsNoActive": "Ingen aktive konti.",
+  "todoAttacksLeftDescription": "Du har {attacks} angreb tilbage ({type}).",
   "@todoAttacksLeftDescription": {
     "placeholders": {
       "attacks": {
@@ -616,7 +627,7 @@
       }
     }
   },
-  "todoDefensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
+  "todoDefensesLeftDescription": "Du har {defenses} defense(s) tilbage ({type}).",
   "@todoDefensesLeftDescription": {
     "placeholders": {
       "defenses": {
@@ -627,7 +638,7 @@
       }
     }
   },
-  "todoNoAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+  "todoNoAttacksLeftDescription": "Tillykke, du har gjort alle dine angreb ({type})!",
   "@todoNoAttacksLeftDescription": {
     "placeholders": {
       "type": {
@@ -635,7 +646,7 @@
       }
     }
   },
-  "todoPointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+  "todoPointsLeftDescription": "Du har {points} point tilbage for at komme i dag til at være i tide til afslutningen af begivenheden ({type}).",
   "@todoPointsLeftDescription": {
     "placeholders": {
       "points": {
@@ -646,7 +657,7 @@
       }
     }
   },
-  "todoPointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+  "todoPointsLeftDescriptionNoPoints": "Tillykke, du er på tide til at få de maksimale belønninger i slutningen af begivenheden ({type})!",
   "@todoPointsLeftDescriptionNoPoints": {
     "placeholders": {
       "type": {
@@ -654,13 +665,13 @@
       }
     }
   },
-  "warTitle": "War",
-  "warFrequency": "War frequency",
-  "warParticipation": "War Participation",
-  "warLeague": "War/League",
-  "warHistory": "War History",
-  "warLog": "War Log",
-  "warLogClosed": "War log closed.",
+  "warTitle": "Krig",
+  "warFrequency": "Krig frekvens",
+  "warParticipation": "Krig Deltagelse",
+  "warLeague": "Krig/Liga",
+  "warHistory": "Krig Historie",
+  "warLog": "Krigslog",
+  "warLogClosed": "{clan}'s krigslog er lukket.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -668,9 +679,9 @@
       }
     }
   },
-  "warStats": "War Stats",
-  "warOngoing": "Ongoing war",
-  "warIsNotInWar": "{clan} is not in war.",
+  "warStats": "Krig Statistik",
+  "warOngoing": "Igangværende krig",
+  "warIsNotInWar": "{clan} er ikke i krig.",
   "@warIsNotInWar": {
     "placeholders": {
       "clan": {
@@ -678,23 +689,23 @@
       }
     }
   },
-  "warAskForWar": "Contact the leader or a co-leader to start a war.",
-  "warAskForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-  "warEnded": "War ended",
-  "warPreparation": "Preparation",
-  "warPerfectWar": "Perfect war",
-  "warVictory": "Victory",
-  "warDefeat": "Defeat",
-  "warDraw": "Draw",
+  "warAskForWar": "Kontakt lederen eller en medleder for at starte en krig.",
+  "warAskForWarLogOpening": "Kontakt en leder eller en medleder for at åbne krigsloggen.",
+  "warEnded": "Krig sluttede",
+  "warPreparation": "Forberedelse",
+  "warPerfectWar": "Perfekt krig",
+  "warVictory": "Sejr",
+  "warDefeat": "Besejr",
+  "warDraw": "Tegn",
   "@warDraw": {
     "description": "War ended in a draw"
   },
-  "warTeamSize": "Team size",
-  "warMyTeam": "My team",
+  "warTeamSize": "Hold størrelse",
+  "warMyTeam": "Mit team",
   "warEnemiesTeam": "Enemies",
-  "warClanDraw": "The two clans are tied",
-  "warStateOfTheWar": "State of the war",
-  "warStarsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+  "warClanDraw": "De to klaner er bundet",
+  "warStateOfTheWar": "Tilstand af krigen",
+  "warStarsNeededToTakeTheLead": "{clan} har stadig brug for {star} flere stjerne(r) eller {stars2} stjerne(r) og {percent}% for at tage føringen.",
   "@warStarsNeededToTakeTheLead": {
     "placeholders": {
       "clan": {
@@ -711,7 +722,7 @@
       }
     }
   },
-  "warStarsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+  "warStarsAndPercentNeededToTakeTheLead": "{clan} har stadig brug for {percent}% eller 1 stjerne til at tage føringen",
   "@warStarsAndPercentNeededToTakeTheLead": {
     "placeholders": {
       "clan": {
@@ -722,9 +733,9 @@
       }
     }
   },
-  "warNoDataAvailableForThisWar": "No data available for this war",
-  "warCalculatorFast": "Fast calculator",
-  "warCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
+  "warNoDataAvailableForThisWar": "Ingen tilgængelige data for denne krig",
+  "warCalculatorFast": "Hurtig lommeregner",
+  "warCalculatorAnswer": "For at opnå en ødelæggelsesrate på {percentNeeded}%, er der brug for i alt {result}%.",
   "@warCalculatorAnswer": {
     "placeholders": {
       "percentNeeded": {
@@ -735,17 +746,17 @@
       }
     }
   },
-  "warCalculatorNeededOverall": "% Needed overall",
-  "warCalculatorCalculate": "Calculate",
-  "warAttacksTitle": "Attacks",
-  "warAttacksNone": "No attack yet",
+  "warCalculatorNeededOverall": "% Behøver samlet",
+  "warCalculatorCalculate": "Beregn",
+  "warAttacksTitle": "Angreb",
+  "warAttacksNone": "Intet angreb endnu",
   "@warAttacksNone": {
     "description": "No attack yet in war"
   },
-  "warAttacksBest": "Best attacks",
-  "warAttacksCount": "Attack Count",
-  "warAttacksMissed": "Missed Attacks",
-  "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
+  "warAttacksBest": "Bedste angreb",
+  "warAttacksCount": "Angrib Antal",
+  "warAttacksMissed": "Ubesvarede Angreb",
+  "warAttacksNumber": "Du angreb {number_time} tid under de sidste {number_war} krige.",
   "@warAttacksNumber": {
     "placeholders": {
       "number_time": {
@@ -756,7 +767,7 @@
       }
     }
   },
-  "warAttacksAverageStars": "You had an average of {stars} stars per war.",
+  "warAttacksAverageStars": "Du havde i gennemsnit {stars} stjerner pr. krig.",
   "@warAttacksAverageStars": {
     "placeholders": {
       "stars": {
@@ -764,7 +775,7 @@
       }
     }
   },
-  "warAttacksAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+  "warAttacksAverageDestruction": "Du havde et gennemsnit af {percent}% ødelæggelse per krig.",
   "@warAttacksAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -772,13 +783,13 @@
       }
     }
   },
-  "warDefensesTitle": "Defenses",
-  "warDefensesNone": "No defense yet",
+  "warDefensesTitle": "Forsvar",
+  "warDefensesNone": "Intet forsvar endnu",
   "@warDefensesNone": {
     "description": "No defense yet in war"
   },
-  "warDefensesBest": "Best defenses",
-  "warDefensesBestOutOf": "Best defense (out of {number})",
+  "warDefensesBest": "Bedste forsvar",
+  "warDefensesBestOutOf": "Bedste forsvar (ud af {number})",
   "@warDefensesBestOutOf": {
     "placeholders": {
       "number": {
@@ -787,7 +798,7 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
+  "warDefensesNumber": "Du forsvarede {number_time} tid under de sidste {number_war} krige.",
   "@warDefensesNumber": {
     "placeholders": {
       "number_time": {
@@ -798,7 +809,7 @@
       }
     }
   },
-  "warDefensesAverageStars": "You had an average of {stars} stars per defense.",
+  "warDefensesAverageStars": "Du havde et gennemsnit af {stars} stjerner pr. forsvar.",
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
@@ -806,7 +817,7 @@
       }
     }
   },
-  "warDefensesAverageDestruction": "You had an average of {percent}% destruction rate per defense.",
+  "warDefensesAverageDestruction": "Du havde i gennemsnit {percent}% destruktionsrate pr. forsvar.",
   "@warDefensesAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -814,24 +825,24 @@
       }
     }
   },
-  "warStarsTitle": "Stars",
-  "warStarsAverage": "Average stars",
-  "warStarsNumber": "Number of stars",
-  "warStarsOne": "1 star",
-  "warStarsTwo": "2 stars",
-  "warStarsThree": "3 stars",
-  "warStarsZero": "0 Star",
-  "warStarsBestPerformance": "Best performance",
+  "warStarsTitle": "Stjerner",
+  "warStarsAverage": "Gennemsnitlige stjerner",
+  "warStarsNumber": "Antal stjerner",
+  "warStarsOne": "1 stjerne",
+  "warStarsTwo": "2 stjerner",
+  "warStarsThree": "3 stjerner",
+  "warStarsZero": "0 Stjerne",
+  "warStarsBestPerformance": "Bedste ydeevne",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
   },
-  "warDestructionTitle": "Destruction",
-  "warDestructionAverage": "Average destruction",
-  "warDestructionRate": "Destruction rate",
+  "warDestructionTitle": "Destruktion",
+  "warDestructionAverage": "Gennemsnitlig destruktion",
+  "warDestructionRate": "Destruktionssats",
   "@warDestructionRate": {
     "description": "Percentage of destruction in war"
   },
-  "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryWinsDescription": "Din klan vandt {wins} krige ({percent}%) ud af de sidste 50 krige.",
   "@warHistoryWinsDescription": {
     "placeholders": {
       "wins": {
@@ -842,7 +853,7 @@
       }
     }
   },
-  "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryLossesDescription": "Din klan mistede {losses} krige ({percent}%) ud af de sidste 50 krige.",
   "@warHistoryLossesDescription": {
     "placeholders": {
       "losses": {
@@ -853,7 +864,7 @@
       }
     }
   },
-  "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) out of the last 50 wars.",
+  "warHistoryDrawsDescription": "Din klan havde {draws} trækker ({percent}%) ud af de sidste 50 krige.",
   "@warHistoryDrawsDescription": {
     "placeholders": {
       "draws": {
@@ -864,7 +875,7 @@
       }
     }
   },
-  "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
+  "warHistoryAverageMembersDescription": "Din klan har i gennemsnit {members} medlemmer, der deltager ud af de sidste 50 krige.",
   "@warHistoryAverageMembersDescription": {
     "placeholders": {
       "members": {
@@ -872,7 +883,7 @@
       }
     }
   },
-  "warHistoryAverageWarStarsDescription": "Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.",
+  "warHistoryAverageWarStarsDescription": "Din klan havde i gennemsnit {stars} stjerner per krig fra de sidste 50 krige. Den repræsenterer {percent} af de samlede stjerner.",
   "@warHistoryAverageWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -883,7 +894,7 @@
       }
     }
   },
-  "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
+  "warHistoryAverageHitRateDescription": "Din klan havde i gennemsnit {percent}% destruktionsrate fra de sidste 50 krige.",
   "@warHistoryAverageHitRateDescription": {
     "placeholders": {
       "percent": {
@@ -891,7 +902,7 @@
       }
     }
   },
-  "warPositionMap": "Map Position",
+  "warPositionMap": "Kort Position",
   "@warPositionMap": {
     "description": "Map position in war"
   },
@@ -899,7 +910,7 @@
   "@warPositionAbbr": {
     "description": "Abbreviation for map position"
   },
-  "warPositionOrder": "Order",
+  "warPositionOrder": "Ordre",
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
@@ -907,12 +918,12 @@
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
   },
-  "warOpponentLowerTownhall": "Lower TH",
-  "warOpponentUpperTownhall": "Upper TH",
-  "warOpponentEqualThLevel": "Equal TH",
-  "warOpponentSelectMembersThLevel": "Members TH Level",
-  "warOpponentSelectOpponentsThLevel": "Opponents TH Level",
-  "warFiltersLastXwars": "Last {number} wars",
+  "warOpponentLowerTownhall": "Nedre TH",
+  "warOpponentUpperTownhall": "Øvre TH",
+  "warOpponentEqualThLevel": "Lig Med TH",
+  "warOpponentSelectMembersThLevel": "Medlemmer TH Niveau",
+  "warOpponentSelectOpponentsThLevel": "Modstandere TH Niveau",
+  "warFiltersLastXwars": "Seneste {number} krige",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
     "placeholders": {
@@ -921,49 +932,49 @@
       }
     }
   },
-  "warFiltersFriendly": "Friendly",
+  "warFiltersFriendly": "Venlig",
   "@warFiltersFriendly": {
     "description": "Friendly war"
   },
-  "warFiltersRandom": "Random",
+  "warFiltersRandom": "Tilfældig",
   "@warFiltersRandom": {
     "description": "Random/basic war (not friendly or cwl)"
   },
-  "warVisibilityToggleTownHall": "Hide/Show stats from former TH levels",
+  "warVisibilityToggleTownHall": "Skjul/Vis statistik fra tidligere TH-niveauer",
   "@warVisibilityToggleTownHall": {
     "description": "For example, hide stats from TH15 and below if the player is now TH16"
   },
-  "warEventsTitle": "Events",
+  "warEventsTitle": "Begivenheder",
   "@warEventsTitle": {
     "description": "War events"
   },
-  "warEventsNewest": "Newest",
-  "warEventsOldest": "Oldest",
-  "warStatusReady": "Opted In",
+  "warEventsNewest": "Nyeste",
+  "warEventsOldest": "Ældste",
+  "warStatusReady": "Valgt Ind",
   "@warStatusReady": {
     "description": "Opted In for war"
   },
-  "warStatusUnready": "Opted Out",
+  "warStatusUnready": "Valgt Ud",
   "@warStatusUnready": {
     "description": "Opted Out for war"
   },
-  "warStatusMissed": "Missed",
+  "warStatusMissed": "Ubesvaret",
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warAbbreviationAvg": "Avg",
+  "warAbbreviationAvg": "Gns",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
   },
-  "warAbbreviationAvgPercentage": "Avg %",
+  "warAbbreviationAvgPercentage": "Gns. %",
   "@warAbbreviationAvgPercentage": {
     "description": "Abbreviation for average percentage"
   },
   "cwlTitle": "CWL",
-  "cwlClanWarLeague": "Clan War League",
-  "cwlOngoing": "Ongoing CWL",
-  "cwlRounds": "Rounds",
-  "cwlRoundNumber": "Round {number}",
+  "cwlClanWarLeague": "Klan Krigsliga",
+  "cwlOngoing": "Igangværende CWL",
+  "cwlRounds": "Runder",
+  "cwlRoundNumber": "Runde {number}",
   "@cwlRoundNumber": {
     "placeholders": {
       "number": {
@@ -971,7 +982,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Aktuel runde (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -979,7 +990,7 @@
       }
     }
   },
-  "cwlRank": "Your clan is currently ranked {rank}.",
+  "cwlRank": "Din klan er i øjeblikket rangeret {rank}.",
   "@cwlRank": {
     "placeholders": {
       "rank": {
@@ -987,7 +998,7 @@
       }
     }
   },
-  "cwlStars": "Your clan has a total of {stars} stars.",
+  "cwlStars": "Din klan har i alt {stars} stjerner.",
   "@cwlStars": {
     "placeholders": {
       "stars": {
@@ -995,7 +1006,7 @@
       }
     }
   },
-  "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
+  "cwlDestructionPercentage": "Din klan har en total ødelæggelse på {percent}%.",
   "@cwlDestructionPercentage": {
     "placeholders": {
       "percent": {
@@ -1003,7 +1014,7 @@
       }
     }
   },
-  "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+  "cwlTotalAttacks": "Din klan har i alt {attacks} angreb ud af {totalAttacks} mulige angreb.",
   "@cwlTotalAttacks": {
     "placeholders": {
       "attacks": {
@@ -1014,20 +1025,20 @@
       }
     }
   },
-  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
-  "joinLeaveJoin": "Join",
-  "joinLeaveLeave": "Leave",
+  "joinLeaveTitle": "Tilmeld/Forlad Logfiler (periodevis)",
+  "joinLeaveJoin": "Deltag",
+  "joinLeaveLeave": "Forlad",
   "joinLeaveReset": "Reset",
-  "joinLeaveJoins": "Joins",
-  "joinLeaveLeaves": "Leaves",
-  "joinLeaveUniquePlayers": "Unique Players",
-  "joinLeaveMovingPlayers": "Moving Players",
-  "joinLeaveMostMovingPlayers": "Most Moving Players",
-  "joinLeaveStillInClan": "Still in Clan",
-  "joinLeaveLeftForever": "Left Forever",
-  "joinLeaveRejoinedPlayers": "Rejoined Players",
-  "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
-  "joinLeavePeakHour": "Most Active Hour",
+  "joinLeaveJoins": "Deltager",
+  "joinLeaveLeaves": "Blade",
+  "joinLeaveUniquePlayers": "Unikke Spillere",
+  "joinLeaveMovingPlayers": "Flytter Spillere",
+  "joinLeaveMostMovingPlayers": "Mest Bevægende Spillere",
+  "joinLeaveStillInClan": "Stadig i klan",
+  "joinLeaveLeftForever": "Venstre For Evigt",
+  "joinLeaveRejoinedPlayers": "Gentilsluttede Spillere",
+  "joinLeaveAvgTimeJoinLeave": "Gns Tilmeld/Forlad Tid",
+  "joinLeavePeakHour": "Mest Aktive Time",
   "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
   "@joinLeaveNumberDescription": {
     "placeholders": {
@@ -1039,7 +1050,7 @@
       }
     }
   },
-  "joinLeaveJoinNumberDescription": "{number} join events occurred during the current season ({date}).",
+  "joinLeaveJoinNumberDescription": "{number} join begivenheder opstod i den aktuelle sæson ({date}).",
   "@joinLeaveJoinNumberDescription": {
     "placeholders": {
       "number": {
@@ -1050,7 +1061,7 @@
       }
     }
   },
-  "joinLeaveMovingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
+  "joinLeaveMovingNumberDescription": "{number} spiller(e) til venstre og tilsluttede sig klanen i den aktuelle sæson ({date}).",
   "@joinLeaveMovingNumberDescription": {
     "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
@@ -1062,7 +1073,7 @@
       }
     }
   },
-  "joinLeaveUniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
+  "joinLeaveUniqueNumberDescription": "{number} unikke spiller(e) tilsluttede/forlod klanen i den aktuelle sæson ({date}).",
   "@joinLeaveUniqueNumberDescription": {
     "description": "Number of unique players who joined/left the clan during the current season.",
     "placeholders": {
@@ -1074,7 +1085,7 @@
       }
     }
   },
-  "joinLeaveStillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
+  "joinLeaveStillInClanNumberDescription": "{number} spiller(e) tilsluttede sig og er stadig i klanen.",
   "@joinLeaveStillInClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1082,7 +1093,7 @@
       }
     }
   },
-  "joinLeaveLeftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
+  "joinLeaveLeftClanNumberDescription": "{number} spiller(e) tilsluttede, så forlod klanen og blev aldrig genoprettet.",
   "@joinLeaveLeftClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1093,7 +1104,7 @@
   "@joinLeaveTitle": {
     "description": "Logs of players joining or leaving the clan."
   },
-  "joinLeaveLeftOnAt": "Left on {date} at {time}.",
+  "joinLeaveLeftOnAt": "Venstre på {date} på {time}.",
   "@joinLeaveLeftOnAt": {
     "description": "[The player] left the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1105,7 +1116,7 @@
       }
     }
   },
-  "joinLeaveJoinedOnAt": "Joined on {date} at {time}.",
+  "joinLeaveJoinedOnAt": "Tilmeldt {date} på {time}.",
   "@joinLeaveJoinedOnAt": {
     "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1118,16 +1129,16 @@
     }
   },
   "raidsTitle": "Raids",
-  "raidsLast": "Last raids",
-  "raidsOngoing": "Ongoing raids",
-  "raidsDistrictsDestroyed": "Districts destroyed",
-  "raidsCompleted": "Raids completed",
-  "searchNoResult": "No result.",
-  "maintenanceTitle": "Maintenance",
-  "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-  "downloadTooltip": "Download CWL summary",
-  "downloadInProgress": "Downloading file... It can take a few seconds...",
-  "downloadSuccess": "File saved successfully in {path}",
+  "raidsLast": "Sidste razziaer",
+  "raidsOngoing": "Igangværende razziaer",
+  "raidsDistrictsDestroyed": "Distrikter ødelagt",
+  "raidsCompleted": "Raids fuldført",
+  "searchNoResult": "Intet resultat.",
+  "maintenanceTitle": "Vedligeholdelse",
+  "maintenanceDescription": "Sammenstød af klaner er i øjeblikket under vedligeholdelse, så vi kan ikke få adgang til API'en. Tjek venligst tilbage senere.",
+  "downloadTooltip": "Download CWL resumé",
+  "downloadInProgress": "Downloader fil... Det kan tage et par sekunder...",
+  "downloadSuccess": "Filen blev gemt i {path}",
   "@downloadSuccess": {
     "placeholders": {
       "path": {
@@ -1135,52 +1146,56 @@
       }
     }
   },
-  "downloadError": "Failed to download file",
-  "dashboardTitle": "Dashboard",
-  "toolsTitle": "Tools",
-  "navigationTeam": "Teams",
-  "navigationStatistics": "Statistics",
-  "versionDevice": "Version & Device",
+  "downloadError": "Download af fil mislykkedes",
+  "dashboardTitle": "Instrumentbræt",
+  "toolsTitle": "Værktøjer",
+  "navigationTeam": "Hold",
+  "navigationStatistics": "Statistik",
+  "versionDevice": "Version & Enhed",
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  "betaFeature": "Beta Feature",
-  "betaLabel": "BETA",
-  "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
-  "settingsLanguage": "Language",
-  "settingsSelectLanguage": "Select a language",
-  "settingsToggleTheme": "Toggle Theme",
-  "faqTitle": "FAQ",
-  "faqSubtitle": "Frequently Asked Questions",
-  "faqIsThisFromSupercell": "Is this App from Supercell?",
-  "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-  "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
-  "faqClanNotTracked": "Clan not tracked",
-  "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
-  "faqTrackingDown": "Tracking down",
-  "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
-  "faqApiLimitation": "Clash of Clans API limitation",
-  "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
-  "faqSupportWork": "How can I support your work?",
-  "faqSupportWorkAnswer": "There are several ways to support us:",
-  "faqUseCodeClashKing": "Use code \"ClashKing\"",
-  "faqSupportUsOnPatreon": "Support us on Patreon",
-  "faqShareTheApp": "Share the app with your friends",
-  "faqRateTheApp": "Rate the app in the store",
-  "faqHelpUsTranslate": "Help us translate the app",
-  "faqHowToInviteTheBot": "How can I invite your bot to my Discord Server?",
-  "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
+  "betaFeature": "Beta Funktion",
+  "betaLabel": "INDSATS",
+  "betaDescription": "Denne funktion er i øjeblikket i beta, den kan have nogle fejl eller være ufuldstændig. Vi arbejder aktivt på forbedringer og hilser din feedback velkommen. Del dine ideer og rapporter eventuelle problemer i vores Discord Server for at hjælpe os med at gøre det bedre.",
+  "settingsLanguage": "Sprog",
+  "settingsSelectLanguage": "Vælg et sprog",
+  "settingsToggleTheme": "Skift Tema",
+  "faqTitle": "OSS",
+  "faqSubtitle": "Ofte Stillede Spørgsmål",
+  "faqIsThisFromSupercell": "Er denne app fra Supercell?",
+  "faqFanContentPolicy": "Dette materiale er uofficielt og er ikke godkendt af Supercell. For mere information se Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
+  "faqWhyNotAccurate": "Hvorfor mangler dataene nogle gange unøjagtigt?",
+  "faqClanNotTracked": "Klan ikke sporet",
+  "faqClanNotTrackedAnswer": "ClashKing kan kun hente denne info hvis klanen er sporet. Hvis din klan ikke spores, bedes du invitere ClashKing Bot til din Discord Server og bruge kommandoen /addclan. Vi arbejder på at gøre denne funktion tilgængelig i appen snart.",
+  "faqTrackingDown": "Sporing ned",
+  "faqTrackingDownAnswer": "Sporingen kan stoppe med at arbejde i en vis periode. Det er derfor, du nogle gange kan have huller i dine data. Vi arbejder på at forbedre dette.",
+  "faqApiLimitation": "Sammenstød mellem klaner API begrænsning",
+  "faqApiLimitationAnswer": "Nogle data leveres af Clash of Clans og deres API har nogle begrænsninger. Dette er tilfældet for legender tracking, det undertiden stakker trofæet gevinst og tab, som om det var et enkelt angreb. Det er også derfor, vi ikke har nogen oplysninger om din bygning niveauer.",
+  "faqSupportWork": "Hvordan kan jeg støtte dit arbejde?",
+  "faqSupportWorkAnswer": "Der er flere måder at støtte os:",
+  "faqUseCodeClashKing": "Brug koden \"ClashKing\"",
+  "faqSupportUsOnPatreon": "Støt os på Patreon",
+  "faqShareTheApp": "Del appen med dine venner",
+  "faqRateTheApp": "Bedøm appen i butikken",
+  "faqHelpUsTranslate": "Hjælp os med at oversætte appen",
+  "faqHowToInviteTheBot": "Hvordan kan jeg invitere din bot til min Discord Server?",
+  "faqHowToInviteTheBotAnswer": "Du kan invitere vores bot til din server ved at klikke på knappen nedenfor. Du skal bruge tilladelsen \"Administrer Server\" for at tilføje bot.",
   "faqInviteTheBot": "Invite ClashKing Bot",
-  "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
+  "faqNeedHelp": "Jeg har brug for hjælp, eller jeg vil gerne komme med et forslag. Hvordan kan jeg kontakte dig?",
   "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
-  "faqSendEmail": "Send an email",
-  "faqJoinDiscord": "Join our Discord Server",
-  "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
-  "translationHelpUsTranslate": "Help us translate",
-  "translationSuggestFeatures": "Suggest features",
-  "translationThankYou": "Thank you!",
-  "translationThankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-  "translationHelpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
-  "translationHelpTranslateButton": "Help Translate on Crowdin",
-  "translationCurrentTranslators": "Current Translators"
+  "faqSendEmail": "Send en e-mail",
+  "faqJoinDiscord": "Tilmeld dig vores Discord Server",
+  "faqCannotOpenMailClient": "Af nogle grunde kan vi ikke åbne din mailklient. Vi kopierede e-mailadressen for dig. Du kan skrive en e-mail og indsætte adressen i modtagerfeltet.",
+  "translationHelpUsTranslate": "Hjælp os med at oversætte",
+  "translationSuggestFeatures": "Foreslå funktioner",
+  "translationThankYou": "Mange tak!",
+  "translationThankYouContent": "En stor tak til alle vores fantastiske oversættere, der hjælper os med at gøre denne app tilgængelig for flere mennesker rundt om i verden!",
+  "translationHelpTranslateContent": "Du kan hjælpe os med at oversætte appen på Crowdin. Hvis dit sprog ikke er tilgængeligt på Crowdin, er du velkommen til at anmode om det i vores Discord Server. Tak for din hjælp!",
+  "translationHelpTranslateButton": "Hjælp med at oversætte til Crowdin",
+  "translationCurrentTranslators": "Nuværende Oversættere"
 }

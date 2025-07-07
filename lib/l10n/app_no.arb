@@ -1,105 +1,109 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Din ultimate Clash of Clans-følgesvenn for å spore statistikk, administrere klaner og analysere ytelse.",
-  "generalLoading": "Laster...",
-  "generalError": "Feil",
-  "generalRetry": "Prøv igjen",
-  "generalTryAgain": "Prøv igjen",
-  "generalClose": "Lukk",
-  "generalCancel": "Avbryt",
+  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "generalLoading": "Loading...",
+  "loadingVillages": "Loading your villages...",
+  "loadingClanData": "Fetching clan data...",
+  "loadingWarStats": "Analyzing war stats...",
+  "loadingLegendsData": "Preparing legends data...",
+  "loadingCapitalRaids": "Loading capital raids...",
+  "loadingAlmostReady": "Almost ready...",
+  "accountVerificationTitle": "Verify Account",
+  "accountVerificationMessage": "Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.",
+  "accountVerified": "Account verified",
+  "accountNotVerified": "Account not verified",
+  "accountVerifyButton": "Verify",
+  "accountVerificationSuccess": "Account verified successfully!",
+  "accountVerificationFailed": "Verification failed. Please check your API token.",
+  "generalRetry": "Retry",
+  "generalTryAgain": "Try again",
+  "generalCancel": "Cancel",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
   },
-  "generalApply": "Bruk",
-  "generalConfirm": "Bekreft",
-  "generalAdd": "Legg til",
-  "@generalAdd": {
-    "description": "Add an account"
+  "generalApply": "Apply",
+  "generalConfirm": "Confirm",
+  "generalManage": "Manage",
+  "generalSettings": "Settings",
+  "generalCopiedToClipboard": "Copied to clipboard",
+  "generalComingSoon": "Coming soon!",
+  "generalLastRefresh": "Last refresh: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
   },
-  "generalDelete": "Slett",
-  "@generalDelete": {
-    "description": "Delete an account"
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
   },
-  "generalManage": "Administrer",
-  "generalManagement": "Forvaltning",
-  "generalSettings": "Innstillinger",
-  "generalCopiedToClipboard": "Kopiert til utklippstavlen",
-  "generalComingSoon": "Kommer snart!",
-  "generalAll": "Alle",
+  "generalAll": "All",
   "@generalAll": {
     "description": "all items"
   },
-  "generalTotal": "Totalt",
-  "generalBest": "Beste",
+  "generalTotal": "Total",
+  "generalBest": "Best",
   "@generalBest": {
     "description": "Best end of day trophies"
   },
-  "generalWorst": "Verste",
+  "generalWorst": "Worst",
   "@generalWorst": {
     "description": "Worst end of day trophies"
   },
-  "generalAverage": "Gjennomsnitt",
+  "generalAverage": "Average",
   "@generalAverage": {
     "description": "Average value of legend trophies (defense and attack)"
   },
-  "generalRemaining": "Gjenstår",
+  "generalRemaining": "Remaining",
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Aktiv",
-  "generalInactive": "Inaktiv",
-  "generalStarted": "Startet",
+  "generalActive": "Active",
+  "generalInactive": "Inactive",
+  "generalStarted": "Started",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
   },
-  "generalEnded": "Avsluttet",
+  "generalEnded": "Ended",
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Nivå",
-  "generalRole": "Rolle",
-  "generalDate": "Dato",
-  "generalStats": "Statistikk",
-  "generalFullStats": "Full statistikk",
-  "generalDetails": "Detaljer",
-  "generalHistory": "Historie",
+  "generalRole": "Role",
+  "generalStats": "Stats",
+  "generalFullStats": "Full Stats",
+  "generalDetails": "Details",
+  "generalHistory": "History",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Diagrammer",
-  "generalFilters": "Filtre",
-  "generalWhatever": "Hva som helst",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Alle",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
-  "generalNotSet": "Ikke satt",
+  "generalFilters": "Filters",
+  "generalNotSet": "Not set",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Advarsel",
-  "generalNoDataAvailable": "Ingen data tilgjengelig.",
-  "generalClosed": "Lukket",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Velkommen tilbake",
-  "authClashKingDescription": "Din ultimate Clash of Clans-følgesvenn for å spore statistikk, administrere klaner og analysere ytelse.",
-  "authChooseSignInMethod": "Velg din foretrukne påloggingsmåte",
-  "authSignUp": "Registrer deg",
-  "authLogin": "Logg inn",
-  "authLogout": "Logg ut",
-  "authCreateAccount": "Opprett konto",
-  "authJoinClashKing": "Bli med ClashKing",
-  "authCreateClashKingAccount": "Opprett ClashKing-konto",
-  "authCreateAccountToGetStarted": "Opprett din konto for å komme i gang",
-  "authAlreadyHaveAccount": "Har du allerede en konto? Logg inn",
-  "authConfirmLogout": "Er du sikker på at du vil logge ut?",
+  "generalWarning": "Warning",
+  "generalNoDataAvailable": "No data available.",
+  "authSignUp": "Sign up",
+  "authLogin": "Login",
+  "authLogout": "Log out",
+  "authCreateAccount": "Create Account",
+  "authJoinClashKing": "Join ClashKing",
+  "authCreateClashKingAccount": "Create ClashKing Account",
+  "authCreateAccountToGetStarted": "Create your account to get started",
+  "authAlreadyHaveAccount": "Already have an account? Sign in",
+  "authConfirmLogout": "Are you sure you want to log out?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
@@ -124,7 +128,7 @@
   "authUsernameTooShort": "Username must be at least 3 characters",
   "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
   "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-  "authAccountManagement": "Account Management",
+  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.",
   "authAccountConnected": "Connected Accounts",
   "authAccountConnectedStatus": "Connected",
   "authAccountNotConnected": "Not connected",
@@ -294,6 +298,10 @@
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Creator Code: ClashKing",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "Clan",
   "clanSearchTitle": "Search clan",
   "clanSearchPlaceholder": "Clan's name",
@@ -378,6 +386,9 @@
     }
   },
   "timeJustNow": "Just Now",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
   "timeEndedJustNow": "Ended just now",
   "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
   "@timeEndedMinutesAgo": {
@@ -435,7 +446,7 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
+  "legendsTitle": "Legend League",
   "legendsNotInLeague": "Not in Legend League",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "You started the day with {trophies} trophies.",
@@ -660,7 +671,7 @@
   "warLeague": "War/League",
   "warHistory": "War History",
   "warLog": "War Log",
-  "warLogClosed": "War log closed.",
+  "warLogClosed": "{clan}'s war log is closed.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -971,7 +982,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Current round (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -1144,6 +1155,10 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
   "betaFeature": "Beta Feature",
   "betaLabel": "BETA",
   "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",

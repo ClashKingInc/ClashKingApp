@@ -9,173 +9,120 @@ class AppLocalizationsSr extends AppLocalizations {
   AppLocalizationsSr([String locale = 'sr']) : super(locale);
 
   @override
-  String get appTitle => 'ClashKing';
+  String get generalLoading => 'Loading...';
 
   @override
-  String get appDescription =>
-      'Vaš najbolji Clash of Clans saputnik za praćenje statistika, upravljanje klanova i analizu performansi.';
+  String get generalRetry => 'Retry';
 
   @override
-  String get generalLoading => 'Učitava...';
+  String get generalTryAgain => 'Try again';
 
   @override
-  String get loadingVillages => 'Loading your villages...';
-
-  @override
-  String get loadingClanData => 'Fetching clan data...';
-
-  @override
-  String get loadingWarStats => 'Analyzing war stats...';
-
-  @override
-  String get loadingLegendsData => 'Preparing legends data...';
-
-  @override
-  String get loadingCapitalRaids => 'Loading capital raids...';
-
-  @override
-  String get loadingAlmostReady => 'Almost ready...';
-
-  @override
-  String get accountVerificationTitle => 'Verify Account';
-
-  @override
-  String get accountVerificationMessage =>
-      'Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.';
-
-  @override
-  String get accountVerified => 'Account verified';
-
-  @override
-  String get accountNotVerified => 'Account not verified';
-
-  @override
-  String get accountVerifyButton => 'Verify';
-
-  @override
-  String get accountVerificationSuccess => 'Account verified successfully!';
-
-  @override
-  String get accountVerificationFailed =>
-      'Verification failed. Please check your API token.';
-
-  @override
-  String get generalRetry => 'Pokušaj ponovo';
-
-  @override
-  String get generalTryAgain => 'Pokušaj ponovo';
-
-  @override
-  String get generalCancel => 'Otkaži';
+  String get generalCancel => 'Cancel';
 
   @override
   String get generalOk => 'OK';
 
   @override
-  String get generalApply => 'Primeni';
+  String get generalApply => 'Apply';
 
   @override
-  String get generalConfirm => 'Potvrdi';
+  String get generalConfirm => 'Confirm';
 
   @override
-  String get generalManage => 'Upravljaj';
+  String get generalManage => 'Manage';
 
   @override
-  String get generalSettings => 'Podešavanja';
+  String get generalSettings => 'Settings';
 
   @override
-  String get generalCopiedToClipboard => 'Kopirano u klipbord';
+  String get generalCopiedToClipboard => 'Copied to clipboard';
 
   @override
-  String get generalComingSoon => 'Uskoro!';
+  String get generalComingSoon => 'Coming soon!';
 
   @override
-  String generalLastRefresh(String time) {
-    return 'Last refresh: $time';
-  }
+  String get generalAll => 'All';
 
   @override
-  String generalRefreshFailed(String error) {
-    return 'Refresh failed: $error';
-  }
+  String get generalTotal => 'Total';
 
   @override
-  String get generalAll => 'Sve';
+  String get generalBest => 'Best';
 
   @override
-  String get generalTotal => 'Ukupno';
+  String get generalWorst => 'Worst';
 
   @override
-  String get generalBest => 'Najbolji';
+  String get generalAverage => 'Average';
 
   @override
-  String get generalWorst => 'Najgori';
+  String get generalRemaining => 'Remaining';
 
   @override
-  String get generalAverage => 'Prosek';
+  String get generalActive => 'Active';
 
   @override
-  String get generalRemaining => 'Preostalo';
+  String get generalInactive => 'Inactive';
 
   @override
-  String get generalActive => 'Aktivan';
+  String get generalStarted => 'Started';
 
   @override
-  String get generalInactive => 'Neaktivan';
+  String get generalEnded => 'Ended';
 
   @override
-  String get generalStarted => 'Započeto';
+  String get generalRole => 'Role';
 
   @override
-  String get generalEnded => 'Završeno';
+  String get generalStats => 'Stats';
 
   @override
-  String get generalRole => 'Uloga';
+  String get generalFullStats => 'Full Stats';
 
   @override
-  String get generalStats => 'Statistike';
+  String get generalDetails => 'Details';
 
   @override
-  String get generalFullStats => 'Pune statistike';
+  String get generalHistory => 'History';
 
   @override
-  String get generalDetails => 'Detalji';
+  String get generalFilters => 'Filters';
 
   @override
-  String get generalHistory => 'Istorija';
+  String get generalNotSet => 'Not set';
 
   @override
-  String get generalFilters => 'Filteri';
+  String get generalWarning => 'Warning';
 
   @override
-  String get generalNotSet => 'Nije podešeno';
+  String get generalNoDataAvailable => 'No data available.';
 
   @override
-  String get generalWarning => 'Upozorenje';
+  String get authClashKingDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
 
   @override
-  String get generalNoDataAvailable => 'Nema dostupnih podataka.';
+  String get authSignIn => 'Sign In';
 
   @override
-  String get authSignUp => 'Registruj se';
+  String get authSignUp => 'Sign up';
 
   @override
-  String get authLogin => 'Prijavi se';
+  String get authLogout => 'Log out';
 
   @override
-  String get authLogout => 'Odjavi se';
+  String get authCreateAccount => 'Create Account';
 
   @override
-  String get authCreateAccount => 'Napravi nalog';
+  String get authJoinClashKing => 'Join ClashKing';
 
   @override
-  String get authJoinClashKing => 'Pridruži se ClashKing';
+  String get authCreateClashKingAccount => 'Create ClashKing Account';
 
   @override
-  String get authCreateClashKingAccount => 'Napravi ClashKing nalog';
-
-  @override
-  String get authCreateAccountToGetStarted => 'Napravite vaš nalog da počnete';
+  String get authCreateAccountToGetStarted =>
+      'Create your account to get started';
 
   @override
   String get authAlreadyHaveAccount => 'Already have an account? Sign in';
@@ -505,20 +452,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'Creator Code: ClashKing';
-
-  @override
-  String get gameCreatorCodeDescription =>
-      'Tap for info • Support us for free!';
-
-  @override
-  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
-
-  @override
-  String get gameCreatorCodeDialogDescription =>
-      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
-
-  @override
-  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -1384,19 +1317,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get versionDevice => 'Version & Device';
 
   @override
-  String get settingsLicenses => 'Open Source Licenses';
-
-  @override
-  String get settingsLicensesSubtitle =>
-      'View licenses for third-party libraries';
-
-  @override
-  String get settingsPrivacyPolicy => 'Privacy Policy';
-
-  @override
-  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
-
-  @override
   String get betaFeature => 'Beta Feature';
 
   @override
@@ -1491,7 +1411,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.';
+      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.';
 
   @override
   String get faqSendEmail => 'Send an email';

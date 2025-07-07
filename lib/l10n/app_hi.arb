@@ -1,12 +1,23 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "आंकड़ों को ट्रैक करने, क्लैन्स का प्रबंधन करने और प्रदर्शन का विश्लेषण करने के लिए आपका अंतिम Clash of Clans साथी।",
+  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "लोड हो रहा है...",
-  "generalError": "गलती",
-  "generalRetry": "पुनः प्रयास करें",
-  "generalTryAgain": "फिर से कोशिश करें",
-  "generalClose": "बंद करना",
+  "loadingVillages": "Loading your villages...",
+  "loadingClanData": "Fetching clan data...",
+  "loadingWarStats": "Analyzing war stats...",
+  "loadingLegendsData": "Preparing legends data...",
+  "loadingCapitalRaids": "Loading capital raids...",
+  "loadingAlmostReady": "Almost ready...",
+  "accountVerificationTitle": "Verify Account",
+  "accountVerificationMessage": "Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.",
+  "accountVerified": "Account verified",
+  "accountNotVerified": "Account not verified",
+  "accountVerifyButton": "Verify",
+  "accountVerificationSuccess": "Account verified successfully!",
+  "accountVerificationFailed": "Verification failed. Please check your API token.",
+  "generalRetry": "Retry",
+  "generalTryAgain": "Try again",
   "generalCancel": "रद्द करना",
   "generalOk": "ठीक है",
   "@generalOk": {
@@ -14,19 +25,30 @@
   },
   "generalApply": "आवेदन करना",
   "generalConfirm": "Confirm",
-  "generalAdd": "जोड़ना",
-  "@generalAdd": {
-    "description": "Add an account"
-  },
-  "generalDelete": "मिटाना",
-  "@generalDelete": {
-    "description": "Delete an account"
-  },
   "generalManage": "प्रबंधित करना",
-  "generalManagement": "प्रबंध ",
   "generalSettings": "सेटिंग्स",
   "generalCopiedToClipboard": "क्लिपबोर्ड पर कॉपी किया गया",
   "generalComingSoon": "जल्द आ रहा है!",
+  "generalLastRefresh": "Last refresh: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
   "generalAll": "सभी",
   "@generalAll": {
     "description": "all items"
@@ -58,9 +80,7 @@
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
   "generalRole": "भूमिका",
-  "generalDate": "तारीख",
   "generalStats": "आँकड़े",
   "generalFullStats": "Full Stats",
   "generalDetails": "विवरण",
@@ -68,29 +88,13 @@
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "चार्ट",
   "generalFilters": "फिल्टर",
-  "generalWhatever": "जो कुछ भी",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "कोई",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
   "generalNotSet": "सेट नहीं",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
   "generalWarning": "चेतावनी ",
   "generalNoDataAvailable": "कोई डेटा मौजूद नहीं ",
-  "generalClosed": "बंद किया हुआ",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "आंकड़ों को ट्रैक करने, क्लैन्स का प्रबंधन करने और प्रदर्शन का विश्लेषण करने के लिए आपका अंतिम Clash of Clans साथी।",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
   "authSignUp": "Sign up",
   "authLogin": "लॉग इन करें",
   "authLogout": "लॉग आउट",
@@ -124,7 +128,7 @@
   "authUsernameTooShort": "Username must be at least 3 characters",
   "authErrorConnection": "एक त्रुटि हुई। कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।",
   "authErrorConnectionRelaunch": "एक त्रुटि हुई। कृपया अपना इंटरनेट कनेक्शन जांचें और ऐप पुनः लॉन्च करें।",
-  "authAccountManagement": "Account Management",
+  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.",
   "authAccountConnected": "Connected Accounts",
   "authAccountConnectedStatus": "Connected",
   "authAccountNotConnected": "Not connected",
@@ -136,7 +140,7 @@
   "helpTitle": "Need help?",
   "helpJoinDiscord": "Join Discord",
   "helpEmailUs": "Email Us",
-  "accountsWelcome": "स्वागत!",
+  "accountsWelcome": "Welcome!",
   "accountsWelcomeMessage": "कृपया अपनी प्रोफ़ाइल में एक या अधिक Clash of Clans खाते जोड़ें। आप बाद में खाते जोड़ या हटा सकते हैं।",
   "accountsManageTitle": "Manage your accounts",
   "accountsNoneFound": "आपकी प्रोफ़ाइल से जुड़ा कोई खाता नहीं मिला",
@@ -148,7 +152,7 @@
   "accountsEnterApiToken": "कृपया अकाउंट API टोकन दर्ज करें ताकि पुष्टि हो सके कि यह आपका है। आप इसे क्लैश ऑफ़ क्लैंस सेटिंग्स > अधिक सेटिंग्स > API टोकन में पा सकते हैं।",
   "accountsFillAllFields": "Please fill all fields.",
   "accountsErrorTagNotExists": "प्रविष्ट किया गया खिलाड़ी टैग मौजूद नहीं है.",
-  "accountsErrorAlreadyLinked": "खिलाड़ी टैग पहले से ही किसी से जुड़ा हुआ है।",
+  "accountsErrorAlreadyLinked": "The player tag is already linked to someone.",
   "accountsErrorAlreadyLinkedToYou": "खिलाड़ी टैग पहले से ही आपसे जुड़ा हुआ है.",
   "accountsErrorWrongApiToken": "दर्ज किया गया API टोकन ग़लत है",
   "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
@@ -294,6 +298,10 @@
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "क्रिएटर कोड: ClashKing",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "कबेला",
   "clanSearchTitle": "कबीला खोजें",
   "clanSearchPlaceholder": "Clan's name",
@@ -378,6 +386,9 @@
     }
   },
   "timeJustNow": "बस अब",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
   "timeEndedJustNow": "Ended just now",
   "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
   "@timeEndedMinutesAgo": {
@@ -1144,6 +1155,10 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
   "betaFeature": "बीटा सुविधा",
   "betaLabel": "बीटा",
   "betaDescription": "यह सुविधा अभी बीटा में है, इसमें कुछ बग हो सकते हैं या यह अधूरी हो सकती है। हम सक्रिय रूप से सुधार पर काम कर रहे हैं और आपकी प्रतिक्रिया का स्वागत करते हैं। कृपया अपने विचार साझा करें और हमारे डिस्कॉर्ड सर्वर में किसी भी समस्या की रिपोर्ट करें ताकि हमें इसे बेहतर बनाने में मदद मिल सके।",
@@ -1172,7 +1187,7 @@
   "faqHowToInviteTheBotAnswer": "आप नीचे दिए गए बटन पर क्लिक करके हमारे बॉट को अपने सर्वर पर आमंत्रित कर सकते हैं। बॉट को जोड़ने के लिए आपको \"सर्वर प्रबंधित करें\" अनुमति की आवश्यकता होगी।",
   "faqInviteTheBot": "क्लैशकिंग बॉट को आमंत्रित करें",
   "faqNeedHelp": "मुझे मदद चाहिए या मैं कोई सुझाव देना चाहता हूँ। मैं आपसे कैसे संपर्क कर सकता हूँ?",
-  "faqNeedHelpAnswer": "आप मदद मांगने या प्रतिक्रिया देने के लिए हमारे डिस्कॉर्ड सर्वर से जुड़ सकते हैं, या आप हमें devs@clashk.ing पर ईमेल कर सकते हैं। कृपया केवल अंग्रेज़ी या फ़्रेंच में ही लिखें।",
+  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
   "faqSendEmail": "हमें एक ईमेल भेजो",
   "faqJoinDiscord": "हमारे डिस्कॉर्ड सर्वर से जुड़ें",
   "faqCannotOpenMailClient": "कुछ कारणों से हम आपका मेल क्लाइंट नहीं खोल पा रहे हैं। हमने आपके लिए ईमेल पता कॉपी कर लिया है। आप ईमेल लिखकर प्राप्तकर्ता फ़ील्ड में पता पेस्ट कर सकते हैं।",

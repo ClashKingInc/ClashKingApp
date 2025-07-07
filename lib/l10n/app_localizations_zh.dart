@@ -9,60 +9,13 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => 'ClashKing';
-
-  @override
-  String get appDescription => '您的终极部落冲突伴侣，用于追踪统计数据、管理部落和分析性能。';
-
-  @override
   String get generalLoading => '加载中...';
 
   @override
-  String get loadingVillages => 'Loading your villages...';
+  String get generalRetry => 'Retry';
 
   @override
-  String get loadingClanData => 'Fetching clan data...';
-
-  @override
-  String get loadingWarStats => 'Analyzing war stats...';
-
-  @override
-  String get loadingLegendsData => 'Preparing legends data...';
-
-  @override
-  String get loadingCapitalRaids => 'Loading capital raids...';
-
-  @override
-  String get loadingAlmostReady => 'Almost ready...';
-
-  @override
-  String get accountVerificationTitle => 'Verify Account';
-
-  @override
-  String get accountVerificationMessage =>
-      'Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.';
-
-  @override
-  String get accountVerified => 'Account verified';
-
-  @override
-  String get accountNotVerified => 'Account not verified';
-
-  @override
-  String get accountVerifyButton => 'Verify';
-
-  @override
-  String get accountVerificationSuccess => 'Account verified successfully!';
-
-  @override
-  String get accountVerificationFailed =>
-      'Verification failed. Please check your API token.';
-
-  @override
-  String get generalRetry => '重试';
-
-  @override
-  String get generalTryAgain => '再试一次';
+  String get generalTryAgain => 'Try again';
 
   @override
   String get generalCancel => '取消';
@@ -74,7 +27,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get generalApply => '需要申请';
 
   @override
-  String get generalConfirm => '确认';
+  String get generalConfirm => 'Confirm';
 
   @override
   String get generalManage => '管理';
@@ -87,16 +40,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get generalComingSoon => '敬请期待！';
-
-  @override
-  String generalLastRefresh(String time) {
-    return 'Last refresh: $time';
-  }
-
-  @override
-  String generalRefreshFailed(String error) {
-    return 'Refresh failed: $error';
-  }
 
   @override
   String get generalAll => '所有';
@@ -117,10 +60,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get generalRemaining => '剩余时间';
 
   @override
-  String get generalActive => '活跃';
+  String get generalActive => 'Active';
 
   @override
-  String get generalInactive => '非活跃';
+  String get generalInactive => 'Inactive';
 
   @override
   String get generalStarted => '已激活';
@@ -135,7 +78,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get generalStats => '统计数据';
 
   @override
-  String get generalFullStats => '完整统计';
+  String get generalFullStats => 'Full Stats';
 
   @override
   String get generalDetails => '详细信息';
@@ -156,25 +99,30 @@ class AppLocalizationsZh extends AppLocalizations {
   String get generalNoDataAvailable => '没有可用数据';
 
   @override
-  String get authSignUp => '注册';
+  String get authClashKingDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
 
   @override
-  String get authLogin => '登录';
+  String get authSignIn => 'Sign In';
+
+  @override
+  String get authSignUp => 'Sign up';
 
   @override
   String get authLogout => '注销';
 
   @override
-  String get authCreateAccount => '创建账户';
+  String get authCreateAccount => 'Create Account';
 
   @override
-  String get authJoinClashKing => '加入 ClashKing';
+  String get authJoinClashKing => 'Join ClashKing';
 
   @override
-  String get authCreateClashKingAccount => '创建 ClashKing 账户';
+  String get authCreateClashKingAccount => 'Create ClashKing Account';
 
   @override
-  String get authCreateAccountToGetStarted => '创建您的账户以开始';
+  String get authCreateAccountToGetStarted =>
+      'Create your account to get started';
 
   @override
   String get authAlreadyHaveAccount => 'Already have an account? Sign in';
@@ -496,20 +444,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get gameCreatorCode => '创作者代码：ClashKing';
-
-  @override
-  String get gameCreatorCodeDescription =>
-      'Tap for info • Support us for free!';
-
-  @override
-  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
-
-  @override
-  String get gameCreatorCodeDialogDescription =>
-      'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn\'t cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!';
-
-  @override
-  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => '部落';
@@ -1364,19 +1298,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get versionDevice => '版本&设备';
 
   @override
-  String get settingsLicenses => 'Open Source Licenses';
-
-  @override
-  String get settingsLicensesSubtitle =>
-      'View licenses for third-party libraries';
-
-  @override
-  String get settingsPrivacyPolicy => 'Privacy Policy';
-
-  @override
-  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
-
-  @override
   String get betaFeature => 'Beta功能';
 
   @override
@@ -1468,7 +1389,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get faqNeedHelpAnswer =>
-      '您可以加入我们的Discord服务器以寻求帮助或提供反馈，也可以发送电子邮件至devs@clashk.ing.请用英语或法语书写。';
+      '您可以加入我们的Discord服务器以寻求帮助或提供反馈，也可以发送电子邮件至devs@clashkingbot.com.请用英语或法语书写。';
 
   @override
   String get faqSendEmail => '发送电子邮件';

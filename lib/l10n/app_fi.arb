@@ -1,170 +1,174 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "Sinun lopullinen Clash of Clans -kumppanisi tilastojen seurantaan, klaanien hallintaan ja suorituskyvyn analysointiin.",
+  "appDescription": "Sinun lopullinen Clash of klaanit kumppani seuranta tilastoja, hallita klaaneja, ja analysoida suorituskykyä.",
   "generalLoading": "Ladataan...",
-  "generalError": "Error",
-  "generalRetry": "Yritä uudelleen",
+  "loadingVillages": "Ladataan kyliäsi...",
+  "loadingClanData": "Haetaan klaanin tietoja...",
+  "loadingWarStats": "Analysoidaan sotatilastoja...",
+  "loadingLegendsData": "Valmistellaan legendojen tietoja...",
+  "loadingCapitalRaids": "Ladataan pääoman raideja...",
+  "loadingAlmostReady": "Melkein valmis...",
+  "accountVerificationTitle": "Vahvista Tili",
+  "accountVerificationMessage": "Syötä API-tunniste varmistaaksesi tämän tilin. Löydät sen osoitteesta Clash of klaanit Asetukset > Lisää Asetukset > API Token.",
+  "accountVerified": "Tili vahvistettu",
+  "accountNotVerified": "Tiliä ei ole vahvistettu",
+  "accountVerifyButton": "Vahvista",
+  "accountVerificationSuccess": "Tili vahvistettu onnistuneesti!",
+  "accountVerificationFailed": "Vahvistus epäonnistui. Tarkista API token.",
+  "generalRetry": "Yritä Uudelleen",
   "generalTryAgain": "Yritä uudelleen",
-  "generalClose": "Close",
   "generalCancel": "Peruuta",
-  "generalOk": "OK",
+  "generalOk": "Ok",
   "@generalOk": {
     "description": "OK button on pop up"
   },
-  "generalApply": "Apply",
-  "generalConfirm": "Confirm",
-  "generalAdd": "Add",
-  "@generalAdd": {
-    "description": "Add an account"
+  "generalApply": "Käytä",
+  "generalConfirm": "Vahvista",
+  "generalManage": "Hallitse",
+  "generalSettings": "Asetukset",
+  "generalCopiedToClipboard": "Kopioitu leikepöydälle",
+  "generalComingSoon": "Tulossa pian!",
+  "generalLastRefresh": "Viimeisin päivitys: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
   },
-  "generalDelete": "Delete",
-  "@generalDelete": {
-    "description": "Delete an account"
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
   },
-  "generalManage": "Manage",
-  "generalManagement": "Management",
-  "generalSettings": "Settings",
-  "generalCopiedToClipboard": "Copied to clipboard",
-  "generalComingSoon": "Coming soon!",
-  "generalAll": "All",
+  "generalAll": "Kaikki",
   "@generalAll": {
     "description": "all items"
   },
-  "generalTotal": "Total",
-  "generalBest": "Best",
+  "generalTotal": "Yhteensä",
+  "generalBest": "Paras",
   "@generalBest": {
     "description": "Best end of day trophies"
   },
-  "generalWorst": "Worst",
+  "generalWorst": "Huonoin",
   "@generalWorst": {
     "description": "Worst end of day trophies"
   },
-  "generalAverage": "Average",
+  "generalAverage": "Keskiarvo",
   "@generalAverage": {
     "description": "Average value of legend trophies (defense and attack)"
   },
-  "generalRemaining": "Remaining",
+  "generalRemaining": "Jäljellä",
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Active",
-  "generalInactive": "Inactive",
-  "generalStarted": "Started",
+  "generalActive": "Aktiivinen",
+  "generalInactive": "Passiivinen",
+  "generalStarted": "Aloitettu",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
   },
-  "generalEnded": "Ended",
+  "generalEnded": "Päättynyt",
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "Level",
-  "generalRole": "Role",
-  "generalDate": "Date",
-  "generalStats": "Stats",
-  "generalFullStats": "Full Stats",
-  "generalDetails": "Details",
-  "generalHistory": "History",
+  "generalRole": "Rooli",
+  "generalStats": "Tilastot",
+  "generalFullStats": "Täydet Tilastot",
+  "generalDetails": "Yksityiskohdat",
+  "generalHistory": "Historia",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "Charts",
-  "generalFilters": "Filters",
-  "generalWhatever": "Whatever",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "Any",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
-  "generalNotSet": "Not set",
+  "generalFilters": "Suodattimet",
+  "generalNotSet": "Ei asetettu",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Warning",
-  "generalNoDataAvailable": "No data available.",
-  "generalClosed": "Closed",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "Welcome Back",
-  "authClashKingDescription": "Sinun lopullinen Clash of Clans -kumppanisi tilastojen seurantaan, klaanien hallintaan ja suorituskyvyn analysointiin.",
-  "authChooseSignInMethod": "Choose your preferred sign-in method",
-  "authSignUp": "Sign up",
-  "authLogin": "Login",
-  "authLogout": "Log out",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateClashKingAccount": "Create ClashKing Account",
-  "authCreateAccountToGetStarted": "Create your account to get started",
-  "authAlreadyHaveAccount": "Already have an account? Sign in",
-  "authConfirmLogout": "Are you sure you want to log out?",
+  "generalWarning": "Varoitus",
+  "generalNoDataAvailable": "Tietoja ei ole saatavilla.",
+  "authSignUp": "Rekisteröidy nyt",
+  "authLogin": "Kirjaudu",
+  "authLogout": "Kirjaudu ulos",
+  "authCreateAccount": "Luo Tili",
+  "authJoinClashKing": "Liity ClashKingiin",
+  "authCreateClashKingAccount": "Luo ClashKing -tili",
+  "authCreateAccountToGetStarted": "Luo tilisi päästäksesi alkuun",
+  "authAlreadyHaveAccount": "Onko sinulla jo tili? Kirjaudu sisään",
+  "authConfirmLogout": "Oletko varma, että haluat kirjautua ulos?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
-  "authDiscordSignIn": "Sign In with Discord",
-  "authDiscordContinue": "Continue with Discord",
-  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authEmailTitle": "Email",
-  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailRequired": "Please enter your email",
-  "authEmailInvalid": "Please enter a valid email",
-  "authPasswordLabel": "Password",
-  "authPasswordConfirm": "Confirm Password",
-  "authPasswordRequired": "Please enter your password",
-  "authPasswordConfirmRequired": "Please confirm your password",
-  "authPasswordMismatch": "Passwords do not match",
-  "authPasswordTooShort": "Password must be at least 8 characters",
-  "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
-  "authPasswordForgot": "Forgot password?",
-  "authUsernameLabel": "Username",
-  "authUsernameRequired": "Please enter a username",
-  "authUsernameTooShort": "Username must be at least 3 characters",
-  "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
-  "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-  "authAccountManagement": "Account Management",
-  "authAccountConnected": "Connected Accounts",
-  "authAccountConnectedStatus": "Connected",
-  "authAccountNotConnected": "Not connected",
-  "authAccountEmailAndPassword": "Email & Password",
-  "authAccountSecured": "Your account is secured with multiple authentication methods",
-  "authAccountLinkEmail": "Link Email Account",
-  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
-  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "helpTitle": "Need help?",
-  "helpJoinDiscord": "Join Discord",
-  "helpEmailUs": "Email Us",
-  "accountsWelcome": "Welcome!",
-  "accountsWelcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
-  "accountsManageTitle": "Manage your accounts",
-  "accountsNoneFound": "No account linked to your profile found",
-  "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsEnterPlayerTag": "Enter a player tag",
-  "accountsAdd": "Add account",
-  "accountsDelete": "Delete account",
-  "accountsApiToken": "Account API Token",
-  "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
-  "accountsFillAllFields": "Please fill all fields.",
-  "accountsErrorTagNotExists": "The player tag entered does not exist.",
-  "accountsErrorAlreadyLinked": "The player tag is already linked to someone.",
-  "accountsErrorAlreadyLinkedToYou": "The player tag is already linked to you.",
-  "accountsErrorWrongApiToken": "The API token entered is incorrect",
-  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
-  "accountsErrorFailedToDelete": "Failed to delete link. Please try again later.",
-  "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
-  "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
-  "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
+  "authDiscordSignIn": "Kirjaudu sisään Discordilla",
+  "authDiscordContinue": "Jatka Discordin avulla",
+  "authDiscordDescription": "Synkronoi tietosi ClashKing Botin kanssa ja avaa ClashKingin koko potentiaali!",
+  "authEmailTitle": "Sähköposti",
+  "authEmailDescription": "Käytä sähköpostia jos et voi käyttää Discordia tai suosia vain sovelluksessa olevia ominaisuuksia",
+  "authEmailRequired": "Ole hyvä ja syötä sähköpostiosoitteesi",
+  "authEmailInvalid": "Syötä voimassa oleva sähköpostiosoite",
+  "authPasswordLabel": "Salasana",
+  "authPasswordConfirm": "Vahvista Salasana",
+  "authPasswordRequired": "Anna salasanasi",
+  "authPasswordConfirmRequired": "Ole hyvä ja vahvista salasana",
+  "authPasswordMismatch": "Salasanat eivät täsmää",
+  "authPasswordTooShort": "Salasanan tulee olla vähintään 8 merkkiä pitkä",
+  "authPasswordRequirements": "Salasanan tulee sisältää: isot kirjaimet, pienet kirjaimet, numerot ja erikoismerkit",
+  "authPasswordForgot": "Unohditko salasanasi?",
+  "authUsernameLabel": "Käyttäjätunnus",
+  "authUsernameRequired": "Ole hyvä ja anna käyttäjänimi",
+  "authUsernameTooShort": "Käyttäjänimen tulee olla vähintään 3 merkkiä pitkä",
+  "authErrorConnection": "Tapahtui virhe. Tarkista internet-yhteytesi ja yritä uudelleen.",
+  "authErrorConnectionRelaunch": "Tapahtui virhe. Tarkista internet-yhteytesi ja käynnistä sovellus uudelleen.",
+  "authAccountManagement": "Lisää, poista ja järjestä uudelleen Clash of klaanit -tilit. Tarkista tilisi käyttääksesi kaikkia ominaisuuksia.",
+  "authAccountConnected": "Yhdistetyt Tilit",
+  "authAccountConnectedStatus": "Yhdistetty",
+  "authAccountNotConnected": "Ei yhdistetty",
+  "authAccountEmailAndPassword": "Sähköposti Ja Salasana",
+  "authAccountSecured": "Tilisi on suojattu useilla tunnistautumistavoilla",
+  "authAccountLinkEmail": "Linkitä Sähköpostitili",
+  "authAccountAddEmailAuth": "Lisää sähköpostin ja salasanan todennus tilillesi lisäturvallisuuden takaamiseksi.",
+  "authAccountEmailLinkedSuccess": "Sähköposti tili onnistuneesti linkitetty!",
+  "helpTitle": "Tarvitsetko apua?",
+  "helpJoinDiscord": "Liity Discordiin",
+  "helpEmailUs": "Lähetä Meille Sähköpostia",
+  "accountsWelcome": "Tervetuloa!",
+  "accountsWelcomeMessage": "Lisää profiiliisi yksi tai useampi Clash of Clans -tili. Voit lisätä tai poistaa tilejä myöhemmin.",
+  "accountsManageTitle": "Hallinnoi tilejäsi",
+  "accountsNoneFound": "Profiiliisi linkitettyä tiliä ei löytynyt",
+  "accountsPlayerTag": "Pelaajan Tagi (#ABC123)",
+  "accountsEnterPlayerTag": "Syötä pelaajan tagi",
+  "accountsAdd": "Lisää tili",
+  "accountsDelete": "Poista tili",
+  "accountsApiToken": "Tilin API-tunniste",
+  "accountsEnterApiToken": "Syötä tili API-tunniste vahvistaaksesi sen sinun. Löydät sen osoitteesta Clash of klaanit Asetukset > Lisää Asetukset > API Token.",
+  "accountsFillAllFields": "Täytä kaikki kentät.",
+  "accountsErrorTagNotExists": "Syötettyä soittimen tunnusta ei ole olemassa.",
+  "accountsErrorAlreadyLinked": "Pelaajan tagi on jo linkitetty jokuun.",
+  "accountsErrorAlreadyLinkedToYou": "Pelaajatunnus on jo linkitetty sinuun.",
+  "accountsErrorWrongApiToken": "Syötetty API-tunniste on virheellinen",
+  "accountsErrorFailedToAdd": "Tilin lisääminen epäonnistui. Yritä myöhemmin uudelleen.",
+  "accountsErrorFailedToDelete": "Linkin poistaminen epäonnistui. Yritä myöhemmin uudelleen.",
+  "accountsErrorFailedToUpdateOrder": "Tilien järjestyksen päivittäminen epäonnistui.",
+  "errorTitle": "Hups! Palvelimemme ovat saattaneet viedä tulipallon kasvoille! Me heitämme parantavaa loitsua... Yritä hetken kuluttua uudelleen.",
+  "errorSubtitle": "Jos ongelma jatkuu, tarkista Discord-palvelimemme nähdäksemme, onko se tiedossa.",
   "errorLoadingVersion": "Error loading version",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorCannotOpenLink": "We can't open this link.",
-  "errorExitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-  "playerSearchTitle": "Search player",
-  "playerSearchPlaceholder": "Player's name or tag",
-  "playerLastActive": "Last active: {date}",
+  "errorCannotOpenLink": "Tätä linkkiä ei voi avata.",
+  "errorExitAppToOpenClash": "Olet poistumassa sovelluksesta avataksesi Clash of Clans.",
+  "playerSearchTitle": "Etsi pelaajaa",
+  "playerSearchPlaceholder": "Pelaajan nimi tai tagi",
+  "playerLastActive": "Viimeisin aktiivinen: {date}",
   "@playerLastActive": {
     "placeholders": {
       "date": {
@@ -198,7 +202,7 @@
       }
     }
   },
-  "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+  "playerWarPreferenceDescription": "Sota etusija on \"{preference}\".",
   "@playerWarPreferenceDescription": {
     "placeholders": {
       "preference": {
@@ -206,7 +210,7 @@
       }
     }
   },
-  "playerWarStarsDescription": "You have {stars} war stars.",
+  "playerWarStarsDescription": "Sinulla on {stars} sotaa tähteä.",
   "@playerWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -225,7 +229,7 @@
       }
     }
   },
-  "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+  "playerTownHallLevelDescription": "Kaupunkihallin taso on {level}.",
   "@playerTownHallLevelDescription": {
     "placeholders": {
       "level": {
@@ -244,12 +248,12 @@
       }
     }
   },
-  "gameBaseHome": "Home Base",
-  "gameBaseBuilder": "Builder Base",
+  "gameBaseHome": "Koti Pohja",
+  "gameBaseBuilder": "Rakentajan Pohja",
   "gameClanCapital": "Clan Capital",
   "gameTownHall": "TH",
-  "gameTownHallLevel": "TH Level",
-  "gameTownHallLevelNumber": "Town Hall {level}",
+  "gameTownHallLevel": "Th Taso",
+  "gameTownHallLevelNumber": "Kaupunginhalli {level}",
   "@gameTownHallLevelNumber": {
     "placeholders": {
       "level": {
@@ -257,7 +261,7 @@
       }
     }
   },
-  "gameTHLevel": "TH{level}",
+  "gameTHLevel": "Th{level}",
   "@gameTHLevel": {
     "placeholders": {
       "level": {
@@ -265,12 +269,12 @@
       }
     }
   },
-  "gameExpLevel": "Experience Level",
-  "gameTrophies": "Trophies",
-  "gameBuilderBaseTrophies": "BB Trophies",
-  "gameDonations": "Donations",
-  "gameDonationsReceived": "Donations Received",
-  "gameDonationsRatio": "Donation Ratio",
+  "gameExpLevel": "Kokemuksen Taso",
+  "gameTrophies": "Palkinnot",
+  "gameBuilderBaseTrophies": "Bb Palkinnot",
+  "gameDonations": "Lahjoitukset",
+  "gameDonationsReceived": "Lahjoitukset Vastaanotettu",
+  "gameDonationsRatio": "Lahjoituksen Suhde",
   "gameLevel": "Level: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
@@ -283,53 +287,57 @@
     }
   },
   "gameHeroes": "Heroes",
-  "gameEquipment": "Equipments",
-  "gameHeroesEquipments": "Hero equipments",
-  "gameTroops": "Troops",
-  "gameActiveSuperTroops": "Active Super Troops",
-  "gamePets": "Pets",
+  "gameEquipment": "Laitteet",
+  "gameHeroesEquipments": "Sankarin laitteet",
+  "gameTroops": "Joukot",
+  "gameActiveSuperTroops": "Aktiiviset Super Joukot",
+  "gamePets": "Lemmikit",
   "gameSiegeMachines": "Siege Machines",
   "gameSpells": "Spells",
-  "gameAchievements": "Achievements",
-  "gameClanGames": "Clan Games",
-  "gameSeasonPass": "Season Pass",
-  "gameCreatorCode": "Creator Code: ClashKing",
-  "clanTitle": "Clan",
-  "clanSearchTitle": "Search clan",
-  "clanSearchPlaceholder": "Clan's name",
-  "clanNone": "No clan",
-  "clanJoinToUnlock": "Join a clan to unlock new features.",
-  "clanMembers": "Members",
-  "clanWarFrequency": "War frequency",
-  "clanMinimumMembers": "Minimum members",
-  "clanMaximumMembers": "Maximum members",
-  "clanLocation": "Location",
-  "clanMinimumPoints": "Minimum clan points",
-  "clanMinimumLevel": "Minimum clan level",
-  "clanInviteOnly": "Invite Only",
+  "gameAchievements": "Saavutukset",
+  "gameClanGames": "Klaani Pelit",
+  "gameSeasonPass": "Kauden Pass",
+  "gameCreatorCode": "Luojan Koodi: ClashKing",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
+  "clanTitle": "Klaani",
+  "clanSearchTitle": "Hae klaania",
+  "clanSearchPlaceholder": "Klaanin nimi",
+  "clanNone": "Ei klaania",
+  "clanJoinToUnlock": "Liity klaaniin avataksesi uusia ominaisuuksia.",
+  "clanMembers": "Jäsenet",
+  "clanWarFrequency": "Sodan taajuus",
+  "clanMinimumMembers": "Minimi jäsenet",
+  "clanMaximumMembers": "Jäsenten enimmäismäärä",
+  "clanLocation": "Sijainti",
+  "clanMinimumPoints": "Klaanipisteiden vähimmäismäärä",
+  "clanMinimumLevel": "Klaanin vähimmäistaso",
+  "clanInviteOnly": "Vain Kutsu",
   "@clanInviteOnly": {
     "description": "Clan is invite only"
   },
-  "clanOpened": "Opened",
+  "clanOpened": "Avattu",
   "@clanOpened": {
     "description": "Clan is opened"
   },
-  "clanClosed": "Closed",
+  "clanClosed": "Suljettu",
   "@clanClosed": {
     "description": "Clan is closed"
   },
-  "clanRoleLeader": "Leader",
-  "clanRoleCoLeader": "Co-Leader",
-  "clanRoleElder": "Elder",
-  "clanRoleMember": "Member",
-  "clanWarFrequencyAlways": "Always",
-  "clanWarFrequencyNever": "Never",
-  "clanWarFrequencyUnknown": "Unknown",
-  "clanWarFrequencyOncePerWeek": "1/week",
-  "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
-  "clanWarFrequencyRarely": "Rarely",
+  "clanRoleLeader": "Johtaja",
+  "clanRoleCoLeader": "Apulaisjohtaja",
+  "clanRoleElder": "Vanhempi",
+  "clanRoleMember": "Jäsen",
+  "clanWarFrequencyAlways": "Aina",
+  "clanWarFrequencyNever": "Ei Koskaan",
+  "clanWarFrequencyUnknown": "Tuntematon",
+  "clanWarFrequencyOncePerWeek": "1/viikko",
+  "clanWarFrequencyMoreThanOncePerWeek": "Yli 1 viikko",
+  "clanWarFrequencyRarely": "Harvoin",
   "timeHourIndicator": "h",
-  "timeDaysAgo": "{days} days ago",
+  "timeDaysAgo": "{days} päivää sitten",
   "@timeDaysAgo": {
     "placeholders": {
       "days": {
@@ -337,7 +345,7 @@
       }
     }
   },
-  "timeDayAgo": "{day} day ago",
+  "timeDayAgo": "{day} päivää sitten",
   "@timeDayAgo": {
     "placeholders": {
       "day": {
@@ -345,7 +353,7 @@
       }
     }
   },
-  "timeHourAgo": "{hour} hour ago",
+  "timeHourAgo": "{hour} tuntia sitten",
   "@timeHourAgo": {
     "placeholders": {
       "hour": {
@@ -353,7 +361,7 @@
       }
     }
   },
-  "timeHoursAgo": "{hours} hours ago",
+  "timeHoursAgo": "{hours} tuntia sitten",
   "@timeHoursAgo": {
     "placeholders": {
       "hours": {
@@ -361,7 +369,7 @@
       }
     }
   },
-  "timeMinuteAgo": "{minute} minute ago",
+  "timeMinuteAgo": "{minute} minuuttia sitten",
   "@timeMinuteAgo": {
     "placeholders": {
       "minute": {
@@ -369,7 +377,7 @@
       }
     }
   },
-  "timeMinutesAgo": "{minutes} minutes ago",
+  "timeMinutesAgo": "{minutes} minuuttia sitten",
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -377,8 +385,11 @@
       }
     }
   },
-  "timeJustNow": "Just Now",
-  "timeEndedJustNow": "Ended just now",
+  "timeJustNow": "Juuri Nyt",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
+  "timeEndedJustNow": "Päättyi juuri nyt",
   "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
   "@timeEndedMinutesAgo": {
     "placeholders": {
@@ -403,7 +414,7 @@
       }
     }
   },
-  "timeStartsIn": "Starts in {time}",
+  "timeStartsIn": "Aloittaa {time} kuluttua",
   "@timeStartsIn": {
     "placeholders": {
       "time": {
@@ -411,7 +422,7 @@
       }
     }
   },
-  "timeStartsAt": "Starts at {time}",
+  "timeStartsAt": "Aloittaa nimellä {time}",
   "@timeStartsAt": {
     "placeholders": {
       "time": {
@@ -419,7 +430,7 @@
       }
     }
   },
-  "timeEndsIn": "Ends in {time}",
+  "timeEndsIn": "Päättyy {time}",
   "@timeEndsIn": {
     "placeholders": {
       "time": {
@@ -435,10 +446,10 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
-  "legendsNotInLeague": "Not in Legend League",
-  "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
-  "legendsStartDescription": "You started the day with {trophies} trophies.",
+  "legendsTitle": "Legend League",
+  "legendsNotInLeague": "Ei Legend League -pelissä",
+  "legendsNoDataToday": "Et ole Legend League, mutta edelliset vuodenajat ovat käytettävissä.",
+  "legendsStartDescription": "Aloitit päivän {trophies} palkalla.",
   "@legendsStartDescription": {
     "placeholders": {
       "trophies": {
@@ -471,7 +482,7 @@
       }
     }
   },
-  "legendsGainDescription": "You gained {trophies} trophies for now.",
+  "legendsGainDescription": "Olet voittanut {trophies} palkinnot toistaiseksi.",
   "@legendsGainDescription": {
     "placeholders": {
       "trophies": {
@@ -479,7 +490,7 @@
       }
     }
   },
-  "legendsLossDescription": "You lost {trophies} trophies for now.",
+  "legendsLossDescription": "Olet menettänyt {trophies} pokaalia toistaiseksi.",
   "@legendsLossDescription": {
     "placeholders": {
       "trophies": {
@@ -487,7 +498,7 @@
       }
     }
   },
-  "legendsNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+  "legendsNoGlobalRankDescription": "Et ole tällä hetkellä maailmanlaajuisesti listattuna {trophies} palkalla.",
   "@legendsNoGlobalRankDescription": {
     "placeholders": {
       "trophies": {
@@ -506,36 +517,36 @@
       }
     }
   },
-  "legendsNoRank": "No ranking",
-  "legendsBestTrophies": "Best Trophies",
-  "legendsMostAttacks": "Most Attacks",
-  "legendsLastSeason": "Last Season",
-  "legendsBestRank": "Best Global Rank",
-  "legendsTrophiesBySeason": "Trophies by season",
-  "legendsEosTrophies": "End Of Season Trophies",
-  "legendsEosDetails": "End Of Season Details",
-  "legendsInaccurateTitle": "Inaccurate data?",
+  "legendsNoRank": "Ei sijoitusta",
+  "legendsBestTrophies": "Parhaat Palkinnat",
+  "legendsMostAttacks": "Eniten Hyökkäyksiä",
+  "legendsLastSeason": "Viime Kausi",
+  "legendsBestRank": "Paras Maailmanlaajuinen Sijoitus",
+  "legendsTrophiesBySeason": "Palkinnot kauden mukaan",
+  "legendsEosTrophies": "Kauden Palkinnot Päättyvät",
+  "legendsEosDetails": "Kauden Loppu Yksityiskohdat",
+  "legendsInaccurateTitle": "Epätarkkoja tietoja?",
   "legendsInaccurateIntro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
-  "legendsInaccurateApiDelayTitle": "1. API Delay: ",
-  "legendsInaccurateApiDelayBody": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
-  "legendsInaccurateConcurrentTitle": "2. Concurrent Changes: \n",
-  "legendsInaccurateMultipleAttacksTitle": "- Multiple Attacks/Defenses: ",
-  "legendsInaccurateMultipleAttacksBody": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
-  "legendsInaccurateSimultaneousTitle": "- Simultaneous Attack and Defense: ",
-  "legendsInaccurateSimultaneousBody": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
-  "legendsInaccurateNetGainTitle": "3. Net Gain/Loss: ",
-  "legendsInaccurateNetGainBody": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
-  "legendsInaccurateConclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-  "statsSeasonStats": "Season Stats",
-  "statsByDay": "By Day",
+  "legendsInaccurateApiDelayTitle": "1. Api Viive: ",
+  "legendsInaccurateApiDelayBody": "API voi kestää jopa 5 minuuttia päivittää, aiheuttaa viive heijastaa reaaliaikaisen pokaalin muutoksia.\n",
+  "legendsInaccurateConcurrentTitle": "2. Samanaikaiset Muutokset: \n",
+  "legendsInaccurateMultipleAttacksTitle": "- Useita Hyökkäyksiä/Puolustuksia: ",
+  "legendsInaccurateMultipleAttacksBody": "Jos useita hyökkäyksiä tai puolustuksia tapahtuu nopeasti peräkkäin, API voi näyttää yhdistetyt tulokset (esim. +68 tai -68).\n",
+  "legendsInaccurateSimultaneousTitle": "- Samanaikainen hyökkäys ja puolustus: ",
+  "legendsInaccurateSimultaneousBody": "Jos hyökkäys ja puolustus tapahtuu samaan aikaan, saatat nähdä sekoitettu tulos (esim. +4).\n",
+  "legendsInaccurateNetGainTitle": "3. Netto Voitto/tappio: ",
+  "legendsInaccurateNetGainBody": "Aika-asioista huolimatta päivän nettovoitto tai tappio on tarkka. ",
+  "legendsInaccurateConclusion": "Nämä rajoitukset ovat yleisiä kaikissa työkaluissa käyttäen Clash of klaanit APIa. Valitettavasti emme voi korjata sitä, koska se on Supercellin käsissä. Teemme parhaamme kompensoidaksemme nämä rajat ja tuottaaksemme tuloksia mahdollisimman lähellä todellisuutta. Kiitos ymmärryksestäsi!",
+  "statsSeasonStats": "Kauden Tilastot",
+  "statsByDay": "Päivän Mukaan",
   "@statsByDay": {
     "description": "Shows stats by day"
   },
-  "statsBySeason": "By Season",
+  "statsBySeason": "Kauden Mukaan",
   "@statsBySeason": {
     "description": "Shows stats by season"
   },
-  "statsDayIndex": "Day {index}",
+  "statsDayIndex": "Päivä {index}",
   "@statsDayIndex": {
     "placeholders": {
       "index": {
@@ -543,7 +554,7 @@
       }
     }
   },
-  "statsIndexDays": "{index} days",
+  "statsIndexDays": "{index} päivää",
   "@statsIndexDays": {
     "placeholders": {
       "index": {
@@ -551,7 +562,7 @@
       }
     }
   },
-  "statsSeasonDate": "{date} season",
+  "statsSeasonDate": "{date} kausi",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
     "placeholders": {
@@ -560,23 +571,23 @@
       }
     }
   },
-  "statsAllTownHalls": "All Town Halls",
-  "statsMembers": "Members Stats",
-  "todoTitle": "To-do list",
-  "todoExplanationTitle": "Task Calculation",
-  "todoExplanationIntro": "The task completion percentage is calculated based on the following activities with specific weightings:",
+  "statsAllTownHalls": "Kaikki Kaupungit",
+  "statsMembers": "Jäsenten Tilastot",
+  "todoTitle": "Tehtäväluettelo",
+  "todoExplanationTitle": "Tehtävän Laskeminen",
+  "todoExplanationIntro": "Tehtävän suorittamisen prosenttiosuus lasketaan seuraavien erityisten painotusten avulla seuraavien toimintojen perusteella:",
   "todoExplanationLegendsTitle": "Legend League:",
-  "todoExplanationLegends": "Weight of 8 points per account, 1 attack = 1 point.",
-  "todoExplanationRaidsTitle": "Raids:",
-  "todoExplanationRaids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-  "todoExplanationClanWarsTitle": "Clan Wars:",
-  "todoExplanationClanWars": "Weight of 2 points per account, 1 attack = 1 point.",
-  "todoExplanationCwlTitle": "Clan War League:",
-  "todoExplanationCwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
-  "todoExplanationPassAndGamesTitle": "Season Pass & Clan Games:",
-  "todoExplanationPassAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
-  "todoExplanationConclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
-  "todoAccountsNumber": "{number} accounts",
+  "todoExplanationLegends": "Paino 8 pistettä per tili, 1 hyökkäys = 1 piste.",
+  "todoExplanationRaidsTitle": "Raidat:",
+  "todoExplanationRaids": "Paino 5 pistettä per tili (tai 6, jos viimeinen hyökkäys on avattu), 1 hyökkäys = 1 piste.",
+  "todoExplanationClanWarsTitle": "Klaanisodat:",
+  "todoExplanationClanWars": "Paino 2 pistettä per tili, 1 hyökkäys = 1 piste.",
+  "todoExplanationCwlTitle": "Clan Sota League:",
+  "todoExplanationCwl": "Paino 1 pisteen per tili, 1 hyökkäys = 1 piste. CWL ei voi seurata, jos pelaaja ei ole liigan klaanissa.",
+  "todoExplanationPassAndGamesTitle": "Kauden Pass Ja Clan Pelit:",
+  "todoExplanationPassAndGames": "Paino 2 pistettä per tili. Suhde perustuu niiden päivien lukumäärään, jotka ovat jäljellä (1 kuukausi solan osalta ja 6 päivää pelien osalta). Vihreä = raiteella suorittaa sola tai pelejä, punainen = takana aikataulu.",
+  "todoExplanationConclusion": "Lopullinen prosenttiosuus lasketaan jakamalla meneillään olevien tapahtumien aikana toteutettujen toimien kokonaismäärä tarvittavilla toimilla. Tilejä, jotka eivät ole toiminnassa yli 14 päivän ajan, ei oteta huomioon laskennassa.",
+  "todoAccountsNumber": "{number} tiliä",
   "@todoAccountsNumber": {
     "placeholders": {
       "number": {
@@ -585,7 +596,7 @@
     },
     "description": "Number of accounts (ex: 4 accounts)"
   },
-  "todoAccountsNumberActive": "{number} active accounts",
+  "todoAccountsNumberActive": "{number} aktiivista tiliä",
   "@todoAccountsNumberActive": {
     "placeholders": {
       "number": {
@@ -593,7 +604,7 @@
       }
     }
   },
-  "todoAccountsNumberInactive": "{number} inactive accounts",
+  "todoAccountsNumberInactive": "{number} passiivista tiliä",
   "@todoAccountsNumberInactive": {
     "placeholders": {
       "number": {
@@ -601,10 +612,10 @@
       }
     }
   },
-  "todoAccountsActive": "Active accounts",
-  "todoAccountsInactive": "Inactive accounts",
-  "todoAccountsNoInactive": "No inactive accounts.",
-  "todoAccountsNoActive": "No active accounts.",
+  "todoAccountsActive": "Aktiiviset tilit",
+  "todoAccountsInactive": "Passiiviset tilit",
+  "todoAccountsNoInactive": "Ei epäaktiivisia tilejä.",
+  "todoAccountsNoActive": "Ei aktiivisia tilejä.",
   "todoAttacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
   "@todoAttacksLeftDescription": {
     "placeholders": {
@@ -627,7 +638,7 @@
       }
     }
   },
-  "todoNoAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+  "todoNoAttacksLeftDescription": "Onnittelut, olet tehnyt kaikki hyökkäyksesi ({type})!",
   "@todoNoAttacksLeftDescription": {
     "placeholders": {
       "type": {
@@ -635,7 +646,7 @@
       }
     }
   },
-  "todoPointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+  "todoPointsLeftDescription": "Sinulla on {points} pistettä jäljellä päästäksesi tänään olemaan ajoissa tapahtuman päättymiseen ({type}).",
   "@todoPointsLeftDescription": {
     "placeholders": {
       "points": {
@@ -646,7 +657,7 @@
       }
     }
   },
-  "todoPointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+  "todoPointsLeftDescriptionNoPoints": "Onneksi olkoon, sinulla on aikaa saada maksimi palkkiot tapahtuman lopussa ({type})!",
   "@todoPointsLeftDescriptionNoPoints": {
     "placeholders": {
       "type": {
@@ -654,13 +665,13 @@
       }
     }
   },
-  "warTitle": "War",
-  "warFrequency": "War frequency",
-  "warParticipation": "War Participation",
-  "warLeague": "War/League",
-  "warHistory": "War History",
-  "warLog": "War Log",
-  "warLogClosed": "War log closed.",
+  "warTitle": "Sota",
+  "warFrequency": "Sodan taajuus",
+  "warParticipation": "Sota Osallistuminen",
+  "warLeague": "Sota/Liitto",
+  "warHistory": "Sota Historia",
+  "warLog": "Sota Loki",
+  "warLogClosed": "{clan}'s sota loki on suljettu.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -668,9 +679,9 @@
       }
     }
   },
-  "warStats": "War Stats",
-  "warOngoing": "Ongoing war",
-  "warIsNotInWar": "{clan} is not in war.",
+  "warStats": "Sodan Tilastot",
+  "warOngoing": "Käynnissä oleva sota",
+  "warIsNotInWar": "{clan} ei ole sodassa.",
   "@warIsNotInWar": {
     "placeholders": {
       "clan": {
@@ -678,22 +689,22 @@
       }
     }
   },
-  "warAskForWar": "Contact the leader or a co-leader to start a war.",
-  "warAskForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-  "warEnded": "War ended",
-  "warPreparation": "Preparation",
-  "warPerfectWar": "Perfect war",
-  "warVictory": "Victory",
-  "warDefeat": "Defeat",
-  "warDraw": "Draw",
+  "warAskForWar": "Ota yhteyttä johtajaan tai yhteisjohtajaan aloittaaksesi sodan.",
+  "warAskForWarLogOpening": "Ota yhteyttä johtajaan tai yhteisjohtajaan avataksesi sotalokin.",
+  "warEnded": "Sota päättyi",
+  "warPreparation": "Valmistelu",
+  "warPerfectWar": "Täydellinen sota",
+  "warVictory": "Voitto",
+  "warDefeat": "Tappio",
+  "warDraw": "Piirrä",
   "@warDraw": {
     "description": "War ended in a draw"
   },
-  "warTeamSize": "Team size",
-  "warMyTeam": "My team",
+  "warTeamSize": "Tiimin koko",
+  "warMyTeam": "Minun tiimini",
   "warEnemiesTeam": "Enemies",
-  "warClanDraw": "The two clans are tied",
-  "warStateOfTheWar": "State of the war",
+  "warClanDraw": "Molemmat klaanit ovat sidottuja",
+  "warStateOfTheWar": "Sodan tila",
   "warStarsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
   "@warStarsNeededToTakeTheLead": {
     "placeholders": {
@@ -722,8 +733,8 @@
       }
     }
   },
-  "warNoDataAvailableForThisWar": "No data available for this war",
-  "warCalculatorFast": "Fast calculator",
+  "warNoDataAvailableForThisWar": "Ei tietoja saatavilla tälle sodalle",
+  "warCalculatorFast": "Nopea laskin",
   "warCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
   "@warCalculatorAnswer": {
     "placeholders": {
@@ -735,16 +746,16 @@
       }
     }
   },
-  "warCalculatorNeededOverall": "% Needed overall",
-  "warCalculatorCalculate": "Calculate",
-  "warAttacksTitle": "Attacks",
-  "warAttacksNone": "No attack yet",
+  "warCalculatorNeededOverall": "% Tarvitaan yhteensä",
+  "warCalculatorCalculate": "Laske",
+  "warAttacksTitle": "Hyökkäykset",
+  "warAttacksNone": "Ei hyökkäystä vielä",
   "@warAttacksNone": {
     "description": "No attack yet in war"
   },
-  "warAttacksBest": "Best attacks",
-  "warAttacksCount": "Attack Count",
-  "warAttacksMissed": "Missed Attacks",
+  "warAttacksBest": "Parhaat hyökkäykset",
+  "warAttacksCount": "Hyökkäysten Määrä",
+  "warAttacksMissed": "Vastaamattomat Hyökkäykset",
   "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -756,7 +767,7 @@
       }
     }
   },
-  "warAttacksAverageStars": "You had an average of {stars} stars per war.",
+  "warAttacksAverageStars": "Sinulla oli keskimäärin {stars} tähteä sotaa kohden.",
   "@warAttacksAverageStars": {
     "placeholders": {
       "stars": {
@@ -764,7 +775,7 @@
       }
     }
   },
-  "warAttacksAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+  "warAttacksAverageDestruction": "Sinulla oli keskimäärin {percent}% tuhoa sotaa kohden.",
   "@warAttacksAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -772,13 +783,13 @@
       }
     }
   },
-  "warDefensesTitle": "Defenses",
-  "warDefensesNone": "No defense yet",
+  "warDefensesTitle": "Puolustukset",
+  "warDefensesNone": "Ei vielä puolustusta",
   "@warDefensesNone": {
     "description": "No defense yet in war"
   },
-  "warDefensesBest": "Best defenses",
-  "warDefensesBestOutOf": "Best defense (out of {number})",
+  "warDefensesBest": "Parhaat puolustukset",
+  "warDefensesBestOutOf": "Paras puolustus (tyhjästä {number})",
   "@warDefensesBestOutOf": {
     "placeholders": {
       "number": {
@@ -798,7 +809,7 @@
       }
     }
   },
-  "warDefensesAverageStars": "You had an average of {stars} stars per defense.",
+  "warDefensesAverageStars": "Sinulla oli keskimäärin {stars} tähteä per puolustus.",
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
@@ -806,7 +817,7 @@
       }
     }
   },
-  "warDefensesAverageDestruction": "You had an average of {percent}% destruction rate per defense.",
+  "warDefensesAverageDestruction": "Sinulla oli keskimäärin {percent}% tuhoa per puolustus.",
   "@warDefensesAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -814,20 +825,20 @@
       }
     }
   },
-  "warStarsTitle": "Stars",
-  "warStarsAverage": "Average stars",
+  "warStarsTitle": "Tähdet",
+  "warStarsAverage": "Keskimääräiset tähdet",
   "warStarsNumber": "Number of stars",
-  "warStarsOne": "1 star",
-  "warStarsTwo": "2 stars",
-  "warStarsThree": "3 stars",
-  "warStarsZero": "0 Star",
-  "warStarsBestPerformance": "Best performance",
+  "warStarsOne": "1 tähti",
+  "warStarsTwo": "2 tähteä",
+  "warStarsThree": "3 tähteä",
+  "warStarsZero": "0 Tähti",
+  "warStarsBestPerformance": "Paras suorituskyky",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
   },
-  "warDestructionTitle": "Destruction",
-  "warDestructionAverage": "Average destruction",
-  "warDestructionRate": "Destruction rate",
+  "warDestructionTitle": "Hävittäminen",
+  "warDestructionAverage": "Keskimääräinen tuhoaminen",
+  "warDestructionRate": "Hävittämisaste",
   "@warDestructionRate": {
     "description": "Percentage of destruction in war"
   },
@@ -864,7 +875,7 @@
       }
     }
   },
-  "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
+  "warHistoryAverageMembersDescription": "klaanissasi on keskimäärin {members} jäsentä, jotka osallistuvat viimeisten 50 sodan loppuun.",
   "@warHistoryAverageMembersDescription": {
     "placeholders": {
       "members": {
@@ -883,7 +894,7 @@
       }
     }
   },
-  "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
+  "warHistoryAverageHitRateDescription": "Kantasi hävitti keskimäärin {percent}% viimeisen 50 sodan aikana.",
   "@warHistoryAverageHitRateDescription": {
     "placeholders": {
       "percent": {
@@ -891,7 +902,7 @@
       }
     }
   },
-  "warPositionMap": "Map Position",
+  "warPositionMap": "Kartan Sijainti",
   "@warPositionMap": {
     "description": "Map position in war"
   },
@@ -899,7 +910,7 @@
   "@warPositionAbbr": {
     "description": "Abbreviation for map position"
   },
-  "warPositionOrder": "Order",
+  "warPositionOrder": "Tilaus",
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
@@ -907,11 +918,11 @@
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
   },
-  "warOpponentLowerTownhall": "Lower TH",
-  "warOpponentUpperTownhall": "Upper TH",
-  "warOpponentEqualThLevel": "Equal TH",
-  "warOpponentSelectMembersThLevel": "Members TH Level",
-  "warOpponentSelectOpponentsThLevel": "Opponents TH Level",
+  "warOpponentLowerTownhall": "Alempi TH",
+  "warOpponentUpperTownhall": "Ylempi TH",
+  "warOpponentEqualThLevel": "Yhtäläinen TH",
+  "warOpponentSelectMembersThLevel": "Jäsenten Th Taso",
+  "warOpponentSelectOpponentsThLevel": "Vastustajien Th Taso",
   "warFiltersLastXwars": "Last {number} wars",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
@@ -921,49 +932,49 @@
       }
     }
   },
-  "warFiltersFriendly": "Friendly",
+  "warFiltersFriendly": "Ystävällinen",
   "@warFiltersFriendly": {
     "description": "Friendly war"
   },
-  "warFiltersRandom": "Random",
+  "warFiltersRandom": "Satunnainen",
   "@warFiltersRandom": {
     "description": "Random/basic war (not friendly or cwl)"
   },
-  "warVisibilityToggleTownHall": "Hide/Show stats from former TH levels",
+  "warVisibilityToggleTownHall": "Piilota/Näytä tilastot entisiltä TH-tasoilta",
   "@warVisibilityToggleTownHall": {
     "description": "For example, hide stats from TH15 and below if the player is now TH16"
   },
-  "warEventsTitle": "Events",
+  "warEventsTitle": "Tapahtumat",
   "@warEventsTitle": {
     "description": "War events"
   },
-  "warEventsNewest": "Newest",
-  "warEventsOldest": "Oldest",
-  "warStatusReady": "Opted In",
+  "warEventsNewest": "Uusin",
+  "warEventsOldest": "Vanhin",
+  "warStatusReady": "Valittu Sisään",
   "@warStatusReady": {
     "description": "Opted In for war"
   },
-  "warStatusUnready": "Opted Out",
+  "warStatusUnready": "Valittu Ulos",
   "@warStatusUnready": {
     "description": "Opted Out for war"
   },
-  "warStatusMissed": "Missed",
+  "warStatusMissed": "Vastaamaton",
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warAbbreviationAvg": "Avg",
+  "warAbbreviationAvg": "Keskiarvo",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
   },
-  "warAbbreviationAvgPercentage": "Avg %",
+  "warAbbreviationAvgPercentage": "Keskim.",
   "@warAbbreviationAvgPercentage": {
     "description": "Abbreviation for average percentage"
   },
   "cwlTitle": "CWL",
-  "cwlClanWarLeague": "Clan War League",
-  "cwlOngoing": "Ongoing CWL",
-  "cwlRounds": "Rounds",
-  "cwlRoundNumber": "Round {number}",
+  "cwlClanWarLeague": "Klaani Sota Liiga",
+  "cwlOngoing": "CWL On Käynnissä",
+  "cwlRounds": "Kierrokset",
+  "cwlRoundNumber": "Pyöreä {number}",
   "@cwlRoundNumber": {
     "placeholders": {
       "number": {
@@ -971,7 +982,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Current round (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -987,7 +998,7 @@
       }
     }
   },
-  "cwlStars": "Your clan has a total of {stars} stars.",
+  "cwlStars": "Sinun klaanissasi on yhteensä {stars} tähteä.",
   "@cwlStars": {
     "placeholders": {
       "stars": {
@@ -995,7 +1006,7 @@
       }
     }
   },
-  "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
+  "cwlDestructionPercentage": "Sinun klaani tuhoamisaste on {percent}%.",
   "@cwlDestructionPercentage": {
     "placeholders": {
       "percent": {
@@ -1003,7 +1014,7 @@
       }
     }
   },
-  "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+  "cwlTotalAttacks": "Klaanillasi on yhteensä {attacks} hyökkäystä {totalAttacks} mahdollisesta hyökkäyksestä.",
   "@cwlTotalAttacks": {
     "placeholders": {
       "attacks": {
@@ -1014,20 +1025,20 @@
       }
     }
   },
-  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
-  "joinLeaveJoin": "Join",
-  "joinLeaveLeave": "Leave",
+  "joinLeaveTitle": "Join/Jätä Lokit (Nykyinen Kausi)",
+  "joinLeaveJoin": "Liity",
+  "joinLeaveLeave": "Poistu",
   "joinLeaveReset": "Reset",
-  "joinLeaveJoins": "Joins",
-  "joinLeaveLeaves": "Leaves",
-  "joinLeaveUniquePlayers": "Unique Players",
-  "joinLeaveMovingPlayers": "Moving Players",
-  "joinLeaveMostMovingPlayers": "Most Moving Players",
-  "joinLeaveStillInClan": "Still in Clan",
-  "joinLeaveLeftForever": "Left Forever",
-  "joinLeaveRejoinedPlayers": "Rejoined Players",
-  "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
-  "joinLeavePeakHour": "Most Active Hour",
+  "joinLeaveJoins": "Liitännäiset",
+  "joinLeaveLeaves": "Lehdet",
+  "joinLeaveUniquePlayers": "Ainutlaatuiset Pelaajat",
+  "joinLeaveMovingPlayers": "Siirretään Pelaajia",
+  "joinLeaveMostMovingPlayers": "Eniten Liikkuvat Pelaajat",
+  "joinLeaveStillInClan": "Vielä klaanissa",
+  "joinLeaveLeftForever": "Vasemmalle Ikuisesti",
+  "joinLeaveRejoinedPlayers": "Liitynyt Pelaajiin",
+  "joinLeaveAvgTimeJoinLeave": "Keskim. Keskim. Poissaoloaika",
+  "joinLeavePeakHour": "Aktiivisin Tunti",
   "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
   "@joinLeaveNumberDescription": {
     "placeholders": {
@@ -1074,7 +1085,7 @@
       }
     }
   },
-  "joinLeaveStillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
+  "joinLeaveStillInClanNumberDescription": "{number} pelaajaa liittyi ja on edelleen klaanissa.",
   "@joinLeaveStillInClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1082,7 +1093,7 @@
       }
     }
   },
-  "joinLeaveLeftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
+  "joinLeaveLeftClanNumberDescription": "{number} pelaajaa liittyi, sitten lähti klaanista eikä koskaan liittynyt.",
   "@joinLeaveLeftClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1117,17 +1128,17 @@
       }
     }
   },
-  "raidsTitle": "Raids",
-  "raidsLast": "Last raids",
-  "raidsOngoing": "Ongoing raids",
-  "raidsDistrictsDestroyed": "Districts destroyed",
-  "raidsCompleted": "Raids completed",
-  "searchNoResult": "No result.",
-  "maintenanceTitle": "Maintenance",
-  "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-  "downloadTooltip": "Download CWL summary",
-  "downloadInProgress": "Downloading file... It can take a few seconds...",
-  "downloadSuccess": "File saved successfully in {path}",
+  "raidsTitle": "Raidat",
+  "raidsLast": "Viimeiset hyökkäykset",
+  "raidsOngoing": "Käynnissä olevat hyökkäykset",
+  "raidsDistrictsDestroyed": "Tuhoutuneet alueet",
+  "raidsCompleted": "Raidat valmiit",
+  "searchNoResult": "Ei tuloksia.",
+  "maintenanceTitle": "Huolto",
+  "maintenanceDescription": "Yhteentörmäyksestä klaanit ovat tällä hetkellä kunnossapidossa, joten emme voi käyttää APIa. Tarkista myöhemmin.",
+  "downloadTooltip": "Lataa CWL yhteenveto",
+  "downloadInProgress": "Ladataan tiedostoa... Se voi kestää muutaman sekunnin...",
+  "downloadSuccess": "Tiedosto tallennettu onnistuneesti {path}",
   "@downloadSuccess": {
     "placeholders": {
       "path": {
@@ -1135,52 +1146,56 @@
       }
     }
   },
-  "downloadError": "Failed to download file",
-  "dashboardTitle": "Dashboard",
-  "toolsTitle": "Tools",
-  "navigationTeam": "Teams",
-  "navigationStatistics": "Statistics",
-  "versionDevice": "Version & Device",
+  "downloadError": "Tiedoston lataaminen epäonnistui",
+  "dashboardTitle": "Hallintapaneeli",
+  "toolsTitle": "Työkalut",
+  "navigationTeam": "Tiimit",
+  "navigationStatistics": "Tilastot",
+  "versionDevice": "Versio Ja Laite",
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  "betaFeature": "Beta Feature",
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
+  "betaFeature": "Beta Ominaisuus",
   "betaLabel": "BETA",
-  "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
-  "settingsLanguage": "Language",
-  "settingsSelectLanguage": "Select a language",
-  "settingsToggleTheme": "Toggle Theme",
-  "faqTitle": "FAQ",
-  "faqSubtitle": "Frequently Asked Questions",
-  "faqIsThisFromSupercell": "Is this App from Supercell?",
-  "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-  "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
-  "faqClanNotTracked": "Clan not tracked",
-  "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
-  "faqTrackingDown": "Tracking down",
-  "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
-  "faqApiLimitation": "Clash of Clans API limitation",
-  "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
-  "faqSupportWork": "How can I support your work?",
-  "faqSupportWorkAnswer": "There are several ways to support us:",
-  "faqUseCodeClashKing": "Use code \"ClashKing\"",
-  "faqSupportUsOnPatreon": "Support us on Patreon",
-  "faqShareTheApp": "Share the app with your friends",
-  "faqRateTheApp": "Rate the app in the store",
-  "faqHelpUsTranslate": "Help us translate the app",
-  "faqHowToInviteTheBot": "How can I invite your bot to my Discord Server?",
-  "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
+  "betaDescription": "Tämä ominaisuus on tällä hetkellä beta, se voi olla joitakin vikoja tai olla epätäydellinen. Työskentelemme aktiivisesti parannusten parissa ja tervetuloa palautteesi. Ole hyvä ja jaa ideasi ja raportoi kaikista Discord-palvelimellamme olevista ongelmista auttaaksesi meitä parantamaan sitä.",
+  "settingsLanguage": "Kieli",
+  "settingsSelectLanguage": "Valitse kieli",
+  "settingsToggleTheme": "Vaihda Teemaa",
+  "faqTitle": "UKK",
+  "faqSubtitle": "Usein Kysytyt Kysymykset",
+  "faqIsThisFromSupercell": "Onko tämä sovellus Supercellistä?",
+  "faqFanContentPolicy": "Tämä materiaali on epävirallista eikä Supercellin hyväksymä aineisto. Lisätietoja on Supercellin fanisisällön käytännössä: www.supercell.com/fan-content-policy",
+  "faqWhyNotAccurate": "Miksi tiedot joskus ovat virheellisiä tai puuttuvat?",
+  "faqClanNotTracked": "Klaania ei seurata",
+  "faqClanNotTrackedAnswer": "ClashKing voi hakea tämän tiedon vain, jos klaania seurataan. Jos klaania ei seurata, ole hyvä ja kutsu ClashKing Bot Discord-palvelimellesi ja käytä komentoa /addclan. Työskentelemme sen eteen, että tämä ominaisuus on saatavilla pian sovelluksessa.",
+  "faqTrackingDown": "Seuranta alas",
+  "faqTrackingDownAnswer": "Seuranta voi lakata toimimasta tietyn ajan. Siksi voit joskus olla reikiä tietojasi. Pyrimme parantamaan tätä.",
+  "faqApiLimitation": "Yhteentörmäyksestä klaanit API rajoitus",
+  "faqApiLimitationAnswer": "Joitakin tietoja on toimittanut Clash of klaanit ja niiden API on joitakin rajoituksia. Tämä pätee legendoja seuranta, se joskus pinot pokaalin voitto ja menetys ikään kuin se oli yksi hyökkäys. Tämän vuoksi meillä ei myöskään ole mitään tietoa rakennuksestasi.",
+  "faqSupportWork": "Miten voin tukea työtäsi?",
+  "faqSupportWorkAnswer": "On olemassa useita tapoja tukea meitä:",
+  "faqUseCodeClashKing": "Käytä koodia \"ClashKing\"",
+  "faqSupportUsOnPatreon": "Tue meitä Patreonissa",
+  "faqShareTheApp": "Jaa sovellus ystäviesi kanssa",
+  "faqRateTheApp": "Arvostele sovellus kaupassa",
+  "faqHelpUsTranslate": "Auta meitä kääntämään sovellus",
+  "faqHowToInviteTheBot": "Miten voin kutsua botti minun Discord-palvelimeeni?",
+  "faqHowToInviteTheBotAnswer": "Voit kutsua botin palvelimellesi klikkaamalla alla olevaa painiketta. Tarvitset \"Manage Server\" -oikeudet lisätäksesi bootin.",
   "faqInviteTheBot": "Invite ClashKing Bot",
-  "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
+  "faqNeedHelp": "Tarvitsen apua tai haluaisin tehdä ehdotuksen. Miten voin ottaa sinuun yhteyttä?",
   "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
-  "faqSendEmail": "Send an email",
-  "faqJoinDiscord": "Join our Discord Server",
-  "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
-  "translationHelpUsTranslate": "Help us translate",
-  "translationSuggestFeatures": "Suggest features",
-  "translationThankYou": "Thank you!",
-  "translationThankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-  "translationHelpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
-  "translationHelpTranslateButton": "Help Translate on Crowdin",
-  "translationCurrentTranslators": "Current Translators"
+  "faqSendEmail": "Lähetä sähköposti",
+  "faqJoinDiscord": "Liity Discord-palvelimeemme",
+  "faqCannotOpenMailClient": "Jostain syystä emme voi avata sähköpostiohjelmaasi. Kopioimme sähköpostiosoitteen sinua varten. Voit kirjoittaa sähköpostin ja liittää osoitteen vastaanottajan kenttään.",
+  "translationHelpUsTranslate": "Auta meitä kääntämään",
+  "translationSuggestFeatures": "Ehdota ominaisuuksia",
+  "translationThankYou": "Kiitos!",
+  "translationThankYouContent": "Valtava kiitos kaikille uskomattomille kääntäjille, jotka auttavat meitä tekemään tämän sovelluksen useampien ihmisten saataville ympäri maailmaa!",
+  "translationHelpTranslateContent": "Voit auttaa meitä kääntämään sovelluksen Crowdinissa. Jos kielesi ei ole käytettävissä Crowdinissa, voit vapaasti pyytää sitä meidän Discord-palvelimella. Kiitos paljon avustasi!",
+  "translationHelpTranslateButton": "Auta kääntämään Crowdinia",
+  "translationCurrentTranslators": "Nykyiset Kääntäjät"
 }

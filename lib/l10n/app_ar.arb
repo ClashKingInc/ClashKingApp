@@ -1,103 +1,107 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
-  "appDescription": "رفيقك النهائي في Clash of Clans لتتبع الإحصائيات وإدارة العشائر وتحليل الأداء.",
-  "generalLoading": "جاري التحميل...",
-  "generalError": "خطأ",
-  "generalRetry": "إعادة المحاولة",
-  "generalTryAgain": "حاول مرة أخرى",
-  "generalClose": "إغلاق",
-  "generalCancel": "إلغاء",
-  "generalOk": "موافق",
+  "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
+  "generalLoading": "Loading...",
+  "loadingVillages": "Loading your villages...",
+  "loadingClanData": "Fetching clan data...",
+  "loadingWarStats": "Analyzing war stats...",
+  "loadingLegendsData": "Preparing legends data...",
+  "loadingCapitalRaids": "Loading capital raids...",
+  "loadingAlmostReady": "Almost ready...",
+  "accountVerificationTitle": "Verify Account",
+  "accountVerificationMessage": "Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.",
+  "accountVerified": "Account verified",
+  "accountNotVerified": "Account not verified",
+  "accountVerifyButton": "Verify",
+  "accountVerificationSuccess": "Account verified successfully!",
+  "accountVerificationFailed": "Verification failed. Please check your API token.",
+  "generalRetry": "Retry",
+  "generalTryAgain": "Try again",
+  "generalCancel": "Cancel",
+  "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
   },
-  "generalApply": "تطبيق",
-  "generalConfirm": "تأكيد",
-  "generalAdd": "إضافة",
-  "@generalAdd": {
-    "description": "Add an account"
+  "generalApply": "Apply",
+  "generalConfirm": "Confirm",
+  "generalManage": "Manage",
+  "generalSettings": "Settings",
+  "generalCopiedToClipboard": "Copied to clipboard",
+  "generalComingSoon": "Coming soon!",
+  "generalLastRefresh": "Last refresh: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
   },
-  "generalDelete": "حذف",
-  "@generalDelete": {
-    "description": "Delete an account"
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
   },
-  "generalManage": "إدارة",
-  "generalManagement": "الإدارة",
-  "generalSettings": "الإعدادات",
-  "generalCopiedToClipboard": "تم النسخ إلى الحافظة",
-  "generalComingSoon": "قريباً!",
-  "generalAll": "الكل",
+  "generalAll": "All",
   "@generalAll": {
     "description": "all items"
   },
-  "generalTotal": "المجموع",
-  "generalBest": "أفضل",
+  "generalTotal": "Total",
+  "generalBest": "Best",
   "@generalBest": {
     "description": "Best end of day trophies"
   },
-  "generalWorst": "أسوأ",
+  "generalWorst": "Worst",
   "@generalWorst": {
     "description": "Worst end of day trophies"
   },
-  "generalAverage": "متوسط",
+  "generalAverage": "Average",
   "@generalAverage": {
     "description": "Average value of legend trophies (defense and attack)"
   },
-  "generalRemaining": "متبقي",
+  "generalRemaining": "Remaining",
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "نشط",
-  "generalInactive": "غير نشط",
-  "generalStarted": "بدأ",
+  "generalActive": "Active",
+  "generalInactive": "Inactive",
+  "generalStarted": "Started",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
   },
-  "generalEnded": "انتهى",
+  "generalEnded": "Ended",
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalLevel": "المستوى",
-  "generalRole": "الدور",
-  "generalDate": "التاريخ",
-  "generalStats": "الإحصائيات",
-  "generalFullStats": "الإحصائيات الكاملة",
-  "generalDetails": "التفاصيل",
-  "generalHistory": "التاريخ",
+  "generalRole": "Role",
+  "generalStats": "Stats",
+  "generalFullStats": "Full Stats",
+  "generalDetails": "Details",
+  "generalHistory": "History",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalCharts": "الرسوم البيانية",
-  "generalFilters": "المرشحات",
-  "generalWhatever": "أي شيء",
-  "@generalWhatever": {
-    "description": "Whatever the value"
-  },
-  "generalAny": "أي",
-  "@generalAny": {
-    "description": "Any value is accepted"
-  },
-  "generalNotSet": "غير محدد",
+  "generalFilters": "Filters",
+  "generalNotSet": "Not set",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "تحذير",
-  "generalNoDataAvailable": "لا توجد بيانات متاحة.",
-  "generalClosed": "مغلق",
-  "@generalClosed": {
-    "description": "WarLog closed"
-  },
-  "authWelcomeBack": "مرحباً بعودتك",
-  "authClashKingDescription": "رفيقك النهائي في Clash of Clans لتتبع الإحصائيات وإدارة العشائر وتحليل الأداء.",
-  "authChooseSignInMethod": "اختر طريقة تسجيل الدخول المفضلة",
-  "authSignUp": "إنشاء حساب",
-  "authLogin": "تسجيل الدخول",
-  "authLogout": "تسجيل الخروج",
-  "authCreateAccount": "إنشاء حساب",
-  "authJoinClashKing": "انضم إلى ClashKing",
-  "authCreateClashKingAccount": "إنشاء حساب ClashKing",
-  "authCreateAccountToGetStarted": "أنشئ حساباً للبدء",
+  "generalWarning": "Warning",
+  "generalNoDataAvailable": "No data available.",
+  "authSignUp": "Sign up",
+  "authLogin": "Login",
+  "authLogout": "Log out",
+  "authCreateAccount": "Create Account",
+  "authJoinClashKing": "Join ClashKing",
+  "authCreateClashKingAccount": "Create ClashKing Account",
+  "authCreateAccountToGetStarted": "Create your account to get started",
   "authAlreadyHaveAccount": "Already have an account? Sign in",
   "authConfirmLogout": "Are you sure you want to log out?",
   "@authConfirmLogout": {
@@ -124,7 +128,7 @@
   "authUsernameTooShort": "Username must be at least 3 characters",
   "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
   "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-  "authAccountManagement": "Account Management",
+  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.",
   "authAccountConnected": "Connected Accounts",
   "authAccountConnectedStatus": "Connected",
   "authAccountNotConnected": "Not connected",
@@ -294,6 +298,10 @@
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Creator Code: ClashKing",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
   "clanTitle": "Clan",
   "clanSearchTitle": "Search clan",
   "clanSearchPlaceholder": "Clan's name",
@@ -378,6 +386,9 @@
     }
   },
   "timeJustNow": "Just Now",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
   "timeEndedJustNow": "Ended just now",
   "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
   "@timeEndedMinutesAgo": {
@@ -435,7 +446,7 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
+  "legendsTitle": "Legend League",
   "legendsNotInLeague": "Not in Legend League",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "You started the day with {trophies} trophies.",
@@ -660,7 +671,7 @@
   "warLeague": "War/League",
   "warHistory": "War History",
   "warLog": "War Log",
-  "warLogClosed": "War log closed.",
+  "warLogClosed": "{clan}'s war log is closed.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -971,7 +982,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Current round (Round {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -1144,6 +1155,10 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
   "betaFeature": "Beta Feature",
   "betaLabel": "BETA",
   "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
@@ -1159,23 +1174,23 @@
   "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
   "faqTrackingDown": "Tracking down",
   "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
-  "faqApiLimitation": "Clash of Clans API limitation",
-  "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
-  "faqSupportWork": "How can I support your work?",
-  "faqSupportWorkAnswer": "There are several ways to support us:",
-  "faqUseCodeClashKing": "Use code \"ClashKing\"",
-  "faqSupportUsOnPatreon": "Support us on Patreon",
-  "faqShareTheApp": "Share the app with your friends",
-  "faqRateTheApp": "Rate the app in the store",
-  "faqHelpUsTranslate": "Help us translate the app",
-  "faqHowToInviteTheBot": "How can I invite your bot to my Discord Server?",
-  "faqHowToInviteTheBotAnswer": "You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.",
+  "faqApiLimitation": "حدود API لمعركة حرب العصابات",
+  "faqApiLimitationAnswer": "بعض البيانات مقدمة من Clash of العصابات، و API لديها بعض القيود. وهذه هي الحالة فيما يتعلق بتعقب الأسطورة، فهي في بعض الأحيان تكبح الكأس والخسارة كما لو كانت هجوما واحدا. هذا أيضا هو السبب في أننا لا نملك أي معلومات عن مستوى المبنى الخاص بك.",
+  "faqSupportWork": "كيف يمكنني دعم عملك؟",
+  "faqSupportWorkAnswer": "هناك عدة طرق لدعمنا:",
+  "faqUseCodeClashKing": "استخدام الرمز \"ClashKing\"",
+  "faqSupportUsOnPatreon": "دعمنا على باتريون",
+  "faqShareTheApp": "شارك التطبيق مع أصدقائك",
+  "faqRateTheApp": "قيّم التطبيق في المتجر",
+  "faqHelpUsTranslate": "ساعدنا على ترجمة التطبيق",
+  "faqHowToInviteTheBot": "كيف يمكنني دعوة بوت الخاص بك إلى خادم ديسكورد؟",
+  "faqHowToInviteTheBotAnswer": "يمكنك دعوة بوت إلى الخادم الخاص بك بالنقر على الزر أدناه. ستحتاج إلى إذن \"إدارة الخادم\" لإضافة البوت.",
   "faqInviteTheBot": "Invite ClashKing Bot",
-  "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
+  "faqNeedHelp": "أحتاج إلى المساعدة أو أود أن أتقدم باقتراح. كيف يمكنني الاتصال بك؟",
   "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
-  "faqSendEmail": "Send an email",
-  "faqJoinDiscord": "Join our Discord Server",
-  "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
+  "faqSendEmail": "إرسال بريد إلكتروني",
+  "faqJoinDiscord": "انضم إلى خادم ديسكورد",
+  "faqCannotOpenMailClient": "لبعض الأسباب لا يمكننا فتح عميل بريدك الإلكتروني. قمنا بنسخ عنوان البريد الإلكتروني لك. يمكنك كتابة بريد إلكتروني ولصق العنوان في حقل المستلم.",
   "translationHelpUsTranslate": "Help us translate",
   "translationSuggestFeatures": "Suggest features",
   "translationThankYou": "Thank you!",
