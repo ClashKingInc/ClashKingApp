@@ -2,6 +2,7 @@ import 'package:clashkingapp/features/war_cwl/models/cwl_league.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_league_round.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class WarCwl {
   final String tag;
@@ -60,7 +61,7 @@ class WarCwl {
       }
       
       final normalizedTag = normalizeClanTag(tag);
-      print("🔍 Looking for CWL war for clan: $normalizedTag");
+      DebugUtils.debugInfo("🔍 Looking for CWL war for clan: $normalizedTag");
       
       // First try to find active war (inWar)
       final activeWar = warLeagueInfos.firstWhere(
@@ -72,8 +73,8 @@ class WarCwl {
       );
       
       if (activeWar.state != 'notFound') {
-        print("✅ Found active CWL war for clan $tag");
-        return activeWar;
+        DebugUtils.debugSuccess("Found active CWL war for clan $tag");
+        return activeWar.reorderForClan(normalizedTag);
       }
       
       // If no active war, try preparation war
@@ -86,8 +87,8 @@ class WarCwl {
       );
       
       if (prepWar.state != 'notFound') {
-        print("✅ Found preparation CWL war for clan $normalizedTag");
-        return prepWar;
+        DebugUtils.debugSuccess("Found preparation CWL war for clan $normalizedTag");
+        return prepWar.reorderForClan(normalizedTag);
       }
       
       // If no active or prep war, try most recent ended war
@@ -101,19 +102,19 @@ class WarCwl {
       if (endedWars.isNotEmpty) {
         // Sort by end time to get most recent
         endedWars.sort((a, b) => (b.endTime ?? '').toString().compareTo((a.endTime ?? '').toString()));
-        print("✅ Found recent ended CWL war for clan $normalizedTag");
-        return endedWars.first;
+        DebugUtils.debugSuccess("Found recent ended CWL war for clan $normalizedTag");
+        return endedWars.first.reorderForClan(normalizedTag);
       }
       
-      print("❌ No CWL wars found for clan $normalizedTag");
-      print("🔍 Available wars in warLeagueInfos:");
+      DebugUtils.debugError("No CWL wars found for clan $normalizedTag");
+      DebugUtils.debugInfo("🔍 Available wars in warLeagueInfos:");
       for (final war in warLeagueInfos) {
-        print("   War: ${war.state}, Clan: ${war.clan?.tag}, Opponent: ${war.opponent?.tag}");
+        DebugUtils.debugInfo("   War: ${war.state}, Clan: ${war.clan?.tag}, Opponent: ${war.opponent?.tag}");
       }
       return null;
       
     } catch (e) {
-      print("❌ Error finding CWL war for clan $tag: $e");
+      DebugUtils.debugError("Error finding CWL war for clan $tag: $e");
       return null;
     }
   }
@@ -152,8 +153,62 @@ class WarCwl {
         );
       }
     } catch (e) {
-      print("❌ Error getting member presence: $e");
+      DebugUtils.debugError("Error getting member presence: $e");
     }
     return WarMemberPresence(isInWar: false);
+  }
+
+  /// Get active war by player tag and automatically reorder so user's clan is always 'clan'
+  /// This is a convenience method that combines finding the war and reordering for the user
+  WarInfo? getActiveWarByPlayerTag(String playerTag) {
+    try {
+      // First find any war containing this player
+      for (final warInfo in warLeagueInfos) {
+        final playerInClan = warInfo.clan?.members.any((member) => member.tag == playerTag) ?? false;
+        final playerInOpponent = warInfo.opponent?.members.any((member) => member.tag == playerTag) ?? false;
+        
+        if (playerInClan || playerInOpponent) {
+          // Found a war with this player, prioritize by state
+          if (warInfo.state == 'inWar') {
+            DebugUtils.debugSuccess("Found active CWL war for player $playerTag");
+            return warInfo.reorderForUser(playerTag);
+          }
+        }
+      }
+      
+      // If no active war, try preparation
+      for (final warInfo in warLeagueInfos) {
+        final playerInClan = warInfo.clan?.members.any((member) => member.tag == playerTag) ?? false;
+        final playerInOpponent = warInfo.opponent?.members.any((member) => member.tag == playerTag) ?? false;
+        
+        if (playerInClan || playerInOpponent) {
+          if (warInfo.state == 'preparation') {
+            DebugUtils.debugSuccess("Found preparation CWL war for player $playerTag");
+            return warInfo.reorderForUser(playerTag);
+          }
+        }
+      }
+      
+      // If no active or prep war, try most recent ended war
+      final playerWars = warLeagueInfos.where((warInfo) {
+        final playerInClan = warInfo.clan?.members.any((member) => member.tag == playerTag) ?? false;
+        final playerInOpponent = warInfo.opponent?.members.any((member) => member.tag == playerTag) ?? false;
+        return (playerInClan || playerInOpponent) && warInfo.state == 'warEnded';
+      }).toList();
+      
+      if (playerWars.isNotEmpty) {
+        // Sort by end time to get most recent
+        playerWars.sort((a, b) => (b.endTime ?? '').toString().compareTo((a.endTime ?? '').toString()));
+        DebugUtils.debugSuccess("Found recent ended CWL war for player $playerTag");
+        return playerWars.first.reorderForUser(playerTag);
+      }
+      
+      DebugUtils.debugWarning("No CWL wars found for player $playerTag");
+      return null;
+      
+    } catch (e) {
+      DebugUtils.debugError("Error finding CWL war for player $playerTag: $e");
+      return null;
+    }
   }
 }

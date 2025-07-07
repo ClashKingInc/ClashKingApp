@@ -5,6 +5,7 @@ import 'package:clashkingapp/features/pages/widgets/war_access_denied_card.dart'
 import 'package:clashkingapp/features/pages/widgets/war_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_history_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_not_in_war_card.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
@@ -32,6 +33,10 @@ class WarCwlPage extends StatelessWidget {
     final warCwl = warCwlService.getWarCwlByTag(clan?.tag ?? "");
     final hasClan = clan != null && clan.tag.isNotEmpty;
     final isPlayerInWarElsewhere = player?.warData != null;
+    WarInfo? reorderWar;
+    if (isPlayerInWarElsewhere) {
+      reorderWar = player!.warData!.reorderForUser(player.tag);
+    }
     final cwlClan = warCwl?.leagueInfo?.clans
         .firstWhere((element) => element.tag == clan!.tag);
 
@@ -44,7 +49,7 @@ class WarCwlPage extends StatelessWidget {
             final playerTags = cocService.getAccountTags();
             if (playerTags.isNotEmpty) {
               await cocService.refreshPageData(
-                playerTags, playerService, clanService, warCwlService);
+                  playerTags, playerService, clanService, warCwlService);
             }
           } catch (e) {
             if (context.mounted) {
@@ -110,11 +115,8 @@ class WarCwlPage extends StatelessWidget {
                             onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CwlScreen(
-                                  clanTag: clan.tag,
-                                  warCwl: warCwl,
-                                  clanInfo: cwlClan!,
-                                ),
+                                builder: (context) => WarScreen(
+                                    war: warCwl.getActiveWarByTag(clan.tag)!),
                               ),
                             ),
                             child: CurrentWarInfoCard(),
@@ -141,11 +143,19 @@ class WarCwlPage extends StatelessWidget {
                 ),
               ),
             if (isPlayerInWarElsewhere)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: WarCard(
-                  currentWarInfo: player!.warData!,
-                  clanTag: player.clanTag,
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WarScreen(war: reorderWar!),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: WarCard(
+                    currentWarInfo: reorderWar!,
+                    clanTag: player!.clanTag,
+                  ),
                 ),
               ),
             if (hasClan &&

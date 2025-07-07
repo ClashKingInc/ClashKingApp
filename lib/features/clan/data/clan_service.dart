@@ -10,6 +10,7 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class ClanService extends ChangeNotifier {
   final Map<String, Clan> _clans = {};
@@ -34,7 +35,7 @@ class ClanService extends ChangeNotifier {
     notifyListeners();
 
     try {
-      print("🏰 Loading clan data for tags: $clanTags");
+      DebugUtils.debugApi("Loading clan data for tags: $clanTags");
       final token = await TokenService().getAccessToken();
       if (token == null) throw Exception("User not authenticated");
 
@@ -64,14 +65,14 @@ class ClanService extends ChangeNotifier {
           _clans[clan.tag] = clan;
         }
 
-        print("✅ Loaded clans: ${_clans.keys.toList()}");
+        DebugUtils.debugSuccess("Loaded clans: ${_clans.keys.toList()}");
       } else {
         Sentry.captureMessage("Error loading clan data",
             level: SentryLevel.error);
       }
     } catch (e) {
       Sentry.captureException(e);
-      print("❌ Error loading clan data: $e");
+      DebugUtils.debugError("Error loading clan data: $e");
     }
 
     _isLoading = false;
@@ -87,7 +88,7 @@ class ClanService extends ChangeNotifier {
     notifyListeners();
 
     try {
-      print("🏰 Loading clan data for tag: $clanTag");
+      DebugUtils.debugApi("Loading clan data for tag: $clanTag");
       clanTag = clanTag.replaceAll("#", "%23");
       final token = await TokenService().getAccessToken();
       if (token == null) throw Exception("User not authenticated");
@@ -106,7 +107,7 @@ class ClanService extends ChangeNotifier {
         final clan = Clan.fromJson(data);
 
         _clans[clan.tag] = clan;
-        print("✅ Loaded clan: ${clan.tag}");
+        DebugUtils.debugSuccess("Loaded clan: ${clan.tag}");
         return clan;
       } else {
         Sentry.captureMessage("Error loading clan data",
@@ -115,7 +116,7 @@ class ClanService extends ChangeNotifier {
       }
     } catch (e) {
       Sentry.captureException(e);
-      print("❌ Error loading clan data: $e");
+      DebugUtils.debugError("Error loading clan data: $e");
       rethrow;
     } finally {
       _isLoading = false;
@@ -129,9 +130,9 @@ class ClanService extends ChangeNotifier {
         final clan = clans.firstWhere((clan) => clan.tag == warCwl.tag);
 
         clan.warCwl = warCwl;
-        print("🔗 Linked ${clan.name} to war info (${warCwl.tag})");
+        DebugUtils.debugInfo("🔗 Linked ${clan.name} to war info (${warCwl.tag})");
       } catch (e) {
-        print("❌ Error linking clan ${warCwl.tag} to war info: $e");
+        DebugUtils.debugError("Error linking clan ${warCwl.tag} to war info: $e");
       }
     }
   }
@@ -144,7 +145,7 @@ class ClanService extends ChangeNotifier {
     notifyListeners();
 
     try {
-      print("🏰 Loading clan join/leave data for tags: $clanTags");
+      DebugUtils.debugApi("Loading clan join/leave data for tags: $clanTags");
       final token = await TokenService().getAccessToken();
       if (token == null) throw Exception("User not authenticated");
 
@@ -178,7 +179,7 @@ class ClanService extends ChangeNotifier {
       }
     } catch (e) {
       Sentry.captureException(e);
-      print("❌ Error loading clan data: $e");
+      DebugUtils.debugError("Error loading clan data: $e");
     }
 
     return List<ClanJoinLeave>.empty();
@@ -191,10 +192,10 @@ class ClanService extends ChangeNotifier {
             (joinLeave) => joinLeave.clanTag == clan.tag,
             orElse: () => ClanJoinLeave.empty());
         clan.joinLeave = joinLeave;
-        print(
+        DebugUtils.debugInfo(
             "🔗 Linked ${clan.tag} to join/leave data (${joinLeave.clanTag})");
       } catch (e) {
-        print("❌ Error linking clan ${clan.tag} to join/leave data: $e");
+        DebugUtils.debugError("Error linking clan ${clan.tag} to join/leave data: $e");
       }
     }
   }
@@ -208,7 +209,7 @@ class ClanService extends ChangeNotifier {
     notifyListeners();
 
     try {
-      print("🏰 Loading capital data for tags: $clanTags");
+      DebugUtils.debugApi("Loading capital data for tags: $clanTags");
       final token = await TokenService().getAccessToken();
       if (token == null) throw Exception("User not authenticated");
 
@@ -239,28 +240,28 @@ class ClanService extends ChangeNotifier {
       capitalHistory = history;
       _isLoading = false;
       notifyListeners();
-      print("✅ Loaded capital data: ${history.length} items");
+      DebugUtils.debugSuccess("Loaded capital data: ${history.length} items");
       return history;
     } catch (e) {
       Sentry.captureException(e);
-      print("❌ Error loading capital data: $e");
+      DebugUtils.debugError("Error loading capital data: $e");
       return List<CapitalHistoryItems>.empty();
     }
   }
 
   void linkCapitalToClans() {
-    print(capitalHistory.length);
+    DebugUtils.debugInfo("Capital history items: ${capitalHistory.length}");
     for (var clan in _clans.values) {
       try {
-        print("🔗 Linking ${clan.tag} to capital data...");
+        DebugUtils.debugInfo("🔗 Linking ${clan.tag} to capital data...");
         final capital = capitalHistory.firstWhere(
           (c) => c.clanTag == clan.tag,
           orElse: () => CapitalHistoryItems.empty(),
         );
         clan.clanCapitalRaid = capital;
-        print("🔗 Linked ${clan.tag} to capital data (${capital.clanTag})");
+        DebugUtils.debugInfo("🔗 Linked ${clan.tag} to capital data (${capital.clanTag})");
       } catch (e) {
-        print("❌ Error linking clan ${clan.tag} to capital data: $e");
+        DebugUtils.debugError("Error linking clan ${clan.tag} to capital data: $e");
       }
     }
   }
@@ -296,9 +297,9 @@ class ClanService extends ChangeNotifier {
           orElse: () => ClanWarLog(items: [], clanTag: ""),
         );
         clan.clanWarLog = warLog;
-        print("🔗 Linked ${clan.tag} to war log data (${warLog.clanTag})");
+        DebugUtils.debugInfo("🔗 Linked ${clan.tag} to war log data (${warLog.clanTag})");
       } catch (e) {
-        print("❌ Error linking clan ${clan.tag} to war log data: $e");
+        DebugUtils.debugError("Error linking clan ${clan.tag} to war log data: $e");
       }
     }
   }
@@ -328,10 +329,10 @@ class ClanService extends ChangeNotifier {
             .toList();
       }
 
-      print("✅ Loaded war stats: ${warStatsList.length} items");
+      DebugUtils.debugSuccess("Loaded war stats: ${warStatsList.length} items");
       return warStatsList;
     } else {
-      print("❌ Error loading clan war stats data: ${response.statusCode}");
+      DebugUtils.debugError("Error loading clan war stats data: ${response.statusCode}");
       Sentry.captureMessage("Error loading clan data",
           level: SentryLevel.error);
       return List<ClanWarStats>.empty();
@@ -346,16 +347,16 @@ class ClanService extends ChangeNotifier {
           orElse: () => ClanWarStats(players: [], clanTag: "", wars: []),
         );
         clan.clanWarStats = warStats;
-        print("🔗 Linked ${clan.tag} to war stats data (${warStats.clanTag})");
+        DebugUtils.debugInfo("🔗 Linked ${clan.tag} to war stats data (${warStats.clanTag})");
       } catch (e) {
-        print("❌ Error linking clan ${clan.tag} to war stats data: $e");
+        DebugUtils.debugError("Error linking clan ${clan.tag} to war stats data: $e");
       }
     }
   }
 
   /// Process bulk clan data from the optimized API endpoint
   Future<void> processBulkClanData(Map<String, dynamic> clanData, List<String> clanTags) async {
-    print("🔄 Processing bulk clan data for ${clanTags.length} clans");
+    DebugUtils.debugInfo("🔄 Processing bulk clan data for ${clanTags.length} clans");
     
     // Process clan details
     if (clanData["clan_details"] != null) {
@@ -364,9 +365,9 @@ class ClanService extends ChangeNotifier {
         try {
           final clan = Clan.fromJson(entry.value);
           _clans[entry.key] = clan;
-          print("✅ Processed clan: ${clan.name} (${clan.tag})");
+          DebugUtils.debugSuccess("Processed clan: ${clan.name} (${clan.tag})");
         } catch (e) {
-          print("❌ Error processing clan ${entry.key}: $e");
+          DebugUtils.debugError("Error processing clan ${entry.key}: $e");
         }
       }
     }
@@ -379,13 +380,13 @@ class ClanService extends ChangeNotifier {
             try {
               return ClanJoinLeave.fromJson(entry.value);
             } catch (e) {
-              print("❌ Error processing join/leave data for ${entry.key}: $e");
+              DebugUtils.debugError("Error processing join/leave data for ${entry.key}: $e");
               return null;
             }
           })
           .whereType<ClanJoinLeave>()
           .toList();
-      print("✅ Processed ${joinLeaveList.length} join/leave records");
+      DebugUtils.debugSuccess("Processed ${joinLeaveList.length} join/leave records");
     }
 
     // Process capital data
@@ -397,7 +398,7 @@ class ClanService extends ChangeNotifier {
             try {
               final clanTag = item["clan_tag"]?.toString();
               if (clanTag == null || clanTag.isEmpty) {
-                print("⚠️ Skipping capital data item with missing clan_tag");
+                DebugUtils.debugWarning("Skipping capital data item with missing clan_tag");
                 return null;
               }
               
@@ -406,13 +407,13 @@ class ClanService extends ChangeNotifier {
               final statsData = item["stats"] as Map<String, dynamic>?;
               return CapitalHistoryItems.fromJson(historyData, clanTag, statsData: statsData);
             } catch (e) {
-              print("❌ Error processing capital data: $e");
+              DebugUtils.debugError("Error processing capital data: $e");
               return null;
             }
           })
           .whereType<CapitalHistoryItems>()
           .toList();
-      print("✅ Processed ${capitalHistory.length} capital history items");
+      DebugUtils.debugSuccess("Processed ${capitalHistory.length} capital history items");
     }
 
     // Process war log data
@@ -427,19 +428,19 @@ class ClanService extends ChangeNotifier {
               warLog.warLogStats = await WarLogStatsService.analyzeWarLogs(warLog.items);
               return warLog;
             } catch (e) {
-              print("❌ Error processing war log data: $e");
+              DebugUtils.debugError("Error processing war log data: $e");
               return null;
             }
           });
       
       final results = await Future.wait(futures);
       warLogList = results.whereType<ClanWarLog>().toList();
-      print("✅ Processed ${warLogList.length} war log items");
+      DebugUtils.debugSuccess("Processed ${warLogList.length} war log items");
     }
 
     // Process war data (current wars and CWL)
     if (clanData["war_data"] != null) {
-      print("🔄 Processing war data...");
+      DebugUtils.debugInfo("🔄 Processing war data...");
       // War data processing should be handled by WarCwlService
       // This is typically linked in the parent call
     }
@@ -453,16 +454,16 @@ class ClanService extends ChangeNotifier {
             try {
               return ClanWarStats.fromJson(item);
             } catch (e) {
-              print("❌ Error processing clan war stats: $e");
+              DebugUtils.debugError("Error processing clan war stats: $e");
               return null;
             }
           })
           .whereType<ClanWarStats>()
           .toList();
-      print("✅ Processed ${warStatsList.length} clan war stats items");
+      DebugUtils.debugSuccess("Processed ${warStatsList.length} clan war stats items");
     }
 
-    print("✅ Processed all bulk clan data");
+    DebugUtils.debugSuccess("✅ Processed all bulk clan data");
     notifyListeners();
   }
 }

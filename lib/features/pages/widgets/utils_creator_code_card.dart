@@ -26,17 +26,15 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text(
-                AppLocalizations.of(context)?.gameCreatorCodeDialogTitle ?? 'Support ClashKing',
+                AppLocalizations.of(context)!.gameCreatorCodeDialogTitle,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               content: Text(
-                AppLocalizations.of(context)?.gameCreatorCodeDialogDescription ??
-                    'Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nIt doesn\'t cost you anything - just use "ClashKing" as your creator code in the Clash of Clans shop!',
-              ),
+                AppLocalizations.of(context)!.gameCreatorCodeDialogDescription),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: Text(AppLocalizations.of(context)?.generalCancel ?? 'Cancel'),
+                  child: Text(AppLocalizations.of(context)!.generalCancel),
                 ),
                 ElevatedButton(
                   onPressed: () async {

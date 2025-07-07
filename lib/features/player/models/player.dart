@@ -269,148 +269,144 @@ class Player {
       }
 
       Player profile = Player(
-        name: json["name"] ?? "Unknown",
-        tag: json["tag"] ?? "Unknown",
-        townHallLevel: json["townHallLevel"] ?? 0,
-        townHallWeaponLevel: json["townHallWeaponLevel"] ?? 0,
-        expLevel: json["expLevel"] ?? 0,
-        trophies: json["trophies"] ?? 0,
-        bestTrophies: json["bestTrophies"] ?? 0,
-        attackWins: json["attackWins"] is int ? json["attackWins"] : 0,
-        defenseWins: json["defenseWins"] is int ? json["defenseWins"] : 0,
-        warStars: json["warStars"] is int ? json["warStars"] : 0,
-        builderHallLevel: json["builderHallLevel"] ?? 0,
-        builderBaseTrophies: json["builderBaseTrophies"] ?? 0,
-        bestBuilderBaseTrophies: json["bestBuilderBaseTrophies"] ?? 0,
-        clanTag: json["clan"]?["tag"] ?? "",
-        clanOverview: json["clan"] != null
-            ? PlayerClanOverview.fromJson(json["clan"])
-            : PlayerClanOverview.empty(),
-        role: json["role"] ?? "",
-        warPreference: json["warPreference"] ?? "",
-        donations: json["donations"] is int ? json["donations"] : 0,
-        donationsReceived:
-            json["donationsReceived"] is int ? json["donationsReceived"] : 0,
-        clanCapitalContributions: json["clanCapitalContributions"] is int
-            ? json["clanCapitalContributions"]
-            : 0,
-        league: json["league"]?['name'] ?? "",
-        townHallPic: ImageAssets.townHall(json["townHallLevel"] ?? 0),
-        builderHallPic: ImageAssets.builderHall(json["builderHallLevel"] ?? 0),
-        leagueUrl: ApiService.cocAssetsProxyUrl(
-            json['league']?['iconUrls']?['medium'] ?? ""),
-        clanGamesPoint: [],
-        seasonPass: [],
-        lastOnline: DateTime.utc(1970, 1, 1),
-        heroes: generateCompleteItemList<PlayerHero>(
-          jsonList: (json['heroes'] as List?)
-              ?.where((x) => x['village'] == 'home')
-              .toList(),
-          gameData: filterGameData(
-            GameDataService.heroesData['heroes'],
-            (k, v) => v['type'] == 'hero',
+          name: json["name"] ?? "Unknown",
+          tag: json["tag"] ?? "Unknown",
+          townHallLevel: json["townHallLevel"] ?? 0,
+          townHallWeaponLevel: json["townHallWeaponLevel"] ?? 0,
+          expLevel: json["expLevel"] ?? 0,
+          trophies: json["trophies"] ?? 0,
+          bestTrophies: json["bestTrophies"] ?? 0,
+          attackWins: json["attackWins"] is int ? json["attackWins"] : 0,
+          defenseWins: json["defenseWins"] is int ? json["defenseWins"] : 0,
+          warStars: json["warStars"] is int ? json["warStars"] : 0,
+          builderHallLevel: json["builderHallLevel"] ?? 0,
+          builderBaseTrophies: json["builderBaseTrophies"] ?? 0,
+          bestBuilderBaseTrophies: json["bestBuilderBaseTrophies"] ?? 0,
+          clanTag: json["clan"]?["tag"] ?? "",
+          clanOverview: json["clan"] != null
+              ? PlayerClanOverview.fromJson(json["clan"])
+              : PlayerClanOverview.empty(),
+          role: json["role"] ?? "",
+          warPreference: json["warPreference"] ?? "",
+          donations: json["donations"] is int ? json["donations"] : 0,
+          donationsReceived:
+              json["donationsReceived"] is int ? json["donationsReceived"] : 0,
+          clanCapitalContributions: json["clanCapitalContributions"] is int
+              ? json["clanCapitalContributions"]
+              : 0,
+          league: json["league"]?['name'] ?? "",
+          townHallPic: ImageAssets.townHall(json["townHallLevel"] ?? 0),
+          builderHallPic:
+              ImageAssets.builderHall(json["builderHallLevel"] ?? 0),
+          leagueUrl: ApiService.cocAssetsProxyUrl(
+              json['league']?['iconUrls']?['medium'] ?? ""),
+          clanGamesPoint: [],
+          seasonPass: [],
+          lastOnline: DateTime.utc(1970, 1, 1),
+          heroes: generateCompleteItemList<PlayerHero>(
+            jsonList: (json['heroes'] as List?)
+                ?.where((x) => x['village'] == 'home')
+                .toList(),
+            gameData: filterGameData(
+              GameDataService.heroesData['heroes'],
+              (k, v) => v['type'] == 'hero',
+            ),
+            factory: PlayerHero.fromRaw,
           ),
-          factory: PlayerHero.fromRaw,
-        ),
-        bbHeroes: generateCompleteItemList<PlayerBuilderBaseHero>(
-          jsonList: (json['heroes'] as List?)
-              ?.where((x) => x['village'] == 'builderBase')
-              .toList(),
-          gameData: filterGameData(
-            GameDataService.heroesData['heroes'],
-            (k, v) => v['type'] == 'bb-hero',
+          bbHeroes: generateCompleteItemList<PlayerBuilderBaseHero>(
+            jsonList: (json['heroes'] as List?)
+                ?.where((x) => x['village'] == 'builderBase')
+                .toList(),
+            gameData: filterGameData(
+              GameDataService.heroesData['heroes'],
+              (k, v) => v['type'] == 'bb-hero',
+            ),
+            factory: PlayerBuilderBaseHero.fromRaw,
           ),
-          factory: PlayerBuilderBaseHero.fromRaw,
-        ),
-        troops: generateCompleteItemList<PlayerTroop>(
-          jsonList: (json['troops'] as List?)
-              ?.where((x) =>
-                  x['village'] == 'home' &&
-                  !GameDataService.isSuperTroop(x['name']) &&
-                  !GameDataService.isSiegeMachine(x['name']) &&
-                  !GameDataService.isPet(x['name']))
-              .toList(),
-          gameData: filterGameData(
-            GameDataService.troopsData['troops'],
-            (k, v) =>
-                v['type'] == 'troop' &&
-                !GameDataService.isSuperTroop(k) &&
-                !GameDataService.isSiegeMachine(k) &&
-                !GameDataService.isPet(k),
+          troops: generateCompleteItemList<PlayerTroop>(
+            jsonList: (json['troops'] as List?)
+                ?.where((x) =>
+                    x['village'] == 'home' &&
+                    !GameDataService.isSuperTroop(x['name']) &&
+                    !GameDataService.isSiegeMachine(x['name']) &&
+                    !GameDataService.isPet(x['name']))
+                .toList(),
+            gameData: filterGameData(
+              GameDataService.troopsData['troops'],
+              (k, v) =>
+                  v['type'] == 'troop' &&
+                  !GameDataService.isSuperTroop(k) &&
+                  !GameDataService.isSiegeMachine(k) &&
+                  !GameDataService.isPet(k),
+            ),
+            factory: PlayerTroop.fromRaw,
           ),
-          factory: PlayerTroop.fromRaw,
-        ),
-        superTroops: generateCompleteItemList<PlayerSuperTroop>(
-          jsonList: (json['troops'] as List?)
-              ?.where((x) =>
-                  x['village'] == 'home' &&
-                  GameDataService.isSuperTroop(x['name']))
-              .toList(),
-          gameData: filterGameData(
-            GameDataService.troopsData['troops'],
-            (k, v) => v['type'] == 'troop' && GameDataService.isSuperTroop(k),
+          superTroops: generateCompleteItemList<PlayerSuperTroop>(
+            jsonList: (json['troops'] as List?)
+                ?.where((x) =>
+                    x['village'] == 'home' &&
+                    GameDataService.isSuperTroop(x['name']))
+                .toList(),
+            gameData: filterGameData(
+              GameDataService.troopsData['troops'],
+              (k, v) => v['type'] == 'troop' && GameDataService.isSuperTroop(k),
+            ),
+            factory: PlayerSuperTroop.fromRaw,
           ),
-          factory: PlayerSuperTroop.fromRaw,
-        ),
-        siegeMachines: generateCompleteItemList<PlayerSiegeMachine>(
-          jsonList: (json['troops'] as List?)
-              ?.where((x) =>
-                  x['village'] == 'home' &&
-                  GameDataService.isSiegeMachine(x['name']))
-              .toList(),
-          gameData: filterGameData(
-            GameDataService.troopsData['troops'],
-            (k, v) =>
-                v['type'] == 'siege-machine' &&
-                GameDataService.isSiegeMachine(k),
+          siegeMachines: generateCompleteItemList<PlayerSiegeMachine>(
+            jsonList: (json['troops'] as List?)
+                ?.where((x) =>
+                    x['village'] == 'home' &&
+                    GameDataService.isSiegeMachine(x['name']))
+                .toList(),
+            gameData: filterGameData(
+              GameDataService.troopsData['troops'],
+              (k, v) =>
+                  v['type'] == 'siege-machine' &&
+                  GameDataService.isSiegeMachine(k),
+            ),
+            factory: PlayerSiegeMachine.fromRaw,
           ),
-          factory: PlayerSiegeMachine.fromRaw,
-        ),
-        pets: generateCompleteItemList<PlayerPet>(
-          jsonList: (json['troops'] as List?)
-              ?.where((x) =>
-                  x['village'] == 'home' && GameDataService.isPet(x['name']))
-              .toList(),
-          gameData: GameDataService.petsData['pets'] ?? {},
-          factory: PlayerPet.fromRaw,
-        ),
-        bbTroops: generateCompleteItemList<PlayerBuilderBaseTroop>(
-          jsonList: (json['troops'] as List?)
-              ?.where((x) => x['village'] == 'builderBase')
-              .toList(),
-          gameData: filterGameData(
-            GameDataService.troopsData['troops'],
-            (k, v) => v['type'] == 'bb-troop',
+          pets: generateCompleteItemList<PlayerPet>(
+            jsonList: (json['troops'] as List?)
+                ?.where((x) =>
+                    x['village'] == 'home' && GameDataService.isPet(x['name']))
+                .toList(),
+            gameData: GameDataService.petsData['pets'] ?? {},
+            factory: PlayerPet.fromRaw,
           ),
-          factory: PlayerBuilderBaseTroop.fromRaw,
-          nameMatcher: (gameDataName, jsonItem) {
-            if (gameDataName == 'Baby Dragon 2' &&
-                jsonItem['name'] == 'Baby Dragon') {
-              return true;
-            }
-            return gameDataName == jsonItem['name'];
-          },
-        ),
-        spells: generateCompleteItemList<PlayerSpell>(
-          jsonList: json['spells'] as List?,
-          gameData: GameDataService.spellsData['spells'] ?? {},
-          factory: PlayerSpell.fromRaw,
-        ),
-        equipments: generateCompleteItemList<PlayerEquipment>(
-          jsonList: json['heroEquipment'] as List?,
-          gameData: GameDataService.gearsData['gears'] ?? {},
-          factory: PlayerEquipment.fromRaw,
-        ),
-        achievements: List<PlayerAchievement>.from(json['achievements']
-            .map((x) => PlayerAchievement.fromJson(x ?? {}))),
-        legendsBySeason: null,
-        legendRanking: [],
-        rankings: null,
-        warData: json['war_data'] != null &&
-                json['war_data']["currentWarInfo"] != null
-            ? WarInfo.fromJson(json['war_data']["currentWarInfo"])
-            : null,
-      );
+          bbTroops: generateCompleteItemList<PlayerBuilderBaseTroop>(
+            jsonList: (json['troops'] as List?)
+                ?.where((x) => x['village'] == 'builderBase')
+                .toList(),
+            gameData: filterGameData(
+              GameDataService.troopsData['troops'],
+              (k, v) => v['type'] == 'bb-troop',
+            ),
+            factory: PlayerBuilderBaseTroop.fromRaw,
+            nameMatcher: (gameDataName, jsonItem) {
+              if (gameDataName == 'Baby Dragon 2' &&
+                  jsonItem['name'] == 'Baby Dragon') {
+                return true;
+              }
+              return gameDataName == jsonItem['name'];
+            },
+          ),
+          spells: generateCompleteItemList<PlayerSpell>(
+            jsonList: json['spells'] as List?,
+            gameData: GameDataService.spellsData['spells'] ?? {},
+            factory: PlayerSpell.fromRaw,
+          ),
+          equipments: generateCompleteItemList<PlayerEquipment>(
+            jsonList: json['heroEquipment'] as List?,
+            gameData: GameDataService.gearsData['gears'] ?? {},
+            factory: PlayerEquipment.fromRaw,
+          ),
+          achievements: List<PlayerAchievement>.from(json['achievements']
+              .map((x) => PlayerAchievement.fromJson(x ?? {}))),
+          legendsBySeason: null,
+          legendRanking: [],
+          rankings: null);
 
       return profile;
     } catch (e, stacktrace) {
@@ -496,6 +492,11 @@ class Player {
     raids = json['raid_data'] != null && (json['raid_data'] as Map).isNotEmpty
         ? PlayerRaids.fromJson(json['raid_data'])
         : PlayerRaids.empty();
+
+    warData =
+        json['war_data'] != null && json['war_data']["currentWarInfo"] != null
+            ? WarInfo.fromJson(json['war_data']["currentWarInfo"])
+            : null;
   }
 
   String getLastOnlineText(BuildContext context) {
@@ -508,7 +509,9 @@ class Player {
       return loc.timeJustNow;
     } else if (diff.inMinutes < 60) {
       final minutes = diff.inMinutes;
-      return minutes == 1 ? loc.timeMinuteAgo(minutes) : loc.timeMinutesAgo(minutes);
+      return minutes == 1
+          ? loc.timeMinuteAgo(minutes)
+          : loc.timeMinutesAgo(minutes);
     } else if (diff.inHours < 24) {
       final hours = diff.inHours;
       return hours == 1 ? loc.timeHourAgo(hours) : loc.timeHoursAgo(hours);

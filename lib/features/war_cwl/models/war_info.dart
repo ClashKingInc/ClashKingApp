@@ -1,5 +1,6 @@
 import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class WarInfo {
   final String? tag;
@@ -48,7 +49,7 @@ class WarInfo {
             : null,
       );
     } catch (e) {
-      print("❌ Error parsing WarInfo: $e");
+      DebugUtils.debugError("Error parsing WarInfo: $e");
       return WarInfo(
         state: 'unknown',
         clan: null,
@@ -186,5 +187,95 @@ class WarInfo {
       }
     }
     return 'unknown';
+  }
+
+  /// Create a new WarInfo with clan and opponent reordered so the user's clan is always 'clan'
+  /// Returns a new WarInfo where:
+  /// - If the user is in 'clan', returns the same WarInfo
+  /// - If the user is in 'opponent', swaps clan and opponent
+  /// - If the user is not found in either, returns the original WarInfo
+  WarInfo reorderForUser(String userPlayerTag) {
+    // Check if user is in the clan side
+    final isUserInClan = clan?.members.any((member) => member.tag == userPlayerTag) ?? false;
+    
+    // Check if user is in the opponent side  
+    final isUserInOpponent = opponent?.members.any((member) => member.tag == userPlayerTag) ?? false;
+    
+    DebugUtils.debugInfo("Reordering war for user $userPlayerTag: inClan=$isUserInClan, inOpponent=$isUserInOpponent");
+    
+    // If user is in clan position, no reordering needed
+    if (isUserInClan && !isUserInOpponent) {
+      DebugUtils.debugInfo("User is in clan position, no reordering needed");
+      return this;
+    }
+    
+    // If user is in opponent position, swap clan and opponent
+    if (isUserInOpponent && !isUserInClan) {
+      DebugUtils.debugInfo("User is in opponent position, swapping clan and opponent");
+      return WarInfo(
+        tag: tag,
+        state: state,
+        teamSize: teamSize,
+        attacksPerMember: attacksPerMember,
+        clan: opponent, // User's clan becomes 'clan'
+        opponent: clan, // Original clan becomes 'opponent'
+        startTime: startTime,
+        endTime: endTime,
+        preparationStartTime: preparationStartTime,
+        warType: warType,
+      );
+    }
+    
+    // If user is not found in either side, or found in both (shouldn't happen), return original
+    if (!isUserInClan && !isUserInOpponent) {
+      DebugUtils.debugWarning("User $userPlayerTag not found in either clan or opponent");
+    } else if (isUserInClan && isUserInOpponent) {
+      DebugUtils.debugWarning("User $userPlayerTag found in both clan and opponent (unexpected)");
+    }
+    
+    return this;
+  }
+
+  /// Create a new WarInfo with clan and opponent reordered so the specified clan tag is always 'clan'
+  /// This is useful when you know which clan should be considered "yours" based on clan tag rather than player tag
+  WarInfo reorderForClan(String clanTag) {
+    // Normalize clan tags for comparison
+    String normalizeClanTag(String tag) {
+      if (!tag.startsWith('#')) return '#$tag';
+      return tag;
+    }
+    
+    final normalizedTargetTag = normalizeClanTag(clanTag);
+    final normalizedClanTag = clan?.tag != null ? normalizeClanTag(clan!.tag) : null;
+    final normalizedOpponentTag = opponent?.tag != null ? normalizeClanTag(opponent!.tag) : null;
+    
+    DebugUtils.debugInfo("Reordering war for clan $normalizedTargetTag: clanTag=$normalizedClanTag, opponentTag=$normalizedOpponentTag");
+    
+    // If target clan is already in clan position, no reordering needed
+    if (normalizedClanTag == normalizedTargetTag) {
+      DebugUtils.debugInfo("Target clan is already in clan position, no reordering needed");
+      return this;
+    }
+    
+    // If target clan is in opponent position, swap clan and opponent
+    if (normalizedOpponentTag == normalizedTargetTag) {
+      DebugUtils.debugInfo("Target clan is in opponent position, swapping clan and opponent");
+      return WarInfo(
+        tag: tag,
+        state: state,
+        teamSize: teamSize,
+        attacksPerMember: attacksPerMember,
+        clan: opponent, // Target clan becomes 'clan'
+        opponent: clan, // Original clan becomes 'opponent'
+        startTime: startTime,
+        endTime: endTime,
+        preparationStartTime: preparationStartTime,
+        warType: warType,
+      );
+    }
+    
+    // If target clan is not found in either side, return original
+    DebugUtils.debugWarning("Target clan $normalizedTargetTag not found in either clan or opponent position");
+    return this;
   }
 }
