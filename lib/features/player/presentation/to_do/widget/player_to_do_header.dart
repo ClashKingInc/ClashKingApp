@@ -7,6 +7,7 @@ import 'dart:ui';
 import 'package:clashkingapp/common/widgets/buttons/info_button.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class PlayerToDoHeader extends StatefulWidget {
   final List<Player> players;
@@ -21,7 +22,7 @@ class PlayerToDoHeader extends StatefulWidget {
 class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
   @override
   Widget build(BuildContext context) {
-    print("PlayerToDoHeader build called");
+    DebugUtils.debugInfo("PlayerToDoHeader build called");
     final loc = AppLocalizations.of(context)!; 
     int total = widget.players.length;
     int active = widget.players.where((p) => DateTime.now().difference(p.lastOnline).inDays < 14).length;
@@ -35,6 +36,8 @@ class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
     int requiredLegend = 0;
     int totalCwl = 0;
     int requiredCwl = 0;
+    int totalWar = 0;
+    int requiredWar = 0;
 
     for (final player in widget.players) {
       totalClanGames += player.currentClanGamesPoints;
@@ -45,6 +48,13 @@ class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
         totalLegend += player.currentLegendSeason!.currentDay!.totalAttacks;
       }
 
+      // Count regular war attacks
+      if (player.warData != null && player.warData!.state == 'inWar') {
+        requiredWar += player.warData!.attacksPerMember ?? 0;
+        totalWar += player.warData!.getAttacksDoneByPlayer(player.tag, player.clanTag);
+      }
+
+      // Count CWL attacks
       final warPresence = widget.memberPresenceMap[player.tag];
       if (warPresence != null && warPresence.attacksAvailable > 0) {
         requiredCwl += warPresence.attacksAvailable;
@@ -98,6 +108,8 @@ class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
               children: <Widget>[
                 if (requiredLegend > 0)
                   _buildChip(context, ImageAssets.legendBlazonNoPadding, totalLegend, requiredLegend),
+                if (requiredWar > 0)
+                  _buildChip(context, ImageAssets.war, totalWar, requiredWar),
                 if (requiredCwl > 0)
                   _buildChip(context, ImageAssets.cwlSwordsNoBorder, totalCwl, requiredCwl),
                 if (totalClanGames > 0)

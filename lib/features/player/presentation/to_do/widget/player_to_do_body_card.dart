@@ -94,6 +94,19 @@ class PlayerToDoBodyCard extends StatelessWidget {
                                       ? Colors.green
                                       : Colors.red,
                                 ),
+                              if (player.warData != null &&
+                                  player.warData!.state == 'inWar')
+                                ImageChip(
+                                  imageUrl: ImageAssets.war,
+                                  labelPadding: 2.0,
+                                  label:
+                                      "${player.warData?.getAttacksDoneByPlayer(player.tag, player.clanTag)} / ${player.warData?.attacksPerMember}",
+                                  edgeColor: player.warData!.getAttacksDoneByPlayer(
+                                              player.tag, player.clanTag) ==
+                                          player.warData!.attacksPerMember
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
                               if (player.clan != null &&
                                   player.clan!.warCwl != null &&
                                   player.clan!.warCwl!.warInfo.state ==
