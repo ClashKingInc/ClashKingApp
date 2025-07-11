@@ -11,16 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     env:
       JAVA_VERSION: 21
-      FLUTTER_VERSION: 3.22.2
+      FLUTTER_VERSION: 3.32.4
       AAB_PATH: build/app/outputs/bundle/release/app-release.aab
       KEYSTORE_PATH: android/ck_key.jks
       KEY_PROPS_PATH: android/key.properties
       SERVICE_ACCOUNT_PATH: android/app/store_credentials.json
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
-      FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.22.2-x64
+      FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.32.1-x64
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Extract version from tag and generate build number
         id: extract_version
@@ -40,7 +40,7 @@ jobs:
         run: cat pubspec.yaml
 
       - name: Setup Java to compile the Android project
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: ${{ env.JAVA_VERSION }}
@@ -50,17 +50,9 @@ jobs:
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
 
-      - name: Create local.properties
+      - name: Create minimal local.properties
         run: |
           echo "sdk.dir=${{ env.ANDROID_SDK_ROOT }}" > android/local.properties
-          echo "flutter.sdk=${{ env.FLUTTER_ROOT }}" >> android/local.properties
-          echo "flutter.buildMode=release" >> android/local.properties
-          echo "flutter.versionName=${{ env.VERSION_NAME }}" >> android/local.properties
-          echo "flutter.versionCode=${{ env.BUILD_NUMBER }}" >> android/local.properties
-          echo "flutter.minSdkVersion=21" >> android/local.properties
-          echo "flutter.targetSdkVersion=34" >> android/local.properties
-          echo "compileSdkVersion=34" >> android/local.properties
-          echo "ndkVersion=26.1.10909125" >> android/local.properties
 
       - name: Decode and create Android keystore
         run: echo "${{ secrets.KEY_STORE_FILE }}" | base64 --decode > ${{ env.KEYSTORE_PATH }}
@@ -75,8 +67,23 @@ jobs:
       - name: Decode Android Service Account
         run: echo "${{ secrets.GOOGLE_PLAY_JSON_KEY }}" | base64 --decode > ${{ env.SERVICE_ACCOUNT_PATH }}
 
-      - name: Create .env file
-        run: echo "${{ secrets.ENV_FILE }}" > .env
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Run flutter pub get
         run: flutter pub get
@@ -88,24 +95,40 @@ jobs:
       #   run: flutter test
 
       - name: Build aab & Sign the release
-        run: flutter build appbundle --release
+        run: |
+          flutter build appbundle --release \
+            --build-number=${{ env.BUILD_NUMBER }} \
+            --build-name=${{ env.VERSION_NAME }}
 
       - name: List output files for debugging
         run: ls -R build/app/outputs/bundle/release/
 
       - name: Upload generated aab to the artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: aab-stores
           path: build/app/outputs/bundle/release/app-release.aab
 
-      - name: Deploy to Opened Test
+      - name: Determine track based on tag
+        id: determine_track
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          if [[ "$TAG" == *"alpha"* ]]; then
+          echo "TRACK=alpha" >> $GITHUB_ENV
+            elif [[ "$TAG" == *"beta"* ]]; then
+          echo "TRACK=beta" >> $GITHUB_ENV
+            else
+          echo "TRACK=production" >> $GITHUB_ENV
+            fi
+            echo "Selected track: $TRACK"
+
+      - name: Deploy to Play Store
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
           packageName: ${{ secrets.PACKAGE_NAME }}
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: beta
+          track: ${{ env.TRACK }}
           status: completed
           inAppUpdatePriority: 4
           whatsNewDirectory: update-news

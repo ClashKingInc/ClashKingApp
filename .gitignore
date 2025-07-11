@@ -104,3 +104,7 @@ android/app/release/*
 
 # extension
 .VsCodeCounter/*
+
+# claude
+.claude/
+CLAUDE.md

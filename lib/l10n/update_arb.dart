@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 void main() {
   // Define the paths to your ARB files
@@ -13,7 +14,7 @@ void main() {
   final enGbFile = File(enGbPath);
 
   if (!enFile.existsSync()) {
-    print('The base en.arb file does not exist. Please check the file path.');
+    DebugUtils.debugError('❌ The base en.arb file does not exist. Please check the file path.');
     return;
   }
 
@@ -39,9 +40,9 @@ void main() {
 
     if (updated) {
       file.writeAsStringSync(JsonEncoder.withIndent('  ').convert(targetJson));
-      print('${file.path} has been updated.');
+      DebugUtils.debugSuccess('✅ ${file.path} has been updated.');
     } else {
-      print('${file.path} is already up-to-date.');
+      DebugUtils.debugInfo('📝 ${file.path} is already up-to-date.');
     }
   }
 

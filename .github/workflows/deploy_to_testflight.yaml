@@ -1,56 +1,114 @@
-name: Upload app to TestFlight
+name: Deploy to TestFlight
 
 on:
   push:
-    branches:
-      - app-store
+    tags:
+      - 'v*'
 
 jobs:
-  build-and-deploy:
+  deploy-ios:
+    name: iOS TestFlight Release
     runs-on: macos-latest
-
+    timeout-minutes: 60
+    
+    env:
+      FLUTTER_VERSION: 3.32.4
+    
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up Flutter environment
-        uses: subosito/flutter-action@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.2'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Extract version from tag
+        id: extract_version
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}          # Extract "ios-v1.0.0"
+          VERSION_NAME=${TAG#ios-v}             # Remove "ios-v" to get "1.0.0"
+          BUILD_NUMBER=$(date +%s)              # Generate timestamp build number
+          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+          echo "Deploying version: $VERSION_NAME ($BUILD_NUMBER)"
+
+      - name: Update version in pubspec.yaml
+        run: |
+          sed -i '' "s/^version: .*/version: ${{ env.VERSION_NAME }}+${{ env.BUILD_NUMBER }}/" pubspec.yaml
+          echo "Updated pubspec.yaml with version ${{ env.VERSION_NAME }}+${{ env.BUILD_NUMBER }}"
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Extract version from pubspec.yaml
-        id: extract_version
+      - name: Setup Xcode signing
+        env:
+          IOS_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
+          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
         run: |
-          # Extract the version line from pubspec.yaml
-          VERSION_LINE=$(grep '^version:' pubspec.yaml)
-          # Remove the 'version: ' prefix
-          VERSION_STRING=${VERSION_LINE#version: }
-          # Split version and build number
-          VERSION_NUM=${VERSION_STRING%+*}
-          BUILD_NUM=${VERSION_STRING#*+}
-          echo "VERSION=$VERSION_NUM" >> $GITHUB_ENV
-          echo "BUILD_NUMBER=$BUILD_NUM" >> $GITHUB_ENV
+          # Create certificates directory
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          
+          # Decode and install certificate
+          echo "$IOS_CERTIFICATE_BASE64" | base64 --decode > certificate.p12
+          security create-keychain -p "" build.keychain
+          security import certificate.p12 -k build.keychain -P "$IOS_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-keychain-settings build.keychain
+          security list-keychains -s build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+          
+          # Decode and install provisioning profile
+          echo "$IOS_PROVISIONING_PROFILE_BASE64" | base64 --decode > profile.mobileprovision
+          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
       - name: Build iOS app
-        run: flutter build ios --release --no-codesign -- -allowProvisioningUpdates
-
-      - name: Install Fastlane
-        run: sudo gem install fastlane
-
-      - name: Build IPA with Fastlane Gym
         run: |
-          fastlane gym --workspace "Runner.xcworkspace" --scheme "Runner" --clean --output_directory ./build --output_name "ClashKing"
+          flutter build ios --release \
+            --build-number=${{ env.BUILD_NUMBER }} \
+            --build-name=${{ env.VERSION_NAME }}
+
+      - name: Build and Archive with xcodebuild
+        run: |
+          cd ios
+          xcodebuild -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -destination generic/platform=iOS \
+            -archivePath build/Runner.xcarchive \
+            archive
+
+      - name: Export IPA
+        run: |
+          cd ios
+          xcodebuild -exportArchive \
+            -archivePath build/Runner.xcarchive \
+            -exportPath build \
+            -exportOptionsPlist ExportOptions.plist
 
       - name: Upload to TestFlight
-        uses: appleboy/app-store-connect-action@master
+        env:
+          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+        run: |
+          # Create API key file
+          mkdir -p ~/.appstoreconnect/private_keys/
+          echo "$API_PRIVATE_KEY" > ~/.appstoreconnect/private_keys/AuthKey_$API_KEY_ID.p8
+          
+          # Upload to TestFlight
+          xcrun altool --upload-app \
+            --type ios \
+            --file ios/build/Runner.ipa \
+            --apiKey $API_KEY_ID \
+            --apiIssuer $API_ISSUER_ID
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        if: always()
         with:
-          api_key_id: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-          api_issuer: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
-          api_key: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
-          ipa_path: ./build/ClashKing.ipa
-          app_identifier: 'com.clashking.clashkingapps'
-          bundle_version: ${{ env.BUILD_NUMBER }}
-          bundle_short_version: ${{ env.VERSION }}
+          name: ios-ipa
+          path: ios/build/Runner.ipa

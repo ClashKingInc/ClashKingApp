@@ -1,1015 +1,1250 @@
 {
-    "creatorCode": "创作者代码：ClashKing",
-    "signInWithDiscord": "使用Discord登录",
-    "guestMode": "访客模式",
-    "needHelpJoinDiscord": "需要帮助？请加入我们的Discord频道。",
-    "createGuestProfile": "创建您的访客形象",
-    "doesNotExist": "{tag}不存在。",
-    "@doesNotExist": {
-        "placeholders": {
-            "tag": {
-                "type": "String"
-            }
-        }
-    },
-    "isAlreadyLinked": "{tag}此标签已被绑定。",
-    "@isAlreadyLinked": {
-        "placeholders": {
-            "tag": {
-                "type": "String"
-            }
-        }
-    },
-    "username": "用户名",
-    "pleaseEnterUsername": "请输入用户名",
-    "playerTags": "玩家标签",
-    "followingTagsDoNotExist": "以下标签不存在：{tags}。",
-    "@followingTagsDoNotExist": {
-        "placeholders": {
-            "tags": {
-                "type": "String"
-            }
-        }
-    },
-    "followingTagsAreAlreadyLinked": "以下标签已被绑定：{tags}。",
-    "@followingTagsAreAlreadyLinked": {
-        "placeholders": {
-            "tags": {
-                "type": "String"
-            }
-        }
-    },
-    "welcome": "欢迎！",
-    "welcomeMessage": "请将一个或多个部落冲突帐户添加到您的个人资料中。您可以稍后添加或删除帐户。",
-    "login": "登录",
-    "logout": "注销",
-    "language": "语言",
-    "settings": "设置",
-    "toggleTheme": "切换主题",
-    "selectLanguage": "搜索语言",
-    "faq": "FAQ",
-    "faqSubtitle": "常见问题回答",
-    "faqIsThisFromSupercell": "这个应用程序是Supercell的吗？",
-    "faqFanContentPolicy": "此材料是非官方的，未得到Supercell的认可。有关更多信息，请参阅Supercell的粉丝内容政策：www.Supercell.com/Fan-Content-Policy",
-    "faqWhyNotAccurate": "为什么数据有时不准确或缺失？",
-    "faqClanNotTracked": "部落未被追踪",
-    "faqClanNotTrackedAnswer": "只有当部落被追踪时，ClashKing才能检索此信息。如果你的部落没有被追踪，请邀请ClashKing机器人到你的Discord服务器，并使用命令/addclan。我们正在努力尽快在应用程序中提供此功能。",
-    "faqTrackingDown": "跟踪",
-    "faqTrackingDownAnswer": "跟踪可以在一段时间内停止工作。这就是为什么你的数据有时会有漏洞。我们正在努力改进这一点。",
-    "faqApiLimitation": "部落冲突API限制",
-    "faqApiLimitationAnswer": "一些数据是由部落冲突提供的，他们的API有一些限制。传奇杯追踪就是这种情况，它有时会像一次攻击一样叠加奖杯的得失。这也是为什么我们没有关于您基地的任何信息。",
-    "faqSupportWork": "我如何支持你的工作？",
-    "faqSupportWorkAnswer": "有几种方法可以支持我们：",
-    "faqUseCodeClashKing": "使用创作者代码“ClashKing”",
-    "faqSupportUsOnPatreon": "在Patreon上支持我们",
-    "faqShareTheApp": "与朋友分享应用程序",
-    "faqRateTheApp": "对商店中的应用程序进行评分",
-    "faqHelpUsTranslate": "帮助我们翻译应用程序",
-    "faqHowToInviteTheBot": "我如何邀请您的机器人加入我的Discord服务器？",
-    "faqHowToInviteTheBotAnswer": "您可以通过单击下面的按钮邀请我们的机器人到您的服务器。您需要“管理服务器”权限才能添加机器人。",
-    "faqInviteTheBot": "邀请ClashKing机器人",
-    "faqNeedHelp": "我需要帮助，或者我想提个建议。我怎样才能联系到你？",
-    "faqNeedHelpAnswer": "您可以加入我们的Discord服务器以寻求帮助或提供反馈，也可以发送电子邮件至devs@clashkingbot.com.请用英语或法语书写。",
-    "faqSendEmail": "发送电子邮件",
-    "faqJoinDiscord": "加入我们的Discord服务器",
-    "faqCannotOpenMailClient": "由于某些原因，我们无法打开您的邮件客户端。我们为您复制了电子邮件地址。您可以编写电子邮件并将地址粘贴到收件人字段中。",
-    "helpUsTranslate": "帮助我们翻译",
-    "suggestFeatures": "建议功能",
-    "thankYou": "感谢您！",
-    "thankYouContent": "非常感谢我们所有出色的翻译人员，他们帮助我们让世界各地的更多人可以访问这个应用程序！",
-    "helpTranslateContent": "您可以在Crowdin上帮助我们翻译应用程序。如果您的语言在Crowdin上不可用，请随时在我们的Discord服务器上请求。非常感谢你的帮助！",
-    "helpTranslateButton": "在Crowdin上帮助翻译",
-    "versionDevice": "版本&设备",
-    "@version": {
-        "description": "Version of the app and device information"
-    },
-    "loading": "加载中...",
-    "errorLoadingVersion": "加载版本时出错",
-    "@errorLoadingVersion": {
-        "description": "Error message when the app version cannot be loaded"
-    },
-    "currentTranslators": "当前翻译员",
-    "betaFeature": "Beta功能",
-    "beta": "BETA",
-    "betaDescription": "此功能目前处于测试阶段，可能存在一些错误或不完整。我们正在积极改进，欢迎您的反馈。请在我们的Discord服务器中分享您的想法并报告任何问题，以帮助我们做得更好。",
-    "copiedToClipboard": "复制到剪贴板",
-    "all": "所有",
-    "@all": {
-        "description": "all items"
-    },
-    "hourIndicator": "小时",
-    "minIndicator": "分钟",
-    "noDataAvailable": "没有可用数据",
-    "close": "关闭",
-    "closed": "已关闭",
-    "@closed": {
-        "description": "WarLog closed"
-    },
-    "error": "出错",
-    "player": "玩家",
-    "notFoundOrNotLinkedToOurSystem": "{player}未被找到或未链接到我们的系统。",
-    "@notFoundOrNotLinkedToOurSystem": {
-        "placeholders": {
-            "player": {
-                "type": "String"
-            }
-        }
-    },
-    "tryAnotherNameOrTagOrLinkIt": "尝试其他名称/标签或链接它。",
-    "playerNotFound": "未找到玩家",
-    "noValueEntered": "未输入有效值",
-    "manage": "管理",
-    "enterPlayerTag": "输入一个玩家标签",
-    "add": "添加",
-    "@add": {
-        "description": "Add an account"
-    },
-    "delete": "删除",
-    "@delete": {
-        "description": "Delete an account"
-    },
-    "addAccount": "添加账户",
-    "deleteAccount": "删除账户",
-    "playerTagNotExists": "输入的村庄标签不存在。",
-    "accountAlreadyLinked": "村庄标签已经链接到某人。",
-    "enterApiToken": "请输入帐户API令牌以确认您的身份。您可以在部落冲突设置>更多设置>API令牌中找到它。",
-    "wrongApiToken": "输入的 API 令牌不正确",
-    "accountAlreadyLinkedToYou": "您已连接玩家标签",
-    "apiToken": "帐户 API 令牌",
-    "failedToAddTryAgain": "无法添加链接。请稍后再试。",
-    "failedToDeleteTryAgain": "删除链接失败。请稍后再试。",
-    "enterPlayerTagWarning": "您必须输入村庄标签，然后点击“+”继续。",
-    "search": "搜索",
-    "@search": {
-        "description": "Search for a player or a clan"
-    },
-    "warning": "警告",
-    "exitAppToOpenClash": "您即将离开应用程序打开部落冲突",
-    "confirmLogout": "确定要退出登录吗？",
-    "@confirmLogout": {
-        "description": "Prompt asking the user to confirm logout"
-    },
-    "tagOrNamePlayer": "村庄的标签或村庄名称",
-    "searchPlayer": "搜索玩家",
-    "nameOrTagPlayer": "村庄名称或标签",
-    "playerClanDescription": "您的部落是“{clan}”（{tag}）",
-    "@playerClanDescription": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            },
-            "tag": {
-                "type": "String"
-            }
-        }
-    },
-    "playerRatioDescription": "您的捐兵比例为{ratio}。你们已经捐赠了{donations}人口的部队，并接收了{received}人口的部队。",
-    "@playerRatioDescription": {
-        "placeholders": {
-            "ratio": {
-                "type": "String"
-            },
-            "donations": {
-                "type": "String"
-            },
-            "received": {
-                "type": "String"
-            }
-        }
-    },
-    "playerWarPreferenceDescription": "您的部落对战偏好是“{preference}”。",
-    "@playerWarPreferenceDescription": {
-        "placeholders": {
-            "preference": {
-                "type": "String"
-            }
-        }
-    },
-    "playerWarStarsDescription": "您拥有{stars}胜利之星。",
-    "@playerWarStarsDescription": {
-        "placeholders": {
-            "stars": {
-                "type": "int"
-            }
-        }
-    },
-    "playerTrophiesDescription": "您拥有{trophies}奖杯。你目前在{league}杯段。",
-    "@playerTrophiesDescription": {
-        "placeholders": {
-            "trophies": {
-                "type": "int"
-            },
-            "league": {
-                "type": "String"
-            }
-        }
-    },
-    "playerTownHallLevelDescription": "您的大本营等级是{level}",
-    "@playerTownHallLevelDescription": {
-        "placeholders": {
-            "level": {
-                "type": "int"
-            }
-        }
-    },
-    "playerBuilderBaseDescription": "您的大本等级为{level}，您的奖杯数为：{trophies}。",
-    "@playerBuilderBaseDescription": {
-        "placeholders": {
-            "level": {
-                "type": "int"
-            },
-            "trophies": {
-                "type": "int"
-            }
-        }
-    },
-    "dashboard": "主页",
-    "homeBase": "家乡",
-    "th": "大本等级",
-    "builderBase": "夜世界",
-    "bh": "夜本等级",
-    "clanCapital": "部落都城",
-    "leader": "首领",
-    "coLeader": "副首领",
-    "elder": "长老",
-    "member": "成员",
-    "ready": "参战",
-    "@ready": {
-        "description": "Opted In for war"
-    },
-    "unready": "退出",
-    "@unready": {
-        "description": "Opted Out for war"
-    },
-    "heroes": "英雄",
-    "equipment": "装备",
-    "troops": "部队",
-    "superTroops": "超级部队",
-    "activeSuperTroops": "已启用的超级部队",
-    "pets": "宠物",
-    "siegeMachines": "攻城机器",
-    "spells": "法术",
-    "achievements": "成就",
-    "byDay": "按天",
-    "@byDay": {
-        "description": "Shows stats by day"
-    },
-    "bySeason": "按赛季",
-    "@byMonth": {
-        "description": "Shows stats by season"
-    },
-    "dayIndex": "Day {index}",
-    "@dayIndex": {
-        "placeholders": {
-            "index": {
-                "type": "int"
-            }
-        }
-    },
-    "indexDays": "{index} days",
-    "@indexDays": {
-        "placeholders": {
-            "index": {
-                "type": "int"
-            }
-        }
-    },
-    "bestTrophies": "最高奖杯",
-    "mostAttacks": "最多进攻次数",
-    "lastSeason": "上一赛季",
-    "bestRank": "最佳全球等级",
-    "daysLeft": "{days} days left",
-    "@daysLeft": {
-        "placeholders": {
-            "days": {
-                "type": "int"
-            }
-        }
-    },
-    "date": "日期",
-    "stats": "统计数据",
-    "details": "详细信息",
-    "seasonStats": "赛季数据",
-    "charts": "统计图",
-    "history": "历史记录",
-    "@history": {
-        "description": "Shows EOS trophies history"
-    },
-    "legendLeague": "传奇联赛",
-    "notInLegendLeague": "不在传奇联赛中",
-    "noLegendData": "未找到今日传奇联赛数据",
-    "legendStartDescription": "您以{trophies}奖杯开始了新的一天。",
-    "@legendStartDescription": {
-        "placeholders": {
-            "trophies": {
-                "type": "String"
-            }
-        }
-    },
-    "legendNoRankLocalDescription": "您目前没有获得{trophies}奖杯的排名（{country}）。",
-    "@legendNoRankLocalDescription": {
-        "placeholders": {
-            "country": {
-                "type": "String"
-            },
-            "trophies": {
-                "type": "int"
-            }
-        }
-    },
-    "legendRankLocalDescription": "您目前拥有{trophies}奖杯，排名{rank}（{country}）。",
-    "@legendRankDescription": {
-        "placeholders": {
-            "rank": {
-                "type": "int"
-            },
-            "country": {
-                "type": "String"
-            },
-            "trophies": {
-                "type": "int"
-            }
-        }
-    },
-    "legendGainDescription": "您获得了{trophies}奖杯。",
-    "@legendGainDescription": {
-        "placeholders": {
-            "trophies": {
-                "type": "int"
-            }
-        }
-    },
-    "legendLossDescription": "您失去了{trophies}奖杯。",
-    "@legendLossDescription": {
-        "placeholders": {
-            "trophies": {
-                "type": "int"
-            }
-        }
-    },
-    "legendNoGlobalRankDescription": "您目前没有在全国范围内获得排名（{trophies}）。",
-    "@legendNoGlobalRankDescription": {
-        "placeholders": {
-            "trophies": {
-                "type": "int"
-            }
-        }
-    },
-    "legendGlobalRankDescription": "您目前在全球排名{rank}。",
-    "@legendGlobalRankDescription": {
-        "placeholders": {
-            "rank": {
-                "type": "int"
-            }
-        }
-    },
-    "noRank": "暂无排名",
-    "started": "已激活",
-    "@started": {
-        "description": "Title for the number of trophies at the beginning of the day"
-    },
-    "ended": "已结束",
-    "@ended": {
-        "description": "Title for the number of trophies at the end of the day"
-    },
-    "average": "平均水平",
-    "@average": {
-        "description": "Average value of legend trophies (defense and attack)"
-    },
-    "remaining": "剩余时间",
-    "@remaining": {
-        "description": "Remaining attacks or defenses"
-    },
-    "legendsTitle": "数据不准确？",
-    "legendsExplanation_intro": "由于Clans API分类的限制，我们的数据可能并不总是完全准确。可能有以下原因：",
-    "legendsExplanation_api_delay_title": "1. API 延迟： ",
-    "legendsExplanation_api_delay_body": "API可能需要长达5分钟的时间进行更新，从而导致反映实时奖杯变化的滞后。",
-    "legendsExplanation_concurrent_changes_title": "2.合并奖杯：",
-    "legendsExplanation_multiple_attacks_defenses_title": "- 多次攻击/防御： ",
-    "legendsExplanation_multiple_attacks_defenses_body": "如果连续发生多次攻击或防御，API可能会显示合并结果(如+68 或 -68)。\n",
-    "legendsExplanation_simultaneous_attack_defense_title": "- 同时攻击和防御： ",
-    "legendsExplanation_simultaneous_attack_defense_body": "如果同时发生攻击和防御，你可能会看到好坏参半的结果(例如+4。\n",
-    "legendsExplanation_net_gain_loss_title": "3. 净增益： ",
-    "legendsExplanation_net_gain_loss_body": "尽管时间安排有问题，但这一天的净损益总额是准确的。 ",
-    "legendsExplanation_conclusion": "这些限制在使用部落冲突API的所有工具上都很常见。遗憾的是，我们无法修复这个问题，因为它的所有权是在Supercell的手中。 我们尽最大努力弥补这些限制，提供尽可能接近现实的结果。谢谢你们的理解！",
-    "toDoList": "待办事宜列表",
-    "lastActive": "上次活跃：{date}",
-    "playerNotTracked": "该玩家未被跟踪。数据可能不准确。",
-    "@lastActive": {
-        "placeholders": {
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "numberAccounts": "{number}账户",
-    "@numberAccounts": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        },
-        "description": "Number of accounts (ex: 4 accounts)"
-    },
-    "numberActiveAccounts": "{number}活账户",
-    "@numberActiveAccounts": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        }
-    },
-    "numberInactiveAccounts": "{number}不活跃账户",
-    "@numberInactiveAccounts": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        }
-    },
-    "activeAccounts": "活跃帐户",
-    "inactiveAccounts": "不活跃账户",
-    "noInactiveAccounts": "没有不活跃的帐户。",
-    "noActiveAccounts": "没有活跃的帐户。",
-    "todoExplanation_title": "任务计算方法",
-    "todoExplanation_intro": "任务完成率是根据下列具有特定权重的活动计算出来的：",
-    "todoExplanation_legends_title": "传奇联赛",
-    "todoExplanation_legends": "每个账户的权重为8分，1次攻击=1分。",
-    "todoExplanation_raids_title": "突袭：",
-    "todoExplanation_raids": "每个账户的权重为5分（如果上次攻击已解锁，则为6分），1次攻击=1分。",
-    "todoExplanation_clanWars_title": "部落战：",
-    "todoExplanation_clanWars": "每个账户2分的权重，1次攻击=1分。",
-    "todoExplanation_cwl_title": "部落联赛",
-    "todoExplanation_cwl": "每个账户的权重为1分，1次攻击=1分。如果玩家不在他们的部落中，则无法跟踪部落联赛。",
-    "todoExplanation_passAndGames_title": "月卡和部落游戏",
-    "todoExplanation_passAndGames": "每个账户的权重为2分。该比率基于剩余天数（通行证为1个月，比赛为6天）。绿色=按计划完成传球或比赛，红色=落后于计划。",
-    "todoExplanation_conclusion": "最终百分比是通过将正在进行的事件中完成的总操作除以所需的总操作来计算的。超过14天未活动的帐户不在计算范围内。",
-    "worst": "最差",
-    "@worst": {
-        "description": "Worst end of day trophies"
-    },
-    "best": "最佳",
-    "@best": {
-        "description": "Best end of day trophies"
-    },
-    "total": "总计",
-    "heroesEquipments": "英雄装备",
-    "daysAgo": "{days} 天前",
-    "@daysAgo": {
-        "placeholders": {
-            "days": {
-                "type": "int"
-            }
-        }
-    },
-    "dayAgo": "{day}天之前",
-    "@dayAgo": {
-        "placeholders": {
-            "day": {
-                "type": "int"
-            }
-        }
-    },
-    "hourAgo": "{hour}小时之前",
-    "@hourAgo": {
-        "placeholders": {
-            "hour": {
-                "type": "int"
-            }
-        }
-    },
-    "hoursAgo": "{Hours} 小时前",
-    "@hoursAgo": {
-        "placeholders": {
-            "hours": {
-                "type": "int"
-            }
-        }
-    },
-    "minuteAgo": "{minute}分钟之前",
-    "@minuteAgo": {
-        "placeholders": {
-            "minute": {
-                "type": "int"
-            }
-        }
-    },
-    "minutesAgo": "{minutes}分钟之前",
-    "@minutesAgo": {
-        "placeholders": {
-            "minutes": {
-                "type": "int"
-            }
-        }
-    },
-    "secondAgo": "{seconds}秒之前",
-    "@secondAgo": {
-        "placeholders": {
-            "seconds": {
-                "type": "int"
-            }
-        }
-    },
-    "justNow": "刚刚",
-    "trophiesByMonth": "每月奖杯",
-    "trophiesBySeason": "每赛季的奖杯数",
-    "eosTrophies": "赛季结束前的奖杯数",
-    "searchClan": "搜索部落",
-    "nameOrTagClan": "村庄名称或标签",
-    "noResult": "没有找到该查询的结果",
-    "filters": "筛选器",
-    "whatever": "任何",
-    "@whatever": {
-        "description": "Whatever the value"
-    },
-    "any": "任何 ",
-    "@any": {
-        "description": "Any value is accepted"
-    },
-    "notSet": "未设置",
-    "@notSet": {
-        "description": "Filter value is not set"
-    },
-    "warFrequency": "对战频率",
-    "minimumMembers": "最小成员数",
-    "maximumMembers": "最大成员数",
-    "location": "位置",
-    "minimumClanPoints": "最低部落奖杯总数",
-    "minimumClanLevel": "最低部落等级",
-    "noClan": "无部落信息",
-    "joinClanToUnlockNewFeatures": "加入一个部落来解锁新功能。",
-    "apply": "需要申请",
-    "opened": "开放",
-    "@opened": {
-        "description": "Clan is opened"
-    },
-    "inviteOnly": "仅限邀请",
-    "cancel": "取消",
-    "clan": "部落",
-    "clans": "部落",
-    "members": "成员",
-    "role": "职位",
-    "expLevel": "经验等级",
-    "townHallLevel": "大本等级",
-    "thLevel": "{level}级大本",
-    "@thLevel": {
-        "placeholders": {
-            "level": {
-                "type": "int"
-            }
-        }
-    },
-    "bhLevel": "{level}级夜本",
-    "@bhLevel": {
-        "placeholders": {
-            "level": {
-                "type": "int"
-            }
-        }
-    },
-    "townHallLevelLevel": "大本营 {level}",
-    "@townHallLevelLevel": {
-        "placeholders": {
-            "level": {
-                "type": "int"
-            }
-        }
-    },
-    "byNumberOfWars": "按进攻次数排序",
-    "@byNumberOfWars": {
-        "description": "filter by number of wars"
-    },
-    "ok": "确定",
-    "@ok": {
-        "description": "OK button on pop up"
-    },
-    "byDateRange": "按日期范围",
-    "@byDateRange": {
-        "description": "filter by date range"
-    },
-    "selectSeason": "选择一个赛季",
-    "@selectSeason": {
-        "description": "Ask player to select a season"
-    },
-    "year": "年",
-    "month": "月",
-    "allTownHalls": "所有大本营",
-    "seasonDate": "{date}赛季",
-    "@seasonDate": {
-        "description": "Example: August 2024 season",
-        "placeholders": {
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "lastXwars": "最后{number}场战争",
-    "@lastXwars": {
-        "description": "Example: Shows the last 25 wars",
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        }
-    },
-    "friendly": "友好",
-    "@friendly": {
-        "description": "Friendly war"
-    },
-    "cwl": "部落联赛",
-    "random": "随机",
-    "@random": {
-        "description": "Random/basic war (not friendly or cwl)"
-    },
-    "selectMembersThLevel": "成员大本等级",
-    "selectOpponentsThLevel": "队友大本等级",
-    "equalThLevel": "Equal TH",
-    "builderBaseTrophies": "BB Trophies",
-    "donations": "Donations",
-    "donationsReceived": "Donations Received",
-    "donationsRatio": "Donation Ratio",
-    "trophies": "Trophies",
-    "always": "Always",
-    "never": "Never",
-    "unknown": "Unknown",
-    "oncePerWeek": "1/week",
-    "twicePerWeek": "2/week",
-    "rarely": "Rarely",
-    "warLeague": "War/League",
-    "war": "War",
-    "league": "League",
-    "wars": "Wars",
-    "ongoingWar": "Ongoing war",
-    "ongoingCwl": "Ongoing CWL",
-    "cantOpenLink": "We can't open this link.",
-    "notInWar": "Not in war",
-    "warHistory": "War History",
-    "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
-    "@warHistoryWinsDescription": {
-        "placeholders": {
-            "wins": {
-                "type": "int"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) out of the last 50 wars.",
-    "@warHistoryLossesDescription": {
-        "placeholders": {
-            "losses": {
-                "type": "int"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) out of the last 50 wars.",
-    "@warHistoryDrawsDescription": {
-        "placeholders": {
-            "draws": {
-                "type": "int"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
-    "@warHistoryAverageMembersDescription": {
-        "placeholders": {
-            "members": {
-                "type": "int"
-            }
-        }
-    },
-    "warHistoryAverageWarStarsDescription": "Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.",
-    "@warHistoryAverageWarStarsDescription": {
-        "placeholders": {
-            "stars": {
-                "type": "double"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
-    "@warHistoryAverageHitRateDescription": {
-        "placeholders": {
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "warHistoryAverageClanStarsPerMember": "Your clan had an average of {stars} stars per member from the last 50 wars.",
-    "warHistoryAverageMembers": "~{members} members per war",
-    "@warHistoryAverageMembers": {
-        "placeholders": {
-            "members": {
-                "type": "int"
-            }
-        }
-    },
-    "averageStars": "Average stars",
-    "averageDestruction": "Average destruction",
-    "noStars": "0 star",
-    "oneStar": "1 star",
-    "twoStars": "2 stars",
-    "threeStars": "3 stars",
-    "warParticipation": "War Participation",
-    "toggleTownHallVisibility": "Hide/Show stats from former TH levels",
-    "@toggleTownHallVisibility": {
-        "description": "For example, hide stats from TH15 and below if the player is now TH16"
-    },
-    "warLog": "War Log",
-    "publicWarLog": "Public War Log",
-    "privateWarLog": "Private War Log",
-    "startsIn": "Starts in {time}",
-    "@startsIn": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "startsAt": "Starts at {time}",
-    "@startsAt": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "endsIn": "Ends in {time}",
-    "@endsIn": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "endsAt": "Ends at {time}",
-    "@endsAt": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "joinLeaveLogs": "Join/Leave Logs",
-    "join": "Join",
-    "leave": "Leave",
-    "reset": "Reset",
-    "leaveNumberDescription": "{number} player(s) left the clan during the current season ({date}).",
-    "@leaveNumberDescription": {
-        "description": "Number of players who left the clan during the current season.",
-        "placeholders": {
-            "number": {
-                "type": "int"
-            },
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "joinNumberDescription": "{number} player(s) joined the clan during the current season ({date}).",
-    "@joinNumberDescription": {
-        "description": "Number of players who joined the clan during the current season.",
-        "placeholders": {
-            "number": {
-                "type": "int"
-            },
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "joinLeaveDifferenceUpDescription": "Your clan has gained {number} new member(s) this season ({date}).",
-    "@joinLeaveDifferenceUpDescription": {
-        "description": "Number of new members gained by the clan this season.",
-        "placeholders": {
-            "number": {
-                "type": "int"
-            },
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "joinLeaveDifferenceDownDescription": "Your clan has lost {number} member(s) this season ({date}).",
-    "@joinLeaveDifferenceDownDescription": {
-        "description": "Number of members lost by the clan this season.",
-        "placeholders": {
-            "number": {
-                "type": "int"
-            },
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "joinLeaveDifferenceEqualDescription": "Your clan has the same number of members as at the beginning of the season ({date}).",
-    "@joinLeaveDifferenceEqualDescription": {
-        "description": "Difference in the number of members between the beginning and the end of the season.",
-        "placeholders": {
-            "date": {
-                "type": "String"
-            }
-        }
-    },
-    "@joinLeaveLogs": {
-        "description": "Logs of players joining or leaving the clan."
-    },
-    "leftOnAt": "Left on {date} at {time}.",
-    "@leftOnAt": {
-        "description": "[The player] left the clan on 16/06/2024 at 10:35.",
-        "placeholders": {
-            "date": {
-                "type": "String"
-            },
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "joinedOnAt": "Joined on {date} at {time}.",
-    "@joinedOnAt": {
-        "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
-        "placeholders": {
-            "date": {
-                "type": "String"
-            },
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "statistics": "Statistics",
-    "stars": "Stars",
-    "numberOfStars": "Number of stars",
-    "destructionRate": "Destruction rate",
-    "@destructionRate": {
-        "description": "Percentage of destruction in war"
-    },
-    "events": "Events",
-    "@events": {
-        "description": "War events"
-    },
-    "team": "Teams",
-    "myTeam": "My team",
-    "enemiesTeam": "Enemies",
-    "defense": "Defense",
-    "defenses": "Defenses",
-    "attack": "Attack",
-    "attacks": "Attacks",
-    "victory": "Victory",
-    "defeat": "Defeat",
-    "draw": "Draw",
-    "@draw": {
-        "description": "War ended in a draw"
-    },
-    "perfectWar": "Perfect war",
-    "newest": "Newest",
-    "oldest": "Oldest",
-    "warEnded": "War ended",
-    "preparation": "Preparation",
-    "isNotInWar": "{clan} is not in war.",
-    "@isNotInWar": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            }
-        }
-    },
-    "warLogIsClosed": "{clan}'s war log is closed.",
-    "@warLogIsClosed": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            }
-        }
-    },
-    "askForWar": "Contact the leader or a co-leader to start a war.",
-    "askForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-    "warLogClosed": "War log closed.",
-    "rounds": "Rounds",
-    "noDataAvailableForThisWar": "No data available for this war",
-    "stateOfTheWar": "State of the war",
-    "starsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
-    "@starsNeededToTakeTheLead": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            },
-            "star": {
-                "type": "int"
-            },
-            "star2": {
-                "type": "int"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "starsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
-    "@starsAndPercentNeededToTakeTheLead": {
-        "placeholders": {
-            "clan": {
-                "type": "String"
-            },
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "clanDraw": "The two clans are tied",
-    "fastCalculator": "Fast calculator",
-    "fastCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
-    "@fastCalculatorAnswer": {
-        "placeholders": {
-            "percentNeedeed": {
-                "type": "String"
-            },
-            "result": {
-                "type": "String"
-            }
-        }
-    },
-    "teamSize": "Team size",
-    "neededOverall": "% Needed overall",
-    "calculate": "Calculate",
-    "warStats": "War Stats",
-    "membersStats": "Members Stats",
-    "clanWarLeague": "Clan War League",
-    "cwlRank": "Your clan is currently ranked {rank}.",
-    "@cwlRank": {
-        "placeholders": {
-            "rank": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlStars": "Your clan has a total of {stars} stars.",
-    "@cwlStars": {
-        "placeholders": {
-            "stars": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlMissingStarsFromNext": "Your clan is missing {stars} stars to catch up with the next clan.",
-    "@cwlMissingStarsFromNext": {
-        "placeholders": {
-            "stars": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlMissingStarsFromFirst": "Your clan is missing {stars} stars to catch up with the first clan.",
-    "@cwlMissingStarsFromFirst": {
-        "placeholders": {
-            "stars": {
-                "type": "int"
-            }
-        }
-    },
-    "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
-    "@cwlDestructionPercentage": {
-        "placeholders": {
-            "percent": {
-                "type": "String"
-            }
-        }
-    },
-    "cwlCurrentRound": "It's currently round {round}.",
-    "@cwlCurrentRound": {
-        "placeholders": {
-            "round": {
-                "type": "int"
-            }
-        }
-    },
-    "noAccountLinkedToYourProfileFound": "No account linked to your profile found",
-    "management": "Management",
-    "comingSoon": "Coming soon!",
-    "connectionError": "An error occurred. Please check your internet connection and try again.",
-    "connectionErrorRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-    "updatedAt": "Updated at {time}",
-    "@updatedAt": {
-        "placeholders": {
-            "time": {
-                "type": "String"
-            }
-        }
-    },
-    "tools": "Tools",
-    "community": "Community",
-    "lastRaids": "Last raids",
-    "ongoingRaids": "Ongoing raids",
-    "districtsDestroyed": "Districts destroyed",
-    "raidsCompleted": "Raids completed"
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "appTitle": "ClashKing",
+  "appDescription": "您的终极部落冲突伴侣，用于追踪统计数据、管理部落和分析性能。",
+  "generalLoading": "加载中...",
+  "loadingVillages": "Loading your villages...",
+  "loadingClanData": "Fetching clan data...",
+  "loadingWarStats": "Analyzing war stats...",
+  "loadingLegendsData": "Preparing legends data...",
+  "loadingCapitalRaids": "Loading capital raids...",
+  "loadingAlmostReady": "Almost ready...",
+  "accountVerificationTitle": "Verify Account",
+  "accountVerificationMessage": "Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.",
+  "accountVerified": "Account verified",
+  "accountNotVerified": "Account not verified",
+  "accountVerifyButton": "Verify",
+  "accountVerificationSuccess": "Account verified successfully!",
+  "accountVerificationFailed": "Verification failed. Please check your API token.",
+  "generalRetry": "重试",
+  "generalTryAgain": "再试一次",
+  "generalCancel": "取消",
+  "generalOk": "确定",
+  "@generalOk": {
+    "description": "OK button on pop up"
+  },
+  "generalApply": "需要申请",
+  "generalConfirm": "确认",
+  "generalManage": "管理",
+  "generalSettings": "设置",
+  "generalCopiedToClipboard": "复制到剪贴板",
+  "generalComingSoon": "敬请期待！",
+  "generalLastRefresh": "Last refresh: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Refresh failed: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
+  "generalAll": "所有",
+  "@generalAll": {
+    "description": "all items"
+  },
+  "generalTotal": "总计",
+  "generalBest": "最佳",
+  "@generalBest": {
+    "description": "Best end of day trophies"
+  },
+  "generalWorst": "最差",
+  "@generalWorst": {
+    "description": "Worst end of day trophies"
+  },
+  "generalAverage": "平均水平",
+  "@generalAverage": {
+    "description": "Average value of legend trophies (defense and attack)"
+  },
+  "generalRemaining": "剩余时间",
+  "@generalRemaining": {
+    "description": "Remaining attacks or defenses"
+  },
+  "generalActive": "活跃",
+  "generalInactive": "非活跃",
+  "generalStarted": "已激活",
+  "@generalStarted": {
+    "description": "Title for the number of trophies at the beginning of the day"
+  },
+  "generalEnded": "已结束",
+  "@generalEnded": {
+    "description": "Title for the number of trophies at the end of the day"
+  },
+  "generalRole": "职位",
+  "generalStats": "统计数据",
+  "generalFullStats": "完整统计",
+  "generalDetails": "详细信息",
+  "generalHistory": "历史记录",
+  "@generalHistory": {
+    "description": "Shows EOS trophies history"
+  },
+  "generalFilters": "筛选器",
+  "generalNotSet": "未设置",
+  "@generalNotSet": {
+    "description": "Filter value is not set"
+  },
+  "generalWarning": "警告",
+  "generalNoDataAvailable": "没有可用数据",
+  "authSignUp": "注册",
+  "authLogin": "登录",
+  "authLogout": "注销",
+  "authCreateAccount": "创建账户",
+  "authJoinClashKing": "加入 ClashKing",
+  "authCreateClashKingAccount": "创建 ClashKing 账户",
+  "authCreateAccountToGetStarted": "创建您的账户以开始",
+  "authAlreadyHaveAccount": "Already have an account? Sign in",
+  "authConfirmLogout": "确定要退出登录吗？",
+  "@authConfirmLogout": {
+    "description": "Prompt asking the user to confirm logout"
+  },
+  "authDiscordTitle": "Discord",
+  "authDiscordSignIn": "使用Discord登录",
+  "authDiscordContinue": "Continue with Discord",
+  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
+  "authEmailTitle": "Email",
+  "authEmail": "Email",
+  "authEmailHint": "Enter your email address",
+  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
+  "authEmailRequired": "Please enter your email",
+  "authEmailInvalid": "Please enter a valid email",
+  "authPasswordLabel": "Password",
+  "authPasswordHint": "Enter your password",
+  "authPasswordConfirm": "Confirm Password",
+  "authPasswordRequired": "Please enter your password",
+  "authPasswordConfirmRequired": "Please confirm your password",
+  "authPasswordMismatch": "Passwords do not match",
+  "authPasswordTooShort": "Password must be at least 8 characters",
+  "authPasswordRequirements": "Password must contain: uppercase, lowercase, digit, and special character",
+  "authPasswordForgot": "Forgot password?",
+  "authPasswordForgotDescription": "Enter your email address and we'll send you a 6-digit code to reset your password.",
+  "authPasswordResetSend": "Send Reset Code",
+  "authPasswordResetSent": "Code Sent!",
+  "authPasswordResetSentDescription": "We've sent a 6-digit reset code to your email address. Please check your inbox and use the code to reset your password.",
+  "authPasswordReset": "Reset Password",
+  "authPasswordResetDescription": "Enter your email, the 6-digit code from the email, and your new password below.",
+  "authPasswordNew": "New Password",
+  "authPasswordConfirmHint": "Re-enter your new password",
+  "authPasswordResetConfirm": "Reset Password",
+  "authPasswordResetSuccess": "Password reset successful! You can now log in.",
+  "authPasswordResetContinue": "Continue to Reset Password",
+  "authPasswordResetCode": "Reset Code",
+  "authPasswordResetCodeHint": "Enter the 6-digit code from your email",
+  "authPasswordResetCodeRequired": "Please enter the reset code",
+  "authPasswordResetCodeInvalid": "Please enter a valid 6-digit code",
+  "authBackToLogin": "Back to Login",
+  "authUsernameLabel": "用户名",
+  "authUsernameRequired": "请输入用户名",
+  "authUsernameTooShort": "Username must be at least 3 characters",
+  "authErrorConnection": "发生错误，请检查网络连接并重试。",
+  "authErrorConnectionRelaunch": "发生错误，请检查网络连接并重新启动应用。",
+  "authErrorEmailAlreadyRegistered": "This email is already registered. Please try logging in instead.",
+  "authErrorEmailAlreadyPending": "A verification email was already sent to this address. Please check your email or try resending.",
+  "authErrorEmailInvalidFormat": "Please enter a valid email address.",
+  "authErrorPasswordWeak": "Password is too weak. Please use a stronger password.",
+  "authErrorUsernameInvalid": "Username is invalid. Please use only letters, numbers, and underscores.",
+  "authErrorUsernameExists": "This username is already taken. Please choose a different one.",
+  "authErrorRegistrationFailed": "Registration failed. Please try again later.",
+  "authErrorEmailSendFailed": "Failed to send verification email. Please try again later.",
+  "authErrorRateLimited": "Too many attempts. Please wait a moment and try again.",
+  "authErrorServerUnavailable": "Server is temporarily unavailable. Please try again later.",
+  "authAccountManagement": "Account Management",
+  "authAccountConnected": "Connected Accounts",
+  "authAccountConnectedStatus": "Connected",
+  "authAccountNotConnected": "Not connected",
+  "authAccountEmailAndPassword": "Email & Password",
+  "authAccountSecured": "Your account is secured with multiple authentication methods",
+  "authAccountLinkEmail": "Link Email Account",
+  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
+  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
+  "authEmailVerificationTitle": "Verify Email",
+  "authEmailVerificationCheckEmail": "Check Your Email",
+  "authEmailVerificationSentTo": "We've sent a verification email to:",
+  "authEmailVerificationInstructions": "Click the link in the email to verify your account. If you don't see the email, check your spam folder.",
+  "authEmailVerificationResend": "Resend Verification Email",
+  "authEmailVerificationResendSuccess": "Verification email resent successfully! Please check your email.",
+  "authEmailVerificationResendFailed": "Failed to resend verification email. Please try again.",
+  "authEmailVerificationBackToLogin": "Back to Login",
+  "authEmailVerificationDevToken": "I have a verification token (Dev)",
+  "authEmailVerificationDevMode": "Development Mode - Manual Token Input:",
+  "authEmailVerificationTokenLabel": "Verification Token",
+  "authEmailVerificationTokenRequired": "Verification token is required",
+  "authEmailVerificationVerifyButton": "Verify Email",
+  "authEmailVerificationExpired": "Verification expired. Please register again.",
+  "authEmailVerificationAlreadyVerified": "This email is already verified. Please try logging in instead.",
+  "authEmailVerificationNoToken": "No pending verification found. Please register first.",
+  "authEmailVerificationVerifying": "Verifying your email...",
+  "authEmailVerificationCodeInstructions": "Enter the 6-digit code sent to your email:",
+  "authEmailVerificationCodeRequired": "Please enter the 6-digit verification code",
+  "authEmailVerificationVerify": "Verify Code",
+  "helpTitle": "Need help?",
+  "helpJoinDiscord": "Join Discord",
+  "helpEmailUs": "Email Us",
+  "accountsWelcome": "欢迎！",
+  "accountsWelcomeMessage": "请将一个或多个部落冲突帐户添加到您的个人资料中。您可以稍后添加或删除帐户。",
+  "accountsManageTitle": "Manage your accounts",
+  "accountsNoneFound": "未找到与你的个人资料关联的账号",
+  "accountsPlayerTag": "Player Tag (#ABC123)",
+  "accountsEnterPlayerTag": "输入一个玩家标签",
+  "accountsAdd": "添加账户",
+  "accountsDelete": "删除账户",
+  "accountsApiToken": "帐户 API 令牌",
+  "accountsEnterApiToken": "请输入帐户API令牌以确认您的身份。您可以在部落冲突设置>更多设置>API令牌中找到它。",
+  "accountsFillAllFields": "Please fill all fields.",
+  "accountsErrorTagNotExists": "输入的村庄标签不存在。",
+  "accountsErrorAlreadyLinked": "村庄标签已经链接到某人。",
+  "accountsErrorAlreadyLinkedToYou": "您已连接玩家标签",
+  "accountsErrorWrongApiToken": "输入的 API 令牌不正确",
+  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
+  "accountsErrorFailedToDelete": "删除链接失败。请稍后再试。",
+  "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
+  "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
+  "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
+  "errorLoadingVersion": "加载版本时出错",
+  "@errorLoadingVersion": {
+    "description": "Error message when the app version cannot be loaded"
+  },
+  "errorCannotOpenLink": "我们无法打开此链接",
+  "errorExitAppToOpenClash": "您即将离开应用程序打开部落冲突",
+  "playerSearchTitle": "搜索玩家",
+  "playerSearchPlaceholder": "村庄名称或标签",
+  "playerLastActive": "上次活跃：{date}",
+  "@playerLastActive": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "playerNotTracked": "该玩家未被跟踪。数据可能不准确。",
+  "playerClanDescription": "您的部落是“{clan}”（{tag}）",
+  "@playerClanDescription": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "playerRatioDescription": "您的捐兵比例为{ratio}。你们已经捐赠了{donations}人口的部队，并接收了{received}人口的部队。",
+  "@playerRatioDescription": {
+    "placeholders": {
+      "ratio": {
+        "type": "String"
+      },
+      "donations": {
+        "type": "String"
+      },
+      "received": {
+        "type": "String"
+      }
+    }
+  },
+  "playerWarPreferenceDescription": "您的部落对战偏好是“{preference}”。",
+  "@playerWarPreferenceDescription": {
+    "placeholders": {
+      "preference": {
+        "type": "String"
+      }
+    }
+  },
+  "playerWarStarsDescription": "您拥有{stars}胜利之星。",
+  "@playerWarStarsDescription": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "playerTrophiesDescription": "您拥有{trophies}奖杯。你目前在{league}杯段。",
+  "@playerTrophiesDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      },
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "playerTownHallLevelDescription": "您的大本营等级是{level}",
+  "@playerTownHallLevelDescription": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBuilderBaseDescription": "您的大本等级为{level}，您的奖杯数为：{trophies}。",
+  "@playerBuilderBaseDescription": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "gameBaseHome": "家乡",
+  "gameBaseBuilder": "夜世界",
+  "gameClanCapital": "部落都城",
+  "gameTownHall": "大本等级",
+  "gameTownHallLevel": "大本等级",
+  "gameTownHallLevelNumber": "大本营 {level}",
+  "@gameTownHallLevelNumber": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameTHLevel": "{level}级大本",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameExpLevel": "经验等级",
+  "gameTrophies": "奖杯",
+  "gameBuilderBaseTrophies": "建筑大师奖杯",
+  "gameDonations": "增援",
+  "gameDonationsReceived": "收到的增援",
+  "gameDonationsRatio": "捐收比例",
+  "gameLevel": "Level: {level}/{maxLevel}",
+  "@gameLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "maxLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "gameHeroes": "英雄",
+  "gameEquipment": "装备",
+  "gameHeroesEquipments": "英雄装备",
+  "gameTroops": "部队",
+  "gameActiveSuperTroops": "已启用的超级部队",
+  "gamePets": "宠物",
+  "gameSiegeMachines": "攻城机器",
+  "gameSpells": "法术",
+  "gameAchievements": "成就",
+  "gameClanGames": "Clan Games",
+  "gameSeasonPass": "Season Pass",
+  "gameCreatorCode": "创作者代码：ClashKing",
+  "gameCreatorCodeDescription": "Tap for info • Support us for free!",
+  "gameCreatorCodeDialogTitle": "Support ClashKing",
+  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
+  "gameCreatorCodeDialogButton": "Use Creator Code",
+  "clanTitle": "部落",
+  "clanSearchTitle": "搜索部落",
+  "clanSearchPlaceholder": "Clan's name",
+  "clanNone": "无部落信息",
+  "clanJoinToUnlock": "加入一个部落来解锁新功能。",
+  "clanMembers": "成员",
+  "clanWarFrequency": "对战频率",
+  "clanMinimumMembers": "最小成员数",
+  "clanMaximumMembers": "最大成员数",
+  "clanLocation": "位置",
+  "clanMinimumPoints": "最低部落奖杯总数",
+  "clanMinimumLevel": "最低部落等级",
+  "clanInviteOnly": "仅限邀请",
+  "@clanInviteOnly": {
+    "description": "Clan is invite only"
+  },
+  "clanOpened": "开放",
+  "@clanOpened": {
+    "description": "Clan is opened"
+  },
+  "clanClosed": "已关闭",
+  "@clanClosed": {
+    "description": "Clan is closed"
+  },
+  "clanRoleLeader": "首领",
+  "clanRoleCoLeader": "副首领",
+  "clanRoleElder": "长老",
+  "clanRoleMember": "成员",
+  "clanWarFrequencyAlways": "总是",
+  "clanWarFrequencyNever": "从不",
+  "clanWarFrequencyUnknown": "未知",
+  "clanWarFrequencyOncePerWeek": "1次/周",
+  "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
+  "clanWarFrequencyRarely": "很少",
+  "timeHourIndicator": "小时",
+  "timeDaysAgo": "{days} 天前",
+  "@timeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeDayAgo": "{day}天之前",
+  "@timeDayAgo": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHourAgo": "{hour}小时之前",
+  "@timeHourAgo": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHoursAgo": "{hours} 小时前",
+  "@timeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeMinuteAgo": "{minute}分钟之前",
+  "@timeMinuteAgo": {
+    "placeholders": {
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "timeMinutesAgo": "{minutes}分钟之前",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeJustNow": "刚刚",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
+  "timeEndedJustNow": "Ended just now",
+  "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
+  "@timeEndedMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeEndedHoursAgo": "Ended {hours} hours ago",
+  "@timeEndedHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeEndedDaysAgo": "Ended {days} days ago",
+  "@timeEndedDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeStartsIn": "开始时间（{time}后",
+  "@timeStartsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeStartsAt": "开始时间（{time}）",
+  "@timeStartsAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEndsIn": "结束于{time}",
+  "@timeEndsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEndsAt": "结束于{time}",
+  "@timeEndsAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "legendsTitle": "数据不准确？",
+  "legendsNotInLeague": "不在传奇联赛中",
+  "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
+  "legendsStartDescription": "您以{trophies}奖杯开始了新的一天。",
+  "@legendsStartDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "String"
+      }
+    }
+  },
+  "legendsNoRankLocalDescription": "您目前没有获得{trophies}奖杯的排名（{country}）。",
+  "@legendsNoRankLocalDescription": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsRankLocalDescription": "您目前拥有{trophies}奖杯，排名{rank}（{country}）。",
+  "@legendsRankLocalDescription": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "country": {
+        "type": "String"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsGainDescription": "您获得了{trophies}奖杯。",
+  "@legendsGainDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsLossDescription": "您失去了{trophies}奖杯。",
+  "@legendsLossDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsNoGlobalRankDescription": "您目前没有在全国范围内获得排名（{trophies}）。",
+  "@legendsNoGlobalRankDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsGlobalRankDescription": "You are currently ranked {rank} globally with {trophies} trophies.",
+  "@legendsGlobalRankDescription": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsNoRank": "暂无排名",
+  "legendsBestTrophies": "最高奖杯",
+  "legendsMostAttacks": "最多进攻次数",
+  "legendsLastSeason": "上一赛季",
+  "legendsBestRank": "最佳全球等级",
+  "legendsTrophiesBySeason": "每赛季的奖杯数",
+  "legendsEosTrophies": "赛季结束前的奖杯数",
+  "legendsEosDetails": "End Of Season Details",
+  "legendsInaccurateTitle": "数据不准确？",
+  "legendsInaccurateIntro": "由于Clans API分类的限制，我们的数据可能并不总是完全准确。可能有以下原因：",
+  "legendsInaccurateApiDelayTitle": "1. API 延迟： ",
+  "legendsInaccurateApiDelayBody": "API可能需要长达5分钟的时间进行更新，从而导致反映实时奖杯变化的滞后。",
+  "legendsInaccurateConcurrentTitle": "2.合并奖杯：",
+  "legendsInaccurateMultipleAttacksTitle": "- 多次攻击/防御： ",
+  "legendsInaccurateMultipleAttacksBody": "如果连续发生多次攻击或防御，API可能会显示合并结果(如+68 或 -68)。\n",
+  "legendsInaccurateSimultaneousTitle": "- 同时攻击和防御： ",
+  "legendsInaccurateSimultaneousBody": "如果同时发生攻击和防御，你可能会看到好坏参半的结果(例如+4。\n",
+  "legendsInaccurateNetGainTitle": "3. 净增益： ",
+  "legendsInaccurateNetGainBody": "尽管时间安排有问题，但这一天的净损益总额是准确的。 ",
+  "legendsInaccurateConclusion": "这些限制在使用部落冲突API的所有工具上都很常见。遗憾的是，我们无法修复这个问题，因为它的所有权是在Supercell的手中。 我们尽最大努力弥补这些限制，提供尽可能接近现实的结果。谢谢你们的理解！",
+  "statsSeasonStats": "赛季数据",
+  "statsByDay": "按天",
+  "@statsByDay": {
+    "description": "Shows stats by day"
+  },
+  "statsBySeason": "按赛季",
+  "@statsBySeason": {
+    "description": "Shows stats by season"
+  },
+  "statsDayIndex": "第{index}天",
+  "@statsDayIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "statsIndexDays": "{index}天",
+  "@statsIndexDays": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "statsSeasonDate": "{date}赛季",
+  "@statsSeasonDate": {
+    "description": "Example: August 2024 season",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "statsAllTownHalls": "所有大本营",
+  "statsMembers": "成员统计",
+  "todoTitle": "待办事宜列表",
+  "todoExplanationTitle": "任务计算方法",
+  "todoExplanationIntro": "任务完成率是根据下列具有特定权重的活动计算出来的：",
+  "todoExplanationLegendsTitle": "传奇联赛",
+  "todoExplanationLegends": "每个账户的权重为8分，1次攻击=1分。",
+  "todoExplanationRaidsTitle": "突袭：",
+  "todoExplanationRaids": "每个账户的权重为5分（如果上次攻击已解锁，则为6分），1次攻击=1分。",
+  "todoExplanationClanWarsTitle": "部落战：",
+  "todoExplanationClanWars": "每个账户2分的权重，1次攻击=1分。",
+  "todoExplanationCwlTitle": "部落联赛",
+  "todoExplanationCwl": "每个账户的权重为1分，1次攻击=1分。如果玩家不在他们的部落中，则无法跟踪部落联赛。",
+  "todoExplanationPassAndGamesTitle": "月卡和部落游戏",
+  "todoExplanationPassAndGames": "每个账户的权重为2分。该比率基于剩余天数（通行证为1个月，比赛为6天）。绿色=按计划完成传球或比赛，红色=落后于计划。",
+  "todoExplanationConclusion": "最终百分比是通过将正在进行的事件中完成的总操作除以所需的总操作来计算的。超过14天未活动的帐户不在计算范围内。",
+  "todoAccountsNumber": "{number}账户",
+  "@todoAccountsNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    },
+    "description": "Number of accounts (ex: 4 accounts)"
+  },
+  "todoAccountsNumberActive": "{number}活账户",
+  "@todoAccountsNumberActive": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsNumberInactive": "{number}不活跃账户",
+  "@todoAccountsNumberInactive": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsActive": "活跃帐户",
+  "todoAccountsInactive": "不活跃账户",
+  "todoAccountsNoInactive": "没有不活跃的帐户。",
+  "todoAccountsNoActive": "没有活跃的帐户。",
+  "todoAttacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
+  "@todoAttacksLeftDescription": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoDefensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
+  "@todoDefensesLeftDescription": {
+    "placeholders": {
+      "defenses": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoNoAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+  "@todoNoAttacksLeftDescription": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoPointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+  "@todoPointsLeftDescription": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoPointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+  "@todoPointsLeftDescriptionNoPoints": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "warTitle": "部落战",
+  "warFrequency": "对战频率",
+  "warParticipation": "参战",
+  "warLeague": "部落战/联赛",
+  "warHistory": "部落对战历史",
+  "warLog": "对战日志",
+  "warLogClosed": "对战日志已关闭。",
+  "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "warStats": "部落战统计",
+  "warOngoing": "正在进行的部落战",
+  "warIsNotInWar": "{clan} 当前未参与部落战。",
+  "@warIsNotInWar": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "warAskForWar": "请联系首领或副首领发起一场部落战。",
+  "warAskForWarLogOpening": "请联系首领或副首领开启对战日志。",
+  "warEnded": "部落战已结束",
+  "warPreparation": "准备阶段",
+  "warPerfectWar": "满星部落战",
+  "warVictory": "胜利",
+  "warDefeat": "失败",
+  "warDraw": "平局",
+  "@warDraw": {
+    "description": "War ended in a draw"
+  },
+  "warTeamSize": "队伍规模",
+  "warMyTeam": "我的部落",
+  "warEnemiesTeam": "敌方部落",
+  "warClanDraw": "双方部落战成平局",
+  "warStateOfTheWar": "部落战状态",
+  "warStarsNeededToTakeTheLead": "{clan} 仍需 {star} 颗星，或 {stars2} 颗星加上 {percent}% 的摧毁率才能取得领先",
+  "@warStarsNeededToTakeTheLead": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "star": {
+        "type": "int"
+      },
+      "stars2": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warStarsAndPercentNeededToTakeTheLead": "{clan} 仍需 {percent}% 或再获得 1 颗星才能取得领先",
+  "@warStarsAndPercentNeededToTakeTheLead": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warNoDataAvailableForThisWar": "此场部落战暂无数据",
+  "warCalculatorFast": "快速计算",
+  "warCalculatorAnswer": "要达到 {percentNeeded}% 的摧毁率，总共需要 {result}%。",
+  "@warCalculatorAnswer": {
+    "placeholders": {
+      "percentNeeded": {
+        "type": "String"
+      },
+      "result": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorNeededOverall": "所需总百分比",
+  "warCalculatorCalculate": "计算",
+  "warAttacksTitle": "进攻记录",
+  "warAttacksNone": "No attack yet",
+  "@warAttacksNone": {
+    "description": "No attack yet in war"
+  },
+  "warAttacksBest": "Best attacks",
+  "warAttacksCount": "Attack Count",
+  "warAttacksMissed": "Missed Attacks",
+  "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
+  "@warAttacksNumber": {
+    "placeholders": {
+      "number_time": {
+        "type": "int"
+      },
+      "number_war": {
+        "type": "int"
+      }
+    }
+  },
+  "warAttacksAverageStars": "You had an average of {stars} stars per war.",
+  "@warAttacksAverageStars": {
+    "placeholders": {
+      "stars": {
+        "type": "String"
+      }
+    }
+  },
+  "warAttacksAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+  "@warAttacksAverageDestruction": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warDefensesTitle": "防御记录",
+  "warDefensesNone": "No defense yet",
+  "@warDefensesNone": {
+    "description": "No defense yet in war"
+  },
+  "warDefensesBest": "Best defenses",
+  "warDefensesBestOutOf": "Best defense (out of {number})",
+  "@warDefensesBestOutOf": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    },
+    "description": "Best war defense (out of 3 defenses)"
+  },
+  "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
+  "@warDefensesNumber": {
+    "placeholders": {
+      "number_time": {
+        "type": "int"
+      },
+      "number_war": {
+        "type": "int"
+      }
+    }
+  },
+  "warDefensesAverageStars": "You had an average of {stars} stars per defense.",
+  "@warDefensesAverageStars": {
+    "placeholders": {
+      "stars": {
+        "type": "double"
+      }
+    }
+  },
+  "warDefensesAverageDestruction": "You had an average of {percent}% destruction rate per defense.",
+  "@warDefensesAverageDestruction": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warStarsTitle": "星数",
+  "warStarsAverage": "平均胜利之星",
+  "warStarsNumber": "获得的星数",
+  "warStarsOne": "1 胜利之星",
+  "warStarsTwo": "2 胜利之星",
+  "warStarsThree": "3 胜利之星",
+  "warStarsZero": "0 Star",
+  "warStarsBestPerformance": "Best performance",
+  "@warStarsBestPerformance": {
+    "description": "Best performance in war"
+  },
+  "warDestructionTitle": "Destruction",
+  "warDestructionAverage": "平均摧毁",
+  "warDestructionRate": "摧毁率",
+  "@warDestructionRate": {
+    "description": "Percentage of destruction in war"
+  },
+  "warHistoryWinsDescription": "在过去50场部落战中，您的部落赢得{wins}场({percent}%)",
+  "@warHistoryWinsDescription": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryLossesDescription": "在过去的50 场部落战中，您的部落失败{losses}场({percent}%)",
+  "@warHistoryLossesDescription": {
+    "placeholders": {
+      "losses": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryDrawsDescription": "在过去50场部落战中，您的部落平局{draws}场({percent}%)",
+  "@warHistoryDrawsDescription": {
+    "placeholders": {
+      "draws": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryAverageMembersDescription": "在过去50场部落战中，您的部落平均有{members}人参战",
+  "@warHistoryAverageMembersDescription": {
+    "placeholders": {
+      "members": {
+        "type": "int"
+      }
+    }
+  },
+  "warHistoryAverageWarStarsDescription": "在过去 50 场战争中，您的部落平均每场战争获得 {stars} 颗星星，占比 {percent}",
+  "@warHistoryAverageWarStarsDescription": {
+    "placeholders": {
+      "stars": {
+        "type": "double"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryAverageHitRateDescription": "您的部落在过去 50 场战争中的平均摧毁率为 {percent}%",
+  "@warHistoryAverageHitRateDescription": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warPositionMap": "Map Position",
+  "@warPositionMap": {
+    "description": "Map position in war"
+  },
+  "warPositionAbbr": "Pos",
+  "@warPositionAbbr": {
+    "description": "Abbreviation for map position"
+  },
+  "warPositionOrder": "Order",
+  "@warPositionOrder": {
+    "description": "Order of the player in the clan"
+  },
+  "warOpponentTownhall": "Opp TH",
+  "@warOpponentTownhall": {
+    "description": "Abbreviation for opponent's town hall level"
+  },
+  "warOpponentLowerTownhall": "Lower TH",
+  "warOpponentUpperTownhall": "Upper TH",
+  "warOpponentEqualThLevel": "大本等级相同",
+  "warOpponentSelectMembersThLevel": "成员大本等级",
+  "warOpponentSelectOpponentsThLevel": "队友大本等级",
+  "warFiltersLastXwars": "最后{number}场战争",
+  "@warFiltersLastXwars": {
+    "description": "Example: Shows the last 25 wars",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warFiltersFriendly": "友好",
+  "@warFiltersFriendly": {
+    "description": "Friendly war"
+  },
+  "warFiltersRandom": "随机",
+  "@warFiltersRandom": {
+    "description": "Random/basic war (not friendly or cwl)"
+  },
+  "warVisibilityToggleTownHall": "显示/隐藏前大本等级统计",
+  "@warVisibilityToggleTownHall": {
+    "description": "For example, hide stats from TH15 and below if the player is now TH16"
+  },
+  "warEventsTitle": "事件",
+  "@warEventsTitle": {
+    "description": "War events"
+  },
+  "warEventsNewest": "最新",
+  "warEventsOldest": "最早",
+  "warStatusReady": "参战",
+  "@warStatusReady": {
+    "description": "Opted In for war"
+  },
+  "warStatusUnready": "退出",
+  "@warStatusUnready": {
+    "description": "Opted Out for war"
+  },
+  "warStatusMissed": "Missed",
+  "@warStatusMissed": {
+    "description": "Missed attacks"
+  },
+  "warAbbreviationAvg": "Avg",
+  "@warAbbreviationAvg": {
+    "description": "Abbreviation for average"
+  },
+  "warAbbreviationAvgPercentage": "Avg %",
+  "@warAbbreviationAvgPercentage": {
+    "description": "Abbreviation for average percentage"
+  },
+  "cwlTitle": "部落联赛",
+  "cwlClanWarLeague": "部落战联赛",
+  "cwlOngoing": "正在进行的部落联赛",
+  "cwlRounds": "轮次",
+  "cwlRoundNumber": "Round {number}",
+  "@cwlRoundNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlCurrentRound": "当前是第 {round} 轮。",
+  "@cwlCurrentRound": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRank": "你的部落当前排名第 {rank}。",
+  "@cwlRank": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlStars": "你的部落共获得 {stars} 颗星。",
+  "@cwlStars": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlDestructionPercentage": "你的部落的总摧毁率为 {percent}%。",
+  "@cwlDestructionPercentage": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+  "@cwlTotalAttacks": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "totalAttacks": {
+        "type": "int"
+      }
+    }
+  },
+  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
+  "joinLeaveJoin": "加入",
+  "joinLeaveLeave": "退出",
+  "joinLeaveReset": "重置",
+  "joinLeaveJoins": "Joins",
+  "joinLeaveLeaves": "Leaves",
+  "joinLeaveUniquePlayers": "Unique Players",
+  "joinLeaveMovingPlayers": "Moving Players",
+  "joinLeaveMostMovingPlayers": "Most Moving Players",
+  "joinLeaveStillInClan": "Still in Clan",
+  "joinLeaveLeftForever": "Left Forever",
+  "joinLeaveRejoinedPlayers": "Rejoined Players",
+  "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
+  "joinLeavePeakHour": "Most Active Hour",
+  "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
+  "@joinLeaveNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveJoinNumberDescription": "{number} join events occurred during the current season ({date}).",
+  "@joinLeaveJoinNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveMovingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
+  "@joinLeaveMovingNumberDescription": {
+    "description": "Number of players who left and rejoined the clan during the current season.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveUniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
+  "@joinLeaveUniqueNumberDescription": {
+    "description": "Number of unique players who joined/left the clan during the current season.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveStillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
+  "@joinLeaveStillInClanNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "joinLeaveLeftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
+  "@joinLeaveLeftClanNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "@joinLeaveTitle": {
+    "description": "Logs of players joining or leaving the clan."
+  },
+  "joinLeaveLeftOnAt": "于 {date} 的 {time} 离开。",
+  "@joinLeaveLeftOnAt": {
+    "description": "[The player] left the clan on 16/06/2024 at 10:35.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveJoinedOnAt": "于 {date} 的 {time} 加入。",
+  "@joinLeaveJoinedOnAt": {
+    "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "raidsTitle": "Raids",
+  "raidsLast": "历史突袭记录",
+  "raidsOngoing": "进行中的突袭",
+  "raidsDistrictsDestroyed": "摧毁的都城",
+  "raidsCompleted": "已完成突袭",
+  "searchNoResult": "没有找到该查询的结果",
+  "maintenanceTitle": "Maintenance",
+  "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
+  "downloadTooltip": "Download CWL summary",
+  "downloadInProgress": "Downloading file... It can take a few seconds...",
+  "downloadSuccess": "File saved successfully in {path}",
+  "@downloadSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadError": "Failed to download file",
+  "dashboardTitle": "主页",
+  "toolsTitle": "工具",
+  "navigationTeam": "部落",
+  "navigationStatistics": "统计数据",
+  "versionDevice": "版本&设备",
+  "@versionDevice": {
+    "description": "Version of the app and device information"
+  },
+  "settingsLicenses": "Open Source Licenses",
+  "settingsLicensesSubtitle": "View licenses for third-party libraries",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsPrivacyPolicySubtitle": "How we handle your data",
+  "betaFeature": "Beta功能",
+  "betaLabel": "BETA",
+  "betaDescription": "此功能目前处于测试阶段，可能存在一些错误或不完整。我们正在积极改进，欢迎您的反馈。请在我们的Discord服务器中分享您的想法并报告任何问题，以帮助我们做得更好。",
+  "settingsLanguage": "语言",
+  "settingsSelectLanguage": "搜索语言",
+  "settingsToggleTheme": "切换主题",
+  "faqTitle": "FAQ",
+  "faqSubtitle": "常见问题回答",
+  "faqIsThisFromSupercell": "这个应用程序是Supercell的吗？",
+  "faqFanContentPolicy": "此材料是非官方的，未得到Supercell的认可。有关更多信息，请参阅Supercell的粉丝内容政策：www.Supercell.com/Fan-Content-Policy",
+  "faqWhyNotAccurate": "为什么数据有时不准确或缺失？",
+  "faqClanNotTracked": "部落未被追踪",
+  "faqClanNotTrackedAnswer": "只有当部落被追踪时，ClashKing才能检索此信息。如果你的部落没有被追踪，请邀请ClashKing机器人到你的Discord服务器，并使用命令/addclan。我们正在努力尽快在应用程序中提供此功能。",
+  "faqTrackingDown": "跟踪",
+  "faqTrackingDownAnswer": "跟踪可以在一段时间内停止工作。这就是为什么你的数据有时会有漏洞。我们正在努力改进这一点。",
+  "faqApiLimitation": "部落冲突API限制",
+  "faqApiLimitationAnswer": "一些数据是由部落冲突提供的，他们的API有一些限制。传奇杯追踪就是这种情况，它有时会像一次攻击一样叠加奖杯的得失。这也是为什么我们没有关于您基地的任何信息。",
+  "faqSupportWork": "我如何支持你的工作？",
+  "faqSupportWorkAnswer": "有几种方法可以支持我们：",
+  "faqUseCodeClashKing": "使用创作者代码“ClashKing”",
+  "faqSupportUsOnPatreon": "在Patreon上支持我们",
+  "faqShareTheApp": "与朋友分享应用程序",
+  "faqRateTheApp": "对商店中的应用程序进行评分",
+  "faqHelpUsTranslate": "帮助我们翻译应用程序",
+  "faqHowToInviteTheBot": "我如何邀请您的机器人加入我的Discord服务器？",
+  "faqHowToInviteTheBotAnswer": "您可以通过单击下面的按钮邀请我们的机器人到您的服务器。您需要“管理服务器”权限才能添加机器人。",
+  "faqInviteTheBot": "邀请ClashKing机器人",
+  "faqNeedHelp": "我需要帮助，或者我想提个建议。我怎样才能联系到你？",
+  "faqNeedHelpAnswer": "您可以加入我们的Discord服务器以寻求帮助或提供反馈，也可以发送电子邮件至devs@clashk.ing.请用英语或法语书写。",
+  "faqSendEmail": "发送电子邮件",
+  "faqJoinDiscord": "加入我们的Discord服务器",
+  "faqCannotOpenMailClient": "由于某些原因，我们无法打开您的邮件客户端。我们为您复制了电子邮件地址。您可以编写电子邮件并将地址粘贴到收件人字段中。",
+  "translationHelpUsTranslate": "帮助我们翻译",
+  "translationSuggestFeatures": "建议功能",
+  "translationThankYou": "感谢您！",
+  "translationThankYouContent": "非常感谢我们所有出色的翻译人员，他们帮助我们让世界各地的更多人可以访问这个应用程序！",
+  "translationHelpTranslateContent": "您可以在Crowdin上帮助我们翻译应用程序。如果您的语言在Crowdin上不可用，请随时在我们的Discord服务器上请求。非常感谢你的帮助！",
+  "translationHelpTranslateButton": "在Crowdin上帮助翻译",
+  "translationCurrentTranslators": "当前翻译员"
 }
