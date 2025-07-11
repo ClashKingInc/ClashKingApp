@@ -4,6 +4,20 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy (e.g., 0.2.0-alpha)'
+        required: true
+        type: string
+      testflight_track:
+        description: 'TestFlight track'
+        required: true
+        default: 'internal'
+        type: choice
+        options:
+          - internal
+          - external
 
 jobs:
   deploy-ios:
@@ -27,8 +41,12 @@ jobs:
       - name: Extract version from tag
         id: extract_version
         run: |
-          TAG=${GITHUB_REF#refs/tags/}          # Extract "ios-v1.0.0"
-          VERSION_NAME=${TAG#ios-v}             # Remove "ios-v" to get "1.0.0"
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION_NAME="${{ github.event.inputs.version }}"
+          else
+            TAG=${GITHUB_REF#refs/tags/}          # Extract "v1.0.0"
+            VERSION_NAME=${TAG#v}                 # Remove "v" to get "1.0.0"
+          fi
           BUILD_NUMBER=$(date +%s)              # Generate timestamp build number
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
           echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
@@ -92,17 +110,28 @@ jobs:
       - name: Determine TestFlight track based on tag
         id: determine_track
         run: |
-          TAG=${GITHUB_REF#refs/tags/}
-          if [[ "$TAG" == *"alpha"* ]]; then
-            echo "TESTFLIGHT_TRACK=internal" >> $GITHUB_ENV
-            echo "EXTERNAL_TESTING=false" >> $GITHUB_ENV
-          elif [[ "$TAG" == *"beta"* ]]; then
-            echo "TESTFLIGHT_TRACK=external" >> $GITHUB_ENV
-            echo "EXTERNAL_TESTING=true" >> $GITHUB_ENV
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            TESTFLIGHT_TRACK="${{ github.event.inputs.testflight_track }}"
+            if [ "$TESTFLIGHT_TRACK" == "external" ]; then
+              EXTERNAL_TESTING="true"
+            else
+              EXTERNAL_TESTING="false"
+            fi
           else
-            echo "TESTFLIGHT_TRACK=external" >> $GITHUB_ENV
-            echo "EXTERNAL_TESTING=true" >> $GITHUB_ENV
+            TAG=${GITHUB_REF#refs/tags/}
+            if [[ "$TAG" == *"alpha"* ]]; then
+              TESTFLIGHT_TRACK="internal"
+              EXTERNAL_TESTING="false"
+            elif [[ "$TAG" == *"beta"* ]]; then
+              TESTFLIGHT_TRACK="external"
+              EXTERNAL_TESTING="true"
+            else
+              TESTFLIGHT_TRACK="external"
+              EXTERNAL_TESTING="true"
+            fi
           fi
+          echo "TESTFLIGHT_TRACK=$TESTFLIGHT_TRACK" >> $GITHUB_ENV
+          echo "EXTERNAL_TESTING=$EXTERNAL_TESTING" >> $GITHUB_ENV
           echo "Selected TestFlight track: $TESTFLIGHT_TRACK"
 
       - name: Upload to TestFlight

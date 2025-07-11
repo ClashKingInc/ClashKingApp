@@ -1,9 +1,24 @@
-name: Deploy to Opened Test
+name: Deploy to Play Store
 
 on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy (e.g., 0.2.0-alpha)'
+        required: true
+        type: string
+      track:
+        description: 'Play Store track'
+        required: true
+        default: 'alpha'
+        type: choice
+        options:
+          - alpha
+          - beta
+          - production
 
 jobs:
   store_deploy_android:
@@ -25,8 +40,12 @@ jobs:
       - name: Extract version from tag and generate build number
         id: extract_version
         run: |
-          TAG=${GITHUB_REF#refs/tags/}          # Extrait "v1.0.0"
-          VERSION_NAME=${TAG#v}                # Retire "v" pour obtenir "1.0.0"
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION_NAME="${{ github.event.inputs.version }}"
+          else
+            TAG=${GITHUB_REF#refs/tags/}          # Extrait "v1.0.0"
+            VERSION_NAME=${TAG#v}                # Retire "v" pour obtenir "1.0.0"
+          fi
           BUILD_NUMBER=$(date +%s)             # Génère un numéro de build basé sur le timestamp
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
           echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
@@ -53,6 +72,10 @@ jobs:
       - name: Create minimal local.properties
         run: |
           echo "sdk.dir=${{ env.ANDROID_SDK_ROOT }}" > android/local.properties
+
+      - name: Accept Android SDK licenses
+        run: |
+          yes | ${{ env.ANDROID_SDK_ROOT }}/cmdline-tools/latest/bin/sdkmanager --licenses
 
       - name: Decode and create Android keystore
         run: echo "${{ secrets.KEY_STORE_FILE }}" | base64 --decode > ${{ env.KEYSTORE_PATH }}
@@ -112,15 +135,20 @@ jobs:
       - name: Determine track based on tag
         id: determine_track
         run: |
-          TAG=${GITHUB_REF#refs/tags/}
-          if [[ "$TAG" == *"alpha"* ]]; then
-          echo "TRACK=alpha" >> $GITHUB_ENV
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            TRACK="${{ github.event.inputs.track }}"
+          else
+            TAG=${GITHUB_REF#refs/tags/}
+            if [[ "$TAG" == *"alpha"* ]]; then
+              TRACK="alpha"
             elif [[ "$TAG" == *"beta"* ]]; then
-          echo "TRACK=beta" >> $GITHUB_ENV
+              TRACK="beta"
             else
-          echo "TRACK=production" >> $GITHUB_ENV
+              TRACK="production"
             fi
-            echo "Selected track: $TRACK"
+          fi
+          echo "TRACK=$TRACK" >> $GITHUB_ENV
+          echo "Selected track: $TRACK"
 
       - name: Deploy to Play Store
         uses: r0adkll/upload-google-play@v1
