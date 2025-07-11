@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'dart:io';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class ApiService {
   static const String apiUrlV1 = "https://dev.api.clashk.ing";
@@ -115,10 +116,36 @@ class ApiService {
         final config = json.decode(response.body);
         _sentryDsn = config['sentry_dsn'];
       } else {
-        print('Failed to load config: ${response.statusCode}');
+        DebugUtils.debugError('❌ Failed to load config: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error loading config: $e');
+      DebugUtils.debugError('❌ Error loading config: $e');
+    }
+  }
+
+  static String getErrorMessage(dynamic error) {
+    if (error is BadRequestException) {
+      return error.message;
+    } else if (error is UnauthorizedException) {
+      return error.message;
+    } else if (error is ForbiddenException) {
+      return error.message;
+    } else if (error is NotFoundException) {
+      return error.message;
+    } else if (error is RateLimitException) {
+      return error.message;
+    } else if (error is ServerException) {
+      return error.message;
+    } else if (error is ApiException) {
+      return error.message;
+    } else if (error is SocketException) {
+      return 'No internet connection. Please check your network and try again.';
+    } else if (error is TimeoutException) {
+      return 'Request timed out. Please try again.';
+    } else if (error is FormatException) {
+      return 'Invalid response format. Please try again.';
+    } else {
+      return error.toString().replaceFirst('Exception: ', '');
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class WarLogHistoryStats extends StatefulWidget {
   final Clan clan;
@@ -241,7 +242,7 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                   );*/
                 } catch (error) {
                   navigator.pop();
-                  print("An error occurred: $error");
+                  DebugUtils.debugError("❌ An error occurred: $error");
                 }
               },
               child: Stack(

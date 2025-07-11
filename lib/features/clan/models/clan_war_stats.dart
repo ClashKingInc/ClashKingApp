@@ -1,5 +1,6 @@
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class ClanWarStats {
   final List<PlayerWarStats> players;
@@ -23,7 +24,7 @@ class ClanWarStats {
             : [],
       );
     } catch (e) {
-      print('❌ Error parsing ClanWarStats: $e');
+      DebugUtils.debugError('❌ Error parsing ClanWarStats: $e');
       return ClanWarStats(
         players: [],
         clanTag: "",
@@ -53,7 +54,7 @@ class ClanWarStatsData {
         membersData: members.map((m) => WarMemberData.fromJson(m)).toList(),
       );
     } catch (e) {
-      print('Error parsing ClanWarStatsData: $e');
+      DebugUtils.debugError('❌ Error parsing ClanWarStatsData: $e');
       return ClanWarStatsData(
         warDetails: WarInfo.empty(),
         membersData: [],

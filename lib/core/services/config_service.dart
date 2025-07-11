@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;  
+import 'package:http/http.dart' as http;
+import 'package:clashkingapp/core/utils/debug_utils.dart';  
 
 class ConfigService {
   static const String _baseUrl = "https://dev.api.clashk.ing/v2/app";
@@ -18,10 +19,10 @@ class ConfigService {
         final config = json.decode(response.body);
         _sentryDsn = config['sentry_dsn'];
       } else {
-        print('Failed to load config: ${response.statusCode}');
+        DebugUtils.debugError('❌ Failed to load config: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error loading config: $e');
+      DebugUtils.debugError('❌ Error loading config: $e');
     }
   }
 }

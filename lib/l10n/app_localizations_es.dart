@@ -9,7 +9,55 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
+  String get appDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+
+  @override
   String get generalLoading => 'Loading...';
+
+  @override
+  String get loadingVillages => 'Loading your villages...';
+
+  @override
+  String get loadingClanData => 'Fetching clan data...';
+
+  @override
+  String get loadingWarStats => 'Analyzing war stats...';
+
+  @override
+  String get loadingLegendsData => 'Preparing legends data...';
+
+  @override
+  String get loadingCapitalRaids => 'Loading capital raids...';
+
+  @override
+  String get loadingAlmostReady => 'Almost ready...';
+
+  @override
+  String get accountVerificationTitle => 'Verify Account';
+
+  @override
+  String get accountVerificationMessage =>
+      'Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.';
+
+  @override
+  String get accountVerified => 'Account verified';
+
+  @override
+  String get accountNotVerified => 'Account not verified';
+
+  @override
+  String get accountVerifyButton => 'Verify';
+
+  @override
+  String get accountVerificationSuccess => 'Account verified successfully!';
+
+  @override
+  String get accountVerificationFailed =>
+      'Verification failed. Please check your API token.';
 
   @override
   String get generalRetry => 'Retry';
@@ -40,6 +88,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get generalComingSoon => 'Coming soon!';
+
+  @override
+  String generalLastRefresh(String time) {
+    return 'Last refresh: $time';
+  }
+
+  @override
+  String generalRefreshFailed(String error) {
+    return 'Refresh failed: $error';
+  }
 
   @override
   String get generalAll => 'All';
@@ -99,14 +157,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get generalNoDataAvailable => 'No data available.';
 
   @override
-  String get authClashKingDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get authSignIn => 'Sign In';
-
-  @override
   String get authSignUp => 'Sign up';
+
+  @override
+  String get authLogin => 'Login';
 
   @override
   String get authLogout => 'Log out';
@@ -147,6 +201,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get authEmailTitle => 'Email';
 
   @override
+  String get authEmail => 'Email';
+
+  @override
+  String get authEmailHint => 'Enter your email address';
+
+  @override
   String get authEmailDescription =>
       'Use email if you can\'t access Discord or prefer app-only features';
 
@@ -158,6 +218,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get authPasswordLabel => 'Password';
+
+  @override
+  String get authPasswordHint => 'Enter your password';
 
   @override
   String get authPasswordConfirm => 'Confirm Password';
@@ -182,6 +245,60 @@ class AppLocalizationsEs extends AppLocalizations {
   String get authPasswordForgot => 'Forgot password?';
 
   @override
+  String get authPasswordForgotDescription =>
+      'Enter your email address and we\'ll send you a 6-digit code to reset your password.';
+
+  @override
+  String get authPasswordResetSend => 'Send Reset Code';
+
+  @override
+  String get authPasswordResetSent => 'Code Sent!';
+
+  @override
+  String get authPasswordResetSentDescription =>
+      'We\'ve sent a 6-digit reset code to your email address. Please check your inbox and use the code to reset your password.';
+
+  @override
+  String get authPasswordReset => 'Reset Password';
+
+  @override
+  String get authPasswordResetDescription =>
+      'Enter your email, the 6-digit code from the email, and your new password below.';
+
+  @override
+  String get authPasswordNew => 'New Password';
+
+  @override
+  String get authPasswordConfirmHint => 'Re-enter your new password';
+
+  @override
+  String get authPasswordResetConfirm => 'Reset Password';
+
+  @override
+  String get authPasswordResetSuccess =>
+      'Password reset successful! You can now log in.';
+
+  @override
+  String get authPasswordResetContinue => 'Continue to Reset Password';
+
+  @override
+  String get authPasswordResetCode => 'Reset Code';
+
+  @override
+  String get authPasswordResetCodeHint =>
+      'Enter the 6-digit code from your email';
+
+  @override
+  String get authPasswordResetCodeRequired => 'Please enter the reset code';
+
+  @override
+  String get authPasswordResetCodeInvalid =>
+      'Please enter a valid 6-digit code';
+
+  @override
+  String get authBackToLogin => 'Back to Login';
+
+  @override
   String get authUsernameLabel => 'Username';
 
   @override
@@ -199,7 +316,48 @@ class AppLocalizationsEs extends AppLocalizations {
       'An error occurred. Please check your internet connection and relaunch the app.';
 
   @override
-  String get authAccountManagement => 'Account Management';
+  String get authErrorEmailAlreadyRegistered =>
+      'This email is already registered. Please try logging in instead.';
+
+  @override
+  String get authErrorEmailAlreadyPending =>
+      'A verification email was already sent to this address. Please check your email or try resending.';
+
+  @override
+  String get authErrorEmailInvalidFormat =>
+      'Please enter a valid email address.';
+
+  @override
+  String get authErrorPasswordWeak =>
+      'Password is too weak. Please use a stronger password.';
+
+  @override
+  String get authErrorUsernameInvalid =>
+      'Username is invalid. Please use only letters, numbers, and underscores.';
+
+  @override
+  String get authErrorUsernameExists =>
+      'This username is already taken. Please choose a different one.';
+
+  @override
+  String get authErrorRegistrationFailed =>
+      'Registration failed. Please try again later.';
+
+  @override
+  String get authErrorEmailSendFailed =>
+      'Failed to send verification email. Please try again later.';
+
+  @override
+  String get authErrorRateLimited =>
+      'Too many attempts. Please wait a moment and try again.';
+
+  @override
+  String get authErrorServerUnavailable =>
+      'Server is temporarily unavailable. Please try again later.';
+
+  @override
+  String get authAccountManagement =>
+      'Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.';
 
   @override
   String get authAccountConnected => 'Connected Accounts';
@@ -227,6 +385,78 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get authAccountEmailLinkedSuccess =>
       'Email account successfully linked!';
+
+  @override
+  String get authEmailVerificationTitle => 'Verify Email';
+
+  @override
+  String get authEmailVerificationCheckEmail => 'Check Your Email';
+
+  @override
+  String get authEmailVerificationSentTo =>
+      'We\'ve sent a verification email to:';
+
+  @override
+  String get authEmailVerificationInstructions =>
+      'Click the link in the email to verify your account. If you don\'t see the email, check your spam folder.';
+
+  @override
+  String get authEmailVerificationResend => 'Resend Verification Email';
+
+  @override
+  String get authEmailVerificationResendSuccess =>
+      'Verification email resent successfully! Please check your email.';
+
+  @override
+  String get authEmailVerificationResendFailed =>
+      'Failed to resend verification email. Please try again.';
+
+  @override
+  String get authEmailVerificationBackToLogin => 'Back to Login';
+
+  @override
+  String get authEmailVerificationDevToken =>
+      'I have a verification token (Dev)';
+
+  @override
+  String get authEmailVerificationDevMode =>
+      'Development Mode - Manual Token Input:';
+
+  @override
+  String get authEmailVerificationTokenLabel => 'Verification Token';
+
+  @override
+  String get authEmailVerificationTokenRequired =>
+      'Verification token is required';
+
+  @override
+  String get authEmailVerificationVerifyButton => 'Verify Email';
+
+  @override
+  String get authEmailVerificationExpired =>
+      'Verification expired. Please register again.';
+
+  @override
+  String get authEmailVerificationAlreadyVerified =>
+      'This email is already verified. Please try logging in instead.';
+
+  @override
+  String get authEmailVerificationNoToken =>
+      'No pending verification found. Please register first.';
+
+  @override
+  String get authEmailVerificationVerifying => 'Verifying your email...';
+
+  @override
+  String get authEmailVerificationCodeInstructions =>
+      'Enter the 6-digit code sent to your email:';
+
+  @override
+  String get authEmailVerificationCodeRequired =>
+      'Please enter the 6-digit verification code';
+
+  @override
+  String get authEmailVerificationVerify => 'Verify Code';
 
   @override
   String get helpTitle => 'Need help?';
@@ -452,6 +682,20 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get gameCreatorCode => 'Creator Code: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -1317,6 +1561,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get versionDevice => 'Version & Device';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
+  String get settingsPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
+
+  @override
   String get betaFeature => 'Función beta';
 
   @override
@@ -1452,7 +1709,55 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   AppLocalizationsEsEs() : super('es_ES');
 
   @override
+  String get appTitle => 'ClashKing';
+
+  @override
+  String get appDescription =>
+      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+
+  @override
   String get generalLoading => 'Cargando...';
+
+  @override
+  String get loadingVillages => 'Loading your villages...';
+
+  @override
+  String get loadingClanData => 'Fetching clan data...';
+
+  @override
+  String get loadingWarStats => 'Analyzing war stats...';
+
+  @override
+  String get loadingLegendsData => 'Preparing legends data...';
+
+  @override
+  String get loadingCapitalRaids => 'Loading capital raids...';
+
+  @override
+  String get loadingAlmostReady => 'Almost ready...';
+
+  @override
+  String get accountVerificationTitle => 'Verify Account';
+
+  @override
+  String get accountVerificationMessage =>
+      'Enter your API token to verify you own this account. You can find it in Clash of Clans Settings > More Settings > API Token.';
+
+  @override
+  String get accountVerified => 'Account verified';
+
+  @override
+  String get accountNotVerified => 'Account not verified';
+
+  @override
+  String get accountVerifyButton => 'Verify';
+
+  @override
+  String get accountVerificationSuccess => 'Account verified successfully!';
+
+  @override
+  String get accountVerificationFailed =>
+      'Verification failed. Please check your API token.';
 
   @override
   String get generalRetry => 'Retry';
@@ -1483,6 +1788,16 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get generalComingSoon => '¡Próximamente!';
+
+  @override
+  String generalLastRefresh(String time) {
+    return 'Last refresh: $time';
+  }
+
+  @override
+  String generalRefreshFailed(String error) {
+    return 'Refresh failed: $error';
+  }
 
   @override
   String get generalAll => 'Todo';
@@ -1542,14 +1857,10 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   String get generalNoDataAvailable => 'No hay datos disponibles.';
 
   @override
-  String get authClashKingDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
-
-  @override
-  String get authSignIn => 'Sign In';
-
-  @override
   String get authSignUp => 'Sign up';
+
+  @override
+  String get authLogin => 'Iniciar sesión';
 
   @override
   String get authLogout => 'Cerrar sesión';
@@ -1625,10 +1936,10 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   String get authPasswordForgot => 'Forgot password?';
 
   @override
-  String get authUsernameLabel => 'Usuario';
+  String get authUsernameLabel => 'Username';
 
   @override
-  String get authUsernameRequired => 'Por favor ingrese un usuario';
+  String get authUsernameRequired => 'Please enter a username';
 
   @override
   String get authUsernameTooShort => 'Username must be at least 3 characters';
@@ -1642,7 +1953,8 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
       'Se ha producido un error. Por favor, verifica tu conexión a internet y vuelve a iniciar la aplicación.';
 
   @override
-  String get authAccountManagement => 'Account Management';
+  String get authAccountManagement =>
+      'Add, remove, and reorder your Clash of Clans accounts. Verify your accounts to access all features.';
 
   @override
   String get authAccountConnected => 'Connected Accounts';
@@ -1681,7 +1993,7 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   String get helpEmailUs => 'Email Us';
 
   @override
-  String get accountsWelcome => '¡Bienvenido!';
+  String get accountsWelcome => 'Welcome!';
 
   @override
   String get accountsWelcomeMessage =>
@@ -1826,7 +2138,7 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   String get gameTownHall => 'TH';
 
   @override
-  String get gameTownHallLevel => 'Nivel TH';
+  String get gameTownHallLevel => 'TH Level';
 
   @override
   String gameTownHallLevelNumber(int level) {
@@ -1862,7 +2174,7 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   }
 
   @override
-  String get gameHeroes => 'Héroes';
+  String get gameHeroes => 'Heroes';
 
   @override
   String get gameEquipment => 'Equipos';
@@ -1896,6 +2208,20 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get gameCreatorCode => 'Código de Creador: ClashKing';
+
+  @override
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
+
+  @override
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
+
+  @override
+  String get gameCreatorCodeDialogDescription =>
+      'When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!';
+
+  @override
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
   String get clanTitle => 'Clan';
@@ -2485,7 +2811,7 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   String get warDestructionAverage => 'Average destruction';
 
   @override
-  String get warDestructionRate => 'Tasa de destrucción';
+  String get warDestructionRate => 'Destruction rate';
 
   @override
   String warHistoryWinsDescription(int wins, String percent) {
@@ -2602,7 +2928,7 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String cwlCurrentRound(int round) {
-    return 'It\'s currently round $round.';
+    return 'Current round (Round $round)';
   }
 
   @override
@@ -2763,6 +3089,19 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   String get versionDevice => 'Versión y dispositivo';
 
   @override
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
+  String get settingsPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
+
+  @override
   String get betaFeature => 'Función beta';
 
   @override
@@ -2857,7 +3196,7 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get faqNeedHelpAnswer =>
-      'Puedes unirte a nuestro servidor de Discord y pedir ayuda o hacer un comentario allí, o enviarnos un correo a devs@clashkingbot.com. Por favor, escribe solo en inglés o francés.';
+      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.';
 
   @override
   String get faqSendEmail => 'Enviar un correo';

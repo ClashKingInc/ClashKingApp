@@ -70,29 +70,29 @@ def main():
     en_arb_path = os.path.join(script_dir, 'app_en.arb')
     search_dir = os.path.join(script_dir, '../')
     
-    print("Checking for unused keys in English ARB file...")
+    print("🔍 Checking for unused keys in English ARB file...")
     
     # Find unused keys in the English ARB file
     unused_keys = get_unused_keys(en_arb_path, search_dir)
     
     if not unused_keys:
-        print("No unused keys found.")
+        print("✅ No unused keys found.")
         return
     
-    print(f"Found {len(unused_keys)} unused keys:")
+    print(f"⚠️ Found {len(unused_keys)} unused keys:")
     for key in unused_keys:
-        print(f"  - {key}")
+        print(f"  📝 {key}")
     
     # Confirm removal
     response = input("\nDo you want to remove these unused keys from all ARB files? (y/N): ")
     if response.lower() != 'y':
-        print("Operation cancelled.")
+        print("❌ Operation cancelled.")
         return
     
     # Find all ARB files in the directory
     arb_files = glob.glob(os.path.join(script_dir, 'app_*.arb'))
     
-    print(f"\nRemoving unused keys from {len(arb_files)} ARB files...")
+    print(f"\n🔄 Removing unused keys from {len(arb_files)} ARB files...")
     
     total_removed = 0
     
@@ -102,13 +102,13 @@ def main():
         removed_keys = remove_keys_from_arb(arb_file, unused_keys)
         
         if removed_keys:
-            print(f"  {file_name}: Removed {len(removed_keys)} keys")
+            print(f"  ✅ {file_name}: Removed {len(removed_keys)} keys")
             total_removed += len(removed_keys)
         else:
-            print(f"  {file_name}: No keys to remove")
+            print(f"  ✨ {file_name}: No keys to remove")
     
-    print(f"\nCompleted! Removed {total_removed} total key entries across all files.")
-    print("Note: This includes both the main keys and their associated @ description keys.")
+    print(f"\n🎉 Completed! Removed {total_removed} total key entries across all files.")
+    print("📋 Note: This includes both the main keys and their associated @ description keys.")
 
 if __name__ == "__main__":
     main()

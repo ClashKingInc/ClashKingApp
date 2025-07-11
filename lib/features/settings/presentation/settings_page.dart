@@ -18,6 +18,7 @@ import 'package:clashkingapp/features/settings/presentation/translation_page.dar
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/settings/presentation/features_vote.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class SettingsInfoScreen extends StatefulWidget {
   final User user;
@@ -235,7 +236,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   }
 
   Future<void> _logOut() async {
-    print("SettingsInfoScreen: _logOut called, clearing all service data.");
+    DebugUtils.debugInfo("SettingsInfoScreen: _logOut called, clearing all service data.");
     if (mounted) {
       final authService = Provider.of<AuthService>(context, listen: false);
       final cocAccountService =
@@ -252,9 +253,9 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
         MaterialPageRoute(builder: (context) => LoginPage()),
       );
 
-      print("SettingsInfoScreen: All service data cleared successfully.");
+      DebugUtils.debugSuccess("✅ SettingsInfoScreen: All service data cleared successfully.");
     } else {
-      print("SettingsInfoScreen: _logOut called but context is not mounted.");
+      DebugUtils.debugWarning("⚠️ SettingsInfoScreen: _logOut called but context is not mounted.");
     }
   }
 }

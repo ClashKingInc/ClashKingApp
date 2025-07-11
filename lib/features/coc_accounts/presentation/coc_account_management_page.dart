@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class AddCocAccountPage extends StatefulWidget {
   @override
@@ -544,7 +545,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
           };
         } catch (e) {
           // Fallback to account data if player not found in PlayerService
-          print("Player not found in PlayerService for tag: $playerTag, using fallback");
+          DebugUtils.debugWarning("⚠️ Player not found in PlayerService for tag: $playerTag, using fallback");
           return {
             "player_tag": playerTag,
             "name": account["name"] ?? "Unknown Player",

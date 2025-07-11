@@ -1,6 +1,7 @@
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -14,7 +15,7 @@ class ClanTagManager {
   /// Call this whenever the user switches to a different CoC account
   static Future<void> onAccountChanged(String newPlayerTag) async {
     try {
-      print("🔄 Account changed to: $newPlayerTag");
+      DebugUtils.debugInfo("🔄 Account changed to: $newPlayerTag");
       
       // Get the new player's clan tag
       final newClanTag = await _getPlayerClanTag(newPlayerTag);
@@ -22,21 +23,21 @@ class ClanTagManager {
       if (newClanTag != null && newClanTag.isNotEmpty) {
         // Store the new clan tag
         await storePrefs('clanTag', newClanTag);
-        print("✅ Updated clan tag to: $newClanTag");
+        DebugUtils.debugSuccess("✅ Updated clan tag to: $newClanTag");
         
         // Update the war widget immediately
         await WarWidgetService.handleWidgetRefresh();
       } else {
         // Player is not in a clan
         await storePrefs('clanTag', '');
-        print("⚠️ Player not in a clan, cleared clan tag");
+        DebugUtils.debugWarning("⚠️ Player not in a clan, cleared clan tag");
         
         // Still update widget to show "not in clan" state
         await WarWidgetService.handleWidgetRefresh();
       }
       
     } catch (e) {
-      print("❌ Error updating clan tag for new account: $e");
+      DebugUtils.debugError("❌ Error updating clan tag for new account: $e");
     }
   }
 
@@ -45,7 +46,7 @@ class ClanTagManager {
     try {
       final token = await TokenService().getAccessToken();
       if (token == null) {
-        print("⚠️ User not authenticated");
+        DebugUtils.debugWarning("⚠️ User not authenticated");
         return null;
       }
 
@@ -63,11 +64,11 @@ class ClanTagManager {
         final clanTag = data['clan_tag'];
         return clanTag;
       } else {
-        print("⚠️ Failed to get player data: ${response.statusCode}");
+        DebugUtils.debugWarning("⚠️ Failed to get player data: ${response.statusCode}");
         return null;
       }
     } catch (e) {
-      print("❌ Error fetching player clan tag: $e");
+      DebugUtils.debugError("❌ Error fetching player clan tag: $e");
       return null;
     }
   }
@@ -80,7 +81,7 @@ class ClanTagManager {
         await onAccountChanged(selectedPlayerTag);
       }
     } catch (e) {
-      print("❌ Error syncing clan tag: $e");
+      DebugUtils.debugError("❌ Error syncing clan tag: $e");
     }
   }
 }

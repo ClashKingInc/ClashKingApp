@@ -9,324 +9,556 @@ class AppLocalizationsFi extends AppLocalizations {
   AppLocalizationsFi([String locale = 'fi']) : super(locale);
 
   @override
-  String get generalLoading => 'Loading...';
+  String get appTitle => 'ClashKing';
 
   @override
-  String get generalRetry => 'Retry';
+  String get appDescription =>
+      'Sinun lopullinen Clash of klaanit kumppani seuranta tilastoja, hallita klaaneja, ja analysoida suorituskykyä.';
 
   @override
-  String get generalTryAgain => 'Try again';
+  String get generalLoading => 'Ladataan...';
 
   @override
-  String get generalCancel => 'Cancel';
+  String get loadingVillages => 'Ladataan kyliäsi...';
 
   @override
-  String get generalOk => 'OK';
+  String get loadingClanData => 'Haetaan klaanin tietoja...';
 
   @override
-  String get generalApply => 'Apply';
+  String get loadingWarStats => 'Analysoidaan sotatilastoja...';
 
   @override
-  String get generalConfirm => 'Confirm';
+  String get loadingLegendsData => 'Valmistellaan legendojen tietoja...';
 
   @override
-  String get generalManage => 'Manage';
+  String get loadingCapitalRaids => 'Ladataan pääoman raideja...';
 
   @override
-  String get generalSettings => 'Settings';
+  String get loadingAlmostReady => 'Melkein valmis...';
 
   @override
-  String get generalCopiedToClipboard => 'Copied to clipboard';
+  String get accountVerificationTitle => 'Vahvista Tili';
 
   @override
-  String get generalComingSoon => 'Coming soon!';
+  String get accountVerificationMessage =>
+      'Syötä API-tunniste varmistaaksesi tämän tilin. Löydät sen osoitteesta Clash of klaanit Asetukset > Lisää Asetukset > API Token.';
 
   @override
-  String get generalAll => 'All';
+  String get accountVerified => 'Tili vahvistettu';
 
   @override
-  String get generalTotal => 'Total';
+  String get accountNotVerified => 'Tiliä ei ole vahvistettu';
 
   @override
-  String get generalBest => 'Best';
+  String get accountVerifyButton => 'Vahvista';
 
   @override
-  String get generalWorst => 'Worst';
+  String get accountVerificationSuccess => 'Tili vahvistettu onnistuneesti!';
 
   @override
-  String get generalAverage => 'Average';
+  String get accountVerificationFailed =>
+      'Vahvistus epäonnistui. Tarkista API token.';
 
   @override
-  String get generalRemaining => 'Remaining';
+  String get generalRetry => 'Yritä Uudelleen';
 
   @override
-  String get generalActive => 'Active';
+  String get generalTryAgain => 'Yritä uudelleen';
 
   @override
-  String get generalInactive => 'Inactive';
+  String get generalCancel => 'Peruuta';
 
   @override
-  String get generalStarted => 'Started';
+  String get generalOk => 'Ok';
 
   @override
-  String get generalEnded => 'Ended';
+  String get generalApply => 'Käytä';
 
   @override
-  String get generalRole => 'Role';
+  String get generalConfirm => 'Vahvista';
 
   @override
-  String get generalStats => 'Stats';
+  String get generalManage => 'Hallitse';
 
   @override
-  String get generalFullStats => 'Full Stats';
+  String get generalSettings => 'Asetukset';
 
   @override
-  String get generalDetails => 'Details';
+  String get generalCopiedToClipboard => 'Kopioitu leikepöydälle';
 
   @override
-  String get generalHistory => 'History';
+  String get generalComingSoon => 'Tulossa pian!';
 
   @override
-  String get generalFilters => 'Filters';
+  String generalLastRefresh(String time) {
+    return 'Viimeisin päivitys: $time';
+  }
 
   @override
-  String get generalNotSet => 'Not set';
+  String generalRefreshFailed(String error) {
+    return 'Refresh failed: $error';
+  }
 
   @override
-  String get generalWarning => 'Warning';
+  String get generalAll => 'Kaikki';
 
   @override
-  String get generalNoDataAvailable => 'No data available.';
+  String get generalTotal => 'Yhteensä';
 
   @override
-  String get authClashKingDescription =>
-      'Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.';
+  String get generalBest => 'Paras';
 
   @override
-  String get authSignIn => 'Sign In';
+  String get generalWorst => 'Huonoin';
 
   @override
-  String get authSignUp => 'Sign up';
+  String get generalAverage => 'Keskiarvo';
 
   @override
-  String get authLogout => 'Log out';
+  String get generalRemaining => 'Jäljellä';
 
   @override
-  String get authCreateAccount => 'Create Account';
+  String get generalActive => 'Aktiivinen';
 
   @override
-  String get authJoinClashKing => 'Join ClashKing';
+  String get generalInactive => 'Passiivinen';
 
   @override
-  String get authCreateClashKingAccount => 'Create ClashKing Account';
+  String get generalStarted => 'Aloitettu';
 
   @override
-  String get authCreateAccountToGetStarted =>
-      'Create your account to get started';
+  String get generalEnded => 'Päättynyt';
 
   @override
-  String get authAlreadyHaveAccount => 'Already have an account? Sign in';
+  String get generalRole => 'Rooli';
 
   @override
-  String get authConfirmLogout => 'Are you sure you want to log out?';
+  String get generalStats => 'Tilastot';
+
+  @override
+  String get generalFullStats => 'Täydet Tilastot';
+
+  @override
+  String get generalDetails => 'Yksityiskohdat';
+
+  @override
+  String get generalHistory => 'Historia';
+
+  @override
+  String get generalFilters => 'Suodattimet';
+
+  @override
+  String get generalNotSet => 'Ei asetettu';
+
+  @override
+  String get generalWarning => 'Varoitus';
+
+  @override
+  String get generalNoDataAvailable => 'Tietoja ei ole saatavilla.';
+
+  @override
+  String get authSignUp => 'Rekisteröidy nyt';
+
+  @override
+  String get authLogin => 'Kirjaudu';
+
+  @override
+  String get authLogout => 'Kirjaudu ulos';
+
+  @override
+  String get authCreateAccount => 'Luo Tili';
+
+  @override
+  String get authJoinClashKing => 'Liity ClashKingiin';
+
+  @override
+  String get authCreateClashKingAccount => 'Luo ClashKing -tili';
+
+  @override
+  String get authCreateAccountToGetStarted => 'Luo tilisi päästäksesi alkuun';
+
+  @override
+  String get authAlreadyHaveAccount => 'Onko sinulla jo tili? Kirjaudu sisään';
+
+  @override
+  String get authConfirmLogout => 'Oletko varma, että haluat kirjautua ulos?';
 
   @override
   String get authDiscordTitle => 'Discord';
 
   @override
-  String get authDiscordSignIn => 'Sign In with Discord';
+  String get authDiscordSignIn => 'Kirjaudu sisään Discordilla';
 
   @override
-  String get authDiscordContinue => 'Continue with Discord';
+  String get authDiscordContinue => 'Jatka Discordin avulla';
 
   @override
   String get authDiscordDescription =>
-      'Sync your data with ClashKing Bot and unlock the full potential of ClashKing!';
+      'Synkronoi tietosi ClashKing Botin kanssa ja avaa ClashKingin koko potentiaali!';
 
   @override
-  String get authEmailTitle => 'Email';
+  String get authEmailTitle => 'Sähköposti';
+
+  @override
+  String get authEmail => 'Email';
+
+  @override
+  String get authEmailHint => 'Enter your email address';
 
   @override
   String get authEmailDescription =>
-      'Use email if you can\'t access Discord or prefer app-only features';
+      'Käytä sähköpostia jos et voi käyttää Discordia tai suosia vain sovelluksessa olevia ominaisuuksia';
 
   @override
-  String get authEmailRequired => 'Please enter your email';
+  String get authEmailRequired => 'Ole hyvä ja syötä sähköpostiosoitteesi';
 
   @override
-  String get authEmailInvalid => 'Please enter a valid email';
+  String get authEmailInvalid => 'Syötä voimassa oleva sähköpostiosoite';
 
   @override
-  String get authPasswordLabel => 'Password';
+  String get authPasswordLabel => 'Salasana';
 
   @override
-  String get authPasswordConfirm => 'Confirm Password';
+  String get authPasswordHint => 'Enter your password';
 
   @override
-  String get authPasswordRequired => 'Please enter your password';
+  String get authPasswordConfirm => 'Vahvista Salasana';
 
   @override
-  String get authPasswordConfirmRequired => 'Please confirm your password';
+  String get authPasswordRequired => 'Anna salasanasi';
 
   @override
-  String get authPasswordMismatch => 'Passwords do not match';
+  String get authPasswordConfirmRequired => 'Ole hyvä ja vahvista salasana';
 
   @override
-  String get authPasswordTooShort => 'Password must be at least 8 characters';
+  String get authPasswordMismatch => 'Salasanat eivät täsmää';
+
+  @override
+  String get authPasswordTooShort =>
+      'Salasanan tulee olla vähintään 8 merkkiä pitkä';
 
   @override
   String get authPasswordRequirements =>
-      'Password must contain: uppercase, lowercase, digit, and special character';
+      'Salasanan tulee sisältää: isot kirjaimet, pienet kirjaimet, numerot ja erikoismerkit';
 
   @override
-  String get authPasswordForgot => 'Forgot password?';
+  String get authPasswordForgot => 'Unohditko salasanasi?';
 
   @override
-  String get authUsernameLabel => 'Username';
+  String get authPasswordForgotDescription =>
+      'Enter your email address and we\'ll send you a 6-digit code to reset your password.';
 
   @override
-  String get authUsernameRequired => 'Please enter a username';
+  String get authPasswordResetSend => 'Send Reset Code';
 
   @override
-  String get authUsernameTooShort => 'Username must be at least 3 characters';
+  String get authPasswordResetSent => 'Code Sent!';
+
+  @override
+  String get authPasswordResetSentDescription =>
+      'We\'ve sent a 6-digit reset code to your email address. Please check your inbox and use the code to reset your password.';
+
+  @override
+  String get authPasswordReset => 'Reset Password';
+
+  @override
+  String get authPasswordResetDescription =>
+      'Enter your email, the 6-digit code from the email, and your new password below.';
+
+  @override
+  String get authPasswordNew => 'New Password';
+
+  @override
+  String get authPasswordConfirmHint => 'Re-enter your new password';
+
+  @override
+  String get authPasswordResetConfirm => 'Reset Password';
+
+  @override
+  String get authPasswordResetSuccess =>
+      'Password reset successful! You can now log in.';
+
+  @override
+  String get authPasswordResetContinue => 'Continue to Reset Password';
+
+  @override
+  String get authPasswordResetCode => 'Reset Code';
+
+  @override
+  String get authPasswordResetCodeHint =>
+      'Enter the 6-digit code from your email';
+
+  @override
+  String get authPasswordResetCodeRequired => 'Please enter the reset code';
+
+  @override
+  String get authPasswordResetCodeInvalid =>
+      'Please enter a valid 6-digit code';
+
+  @override
+  String get authBackToLogin => 'Back to Login';
+
+  @override
+  String get authUsernameLabel => 'Käyttäjätunnus';
+
+  @override
+  String get authUsernameRequired => 'Ole hyvä ja anna käyttäjänimi';
+
+  @override
+  String get authUsernameTooShort =>
+      'Käyttäjänimen tulee olla vähintään 3 merkkiä pitkä';
 
   @override
   String get authErrorConnection =>
-      'An error occurred. Please check your internet connection and try again.';
+      'Tapahtui virhe. Tarkista internet-yhteytesi ja yritä uudelleen.';
 
   @override
   String get authErrorConnectionRelaunch =>
-      'An error occurred. Please check your internet connection and relaunch the app.';
+      'Tapahtui virhe. Tarkista internet-yhteytesi ja käynnistä sovellus uudelleen.';
 
   @override
-  String get authAccountManagement => 'Account Management';
+  String get authErrorEmailAlreadyRegistered =>
+      'This email is already registered. Please try logging in instead.';
 
   @override
-  String get authAccountConnected => 'Connected Accounts';
+  String get authErrorEmailAlreadyPending =>
+      'A verification email was already sent to this address. Please check your email or try resending.';
 
   @override
-  String get authAccountConnectedStatus => 'Connected';
+  String get authErrorEmailInvalidFormat =>
+      'Please enter a valid email address.';
 
   @override
-  String get authAccountNotConnected => 'Not connected';
+  String get authErrorPasswordWeak =>
+      'Password is too weak. Please use a stronger password.';
 
   @override
-  String get authAccountEmailAndPassword => 'Email & Password';
+  String get authErrorUsernameInvalid =>
+      'Username is invalid. Please use only letters, numbers, and underscores.';
+
+  @override
+  String get authErrorUsernameExists =>
+      'This username is already taken. Please choose a different one.';
+
+  @override
+  String get authErrorRegistrationFailed =>
+      'Registration failed. Please try again later.';
+
+  @override
+  String get authErrorEmailSendFailed =>
+      'Failed to send verification email. Please try again later.';
+
+  @override
+  String get authErrorRateLimited =>
+      'Too many attempts. Please wait a moment and try again.';
+
+  @override
+  String get authErrorServerUnavailable =>
+      'Server is temporarily unavailable. Please try again later.';
+
+  @override
+  String get authAccountManagement =>
+      'Lisää, poista ja järjestä uudelleen Clash of klaanit -tilit. Tarkista tilisi käyttääksesi kaikkia ominaisuuksia.';
+
+  @override
+  String get authAccountConnected => 'Yhdistetyt Tilit';
+
+  @override
+  String get authAccountConnectedStatus => 'Yhdistetty';
+
+  @override
+  String get authAccountNotConnected => 'Ei yhdistetty';
+
+  @override
+  String get authAccountEmailAndPassword => 'Sähköposti Ja Salasana';
 
   @override
   String get authAccountSecured =>
-      'Your account is secured with multiple authentication methods';
+      'Tilisi on suojattu useilla tunnistautumistavoilla';
 
   @override
-  String get authAccountLinkEmail => 'Link Email Account';
+  String get authAccountLinkEmail => 'Linkitä Sähköpostitili';
 
   @override
   String get authAccountAddEmailAuth =>
-      'Add email & password authentication to your account for additional security.';
+      'Lisää sähköpostin ja salasanan todennus tilillesi lisäturvallisuuden takaamiseksi.';
 
   @override
   String get authAccountEmailLinkedSuccess =>
-      'Email account successfully linked!';
+      'Sähköposti tili onnistuneesti linkitetty!';
 
   @override
-  String get helpTitle => 'Need help?';
+  String get authEmailVerificationTitle => 'Verify Email';
 
   @override
-  String get helpJoinDiscord => 'Join Discord';
+  String get authEmailVerificationCheckEmail => 'Check Your Email';
 
   @override
-  String get helpEmailUs => 'Email Us';
+  String get authEmailVerificationSentTo =>
+      'We\'ve sent a verification email to:';
 
   @override
-  String get accountsWelcome => 'Welcome!';
+  String get authEmailVerificationInstructions =>
+      'Click the link in the email to verify your account. If you don\'t see the email, check your spam folder.';
+
+  @override
+  String get authEmailVerificationResend => 'Resend Verification Email';
+
+  @override
+  String get authEmailVerificationResendSuccess =>
+      'Verification email resent successfully! Please check your email.';
+
+  @override
+  String get authEmailVerificationResendFailed =>
+      'Failed to resend verification email. Please try again.';
+
+  @override
+  String get authEmailVerificationBackToLogin => 'Back to Login';
+
+  @override
+  String get authEmailVerificationDevToken =>
+      'I have a verification token (Dev)';
+
+  @override
+  String get authEmailVerificationDevMode =>
+      'Development Mode - Manual Token Input:';
+
+  @override
+  String get authEmailVerificationTokenLabel => 'Verification Token';
+
+  @override
+  String get authEmailVerificationTokenRequired =>
+      'Verification token is required';
+
+  @override
+  String get authEmailVerificationVerifyButton => 'Verify Email';
+
+  @override
+  String get authEmailVerificationExpired =>
+      'Verification expired. Please register again.';
+
+  @override
+  String get authEmailVerificationAlreadyVerified =>
+      'This email is already verified. Please try logging in instead.';
+
+  @override
+  String get authEmailVerificationNoToken =>
+      'No pending verification found. Please register first.';
+
+  @override
+  String get authEmailVerificationVerifying => 'Verifying your email...';
+
+  @override
+  String get authEmailVerificationCodeInstructions =>
+      'Enter the 6-digit code sent to your email:';
+
+  @override
+  String get authEmailVerificationCodeRequired =>
+      'Please enter the 6-digit verification code';
+
+  @override
+  String get authEmailVerificationVerify => 'Verify Code';
+
+  @override
+  String get helpTitle => 'Tarvitsetko apua?';
+
+  @override
+  String get helpJoinDiscord => 'Liity Discordiin';
+
+  @override
+  String get helpEmailUs => 'Lähetä Meille Sähköpostia';
+
+  @override
+  String get accountsWelcome => 'Tervetuloa!';
 
   @override
   String get accountsWelcomeMessage =>
-      'Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.';
+      'Lisää profiiliisi yksi tai useampi Clash of Clans -tili. Voit lisätä tai poistaa tilejä myöhemmin.';
 
   @override
-  String get accountsManageTitle => 'Manage your accounts';
+  String get accountsManageTitle => 'Hallinnoi tilejäsi';
 
   @override
-  String get accountsNoneFound => 'No account linked to your profile found';
+  String get accountsNoneFound => 'Profiiliisi linkitettyä tiliä ei löytynyt';
 
   @override
-  String get accountsPlayerTag => 'Player Tag (#ABC123)';
+  String get accountsPlayerTag => 'Pelaajan Tagi (#ABC123)';
 
   @override
-  String get accountsEnterPlayerTag => 'Enter a player tag';
+  String get accountsEnterPlayerTag => 'Syötä pelaajan tagi';
 
   @override
-  String get accountsAdd => 'Add account';
+  String get accountsAdd => 'Lisää tili';
 
   @override
-  String get accountsDelete => 'Delete account';
+  String get accountsDelete => 'Poista tili';
 
   @override
-  String get accountsApiToken => 'Account API Token';
+  String get accountsApiToken => 'Tilin API-tunniste';
 
   @override
   String get accountsEnterApiToken =>
-      'Please enter the account API token to confirm it\'s yours. You can find it in Clash of Clans Settings > More Settings > API Token.';
+      'Syötä tili API-tunniste vahvistaaksesi sen sinun. Löydät sen osoitteesta Clash of klaanit Asetukset > Lisää Asetukset > API Token.';
 
   @override
-  String get accountsFillAllFields => 'Please fill all fields.';
+  String get accountsFillAllFields => 'Täytä kaikki kentät.';
 
   @override
   String get accountsErrorTagNotExists =>
-      'The player tag entered does not exist.';
+      'Syötettyä soittimen tunnusta ei ole olemassa.';
 
   @override
   String accountsErrorAlreadyLinked(Object tag) {
-    return 'The player tag is already linked to someone.';
+    return 'Pelaajan tagi on jo linkitetty jokuun.';
   }
 
   @override
   String get accountsErrorAlreadyLinkedToYou =>
-      'The player tag is already linked to you.';
+      'Pelaajatunnus on jo linkitetty sinuun.';
 
   @override
-  String get accountsErrorWrongApiToken => 'The API token entered is incorrect';
+  String get accountsErrorWrongApiToken =>
+      'Syötetty API-tunniste on virheellinen';
 
   @override
   String get accountsErrorFailedToAdd =>
-      'Failed to add the account. Please try again later.';
+      'Tilin lisääminen epäonnistui. Yritä myöhemmin uudelleen.';
 
   @override
   String get accountsErrorFailedToDelete =>
-      'Failed to delete link. Please try again later.';
+      'Linkin poistaminen epäonnistui. Yritä myöhemmin uudelleen.';
 
   @override
   String get accountsErrorFailedToUpdateOrder =>
-      'Failed to update the order of accounts.';
+      'Tilien järjestyksen päivittäminen epäonnistui.';
 
   @override
   String get errorTitle =>
-      'Oops! Our servers might have taken a fireball to the face! We\'re casting a healing spell... Try again in a moment.';
+      'Hups! Palvelimemme ovat saattaneet viedä tulipallon kasvoille! Me heitämme parantavaa loitsua... Yritä hetken kuluttua uudelleen.';
 
   @override
   String get errorSubtitle =>
-      'If the issue persists, check our Discord Server to see if we\'re aware of it.';
+      'Jos ongelma jatkuu, tarkista Discord-palvelimemme nähdäksemme, onko se tiedossa.';
 
   @override
   String get errorLoadingVersion => 'Error loading version';
 
   @override
-  String get errorCannotOpenLink => 'We can\'t open this link.';
+  String get errorCannotOpenLink => 'Tätä linkkiä ei voi avata.';
 
   @override
   String get errorExitAppToOpenClash =>
-      'You are about to leave the app to open Clash of Clans.';
+      'Olet poistumassa sovelluksesta avataksesi Clash of Clans.';
 
   @override
-  String get playerSearchTitle => 'Search player';
+  String get playerSearchTitle => 'Etsi pelaajaa';
 
   @override
-  String get playerSearchPlaceholder => 'Player\'s name or tag';
+  String get playerSearchPlaceholder => 'Pelaajan nimi tai tagi';
 
   @override
   String playerLastActive(String date) {
-    return 'Last active: $date';
+    return 'Viimeisin aktiivinen: $date';
   }
 
   @override
@@ -346,12 +578,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String playerWarPreferenceDescription(String preference) {
-    return 'Your war preference is \"$preference\".';
+    return 'Sota etusija on \"$preference\".';
   }
 
   @override
   String playerWarStarsDescription(int stars) {
-    return 'You have $stars war stars.';
+    return 'Sinulla on $stars sotaa tähteä.';
   }
 
   @override
@@ -361,7 +593,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String playerTownHallLevelDescription(int level) {
-    return 'Your Town Hall level is $level.';
+    return 'Kaupunkihallin taso on $level.';
   }
 
   @override
@@ -370,10 +602,10 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get gameBaseHome => 'Home Base';
+  String get gameBaseHome => 'Koti Pohja';
 
   @override
-  String get gameBaseBuilder => 'Builder Base';
+  String get gameBaseBuilder => 'Rakentajan Pohja';
 
   @override
   String get gameClanCapital => 'Clan Capital';
@@ -382,35 +614,35 @@ class AppLocalizationsFi extends AppLocalizations {
   String get gameTownHall => 'TH';
 
   @override
-  String get gameTownHallLevel => 'TH Level';
+  String get gameTownHallLevel => 'Th Taso';
 
   @override
   String gameTownHallLevelNumber(int level) {
-    return 'Town Hall $level';
+    return 'Kaupunginhalli $level';
   }
 
   @override
   String gameTHLevel(int level) {
-    return 'TH$level';
+    return 'Th$level';
   }
 
   @override
-  String get gameExpLevel => 'Experience Level';
+  String get gameExpLevel => 'Kokemuksen Taso';
 
   @override
-  String get gameTrophies => 'Trophies';
+  String get gameTrophies => 'Palkinnot';
 
   @override
-  String get gameBuilderBaseTrophies => 'BB Trophies';
+  String get gameBuilderBaseTrophies => 'Bb Palkinnot';
 
   @override
-  String get gameDonations => 'Donations';
+  String get gameDonations => 'Lahjoitukset';
 
   @override
-  String get gameDonationsReceived => 'Donations Received';
+  String get gameDonationsReceived => 'Lahjoitukset Vastaanotettu';
 
   @override
-  String get gameDonationsRatio => 'Donation Ratio';
+  String get gameDonationsRatio => 'Lahjoituksen Suhde';
 
   @override
   String gameLevel(int level, int maxLevel) {
@@ -421,19 +653,19 @@ class AppLocalizationsFi extends AppLocalizations {
   String get gameHeroes => 'Heroes';
 
   @override
-  String get gameEquipment => 'Equipments';
+  String get gameEquipment => 'Laitteet';
 
   @override
-  String get gameHeroesEquipments => 'Hero equipments';
+  String get gameHeroesEquipments => 'Sankarin laitteet';
 
   @override
-  String get gameTroops => 'Troops';
+  String get gameTroops => 'Joukot';
 
   @override
-  String get gameActiveSuperTroops => 'Active Super Troops';
+  String get gameActiveSuperTroops => 'Aktiiviset Super Joukot';
 
   @override
-  String get gamePets => 'Pets';
+  String get gamePets => 'Lemmikit';
 
   @override
   String get gameSiegeMachines => 'Siege Machines';
@@ -442,130 +674,145 @@ class AppLocalizationsFi extends AppLocalizations {
   String get gameSpells => 'Spells';
 
   @override
-  String get gameAchievements => 'Achievements';
+  String get gameAchievements => 'Saavutukset';
 
   @override
-  String get gameClanGames => 'Clan Games';
+  String get gameClanGames => 'Klaani Pelit';
 
   @override
-  String get gameSeasonPass => 'Season Pass';
+  String get gameSeasonPass => 'Kauden Pass';
 
   @override
-  String get gameCreatorCode => 'Creator Code: ClashKing';
+  String get gameCreatorCode => 'Luojan Koodi: ClashKing';
 
   @override
-  String get clanTitle => 'Clan';
+  String get gameCreatorCodeDescription =>
+      'Tap for info • Support us for free!';
 
   @override
-  String get clanSearchTitle => 'Search clan';
+  String get gameCreatorCodeDialogTitle => 'Support ClashKing';
 
   @override
-  String get clanSearchPlaceholder => 'Clan\'s name';
+  String get gameCreatorCodeDialogDescription =>
+      'When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!';
 
   @override
-  String get clanNone => 'No clan';
+  String get gameCreatorCodeDialogButton => 'Use Creator Code';
 
   @override
-  String get clanJoinToUnlock => 'Join a clan to unlock new features.';
+  String get clanTitle => 'Klaani';
 
   @override
-  String get clanMembers => 'Members';
+  String get clanSearchTitle => 'Hae klaania';
 
   @override
-  String get clanWarFrequency => 'War frequency';
+  String get clanSearchPlaceholder => 'Klaanin nimi';
 
   @override
-  String get clanMinimumMembers => 'Minimum members';
+  String get clanNone => 'Ei klaania';
 
   @override
-  String get clanMaximumMembers => 'Maximum members';
+  String get clanJoinToUnlock =>
+      'Liity klaaniin avataksesi uusia ominaisuuksia.';
 
   @override
-  String get clanLocation => 'Location';
+  String get clanMembers => 'Jäsenet';
 
   @override
-  String get clanMinimumPoints => 'Minimum clan points';
+  String get clanWarFrequency => 'Sodan taajuus';
 
   @override
-  String get clanMinimumLevel => 'Minimum clan level';
+  String get clanMinimumMembers => 'Minimi jäsenet';
 
   @override
-  String get clanInviteOnly => 'Invite Only';
+  String get clanMaximumMembers => 'Jäsenten enimmäismäärä';
 
   @override
-  String get clanOpened => 'Opened';
+  String get clanLocation => 'Sijainti';
 
   @override
-  String get clanClosed => 'Closed';
+  String get clanMinimumPoints => 'Klaanipisteiden vähimmäismäärä';
 
   @override
-  String get clanRoleLeader => 'Leader';
+  String get clanMinimumLevel => 'Klaanin vähimmäistaso';
 
   @override
-  String get clanRoleCoLeader => 'Co-Leader';
+  String get clanInviteOnly => 'Vain Kutsu';
 
   @override
-  String get clanRoleElder => 'Elder';
+  String get clanOpened => 'Avattu';
 
   @override
-  String get clanRoleMember => 'Member';
+  String get clanClosed => 'Suljettu';
 
   @override
-  String get clanWarFrequencyAlways => 'Always';
+  String get clanRoleLeader => 'Johtaja';
 
   @override
-  String get clanWarFrequencyNever => 'Never';
+  String get clanRoleCoLeader => 'Apulaisjohtaja';
 
   @override
-  String get clanWarFrequencyUnknown => 'Unknown';
+  String get clanRoleElder => 'Vanhempi';
 
   @override
-  String get clanWarFrequencyOncePerWeek => '1/week';
+  String get clanRoleMember => 'Jäsen';
 
   @override
-  String get clanWarFrequencyMoreThanOncePerWeek => 'More than 1/week';
+  String get clanWarFrequencyAlways => 'Aina';
 
   @override
-  String get clanWarFrequencyRarely => 'Rarely';
+  String get clanWarFrequencyNever => 'Ei Koskaan';
+
+  @override
+  String get clanWarFrequencyUnknown => 'Tuntematon';
+
+  @override
+  String get clanWarFrequencyOncePerWeek => '1/viikko';
+
+  @override
+  String get clanWarFrequencyMoreThanOncePerWeek => 'Yli 1 viikko';
+
+  @override
+  String get clanWarFrequencyRarely => 'Harvoin';
 
   @override
   String get timeHourIndicator => 'h';
 
   @override
   String timeDaysAgo(int days) {
-    return '$days days ago';
+    return '$days päivää sitten';
   }
 
   @override
   String timeDayAgo(int day) {
-    return '$day day ago';
+    return '$day päivää sitten';
   }
 
   @override
   String timeHourAgo(int hour) {
-    return '$hour hour ago';
+    return '$hour tuntia sitten';
   }
 
   @override
   String timeHoursAgo(int hours) {
-    return '$hours hours ago';
+    return '$hours tuntia sitten';
   }
 
   @override
   String timeMinuteAgo(int minute) {
-    return '$minute minute ago';
+    return '$minute minuuttia sitten';
   }
 
   @override
   String timeMinutesAgo(int minutes) {
-    return '$minutes minutes ago';
+    return '$minutes minuuttia sitten';
   }
 
   @override
-  String get timeJustNow => 'Just Now';
+  String get timeJustNow => 'Juuri Nyt';
 
   @override
-  String get timeEndedJustNow => 'Ended just now';
+  String get timeEndedJustNow => 'Päättyi juuri nyt';
 
   @override
   String timeEndedMinutesAgo(int minutes) {
@@ -584,17 +831,17 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String timeStartsIn(String time) {
-    return 'Starts in $time';
+    return 'Aloittaa $time kuluttua';
   }
 
   @override
   String timeStartsAt(String time) {
-    return 'Starts at $time';
+    return 'Aloittaa nimellä $time';
   }
 
   @override
   String timeEndsIn(String time) {
-    return 'Ends in $time';
+    return 'Päättyy $time';
   }
 
   @override
@@ -603,18 +850,18 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get legendsTitle => 'Inaccurate data?';
+  String get legendsTitle => 'Legend League';
 
   @override
-  String get legendsNotInLeague => 'Not in Legend League';
+  String get legendsNotInLeague => 'Ei Legend League -pelissä';
 
   @override
   String get legendsNoDataToday =>
-      'You\'re not in Legend League, but past seasons are available.';
+      'Et ole Legend League, mutta edelliset vuodenajat ovat käytettävissä.';
 
   @override
   String legendsStartDescription(String trophies) {
-    return 'You started the day with $trophies trophies.';
+    return 'Aloitit päivän $trophies palkalla.';
   }
 
   @override
@@ -629,17 +876,17 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String legendsGainDescription(int trophies) {
-    return 'You gained $trophies trophies for now.';
+    return 'Olet voittanut $trophies palkinnot toistaiseksi.';
   }
 
   @override
   String legendsLossDescription(int trophies) {
-    return 'You lost $trophies trophies for now.';
+    return 'Olet menettänyt $trophies pokaalia toistaiseksi.';
   }
 
   @override
   String legendsNoGlobalRankDescription(int trophies) {
-    return 'You are currently not ranked globally with $trophies trophies.';
+    return 'Et ole tällä hetkellä maailmanlaajuisesti listattuna $trophies palkalla.';
   }
 
   @override
@@ -648,178 +895,179 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get legendsNoRank => 'No ranking';
+  String get legendsNoRank => 'Ei sijoitusta';
 
   @override
-  String get legendsBestTrophies => 'Best Trophies';
+  String get legendsBestTrophies => 'Parhaat Palkinnat';
 
   @override
-  String get legendsMostAttacks => 'Most Attacks';
+  String get legendsMostAttacks => 'Eniten Hyökkäyksiä';
 
   @override
-  String get legendsLastSeason => 'Last Season';
+  String get legendsLastSeason => 'Viime Kausi';
 
   @override
-  String get legendsBestRank => 'Best Global Rank';
+  String get legendsBestRank => 'Paras Maailmanlaajuinen Sijoitus';
 
   @override
-  String get legendsTrophiesBySeason => 'Trophies by season';
+  String get legendsTrophiesBySeason => 'Palkinnot kauden mukaan';
 
   @override
-  String get legendsEosTrophies => 'End Of Season Trophies';
+  String get legendsEosTrophies => 'Kauden Palkinnot Päättyvät';
 
   @override
-  String get legendsEosDetails => 'End Of Season Details';
+  String get legendsEosDetails => 'Kauden Loppu Yksityiskohdat';
 
   @override
-  String get legendsInaccurateTitle => 'Inaccurate data?';
+  String get legendsInaccurateTitle => 'Epätarkkoja tietoja?';
 
   @override
   String get legendsInaccurateIntro =>
       'Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here\'s why:\n';
 
   @override
-  String get legendsInaccurateApiDelayTitle => '1. API Delay: ';
+  String get legendsInaccurateApiDelayTitle => '1. Api Viive: ';
 
   @override
   String get legendsInaccurateApiDelayBody =>
-      'The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n';
+      'API voi kestää jopa 5 minuuttia päivittää, aiheuttaa viive heijastaa reaaliaikaisen pokaalin muutoksia.\n';
 
   @override
-  String get legendsInaccurateConcurrentTitle => '2. Concurrent Changes: \n';
+  String get legendsInaccurateConcurrentTitle =>
+      '2. Samanaikaiset Muutokset: \n';
 
   @override
   String get legendsInaccurateMultipleAttacksTitle =>
-      '- Multiple Attacks/Defenses: ';
+      '- Useita Hyökkäyksiä/Puolustuksia: ';
 
   @override
   String get legendsInaccurateMultipleAttacksBody =>
-      'If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n';
+      'Jos useita hyökkäyksiä tai puolustuksia tapahtuu nopeasti peräkkäin, API voi näyttää yhdistetyt tulokset (esim. +68 tai -68).\n';
 
   @override
   String get legendsInaccurateSimultaneousTitle =>
-      '- Simultaneous Attack and Defense: ';
+      '- Samanaikainen hyökkäys ja puolustus: ';
 
   @override
   String get legendsInaccurateSimultaneousBody =>
-      'If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n';
+      'Jos hyökkäys ja puolustus tapahtuu samaan aikaan, saatat nähdä sekoitettu tulos (esim. +4).\n';
 
   @override
-  String get legendsInaccurateNetGainTitle => '3. Net Gain/Loss: ';
+  String get legendsInaccurateNetGainTitle => '3. Netto Voitto/tappio: ';
 
   @override
   String get legendsInaccurateNetGainBody =>
-      'Despite timing issues, the overall net gain or loss for the day is accurate. ';
+      'Aika-asioista huolimatta päivän nettovoitto tai tappio on tarkka. ';
 
   @override
   String get legendsInaccurateConclusion =>
-      'These limitations are common across all tools using the Clash of Clans API. We sadly can\'t fix that as it is in Supercell\'s hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!';
+      'Nämä rajoitukset ovat yleisiä kaikissa työkaluissa käyttäen Clash of klaanit APIa. Valitettavasti emme voi korjata sitä, koska se on Supercellin käsissä. Teemme parhaamme kompensoidaksemme nämä rajat ja tuottaaksemme tuloksia mahdollisimman lähellä todellisuutta. Kiitos ymmärryksestäsi!';
 
   @override
-  String get statsSeasonStats => 'Season Stats';
+  String get statsSeasonStats => 'Kauden Tilastot';
 
   @override
-  String get statsByDay => 'By Day';
+  String get statsByDay => 'Päivän Mukaan';
 
   @override
-  String get statsBySeason => 'By Season';
+  String get statsBySeason => 'Kauden Mukaan';
 
   @override
   String statsDayIndex(int index) {
-    return 'Day $index';
+    return 'Päivä $index';
   }
 
   @override
   String statsIndexDays(int index) {
-    return '$index days';
+    return '$index päivää';
   }
 
   @override
   String statsSeasonDate(String date) {
-    return '$date season';
+    return '$date kausi';
   }
 
   @override
-  String get statsAllTownHalls => 'All Town Halls';
+  String get statsAllTownHalls => 'Kaikki Kaupungit';
 
   @override
-  String get statsMembers => 'Members Stats';
+  String get statsMembers => 'Jäsenten Tilastot';
 
   @override
-  String get todoTitle => 'To-do list';
+  String get todoTitle => 'Tehtäväluettelo';
 
   @override
-  String get todoExplanationTitle => 'Task Calculation';
+  String get todoExplanationTitle => 'Tehtävän Laskeminen';
 
   @override
   String get todoExplanationIntro =>
-      'The task completion percentage is calculated based on the following activities with specific weightings:';
+      'Tehtävän suorittamisen prosenttiosuus lasketaan seuraavien erityisten painotusten avulla seuraavien toimintojen perusteella:';
 
   @override
   String get todoExplanationLegendsTitle => 'Legend League:';
 
   @override
   String get todoExplanationLegends =>
-      'Weight of 8 points per account, 1 attack = 1 point.';
+      'Paino 8 pistettä per tili, 1 hyökkäys = 1 piste.';
 
   @override
-  String get todoExplanationRaidsTitle => 'Raids:';
+  String get todoExplanationRaidsTitle => 'Raidat:';
 
   @override
   String get todoExplanationRaids =>
-      'Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.';
+      'Paino 5 pistettä per tili (tai 6, jos viimeinen hyökkäys on avattu), 1 hyökkäys = 1 piste.';
 
   @override
-  String get todoExplanationClanWarsTitle => 'Clan Wars:';
+  String get todoExplanationClanWarsTitle => 'Klaanisodat:';
 
   @override
   String get todoExplanationClanWars =>
-      'Weight of 2 points per account, 1 attack = 1 point.';
+      'Paino 2 pistettä per tili, 1 hyökkäys = 1 piste.';
 
   @override
-  String get todoExplanationCwlTitle => 'Clan War League:';
+  String get todoExplanationCwlTitle => 'Clan Sota League:';
 
   @override
   String get todoExplanationCwl =>
-      'Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.';
+      'Paino 1 pisteen per tili, 1 hyökkäys = 1 piste. CWL ei voi seurata, jos pelaaja ei ole liigan klaanissa.';
 
   @override
-  String get todoExplanationPassAndGamesTitle => 'Season Pass & Clan Games:';
+  String get todoExplanationPassAndGamesTitle => 'Kauden Pass Ja Clan Pelit:';
 
   @override
   String get todoExplanationPassAndGames =>
-      'Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.';
+      'Paino 2 pistettä per tili. Suhde perustuu niiden päivien lukumäärään, jotka ovat jäljellä (1 kuukausi solan osalta ja 6 päivää pelien osalta). Vihreä = raiteella suorittaa sola tai pelejä, punainen = takana aikataulu.';
 
   @override
   String get todoExplanationConclusion =>
-      'The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.';
+      'Lopullinen prosenttiosuus lasketaan jakamalla meneillään olevien tapahtumien aikana toteutettujen toimien kokonaismäärä tarvittavilla toimilla. Tilejä, jotka eivät ole toiminnassa yli 14 päivän ajan, ei oteta huomioon laskennassa.';
 
   @override
   String todoAccountsNumber(int number) {
-    return '$number accounts';
+    return '$number tiliä';
   }
 
   @override
   String todoAccountsNumberActive(int number) {
-    return '$number active accounts';
+    return '$number aktiivista tiliä';
   }
 
   @override
   String todoAccountsNumberInactive(int number) {
-    return '$number inactive accounts';
+    return '$number passiivista tiliä';
   }
 
   @override
-  String get todoAccountsActive => 'Active accounts';
+  String get todoAccountsActive => 'Aktiiviset tilit';
 
   @override
-  String get todoAccountsInactive => 'Inactive accounts';
+  String get todoAccountsInactive => 'Passiiviset tilit';
 
   @override
-  String get todoAccountsNoInactive => 'No inactive accounts.';
+  String get todoAccountsNoInactive => 'Ei epäaktiivisia tilejä.';
 
   @override
-  String get todoAccountsNoActive => 'No active accounts.';
+  String get todoAccountsNoActive => 'Ei aktiivisia tilejä.';
 
   @override
   String todoAttacksLeftDescription(int attacks, String type) {
@@ -833,93 +1081,93 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String todoNoAttacksLeftDescription(String type) {
-    return 'Congratulations, you have done all your attacks ($type)!';
+    return 'Onnittelut, olet tehnyt kaikki hyökkäyksesi ($type)!';
   }
 
   @override
   String todoPointsLeftDescription(int points, String type) {
-    return 'You have $points points left to get today to be in time for the end of the event ($type).';
+    return 'Sinulla on $points pistettä jäljellä päästäksesi tänään olemaan ajoissa tapahtuman päättymiseen ($type).';
   }
 
   @override
   String todoPointsLeftDescriptionNoPoints(String type) {
-    return 'Congratulations, you are on time to get the maximum rewards at the end of the event ($type)!';
+    return 'Onneksi olkoon, sinulla on aikaa saada maksimi palkkiot tapahtuman lopussa ($type)!';
   }
 
   @override
-  String get warTitle => 'War';
+  String get warTitle => 'Sota';
 
   @override
-  String get warFrequency => 'War frequency';
+  String get warFrequency => 'Sodan taajuus';
 
   @override
-  String get warParticipation => 'War Participation';
+  String get warParticipation => 'Sota Osallistuminen';
 
   @override
-  String get warLeague => 'War/League';
+  String get warLeague => 'Sota/Liitto';
 
   @override
-  String get warHistory => 'War History';
+  String get warHistory => 'Sota Historia';
 
   @override
-  String get warLog => 'War Log';
+  String get warLog => 'Sota Loki';
 
   @override
   String warLogClosed(String clan) {
-    return 'War log closed.';
+    return '$clan\'s sota loki on suljettu.';
   }
 
   @override
-  String get warStats => 'War Stats';
+  String get warStats => 'Sodan Tilastot';
 
   @override
-  String get warOngoing => 'Ongoing war';
+  String get warOngoing => 'Käynnissä oleva sota';
 
   @override
   String warIsNotInWar(String clan) {
-    return '$clan is not in war.';
+    return '$clan ei ole sodassa.';
   }
 
   @override
   String get warAskForWar =>
-      'Contact the leader or a co-leader to start a war.';
+      'Ota yhteyttä johtajaan tai yhteisjohtajaan aloittaaksesi sodan.';
 
   @override
   String get warAskForWarLogOpening =>
-      'Contact a leader or a co-leader to open the war log.';
+      'Ota yhteyttä johtajaan tai yhteisjohtajaan avataksesi sotalokin.';
 
   @override
-  String get warEnded => 'War ended';
+  String get warEnded => 'Sota päättyi';
 
   @override
-  String get warPreparation => 'Preparation';
+  String get warPreparation => 'Valmistelu';
 
   @override
-  String get warPerfectWar => 'Perfect war';
+  String get warPerfectWar => 'Täydellinen sota';
 
   @override
-  String get warVictory => 'Victory';
+  String get warVictory => 'Voitto';
 
   @override
-  String get warDefeat => 'Defeat';
+  String get warDefeat => 'Tappio';
 
   @override
-  String get warDraw => 'Draw';
+  String get warDraw => 'Piirrä';
 
   @override
-  String get warTeamSize => 'Team size';
+  String get warTeamSize => 'Tiimin koko';
 
   @override
-  String get warMyTeam => 'My team';
+  String get warMyTeam => 'Minun tiimini';
 
   @override
   String get warEnemiesTeam => 'Enemies';
 
   @override
-  String get warClanDraw => 'The two clans are tied';
+  String get warClanDraw => 'Molemmat klaanit ovat sidottuja';
 
   @override
-  String get warStateOfTheWar => 'State of the war';
+  String get warStateOfTheWar => 'Sodan tila';
 
   @override
   String warStarsNeededToTakeTheLead(
@@ -933,10 +1181,11 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get warNoDataAvailableForThisWar => 'No data available for this war';
+  String get warNoDataAvailableForThisWar =>
+      'Ei tietoja saatavilla tälle sodalle';
 
   @override
-  String get warCalculatorFast => 'Fast calculator';
+  String get warCalculatorFast => 'Nopea laskin';
 
   @override
   String warCalculatorAnswer(String percentNeeded, String result) {
@@ -944,25 +1193,25 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get warCalculatorNeededOverall => '% Needed overall';
+  String get warCalculatorNeededOverall => '% Tarvitaan yhteensä';
 
   @override
-  String get warCalculatorCalculate => 'Calculate';
+  String get warCalculatorCalculate => 'Laske';
 
   @override
-  String get warAttacksTitle => 'Attacks';
+  String get warAttacksTitle => 'Hyökkäykset';
 
   @override
-  String get warAttacksNone => 'No attack yet';
+  String get warAttacksNone => 'Ei hyökkäystä vielä';
 
   @override
-  String get warAttacksBest => 'Best attacks';
+  String get warAttacksBest => 'Parhaat hyökkäykset';
 
   @override
-  String get warAttacksCount => 'Attack Count';
+  String get warAttacksCount => 'Hyökkäysten Määrä';
 
   @override
-  String get warAttacksMissed => 'Missed Attacks';
+  String get warAttacksMissed => 'Vastaamattomat Hyökkäykset';
 
   @override
   String warAttacksNumber(int number_time, int number_war) {
@@ -971,26 +1220,26 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String warAttacksAverageStars(String stars) {
-    return 'You had an average of $stars stars per war.';
+    return 'Sinulla oli keskimäärin $stars tähteä sotaa kohden.';
   }
 
   @override
   String warAttacksAverageDestruction(String percent) {
-    return 'You had an average of $percent% destruction rate per war.';
+    return 'Sinulla oli keskimäärin $percent% tuhoa sotaa kohden.';
   }
 
   @override
-  String get warDefensesTitle => 'Defenses';
+  String get warDefensesTitle => 'Puolustukset';
 
   @override
-  String get warDefensesNone => 'No defense yet';
+  String get warDefensesNone => 'Ei vielä puolustusta';
 
   @override
-  String get warDefensesBest => 'Best defenses';
+  String get warDefensesBest => 'Parhaat puolustukset';
 
   @override
   String warDefensesBestOutOf(int number) {
-    return 'Best defense (out of $number)';
+    return 'Paras puolustus (tyhjästä $number)';
   }
 
   @override
@@ -1000,46 +1249,46 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String warDefensesAverageStars(double stars) {
-    return 'You had an average of $stars stars per defense.';
+    return 'Sinulla oli keskimäärin $stars tähteä per puolustus.';
   }
 
   @override
   String warDefensesAverageDestruction(String percent) {
-    return 'You had an average of $percent% destruction rate per defense.';
+    return 'Sinulla oli keskimäärin $percent% tuhoa per puolustus.';
   }
 
   @override
-  String get warStarsTitle => 'Stars';
+  String get warStarsTitle => 'Tähdet';
 
   @override
-  String get warStarsAverage => 'Average stars';
+  String get warStarsAverage => 'Keskimääräiset tähdet';
 
   @override
   String get warStarsNumber => 'Number of stars';
 
   @override
-  String get warStarsOne => '1 star';
+  String get warStarsOne => '1 tähti';
 
   @override
-  String get warStarsTwo => '2 stars';
+  String get warStarsTwo => '2 tähteä';
 
   @override
-  String get warStarsThree => '3 stars';
+  String get warStarsThree => '3 tähteä';
 
   @override
-  String get warStarsZero => '0 Star';
+  String get warStarsZero => '0 Tähti';
 
   @override
-  String get warStarsBestPerformance => 'Best performance';
+  String get warStarsBestPerformance => 'Paras suorituskyky';
 
   @override
-  String get warDestructionTitle => 'Destruction';
+  String get warDestructionTitle => 'Hävittäminen';
 
   @override
-  String get warDestructionAverage => 'Average destruction';
+  String get warDestructionAverage => 'Keskimääräinen tuhoaminen';
 
   @override
-  String get warDestructionRate => 'Destruction rate';
+  String get warDestructionRate => 'Hävittämisaste';
 
   @override
   String warHistoryWinsDescription(int wins, String percent) {
@@ -1058,7 +1307,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String warHistoryAverageMembersDescription(int members) {
-    return 'Your clan has an average of $members members participating out of the last 50 wars.';
+    return 'klaanissasi on keskimäärin $members jäsentä, jotka osallistuvat viimeisten 50 sodan loppuun.';
   }
 
   @override
@@ -1068,35 +1317,35 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String warHistoryAverageHitRateDescription(String percent) {
-    return 'Your clan had an average of $percent% destruction rate from the last 50 wars.';
+    return 'Kantasi hävitti keskimäärin $percent% viimeisen 50 sodan aikana.';
   }
 
   @override
-  String get warPositionMap => 'Map Position';
+  String get warPositionMap => 'Kartan Sijainti';
 
   @override
   String get warPositionAbbr => 'Pos';
 
   @override
-  String get warPositionOrder => 'Order';
+  String get warPositionOrder => 'Tilaus';
 
   @override
   String get warOpponentTownhall => 'Opp TH';
 
   @override
-  String get warOpponentLowerTownhall => 'Lower TH';
+  String get warOpponentLowerTownhall => 'Alempi TH';
 
   @override
-  String get warOpponentUpperTownhall => 'Upper TH';
+  String get warOpponentUpperTownhall => 'Ylempi TH';
 
   @override
-  String get warOpponentEqualThLevel => 'Equal TH';
+  String get warOpponentEqualThLevel => 'Yhtäläinen TH';
 
   @override
-  String get warOpponentSelectMembersThLevel => 'Members TH Level';
+  String get warOpponentSelectMembersThLevel => 'Jäsenten Th Taso';
 
   @override
-  String get warOpponentSelectOpponentsThLevel => 'Opponents TH Level';
+  String get warOpponentSelectOpponentsThLevel => 'Vastustajien Th Taso';
 
   @override
   String warFiltersLastXwars(int number) {
@@ -1104,59 +1353,59 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get warFiltersFriendly => 'Friendly';
+  String get warFiltersFriendly => 'Ystävällinen';
 
   @override
-  String get warFiltersRandom => 'Random';
+  String get warFiltersRandom => 'Satunnainen';
 
   @override
   String get warVisibilityToggleTownHall =>
-      'Hide/Show stats from former TH levels';
+      'Piilota/Näytä tilastot entisiltä TH-tasoilta';
 
   @override
-  String get warEventsTitle => 'Events';
+  String get warEventsTitle => 'Tapahtumat';
 
   @override
-  String get warEventsNewest => 'Newest';
+  String get warEventsNewest => 'Uusin';
 
   @override
-  String get warEventsOldest => 'Oldest';
+  String get warEventsOldest => 'Vanhin';
 
   @override
-  String get warStatusReady => 'Opted In';
+  String get warStatusReady => 'Valittu Sisään';
 
   @override
-  String get warStatusUnready => 'Opted Out';
+  String get warStatusUnready => 'Valittu Ulos';
 
   @override
-  String get warStatusMissed => 'Missed';
+  String get warStatusMissed => 'Vastaamaton';
 
   @override
-  String get warAbbreviationAvg => 'Avg';
+  String get warAbbreviationAvg => 'Keskiarvo';
 
   @override
-  String get warAbbreviationAvgPercentage => 'Avg %';
+  String get warAbbreviationAvgPercentage => 'Keskim.';
 
   @override
   String get cwlTitle => 'CWL';
 
   @override
-  String get cwlClanWarLeague => 'Clan War League';
+  String get cwlClanWarLeague => 'Klaani Sota Liiga';
 
   @override
-  String get cwlOngoing => 'Ongoing CWL';
+  String get cwlOngoing => 'CWL On Käynnissä';
 
   @override
-  String get cwlRounds => 'Rounds';
+  String get cwlRounds => 'Kierrokset';
 
   @override
   String cwlRoundNumber(int number) {
-    return 'Round $number';
+    return 'Pyöreä $number';
   }
 
   @override
   String cwlCurrentRound(int round) {
-    return 'It\'s currently round $round.';
+    return 'Current round (Round $round)';
   }
 
   @override
@@ -1166,60 +1415,60 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String cwlStars(int stars) {
-    return 'Your clan has a total of $stars stars.';
+    return 'Sinun klaanissasi on yhteensä $stars tähteä.';
   }
 
   @override
   String cwlDestructionPercentage(String percent) {
-    return 'Your clan has a total destruction rate of $percent%.';
+    return 'Sinun klaani tuhoamisaste on $percent%.';
   }
 
   @override
   String cwlTotalAttacks(int attacks, int totalAttacks) {
-    return 'Your clan has a total of $attacks attacks out of $totalAttacks possible attacks.';
+    return 'Klaanillasi on yhteensä $attacks hyökkäystä $totalAttacks mahdollisesta hyökkäyksestä.';
   }
 
   @override
-  String get joinLeaveTitle => 'Join/Leave Logs (Current Season)';
+  String get joinLeaveTitle => 'Join/Jätä Lokit (Nykyinen Kausi)';
 
   @override
-  String get joinLeaveJoin => 'Join';
+  String get joinLeaveJoin => 'Liity';
 
   @override
-  String get joinLeaveLeave => 'Leave';
+  String get joinLeaveLeave => 'Poistu';
 
   @override
   String get joinLeaveReset => 'Reset';
 
   @override
-  String get joinLeaveJoins => 'Joins';
+  String get joinLeaveJoins => 'Liitännäiset';
 
   @override
-  String get joinLeaveLeaves => 'Leaves';
+  String get joinLeaveLeaves => 'Lehdet';
 
   @override
-  String get joinLeaveUniquePlayers => 'Unique Players';
+  String get joinLeaveUniquePlayers => 'Ainutlaatuiset Pelaajat';
 
   @override
-  String get joinLeaveMovingPlayers => 'Moving Players';
+  String get joinLeaveMovingPlayers => 'Siirretään Pelaajia';
 
   @override
-  String get joinLeaveMostMovingPlayers => 'Most Moving Players';
+  String get joinLeaveMostMovingPlayers => 'Eniten Liikkuvat Pelaajat';
 
   @override
-  String get joinLeaveStillInClan => 'Still in Clan';
+  String get joinLeaveStillInClan => 'Vielä klaanissa';
 
   @override
-  String get joinLeaveLeftForever => 'Left Forever';
+  String get joinLeaveLeftForever => 'Vasemmalle Ikuisesti';
 
   @override
-  String get joinLeaveRejoinedPlayers => 'Rejoined Players';
+  String get joinLeaveRejoinedPlayers => 'Liitynyt Pelaajiin';
 
   @override
-  String get joinLeaveAvgTimeJoinLeave => 'Avg Join/Leave Time';
+  String get joinLeaveAvgTimeJoinLeave => 'Keskim. Keskim. Poissaoloaika';
 
   @override
-  String get joinLeavePeakHour => 'Most Active Hour';
+  String get joinLeavePeakHour => 'Aktiivisin Tunti';
 
   @override
   String joinLeaveNumberDescription(int number, String date) {
@@ -1243,12 +1492,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String joinLeaveStillInClanNumberDescription(int number) {
-    return '$number player(s) joined and are still in the clan.';
+    return '$number pelaajaa liittyi ja on edelleen klaanissa.';
   }
 
   @override
   String joinLeaveLeftClanNumberDescription(int number) {
-    return '$number player(s) joined, then left the clan and never rejoined.';
+    return '$number pelaajaa liittyi, sitten lähti klaanista eikä koskaan liittynyt.';
   }
 
   @override
@@ -1262,187 +1511,200 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get raidsTitle => 'Raids';
+  String get raidsTitle => 'Raidat';
 
   @override
-  String get raidsLast => 'Last raids';
+  String get raidsLast => 'Viimeiset hyökkäykset';
 
   @override
-  String get raidsOngoing => 'Ongoing raids';
+  String get raidsOngoing => 'Käynnissä olevat hyökkäykset';
 
   @override
-  String get raidsDistrictsDestroyed => 'Districts destroyed';
+  String get raidsDistrictsDestroyed => 'Tuhoutuneet alueet';
 
   @override
-  String get raidsCompleted => 'Raids completed';
+  String get raidsCompleted => 'Raidat valmiit';
 
   @override
-  String get searchNoResult => 'No result.';
+  String get searchNoResult => 'Ei tuloksia.';
 
   @override
-  String get maintenanceTitle => 'Maintenance';
+  String get maintenanceTitle => 'Huolto';
 
   @override
   String get maintenanceDescription =>
-      'Clash of Clans is currently under maintenance, so we can\'t access the API. Please check back later.';
+      'Yhteentörmäyksestä klaanit ovat tällä hetkellä kunnossapidossa, joten emme voi käyttää APIa. Tarkista myöhemmin.';
 
   @override
-  String get downloadTooltip => 'Download CWL summary';
+  String get downloadTooltip => 'Lataa CWL yhteenveto';
 
   @override
   String get downloadInProgress =>
-      'Downloading file... It can take a few seconds...';
+      'Ladataan tiedostoa... Se voi kestää muutaman sekunnin...';
 
   @override
   String downloadSuccess(String path) {
-    return 'File saved successfully in $path';
+    return 'Tiedosto tallennettu onnistuneesti $path';
   }
 
   @override
-  String get downloadError => 'Failed to download file';
+  String get downloadError => 'Tiedoston lataaminen epäonnistui';
 
   @override
-  String get dashboardTitle => 'Dashboard';
+  String get dashboardTitle => 'Hallintapaneeli';
 
   @override
-  String get toolsTitle => 'Tools';
+  String get toolsTitle => 'Työkalut';
 
   @override
-  String get navigationTeam => 'Teams';
+  String get navigationTeam => 'Tiimit';
 
   @override
-  String get navigationStatistics => 'Statistics';
+  String get navigationStatistics => 'Tilastot';
 
   @override
-  String get versionDevice => 'Version & Device';
+  String get versionDevice => 'Versio Ja Laite';
 
   @override
-  String get betaFeature => 'Beta Feature';
+  String get settingsLicenses => 'Open Source Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'View licenses for third-party libraries';
+
+  @override
+  String get settingsPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get settingsPrivacyPolicySubtitle => 'How we handle your data';
+
+  @override
+  String get betaFeature => 'Beta Ominaisuus';
 
   @override
   String get betaLabel => 'BETA';
 
   @override
   String get betaDescription =>
-      'This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.';
+      'Tämä ominaisuus on tällä hetkellä beta, se voi olla joitakin vikoja tai olla epätäydellinen. Työskentelemme aktiivisesti parannusten parissa ja tervetuloa palautteesi. Ole hyvä ja jaa ideasi ja raportoi kaikista Discord-palvelimellamme olevista ongelmista auttaaksesi meitä parantamaan sitä.';
 
   @override
-  String get settingsLanguage => 'Language';
+  String get settingsLanguage => 'Kieli';
 
   @override
-  String get settingsSelectLanguage => 'Select a language';
+  String get settingsSelectLanguage => 'Valitse kieli';
 
   @override
-  String get settingsToggleTheme => 'Toggle Theme';
+  String get settingsToggleTheme => 'Vaihda Teemaa';
 
   @override
-  String get faqTitle => 'FAQ';
+  String get faqTitle => 'UKK';
 
   @override
-  String get faqSubtitle => 'Frequently Asked Questions';
+  String get faqSubtitle => 'Usein Kysytyt Kysymykset';
 
   @override
-  String get faqIsThisFromSupercell => 'Is this App from Supercell?';
+  String get faqIsThisFromSupercell => 'Onko tämä sovellus Supercellistä?';
 
   @override
   String get faqFanContentPolicy =>
-      'This material is unofficial and is not endorsed by Supercell. For more information see Supercell\'s Fan Content Policy: www.supercell.com/fan-content-policy';
+      'Tämä materiaali on epävirallista eikä Supercellin hyväksymä aineisto. Lisätietoja on Supercellin fanisisällön käytännössä: www.supercell.com/fan-content-policy';
 
   @override
   String get faqWhyNotAccurate =>
-      'Why is the data sometimes inaccurate or missing?';
+      'Miksi tiedot joskus ovat virheellisiä tai puuttuvat?';
 
   @override
-  String get faqClanNotTracked => 'Clan not tracked';
+  String get faqClanNotTracked => 'Klaania ei seurata';
 
   @override
   String get faqClanNotTrackedAnswer =>
-      'ClashKing can only retrieve this info if the clan is tracked. If your clan isn\'t tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.';
+      'ClashKing voi hakea tämän tiedon vain, jos klaania seurataan. Jos klaania ei seurata, ole hyvä ja kutsu ClashKing Bot Discord-palvelimellesi ja käytä komentoa /addclan. Työskentelemme sen eteen, että tämä ominaisuus on saatavilla pian sovelluksessa.';
 
   @override
-  String get faqTrackingDown => 'Tracking down';
+  String get faqTrackingDown => 'Seuranta alas';
 
   @override
   String get faqTrackingDownAnswer =>
-      'The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.';
+      'Seuranta voi lakata toimimasta tietyn ajan. Siksi voit joskus olla reikiä tietojasi. Pyrimme parantamaan tätä.';
 
   @override
-  String get faqApiLimitation => 'Clash of Clans API limitation';
+  String get faqApiLimitation => 'Yhteentörmäyksestä klaanit API rajoitus';
 
   @override
   String get faqApiLimitationAnswer =>
-      'Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don\'t have any information on your building levels.';
+      'Joitakin tietoja on toimittanut Clash of klaanit ja niiden API on joitakin rajoituksia. Tämä pätee legendoja seuranta, se joskus pinot pokaalin voitto ja menetys ikään kuin se oli yksi hyökkäys. Tämän vuoksi meillä ei myöskään ole mitään tietoa rakennuksestasi.';
 
   @override
-  String get faqSupportWork => 'How can I support your work?';
+  String get faqSupportWork => 'Miten voin tukea työtäsi?';
 
   @override
-  String get faqSupportWorkAnswer => 'There are several ways to support us:';
+  String get faqSupportWorkAnswer => 'On olemassa useita tapoja tukea meitä:';
 
   @override
-  String get faqUseCodeClashKing => 'Use code \"ClashKing\"';
+  String get faqUseCodeClashKing => 'Käytä koodia \"ClashKing\"';
 
   @override
-  String get faqSupportUsOnPatreon => 'Support us on Patreon';
+  String get faqSupportUsOnPatreon => 'Tue meitä Patreonissa';
 
   @override
-  String get faqShareTheApp => 'Share the app with your friends';
+  String get faqShareTheApp => 'Jaa sovellus ystäviesi kanssa';
 
   @override
-  String get faqRateTheApp => 'Rate the app in the store';
+  String get faqRateTheApp => 'Arvostele sovellus kaupassa';
 
   @override
-  String get faqHelpUsTranslate => 'Help us translate the app';
+  String get faqHelpUsTranslate => 'Auta meitä kääntämään sovellus';
 
   @override
   String get faqHowToInviteTheBot =>
-      'How can I invite your bot to my Discord Server?';
+      'Miten voin kutsua botti minun Discord-palvelimeeni?';
 
   @override
   String get faqHowToInviteTheBotAnswer =>
-      'You can invite our bot to your server by clicking on the button below. You will need the \"Manage Server\" permission to add the bot.';
+      'Voit kutsua botin palvelimellesi klikkaamalla alla olevaa painiketta. Tarvitset \"Manage Server\" -oikeudet lisätäksesi bootin.';
 
   @override
   String get faqInviteTheBot => 'Invite ClashKing Bot';
 
   @override
   String get faqNeedHelp =>
-      'I need help or I would like to make a suggestion. How can I contact you?';
+      'Tarvitsen apua tai haluaisin tehdä ehdotuksen. Miten voin ottaa sinuun yhteyttä?';
 
   @override
   String get faqNeedHelpAnswer =>
-      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashkingbot.com. Please only write in English or French.';
+      'You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.';
 
   @override
-  String get faqSendEmail => 'Send an email';
+  String get faqSendEmail => 'Lähetä sähköposti';
 
   @override
-  String get faqJoinDiscord => 'Join our Discord Server';
+  String get faqJoinDiscord => 'Liity Discord-palvelimeemme';
 
   @override
   String get faqCannotOpenMailClient =>
-      'For some reasons we can\'t open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.';
+      'Jostain syystä emme voi avata sähköpostiohjelmaasi. Kopioimme sähköpostiosoitteen sinua varten. Voit kirjoittaa sähköpostin ja liittää osoitteen vastaanottajan kenttään.';
 
   @override
-  String get translationHelpUsTranslate => 'Help us translate';
+  String get translationHelpUsTranslate => 'Auta meitä kääntämään';
 
   @override
-  String get translationSuggestFeatures => 'Suggest features';
+  String get translationSuggestFeatures => 'Ehdota ominaisuuksia';
 
   @override
-  String get translationThankYou => 'Thank you!';
+  String get translationThankYou => 'Kiitos!';
 
   @override
   String get translationThankYouContent =>
-      'A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!';
+      'Valtava kiitos kaikille uskomattomille kääntäjille, jotka auttavat meitä tekemään tämän sovelluksen useampien ihmisten saataville ympäri maailmaa!';
 
   @override
   String get translationHelpTranslateContent =>
-      'You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!';
+      'Voit auttaa meitä kääntämään sovelluksen Crowdinissa. Jos kielesi ei ole käytettävissä Crowdinissa, voit vapaasti pyytää sitä meidän Discord-palvelimella. Kiitos paljon avustasi!';
 
   @override
-  String get translationHelpTranslateButton => 'Help Translate on Crowdin';
+  String get translationHelpTranslateButton => 'Auta kääntämään Crowdinia';
 
   @override
-  String get translationCurrentTranslators => 'Current Translators';
+  String get translationCurrentTranslators => 'Nykyiset Kääntäjät';
 }

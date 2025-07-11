@@ -1,5 +1,6 @@
 import 'package:clashkingapp/features/war_cwl/models/cwl_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_league_round.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class CwlLeague {
   final String state;
@@ -34,7 +35,7 @@ class CwlLeague {
             .toList(),
       );
     } catch (e) {
-      print("❌ Error parsing CwlLeague: $e");
+      DebugUtils.debugError("❌ Error parsing CwlLeague: $e");
       return CwlLeague(
         state: 'unknown',
         season: 'unknown',

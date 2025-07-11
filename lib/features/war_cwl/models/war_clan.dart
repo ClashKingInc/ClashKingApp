@@ -1,5 +1,6 @@
 import 'package:clashkingapp/features/clan/models/clan_badge.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class WarClan {
   final String tag;
@@ -39,7 +40,7 @@ class WarClan {
             [],
       );
     } catch (e) {
-      print("❌ Error parsing WarClan: $e");
+      DebugUtils.debugError("❌ Error parsing WarClan: $e");
       return WarClan(
         tag: 'No tag',
         name: 'No name',

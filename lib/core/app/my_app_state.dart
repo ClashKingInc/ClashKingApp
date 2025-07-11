@@ -11,6 +11,7 @@ import 'dart:async';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   Future<void>? initializeUserFuture;
@@ -131,10 +132,10 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         androidName: 'WarAppWidgetProvider',
       );
       
-      print("✅ War widget updated successfully");
+      DebugUtils.debugSuccess("✅ War widget updated successfully");
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
-      print("❌ Error updating war widget: $exception");
+      DebugUtils.debugError("❌ Error updating war widget: $exception");
     }
   }
 

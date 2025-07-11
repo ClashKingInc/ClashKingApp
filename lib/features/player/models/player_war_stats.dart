@@ -1,6 +1,7 @@
 import 'package:clashkingapp/features/player/models/player_enemy_townhall_stats.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_attack.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class PlayerWarStats {
   final String name;
@@ -47,7 +48,7 @@ class PlayerWarStats {
                 )),
       );
     } catch (e) {
-      print('Error parsing PlayerWarStats: $e');
+      DebugUtils.debugError('❌ Error parsing PlayerWarStats: $e');
       return PlayerWarStats(
         name: json['name'] ?? '',
         tag: json['tag'] ?? '',
@@ -328,7 +329,7 @@ class PlayerWarStatsData {
         memberData: WarMemberData.fromJson(member),
       );
     } catch (e) {
-      print('Error parsing PlayerWarStatsData: $e');
+      DebugUtils.debugError('❌ Error parsing PlayerWarStatsData: $e');
       return PlayerWarStatsData(
         warDetails: WarInfo.empty(),
         memberData: WarMemberData(

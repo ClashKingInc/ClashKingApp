@@ -1,6 +1,7 @@
 import 'package:clashkingapp/features/clan/models/clan_badge.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_attacks_defenses_stats.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_member.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class CwlClan {
   final String tag;
@@ -203,7 +204,7 @@ class CwlClan {
         townHallLevels: Map<String, int>.from(json['town_hall_levels'] ?? {}),
       );
     } catch (e) {
-      print("❌ Error parsing WarClan: $e");
+      DebugUtils.debugError("❌ Error parsing CwlClan: $e");
       return CwlClan(
         tag: 'No tag',
         name: 'No name',

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -58,12 +59,12 @@ class _DownloadCwlExcelButtonState extends State<DownloadCwlExcelButton> {
           try{
             await OpenFilex.open(filePath);
           } catch (e) {
-            print('❌ Error opening file : $e');
+            DebugUtils.debugError('❌ Error opening file : $e');
           }
         }
       }
     } catch (e) {
-      print('❌ Error downloading file : $e');
+      DebugUtils.debugError('❌ Error downloading file : $e');
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(loc.downloadError)),

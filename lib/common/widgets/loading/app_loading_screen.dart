@@ -123,8 +123,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
                 child: MobileWebImage(
                     imageUrl: Theme.of(context).brightness == Brightness.dark
                         ? ImageAssets.darkModeLogo
-                        : ImageAssets.lightModeLogo,
-                    fit: BoxFit.cover),
+                        : ImageAssets.lightModeLogo),
               ),
             ),
 

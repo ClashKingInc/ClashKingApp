@@ -1,3 +1,5 @@
+import 'package:clashkingapp/core/utils/debug_utils.dart';
+
 class CwlAttackStats {
   final int stars;
   final Map<String, int> threeStars;
@@ -64,7 +66,7 @@ class CwlAttackStats {
         attacksPerWar: null, // Could be calculated if needed
       );
     } catch (e) {
-      print("❌ Error parsing CwlAttackStats: $e");
+      DebugUtils.debugError("❌ Error parsing CwlAttackStats: $e");
       return CwlAttackStats(
         stars: 0,
         threeStars: {},
@@ -142,7 +144,7 @@ class CwlDefenseStats {
         missedDefenses: json['missedDefenses'] ?? 0,
       );
     } catch (e) {
-      print("❌ Error parsing CwlDefenseStats: $e");
+      DebugUtils.debugError("❌ Error parsing CwlDefenseStats: $e");
       return CwlDefenseStats(
         stars: 0,
         threeStars: {},
