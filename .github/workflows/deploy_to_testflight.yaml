@@ -71,17 +71,29 @@ jobs:
           
           # Decode and install certificate
           echo "$IOS_CERTIFICATE_BASE64" | base64 --decode > certificate.p12
-          security create-keychain -p "" build.keychain
-          security import certificate.p12 -k build.keychain -P "$IOS_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-          security set-keychain-settings build.keychain
-          security list-keychains -s build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p "" build.keychain
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
           
-          # Decode and install provisioning profile
+          # Create a new keychain
+          security create-keychain -p "temppassword" build.keychain
+          security set-keychain-settings -lut 21600 build.keychain
+          security unlock-keychain -p "temppassword" build.keychain
+          
+          # Import certificate
+          security import certificate.p12 -k build.keychain -P "$IOS_CERTIFICATE_PASSWORD" -T /usr/bin/codesign -T /usr/bin/xcodebuild
+          
+          # Set keychain search list
+          security list-keychains -s build.keychain login.keychain
+          security default-keychain -s build.keychain
+          
+          # Allow codesign to use the keychain
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "temppassword" build.keychain
+          
+          # Decode and install provisioning profile with proper UUID filename
           echo "$IOS_PROVISIONING_PROFILE_BASE64" | base64 --decode > profile.mobileprovision
-          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          UUID=$(grep -a -A 1 'UUID' profile.mobileprovision | grep -o '[A-F0-9\-]\{36\}' | head -1)
+          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
+          
+          # Verify installation
+          security find-identity -v -p codesigning build.keychain
 
       - name: Build iOS app
         run: |
