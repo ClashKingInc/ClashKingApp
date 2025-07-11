@@ -135,7 +135,7 @@
   "authPasswordNew": "New Password",
   "authPasswordConfirmHint": "Re-enter your new password",
   "authPasswordResetConfirm": "Reset Password",
-  "authPasswordResetSuccess": "Password reset successful! You are now logged in.",
+  "authPasswordResetSuccess": "Password reset successful! You can now log in.",
   "authPasswordResetContinue": "Continue to Reset Password",
   "authPasswordResetCode": "Reset Code",
   "authPasswordResetCodeHint": "Enter the 6-digit code from your email",
