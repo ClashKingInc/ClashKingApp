@@ -1,10 +1,32 @@
-android/.gradle
-android/captures/
-android/local.properties
-android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+# Android Studio and Gradle
+.gradle/
+.idea/
+*.iml
+*.ipr
+*.iws
+local.properties
 
-# Remember to never publicly share your keystore.
-# See https://flutter.dev/docs/deployment/android#reference-the-keystore-from-the-app
+# Build outputs
+build/
+app/build/
+*/build/
+
+# Captures
+captures/
+
+# Generated files
+app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+GeneratedPluginRegistrant.java
+
+# Keystore files (NEVER commit these!)
 key.properties
-**/*.keystore
-**/*.jks
+*.keystore
+*.jks
+
+# NDK
+.cxx/
+.externalNativeBuild/
+
+# OS generated files
+.DS_Store
+Thumbs.db
