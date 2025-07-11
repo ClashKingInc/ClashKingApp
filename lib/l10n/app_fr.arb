@@ -1053,7 +1053,7 @@
       }
     }
   },
-  "cwlTotalAttacks": "Attaques totales : {attacks}/{total}",
+  "cwlTotalAttacks": "Ton clan a un total de {attacks} attaques sur {totalAttacks} attaques possibles.",
   "@cwlTotalAttacks": {
     "placeholders": {
       "attacks": {
