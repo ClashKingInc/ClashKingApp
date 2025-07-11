@@ -1,13 +1,7 @@
-import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
-import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
-import 'package:clashkingapp/features/clan/data/clan_service.dart';
-import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
-import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
-import 'package:clashkingapp/features/player/data/player_service.dart';
-import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
+import 'package:clashkingapp/features/auth/presentation/email_verification_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -50,27 +44,15 @@ class RegisterPageState extends State<RegisterPage> {
         _usernameController.text.trim(),
       );
 
-      final accessToken = await TokenService().getAccessToken();
-      if (accessToken != null && mounted) {
-        final cocService = context.read<CocAccountService>();
-        final playerService = context.read<PlayerService>();
-        final clanService = context.read<ClanService>();
-        final warCwlService = context.read<WarCwlService>();
-        
-        await cocService.loadApiData(playerService, clanService, warCwlService);
-        
-        if (mounted) {
-          // Check if user has CoC accounts and navigate accordingly
-          if (cocService.cocAccounts.isNotEmpty) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => MyHomePage()),
-            );
-          } else {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => AddCocAccountPage()),
-            );
-          }
-        }
+      // Registration successful - verification email sent
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => EmailVerificationPage(
+              email: _emailController.text.trim(),
+            ),
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
@@ -79,39 +61,88 @@ class RegisterPageState extends State<RegisterPage> {
             MaterialPageRoute(builder: (context) => MaintenanceScreen()),
           );
         } else {
+          String errorMessage = _getLocalizedErrorMessage(e.toString());
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(e.toString().replaceAll('Exception: ', '')),
+              content: Text(errorMessage),
               backgroundColor: Colors.red,
+              duration: Duration(seconds: 4),
+              action: SnackBarAction(
+                label: AppLocalizations.of(context)!.generalOk,
+                textColor: Colors.white,
+                onPressed: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+              ),
             ),
           );
         }
       }
     }
-    
+
     if (mounted) setState(() => _isLoading = false);
+  }
+
+  String _getLocalizedErrorMessage(String errorString) {
+    // Extract the detail message from BadRequestException format
+    String detail = "";
+    if (errorString.contains('"detail"')) {
+      final regex = RegExp(r'"detail"\s*:\s*"([^"]*)"');
+      final match = regex.firstMatch(errorString);
+      detail = match?.group(1)?.toLowerCase() ?? errorString.toLowerCase();
+    } else {
+      detail = errorString.toLowerCase();
+    }
+
+    // Map API error messages to localized messages
+    if (detail.contains("already registered")) {
+      return AppLocalizations.of(context)!.authErrorEmailAlreadyRegistered;
+    } else if (detail.contains("verification email was already sent")) {
+      return AppLocalizations.of(context)!.authErrorEmailAlreadyPending;
+    } else if (detail.contains("invalid email format")) {
+      return AppLocalizations.of(context)!.authErrorEmailInvalidFormat;
+    } else if (detail.contains("failed to send verification email")) {
+      return AppLocalizations.of(context)!.authErrorEmailSendFailed;
+    } else if (detail.contains("password must contain") ||
+        detail.contains("weak patterns")) {
+      return AppLocalizations.of(context)!.authErrorPasswordWeak;
+    } else if (detail.contains("password must be at least")) {
+      return AppLocalizations.of(context)!.authPasswordTooShort;
+    } else if (detail.contains("username must be at least")) {
+      return AppLocalizations.of(context)!.authUsernameTooShort;
+    } else if (detail.contains("username can only contain")) {
+      return AppLocalizations.of(context)!.authErrorUsernameInvalid;
+    } else if (detail.contains("rate limit") || detail.contains("too many")) {
+      return AppLocalizations.of(context)!.authErrorRateLimited;
+    } else if (detail.contains("network") || detail.contains("connection")) {
+      return AppLocalizations.of(context)!.authErrorConnection;
+    } else if (detail.contains("server") ||
+        detail.contains("500") ||
+        detail.contains("503")) {
+      return AppLocalizations.of(context)!.authErrorServerUnavailable;
+    } else {
+      return AppLocalizations.of(context)!.authErrorRegistrationFailed;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final logoUrl = (isDarkMode ? ImageAssets.darkModeLogo : ImageAssets.lightModeLogo);
+    final logoUrl =
+        (isDarkMode ? ImageAssets.darkModeLogo : ImageAssets.lightModeLogo);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.authCreateClashKingAccount),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(24),
+        padding: EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 20),
-              
               // Logo
               Center(
                 child: SizedBox(
@@ -123,159 +154,223 @@ class RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 32),
-              
+
               Text(
                 AppLocalizations.of(context)!.authJoinClashKing,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
-              
+
               SizedBox(height: 8),
-              
+
               Text(
                 AppLocalizations.of(context)!.authCreateAccountToGetStarted,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
                 textAlign: TextAlign.center,
               ),
-              
+
               SizedBox(height: 32),
-              
-              // Username Field
-              TextFormField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.authUsernameLabel,
-                  prefixIcon: Icon(Icons.person),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return AppLocalizations.of(context)!.authUsernameRequired;
-                  }
-                  if (value.trim().length < 3) {
-                    return AppLocalizations.of(context)!.authUsernameTooShort;
-                  }
-                  return null;
-                },
-              ),
-              
-              SizedBox(height: 16),
-              
-              // Email Field
-              TextFormField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.authEmailTitle,
-                  prefixIcon: Icon(Icons.email),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return AppLocalizations.of(context)!.authEmailRequired;
-                  }
-                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                    return AppLocalizations.of(context)!.authEmailInvalid;
-                  }
-                  return null;
-                },
-              ),
-              
-              SizedBox(height: 16),
-              
-              // Password Field
-              TextFormField(
-                controller: _passwordController,
-                obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.authPasswordLabel,
-                  prefixIcon: Icon(Icons.lock),
-                  suffixIcon: IconButton(
-                    icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
-                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context)!.authPasswordRequired;
-                  }
-                  if (value.length < 8) {
-                    return AppLocalizations.of(context)!.authPasswordTooShort;
-                  }
-                  // Check for uppercase, lowercase, digit, and special character
-                  if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])').hasMatch(value)) {
-                    return AppLocalizations.of(context)!.authPasswordRequirements;
-                  }
-                  return null;
-                },
-              ),
-              
-              SizedBox(height: 16),
-              
-              // Confirm Password Field
-              TextFormField(
-                controller: _confirmPasswordController,
-                obscureText: _obscureConfirmPassword,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.authPasswordConfirm,
-                  prefixIcon: Icon(Icons.lock_outline),
-                  suffixIcon: IconButton(
-                    icon: Icon(_obscureConfirmPassword ? Icons.visibility : Icons.visibility_off),
-                    onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context)!.authPasswordConfirmRequired;
-                  }
-                  if (value != _passwordController.text) {
-                    return AppLocalizations.of(context)!.authPasswordMismatch;
-                  }
-                  return null;
-                },
-              ),
-              
-              SizedBox(height: 24),
-              
-              // Register Button
-              ElevatedButton(
-                onPressed: _isLoading ? null : _register,
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: _isLoading
-                    ? CircularProgressIndicator(color: Colors.white)
-                    : Text(
-                        AppLocalizations.of(context)!.authCreateAccount,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+
+              // Registration form card
+              Card(
+                elevation: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 8),
+                      // Username Field
+                      TextFormField(
+                        controller: _usernameController,
+                        textInputAction: TextInputAction.next,
+                        enabled: !_isLoading,
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.authUsernameLabel,
+                          prefixIcon: Icon(Icons.person),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return AppLocalizations.of(context)!
+                                .authUsernameRequired;
+                          }
+                          if (value.trim().length < 3) {
+                            return AppLocalizations.of(context)!
+                                .authUsernameTooShort;
+                          }
+                          return null;
+                        },
                       ),
-              ),
-              
-              SizedBox(height: 16),
-              
-              // Back to Login
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(AppLocalizations.of(context)!.authAlreadyHaveAccount),
+
+                      SizedBox(height: 20),
+
+                      // Email Field
+                      TextFormField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        enabled: !_isLoading,
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.authEmailTitle,
+                          prefixIcon: Icon(Icons.email),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return AppLocalizations.of(context)!
+                                .authEmailRequired;
+                          }
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                              .hasMatch(value)) {
+                            return AppLocalizations.of(context)!
+                                .authEmailInvalid;
+                          }
+                          return null;
+                        },
+                      ),
+
+                      SizedBox(height: 20),
+
+                      // Password Field
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: _obscurePassword,
+                        textInputAction: TextInputAction.next,
+                        enabled: !_isLoading,
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.authPasswordLabel,
+                          prefixIcon: Icon(Icons.lock),
+                          suffixIcon: IconButton(
+                            icon: Icon(_obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                            onPressed: () => setState(
+                                () => _obscurePassword = !_obscurePassword),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppLocalizations.of(context)!
+                                .authPasswordRequired;
+                          }
+                          if (value.length < 8) {
+                            return AppLocalizations.of(context)!
+                                .authPasswordTooShort;
+                          }
+                          // Check for uppercase, lowercase, digit, and special character
+                          if (!RegExp(
+                                  r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])')
+                              .hasMatch(value)) {
+                            return AppLocalizations.of(context)!
+                                .authPasswordRequirements;
+                          }
+                          return null;
+                        },
+                      ),
+
+                      SizedBox(height: 20),
+
+                      // Confirm Password Field
+                      TextFormField(
+                        controller: _confirmPasswordController,
+                        obscureText: _obscureConfirmPassword,
+                        textInputAction: TextInputAction.done,
+                        enabled: !_isLoading,
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.authPasswordConfirm,
+                          prefixIcon: Icon(Icons.lock_outline),
+                          suffixIcon: IconButton(
+                            icon: Icon(_obscureConfirmPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                            onPressed: () => setState(() =>
+                                _obscureConfirmPassword =
+                                    !_obscureConfirmPassword),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppLocalizations.of(context)!
+                                .authPasswordConfirmRequired;
+                          }
+                          if (value != _passwordController.text) {
+                            return AppLocalizations.of(context)!
+                                .authPasswordMismatch;
+                          }
+                          return null;
+                        },
+                        onFieldSubmitted: (_) => _register(),
+                      ),
+
+                      SizedBox(height: 32),
+
+                      // Register Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: ElevatedButton(
+                          onPressed: _isLoading ? null : _register,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            foregroundColor:
+                                Theme.of(context).colorScheme.onPrimary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: _isLoading
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
+                                  ),
+                                )
+                              : Text(
+                                  AppLocalizations.of(context)!
+                                      .authCreateAccount,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+
+                      // Back to Login
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(AppLocalizations.of(context)!
+                            .authAlreadyHaveAccount),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

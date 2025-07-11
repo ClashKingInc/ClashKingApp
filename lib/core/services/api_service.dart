@@ -122,6 +122,32 @@ class ApiService {
       DebugUtils.debugError('❌ Error loading config: $e');
     }
   }
+
+  static String getErrorMessage(dynamic error) {
+    if (error is BadRequestException) {
+      return error.message;
+    } else if (error is UnauthorizedException) {
+      return error.message;
+    } else if (error is ForbiddenException) {
+      return error.message;
+    } else if (error is NotFoundException) {
+      return error.message;
+    } else if (error is RateLimitException) {
+      return error.message;
+    } else if (error is ServerException) {
+      return error.message;
+    } else if (error is ApiException) {
+      return error.message;
+    } else if (error is SocketException) {
+      return 'No internet connection. Please check your network and try again.';
+    } else if (error is TimeoutException) {
+      return 'Request timed out. Please try again.';
+    } else if (error is FormatException) {
+      return 'Invalid response format. Please try again.';
+    } else {
+      return error.toString().replaceFirst('Exception: ', '');
+    }
+  }
 }
 
 class ApiException implements Exception {

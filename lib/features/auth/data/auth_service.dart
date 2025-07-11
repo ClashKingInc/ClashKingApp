@@ -102,7 +102,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Future<void> registerWithEmail(String email, String password, String username) async {
+  Future<Map<String, dynamic>> registerWithEmail(String email, String password, String username) async {
     try {
       DebugUtils.debugInfo("🔄 Starting email registration process...");
       final deviceId = await _tokenService.getDeviceId();
@@ -118,17 +118,133 @@ class AuthService extends ChangeNotifier {
       
       DebugUtils.debugInfo("🔄 Email registration response: $response");
       
+      // Registration now sends verification email instead of creating account
+      // No tokens returned yet - user needs to verify email first
+      DebugUtils.debugSuccess("🔄 Email registration verification sent successfully");
+      
+      // Don't set authentication state yet - wait for email verification
+      notifyListeners();
+      
+      // Return response for UI to handle (includes verification_token in dev mode)
+      return response;
+    } catch (e) {
+      DebugUtils.debugError("❌ Email registration error: $e");
+      rethrow; // Let the UI handle error parsing and localization
+    }
+  }
+
+  Future<void> verifyEmail(String verificationToken) async {
+    try {
+      DebugUtils.debugInfo("🔄 Starting email verification process...");
+      
+      final response = await _apiService.post('/auth/verify-email', {
+        'token': verificationToken,
+      });
+      
+      DebugUtils.debugInfo("🔄 Email verification response: $response");
+      
       await _tokenService.saveTokens(
           response['access_token'], response['refresh_token']);
       _currentUser = User.fromJson(response['user']);
       _isAuthenticated = true;
       _accessToken = response['access_token'];
       
-      DebugUtils.debugSuccess("🔄 Email registration completed successfully");
+      DebugUtils.debugSuccess("🔄 Email verification completed successfully");
       notifyListeners();
     } catch (e) {
-      DebugUtils.debugError("❌ Email registration error: $e");
-      throw Exception("Registration failed. Email may already be in use.");
+      DebugUtils.debugError("❌ Email verification error: $e");
+      throw Exception("Email verification failed. The token may be invalid or expired.");
+    }
+  }
+
+  Future<void> verifyEmailWithCode(String email, String code) async {
+    try {
+      DebugUtils.debugInfo("🔄 Starting email verification with code...");
+      
+      final response = await _apiService.post('/auth/verify-email-code', {
+        'email': email,
+        'code': code,
+      });
+      
+      DebugUtils.debugInfo("🔄 Email verification response: $response");
+      
+      await _tokenService.saveTokens(
+          response['access_token'], response['refresh_token']);
+      _currentUser = User.fromJson(response['user']);
+      _isAuthenticated = true;
+      _accessToken = response['access_token'];
+      
+      DebugUtils.debugSuccess("🔄 Email verification with code completed successfully");
+      notifyListeners();
+    } catch (e) {
+      DebugUtils.debugError("❌ Email verification with code error: $e");
+      rethrow; // Let the UI handle error parsing and localization
+    }
+  }
+
+  Future<Map<String, dynamic>> resendVerificationEmail(String email) async {
+    try {
+      DebugUtils.debugInfo("🔄 Resending verification email...");
+      
+      final response = await _apiService.post('/auth/resend-verification', {
+        'email': email,
+      });
+      
+      DebugUtils.debugInfo("🔄 Resend verification response: $response");
+      DebugUtils.debugSuccess("🔄 Verification email resent successfully");
+      
+      return response;
+    } catch (e) {
+      DebugUtils.debugError("❌ Resend verification error: $e");
+      rethrow; // Let the UI handle error parsing and localization
+    }
+  }
+
+  Future<Map<String, dynamic>> forgotPassword(String email) async {
+    try {
+      DebugUtils.debugInfo("🔄 Requesting password reset...");
+      
+      final response = await _apiService.post('/auth/forgot-password', {
+        'email': email,
+      });
+      
+      DebugUtils.debugInfo("🔄 Forgot password response: $response");
+      DebugUtils.debugSuccess("🔄 Password reset requested successfully");
+      
+      return response;
+    } catch (e) {
+      DebugUtils.debugError("❌ Forgot password error: $e");
+      rethrow; // Let the UI handle error parsing and localization
+    }
+  }
+
+  Future<void> resetPassword(String email, String resetCode, String newPassword) async {
+    try {
+      DebugUtils.debugInfo("🔄 Resetting password...");
+      final deviceId = await _tokenService.getDeviceId();
+      final deviceName = await _tokenService.getDeviceName();
+      
+      final response = await _apiService.post('/auth/reset-password', {
+        'email': email,
+        'reset_code': resetCode,
+        'new_password': newPassword,
+        'device_id': deviceId,
+        'device_name': deviceName,
+      });
+      
+      DebugUtils.debugInfo("🔄 Password reset response: $response");
+      
+      await _tokenService.saveTokens(
+          response['access_token'], response['refresh_token']);
+      _currentUser = User.fromJson(response['user']);
+      _isAuthenticated = true;
+      _accessToken = response['access_token'];
+      
+      DebugUtils.debugSuccess("🔄 Password reset completed successfully");
+      notifyListeners();
+    } catch (e) {
+      DebugUtils.debugError("❌ Password reset error: $e");
+      rethrow; // Let the UI handle error parsing and localization
     }
   }
 
@@ -263,4 +379,5 @@ class AuthService extends ChangeNotifier {
     // Note: Also call CocAccountService.clearAccountData() after this
     DebugUtils.debugInfo("🔄 AuthService data cleared. Make sure to also clear CocAccountService data.");
   }
+
 }

@@ -19,6 +19,9 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter/foundation.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:app_links/app_links.dart';
+import 'package:clashkingapp/core/utils/deep_link_handler.dart';
+import 'package:clashkingapp/core/constants/global_keys.dart';
 
 // CallbackDispatcher for background execution (Android only)
 @pragma('vm:entry-point')
@@ -44,6 +47,56 @@ void callbackDispatcher() {
       return Future.value(false);
     }
   });
+}
+
+/// Initialize deep link listening for clashking:// URLs
+void _initializeDeepLinks() {
+  if (kIsWeb) {
+    // Web doesn't support deep links in the same way
+    return;
+  }
+  
+  final appLinks = AppLinks();
+  
+  // Handle deep links when app is already running
+  appLinks.uriLinkStream.listen((uri) {
+    DebugUtils.debugInfo("🔗 Deep link received (running): $uri");
+    _handleDeepLink(uri);
+  }, onError: (err) {
+    DebugUtils.debugError("❌ Deep link error: $err");
+  });
+  
+  // Handle initial deep link when app starts from a deep link
+  appLinks.getInitialLink().then((uri) {
+    if (uri != null) {
+      DebugUtils.debugInfo("🔗 Initial deep link: $uri");
+      // Delay handling to ensure app is fully initialized
+      Future.delayed(Duration(milliseconds: 500), () {
+        _handleDeepLink(uri);
+      });
+    }
+  }).catchError((err) {
+    DebugUtils.debugError("❌ Initial deep link error: $err");
+  });
+}
+
+/// Handle deep link with proper context checking
+void _handleDeepLink(Uri uri) {
+  // Ensure we have a valid navigation context
+  final context = globalNavigatorKey.currentContext;
+  if (context != null) {
+    DeepLinkHandler.handleDeepLink(context, uri);
+  } else {
+    // If no context yet, retry after a short delay
+    Future.delayed(Duration(milliseconds: 200), () {
+      final retryContext = globalNavigatorKey.currentContext;
+      if (retryContext != null) {
+        DeepLinkHandler.handleDeepLink(retryContext, uri);
+      } else {
+        DebugUtils.debugError("❌ No navigation context available for deep link: $uri");
+      }
+    });
+  }
 }
 
 Future<void> main() async {
@@ -72,6 +125,10 @@ Future<void> main() async {
       ]);
 
       FlutterNativeSplash.remove();
+      
+      // Initialize deep link listening
+      _initializeDeepLinks();
+      
       runApp(
         MultiProvider(
           providers: [

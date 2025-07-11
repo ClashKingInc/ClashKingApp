@@ -523,6 +523,18 @@ abstract class AppLocalizations {
   /// **'Email'**
   String get authEmailTitle;
 
+  /// No description provided for @authEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get authEmail;
+
+  /// No description provided for @authEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address'**
+  String get authEmailHint;
+
   /// No description provided for @authEmailDescription.
   ///
   /// In en, this message translates to:
@@ -546,6 +558,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Password'**
   String get authPasswordLabel;
+
+  /// No description provided for @authPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get authPasswordHint;
 
   /// No description provided for @authPasswordConfirm.
   ///
@@ -589,6 +607,102 @@ abstract class AppLocalizations {
   /// **'Forgot password?'**
   String get authPasswordForgot;
 
+  /// No description provided for @authPasswordForgotDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address and we\'ll send you a 6-digit code to reset your password.'**
+  String get authPasswordForgotDescription;
+
+  /// No description provided for @authPasswordResetSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Reset Code'**
+  String get authPasswordResetSend;
+
+  /// No description provided for @authPasswordResetSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Code Sent!'**
+  String get authPasswordResetSent;
+
+  /// No description provided for @authPasswordResetSentDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ve sent a 6-digit reset code to your email address. Please check your inbox and use the code to reset your password.'**
+  String get authPasswordResetSentDescription;
+
+  /// No description provided for @authPasswordReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get authPasswordReset;
+
+  /// No description provided for @authPasswordResetDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email, the 6-digit code from the email, and your new password below.'**
+  String get authPasswordResetDescription;
+
+  /// No description provided for @authPasswordNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get authPasswordNew;
+
+  /// No description provided for @authPasswordConfirmHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enter your new password'**
+  String get authPasswordConfirmHint;
+
+  /// No description provided for @authPasswordResetConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get authPasswordResetConfirm;
+
+  /// No description provided for @authPasswordResetSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset successful! You can now log in.'**
+  String get authPasswordResetSuccess;
+
+  /// No description provided for @authPasswordResetContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue to Reset Password'**
+  String get authPasswordResetContinue;
+
+  /// No description provided for @authPasswordResetCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Code'**
+  String get authPasswordResetCode;
+
+  /// No description provided for @authPasswordResetCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code from your email'**
+  String get authPasswordResetCodeHint;
+
+  /// No description provided for @authPasswordResetCodeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the reset code'**
+  String get authPasswordResetCodeRequired;
+
+  /// No description provided for @authPasswordResetCodeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid 6-digit code'**
+  String get authPasswordResetCodeInvalid;
+
+  /// No description provided for @authBackToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Login'**
+  String get authBackToLogin;
+
   /// No description provided for @authUsernameLabel.
   ///
   /// In en, this message translates to:
@@ -618,6 +732,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An error occurred. Please check your internet connection and relaunch the app.'**
   String get authErrorConnectionRelaunch;
+
+  /// No description provided for @authErrorEmailAlreadyRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already registered. Please try logging in instead.'**
+  String get authErrorEmailAlreadyRegistered;
+
+  /// No description provided for @authErrorEmailAlreadyPending.
+  ///
+  /// In en, this message translates to:
+  /// **'A verification email was already sent to this address. Please check your email or try resending.'**
+  String get authErrorEmailAlreadyPending;
+
+  /// No description provided for @authErrorEmailInvalidFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address.'**
+  String get authErrorEmailInvalidFormat;
+
+  /// No description provided for @authErrorPasswordWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too weak. Please use a stronger password.'**
+  String get authErrorPasswordWeak;
+
+  /// No description provided for @authErrorUsernameInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Username is invalid. Please use only letters, numbers, and underscores.'**
+  String get authErrorUsernameInvalid;
+
+  /// No description provided for @authErrorUsernameExists.
+  ///
+  /// In en, this message translates to:
+  /// **'This username is already taken. Please choose a different one.'**
+  String get authErrorUsernameExists;
+
+  /// No description provided for @authErrorRegistrationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration failed. Please try again later.'**
+  String get authErrorRegistrationFailed;
+
+  /// No description provided for @authErrorEmailSendFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send verification email. Please try again later.'**
+  String get authErrorEmailSendFailed;
+
+  /// No description provided for @authErrorRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Please wait a moment and try again.'**
+  String get authErrorRateLimited;
+
+  /// No description provided for @authErrorServerUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Server is temporarily unavailable. Please try again later.'**
+  String get authErrorServerUnavailable;
 
   /// No description provided for @authAccountManagement.
   ///
@@ -672,6 +846,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Email account successfully linked!'**
   String get authAccountEmailLinkedSuccess;
+
+  /// No description provided for @authEmailVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Email'**
+  String get authEmailVerificationTitle;
+
+  /// No description provided for @authEmailVerificationCheckEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Your Email'**
+  String get authEmailVerificationCheckEmail;
+
+  /// No description provided for @authEmailVerificationSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ve sent a verification email to:'**
+  String get authEmailVerificationSentTo;
+
+  /// No description provided for @authEmailVerificationInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Click the link in the email to verify your account. If you don\'t see the email, check your spam folder.'**
+  String get authEmailVerificationInstructions;
+
+  /// No description provided for @authEmailVerificationResend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend Verification Email'**
+  String get authEmailVerificationResend;
+
+  /// No description provided for @authEmailVerificationResendSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification email resent successfully! Please check your email.'**
+  String get authEmailVerificationResendSuccess;
+
+  /// No description provided for @authEmailVerificationResendFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to resend verification email. Please try again.'**
+  String get authEmailVerificationResendFailed;
+
+  /// No description provided for @authEmailVerificationBackToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Login'**
+  String get authEmailVerificationBackToLogin;
+
+  /// No description provided for @authEmailVerificationDevToken.
+  ///
+  /// In en, this message translates to:
+  /// **'I have a verification token (Dev)'**
+  String get authEmailVerificationDevToken;
+
+  /// No description provided for @authEmailVerificationDevMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Development Mode - Manual Token Input:'**
+  String get authEmailVerificationDevMode;
+
+  /// No description provided for @authEmailVerificationTokenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification Token'**
+  String get authEmailVerificationTokenLabel;
+
+  /// No description provided for @authEmailVerificationTokenRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification token is required'**
+  String get authEmailVerificationTokenRequired;
+
+  /// No description provided for @authEmailVerificationVerifyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Email'**
+  String get authEmailVerificationVerifyButton;
+
+  /// No description provided for @authEmailVerificationExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification expired. Please register again.'**
+  String get authEmailVerificationExpired;
+
+  /// No description provided for @authEmailVerificationAlreadyVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already verified. Please try logging in instead.'**
+  String get authEmailVerificationAlreadyVerified;
+
+  /// No description provided for @authEmailVerificationNoToken.
+  ///
+  /// In en, this message translates to:
+  /// **'No pending verification found. Please register first.'**
+  String get authEmailVerificationNoToken;
+
+  /// No description provided for @authEmailVerificationVerifying.
+  ///
+  /// In en, this message translates to:
+  /// **'Verifying your email...'**
+  String get authEmailVerificationVerifying;
+
+  /// No description provided for @authEmailVerificationCodeInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code sent to your email:'**
+  String get authEmailVerificationCodeInstructions;
+
+  /// No description provided for @authEmailVerificationCodeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the 6-digit verification code'**
+  String get authEmailVerificationCodeRequired;
+
+  /// No description provided for @authEmailVerificationVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Code'**
+  String get authEmailVerificationVerify;
 
   /// No description provided for @helpTitle.
   ///
