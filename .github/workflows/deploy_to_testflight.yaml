@@ -63,16 +63,24 @@ jobs:
       - name: Setup Xcode signing
         run: |
           # Determine which certificates to use based on track
-          if [ "${{ env.TESTFLIGHT_TRACK }}" == "internal" ]; then
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ "${{ github.event.inputs.testflight_track }}" == "internal" ]; then
+            TRACK="internal"
+          elif [ "${{ github.event_name }}" == "push" ] && [[ "${{ github.ref }}" == *"alpha"* ]]; then
+            TRACK="internal"  
+          else
+            TRACK="external"
+          fi
+          
+          if [ "$TRACK" == "internal" ]; then
             CERTIFICATE_BASE64="${{ secrets.IOS_DEV_CERTIFICATE_BASE64 }}"
             CERTIFICATE_PASSWORD="${{ secrets.IOS_DEV_CERTIFICATE_PASSWORD }}"
             PROVISIONING_PROFILE_BASE64="${{ secrets.IOS_DEV_PROVISIONING_PROFILE_BASE64 }}"
             SIGNING_IDENTITY="iPhone Developer"
             echo "Using Development certificates for Internal Testing"
           else
-            CERTIFICATE_BASE64="${{ secrets.IOS_DIST_CERTIFICATE_BASE64 }}"
-            CERTIFICATE_PASSWORD="${{ secrets.IOS_DIST_CERTIFICATE_PASSWORD }}"
-            PROVISIONING_PROFILE_BASE64="${{ secrets.IOS_DIST_PROVISIONING_PROFILE_BASE64 }}"
+            CERTIFICATE_BASE64="${{ secrets.IOS_CERTIFICATE_BASE64 }}"
+            CERTIFICATE_PASSWORD="${{ secrets.IOS_CERTIFICATE_PASSWORD }}"
+            PROVISIONING_PROFILE_BASE64="${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}"
             SIGNING_IDENTITY="iPhone Distribution"
             echo "Using Distribution certificates for External Testing"
           fi
