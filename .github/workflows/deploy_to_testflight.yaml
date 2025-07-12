@@ -80,16 +80,46 @@ jobs:
           # Create certificates directory
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           
+          # Validate certificate data exists
+          if [ -z "$CERTIFICATE_BASE64" ]; then
+            echo "❌ ERROR: Certificate base64 data is empty"
+            exit 1
+          fi
+          
+          if [ -z "$CERTIFICATE_PASSWORD" ]; then
+            echo "❌ ERROR: Certificate password is empty"
+            exit 1
+          fi
+          
           # Decode and install certificate
           echo "$CERTIFICATE_BASE64" | base64 --decode > certificate.p12
+          
+          # Verify certificate file was created and has content
+          if [ ! -f certificate.p12 ] || [ ! -s certificate.p12 ]; then
+            echo "❌ ERROR: Certificate file is empty or doesn't exist"
+            ls -la certificate.p12 || echo "File not found"
+            exit 1
+          fi
+          
+          echo "✅ Certificate file created successfully ($(stat -f%z certificate.p12 2>/dev/null || stat -c%s certificate.p12) bytes)"
           
           # Create a new keychain
           security create-keychain -p "temppassword" build.keychain
           security set-keychain-settings -lut 21600 build.keychain
           security unlock-keychain -p "temppassword" build.keychain
           
-          # Import certificate
-          security import certificate.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign -T /usr/bin/xcodebuild
+          # Import certificate with better error handling
+          echo "🔐 Importing certificate..."
+          if ! security import certificate.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign -T /usr/bin/xcodebuild; then
+            echo "❌ ERROR: Failed to import certificate"
+            echo "🔍 Troubleshooting info:"
+            echo "  - Certificate file size: $(stat -f%z certificate.p12 2>/dev/null || stat -c%s certificate.p12) bytes"
+            echo "  - Password length: ${#CERTIFICATE_PASSWORD}"
+            echo "  - Trying to verify certificate format..."
+            openssl pkcs12 -info -in certificate.p12 -noout -passin pass:"$CERTIFICATE_PASSWORD" || echo "  Certificate verification failed"
+            exit 1
+          fi
+          echo "✅ Certificate imported successfully"
           
           # Set keychain search list
           security list-keychains -s build.keychain login.keychain
