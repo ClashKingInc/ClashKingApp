@@ -339,8 +339,8 @@
   "gameCreatorCode": "Makerscode: ClashKing",
   "gameCreatorCodeDescription": "Tik voor info • Steun ons gratis!",
   "gameCreatorCodeDialogTitle": "Steun ClashKing",
-  "gameCreatorCodeDialogDescription": "Als je onze creator code gebruikt, help je de ontwikkeling te financieren, houden we de app en bot gratis voor iedereen, en ondersteunen we de toevoeging van nieuwe functies.\n\nWij ontvangen 5% van je aankopen in het spel, zonder extra kosten voor jou — vul gewoon \"ClashKing\" in bij de winkel van een Supercell-spel.\n\nBedankt voor je steun!",
-  "gameCreatorCodeDialogButton": "Gebruik Maker Code",
+  "gameCreatorCodeDialogDescription": "Wanneer je onze creatorcode gebruikt, help je de ontwikkeling te financieren, de app en bot gratis te houden voor iedereen én nieuwe functies mogelijk te maken.\n\nWij ontvangen 5% van je aankopen in het spel, zonder extra kosten voor jou — vul gewoon \"ClashKing\" in bij de winkel van een Supercell-spel.\n\nBedankt voor je steun!",
+  "gameCreatorCodeDialogButton": "Gebruik makerscode",
   "clanTitle": "Clan",
   "clanSearchTitle": "Zoek clan",
   "clanSearchPlaceholder": "Clannaam",
@@ -469,7 +469,7 @@
       }
     }
   },
-  "timeEndsIn": "Eindigt over {time}",
+  "timeEndsIn": "Eindigt in {time}",
   "@timeEndsIn": {
     "placeholders": {
       "time": {
@@ -496,7 +496,7 @@
       }
     }
   },
-  "legendsNoRankLocalDescription": "Je staat momenteel niet gerangschikt ({country}) met {trophies} trofeeën.",
+  "legendsNoRankLocalDescription": "Je bent momenteel niet gerangschikt ({country}) met {trophies} trofeeën.",
   "@legendsNoRankLocalDescription": {
     "placeholders": {
       "country": {
