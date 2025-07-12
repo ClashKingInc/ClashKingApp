@@ -188,7 +188,7 @@
   "accountsAdd": "Account toevoegen",
   "accountsDelete": "Account verwijderen",
   "accountsApiToken": "Account API Token",
-  "accountsEnterApiToken": "Voer het account API-token in om te bevestigen dat het van jou is. Je vindt het in Clash of Clans Instellingen > Meer instellingen > API-token.",
+  "accountsEnterApiToken": "Voer je account API-token in om te bevestigen dat deze van jou is. Je vindt deze in Clash of Clans Instellingen > Meer instellingen > API Token.",
   "accountsFillAllFields": "Vul alle velden in.",
   "accountsErrorTagNotExists": "Het ingevoerde speler-ID bestaat niet.",
   "accountsErrorAlreadyLinked": "De spelertag is al gekoppeld aan iemand anders.",
@@ -291,7 +291,7 @@
   "gameBaseBuilder": "Bouwerbasis",
   "gameClanCapital": "Clan Hoofdstad",
   "gameTownHall": "SH",
-  "gameTownHallLevel": "SH niveau",
+  "gameTownHallLevel": "SH level",
   "gameTownHallLevelNumber": "Stadhuis {level}",
   "@gameTownHallLevelNumber": {
     "placeholders": {
@@ -314,7 +314,7 @@
   "gameDonations": "Donaties",
   "gameDonationsReceived": "Donaties ontvangen",
   "gameDonationsRatio": "Donatieverhouding",
-  "gameLevel": "Niveau: {level}/{maxLevel}",
+  "gameLevel": "Level: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
       "level": {
@@ -334,7 +334,7 @@
   "gameSiegeMachines": "Belegeringsmachines",
   "gameSpells": "Spreuken",
   "gameAchievements": "Prestaties",
-  "gameClanGames": "Clan Spellen",
+  "gameClanGames": "Clanspelen",
   "gameSeasonPass": "Seizoenspas",
   "gameCreatorCode": "Makerscode: ClashKing",
   "gameCreatorCodeDescription": "Tik voor info • Steun ons gratis!",
