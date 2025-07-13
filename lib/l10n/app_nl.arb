@@ -979,7 +979,7 @@
   "@warFiltersRandom": {
     "description": "Random/basic war (not friendly or cwl)"
   },
-  "warVisibilityToggleTownHall": "Verberg/toon statistieken van voormalige SH-niveaus",
+  "warVisibilityToggleTownHall": "Verberg/toon statistieken van voormalige SH-levels",
   "@warVisibilityToggleTownHall": {
     "description": "For example, hide stats from TH15 and below if the player is now TH16"
   },
@@ -1021,7 +1021,7 @@
       }
     }
   },
-  "cwlCurrentRound": "Het is momenteel ronde {round}.",
+  "cwlCurrentRound": "Huidige ronde (ronde {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -1175,7 +1175,7 @@
   "searchNoResult": "Geen resultaat.",
   "maintenanceTitle": "Onderhoud",
   "maintenanceDescription": "Clash of Clans is momenteel in onderhoud, dus we kunnen geen toegang krijgen tot de API. Kom later terug.",
-  "downloadTooltip": "CWL-samenvatting downloaden",
+  "downloadTooltip": "CWL samenvatting downloaden",
   "downloadInProgress": "Bestand downloaden... Dit kan een paar seconden duren...",
   "downloadSuccess": "Bestand succesvol opgeslagen in {path}",
   "@downloadSuccess": {
@@ -1194,11 +1194,11 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  "settingsLicenses": "Open Source Licenties",
+  "settingsLicenses": "Open source licenties",
   "settingsLicensesSubtitle": "Bekijk licenties van externe bibliotheken",
   "settingsPrivacyPolicy": "Privacybeleid",
   "settingsPrivacyPolicySubtitle": "Hoe we met jouw gegevens omgaan",
-  "betaFeature": "Beta-functie",
+  "betaFeature": "Beta functie",
   "betaLabel": "BETA",
   "betaDescription": "Deze functie bevindt zich momenteel in beta, er kunnen bugs in zitten of het kan onvolledig zijn. We werken actief aan verbeteringen en verwelkomen je feedback. Deel je ideeën en meld problemen op onze Discord-server om ons te helpen het beter te maken.",
   "settingsLanguage": "Taal",
@@ -1228,7 +1228,7 @@
   "faqNeedHelp": "Ik heb hulp nodig of wil graag een suggestie doen. Hoe kan ik contact met jullie opnemen?",
   "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven, of je kunt ons een e-mail sturen naar devs@clashk.ing. Schrijf alleen in het Engels of Frans.",
   "faqSendEmail": "Stuur een e-mail",
-  "faqJoinDiscord": "Word lid van onze Discord-server",
+  "faqJoinDiscord": "Word lid van onze Discord server",
   "faqCannotOpenMailClient": "Om een of andere reden kunnen we je mailclient niet openen. We hebben het e-mailadres voor je gekopieerd. Je kunt een e-mail schrijven en het adres plakken in het ontvangerveld.",
   "translationHelpUsTranslate": "Help ons met vertalen",
   "translationSuggestFeatures": "Functies voorstellen",
