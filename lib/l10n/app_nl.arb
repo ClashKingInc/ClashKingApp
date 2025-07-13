@@ -696,7 +696,7 @@
       }
     }
   },
-  "todoPointsLeftDescriptionNoPoints": "Gefeliciteerd, je bent op tijd om de maximale beloningen aan het einde van het evenement te krijgen ({type})!",
+  "todoPointsLeftDescriptionNoPoints": "Gefeliciteerd, je bent op tijd om de maximale beloningen te krijgen aan het einde van het evenement ({type})!",
   "@todoPointsLeftDescriptionNoPoints": {
     "placeholders": {
       "type": {
@@ -706,11 +706,11 @@
   },
   "warTitle": "Oorlog",
   "warFrequency": "Oorlogfrequentie",
-  "warParticipation": "Oorlogdeelname",
+  "warParticipation": "Oorlogsdeelname",
   "warLeague": "Oorlog/Divisies",
   "warHistory": "Oorlogsgeschiedenis",
-  "warLog": "Oorloglog",
-  "warLogClosed": "{clan}s oorloglog is gesloten.",
+  "warLog": "Oorlogslogboek",
+  "warLogClosed": "Het oorlogslogboek van {clan} is gesloten.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -729,7 +729,7 @@
     }
   },
   "warAskForWar": "Neem contact op met de leider of een co-leider om een oorlog te starten.",
-  "warAskForWarLogOpening": "Neem contact op met de leider of een co-leider om het oorloglog te openen.",
+  "warAskForWarLogOpening": "Neem contact op met de leider of een co-leider om het oorlogs logsboek te openen.",
   "warEnded": "Oorlog afgelopen",
   "warPreparation": "Voorbereiding",
   "warPerfectWar": "Perfecte oorlog",
@@ -953,7 +953,7 @@
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
-  "warOpponentTownhall": "Teg SH",
+  "warOpponentTownhall": "Tegenstander SH",
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
   },
@@ -1069,16 +1069,16 @@
   "joinLeaveLeave": "Verlaten",
   "joinLeaveReset": "Reset",
   "joinLeaveJoins": "Toetredingen",
-  "joinLeaveLeaves": "Uitredingen",
+  "joinLeaveLeaves": "Vertrokken",
   "joinLeaveUniquePlayers": "Unieke spelers",
   "joinLeaveMovingPlayers": "Wisselende spelers",
   "joinLeaveMostMovingPlayers": "Meest wisselende spelers",
-  "joinLeaveStillInClan": "Nog in clan",
+  "joinLeaveStillInClan": "Nog in de clan",
   "joinLeaveLeftForever": "Voor altijd vertrokken",
   "joinLeaveRejoinedPlayers": "Weer toegetreden spelers",
   "joinLeaveAvgTimeJoinLeave": "Gem. toetredings-/uitredingstijd",
   "joinLeavePeakHour": "Meest actieve uur",
-  "joinLeaveNumberDescription": "{number} uitredingsgebeurtenissen vonden plaats tijdens het huidige seizoen ({date}).",
+  "joinLeaveNumberDescription": "{number} vertrekevents vonden plaats tijdens het huidige seizoen ({date}).",
   "@joinLeaveNumberDescription": {
     "placeholders": {
       "number": {
@@ -1089,7 +1089,7 @@
       }
     }
   },
-  "joinLeaveJoinNumberDescription": "{number} toetredingsgebeurtenissen vonden plaats tijdens het huidige seizoen ({date}).",
+  "joinLeaveJoinNumberDescription": "{number} spelers zijn toegetreden tijdens het huidige seizoen ({date}).",
   "@joinLeaveJoinNumberDescription": {
     "placeholders": {
       "number": {
@@ -1100,7 +1100,7 @@
       }
     }
   },
-  "joinLeaveMovingNumberDescription": "{number} speler(s) verlieten de clan en traden opnieuw toe tijdens het huidige seizoen ({date}).",
+  "joinLeaveMovingNumberDescription": "{number} speler(s) zijn de clan uit gegaan en weer teruggekeerd tijdens het huidige seizoen ({date}).",
   "@joinLeaveMovingNumberDescription": {
     "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
@@ -1112,7 +1112,7 @@
       }
     }
   },
-  "joinLeaveUniqueNumberDescription": "{number} unieke speler(s) traden toe/verlieten de clan tijdens het huidige seizoen ({date}).",
+  "joinLeaveUniqueNumberDescription": "{number} unieke speler(s) zijn de clan binnengekomen of vertrokken tijdens het huidige seizoen ({date}).",
   "@joinLeaveUniqueNumberDescription": {
     "description": "Number of unique players who joined/left the clan during the current season.",
     "placeholders": {
@@ -1124,7 +1124,7 @@
       }
     }
   },
-  "joinLeaveStillInClanNumberDescription": "{number} speler(s) traden toe en zitten nog steeds in de clan.",
+  "joinLeaveStillInClanNumberDescription": "{number} speler(s) zijn toegetreden en zitten nog steeds in de clan.",
   "@joinLeaveStillInClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1132,7 +1132,7 @@
       }
     }
   },
-  "joinLeaveLeftClanNumberDescription": "{number} speler(s) traden toe, verlieten vervolgens de clan en traden nooit meer toe.",
+  "joinLeaveLeftClanNumberDescription": "{number} speler(s) zijn toegetreden, daarna vertrokken en nooit teruggekeerd naar de clan.",
   "@joinLeaveLeftClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1155,7 +1155,7 @@
       }
     }
   },
-  "joinLeaveJoinedOnAt": "Toegetreden op {date} om {time}.",
+  "joinLeaveJoinedOnAt": "Lid geworden op {date} om {time}.",
   "@joinLeaveJoinedOnAt": {
     "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
     "placeholders": {
