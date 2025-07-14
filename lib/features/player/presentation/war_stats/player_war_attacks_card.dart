@@ -12,7 +12,8 @@ class PlayerWarAttacksCard extends StatelessWidget {
   final List<PlayerWarStatsData> wars;
   final String type;
 
-  const PlayerWarAttacksCard({super.key, required this.wars, required this.type});
+  const PlayerWarAttacksCard(
+      {super.key, required this.wars, required this.type});
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +25,13 @@ class PlayerWarAttacksCard extends StatelessWidget {
 
     if (type == "attacks") {
       allAttacks = wars
-          .expand((w) => w.memberData.attacks.map((d) => {"defense": d, "war": w}))
+          .expand(
+              (w) => w.memberData.attacks.map((d) => {"defense": d, "war": w}))
           .toList();
     } else {
       allAttacks = wars
-          .expand((w) => w.memberData.defenses.map((d) => {"defense": d, "war": w}))
+          .expand(
+              (w) => w.memberData.defenses.map((d) => {"defense": d, "war": w}))
           .toList();
     }
 
@@ -67,19 +70,21 @@ class PlayerWarAttacksCard extends StatelessWidget {
             trailing: Text(formattedDate),
             onTap: () async {
               final navigator = Navigator.of(context);
-              final playerTag = type == "attacks" 
-                  ? defense.defender?.tag 
+              final playerTag = type == "attacks"
+                  ? defense.defender?.tag
                   : defense.attacker?.tag;
-              
+
               if (playerTag == null) return;
-              
+
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                builder: (_) => const Center(child: CircularProgressIndicator()),
+                builder: (_) =>
+                    const Center(child: CircularProgressIndicator()),
               );
               try {
-                final player = await PlayerService().getPlayerAndClanData(playerTag);
+                final player =
+                    await PlayerService().getPlayerAndClanData(playerTag);
                 navigator.pop();
                 navigator.push(
                   MaterialPageRoute(
@@ -88,9 +93,11 @@ class PlayerWarAttacksCard extends StatelessWidget {
                 );
               } catch (e) {
                 navigator.pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Failed to load player data')),
-                );
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to load player data')),
+                  );
+                }
               }
             },
           ),
@@ -104,7 +111,8 @@ class PlayerWarAttacksCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          Text(AppLocalizations.of(context)?.generalNoDataAvailable ?? 'No data'),
+          Text(AppLocalizations.of(context)?.generalNoDataAvailable ??
+              'No data'),
           const SizedBox(height: 16),
           CachedNetworkImage(
             imageUrl:

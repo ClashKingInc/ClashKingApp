@@ -193,8 +193,6 @@ class PlayerService extends ChangeNotifier {
 
           // Process player data using the same method as loadApiData
           if (data["players"] != null && data["players_basic"] != null) {
-            // Save current profiles state
-            final originalProfiles = _profiles.toList();
             
             // Process the player data using the bulk method
             processBulkPlayerData(data["players"], data["players_basic"]);
@@ -399,15 +397,8 @@ class PlayerService extends ChangeNotifier {
         DebugUtils.debugSuccess("Enriched player: ${existing.name} (${existing.tag})");
       } catch (e) {
         DebugUtils.debugError(" Error enriching player $tag: $e");
-        // Create a new player if not found in basic data
-        try {
-          final player = Player.fromJson(extendedData);
-          player.enrichWithFullStats(extendedData);
-          _profiles.add(player);
-          DebugUtils.debugSuccess("Created & enriched new player: ${player.name} (${player.tag})");
-        } catch (e2) {
-          DebugUtils.debugError(" Error creating player from extended data $tag: $e2");
-        }
+        // Skip players not found in basic data - extended data alone is incomplete
+        DebugUtils.debugWarning("⚠️ Skipping player $tag - not found in basic data and extended data is incomplete");
       }
     }
 

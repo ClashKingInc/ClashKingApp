@@ -403,8 +403,10 @@ class Player {
             gameData: GameDataService.gearsData['gears'] ?? {},
             factory: PlayerEquipment.fromRaw,
           ),
-          achievements: List<PlayerAchievement>.from(json['achievements']
-              .map((x) => PlayerAchievement.fromJson(x ?? {}))),
+          achievements: json['achievements'] != null 
+              ? List<PlayerAchievement>.from(json['achievements']
+                  .map((x) => PlayerAchievement.fromJson(x ?? {})))
+              : <PlayerAchievement>[],
           legendsBySeason: null,
           legendRanking: [],
           rankings: null);
