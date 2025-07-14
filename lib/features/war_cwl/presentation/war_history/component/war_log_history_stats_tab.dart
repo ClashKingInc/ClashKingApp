@@ -242,7 +242,7 @@ class WarLogHistoryStatsState extends State<WarLogHistoryStats>
                   );*/
                 } catch (error) {
                   navigator.pop();
-                  DebugUtils.debugError("❌ An error occurred: $error");
+                  DebugUtils.debugError(" An error occurred: $error");
                 }
               },
               child: Stack(

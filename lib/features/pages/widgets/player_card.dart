@@ -143,9 +143,13 @@ class PlayerCard extends StatelessWidget {
                                               .toString())
                                       .format(int.parse(
                                           player.trophies.toString())),
-                                  description: AppLocalizations.of(context)!
-                                      .playerTrophiesDescription(
-                                          player.trophies, player.league)),
+                                  description: player.league == "Unranked"
+                                      ? AppLocalizations.of(context)!
+                                          .playerTrophiesUnrankedDescription(
+                                              player.trophies)
+                                      : AppLocalizations.of(context)!
+                                          .playerTrophiesDescription(
+                                              player.trophies, player.league)),
                               ImageChip(
                             context: context,
                                   imageUrl: player.builderHallPic,

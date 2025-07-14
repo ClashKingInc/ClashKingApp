@@ -23,7 +23,7 @@ class ClanTagManager {
       if (newClanTag != null && newClanTag.isNotEmpty) {
         // Store the new clan tag
         await storePrefs('clanTag', newClanTag);
-        DebugUtils.debugSuccess("✅ Updated clan tag to: $newClanTag");
+        DebugUtils.debugSuccess("Updated clan tag to: $newClanTag");
         
         // Update the war widget immediately
         await WarWidgetService.handleWidgetRefresh();
@@ -37,7 +37,7 @@ class ClanTagManager {
       }
       
     } catch (e) {
-      DebugUtils.debugError("❌ Error updating clan tag for new account: $e");
+      DebugUtils.debugError(" Error updating clan tag for new account: $e");
     }
   }
 
@@ -68,7 +68,7 @@ class ClanTagManager {
         return null;
       }
     } catch (e) {
-      DebugUtils.debugError("❌ Error fetching player clan tag: $e");
+      DebugUtils.debugError(" Error fetching player clan tag: $e");
       return null;
     }
   }
@@ -81,7 +81,7 @@ class ClanTagManager {
         await onAccountChanged(selectedPlayerTag);
       }
     } catch (e) {
-      DebugUtils.debugError("❌ Error syncing clan tag: $e");
+      DebugUtils.debugError(" Error syncing clan tag: $e");
     }
   }
 }

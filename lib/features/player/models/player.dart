@@ -295,12 +295,12 @@ class Player {
           clanCapitalContributions: json["clanCapitalContributions"] is int
               ? json["clanCapitalContributions"]
               : 0,
-          league: json["league"]?['name'] ?? "",
+          league: json["league"]?['name'] ?? "Unranked",
           townHallPic: ImageAssets.townHall(json["townHallLevel"] ?? 0),
           builderHallPic:
               ImageAssets.builderHall(json["builderHallLevel"] ?? 0),
           leagueUrl: ApiService.cocAssetsProxyUrl(
-              json['league']?['iconUrls']?['medium'] ?? ""),
+              json['league']?['iconUrls']?['medium'] ?? ImageAssets.leagues["Unranked"]),
           clanGamesPoint: [],
           seasonPass: [],
           lastOnline: DateTime.utc(1970, 1, 1),
@@ -411,7 +411,7 @@ class Player {
 
       return profile;
     } catch (e, stacktrace) {
-      DebugUtils.debugError("❌ Exception in Player.fromJson: $e");
+      DebugUtils.debugError(" Exception in Player.fromJson: $e");
       DebugUtils.debugError(stacktrace.toString());
       return Player(
           name: "Unknown",

@@ -10,6 +10,8 @@ import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
+import 'package:clashkingapp/common/widgets/error/error_page.dart';
+import 'dart:io';
 
 class StartupWidget extends StatefulWidget {
   @override
@@ -25,9 +27,47 @@ class StartupWidgetState extends State<StartupWidget> {
     _initAuth();
   }
 
+  // Helper function to determine if an error is network-related
+  bool _isNetworkError(dynamic error) {
+    if (error is SocketException) {
+      return true;
+    }
+    if (error is Exception) {
+      String errorString = error.toString().toLowerCase();
+      return errorString.contains('network') ||
+             errorString.contains('connection') ||
+             errorString.contains('hostname') ||
+             errorString.contains('socket') ||
+             errorString.contains('timeout') ||
+             errorString.contains('no address');
+    }
+    return false;
+  }
+
   Future<void> _initAuth() async {
     final authService = context.read<AuthService>();
-    await authService.initializeAuth();
+    
+    try {
+      await authService.initializeAuth();
+    } catch (e) {
+      // Handle network errors during authentication
+      if (mounted && _isNetworkError(e)) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => ErrorPage(
+              isNetworkError: true,
+              onRetry: () async {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => StartupWidget()),
+                );
+              },
+            ),
+          ),
+        );
+        return;
+      }
+      // For non-network errors, continue with normal flow
+    }
 
     if (!mounted) return;
 
@@ -46,6 +86,22 @@ class StartupWidgetState extends State<StartupWidget> {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => MaintenanceScreen()),
             );
+            return;
+          } else if (_isNetworkError(e)) {
+            // Show network error page for data loading failures
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => ErrorPage(
+                  isNetworkError: true,
+                  onRetry: () async {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => StartupWidget()),
+                    );
+                  },
+                ),
+              ),
+            );
+            return;
           } else {
             // Handle other errors (e.g., network issues)
             showDialog(

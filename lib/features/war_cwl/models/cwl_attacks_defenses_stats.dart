@@ -47,11 +47,15 @@ class CwlAttackStats {
 
   factory CwlAttackStats.fromJson(Map<String, dynamic> json) {
     try {
+      DebugUtils.debugInfo("🔍 Parsing CwlAttackStats JSON: $json");
+      
       // Calculate total stars from individual star counts
       final starsCount = Map<String, int>.from(json['starsCount'] ?? {});
       final totalStars = (starsCount['3'] ?? 0) * 3 + 
                         (starsCount['2'] ?? 0) * 2 + 
                         (starsCount['1'] ?? 0) * 1;
+      
+      DebugUtils.debugInfo("🔍 StarsCount: $starsCount, TotalStars: $totalStars");
       
       return CwlAttackStats(
         stars: totalStars,
@@ -66,7 +70,8 @@ class CwlAttackStats {
         attacksPerWar: null, // Could be calculated if needed
       );
     } catch (e) {
-      DebugUtils.debugError("❌ Error parsing CwlAttackStats: $e");
+      DebugUtils.debugError(" Error parsing CwlAttackStats: $e");
+      DebugUtils.debugError(" JSON was: $json");
       return CwlAttackStats(
         stars: 0,
         threeStars: {},
@@ -127,11 +132,15 @@ class CwlDefenseStats {
 
   factory CwlDefenseStats.fromJson(Map<String, dynamic> json) {
     try {
+      DebugUtils.debugInfo("🔍 Parsing CwlDefenseStats JSON: $json");
+      
       // Calculate total stars from individual star counts (defense perspective)
       final starsCountDef = Map<String, int>.from(json['starsCountDef'] ?? {});
       final totalStars = (starsCountDef['3'] ?? 0) * 3 + 
                         (starsCountDef['2'] ?? 0) * 2 + 
                         (starsCountDef['1'] ?? 0) * 1;
+      
+      DebugUtils.debugInfo("🔍 StarsCountDef: $starsCountDef, TotalStars: $totalStars");
       
       return CwlDefenseStats(
         stars: totalStars,
@@ -144,7 +153,8 @@ class CwlDefenseStats {
         missedDefenses: json['missedDefenses'] ?? 0,
       );
     } catch (e) {
-      DebugUtils.debugError("❌ Error parsing CwlDefenseStats: $e");
+      DebugUtils.debugError(" Error parsing CwlDefenseStats: $e");
+      DebugUtils.debugError(" JSON was: $json");
       return CwlDefenseStats(
         stars: 0,
         threeStars: {},

@@ -173,7 +173,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                           ),
                                         )
                                       : IconButton(
-                                          icon: Icon(Icons.add_circle),
+                                          icon: Icon(Icons.add_circle,
+                                              color: Theme.of(context).colorScheme.primary),
+                                          tooltip: AppLocalizations.of(context)!.accountsAdd,
                                           onPressed: _showApiTokenInput
                                               ? _submitApiToken
                                               : _addAccount,
@@ -206,6 +208,25 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                         .accountsApiToken,
                                     border: OutlineInputBorder(),
                                   ),
+                                ),
+                              ],
+                              if (!_showApiTokenInput) ...[
+                                SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Icon(Icons.info_outline, 
+                                        size: 16, 
+                                        color: Theme.of(context).colorScheme.primary),
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        "Tap the + button to add your account",
+                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                          color: Theme.of(context).colorScheme.primary,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                               SizedBox(height: 8),
@@ -331,9 +352,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    if (userAccounts.isEmpty) return;
-
+                  onPressed: userAccounts.isEmpty ? null : () async {
                     showDialog(
                       context: context,
                       barrierDismissible: false,
@@ -344,7 +363,17 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
 
                     await _loadAllAccountData();
                   },
-                  child: Text(AppLocalizations.of(context)!.generalConfirm),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: userAccounts.isEmpty 
+                        ? Theme.of(context).colorScheme.surface
+                        : null,
+                    foregroundColor: userAccounts.isEmpty 
+                        ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4)
+                        : null,
+                  ),
+                  child: Text(userAccounts.isEmpty 
+                      ? "Add accounts first"
+                      : AppLocalizations.of(context)!.generalConfirm),
                 ),
               ),
             ),
@@ -401,7 +430,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       } else if (errorCode == 500) {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ErrorPage(onRetry: _addAccount),
+            builder: (context) => ErrorPage(onRetry: () async => _addAccount()),
           ),
         );
       } else {
@@ -462,7 +491,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       } else if (errorCode == 500) {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ErrorPage(onRetry: _addAccount),
+            builder: (context) => ErrorPage(onRetry: () async => _addAccount()),
           ),
         );
       } else {

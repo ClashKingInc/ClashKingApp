@@ -253,7 +253,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
         MaterialPageRoute(builder: (context) => LoginPage()),
       );
 
-      DebugUtils.debugSuccess("✅ SettingsInfoScreen: All service data cleared successfully.");
+      DebugUtils.debugSuccess("SettingsInfoScreen: All service data cleared successfully.");
     } else {
       DebugUtils.debugWarning("⚠️ SettingsInfoScreen: _logOut called but context is not mounted.");
     }

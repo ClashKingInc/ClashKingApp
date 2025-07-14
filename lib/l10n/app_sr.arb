@@ -852,7 +852,7 @@
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
-        "type": "double"
+        "type": "String"
       }
     }
   },

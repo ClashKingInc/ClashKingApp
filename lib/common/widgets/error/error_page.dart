@@ -1,15 +1,22 @@
 import 'package:clashkingapp/common/widgets/app_bar/coc_accounts_app_bar.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
-import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class ErrorPage extends StatelessWidget {
-  final VoidCallback onRetry;
+class ErrorPage extends StatefulWidget {
+  final Future<void> Function() onRetry;
+  final bool isNetworkError;
 
-  ErrorPage({super.key, required this.onRetry,});
+  ErrorPage({super.key, required this.onRetry, this.isNetworkError = false});
+
+  @override
+  State<ErrorPage> createState() => _ErrorPageState();
+}
+
+class _ErrorPageState extends State<ErrorPage> {
+  bool _isRetrying = false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +32,59 @@ class ErrorPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Thematic Image
-                  SizedBox(
+                  // Thematic Image with animation
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
                     width: 200,
                     height: 200,
-                    child: MobileWebImage(
-                      imageUrl: ImageAssets.goblin,
-                      fit: BoxFit.contain,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // Background circle for network error
+                        if (widget.isNetworkError)
+                          Container(
+                            width: 180,
+                            height: 180,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Theme.of(context).colorScheme.errorContainer.withValues(alpha: 0.1),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.error.withValues(alpha: 0.2),
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                        MobileWebImage(
+                          imageUrl: ImageAssets.sleepingApprenticeBuilder,
+                          fit: BoxFit.contain,
+                        ),
+                        // Network icon overlay for network errors
+                        if (widget.isNetworkError)
+                          Positioned(
+                            bottom: 10,
+                            right: 10,
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.error,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.2),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Icon(
+                                Icons.wifi_off,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                   
@@ -39,7 +92,9 @@ class ErrorPage extends StatelessWidget {
                   
                   // Error Title with better typography
                   Text(
-                    AppLocalizations.of(context)!.errorTitle,
+                    widget.isNetworkError 
+                        ? AppLocalizations.of(context)!.errorNetworkTitle
+                        : AppLocalizations.of(context)!.errorTitle,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
@@ -47,76 +102,83 @@ class ErrorPage extends StatelessWidget {
                     ),
                   ),
                   
+                  const SizedBox(height: 16),
+                  
+                  // Simple network error message
+                  if (widget.isNetworkError)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Text(
+                        "Check your internet connection and try again.",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  
                   const SizedBox(height: 40),
                   
-                  // Enhanced Retry Button
+                  // Enhanced Retry Button with loading state
                   Container(
                     width: double.infinity,
                     constraints: const BoxConstraints(maxWidth: 300),
                     child: ElevatedButton.icon(
-                      onPressed: onRetry,
+                      onPressed: _isRetrying ? null : () async {
+                        setState(() {
+                          _isRetrying = true;
+                        });
+                        
+                        // Add a small delay for visual feedback
+                        await Future.delayed(const Duration(milliseconds: 300));
+                        
+                        try {
+                          await widget.onRetry();
+                        } catch (retryError) {
+                          // Handle retry failures - show feedback but stay on error page
+                          DebugUtils.debugError("Retry failed: $retryError");
+                        } finally {
+                          if (mounted) {
+                            setState(() {
+                              _isRetrying = false;
+                            });
+                          }
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        backgroundColor: _isRetrying 
+                            ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.7)
+                            : Theme.of(context).colorScheme.primary,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        elevation: 3,
+                        elevation: _isRetrying ? 1 : 3,
                       ),
-                      icon: const Icon(Icons.refresh, size: 20),
+                      icon: _isRetrying 
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : const Icon(Icons.refresh, size: 20),
                       label: Text(
-                        AppLocalizations.of(context)!.generalRetry,
-                        style: const TextStyle(
+                        _isRetrying 
+                            ? "Retrying..." 
+                            : AppLocalizations.of(context)!.generalRetry,
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          color: _isRetrying ? Colors.white.withValues(alpha: 0.8) : Colors.white,
                         ),
                       ),
                     ),
                   ),
                   
-                  const SizedBox(height: 60),
-                  
-                  // Discord Support Section
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.discord,
-                          color: const Color(0xFF5865F2),
-                          size: 32,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          AppLocalizations.of(context)!.helpTitle,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        GestureDetector(
-                          onTap: () => launchUrl(Uri.parse(ApiService.discordUrl)),
-                          child: Text(
-                            AppLocalizations.of(context)!.errorSubtitle,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),
