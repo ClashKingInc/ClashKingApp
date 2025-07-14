@@ -186,6 +186,7 @@
   "accountsPlayerTag": "Player Tag (#ABC123)",
   "accountsEnterPlayerTag": "Enter a player tag",
   "accountsAdd": "Add account",
+  "accountsAddInstruction": "Tap the + button to add your account",
   "accountsDelete": "Delete account",
   "accountsApiToken": "Account API Token",
   "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans Settings > More Settings > API Token.",
