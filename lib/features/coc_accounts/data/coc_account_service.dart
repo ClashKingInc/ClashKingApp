@@ -255,9 +255,9 @@ class CocAccountService extends ChangeNotifier {
       await _loadDataWithBulkEndpoint(playerTags, playerService, clanService, warCwlService);
       _lastRefresh = DateTime.now();
       notifyListeners();
-      DebugUtils.debugSuccess("✅ Page refresh completed successfully");
+      DebugUtils.debugSuccess("Page refresh completed successfully");
     } catch (e) {
-      DebugUtils.debugError("❌ Page refresh failed: $e");
+      DebugUtils.debugError(" Page refresh failed: $e");
       rethrow;
     }
   }
@@ -347,7 +347,7 @@ class CocAccountService extends ChangeNotifier {
         final responseBody = utf8.decode(response.bodyBytes);
         final data = jsonDecode(responseBody);
 
-        DebugUtils.debugSuccess("✅ Bulk data loaded successfully");
+        DebugUtils.debugSuccess("Bulk data loaded successfully");
 
         // Process player data
         if (data["players"] != null) {
@@ -393,15 +393,15 @@ class CocAccountService extends ChangeNotifier {
           clanService.linkWarStatsToClans();
         }
 
-        DebugUtils.debugSuccess("✅ All data linked successfully");
+        DebugUtils.debugSuccess("All data linked successfully");
       } else if (response.statusCode == 503 || response.statusCode == 500) {
         throw HttpException(response.statusCode.toString(), uri: response.request!.url);
       } else {
-        DebugUtils.debugError("❌ Bulk endpoint failed, falling back to individual calls");
+        DebugUtils.debugError(" Bulk endpoint failed, falling back to individual calls");
         await _loadDataWithFallback(playerTags, playerService, clanService, warCwlService);
       }
     } catch (e) {
-      DebugUtils.debugError("❌ Bulk endpoint error: $e, falling back to individual calls");
+      DebugUtils.debugError(" Bulk endpoint error: $e, falling back to individual calls");
       await _loadDataWithFallback(playerTags, playerService, clanService, warCwlService);
     }
   }
@@ -472,7 +472,7 @@ class CocAccountService extends ChangeNotifier {
         DebugUtils.debugInfo("🔄 Clan changed! Refreshing war widget in background...");
         // Don't await - let it run in background
         WarWidgetService.handleWidgetRefresh().catchError((error) {
-          DebugUtils.debugError("❌ Background widget refresh error: $error");
+          DebugUtils.debugError(" Background widget refresh error: $error");
         });
       } else {
         DebugUtils.debugInfo("✅ Same clan, no widget refresh needed");
@@ -481,7 +481,7 @@ class CocAccountService extends ChangeNotifier {
       DebugUtils.debugWarning("⚠️ Error checking clan change: $e");
       // If there's an error, refresh anyway to be safe (in background)
       WarWidgetService.handleWidgetRefresh().catchError((error) {
-        DebugUtils.debugError("❌ Background widget refresh error: $error");
+        DebugUtils.debugError(" Background widget refresh error: $error");
       });
     }
   }

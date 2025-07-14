@@ -463,7 +463,7 @@ class ClanService extends ChangeNotifier {
       DebugUtils.debugSuccess("Processed ${warStatsList.length} clan war stats items");
     }
 
-    DebugUtils.debugSuccess("✅ Processed all bulk clan data");
+    DebugUtils.debugSuccess("Processed all bulk clan data");
     notifyListeners();
   }
 }

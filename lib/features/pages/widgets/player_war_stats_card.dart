@@ -86,7 +86,7 @@ class PlayerWarStatsCard extends StatelessWidget {
                                   label: "${allStats?.totalAttacks}",
                                   description: AppLocalizations.of(context)!
                                       .warAttacksNumber(
-                                          allStats?.totalAttacks ?? 0, 50),
+                                          allStats?.totalAttacks ?? 0, allStats?.warsCounts ?? 0),
                                 ),
                                 ImageChip(
                                   context: context,
@@ -116,7 +116,7 @@ class PlayerWarStatsCard extends StatelessWidget {
                                   label: "${allStats?.totalDefenses}",
                                   description: AppLocalizations.of(context)!
                                       .warDefensesNumber(
-                                          allStats?.totalDefenses ?? 0, 50),
+                                          allStats?.totalDefenses ?? 0, allStats?.warsCounts ?? 0),
                                 ),
                                 ImageChip(
                                   context: context,
@@ -126,7 +126,7 @@ class PlayerWarStatsCard extends StatelessWidget {
                                       "",
                                   description: AppLocalizations.of(context)!
                                       .warDefensesAverageStars(
-                                          allStats?.averageStarsDef ?? 0),
+                                          allStats?.averageStarsDef.toStringAsFixed(2) ?? "0.00"),
                                 ),
                                 ImageChip(
                                   context: context,

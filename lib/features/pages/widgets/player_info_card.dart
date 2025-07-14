@@ -37,20 +37,7 @@ class PlayerInfosCard extends StatelessWidget {
         ? AppLocalizations.of(context)?.warStatusReady ?? 'Ready'
         : AppLocalizations.of(context)?.warStatusUnready ?? 'Unready';
 
-    return GestureDetector(
-      onTap: () {
-        /*
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => StatsScreen(
-              playerStats: selectedProfile,
-              discordUser: cocService.getAccountTags(), // Liste des tags
-            ),
-          ),
-        );*/
-      },
-      child: DefaultTextStyle(
+    return DefaultTextStyle(
         style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
         child: Card(
           child: Padding(
@@ -176,7 +163,6 @@ class PlayerInfosCard extends StatelessWidget {
             ),
           ),
         ),
-      ),
     );
   }
 }

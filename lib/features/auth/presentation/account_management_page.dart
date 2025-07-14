@@ -309,7 +309,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.authEmailTitle,
+                      labelText: AppLocalizations.of(context)!.authEmail,
                       prefixIcon: Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),

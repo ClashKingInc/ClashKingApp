@@ -43,7 +43,7 @@ void callbackDispatcher() {
       
       return Future.value(true);
     } catch (e) {
-      DebugUtils.debugError("❌ Background task error: $e");
+      DebugUtils.debugError(" Background task error: $e");
       return Future.value(false);
     }
   });
@@ -63,7 +63,7 @@ void _initializeDeepLinks() {
     DebugUtils.debugInfo("🔗 Deep link received (running): $uri");
     _handleDeepLink(uri);
   }, onError: (err) {
-    DebugUtils.debugError("❌ Deep link error: $err");
+    DebugUtils.debugError(" Deep link error: $err");
   });
   
   // Handle initial deep link when app starts from a deep link
@@ -76,7 +76,7 @@ void _initializeDeepLinks() {
       });
     }
   }).catchError((err) {
-    DebugUtils.debugError("❌ Initial deep link error: $err");
+    DebugUtils.debugError(" Initial deep link error: $err");
   });
 }
 
@@ -90,10 +90,10 @@ void _handleDeepLink(Uri uri) {
     // If no context yet, retry after a short delay
     Future.delayed(Duration(milliseconds: 200), () {
       final retryContext = globalNavigatorKey.currentContext;
-      if (retryContext != null) {
+      if (retryContext != null && retryContext.mounted) {
         DeepLinkHandler.handleDeepLink(retryContext, uri);
       } else {
-        DebugUtils.debugError("❌ No navigation context available for deep link: $uri");
+        DebugUtils.debugError(" No navigation context available for deep link: $uri");
       }
     });
   }
@@ -121,7 +121,7 @@ Future<void> main() async {
       }
 
       await Future.wait([
-        GameDataService.loadGameData().then((_) => DebugUtils.debugSuccess("✅ GameDataService OK")),
+        GameDataService.loadGameData().then((_) => DebugUtils.debugSuccess("GameDataService OK")),
       ]);
 
       FlutterNativeSplash.remove();

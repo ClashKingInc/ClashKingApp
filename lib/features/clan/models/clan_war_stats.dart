@@ -24,7 +24,7 @@ class ClanWarStats {
             : [],
       );
     } catch (e) {
-      DebugUtils.debugError('❌ Error parsing ClanWarStats: $e');
+      DebugUtils.debugError(' Error parsing ClanWarStats: $e');
       return ClanWarStats(
         players: [],
         clanTag: "",
@@ -54,7 +54,7 @@ class ClanWarStatsData {
         membersData: members.map((m) => WarMemberData.fromJson(m)).toList(),
       );
     } catch (e) {
-      DebugUtils.debugError('❌ Error parsing ClanWarStatsData: $e');
+      DebugUtils.debugError(' Error parsing ClanWarStatsData: $e');
       return ClanWarStatsData(
         warDetails: WarInfo.empty(),
         membersData: [],

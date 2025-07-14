@@ -48,7 +48,7 @@ class PlayerWarStats {
                 )),
       );
     } catch (e) {
-      DebugUtils.debugError('❌ Error parsing PlayerWarStats: $e');
+      DebugUtils.debugError(' Error parsing PlayerWarStats: $e');
       return PlayerWarStats(
         name: json['name'] ?? '',
         tag: json['tag'] ?? '',
@@ -329,7 +329,7 @@ class PlayerWarStatsData {
         memberData: WarMemberData.fromJson(member),
       );
     } catch (e) {
-      DebugUtils.debugError('❌ Error parsing PlayerWarStatsData: $e');
+      DebugUtils.debugError(' Error parsing PlayerWarStatsData: $e');
       return PlayerWarStatsData(
         warDetails: WarInfo.empty(),
         memberData: WarMemberData(
