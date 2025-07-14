@@ -4,6 +4,7 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ErrorPage extends StatefulWidget {
   final Future<void> Function() onRetry;
@@ -109,7 +110,7 @@ class _ErrorPageState extends State<ErrorPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 32),
                       child: Text(
-                        "Check your internet connection and try again.",
+                        AppLocalizations.of(context)!.errorNetworkMessage,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -168,7 +169,7 @@ class _ErrorPageState extends State<ErrorPage> {
                           : const Icon(Icons.refresh, size: 20),
                       label: Text(
                         _isRetrying 
-                            ? "Retrying..." 
+                            ? AppLocalizations.of(context)!.generalRetrying
                             : AppLocalizations.of(context)!.generalRetry,
                         style: TextStyle(
                           fontSize: 16,
@@ -177,6 +178,45 @@ class _ErrorPageState extends State<ErrorPage> {
                         ),
                       ),
                     ),
+                  ),
+                  
+                  const SizedBox(height: 24),
+                  
+                  // Error subtitle with Discord link
+                  Column(
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.errorSubtitle,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton.icon(
+                        onPressed: () async => launchUrl(
+                            Uri.parse('https://discord.gg/clashking')),
+                        icon: Icon(
+                          Icons.discord,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        label: Text(
+                          AppLocalizations.of(context)!.helpJoinDiscord,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w500,
+                              ),
+                        ),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                        ),
+                      ),
+                    ],
                   ),
                   
                 ],
