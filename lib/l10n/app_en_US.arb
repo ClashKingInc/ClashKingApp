@@ -199,6 +199,8 @@
   "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
   "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
   "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
+  "errorNetworkTitle": "Connection Problem",
+  "errorNetworkMessage": "We're having trouble connecting to our servers. This could be due to your internet connection or an issue on our end. Please check your connection and try again.",
   "errorLoadingVersion": "Error loading version",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
@@ -265,6 +267,14 @@
       },
       "league": {
         "type": "String"
+      }
+    }
+  },
+  "playerTrophiesUnrankedDescription": "You have {trophies} trophies. Not ranked yet.",
+  "@playerTrophiesUnrankedDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
       }
     }
   },
@@ -852,7 +862,7 @@
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
-        "type": "double"
+        "type": "String"
       }
     }
   },

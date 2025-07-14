@@ -130,15 +130,31 @@ class ClanMembersState extends State<ClanMembers> {
                       const Center(child: CircularProgressIndicator()),
                 );
 
-                final Player selectedPlayer =
-                    await PlayerService().getPlayerAndClanData(member.tag);
+                try {
+                  final Player selectedPlayer =
+                      await PlayerService().getPlayerAndClanData(member.tag);
 
-                navigator.pop();
-                navigator.push(
-                  MaterialPageRoute(
-                      builder: (context) => PlayerScreen(
-                          selectedPlayer: selectedPlayer)),
-                );
+                  navigator.pop();
+                  navigator.push(
+                    MaterialPageRoute(
+                        builder: (context) => PlayerScreen(
+                            selectedPlayer: selectedPlayer)),
+                  );
+                } catch (e) {
+                  // Dismiss loading dialog
+                  navigator.pop();
+                  
+                  // Show error message
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context)!
+                            .generalRefreshFailed(e.toString())),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }
               },
               child: Card(
                 shape: RoundedRectangleBorder(

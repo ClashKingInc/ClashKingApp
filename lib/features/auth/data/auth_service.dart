@@ -7,6 +7,7 @@ import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
@@ -23,6 +24,23 @@ class AuthService extends ChangeNotifier {
   User? get currentUser => _currentUser;
   List<dynamic>? get cocAccounts => _cocAccounts;
 
+  // Helper function to determine if an error is network-related
+  bool _isNetworkError(dynamic error) {
+    if (error is SocketException) {
+      return true;
+    }
+    if (error is Exception) {
+      String errorString = error.toString().toLowerCase();
+      return errorString.contains('network') ||
+             errorString.contains('connection') ||
+             errorString.contains('hostname') ||
+             errorString.contains('socket') ||
+             errorString.contains('timeout') ||
+             errorString.contains('no address');
+    }
+    return false;
+  }
+
   Future<void> initializeAuth() async {
     _accessToken = await _tokenService.getAccessToken();
     if (_accessToken != null) {
@@ -31,9 +49,20 @@ class AuthService extends ChangeNotifier {
         _currentUser = User.fromJson(response);
         _isAuthenticated = true;
       } catch (e) {
-        _isAuthenticated = false;
-        _accessToken = null;
-        await _tokenService.clearTokens();
+        if (_isNetworkError(e)) {
+          // For network errors, keep the authentication state
+          // We'll assume the user is still authenticated but can't connect
+          _isAuthenticated = true;
+          DebugUtils.debugWarning("⚠️ Network error during auth check: $e");
+        } else {
+          // For authentication errors (401, 403, etc.), log out the user
+          _isAuthenticated = false;
+          _accessToken = null;
+          await _tokenService.clearTokens();
+          DebugUtils.debugWarning("⚠️ Authentication error: $e");
+        }
+        // Rethrow the error so startup can handle it appropriately
+        rethrow;
       }
     }
     notifyListeners();
@@ -68,7 +97,7 @@ class AuthService extends ChangeNotifier {
       DebugUtils.debugSuccess("🔄 Tokens saved successfully.");
       notifyListeners();
     } catch (e) {
-      DebugUtils.debugError("❌ Discord login error: $e");
+      DebugUtils.debugError(" Discord login error: $e");
       throw Exception("Discord login failed. Please try again.");
     }
   }
@@ -97,7 +126,7 @@ class AuthService extends ChangeNotifier {
       DebugUtils.debugSuccess("🔄 Email login completed successfully");
       notifyListeners();
     } catch (e) {
-      DebugUtils.debugError("❌ Email login error: $e");
+      DebugUtils.debugError(" Email login error: $e");
       throw Exception("Email login failed. Please check your credentials.");
     }
   }
@@ -128,7 +157,7 @@ class AuthService extends ChangeNotifier {
       // Return response for UI to handle (includes verification_token in dev mode)
       return response;
     } catch (e) {
-      DebugUtils.debugError("❌ Email registration error: $e");
+      DebugUtils.debugError(" Email registration error: $e");
       rethrow; // Let the UI handle error parsing and localization
     }
   }
@@ -152,7 +181,7 @@ class AuthService extends ChangeNotifier {
       DebugUtils.debugSuccess("🔄 Email verification completed successfully");
       notifyListeners();
     } catch (e) {
-      DebugUtils.debugError("❌ Email verification error: $e");
+      DebugUtils.debugError(" Email verification error: $e");
       throw Exception("Email verification failed. The token may be invalid or expired.");
     }
   }
@@ -177,7 +206,7 @@ class AuthService extends ChangeNotifier {
       DebugUtils.debugSuccess("🔄 Email verification with code completed successfully");
       notifyListeners();
     } catch (e) {
-      DebugUtils.debugError("❌ Email verification with code error: $e");
+      DebugUtils.debugError(" Email verification with code error: $e");
       rethrow; // Let the UI handle error parsing and localization
     }
   }
@@ -195,7 +224,7 @@ class AuthService extends ChangeNotifier {
       
       return response;
     } catch (e) {
-      DebugUtils.debugError("❌ Resend verification error: $e");
+      DebugUtils.debugError(" Resend verification error: $e");
       rethrow; // Let the UI handle error parsing and localization
     }
   }
@@ -213,7 +242,7 @@ class AuthService extends ChangeNotifier {
       
       return response;
     } catch (e) {
-      DebugUtils.debugError("❌ Forgot password error: $e");
+      DebugUtils.debugError(" Forgot password error: $e");
       rethrow; // Let the UI handle error parsing and localization
     }
   }
@@ -243,7 +272,7 @@ class AuthService extends ChangeNotifier {
       DebugUtils.debugSuccess("🔄 Password reset completed successfully");
       notifyListeners();
     } catch (e) {
-      DebugUtils.debugError("❌ Password reset error: $e");
+      DebugUtils.debugError(" Password reset error: $e");
       rethrow; // Let the UI handle error parsing and localization
     }
   }
@@ -266,7 +295,7 @@ class AuthService extends ChangeNotifier {
       // Refresh user data to get updated auth methods
       await initializeAuth();
     } catch (e) {
-      DebugUtils.debugError("❌ Discord linking error: $e");
+      DebugUtils.debugError(" Discord linking error: $e");
       throw Exception("Failed to link Discord account. It may already be linked to another account.");
     }
   }
@@ -289,7 +318,7 @@ class AuthService extends ChangeNotifier {
       // Refresh user data to get updated auth methods
       await initializeAuth();
     } catch (e) {
-      DebugUtils.debugError("❌ Email linking error: $e");
+      DebugUtils.debugError(" Email linking error: $e");
       throw Exception("Failed to link email account. Email may already be in use.");
     }
   }

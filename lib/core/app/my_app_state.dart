@@ -132,10 +132,10 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
         androidName: 'WarAppWidgetProvider',
       );
       
-      DebugUtils.debugSuccess("✅ War widget updated successfully");
+      DebugUtils.debugSuccess("War widget updated successfully");
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
-      DebugUtils.debugError("❌ Error updating war widget: $exception");
+      DebugUtils.debugError(" Error updating war widget: $exception");
     }
   }
 

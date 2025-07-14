@@ -19,7 +19,7 @@ class CapitalHistoryItems {
         stats: statsData != null ? CapitalStats.fromJson(statsData) : null,
       );
     } catch (e) {
-      DebugUtils.debugError("❌ Error parsing CapitalHistoryItems: $e");
+      DebugUtils.debugError(" Error parsing CapitalHistoryItems: $e");
       return CapitalHistoryItems.empty();
     }
   }
