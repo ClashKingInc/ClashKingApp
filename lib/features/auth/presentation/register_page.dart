@@ -222,7 +222,7 @@ class RegisterPageState extends State<RegisterPage> {
                         enabled: !_isLoading,
                         decoration: InputDecoration(
                           labelText:
-                              AppLocalizations.of(context)!.authEmailTitle,
+                              AppLocalizations.of(context)!.authEmail,
                           prefixIcon: Icon(Icons.email),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
