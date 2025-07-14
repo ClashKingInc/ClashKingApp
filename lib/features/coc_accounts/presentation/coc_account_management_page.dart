@@ -378,7 +378,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                       Icon(Icons.verified, color: Colors.green, size: 16),
                                                       const SizedBox(width: 4),
                                                       Text(
-                                                        "Verified",
+                                                        AppLocalizations.of(context)!.accountVerified,
                                                         style: TextStyle(
                                                           color: Colors.green,
                                                           fontSize: 12,
@@ -409,7 +409,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                         Icon(Icons.warning_outlined, color: Colors.orange, size: 16),
                                                         const SizedBox(width: 4),
                                                         Text(
-                                                          "Verify",
+                                                          AppLocalizations.of(context)!.accountVerify,
                                                           style: TextStyle(
                                                             color: Colors.orange,
                                                             fontSize: 12,
