@@ -485,7 +485,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
 
                             FlutterClipboard.copy('devs@clashk.ing')
                                   .then((_) {
-                                if (context.mounted) {
+                                if (mounted) {
                                   showClipboardSnackbar(
                                     context,
                                     AppLocalizations.of(context)!

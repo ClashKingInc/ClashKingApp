@@ -52,14 +52,16 @@ class ClanWarStatsPlayers extends StatelessWidget {
                 showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
                 size: 20,
               ),
-              tooltip: AppLocalizations.of(context)!.warVisibilityToggleTownHall,
+              tooltip:
+                  AppLocalizations.of(context)!.warVisibilityToggleTownHall,
               onPressed: toggleTownHallVisibility,
             ),
             FilterDropdown(
               sortBy: sortBy,
               updateSortBy: updateSortBy,
               sortByOptions: {
-                AppLocalizations.of(context)!.warStarsThree: "Three Stars Attacks",
+                AppLocalizations.of(context)!.warStarsThree:
+                    "Three Stars Attacks",
                 AppLocalizations.of(context)!.warStarsTwo: "Two Stars Attacks",
                 AppLocalizations.of(context)!.warStarsOne: "One Star Attacks",
                 AppLocalizations.of(context)!.warStarsZero: "No Star Attacks",
@@ -68,7 +70,8 @@ class ClanWarStatsPlayers extends StatelessWidget {
                 AppLocalizations.of(context)!.warStarsAverage: "Average Stars",
                 AppLocalizations.of(context)!.warParticipation:
                     "War Participation",
-                AppLocalizations.of(context)!.warAttacksMissed: "Missed Attacks",
+                AppLocalizations.of(context)!.warAttacksMissed:
+                    "Missed Attacks",
               },
             ),
             IconButton(
@@ -89,12 +92,12 @@ class ClanWarStatsPlayers extends StatelessWidget {
                 defenderThFilter: defenderThFilter,
                 equalThSelected: equalThSelected,
               );
-              
+
               final starsCount = showUppedTownHall
                   ? memberWarStats.starsCount
                   : (memberWarStats
                       .getStarsCountAgainstTh(member.townhallLevel));
-              
+
               final totalAttacks = starsCount.values.fold<int>(
                 0,
                 (previousValue, element) => previousValue + element,
@@ -110,10 +113,12 @@ class ClanWarStatsPlayers extends StatelessWidget {
                   showDialog(
                     context: context,
                     barrierDismissible: false,
-                    builder: (_) => const Center(child: CircularProgressIndicator()),
+                    builder: (_) =>
+                        const Center(child: CircularProgressIndicator()),
                   );
                   try {
-                    final player = await PlayerService().getPlayerAndClanData(member.tag);
+                    final player =
+                        await PlayerService().getPlayerAndClanData(member.tag);
                     navigator.pop();
                     navigator.push(
                       MaterialPageRoute(
@@ -121,135 +126,134 @@ class ClanWarStatsPlayers extends StatelessWidget {
                       ),
                     );
                   } catch (e) {
-                    navigator.pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Failed to load player data')),
-                    );
+                    if (context.mounted) {
+                      navigator.pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Failed to load player data')),
+                      );
+                    }
                   }
                 },
                 child: Card(
                   child: Padding(
                     padding: EdgeInsets.all(16),
                     child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              MobileWebImage(
-                                imageUrl:
-                                    ImageAssets.townHall(member.townhallLevel),
-                                height: 50,
-                              ),
-                              SizedBox(width: 16),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(member.name),
-                                  Text(member.tag),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Text(totalAttacks.toString()),
-                                  SizedBox(width: 8),
-                                  MobileWebImage(
-                                      imageUrl: ImageAssets.warClan,
-                                      height: 16,
-                                      width: 16),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(memberWarStats.missedAttacks.toString()),
-                                  SizedBox(width: 8),
-                                  MobileWebImage(
-                                      imageUrl: ImageAssets.brokenSword,
-                                      height: 16,
-                                      width: 16),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.percent, size: 16),
-                                  Icon(Icons.star, size: 16),
-                                ],
-                              ),
-                              Text(memberWarStats.averageDestruction
-                                  .toStringAsFixed(2)),
-                              Text(memberWarStats.averageStars
-                                  .toStringAsFixed(2)),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Row(
-                                children: [...generateStars(0, 16)],
-                              ),
-                              Text(
-                                "${((starsCount["0"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
-                              ),
-                              Text(
-                                  "${starsCount["0"]}/$totalAttacks"),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Row(
-                                children: [...generateStars(1, 16)],
-                              ),
-                              Text(
-                                "${((starsCount["1"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
-                              ),
-                              Text(
-                                  "${starsCount["1"]}/$totalAttacks"),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Row(
-                                children: [...generateStars(2, 16)],
-                              ),
-                              Text(
-                                "${((starsCount["2"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
-                              ),
-                              Text(
-                                  "${starsCount["2"]}/$totalAttacks"),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Row(
-                                children: [...generateStars(3, 16)],
-                              ),
-                              Text(
-                                "${((starsCount["3"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
-                              ),
-                              Text(
-                                  "${starsCount["3"]}/$totalAttacks"),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                MobileWebImage(
+                                  imageUrl: ImageAssets.townHall(
+                                      member.townhallLevel),
+                                  height: 50,
+                                ),
+                                SizedBox(width: 16),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(member.name),
+                                    Text(member.tag),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(totalAttacks.toString()),
+                                    SizedBox(width: 8),
+                                    MobileWebImage(
+                                        imageUrl: ImageAssets.warClan,
+                                        height: 16,
+                                        width: 16),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(memberWarStats.missedAttacks
+                                        .toString()),
+                                    SizedBox(width: 8),
+                                    MobileWebImage(
+                                        imageUrl: ImageAssets.brokenSword,
+                                        height: 16,
+                                        width: 16),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(Icons.percent, size: 16),
+                                    Icon(Icons.star, size: 16),
+                                  ],
+                                ),
+                                Text(memberWarStats.averageDestruction
+                                    .toStringAsFixed(2)),
+                                Text(memberWarStats.averageStars
+                                    .toStringAsFixed(2)),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Row(
+                                  children: [...generateStars(0, 16)],
+                                ),
+                                Text(
+                                  "${((starsCount["0"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
+                                ),
+                                Text("${starsCount["0"]}/$totalAttacks"),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Row(
+                                  children: [...generateStars(1, 16)],
+                                ),
+                                Text(
+                                  "${((starsCount["1"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
+                                ),
+                                Text("${starsCount["1"]}/$totalAttacks"),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Row(
+                                  children: [...generateStars(2, 16)],
+                                ),
+                                Text(
+                                  "${((starsCount["2"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
+                                ),
+                                Text("${starsCount["2"]}/$totalAttacks"),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Row(
+                                  children: [...generateStars(3, 16)],
+                                ),
+                                Text(
+                                  "${((starsCount["3"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
+                                ),
+                                Text("${starsCount["3"]}/$totalAttacks"),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
                 ),
               );
             },
