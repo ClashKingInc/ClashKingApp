@@ -213,7 +213,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             Tab(
                               icon: Icon(Icons.email_outlined, size: 20),
                               text:
-                                  AppLocalizations.of(context)!.authEmailTitle,
+                                  AppLocalizations.of(context)!.authEmail,
                               height: 50,
                             ),
                           ],
@@ -419,7 +419,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.authEmailTitle,
+                      labelText: AppLocalizations.of(context)!.authEmail,
                       prefixIcon: Icon(Icons.email_outlined, size: 20),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
