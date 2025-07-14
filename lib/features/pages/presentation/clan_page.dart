@@ -11,12 +11,31 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'dart:io';
 
 class ClanPage extends StatelessWidget {
   const ClanPage({super.key});
+
+  // Helper function to determine if an error is network-related
+  bool _isNetworkError(dynamic error) {
+    if (error is SocketException) {
+      return true;
+    }
+    if (error is Exception) {
+      String errorString = error.toString().toLowerCase();
+      return errorString.contains('network') ||
+             errorString.contains('connection') ||
+             errorString.contains('hostname') ||
+             errorString.contains('socket') ||
+             errorString.contains('timeout') ||
+             errorString.contains('no address');
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +61,35 @@ class ClanPage extends StatelessWidget {
             }
           } catch (e) {
             if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    content: Text(AppLocalizations.of(context)!
-                        .generalRefreshFailed(e.toString()))),
-              );
+              if (_isNetworkError(e)) {
+                // Navigate to error page for network errors
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ErrorPage(
+                      isNetworkError: true,
+                      onRetry: () async {
+                        // Trigger refresh while staying on error page
+                        await cocService.refreshPageData(
+                            cocService.getAccountTags(),
+                            playerService,
+                            clanService,
+                            warCwlService);
+                        // Only pop if refresh succeeds
+                        if (context.mounted) {
+                          Navigator.of(context).pop();
+                        }
+                      },
+                    ),
+                  ),
+                );
+              } else {
+                // Show SnackBar for other errors
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(AppLocalizations.of(context)!
+                          .generalRefreshFailed(e.toString()))),
+                );
+              }
             }
           }
         },

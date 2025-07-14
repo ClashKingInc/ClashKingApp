@@ -116,10 +116,10 @@ class ApiService {
         final config = json.decode(response.body);
         _sentryDsn = config['sentry_dsn'];
       } else {
-        DebugUtils.debugError('❌ Failed to load config: ${response.statusCode}');
+        DebugUtils.debugError(' Failed to load config: ${response.statusCode}');
       }
     } catch (e) {
-      DebugUtils.debugError('❌ Error loading config: $e');
+      DebugUtils.debugError(' Error loading config: $e');
     }
   }
 

@@ -11,7 +11,7 @@ class ThemeNotifier with ChangeNotifier {
 
   ThemeMode get themeMode => _themeMode;
 
-  void _loadThemeMode() async {
+  Future<void> _loadThemeMode() async {
     String? themeModeString = await getPrefs('themeMode');
     if (themeModeString == 'dark') {
       _themeMode = ThemeMode.dark;

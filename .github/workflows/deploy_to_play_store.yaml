@@ -43,9 +43,13 @@ jobs:
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             VERSION_NAME="${{ github.event.inputs.version }}"
           else
-            TAG=${GITHUB_REF#refs/tags/}          # Extrait "v1.0.0"
-            VERSION_NAME=${TAG#v}                # Retire "v" pour obtenir "1.0.0"
+            TAG=${GITHUB_REF#refs/tags/}          # Extrait "v1.0.0-alpha"
+            VERSION_NAME=${TAG#v}                # Retire "v" pour obtenir "1.0.0-alpha"
           fi
+          
+          # Remove alpha/beta suffixes for Play Store (required by Google)
+          VERSION_NAME=$(echo "$VERSION_NAME" | sed 's/-alpha.*$//' | sed 's/-beta.*$//')
+          echo "Cleaned version for Play Store: $VERSION_NAME"
           BUILD_NUMBER=$(date +%s)             # Génère un numéro de build basé sur le timestamp
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
           echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV

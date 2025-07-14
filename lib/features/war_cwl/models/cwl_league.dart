@@ -35,7 +35,7 @@ class CwlLeague {
             .toList(),
       );
     } catch (e) {
-      DebugUtils.debugError("❌ Error parsing CwlLeague: $e");
+      DebugUtils.debugError(" Error parsing CwlLeague: $e");
       return CwlLeague(
         state: 'unknown',
         season: 'unknown',

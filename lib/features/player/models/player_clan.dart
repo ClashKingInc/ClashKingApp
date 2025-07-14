@@ -23,7 +23,7 @@ class PlayerClanOverview {
         badgeUrls: ClanBadgeUrls.fromJson(json['badgeUrls']),
       );
     } catch (e) {
-      DebugUtils.debugError("❌ Error parsing PlayerClanOverview: $e");
+      DebugUtils.debugError(" Error parsing PlayerClanOverview: $e");
       return PlayerClanOverview.empty();
     }
   }

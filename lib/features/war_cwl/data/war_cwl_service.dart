@@ -36,13 +36,13 @@ class WarCwlService extends ChangeNotifier {
         for (final summary in data) {
           final warSummary = WarCwl.fromJson(summary, null);
           summaries[warSummary.tag] = warSummary;
-          DebugUtils.debugSuccess("✅ Loaded war data for clan: ${warSummary.tag}");
+          DebugUtils.debugSuccess("Loaded war data for clan: ${warSummary.tag}");
         }
         notifyListeners();
       }
     } catch (e) {
       Sentry.captureException(e);
-      DebugUtils.debugError("❌ Error loading war data: $e");
+      DebugUtils.debugError(" Error loading war data: $e");
     }
   }
 
@@ -60,14 +60,14 @@ class WarCwlService extends ChangeNotifier {
         if (warItem is Map<String, dynamic>) {
           final warSummary = WarCwl.fromJson(warItem, null);
           summaries[warSummary.tag] = warSummary;
-          DebugUtils.debugSuccess("✅ Processed bulk war data for clan: ${warSummary.tag}");
+          DebugUtils.debugSuccess("Processed bulk war data for clan: ${warSummary.tag}");
         }
       } catch (e) {
-        DebugUtils.debugError("❌ Error processing bulk war data item: $e");
+        DebugUtils.debugError(" Error processing bulk war data item: $e");
       }
     }
     
-    DebugUtils.debugSuccess("✅ Processed all bulk war data, total summaries: ${summaries.length}");
+    DebugUtils.debugSuccess("Processed all bulk war data, total summaries: ${summaries.length}");
     notifyListeners();
   }
 

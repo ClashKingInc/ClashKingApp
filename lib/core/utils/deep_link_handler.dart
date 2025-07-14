@@ -40,7 +40,7 @@ class DeepLinkHandler {
     final playerTag = uri.queryParameters['tag'];
     
     if (playerTag == null || playerTag.trim().isEmpty) {
-      DebugUtils.debugError("❌ Player tag missing from deep link");
+      DebugUtils.debugError(" Player tag missing from deep link");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Invalid player link - no tag found"),
@@ -67,7 +67,7 @@ class DeepLinkHandler {
     final clanTag = uri.queryParameters['tag'];
     
     if (clanTag == null || clanTag.trim().isEmpty) {
-      DebugUtils.debugError("❌ Clan tag missing from deep link");
+      DebugUtils.debugError(" Clan tag missing from deep link");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Invalid clan link - no tag found"),
@@ -94,7 +94,7 @@ class DeepLinkHandler {
     final warId = uri.queryParameters['id'];
     
     if (warId == null || warId.trim().isEmpty) {
-      DebugUtils.debugError("❌ War ID missing from deep link");
+      DebugUtils.debugError(" War ID missing from deep link");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Invalid war link - no ID found"),

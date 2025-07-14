@@ -41,10 +41,10 @@ class WarWidgetService {
         iOSName: 'WarWidget',
       );
       
-      DebugUtils.debugSuccess("✅ War widget refresh completed");
+      DebugUtils.debugSuccess("War widget refresh completed");
     } catch (e, stackTrace) {
       Sentry.captureException(e, stackTrace: stackTrace);
-      DebugUtils.debugError("❌ Error refreshing war widget: $e");
+      DebugUtils.debugError(" Error refreshing war widget: $e");
     }
   }
 
@@ -106,7 +106,7 @@ class WarWidgetService {
       final playerClanTag = await _getPlayerClanTag(selectedPlayerTag);
       
       if (playerClanTag != null && playerClanTag.isNotEmpty) {
-        DebugUtils.debugSuccess("✅ Got clan tag for selected player $selectedPlayerTag: $playerClanTag");
+        DebugUtils.debugSuccess("Got clan tag for selected player $selectedPlayerTag: $playerClanTag");
         return playerClanTag;
       } else {
         DebugUtils.debugWarning("⚠️ Player $selectedPlayerTag is not in a clan");
@@ -114,7 +114,7 @@ class WarWidgetService {
       }
       
     } catch (e) {
-      DebugUtils.debugError("❌ Error getting current player clan tag: $e");
+      DebugUtils.debugError(" Error getting current player clan tag: $e");
       return null;
     }
   }
@@ -154,7 +154,7 @@ class WarWidgetService {
         return null;
       }
     } catch (e) {
-      DebugUtils.debugError("❌ Error getting first available account: $e");
+      DebugUtils.debugError(" Error getting first available account: $e");
       return null;
     }
   }
@@ -196,7 +196,7 @@ class WarWidgetService {
           if (clanTag.isNotEmpty) {
             // Cache the clan tag for future use
             await storePrefs('player_${playerTag}_clan_tag', clanTag);
-            DebugUtils.debugSuccess("✅ Got and cached clan tag: $clanTag");
+            DebugUtils.debugSuccess("Got and cached clan tag: $clanTag");
             return clanTag;
           } else {
             DebugUtils.debugWarning("⚠️ Player $playerTag is not in a clan");
@@ -211,7 +211,7 @@ class WarWidgetService {
         return null;
       }
     } catch (e) {
-      DebugUtils.debugError("❌ Error fetching player clan tag: $e");
+      DebugUtils.debugError(" Error fetching player clan tag: $e");
       return null;
     }
   }
@@ -258,7 +258,7 @@ class WarDisplayWidgetState extends State<WarDisplayWidget> {
           isLoading = false;
         });
       }
-      DebugUtils.debugError("❌ Error loading war data: $e");
+      DebugUtils.debugError(" Error loading war data: $e");
     }
   }
 

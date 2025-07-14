@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AddCocAccountPage extends StatefulWidget {
   @override
@@ -173,7 +174,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                           ),
                                         )
                                       : IconButton(
-                                          icon: Icon(Icons.add_circle),
+                                          icon: Icon(Icons.add_circle,
+                                              color: Theme.of(context).colorScheme.primary),
+                                          tooltip: AppLocalizations.of(context)!.accountsAdd,
                                           onPressed: _showApiTokenInput
                                               ? _submitApiToken
                                               : _addAccount,
@@ -193,12 +196,87 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                               ],
                               if (_showApiTokenInput) ...[
                                 SizedBox(height: 16),
-                                Text(
-                                    AppLocalizations.of(context)!
-                                        .accountsEnterApiToken,
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium),
-                                SizedBox(height: 8),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)!.accountsEnterApiToken,
+                                      style: Theme.of(context).textTheme.bodyMedium,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.info_outline,
+                                          size: 16,
+                                          color: Theme.of(context).colorScheme.primary,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          AppLocalizations.of(context)!.accountsApiTokenLocation,
+                                          style: Theme.of(context).textTheme.bodySmall,
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    InkWell(
+                                      onTap: () async {
+                                        try {
+                                          final uri = Uri.parse('https://link.clashofclans.com/?action=OpenMoreSettings');
+                                          if (await canLaunchUrl(uri)) {
+                                            await launchUrl(uri, mode: LaunchMode.externalApplication);
+                                          } else {
+                                            if (context.mounted) {
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                  content: Text('Could not open Clash of Clans. Please open it manually.'),
+                                                ),
+                                              );
+                                            }
+                                          }
+                                        } catch (e) {
+                                          if (context.mounted) {
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text('Could not open Clash of Clans. Please open it manually.'),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      },
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.open_in_new,
+                                              size: 16,
+                                              color: Theme.of(context).colorScheme.primary,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              AppLocalizations.of(context)!.accountsOpenMoreSettings,
+                                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                                color: Theme.of(context).colorScheme.primary,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 16),
                                 TextField(
                                   controller: _apiTokenController,
                                   decoration: InputDecoration(
@@ -206,6 +284,25 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                         .accountsApiToken,
                                     border: OutlineInputBorder(),
                                   ),
+                                ),
+                              ],
+                              if (!_showApiTokenInput) ...[
+                                SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Icon(Icons.info_outline, 
+                                        size: 16, 
+                                        color: Theme.of(context).colorScheme.primary),
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        AppLocalizations.of(context)!.accountsAddInstruction,
+                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                          color: Theme.of(context).colorScheme.onSurface,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                               SizedBox(height: 8),
@@ -266,28 +363,74 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                           trailing: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              // Verification status icon
-                                              IconButton(
-                                                icon: Icon(
-                                                  _tempUserAccounts[index]["isVerified"] == true
-                                                      ? Icons.verified
-                                                      : Icons.warning_outlined,
-                                                  color: _tempUserAccounts[index]["isVerified"] == true
-                                                      ? Colors.green
-                                                      : Colors.orange,
-                                                ),
-                                                tooltip: _tempUserAccounts[index]["isVerified"] == true
-                                                    ? AppLocalizations.of(context)!.accountVerified
-                                                    : AppLocalizations.of(context)!.accountNotVerified,
-                                                onPressed: _tempUserAccounts[index]["isVerified"] == true
-                                                    ? null // Already verified, disable button
-                                                    : () => _showVerificationDialog(
-                                                          _tempUserAccounts[index]["player_tag"],
-                                                          _tempUserAccounts[index]["name"] ?? "Unknown Player",
-                                                          _tempUserAccounts[index]["townHallLevel"] ?? 1, 
+                                              // Verification status with better UX
+                                              if (_tempUserAccounts[index]["isVerified"] == true)
+                                                Container(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.green.withValues(alpha: 0.1),
+                                                    borderRadius: BorderRadius.circular(12),
+                                                    border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Icon(Icons.verified, color: Colors.green, size: 16),
+                                                      const SizedBox(width: 4),
+                                                      Text(
+                                                        AppLocalizations.of(context)!.accountVerified,
+                                                        style: TextStyle(
+                                                          color: Colors.green,
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.w500,
                                                         ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              else
+                                                InkWell(
+                                                  onTap: () => _showVerificationDialog(
+                                                    _tempUserAccounts[index]["player_tag"],
+                                                    _tempUserAccounts[index]["name"] ?? "Unknown Player",
+                                                    _tempUserAccounts[index]["townHallLevel"] ?? 1, 
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  child: Container(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.orange.withValues(alpha: 0.1),
+                                                      borderRadius: BorderRadius.circular(12),
+                                                      border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        Icon(Icons.warning_outlined, color: Colors.orange, size: 16),
+                                                        const SizedBox(width: 4),
+                                                        Text(
+                                                          AppLocalizations.of(context)!.accountVerify,
+                                                          style: TextStyle(
+                                                            color: Colors.orange,
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              const SizedBox(width: 8),
+                                              // Drag handle with better visual design
+                                              Container(
+                                                padding: const EdgeInsets.all(8),
+                                                child: Icon(
+                                                  Icons.drag_indicator,
+                                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                                  size: 20,
+                                                ),
                                               ),
-                                              Icon(Icons.drag_handle),
+                                              // Delete button with confirmation
                                               IconButton(
                                                 icon: _deletingPlayerTag ==
                                                         _tempUserAccounts[index]
@@ -331,9 +474,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    if (userAccounts.isEmpty) return;
-
+                  onPressed: userAccounts.isEmpty ? null : () async {
                     showDialog(
                       context: context,
                       barrierDismissible: false,
@@ -344,7 +485,17 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
 
                     await _loadAllAccountData();
                   },
-                  child: Text(AppLocalizations.of(context)!.generalConfirm),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: userAccounts.isEmpty 
+                        ? Theme.of(context).colorScheme.surface
+                        : null,
+                    foregroundColor: userAccounts.isEmpty 
+                        ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4)
+                        : null,
+                  ),
+                  child: Text(userAccounts.isEmpty 
+                      ? "Add accounts first"
+                      : AppLocalizations.of(context)!.generalConfirm),
                 ),
               ),
             ),
@@ -401,7 +552,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       } else if (errorCode == 500) {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ErrorPage(onRetry: _addAccount),
+            builder: (context) => ErrorPage(onRetry: () async => _addAccount()),
           ),
         );
       } else {
@@ -462,7 +613,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       } else if (errorCode == 500) {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ErrorPage(onRetry: _addAccount),
+            builder: (context) => ErrorPage(onRetry: () async => _addAccount()),
           ),
         );
       } else {

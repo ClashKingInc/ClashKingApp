@@ -40,7 +40,7 @@ class WarCwl {
             .toList(),
       );
     } catch (e) {
-      DebugUtils.debugError("❌ Error parsing WarCwl: $e");
+      DebugUtils.debugError(" Error parsing WarCwl: $e");
       return WarCwl(
         tag: json['clan_tag'],
         isInWar: false,

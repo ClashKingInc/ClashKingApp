@@ -14,7 +14,7 @@ void main() {
   final enGbFile = File(enGbPath);
 
   if (!enFile.existsSync()) {
-    DebugUtils.debugError('❌ The base en.arb file does not exist. Please check the file path.');
+    DebugUtils.debugError(' The base en.arb file does not exist. Please check the file path.');
     return;
   }
 

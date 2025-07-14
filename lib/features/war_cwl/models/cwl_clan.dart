@@ -204,7 +204,7 @@ class CwlClan {
         townHallLevels: Map<String, int>.from(json['town_hall_levels'] ?? {}),
       );
     } catch (e) {
-      DebugUtils.debugError("❌ Error parsing CwlClan: $e");
+      DebugUtils.debugError(" Error parsing CwlClan: $e");
       return CwlClan(
         tag: 'No tag',
         name: 'No name',
