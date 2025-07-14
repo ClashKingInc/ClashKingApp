@@ -1,4 +1,6 @@
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
+import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -330,22 +332,24 @@ class _FaqScreenState extends State<FaqScreen> {
                                           Navigator.of(context).pop();
                                         },
                                         child: Text(
-                                            AppLocalizations.of(context)!.generalOk),
+                                            AppLocalizations.of(context)!
+                                                .generalOk),
                                       ),
                                     ],
                                   );
                                 },
                               );
 
-                              // Copy the email to the clipboard or show a Snackbar message
-                              Clipboard.setData(
-                                  ClipboardData(text: 'devs@clashk.ing'));
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      Text('Email address copied to clipboard'),
-                                ),
-                              );
+                              FlutterClipboard.copy('devs@clashk.ing')
+                                  .then((_) {
+                                if (context.mounted) {
+                                  showClipboardSnackbar(
+                                    context,
+                                    AppLocalizations.of(context)!
+                                        .generalCopiedToClipboard,
+                                  );
+                                }
+                              });
                             }
                           }
                         },
