@@ -153,7 +153,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
         ),
         ImageChip(
                             context: context,
-          imageUrl: ImageAssets.capitalGold,
+          imageUrl: ImageAssets.capitalTrophy,
           label: NumberFormat('#,###').format(clanInfo.clanCapitalPoints),
         ),
         if (clanInfo.requiredTownhallLevel > 0)
