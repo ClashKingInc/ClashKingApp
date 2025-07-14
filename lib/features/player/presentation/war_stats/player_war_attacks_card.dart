@@ -3,6 +3,8 @@ import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_attack.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/functions/war_functions.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -64,12 +66,32 @@ class PlayerWarAttacksCard extends StatelessWidget {
             ),
             trailing: Text(formattedDate),
             onTap: () async {
+              final navigator = Navigator.of(context);
+              final playerTag = type == "attacks" 
+                  ? defense.defender?.tag 
+                  : defense.attacker?.tag;
+              
+              if (playerTag == null) return;
+              
               showDialog(
                 context: context,
-                builder: (context) =>
-                    const Center(child: CircularProgressIndicator()),
+                barrierDismissible: false,
+                builder: (_) => const Center(child: CircularProgressIndicator()),
               );
-              Navigator.of(context).pop();
+              try {
+                final player = await PlayerService().getPlayerAndClanData(playerTag);
+                navigator.pop();
+                navigator.push(
+                  MaterialPageRoute(
+                    builder: (_) => PlayerScreen(selectedPlayer: player),
+                  ),
+                );
+              } catch (e) {
+                navigator.pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Failed to load player data')),
+                );
+              }
             },
           ),
         );

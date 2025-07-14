@@ -4,6 +4,8 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/war_functions.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
@@ -102,10 +104,33 @@ class ClanWarStatsPlayers extends StatelessWidget {
                 return SizedBox.shrink();
               }
 
-              return Card(
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
+              return GestureDetector(
+                onTap: () async {
+                  final navigator = Navigator.of(context);
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) => const Center(child: CircularProgressIndicator()),
+                  );
+                  try {
+                    final player = await PlayerService().getPlayerAndClanData(member.tag);
+                    navigator.pop();
+                    navigator.push(
+                      MaterialPageRoute(
+                        builder: (_) => PlayerScreen(selectedPlayer: player),
+                      ),
+                    );
+                  } catch (e) {
+                    navigator.pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to load player data')),
+                    );
+                  }
+                },
+                child: Card(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -224,6 +249,7 @@ class ClanWarStatsPlayers extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),
                 ),
               );
             },

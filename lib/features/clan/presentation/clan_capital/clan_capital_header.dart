@@ -139,7 +139,7 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
           SizedBox(height: 80),
           ImageChip(
                             context: context,
-            imageUrl: ImageAssets.capitalGold,
+            imageUrl: ImageAssets.capitalTrophy,
             label: NumberFormat('#,###').format(widget.clanInfo?.clanCapitalPoints),
           ),
           SizedBox(height: 8),

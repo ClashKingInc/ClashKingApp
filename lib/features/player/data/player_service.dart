@@ -171,78 +171,110 @@ class PlayerService extends ChangeNotifier {
       final token = await TokenService().getAccessToken();
       if (token == null) throw Exception("User not authenticated");
 
-      // First, get basic player data
-      DebugUtils.debugApi("🔄 Calling players API for tag: $playerTag");
-      final responseInit = await http.post(
-        Uri.parse("${ApiService.apiUrlV2}/players"),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode({
-          "player_tags": [playerTag]
-        }),
-      );
+      // Try bulk endpoint first
+      DebugUtils.debugApi("🔄 Calling bulk initialization API for tag: $playerTag");
+      try {
+        final response = await http.post(
+          Uri.parse("${ApiService.apiUrlV2}/app/initialization"),
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json",
+          },
+          body: jsonEncode({"player_tags": [playerTag]}),
+        );
 
-      if (responseInit.statusCode != 200) {
-        throw Exception("Failed to fetch initial player data");
-      }
+        DebugUtils.debugApi("🔄 Bulk API response status: ${response.statusCode}");
 
-      final initData = jsonDecode(utf8.decode(responseInit.bodyBytes));
-      final Player player = Player.fromJson(initData["items"][0]);
-      
-      // Build clan tags map like loadPlayerData does
-      final Map<String, String> clanTagsByPlayer = {};
-      if (player.clanTag.isNotEmpty) {
-        clanTagsByPlayer[player.tag] = player.clanTag;
-      }
+        if (response.statusCode == 200) {
+          final responseBody = utf8.decode(response.bodyBytes);
+          final data = jsonDecode(responseBody);
 
-      // If player has no clan, return basic player data
-      if (clanTagsByPlayer.isEmpty) {
+          DebugUtils.debugApi("🔄 Bulk response data keys: ${data.keys.toList()}");
+
+          // Process player data using the same method as loadApiData
+          if (data["players"] != null && data["players_basic"] != null) {
+            // Save current profiles state
+            final originalProfiles = _profiles.toList();
+            
+            // Process the player data using the bulk method
+            processBulkPlayerData(data["players"], data["players_basic"]);
+            
+            // Find the specific player we requested
+            final requestedPlayer = _profiles.firstWhere(
+              (p) => p.tag == playerTag,
+              orElse: () => throw Exception("Player not found in response"),
+            );
+            
+            DebugUtils.debugSuccess("Successfully loaded player via bulk: ${requestedPlayer.name} (${requestedPlayer.tag})");
+            return requestedPlayer;
+          } else {
+            DebugUtils.debugWarning("⚠️ Bulk endpoint missing player data, falling back to individual calls");
+            throw Exception("No player data in bulk endpoint response");
+          }
+        } else {
+          DebugUtils.debugWarning("⚠️ Bulk endpoint failed with status ${response.statusCode}, falling back to individual calls");
+          throw Exception("Bulk endpoint returned status ${response.statusCode}");
+        }
+      } catch (bulkError) {
+        DebugUtils.debugWarning("⚠️ Bulk endpoint failed: $bulkError, falling back to individual calls");
+        
+        // Fallback to individual API calls
+        DebugUtils.debugInfo("🔄 Using fallback individual API calls for player: $playerTag");
+        
+        // Call basic player endpoint
+        final basicResponse = await http.post(
+          Uri.parse("${ApiService.apiUrlV2}/players"),
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json",
+          },
+          body: jsonEncode({"player_tags": [playerTag]}),
+        );
+
+        if (basicResponse.statusCode != 200) {
+          throw Exception("Failed to fetch basic player data: ${basicResponse.statusCode}");
+        }
+
+        final basicResponseBody = utf8.decode(basicResponse.bodyBytes);
+        final basicData = jsonDecode(basicResponseBody);
+
+        if (!basicData.containsKey("items") || (basicData["items"] as List).isEmpty) {
+          throw Exception("No player data found for tag: $playerTag");
+        }
+
+        final playerJson = (basicData["items"] as List).first as Map<String, dynamic>;
+        final player = Player.fromJson(playerJson);
+
+        // Get clan tag for extended call
+        final clanTag = player.clanOverview.tag;
+        final clanTagsByPlayer = {playerTag: clanTag};
+
+        // Call extended player endpoint
+        final extendedResponse = await http.post(
+          Uri.parse("${ApiService.apiUrlV2}/players/extended"),
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json",
+          },
+          body: jsonEncode({
+            "player_tags": [playerTag],
+            "clan_tags": clanTagsByPlayer,
+          }),
+        );
+
+        if (extendedResponse.statusCode == 200) {
+          final extendedResponseBody = utf8.decode(extendedResponse.bodyBytes);
+          final extendedData = jsonDecode(extendedResponseBody);
+
+          if (extendedData.containsKey("items") && (extendedData["items"] as List).isNotEmpty) {
+            final extendedPlayerJson = (extendedData["items"] as List).first as Map<String, dynamic>;
+            player.enrichWithFullStats(extendedPlayerJson);
+          }
+        }
+
+        DebugUtils.debugSuccess("Successfully loaded player via fallback: ${player.name} (${player.tag})");
         return player;
       }
-
-      // Use the same extended endpoint as loadPlayerData
-      DebugUtils.debugApi("🔄 Calling extended players API for tag: $playerTag");
-      final responseExtended = await http.post(
-        Uri.parse("${ApiService.apiUrlV2}/players/extended"),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode({
-          "player_tags": [playerTag],
-          "clan_tags": clanTagsByPlayer,
-        }),
-      );
-
-      if (responseExtended.statusCode == 200) {
-        final responseBody = utf8.decode(responseExtended.bodyBytes);
-        final data = jsonDecode(responseBody);
-
-        if (data.containsKey("items") && data["items"] is List) {
-          final items = (data["items"] as List).whereType<Map<String, dynamic>>();
-          
-          for (final item in items) {
-            final tag = item["tag"];
-            if (tag == playerTag) {
-              player.enrichWithFullStats(item);
-              break;
-            }
-          }
-          
-          DebugUtils.debugSuccess("Enriched player: ${player.name} (${player.tag})");
-        } else {
-          Sentry.captureMessage("Error loading player extended data: $data",
-              level: SentryLevel.error);
-        }
-      } else {
-        Sentry.captureMessage("Error loading player extended data",
-            level: SentryLevel.error);
-        throw Exception("Error loading player extended data");
-      }
-
-      return player;
     } catch (e, st) {
       Sentry.captureException(e, stackTrace: st);
       DebugUtils.debugError(" Error in getPlayerAndClanData: $e");
