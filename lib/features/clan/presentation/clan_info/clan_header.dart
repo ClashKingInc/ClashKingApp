@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 import 'package:clashkingapp/common/widgets/buttons/war_button.dart';
+import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
@@ -103,11 +104,9 @@ class ClanInfoHeaderCard extends StatelessWidget {
           onTap: () {
             FlutterClipboard.copy(clanInfo.tag).then((_) {
               if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Center(child: Text(loc.generalCopiedToClipboard)),
-                    duration: const Duration(seconds: 1),
-                  ),
+                showClipboardSnackbar(
+                  context,
+                  AppLocalizations.of(context)!.generalCopiedToClipboard,
                 );
               }
             });
@@ -129,7 +128,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
       children: [
         if (clanInfo.warLeague != null)
           ImageChip(
-                            context: context,
+            context: context,
             imageUrl:
                 ImageAssets.leagues[clanInfo.warLeague?.name ?? "Unranked"]!,
             label: clanInfo.warLeague!.name,
@@ -137,7 +136,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
         if (clanInfo.location?.name != null &&
             clanInfo.location!.countryCode != null)
           ImageChip(
-                            context: context,
+            context: context,
             imageUrl: ImageAssets.flag(clanInfo.location!.countryCode!),
             label: clanInfo.location!.name,
           ),
@@ -147,18 +146,18 @@ class ClanInfoHeaderCard extends StatelessWidget {
             color: Theme.of(context).colorScheme.onSurface,
             label: "${clanInfo.members}/50"),
         ImageChip(
-                            context: context,
+          context: context,
           imageUrl: ImageAssets.trophies,
           label: NumberFormat('#,###').format(clanInfo.clanPoints),
         ),
         ImageChip(
-                            context: context,
+          context: context,
           imageUrl: ImageAssets.capitalTrophy,
           label: NumberFormat('#,###').format(clanInfo.clanCapitalPoints),
         ),
         if (clanInfo.requiredTownhallLevel > 0)
           ImageChip(
-                            context: context,
+            context: context,
             imageUrl: ImageAssets.townHall(clanInfo.requiredTownhallLevel),
             label: clanInfo.requiredTownhallLevel.toString(),
           ),
@@ -180,7 +179,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
           }(),
         ),
         ImageChip(
-                            context: context,
+          context: context,
           imageUrl: ImageAssets.war,
           label: () {
             switch (clanInfo.warFrequency) {
@@ -293,8 +292,8 @@ class ClanInfoHeaderCard extends StatelessWidget {
                     if (!await launchUrl(url) && context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                            content: Text(
-                                AppLocalizations.of(context)!.errorCannotOpenLink)),
+                            content: Text(AppLocalizations.of(context)!
+                                .errorCannotOpenLink)),
                       );
                     }
                   }

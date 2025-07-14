@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -8,9 +9,7 @@ import 'package:clipboard/clipboard.dart';
 class ClanJoinLeaveHeader extends StatefulWidget {
   final Clan clanInfo;
 
-  ClanJoinLeaveHeader(
-      {super.key,
-      required this.clanInfo});
+  ClanJoinLeaveHeader({super.key, required this.clanInfo});
 
   @override
   ClanJoinLeaveHeaderState createState() => ClanJoinLeaveHeaderState();
@@ -65,20 +64,12 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
               ),
               InkWell(
                 onTap: () {
-                  FlutterClipboard.copy(widget.clanInfo.tag).then((value) {
+                  FlutterClipboard.copy(widget.clanInfo.tag).then((_) {
                     if (context.mounted) {
-                      final snackBar = SnackBar(
-                        content: Center(
-                          child: Text(
-                            AppLocalizations.of(context)!.generalCopiedToClipboard,
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface),
-                          ),
-                        ),
-                        duration: Duration(milliseconds: 1500),
-                        backgroundColor: Theme.of(context).colorScheme.surface,
+                      showClipboardSnackbar(
+                        context,
+                        AppLocalizations.of(context)!.generalCopiedToClipboard,
                       );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
                   });
                 },
