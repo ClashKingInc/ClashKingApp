@@ -220,9 +220,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                     SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
-                                        "Tap the + button to add your account",
+                                        AppLocalizations.of(context)!.accountsAddInstruction,
                                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: Theme.of(context).colorScheme.primary,
+                                          color: Theme.of(context).colorScheme.onSurface,
                                         ),
                                       ),
                                     ),
@@ -287,28 +287,74 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                           trailing: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              // Verification status icon
-                                              IconButton(
-                                                icon: Icon(
-                                                  _tempUserAccounts[index]["isVerified"] == true
-                                                      ? Icons.verified
-                                                      : Icons.warning_outlined,
-                                                  color: _tempUserAccounts[index]["isVerified"] == true
-                                                      ? Colors.green
-                                                      : Colors.orange,
-                                                ),
-                                                tooltip: _tempUserAccounts[index]["isVerified"] == true
-                                                    ? AppLocalizations.of(context)!.accountVerified
-                                                    : AppLocalizations.of(context)!.accountNotVerified,
-                                                onPressed: _tempUserAccounts[index]["isVerified"] == true
-                                                    ? null // Already verified, disable button
-                                                    : () => _showVerificationDialog(
-                                                          _tempUserAccounts[index]["player_tag"],
-                                                          _tempUserAccounts[index]["name"] ?? "Unknown Player",
-                                                          _tempUserAccounts[index]["townHallLevel"] ?? 1, 
+                                              // Verification status with better UX
+                                              if (_tempUserAccounts[index]["isVerified"] == true)
+                                                Container(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.green.withValues(alpha: 0.1),
+                                                    borderRadius: BorderRadius.circular(12),
+                                                    border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Icon(Icons.verified, color: Colors.green, size: 16),
+                                                      const SizedBox(width: 4),
+                                                      Text(
+                                                        "Verified",
+                                                        style: TextStyle(
+                                                          color: Colors.green,
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.w500,
                                                         ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              else
+                                                InkWell(
+                                                  onTap: () => _showVerificationDialog(
+                                                    _tempUserAccounts[index]["player_tag"],
+                                                    _tempUserAccounts[index]["name"] ?? "Unknown Player",
+                                                    _tempUserAccounts[index]["townHallLevel"] ?? 1, 
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  child: Container(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.orange.withValues(alpha: 0.1),
+                                                      borderRadius: BorderRadius.circular(12),
+                                                      border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        Icon(Icons.warning_outlined, color: Colors.orange, size: 16),
+                                                        const SizedBox(width: 4),
+                                                        Text(
+                                                          "Verify",
+                                                          style: TextStyle(
+                                                            color: Colors.orange,
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              const SizedBox(width: 8),
+                                              // Drag handle with better visual design
+                                              Container(
+                                                padding: const EdgeInsets.all(8),
+                                                child: Icon(
+                                                  Icons.drag_indicator,
+                                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                                  size: 20,
+                                                ),
                                               ),
-                                              Icon(Icons.drag_handle),
+                                              // Delete button with confirmation
                                               IconButton(
                                                 icon: _deletingPlayerTag ==
                                                         _tempUserAccounts[index]
