@@ -16,6 +16,7 @@
   "accountVerifyButton": "Verify",
   "accountVerificationSuccess": "Account verified successfully!",
   "generalRetry": "Retry",
+  "generalRetrying": "Retrying...",
   "generalTryAgain": "Try again",
   "generalCancel": "Cancel",
   "generalOk": "OK",
