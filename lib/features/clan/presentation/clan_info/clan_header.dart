@@ -9,6 +9,7 @@ import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_page.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -335,7 +336,16 @@ class ClanInfoHeaderCard extends StatelessWidget {
                     ),
                   ),
                 ],
-              );
+              ).then((value) {
+                if (value == 'Stats') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ClanWarStatsScreen(clan: clanInfo),
+                    ),
+                  );
+                }
+              });
             },
           ),
         ],

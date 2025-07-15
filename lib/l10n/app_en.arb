@@ -52,6 +52,9 @@
   "@generalAll": {
     "description": "all items"
   },
+  "generalOthers": "Others",
+  "generalProgress": "Progress",
+  "generalCompleted": "completed",
   "generalTotal": "Total",
   "generalBest": "Best",
   "@generalBest": {

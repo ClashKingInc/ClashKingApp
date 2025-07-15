@@ -174,6 +174,8 @@ class ImageAssets {
       "$baseUrl/landscape/clan-capital-landscape.png";
   static const String playerWarStatsPageBackground =
       "$baseUrl/landscape/war-stats.png";
+  static const String playerAchievementPageBackground =
+      "$baseUrl/landscape/achievement-landscape.png";
 
 
   // 🎭 Heroes & Troops & Others

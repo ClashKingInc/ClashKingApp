@@ -124,6 +124,26 @@ class ClanService extends ChangeNotifier {
     }
   }
 
+  /// Loads clan data including war statistics for clan search functionality
+  Future<Clan> getClanAndWarData(String clanTag) async {
+    // First load basic clan data
+    final clan = await loadClanData(clanTag);
+    
+    // Then load war statistics data
+    try {
+      final warStats = await loadClanWarStatsData([clan.tag]);
+      if (warStats.isNotEmpty) {
+        linkWarStatsToClans();
+        DebugUtils.debugSuccess("Loaded war stats for searched clan: ${clan.tag}");
+      }
+    } catch (warStatsError) {
+      DebugUtils.debugWarning("Failed to load war stats for searched clan ${clan.tag}: $warStatsError");
+      // Don't fail the entire operation if war stats loading fails
+    }
+    
+    return _clans[clan.tag]!; // Return the updated clan with war stats
+  }
+
   void linkWarsToClans(List<Clan> clans, List<WarCwl> warCwls) {
     for (final warCwl in warCwls) {
       try {
