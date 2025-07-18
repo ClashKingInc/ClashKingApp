@@ -483,7 +483,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                   onPressed: () {
                     _resetFilters();
                   },
-                  tooltip: AppLocalizations.of(context)!.joinLeaveReset,
+                  tooltip: AppLocalizations.of(context)!.generalReset,
                 ),
               ],
             ),

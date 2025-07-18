@@ -79,7 +79,7 @@ class ClanWarStatsPlayers extends StatelessWidget {
               onPressed: () {
                 resetFilters();
               },
-              tooltip: AppLocalizations.of(context)!.joinLeaveReset,
+              tooltip: AppLocalizations.of(context)!.generalReset,
             ),
           ],
         ),

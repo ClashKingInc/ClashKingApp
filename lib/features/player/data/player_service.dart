@@ -5,6 +5,7 @@ import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
+import 'package:clashkingapp/features/player/models/war_stats_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/api_service.dart';
@@ -339,6 +340,74 @@ class PlayerService extends ChangeNotifier {
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError(" Error loading war stats: $e");
+    }
+  }
+
+  /// Load war stats with custom filters
+  Future<PlayerWarStats?> loadPlayerWarStatsWithFilter(
+    String playerTag,
+    WarStatsFilter filter,
+  ) async {
+    final token = await TokenService().getAccessToken();
+    if (token == null) throw Exception("User not authenticated");
+    
+    DebugUtils.debugApi("🎯 Loading filtered war stats for: $playerTag");
+    DebugUtils.debugInfo("🔍 Filter: ${filter.getFilterSummary()}");
+
+    final requestBody = {
+      "player_tags": [playerTag],
+      ...filter.toJson(),
+    };
+
+    // Debug logging to see what's being sent
+    DebugUtils.debugInfo("🔍 War Stats Request Body: ${jsonEncode(requestBody)}");
+
+    final response = await http.post(
+      Uri.parse("${ApiService.apiUrlV2}/war/players/warhits"),
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode(requestBody),
+    );
+
+    // Debug logging for response
+    DebugUtils.debugInfo("📡 War Stats Response Status: ${response.statusCode}");
+
+    try {
+      if (response.statusCode == 200) {
+        final responseBody = utf8.decode(response.bodyBytes);
+        final data = jsonDecode(responseBody);
+
+        if (data.containsKey("items") && data["items"] is List) {
+          final items = data["items"] as List;
+          if (items.isNotEmpty) {
+            final item = items.first;
+            final String tag = item["tag"];
+            
+            if (tag == playerTag) {
+              DebugUtils.debugSuccess("✅ Loaded filtered war stats for $playerTag");
+              return PlayerWarStats.fromJson(item, tag, data["wars"]);
+            }
+          }
+        }
+        
+        DebugUtils.debugWarning("⚠️ No filtered war stats found for $playerTag");
+        return null;
+      } else {
+        DebugUtils.debugError("❌ Failed to load filtered war stats: ${response.statusCode}");
+        if (response.statusCode == 422) {
+          final errorBody = utf8.decode(response.bodyBytes);
+          DebugUtils.debugError("❌ Validation Error Details: $errorBody");
+        }
+        Sentry.captureMessage("Error loading filtered war stats: ${response.statusCode}",
+            level: SentryLevel.error);
+        throw Exception("Error loading filtered war stats");
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+      DebugUtils.debugError("❌ Error loading filtered war stats: $e");
+      rethrow;
     }
   }
 

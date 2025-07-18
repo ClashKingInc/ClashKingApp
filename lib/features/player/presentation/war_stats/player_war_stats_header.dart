@@ -17,6 +17,7 @@ class PlayerWarStatsHeader extends StatelessWidget {
   final VoidCallback onFriendlyChanged;
   final VoidCallback onBack;
   final VoidCallback onFilter;
+  final bool hasActiveFilters;
 
   PlayerWarStatsHeader({
     super.key,
@@ -31,6 +32,7 @@ class PlayerWarStatsHeader extends StatelessWidget {
     required this.onFriendlyChanged,
     required this.onBack,
     required this.onFilter,
+    this.hasActiveFilters = false,
   });
 
   @override
@@ -157,9 +159,26 @@ class PlayerWarStatsHeader extends StatelessWidget {
         Positioned(
           top: 40,
           right: 10,
-          child: IconButton(
-            icon: Icon(Icons.filter_list, color: Colors.white),
-            onPressed: onFilter,
+          child: Stack(
+            children: [
+              IconButton(
+                icon: Icon(Icons.filter_list, color: Colors.white),
+                onPressed: onFilter,
+              ),
+              if (hasActiveFilters)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+            ],
           ),
         ),
       ],

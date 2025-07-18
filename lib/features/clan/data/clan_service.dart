@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:clashkingapp/features/clan/models/clan_capital_history.dart';
 import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_stats.dart';
+import 'package:clashkingapp/features/clan/models/clan_war_stats_filter.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_log.dart';
 import 'package:flutter/material.dart';
@@ -356,6 +357,64 @@ class ClanService extends ChangeNotifier {
       Sentry.captureMessage("Error loading clan data",
           level: SentryLevel.error);
       return List<ClanWarStats>.empty();
+    }
+  }
+
+  /// Load clan war stats with custom filters
+  Future<ClanWarStats?> loadClanWarStatsWithFilter(
+    String clanTag,
+    ClanWarStatsFilter filter,
+  ) async {
+    final token = await TokenService().getAccessToken();
+    if (token == null) throw Exception("User not authenticated");
+    
+    DebugUtils.debugApi("🎯 Loading filtered clan war stats for: $clanTag");
+    DebugUtils.debugInfo("🔍 Filter: ${filter.getFilterSummary()}");
+
+    final requestBody = {
+      "clan_tags": [clanTag],
+      ...filter.toJson(),
+    };
+
+    final response = await http.post(
+      Uri.parse("${ApiService.apiUrlV2}/war/clans/warhits"),
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode(requestBody),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final responseBody = utf8.decode(response.bodyBytes);
+        final data = jsonDecode(responseBody);
+
+        if (data.containsKey("items") && data["items"] is List) {
+          final items = data["items"] as List;
+          if (items.isNotEmpty) {
+            final item = items.first as Map<String, dynamic>;
+            final String tag = item["tag"];
+            
+            if (tag == clanTag) {
+              DebugUtils.debugSuccess("✅ Loaded filtered clan war stats for $clanTag");
+              return ClanWarStats.fromJson(item);
+            }
+          }
+        }
+        
+        DebugUtils.debugWarning("⚠️ No filtered clan war stats found for $clanTag");
+        return null;
+      } else {
+        DebugUtils.debugError("❌ Failed to load filtered clan war stats: ${response.statusCode}");
+        Sentry.captureMessage("Error loading filtered clan war stats: ${response.statusCode}",
+            level: SentryLevel.error);
+        throw Exception("Error loading filtered clan war stats");
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+      DebugUtils.debugError("❌ Error loading filtered clan war stats: $e");
+      rethrow;
     }
   }
 

@@ -17,6 +17,7 @@
   "generalRetry": "Retry",
   "generalRetrying": "Retrying...",
   "generalTryAgain": "Try again",
+  "generalReset": "Reset",
   "generalCancel": "Cancel",
   "generalOk": "OK",
   "@generalOk": {
@@ -1082,7 +1083,6 @@
   "joinLeaveTitle": "Join/Leave Logs (Current Season)",
   "joinLeaveJoin": "Join",
   "joinLeaveLeave": "Leave",
-  "joinLeaveReset": "Reset",
   "joinLeaveJoins": "Joins",
   "joinLeaveLeaves": "Leaves",
   "joinLeaveUniquePlayers": "Unique Players",
@@ -1301,5 +1301,149 @@
   "translationThankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
   "translationHelpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
   "translationHelpTranslateButton": "Help Translate on Crowdin",
-  "translationCurrentTranslators": "Current Translators"
+  "translationCurrentTranslators": "Current Translators",
+  "filtersTimeFilters": "Time Filters",
+  "@filtersTimeFilters": {
+    "description": "Time-based filters section title"
+  },
+  "filtersWarSettings": "War Settings",
+  "@filtersWarSettings": {
+    "description": "War settings filters section title"
+  },
+  "filtersPerformance": "Performance",
+  "@filtersPerformance": {
+    "description": "Performance filters section title"
+  },
+  "filtersAdvanced": "Advanced",
+  "@filtersAdvanced": {
+    "description": "Advanced filters section title"
+  },
+  "filtersNoFiltersActive": "No filters active",
+  "@filtersNoFiltersActive": {
+    "description": "Text shown when no filters are applied in a section"
+  },
+  "filtersQuickFilters": "Quick Filters",
+  "@filtersQuickFilters": {
+    "description": "Quick preset filters section title"
+  },
+  "filtersLast30Days": "Last 30 Days",
+  "@filtersLast30Days": {
+    "description": "Preset filter for last 30 days"
+  },
+  "filters3StarOnly": "3-Star Only",
+  "@filters3StarOnly": {
+    "description": "Preset filter for 3-star attacks only"
+  },
+  "filtersCwlWars": "CWL Wars",
+  "@filtersCwlWars": {
+    "description": "Preset filter for CWL wars only"
+  },
+  "filtersFreshAttacks": "Fresh Attacks",
+  "@filtersFreshAttacks": {
+    "description": "Preset filter for fresh attacks only"
+  },
+  "filtersSeason": "Season",
+  "@filtersSeason": {
+    "description": "Season filter subsection title"
+  },
+  "filtersDateRange": "Date Range",
+  "@filtersDateRange": {
+    "description": "Date range filter subsection title"
+  },
+  "filtersWarType": "War Type",
+  "@filtersWarType": {
+    "description": "War type filter subsection title"
+  },
+  "filtersTownHall": "Town Hall",
+  "@filtersTownHall": {
+    "description": "Town hall filter subsection title"
+  },
+  "filtersAttackerTh": "Attacker TH",
+  "@filtersAttackerTh": {
+    "description": "Attacker town hall filter label"
+  },
+  "filtersDefenderTh": "Defender TH",
+  "@filtersDefenderTh": {
+    "description": "Defender town hall filter label"
+  },
+  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "@filtersSameTownHallOnly": {
+    "description": "Same town hall filter option"
+  },
+  "filtersStars": "Stars",
+  "@filtersStars": {
+    "description": "Stars filter subsection title"
+  },
+  "filtersDestructionPercentage": "Destruction Percentage",
+  "@filtersDestructionPercentage": {
+    "description": "Destruction percentage filter subsection title"
+  },
+  "filtersMapPosition": "Map Position",
+  "@filtersMapPosition": {
+    "description": "Map position filter subsection title"
+  },
+  "filtersOptions": "Options",
+  "@filtersOptions": {
+    "description": "Options filter subsection title"
+  },
+  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "@filtersFreshAttacksOnly": {
+    "description": "Fresh attacks only filter option"
+  },
+  "filtersResultLimit": "Result Limit",
+  "@filtersResultLimit": {
+    "description": "Result limit filter label"
+  },
+  "filtersMinPosition": "Min Position",
+  "@filtersMinPosition": {
+    "description": "Minimum map position filter label"
+  },
+  "filtersMaxPosition": "Max Position",
+  "@filtersMaxPosition": {
+    "description": "Maximum map position filter label"
+  },
+  "filtersStartDate": "Start Date",
+  "@filtersStartDate": {
+    "description": "Start date filter label"
+  },
+  "filtersEndDate": "End Date",
+  "@filtersEndDate": {
+    "description": "End date filter label"
+  },
+  "filtersNotSet": "Not set",
+  "@filtersNotSet": {
+    "description": "Text shown when date is not set"
+  },
+  "filtersYear": "Year",
+  "@filtersYear": {
+    "description": "Year selector label"
+  },
+  "filtersMonth": "Month",
+  "@filtersMonth": {
+    "description": "Month selector label"
+  },
+  "filtersSelectYear": "Select Year",
+  "@filtersSelectYear": {
+    "description": "Year picker dialog title"
+  },
+  "filtersSelectMonth": "Select Month",
+  "@filtersSelectMonth": {
+    "description": "Month picker dialog title"
+  },
+  "filtersAllWars": "All Wars",
+  "@filtersAllWars": {
+    "description": "All wars filter option"
+  },
+  "filtersRandomWars": "Random Wars",
+  "@filtersRandomWars": {
+    "description": "Random wars filter option"
+  },
+  "filtersCwlWarsOnly": "CWL Wars",
+  "@filtersCwlWarsOnly": {
+    "description": "CWL wars only filter option"
+  },
+  "filtersFriendlyWars": "Friendly Wars",
+  "@filtersFriendlyWars": {
+    "description": "Friendly wars filter option"
+  }
 }
