@@ -338,12 +338,15 @@ class ClanInfoHeaderCard extends StatelessWidget {
                 ],
               ).then((value) {
                 if (value == 'Stats') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ClanWarStatsScreen(clan: clanInfo),
-                    ),
-                  );
+                  if (context.mounted) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ClanWarStatsScreen(clan: clanInfo),
+                      ),
+                    );
+                  }
                 }
               });
             },

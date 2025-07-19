@@ -46,9 +46,11 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
             );
           } catch (e) {
             navigator.pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Failed to load clan data: ${e.toString()}')),
-            );
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Failed to load clan data: ${e.toString()}')),
+              );
+            }
           }
         },
         child: Padding(

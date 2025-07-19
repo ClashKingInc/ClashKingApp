@@ -871,7 +871,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Container(
+        return SizedBox(
           height: MediaQuery.of(context).size.height * 0.6,
           child: Column(
             children: [
@@ -1000,7 +1000,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   void _updateSeasonString() {
     if (selectedYear != null && selectedMonth != null) {
       selectedSeason =
-          '${selectedYear}-${selectedMonth.toString().padLeft(2, '0')}';
+          '$selectedYear-${selectedMonth.toString().padLeft(2, '0')}';
     } else {
       selectedSeason = null;
     }

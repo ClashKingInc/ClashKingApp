@@ -98,6 +98,7 @@
   },
   "generalWarning": "Warning",
   "generalNoDataAvailable": "No data available.",
+  "generalCharts": "Charts",
   "authSignUp": "Sign up",
   "authLogin": "Login",
   "authLogout": "Log out",
@@ -1017,6 +1018,15 @@
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
+  "warStatusMissedInfo": "Missed: {number}",
+  "@warStatusMissedInfo": {
+    "description": "Number of missed attacks",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warAbbreviationAvg": "Avg",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
@@ -1445,5 +1455,37 @@
   "filtersFriendlyWars": "Friendly Wars",
   "@filtersFriendlyWars": {
     "description": "Friendly wars filter option"
+  },
+  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "@chartsAttackPerformance": {
+    "description": "Attack performance chart title"
+  },
+  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "@chartsDefensePerformance": {
+    "description": "Defense performance chart title"
+  },
+  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "@chartsRowsYourTh": {
+    "description": "Heatmap chart axis explanation"
+  },
+  "chartsPoor": "Poor",
+  "@chartsPoor": {
+    "description": "Poor performance legend label"
+  },
+  "chartsAverage": "Average",
+  "@chartsAverage": {
+    "description": "Average performance legend label"
+  },
+  "chartsGood": "Good",
+  "@chartsGood": {
+    "description": "Good performance legend label"
+  },
+  "chartsExcellent": "Excellent",
+  "@chartsExcellent": {
+    "description": "Excellent performance legend label"
+  },
+  "chartsNoData": "N/A",
+  "@chartsNoData": {
+    "description": "No data available indicator"
   }
 }

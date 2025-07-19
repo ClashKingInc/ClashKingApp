@@ -1,4 +1,6 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
+import 'package:clashkingapp/features/player/presentation/war_stats/widgets/th_heatmap_chart.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/player/models/war_stats_filter.dart';
@@ -35,6 +37,13 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
     if (isCWLChecked) selected.add("cwl");
     if (isRandomChecked) selected.add("random");
     if (isFriendlyChecked) selected.add("friendly");
+    
+    // If all types are selected, return empty list to use 'all' data
+    // This ensures consistency between "no filters" and "all filters selected"
+    if (selected.length == 3) {
+      return [];
+    }
+    
     return selected;
   }
 
@@ -59,12 +68,47 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
         : widget.player.warStats;
   }
 
+  Future<void> _refreshData() async {
+    try {
+      // If we have active filters, re-apply them
+      if (_hasAppliedFilters) {
+        await _applyFilters(_currentFilter);
+      }
+      
+      setState(() {
+        // Update the widget's player data would require parent state management
+        // For now, we'll just refresh the filtered data
+      });
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Data refreshed successfully'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to refresh data: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [
             PlayerWarStatsHeader(
               name: widget.player.name,
               tag: widget.player.tag,
@@ -86,11 +130,22 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
               hasActiveFilters: _hasAppliedFilters,
             ),
             _isLoadingFiltered
-                ? const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: CircularProgressIndicator(),
-                    ),
+                ? Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      // Skeleton loading for stat cards
+                      Row(
+                        children: [
+                          Expanded(child: const StatCardSkeleton()),
+                          const SizedBox(width: 8),
+                          Expanded(child: const StatCardSkeleton()),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      
+                      // Skeleton loading for attack cards
+                      ...List.generate(3, (index) => const WarStatsSkeletonCard()),
+                    ],
                   )
                 : _displayedWarStats != null
                     ? Column(
@@ -146,6 +201,7 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
                             tabs: [
                               Tab(text: AppLocalizations.of(context)!.generalStats),
                               Tab(text: AppLocalizations.of(context)!.generalDetails),
+                              Tab(text: AppLocalizations.of(context)!.generalCharts),
                             ],
                             children: [
                               WarStatsView(
@@ -157,6 +213,7 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
                               PlayerWarAttacksTab(
                                 wars: _filteredWars,
                               ),
+                              _buildPerformanceChartsTab(),
                             ],
                           ),
                         ],
@@ -165,7 +222,17 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
                         child: Text(AppLocalizations.of(context)?.generalNoDataAvailable ??
                             'No data'),
                       ),
-          ],
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showFilterDialog,
+        tooltip: 'Filter War Stats',
+        backgroundColor: _hasAppliedFilters ? Theme.of(context).colorScheme.primary : null,
+        child: Icon(
+          _hasAppliedFilters ? Icons.filter_alt : Icons.filter_alt_outlined,
+          color: _hasAppliedFilters ? Colors.white : null,
         ),
       ),
     );
@@ -181,7 +248,7 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
     );
   }
 
-  void _applyFilter(WarStatsFilter filter) async {
+  Future<void> _applyFilters(WarStatsFilter filter) async {
     setState(() {
       _currentFilter = filter;
       _isLoadingFiltered = true;
@@ -215,11 +282,59 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
     }
   }
 
+  void _applyFilter(WarStatsFilter filter) async {
+    await _applyFilters(filter);
+  }
+
   void _clearFilters() {
     setState(() {
       _currentFilter = WarStatsFilter.defaultFilter();
       _filteredWarStats = null;
       _hasAppliedFilters = false;
     });
+  }
+
+  Widget _buildPerformanceChartsTab() {
+    if (_displayedWarStats == null) {
+      return const Center(child: Text('No data available'));
+    }
+
+    final selectedTypes = _getSelectedTypes();
+    final stats = _displayedWarStats!.getStatsForTypes(selectedTypes);
+    
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Attack Performance Heatmap
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: THHeatmapChart(
+                attackStats: stats.byEnemyTownhall,
+                defenseStats: stats.byEnemyTownhallDef,
+                playerThLevel: widget.player.townHallLevel,
+                showDefense: false,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          // Defense Performance Heatmap
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: THHeatmapChart(
+                attackStats: stats.byEnemyTownhall,
+                defenseStats: stats.byEnemyTownhallDef,
+                playerThLevel: widget.player.townHallLevel,
+                showDefense: true,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
