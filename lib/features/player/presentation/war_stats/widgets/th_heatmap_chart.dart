@@ -121,9 +121,6 @@ class THHeatmapChart extends StatelessWidget {
             final key = showDefense ? '${colTh}vs$rowTh' : '${rowTh}vs$colTh';
             final stat = stats[key];
             
-            // Debug: Print the key and stat values
-            print('TH Heatmap Debug: ${showDefense ? 'DEFENSE' : 'ATTACK'} - Row(${showDefense ? 'myTh' : 'myTh'})=$rowTh, Col(${showDefense ? 'opponentTh' : 'opponentTh'})=$colTh, key=$key, stat=${stat?.averageStars}, count=${stat?.count}');
-            
             return Expanded(
               child: Container(
                 margin: const EdgeInsets.all(2),

@@ -73,6 +73,7 @@ class WarStatsView extends StatelessWidget {
     String formattedEndDate = DateFormat.yMd(userLocale.toString())
         .format(DateTime.fromMillisecondsSinceEpoch(1000));
 
+
     final groupedAttackStats = groupByDefenderTh(stats!.byEnemyTownhall);
     final groupedDefenseStats = groupByDefenderTh(stats.byEnemyTownhallDef);
 

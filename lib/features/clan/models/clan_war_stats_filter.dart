@@ -45,9 +45,9 @@ class ClanWarStatsFilter {
       'same_th': sameTownHall,
     };
     
-    if (warTypes != null && warTypes!.isNotEmpty) {
+    if (warTypes != null && warTypes!.isNotEmpty && !warTypes!.contains('all')) {
       data['type'] = warTypes;
-    } else {
+    } else if (warType != "all") {
       data['type'] = warType;
     }
 

@@ -221,7 +221,9 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text(AppLocalizations.of(context)!.warOpponentSelectMembersThLevel,
+                    Text(
+                        AppLocalizations.of(context)!
+                            .warOpponentSelectMembersThLevel,
                         style: Theme.of(context).textTheme.bodyMedium),
                     Wrap(
                       spacing: 4.0,
@@ -246,7 +248,9 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                       }).toList(),
                     ),
                     SizedBox(height: 10),
-                    Text(AppLocalizations.of(context)!.warOpponentSelectOpponentsThLevel,
+                    Text(
+                        AppLocalizations.of(context)!
+                            .warOpponentSelectOpponentsThLevel,
                         style: Theme.of(context).textTheme.bodyMedium),
                     Wrap(
                       spacing: 4.0,
@@ -272,7 +276,8 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                     ),
                     SizedBox(height: 10),
                     CheckboxListTile(
-                      title: Text(AppLocalizations.of(context)!.warOpponentEqualThLevel,
+                      title: Text(
+                          AppLocalizations.of(context)!.warOpponentEqualThLevel,
                           style: Theme.of(context).textTheme.bodyMedium),
                       value: equalThSelected,
                       onChanged: (bool? value) {
@@ -354,7 +359,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
       setState(() {
         _isLoadingFiltered = false;
       });
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -388,6 +393,13 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
     });
   }
 
+  String _getFilterSummary() {
+    if (!_currentFilter.hasActiveFilters()) {
+      return AppLocalizations.of(context)!.filtersNoneApplied;
+    }
+    return _currentFilter.getFilterSummary();
+  }
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -412,7 +424,15 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
               },
               onBack: () => Navigator.of(context).pop(),
               onFilter: () => _showAdvancedFilterDialog(),
-              hasActiveFilters: _hasAppliedFilters,
+              hasActiveFilters: _currentFilter.hasActiveFilters(),
+              onExport: () {
+                // TODO: Implement clan war stats export
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(AppLocalizations.of(context)!
+                          .exportClanWarStatsComingSoon)),
+                );
+              },
             ),
             _isLoadingFiltered
                 ? const Center(
@@ -429,7 +449,8 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                           padding: const EdgeInsets.all(12.0),
                           margin: const EdgeInsets.symmetric(horizontal: 16.0),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primaryContainer,
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           child: Row(
@@ -437,22 +458,31 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                               Icon(
                                 Icons.filter_alt,
                                 size: 16,
-                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
                               ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  _currentFilter.getFilterSummary(),
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                                  ),
+                                  _getFilterSummary(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimaryContainer,
+                                      ),
                                 ),
                               ),
                               IconButton(
                                 icon: Icon(
                                   Icons.close,
                                   size: 16,
-                                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
                                 ),
                                 onPressed: _clearAdvancedFilters,
                               ),
@@ -466,11 +496,15 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                         labelColor: Theme.of(context).colorScheme.onSurface,
                         labelPadding: EdgeInsets.zero,
                         labelStyle: Theme.of(context).textTheme.bodyLarge,
-                        unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
+                        unselectedLabelColor:
+                            Theme.of(context).colorScheme.onSurface,
                         tabs: [
-                          Tab(text: AppLocalizations.of(context)?.warLog ?? 'War Log'),
                           Tab(
-                              text: AppLocalizations.of(context)?.navigationStatistics ??
+                              text: AppLocalizations.of(context)?.warLog ??
+                                  'War Log'),
+                          Tab(
+                              text: AppLocalizations.of(context)
+                                      ?.navigationStatistics ??
                                   'Statistics'),
                         ],
                         children: [
@@ -478,7 +512,10 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                             padding: EdgeInsets.all(8),
                             child: Column(
                               children: [
-                                ClanWarLog(clan: widget.clan, selectedTypes: _getSelectedTypes(),),
+                                ClanWarLog(
+                                  clan: widget.clan,
+                                  selectedTypes: _getSelectedTypes(),
+                                ),
                               ],
                             ),
                           ),
@@ -496,7 +533,8 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                                           .map((player) => player.tag)
                                           .toList() ??
                                       [],
-                                  toggleTownHallVisibility: toggleTownHallVisibility,
+                                  toggleTownHallVisibility:
+                                      toggleTownHallVisibility,
                                   updateSortBy: _updateSortBy,
                                   resetFilters: _resetFilters,
                                   attackerThFilter: attackerThFilter,

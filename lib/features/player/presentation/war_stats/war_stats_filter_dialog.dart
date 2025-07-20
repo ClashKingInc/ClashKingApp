@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/player/models/war_stats_filter.dart';
+import 'package:clashkingapp/features/player/models/filter_preset.dart';
+import 'package:clashkingapp/features/player/services/filter_preset_service.dart';
+import 'package:clashkingapp/features/player/services/performance_analysis_service.dart';
+import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
@@ -11,11 +15,13 @@ import 'package:intl/intl.dart';
 class WarStatsFilterDialog extends StatefulWidget {
   final WarStatsFilter initialFilter;
   final Function(WarStatsFilter) onApply;
+  final PlayerWarStats? warStats;
 
   const WarStatsFilterDialog({
     super.key,
     required this.initialFilter,
     required this.onApply,
+    this.warStats,
   });
 
   @override
@@ -45,6 +51,13 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   bool _isTimeFiltersExpanded = false;
   bool _isWarSettingsExpanded = false;
   bool _isPerformanceExpanded = false;
+
+  // Saved presets management
+  List<FilterPreset> _savedPresets = [];
+  bool _isLoadingPresets = false;
+
+  // Performance analysis suggestions
+  List<FilterPreset> _performanceSuggestions = [];
 
   @override
   void initState() {
@@ -87,6 +100,15 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       selectedYear = int.parse(parts[0]);
       selectedMonth = int.parse(parts[1]);
     }
+
+    // Load saved presets
+    _loadSavedPresets();
+
+    // Generate performance analysis suggestions
+    if (widget.warStats != null) {
+      _performanceSuggestions =
+          PerformanceAnalysisService.analyzePerformance(widget.warStats!);
+    }
   }
 
   @override
@@ -94,6 +116,208 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     _minMapPositionController.dispose();
     _maxMapPositionController.dispose();
     super.dispose();
+  }
+
+  /// Load saved filter presets
+  Future<void> _loadSavedPresets() async {
+    setState(() {
+      _isLoadingPresets = true;
+    });
+
+    try {
+      final presets = await FilterPresetService.instance.getPresets();
+      setState(() {
+        _savedPresets = presets;
+        _isLoadingPresets = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoadingPresets = false;
+      });
+    }
+  }
+
+  /// Show dialog to save current filter as preset
+  Future<void> _showSavePresetDialog() async {
+    if (!_filter.hasActiveFilters()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.presetsApplyFirst),
+        ),
+      );
+      return;
+    }
+
+    final nameController = TextEditingController();
+    final suggestions = FilterPresetService.getPresetNameSuggestions(_filter);
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.presetsSaveTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.presetsName,
+                hintText: AppLocalizations.of(context)!.presetsNameHint,
+              ),
+              textCapitalization: TextCapitalization.words,
+            ),
+            const SizedBox(height: 16),
+            if (suggestions.isNotEmpty) ...[
+              Text(AppLocalizations.of(context)!.presetsSuggestions,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                children: suggestions.map((suggestion) {
+                  return ActionChip(
+                    label: Text(
+                      suggestion,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.secondaryContainer,
+                    side: BorderSide(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .outline
+                          .withValues(alpha: 0.2),
+                    ),
+                    labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                        ),
+                    onPressed: () {
+                      nameController.text = suggestion;
+                    },
+                  );
+                }).toList(),
+              ),
+            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.generalCancel),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final name = nameController.text.trim();
+              if (name.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          AppLocalizations.of(context)!.presetsNameRequired)),
+                );
+                return;
+              }
+
+              if (await FilterPresetService.instance.presetNameExists(name) &&
+                  context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          AppLocalizations.of(context)!.presetsNameExists)),
+                );
+                return;
+              }
+
+              final success = await FilterPresetService.instance.savePreset(
+                name: name,
+                filter: _filter,
+              );
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
+
+              if (success && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(AppLocalizations.of(context)!
+                          .presetsSaveSuccess(name))),
+                );
+                await _loadSavedPresets();
+              } else {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text(
+                            AppLocalizations.of(context)!.presetsSaveError)),
+                  );
+                }
+              }
+            },
+            child: Text(AppLocalizations.of(context)!.presetsSave),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Apply a saved preset
+  Future<void> _applySavedPreset(FilterPreset preset) async {
+    setState(() {
+      _filter = preset.filter;
+
+      // Update UI state to match the preset filter
+      attackerThSelection.clear();
+      defenderThSelection.clear();
+      warTypeSelection.clear();
+      starSelection.clear();
+
+      // Initialize TH selections
+      for (int i = 1; i <= GameDataService.getMaxTownHallLevel(); i++) {
+        attackerThSelection[i] =
+            _filter.ownTownHalls?.contains(i) ?? (_filter.ownTownHall == i);
+        defenderThSelection[i] =
+            _filter.enemyTownHalls?.contains(i) ?? (_filter.enemyTownHall == i);
+      }
+
+      // Initialize war type selections
+      warTypeSelection['all'] =
+          _filter.warType == 'all' && (_filter.warTypes?.isEmpty ?? true);
+      warTypeSelection['cwl'] =
+          _filter.warTypes?.contains('cwl') ?? _filter.warType == 'cwl';
+      warTypeSelection['random'] =
+          _filter.warTypes?.contains('random') ?? _filter.warType == 'random';
+      warTypeSelection['friendly'] = _filter.warTypes?.contains('friendly') ??
+          _filter.warType == 'friendly';
+
+      // Initialize star selections
+      for (int i = 0; i <= 3; i++) {
+        starSelection[i] = _filter.allowedStars?.contains(i) ?? false;
+      }
+
+      // Initialize season selection
+      selectedSeason = _filter.season;
+      if (selectedSeason != null) {
+        final parts = selectedSeason!.split('-');
+        selectedYear = int.parse(parts[0]);
+        selectedMonth = int.parse(parts[1]);
+      } else {
+        selectedYear = null;
+        selectedMonth = null;
+      }
+
+      // Update text controllers
+      _minMapPositionController.text = _filter.minMapPosition?.toString() ?? '';
+      _maxMapPositionController.text = _filter.maxMapPosition?.toString() ?? '';
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          content:
+              Text(AppLocalizations.of(context)!.presetsApplied(preset.name))),
+    );
   }
 
   void _updateFilter(WarStatsFilter newFilter) {
@@ -155,17 +379,22 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(16),
                   topRight: Radius.circular(16),
+                ),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+                  ),
                 ),
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.tune,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    color: Theme.of(context).colorScheme.primary,
                     size: 24,
                   ),
                   const SizedBox(width: 12),
@@ -173,8 +402,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                     AppLocalizations.of(context)?.generalFilters ??
                         'War Stats Filters',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          color: Theme.of(context).colorScheme.onSurface,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -182,7 +410,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                   IconButton(
                     icon: Icon(
                       Icons.close,
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                     onPressed: () => Navigator.pop(context),
                   ),
@@ -202,7 +430,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
                     // Time Filters Card (Collapsible)
                     _buildCollapsibleSectionCard(
-                      title: AppLocalizations.of(context)?.filtersTimeFilters ?? 'Time Filters',
+                      title: AppLocalizations.of(context)?.filtersTimeFilters ??
+                          'Time Filters',
                       icon: Icons.schedule,
                       isExpanded: _isTimeFiltersExpanded,
                       onToggle: () {
@@ -212,11 +441,15 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       },
                       child: Column(
                         children: [
-                          _buildSubsectionTitle(AppLocalizations.of(context)?.filtersSeason ?? 'Season'),
+                          _buildSubsectionTitle(
+                              AppLocalizations.of(context)?.filtersSeason ??
+                                  'Season'),
                           const SizedBox(height: 8),
                           _buildSeasonSelector(),
                           const SizedBox(height: 16),
-                          _buildSubsectionTitle(AppLocalizations.of(context)?.filtersDateRange ?? 'Date Range'),
+                          _buildSubsectionTitle(
+                              AppLocalizations.of(context)?.filtersDateRange ??
+                                  'Date Range'),
                           const SizedBox(height: 8),
                           _buildDateRangePicker(),
                         ],
@@ -225,7 +458,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
                     // War Settings Card (Collapsible)
                     _buildCollapsibleSectionCard(
-                      title: AppLocalizations.of(context)?.filtersWarSettings ?? 'War Settings',
+                      title: AppLocalizations.of(context)?.filtersWarSettings ??
+                          'War Settings',
                       icon: Icons.military_tech,
                       isExpanded: _isWarSettingsExpanded,
                       onToggle: () {
@@ -235,11 +469,15 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       },
                       child: Column(
                         children: [
-                          _buildSubsectionTitle(AppLocalizations.of(context)?.filtersWarType ?? 'War Type'),
+                          _buildSubsectionTitle(
+                              AppLocalizations.of(context)?.filtersWarType ??
+                                  'War Type'),
                           const SizedBox(height: 8),
                           _buildWarTypeDropdown(),
                           const SizedBox(height: 16),
-                          _buildSubsectionTitle(AppLocalizations.of(context)?.filtersTownHall ?? 'Town Hall'),
+                          _buildSubsectionTitle(
+                              AppLocalizations.of(context)?.filtersTownHall ??
+                                  'Town Hall'),
                           const SizedBox(height: 8),
                           _buildTownHallFilters(),
                         ],
@@ -248,7 +486,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
                     // Performance Card (Collapsible)
                     _buildCollapsibleSectionCard(
-                      title: AppLocalizations.of(context)?.filtersPerformance ?? 'Performance',
+                      title: AppLocalizations.of(context)?.filtersPerformance ??
+                          'Performance',
                       icon: Icons.star,
                       isExpanded: _isPerformanceExpanded,
                       onToggle: () {
@@ -261,7 +500,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
                     // Advanced Card (Collapsible)
                     _buildCollapsibleSectionCard(
-                      title: AppLocalizations.of(context)?.filtersAdvanced ?? 'Advanced',
+                      title: AppLocalizations.of(context)?.filtersAdvanced ??
+                          'Advanced',
                       icon: Icons.settings,
                       isExpanded: _isAdvancedExpanded,
                       onToggle: () {
@@ -271,11 +511,15 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       },
                       child: Column(
                         children: [
-                          _buildSubsectionTitle(AppLocalizations.of(context)?.filtersMapPosition ?? 'Map Position'),
+                          _buildSubsectionTitle(AppLocalizations.of(context)
+                                  ?.filtersMapPosition ??
+                              'Map Position'),
                           const SizedBox(height: 8),
                           _buildMapPositionFilters(),
                           const SizedBox(height: 16),
-                          _buildSubsectionTitle(AppLocalizations.of(context)?.filtersOptions ?? 'Options'),
+                          _buildSubsectionTitle(
+                              AppLocalizations.of(context)?.filtersOptions ??
+                                  'Options'),
                           const SizedBox(height: 8),
                           _buildAdvancedOptions(),
                         ],
@@ -301,102 +545,102 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 ),
               ),
               child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // First row with Reset button
+                  Row(
                     children: [
-                      // First row with Reset button
-                      Row(
-                        children: [
-                          OutlinedButton.icon(
-                            onPressed: _resetFilters,
-                            icon: const Icon(Icons.refresh, size: 18),
-                            label: Text(
-                                AppLocalizations.of(context)?.generalReset ??
-                                    'Reset'),
-                          ),
-                          const Spacer(),
-                        ],
+                      OutlinedButton.icon(
+                        onPressed: _resetFilters,
+                        icon: const Icon(Icons.refresh, size: 18),
+                        label: Text(
+                            AppLocalizations.of(context)?.generalReset ??
+                                'Reset'),
                       ),
-                      const SizedBox(height: 8),
-                      // Second row with Cancel and Apply buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text(
-                                AppLocalizations.of(context)?.generalCancel ??
-                                    'Cancel'),
-                          ),
-                          const SizedBox(width: 8),
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              // Get selected TH levels
-                              final selectedAttackerTH = attackerThSelection.entries
-                                  .where((entry) => entry.value)
-                                  .map((entry) => entry.key)
-                                  .toList();
-                              final selectedDefenderTH = defenderThSelection.entries
-                                  .where((entry) => entry.value)
-                                  .map((entry) => entry.key)
-                                  .toList();
+                      const Spacer(),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  // Second row with Cancel and Apply buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(
+                            AppLocalizations.of(context)?.generalCancel ??
+                                'Cancel'),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          // Get selected TH levels
+                          final selectedAttackerTH = attackerThSelection.entries
+                              .where((entry) => entry.value)
+                              .map((entry) => entry.key)
+                              .toList();
+                          final selectedDefenderTH = defenderThSelection.entries
+                              .where((entry) => entry.value)
+                              .map((entry) => entry.key)
+                              .toList();
 
-                              // Get selected war types
-                              final selectedWarTypes = warTypeSelection.entries
-                                  .where((entry) => entry.value)
-                                  .map((entry) => entry.key)
-                                  .toList();
+                          // Get selected war types
+                          final selectedWarTypes = warTypeSelection.entries
+                              .where((entry) => entry.value)
+                              .map((entry) => entry.key)
+                              .toList();
 
-                              // Get selected stars
-                              final selectedStars = starSelection.entries
-                                  .where((entry) => entry.value)
-                                  .map((entry) => entry.key)
-                                  .toList();
+                          // Get selected stars
+                          final selectedStars = starSelection.entries
+                              .where((entry) => entry.value)
+                              .map((entry) => entry.key)
+                              .toList();
 
-                              // Update filter with all selections
-                              final updatedFilter = _filter.copyWith(
-                                season: selectedSeason,
-                                ownTownHalls: selectedAttackerTH.isNotEmpty
-                                    ? selectedAttackerTH
-                                    : null,
-                                enemyTownHalls: selectedDefenderTH.isNotEmpty
-                                    ? selectedDefenderTH
-                                    : null,
-                                warTypes: selectedWarTypes.isNotEmpty
-                                    ? selectedWarTypes
-                                    : null,
-                                allowedStars:
-                                    selectedStars.isNotEmpty ? selectedStars : null,
-                                minDestruction: _filter.minDestruction,
-                                maxDestruction: _filter.maxDestruction,
-                                minMapPosition: _minMapPositionController
-                                        .text.isNotEmpty
-                                    ? int.tryParse(_minMapPositionController.text)
-                                    : null,
-                                maxMapPosition: _maxMapPositionController
-                                        .text.isNotEmpty
-                                    ? int.tryParse(_maxMapPositionController.text)
-                                    : null,
-                              );
+                          // Update filter with all selections
+                          final updatedFilter = _filter.copyWith(
+                            season: selectedSeason,
+                            ownTownHalls: selectedAttackerTH.isNotEmpty
+                                ? selectedAttackerTH
+                                : null,
+                            enemyTownHalls: selectedDefenderTH.isNotEmpty
+                                ? selectedDefenderTH
+                                : null,
+                            warTypes: selectedWarTypes.isNotEmpty &&
+                                    !selectedWarTypes.contains('all')
+                                ? selectedWarTypes
+                                : null,
+                            allowedStars:
+                                selectedStars.isNotEmpty ? selectedStars : null,
+                            minDestruction: _filter.minDestruction,
+                            maxDestruction: _filter.maxDestruction,
+                            minMapPosition: _minMapPositionController
+                                    .text.isNotEmpty
+                                ? int.tryParse(_minMapPositionController.text)
+                                : null,
+                            maxMapPosition: _maxMapPositionController
+                                    .text.isNotEmpty
+                                ? int.tryParse(_maxMapPositionController.text)
+                                : null,
+                          );
 
-                              widget.onApply(updatedFilter);
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.check, size: 18),
-                            label: Text(
-                                AppLocalizations.of(context)?.generalApply ??
-                                    'Apply'),
-                          ),
-                        ],
+                          widget.onApply(updatedFilter);
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(Icons.check, size: 18),
+                        label: Text(
+                            AppLocalizations.of(context)?.generalApply ??
+                                'Apply'),
                       ),
                     ],
                   ),
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
   }
-
 
   Widget _buildDateRangePicker() {
     return Row(
@@ -437,7 +681,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        AppLocalizations.of(context)?.filtersStartDate ?? 'Start Date',
+                        AppLocalizations.of(context)?.filtersStartDate ??
+                            'Start Date',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: Theme.of(context)
                                   .colorScheme
@@ -450,7 +695,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    _filter.startDate?.toString().split(' ')[0] ?? (AppLocalizations.of(context)?.filtersNotSet ?? 'Not set'),
+                    _filter.startDate?.toString().split(' ')[0] ??
+                        (AppLocalizations.of(context)?.filtersNotSet ??
+                            'Not set'),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.w500,
                         ),
@@ -497,7 +744,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        AppLocalizations.of(context)?.filtersEndDate ?? 'End Date',
+                        AppLocalizations.of(context)?.filtersEndDate ??
+                            'End Date',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: Theme.of(context)
                                   .colorScheme
@@ -510,7 +758,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    _filter.endDate?.toString().split(' ')[0] ?? (AppLocalizations.of(context)?.filtersNotSet ?? 'Not set'),
+                    _filter.endDate?.toString().split(' ')[0] ??
+                        (AppLocalizations.of(context)?.filtersNotSet ??
+                            'Not set'),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.w500,
                         ),
@@ -527,10 +777,26 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
   Widget _buildWarTypeDropdown() {
     final warTypeOptions = [
-      {'value': 'all', 'label': AppLocalizations.of(context)!.filtersAllWars, 'icon': Icons.all_inclusive},
-      {'value': 'random', 'label': AppLocalizations.of(context)!.warFiltersRandom, 'icon': Icons.shuffle},
-      {'value': 'cwl', 'label': AppLocalizations.of(context)!.cwlTitle, 'icon': Icons.emoji_events},
-      {'value': 'friendly', 'label': AppLocalizations.of(context)!.warFiltersFriendly, 'icon': Icons.handshake},
+      {
+        'value': 'all',
+        'label': AppLocalizations.of(context)!.filtersAllWars,
+        'icon': Icons.all_inclusive
+      },
+      {
+        'value': 'random',
+        'label': AppLocalizations.of(context)!.warFiltersRandom,
+        'icon': Icons.shuffle
+      },
+      {
+        'value': 'cwl',
+        'label': AppLocalizations.of(context)!.cwlTitle,
+        'icon': Icons.emoji_events
+      },
+      {
+        'value': 'friendly',
+        'label': AppLocalizations.of(context)!.warFiltersFriendly,
+        'icon': Icons.handshake
+      },
     ];
 
     return Wrap(
@@ -601,7 +867,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             return FilterChip(
               showCheckmark: false,
               selectedColor:
-                  Theme.of(context).colorScheme.primary.withAlpha(150),
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
               labelPadding: const EdgeInsets.all(0),
               label: MobileWebImage(
                 imageUrl: ImageAssets.townHall(thLevel),
@@ -632,7 +898,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             return FilterChip(
               showCheckmark: false,
               selectedColor:
-                  Theme.of(context).colorScheme.primary.withAlpha(150),
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
               labelPadding: const EdgeInsets.all(0),
               label: MobileWebImage(
                 imageUrl: ImageAssets.townHall(thLevel),
@@ -659,7 +925,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                AppLocalizations.of(context)?.filtersSameTownHallOnly ?? 'Same Town Hall Only',
+                AppLocalizations.of(context)?.filtersSameTownHallOnly ??
+                    'Same Town Hall Only',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -711,7 +978,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppLocalizations.of(context)?.filtersDestructionPercentage ?? 'Destruction Percentage',
+          AppLocalizations.of(context)?.filtersDestructionPercentage ??
+              'Destruction Percentage',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w500,
               ),
@@ -763,7 +1031,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             controller: _minMapPositionController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)?.filtersMinPosition ?? 'Min Position',
+              labelText: AppLocalizations.of(context)?.filtersMinPosition ??
+                  'Min Position',
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               contentPadding:
@@ -778,7 +1047,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             controller: _maxMapPositionController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)?.filtersMaxPosition ?? 'Max Position',
+              labelText: AppLocalizations.of(context)?.filtersMaxPosition ??
+                  'Max Position',
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               contentPadding:
@@ -793,7 +1063,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
   Widget _buildSeasonSelector() {
     final months = _generateMonths();
-    
+
     // Get display text for the current selection
     String displayText;
     if (selectedYear != null && selectedMonth != null) {
@@ -814,10 +1084,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           border: Border.all(
-              color: Theme.of(context)
-                  .colorScheme
-                  .outline
-                  .withValues(alpha: 0.3)),
+              color:
+                  Theme.of(context).colorScheme.outline.withValues(alpha: 0.3)),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -855,7 +1123,10 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             ),
             Icon(
               Icons.arrow_drop_down,
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.7),
             ),
           ],
         ),
@@ -866,7 +1137,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   void _showSeasonPicker() {
     final years = _generateYears();
     final months = _generateMonths();
-    
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -878,7 +1149,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  AppLocalizations.of(context)?.filtersSelectYear ?? 'Select Season',
+                  AppLocalizations.of(context)?.filtersSelectYear ??
+                      'Select Season',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
@@ -892,7 +1164,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                           Padding(
                             padding: const EdgeInsets.all(8),
                             child: Text(
-                              AppLocalizations.of(context)?.filtersYear ?? 'Year',
+                              AppLocalizations.of(context)?.filtersYear ??
+                                  'Year',
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                           ),
@@ -900,7 +1173,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                             child: ListView(
                               children: [
                                 ListTile(
-                                  title: Text(AppLocalizations.of(context)!.generalAll),
+                                  title: Text(
+                                      AppLocalizations.of(context)!.generalAll),
                                   selected: selectedYear == null,
                                   onTap: () {
                                     setState(() {
@@ -927,7 +1201,10 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                     ),
                     Container(
                       width: 1,
-                      color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .outline
+                          .withValues(alpha: 0.3),
                     ),
                     // Month Selection
                     Expanded(
@@ -936,7 +1213,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                           Padding(
                             padding: const EdgeInsets.all(8),
                             child: Text(
-                              AppLocalizations.of(context)?.filtersMonth ?? 'Month',
+                              AppLocalizations.of(context)?.filtersMonth ??
+                                  'Month',
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                           ),
@@ -944,7 +1222,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                             child: ListView(
                               children: [
                                 ListTile(
-                                  title: Text(AppLocalizations.of(context)!.generalAll),
+                                  title: Text(
+                                      AppLocalizations.of(context)!.generalAll),
                                   selected: selectedMonth == null,
                                   onTap: () {
                                     setState(() {
@@ -979,12 +1258,14 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                   children: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: Text(AppLocalizations.of(context)?.generalCancel ?? 'Cancel'),
+                      child: Text(AppLocalizations.of(context)?.generalCancel ??
+                          'Cancel'),
                     ),
                     const SizedBox(width: 8),
                     ElevatedButton(
                       onPressed: () => Navigator.pop(context),
-                      child: Text(AppLocalizations.of(context)?.generalOk ?? 'OK'),
+                      child:
+                          Text(AppLocalizations.of(context)?.generalOk ?? 'OK'),
                     ),
                   ],
                 ),
@@ -995,7 +1276,6 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       },
     );
   }
-
 
   void _updateSeasonString() {
     if (selectedYear != null && selectedMonth != null) {
@@ -1052,7 +1332,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                AppLocalizations.of(context)?.filtersFreshAttacksOnly ?? 'Fresh Attacks Only',
+                AppLocalizations.of(context)?.filtersFreshAttacksOnly ??
+                    'Fresh Attacks Only',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -1066,7 +1347,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         Row(
           children: [
             Text(
-              AppLocalizations.of(context)?.filtersResultLimit ?? 'Result Limit',
+              AppLocalizations.of(context)?.filtersResultLimit ??
+                  'Result Limit',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
@@ -1105,9 +1387,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     );
   }
 
-
   Widget _buildPresetFilters() {
-    final presets = [
+    final builtInPresets = [
       {
         'label': AppLocalizations.of(context)!.filtersLast30Days,
         'icon': Icons.schedule,
@@ -1138,6 +1419,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Quick Filters Header
         Row(
           children: [
             Icon(
@@ -1147,20 +1429,130 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             ),
             const SizedBox(width: 4),
             Text(
-              AppLocalizations.of(context)?.filtersQuickFilters ?? 'Quick Filters',
+              AppLocalizations.of(context)?.filtersQuickFilters ??
+                  'Quick Filters',
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Theme.of(context).colorScheme.primary,
                   ),
             ),
+            const Spacer(),
+            // Save Current Filter Button
+            if (_filter.hasActiveFilters())
+              TextButton.icon(
+                onPressed: _showSavePresetDialog,
+                icon: Icon(Icons.bookmark_add,
+                    size: 16, color: Theme.of(context).colorScheme.primary),
+                label: Text(AppLocalizations.of(context)!.presetsSave),
+                style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+              ),
           ],
         ),
         const SizedBox(height: 8),
+
+        // Built-in Quick Filters
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: presets.map((preset) => _buildPresetChip(preset)).toList(),
+          children:
+              builtInPresets.map((preset) => _buildPresetChip(preset)).toList(),
         ),
+
+        // Saved Presets Section
+        if (_savedPresets.isNotEmpty || _isLoadingPresets) ...[
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Icon(
+                Icons.bookmark,
+                size: 16,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                AppLocalizations.of(context)!.presetsSaved,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          if (_isLoadingPresets)
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Center(
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            )
+          else
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: _savedPresets
+                  .map((preset) => _buildSavedPresetChip(preset))
+                  .toList(),
+            ),
+        ],
+
+        // Performance Analysis Suggestions
+        if (_performanceSuggestions.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Icon(
+                Icons.analytics_outlined,
+                size: 16,
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                AppLocalizations.of(context)!.performanceAnalysisSuggestions,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.tertiary,
+                    ),
+              ),
+              const SizedBox(width: 8),
+              Tooltip(
+                message:
+                    AppLocalizations.of(context)!.performanceAnalysisTooltip,
+                child: Icon(
+                  Icons.info_outline,
+                  size: 14,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.6),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: _performanceSuggestions
+                .map(
+                    (suggestion) => _buildPerformanceSuggestionChip(suggestion))
+                .toList(),
+          ),
+        ],
+
         const SizedBox(height: 20),
       ],
     );
@@ -1202,6 +1594,265 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     );
   }
 
+  Widget _buildSavedPresetChip(FilterPreset preset) {
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.lightImpact();
+        _applySavedPreset(preset);
+      },
+      onLongPress: () {
+        _showPresetContextMenu(preset);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.bookmark,
+              size: 16,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            const SizedBox(width: 6),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 120),
+              child: Text(
+                preset.name,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPerformanceSuggestionChip(FilterPreset suggestion) {
+    final metadata = suggestion.filter.metadata ?? {};
+    final description = metadata['description'] as String? ?? '';
+
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.lightImpact();
+        _applySavedPreset(suggestion);
+      },
+      child: Tooltip(
+        message: description.isNotEmpty ? description : suggestion.name,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: Theme.of(context)
+                .colorScheme
+                .tertiaryContainer
+                .withValues(alpha: 0.3),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color:
+                  Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.4),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.lightbulb_outline,
+                size: 16,
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+              const SizedBox(width: 6),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 140),
+                child: Text(
+                  suggestion.name,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color:
+                            Theme.of(context).colorScheme.onTertiaryContainer,
+                      ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Show context menu for preset management
+  void _showPresetContextMenu(FilterPreset preset) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Icon(Icons.play_arrow,
+                  color: Theme.of(context).colorScheme.primary),
+              title: Text(AppLocalizations.of(context)!.presetsApply),
+              onTap: () {
+                Navigator.pop(context);
+                _applySavedPreset(preset);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.edit,
+                  color: Theme.of(context).colorScheme.secondary),
+              title: Text(AppLocalizations.of(context)!.presetsRename),
+              onTap: () {
+                Navigator.pop(context);
+                _showRenamePresetDialog(preset);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.delete,
+                  color: Theme.of(context).colorScheme.error),
+              title: Text(AppLocalizations.of(context)!.presetsDelete,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              onTap: () {
+                Navigator.pop(context);
+                _showDeletePresetDialog(preset);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Show dialog to rename a preset
+  Future<void> _showRenamePresetDialog(FilterPreset preset) async {
+    final nameController = TextEditingController(text: preset.name);
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.presetsRenameTitle),
+        content: TextField(
+          controller: nameController,
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context)!.presetsName,
+          ),
+          textCapitalization: TextCapitalization.words,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.generalCancel),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final newName = nameController.text.trim();
+              if (newName.isEmpty || newName == preset.name) {
+                Navigator.pop(context);
+                return;
+              }
+
+              if (await FilterPresetService.instance
+                      .presetNameExists(newName, excludeId: preset.id) &&
+                  context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          AppLocalizations.of(context)!.presetsNameExists)),
+                );
+                return;
+              }
+
+              final updatedPreset = preset.copyWith(name: newName);
+              final success = await FilterPresetService.instance
+                  .updatePreset(updatedPreset);
+
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
+
+              if (success && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(AppLocalizations.of(context)!
+                          .presetsRenameSuccess(newName))),
+                );
+                await _loadSavedPresets();
+              } else {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text(
+                            AppLocalizations.of(context)!.presetsRenameError)),
+                  );
+                }
+              }
+            },
+            child: Text(AppLocalizations.of(context)!.presetsRename),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Show dialog to confirm preset deletion
+  Future<void> _showDeletePresetDialog(FilterPreset preset) async {
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.presetsDeleteTitle),
+        content: Text(
+            AppLocalizations.of(context)!.presetsDeleteConfirm(preset.name)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.generalCancel),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final success =
+                  await FilterPresetService.instance.deletePreset(preset.id);
+
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
+
+              if (success && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(AppLocalizations.of(context)!
+                          .presetsDeleteSuccess(preset.name))),
+                );
+                await _loadSavedPresets();
+              } else {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text(
+                            AppLocalizations.of(context)!.presetsDeleteError)),
+                  );
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            child: Text(AppLocalizations.of(context)!.presetsDelete),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _removeFilter(String filterType) {
     setState(() {
@@ -1282,7 +1933,6 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     });
   }
 
-
   Widget _buildCollapsibleSectionCard({
     required String title,
     required IconData icon,
@@ -1316,7 +1966,10 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                         children: [
                           Text(
                             title,
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
                           ),
@@ -1324,12 +1977,21 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                             const SizedBox(height: 4),
                             Builder(
                               builder: (context) {
-                                final sectionFilters = _getSectionActiveFilters(title);
+                                final sectionFilters =
+                                    _getSectionActiveFilters(title);
                                 if (sectionFilters.isEmpty) {
                                   return Text(
-                                    AppLocalizations.of(context)?.filtersNoFiltersActive ?? 'No filters active',
-                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                                    AppLocalizations.of(context)
+                                            ?.filtersNoFiltersActive ??
+                                        'No filters active',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withValues(alpha: 0.6),
                                         ),
                                   );
                                 } else {
@@ -1338,28 +2000,40 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                                     runSpacing: 4,
                                     children: sectionFilters.map((filter) {
                                       return Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 6, vertical: 2),
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.secondaryContainer,
-                                          borderRadius: BorderRadius.circular(12),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondaryContainer,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Text(
                                               filter['text'],
-                                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .labelSmall
+                                                  ?.copyWith(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onSecondaryContainer,
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                             ),
                                             const SizedBox(width: 3),
                                             InkWell(
-                                              onTap: () => _removeFilter(filter['type']),
+                                              onTap: () =>
+                                                  _removeFilter(filter['type']),
                                               child: Icon(
                                                 Icons.close,
                                                 size: 12,
-                                                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSecondaryContainer,
                                               ),
                                             ),
                                           ],
@@ -1420,13 +2094,17 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
   List<Map<String, dynamic>> _getSectionActiveFilters(String sectionTitle) {
     List<Map<String, dynamic>> filters = [];
-    
+
     // Get localized section titles for comparison
-    final timeFilters = AppLocalizations.of(context)?.filtersTimeFilters ?? 'Time Filters';
-    final warSettings = AppLocalizations.of(context)?.filtersWarSettings ?? 'War Settings';
-    final performance = AppLocalizations.of(context)?.filtersPerformance ?? 'Performance';
-    final advanced = AppLocalizations.of(context)?.filtersAdvanced ?? 'Advanced';
-    
+    final timeFilters =
+        AppLocalizations.of(context)?.filtersTimeFilters ?? 'Time Filters';
+    final warSettings =
+        AppLocalizations.of(context)?.filtersWarSettings ?? 'War Settings';
+    final performance =
+        AppLocalizations.of(context)?.filtersPerformance ?? 'Performance';
+    final advanced =
+        AppLocalizations.of(context)?.filtersAdvanced ?? 'Advanced';
+
     if (sectionTitle == timeFilters) {
       if (selectedSeason != null) {
         // Format season as readable month/year
@@ -1440,26 +2118,38 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         }
         filters.add({'type': 'season', 'text': seasonText});
       }
-        if (_filter.startDate != null && _filter.endDate != null) {
-          final start = _filter.startDate!.toString().split(' ')[0];
-          final end = _filter.endDate!.toString().split(' ')[0];
-          filters.add({'type': 'dateRange', 'text': '$start - $end'});
-        } else if (_filter.startDate != null) {
-          final start = _filter.startDate!.toString().split(' ')[0];
-          filters.add({'type': 'startDate', 'text': '${AppLocalizations.of(context)?.filtersStartDate ?? 'From'} $start'});
-        } else if (_filter.endDate != null) {
-          final end = _filter.endDate!.toString().split(' ')[0];
-          filters.add({'type': 'endDate', 'text': '${AppLocalizations.of(context)?.filtersEndDate ?? 'Until'} $end'});
-        }
+      if (_filter.startDate != null && _filter.endDate != null) {
+        final start = _filter.startDate!.toString().split(' ')[0];
+        final end = _filter.endDate!.toString().split(' ')[0];
+        filters.add({'type': 'dateRange', 'text': '$start - $end'});
+      } else if (_filter.startDate != null) {
+        final start = _filter.startDate!.toString().split(' ')[0];
+        filters.add({
+          'type': 'startDate',
+          'text':
+              '${AppLocalizations.of(context)?.filtersStartDate ?? 'From'} $start'
+        });
+      } else if (_filter.endDate != null) {
+        final end = _filter.endDate!.toString().split(' ')[0];
+        filters.add({
+          'type': 'endDate',
+          'text':
+              '${AppLocalizations.of(context)?.filtersEndDate ?? 'Until'} $end'
+        });
+      }
     } else if (sectionTitle == warSettings) {
-      if (warTypeSelection.values.any((selected) => selected) && 
+      if (warTypeSelection.values.any((selected) => selected) &&
           !(warTypeSelection['all'] == true)) {
         final selectedTypes = warTypeSelection.entries
             .where((entry) => entry.value && entry.key != 'all')
             .map((entry) => entry.key.toUpperCase())
             .join(', ');
         if (selectedTypes.isNotEmpty) {
-          filters.add({'type': 'warType', 'text': '$selectedTypes ${AppLocalizations.of(context)?.filtersWarType ?? 'wars'}'});
+          filters.add({
+            'type': 'warType',
+            'text':
+                '$selectedTypes ${AppLocalizations.of(context)?.filtersWarType ?? 'wars'}'
+          });
         }
       }
       if (attackerThSelection.values.any((selected) => selected)) {
@@ -1467,17 +2157,29 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             .where((entry) => entry.value)
             .map((entry) => entry.key.toString())
             .join(', ');
-        filters.add({'type': 'attackerTH', 'text': '${AppLocalizations.of(context)?.filtersAttackerTh ?? 'Attacker TH'}$selectedTH'});
+        filters.add({
+          'type': 'attackerTH',
+          'text':
+              '${AppLocalizations.of(context)?.filtersAttackerTh ?? 'Attacker TH'}$selectedTH'
+        });
       }
       if (defenderThSelection.values.any((selected) => selected)) {
         final selectedTH = defenderThSelection.entries
             .where((entry) => entry.value)
             .map((entry) => entry.key.toString())
             .join(', ');
-        filters.add({'type': 'defenderTH', 'text': '${AppLocalizations.of(context)?.filtersDefenderTh ?? 'Defender TH'}$selectedTH'});
+        filters.add({
+          'type': 'defenderTH',
+          'text':
+              '${AppLocalizations.of(context)?.filtersDefenderTh ?? 'Defender TH'}$selectedTH'
+        });
       }
       if (_filter.sameTownHall == true) {
-        filters.add({'type': 'sameTH', 'text': AppLocalizations.of(context)?.filtersSameTownHallOnly ?? 'Same TH only'});
+        filters.add({
+          'type': 'sameTH',
+          'text': AppLocalizations.of(context)?.filtersSameTownHallOnly ??
+              'Same TH only'
+        });
       }
     } else if (sectionTitle == performance) {
       if (starSelection.values.any((selected) => selected)) {
@@ -1485,34 +2187,55 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             .where((entry) => entry.value)
             .map((entry) => entry.key.toString())
             .join(', ');
-        filters.add({'type': 'stars', 'text': '$selectedStars ${AppLocalizations.of(context)?.filtersStars ?? '⭐'}'});
+        filters.add({
+          'type': 'stars',
+          'text':
+              '$selectedStars ${AppLocalizations.of(context)?.filtersStars ?? '⭐'}'
+        });
       }
-      if ((_filter.minDestruction != null && _filter.minDestruction! > 0) || 
+      if ((_filter.minDestruction != null && _filter.minDestruction! > 0) ||
           (_filter.maxDestruction != null && _filter.maxDestruction! < 100)) {
         final min = _filter.minDestruction ?? 0;
         final max = _filter.maxDestruction ?? 100;
         filters.add({
           'type': 'destruction',
-          'text': '${min.toInt()}-${max.toInt()}% ${AppLocalizations.of(context)?.filtersDestructionPercentage ?? 'destruction'}'
+          'text':
+              '${min.toInt()}-${max.toInt()}% ${AppLocalizations.of(context)?.filtersDestructionPercentage ?? 'destruction'}'
         });
       }
     } else if (sectionTitle == advanced) {
       if (_filter.freshAttacksOnly == true) {
-        filters.add({'type': 'fresh', 'text': AppLocalizations.of(context)?.filtersFreshAttacksOnly ?? 'Fresh attacks only'});
+        filters.add({
+          'type': 'fresh',
+          'text': AppLocalizations.of(context)?.filtersFreshAttacksOnly ??
+              'Fresh attacks only'
+        });
       }
-      if (_minMapPositionController.text.isNotEmpty || _maxMapPositionController.text.isNotEmpty) {
-        final min = _minMapPositionController.text.isNotEmpty ? _minMapPositionController.text : '1';
-        final max = _maxMapPositionController.text.isNotEmpty ? _maxMapPositionController.text : '50';
-        filters.add({'type': 'mapPosition', 'text': '${AppLocalizations.of(context)?.filtersMapPosition ?? 'Position'} $min-$max'});
+      if (_minMapPositionController.text.isNotEmpty ||
+          _maxMapPositionController.text.isNotEmpty) {
+        final min = _minMapPositionController.text.isNotEmpty
+            ? _minMapPositionController.text
+            : '1';
+        final max = _maxMapPositionController.text.isNotEmpty
+            ? _maxMapPositionController.text
+            : '50';
+        filters.add({
+          'type': 'mapPosition',
+          'text':
+              '${AppLocalizations.of(context)?.filtersMapPosition ?? 'Position'} $min-$max'
+        });
       }
       if (_filter.limit != 50) {
-        filters.add({'type': 'limit', 'text': '${AppLocalizations.of(context)?.filtersResultLimit ?? 'Limit'}: ${_filter.limit}'});
+        filters.add({
+          'type': 'limit',
+          'text':
+              '${AppLocalizations.of(context)?.filtersResultLimit ?? 'Limit'}: ${_filter.limit}'
+        });
       }
     }
-    
+
     return filters;
   }
-
 }
 
 class StarFilterChip extends StatelessWidget {

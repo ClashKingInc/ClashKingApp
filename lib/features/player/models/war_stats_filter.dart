@@ -18,6 +18,7 @@ class WarStatsFilter {
   final int? minMapPosition;
   final int? maxMapPosition;
   final int limit;
+  final Map<String, dynamic>? metadata;
 
   const WarStatsFilter({
     this.season,
@@ -39,7 +40,41 @@ class WarStatsFilter {
     this.minMapPosition,
     this.maxMapPosition,
     this.limit = 50,
+    this.metadata,
   });
+
+  factory WarStatsFilter.fromJson(Map<String, dynamic> json) {
+    return WarStatsFilter(
+      season: json['season'],
+      startDate: json['timestamp_start'] != null 
+          ? DateTime.fromMillisecondsSinceEpoch(json['timestamp_start'] * 1000)
+          : null,
+      endDate: json['timestamp_end'] != null 
+          ? DateTime.fromMillisecondsSinceEpoch(json['timestamp_end'] * 1000)
+          : null,
+      ownTownHall: json['own_th'] is List && (json['own_th'] as List).length == 1
+          ? (json['own_th'] as List)[0]
+          : null,
+      enemyTownHall: json['enemy_th'] is List && (json['enemy_th'] as List).length == 1
+          ? (json['enemy_th'] as List)[0]
+          : null,
+      ownTownHalls: json['own_th'] is List ? List<int>.from(json['own_th']) : null,
+      enemyTownHalls: json['enemy_th'] is List ? List<int>.from(json['enemy_th']) : null,
+      sameTownHall: json['same_th'] ?? false,
+      warType: json['type'] is List && (json['type'] as List).length == 1
+          ? (json['type'] as List)[0]
+          : "all",
+      warTypes: json['type'] is List ? List<String>.from(json['type']) : null,
+      freshAttacksOnly: json['fresh_only'],
+      allowedStars: json['stars'] is List ? List<int>.from(json['stars']) : null,
+      minDestruction: json['min_destruction']?.toDouble(),
+      maxDestruction: json['max_destruction']?.toDouble(),
+      minMapPosition: json['map_position_min'],
+      maxMapPosition: json['map_position_max'],
+      limit: json['limit'] ?? 50,
+      metadata: json['metadata'] != null ? Map<String, dynamic>.from(json['metadata']) : null,
+    );
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {
@@ -47,9 +82,9 @@ class WarStatsFilter {
       'same_th': sameTownHall,
     };
     
-    if (warTypes != null && warTypes!.isNotEmpty) {
+    if (warTypes != null && warTypes!.isNotEmpty && !warTypes!.contains('all')) {
       data['type'] = warTypes;
-    } else {
+    } else if (warType != "all") {
       data['type'] = warType;
     }
 
@@ -97,6 +132,9 @@ class WarStatsFilter {
     if (maxMapPosition != null) {
       data['map_position_max'] = maxMapPosition;
     }
+    if (metadata != null) {
+      data['metadata'] = metadata;
+    }
 
     return data;
   }
@@ -121,6 +159,7 @@ class WarStatsFilter {
     int? minMapPosition,
     int? maxMapPosition,
     int? limit,
+    Map<String, dynamic>? metadata,
   }) {
     return WarStatsFilter(
       season: season ?? this.season,
@@ -142,6 +181,7 @@ class WarStatsFilter {
       minMapPosition: minMapPosition ?? this.minMapPosition,
       maxMapPosition: maxMapPosition ?? this.maxMapPosition,
       limit: limit ?? this.limit,
+      metadata: metadata ?? this.metadata,
     );
   }
 
@@ -158,6 +198,8 @@ class WarStatsFilter {
   /// Check if any filters are active (not default)
   bool hasActiveFilters() {
     return season != null ||
+        startDate != null ||
+        endDate != null ||
         ownTownHall != null ||
         enemyTownHall != null ||
         (ownTownHalls != null && ownTownHalls!.isNotEmpty) ||
@@ -181,6 +223,19 @@ class WarStatsFilter {
     
     if (season != null) {
       filters.add("Season $season");
+    }
+    
+    // Add date range filter display
+    if (startDate != null && endDate != null) {
+      final start = "${startDate!.day}/${startDate!.month}/${startDate!.year}";
+      final end = "${endDate!.day}/${endDate!.month}/${endDate!.year}";
+      filters.add("$start - $end");
+    } else if (startDate != null) {
+      final start = "${startDate!.day}/${startDate!.month}/${startDate!.year}";
+      filters.add("From $start");
+    } else if (endDate != null) {
+      final end = "${endDate!.day}/${endDate!.month}/${endDate!.year}";
+      filters.add("Until $end");
     }
     
     if (ownTownHalls != null && ownTownHalls!.isNotEmpty) {
