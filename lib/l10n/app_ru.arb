@@ -17,6 +17,7 @@
   "generalRetry": "Повторить",
   "generalRetrying": "Retrying...",
   "generalTryAgain": "Попробовать снова",
+  "generalReset": "Reset",
   "generalCancel": "Отмена",
   "generalOk": "OK",
   "@generalOk": {
@@ -52,6 +53,8 @@
   "@generalAll": {
     "description": "all items"
   },
+  "generalOthers": "Others",
+  "generalCompleted": "completed",
   "generalTotal": "Всего",
   "generalBest": "Лучший",
   "@generalBest": {
@@ -94,6 +97,137 @@
   },
   "generalWarning": "Внимание",
   "generalNoDataAvailable": "Данные отсутствуют.",
+  "generalNoFilteredResults": "No results match your filters",
+  "@generalNoFilteredResults": {
+    "description": "Message when applied filters return no results"
+  },
+  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "@generalAdjustFilters": {
+    "description": "Suggestion when filters return no results"
+  },
+  "generalClearFilters": "Clear Filters",
+  "@generalClearFilters": {
+    "description": "Button text to clear all applied filters"
+  },
+  "presetsSaved": "Saved Presets",
+  "@presetsSaved": {
+    "description": "Header for saved filter presets section"
+  },
+  "presetsSave": "Save",
+  "@presetsSave": {
+    "description": "Button to save current filter as preset"
+  },
+  "presetsSaveTitle": "Save Filter Preset",
+  "@presetsSaveTitle": {
+    "description": "Title for save preset dialog"
+  },
+  "presetsName": "Preset Name",
+  "@presetsName": {
+    "description": "Label for preset name input"
+  },
+  "presetsNameHint": "Enter a name for this preset",
+  "@presetsNameHint": {
+    "description": "Hint text for preset name input"
+  },
+  "presetsSuggestions": "Suggestions:",
+  "@presetsSuggestions": {
+    "description": "Label for name suggestions section"
+  },
+  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "@presetsApplyFirst": {
+    "description": "Message when trying to save without active filters"
+  },
+  "presetsNameRequired": "Please enter a name",
+  "@presetsNameRequired": {
+    "description": "Error when preset name is empty"
+  },
+  "presetsNameExists": "A preset with this name already exists",
+  "@presetsNameExists": {
+    "description": "Error when preset name is duplicate"
+  },
+  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "@presetsSaveSuccess": {
+    "description": "Success message when preset is saved",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the saved preset"
+      }
+    }
+  },
+  "presetsSaveError": "Failed to save preset",
+  "@presetsSaveError": {
+    "description": "Error message when preset save fails"
+  },
+  "presetsApplied": "Applied preset \"{name}\"",
+  "@presetsApplied": {
+    "description": "Message when preset is applied",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the applied preset"
+      }
+    }
+  },
+  "presetsApply": "Apply Preset",
+  "@presetsApply": {
+    "description": "Context menu option to apply preset"
+  },
+  "presetsRename": "Rename",
+  "@presetsRename": {
+    "description": "Context menu option to rename preset"
+  },
+  "presetsDelete": "Delete",
+  "@presetsDelete": {
+    "description": "Context menu option to delete preset"
+  },
+  "presetsRenameTitle": "Rename Preset",
+  "@presetsRenameTitle": {
+    "description": "Title for rename preset dialog"
+  },
+  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "@presetsRenameSuccess": {
+    "description": "Success message when preset is renamed",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "New name of the preset"
+      }
+    }
+  },
+  "presetsRenameError": "Failed to rename preset",
+  "@presetsRenameError": {
+    "description": "Error message when preset rename fails"
+  },
+  "presetsDeleteTitle": "Delete Preset",
+  "@presetsDeleteTitle": {
+    "description": "Title for delete preset dialog"
+  },
+  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "@presetsDeleteConfirm": {
+    "description": "Confirmation message for preset deletion",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the preset to delete"
+      }
+    }
+  },
+  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "@presetsDeleteSuccess": {
+    "description": "Success message when preset is deleted",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the deleted preset"
+      }
+    }
+  },
+  "presetsDeleteError": "Failed to delete preset",
+  "@presetsDeleteError": {
+    "description": "Error message when preset deletion fails"
+  },
+  "generalCharts": "Charts",
   "authSignUp": "Регистрация",
   "authLogin": "Вход",
   "authLogout": "Выход",
@@ -186,7 +320,6 @@
   "accountsEnterPlayerTag": "Введите тег игрока",
   "accountsAdd": "Добавить аккаунт",
   "accountsAddInstruction": "Tap the + button to add your account",
-  "accountsDelete": "Удалить аккаунт",
   "accountsApiToken": "Аккаунт API Токен",
   "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans:",
   "accountsApiTokenLocation": "Settings > More Settings > API Token",
@@ -197,7 +330,6 @@
   "accountsErrorAlreadyLinkedToYou": "Тег игрока уже привязан к вам.",
   "accountsErrorWrongApiToken": "Тег игрока уже привязан к вм.",
   "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
-  "accountsErrorFailedToDelete": "Не удалось добавить ссылку. Пожалуйста, повторите попытку позже.",
   "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
   "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
   "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
@@ -1013,6 +1145,15 @@
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
+  "warStatusMissedInfo": "Missed: {number}",
+  "@warStatusMissedInfo": {
+    "description": "Number of missed attacks",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warAbbreviationAvg": "Avg",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
@@ -1079,7 +1220,6 @@
   "joinLeaveTitle": "Join/Leave Logs (Current Season)",
   "joinLeaveJoin": "Join",
   "joinLeaveLeave": "Leave",
-  "joinLeaveReset": "Reset",
   "joinLeaveJoins": "Joins",
   "joinLeaveLeaves": "Leaves",
   "joinLeaveUniquePlayers": "Unique Players",
@@ -1231,9 +1371,7 @@
   "faqSupportWorkAnswer": "Есть несколько способов поддержать нас:",
   "faqUseCodeClashKing": "Используйте код \"ClashKing\"",
   "faqSupportUsOnPatreon": "Поддержать нас в Patreon",
-  "faqShareTheApp": "Поделитесь этим приложением со своими друзьями",
   "faqRateTheApp": "Предложить особенности",
-  "faqHelpUsTranslate": "Помогите нам перевести это приложение",
   "faqWhatCanBotDo": "What can the ClashKing Discord bot do?",
   "faqWhatCanBotDoAnswer": "The ClashKing Discord bot helps you manage your clan directly from Discord with comprehensive tracking tools, automated notifications, and seamless integration with this app. It's designed for clan leaders and members who want to stay connected and organized:",
   "faqInviteBotToServer": "Invite Bot to Server",
@@ -1245,7 +1383,6 @@
   "faqBotFeatureNotificationsDesc": "Get alerts for donations, war attacks, and important clan events",
   "faqBotFeatureCommands": "Powerful Commands",
   "faqBotFeatureCommandsDesc": "Use slash commands to quickly access player stats, war info, and more",
-  "faqInviteTheBot": "Пригласить бота ClashKing",
   "faqNeedHelp": "Мне нужна помощь или я хотел бы внести предложение. Как я могу связаться с вами?",
   "faqNeedHelpAnswer": "Вы можете присоединиться к нашему Discord-серверу, чтобы попросить о помощи или оставить отзыв, или вы можете написать нам по адресу devs@clashk.ing. Пожалуйста, пишите только на английском или французском языке.",
   "faqSendEmail": "Отправить e-mail",
@@ -1298,5 +1435,219 @@
   "translationThankYouContent": "Огромное спасибо всем нашим замечательным переводчикам, которые помогают нам сделать это приложение доступным для большего количества людей по всему миру!",
   "translationHelpTranslateContent": "Вы можете помочь нам перевести приложение на Crowdin. Если ваш язык недоступен на Crowdin, смело запрашивайте его на нашем сервере Discord. Большое спасибо за вашу помощь!",
   "translationHelpTranslateButton": "Помогите с переводом на Crowdin",
-  "translationCurrentTranslators": "Текущие Переводчики"
+  "translationCurrentTranslators": "Текущие Переводчики",
+  "filtersTimeFilters": "Time Filters",
+  "@filtersTimeFilters": {
+    "description": "Time-based filters section title"
+  },
+  "filtersWarSettings": "War Settings",
+  "@filtersWarSettings": {
+    "description": "War settings filters section title"
+  },
+  "filtersPerformance": "Performance",
+  "@filtersPerformance": {
+    "description": "Performance filters section title"
+  },
+  "filtersAdvanced": "Advanced",
+  "@filtersAdvanced": {
+    "description": "Advanced filters section title"
+  },
+  "filtersNoFiltersActive": "No filters active",
+  "@filtersNoFiltersActive": {
+    "description": "Text shown when no filters are applied in a section"
+  },
+  "filtersShowingDefaultData": "Showing last {count} wars (default)",
+  "@filtersShowingDefaultData": {
+    "description": "Text shown in filter bandeau when no filters are applied",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of wars being shown"
+      }
+    }
+  },
+  "filtersQuickFilters": "Quick Filters",
+  "@filtersQuickFilters": {
+    "description": "Quick preset filters section title"
+  },
+  "filtersLast30Days": "Last 30 Days",
+  "@filtersLast30Days": {
+    "description": "Preset filter for last 30 days"
+  },
+  "filters3StarOnly": "3-Star Only",
+  "@filters3StarOnly": {
+    "description": "Preset filter for 3-star attacks only"
+  },
+  "filtersCwlWars": "CWL Wars",
+  "@filtersCwlWars": {
+    "description": "Preset filter for CWL wars only"
+  },
+  "filtersFreshAttacks": "Fresh Attacks",
+  "@filtersFreshAttacks": {
+    "description": "Preset filter for fresh attacks only"
+  },
+  "filtersSeason": "Season",
+  "@filtersSeason": {
+    "description": "Season filter subsection title"
+  },
+  "filtersDateRange": "Date Range",
+  "@filtersDateRange": {
+    "description": "Date range filter subsection title"
+  },
+  "filtersWarType": "War Type",
+  "@filtersWarType": {
+    "description": "War type filter subsection title"
+  },
+  "filtersTownHall": "Town Hall",
+  "@filtersTownHall": {
+    "description": "Town hall filter subsection title"
+  },
+  "filtersAttackerTh": "Attacker TH",
+  "@filtersAttackerTh": {
+    "description": "Attacker town hall filter label"
+  },
+  "filtersDefenderTh": "Defender TH",
+  "@filtersDefenderTh": {
+    "description": "Defender town hall filter label"
+  },
+  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "@filtersSameTownHallOnly": {
+    "description": "Same town hall filter option"
+  },
+  "filtersStars": "Stars",
+  "@filtersStars": {
+    "description": "Stars filter subsection title"
+  },
+  "filtersDestructionPercentage": "Destruction Percentage",
+  "@filtersDestructionPercentage": {
+    "description": "Destruction percentage filter subsection title"
+  },
+  "filtersMapPosition": "Map Position",
+  "@filtersMapPosition": {
+    "description": "Map position filter subsection title"
+  },
+  "filtersOptions": "Options",
+  "@filtersOptions": {
+    "description": "Options filter subsection title"
+  },
+  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "@filtersFreshAttacksOnly": {
+    "description": "Fresh attacks only filter option"
+  },
+  "filtersResultLimit": "Result Limit",
+  "@filtersResultLimit": {
+    "description": "Result limit filter label"
+  },
+  "filtersMinPosition": "Min Position",
+  "@filtersMinPosition": {
+    "description": "Minimum map position filter label"
+  },
+  "filtersMaxPosition": "Max Position",
+  "@filtersMaxPosition": {
+    "description": "Maximum map position filter label"
+  },
+  "filtersStartDate": "Start Date",
+  "@filtersStartDate": {
+    "description": "Start date filter label"
+  },
+  "filtersEndDate": "End Date",
+  "@filtersEndDate": {
+    "description": "End date filter label"
+  },
+  "filtersNotSet": "Не установлено",
+  "@filtersNotSet": {
+    "description": "Text shown when date is not set"
+  },
+  "filtersYear": "Year",
+  "@filtersYear": {
+    "description": "Year selector label"
+  },
+  "filtersMonth": "Month",
+  "@filtersMonth": {
+    "description": "Month selector label"
+  },
+  "filtersSelectYear": "Select Year",
+  "@filtersSelectYear": {
+    "description": "Year picker dialog title"
+  },
+  "filtersAllWars": "All Wars",
+  "@filtersAllWars": {
+    "description": "All wars filter option"
+  },
+  "filtersFriendlyWars": "Friendly Wars",
+  "@filtersFriendlyWars": {
+    "description": "Friendly wars filter option"
+  },
+  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "@chartsAttackPerformance": {
+    "description": "Attack performance chart title"
+  },
+  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "@chartsDefensePerformance": {
+    "description": "Defense performance chart title"
+  },
+  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "@chartsRowsYourTh": {
+    "description": "Heatmap chart axis explanation"
+  },
+  "chartsPoor": "Poor",
+  "@chartsPoor": {
+    "description": "Poor performance legend label"
+  },
+  "chartsAverage": "Средний",
+  "@chartsAverage": {
+    "description": "Average performance legend label"
+  },
+  "chartsGood": "Good",
+  "@chartsGood": {
+    "description": "Good performance legend label"
+  },
+  "chartsExcellent": "Excellent",
+  "@chartsExcellent": {
+    "description": "Excellent performance legend label"
+  },
+  "chartsNoData": "N/A",
+  "@chartsNoData": {
+    "description": "No data available indicator"
+  },
+  "performanceAnalysisSuggestions": "Performance Insights",
+  "@performanceAnalysisSuggestions": {
+    "description": "Section title for AI-generated performance analysis suggestions"
+  },
+  "performanceAnalysisTooltip": "Smart filter suggestions based on your war performance to help identify areas for improvement",
+  "@performanceAnalysisTooltip": {
+    "description": "Tooltip explaining what performance analysis suggestions are"
+  },
+  "generalExport": "Export",
+  "@generalExport": {
+    "description": "Export button label"
+  },
+  "exportTitle": "Export War Statistics",
+  "@exportTitle": {
+    "description": "Title for export bottom sheet dialog"
+  },
+  "exportSuccess": "Export successful!",
+  "@exportSuccess": {
+    "description": "Success message for completed export"
+  },
+  "exportOpen": "Open",
+  "@exportOpen": {
+    "description": "Button label to open exported file"
+  },
+  "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
+  "@exportDialogDesc": {
+    "description": "Description text for export dialog"
+  },
+  "exportGenerating": "Generating export...",
+  "@exportGenerating": {
+    "description": "Loading message while generating export"
+  },
+  "exportClanWarStatsComingSoon": "Export feature coming soon for clan war stats",
+  "@exportClanWarStatsComingSoon": {
+    "description": "Message shown when clan war stats export is not yet available"
+  },
+  "filtersNoneApplied": "No filters applied",
+  "@filtersNoneApplied": {
+    "description": "Text shown when no filters are active"
+  }
 }
