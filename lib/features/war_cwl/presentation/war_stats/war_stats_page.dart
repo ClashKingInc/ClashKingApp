@@ -8,7 +8,7 @@ import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/clan_war_log.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_players.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/war_stats/clan_war_stats_filter_dialog.dart';
+// import 'package:clashkingapp/features/war_cwl/presentation/war_stats/clan_war_stats_filter_dialog.dart'; // Temporarily disabled
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_header.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -324,52 +324,59 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
     );
   }
 
+  // Temporarily disabled clan war stats filters
   void _showAdvancedFilterDialog() {
     showDialog(
-      context: context,
-      builder: (context) => ClanWarStatsFilterDialog(
-        initialFilter: _currentFilter,
-        onApply: _applyAdvancedFilter,
-      ),
-    );
+        context: context,
+        builder: (context) {
+          return Text(AppLocalizations.of(context)!.generalComingSoon);
+        });
+    //   showDialog(
+    //     context: context,
+    //     builder: (context) => ClanWarStatsFilterDialog(
+    //       initialFilter: _currentFilter,
+    //       onApply: _applyAdvancedFilter,
+    //     ),
+    //   );
   }
 
-  void _applyAdvancedFilter(ClanWarStatsFilter filter) async {
-    setState(() {
-      _currentFilter = filter;
-      _isLoadingFiltered = true;
-      _hasAppliedFilters = true;
-    });
+  // Temporarily disabled clan war stats filter methods
+  // void _applyAdvancedFilter(ClanWarStatsFilter filter) async {
+  //   setState(() {
+  //     _currentFilter = filter;
+  //     _isLoadingFiltered = true;
+  //     _hasAppliedFilters = true;
+  //   });
 
-    try {
-      final clanService = Provider.of<ClanService>(context, listen: false);
-      final filteredStats = await clanService.loadClanWarStatsWithFilter(
-        widget.clan.tag,
-        filter,
-      );
+  //   try {
+  //     final clanService = Provider.of<ClanService>(context, listen: false);
+  //     final filteredStats = await clanService.loadClanWarStatsWithFilter(
+  //       widget.clan.tag,
+  //       filter,
+  //     );
 
-      setState(() {
-        _filteredClanWarStats = filteredStats;
-        _isLoadingFiltered = false;
-        if (filteredStats != null) {
-          filteredPlayers = filteredStats.players;
-        }
-      });
-    } catch (e) {
-      setState(() {
-        _isLoadingFiltered = false;
-      });
+  //     setState(() {
+  //       _filteredClanWarStats = filteredStats;
+  //       _isLoadingFiltered = false;
+  //       if (filteredStats != null) {
+  //         filteredPlayers = filteredStats.players;
+  //       }
+  //     });
+  //   } catch (e) {
+  //     setState(() {
+  //       _isLoadingFiltered = false;
+  //     });
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to load filtered data: $e'),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
-      }
-    }
-  }
+  //     if (mounted) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text('Failed to load filtered data: $e'),
+  //           backgroundColor: Theme.of(context).colorScheme.error,
+  //         ),
+  //       );
+  //     }
+  //   }
+  // }
 
   void _clearAdvancedFilters() {
     setState(() {
@@ -399,7 +406,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
     }
     return _currentFilter.getFilterSummary();
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -423,8 +430,10 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                 setState(() => isFriendlyChecked = !isFriendlyChecked);
               },
               onBack: () => Navigator.of(context).pop(),
-              onFilter: () => _showAdvancedFilterDialog(),
-              hasActiveFilters: _currentFilter.hasActiveFilters(),
+              onFilter: () =>
+                  _showAdvancedFilterDialog(), // Temporarily disabled
+              hasActiveFilters:
+                  false, // _currentFilter.hasActiveFilters(), // Filters disabled
               onExport: () {
                 // TODO: Implement clan war stats export
                 ScaffoldMessenger.of(context).showSnackBar(
