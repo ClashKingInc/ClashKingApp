@@ -53,8 +53,8 @@
   "@generalAll": {
     "description": "all items"
   },
-  "generalOthers": "Others",
-  "generalCompleted": "completed",
+  "generalOthers": "Autres",
+  "generalCompleted": "terminé",
   "generalTotal": "Total",
   "generalBest": "Meilleur",
   "@generalBest": {
@@ -97,27 +97,27 @@
   },
   "generalWarning": "Attention",
   "generalNoDataAvailable": "Aucune donnée disponible.",
-  "generalNoFilteredResults": "No results match your filters",
+  "generalNoFilteredResults": "Aucun résultat ne correspond à tes filtres",
   "@generalNoFilteredResults": {
     "description": "Message when applied filters return no results"
   },
-  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "generalAdjustFilters": "Essaie d'ajuster les critères de ton filtre ou d'effacer les filtres pour voir toutes les données.",
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
-  "generalClearFilters": "Clear Filters",
+  "generalClearFilters": "Supprimer les filtres",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
   },
-  "presetsSaved": "Saved Presets",
+  "presetsSaved": "Pré-réglages enregistrés",
   "@presetsSaved": {
     "description": "Header for saved filter presets section"
   },
-  "presetsSave": "Save",
+  "presetsSave": "Sauvegarder",
   "@presetsSave": {
     "description": "Button to save current filter as preset"
   },
-  "presetsSaveTitle": "Save Filter Preset",
+  "presetsSaveTitle": "Enregistrer le réglage du filtre",
   "@presetsSaveTitle": {
     "description": "Title for save preset dialog"
   },
