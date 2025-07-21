@@ -117,35 +117,35 @@
   "@presetsSave": {
     "description": "Button to save current filter as preset"
   },
-  "presetsSaveTitle": "Enregistrer le réglage du filtre",
+  "presetsSaveTitle": "Enregistrer le préréglage du filtre",
   "@presetsSaveTitle": {
     "description": "Title for save preset dialog"
   },
-  "presetsName": "Preset Name",
+  "presetsName": "Nom du préréglage",
   "@presetsName": {
     "description": "Label for preset name input"
   },
-  "presetsNameHint": "Enter a name for this preset",
+  "presetsNameHint": "Saisis un nom pour ce préréglage",
   "@presetsNameHint": {
     "description": "Hint text for preset name input"
   },
-  "presetsSuggestions": "Suggestions:",
+  "presetsSuggestions": "Suggestions :",
   "@presetsSuggestions": {
     "description": "Label for name suggestions section"
   },
-  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "presetsApplyFirst": "Applique certains filtres avant de les enregistrer comme préréglage",
   "@presetsApplyFirst": {
     "description": "Message when trying to save without active filters"
   },
-  "presetsNameRequired": "Please enter a name",
+  "presetsNameRequired": "Merci de saisir un nom",
   "@presetsNameRequired": {
     "description": "Error when preset name is empty"
   },
-  "presetsNameExists": "A preset with this name already exists",
+  "presetsNameExists": "Un préréglage portant ce nom existe déjà",
   "@presetsNameExists": {
     "description": "Error when preset name is duplicate"
   },
-  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "presetsSaveSuccess": "Le préréglage «{name}» a été enregistré avec succès",
   "@presetsSaveSuccess": {
     "description": "Success message when preset is saved",
     "placeholders": {
@@ -155,11 +155,11 @@
       }
     }
   },
-  "presetsSaveError": "Failed to save preset",
+  "presetsSaveError": "Échec de l'enregistrement du préréglage",
   "@presetsSaveError": {
     "description": "Error message when preset save fails"
   },
-  "presetsApplied": "Applied preset \"{name}\"",
+  "presetsApplied": "Préréglage \"{name}\" appliqué",
   "@presetsApplied": {
     "description": "Message when preset is applied",
     "placeholders": {
@@ -169,23 +169,23 @@
       }
     }
   },
-  "presetsApply": "Apply Preset",
+  "presetsApply": "Appliquer le préréglage",
   "@presetsApply": {
     "description": "Context menu option to apply preset"
   },
-  "presetsRename": "Rename",
+  "presetsRename": "Renommer",
   "@presetsRename": {
     "description": "Context menu option to rename preset"
   },
-  "presetsDelete": "Delete",
+  "presetsDelete": "Supprimer",
   "@presetsDelete": {
     "description": "Context menu option to delete preset"
   },
-  "presetsRenameTitle": "Rename Preset",
+  "presetsRenameTitle": "Renommer Présélection",
   "@presetsRenameTitle": {
     "description": "Title for rename preset dialog"
   },
-  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "presetsRenameSuccess": "Le préréglage a été renommé en \"{name}\"",
   "@presetsRenameSuccess": {
     "description": "Success message when preset is renamed",
     "placeholders": {
@@ -195,15 +195,15 @@
       }
     }
   },
-  "presetsRenameError": "Failed to rename preset",
+  "presetsRenameError": "Impossible de renommer le préréglage",
   "@presetsRenameError": {
     "description": "Error message when preset rename fails"
   },
-  "presetsDeleteTitle": "Delete Preset",
+  "presetsDeleteTitle": "Supprimer le préréglage",
   "@presetsDeleteTitle": {
     "description": "Title for delete preset dialog"
   },
-  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "presetsDeleteConfirm": "Voulez-vous vraiment supprimer \"{name}\" ?",
   "@presetsDeleteConfirm": {
     "description": "Confirmation message for preset deletion",
     "placeholders": {
@@ -213,7 +213,7 @@
       }
     }
   },
-  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "presetsDeleteSuccess": "Le préréglage \"{name}\" a été supprimé",
   "@presetsDeleteSuccess": {
     "description": "Success message when preset is deleted",
     "placeholders": {
@@ -223,11 +223,11 @@
       }
     }
   },
-  "presetsDeleteError": "Failed to delete preset",
+  "presetsDeleteError": "Échec de la suppression du préréglage",
   "@presetsDeleteError": {
     "description": "Error message when preset deletion fails"
   },
-  "generalCharts": "Charts",
+  "generalCharts": "Graphiques",
   "authSignUp": "Inscription",
   "authLogin": "Connexion",
   "authLogout": "Déconnexion",
@@ -1145,7 +1145,7 @@
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warStatusMissedInfo": "Missed: {number}",
+  "warStatusMissedInfo": "Manqué: {number}",
   "@warStatusMissedInfo": {
     "description": "Number of missed attacks",
     "placeholders": {
@@ -1436,11 +1436,11 @@
   "translationHelpTranslateContent": "Vous pouvez nous aider à traduire l'application sur Crowdin. Si votre langue n'est pas disponible sur Crowdin, n'hésitez pas à la demander sur notre serveur Discord. Merci beaucoup pour votre aide !",
   "translationHelpTranslateButton": "Aider à traduire sur Crowdin",
   "translationCurrentTranslators": "Traducteurs actuels",
-  "filtersTimeFilters": "Time Filters",
+  "filtersTimeFilters": "Filtres temporels",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
   },
-  "filtersWarSettings": "War Settings",
+  "filtersWarSettings": "Paramètres de guerre",
   "@filtersWarSettings": {
     "description": "War settings filters section title"
   },
@@ -1448,15 +1448,15 @@
   "@filtersPerformance": {
     "description": "Performance filters section title"
   },
-  "filtersAdvanced": "Advanced",
+  "filtersAdvanced": "Avancé",
   "@filtersAdvanced": {
     "description": "Advanced filters section title"
   },
-  "filtersNoFiltersActive": "No filters active",
+  "filtersNoFiltersActive": "Aucun filtre actif",
   "@filtersNoFiltersActive": {
     "description": "Text shown when no filters are applied in a section"
   },
-  "filtersShowingDefaultData": "Showing last {count} wars (default)",
+  "filtersShowingDefaultData": "Affichage des {count} dernières guerres (par défaut)",
   "@filtersShowingDefaultData": {
     "description": "Text shown in filter bandeau when no filters are applied",
     "placeholders": {
@@ -1466,51 +1466,51 @@
       }
     }
   },
-  "filtersQuickFilters": "Quick Filters",
+  "filtersQuickFilters": "Filtres rapides",
   "@filtersQuickFilters": {
     "description": "Quick preset filters section title"
   },
-  "filtersLast30Days": "Last 30 Days",
+  "filtersLast30Days": "30 derniers jours",
   "@filtersLast30Days": {
     "description": "Preset filter for last 30 days"
   },
-  "filters3StarOnly": "3-Star Only",
+  "filters3StarOnly": "3 étoiles seulement",
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersCwlWars": "CWL Wars",
+  "filtersCwlWars": "Guerres de LDC",
   "@filtersCwlWars": {
     "description": "Preset filter for CWL wars only"
   },
-  "filtersFreshAttacks": "Fresh Attacks",
+  "filtersFreshAttacks": "Attaques d'ouvertures",
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
   },
-  "filtersSeason": "Season",
+  "filtersSeason": "Saison",
   "@filtersSeason": {
     "description": "Season filter subsection title"
   },
-  "filtersDateRange": "Date Range",
+  "filtersDateRange": "Intervalle de dates",
   "@filtersDateRange": {
     "description": "Date range filter subsection title"
   },
-  "filtersWarType": "War Type",
+  "filtersWarType": "Type de guerre",
   "@filtersWarType": {
     "description": "War type filter subsection title"
   },
-  "filtersTownHall": "Town Hall",
+  "filtersTownHall": "Hôtel de ville",
   "@filtersTownHall": {
     "description": "Town hall filter subsection title"
   },
-  "filtersAttackerTh": "Attacker TH",
+  "filtersAttackerTh": "HDV de l'attaquant",
   "@filtersAttackerTh": {
     "description": "Attacker town hall filter label"
   },
-  "filtersDefenderTh": "Defender TH",
+  "filtersDefenderTh": "HDV du défenseur",
   "@filtersDefenderTh": {
     "description": "Defender town hall filter label"
   },
-  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "filtersSameTownHallOnly": "Même hôtel de ville uniquement",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -1518,7 +1518,7 @@
   "@filtersStars": {
     "description": "Stars filter subsection title"
   },
-  "filtersDestructionPercentage": "Destruction Percentage",
+  "filtersDestructionPercentage": "Pourcentage de destruction",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
   },
@@ -1530,27 +1530,27 @@
   "@filtersOptions": {
     "description": "Options filter subsection title"
   },
-  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "filtersFreshAttacksOnly": "Attaques d'ouvertures seulement",
   "@filtersFreshAttacksOnly": {
     "description": "Fresh attacks only filter option"
   },
-  "filtersResultLimit": "Result Limit",
+  "filtersResultLimit": "Limite de résultat",
   "@filtersResultLimit": {
     "description": "Result limit filter label"
   },
-  "filtersMinPosition": "Min Position",
+  "filtersMinPosition": "Position min",
   "@filtersMinPosition": {
     "description": "Minimum map position filter label"
   },
-  "filtersMaxPosition": "Max Position",
+  "filtersMaxPosition": "Position max",
   "@filtersMaxPosition": {
     "description": "Maximum map position filter label"
   },
-  "filtersStartDate": "Start Date",
+  "filtersStartDate": "Date de départ",
   "@filtersStartDate": {
     "description": "Start date filter label"
   },
-  "filtersEndDate": "End Date",
+  "filtersEndDate": "Date de fin",
   "@filtersEndDate": {
     "description": "End date filter label"
   },
@@ -1558,39 +1558,39 @@
   "@filtersNotSet": {
     "description": "Text shown when date is not set"
   },
-  "filtersYear": "Year",
+  "filtersYear": "Année",
   "@filtersYear": {
     "description": "Year selector label"
   },
-  "filtersMonth": "Month",
+  "filtersMonth": "Mois",
   "@filtersMonth": {
     "description": "Month selector label"
   },
-  "filtersSelectYear": "Select Year",
+  "filtersSelectYear": "Sélectionne l'année",
   "@filtersSelectYear": {
     "description": "Year picker dialog title"
   },
-  "filtersAllWars": "All Wars",
+  "filtersAllWars": "Toutes les guerres",
   "@filtersAllWars": {
     "description": "All wars filter option"
   },
-  "filtersFriendlyWars": "Friendly Wars",
+  "filtersFriendlyWars": "Guerres amicales",
   "@filtersFriendlyWars": {
     "description": "Friendly wars filter option"
   },
-  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "chartsAttackPerformance": "Performance d'attaque par niveau d'HDV",
   "@chartsAttackPerformance": {
     "description": "Attack performance chart title"
   },
-  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "chartsDefensePerformance": "Performance de défense par niveau d'HDV",
   "@chartsDefensePerformance": {
     "description": "Defense performance chart title"
   },
-  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "chartsRowsYourTh": "Lignes : Ton HDV | Colonnes : HDV adverse",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
   },
-  "chartsPoor": "Poor",
+  "chartsPoor": "Mauvais",
   "@chartsPoor": {
     "description": "Poor performance legend label"
   },
@@ -1598,7 +1598,7 @@
   "@chartsAverage": {
     "description": "Average performance legend label"
   },
-  "chartsGood": "Good",
+  "chartsGood": "Bon",
   "@chartsGood": {
     "description": "Good performance legend label"
   },
@@ -1610,43 +1610,43 @@
   "@chartsNoData": {
     "description": "No data available indicator"
   },
-  "performanceAnalysisSuggestions": "Performance Insights",
+  "performanceAnalysisSuggestions": "Analyses de performances",
   "@performanceAnalysisSuggestions": {
     "description": "Section title for AI-generated performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Smart filter suggestions based on your war performance to help identify areas for improvement",
+  "performanceAnalysisTooltip": "Suggestions de filtres intelligents basées sur tes performances de guerre pour aider à identifier les domaines à améliorer",
   "@performanceAnalysisTooltip": {
     "description": "Tooltip explaining what performance analysis suggestions are"
   },
-  "generalExport": "Export",
+  "generalExport": "Exporter",
   "@generalExport": {
     "description": "Export button label"
   },
-  "exportTitle": "Export War Statistics",
+  "exportTitle": "Exporter les statistiques de guerre",
   "@exportTitle": {
     "description": "Title for export bottom sheet dialog"
   },
-  "exportSuccess": "Export successful!",
+  "exportSuccess": "Exportation terminée !",
   "@exportSuccess": {
     "description": "Success message for completed export"
   },
-  "exportOpen": "Open",
+  "exportOpen": "Ouvrir",
   "@exportOpen": {
     "description": "Button label to open exported file"
   },
-  "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
+  "exportDialogDesc": "Cela téléchargera tes statistiques de guerre en tant que fichier Excel avec plusieurs fiches, y compris des statistiques globales, des attaques détaillées et des analyses d'HDV.",
   "@exportDialogDesc": {
     "description": "Description text for export dialog"
   },
-  "exportGenerating": "Generating export...",
+  "exportGenerating": "Génération de l'export...",
   "@exportGenerating": {
     "description": "Loading message while generating export"
   },
-  "exportClanWarStatsComingSoon": "Export feature coming soon for clan war stats",
+  "exportClanWarStatsComingSoon": "La fonction d'exportation sera bientôt disponible pour les statistiques de guerre de clans",
   "@exportClanWarStatsComingSoon": {
     "description": "Message shown when clan war stats export is not yet available"
   },
-  "filtersNoneApplied": "No filters applied",
+  "filtersNoneApplied": "Aucun filtre appliqué",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   }
