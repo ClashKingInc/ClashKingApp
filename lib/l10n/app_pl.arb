@@ -10,12 +10,12 @@
   "loadingCapitalRaids": "Ładowanie rajdów kapitałowych...",
   "loadingAlmostReady": "Prawie gotowe...",
   "accountVerificationTitle": "Zweryfikuj konto",
-  "accountVerified": "Verified",
+  "accountVerified": "Zweryfikowany",
   "accountVerify": "Weryfikuj",
   "accountVerifyButton": "Weryfikuj",
   "accountVerificationSuccess": "Konto zweryfikowane pomyślnie!",
   "generalRetry": "Spróbuj ponownie",
-  "generalRetrying": "Retrying...",
+  "generalRetrying": "Próbuję ponownie...",
   "generalTryAgain": "Spróbuj ponownie",
   "generalReset": "Zresetuj",
   "generalCancel": "Anuluj",
@@ -53,8 +53,8 @@
   "@generalAll": {
     "description": "all items"
   },
-  "generalOthers": "Others",
-  "generalCompleted": "completed",
+  "generalOthers": "Inne",
+  "generalCompleted": "ukończono",
   "generalTotal": "Ogółem",
   "generalBest": "Najlepszy",
   "@generalBest": {
@@ -97,55 +97,55 @@
   },
   "generalWarning": "Ostrzeżenie",
   "generalNoDataAvailable": "Brak dostępnych danych.",
-  "generalNoFilteredResults": "No results match your filters",
+  "generalNoFilteredResults": "Brak wyników pasujących do Twoich filtrów",
   "@generalNoFilteredResults": {
     "description": "Message when applied filters return no results"
   },
-  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "generalAdjustFilters": "Spróbuj dostosować kryteria filtra lub wyczyść filtry, aby zobaczyć wszystkie dane.",
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
-  "generalClearFilters": "Clear Filters",
+  "generalClearFilters": "Wyczyść filtry",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
   },
-  "presetsSaved": "Saved Presets",
+  "presetsSaved": "Zapisane ustawienia",
   "@presetsSaved": {
     "description": "Header for saved filter presets section"
   },
-  "presetsSave": "Save",
+  "presetsSave": "Zapisz",
   "@presetsSave": {
     "description": "Button to save current filter as preset"
   },
-  "presetsSaveTitle": "Save Filter Preset",
+  "presetsSaveTitle": "Zapisz ustawienia filtra",
   "@presetsSaveTitle": {
     "description": "Title for save preset dialog"
   },
-  "presetsName": "Preset Name",
+  "presetsName": "Nazwa ustawienia",
   "@presetsName": {
     "description": "Label for preset name input"
   },
-  "presetsNameHint": "Enter a name for this preset",
+  "presetsNameHint": "Wprowadź nazwę dla tego ustawienia",
   "@presetsNameHint": {
     "description": "Hint text for preset name input"
   },
-  "presetsSuggestions": "Suggestions:",
+  "presetsSuggestions": "Sugestie:",
   "@presetsSuggestions": {
     "description": "Label for name suggestions section"
   },
-  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "presetsApplyFirst": "Zastosuj kilka filtrów przed zapisaniem jako ustawienia predefiniowanego",
   "@presetsApplyFirst": {
     "description": "Message when trying to save without active filters"
   },
-  "presetsNameRequired": "Please enter a name",
+  "presetsNameRequired": "Proszę wpisać nazwę",
   "@presetsNameRequired": {
     "description": "Error when preset name is empty"
   },
-  "presetsNameExists": "A preset with this name already exists",
+  "presetsNameExists": "Ustawienie o tej nazwie już istnieje",
   "@presetsNameExists": {
     "description": "Error when preset name is duplicate"
   },
-  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "presetsSaveSuccess": "Ustawienie \"{name}\" zapisane pomyślnie",
   "@presetsSaveSuccess": {
     "description": "Success message when preset is saved",
     "placeholders": {
@@ -155,11 +155,11 @@
       }
     }
   },
-  "presetsSaveError": "Failed to save preset",
+  "presetsSaveError": "Zapisanie ustawień nie powiodło się",
   "@presetsSaveError": {
     "description": "Error message when preset save fails"
   },
-  "presetsApplied": "Applied preset \"{name}\"",
+  "presetsApplied": "Zastosowano ustawienie \"{name}\"",
   "@presetsApplied": {
     "description": "Message when preset is applied",
     "placeholders": {
@@ -169,23 +169,23 @@
       }
     }
   },
-  "presetsApply": "Apply Preset",
+  "presetsApply": "Zastosuj ustawienie",
   "@presetsApply": {
     "description": "Context menu option to apply preset"
   },
-  "presetsRename": "Rename",
+  "presetsRename": "Zmień nazwę",
   "@presetsRename": {
     "description": "Context menu option to rename preset"
   },
-  "presetsDelete": "Delete",
+  "presetsDelete": "Usuń",
   "@presetsDelete": {
     "description": "Context menu option to delete preset"
   },
-  "presetsRenameTitle": "Rename Preset",
+  "presetsRenameTitle": "Zmień nazwę ustawień",
   "@presetsRenameTitle": {
     "description": "Title for rename preset dialog"
   },
-  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "presetsRenameSuccess": "Zmieniono nazwę ustawień na \"{name}\"",
   "@presetsRenameSuccess": {
     "description": "Success message when preset is renamed",
     "placeholders": {
@@ -195,15 +195,15 @@
       }
     }
   },
-  "presetsRenameError": "Failed to rename preset",
+  "presetsRenameError": "Nie udało się zmienić nazwy ustawienia",
   "@presetsRenameError": {
     "description": "Error message when preset rename fails"
   },
-  "presetsDeleteTitle": "Delete Preset",
+  "presetsDeleteTitle": "Usuń ustawienie",
   "@presetsDeleteTitle": {
     "description": "Title for delete preset dialog"
   },
-  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "presetsDeleteConfirm": "Czy na pewno chcesz usunąć {name}?",
   "@presetsDeleteConfirm": {
     "description": "Confirmation message for preset deletion",
     "placeholders": {
@@ -213,7 +213,7 @@
       }
     }
   },
-  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "presetsDeleteSuccess": "Usunięto ustawienie \"{name}\"",
   "@presetsDeleteSuccess": {
     "description": "Success message when preset is deleted",
     "placeholders": {
@@ -223,11 +223,11 @@
       }
     }
   },
-  "presetsDeleteError": "Failed to delete preset",
+  "presetsDeleteError": "Nie udało się usunąć ustawienia",
   "@presetsDeleteError": {
     "description": "Error message when preset deletion fails"
   },
-  "generalCharts": "Charts",
+  "generalCharts": "Wykresy",
   "authSignUp": "Zarejestruj się",
   "authLogin": "Zaloguj się",
   "authLogout": "Wyloguj",
@@ -287,7 +287,7 @@
   "authErrorEmailSendFailed": "Nie udało się wysłać e-maila weryfikacyjnego. Spróbuj ponownie później.",
   "authErrorRateLimited": "Zbyt wiele prób. Proszę poczekać chwilę i spróbować ponownie.",
   "authErrorServerUnavailable": "Usługa jest chwilowo niedostępna. Spróbuj ponownie później.",
-  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts here. Verify your accounts with a token to access all features.",
+  "authAccountManagement": "Dodaj, usuń i zmień kolejność swoich kont Clash of Clans tutaj. Zweryfikuj swoje konta tokenem, aby uzyskać dostęp do wszystkich funkcji.",
   "authAccountConnected": "Połączone konta",
   "authAccountConnectedStatus": "Połączony",
   "authAccountNotConnected": "Nie połączony",
@@ -319,11 +319,11 @@
   "accountsPlayerTag": "Tag gracza (#ABC123)",
   "accountsEnterPlayerTag": "Wprowadź tag gracza",
   "accountsAdd": "Dodaj konto",
-  "accountsAddInstruction": "Tap the + button to add your account",
+  "accountsAddInstruction": "Naciśnij przycisk +, aby dodać swoje konto",
   "accountsApiToken": "Token API konta",
-  "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans:",
-  "accountsApiTokenLocation": "Settings > More Settings > API Token",
-  "accountsOpenMoreSettings": "Open More Settings",
+  "accountsEnterApiToken": "Wprowadź token API, aby potwierdzić, że jest twój. Możesz go znaleźć w Clash of Clans:",
+  "accountsApiTokenLocation": "Ustawienia > Więcej Ustawień > Token API",
+  "accountsOpenMoreSettings": "Otwórz więcej ustawień",
   "accountsFillAllFields": "Wypełnij wszystkie pola.",
   "accountsErrorTagNotExists": "Wprowadzony tag gracza nie istnieje.",
   "accountsErrorAlreadyLinked": "{tag} jest już powiązany z kimś innym.",
@@ -333,8 +333,8 @@
   "accountsErrorFailedToUpdateOrder": "Nie udało się zaktualizować kolejności kont.",
   "errorTitle": "Ups! Nasze serwery mogły oberwać ognistą kulą w twarz! Rzucamy czar uzdrowienia... Spróbuj ponownie za chwilę.",
   "errorSubtitle": "Jeśli problem nie ustąpi, sprawdź nasz serwer Discord, aby zobaczyć, czy jesteśmy tego świadomi.",
-  "errorNetworkTitle": "Connection Problem",
-  "errorNetworkMessage": "We're having trouble connecting to our servers. This could be due to your internet connection or an issue on our end. Please check your connection and try again.",
+  "errorNetworkTitle": "Problem z połączeniem",
+  "errorNetworkMessage": "Mamy problem z połączeniem z naszymi serwerami. Może to być spowodowane połączeniem internetowym lub problemem po naszej stronie. Sprawdź swoje połączenie i spróbuj ponownie.",
   "errorLoadingVersion": "Błąd ładowania wersji",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
@@ -404,7 +404,7 @@
       }
     }
   },
-  "playerTrophiesUnrankedDescription": "You have {trophies} trophies. You are not ranked in any league.",
+  "playerTrophiesUnrankedDescription": "Masz trofea {trophies}. Nie jesteś w żadnej lidze.",
   "@playerTrophiesUnrankedDescription": {
     "placeholders": {
       "trophies": {
@@ -481,7 +481,7 @@
   "gameClanGames": "Gry klanowe",
   "gameSeasonPass": "Przepustka Sezonowa",
   "gameCreatorCode": "Kod twórcy: ClashKing",
-  "gameCreatorCodeDescription": "Support us for free!",
+  "gameCreatorCodeDescription": "Wspieraj nas za darmo!",
   "gameCreatorCodeDialogTitle": "Wspieraj ClashKing",
   "gameCreatorCodeDialogDescription": "Korzystając z naszego kodu twórcy, pomagasz finansować rozwój, zachować aplikację i bota za darmo dla wszystkich i wspierać dodawanie nowych funkcji.\n\nOtrzymujemy 5% Twoich zakupów w grze bez dodatkowych kosztów — po prostu wpisz \"ClashKing\" w sklepie każdej gry Supercell.\n\nDziękujemy za twoje wsparcie!",
   "gameCreatorCodeDialogButton": "Użyj kodu Twórcy",
@@ -1145,7 +1145,7 @@
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warStatusMissedInfo": "Missed: {number}",
+  "warStatusMissedInfo": "Pominięto: {number}",
   "@warStatusMissedInfo": {
     "description": "Number of missed attacks",
     "placeholders": {
@@ -1372,63 +1372,63 @@
   "faqUseCodeClashKing": "Użyj kodu \"ClashKing\"",
   "faqSupportUsOnPatreon": "Wesprzyj nas na Patreonie",
   "faqRateTheApp": "Oceń aplikację w sklepie",
-  "faqWhatCanBotDo": "What can the ClashKing Discord bot do?",
-  "faqWhatCanBotDoAnswer": "The ClashKing Discord bot helps you manage your clan directly from Discord with comprehensive tracking tools, automated notifications, and seamless integration with this app. It's designed for clan leaders and members who want to stay connected and organized:",
-  "faqInviteBotToServer": "Invite Bot to Server",
-  "faqBotFeatureTracking": "Player & Clan Tracking",
-  "faqBotFeatureTrackingDesc": "Add and monitor multiple clans and players with real-time updates",
-  "faqBotFeatureWars": "War Management",
-  "faqBotFeatureWarsDesc": "Track war performance, analyze attacks, and get war notifications",
-  "faqBotFeatureNotifications": "Smart Notifications",
-  "faqBotFeatureNotificationsDesc": "Get alerts for donations, war attacks, and important clan events",
-  "faqBotFeatureCommands": "Powerful Commands",
-  "faqBotFeatureCommandsDesc": "Use slash commands to quickly access player stats, war info, and more",
+  "faqWhatCanBotDo": "Co może zrobić Bot Discord ClashKing?",
+  "faqWhatCanBotDoAnswer": "Bot ClashKing Discord pomaga zarządzać klanem bezpośrednio z Discorda za pomocą kompleksowych narzędzi śledzenia, automatycznych powiadomień i bezproblemowej integracji z tą aplikacją. Jest on zaprojektowany dla przywódców klanów i członków, którzy chcą pozostać w kontakcie i zorganizowaniu:",
+  "faqInviteBotToServer": "Zaproś bota na serwer",
+  "faqBotFeatureTracking": "Śledzenie gracza i klanu",
+  "faqBotFeatureTrackingDesc": "Dodaj i monitoruj wiele klanów i graczy z aktualizacjami w czasie rzeczywistym",
+  "faqBotFeatureWars": "Zarządzanie Wojnami",
+  "faqBotFeatureWarsDesc": "Śledź wyniki wojny, analizuj ataki i otrzymuj powiadomienia wojenne",
+  "faqBotFeatureNotifications": "Inteligentne powiadomienia",
+  "faqBotFeatureNotificationsDesc": "Otrzymuj powiadomienia o darowiznach, atakach wojennych i ważnych wydarzeniach klanów",
+  "faqBotFeatureCommands": "Potężne komendy",
+  "faqBotFeatureCommandsDesc": "Użyj komend ukośnych, aby szybko uzyskać dostęp do statystyk gracza, informacji wojennych i innych",
   "faqNeedHelp": "Potrzebuję pomocy lub chciałbym złożyć sugestię. Jak mogę się z Tobą skontaktować?",
   "faqNeedHelpAnswer": "Możesz dołączyć do naszego serwera Discord, aby poprosić o pomoc lub przekazać informacje zwrotne, lub możesz napisać do nas e-maila na adres devs@clashk.ing. Prosimy pisać tylko po angielsku lub francusku.",
   "faqSendEmail": "Wyślij wiadomość e-mail",
   "faqJoinDiscord": "Dołącz do naszego Discorda",
   "faqCannotOpenMailClient": "Z jakiegoś powodu nie możemy otworzyć twojego klienta poczty. Skopiowaliśmy dla ciebie adres e-mail. Możesz napisać e-mail i wkleić adres w polu odbiorcy.",
-  "faqTroubleshooting": "Troubleshooting",
-  "faqTroubleshootingDataTitle": "Why is my data not syncing?",
-  "faqTroubleshootingDataDescription": "Player or clan data appears outdated",
-  "faqTroubleshootingDataSolution1": "Pull down to refresh the page",
-  "faqTroubleshootingDataSolution2": "Check if your clan is tracked (see above)",
-  "faqTroubleshootingDataSolution3": "Wait a few minutes and try again : the API can take some time to update",
-  "faqTroubleshootingCrashTitle": "Why does the app crash?",
-  "faqTroubleshootingCrashDescription": "App closes unexpectedly or freezes",
-  "faqTroubleshootingCrashSolution1": "Close the app and restart it",
-  "faqTroubleshootingCrashSolution2": "Update the app to the latest version",
-  "faqTroubleshootingCrashSolution3": "Clear app cache and data (Android) or reinstall the app",
-  "faqTroubleshootingCrashSolution4": "Free up device storage space",
-  "faqContactSupport": "Contact support if problem persists (see last section)",
-  "faqTroubleshootingAccountTitle": "Why can't I verify my account?",
-  "faqTroubleshootingAccountDescription": "Problems linking your Clash of Clans account",
-  "faqTroubleshootingAccountSolution1": "Make sure you're using the correct player tag starting with #",
-  "faqTroubleshootingAccountSolution2": "If the account seems to be already linked, use the API token from Clash of Clans settings",
-  "faqTroubleshootingSolutions": "Solutions:",
-  "faqWhatIsClashKingProject": "What is the ClashKing project?",
-  "faqWhatIsClashKingProjectAnswer": "ClashKing is an open-source Clash of Clans statistics and clan management project created by passionate players for the community. We develop this as a side project alongside our full-time jobs, driven by our love for the game. We offer a mobile app, Discord bot, and free API that work together to provide the ultimate Clash of Clans experience. The project is funded entirely through user donations and Supercell Creator code usage - no ads, no premium features!",
-  "faqViewOnGitHub": "View on GitHub",
-  "faqFeaturesGuide": "What can ClashKing app do?",
-  "faqFeaturesGuideDescription": "Take your Clash of Clans experience to the next level! ClashKing app delivers beautiful, fast access to all your stats and clan data - perfect for players who do not have Discordand those who prefer a sleek mobile experience:",
-  "faqAppDevelopmentNotice": "We're actively developing new features to make the app even better. Your feedback helps us improve!",
-  "faqFeaturesPlayerTitle": "Player Statistics",
-  "faqFeaturesPlayerDescription": "Track your progress, achievements, and legend league performance",
-  "faqFeaturesClanTitle": "Clan Management",
-  "faqFeaturesClanDescription": "Monitor clan members, donations, and overall clan health",
-  "faqFeaturesWarTitle": "War Tracking",
-  "faqFeaturesWarDescription": "Analyze war performance, attack strategies, and win rates",
+  "faqTroubleshooting": "Rozwiązywanie problemów",
+  "faqTroubleshootingDataTitle": "Dlaczego moje dane nie są synchronizowane?",
+  "faqTroubleshootingDataDescription": "Dane gracza lub klanu wydają się nieaktualne",
+  "faqTroubleshootingDataSolution1": "Przeciągnij w dół, aby odświeżyć stronę",
+  "faqTroubleshootingDataSolution2": "Sprawdź, czy klan jest śledzony (patrz powyżej)",
+  "faqTroubleshootingDataSolution3": "Poczekaj kilka minut i spróbuj ponownie: aktualizacja API może zająć trochę czasu",
+  "faqTroubleshootingCrashTitle": "Dlaczego aplikacja się zawiesza?",
+  "faqTroubleshootingCrashDescription": "Aplikacja zamyka się niespodziewanie lub zamraża",
+  "faqTroubleshootingCrashSolution1": "Zamknij aplikację i uruchom ją ponownie",
+  "faqTroubleshootingCrashSolution2": "Zaktualizuj aplikację do najnowszej wersji",
+  "faqTroubleshootingCrashSolution3": "Wyczyść pamięć podręczną aplikacji i dane (Android) lub zainstaluj ponownie aplikację",
+  "faqTroubleshootingCrashSolution4": "Zwolnij miejsce na pamięć urządzenia",
+  "faqContactSupport": "Skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzał (patrz ostatnia sekcja)",
+  "faqTroubleshootingAccountTitle": "Dlaczego nie mogę zweryfikować mojego konta?",
+  "faqTroubleshootingAccountDescription": "Problemy z połączeniem konta Clash of Clans",
+  "faqTroubleshootingAccountSolution1": "Upewnij się, że używasz poprawnego tagu gracza zaczynającego się od #",
+  "faqTroubleshootingAccountSolution2": "Jeśli konto wydaje się być już połączone, użyj tokenu API z ustawień Clash of Clans",
+  "faqTroubleshootingSolutions": "Rozwiązanie:",
+  "faqWhatIsClashKingProject": "Czym jest projekt ClashKing?",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing to otwarte statystyki Clash of Clans i projekt zarządzania klanami stworzony przez pasjonujących graczy dla społeczności. Rozwijamy to jako projekt poboczny wraz z naszymi pełnoetatowymi pracami, napędzanymi naszą miłością do gry. Oferujemy aplikację mobilną, bota Discorda i darmowe API, które współpracują ze sobą, aby zapewnić komfort Clash of Clans. Projekt jest finansowany w całości poprzez darowizny użytkowników i użycie kodu Supercell Creator - brak reklam, brak funkcji premium!",
+  "faqViewOnGitHub": "Zobacz na GitHub",
+  "faqFeaturesGuide": "Co może robić aplikacja ClashKing?",
+  "faqFeaturesGuideDescription": "Weź swoje doświadczenie z Clash of Clans na następny poziom! Aplikacja ClashKing dostarcza piękne, szybki dostęp do wszystkich Twoich statystyk i danych klanu - idealny dla graczy, którzy nie mają Discorda i tych, którzy wolą spać na urządzeniu mobilnym:",
+  "faqAppDevelopmentNotice": "Aktywnie rozwijamy nowe funkcje, aby aplikacja była jeszcze lepsza. Twoja opinia pomaga nam ulepszyć!",
+  "faqFeaturesPlayerTitle": "Statystyki Gracza",
+  "faqFeaturesPlayerDescription": "Śledź swoje postępy, osiągnięcia i wyniki ligowe legendy",
+  "faqFeaturesClanTitle": "Zarządzanie klanem",
+  "faqFeaturesClanDescription": "Monitoruj członków klanu, darowizny i ogólne zdrowie klanów",
+  "faqFeaturesWarTitle": "Śledzenie Wojenne",
+  "faqFeaturesWarDescription": "Analizuj wyniki wojny, strategie ataku i wskaźniki zwycięstw",
   "faqFeaturesLegendsTitle": "Nieprecyzyjne dane?",
-  "faqFeaturesLegendsDescription": "Daily trophy tracking and end-of-season statistics",
-  "faqFeaturesCwlTitle": "CWL Analytics",
-  "faqFeaturesCwlDescription": "Clan War League performance and member contributions",
-  "faqSearchHint": "Search FAQ...",
-  "faqSectionGettingStarted": "Getting Started & About",
-  "faqSectionTroubleshooting": "Troubleshooting",
-  "faqSectionSupportAndContact": "Support & Contact",
-  "faqTranslationIssue": "Translation is missing or incorrect?",
-  "faqTranslationIssueAnswer": "Translations are done by app users like you! We (developers) only provide French and English translations. If you find missing or incorrect translations, you can help improve them. Do not hesitate to reach out to us on Discord or via email if want to help us. We have a specific Discord channel for translators where you can ask questions and get help.",
-  "faqWaysToSupport": "Ways to support us:",
+  "faqFeaturesLegendsDescription": "Codzienne śledzenie trofeów i statystyki na koniec sezonu",
+  "faqFeaturesCwlTitle": "Analiza CWL",
+  "faqFeaturesCwlDescription": "Wydajność Ligi Wojennych i wkład członków",
+  "faqSearchHint": "Szukaj FAQ...",
+  "faqSectionGettingStarted": "Pierwsze kroki i informacje",
+  "faqSectionTroubleshooting": "Rozwiązywanie problemów",
+  "faqSectionSupportAndContact": "Wsparcie & Kontakt",
+  "faqTranslationIssue": "Tłumaczenie jest brakujące lub niepoprawne?",
+  "faqTranslationIssueAnswer": "Tłumaczenia są wykonywane przez takich użytkowników aplikacji! My (deweloperów) udostępniamy tylko tłumaczenie francuskie i angielskie. Jeśli znajdziesz brakujące lub niepoprawne tłumaczenia, możesz pomóc je poprawić. Nie wahaj się skontaktować z nami na Discordzie lub pocztą e-mail, jeśli chcesz nam pomóc. Mamy specjalny kanał Discorda dla tłumaczy, gdzie możesz zadawać pytania i uzyskać pomoc.",
+  "faqWaysToSupport": "Sposób, aby nas wspierać:",
   "translationHelpUsTranslate": "Pomóż w tłumaczeniu",
   "translationSuggestFeatures": "Zaproponuj funkcje",
   "translationThankYou": "Dziękujemy!",
@@ -1436,27 +1436,27 @@
   "translationHelpTranslateContent": "Możesz nam pomóc przetłumaczyć aplikację na Crowdin. Jeśli Twojego języka nie ma na Crowdin, śmiało poproś o niego na naszym serwerze Discord. Bardzo dziękujemy za pomoc!",
   "translationHelpTranslateButton": "Pomóż przetłumaczyć na Crowdin",
   "translationCurrentTranslators": "Aktualni tłumacze",
-  "filtersTimeFilters": "Time Filters",
+  "filtersTimeFilters": "Filtry czasu",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
   },
-  "filtersWarSettings": "War Settings",
+  "filtersWarSettings": "Ustawienia Wojenne",
   "@filtersWarSettings": {
     "description": "War settings filters section title"
   },
-  "filtersPerformance": "Performance",
+  "filtersPerformance": "Wydajność",
   "@filtersPerformance": {
     "description": "Performance filters section title"
   },
-  "filtersAdvanced": "Advanced",
+  "filtersAdvanced": "Zaawansowane",
   "@filtersAdvanced": {
     "description": "Advanced filters section title"
   },
-  "filtersNoFiltersActive": "No filters active",
+  "filtersNoFiltersActive": "Brak aktywnych filtrów",
   "@filtersNoFiltersActive": {
     "description": "Text shown when no filters are applied in a section"
   },
-  "filtersShowingDefaultData": "Showing last {count} wars (default)",
+  "filtersShowingDefaultData": "Pokazuje ostatnie {count} wojny (domyślnie)",
   "@filtersShowingDefaultData": {
     "description": "Text shown in filter bandeau when no filters are applied",
     "placeholders": {
@@ -1466,51 +1466,51 @@
       }
     }
   },
-  "filtersQuickFilters": "Quick Filters",
+  "filtersQuickFilters": "Szybkie filtry",
   "@filtersQuickFilters": {
     "description": "Quick preset filters section title"
   },
-  "filtersLast30Days": "Last 30 Days",
+  "filtersLast30Days": "Ostatnie 30 dni",
   "@filtersLast30Days": {
     "description": "Preset filter for last 30 days"
   },
-  "filters3StarOnly": "3-Star Only",
+  "filters3StarOnly": "Tylko 3-gwiazdkowe",
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersCwlWars": "CWL Wars",
+  "filtersCwlWars": "Gwiazdy CWL",
   "@filtersCwlWars": {
     "description": "Preset filter for CWL wars only"
   },
-  "filtersFreshAttacks": "Fresh Attacks",
+  "filtersFreshAttacks": "Świeże ataki",
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
   },
-  "filtersSeason": "Season",
+  "filtersSeason": "Sezon",
   "@filtersSeason": {
     "description": "Season filter subsection title"
   },
-  "filtersDateRange": "Date Range",
+  "filtersDateRange": "Zakres dat",
   "@filtersDateRange": {
     "description": "Date range filter subsection title"
   },
-  "filtersWarType": "War Type",
+  "filtersWarType": "Typ Wojen",
   "@filtersWarType": {
     "description": "War type filter subsection title"
   },
-  "filtersTownHall": "Town Hall",
+  "filtersTownHall": "Ratusz",
   "@filtersTownHall": {
     "description": "Town hall filter subsection title"
   },
-  "filtersAttackerTh": "Attacker TH",
+  "filtersAttackerTh": "Atakujący TH",
   "@filtersAttackerTh": {
     "description": "Attacker town hall filter label"
   },
-  "filtersDefenderTh": "Defender TH",
+  "filtersDefenderTh": "TH Obrońcy",
   "@filtersDefenderTh": {
     "description": "Defender town hall filter label"
   },
-  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "filtersSameTownHallOnly": "Tylko ten sam poziom ratusza",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -1518,7 +1518,7 @@
   "@filtersStars": {
     "description": "Stars filter subsection title"
   },
-  "filtersDestructionPercentage": "Destruction Percentage",
+  "filtersDestructionPercentage": "Procent Zniszczenia",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
   },
@@ -1526,31 +1526,31 @@
   "@filtersMapPosition": {
     "description": "Map position filter subsection title"
   },
-  "filtersOptions": "Options",
+  "filtersOptions": "Opcje",
   "@filtersOptions": {
     "description": "Options filter subsection title"
   },
-  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "filtersFreshAttacksOnly": "Tylko świeże ataki",
   "@filtersFreshAttacksOnly": {
     "description": "Fresh attacks only filter option"
   },
-  "filtersResultLimit": "Result Limit",
+  "filtersResultLimit": "Ograniczenie rezultatu",
   "@filtersResultLimit": {
     "description": "Result limit filter label"
   },
-  "filtersMinPosition": "Min Position",
+  "filtersMinPosition": "Minimalna pozycja",
   "@filtersMinPosition": {
     "description": "Minimum map position filter label"
   },
-  "filtersMaxPosition": "Max Position",
+  "filtersMaxPosition": "Maks. pozycja",
   "@filtersMaxPosition": {
     "description": "Maximum map position filter label"
   },
-  "filtersStartDate": "Start Date",
+  "filtersStartDate": "Data rozpoczęcia",
   "@filtersStartDate": {
     "description": "Start date filter label"
   },
-  "filtersEndDate": "End Date",
+  "filtersEndDate": "Data zakończenia",
   "@filtersEndDate": {
     "description": "End date filter label"
   },
@@ -1558,39 +1558,39 @@
   "@filtersNotSet": {
     "description": "Text shown when date is not set"
   },
-  "filtersYear": "Year",
+  "filtersYear": "Rok",
   "@filtersYear": {
     "description": "Year selector label"
   },
-  "filtersMonth": "Month",
+  "filtersMonth": "Miesiąc",
   "@filtersMonth": {
     "description": "Month selector label"
   },
-  "filtersSelectYear": "Select Year",
+  "filtersSelectYear": "Wybierz rok",
   "@filtersSelectYear": {
     "description": "Year picker dialog title"
   },
-  "filtersAllWars": "All Wars",
+  "filtersAllWars": "Wszystkie Wojny",
   "@filtersAllWars": {
     "description": "All wars filter option"
   },
-  "filtersFriendlyWars": "Friendly Wars",
+  "filtersFriendlyWars": "Przyjazne wojny",
   "@filtersFriendlyWars": {
     "description": "Friendly wars filter option"
   },
-  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "chartsAttackPerformance": "Wydajność ataku na poziomie TH",
   "@chartsAttackPerformance": {
     "description": "Attack performance chart title"
   },
-  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "chartsDefensePerformance": "Wydajność obrony na poziomie TH",
   "@chartsDefensePerformance": {
     "description": "Defense performance chart title"
   },
-  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "chartsRowsYourTh": "Wierszy: Twoje TH | Kolumny: TH przeciwnika",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
   },
-  "chartsPoor": "Poor",
+  "chartsPoor": "Słaby",
   "@chartsPoor": {
     "description": "Poor performance legend label"
   },
@@ -1598,55 +1598,55 @@
   "@chartsAverage": {
     "description": "Average performance legend label"
   },
-  "chartsGood": "Good",
+  "chartsGood": "Dobre",
   "@chartsGood": {
     "description": "Good performance legend label"
   },
-  "chartsExcellent": "Excellent",
+  "chartsExcellent": "Doskonałe",
   "@chartsExcellent": {
     "description": "Excellent performance legend label"
   },
-  "chartsNoData": "N/A",
+  "chartsNoData": "Nie dotyczy",
   "@chartsNoData": {
     "description": "No data available indicator"
   },
-  "performanceAnalysisSuggestions": "Performance Insights",
+  "performanceAnalysisSuggestions": "Analiza wydajności",
   "@performanceAnalysisSuggestions": {
     "description": "Section title for AI-generated performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Smart filter suggestions based on your war performance to help identify areas for improvement",
+  "performanceAnalysisTooltip": "Inteligentne sugestie filtrowania oparte na wydajności wojny, aby pomóc w określeniu obszarów wymagających poprawy",
   "@performanceAnalysisTooltip": {
     "description": "Tooltip explaining what performance analysis suggestions are"
   },
-  "generalExport": "Export",
+  "generalExport": "Eksportuj",
   "@generalExport": {
     "description": "Export button label"
   },
-  "exportTitle": "Export War Statistics",
+  "exportTitle": "Eksportuj statystyki Wojenne",
   "@exportTitle": {
     "description": "Title for export bottom sheet dialog"
   },
-  "exportSuccess": "Export successful!",
+  "exportSuccess": "Eksport zakończony pomyślnie!",
   "@exportSuccess": {
     "description": "Success message for completed export"
   },
-  "exportOpen": "Open",
+  "exportOpen": "Otwórz",
   "@exportOpen": {
     "description": "Button label to open exported file"
   },
-  "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
+  "exportDialogDesc": "Spowoduje to pobranie statystyk wojny jako pliku Excel z wieloma arkuszami, w tym ogólnymi statystykami, szczegółowymi atakami i analizami TH.",
   "@exportDialogDesc": {
     "description": "Description text for export dialog"
   },
-  "exportGenerating": "Generating export...",
+  "exportGenerating": "Generowanie eksportu...",
   "@exportGenerating": {
     "description": "Loading message while generating export"
   },
-  "exportClanWarStatsComingSoon": "Export feature coming soon for clan war stats",
+  "exportClanWarStatsComingSoon": "Eksport funkcji już wkrótce dla statystyk wojny klanowej",
   "@exportClanWarStatsComingSoon": {
     "description": "Message shown when clan war stats export is not yet available"
   },
-  "filtersNoneApplied": "No filters applied",
+  "filtersNoneApplied": "Nie zastosowano żadnych filtrów",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   }
