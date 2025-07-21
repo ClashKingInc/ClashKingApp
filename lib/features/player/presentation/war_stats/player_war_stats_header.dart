@@ -17,6 +17,8 @@ class PlayerWarStatsHeader extends StatelessWidget {
   final VoidCallback onFriendlyChanged;
   final VoidCallback onBack;
   final VoidCallback onFilter;
+  final VoidCallback onExport;
+  final bool hasActiveFilters;
 
   PlayerWarStatsHeader({
     super.key,
@@ -31,6 +33,8 @@ class PlayerWarStatsHeader extends StatelessWidget {
     required this.onFriendlyChanged,
     required this.onBack,
     required this.onFilter,
+    required this.onExport,
+    this.hasActiveFilters = false,
   });
 
   @override
@@ -157,9 +161,39 @@ class PlayerWarStatsHeader extends StatelessWidget {
         Positioned(
           top: 40,
           right: 10,
-          child: IconButton(
-            icon: Icon(Icons.filter_list, color: Colors.white),
-            onPressed: onFilter,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Export button
+              IconButton(
+                icon: Icon(Icons.download_outlined, color: Colors.white),
+                onPressed: onExport,
+                tooltip: AppLocalizations.of(context)?.generalExport ?? 'Export',
+              ),
+              // Filter button with active indicator
+              Stack(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.filter_list, color: Theme.of(context).colorScheme.onPrimary),
+                    onPressed: onFilter,
+                    tooltip: AppLocalizations.of(context)?.generalFilters ?? 'Filters',
+                  ),
+                  if (hasActiveFilters)
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.secondary,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
           ),
         ),
       ],

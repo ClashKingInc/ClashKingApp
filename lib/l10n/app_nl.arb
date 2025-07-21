@@ -6,17 +6,18 @@
   "loadingVillages": "Je dorpen worden geladen...",
   "loadingClanData": "Clan gegevens ophalen...",
   "loadingWarStats": "Oorlogsstatistieken analyseren...",
-  "loadingLegendsData": "Legends gegevens voorbereiden...",
+  "loadingLegendsData": "Legende gegevens voorbereiden...",
   "loadingCapitalRaids": "Hoofdstad aanvallen laden...",
   "loadingAlmostReady": "Bijna klaar...",
   "accountVerificationTitle": "Account verifiëren",
-  "accountVerificationMessage": "Voer je API-token in om te verifiëren dat dit jouw account is. Je vindt het in Clash of Clans instellingen > Meer instellingen > API-token.",
-  "accountVerified": "Account geverifieerd",
-  "accountNotVerified": "Account niet geverifieerd",
+  "accountVerified": "Geverifiëerd",
+  "accountVerify": "Verifiëren",
   "accountVerifyButton": "Verifiëren",
   "accountVerificationSuccess": "Account succesvol geverifieerd!",
   "generalRetry": "Opnieuw proberen",
-  "generalTryAgain": "Probeer het later opnieuw",
+  "generalRetrying": "Opnieuw proberen...",
+  "generalTryAgain": "Probeer het opnieuw",
+  "generalReset": "Reset",
   "generalCancel": "Annuleren",
   "generalOk": "Oké",
   "@generalOk": {
@@ -52,6 +53,8 @@
   "@generalAll": {
     "description": "all items"
   },
+  "generalOthers": "Others",
+  "generalCompleted": "completed",
   "generalTotal": "Totaal",
   "generalBest": "Beste",
   "@generalBest": {
@@ -80,7 +83,7 @@
     "description": "Title for the number of trophies at the end of the day"
   },
   "generalRole": "Rol",
-  "generalStats": "Statistieken",
+  "generalStats": "Stats",
   "generalFullStats": "Volledige statistieken",
   "generalDetails": "Details",
   "generalHistory": "Geschiedenis",
@@ -94,6 +97,137 @@
   },
   "generalWarning": "Waarschuwing",
   "generalNoDataAvailable": "Geen gegevens beschikbaar.",
+  "generalNoFilteredResults": "Geen resultaten gevonden voor je filters",
+  "@generalNoFilteredResults": {
+    "description": "Message when applied filters return no results"
+  },
+  "generalAdjustFilters": "Probeer je filtercriteria aan te passen of verwijder de filters om alle gegevens te bekijken.",
+  "@generalAdjustFilters": {
+    "description": "Suggestion when filters return no results"
+  },
+  "generalClearFilters": "Filters wissen",
+  "@generalClearFilters": {
+    "description": "Button text to clear all applied filters"
+  },
+  "presetsSaved": "Opgeslagen voorkeursinstellingen",
+  "@presetsSaved": {
+    "description": "Header for saved filter presets section"
+  },
+  "presetsSave": "Opslaan",
+  "@presetsSave": {
+    "description": "Button to save current filter as preset"
+  },
+  "presetsSaveTitle": "Filter voorkeurinstelling opslaan",
+  "@presetsSaveTitle": {
+    "description": "Title for save preset dialog"
+  },
+  "presetsName": "Preset Name",
+  "@presetsName": {
+    "description": "Label for preset name input"
+  },
+  "presetsNameHint": "Enter a name for this preset",
+  "@presetsNameHint": {
+    "description": "Hint text for preset name input"
+  },
+  "presetsSuggestions": "Suggestions:",
+  "@presetsSuggestions": {
+    "description": "Label for name suggestions section"
+  },
+  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "@presetsApplyFirst": {
+    "description": "Message when trying to save without active filters"
+  },
+  "presetsNameRequired": "Please enter a name",
+  "@presetsNameRequired": {
+    "description": "Error when preset name is empty"
+  },
+  "presetsNameExists": "A preset with this name already exists",
+  "@presetsNameExists": {
+    "description": "Error when preset name is duplicate"
+  },
+  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "@presetsSaveSuccess": {
+    "description": "Success message when preset is saved",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the saved preset"
+      }
+    }
+  },
+  "presetsSaveError": "Failed to save preset",
+  "@presetsSaveError": {
+    "description": "Error message when preset save fails"
+  },
+  "presetsApplied": "Applied preset \"{name}\"",
+  "@presetsApplied": {
+    "description": "Message when preset is applied",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the applied preset"
+      }
+    }
+  },
+  "presetsApply": "Apply Preset",
+  "@presetsApply": {
+    "description": "Context menu option to apply preset"
+  },
+  "presetsRename": "Rename",
+  "@presetsRename": {
+    "description": "Context menu option to rename preset"
+  },
+  "presetsDelete": "Verwijderen",
+  "@presetsDelete": {
+    "description": "Context menu option to delete preset"
+  },
+  "presetsRenameTitle": "Rename Preset",
+  "@presetsRenameTitle": {
+    "description": "Title for rename preset dialog"
+  },
+  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "@presetsRenameSuccess": {
+    "description": "Success message when preset is renamed",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "New name of the preset"
+      }
+    }
+  },
+  "presetsRenameError": "Failed to rename preset",
+  "@presetsRenameError": {
+    "description": "Error message when preset rename fails"
+  },
+  "presetsDeleteTitle": "Delete Preset",
+  "@presetsDeleteTitle": {
+    "description": "Title for delete preset dialog"
+  },
+  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "@presetsDeleteConfirm": {
+    "description": "Confirmation message for preset deletion",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the preset to delete"
+      }
+    }
+  },
+  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "@presetsDeleteSuccess": {
+    "description": "Success message when preset is deleted",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the deleted preset"
+      }
+    }
+  },
+  "presetsDeleteError": "Failed to delete preset",
+  "@presetsDeleteError": {
+    "description": "Error message when preset deletion fails"
+  },
+  "generalCharts": "Charts",
   "authSignUp": "Registreren",
   "authLogin": "Inloggen",
   "authLogout": "Uitloggen",
@@ -109,7 +243,6 @@
   "authDiscordSignIn": "Inloggen met Discord",
   "authDiscordContinue": "Doorgaan met Discord",
   "authDiscordDescription": "Synchroniseer je gegevens met ClashKing Bot en ontgrendel het volledige potentieel van ClashKing!",
-  "authEmailTitle": "E-mail",
   "authEmail": "E-mail",
   "authEmailHint": "Vul je e-mailadres in",
   "authEmailDescription": "Gebruik e-mail als je geen toegang hebt tot Discord of alleen app-functies wilt",
@@ -137,7 +270,7 @@
   "authPasswordResetContinue": "Doorgaan naar wachtwoord opnieuw instellen",
   "authPasswordResetCode": "Resetcode",
   "authPasswordResetCodeHint": "Voer de 6-cijferige code uit je e-mail in",
-  "authPasswordResetCodeRequired": "Gelieve de reset code in te voeren",
+  "authPasswordResetCodeRequired": "Voer de resetcode in",
   "authPasswordResetCodeInvalid": "Voer een geldige 6-cijferige code in",
   "authBackToLogin": "Terug naar inloggen",
   "authUsernameLabel": "Gebruikersnaam",
@@ -146,15 +279,15 @@
   "authErrorConnection": "Er is een fout opgetreden. Controleer je internetverbinding en probeer het opnieuw.",
   "authErrorConnectionRelaunch": "Er is een fout opgetreden. Controleer je internetverbinding en start de app opnieuw op.",
   "authErrorEmailAlreadyRegistered": "Dit e-mailadres is al geregistreerd. Probeer in plaats daarvan in te loggen.",
-  "authErrorEmailAlreadyPending": "Er is al een verificatiemail naar dit adres gestuurd. Controleer je e-mail of probeer deze opnieuw te verzenden.",
+  "authErrorEmailAlreadyPending": "Er is al een verificatiemail naar dit adres gestuurd. Controleer je e-mail of probeer het opnieuw te versturen.",
   "authErrorEmailInvalidFormat": "Voer een geldig e-mailadres in.",
   "authErrorPasswordWeak": "Het wachtwoord is te zwak. Gebruik een sterker wachtwoord.",
   "authErrorUsernameInvalid": "Gebruikersnaam is ongeldig. Gebruik alleen letters, cijfers en lage streepjes.",
   "authErrorRegistrationFailed": "Registratie is mislukt. Probeer het later opnieuw.",
-  "authErrorEmailSendFailed": "Verzenden van verificatie-e-mail mislukt. Probeer het later opnieuw.",
+  "authErrorEmailSendFailed": "Verzenden van verificatie e-mail mislukt. Probeer het later opnieuw.",
   "authErrorRateLimited": "Te veel aanmeldpogingen. Wacht even en probeer het opnieuw.",
   "authErrorServerUnavailable": "De server is tijdelijk niet beschikbaar. Probeer het later opnieuw.",
-  "authAccountManagement": "Accountbeheer",
+  "authAccountManagement": "Voeg hier je Clash of Clans-accounts toe, verwijder ze of wijzig de volgorde. Verifieer je accounts met een token om toegang te krijgen tot alle functies.",
   "authAccountConnected": "Verbonden accounts",
   "authAccountConnectedStatus": "Verbonden",
   "authAccountNotConnected": "Niet verbonden",
@@ -165,7 +298,7 @@
   "authAccountEmailLinkedSuccess": "E-mailaccount succesvol gekoppeld!",
   "authEmailVerificationTitle": "Bevestig e-mailadres",
   "authEmailVerificationCheckEmail": "Controleer je e-mail",
-  "authEmailVerificationSentTo": "We hebben een verificatie-e-mail gestuurd naar:",
+  "authEmailVerificationSentTo": "We hebben een verificatie e-mail gestuurd naar:",
   "authEmailVerificationResend": "Verificatiemail opnieuw verzenden",
   "authEmailVerificationResendSuccess": "Verificatiemail succesvol opnieuw verzonden! Controleer je e-mail.",
   "authEmailVerificationBackToLogin": "Terug naar inloggen",
@@ -180,25 +313,28 @@
   "helpJoinDiscord": "Doe mee op Discord",
   "helpEmailUs": "E-mail ons",
   "accountsWelcome": "Welkom!",
-  "accountsWelcomeMessage": "Voeg alsjeblieft één of meer Clash Of Clans accounts toe aan je profiel. Je kan later accounts toevoegen of verwijderen.",
+  "accountsWelcomeMessage": "Voeg één of meer Clash Of Clans accounts toe aan je profiel. Je kan ze later ook toevoegen of verwijderen.",
   "accountsManageTitle": "Beheer je accounts",
-  "accountsNoneFound": "Geen account gekoppeld aan je profiel gevonden",
-  "accountsPlayerTag": "Speler Tag (#ABC123)",
+  "accountsNoneFound": "Geen gekoppeld account aan je profiel gevonden",
+  "accountsPlayerTag": "Spelerslabel (#ABC123)",
   "accountsEnterPlayerTag": "Voer een speler-ID in",
   "accountsAdd": "Account toevoegen",
-  "accountsDelete": "Account verwijderen",
-  "accountsApiToken": "Account API-token",
-  "accountsEnterApiToken": "Voer het account API-token in om te bevestigen dat het van jou is. Je vindt het in Clash of Clans Instellingen > Meer instellingen > API-token.",
+  "accountsAddInstruction": "Tik op de + knop om je account toe te voegen",
+  "accountsApiToken": "Account API Token",
+  "accountsEnterApiToken": "Voer de API-token van je account in om te bevestigen dat het van jou is. Je kunt deze vinden in Clash of Clans:",
+  "accountsApiTokenLocation": "Instellingen > meer instellingen > API Token",
+  "accountsOpenMoreSettings": "Open meer instellingen",
   "accountsFillAllFields": "Vul alle velden in.",
   "accountsErrorTagNotExists": "Het ingevoerde speler-ID bestaat niet.",
   "accountsErrorAlreadyLinked": "De spelertag is al gekoppeld aan iemand anders.",
   "accountsErrorAlreadyLinkedToYou": "De spelertag is al aan jou gekoppeld.",
   "accountsErrorWrongApiToken": "Het ingevoerde API-token is onjuist",
   "accountsErrorFailedToAdd": "Account toevoegen mislukt. Probeer het later opnieuw.",
-  "accountsErrorFailedToDelete": "Link verwijderen mislukt. Probeer het later opnieuw.",
-  "accountsErrorFailedToUpdateOrder": "Volgorde van accounts bijwerken mislukt.",
-  "errorTitle": "Oeps! Onze servers hebben misschien een vuurbal in het gezicht gekregen! We spreken een genezing uit... Probeer het over een moment opnieuw.",
+  "accountsErrorFailedToUpdateOrder": "Kan de volgorde van accounts niet bijwerken.",
+  "errorTitle": "Oeps! Onze servers hebben misschien een vuurbal recht in het gezicht gekregen! We zijn een genezingsspreuk aan het doen... Probeer het zo nog eens.",
   "errorSubtitle": "Als het probleem aanhoudt, kijk dan op onze Discord-server of we ervan op de hoogte zijn.",
+  "errorNetworkTitle": "Verbindingsprobleem",
+  "errorNetworkMessage": "We hebben moeite om verbinding te maken met onze servers. Dit kan komen door je internetverbinding of een probleem aan onze kant. Controleer je verbinding en probeer het opnieuw.",
   "errorLoadingVersion": "Fout bij het laden van de versie",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
@@ -268,6 +404,14 @@
       }
     }
   },
+  "playerTrophiesUnrankedDescription": "Je hebt {trophies} trofeeën. Je bent niet gerangschikt in een divisie.",
+  "@playerTrophiesUnrankedDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
   "playerTownHallLevelDescription": "Je stadhuisniveau is {level}.",
   "@playerTownHallLevelDescription": {
     "placeholders": {
@@ -291,7 +435,7 @@
   "gameBaseBuilder": "Bouwerbasis",
   "gameClanCapital": "Clan Hoofdstad",
   "gameTownHall": "SH",
-  "gameTownHallLevel": "SH niveau",
+  "gameTownHallLevel": "SH level",
   "gameTownHallLevelNumber": "Stadhuis {level}",
   "@gameTownHallLevelNumber": {
     "placeholders": {
@@ -314,7 +458,7 @@
   "gameDonations": "Donaties",
   "gameDonationsReceived": "Donaties ontvangen",
   "gameDonationsRatio": "Donatieverhouding",
-  "gameLevel": "Niveau: {level}/{maxLevel}",
+  "gameLevel": "Level: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
       "level": {
@@ -334,13 +478,13 @@
   "gameSiegeMachines": "Belegeringsmachines",
   "gameSpells": "Spreuken",
   "gameAchievements": "Prestaties",
-  "gameClanGames": "Clan Spellen",
+  "gameClanGames": "Clanspelen",
   "gameSeasonPass": "Seizoenspas",
   "gameCreatorCode": "Makerscode: ClashKing",
-  "gameCreatorCodeDescription": "Tik voor info • Steun ons gratis!",
+  "gameCreatorCodeDescription": "Steun ons gratis!",
   "gameCreatorCodeDialogTitle": "Steun ClashKing",
-  "gameCreatorCodeDialogDescription": "Als je onze creator code gebruikt, help je de ontwikkeling te financieren, houden we de app en bot gratis voor iedereen, en ondersteunen we de toevoeging van nieuwe functies.\n\nWij ontvangen 5% van je aankopen in het spel, zonder extra kosten voor jou — vul gewoon \"ClashKing\" in bij de winkel van een Supercell-spel.\n\nBedankt voor je steun!",
-  "gameCreatorCodeDialogButton": "Gebruik Maker Code",
+  "gameCreatorCodeDialogDescription": "Wanneer je onze creatorcode gebruikt, help je de ontwikkeling te financieren, de app en bot gratis te houden voor iedereen én nieuwe functies mogelijk te maken.\n\nWij ontvangen 5% van je aankopen in het spel, zonder extra kosten voor jou — vul gewoon \"ClashKing\" in bij de winkel van een Supercell-spel.\n\nBedankt voor je steun!",
+  "gameCreatorCodeDialogButton": "Gebruik makerscode",
   "clanTitle": "Clan",
   "clanSearchTitle": "Zoek clan",
   "clanSearchPlaceholder": "Clannaam",
@@ -469,7 +613,7 @@
       }
     }
   },
-  "timeEndsIn": "Eindigt over {time}",
+  "timeEndsIn": "Eindigt in {time}",
   "@timeEndsIn": {
     "placeholders": {
       "time": {
@@ -485,9 +629,9 @@
       }
     }
   },
-  "legendsTitle": "Legendarische Liga",
-  "legendsNotInLeague": "Niet in de Legendarische Liga",
-  "legendsNoDataToday": "Je zit niet in de Legendarische Liga, maar vorige seizoenen zijn beschikbaar.",
+  "legendsTitle": "Legendarische Divisie",
+  "legendsNotInLeague": "Niet in de Legendarische Divisie",
+  "legendsNoDataToday": "Je zit niet in de Legendarische Divisie, maar vorige seizoenen zijn beschikbaar.",
   "legendsStartDescription": "Je bent de dag begonnen met {trophies} trofeeën.",
   "@legendsStartDescription": {
     "placeholders": {
@@ -496,7 +640,7 @@
       }
     }
   },
-  "legendsNoRankLocalDescription": "Je staat momenteel niet gerangschikt ({country}) met {trophies} trofeeën.",
+  "legendsNoRankLocalDescription": "Je bent momenteel niet gerangschikt ({country}) met {trophies} trofeeën.",
   "@legendsNoRankLocalDescription": {
     "placeholders": {
       "country": {
@@ -560,7 +704,7 @@
   "legendsBestTrophies": "Beste trofeeën",
   "legendsMostAttacks": "Meeste aanvallen",
   "legendsLastSeason": "Laatste seizoen",
-  "legendsBestRank": "Beste wereldwijde rang",
+  "legendsBestRank": "Beste wereldwijde positie",
   "legendsTrophiesBySeason": "Trofeeën per seizoen",
   "legendsEosTrophies": "Einde van seizoen trofeeën",
   "legendsEosDetails": "Einde van seizoen details",
@@ -574,7 +718,7 @@
   "legendsInaccurateSimultaneousTitle": "- Gelijktijdige aanval en verdediging: ",
   "legendsInaccurateSimultaneousBody": "Als een aanval en verdediging op hetzelfde moment plaatsvinden, zie je mogelijk een gemengd resultaat (bijv. +4).\n",
   "legendsInaccurateNetGainTitle": "3. Netto winst/verlies: ",
-  "legendsInaccurateNetGainBody": "Ondanks timing-problemen is de totale netto winst of verlies voor de dag accuraat. ",
+  "legendsInaccurateNetGainBody": "Ondanks de timing problemen, is het nettoresultaat van de gehele dag wel correct. ",
   "legendsInaccurateConclusion": "Deze beperkingen zijn gebruikelijk bij alle tools die de Clash of Clans API gebruiken. Helaas kunnen we dat niet oplossen omdat het in handen van Supercell ligt. We doen ons best om deze limieten te compenseren en resultaten te bieden die zo dicht mogelijk bij de werkelijkheid liggen. Bedankt voor je begrip!",
   "statsSeasonStats": "Seizoenstatistieken",
   "statsByDay": "Per dag",
@@ -615,16 +759,16 @@
   "todoTitle": "Takenlijst",
   "todoExplanationTitle": "Taakberekening",
   "todoExplanationIntro": "Het voltooiingspercentage van taken wordt berekend op basis van de volgende activiteiten met specifieke gewichten:",
-  "todoExplanationLegendsTitle": "Legendarische Liga:",
+  "todoExplanationLegendsTitle": "Legendarische Divisie:",
   "todoExplanationLegends": "Gewicht van 8 punten per account, 1 aanval = 1 punt.",
-  "todoExplanationRaidsTitle": "Raids:",
+  "todoExplanationRaidsTitle": "Rooftochten:",
   "todoExplanationRaids": "Gewicht van 5 punten per account (of 6 als de laatste aanval is ontgrendeld), 1 aanval = 1 punt.",
   "todoExplanationClanWarsTitle": "Clanoorlogen:",
   "todoExplanationClanWars": "Gewicht van 2 punten per account, 1 aanval = 1 punt.",
-  "todoExplanationCwlTitle": "Clanoorlogliga:",
-  "todoExplanationCwl": "Gewicht van 1 punt per account, 1 aanval = 1 punt. CWL kan niet worden gevolgd als de speler niet in zijn ligaclan zit.",
+  "todoExplanationCwlTitle": "Clanoorlogsdivisie:",
+  "todoExplanationCwl": "Gewicht van 1 punt per account, 1 aanval = 1 punt. CWL (clanoorlogdivisie) kan niet worden gevolgd als de speler niet in zijn divisie clan zit.",
   "todoExplanationPassAndGamesTitle": "Seizoenspas & Clan Spellen:",
-  "todoExplanationPassAndGames": "Gewicht van elk 2 punten per account. De verhouding is gebaseerd op het aantal resterende dagen (1 maand voor de pas en 6 dagen voor de spellen). Groen = op schema om de pas of spellen te voltooien, rood = achter op schema.",
+  "todoExplanationPassAndGames": "Gewicht van 2 punten per account. De verhouding is gebaseerd op het aantal resterende dagen (1 maand voor de pas en 6 dagen voor de spellen). Groen = op schema om de pas of spellen te voltooien, rood = achter op schema.",
   "todoExplanationConclusion": "Het uiteindelijke percentage wordt berekend door het totaal aantal voltooide acties tijdens lopende evenementen te delen door het totaal aantal vereiste acties. Accounts die langer dan 14 dagen inactief zijn worden uitgesloten van de berekening.",
   "todoAccountsNumber": "{number} accounts",
   "@todoAccountsNumber": {
@@ -696,7 +840,7 @@
       }
     }
   },
-  "todoPointsLeftDescriptionNoPoints": "Gefeliciteerd, je bent op tijd om de maximale beloningen aan het einde van het evenement te krijgen ({type})!",
+  "todoPointsLeftDescriptionNoPoints": "Gefeliciteerd, je bent op tijd om de maximale beloningen te krijgen aan het einde van het evenement ({type})!",
   "@todoPointsLeftDescriptionNoPoints": {
     "placeholders": {
       "type": {
@@ -706,11 +850,11 @@
   },
   "warTitle": "Oorlog",
   "warFrequency": "Oorlogfrequentie",
-  "warParticipation": "Oorlogdeelname",
-  "warLeague": "Oorlog/Liga",
-  "warHistory": "Oorloggeschiedenis",
-  "warLog": "Oorloglog",
-  "warLogClosed": "{clan}s oorloglog is gesloten.",
+  "warParticipation": "Oorlogsdeelname",
+  "warLeague": "Oorlog/Divisies",
+  "warHistory": "Oorlogsgeschiedenis",
+  "warLog": "Oorlogslogboek",
+  "warLogClosed": "Het oorlogslogboek van {clan} is gesloten.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -718,7 +862,7 @@
       }
     }
   },
-  "warStats": "Oorlogstatistieken",
+  "warStats": "Oorlog Stats",
   "warOngoing": "Lopende oorlog",
   "warIsNotInWar": "{clan} is niet in oorlog.",
   "@warIsNotInWar": {
@@ -729,7 +873,7 @@
     }
   },
   "warAskForWar": "Neem contact op met de leider of een co-leider om een oorlog te starten.",
-  "warAskForWarLogOpening": "Neem contact op met de leider of een co-leider om het oorloglog te openen.",
+  "warAskForWarLogOpening": "Neem contact op met de leider of een co-leider om het oorlogs logsboek te openen.",
   "warEnded": "Oorlog afgelopen",
   "warPreparation": "Voorbereiding",
   "warPerfectWar": "Perfecte oorlog",
@@ -852,7 +996,7 @@
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
-        "type": "double"
+        "type": "String"
       }
     }
   },
@@ -903,7 +1047,7 @@
       }
     }
   },
-  "warHistoryDrawsDescription": "Je clan had {draws} gelijkspelen ({percent}%) van de laatste 50 oorlogen.",
+  "warHistoryDrawsDescription": "Jouw clan had {draws} keer gelijkgespeeld ({percent}%) in de laatste 50 oorlogen.",
   "@warHistoryDrawsDescription": {
     "placeholders": {
       "draws": {
@@ -953,7 +1097,7 @@
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
-  "warOpponentTownhall": "Teg SH",
+  "warOpponentTownhall": "Tegenstander SH",
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
   },
@@ -979,7 +1123,7 @@
   "@warFiltersRandom": {
     "description": "Random/basic war (not friendly or cwl)"
   },
-  "warVisibilityToggleTownHall": "Verberg/toon statistieken van voormalige SH-niveaus",
+  "warVisibilityToggleTownHall": "Verberg/toon statistieken van voormalige SH-levels",
   "@warVisibilityToggleTownHall": {
     "description": "For example, hide stats from TH15 and below if the player is now TH16"
   },
@@ -1001,6 +1145,15 @@
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
+  "warStatusMissedInfo": "Missed: {number}",
+  "@warStatusMissedInfo": {
+    "description": "Number of missed attacks",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warAbbreviationAvg": "Gem",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
@@ -1010,7 +1163,7 @@
     "description": "Abbreviation for average percentage"
   },
   "cwlTitle": "CWL",
-  "cwlClanWarLeague": "Clanoorlogliga",
+  "cwlClanWarLeague": "Clanoorlogsdivisie",
   "cwlOngoing": "Lopende CWL",
   "cwlRounds": "Rondes",
   "cwlRoundNumber": "Ronde {number}",
@@ -1021,7 +1174,7 @@
       }
     }
   },
-  "cwlCurrentRound": "Het is momenteel ronde {round}.",
+  "cwlCurrentRound": "Huidige ronde (ronde {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -1064,21 +1217,20 @@
       }
     }
   },
-  "joinLeaveTitle": "Toetredings-/uitredingslogs (huidig seizoen)",
+  "joinLeaveTitle": "Deelnemen/Verlaten Logboeken\n(huidige seizoen)",
   "joinLeaveJoin": "Toetreden",
   "joinLeaveLeave": "Verlaten",
-  "joinLeaveReset": "Reset",
   "joinLeaveJoins": "Toetredingen",
-  "joinLeaveLeaves": "Uitredingen",
+  "joinLeaveLeaves": "Vertrokken",
   "joinLeaveUniquePlayers": "Unieke spelers",
   "joinLeaveMovingPlayers": "Wisselende spelers",
   "joinLeaveMostMovingPlayers": "Meest wisselende spelers",
-  "joinLeaveStillInClan": "Nog in clan",
+  "joinLeaveStillInClan": "Nog in de clan",
   "joinLeaveLeftForever": "Voor altijd vertrokken",
   "joinLeaveRejoinedPlayers": "Weer toegetreden spelers",
   "joinLeaveAvgTimeJoinLeave": "Gem. toetredings-/uitredingstijd",
   "joinLeavePeakHour": "Meest actieve uur",
-  "joinLeaveNumberDescription": "{number} uitredingsgebeurtenissen vonden plaats tijdens het huidige seizoen ({date}).",
+  "joinLeaveNumberDescription": "{number} vertrekevents vonden plaats tijdens het huidige seizoen ({date}).",
   "@joinLeaveNumberDescription": {
     "placeholders": {
       "number": {
@@ -1089,7 +1241,7 @@
       }
     }
   },
-  "joinLeaveJoinNumberDescription": "{number} toetredingsgebeurtenissen vonden plaats tijdens het huidige seizoen ({date}).",
+  "joinLeaveJoinNumberDescription": "{number} spelers zijn toegetreden tijdens het huidige seizoen ({date}).",
   "@joinLeaveJoinNumberDescription": {
     "placeholders": {
       "number": {
@@ -1100,7 +1252,7 @@
       }
     }
   },
-  "joinLeaveMovingNumberDescription": "{number} speler(s) verlieten de clan en traden opnieuw toe tijdens het huidige seizoen ({date}).",
+  "joinLeaveMovingNumberDescription": "{number} speler(s) zijn de clan uit gegaan en weer teruggekeerd tijdens het huidige seizoen ({date}).",
   "@joinLeaveMovingNumberDescription": {
     "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
@@ -1112,7 +1264,7 @@
       }
     }
   },
-  "joinLeaveUniqueNumberDescription": "{number} unieke speler(s) traden toe/verlieten de clan tijdens het huidige seizoen ({date}).",
+  "joinLeaveUniqueNumberDescription": "{number} unieke speler(s) zijn de clan binnengekomen of vertrokken tijdens het huidige seizoen ({date}).",
   "@joinLeaveUniqueNumberDescription": {
     "description": "Number of unique players who joined/left the clan during the current season.",
     "placeholders": {
@@ -1124,7 +1276,7 @@
       }
     }
   },
-  "joinLeaveStillInClanNumberDescription": "{number} speler(s) traden toe en zitten nog steeds in de clan.",
+  "joinLeaveStillInClanNumberDescription": "{number} speler(s) zijn toegetreden en zitten nog steeds in de clan.",
   "@joinLeaveStillInClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1132,7 +1284,7 @@
       }
     }
   },
-  "joinLeaveLeftClanNumberDescription": "{number} speler(s) traden toe, verlieten vervolgens de clan en traden nooit meer toe.",
+  "joinLeaveLeftClanNumberDescription": "{number} speler(s) zijn toegetreden, daarna vertrokken en nooit teruggekeerd naar de clan.",
   "@joinLeaveLeftClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1155,7 +1307,7 @@
       }
     }
   },
-  "joinLeaveJoinedOnAt": "Toegetreden op {date} om {time}.",
+  "joinLeaveJoinedOnAt": "Lid geworden op {date} om {time}.",
   "@joinLeaveJoinedOnAt": {
     "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1175,7 +1327,7 @@
   "searchNoResult": "Geen resultaat.",
   "maintenanceTitle": "Onderhoud",
   "maintenanceDescription": "Clash of Clans is momenteel in onderhoud, dus we kunnen geen toegang krijgen tot de API. Kom later terug.",
-  "downloadTooltip": "CWL-samenvatting downloaden",
+  "downloadTooltip": "CWL samenvatting downloaden",
   "downloadInProgress": "Bestand downloaden... Dit kan een paar seconden duren...",
   "downloadSuccess": "Bestand succesvol opgeslagen in {path}",
   "@downloadSuccess": {
@@ -1194,11 +1346,11 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  "settingsLicenses": "Open Source Licenties",
+  "settingsLicenses": "Open source licenties",
   "settingsLicensesSubtitle": "Bekijk licenties van externe bibliotheken",
   "settingsPrivacyPolicy": "Privacybeleid",
   "settingsPrivacyPolicySubtitle": "Hoe we met jouw gegevens omgaan",
-  "betaFeature": "Beta-functie",
+  "betaFeature": "Beta functie",
   "betaLabel": "BETA",
   "betaDescription": "Deze functie bevindt zich momenteel in beta, er kunnen bugs in zitten of het kan onvolledig zijn. We werken actief aan verbeteringen en verwelkomen je feedback. Deel je ideeën en meld problemen op onze Discord-server om ons te helpen het beter te maken.",
   "settingsLanguage": "Taal",
@@ -1207,34 +1359,295 @@
   "faqTitle": "FAQ",
   "faqSubtitle": "Veelgestelde vragen",
   "faqIsThisFromSupercell": "Is deze app van Supercell?",
-  "faqFanContentPolicy": "Dit materiaal is onofficieel en wordt niet goedgekeurd door Supercell. Voor meer informatie zie Supercells Fan Content Policy: www.supercell.com/fan-content-policy",
+  "faqFanContentPolicy": "Dit materiaal is onofficieel en wordt niet goedgekeurd door Supercell. Voor meer informatie, zie de Fan Content Policy van Supercell: www.supercell.com/fan-content-policy",
   "faqWhyNotAccurate": "Waarom zijn de gegevens soms onnauwkeurig of ontbreken ze?",
   "faqClanNotTracked": "Clan niet gevolgd",
   "faqClanNotTrackedAnswer": "ClashKing kan deze informatie alleen ophalen als de clan wordt gevolgd. Als je clan niet wordt gevolgd, nodig dan de ClashKing Bot uit op je Discord-server en gebruik het commando /addclan. We werken eraan om deze functie binnenkort beschikbaar te maken in de app.",
   "faqTrackingDown": "Volgen gestopt",
   "faqTrackingDownAnswer": "Het volgen kan gedurende een bepaalde periode stoppen met werken. Daarom kun je soms gaten in je gegevens hebben. We werken eraan om dit te verbeteren.",
-  "faqApiLimitation": "Clash of Clans API-beperking",
+  "faqApiLimitation": "Clash of Clans API limitatie",
   "faqApiLimitationAnswer": "Sommige gegevens worden geleverd door Clash of Clans en hun API heeft enkele beperkingen. Dit is het geval bij legend tracking, waarbij soms trofeewinst en -verlies worden gestapeld alsof het een enkele aanval was. Dit is ook waarom we geen informatie hebben over de niveaus van je gebouwen.",
   "faqSupportWork": "Hoe kan ik jullie werk ondersteunen?",
   "faqSupportWorkAnswer": "Er zijn verschillende manieren om ons te ondersteunen:",
   "faqUseCodeClashKing": "Gebruik code \"ClashKing\"",
   "faqSupportUsOnPatreon": "Steun ons op Patreon",
-  "faqShareTheApp": "Deel de app met je vrienden",
   "faqRateTheApp": "Beoordeel de app in de store",
-  "faqHelpUsTranslate": "Help ons de app te vertalen",
-  "faqHowToInviteTheBot": "Hoe kan ik jullie bot uitnodigen op mijn Discord-server?",
-  "faqHowToInviteTheBotAnswer": "Je kunt onze bot uitnodigen op je server door op de onderstaande knop te klikken. Je hebt de \"Server beheren\" toestemming nodig om de bot toe te voegen.",
-  "faqInviteTheBot": "ClashKing Bot uitnodigen",
+  "faqWhatCanBotDo": "Wat kan de ClashKing Discord bot doen?",
+  "faqWhatCanBotDoAnswer": "De ClashKing Discord-bot helpt je om je clan rechtstreeks via Discord te beheren met uitgebreide trackingtools, automatische meldingen en naadloze integratie met deze app. De bot is speciaal ontworpen voor clanleiders en leden die verbonden en georganiseerd willen blijven:",
+  "faqInviteBotToServer": "Nodig de Discord bot uit",
+  "faqBotFeatureTracking": "Speler & clan tracking",
+  "faqBotFeatureTrackingDesc": "Voeg meerdere clans en spelers toe en houd ze in de gaten met realtime updates",
+  "faqBotFeatureWars": "Oorlog beheer",
+  "faqBotFeatureWarsDesc": "Volg oorlogsprestaties, analyseer aanvallen en ontvang oorlogsmeldingen",
+  "faqBotFeatureNotifications": "Slimme meldingen",
+  "faqBotFeatureNotificationsDesc": "Krijg waarschuwingen voor donaties, oorlogsaanvallen en belangrijke clan evenementen",
+  "faqBotFeatureCommands": "Krachtige commando's",
+  "faqBotFeatureCommandsDesc": "Gebruik slashcommando's om snel spelerstatistieken, oorlogsinfo en meer te bekijken",
   "faqNeedHelp": "Ik heb hulp nodig of wil graag een suggestie doen. Hoe kan ik contact met jullie opnemen?",
   "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server om hulp te vragen of feedback te geven, of je kunt ons een e-mail sturen naar devs@clashk.ing. Schrijf alleen in het Engels of Frans.",
   "faqSendEmail": "Stuur een e-mail",
-  "faqJoinDiscord": "Word lid van onze Discord-server",
+  "faqJoinDiscord": "Word lid van onze Discord server",
   "faqCannotOpenMailClient": "Om een of andere reden kunnen we je mailclient niet openen. We hebben het e-mailadres voor je gekopieerd. Je kunt een e-mail schrijven en het adres plakken in het ontvangerveld.",
+  "faqTroubleshooting": "Problemen oplossen",
+  "faqTroubleshootingDataTitle": "Waarom synchroniseren mijn gegevens niet?",
+  "faqTroubleshootingDataDescription": "Speler- of clangegevens lijken verouderd",
+  "faqTroubleshootingDataSolution1": "Trek omlaag om de pagina te vernieuwen",
+  "faqTroubleshootingDataSolution2": "Controleer of je clan wordt gevolgd (zie hierboven)",
+  "faqTroubleshootingDataSolution3": "Wacht een paar minuten en probeer het opnieuw: de API kan soms even nodig hebben om bij te werken",
+  "faqTroubleshootingCrashTitle": "Waarom crasht de app?",
+  "faqTroubleshootingCrashDescription": "App sluit onverwachts af of loopt vast",
+  "faqTroubleshootingCrashSolution1": "Sluit de app af en start deze opnieuw op",
+  "faqTroubleshootingCrashSolution2": "Werk de app bij naar de nieuwste versie",
+  "faqTroubleshootingCrashSolution3": "Wis de cache en gegevens van de app (Android) of installeer de app opnieuw",
+  "faqTroubleshootingCrashSolution4": "Maak opslagruimte vrij op je apparaat",
+  "faqContactSupport": "Neem contact op met de support als het probleem blijft bestaan (zie laatste sectie)",
+  "faqTroubleshootingAccountTitle": "Waarom kan ik mijn account niet verifiëren?",
+  "faqTroubleshootingAccountDescription": "Problemen met het koppelen van je Clash of Clans account",
+  "faqTroubleshootingAccountSolution1": "Zorg ervoor dat je de juiste spelerstag gebruikt die begint met een #",
+  "faqTroubleshootingAccountSolution2": "Als het account al gekoppeld lijkt te zijn, gebruik dan de API-token uit de instellingen van Clash of Clans",
+  "faqTroubleshootingSolutions": "Oplossingen:",
+  "faqWhatIsClashKingProject": "Wat is het ClashKing project?",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing is een open-source Clash of Clans statistieken- en clanbeheerproject, gemaakt door gepassioneerde spelers voor de community. We ontwikkelen dit als een hobbyproject naast onze fulltimebanen, gedreven door onze liefde voor het spel. We bieden een mobiele app, een Discord-bot en een gratis API die samenwerken om de ultieme Clash of Clans-ervaring te leveren. Het project wordt volledig gefinancierd via donaties van gebruikers en het gebruik van de Supercell Creatorcode – geen advertenties, geen premium functies!",
+  "faqViewOnGitHub": "Bekijk op GitHub",
+  "faqFeaturesGuide": "Wat kan de ClashKing app doen?",
+  "faqFeaturesGuideDescription": "Til je Clash of Clans-ervaring naar een hoger niveau! De ClashKing-app biedt een snelle en overzichtelijke toegang tot al je statistieken en clangegevens – perfect voor spelers die geen Discord gebruiken of die liever een strakke mobiele ervaring hebben:",
+  "faqAppDevelopmentNotice": "We zijn actief bezig met het ontwikkelen van nieuwe functies om de app nog beter te maken. Jouw feedback helpt ons daarbij!",
+  "faqFeaturesPlayerTitle": "Spelerstatistieken",
+  "faqFeaturesPlayerDescription": "Volg je voortgang, prestaties en legendarische divisie resultaten",
+  "faqFeaturesClanTitle": "Clan beheer",
+  "faqFeaturesClanDescription": "Houd clankleden, donaties en de algehele clanstatus in de gaten",
+  "faqFeaturesWarTitle": "Oorlog volgen",
+  "faqFeaturesWarDescription": "Analyseer oorlogsprestaties, aanvalstrategieën en winstpercentages",
+  "faqFeaturesLegendsTitle": "Legendarische Divisie",
+  "faqFeaturesLegendsDescription": "Dagelijkse trofeeëntracking en seizoensstatistieken",
+  "faqFeaturesCwlTitle": "CWL analyses",
+  "faqFeaturesCwlDescription": "Clan War League prestaties en bijdragen van leden",
+  "faqSearchHint": "Zoek in de FAQ...",
+  "faqSectionGettingStarted": "Aan de slag & Over ons",
+  "faqSectionTroubleshooting": "Problemen oplossen",
+  "faqSectionSupportAndContact": "Ondersteuning & contact",
+  "faqTranslationIssue": "Ontbreekt er een vertaling of is deze onjuist?",
+  "faqTranslationIssueAnswer": "Vertalingen worden gedaan door appgebruikers zoals jij! Wij (de ontwikkelaars) verzorgen alleen de Franse en Engelse vertalingen. Als je ontbrekende of onjuiste vertalingen vindt, kun je helpen om deze te verbeteren. Aarzel niet om contact met ons op te nemen via Discord of e-mail als je wilt meehelpen. We hebben een speciaal Discord-kanaal voor vertalers waar je vragen kunt stellen en hulp kunt krijgen.",
+  "faqWaysToSupport": "Manieren om ons te steunen:",
   "translationHelpUsTranslate": "Help ons met vertalen",
   "translationSuggestFeatures": "Functies voorstellen",
   "translationThankYou": "Bedankt!",
   "translationThankYouContent": "Een enorme dank aan al onze geweldige vertalers die ons helpen deze app toegankelijk te maken voor meer mensen over de hele wereld!",
-  "translationHelpTranslateContent": "Je kunt ons helpen de app te vertalen op Crowdin. Als je taal niet beschikbaar is op Crowdin, vraag deze dan aan op onze Discord-server. Heel erg bedankt voor je hulp!",
-  "translationHelpTranslateButton": "Help vertalen op Crowdin",
-  "translationCurrentTranslators": "Huidige vertalers"
+  "translationHelpTranslateContent": "Je kunt ons helpen de app op Crowdin te vertalen. Als je taal niet beschikbaar is op Crowdin, kan je deze aanvragen in onze Discord Server. Heel erg bedankt voor je hulp!",
+  "translationHelpTranslateButton": "Help met vertalen op Crowdin",
+  "translationCurrentTranslators": "Huidige vertalers",
+  "filtersTimeFilters": "Time Filters",
+  "@filtersTimeFilters": {
+    "description": "Time-based filters section title"
+  },
+  "filtersWarSettings": "War Settings",
+  "@filtersWarSettings": {
+    "description": "War settings filters section title"
+  },
+  "filtersPerformance": "Performance",
+  "@filtersPerformance": {
+    "description": "Performance filters section title"
+  },
+  "filtersAdvanced": "Advanced",
+  "@filtersAdvanced": {
+    "description": "Advanced filters section title"
+  },
+  "filtersNoFiltersActive": "Geen filters actief",
+  "@filtersNoFiltersActive": {
+    "description": "Text shown when no filters are applied in a section"
+  },
+  "filtersShowingDefaultData": "Toon de laatste {count} oorlogen (standaard)",
+  "@filtersShowingDefaultData": {
+    "description": "Text shown in filter bandeau when no filters are applied",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of wars being shown"
+      }
+    }
+  },
+  "filtersQuickFilters": "Snelle filters",
+  "@filtersQuickFilters": {
+    "description": "Quick preset filters section title"
+  },
+  "filtersLast30Days": "Laatste 30 dagen",
+  "@filtersLast30Days": {
+    "description": "Preset filter for last 30 days"
+  },
+  "filters3StarOnly": "Alleen 3-sterren",
+  "@filters3StarOnly": {
+    "description": "Preset filter for 3-star attacks only"
+  },
+  "filtersCwlWars": "CWL oorlogen",
+  "@filtersCwlWars": {
+    "description": "Preset filter for CWL wars only"
+  },
+  "filtersFreshAttacks": "Fresh Attacks",
+  "@filtersFreshAttacks": {
+    "description": "Preset filter for fresh attacks only"
+  },
+  "filtersSeason": "Seizoen",
+  "@filtersSeason": {
+    "description": "Season filter subsection title"
+  },
+  "filtersDateRange": "Date Range",
+  "@filtersDateRange": {
+    "description": "Date range filter subsection title"
+  },
+  "filtersWarType": "War Type",
+  "@filtersWarType": {
+    "description": "War type filter subsection title"
+  },
+  "filtersTownHall": "Town Hall",
+  "@filtersTownHall": {
+    "description": "Town hall filter subsection title"
+  },
+  "filtersAttackerTh": "Attacker TH",
+  "@filtersAttackerTh": {
+    "description": "Attacker town hall filter label"
+  },
+  "filtersDefenderTh": "Defender TH",
+  "@filtersDefenderTh": {
+    "description": "Defender town hall filter label"
+  },
+  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "@filtersSameTownHallOnly": {
+    "description": "Same town hall filter option"
+  },
+  "filtersStars": "Sterren",
+  "@filtersStars": {
+    "description": "Stars filter subsection title"
+  },
+  "filtersDestructionPercentage": "Destruction Percentage",
+  "@filtersDestructionPercentage": {
+    "description": "Destruction percentage filter subsection title"
+  },
+  "filtersMapPosition": "Kaartpositie",
+  "@filtersMapPosition": {
+    "description": "Map position filter subsection title"
+  },
+  "filtersOptions": "Opties",
+  "@filtersOptions": {
+    "description": "Options filter subsection title"
+  },
+  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "@filtersFreshAttacksOnly": {
+    "description": "Fresh attacks only filter option"
+  },
+  "filtersResultLimit": "Result Limit",
+  "@filtersResultLimit": {
+    "description": "Result limit filter label"
+  },
+  "filtersMinPosition": "Min Position",
+  "@filtersMinPosition": {
+    "description": "Minimum map position filter label"
+  },
+  "filtersMaxPosition": "Max Position",
+  "@filtersMaxPosition": {
+    "description": "Maximum map position filter label"
+  },
+  "filtersStartDate": "Start Date",
+  "@filtersStartDate": {
+    "description": "Start date filter label"
+  },
+  "filtersEndDate": "End Date",
+  "@filtersEndDate": {
+    "description": "End date filter label"
+  },
+  "filtersNotSet": "Niet ingesteld",
+  "@filtersNotSet": {
+    "description": "Text shown when date is not set"
+  },
+  "filtersYear": "Year",
+  "@filtersYear": {
+    "description": "Year selector label"
+  },
+  "filtersMonth": "Month",
+  "@filtersMonth": {
+    "description": "Month selector label"
+  },
+  "filtersSelectYear": "Select Year",
+  "@filtersSelectYear": {
+    "description": "Year picker dialog title"
+  },
+  "filtersAllWars": "All Wars",
+  "@filtersAllWars": {
+    "description": "All wars filter option"
+  },
+  "filtersFriendlyWars": "Friendly Wars",
+  "@filtersFriendlyWars": {
+    "description": "Friendly wars filter option"
+  },
+  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "@chartsAttackPerformance": {
+    "description": "Attack performance chart title"
+  },
+  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "@chartsDefensePerformance": {
+    "description": "Defense performance chart title"
+  },
+  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "@chartsRowsYourTh": {
+    "description": "Heatmap chart axis explanation"
+  },
+  "chartsPoor": "Poor",
+  "@chartsPoor": {
+    "description": "Poor performance legend label"
+  },
+  "chartsAverage": "Gemiddelde",
+  "@chartsAverage": {
+    "description": "Average performance legend label"
+  },
+  "chartsGood": "Good",
+  "@chartsGood": {
+    "description": "Good performance legend label"
+  },
+  "chartsExcellent": "Uitstekend",
+  "@chartsExcellent": {
+    "description": "Excellent performance legend label"
+  },
+  "chartsNoData": "N.v.t.",
+  "@chartsNoData": {
+    "description": "No data available indicator"
+  },
+  "performanceAnalysisSuggestions": "Prestatie Inzichten",
+  "@performanceAnalysisSuggestions": {
+    "description": "Section title for AI-generated performance analysis suggestions"
+  },
+  "performanceAnalysisTooltip": "Slimme filtervoorstellen op basis van je oorlogsprestaties om verbeterpunten te ontdekken",
+  "@performanceAnalysisTooltip": {
+    "description": "Tooltip explaining what performance analysis suggestions are"
+  },
+  "generalExport": "Exporteer",
+  "@generalExport": {
+    "description": "Export button label"
+  },
+  "exportTitle": "Exporteer oorlogstatistieken",
+  "@exportTitle": {
+    "description": "Title for export bottom sheet dialog"
+  },
+  "exportSuccess": "Exporteren geslaagd!",
+  "@exportSuccess": {
+    "description": "Success message for completed export"
+  },
+  "exportOpen": "Open",
+  "@exportOpen": {
+    "description": "Button label to open exported file"
+  },
+  "exportDialogDesc": "Dit downloadt je oorlogstatistieken als een Excel-bestand met meerdere tabbladen, waaronder algemene statistieken, gedetailleerde aanvallen en stadhuis analyse.",
+  "@exportDialogDesc": {
+    "description": "Description text for export dialog"
+  },
+  "exportGenerating": "Export wordt gegenereerd...",
+  "@exportGenerating": {
+    "description": "Loading message while generating export"
+  },
+  "exportClanWarStatsComingSoon": "Exportfunctie voor clanoorlogsstatistieken komt binnenkort",
+  "@exportClanWarStatsComingSoon": {
+    "description": "Message shown when clan war stats export is not yet available"
+  },
+  "filtersNoneApplied": "Geen filters toegepast",
+  "@filtersNoneApplied": {
+    "description": "Text shown when no filters are active"
+  }
 }

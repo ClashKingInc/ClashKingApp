@@ -72,7 +72,7 @@ class CwlScreenState extends State<CwlScreen> {
                   right: 10,
                   child: DownloadCwlExcelButton(
                       url:
-                          "${ApiService.apiUrlV2}/war/cwl-summary/export?tag=${widget.clanTag.replaceAll('#', '!')}",
+                          "${ApiService.apiUrlV2}/exports/war/cwl-summary?tag=${widget.clanTag.replaceAll('#', '!')}",
                       fileName:
                           "cwl_summary_${widget.clanInfo.tag.replaceAll('#', '')}.xlsx"),
                 ),

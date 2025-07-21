@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/features/player/presentation/war_stats/widgets/enhanced_stat_card.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/models/player_enemy_townhall_stats.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
@@ -39,6 +39,7 @@ class WarStatsView extends StatelessWidget {
     double totalStars = 0;
     double totalDestruction = 0;
     int totalCount = 0;
+    final Map<String, int> mergedStarsCount = {'0': 0, '1': 0, '2': 0, '3': 0};
 
     for (final stat in statList) {
       final count = stat.count;
@@ -47,13 +48,18 @@ class WarStatsView extends StatelessWidget {
       totalStars += stars * count;
       totalDestruction += destruction * count;
       totalCount += count;
+      
+      // Merge star counts
+      for (final entry in stat.starsCount.entries) {
+        mergedStarsCount[entry.key] = (mergedStarsCount[entry.key] ?? 0) + entry.value;
+      }
     }
 
     return EnemyTownhallStats(
       averageStars: totalCount > 0 ? totalStars / totalCount : 0.0,
       averageDestruction: totalCount > 0 ? totalDestruction / totalCount : 0.0,
       count: totalCount,
-      starsCount: {},
+      starsCount: mergedStarsCount,
     );
   }
 
@@ -67,10 +73,16 @@ class WarStatsView extends StatelessWidget {
     String formattedEndDate = DateFormat.yMd(userLocale.toString())
         .format(DateTime.fromMillisecondsSinceEpoch(1000));
 
+
     final groupedAttackStats = groupByDefenderTh(stats!.byEnemyTownhall);
     final groupedDefenseStats = groupByDefenderTh(stats.byEnemyTownhallDef);
 
-    final sortedEntries = groupedAttackStats.entries.toList()
+    // Get all unique TH levels from both attack and defense data
+    final allThLevels = <String>{};
+    allThLevels.addAll(groupedAttackStats.keys);
+    allThLevels.addAll(groupedDefenseStats.keys);
+    
+    final sortedEntries = allThLevels.map((thLevel) => MapEntry(thLevel, groupedAttackStats[thLevel] ?? [])).toList()
       ..sort((a, b) => int.parse(b.key).compareTo(int.parse(a.key)));
 
     return Column(
@@ -105,7 +117,7 @@ class WarStatsView extends StatelessWidget {
         ),
         ...sortedEntries.map((entry) {
           final thLevel = entry.key;
-          final attackStats = mergeStats(entry.value);
+          final attackStats = entry.value.isNotEmpty ? mergeStats(entry.value) : null;
           final defenseStats = groupedDefenseStats[thLevel] != null
               ? mergeStats(groupedDefenseStats[thLevel]!)
               : null;
@@ -133,29 +145,67 @@ class WarStatsView extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildColumn(
-                            context,
-                            AppLocalizations.of(context)!.warAttacksTitle,
-                            attackStats.averageStars,
-                            attackStats.averageDestruction,
-                            attackStats.count,
-                            -1,
-                            isAttack: true),
-                        if (defenseStats != null)
-                          _buildColumn(
-                              context,
-                              AppLocalizations.of(context)!.warDefensesTitle,
-                              defenseStats.averageStars,
-                              defenseStats.averageDestruction,
-                              defenseStats.count,
-                              -1,
-                              isAttack: false)
-                        else
-                          Text(AppLocalizations.of(context)!.warDefensesNone),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: attackStats != null
+                                ? EnhancedStatCard(
+                                    title: AppLocalizations.of(context)!.warAttacksTitle,
+                                    stars: attackStats.averageStars,
+                                    destruction: attackStats.averageDestruction,
+                                    count: attackStats.count,
+                                    isAttack: true,
+                                    starsBreakdown: attackStats.starsCount,
+                                  )
+                                : Container(
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: Colors.grey[300]!.withValues(alpha: 0.3)),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        AppLocalizations.of(context)!.warAttacksNone,
+                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: defenseStats != null
+                                ? EnhancedStatCard(
+                                    title: AppLocalizations.of(context)!.warDefensesTitle,
+                                    stars: defenseStats.averageStars,
+                                    destruction: defenseStats.averageDestruction,
+                                    count: defenseStats.count,
+                                    isAttack: false,
+                                    starsBreakdown: defenseStats.starsCount,
+                                  )
+                                : Container(
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: Colors.grey[300]!.withValues(alpha: 0.3)),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        AppLocalizations.of(context)!.warDefensesNone,
+                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -168,81 +218,35 @@ class WarStatsView extends StatelessWidget {
   }
 
   Widget _buildStatRows(BuildContext context, PlayerWarTypeStats stats) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildColumn(
-          context,
-          AppLocalizations.of(context)!.warAttacksTitle,
-          stats.averageStars,
-          stats.averageDestruction,
-          stats.totalAttacks,
-          stats.missedAttacks,
-          isAttack: true,
-        ),
-        _buildColumn(
-          context,
-          AppLocalizations.of(context)!.warDefensesTitle,
-          stats.averageStarsDef,
-          stats.averageDestructionDef,
-          stats.totalDefenses,
-          stats.missedDefenses,
-          isAttack: false,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildColumn(BuildContext context, String title, double avgStars,
-      double avgPct, int count, int missing,
-      {required bool isAttack}) {
-    return Column(
-      children: [
-        Text(title),
-        Row(children: [
-          CachedNetworkImage(
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-              imageUrl:
-                  "https://assets.clashk.ing/icons/Icon_HV_Attack_Star.png",
-              width: 16,
-              height: 16,
-              fit: BoxFit.cover),
-          const SizedBox(width: 8),
-          Text(avgStars.toStringAsFixed(2))
-        ]),
-        Row(children: [
-          CachedNetworkImage(
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-              imageUrl: "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
-              width: 16,
-              height: 16,
-              fit: BoxFit.cover),
-          const SizedBox(width: 8),
-          Text(avgPct.toStringAsFixed(2))
-        ]),
-        Row(children: [
-          CachedNetworkImage(
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-              imageUrl:
-                  isAttack ? ImageAssets.sword : ImageAssets.shieldWithArrow,
-              width: 16,
-              height: 16,
-              fit: BoxFit.cover),
-          const SizedBox(width: 8),
-          Text(count.toString())
-        ]),
-        if (missing != -1)
-          Row(
-            children: [
-              MobileWebImage(
-                  imageUrl:
-                      isAttack ? ImageAssets.brokenSword : ImageAssets.shield,
-                  width: 16),
-              const SizedBox(width: 8),
-              Text(missing.toString()),
-            ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: EnhancedStatCard(
+              title: AppLocalizations.of(context)!.warAttacksTitle,
+              stars: stats.averageStars,
+              destruction: stats.averageDestruction,
+              count: stats.totalAttacks,
+              missed: stats.missedAttacks > 0 ? stats.missedAttacks : null,
+              isAttack: true,
+              starsBreakdown: stats.starsCount,
+            ),
           ),
-      ],
+          const SizedBox(width: 8),
+          Expanded(
+            child: EnhancedStatCard(
+              title: AppLocalizations.of(context)!.warDefensesTitle,
+              stars: stats.averageStarsDef,
+              destruction: stats.averageDestructionDef,
+              count: stats.totalDefenses,
+              missed: stats.missedDefenses > 0 ? stats.missedDefenses : null,
+              isAttack: false,
+              starsBreakdown: stats.starsCountDef,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

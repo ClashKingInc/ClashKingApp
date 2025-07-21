@@ -142,6 +142,8 @@ class ImageAssets {
   // ⭐ Clan Capital
   static const String capitalGold =
       "$baseUrl/icons/Icon_CC_Resource_Capital_Gold_small.png";
+  static const String capitalTrophy =
+      "$baseUrl/icons/Icon_CC_Resource_Capital_Trophy.png";
   static const String raidAttacks = "$baseUrl/icons/Icon_HV_Raid_Attack.png";
   static const String capitalThickSwords =
       "$baseUrl/bot/icons/thick_capital_sword.png";
@@ -172,6 +174,8 @@ class ImageAssets {
       "$baseUrl/landscape/clan-capital-landscape.png";
   static const String playerWarStatsPageBackground =
       "$baseUrl/landscape/war-stats.png";
+  static const String playerAchievementPageBackground =
+      "$baseUrl/landscape/achievement-landscape.png";
 
 
   // 🎭 Heroes & Troops & Others

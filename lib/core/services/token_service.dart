@@ -26,7 +26,7 @@ class TokenService {
       if (newAccessToken != null) {
         return newAccessToken;
       } else {
-        DebugUtils.debugError("❌ Failed to refresh token, user must re-authenticate");
+        DebugUtils.debugError(" Failed to refresh token, user must re-authenticate");
         await clearTokens();
         return null;
       }
@@ -56,7 +56,7 @@ class TokenService {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('access_token', newAccessToken);
 
-        DebugUtils.debugSuccess("✅ Token refreshed successfully");
+        DebugUtils.debugSuccess("Token refreshed successfully");
         return newAccessToken;
       } else {
         Sentry.captureMessage("Token refresh failed with status ${response.statusCode}: ${response.body}");
@@ -153,7 +153,7 @@ class TokenService {
         return "unsupported-platform";
       }
     } catch (e) {
-      DebugUtils.debugError("❌ Erreur getDeviceName: $e");
+      DebugUtils.debugError(" Erreur getDeviceName: $e");
       return "unknown-device";
     }
   }

@@ -1,7 +1,6 @@
-• Complete authentication system redesign
-• Follow wars from other clans during CWL season
-• Download CWL results as Excel spreadsheets after it ends
-• New maintenance page for better service updates
-• Improved error handling and performance optimizations
-• Bug fixes and stability improvements
-
+- Improved network error handling and connectivity
+- Enhanced account management UI with better user guidance
+- Modernized achievement page with improved cards and progress bars
+- Enhanced overall user experience with updated design elements
+- Added player war stats filters, details tab, and charts tab
+- Fixed clan search, unclickable buttons, infinite loading, and translation issues

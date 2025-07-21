@@ -102,7 +102,7 @@ class ClanJoinLeaveEventsState extends State<ClanJoinLeaveEvents>
                 IconButton(
                   icon: Icon(LucideIcons.listRestart),
                   onPressed: resetDateFilter,
-                  tooltip: loc.joinLeaveReset,
+                  tooltip: loc.generalReset,
                 ),
               ],
             ),

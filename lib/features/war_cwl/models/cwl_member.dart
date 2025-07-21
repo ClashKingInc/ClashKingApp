@@ -57,6 +57,9 @@ class CwlMember {
 
   factory CwlMember.fromJson(Map<String, dynamic> json) {
     try {
+      DebugUtils.debugInfo("🔍 Parsing CwlMember JSON: $json");
+      DebugUtils.debugInfo("🔍 Stats structure: ${json['stats']}");
+      
       return CwlMember(
           tag: json['tag'],
           name: json['name'],
@@ -82,11 +85,12 @@ class CwlMember {
               ? CwlDefenseStats.fromJson(json['stats']['cwl'])
               : null);
     } catch (e) {
-      DebugUtils.debugError("❌ Error parsing CwlMember: $e");
+      DebugUtils.debugError(" Error parsing CwlMember: $e");
+      DebugUtils.debugError(" JSON was: $json");
       return CwlMember(
-        tag: 'No tag',
-        name: 'No name',
-        townhallLevel: 0,
+        tag: json['tag'] ?? 'No tag',
+        name: json['name'] ?? 'No name',
+        townhallLevel: json['townHallLevel'] ?? 0,
         attackStats: null,
         defenseStats: null,
       );

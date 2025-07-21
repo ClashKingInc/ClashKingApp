@@ -83,9 +83,11 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
                     // Handle CWL state with enhanced UI
                     val score = warInfo.optString("score", "")
                     
-                    // Use new enhanced text fields
+                    // Use new enhanced text fields - only show score in primary text
                     views.setTextViewText(R.id.text_score, if (primaryText.isNotEmpty()) primaryText else score)
-                    views.setTextViewText(R.id.text_state, if (secondaryText.isNotEmpty()) secondaryText else warInfo.optString("timeState", "CWL"))
+                    // Only show secondary text if it's a score (contains numbers or "-")
+                    val hasScore = score.isNotEmpty() && (score.contains("-") || score.any { it.isDigit() })
+                    views.setTextViewText(R.id.text_state, if (hasScore && secondaryText.isNotEmpty()) secondaryText else "")
 
                     val clanInfo = warInfo.optJSONObject("clan")
                     val opponentInfo = warInfo.optJSONObject("opponent")
@@ -112,9 +114,11 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
                     // Handle regular war states with enhanced UI
                     val score = warInfo.optString("score", "")
                     
-                    // Use new enhanced text fields
+                    // Use new enhanced text fields - only show score in primary text
                     views.setTextViewText(R.id.text_score, if (primaryText.isNotEmpty()) primaryText else score)
-                    views.setTextViewText(R.id.text_state, if (secondaryText.isNotEmpty()) secondaryText else warInfo.optString("timeState", "notInWar"))
+                    // Only show secondary text if it's a score (contains numbers or "-")
+                    val hasScore = score.isNotEmpty() && (score.contains("-") || score.any { it.isDigit() })
+                    views.setTextViewText(R.id.text_state, if (hasScore && secondaryText.isNotEmpty()) secondaryText else "")
 
                     val clanInfo = warInfo.optJSONObject("clan")
                     val opponentInfo = warInfo.optJSONObject("opponent")

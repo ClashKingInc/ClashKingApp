@@ -40,7 +40,7 @@ class WarClan {
             [],
       );
     } catch (e) {
-      DebugUtils.debugError("❌ Error parsing WarClan: $e");
+      DebugUtils.debugError(" Error parsing WarClan: $e");
       return WarClan(
         tag: 'No tag',
         name: 'No name',

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:clashkingapp/features/clan/models/clan_capital_history.dart';
 import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_stats.dart';
+import 'package:clashkingapp/features/clan/models/clan_war_stats_filter.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_log.dart';
 import 'package:flutter/material.dart';
@@ -122,6 +123,26 @@ class ClanService extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  /// Loads clan data including war statistics for clan search functionality
+  Future<Clan> getClanAndWarData(String clanTag) async {
+    // First load basic clan data
+    final clan = await loadClanData(clanTag);
+    
+    // Then load war statistics data
+    try {
+      final warStats = await loadClanWarStatsData([clan.tag]);
+      if (warStats.isNotEmpty) {
+        linkWarStatsToClans();
+        DebugUtils.debugSuccess("Loaded war stats for searched clan: ${clan.tag}");
+      }
+    } catch (warStatsError) {
+      DebugUtils.debugWarning("Failed to load war stats for searched clan ${clan.tag}: $warStatsError");
+      // Don't fail the entire operation if war stats loading fails
+    }
+    
+    return _clans[clan.tag]!; // Return the updated clan with war stats
   }
 
   void linkWarsToClans(List<Clan> clans, List<WarCwl> warCwls) {
@@ -339,6 +360,64 @@ class ClanService extends ChangeNotifier {
     }
   }
 
+  /// Load clan war stats with custom filters
+  Future<ClanWarStats?> loadClanWarStatsWithFilter(
+    String clanTag,
+    ClanWarStatsFilter filter,
+  ) async {
+    final token = await TokenService().getAccessToken();
+    if (token == null) throw Exception("User not authenticated");
+    
+    DebugUtils.debugApi("🎯 Loading filtered clan war stats for: $clanTag");
+    DebugUtils.debugInfo("🔍 Filter: ${filter.getFilterSummary()}");
+
+    final requestBody = {
+      "clan_tags": [clanTag],
+      ...filter.toJson(),
+    };
+
+    final response = await http.post(
+      Uri.parse("${ApiService.apiUrlV2}/war/clans/warhits"),
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode(requestBody),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final responseBody = utf8.decode(response.bodyBytes);
+        final data = jsonDecode(responseBody);
+
+        if (data.containsKey("items") && data["items"] is List) {
+          final items = data["items"] as List;
+          if (items.isNotEmpty) {
+            final item = items.first as Map<String, dynamic>;
+            final String tag = item["tag"];
+            
+            if (tag == clanTag) {
+              DebugUtils.debugSuccess("✅ Loaded filtered clan war stats for $clanTag");
+              return ClanWarStats.fromJson(item);
+            }
+          }
+        }
+        
+        DebugUtils.debugWarning("⚠️ No filtered clan war stats found for $clanTag");
+        return null;
+      } else {
+        DebugUtils.debugError("❌ Failed to load filtered clan war stats: ${response.statusCode}");
+        Sentry.captureMessage("Error loading filtered clan war stats: ${response.statusCode}",
+            level: SentryLevel.error);
+        throw Exception("Error loading filtered clan war stats");
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+      DebugUtils.debugError("❌ Error loading filtered clan war stats: $e");
+      rethrow;
+    }
+  }
+
   void linkWarStatsToClans() {
     for (var clan in _clans.values) {
       try {
@@ -463,7 +542,7 @@ class ClanService extends ChangeNotifier {
       DebugUtils.debugSuccess("Processed ${warStatsList.length} clan war stats items");
     }
 
-    DebugUtils.debugSuccess("✅ Processed all bulk clan data");
+    DebugUtils.debugSuccess("Processed all bulk clan data");
     notifyListeners();
   }
 }

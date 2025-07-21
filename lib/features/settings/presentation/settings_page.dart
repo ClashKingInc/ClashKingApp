@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/dialogs/logout_dialog.dart';
+import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
@@ -236,7 +237,8 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   }
 
   Future<void> _logOut() async {
-    DebugUtils.debugInfo("SettingsInfoScreen: _logOut called, clearing all service data.");
+    DebugUtils.debugInfo(
+        "SettingsInfoScreen: _logOut called, clearing all service data.");
     if (mounted) {
       final authService = Provider.of<AuthService>(context, listen: false);
       final cocAccountService =
@@ -252,10 +254,10 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       globalNavigatorKey.currentState?.pushReplacement(
         MaterialPageRoute(builder: (context) => LoginPage()),
       );
-
-      DebugUtils.debugSuccess("✅ SettingsInfoScreen: All service data cleared successfully.");
+      DebugUtils.debugSuccess("SettingsInfoScreen: All service data cleared successfully.");
     } else {
-      DebugUtils.debugWarning("⚠️ SettingsInfoScreen: _logOut called but context is not mounted.");
+      DebugUtils.debugWarning(
+          "⚠️ SettingsInfoScreen: _logOut called but context is not mounted.");
     }
   }
 }
@@ -279,13 +281,14 @@ Widget _buildVersionInfoTile(BuildContext context) {
           title: Text(AppLocalizations.of(context)!.versionDevice),
           subtitle: Text(snapshot.data ?? ''),
           onTap: () {
-            Clipboard.setData(ClipboardData(text: snapshot.data ?? ''));
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                    AppLocalizations.of(context)!.generalCopiedToClipboard),
-              ),
-            );
+            FlutterClipboard.copy(snapshot.data ?? '').then((_) {
+              if (context.mounted) {
+                showClipboardSnackbar(
+                  context,
+                  AppLocalizations.of(context)!.generalCopiedToClipboard,
+                );
+              }
+            });
           },
         );
       }

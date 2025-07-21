@@ -2,6 +2,8 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
 
 class ClanSearchResultTile extends StatefulWidget {
   final dynamic clan;
@@ -35,11 +37,21 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
               );
             },
           );
-          // Clan clanInfo = await ClanService().fetchClanAndWarInfo(widget.clan['tag']);
-          navigator.pop();
-          /*navigator.push(
-            MaterialPageRoute(builder: (context) => ClanInfoScreen(clanInfo: clanInfo, discordUser: widget.user)),
-          );*/
+          
+          try {
+            final clanInfo = await ClanService().getClanAndWarData(widget.clan['tag']);
+            navigator.pop();
+            navigator.push(
+              MaterialPageRoute(builder: (context) => ClanInfoScreen(clanInfo: clanInfo)),
+            );
+          } catch (e) {
+            navigator.pop();
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Failed to load clan data: ${e.toString()}')),
+              );
+            }
+          }
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),

@@ -10,13 +10,14 @@
   "loadingCapitalRaids": "Başkent baskınları yükleniyor...",
   "loadingAlmostReady": "Neredeyse hazır...",
   "accountVerificationTitle": "Hesabı Doğrula",
-  "accountVerificationMessage": "Bu hesabın sahibi olduğunuzu doğrulamak için API token'ınızı girin. Bunu Clash of Clans Ayarları > Diğer Ayarlar > API Token'da bulabilirsiniz.",
-  "accountVerified": "Hesap doğrulandı",
-  "accountNotVerified": "Hesap doğrulanmadı",
+  "accountVerified": "Doğrulandı",
+  "accountVerify": "Doğrula",
   "accountVerifyButton": "Doğrula",
   "accountVerificationSuccess": "Hesap başarıyla doğrulandı!",
   "generalRetry": "Yeniden dene",
+  "generalRetrying": "Yeniden deneniyor...",
   "generalTryAgain": "Tekrar dene",
+  "generalReset": "Sıfırla",
   "generalCancel": "İptal",
   "generalOk": "Tamam",
   "@generalOk": {
@@ -52,6 +53,8 @@
   "@generalAll": {
     "description": "all items"
   },
+  "generalOthers": "Others",
+  "generalCompleted": "completed",
   "generalTotal": "Toplam",
   "generalBest": "En İyi",
   "@generalBest": {
@@ -94,6 +97,137 @@
   },
   "generalWarning": "Uyarı",
   "generalNoDataAvailable": "Veri bulunamadı.",
+  "generalNoFilteredResults": "No results match your filters",
+  "@generalNoFilteredResults": {
+    "description": "Message when applied filters return no results"
+  },
+  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "@generalAdjustFilters": {
+    "description": "Suggestion when filters return no results"
+  },
+  "generalClearFilters": "Clear Filters",
+  "@generalClearFilters": {
+    "description": "Button text to clear all applied filters"
+  },
+  "presetsSaved": "Saved Presets",
+  "@presetsSaved": {
+    "description": "Header for saved filter presets section"
+  },
+  "presetsSave": "Save",
+  "@presetsSave": {
+    "description": "Button to save current filter as preset"
+  },
+  "presetsSaveTitle": "Save Filter Preset",
+  "@presetsSaveTitle": {
+    "description": "Title for save preset dialog"
+  },
+  "presetsName": "Preset Name",
+  "@presetsName": {
+    "description": "Label for preset name input"
+  },
+  "presetsNameHint": "Enter a name for this preset",
+  "@presetsNameHint": {
+    "description": "Hint text for preset name input"
+  },
+  "presetsSuggestions": "Suggestions:",
+  "@presetsSuggestions": {
+    "description": "Label for name suggestions section"
+  },
+  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "@presetsApplyFirst": {
+    "description": "Message when trying to save without active filters"
+  },
+  "presetsNameRequired": "Please enter a name",
+  "@presetsNameRequired": {
+    "description": "Error when preset name is empty"
+  },
+  "presetsNameExists": "A preset with this name already exists",
+  "@presetsNameExists": {
+    "description": "Error when preset name is duplicate"
+  },
+  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "@presetsSaveSuccess": {
+    "description": "Success message when preset is saved",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the saved preset"
+      }
+    }
+  },
+  "presetsSaveError": "Failed to save preset",
+  "@presetsSaveError": {
+    "description": "Error message when preset save fails"
+  },
+  "presetsApplied": "Applied preset \"{name}\"",
+  "@presetsApplied": {
+    "description": "Message when preset is applied",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the applied preset"
+      }
+    }
+  },
+  "presetsApply": "Apply Preset",
+  "@presetsApply": {
+    "description": "Context menu option to apply preset"
+  },
+  "presetsRename": "Rename",
+  "@presetsRename": {
+    "description": "Context menu option to rename preset"
+  },
+  "presetsDelete": "Delete",
+  "@presetsDelete": {
+    "description": "Context menu option to delete preset"
+  },
+  "presetsRenameTitle": "Rename Preset",
+  "@presetsRenameTitle": {
+    "description": "Title for rename preset dialog"
+  },
+  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "@presetsRenameSuccess": {
+    "description": "Success message when preset is renamed",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "New name of the preset"
+      }
+    }
+  },
+  "presetsRenameError": "Failed to rename preset",
+  "@presetsRenameError": {
+    "description": "Error message when preset rename fails"
+  },
+  "presetsDeleteTitle": "Delete Preset",
+  "@presetsDeleteTitle": {
+    "description": "Title for delete preset dialog"
+  },
+  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "@presetsDeleteConfirm": {
+    "description": "Confirmation message for preset deletion",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the preset to delete"
+      }
+    }
+  },
+  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "@presetsDeleteSuccess": {
+    "description": "Success message when preset is deleted",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the deleted preset"
+      }
+    }
+  },
+  "presetsDeleteError": "Failed to delete preset",
+  "@presetsDeleteError": {
+    "description": "Error message when preset deletion fails"
+  },
+  "generalCharts": "Charts",
   "authSignUp": "Kaydol",
   "authLogin": "Oturum aç",
   "authLogout": "Oturumu kapat",
@@ -109,14 +243,13 @@
   "authDiscordSignIn": "Discord ile giriş yap",
   "authDiscordContinue": "Discord ile Devam Et",
   "authDiscordDescription": "Verilerini ClashKing Bot ile senkronize et ve ClashKing'in tüm potansiyelini aç!",
-  "authEmailTitle": "E-posta",
-  "authEmail": "Email",
-  "authEmailHint": "Enter your email address",
+  "authEmail": "E-posta",
+  "authEmailHint": "E-posta adresinizi girin",
   "authEmailDescription": "Discord'a erişemiyorsan veya sadece uygulama özelliklerini tercih ediyorsan e-posta kullan",
   "authEmailRequired": "Lütfen e-postanı gir",
   "authEmailInvalid": "Lütfen geçerli bir e-posta gir",
   "authPasswordLabel": "Şifre",
-  "authPasswordHint": "Enter your password",
+  "authPasswordHint": "Şifrenizi girin ",
   "authPasswordConfirm": "Şifreyi Onayla",
   "authPasswordRequired": "Lütfen şifreni gir",
   "authPasswordConfirmRequired": "Lütfen şifreni onayla",
@@ -124,37 +257,37 @@
   "authPasswordTooShort": "Şifre en az 8 karakter olmalı",
   "authPasswordRequirements": "Şifre şunları içermeli: büyük harf, küçük harf, rakam ve özel karakter",
   "authPasswordForgot": "Şifreni mi unuttun?",
-  "authPasswordForgotDescription": "Enter your email address and we'll send you a 6-digit code to reset your password.",
-  "authPasswordResetSend": "Send Reset Code",
-  "authPasswordResetSent": "Code Sent!",
-  "authPasswordResetSentDescription": "We've sent a 6-digit reset code to your email address. Please check your inbox and use the code to reset your password.",
-  "authPasswordReset": "Reset Password",
-  "authPasswordResetDescription": "Enter your email, the 6-digit code from the email, and your new password below.",
-  "authPasswordNew": "New Password",
-  "authPasswordConfirmHint": "Re-enter your new password",
-  "authPasswordResetConfirm": "Reset Password",
-  "authPasswordResetSuccess": "Password reset successful! You can now log in.",
-  "authPasswordResetContinue": "Continue to Reset Password",
-  "authPasswordResetCode": "Reset Code",
-  "authPasswordResetCodeHint": "Enter the 6-digit code from your email",
-  "authPasswordResetCodeRequired": "Please enter the reset code",
-  "authPasswordResetCodeInvalid": "Please enter a valid 6-digit code",
-  "authBackToLogin": "Back to Login",
+  "authPasswordForgotDescription": "E-posta adresinizi girin, size şifrenizi sıfırlamak için 6 haneli bir kod gönderelim.",
+  "authPasswordResetSend": "Sıfırlama Kodunu Gönder",
+  "authPasswordResetSent": "Kod gönderildi!",
+  "authPasswordResetSentDescription": "E-posta adresinize 6 haneli bir sıfırlama kodu gönderdik. Lütfen gelen kutunuzu kontrol edin ve şifrenizi sıfırlamak için kodu kullanın.",
+  "authPasswordReset": "Şifreyi Sıfırla",
+  "authPasswordResetDescription": "E-postanızı, e-postadaki 6 haneli kodu ve yeni şifrenizi aşağıya girin.",
+  "authPasswordNew": "Yeni Şifre",
+  "authPasswordConfirmHint": "Yeni şifrenizi tekrar girin",
+  "authPasswordResetConfirm": "Şifreyi Sıfırla",
+  "authPasswordResetSuccess": "Şifre başarılı bir şekilde sıfırlandı. Giriş yapabilirsiniz.",
+  "authPasswordResetContinue": "Şifreyi Sıfırlamaya Devam Et",
+  "authPasswordResetCode": "Sıfırlama Kodu",
+  "authPasswordResetCodeHint": "E-postanızdaki 6 haneli kodu girin",
+  "authPasswordResetCodeRequired": "Lütfen sıfırlama kodunu girin",
+  "authPasswordResetCodeInvalid": "Lütfen geçerli bir 6 haneli kod girin",
+  "authBackToLogin": "Giriş sayfasına dön",
   "authUsernameLabel": "Kullanıcı Adı",
   "authUsernameRequired": "Lütfen bir kullanıcı adı girin",
   "authUsernameTooShort": "Kullanıcı adı en az 3 karakter olmalı",
   "authErrorConnection": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.",
   "authErrorConnectionRelaunch": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve uygulamayı yeniden başlatın.",
-  "authErrorEmailAlreadyRegistered": "This email is already registered. Please try logging in instead.",
-  "authErrorEmailAlreadyPending": "A verification email was already sent to this address. Please check your email or try resending.",
-  "authErrorEmailInvalidFormat": "Please enter a valid email address.",
-  "authErrorPasswordWeak": "Password is too weak. Please use a stronger password.",
-  "authErrorUsernameInvalid": "Username is invalid. Please use only letters, numbers, and underscores.",
-  "authErrorRegistrationFailed": "Registration failed. Please try again later.",
-  "authErrorEmailSendFailed": "Failed to send verification email. Please try again later.",
-  "authErrorRateLimited": "Too many attempts. Please wait a moment and try again.",
-  "authErrorServerUnavailable": "Server is temporarily unavailable. Please try again later.",
-  "authAccountManagement": "Hesap Yönetimi",
+  "authErrorEmailAlreadyRegistered": "Bu e-posta zaten kayıtlı. Lütfen giriş yapmayı deneyin.",
+  "authErrorEmailAlreadyPending": "Bu adrese bir doğrulama e-postası zaten gönderildi. Lütfen e-postanızı kontrol edin veya tekrar göndermeyi deneyin.",
+  "authErrorEmailInvalidFormat": "Lütfen geçerli bir e-posta adresi girin.",
+  "authErrorPasswordWeak": "Şifre çok zayıf. Lütfen daha güçlü bir şifre kullanın.",
+  "authErrorUsernameInvalid": "Kullanıcı adı geçersiz. Lütfen yalnızca harf, rakam ve alt çizgi kullanın.",
+  "authErrorRegistrationFailed": "Kayıt işlemi başarısız, lütfen daha sonra tekrar deneyin.",
+  "authErrorEmailSendFailed": "Doğrulama e-postası gönderilemedi. Lütfen daha sonra tekrar deneyin.",
+  "authErrorRateLimited": "Çok fazla giriş denemesi. Lütfen biraz bekleyip tekrar deneyin.",
+  "authErrorServerUnavailable": "Hizmet geçici olarak kullanılamıyor. Lütfen daha sonra tekrar deneyin.",
+  "authAccountManagement": "Clash of Clans hesaplarınızı buradan ekleyin, kaldırın ve yeniden sıralayın. Tüm özelliklere erişmek için hesaplarınızı bir jetonla doğrulayın.",
   "authAccountConnected": "Bağlı Hesaplar",
   "authAccountConnectedStatus": "Bağlı",
   "authAccountNotConnected": "Bağlı değil",
@@ -163,19 +296,19 @@
   "authAccountLinkEmail": "E-posta Hesabını Bağla",
   "authAccountAddEmailAuth": "Ek güvenlik için hesabına e-posta ve şifre kimlik doğrulaması ekle.",
   "authAccountEmailLinkedSuccess": "E-posta hesabı başarıyla bağlandı!",
-  "authEmailVerificationTitle": "Verify Email",
-  "authEmailVerificationCheckEmail": "Check Your Email",
-  "authEmailVerificationSentTo": "We've sent a verification email to:",
-  "authEmailVerificationResend": "Resend Verification Email",
-  "authEmailVerificationResendSuccess": "Verification email resent successfully! Please check your email.",
-  "authEmailVerificationBackToLogin": "Back to Login",
-  "authEmailVerificationExpired": "Verification expired. Please register again.",
-  "authEmailVerificationAlreadyVerified": "This email is already verified. Please try logging in instead.",
-  "authEmailVerificationNoToken": "No pending verification found. Please register first.",
-  "authEmailVerificationVerifying": "Verifying your email...",
-  "authEmailVerificationCodeInstructions": "Enter the 6-digit code sent to your email:",
-  "authEmailVerificationCodeRequired": "Please enter the 6-digit verification code",
-  "authEmailVerificationVerify": "Verify Code",
+  "authEmailVerificationTitle": "E-postayı Doğrula",
+  "authEmailVerificationCheckEmail": "E-postanızı Kontrol Edin",
+  "authEmailVerificationSentTo": "Şu adrese doğrulama e-postası gönderdik:",
+  "authEmailVerificationResend": "Doğrulama e-postasını tekrar gönder",
+  "authEmailVerificationResendSuccess": "Doğrulama e-postası başarıyla tekrar gönderildi! Lütfen e-postanızı kontrol edin.",
+  "authEmailVerificationBackToLogin": "Giriş sayfasına dön",
+  "authEmailVerificationExpired": "Doğrulama süresi doldu. Lütfen tekrar kayıt olun.",
+  "authEmailVerificationAlreadyVerified": "Bu e-posta zaten doğrulandı. Lütfen bunun yerine giriş yapmayı deneyin.",
+  "authEmailVerificationNoToken": "Bekleyen doğrulama bulunamadı. Lütfen önce kayıt olun.",
+  "authEmailVerificationVerifying": "E-postanız doğrulanıyor...",
+  "authEmailVerificationCodeInstructions": "E-postanıza gönderilen 6 haneli kodu girin:",
+  "authEmailVerificationCodeRequired": "Lütfen 6 haneli doğrulama kodunu girin",
+  "authEmailVerificationVerify": "Doğrulama Kodu",
   "helpTitle": "Yardıma mı ihtiyacın var?",
   "helpJoinDiscord": "Discord'a Katıl",
   "helpEmailUs": "Bize E-posta Gönder",
@@ -186,19 +319,22 @@
   "accountsPlayerTag": "Oyuncu Etiketi (#ABC123)",
   "accountsEnterPlayerTag": "Bir oyuncu etiketi girin",
   "accountsAdd": "Hesap ekle",
-  "accountsDelete": "Hesabı sil",
+  "accountsAddInstruction": "Hesabınızı eklemek için + düğmesine dokunun",
   "accountsApiToken": "Hesap API Tokeni",
-  "accountsEnterApiToken": "Lütfen hesabınızın API token'ını girin ve sizin olduğunu doğrulayın. Bunu Clash of Clans Ayarları > Diğer Ayarlar > API Token'ında bulabilirsiniz.",
+  "accountsEnterApiToken": "Hesabınızın size ait olduğunu onaylamak için lütfen hesap API jetonunu girin. Bunu Clash of Clans'ta bulabilirsiniz:",
+  "accountsApiTokenLocation": "Ayarlar > Diğer Ayarlar > API Simgesi",
+  "accountsOpenMoreSettings": "Daha Fazla Ayarı Aç",
   "accountsFillAllFields": "Lütfen tüm alanları doldur.",
   "accountsErrorTagNotExists": "Girilen oyuncu etiketi mevcut değil.",
   "accountsErrorAlreadyLinked": "Oyuncu etiketi zaten birine bağlı.",
   "accountsErrorAlreadyLinkedToYou": "Oyuncu etiketi zaten size bağlı.",
   "accountsErrorWrongApiToken": "Girilen API belirteci yanlış",
   "accountsErrorFailedToAdd": "Hesap eklenemedi. Lütfen daha sonra tekrar dene.",
-  "accountsErrorFailedToDelete": "Bağlantı silinemedi. Lütfen daha sonra tekrar deneyin.",
   "accountsErrorFailedToUpdateOrder": "Hesap sırası güncellenemedi.",
   "errorTitle": "Ops! Sunucularımız yüzüne bir ateş topu almış olabilir! İyileştirme büyüsü yapıyoruz... Birazdan tekrar dene.",
   "errorSubtitle": "Sorun devam ederse, bunun farkında olup olmadığımızı görmek için Discord Sunucumuzu kontrol et.",
+  "errorNetworkTitle": "Bağlantı sorunu",
+  "errorNetworkMessage": "Sunucularımıza bağlanmada sorun yaşıyoruz. Bu sorun internet bağlantınızdan veya tarafımızdaki bir sorundan kaynaklanıyor olabilir. Lütfen bağlantınızı kontrol edip tekrar deneyin.",
   "errorLoadingVersion": "Sürüm yüklenirken hata oluştu",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
@@ -265,6 +401,14 @@
       },
       "league": {
         "type": "String"
+      }
+    }
+  },
+  "playerTrophiesUnrankedDescription": "{trophies} kupanız var. Hiçbir ligde sıralamanız yok.",
+  "@playerTrophiesUnrankedDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
       }
     }
   },
@@ -337,7 +481,7 @@
   "gameClanGames": "Klan Oyunları",
   "gameSeasonPass": "Sezon Bileti",
   "gameCreatorCode": "İçerik Üretici Kodu: ClashKing",
-  "gameCreatorCodeDescription": "Bilgi için dokunun • Bizi ücretsiz destekleyin!",
+  "gameCreatorCodeDescription": "Bizi ücretsiz destekleyin!",
   "gameCreatorCodeDialogTitle": "ClashKing'i destekleyin",
   "gameCreatorCodeDialogDescription": "Yaratıcı kodumuzu kullandığınızda, geliştirmeyi finanse etmeye yardımcı olur, uygulamayı ve botu herkes için ücretsiz tutar ve yeni özelliklerin eklenmesini desteklersiniz.\n\nOyun içi satın alımlarınızın %5'ini size hiçbir ek ücret ödemeden alırız — herhangi bir Supercell oyununun mağazasına \"ClashKing\" yazmanız yeterlidir.\n\nDesteğiniz için teşekkür ederiz!",
   "gameCreatorCodeDialogButton": "Üretici Kodunu Kullan",
@@ -852,7 +996,7 @@
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
-        "type": "double"
+        "type": "String"
       }
     }
   },
@@ -1001,6 +1145,15 @@
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
+  "warStatusMissedInfo": "Missed: {number}",
+  "@warStatusMissedInfo": {
+    "description": "Number of missed attacks",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warAbbreviationAvg": "Ort",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
@@ -1067,7 +1220,6 @@
   "joinLeaveTitle": "Katılma/Ayrılma Kayıtları (Mevcut Sezon)",
   "joinLeaveJoin": "Katıl",
   "joinLeaveLeave": "Ayrıl",
-  "joinLeaveReset": "Sıfırla",
   "joinLeaveJoins": "Katılımlar",
   "joinLeaveLeaves": "Ayrılmalar",
   "joinLeaveUniquePlayers": "Benzersiz Oyuncular",
@@ -1219,22 +1371,283 @@
   "faqSupportWorkAnswer": "Bizi desteklemenin birkaç yolu var:",
   "faqUseCodeClashKing": "\"ClashKing\" kodunu kullanın",
   "faqSupportUsOnPatreon": "Bizi Patreon’da Destekleyin",
-  "faqShareTheApp": "Uygulamayı arkadaşlarınızla paylaşın",
   "faqRateTheApp": "Uygulamayı mağazada derecelendirin",
-  "faqHelpUsTranslate": "Uygulamayı çevirmemize yardım edin",
-  "faqHowToInviteTheBot": "Botunuzu Discord Sunucuma nasıl davet edebilirim?",
-  "faqHowToInviteTheBotAnswer": "Aşağıdaki butona tıklayarak botumuzu sunucunuza davet edebilirsiniz. Botu eklemek için \"Sunucuyu Yönet\" iznine ihtiyacınız olacak.",
-  "faqInviteTheBot": "ClashKing Botunu Davet Et",
+  "faqWhatCanBotDo": "ClashKing Discord botu neler yapabilir?",
+  "faqWhatCanBotDoAnswer": "ClashKing Discord botu, kapsamlı takip araçları, otomatik bildirimler ve uygulamayla kusursuz entegrasyonuyla klanınızı doğrudan Discord üzerinden yönetmenize yardımcı olur. Bağlantıda kalmak ve düzenli kalmak isteyen klan liderleri ve üyeleri için tasarlanmıştır.",
+  "faqInviteBotToServer": "Botu Sunucuya Davet Et",
+  "faqBotFeatureTracking": "Oyuncu ve Klan Takibi",
+  "faqBotFeatureTrackingDesc": "Gerçek zamanlı güncellemelerle birden fazla klan ve oyuncu ekleyin ve izleyin",
+  "faqBotFeatureWars": "Savaş Yönetimi",
+  "faqBotFeatureWarsDesc": "Savaş performansını takip edin, saldırıları analiz edin ve savaş bildirimleri alın",
+  "faqBotFeatureNotifications": "Akıllı Bildirimler",
+  "faqBotFeatureNotificationsDesc": "Bağışlar, savaş saldırıları ve önemli klan etkinlikleri hakkında uyarılar alın",
+  "faqBotFeatureCommands": "Güçlü Komutlar",
+  "faqBotFeatureCommandsDesc": "Oyuncu istatistiklerine, savaş bilgilerine ve daha fazlasına hızlı bir şekilde erişmek için eğik çizgi komutlarını kullanın",
   "faqNeedHelp": "Yardıma ihtiyacım var veya bir öneride bulunmak istiyorum. Sizinle nasıl iletişime geçebilirim?",
   "faqNeedHelpAnswer": "Yardım istemek veya geri bildirim sağlamak için Discord Sunucumuza katılabilir veya devs@clashk.ing adresine e-posta gönderebilirsiniz. Lütfen yalnızca İngilizce veya Fransızca yazın.",
   "faqSendEmail": "E-posta gönderin",
   "faqJoinDiscord": "Discord Sunucumuza Katılın",
   "faqCannotOpenMailClient": "Bazı nedenlerden dolayı posta istemcinizi açamadık. E-posta adresini sizin için kopyaladık. Bir e-posta yazıp adresi alıcı alanına yapıştırabilirsiniz.",
+  "faqTroubleshooting": "Sorun Giderme",
+  "faqTroubleshootingDataTitle": "Verilerim neden senkronize olmuyor?",
+  "faqTroubleshootingDataDescription": "Oyuncu veya klan verileri güncelliğini yitirmiş görünüyor",
+  "faqTroubleshootingDataSolution1": "Sayfayı yenilemek için aşağı çekin",
+  "faqTroubleshootingDataSolution2": "Klanınızın takip edilip edilmediğini kontrol edin (yukarıya bakın)",
+  "faqTroubleshootingDataSolution3": "Birkaç dakika bekleyin ve tekrar deneyin: API'nin güncellenmesi biraz zaman alabilir",
+  "faqTroubleshootingCrashTitle": "Uygulama neden çöküyor?",
+  "faqTroubleshootingCrashDescription": "Uygulama beklenmedik şekilde kapanıyor veya donuyor",
+  "faqTroubleshootingCrashSolution1": "Uygulamayı kapatın ve yeniden başlatın",
+  "faqTroubleshootingCrashSolution2": "Uygulamayı en son sürüme güncelleyin",
+  "faqTroubleshootingCrashSolution3": "Uygulama önbelleğini ve verilerini temizleyin (Android) veya uygulamayı yeniden yükleyin",
+  "faqTroubleshootingCrashSolution4": "Cihaz depolama alanını boşaltın",
+  "faqContactSupport": "Sorun devam ederse destek ekibiyle iletişime geçin (son bölüme bakın)",
+  "faqTroubleshootingAccountTitle": "Hesabımı neden doğrulayamıyorum?",
+  "faqTroubleshootingAccountDescription": "Clash of Clans hesabınızı bağlamada sorunlar",
+  "faqTroubleshootingAccountSolution1": "# ile başlayan doğru oyuncu etiketini kullandığınızdan emin olun",
+  "faqTroubleshootingAccountSolution2": "Hesap zaten bağlı görünüyorsa, Clash of Clans ayarlarından API belirtecini kullanın",
+  "faqTroubleshootingSolutions": "Çözümler:",
+  "faqWhatIsClashKingProject": "ClashKing projesi nedir?",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing, topluluk için tutkulu oyuncular tarafından oluşturulmuş, açık kaynaklı bir Clash of Clans istatistikleri ve klan yönetimi projesidir. Oyuna olan sevgimizle, tam zamanlı işlerimizin yanı sıra bir yan proje olarak geliştiriyoruz. En üst düzey Clash of Clans deneyimini sunmak için birlikte çalışan bir mobil uygulama, Discord botu ve ücretsiz API sunuyoruz. Proje tamamen kullanıcı bağışları ve Supercell Creator kod kullanımıyla finanse ediliyor - reklam yok, premium özellik yok!",
+  "faqViewOnGitHub": "GitHub'da görüntüle",
+  "faqFeaturesGuide": "ClashKing uygulaması neler yapabilir?",
+  "faqFeaturesGuideDescription": "Clash of Clans deneyiminizi bir üst seviyeye taşıyın! ClashKing uygulaması, tüm istatistiklerinize ve klan verilerinize hızlı ve güzel bir erişim sağlar. Discord'u olmayan ve şık bir mobil deneyimi tercih eden oyuncular için mükemmeldir.",
+  "faqAppDevelopmentNotice": "Uygulamayı daha da iyi hale getirmek için aktif olarak yeni özellikler geliştiriyoruz. Geri bildirimleriniz geliştirmemize yardımcı oluyor!",
+  "faqFeaturesPlayerTitle": "Oyuncu İstatistikleri",
+  "faqFeaturesPlayerDescription": "İlerlemenizi, başarılarınızı ve efsane lig performansınızı takip edin",
+  "faqFeaturesClanTitle": "Klan Yönetimi",
+  "faqFeaturesClanDescription": "Klan üyelerini, bağışları ve genel klan sağlığını izleyin",
+  "faqFeaturesWarTitle": "Savaş Takibi",
+  "faqFeaturesWarDescription": "Savaş performansını, saldırı stratejilerini ve kazanma oranlarını analiz edin",
+  "faqFeaturesLegendsTitle": "Veri yanlış mı?",
+  "faqFeaturesLegendsDescription": "Günlük kupa takibi ve sezon sonu istatistikleri",
+  "faqFeaturesCwlTitle": "KSL Analitiği",
+  "faqFeaturesCwlDescription": "Klan Savaş Ligi performansı ve üye katkıları",
+  "faqSearchHint": "SSS'de ara...",
+  "faqSectionGettingStarted": "Başlarken ve Hakkında",
+  "faqSectionTroubleshooting": "Sorun Giderme",
+  "faqSectionSupportAndContact": "Destek & İletişim",
+  "faqTranslationIssue": "Çeviri eksik veya hatalı mı?",
+  "faqTranslationIssueAnswer": "Çeviriler sizin gibi uygulama kullanıcıları tarafından yapılır! Biz (geliştiriciler) yalnızca Fransızca ve İngilizce çeviriler sunuyoruz. Eksik veya hatalı çeviriler bulursanız, bunları iyileştirmemize yardımcı olabilirsiniz. Bize yardımcı olmak isterseniz, Discord üzerinden veya e-posta yoluyla bizimle iletişime geçmekten çekinmeyin. Çevirmenler için özel bir Discord kanalımız var; burada sorularınızı sorabilir ve yardım alabilirsiniz.",
+  "faqWaysToSupport": "Bizi desteklemenin yolları:",
   "translationHelpUsTranslate": "Çeviriye yardımcı olun",
   "translationSuggestFeatures": "Özellik önerin",
   "translationThankYou": "Teşekkürler!",
   "translationThankYouContent": "Bu uygulamayı dünya çapında daha fazla insana ulaştırmamıza yardımcı olan tüm harika çevirmenlerimize çok teşekkür ederiz!",
   "translationHelpTranslateContent": "Uygulamayı Crowdin'de çevirmemize yardımcı olabilirsiniz. Diliniz Crowdin'de mevcut değilse, Discord Sunucumuzda talep etmekten çekinmeyin. Yardımınız için çok teşekkür ederim!",
   "translationHelpTranslateButton": "Crowdin'de Çeviriye Yardım Edin",
-  "translationCurrentTranslators": "Güncel Tercümanlar"
+  "translationCurrentTranslators": "Güncel Tercümanlar",
+  "filtersTimeFilters": "Time Filters",
+  "@filtersTimeFilters": {
+    "description": "Time-based filters section title"
+  },
+  "filtersWarSettings": "War Settings",
+  "@filtersWarSettings": {
+    "description": "War settings filters section title"
+  },
+  "filtersPerformance": "Performance",
+  "@filtersPerformance": {
+    "description": "Performance filters section title"
+  },
+  "filtersAdvanced": "Advanced",
+  "@filtersAdvanced": {
+    "description": "Advanced filters section title"
+  },
+  "filtersNoFiltersActive": "No filters active",
+  "@filtersNoFiltersActive": {
+    "description": "Text shown when no filters are applied in a section"
+  },
+  "filtersShowingDefaultData": "Showing last {count} wars (default)",
+  "@filtersShowingDefaultData": {
+    "description": "Text shown in filter bandeau when no filters are applied",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of wars being shown"
+      }
+    }
+  },
+  "filtersQuickFilters": "Quick Filters",
+  "@filtersQuickFilters": {
+    "description": "Quick preset filters section title"
+  },
+  "filtersLast30Days": "Last 30 Days",
+  "@filtersLast30Days": {
+    "description": "Preset filter for last 30 days"
+  },
+  "filters3StarOnly": "3-Star Only",
+  "@filters3StarOnly": {
+    "description": "Preset filter for 3-star attacks only"
+  },
+  "filtersCwlWars": "CWL Wars",
+  "@filtersCwlWars": {
+    "description": "Preset filter for CWL wars only"
+  },
+  "filtersFreshAttacks": "Fresh Attacks",
+  "@filtersFreshAttacks": {
+    "description": "Preset filter for fresh attacks only"
+  },
+  "filtersSeason": "Season",
+  "@filtersSeason": {
+    "description": "Season filter subsection title"
+  },
+  "filtersDateRange": "Date Range",
+  "@filtersDateRange": {
+    "description": "Date range filter subsection title"
+  },
+  "filtersWarType": "War Type",
+  "@filtersWarType": {
+    "description": "War type filter subsection title"
+  },
+  "filtersTownHall": "Town Hall",
+  "@filtersTownHall": {
+    "description": "Town hall filter subsection title"
+  },
+  "filtersAttackerTh": "Attacker TH",
+  "@filtersAttackerTh": {
+    "description": "Attacker town hall filter label"
+  },
+  "filtersDefenderTh": "Defender TH",
+  "@filtersDefenderTh": {
+    "description": "Defender town hall filter label"
+  },
+  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "@filtersSameTownHallOnly": {
+    "description": "Same town hall filter option"
+  },
+  "filtersStars": "Yıldızlar",
+  "@filtersStars": {
+    "description": "Stars filter subsection title"
+  },
+  "filtersDestructionPercentage": "Destruction Percentage",
+  "@filtersDestructionPercentage": {
+    "description": "Destruction percentage filter subsection title"
+  },
+  "filtersMapPosition": "Harita Pozisyonu",
+  "@filtersMapPosition": {
+    "description": "Map position filter subsection title"
+  },
+  "filtersOptions": "Options",
+  "@filtersOptions": {
+    "description": "Options filter subsection title"
+  },
+  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "@filtersFreshAttacksOnly": {
+    "description": "Fresh attacks only filter option"
+  },
+  "filtersResultLimit": "Result Limit",
+  "@filtersResultLimit": {
+    "description": "Result limit filter label"
+  },
+  "filtersMinPosition": "Min Position",
+  "@filtersMinPosition": {
+    "description": "Minimum map position filter label"
+  },
+  "filtersMaxPosition": "Max Position",
+  "@filtersMaxPosition": {
+    "description": "Maximum map position filter label"
+  },
+  "filtersStartDate": "Start Date",
+  "@filtersStartDate": {
+    "description": "Start date filter label"
+  },
+  "filtersEndDate": "End Date",
+  "@filtersEndDate": {
+    "description": "End date filter label"
+  },
+  "filtersNotSet": "Ayarlanmamış",
+  "@filtersNotSet": {
+    "description": "Text shown when date is not set"
+  },
+  "filtersYear": "Year",
+  "@filtersYear": {
+    "description": "Year selector label"
+  },
+  "filtersMonth": "Month",
+  "@filtersMonth": {
+    "description": "Month selector label"
+  },
+  "filtersSelectYear": "Select Year",
+  "@filtersSelectYear": {
+    "description": "Year picker dialog title"
+  },
+  "filtersAllWars": "All Wars",
+  "@filtersAllWars": {
+    "description": "All wars filter option"
+  },
+  "filtersFriendlyWars": "Friendly Wars",
+  "@filtersFriendlyWars": {
+    "description": "Friendly wars filter option"
+  },
+  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "@chartsAttackPerformance": {
+    "description": "Attack performance chart title"
+  },
+  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "@chartsDefensePerformance": {
+    "description": "Defense performance chart title"
+  },
+  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "@chartsRowsYourTh": {
+    "description": "Heatmap chart axis explanation"
+  },
+  "chartsPoor": "Poor",
+  "@chartsPoor": {
+    "description": "Poor performance legend label"
+  },
+  "chartsAverage": "Ortalama",
+  "@chartsAverage": {
+    "description": "Average performance legend label"
+  },
+  "chartsGood": "Good",
+  "@chartsGood": {
+    "description": "Good performance legend label"
+  },
+  "chartsExcellent": "Excellent",
+  "@chartsExcellent": {
+    "description": "Excellent performance legend label"
+  },
+  "chartsNoData": "N/A",
+  "@chartsNoData": {
+    "description": "No data available indicator"
+  },
+  "performanceAnalysisSuggestions": "Performance Insights",
+  "@performanceAnalysisSuggestions": {
+    "description": "Section title for AI-generated performance analysis suggestions"
+  },
+  "performanceAnalysisTooltip": "Smart filter suggestions based on your war performance to help identify areas for improvement",
+  "@performanceAnalysisTooltip": {
+    "description": "Tooltip explaining what performance analysis suggestions are"
+  },
+  "generalExport": "Export",
+  "@generalExport": {
+    "description": "Export button label"
+  },
+  "exportTitle": "Export War Statistics",
+  "@exportTitle": {
+    "description": "Title for export bottom sheet dialog"
+  },
+  "exportSuccess": "Export successful!",
+  "@exportSuccess": {
+    "description": "Success message for completed export"
+  },
+  "exportOpen": "Open",
+  "@exportOpen": {
+    "description": "Button label to open exported file"
+  },
+  "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
+  "@exportDialogDesc": {
+    "description": "Description text for export dialog"
+  },
+  "exportGenerating": "Generating export...",
+  "@exportGenerating": {
+    "description": "Loading message while generating export"
+  },
+  "exportClanWarStatsComingSoon": "Export feature coming soon for clan war stats",
+  "@exportClanWarStatsComingSoon": {
+    "description": "Message shown when clan war stats export is not yet available"
+  },
+  "filtersNoneApplied": "No filters applied",
+  "@filtersNoneApplied": {
+    "description": "Text shown when no filters are active"
+  }
 }

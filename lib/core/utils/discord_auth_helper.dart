@@ -50,7 +50,7 @@ class DiscordAuthHelper {
             : null;
       }
     } catch (e) {
-      DebugUtils.debugError('❌ Error getting Discord auth code: $e');
+      DebugUtils.debugError(' Error getting Discord auth code: $e');
       return null;
     }
   }
