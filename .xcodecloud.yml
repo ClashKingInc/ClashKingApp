@@ -3,23 +3,19 @@ name: CKBuild
 shared:
   environment:
     variables:
-      FLUTTER_VERSION: "3.32.6"
+      FLUTTER_VERSION: "3.32.0"
 
 targets:
   - name: Runner
     platform: iOS
 
     scripts:
-      - name: Install Flutter & Dependencies
+      - name: Set up Flutter and CocoaPods
         script: |
           flutter pub get
           cd ios
           pod install
           cd ..
-
-      - name: Build iOS
-        script: |
-          flutter build ios --release
 
     build:
       config: Release
