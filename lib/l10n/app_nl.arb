@@ -97,27 +97,27 @@
   },
   "generalWarning": "Waarschuwing",
   "generalNoDataAvailable": "Geen gegevens beschikbaar.",
-  "generalNoFilteredResults": "No results match your filters",
+  "generalNoFilteredResults": "Geen resultaten gevonden voor je filters",
   "@generalNoFilteredResults": {
     "description": "Message when applied filters return no results"
   },
-  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "generalAdjustFilters": "Probeer je filtercriteria aan te passen of verwijder de filters om alle gegevens te bekijken.",
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
-  "generalClearFilters": "Clear Filters",
+  "generalClearFilters": "Filters wissen",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
   },
-  "presetsSaved": "Saved Presets",
+  "presetsSaved": "Opgeslagen voorkeursinstellingen",
   "@presetsSaved": {
     "description": "Header for saved filter presets section"
   },
-  "presetsSave": "Save",
+  "presetsSave": "Opslaan",
   "@presetsSave": {
     "description": "Button to save current filter as preset"
   },
-  "presetsSaveTitle": "Save Filter Preset",
+  "presetsSaveTitle": "Filter voorkeurinstelling opslaan",
   "@presetsSaveTitle": {
     "description": "Title for save preset dialog"
   },
@@ -177,7 +177,7 @@
   "@presetsRename": {
     "description": "Context menu option to rename preset"
   },
-  "presetsDelete": "Delete",
+  "presetsDelete": "Verwijderen",
   "@presetsDelete": {
     "description": "Context menu option to delete preset"
   },
@@ -1452,11 +1452,11 @@
   "@filtersAdvanced": {
     "description": "Advanced filters section title"
   },
-  "filtersNoFiltersActive": "No filters active",
+  "filtersNoFiltersActive": "Geen filters actief",
   "@filtersNoFiltersActive": {
     "description": "Text shown when no filters are applied in a section"
   },
-  "filtersShowingDefaultData": "Showing last {count} wars (default)",
+  "filtersShowingDefaultData": "Toon de laatste {count} oorlogen (standaard)",
   "@filtersShowingDefaultData": {
     "description": "Text shown in filter bandeau when no filters are applied",
     "placeholders": {
@@ -1466,19 +1466,19 @@
       }
     }
   },
-  "filtersQuickFilters": "Quick Filters",
+  "filtersQuickFilters": "Snelle filters",
   "@filtersQuickFilters": {
     "description": "Quick preset filters section title"
   },
-  "filtersLast30Days": "Last 30 Days",
+  "filtersLast30Days": "Laatste 30 dagen",
   "@filtersLast30Days": {
     "description": "Preset filter for last 30 days"
   },
-  "filters3StarOnly": "3-Star Only",
+  "filters3StarOnly": "Alleen 3-sterren",
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersCwlWars": "CWL Wars",
+  "filtersCwlWars": "CWL oorlogen",
   "@filtersCwlWars": {
     "description": "Preset filter for CWL wars only"
   },
@@ -1486,7 +1486,7 @@
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
   },
-  "filtersSeason": "Season",
+  "filtersSeason": "Seizoen",
   "@filtersSeason": {
     "description": "Season filter subsection title"
   },
@@ -1526,7 +1526,7 @@
   "@filtersMapPosition": {
     "description": "Map position filter subsection title"
   },
-  "filtersOptions": "Options",
+  "filtersOptions": "Opties",
   "@filtersOptions": {
     "description": "Options filter subsection title"
   },
@@ -1602,31 +1602,31 @@
   "@chartsGood": {
     "description": "Good performance legend label"
   },
-  "chartsExcellent": "Excellent",
+  "chartsExcellent": "Uitstekend",
   "@chartsExcellent": {
     "description": "Excellent performance legend label"
   },
-  "chartsNoData": "N/A",
+  "chartsNoData": "N.v.t.",
   "@chartsNoData": {
     "description": "No data available indicator"
   },
-  "performanceAnalysisSuggestions": "Performance Insights",
+  "performanceAnalysisSuggestions": "Prestatie Inzichten",
   "@performanceAnalysisSuggestions": {
     "description": "Section title for AI-generated performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Smart filter suggestions based on your war performance to help identify areas for improvement",
+  "performanceAnalysisTooltip": "Slimme filtervoorstellen op basis van je oorlogsprestaties om verbeterpunten te ontdekken",
   "@performanceAnalysisTooltip": {
     "description": "Tooltip explaining what performance analysis suggestions are"
   },
-  "generalExport": "Export",
+  "generalExport": "Exporteer",
   "@generalExport": {
     "description": "Export button label"
   },
-  "exportTitle": "Export War Statistics",
+  "exportTitle": "Exporteer oorlogstatistieken",
   "@exportTitle": {
     "description": "Title for export bottom sheet dialog"
   },
-  "exportSuccess": "Export successful!",
+  "exportSuccess": "Exporteren geslaagd!",
   "@exportSuccess": {
     "description": "Success message for completed export"
   },
@@ -1634,19 +1634,19 @@
   "@exportOpen": {
     "description": "Button label to open exported file"
   },
-  "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
+  "exportDialogDesc": "Dit downloadt je oorlogstatistieken als een Excel-bestand met meerdere tabbladen, waaronder algemene statistieken, gedetailleerde aanvallen en stadhuis analyse.",
   "@exportDialogDesc": {
     "description": "Description text for export dialog"
   },
-  "exportGenerating": "Generating export...",
+  "exportGenerating": "Export wordt gegenereerd...",
   "@exportGenerating": {
     "description": "Loading message while generating export"
   },
-  "exportClanWarStatsComingSoon": "Export feature coming soon for clan war stats",
+  "exportClanWarStatsComingSoon": "Exportfunctie voor clanoorlogsstatistieken komt binnenkort",
   "@exportClanWarStatsComingSoon": {
     "description": "Message shown when clan war stats export is not yet available"
   },
-  "filtersNoneApplied": "No filters applied",
+  "filtersNoneApplied": "Geen filters toegepast",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   }
