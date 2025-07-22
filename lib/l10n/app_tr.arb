@@ -53,8 +53,8 @@
   "@generalAll": {
     "description": "all items"
   },
-  "generalOthers": "Others",
-  "generalCompleted": "completed",
+  "generalOthers": "Diğer",
+  "generalCompleted": "tamamlandı",
   "generalTotal": "Toplam",
   "generalBest": "En İyi",
   "@generalBest": {
@@ -97,55 +97,55 @@
   },
   "generalWarning": "Uyarı",
   "generalNoDataAvailable": "Veri bulunamadı.",
-  "generalNoFilteredResults": "No results match your filters",
+  "generalNoFilteredResults": "Filtrelerinize uyan hiçbir sonuç yok",
   "@generalNoFilteredResults": {
     "description": "Message when applied filters return no results"
   },
-  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "generalAdjustFilters": "Tüm verileri görmek için filtre ölçütlerinizi ayarlamayı veya filtreleri temizlemeyi deneyin.",
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
-  "generalClearFilters": "Clear Filters",
+  "generalClearFilters": "Filtreleri Temizle",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
   },
-  "presetsSaved": "Saved Presets",
+  "presetsSaved": "Kayıtlı Öntanımlar",
   "@presetsSaved": {
     "description": "Header for saved filter presets section"
   },
-  "presetsSave": "Save",
+  "presetsSave": "Kaydet",
   "@presetsSave": {
     "description": "Button to save current filter as preset"
   },
-  "presetsSaveTitle": "Save Filter Preset",
+  "presetsSaveTitle": "Filtre Ön Ayarını Kaydet",
   "@presetsSaveTitle": {
     "description": "Title for save preset dialog"
   },
-  "presetsName": "Preset Name",
+  "presetsName": "Ön Ayar Adı",
   "@presetsName": {
     "description": "Label for preset name input"
   },
-  "presetsNameHint": "Enter a name for this preset",
+  "presetsNameHint": "Ön ayar için bir ad gir:",
   "@presetsNameHint": {
     "description": "Hint text for preset name input"
   },
-  "presetsSuggestions": "Suggestions:",
+  "presetsSuggestions": "Öneriler:",
   "@presetsSuggestions": {
     "description": "Label for name suggestions section"
   },
-  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "presetsApplyFirst": "Ön ayar olarak kaydetmeden önce bazı filtreler uygulayın",
   "@presetsApplyFirst": {
     "description": "Message when trying to save without active filters"
   },
-  "presetsNameRequired": "Please enter a name",
+  "presetsNameRequired": "Lütfen bir ad yazın",
   "@presetsNameRequired": {
     "description": "Error when preset name is empty"
   },
-  "presetsNameExists": "A preset with this name already exists",
+  "presetsNameExists": "Bu isimde bir ön ayar zaten mevcut",
   "@presetsNameExists": {
     "description": "Error when preset name is duplicate"
   },
-  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "presetsSaveSuccess": "\"{name}\" ön ayarı başarıyla kaydedildi",
   "@presetsSaveSuccess": {
     "description": "Success message when preset is saved",
     "placeholders": {
@@ -155,11 +155,11 @@
       }
     }
   },
-  "presetsSaveError": "Failed to save preset",
+  "presetsSaveError": "Ön ayar kaydedilemedi",
   "@presetsSaveError": {
     "description": "Error message when preset save fails"
   },
-  "presetsApplied": "Applied preset \"{name}\"",
+  "presetsApplied": "\"{name}\" ön ayarı uygulandı",
   "@presetsApplied": {
     "description": "Message when preset is applied",
     "placeholders": {
@@ -169,23 +169,23 @@
       }
     }
   },
-  "presetsApply": "Apply Preset",
+  "presetsApply": "Ön Ayarı Uygula",
   "@presetsApply": {
     "description": "Context menu option to apply preset"
   },
-  "presetsRename": "Rename",
+  "presetsRename": "Yeniden adlandır",
   "@presetsRename": {
     "description": "Context menu option to rename preset"
   },
-  "presetsDelete": "Delete",
+  "presetsDelete": "Sil",
   "@presetsDelete": {
     "description": "Context menu option to delete preset"
   },
-  "presetsRenameTitle": "Rename Preset",
+  "presetsRenameTitle": "Ön Ayarı Yeniden Adlandır",
   "@presetsRenameTitle": {
     "description": "Title for rename preset dialog"
   },
-  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "presetsRenameSuccess": "Ön ayar \"{name}\" olarak yeniden adlandırıldı",
   "@presetsRenameSuccess": {
     "description": "Success message when preset is renamed",
     "placeholders": {
@@ -195,15 +195,15 @@
       }
     }
   },
-  "presetsRenameError": "Failed to rename preset",
+  "presetsRenameError": "Ön ayar yeniden adlandırılamadı",
   "@presetsRenameError": {
     "description": "Error message when preset rename fails"
   },
-  "presetsDeleteTitle": "Delete Preset",
+  "presetsDeleteTitle": "Ön Ayarı Sil",
   "@presetsDeleteTitle": {
     "description": "Title for delete preset dialog"
   },
-  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "presetsDeleteConfirm": "\"{name}\" adlı ön ayarı silmek istediğinizden emin misiniz?",
   "@presetsDeleteConfirm": {
     "description": "Confirmation message for preset deletion",
     "placeholders": {
@@ -213,7 +213,7 @@
       }
     }
   },
-  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "presetsDeleteSuccess": "Ön ayar \"{name}\" silindi",
   "@presetsDeleteSuccess": {
     "description": "Success message when preset is deleted",
     "placeholders": {
@@ -223,11 +223,11 @@
       }
     }
   },
-  "presetsDeleteError": "Failed to delete preset",
+  "presetsDeleteError": "Ön ayar silinemedi",
   "@presetsDeleteError": {
     "description": "Error message when preset deletion fails"
   },
-  "generalCharts": "Charts",
+  "generalCharts": "Grafikler",
   "authSignUp": "Kaydol",
   "authLogin": "Oturum aç",
   "authLogout": "Oturumu kapat",
@@ -1145,7 +1145,7 @@
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warStatusMissedInfo": "Missed: {number}",
+  "warStatusMissedInfo": "Kaçırılan: {number}",
   "@warStatusMissedInfo": {
     "description": "Number of missed attacks",
     "placeholders": {
@@ -1436,27 +1436,27 @@
   "translationHelpTranslateContent": "Uygulamayı Crowdin'de çevirmemize yardımcı olabilirsiniz. Diliniz Crowdin'de mevcut değilse, Discord Sunucumuzda talep etmekten çekinmeyin. Yardımınız için çok teşekkür ederim!",
   "translationHelpTranslateButton": "Crowdin'de Çeviriye Yardım Edin",
   "translationCurrentTranslators": "Güncel Tercümanlar",
-  "filtersTimeFilters": "Time Filters",
+  "filtersTimeFilters": "Zaman Filtreleri",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
   },
-  "filtersWarSettings": "War Settings",
+  "filtersWarSettings": "Savaş Ayarları",
   "@filtersWarSettings": {
     "description": "War settings filters section title"
   },
-  "filtersPerformance": "Performance",
+  "filtersPerformance": "Performans",
   "@filtersPerformance": {
     "description": "Performance filters section title"
   },
-  "filtersAdvanced": "Advanced",
+  "filtersAdvanced": "Gelişmiş",
   "@filtersAdvanced": {
     "description": "Advanced filters section title"
   },
-  "filtersNoFiltersActive": "No filters active",
+  "filtersNoFiltersActive": "Etkin filtre yok",
   "@filtersNoFiltersActive": {
     "description": "Text shown when no filters are applied in a section"
   },
-  "filtersShowingDefaultData": "Showing last {count} wars (default)",
+  "filtersShowingDefaultData": "Son {count} savaş gösteriliyor (varsayılan)",
   "@filtersShowingDefaultData": {
     "description": "Text shown in filter bandeau when no filters are applied",
     "placeholders": {
@@ -1466,51 +1466,51 @@
       }
     }
   },
-  "filtersQuickFilters": "Quick Filters",
+  "filtersQuickFilters": "Hızlı Filtreler",
   "@filtersQuickFilters": {
     "description": "Quick preset filters section title"
   },
-  "filtersLast30Days": "Last 30 Days",
+  "filtersLast30Days": "Son 30 Gün",
   "@filtersLast30Days": {
     "description": "Preset filter for last 30 days"
   },
-  "filters3StarOnly": "3-Star Only",
+  "filters3StarOnly": "Sadece 3 Yıldız",
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersCwlWars": "CWL Wars",
+  "filtersCwlWars": "KSL Savaşları",
   "@filtersCwlWars": {
     "description": "Preset filter for CWL wars only"
   },
-  "filtersFreshAttacks": "Fresh Attacks",
+  "filtersFreshAttacks": "Taze Saldırılar",
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
   },
-  "filtersSeason": "Season",
+  "filtersSeason": "Sezon",
   "@filtersSeason": {
     "description": "Season filter subsection title"
   },
-  "filtersDateRange": "Date Range",
+  "filtersDateRange": "Tarih Aralığı",
   "@filtersDateRange": {
     "description": "Date range filter subsection title"
   },
-  "filtersWarType": "War Type",
+  "filtersWarType": "Savaş Türü",
   "@filtersWarType": {
     "description": "War type filter subsection title"
   },
-  "filtersTownHall": "Town Hall",
+  "filtersTownHall": "Belediye Binası",
   "@filtersTownHall": {
     "description": "Town hall filter subsection title"
   },
-  "filtersAttackerTh": "Attacker TH",
+  "filtersAttackerTh": "Saldırgan BB",
   "@filtersAttackerTh": {
     "description": "Attacker town hall filter label"
   },
-  "filtersDefenderTh": "Defender TH",
+  "filtersDefenderTh": "Savunan BB",
   "@filtersDefenderTh": {
     "description": "Defender town hall filter label"
   },
-  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "filtersSameTownHallOnly": "Sadece Aynı Belediye Binası",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -1518,7 +1518,7 @@
   "@filtersStars": {
     "description": "Stars filter subsection title"
   },
-  "filtersDestructionPercentage": "Destruction Percentage",
+  "filtersDestructionPercentage": "Yıkım Yüzdesi",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
   },
@@ -1526,31 +1526,31 @@
   "@filtersMapPosition": {
     "description": "Map position filter subsection title"
   },
-  "filtersOptions": "Options",
+  "filtersOptions": "Seçenekler",
   "@filtersOptions": {
     "description": "Options filter subsection title"
   },
-  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "filtersFreshAttacksOnly": "Sadece Taze Saldırılar",
   "@filtersFreshAttacksOnly": {
     "description": "Fresh attacks only filter option"
   },
-  "filtersResultLimit": "Result Limit",
+  "filtersResultLimit": "Sonuç limiti",
   "@filtersResultLimit": {
     "description": "Result limit filter label"
   },
-  "filtersMinPosition": "Min Position",
+  "filtersMinPosition": "Minimum Pozisyon",
   "@filtersMinPosition": {
     "description": "Minimum map position filter label"
   },
-  "filtersMaxPosition": "Max Position",
+  "filtersMaxPosition": "Maksimum Pozisyon",
   "@filtersMaxPosition": {
     "description": "Maximum map position filter label"
   },
-  "filtersStartDate": "Start Date",
+  "filtersStartDate": "Başlangıç Tarihi",
   "@filtersStartDate": {
     "description": "Start date filter label"
   },
-  "filtersEndDate": "End Date",
+  "filtersEndDate": "Bitiş Tarihi",
   "@filtersEndDate": {
     "description": "End date filter label"
   },
@@ -1558,39 +1558,39 @@
   "@filtersNotSet": {
     "description": "Text shown when date is not set"
   },
-  "filtersYear": "Year",
+  "filtersYear": "Yıl",
   "@filtersYear": {
     "description": "Year selector label"
   },
-  "filtersMonth": "Month",
+  "filtersMonth": "Ay",
   "@filtersMonth": {
     "description": "Month selector label"
   },
-  "filtersSelectYear": "Select Year",
+  "filtersSelectYear": "Yıl Seçin",
   "@filtersSelectYear": {
     "description": "Year picker dialog title"
   },
-  "filtersAllWars": "All Wars",
+  "filtersAllWars": "Tüm Savaşlar",
   "@filtersAllWars": {
     "description": "All wars filter option"
   },
-  "filtersFriendlyWars": "Friendly Wars",
+  "filtersFriendlyWars": "Dostluk Savaşları",
   "@filtersFriendlyWars": {
     "description": "Friendly wars filter option"
   },
-  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "chartsAttackPerformance": "BB Seviyesine Göre Saldırı Performansı",
   "@chartsAttackPerformance": {
     "description": "Attack performance chart title"
   },
-  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "chartsDefensePerformance": "BB Seviyesine Göre Savunma Performansı",
   "@chartsDefensePerformance": {
     "description": "Defense performance chart title"
   },
-  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "chartsRowsYourTh": "Satırlar: Sizin BB | Sütunlar: Rakip BB",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
   },
-  "chartsPoor": "Poor",
+  "chartsPoor": "Zayıf",
   "@chartsPoor": {
     "description": "Poor performance legend label"
   },
@@ -1598,55 +1598,55 @@
   "@chartsAverage": {
     "description": "Average performance legend label"
   },
-  "chartsGood": "Good",
+  "chartsGood": "İyi",
   "@chartsGood": {
     "description": "Good performance legend label"
   },
-  "chartsExcellent": "Excellent",
+  "chartsExcellent": "Harika",
   "@chartsExcellent": {
     "description": "Excellent performance legend label"
   },
-  "chartsNoData": "N/A",
+  "chartsNoData": "Mevcut değil",
   "@chartsNoData": {
     "description": "No data available indicator"
   },
-  "performanceAnalysisSuggestions": "Performance Insights",
+  "performanceAnalysisSuggestions": "Performans Görüşleri",
   "@performanceAnalysisSuggestions": {
     "description": "Section title for AI-generated performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Smart filter suggestions based on your war performance to help identify areas for improvement",
+  "performanceAnalysisTooltip": "Savaş performansınıza dayalı akıllı filtre önerileri, iyileştirme alanlarını belirlemenize yardımcı olur",
   "@performanceAnalysisTooltip": {
     "description": "Tooltip explaining what performance analysis suggestions are"
   },
-  "generalExport": "Export",
+  "generalExport": "Dışa Aktar",
   "@generalExport": {
     "description": "Export button label"
   },
-  "exportTitle": "Export War Statistics",
+  "exportTitle": "Savaş İstatistiiklerini Dışa Aktar",
   "@exportTitle": {
     "description": "Title for export bottom sheet dialog"
   },
-  "exportSuccess": "Export successful!",
+  "exportSuccess": "Dışa aktarım başarılı!",
   "@exportSuccess": {
     "description": "Success message for completed export"
   },
-  "exportOpen": "Open",
+  "exportOpen": "Aç",
   "@exportOpen": {
     "description": "Button label to open exported file"
   },
-  "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
+  "exportDialogDesc": "Bu, genel istatistikler, detaylı saldırılar ve BB analizi dahil olmak üzere birden fazla sayfa içeren bir Excel dosyası olarak savaş istatistiklerinizi indirecektir.",
   "@exportDialogDesc": {
     "description": "Description text for export dialog"
   },
-  "exportGenerating": "Generating export...",
+  "exportGenerating": "Dışa aktarım oluşturuluyor...",
   "@exportGenerating": {
     "description": "Loading message while generating export"
   },
-  "exportClanWarStatsComingSoon": "Export feature coming soon for clan war stats",
+  "exportClanWarStatsComingSoon": "Klan savaş istatistikleri için yakında dışa aktarma özelliği geliyor",
   "@exportClanWarStatsComingSoon": {
     "description": "Message shown when clan war stats export is not yet available"
   },
-  "filtersNoneApplied": "No filters applied",
+  "filtersNoneApplied": "Hiçbir filtre uygulanmadı",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   }
