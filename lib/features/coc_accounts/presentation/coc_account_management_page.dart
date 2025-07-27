@@ -13,7 +13,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AddCocAccountPage extends StatefulWidget {
   @override
@@ -22,8 +21,6 @@ class AddCocAccountPage extends StatefulWidget {
 
 class AddCocAccountPageState extends State<AddCocAccountPage> {
   final TextEditingController _playerTagController = TextEditingController();
-  final TextEditingController _apiTokenController = TextEditingController();
-  bool _showApiTokenInput = false;
   bool _isAddingLoading = false;
   String _errorMessage = "";
   List<Map<String, dynamic>> _tempUserAccounts = [];
@@ -103,6 +100,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
 
     return Scaffold(
       appBar: CocAccountsAppBar(),
+      resizeToAvoidBottomInset: false,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -175,11 +173,12 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                         )
                                       : IconButton(
                                           icon: Icon(Icons.add_circle,
-                                              color: Theme.of(context).colorScheme.primary),
-                                          tooltip: AppLocalizations.of(context)!.accountsAdd,
-                                          onPressed: _showApiTokenInput
-                                              ? _submitApiToken
-                                              : _addAccount,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
+                                          tooltip: AppLocalizations.of(context)!
+                                              .accountsAdd,
+                                          onPressed: _addAccount,
                                         ),
                                 ),
                                 inputFormatters: [
@@ -194,117 +193,31 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                   style: TextStyle(color: Colors.red),
                                 ),
                               ],
-                              if (_showApiTokenInput) ...[
-                                SizedBox(height: 16),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)!.accountsEnterApiToken,
-                                      style: Theme.of(context).textTheme.bodyMedium,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.info_outline,
-                                          size: 16,
-                                          color: Theme.of(context).colorScheme.primary,
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          AppLocalizations.of(context)!.accountsApiTokenLocation,
-                                          style: Theme.of(context).textTheme.bodySmall,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    InkWell(
-                                      onTap: () async {
-                                        try {
-                                          final uri = Uri.parse('https://link.clashofclans.com/?action=OpenMoreSettings');
-                                          if (await canLaunchUrl(uri)) {
-                                            await launchUrl(uri, mode: LaunchMode.externalApplication);
-                                          } else {
-                                            if (context.mounted) {
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                SnackBar(
-                                                  content: Text('Could not open Clash of Clans. Please open it manually.'),
-                                                ),
-                                              );
-                                            }
-                                          }
-                                        } catch (e) {
-                                          if (context.mounted) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(
-                                                content: Text('Could not open Clash of Clans. Please open it manually.'),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      },
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-                                          borderRadius: BorderRadius.circular(8),
-                                          border: Border.all(
-                                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                              SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Icon(Icons.info_outline,
+                                      size: 16,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                                  SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      AppLocalizations.of(context)!
+                                          .accountsAddInstruction,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
                                           ),
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Icon(
-                                              Icons.open_in_new,
-                                              size: 16,
-                                              color: Theme.of(context).colorScheme.primary,
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Text(
-                                              AppLocalizations.of(context)!.accountsOpenMoreSettings,
-                                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                                color: Theme.of(context).colorScheme.primary,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 16),
-                                TextField(
-                                  controller: _apiTokenController,
-                                  decoration: InputDecoration(
-                                    labelText: AppLocalizations.of(context)!
-                                        .accountsApiToken,
-                                    border: OutlineInputBorder(),
                                   ),
-                                ),
-                              ],
-                              if (!_showApiTokenInput) ...[
-                                SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    Icon(Icons.info_outline, 
-                                        size: 16, 
-                                        color: Theme.of(context).colorScheme.primary),
-                                    SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        AppLocalizations.of(context)!.accountsAddInstruction,
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: Theme.of(context).colorScheme.onSurface,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                ],
+                              ),
                               SizedBox(height: 8),
                             ],
                           ),
@@ -364,25 +277,42 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               // Verification status with better UX
-                                              if (_tempUserAccounts[index]["isVerified"] == true)
+                                              if (_tempUserAccounts[index]
+                                                      ["isVerified"] ==
+                                                  true)
                                                 Container(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 4),
                                                   decoration: BoxDecoration(
-                                                    color: Colors.green.withValues(alpha: 0.1),
-                                                    borderRadius: BorderRadius.circular(12),
-                                                    border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
+                                                    color: Colors.green
+                                                        .withValues(alpha: 0.1),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    border: Border.all(
+                                                        color: Colors.green
+                                                            .withValues(
+                                                                alpha: 0.3)),
                                                   ),
                                                   child: Row(
-                                                    mainAxisSize: MainAxisSize.min,
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
                                                     children: [
-                                                      Icon(Icons.verified, color: Colors.green, size: 16),
+                                                      Icon(Icons.verified,
+                                                          color: Colors.green,
+                                                          size: 16),
                                                       const SizedBox(width: 4),
                                                       Text(
-                                                        AppLocalizations.of(context)!.accountVerified,
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .accountVerified,
                                                         style: TextStyle(
                                                           color: Colors.green,
                                                           fontSize: 12,
-                                                          fontWeight: FontWeight.w500,
+                                                          fontWeight:
+                                                              FontWeight.w500,
                                                         ),
                                                       ),
                                                     ],
@@ -390,30 +320,58 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                 )
                                               else
                                                 InkWell(
-                                                  onTap: () => _showVerificationDialog(
-                                                    _tempUserAccounts[index]["player_tag"],
-                                                    _tempUserAccounts[index]["name"] ?? "Unknown Player",
-                                                    _tempUserAccounts[index]["townHallLevel"] ?? 1, 
+                                                  onTap: () =>
+                                                      _showVerificationDialog(
+                                                    _tempUserAccounts[index]
+                                                        ["player_tag"],
+                                                    _tempUserAccounts[index]
+                                                            ["name"] ??
+                                                        "Unknown Player",
+                                                    _tempUserAccounts[index]
+                                                            ["townHallLevel"] ??
+                                                        1,
                                                   ),
-                                                  borderRadius: BorderRadius.circular(12),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
                                                   child: Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8,
+                                                        vertical: 4),
                                                     decoration: BoxDecoration(
-                                                      color: Colors.orange.withValues(alpha: 0.1),
-                                                      borderRadius: BorderRadius.circular(12),
-                                                      border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
+                                                      color: Colors.orange
+                                                          .withValues(
+                                                              alpha: 0.1),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      border: Border.all(
+                                                          color: Colors.orange
+                                                              .withValues(
+                                                                  alpha: 0.3)),
                                                     ),
                                                     child: Row(
-                                                      mainAxisSize: MainAxisSize.min,
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
                                                       children: [
-                                                        Icon(Icons.warning_outlined, color: Colors.orange, size: 16),
-                                                        const SizedBox(width: 4),
+                                                        Icon(
+                                                            Icons
+                                                                .warning_outlined,
+                                                            color:
+                                                                Colors.orange,
+                                                            size: 16),
+                                                        const SizedBox(
+                                                            width: 4),
                                                         Text(
-                                                          AppLocalizations.of(context)!.accountVerify,
+                                                          AppLocalizations.of(
+                                                                  context)!
+                                                              .accountVerify,
                                                           style: TextStyle(
-                                                            color: Colors.orange,
+                                                            color:
+                                                                Colors.orange,
                                                             fontSize: 12,
-                                                            fontWeight: FontWeight.w500,
+                                                            fontWeight:
+                                                                FontWeight.w500,
                                                           ),
                                                         ),
                                                       ],
@@ -423,10 +381,13 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                               const SizedBox(width: 8),
                                               // Drag handle with better visual design
                                               Container(
-                                                padding: const EdgeInsets.all(8),
+                                                padding:
+                                                    const EdgeInsets.all(8),
                                                 child: Icon(
                                                   Icons.drag_indicator,
-                                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurfaceVariant,
                                                   size: 20,
                                                 ),
                                               ),
@@ -468,47 +429,47 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
               ],
             ),
           ),
-          SafeArea(
-            child: Padding(
+          Padding(
               padding: const EdgeInsets.only(bottom: 16.0, left: 16, right: 16),
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: userAccounts.isEmpty ? null : () async {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
+                  onPressed: userAccounts.isEmpty
+                      ? null
+                      : () async {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
 
-                    await _loadAllAccountData();
-                  },
+                          await _loadAllAccountData();
+                        },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: userAccounts.isEmpty 
+                    backgroundColor: userAccounts.isEmpty
                         ? Theme.of(context).colorScheme.surface
                         : null,
-                    foregroundColor: userAccounts.isEmpty 
-                        ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4)
+                    foregroundColor: userAccounts.isEmpty
+                        ? Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withValues(alpha: 0.4)
                         : null,
                   ),
-                  child: Text(userAccounts.isEmpty 
-                      ? "Add accounts first"
-                      : AppLocalizations.of(context)!.generalConfirm),
+                  child: Text(AppLocalizations.of(context)!.generalConfirm),
                 ),
               ),
             ),
-          )
         ],
       ),
     );
   }
 
-  void _setError(String message, {bool showApiToken = false}) {
+  void _setError(String message) {
     setState(() {
       _errorMessage = message;
-      _showApiTokenInput = showApiToken;
       _isAddingLoading = false;
     });
   }
@@ -544,9 +505,35 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       final errorCode = response["code"];
 
       if (errorCode == 409) {
-        _setError(
-            AppLocalizations.of(context)!.accountsErrorAlreadyLinked(playerTag),
-            showApiToken: true);
+        // Extract account information from 409 response
+        final accountData = response["account"];
+        final playerName = accountData?["name"] ?? "Player";
+        final playerTownHall = accountData?["townHallLevel"] ?? 1;
+        
+        // Show popup dialog for token verification with actual account data
+        final result = await showDialog<bool>(
+          context: context,
+          builder: (context) => AccountVerificationDialog(
+            playerTag: playerTag,
+            playerName: playerName,
+            playerTownHall: playerTownHall,
+          ),
+        );
+        
+        if (result == true) {
+          // Account was successfully verified and added
+          setState(() {
+            _isAddingLoading = false;
+            _errorMessage = "";
+          });
+          _playerTagController.clear();
+          _syncTempAccountsWithPlayerService();
+        } else {
+          setState(() {
+            _isAddingLoading = false;
+          });
+        }
+        return;
       } else if (errorCode == 404) {
         _setError(AppLocalizations.of(context)!.accountsErrorTagNotExists);
       } else if (errorCode == 500) {
@@ -567,7 +554,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     final newAccount = {
       "player_tag": response["account"]["tag"],
       "name": response["account"]["name"],
-      "townHallLevel": response["account"]["townHallLevel"] ?? 1
+      "townHallLevel": response["account"]["townHallLevel"] ?? 1,
+      "is_verified": response["account"]["is_verified"] ??
+          false // Default false for security
     };
 
     // Add the account to the local list
@@ -581,67 +570,6 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     _playerTagController.clear();
   }
 
-  Future<void> _submitApiToken() async {
-    setState(() {
-      _isAddingLoading = true;
-      _errorMessage = "";
-    });
-
-    final playerTag = _playerTagController.text.trim();
-    final apiToken = _apiTokenController.text.trim();
-
-    if (playerTag.isEmpty || apiToken.isEmpty) {
-      setState(() {
-        _errorMessage = AppLocalizations.of(context)!.accountsFillAllFields;
-        _isAddingLoading = false;
-      });
-      return;
-    }
-
-    final cocService = context.read<CocAccountService>();
-    final Map<String, dynamic> response =
-        await cocService.addCocAccountWithVerification(playerTag, apiToken);
-
-    if (response["code"] != 200 && mounted) {
-      final errorCode = response["code"];
-
-      if (errorCode == 403) {
-        _setError(AppLocalizations.of(context)!.accountsErrorWrongApiToken,
-            showApiToken: true);
-      } else if (errorCode == 404) {
-        _setError(AppLocalizations.of(context)!.accountsErrorTagNotExists);
-      } else if (errorCode == 500) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => ErrorPage(onRetry: () async => _addAccount()),
-          ),
-        );
-      } else {
-        _setError(AppLocalizations.of(context)!.accountsErrorFailedToAdd);
-      }
-      return;
-    }
-
-    if (response["account"] == null) return;
-
-    // Get the new account data
-    final newAccount = {
-      "player_tag": response["account"]["tag"],
-      "name": response["account"]["name"],
-      "townHallLevel": response["account"]["townHallLevel"] ?? 1
-    };
-
-    // Add the account to the local list
-    setState(() {
-      _isAddingLoading = false;
-      _errorMessage = "";
-      context.read<CocAccountService>().addLocalAccount(newAccount);
-      _syncTempAccountsWithPlayerService();
-    });
-
-    _playerTagController.clear();
-    _apiTokenController.clear();
-  }
 
   Future<void> _removeAccount(String playerTag) async {
     setState(() {
@@ -659,7 +587,8 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     });
   }
 
-  Future<void> _showVerificationDialog(String playerTag, String playerName, int playerTownHall) async {
+  Future<void> _showVerificationDialog(
+      String playerTag, String playerName, int playerTownHall) async {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AccountVerificationDialog(
@@ -679,10 +608,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     final playerService = context.read<PlayerService>();
     final cocService = context.read<CocAccountService>();
     setState(() {
-      _tempUserAccounts =
-          cocService.cocAccounts.map((account) {
+      _tempUserAccounts = cocService.cocAccounts.map((account) {
         String playerTag = account["player_tag"];
-        
+
         // Try to find the player data from PlayerService
         try {
           final player = playerService.profiles.firstWhere(
@@ -696,7 +624,8 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
           };
         } catch (e) {
           // Fallback to account data if player not found in PlayerService
-          DebugUtils.debugWarning("⚠️ Player not found in PlayerService for tag: $playerTag, using fallback");
+          DebugUtils.debugWarning(
+              "⚠️ Player not found in PlayerService for tag: $playerTag, using fallback");
           return {
             "player_tag": playerTag,
             "name": account["name"] ?? "Unknown Player",

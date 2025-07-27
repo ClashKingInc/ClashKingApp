@@ -89,7 +89,8 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.3),
+              color:
+                  Theme.of(context).colorScheme.surface.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -118,7 +119,9 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
                       Text(
                         widget.playerTag,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
                             ),
                       ),
                     ],
@@ -127,17 +130,20 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
-          // Simple instruction text
+          // API Token instructions
           Text(
             AppLocalizations.of(context)!.accountsEnterApiToken,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
-          
-          const SizedBox(height: 16),
-          
+          const SizedBox(height: 8),
+          Text(
+            AppLocalizations.of(context)!.accountsApiTokenLocation,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 8),
+
           // API Token input field - simplified
           TextField(
             controller: _apiTokenController,
@@ -148,67 +154,42 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
             ),
             enabled: !_isVerifying,
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Direct link to get API token
-          InkWell(
-            onTap: () async {
-              try {
-                final uri = Uri.parse(
-                    'https://link.clashofclans.com/?action=OpenMoreSettings');
-                if (await canLaunchUrl(uri)) {
-                  await launchUrl(uri, mode: LaunchMode.externalApplication);
-                } else {
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () async {
+                try {
+                  final uri = Uri.parse(
+                      'https://link.clashofclans.com/?action=OpenMoreSettings');
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  } else {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              AppLocalizations.of(context)!.accountsCouldNotOpenClash),
+                        ),
+                      );
+                    }
+                  }
+                } catch (e) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                            'Could not open Clash of Clans. Please open it manually.'),
+                            AppLocalizations.of(context)!.accountsCouldNotOpenClash),
                       ),
                     );
                   }
                 }
-              } catch (e) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                          'Could not open Clash of Clans. Please open it manually.'),
-                    ),
-                  );
-                }
-              }
-            },
-            borderRadius: BorderRadius.circular(8),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.open_in_new,
-                    size: 16,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    AppLocalizations.of(context)!.accountsOpenMoreSettings,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                  ),
-                ],
-              ),
+              },
+              icon: const Icon(Icons.open_in_new, size: 16),
+              label: Text(AppLocalizations.of(context)!.accountsOpenMoreSettings),
             ),
           ),
         ],

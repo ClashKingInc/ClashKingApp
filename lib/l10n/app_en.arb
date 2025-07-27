@@ -324,6 +324,7 @@
   "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans:",
   "accountsApiTokenLocation": "Settings > More Settings > API Token",
   "accountsOpenMoreSettings": "Open More Settings",
+  "accountsCouldNotOpenClash": "Could not open Clash of Clans. Please open it manually.",
   "accountsFillAllFields": "Please fill all fields.",
   "accountsErrorTagNotExists": "The player tag entered does not exist.",
   "accountsErrorAlreadyLinked": "The player tag is already linked to someone.",
@@ -1649,5 +1650,145 @@
   "filtersNoneApplied": "No filters applied",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
+  },
+  "warAttacksFailedToLoadPlayer": "Failed to load player data",
+  "@warAttacksFailedToLoadPlayer": {
+    "description": "Error message when player profile fails to load"
+  },
+  "warAttacksDetailsTitle": "Attack Details",
+  "@warAttacksDetailsTitle": {
+    "description": "Title for attack details modal"
+  },
+  "warAttacksDetailsWarType": "War Type",
+  "@warAttacksDetailsWarType": {
+    "description": "Label for war type in attack details"
+  },
+  "warAttacksDetailsAttackOrder": "Attack Order",
+  "@warAttacksDetailsAttackOrder": {
+    "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsStars": "Stars",
+  "@warAttacksDetailsStars": {
+    "description": "Label for stars in attack details"
+  },
+  "warAttacksDetailsDestruction": "Destruction",
+  "@warAttacksDetailsDestruction": {
+    "description": "Label for destruction percentage in attack details"
+  },
+  "warAttacksDetailsAttacker": "Attacker",
+  "@warAttacksDetailsAttacker": {
+    "description": "Label for attacker section in attack details"
+  },
+  "warAttacksDetailsDefender": "Defender",
+  "@warAttacksDetailsDefender": {
+    "description": "Label for defender section in attack details"
+  },
+  "warAttacksDetailsName": "Name",
+  "@warAttacksDetailsName": {
+    "description": "Label for player name in attack details"
+  },
+  "warAttacksDetailsTHLevel": "TH Level",
+  "@warAttacksDetailsTHLevel": {
+    "description": "Label for town hall level in attack details"
+  },
+  "warAttacksDetailsMapPosition": "Map Position",
+  "@warAttacksDetailsMapPosition": {
+    "description": "Label for map position in attack details"
+  },
+  "warAttacksDetailsUnknown": "Unknown",
+  "@warAttacksDetailsUnknown": {
+    "description": "Default text for unknown values in attack details"
+  },
+  "warDataState": "State",
+  "@warDataState": {
+    "description": "Label for war state"
+  },
+  "warDataStateWarEnded": "War Ended",
+  "@warDataStateWarEnded": {
+    "description": "War state: ended"
+  },
+  "warDataStateInWar": "In War",
+  "@warDataStateInWar": {
+    "description": "War state: active"
+  },
+  "warDataStatePreparation": "Preparation",
+  "@warDataStatePreparation": {
+    "description": "War state: preparation day"
+  },
+  "warDataTeamSize": "Team Size",
+  "@warDataTeamSize": {
+    "description": "Label for war team size"
+  },
+  "warDataAttacksPerMember": "Attacks Per Member",
+  "@warDataAttacksPerMember": {
+    "description": "Label for attacks per member"
+  },
+  "warDataBattleModifier": "Battle Modifier",
+  "@warDataBattleModifier": {
+    "description": "Label for battle modifier"
+  },
+  "warDataBattleModifierNone": "None",
+  "@warDataBattleModifierNone": {
+    "description": "Battle modifier: none"
+  },
+  "warDataPreparationStartTime": "Preparation Start",
+  "@warDataPreparationStartTime": {
+    "description": "Label for preparation start time"
+  },
+  "warDataStartTime": "War Start",
+  "@warDataStartTime": {
+    "description": "Label for war start time"
+  },
+  "warDataEndTime": "War End",
+  "@warDataEndTime": {
+    "description": "Label for war end time"
+  },
+  "warDataClan": "Clan",
+  "@warDataClan": {
+    "description": "Label for clan information"
+  },
+  "warDataOpponent": "Opponent",
+  "@warDataOpponent": {
+    "description": "Label for opponent clan information"
+  },
+  "warDataClanLevel": "Clan Level",
+  "@warDataClanLevel": {
+    "description": "Label for clan level"
+  },
+  "warDataAttacks": "Attacks",
+  "@warDataAttacks": {
+    "description": "Label for number of attacks"
+  },
+  "warDataTotalStars": "Total Stars",
+  "@warDataTotalStars": {
+    "description": "Label for total stars earned"
+  },
+  "warDataDestructionPercentage": "Destruction %",
+  "@warDataDestructionPercentage": {
+    "description": "Label for destruction percentage"
+  },
+  "warDataType": "War Type",
+  "@warDataType": {
+    "description": "Label for war type"
+  },
+  "warDataTypeRandom": "Random",
+  "@warDataTypeRandom": {
+    "description": "War type: random"
+  },
+  "warDataTypeFriendly": "Friendly",
+  "@warDataTypeFriendly": {
+    "description": "War type: friendly"
+  },
+  "warInformationTitle": "War Information",
+  "@warInformationTitle": {
+    "description": "Title for war information section in attack details"
+  },
+  "warResultsTitle": "War Results",
+  "@warResultsTitle": {
+    "description": "Title for war results section showing clan vs opponent"
+  },
+  "warPlayersTitle": "Players",
+  "@warPlayersTitle": {
+    "description": "Title for players section showing attacker and defender info"
   }
 }
