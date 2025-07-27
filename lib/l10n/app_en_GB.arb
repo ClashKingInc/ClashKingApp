@@ -620,7 +620,7 @@
       }
     }
   },
-  "legendsTitle": "Legend League",
+  "legendsTitle": "Inaccurate data?",
   "legendsNotInLeague": "Not in Legend League",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "You started the day with {trophies} trophies.",
