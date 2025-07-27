@@ -508,7 +508,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       child: Column(
                         children: [
                           _buildSubsectionTitle(AppLocalizations.of(context)
-                                  ?.filtersMapPosition ??
+                                  ?.warPositionMap ??
                               'Map Position'),
                           const SizedBox(height: 8),
                           _buildMapPositionFilters(),
@@ -939,7 +939,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       children: [
         // Stars filter with chips
         Text(
-          AppLocalizations.of(context)?.filtersStars ?? 'Stars',
+          AppLocalizations.of(context)?.warStarsTitle ?? 'Stars',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w500,
               ),
@@ -2316,7 +2316,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         filters.add({
           'type': 'stars',
           'text':
-              '$selectedStars ${AppLocalizations.of(context)?.filtersStars ?? '⭐'}'
+              '$selectedStars ${AppLocalizations.of(context)?.warStarsTitle ?? '⭐'}'
         });
       }
       if ((_filter.minDestruction != null && _filter.minDestruction! > 0) ||
@@ -2348,7 +2348,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         filters.add({
           'type': 'mapPosition',
           'text':
-              '${AppLocalizations.of(context)?.filtersMapPosition ?? 'Position'} $min-$max'
+              '${AppLocalizations.of(context)?.warPositionMap ?? 'Position'} $min-$max'
         });
       }
       if (_filter.limit != 50) {

@@ -170,7 +170,7 @@ class PlayerWarAttacksCard extends StatelessWidget {
                       children: [
                         // Player name and position
                         Text(
-                          "${targetPlayer?.mapPosition}. ${targetPlayer?.name ?? AppLocalizations.of(context)!.warAttacksDetailsUnknown}",
+                          "${targetPlayer?.mapPosition}. ${targetPlayer?.name ?? AppLocalizations.of(context)!.generalUnknown}",
                           style:
                               Theme.of(context).textTheme.titleSmall?.copyWith(
                                     fontWeight: FontWeight.bold,
@@ -322,9 +322,9 @@ class PlayerWarAttacksCard extends StatelessWidget {
                         icon: Icons.military_tech,
                         children: [
                           _buildIconValueRow(context, Icons.star, AppLocalizations.of(context)!.warAttacksDetailsStars, attack.stars.toString()),
-                          _buildIconValueRow(context, Icons.percent, AppLocalizations.of(context)!.warAttacksDetailsDestruction, '${attack.destructionPercentage}%'),
+                          _buildIconValueRow(context, Icons.percent, AppLocalizations.of(context)!.warDestructionTitle, '${attack.destructionPercentage}%'),
                           _buildIconValueRow(context, Icons.format_list_numbered, AppLocalizations.of(context)!.warAttacksDetailsAttackOrder, attack.order.toString()),
-                          _buildIconValueRow(context, Icons.sports_esports, AppLocalizations.of(context)!.warAttacksDetailsWarType, war.warDetails.warType ?? AppLocalizations.of(context)!.warAttacksDetailsUnknown),
+                          _buildIconValueRow(context, Icons.sports_esports, AppLocalizations.of(context)!.warAttacksDetailsWarType, war.warDetails.warType ?? AppLocalizations.of(context)!.generalUnknown),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -336,8 +336,8 @@ class PlayerWarAttacksCard extends StatelessWidget {
                         icon: Icons.info,
                         children: [
                           _buildIconValueRow(context, _getWarStateIcon(war.warDetails.state), AppLocalizations.of(context)!.warDataState, _getWarStateDisplay(context, war.warDetails.state)),
-                          _buildIconValueRow(context, Icons.group, AppLocalizations.of(context)!.warDataTeamSize, war.warDetails.teamSize?.toString() ?? AppLocalizations.of(context)!.warAttacksDetailsUnknown),
-                          _buildIconValueRow(context, Icons.local_fire_department, AppLocalizations.of(context)!.warDataAttacksPerMember, war.warDetails.attacksPerMember?.toString() ?? AppLocalizations.of(context)!.warAttacksDetailsUnknown),
+                          _buildIconValueRow(context, Icons.group, AppLocalizations.of(context)!.warTeamSize, war.warDetails.teamSize?.toString() ?? AppLocalizations.of(context)!.generalUnknown),
+                          _buildIconValueRow(context, Icons.local_fire_department, AppLocalizations.of(context)!.warDataAttacksPerMember, war.warDetails.attacksPerMember?.toString() ?? AppLocalizations.of(context)!.generalUnknown),
                           if (war.warDetails.startTime != null)
                             _buildIconValueRow(context, Icons.schedule, AppLocalizations.of(context)!.warDataStartTime, DateFormat.yMd(Localizations.localeOf(context).toString()).add_Hm().format(war.warDetails.startTime!)),
                           if (war.warDetails.endTime != null)
@@ -401,11 +401,11 @@ class PlayerWarAttacksCard extends StatelessWidget {
   String _getWarStateDisplay(BuildContext context, String state) {
     switch (state.toLowerCase()) {
       case 'warended':
-        return AppLocalizations.of(context)!.warDataStateWarEnded;
+        return AppLocalizations.of(context)!.warEnded;
       case 'inwar':
-        return AppLocalizations.of(context)!.warDataStateInWar;
+        return AppLocalizations.of(context)!.warInWar;
       case 'preparation':
-        return AppLocalizations.of(context)!.warDataStatePreparation;
+        return AppLocalizations.of(context)!.warPreparation;
       default:
         return state;
     }
@@ -606,7 +606,7 @@ class PlayerWarAttacksCard extends StatelessWidget {
                         children: [
                           _buildClanStatItem(context, Icons.emoji_events, AppLocalizations.of(context)!.warDataClanLevel, clan.clanLevel.toString()),
                           _buildClanStatItem(context, Icons.star, AppLocalizations.of(context)!.warDataTotalStars, clan.stars.toString()),
-                          _buildClanStatItem(context, Icons.local_fire_department, AppLocalizations.of(context)!.warDataAttacks, clan.attacks.toString()),
+                          _buildClanStatItem(context, Icons.local_fire_department, AppLocalizations.of(context)!.warAttacksTitle, clan.attacks.toString()),
                           _buildClanStatItem(context, Icons.percent, AppLocalizations.of(context)!.warDataDestructionPercentage, '${clan.destructionPercentage.toStringAsFixed(1)}%'),
                         ],
                       ),
@@ -633,7 +633,7 @@ class PlayerWarAttacksCard extends StatelessWidget {
                         children: [
                           _buildClanStatItem(context, Icons.emoji_events, AppLocalizations.of(context)!.warDataClanLevel, opponent.clanLevel.toString()),
                           _buildClanStatItem(context, Icons.star, AppLocalizations.of(context)!.warDataTotalStars, opponent.stars.toString()),
-                          _buildClanStatItem(context, Icons.local_fire_department, AppLocalizations.of(context)!.warDataAttacks, opponent.attacks.toString()),
+                          _buildClanStatItem(context, Icons.local_fire_department, AppLocalizations.of(context)!.warAttacksTitle, opponent.attacks.toString()),
                           _buildClanStatItem(context, Icons.percent, AppLocalizations.of(context)!.warDataDestructionPercentage, '${opponent.destructionPercentage.toStringAsFixed(1)}%'),
                         ],
                       ),
@@ -768,9 +768,9 @@ class PlayerWarAttacksCard extends StatelessWidget {
   Widget _buildPlayerInfo(BuildContext context, dynamic player) {
     return Column(
       children: [
-        _buildPlayerInfoRow(context, Icons.person, AppLocalizations.of(context)!.warAttacksDetailsName, player?.name ?? AppLocalizations.of(context)!.warAttacksDetailsUnknown),
-        _buildPlayerInfoRow(context, Icons.home, AppLocalizations.of(context)!.warAttacksDetailsTHLevel, player?.townhallLevel?.toString() ?? AppLocalizations.of(context)!.warAttacksDetailsUnknown),
-        _buildPlayerInfoRow(context, Icons.location_on, AppLocalizations.of(context)!.warAttacksDetailsMapPosition, player?.mapPosition?.toString() ?? AppLocalizations.of(context)!.warAttacksDetailsUnknown),
+        _buildPlayerInfoRow(context, Icons.person, AppLocalizations.of(context)!.warAttacksDetailsName, player?.name ?? AppLocalizations.of(context)!.generalUnknown),
+        _buildPlayerInfoRow(context, Icons.home, AppLocalizations.of(context)!.gameTownHallLevel, player?.townhallLevel?.toString() ?? AppLocalizations.of(context)!.generalUnknown),
+        _buildPlayerInfoRow(context, Icons.location_on, AppLocalizations.of(context)!.warPositionMap, player?.mapPosition?.toString() ?? AppLocalizations.of(context)!.generalUnknown),
       ],
     );
   }
