@@ -10,7 +10,9 @@ class PerformanceAnalysisService {
   
   /// Analyze war statistics and generate suggested filter presets
   /// Returns a list of preset suggestions that highlight performance issues
-  static List<FilterPreset> analyzePerformance(PlayerWarStats warStats) {
+  static List<FilterPreset> analyzePerformance(PlayerWarStats warStats, {
+    Map<String, String> localizations = const {},
+  }) {
     final suggestions = <FilterPreset>[];
     final stats = warStats.getStatsForTypes([]);
     
@@ -22,8 +24,8 @@ class PerformanceAnalysisService {
     if (stats.averageStars < 2.0) {
       suggestions.add(_createPreset(
         'failed-attacks',
-        'Failed Attacks (0-1 Stars)',
-        'Shows attacks that failed to get 2+ stars',
+        localizations['performanceAnalysisFailedAttacks'] ?? 'Failed Attacks (0-1 Stars)',
+        localizations['performanceAnalysisFailedAttacksDesc'] ?? 'Shows attacks that failed to get 2+ stars',
         WarStatsFilter(
           allowedStars: [0, 1],
         ),
@@ -36,8 +38,8 @@ class PerformanceAnalysisService {
     if (perfectRate < _lowSuccessRateThreshold) {
       suggestions.add(_createPreset(
         'missed-perfects',
-        'Missed Perfect Attacks',
-        'Shows attacks that got 2 stars - potential perfect opportunities',
+        localizations['performanceAnalysisMissedPerfects'] ?? 'Missed Perfect Attacks',
+        localizations['performanceAnalysisMissedPerfectsDesc'] ?? 'Shows attacks that got 2 stars - potential perfect opportunities',
         WarStatsFilter(
           allowedStars: [2],
         ),
@@ -57,8 +59,8 @@ class PerformanceAnalysisService {
         if (enemyTh != null && thData.count >= 3 && thData.averageStars < 1.5) {
           suggestions.add(_createPreset(
             'th$enemyTh-struggles',
-            'TH$enemyTh Attack Issues',
-            'Shows poor performance against TH$enemyTh',
+            localizations['performanceAnalysisThAttackIssues']?.replaceAll('{thLevel}', '$enemyTh') ?? 'TH$enemyTh Attack Issues',
+            localizations['performanceAnalysisThAttackIssuesDesc']?.replaceAll('{thLevel}', '$enemyTh') ?? 'Shows poor performance against TH$enemyTh',
             WarStatsFilter(
               enemyTownHalls: [enemyTh],
             ),
@@ -80,8 +82,8 @@ class PerformanceAnalysisService {
         if (attackerTh != null && defData.count >= 3 && defData.averageStars > 2.0) {
           suggestions.add(_createPreset(
             'th$attackerTh-defense-weak',
-            'TH$attackerTh Defense Issues',
-            'Shows where you\'re vulnerable to TH$attackerTh attacks',
+            localizations['performanceAnalysisThDefenseIssues']?.replaceAll('{thLevel}', '$attackerTh') ?? 'TH$attackerTh Defense Issues',
+            localizations['performanceAnalysisThDefenseIssuesDesc']?.replaceAll('{thLevel}', '$attackerTh') ?? 'Shows where you\'re vulnerable to TH$attackerTh attacks',
             WarStatsFilter(
               enemyTownHalls: [attackerTh],
             ),
@@ -102,8 +104,8 @@ class PerformanceAnalysisService {
       if (cwlSuccess < randomSuccess - 0.5) {
         suggestions.add(_createPreset(
           'cwl-issues',
-          'CWL Performance Issues',
-          'Shows CWL attacks - lower success than regular wars',
+          localizations['performanceAnalysisCwlIssues'] ?? 'CWL Performance Issues',
+          localizations['performanceAnalysisCwlIssuesDesc'] ?? 'Shows CWL attacks - lower success than regular wars',
           WarStatsFilter(
             warTypes: ['cwl'],
           ),
@@ -114,8 +116,8 @@ class PerformanceAnalysisService {
       if (randomSuccess < cwlSuccess - 0.5) {
         suggestions.add(_createPreset(
           'random-war-issues',
-          'Random War Issues',
-          'Shows random war attacks - lower success than CWL',
+          localizations['performanceAnalysisRandomWarIssues'] ?? 'Random War Issues',
+          localizations['performanceAnalysisRandomWarIssuesDesc'] ?? 'Shows random war attacks - lower success than CWL',
           WarStatsFilter(
             warTypes: ['random'],
           ),
@@ -126,8 +128,8 @@ class PerformanceAnalysisService {
     // 6. Fresh attack performance
     suggestions.add(_createPreset(
       'fresh-only',
-      'Fresh Attack Analysis',
-      'Analyzes performance on fresh bases only',
+      localizations['performanceAnalysisFreshOnly'] ?? 'Fresh Attack Analysis',
+      localizations['performanceAnalysisFreshOnlyDesc'] ?? 'Analyzes performance on fresh bases only',
       WarStatsFilter(
         freshAttacksOnly: true,
       ),
@@ -137,8 +139,8 @@ class PerformanceAnalysisService {
     final recentDate = DateTime.now().subtract(const Duration(days: 30));
     suggestions.add(_createPreset(
       'recent-performance',
-      'Recent Performance (30 Days)',
-      'Shows recent performance to identify current trends',
+      localizations['performanceAnalysisRecentPerformance'] ?? 'Recent Performance (30 Days)',
+      localizations['performanceAnalysisRecentPerformanceDesc'] ?? 'Shows recent performance to identify current trends',
       WarStatsFilter(
         startDate: recentDate,
       ),
@@ -147,8 +149,8 @@ class PerformanceAnalysisService {
     // 8. High-stakes wars (position 1-5)
     suggestions.add(_createPreset(
       'high-stakes',
-      'High-Stakes Attacks',
-      'Shows attacks from top 5 war positions',
+      localizations['performanceAnalysisHighStakes'] ?? 'High-Stakes Attacks',
+      localizations['performanceAnalysisHighStakesDesc'] ?? 'Shows attacks from top 5 war positions',
       WarStatsFilter(
         maxMapPosition: 5,
       ),
@@ -157,8 +159,8 @@ class PerformanceAnalysisService {
     // 9. Cleanup crew performance (position 6+)
     suggestions.add(_createPreset(
       'cleanup-crew',
-      'Cleanup Attacks',
-      'Shows attacks from lower war positions',
+      localizations['performanceAnalysisCleanupCrew'] ?? 'Cleanup Attacks',
+      localizations['performanceAnalysisCleanupCrewDesc'] ?? 'Shows attacks from lower war positions',
       WarStatsFilter(
         minMapPosition: 6,
       ),
@@ -214,13 +216,13 @@ class PerformanceAnalysisService {
   static String _calculateOverallRating(PlayerWarTypeStats stats) {
     final threeStarRate = _calculateThreeStarRate(stats);
     if (stats.averageStars >= 2.5 && threeStarRate >= 0.7) {
-      return 'excellent';
+      return 'performanceRatingExcellent';
     } else if (stats.averageStars >= 2.0 && threeStarRate >= 0.5) {
-      return 'good';
+      return 'performanceRatingGood';
     } else if (stats.averageStars >= 1.5) {
-      return 'average';
+      return 'performanceRatingAverage';
     } else {
-      return 'needs_improvement';
+      return 'performanceRatingNeedsImprovement';
     }
   }
   
@@ -229,13 +231,13 @@ class PerformanceAnalysisService {
     final threeStarRate = _calculateThreeStarRate(stats);
     
     if (threeStarRate >= 0.8) {
-      strengths.add('high_three_star_rate');
+      strengths.add('performanceStrengthHighThreeStarRate');
     }
     if (stats.averageDestruction >= 85.0) {
-      strengths.add('high_destruction');
+      strengths.add('performanceStrengthHighDestruction');
     }
     if (stats.averageStars >= 2.5) {
-      strengths.add('consistent_performance');
+      strengths.add('performanceStrengthConsistentPerformance');
     }
     
     return strengths;
@@ -246,13 +248,13 @@ class PerformanceAnalysisService {
     final threeStarRate = _calculateThreeStarRate(stats);
     
     if (threeStarRate < 0.5) {
-      improvements.add('three_star_consistency');
+      improvements.add('performanceImprovementThreeStarConsistency');
     }
     if (stats.averageStars < 2.0) {
-      improvements.add('overall_star_performance');
+      improvements.add('performanceImprovementOverallStarPerformance');
     }
     if (stats.averageDestruction < 70.0) {
-      improvements.add('destruction_percentage');
+      improvements.add('performanceImprovementDestructionPercentage');
     }
     
     return improvements;

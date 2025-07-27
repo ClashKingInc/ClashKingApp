@@ -162,56 +162,6 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
                     : _displayedWarStats != null
                         ? Column(
                             children: [
-                              // Always show filter bandeau
-                              Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(12.0),
-                                margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.surface,
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  border: Border.all(
-                                    color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      _hasAppliedFilters ? Icons.filter_alt : Icons.info_outline,
-                                      size: 16,
-                                      color: Theme.of(context).colorScheme.primary,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        _hasAppliedFilters 
-                                            ? _getFilterSummary()
-                                            : AppLocalizations.of(context)?.filtersShowingDefaultData(_currentFilter.limit) ?? 'Showing last ${_currentFilter.limit} wars (default)',
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: Theme.of(context).colorScheme.onSurface,
-                                        ),
-                                      ),
-                                    ),
-                                    if (_hasAppliedFilters)
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.close,
-                                          size: 16,
-                                          color: Theme.of(context).colorScheme.onSurface,
-                                        ),
-                                        onPressed: _clearFilters,
-                                      ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.tune,
-                                        size: 16,
-                                        color: Theme.of(context).colorScheme.primary,
-                                      ),
-                                      onPressed: _showFilterDialog,
-                                    ),
-                                  ],
-                                ),
-                              ),
                               ScrollableTab(
                             tabBarDecoration: BoxDecoration(
                               color: Theme.of(context).colorScheme.surface,
@@ -230,16 +180,178 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
                               Tab(text: AppLocalizations.of(context)!.generalCharts),
                             ],
                             children: [
-                              WarStatsView(
-                                warStats: _displayedWarStats,
-                                filterTypes: _getSelectedTypes(),
-                                currentSeasonDate: DateTime.now(),
-                                warDataLimit: 0,
+                              Column(
+                                children: [
+                                  // Filter bandeau under tabs
+                                  Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(12.0),
+                                    margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.surface,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      border: Border.all(
+                                        color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          _hasAppliedFilters ? Icons.filter_alt : Icons.info_outline,
+                                          size: 16,
+                                          color: Theme.of(context).colorScheme.primary,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            _hasAppliedFilters 
+                                                ? _getFilterSummary()
+                                                : AppLocalizations.of(context)?.filtersShowingDefaultData(_currentFilter.limit) ?? 'Showing last ${_currentFilter.limit} wars (default)',
+                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                              color: Theme.of(context).colorScheme.onSurface,
+                                            ),
+                                          ),
+                                        ),
+                                        if (_hasAppliedFilters)
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.close,
+                                              size: 16,
+                                              color: Theme.of(context).colorScheme.onSurface,
+                                            ),
+                                            onPressed: _clearFilters,
+                                          ),
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.tune,
+                                            size: 16,
+                                            color: Theme.of(context).colorScheme.primary,
+                                          ),
+                                          onPressed: _showFilterDialog,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  WarStatsView(
+                                    warStats: _displayedWarStats,
+                                    filterTypes: _getSelectedTypes(),
+                                    currentSeasonDate: DateTime.now(),
+                                    warDataLimit: 0,
+                                  ),
+                                ],
                               ),
-                              PlayerWarAttacksTab(
-                                wars: _filteredWars,
+                              Column(
+                                children: [
+                                  // Filter bandeau under tabs
+                                  Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(12.0),
+                                    margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.surface,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      border: Border.all(
+                                        color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          _hasAppliedFilters ? Icons.filter_alt : Icons.info_outline,
+                                          size: 16,
+                                          color: Theme.of(context).colorScheme.primary,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            _hasAppliedFilters 
+                                                ? _getFilterSummary()
+                                                : AppLocalizations.of(context)?.filtersShowingDefaultData(_currentFilter.limit) ?? 'Showing last ${_currentFilter.limit} wars (default)',
+                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                              color: Theme.of(context).colorScheme.onSurface,
+                                            ),
+                                          ),
+                                        ),
+                                        if (_hasAppliedFilters)
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.close,
+                                              size: 16,
+                                              color: Theme.of(context).colorScheme.onSurface,
+                                            ),
+                                            onPressed: _clearFilters,
+                                          ),
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.tune,
+                                            size: 16,
+                                            color: Theme.of(context).colorScheme.primary,
+                                          ),
+                                          onPressed: _showFilterDialog,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  PlayerWarAttacksTab(
+                                    wars: _filteredWars,
+                                  ),
+                                ],
                               ),
-                              _buildPerformanceChartsTab(),
+                              Column(
+                                children: [
+                                  // Filter bandeau under tabs
+                                  Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(12.0),
+                                    margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.surface,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      border: Border.all(
+                                        color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          _hasAppliedFilters ? Icons.filter_alt : Icons.info_outline,
+                                          size: 16,
+                                          color: Theme.of(context).colorScheme.primary,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            _hasAppliedFilters 
+                                                ? _getFilterSummary()
+                                                : AppLocalizations.of(context)?.filtersShowingDefaultData(_currentFilter.limit) ?? 'Showing last ${_currentFilter.limit} wars (default)',
+                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                              color: Theme.of(context).colorScheme.onSurface,
+                                            ),
+                                          ),
+                                        ),
+                                        if (_hasAppliedFilters)
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.close,
+                                              size: 16,
+                                              color: Theme.of(context).colorScheme.onSurface,
+                                            ),
+                                            onPressed: _clearFilters,
+                                          ),
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.tune,
+                                            size: 16,
+                                            color: Theme.of(context).colorScheme.primary,
+                                          ),
+                                          onPressed: _showFilterDialog,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  _buildPerformanceChartsTab(),
+                                ],
+                              ),
                             ],
                           ),
                         ],
@@ -277,7 +389,9 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: 12),
-            Text(AppLocalizations.of(context)?.exportTitle ?? 'Export War Statistics'),
+            Expanded(
+              child: Text(AppLocalizations.of(context)?.exportTitle ?? 'Export War Statistics'),
+            ),
           ],
         ),
         content: Column(
@@ -346,6 +460,25 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
         _filteredWarStats = filteredStats;
         _isLoadingFiltered = false;
       });
+      
+      // Show success feedback
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.check_circle, color: Colors.white, size: 20),
+                const SizedBox(width: 12),
+                Text('Filters applied successfully'),
+              ],
+            ),
+            duration: const Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.green,
+            margin: const EdgeInsets.only(bottom: 80, left: 16, right: 16),
+          ),
+        );
+      }
     } catch (e) {
       setState(() {
         _isLoadingFiltered = false;
@@ -354,8 +487,16 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to load filtered data: $e'),
-            backgroundColor: Theme.of(context).colorScheme.error,
+            content: Row(
+              children: [
+                Icon(Icons.error, color: Colors.white, size: 20),
+                const SizedBox(width: 12),
+                Expanded(child: Text('Failed to load filtered data: $e')),
+              ],
+            ),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.only(bottom: 80, left: 16, right: 16),
           ),
         );
       }
@@ -579,8 +720,12 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
         playerName: widget.player.name,
       );
       
+      // Dismiss the loading snackbar before showing success
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       _showExportSuccess(file.path);
     } catch (e) {
+      // Dismiss the loading snackbar before showing error
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       _showExportError(e.toString());
     }
   }
@@ -597,13 +742,14 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
             Text(
               'Saved to: $filePath',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onInverseSurface.withValues(alpha: 0.8),
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.8),
               ),
             ),
           ],
         ),
         action: SnackBarAction(
           label: AppLocalizations.of(context)?.exportOpen ?? 'Open',
+          textColor: Theme.of(context).colorScheme.primary,
           onPressed: () => OpenFilex.open(filePath),
         ),
         duration: const Duration(seconds: 6),
