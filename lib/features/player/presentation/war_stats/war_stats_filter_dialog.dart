@@ -283,14 +283,13 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       }
 
       // Initialize war type selections
-      warTypeSelection['all'] =
-          _filter.warType == 'all' && (_filter.warTypes?.isEmpty ?? true);
-      warTypeSelection['cwl'] =
-          _filter.warTypes?.contains('cwl') ?? _filter.warType == 'cwl';
-      warTypeSelection['random'] =
-          _filter.warTypes?.contains('random') ?? _filter.warType == 'random';
-      warTypeSelection['friendly'] = _filter.warTypes?.contains('friendly') ??
-          _filter.warType == 'friendly';
+      final savedWarTypes = _filter.warTypes ?? [];
+      final isAllWars = savedWarTypes.isEmpty;
+
+      warTypeSelection['all'] = isAllWars;
+      warTypeSelection['cwl'] = savedWarTypes.contains('cwl');
+      warTypeSelection['random'] = savedWarTypes.contains('random');
+      warTypeSelection['friendly'] = savedWarTypes.contains('friendly');
 
       // Initialize star selections
       for (int i = 0; i <= 3; i++) {
@@ -312,12 +311,6 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       _minMapPositionController.text = _filter.minMapPosition?.toString() ?? '';
       _maxMapPositionController.text = _filter.maxMapPosition?.toString() ?? '';
     });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          content:
-              Text(AppLocalizations.of(context)!.presetsApplied(preset.name))),
-    );
   }
 
   void _updateFilter(WarStatsFilter newFilter) {
@@ -386,7 +379,10 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 ),
                 border: Border(
                   bottom: BorderSide(
-                    color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .outline
+                        .withValues(alpha: 0.2),
                   ),
                 ),
               ),
@@ -512,7 +508,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       child: Column(
                         children: [
                           _buildSubsectionTitle(AppLocalizations.of(context)
-                                  ?.filtersMapPosition ??
+                                  ?.warPositionMap ??
                               'Map Position'),
                           const SizedBox(height: 8),
                           _buildMapPositionFilters(),
@@ -628,8 +624,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                         },
                         icon: const Icon(Icons.check, size: 18),
                         label: Text(
-                            AppLocalizations.of(context)?.generalApply ??
-                                'Apply'),
+                            AppLocalizations.of(context)?.generalApply ?? 'Apply', style: Theme.of(context).textTheme.labelLarge),
                       ),
                     ],
                   ),
@@ -944,7 +939,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       children: [
         // Stars filter with chips
         Text(
-          AppLocalizations.of(context)?.filtersStars ?? 'Stars',
+          AppLocalizations.of(context)?.warStarsTitle ?? 'Stars',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w500,
               ),
@@ -1400,12 +1395,17 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         'preset': '3star'
       },
       {
-        'label': AppLocalizations.of(context)!.filtersCwlWars,
+        'label': AppLocalizations.of(context)!.cwlTitle,
         'icon': Icons.emoji_events,
         'preset': 'cwl'
       },
       {
-        'label': AppLocalizations.of(context)!.filtersFriendlyWars,
+        'label': AppLocalizations.of(context)!.warFiltersRandom,
+        'icon': Icons.shuffle,
+        'preset': 'random'
+      },
+      {
+        'label': AppLocalizations.of(context)!.warFiltersFriendly,
         'icon': Icons.handshake,
         'preset': 'friendly'
       },
@@ -1559,18 +1559,70 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   }
 
   Widget _buildPresetChip(Map<String, dynamic> preset) {
+    final presetType = preset['preset'] as String;
+    bool isActive = false;
+
+    // Check if this preset is currently active
+    switch (presetType) {
+      case 'last30days':
+        // Check if we have a 30-day range ending around today
+        if (_filter.startDate != null && _filter.endDate != null) {
+          final daysDiff =
+              _filter.endDate!.difference(_filter.startDate!).inDays;
+          final daysFromToday =
+              DateTime.now().difference(_filter.endDate!).inDays.abs();
+          // Consider active if it's approximately 30 days range and ends within 2 days of today
+          isActive = daysDiff >= 28 && daysDiff <= 32 && daysFromToday <= 2;
+        }
+        break;
+      case '3star':
+        isActive = starSelection[3] == true &&
+            starSelection[0] == false &&
+            starSelection[1] == false &&
+            starSelection[2] == false;
+        break;
+      case 'cwl':
+        isActive = warTypeSelection['cwl'] == true &&
+            warTypeSelection['all'] == false &&
+            warTypeSelection['random'] == false &&
+            warTypeSelection['friendly'] == false;
+        break;
+      case 'random':
+        isActive = warTypeSelection['random'] == true &&
+            warTypeSelection['all'] == false &&
+            warTypeSelection['cwl'] == false &&
+            warTypeSelection['friendly'] == false;
+        break;
+      case 'friendly':
+        isActive = warTypeSelection['friendly'] == true &&
+            warTypeSelection['all'] == false &&
+            warTypeSelection['random'] == false &&
+            warTypeSelection['cwl'] == false;
+        break;
+      case 'fresh':
+        isActive = _filter.freshAttacksOnly == true;
+        break;
+    }
+
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
-        _applyPreset(preset['preset']);
+        if (isActive) {
+          _clearPreset(preset['preset']);
+        } else {
+          _applyPreset(preset['preset']);
+        }
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: isActive
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+            width: 1,
           ),
         ),
         child: Row(
@@ -1579,13 +1631,18 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             Icon(
               preset['icon'],
               size: 16,
-              color: Theme.of(context).colorScheme.primary,
+              color: isActive
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: 6),
             Text(
               preset['label'],
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.w500,
+                    fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+                    color: isActive
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : null,
                   ),
             ),
           ],
@@ -1595,10 +1652,17 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   }
 
   Widget _buildSavedPresetChip(FilterPreset preset) {
+    // Check if this saved preset matches the current filter state
+    final isActive = _isPresetActive(preset);
+
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
-        _applySavedPreset(preset);
+        if (isActive) {
+          _clearSavedPreset(preset);
+        } else {
+          _applySavedPreset(preset);
+        }
       },
       onLongPress: () {
         _showPresetContextMenu(preset);
@@ -1606,10 +1670,15 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondaryContainer,
+          color: isActive
+              ? Theme.of(context).colorScheme.secondary
+              : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+            color: isActive
+                ? Theme.of(context).colorScheme.secondary
+                : Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+            width: isActive ? 2 : 1,
           ),
         ),
         child: Row(
@@ -1618,7 +1687,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             Icon(
               Icons.bookmark,
               size: 16,
-              color: Theme.of(context).colorScheme.secondary,
+              color: isActive
+                  ? Theme.of(context).colorScheme.onSecondary
+                  : Theme.of(context).colorScheme.secondary,
             ),
             const SizedBox(width: 6),
             ConstrainedBox(
@@ -1626,8 +1697,10 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               child: Text(
                 preset.name,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+                      color: isActive
+                          ? Theme.of(context).colorScheme.onSecondary
+                          : Theme.of(context).colorScheme.onSecondaryContainer,
                     ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -1641,25 +1714,34 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   Widget _buildPerformanceSuggestionChip(FilterPreset suggestion) {
     final metadata = suggestion.filter.metadata ?? {};
     final description = metadata['description'] as String? ?? '';
+    
+    // Check if this performance suggestion is currently active
+    final isActive = _isPresetActive(suggestion);
 
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
-        _applySavedPreset(suggestion);
+        if (isActive) {
+          _clearSavedPreset(suggestion);
+        } else {
+          _applySavedPreset(suggestion);
+        }
       },
       child: Tooltip(
         message: description.isNotEmpty ? description : suggestion.name,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            color: Theme.of(context)
-                .colorScheme
-                .tertiaryContainer
-                .withValues(alpha: 0.3),
+            color: isActive
+                ? Theme.of(context).colorScheme.tertiary
+                : Theme.of(context)
+                    .colorScheme.surface,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color:
-                  Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.4),
+              color: isActive
+                  ? Theme.of(context).colorScheme.tertiary
+                  : Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.4),
+              width: isActive ? 2 : 1,
             ),
           ),
           child: Row(
@@ -1668,7 +1750,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               Icon(
                 Icons.lightbulb_outline,
                 size: 16,
-                color: Theme.of(context).colorScheme.tertiary,
+                color: isActive
+                    ? Theme.of(context).colorScheme.onTertiary
+                    : Theme.of(context).colorScheme.tertiary,
               ),
               const SizedBox(width: 6),
               ConstrainedBox(
@@ -1676,9 +1760,10 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 child: Text(
                   suggestion.name,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color:
-                            Theme.of(context).colorScheme.onTertiaryContainer,
+                        fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+                        color: isActive
+                            ? Theme.of(context).colorScheme.onTertiary
+                            : Theme.of(context).colorScheme.onTertiaryContainer,
                       ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -1705,7 +1790,12 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               title: Text(AppLocalizations.of(context)!.presetsApply),
               onTap: () {
                 Navigator.pop(context);
-                _applySavedPreset(preset);
+                final isActive = _isPresetActive(preset);
+                if (isActive) {
+                  _clearSavedPreset(preset);
+                } else {
+                  _applySavedPreset(preset);
+                }
               },
             ),
             ListTile(
@@ -1918,6 +2008,14 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             'friendly': false
           };
           break;
+        case 'random':
+          warTypeSelection = {
+            'all': false,
+            'random': true,
+            'cwl': false,
+            'friendly': false
+          };
+          break;
         case 'friendly':
           warTypeSelection = {
             'all': false,
@@ -1928,6 +2026,34 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
           break;
         case 'fresh':
           _updateFilter(_filter.copyWith(freshAttacksOnly: true));
+          break;
+      }
+    });
+  }
+
+  void _clearPreset(String preset) {
+    setState(() {
+      switch (preset) {
+        case 'last30days':
+          _updateFilter(_filter.copyWith(
+              startDate: DateTime.now().subtract(const Duration(days: 180)),
+              endDate: DateTime.now()));
+          break;
+        case '3star':
+          starSelection = {0: false, 1: false, 2: false, 3: false};
+          break;
+        case 'cwl':
+        case 'random':
+        case 'friendly':
+          warTypeSelection = {
+            'all': true,
+            'random': false,
+            'cwl': false,
+            'friendly': false
+          };
+          break;
+        case 'fresh':
+          _updateFilter(_filter.copyWith(freshAttacksOnly: false));
           break;
       }
     });
@@ -2190,7 +2316,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         filters.add({
           'type': 'stars',
           'text':
-              '$selectedStars ${AppLocalizations.of(context)?.filtersStars ?? '⭐'}'
+              '$selectedStars ${AppLocalizations.of(context)?.warStarsTitle ?? '⭐'}'
         });
       }
       if ((_filter.minDestruction != null && _filter.minDestruction! > 0) ||
@@ -2222,7 +2348,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         filters.add({
           'type': 'mapPosition',
           'text':
-              '${AppLocalizations.of(context)?.filtersMapPosition ?? 'Position'} $min-$max'
+              '${AppLocalizations.of(context)?.warPositionMap ?? 'Position'} $min-$max'
         });
       }
       if (_filter.limit != 50) {
@@ -2235,6 +2361,180 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     }
 
     return filters;
+  }
+
+  /// Check if a saved preset matches the current filter state
+  bool _isPresetActive(FilterPreset preset) {
+    // Build a filter from current UI state and compare with saved filter
+    final currentFilter = _buildCurrentFilter();
+    final savedFilter = preset.filter;
+
+    // Compare the essential properties that make filters equivalent
+    return _filtersAreEquivalent(currentFilter, savedFilter);
+  }
+
+  /// Build a filter object from the current UI state
+  WarStatsFilter _buildCurrentFilter() {
+    // Get selected war types
+    final selectedWarTypes = warTypeSelection.entries
+        .where((entry) => entry.value && entry.key != 'all')
+        .map((entry) => entry.key)
+        .toList();
+
+    // Get selected stars
+    final selectedStars = starSelection.entries
+        .where((entry) => entry.value)
+        .map((entry) => entry.key)
+        .toList();
+
+    // Get selected TH levels
+    final selectedAttackerTH = attackerThSelection.entries
+        .where((entry) => entry.value)
+        .map((entry) => entry.key)
+        .toList();
+    final selectedDefenderTH = defenderThSelection.entries
+        .where((entry) => entry.value)
+        .map((entry) => entry.key)
+        .toList();
+
+    // Get map positions
+    final minPos = _minMapPositionController.text.isNotEmpty
+        ? int.tryParse(_minMapPositionController.text)
+        : null;
+    final maxPos = _maxMapPositionController.text.isNotEmpty
+        ? int.tryParse(_maxMapPositionController.text)
+        : null;
+
+    return WarStatsFilter(
+      season: selectedSeason,
+      startDate: _filter.startDate,
+      endDate: _filter.endDate,
+      warTypes: warTypeSelection['all'] == true
+          ? null
+          : (selectedWarTypes.isEmpty ? null : selectedWarTypes),
+      allowedStars: selectedStars.isEmpty ? null : selectedStars,
+      ownTownHalls: selectedAttackerTH.isEmpty ? null : selectedAttackerTH,
+      enemyTownHalls: selectedDefenderTH.isEmpty ? null : selectedDefenderTH,
+      minMapPosition: minPos,
+      maxMapPosition: maxPos,
+      freshAttacksOnly: _filter.freshAttacksOnly,
+      sameTownHall: _filter.sameTownHall,
+      minDestruction: _filter.minDestruction,
+      maxDestruction: _filter.maxDestruction,
+      limit: _filter.limit,
+    );
+  }
+
+  /// Check if two filters are functionally equivalent
+  bool _filtersAreEquivalent(WarStatsFilter current, WarStatsFilter saved) {
+    // Normalize war types (null/empty list both mean "all")
+    final currentWarTypes = current.warTypes?.toSet() ?? <String>{};
+    final savedWarTypes = saved.warTypes?.toSet() ?? <String>{};
+
+    // Handle "all wars" case - both null/empty means all
+    final currentIsAll = currentWarTypes.isEmpty;
+    final savedIsAll = savedWarTypes.isEmpty;
+
+    if (currentIsAll != savedIsAll) {
+      return false;
+    }
+    // Use manual set comparison instead of == operator
+    if (!currentIsAll && !_setsAreEqual(currentWarTypes, savedWarTypes)) {
+      return false;
+    }
+
+    // Compare other list properties using manual set comparison
+    final currentStars = current.allowedStars?.toSet() ?? <int>{};
+    final savedStars = saved.allowedStars?.toSet() ?? <int>{};
+    if (!_setsAreEqual(currentStars, savedStars)) {
+      return false;
+    }
+
+    final currentAttackerTH = current.ownTownHalls?.toSet() ?? <int>{};
+    final savedAttackerTH = saved.ownTownHalls?.toSet() ?? <int>{};
+    if (!_setsAreEqual(currentAttackerTH, savedAttackerTH)) {
+      return false;
+    }
+
+    final currentDefenderTH = current.enemyTownHalls?.toSet() ?? <int>{};
+    final savedDefenderTH = saved.enemyTownHalls?.toSet() ?? <int>{};
+    if (!_setsAreEqual(currentDefenderTH, savedDefenderTH)) {
+      return false;
+    }
+
+    // Compare scalar properties one by one
+    if (current.season != saved.season) {
+      return false;
+    }
+    if (current.startDate != saved.startDate) {
+      return false;
+    }
+    if (current.endDate != saved.endDate) {
+      return false;
+    }
+    if (current.minMapPosition != saved.minMapPosition) {
+      return false;
+    }
+    if (current.maxMapPosition != saved.maxMapPosition) {
+      return false;
+    }
+    if (current.freshAttacksOnly != saved.freshAttacksOnly) {
+      return false;
+    }
+    if (current.sameTownHall != saved.sameTownHall) {
+      return false;
+    }
+    if (current.minDestruction != saved.minDestruction) {
+      return false;
+    }
+    if (current.maxDestruction != saved.maxDestruction) {
+      return false;
+    }
+    if (current.limit != saved.limit) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /// Helper method to compare sets manually (workaround for Set equality issues)
+  bool _setsAreEqual<T>(Set<T> set1, Set<T> set2) {
+    if (set1.length != set2.length) return false;
+    return set1.every((element) => set2.contains(element));
+  }
+
+  /// Clear/reset a saved preset by resetting to default values
+  void _clearSavedPreset(FilterPreset preset) {
+    setState(() {
+      // Reset to default filter state
+      _filter = WarStatsFilter.defaultFilter();
+      _minMapPositionController.clear();
+      _maxMapPositionController.clear();
+
+      // Reset TH selections
+      for (int i = 1; i <= GameDataService.getMaxTownHallLevel(); i++) {
+        attackerThSelection[i] = false;
+        defenderThSelection[i] = false;
+      }
+
+      // Reset war type selections (default to 'all')
+      warTypeSelection = {
+        'all': true,
+        'random': false,
+        'cwl': false,
+        'friendly': false,
+      };
+
+      // Reset star selections
+      for (int i = 0; i <= 3; i++) {
+        starSelection[i] = false;
+      }
+
+      // Reset season selection
+      selectedSeason = null;
+      selectedYear = null;
+      selectedMonth = null;
+    });
   }
 }
 

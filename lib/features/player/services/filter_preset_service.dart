@@ -119,20 +119,23 @@ class FilterPresetService {
   }
 
   /// Get preset suggestions based on filter characteristics
-  static List<String> getPresetNameSuggestions(WarStatsFilter filter) {
+  static List<String> getPresetNameSuggestions(
+    WarStatsFilter filter, {
+    Map<String, String> localizations = const {},
+  }) {
     List<String> suggestions = [];
     
     // Based on war types
     if (filter.warTypes != null && filter.warTypes!.length == 1) {
       switch (filter.warTypes!.first.toLowerCase()) {
         case 'cwl':
-          suggestions.add('CWL Only');
+          suggestions.add(localizations['presetSuggestionCwlOnly'] ?? 'CWL Only');
           break;
         case 'random':
-          suggestions.add('Random Wars');
+          suggestions.add(localizations['presetSuggestionRandomWars'] ?? 'Random Wars');
           break;
         case 'friendly':
-          suggestions.add('Friendly Wars');
+          suggestions.add(localizations['presetSuggestionFriendlyWars'] ?? 'Friendly Wars');
           break;
       }
     }
@@ -140,42 +143,46 @@ class FilterPresetService {
     // Based on stars
     if (filter.allowedStars != null) {
       if (filter.allowedStars!.length == 1) {
-        suggestions.add('${filter.allowedStars!.first} Star Only');
+        final starCount = filter.allowedStars!.first;
+        final template = localizations['presetSuggestionStarOnly'] ?? '{count} Star Only';
+        suggestions.add(template.replaceAll('{count}', starCount.toString()));
       }
       if (filter.allowedStars!.contains(3) && filter.allowedStars!.length == 1) {
-        suggestions.add('Perfect Attacks');
+        suggestions.add(localizations['presetSuggestionPerfectAttacks'] ?? 'Perfect Attacks');
       }
       if (!filter.allowedStars!.contains(3)) {
-        suggestions.add('Failed Attacks');
+        suggestions.add(localizations['presetSuggestionFailedAttacks'] ?? 'Failed Attacks');
       }
     }
     
     // Based on town hall
     if (filter.ownTownHalls != null && filter.ownTownHalls!.length == 1) {
-      suggestions.add('TH${filter.ownTownHalls!.first} Only');
+      final thLevel = filter.ownTownHalls!.first;
+      final template = localizations['presetSuggestionThOnly'] ?? 'TH{level} Only';
+      suggestions.add(template.replaceAll('{level}', thLevel.toString()));
     }
     
     // Based on fresh attacks
     if (filter.freshAttacksOnly == true) {
-      suggestions.add('Fresh Attacks');
+      suggestions.add(localizations['filtersFreshAttacks'] ?? 'Fresh Attacks');
     }
     
     // Based on time range
     if (filter.startDate != null && filter.endDate != null) {
       final daysDiff = filter.endDate!.difference(filter.startDate!).inDays;
       if (daysDiff <= 7) {
-        suggestions.add('Last Week');
+        suggestions.add(localizations['presetSuggestionLastWeek'] ?? 'Last Week');
       } else if (daysDiff <= 30) {
-        suggestions.add('Last Month');
+        suggestions.add(localizations['presetSuggestionLastMonth'] ?? 'Last Month');
       }
     }
     
     // Default suggestions
     if (suggestions.isEmpty) {
       suggestions.addAll([
-        'My Preset',
-        'Custom Filter',
-        'Recent Filter',
+        localizations['presetSuggestionMyPreset'] ?? 'My Preset',
+        localizations['presetSuggestionCustomFilter'] ?? 'Custom Filter',
+        localizations['presetSuggestionRecentFilter'] ?? 'Recent Filter',
       ]);
     }
     

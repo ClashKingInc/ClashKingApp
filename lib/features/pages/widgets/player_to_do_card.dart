@@ -187,28 +187,23 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                         spacing: 7.0,
                         runSpacing: -7.0,
                         children: <Widget>[
-                          if (player.league == 'Legend League' ||
+                          if (player.league == 'Legend League' &&
                               currentDay != null)
                             ImageChip(
                               imageUrl: ImageAssets.legendBlazonNoPadding,
                               labelPadding: 2.0,
-                              label: "${currentDay?.totalAttacks ?? 0}/8",
-                              description: (8 -
-                                          player.currentLegendSeason!
-                                              .currentDay!.totalAttacks) >
-                                      0
+                              label: "${currentDay.totalAttacks}/8",
+                              description: (8 - currentDay.totalAttacks) > 0
                                   ? AppLocalizations.of(context)!
                                       .todoAttacksLeftDescription(
-                                          (8 -
-                                              player.currentLegendSeason!
-                                                  .currentDay!.totalAttacks),
+                                          (8 - (currentDay.totalAttacks)),
                                           AppLocalizations.of(context)!
                                               .legendsTitle)
                                   : AppLocalizations.of(context)!
                                       .todoNoAttacksLeftDescription(
                                           AppLocalizations.of(context)!
                                               .legendsTitle),
-                              edgeColor: currentDay?.totalAttacks == 8
+                              edgeColor: currentDay.totalAttacks == 8
                                   ? Colors.green
                                   : Colors.red,
                             ),

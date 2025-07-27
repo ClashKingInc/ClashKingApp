@@ -111,6 +111,8 @@ Future<void> main() async {
       options.dsn = ApiService.sentryDsn ?? '';
       options.tracesSampleRate = 1.0;
       options.debug = false;
+      options.replay.sessionSampleRate = 1.0;
+      options.replay.onErrorSampleRate = 1.0;
     },
     appRunner: () async {
 

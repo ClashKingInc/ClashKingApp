@@ -81,7 +81,7 @@ Future<String> getAppAndDeviceInfo() async {
 }
 
 String getEndedAgoText(DateTime? endTime, material.BuildContext context) {
-  if (endTime == null) return AppLocalizations.of(context)!.clanWarFrequencyUnknown;
+  if (endTime == null) return AppLocalizations.of(context)!.generalUnknown;
 
   final localEndTime = endTime.toLocal();
   final now = DateTime.now();

@@ -195,7 +195,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
               case 'lessThanOncePerWeek':
                 return loc.clanWarFrequencyRarely;
               default:
-                return loc.clanWarFrequencyUnknown;
+                return loc.generalUnknown;
             }
           }(),
         ),

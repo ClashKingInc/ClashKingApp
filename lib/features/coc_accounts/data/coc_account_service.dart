@@ -95,8 +95,12 @@ class CocAccountService extends ChangeNotifier {
 
       return {
         "code": response.statusCode,
-        "message": data["detail"] ?? "Uknown error",
-        "account": response.statusCode == 200 ? data["account"] : null
+        "message": data["detail"] is Map ? data["detail"]["message"] : data["detail"] ?? "Unknown error",
+        "account": response.statusCode == 200 
+            ? data["account"] 
+            : (data["detail"] is Map && data["detail"]["account"] != null 
+                ? data["detail"]["account"] 
+                : null)
       };
     } catch (e) {
       return {"code": 500, "message": "Internal server error"};

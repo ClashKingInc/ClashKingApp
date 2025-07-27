@@ -496,10 +496,18 @@ class Player {
         ? PlayerRaids.fromJson(json['raid_data'])
         : PlayerRaids.empty();
 
-    warData =
-        json['war_data'] != null && json['war_data']["currentWarInfo"] != null
-            ? WarInfo.fromJson(json['war_data']["currentWarInfo"])
-            : null;
+    if (json['war_data'] != null && json['war_data']["currentWarInfo"] != null) {
+      final originalWar = WarInfo.fromJson(json['war_data']["currentWarInfo"]);
+      warData = originalWar.reorderForUser(tag);
+      // Debug: Check if reordering happened
+      print("🔄 REORDERING WAR DATA for $tag:");
+      print("  - Original clan: ${originalWar.clan?.tag}");
+      print("  - Original opponent: ${originalWar.opponent?.tag}"); 
+      print("  - Reordered clan: ${warData?.clan?.tag}");
+      print("  - Reordered opponent: ${warData?.opponent?.tag}");
+    } else {
+      warData = null;
+    }
   }
 
   String getLastOnlineText(BuildContext context) {
@@ -533,7 +541,7 @@ class Player {
     if (league == 'Legend League') {
       totalEvent += 8;
       totalDone +=
-          currentLegendSeason!.currentDay?.totalAttacks.toDouble() ?? 0.0;
+          currentLegendSeason?.currentDay?.totalAttacks.toDouble() ?? 0.0;
     }
 
     // CWL (guerres de ligue)

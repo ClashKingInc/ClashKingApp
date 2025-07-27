@@ -45,7 +45,7 @@ class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
 
       if (player.league == "Legend League" && player.currentLegendSeason?.currentDay != null) {
         requiredLegend += 8;
-        totalLegend += player.currentLegendSeason!.currentDay!.totalAttacks;
+        totalLegend += player.currentLegendSeason?.currentDay?.totalAttacks ?? 0;
       }
 
       // Count regular war attacks

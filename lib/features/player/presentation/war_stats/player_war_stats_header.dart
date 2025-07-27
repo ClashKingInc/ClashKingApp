@@ -119,7 +119,8 @@ class PlayerWarStatsHeader extends StatelessWidget {
                           visualDensity: VisualDensity.compact,
                           selectedColor: Theme.of(context).colorScheme.primary,
                           checkmarkColor: Colors.white,
-                          label: Text(AppLocalizations.of(context)!.warFiltersRandom,
+                          label: Text(
+                              AppLocalizations.of(context)!.warFiltersRandom,
                               style: Theme.of(context)
                                   .textTheme
                                   .labelMedium
@@ -132,7 +133,8 @@ class PlayerWarStatsHeader extends StatelessWidget {
                           visualDensity: VisualDensity.compact,
                           selectedColor: Theme.of(context).colorScheme.primary,
                           checkmarkColor: Colors.white,
-                          label: Text(AppLocalizations.of(context)!.warFiltersFriendly,
+                          label: Text(
+                              AppLocalizations.of(context)!.warFiltersFriendly,
                               style: Theme.of(context)
                                   .textTheme
                                   .labelMedium
@@ -168,30 +170,8 @@ class PlayerWarStatsHeader extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.download_outlined, color: Colors.white),
                 onPressed: onExport,
-                tooltip: AppLocalizations.of(context)?.generalExport ?? 'Export',
-              ),
-              // Filter button with active indicator
-              Stack(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.filter_list, color: Theme.of(context).colorScheme.onPrimary),
-                    onPressed: onFilter,
-                    tooltip: AppLocalizations.of(context)?.generalFilters ?? 'Filters',
-                  ),
-                  if (hasActiveFilters)
-                    Positioned(
-                      right: 8,
-                      top: 8,
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondary,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                ],
+                tooltip:
+                    AppLocalizations.of(context)?.generalExport ?? 'Export',
               ),
             ],
           ),

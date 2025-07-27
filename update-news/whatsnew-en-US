@@ -1,1 +1,8 @@
-New Polish, Dutch and French translations
+- Improved account verification experience with alert dialog
+- Enhanced error handling for better user feedback during account setup
+- Fixed keyboard layout issues in account management screen
+- Improved war attack details UI
+- Removed war stats filter button from war stats header
+- Moved war filter banner for better UI
+- Removed duplicate war cards
+- Fixed saved preset filter visual feedback and color issues
