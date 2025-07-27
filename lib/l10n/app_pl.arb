@@ -96,6 +96,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Ostrzeżenie",
+  "generalUnknown": "Unknown",
   "generalNoDataAvailable": "Brak dostępnych danych.",
   "generalNoFilteredResults": "Brak wyników pasujących do Twoich filtrów",
   "@generalNoFilteredResults": {
@@ -506,7 +507,6 @@
   "clanRoleMember": "Członek",
   "clanWarFrequencyAlways": "Zawsze",
   "clanWarFrequencyNever": "Nigdy",
-  "clanWarFrequencyUnknown": "Nieznane",
   "clanWarFrequencyOncePerWeek": "1/tydzień",
   "clanWarFrequencyMoreThanOncePerWeek": "Więcej niż 1/tydzień",
   "clanWarFrequencyRarely": "Rzadko",
@@ -866,6 +866,10 @@
   "warAskForWar": "Skontaktuj się z liderem lub co-liderem, aby rozpocząć wojnę.",
   "warAskForWarLogOpening": "Skontaktuj się z liderem lub co-liderem, aby otworzyć dziennik wojenny.",
   "warEnded": "Zakończyła się wojna",
+  "warInWar": "In War",
+  "@warInWar": {
+    "description": "War state: active"
+  },
   "warPreparation": "Przygotowanie",
   "warPerfectWar": "Perfekcyjna wojna",
   "warVictory": "Zwycięstwo",
@@ -1501,17 +1505,9 @@
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
-  "filtersStars": "Gwiazdki",
-  "@filtersStars": {
-    "description": "Stars filter subsection title"
-  },
   "filtersDestructionPercentage": "Procent Zniszczenia",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
-  },
-  "filtersMapPosition": "Pozycja na mapie",
-  "@filtersMapPosition": {
-    "description": "Map position filter subsection title"
   },
   "filtersOptions": "Opcje",
   "@filtersOptions": {
@@ -1653,10 +1649,6 @@
   "@warAttacksDetailsStars": {
     "description": "Label for stars in attack details"
   },
-  "warAttacksDetailsDestruction": "Destruction",
-  "@warAttacksDetailsDestruction": {
-    "description": "Label for destruction percentage in attack details"
-  },
   "warAttacksDetailsAttacker": "Attacker",
   "@warAttacksDetailsAttacker": {
     "description": "Label for attacker section in attack details"
@@ -1669,37 +1661,9 @@
   "@warAttacksDetailsName": {
     "description": "Label for player name in attack details"
   },
-  "warAttacksDetailsTHLevel": "TH Level",
-  "@warAttacksDetailsTHLevel": {
-    "description": "Label for town hall level in attack details"
-  },
-  "warAttacksDetailsMapPosition": "Map Position",
-  "@warAttacksDetailsMapPosition": {
-    "description": "Label for map position in attack details"
-  },
-  "warAttacksDetailsUnknown": "Unknown",
-  "@warAttacksDetailsUnknown": {
-    "description": "Default text for unknown values in attack details"
-  },
   "warDataState": "State",
   "@warDataState": {
     "description": "Label for war state"
-  },
-  "warDataStateWarEnded": "War Ended",
-  "@warDataStateWarEnded": {
-    "description": "War state: ended"
-  },
-  "warDataStateInWar": "In War",
-  "@warDataStateInWar": {
-    "description": "War state: active"
-  },
-  "warDataStatePreparation": "Preparation",
-  "@warDataStatePreparation": {
-    "description": "War state: preparation day"
-  },
-  "warDataTeamSize": "Team Size",
-  "@warDataTeamSize": {
-    "description": "Label for war team size"
   },
   "warDataAttacksPerMember": "Attacks Per Member",
   "@warDataAttacksPerMember": {
@@ -1713,17 +1677,9 @@
   "@warDataEndTime": {
     "description": "Label for war end time"
   },
-  "warDataClan": "Clan",
-  "@warDataClan": {
-    "description": "Label for clan information"
-  },
   "warDataClanLevel": "Clan Level",
   "@warDataClanLevel": {
     "description": "Label for clan level"
-  },
-  "warDataAttacks": "Attacks",
-  "@warDataAttacks": {
-    "description": "Label for number of attacks"
   },
   "warDataTotalStars": "Total Stars",
   "@warDataTotalStars": {
