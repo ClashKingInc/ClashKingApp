@@ -96,6 +96,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Attention",
+  "generalUnknown": "Unknown",
   "generalNoDataAvailable": "Aucune donnée disponible.",
   "generalNoFilteredResults": "Aucun résultat ne correspond à tes filtres",
   "@generalNoFilteredResults": {
@@ -314,7 +315,7 @@
   "accountsEnterApiToken": "Merci de saisir le token API du compte pour confirmer que c'est tien. Tu peux le trouver dans Clash of Clans :",
   "accountsApiTokenLocation": "Paramètres > Plus de paramètres > Jeton API",
   "accountsOpenMoreSettings": "Ouvrir les paramètres",
-  "accountsCouldNotOpenClash": "Could not open Clash of Clans. Please open it manually.",
+  "accountsCouldNotOpenClash": "Impossible d'ouvrir Clash of Clans. Essaie de l'ouvrir manuellement.",
   "accountsFillAllFields": "Merci de remplir tous les champs.",
   "accountsErrorTagNotExists": "Le tag du joueur n'existe pas.",
   "accountsErrorAlreadyLinked": "Ce compte est déjà lié à un utilisateur.",
@@ -506,7 +507,6 @@
   "clanRoleMember": "Membre",
   "clanWarFrequencyAlways": "Toujours",
   "clanWarFrequencyNever": "Jamais",
-  "clanWarFrequencyUnknown": "Inconnu",
   "clanWarFrequencyOncePerWeek": "1/semaine",
   "clanWarFrequencyMoreThanOncePerWeek": "Plus de 1/semaine",
   "clanWarFrequencyRarely": "Rarement",
@@ -866,6 +866,10 @@
   "warAskForWar": "Contactez le chef ou un adjoint pour lancer une guerre.",
   "warAskForWarLogOpening": "Contactez un chef ou un adjoint pour ouvrir le journal de guerre.",
   "warEnded": "Terminée",
+  "warInWar": "In War",
+  "@warInWar": {
+    "description": "War state: active"
+  },
   "warPreparation": "Préparation",
   "warPerfectWar": "Perf map",
   "warVictory": "Victoire",
@@ -1501,17 +1505,9 @@
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
-  "filtersStars": "Étoiles",
-  "@filtersStars": {
-    "description": "Stars filter subsection title"
-  },
   "filtersDestructionPercentage": "Pourcentage de destruction",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
-  },
-  "filtersMapPosition": "Position sur la carte",
-  "@filtersMapPosition": {
-    "description": "Map position filter subsection title"
   },
   "filtersOptions": "Options",
   "@filtersOptions": {
@@ -1633,19 +1629,19 @@
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   },
-  "warAttacksFailedToLoadPlayer": "Failed to load player data",
+  "warAttacksFailedToLoadPlayer": "Impossible de charger les données du joueur",
   "@warAttacksFailedToLoadPlayer": {
     "description": "Error message when player profile fails to load"
   },
-  "warAttacksDetailsTitle": "Attack Details",
+  "warAttacksDetailsTitle": "Détails de l'attaque",
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
   },
-  "warAttacksDetailsWarType": "War Type",
+  "warAttacksDetailsWarType": "Type de guerre",
   "@warAttacksDetailsWarType": {
     "description": "Label for war type in attack details"
   },
-  "warAttacksDetailsAttackOrder": "Attack Order",
+  "warAttacksDetailsAttackOrder": "Ordre d'attaque",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
   },
@@ -1653,77 +1649,37 @@
   "@warAttacksDetailsStars": {
     "description": "Label for stars in attack details"
   },
-  "warAttacksDetailsDestruction": "Destruction",
-  "@warAttacksDetailsDestruction": {
-    "description": "Label for destruction percentage in attack details"
-  },
-  "warAttacksDetailsAttacker": "Attacker",
+  "warAttacksDetailsAttacker": "Attaquant",
   "@warAttacksDetailsAttacker": {
     "description": "Label for attacker section in attack details"
   },
-  "warAttacksDetailsDefender": "Defender",
+  "warAttacksDetailsDefender": "Défenseur",
   "@warAttacksDetailsDefender": {
     "description": "Label for defender section in attack details"
   },
-  "warAttacksDetailsName": "Name",
+  "warAttacksDetailsName": "Nom",
   "@warAttacksDetailsName": {
     "description": "Label for player name in attack details"
   },
-  "warAttacksDetailsTHLevel": "TH Level",
-  "@warAttacksDetailsTHLevel": {
-    "description": "Label for town hall level in attack details"
-  },
-  "warAttacksDetailsMapPosition": "Map Position",
-  "@warAttacksDetailsMapPosition": {
-    "description": "Label for map position in attack details"
-  },
-  "warAttacksDetailsUnknown": "Unknown",
-  "@warAttacksDetailsUnknown": {
-    "description": "Default text for unknown values in attack details"
-  },
-  "warDataState": "State",
+  "warDataState": "État",
   "@warDataState": {
     "description": "Label for war state"
   },
-  "warDataStateWarEnded": "War Ended",
-  "@warDataStateWarEnded": {
-    "description": "War state: ended"
-  },
-  "warDataStateInWar": "In War",
-  "@warDataStateInWar": {
-    "description": "War state: active"
-  },
-  "warDataStatePreparation": "Preparation",
-  "@warDataStatePreparation": {
-    "description": "War state: preparation day"
-  },
-  "warDataTeamSize": "Team Size",
-  "@warDataTeamSize": {
-    "description": "Label for war team size"
-  },
-  "warDataAttacksPerMember": "Attacks Per Member",
+  "warDataAttacksPerMember": "Attaques par membre",
   "@warDataAttacksPerMember": {
     "description": "Label for attacks per member"
   },
-  "warDataStartTime": "War Start",
+  "warDataStartTime": "Début de la guerre",
   "@warDataStartTime": {
     "description": "Label for war start time"
   },
-  "warDataEndTime": "War End",
+  "warDataEndTime": "Fin de la guerre",
   "@warDataEndTime": {
     "description": "Label for war end time"
   },
-  "warDataClan": "Clan",
-  "@warDataClan": {
-    "description": "Label for clan information"
-  },
-  "warDataClanLevel": "Clan Level",
+  "warDataClanLevel": "Niveau du clan",
   "@warDataClanLevel": {
     "description": "Label for clan level"
-  },
-  "warDataAttacks": "Attacks",
-  "@warDataAttacks": {
-    "description": "Label for number of attacks"
   },
   "warDataTotalStars": "Total Stars",
   "@warDataTotalStars": {
@@ -1733,27 +1689,27 @@
   "@warDataDestructionPercentage": {
     "description": "Label for destruction percentage"
   },
-  "warInformationTitle": "War Information",
+  "warInformationTitle": "Informations sur la guerre",
   "@warInformationTitle": {
     "description": "Title for war information section in attack details"
   },
-  "warResultsTitle": "War Results",
+  "warResultsTitle": "Résultats de la guerre",
   "@warResultsTitle": {
     "description": "Title for war results section showing clan vs opponent"
   },
-  "warPlayersTitle": "Players",
+  "warPlayersTitle": "Joueurs",
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "performanceAnalysisFailedAttacks": "Failed Attacks (0-1 Stars)",
+  "performanceAnalysisFailedAttacks": "Attaques ratées (0-1 Etoiles)",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
   },
-  "performanceAnalysisFailedAttacksDesc": "Shows attacks that failed to get 2+ stars",
+  "performanceAnalysisFailedAttacksDesc": "Affiche les attaques avec moins de 2 étoiles",
   "@performanceAnalysisFailedAttacksDesc": {
     "description": "Description for failed attacks analysis"
   },
-  "performanceAnalysisMissedPerfects": "Missed Perfect Attacks",
+  "performanceAnalysisMissedPerfects": "Attaques parfaites manquées",
   "@performanceAnalysisMissedPerfects": {
     "description": "Performance analysis preset for missed perfect attacks"
   },
@@ -1771,7 +1727,7 @@
       }
     }
   },
-  "performanceAnalysisThAttackIssuesDesc": "Shows poor performance against TH{thLevel}",
+  "performanceAnalysisThAttackIssuesDesc": "Montre les performances médiocres contre HDV{thLevel}",
   "@performanceAnalysisThAttackIssuesDesc": {
     "description": "Description for TH-specific attack issues",
     "placeholders": {
@@ -1935,15 +1891,15 @@
   "@presetSuggestionLastMonth": {
     "description": "Preset suggestion for last month timeframe"
   },
-  "presetSuggestionMyPreset": "My Preset",
+  "presetSuggestionMyPreset": "Mes filtres",
   "@presetSuggestionMyPreset": {
     "description": "Default preset suggestion"
   },
-  "presetSuggestionCustomFilter": "Custom Filter",
+  "presetSuggestionCustomFilter": "Filtre personnalisé",
   "@presetSuggestionCustomFilter": {
     "description": "Default custom filter suggestion"
   },
-  "presetSuggestionRecentFilter": "Recent Filter",
+  "presetSuggestionRecentFilter": "Filtre récent",
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
   }
