@@ -96,6 +96,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Attention",
+  "generalUnknown": "Unknown",
   "generalNoDataAvailable": "Aucune donnée disponible.",
   "generalNoFilteredResults": "Aucun résultat ne correspond à tes filtres",
   "@generalNoFilteredResults": {
@@ -158,16 +159,6 @@
   "presetsSaveError": "Échec de l'enregistrement du préréglage",
   "@presetsSaveError": {
     "description": "Error message when preset save fails"
-  },
-  "presetsApplied": "Préréglage \"{name}\" appliqué",
-  "@presetsApplied": {
-    "description": "Message when preset is applied",
-    "placeholders": {
-      "name": {
-        "type": "String",
-        "description": "Name of the applied preset"
-      }
-    }
   },
   "presetsApply": "Appliquer le préréglage",
   "@presetsApply": {
@@ -324,6 +315,7 @@
   "accountsEnterApiToken": "Merci de saisir le token API du compte pour confirmer que c'est tien. Tu peux le trouver dans Clash of Clans :",
   "accountsApiTokenLocation": "Paramètres > Plus de paramètres > Jeton API",
   "accountsOpenMoreSettings": "Ouvrir les paramètres",
+  "accountsCouldNotOpenClash": "Impossible d'ouvrir Clash of Clans. Essaie de l'ouvrir manuellement.",
   "accountsFillAllFields": "Merci de remplir tous les champs.",
   "accountsErrorTagNotExists": "Le tag du joueur n'existe pas.",
   "accountsErrorAlreadyLinked": "Ce compte est déjà lié à un utilisateur.",
@@ -515,7 +507,6 @@
   "clanRoleMember": "Membre",
   "clanWarFrequencyAlways": "Toujours",
   "clanWarFrequencyNever": "Jamais",
-  "clanWarFrequencyUnknown": "Inconnu",
   "clanWarFrequencyOncePerWeek": "1/semaine",
   "clanWarFrequencyMoreThanOncePerWeek": "Plus de 1/semaine",
   "clanWarFrequencyRarely": "Rarement",
@@ -875,6 +866,10 @@
   "warAskForWar": "Contactez le chef ou un adjoint pour lancer une guerre.",
   "warAskForWarLogOpening": "Contactez un chef ou un adjoint pour ouvrir le journal de guerre.",
   "warEnded": "Terminée",
+  "warInWar": "In War",
+  "@warInWar": {
+    "description": "War state: active"
+  },
   "warPreparation": "Préparation",
   "warPerfectWar": "Perf map",
   "warVictory": "Victoire",
@@ -1478,10 +1473,6 @@
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersCwlWars": "Guerres de LDC",
-  "@filtersCwlWars": {
-    "description": "Preset filter for CWL wars only"
-  },
   "filtersFreshAttacks": "Attaques d'ouvertures",
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
@@ -1514,17 +1505,9 @@
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
-  "filtersStars": "Étoiles",
-  "@filtersStars": {
-    "description": "Stars filter subsection title"
-  },
   "filtersDestructionPercentage": "Pourcentage de destruction",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
-  },
-  "filtersMapPosition": "Position sur la carte",
-  "@filtersMapPosition": {
-    "description": "Map position filter subsection title"
   },
   "filtersOptions": "Options",
   "@filtersOptions": {
@@ -1573,10 +1556,6 @@
   "filtersAllWars": "Toutes les guerres",
   "@filtersAllWars": {
     "description": "All wars filter option"
-  },
-  "filtersFriendlyWars": "Guerres amicales",
-  "@filtersFriendlyWars": {
-    "description": "Friendly wars filter option"
   },
   "chartsAttackPerformance": "Performance d'attaque par niveau d'HDV",
   "@chartsAttackPerformance": {
@@ -1649,5 +1628,279 @@
   "filtersNoneApplied": "Aucun filtre appliqué",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
+  },
+  "warAttacksFailedToLoadPlayer": "Impossible de charger les données du joueur",
+  "@warAttacksFailedToLoadPlayer": {
+    "description": "Error message when player profile fails to load"
+  },
+  "warAttacksDetailsTitle": "Détails de l'attaque",
+  "@warAttacksDetailsTitle": {
+    "description": "Title for attack details modal"
+  },
+  "warAttacksDetailsWarType": "Type de guerre",
+  "@warAttacksDetailsWarType": {
+    "description": "Label for war type in attack details"
+  },
+  "warAttacksDetailsAttackOrder": "Ordre d'attaque",
+  "@warAttacksDetailsAttackOrder": {
+    "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsStars": "Stars",
+  "@warAttacksDetailsStars": {
+    "description": "Label for stars in attack details"
+  },
+  "warAttacksDetailsAttacker": "Attaquant",
+  "@warAttacksDetailsAttacker": {
+    "description": "Label for attacker section in attack details"
+  },
+  "warAttacksDetailsDefender": "Défenseur",
+  "@warAttacksDetailsDefender": {
+    "description": "Label for defender section in attack details"
+  },
+  "warAttacksDetailsName": "Nom",
+  "@warAttacksDetailsName": {
+    "description": "Label for player name in attack details"
+  },
+  "warDataState": "État",
+  "@warDataState": {
+    "description": "Label for war state"
+  },
+  "warDataAttacksPerMember": "Attaques par membre",
+  "@warDataAttacksPerMember": {
+    "description": "Label for attacks per member"
+  },
+  "warDataStartTime": "Début de la guerre",
+  "@warDataStartTime": {
+    "description": "Label for war start time"
+  },
+  "warDataEndTime": "Fin de la guerre",
+  "@warDataEndTime": {
+    "description": "Label for war end time"
+  },
+  "warDataClanLevel": "Niveau du clan",
+  "@warDataClanLevel": {
+    "description": "Label for clan level"
+  },
+  "warDataTotalStars": "Total Stars",
+  "@warDataTotalStars": {
+    "description": "Label for total stars earned"
+  },
+  "warDataDestructionPercentage": "Destruction %",
+  "@warDataDestructionPercentage": {
+    "description": "Label for destruction percentage"
+  },
+  "warInformationTitle": "Informations sur la guerre",
+  "@warInformationTitle": {
+    "description": "Title for war information section in attack details"
+  },
+  "warResultsTitle": "Résultats de la guerre",
+  "@warResultsTitle": {
+    "description": "Title for war results section showing clan vs opponent"
+  },
+  "warPlayersTitle": "Joueurs",
+  "@warPlayersTitle": {
+    "description": "Title for players section showing attacker and defender info"
+  },
+  "performanceAnalysisFailedAttacks": "Attaques ratées (0-1 Etoiles)",
+  "@performanceAnalysisFailedAttacks": {
+    "description": "Performance analysis preset for failed attacks"
+  },
+  "performanceAnalysisFailedAttacksDesc": "Affiche les attaques avec moins de 2 étoiles",
+  "@performanceAnalysisFailedAttacksDesc": {
+    "description": "Description for failed attacks analysis"
+  },
+  "performanceAnalysisMissedPerfects": "Attaques parfaites manquées",
+  "@performanceAnalysisMissedPerfects": {
+    "description": "Performance analysis preset for missed perfect attacks"
+  },
+  "performanceAnalysisMissedPerfectsDesc": "Shows attacks that got 2 stars - potential perfect opportunities",
+  "@performanceAnalysisMissedPerfectsDesc": {
+    "description": "Description for missed perfect attacks analysis"
+  },
+  "performanceAnalysisThAttackIssues": "TH{thLevel} Attack Issues",
+  "@performanceAnalysisThAttackIssues": {
+    "description": "Performance analysis preset for TH-specific attack issues",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThAttackIssuesDesc": "Montre les performances médiocres contre HDV{thLevel}",
+  "@performanceAnalysisThAttackIssuesDesc": {
+    "description": "Description for TH-specific attack issues",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssues": "TH{thLevel} Defense Issues",
+  "@performanceAnalysisThDefenseIssues": {
+    "description": "Performance analysis preset for TH-specific defense issues",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssuesDesc": "Shows where you're vulnerable to TH{thLevel} attacks",
+  "@performanceAnalysisThDefenseIssuesDesc": {
+    "description": "Description for TH-specific defense issues",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisCwlIssues": "CWL Performance Issues",
+  "@performanceAnalysisCwlIssues": {
+    "description": "Performance analysis preset for CWL issues"
+  },
+  "performanceAnalysisCwlIssuesDesc": "Shows CWL attacks - lower success than regular wars",
+  "@performanceAnalysisCwlIssuesDesc": {
+    "description": "Description for CWL performance issues"
+  },
+  "performanceAnalysisRandomWarIssues": "Random War Issues",
+  "@performanceAnalysisRandomWarIssues": {
+    "description": "Performance analysis preset for random war issues"
+  },
+  "performanceAnalysisRandomWarIssuesDesc": "Shows random war attacks - lower success than CWL",
+  "@performanceAnalysisRandomWarIssuesDesc": {
+    "description": "Description for random war performance issues"
+  },
+  "performanceAnalysisFreshOnly": "Fresh Attack Analysis",
+  "@performanceAnalysisFreshOnly": {
+    "description": "Performance analysis preset for fresh attacks only"
+  },
+  "performanceAnalysisFreshOnlyDesc": "Analyzes performance on fresh bases only",
+  "@performanceAnalysisFreshOnlyDesc": {
+    "description": "Description for fresh attack analysis"
+  },
+  "performanceAnalysisRecentPerformance": "Recent Performance (30 Days)",
+  "@performanceAnalysisRecentPerformance": {
+    "description": "Performance analysis preset for recent performance"
+  },
+  "performanceAnalysisRecentPerformanceDesc": "Shows recent performance to identify current trends",
+  "@performanceAnalysisRecentPerformanceDesc": {
+    "description": "Description for recent performance analysis"
+  },
+  "performanceAnalysisHighStakes": "High-Stakes Attacks",
+  "@performanceAnalysisHighStakes": {
+    "description": "Performance analysis preset for high-stakes attacks"
+  },
+  "performanceAnalysisHighStakesDesc": "Shows attacks from top 5 war positions",
+  "@performanceAnalysisHighStakesDesc": {
+    "description": "Description for high-stakes attacks analysis"
+  },
+  "performanceAnalysisCleanupCrew": "Cleanup Attacks",
+  "@performanceAnalysisCleanupCrew": {
+    "description": "Performance analysis preset for cleanup attacks"
+  },
+  "performanceAnalysisCleanupCrewDesc": "Shows attacks from lower war positions",
+  "@performanceAnalysisCleanupCrewDesc": {
+    "description": "Description for cleanup attacks analysis"
+  },
+  "performanceRatingExcellent": "Excellent",
+  "@performanceRatingExcellent": {
+    "description": "Excellent performance rating"
+  },
+  "performanceRatingGood": "Good",
+  "@performanceRatingGood": {
+    "description": "Good performance rating"
+  },
+  "performanceRatingAverage": "Average",
+  "@performanceRatingAverage": {
+    "description": "Average performance rating"
+  },
+  "performanceRatingNeedsImprovement": "Needs Improvement",
+  "@performanceRatingNeedsImprovement": {
+    "description": "Needs improvement performance rating"
+  },
+  "performanceStrengthHighThreeStarRate": "High Three-Star Rate",
+  "@performanceStrengthHighThreeStarRate": {
+    "description": "Strength area: high three-star rate"
+  },
+  "performanceStrengthHighDestruction": "High Destruction",
+  "@performanceStrengthHighDestruction": {
+    "description": "Strength area: high destruction percentage"
+  },
+  "performanceStrengthConsistentPerformance": "Consistent Performance",
+  "@performanceStrengthConsistentPerformance": {
+    "description": "Strength area: consistent performance"
+  },
+  "performanceImprovementThreeStarConsistency": "Three-Star Consistency",
+  "@performanceImprovementThreeStarConsistency": {
+    "description": "Improvement area: three-star consistency"
+  },
+  "performanceImprovementOverallStarPerformance": "Overall Star Performance",
+  "@performanceImprovementOverallStarPerformance": {
+    "description": "Improvement area: overall star performance"
+  },
+  "performanceImprovementDestructionPercentage": "Destruction Percentage",
+  "@performanceImprovementDestructionPercentage": {
+    "description": "Improvement area: destruction percentage"
+  },
+  "presetSuggestionCwlOnly": "CWL Only",
+  "@presetSuggestionCwlOnly": {
+    "description": "Preset suggestion for CWL wars only"
+  },
+  "presetSuggestionRandomWars": "Random Wars",
+  "@presetSuggestionRandomWars": {
+    "description": "Preset suggestion for random wars"
+  },
+  "presetSuggestionFriendlyWars": "Friendly Wars",
+  "@presetSuggestionFriendlyWars": {
+    "description": "Preset suggestion for friendly wars"
+  },
+  "presetSuggestionStarOnly": "{count} Star Only",
+  "@presetSuggestionStarOnly": {
+    "description": "Preset suggestion for specific star count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionPerfectAttacks": "Perfect Attacks",
+  "@presetSuggestionPerfectAttacks": {
+    "description": "Preset suggestion for perfect attacks"
+  },
+  "presetSuggestionFailedAttacks": "Failed Attacks",
+  "@presetSuggestionFailedAttacks": {
+    "description": "Preset suggestion for failed attacks"
+  },
+  "presetSuggestionThOnly": "TH{level} Only",
+  "@presetSuggestionThOnly": {
+    "description": "Preset suggestion for specific town hall level",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionLastWeek": "Last Week",
+  "@presetSuggestionLastWeek": {
+    "description": "Preset suggestion for last week timeframe"
+  },
+  "presetSuggestionLastMonth": "Last Month",
+  "@presetSuggestionLastMonth": {
+    "description": "Preset suggestion for last month timeframe"
+  },
+  "presetSuggestionMyPreset": "Mes filtres",
+  "@presetSuggestionMyPreset": {
+    "description": "Default preset suggestion"
+  },
+  "presetSuggestionCustomFilter": "Filtre personnalisé",
+  "@presetSuggestionCustomFilter": {
+    "description": "Default custom filter suggestion"
+  },
+  "presetSuggestionRecentFilter": "Filtre récent",
+  "@presetSuggestionRecentFilter": {
+    "description": "Default recent filter suggestion"
   }
 }
