@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 class WarStatsFilter {
   final String? season;
   final DateTime? startDate;
@@ -222,7 +225,7 @@ class WarStatsFilter {
   }
 
   /// Get filter summary text
-  String getFilterSummary() {
+  String getFilterSummary([BuildContext? context]) {
     List<String> filters = [];
     
     if (season != null) {
@@ -231,14 +234,14 @@ class WarStatsFilter {
     
     // Add date range filter display
     if (startDate != null && endDate != null) {
-      final start = "${startDate!.day}/${startDate!.month}/${startDate!.year}";
-      final end = "${endDate!.day}/${endDate!.month}/${endDate!.year}";
+      final start = context != null ? _formatDate(startDate!, context) : "${startDate!.day}/${startDate!.month}/${startDate!.year}";
+      final end = context != null ? _formatDate(endDate!, context) : "${endDate!.day}/${endDate!.month}/${endDate!.year}";
       filters.add("$start - $end");
     } else if (startDate != null) {
-      final start = "${startDate!.day}/${startDate!.month}/${startDate!.year}";
+      final start = context != null ? _formatDate(startDate!, context) : "${startDate!.day}/${startDate!.month}/${startDate!.year}";
       filters.add("From $start");
     } else if (endDate != null) {
-      final end = "${endDate!.day}/${endDate!.month}/${endDate!.year}";
+      final end = context != null ? _formatDate(endDate!, context) : "${endDate!.day}/${endDate!.month}/${endDate!.year}";
       filters.add("Until $end");
     }
     
@@ -302,5 +305,11 @@ class WarStatsFilter {
     }
     
     return filters.isEmpty ? "No filters applied" : filters.join(", ");
+  }
+
+  /// Format date for display using localized format
+  String _formatDate(DateTime date, BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    return DateFormat.yMd(locale.toString()).format(date);
   }
 }

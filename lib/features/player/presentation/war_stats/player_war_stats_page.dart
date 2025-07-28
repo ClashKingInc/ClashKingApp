@@ -106,7 +106,7 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
     if (!(_currentFilter.hasActiveFilters())) {
       return AppLocalizations.of(context)!.filtersNoneApplied;
     }
-    return _currentFilter.getFilterSummary();
+    return _currentFilter.getFilterSummary(context);
   }
 
   @override

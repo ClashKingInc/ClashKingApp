@@ -63,6 +63,10 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   // Performance analysis suggestions
   List<FilterPreset> _performanceSuggestions = [];
 
+  // Inline message display
+  String? _inlineMessage;
+  bool _isInlineError = false;
+
   @override
   void initState() {
     super.initState();
@@ -153,130 +157,67 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     }
   }
 
+  /// Show inline error message in the dialog
+  void _showInlineError(String message) {
+    setState(() {
+      _inlineMessage = message;
+      _isInlineError = true;
+    });
+    // Auto-clear after 4 seconds
+    Future.delayed(const Duration(seconds: 4), () {
+      if (mounted) {
+        setState(() {
+          _inlineMessage = null;
+          _isInlineError = false;
+        });
+      }
+    });
+  }
+
+  /// Show inline success message in the dialog
+  void _showInlineSuccess(String message) {
+    setState(() {
+      _inlineMessage = message;
+      _isInlineError = false;
+    });
+    // Auto-clear after 3 seconds
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() {
+          _inlineMessage = null;
+          _isInlineError = false;
+        });
+      }
+    });
+  }
+
+  /// Clear inline message
+  void _clearInlineMessage() {
+    setState(() {
+      _inlineMessage = null;
+      _isInlineError = false;
+    });
+  }
+
   /// Show dialog to save current filter as preset
   Future<void> _showSavePresetDialog() async {
     if (!_filter.hasActiveFilters()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.presetsApplyFirst),
-        ),
-      );
+      _showInlineError(AppLocalizations.of(context)!.presetsApplyFirst);
       return;
     }
 
-    final nameController = TextEditingController();
-    final suggestions = FilterPresetService.getPresetNameSuggestions(_filter);
-
-    await showDialog(
+    final result = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context)!.presetsSaveTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.presetsName,
-                hintText: AppLocalizations.of(context)!.presetsNameHint,
-              ),
-              textCapitalization: TextCapitalization.words,
-            ),
-            const SizedBox(height: 16),
-            if (suggestions.isNotEmpty) ...[
-              Text(AppLocalizations.of(context)!.presetsSuggestions,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                children: suggestions.map((suggestion) {
-                  return ActionChip(
-                    label: Text(
-                      suggestion,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    backgroundColor:
-                        Theme.of(context).colorScheme.secondaryContainer,
-                    side: BorderSide(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .outline
-                          .withValues(alpha: 0.2),
-                    ),
-                    labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                        ),
-                    onPressed: () {
-                      nameController.text = suggestion;
-                    },
-                  );
-                }).toList(),
-              ),
-            ],
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(AppLocalizations.of(context)!.generalCancel),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final name = nameController.text.trim();
-              if (name.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(
-                          AppLocalizations.of(context)!.presetsNameRequired)),
-                );
-                return;
-              }
-
-              if (await FilterPresetService.instance.presetNameExists(name) &&
-                  context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(
-                          AppLocalizations.of(context)!.presetsNameExists)),
-                );
-                return;
-              }
-
-              final success = await FilterPresetService.instance.savePreset(
-                name: name,
-                filter: _filter,
-              );
-              if (context.mounted) {
-                Navigator.pop(context);
-              }
-
-              if (success && context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(AppLocalizations.of(context)!
-                          .presetsSaveSuccess(name))),
-                );
-                await _loadSavedPresets();
-              } else {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text(
-                            AppLocalizations.of(context)!.presetsSaveError)),
-                  );
-                }
-              }
-            },
-            child: Text(AppLocalizations.of(context)!.presetsSave),
-          ),
-        ],
+      builder: (context) => _SavePresetDialog(
+        filter: _filter,
       ),
     );
+    
+    // Only show success message and reload if preset was actually saved
+    if (result != null && context.mounted) {
+      _showInlineSuccess(AppLocalizations.of(context)!.presetsSaveSuccess(result));
+      await _loadSavedPresets();
+    }
   }
 
   /// Apply a saved preset
@@ -446,6 +387,63 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Inline message display
+                    if (_inlineMessage != null) 
+                      Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.only(bottom: 16),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: _isInlineError 
+                              ? Theme.of(context).colorScheme.errorContainer.withValues(alpha: 0.8)
+                              : Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.8),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: _isInlineError 
+                                ? Theme.of(context).colorScheme.error.withValues(alpha: 0.5)
+                                : Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              _isInlineError ? Icons.error_outline : Icons.check_circle_outline,
+                              color: _isInlineError 
+                                  ? Theme.of(context).colorScheme.error
+                                  : Theme.of(context).colorScheme.primary,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                _inlineMessage!,
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: _isInlineError 
+                                      ? Theme.of(context).colorScheme.onErrorContainer
+                                      : Theme.of(context).colorScheme.onSurface,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: _clearInlineMessage,
+                              icon: Icon(
+                                Icons.close,
+                                color: _isInlineError 
+                                    ? Theme.of(context).colorScheme.error
+                                    : Theme.of(context).colorScheme.primary,
+                                size: 18,
+                              ),
+                              constraints: const BoxConstraints(
+                                minWidth: 32,
+                                minHeight: 32,
+                              ),
+                              padding: EdgeInsets.zero,
+                            ),
+                          ],
+                        ),
+                      ),
                     // Preset Filters
                     _buildPresetFilters(),
 
@@ -825,9 +823,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                                 ? (AppLocalizations.of(context)
                                         ?.filtersSeason ??
                                     'Season Selected')
-                                : (_filter.startDate
-                                        ?.toString()
-                                        .split(' ')[0] ??
+                                : (_filter.startDate != null
+                                        ? _formatDate(_filter.startDate!) :
                                     (AppLocalizations.of(context)
                                             ?.generalNotSet ??
                                         'Not set'))),
@@ -925,7 +922,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                                 ? (AppLocalizations.of(context)
                                         ?.filtersSeason ??
                                     'Season Selected')
-                                : (_filter.endDate?.toString().split(' ')[0] ??
+                                : (_filter.endDate != null
+                                        ? _formatDate(_filter.endDate!) :
                                     (AppLocalizations.of(context)
                                             ?.generalNotSet ??
                                         'Not set'))),
@@ -1609,6 +1607,12 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     );
   }
 
+  /// Format date for display using localized format
+  String _formatDate(DateTime date) {
+    final locale = Localizations.localeOf(context);
+    return DateFormat.yMd(locale.toString()).format(date);
+  }
+
   void _updateSeasonString() {
     if (selectedYear != null && selectedMonth != null) {
       selectedSeason =
@@ -2235,11 +2239,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               if (await FilterPresetService.instance
                       .presetNameExists(newName, excludeId: preset.id) &&
                   context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(
-                          AppLocalizations.of(context)!.presetsNameExists)),
-                );
+                _showInlineError(AppLocalizations.of(context)!.presetsNameExists);
                 return;
               }
 
@@ -2252,19 +2252,11 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               }
 
               if (success && context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(AppLocalizations.of(context)!
-                          .presetsRenameSuccess(newName))),
-                );
+                _showInlineSuccess(AppLocalizations.of(context)!.presetsRenameSuccess(newName));
                 await _loadSavedPresets();
               } else {
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text(
-                            AppLocalizations.of(context)!.presetsRenameError)),
-                  );
+                  _showInlineError(AppLocalizations.of(context)!.presetsRenameError);
                 }
               }
             },
@@ -2298,19 +2290,11 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               }
 
               if (success && context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(AppLocalizations.of(context)!
-                          .presetsDeleteSuccess(preset.name))),
-                );
+                _showInlineSuccess(AppLocalizations.of(context)!.presetsDeleteSuccess(preset.name));
                 await _loadSavedPresets();
               } else {
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text(
-                            AppLocalizations.of(context)!.presetsDeleteError)),
-                  );
+                  _showInlineError(AppLocalizations.of(context)!.presetsDeleteError);
                 }
               }
             },
@@ -2625,18 +2609,18 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         filters.add({'type': 'season', 'text': seasonText});
       }
       if (_filter.startDate != null && _filter.endDate != null) {
-        final start = _filter.startDate!.toString().split(' ')[0];
-        final end = _filter.endDate!.toString().split(' ')[0];
+        final start = _formatDate(_filter.startDate!);
+        final end = _formatDate(_filter.endDate!);
         filters.add({'type': 'dateRange', 'text': '$start - $end'});
       } else if (_filter.startDate != null) {
-        final start = _filter.startDate!.toString().split(' ')[0];
+        final start = _formatDate(_filter.startDate!);
         filters.add({
           'type': 'startDate',
           'text':
               '${AppLocalizations.of(context)?.filtersStartDate ?? 'From'} $start'
         });
       } else if (_filter.endDate != null) {
-        final end = _filter.endDate!.toString().split(' ')[0];
+        final end = _formatDate(_filter.endDate!);
         filters.add({
           'type': 'endDate',
           'text':
@@ -2964,6 +2948,329 @@ class StarFilterChip extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Dialog for saving filter presets with inline error display
+class _SavePresetDialog extends StatefulWidget {
+  final WarStatsFilter filter;
+
+  const _SavePresetDialog({
+    required this.filter,
+  });
+
+  @override
+  State<_SavePresetDialog> createState() => _SavePresetDialogState();
+}
+
+class _SavePresetDialogState extends State<_SavePresetDialog> {
+  final _nameController = TextEditingController();
+  String? _errorMessage;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  void _showError(String message) {
+    setState(() {
+      _errorMessage = message;
+    });
+  }
+
+  void _clearError() {
+    setState(() {
+      _errorMessage = null;
+    });
+  }
+
+  Future<void> _savePreset() async {
+    final name = _nameController.text.trim();
+    
+    _clearError();
+    
+    if (name.isEmpty) {
+      _showError(AppLocalizations.of(context)!.presetsNameRequired);
+      return;
+    }
+    
+    if (await FilterPresetService.instance.presetNameExists(name)) {
+      if (!context.mounted) return;
+      _showError(AppLocalizations.of(context)!.presetsNameExists);
+      return;
+    }
+
+    final success = await FilterPresetService.instance.savePreset(
+      name: name,
+      filter: widget.filter,
+    );
+
+    if (!context.mounted) return;
+    
+    if (success) {
+      Navigator.pop(context, name); // Return the preset name
+    } else {
+      _showError(AppLocalizations.of(context)!.presetsSaveError);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final suggestions = FilterPresetService.getPresetNameSuggestions(widget.filter);
+
+    return AlertDialog(
+      title: Text(AppLocalizations.of(context)!.presetsSaveTitle),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.presetsName,
+                hintText: AppLocalizations.of(context)!.presetsNameHint,
+              ),
+              textCapitalization: TextCapitalization.words,
+              onSubmitted: (_) => _savePreset(),
+              onChanged: (_) => _clearError(),
+            ),
+            if (_errorMessage != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                _errorMessage!,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+            if (suggestions.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  AppLocalizations.of(context)!.presetsSuggestions,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: suggestions.map((suggestion) {
+                      return ActionChip(
+                        label: Text(
+                          suggestion,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondaryContainer,
+                        side: BorderSide(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .outline
+                              .withValues(alpha: 0.2),
+                        ),
+                        labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                            ),
+                        onPressed: () {
+                          _nameController.text = suggestion;
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(AppLocalizations.of(context)!.generalCancel),
+        ),
+        ElevatedButton(
+          onPressed: _savePreset,
+          child: Text(AppLocalizations.of(context)!.presetsSave),
+        ),
+      ],
+    );
+  }
+}
+
+/// Dialog for renaming filter presets with inline error display
+class _RenamePresetDialog extends StatefulWidget {
+  final FilterPreset preset;
+
+  const _RenamePresetDialog({
+    required this.preset,
+  });
+
+  @override
+  State<_RenamePresetDialog> createState() => _RenamePresetDialogState();
+}
+
+class _RenamePresetDialogState extends State<_RenamePresetDialog> {
+  late TextEditingController _nameController;
+  String? _inlineMessage;
+  bool _isInlineError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.preset.name);
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  void _showInlineError(String message) {
+    setState(() {
+      _inlineMessage = message;
+      _isInlineError = true;
+    });
+    // Auto-clear after 4 seconds
+    Future.delayed(const Duration(seconds: 4), () {
+      if (mounted) {
+        setState(() {
+          _inlineMessage = null;
+          _isInlineError = false;
+        });
+      }
+    });
+  }
+
+  void _clearInlineMessage() {
+    setState(() {
+      _inlineMessage = null;
+      _isInlineError = false;
+    });
+  }
+
+  Future<void> _renamePreset() async {
+    final newName = _nameController.text.trim();
+    if (newName.isEmpty || newName == widget.preset.name) {
+      Navigator.pop(context);
+      return;
+    }
+
+    if (await FilterPresetService.instance.presetNameExists(newName, excludeId: widget.preset.id) &&
+        context.mounted) {
+      _showInlineError(AppLocalizations.of(context)!.presetsNameExists);
+      return;
+    }
+
+    final updatedPreset = widget.preset.copyWith(name: newName);
+    final success = await FilterPresetService.instance.updatePreset(updatedPreset);
+
+    if (context.mounted) {
+      if (success) {
+        Navigator.pop(context, newName); // Return the new preset name
+      } else {
+        _showInlineError(AppLocalizations.of(context)!.presetsRenameError);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(AppLocalizations.of(context)!.presetsRenameTitle),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Inline message display
+          if (_inlineMessage != null) 
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: _isInlineError 
+                    ? Theme.of(context).colorScheme.errorContainer.withValues(alpha: 0.8)
+                    : Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.8),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: _isInlineError 
+                      ? Theme.of(context).colorScheme.error.withValues(alpha: 0.5)
+                      : Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    _isInlineError ? Icons.error_outline : Icons.check_circle_outline,
+                    color: _isInlineError 
+                        ? Theme.of(context).colorScheme.error
+                        : Theme.of(context).colorScheme.primary,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      _inlineMessage!,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: _isInlineError 
+                            ? Theme.of(context).colorScheme.onErrorContainer
+                            : Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: _clearInlineMessage,
+                    icon: Icon(
+                      Icons.close,
+                      color: _isInlineError 
+                          ? Theme.of(context).colorScheme.error
+                          : Theme.of(context).colorScheme.primary,
+                      size: 18,
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 32,
+                      minHeight: 32,
+                    ),
+                    padding: EdgeInsets.zero,
+                  ),
+                ],
+              ),
+            ),
+          TextField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.presetsName,
+            ),
+            textCapitalization: TextCapitalization.words,
+            onSubmitted: (_) => _renamePreset(),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(AppLocalizations.of(context)!.generalCancel),
+        ),
+        ElevatedButton(
+          onPressed: _renamePreset,
+          child: Text(AppLocalizations.of(context)!.presetsRename),
+        ),
+      ],
     );
   }
 }
