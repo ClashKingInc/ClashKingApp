@@ -32,6 +32,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   late WarStatsFilter _filter;
   late TextEditingController _minMapPositionController;
   late TextEditingController _maxMapPositionController;
+  late TextEditingController _limitController;
 
   // Track selected Town Hall levels for members and enemies
   Map<int, bool> attackerThSelection = {};
@@ -52,6 +53,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   bool _isWarSettingsExpanded = false;
   bool _isPerformanceExpanded = false;
 
+  // Track All Time checkbox state
+  bool _isAllTimeSelected = false;
+
   // Saved presets management
   List<FilterPreset> _savedPresets = [];
   bool _isLoadingPresets = false;
@@ -68,6 +72,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     );
     _maxMapPositionController = TextEditingController(
       text: _filter.maxMapPosition?.toString() ?? '',
+    );
+    _limitController = TextEditingController(
+      text: _filter.limit == 10000 ? '' : _filter.limit.toString(),
     );
 
     // Initialize TH selections
@@ -109,12 +116,18 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       _performanceSuggestions =
           PerformanceAnalysisService.analyzePerformance(widget.warStats!);
     }
+
+    // Initialize All Time state based on current filter
+    _isAllTimeSelected = _filter.startDate == null &&
+        _filter.endDate == null &&
+        _filter.season == null;
   }
 
   @override
   void dispose() {
     _minMapPositionController.dispose();
     _maxMapPositionController.dispose();
+    _limitController.dispose();
     super.dispose();
   }
 
@@ -325,6 +338,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       _minMapPositionController.clear();
       _maxMapPositionController.clear();
 
+      // Reset All Time state
+      _isAllTimeSelected = true;
+
       // Reset TH selections
       for (int i = 1; i <= GameDataService.getMaxTownHallLevel(); i++) {
         attackerThSelection[i] = false;
@@ -349,9 +365,15 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       selectedYear = null;
       selectedMonth = null;
 
-      // Reset destruction range
-      _updateFilter(
-          _filter.copyWith(minDestruction: null, maxDestruction: null));
+      // Reset destruction range and limit
+      _filter = _filter.copyWith(
+        minDestruction: null, 
+        maxDestruction: null, 
+        limit: null,
+        startDate: null,
+        endDate: null,
+        season: null,
+      );
     });
   }
 
@@ -440,13 +462,11 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                           _buildSubsectionTitle(
                               AppLocalizations.of(context)?.filtersSeason ??
                                   'Season'),
-                          const SizedBox(height: 8),
                           _buildSeasonSelector(),
                           const SizedBox(height: 16),
                           _buildSubsectionTitle(
                               AppLocalizations.of(context)?.filtersDateRange ??
                                   'Date Range'),
-                          const SizedBox(height: 8),
                           _buildDateRangePicker(),
                         ],
                       ),
@@ -468,13 +488,11 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                           _buildSubsectionTitle(
                               AppLocalizations.of(context)?.filtersWarType ??
                                   'War Type'),
-                          const SizedBox(height: 8),
                           _buildWarTypeDropdown(),
                           const SizedBox(height: 16),
                           _buildSubsectionTitle(
                               AppLocalizations.of(context)?.filtersTownHall ??
                                   'Town Hall'),
-                          const SizedBox(height: 8),
                           _buildTownHallFilters(),
                         ],
                       ),
@@ -507,20 +525,88 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       },
                       child: Column(
                         children: [
-                          _buildSubsectionTitle(AppLocalizations.of(context)
-                                  ?.warPositionMap ??
-                              'Map Position'),
-                          const SizedBox(height: 8),
+                          _buildSubsectionTitle(
+                              AppLocalizations.of(context)?.warPositionMap ??
+                                  'Map Position'),
                           _buildMapPositionFilters(),
                           const SizedBox(height: 16),
                           _buildSubsectionTitle(
                               AppLocalizations.of(context)?.filtersOptions ??
                                   'Options'),
-                          const SizedBox(height: 8),
                           _buildAdvancedOptions(),
                         ],
                       ),
                     ),
+                    // Performance Analysis Suggestions
+                    if (_performanceSuggestions.isNotEmpty) ...[
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.analytics_outlined,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.tertiary,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            AppLocalizations.of(context)!
+                                .performanceAnalysisSuggestions,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
+                          ),
+                          const SizedBox(width: 8),
+                          InkWell(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(AppLocalizations.of(context)!
+                                        .performanceAnalysisSuggestions),
+                                    content: Text(AppLocalizations.of(context)!
+                                        .performanceAnalysisTooltip),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: Text(AppLocalizations.of(context)
+                                                ?.generalOk ??
+                                            'OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            borderRadius: BorderRadius.circular(12),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Icon(
+                                Icons.info_outline,
+                                size: 14,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withValues(alpha: 0.6),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: _performanceSuggestions
+                            .map((suggestion) =>
+                                _buildPerformanceSuggestionChip(suggestion))
+                            .toList(),
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -593,8 +679,17 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                               .toList();
 
                           // Update filter with all selections
+                          final DateTime? finalStartDate = _isAllTimeSelected ? null : _filter.startDate;
+                          final DateTime? finalEndDate = _isAllTimeSelected ? null : _filter.endDate;
+                          final String? finalSeason = _isAllTimeSelected ? null : selectedSeason;
+                          
                           final updatedFilter = _filter.copyWith(
-                            season: selectedSeason,
+                            season: finalSeason,
+                            startDate: finalStartDate,
+                            endDate: finalEndDate,
+                            clearStartDate: _isAllTimeSelected,
+                            clearEndDate: _isAllTimeSelected,
+                            clearSeason: _isAllTimeSelected,
                             ownTownHalls: selectedAttackerTH.isNotEmpty
                                 ? selectedAttackerTH
                                 : null,
@@ -617,14 +712,31 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                                     .text.isNotEmpty
                                 ? int.tryParse(_maxMapPositionController.text)
                                 : null,
+                            limit: _filter.limit,
                           );
 
+                          print('=== APPLY BUTTON DEBUG ===');
+                          print('_isAllTimeSelected: $_isAllTimeSelected');
+                          print('_filter.startDate (before): ${_filter.startDate}');
+                          print('_filter.endDate (before): ${_filter.endDate}');
+                          print('selectedSeason: $selectedSeason');
+                          print('finalStartDate: $finalStartDate');
+                          print('finalEndDate: $finalEndDate');
+                          print('finalSeason: $finalSeason');
+                          print('updatedFilter.startDate: ${updatedFilter.startDate}');
+                          print('updatedFilter.endDate: ${updatedFilter.endDate}');
+                          print('updatedFilter.season: ${updatedFilter.season}');
+                          print('updatedFilter.limit: ${updatedFilter.limit}');
+                          print('========================');
+                          
                           widget.onApply(updatedFilter);
                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.check, size: 18),
                         label: Text(
-                            AppLocalizations.of(context)?.generalApply ?? 'Apply', style: Theme.of(context).textTheme.labelLarge),
+                            AppLocalizations.of(context)?.generalApply ??
+                                'Apply',
+                            style: Theme.of(context).textTheme.labelLarge),
                       ),
                     ],
                   ),
@@ -638,132 +750,312 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   }
 
   Widget _buildDateRangePicker() {
-    return Row(
+    final bool isAllTime = _isAllTimeSelected;
+
+    return Column(
       children: [
-        Expanded(
-          child: InkWell(
-            onTap: () async {
-              final picked = await showDatePicker(
-                context: context,
-                initialDate: _filter.startDate ??
-                    DateTime.now().subtract(const Duration(days: 180)),
-                firstDate: DateTime(2020),
-                lastDate: DateTime.now(),
-              );
-              if (picked != null) {
-                _updateFilter(_filter.copyWith(startDate: picked));
-              }
-            },
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                border: Border.all(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .outline
-                        .withValues(alpha: 0.3)),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+        // Date range pickers
+        Row(
+          children: [
+            Expanded(
+              child: InkWell(
+                onTap: isAllTime
+                    ? null
+                    : () async {
+                        final picked = await showDatePicker(
+                          context: context,
+                          initialDate: _filter.startDate ??
+                              DateTime.now()
+                                  .subtract(const Duration(days: 180)),
+                          firstDate: DateTime(2020),
+                          lastDate: DateTime.now(),
+                        );
+                        if (picked != null) {
+                          // Clear season when setting specific dates
+                          setState(() {
+                            _isAllTimeSelected = false;
+                            selectedSeason = null;
+                            selectedYear = null;
+                            selectedMonth = null;
+                          });
+                          _updateFilter(_filter.copyWith(startDate: picked));
+                        }
+                      },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Theme.of(context).colorScheme.outline.withValues(
+                            alpha: (isAllTime || selectedSeason != null)
+                                ? 0.1
+                                : 0.3)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.event,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 16,
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.event,
+                            color: isAllTime
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withValues(alpha: 0.5)
+                                : Theme.of(context).colorScheme.primary,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            AppLocalizations.of(context)?.filtersStartDate ??
+                                'Start Date',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall
+                                ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(
+                                          alpha: (isAllTime ||
+                                                  selectedSeason != null)
+                                              ? 0.4
+                                              : 0.8),
+                                ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(height: 4),
                       Text(
-                        AppLocalizations.of(context)?.filtersStartDate ??
-                            'Start Date',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.8),
+                        isAllTime
+                            ? (AppLocalizations.of(context)?.generalAll ??
+                                'All Time')
+                            : (selectedSeason != null
+                                ? (AppLocalizations.of(context)
+                                        ?.filtersSeason ??
+                                    'Season Selected')
+                                : (_filter.startDate
+                                        ?.toString()
+                                        .split(' ')[0] ??
+                                    (AppLocalizations.of(context)
+                                            ?.filtersNotSet ??
+                                        'Not set'))),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: isAllTime
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.6)
+                                  : null,
                             ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _filter.startDate?.toString().split(' ')[0] ??
-                        (AppLocalizations.of(context)?.filtersNotSet ??
-                            'Not set'),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: InkWell(
+                onTap: isAllTime
+                    ? null
+                    : () async {
+                        final picked = await showDatePicker(
+                          context: context,
+                          initialDate: _filter.endDate ?? DateTime.now(),
+                          firstDate: DateTime(2020),
+                          lastDate: DateTime.now(),
+                        );
+                        if (picked != null) {
+                          // Clear season when setting specific dates
+                          setState(() {
+                            _isAllTimeSelected = false;
+                            selectedSeason = null;
+                            selectedYear = null;
+                            selectedMonth = null;
+                          });
+                          _updateFilter(_filter.copyWith(endDate: picked));
+                        }
+                      },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Theme.of(context).colorScheme.outline.withValues(
+                            alpha: (isAllTime || selectedSeason != null)
+                                ? 0.1
+                                : 0.3)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.event,
+                            color: isAllTime
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withValues(alpha: 0.5)
+                                : Theme.of(context).colorScheme.primary,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            AppLocalizations.of(context)?.filtersEndDate ??
+                                'End Date',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall
+                                ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(
+                                          alpha: (isAllTime ||
+                                                  selectedSeason != null)
+                                              ? 0.4
+                                              : 0.8),
+                                ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        isAllTime
+                            ? (AppLocalizations.of(context)?.generalAll ??
+                                'All Time')
+                            : (selectedSeason != null
+                                ? (AppLocalizations.of(context)
+                                        ?.filtersSeason ??
+                                    'Season Selected')
+                                : (_filter.endDate?.toString().split(' ')[0] ??
+                                    (AppLocalizations.of(context)
+                                            ?.filtersNotSet ??
+                                        'Not set'))),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: isAllTime
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.6)
+                                  : null,
+                            ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: InkWell(
-            onTap: () async {
-              final picked = await showDatePicker(
-                context: context,
-                initialDate: _filter.endDate ?? DateTime.now(),
-                firstDate: DateTime(2020),
-                lastDate: DateTime.now(),
+        const SizedBox(height: 12),
+        // All Time option
+        InkWell(
+          onTap: () {
+            if (!isAllTime) {
+              // When checking, clear dates and season for all time, and set limit to All
+              print('=== ALL TIME SELECTED ===');
+              setState(() {
+                _isAllTimeSelected = true;
+                selectedSeason = null;
+                selectedYear = null;
+                selectedMonth = null;
+              });
+              _limitController.text = '';
+              final newFilter = _filter.copyWith(
+                startDate: null,
+                endDate: null,
+                season: null,
+                limit: 10000, // Set to "All" when All Time is selected
+                clearStartDate: true,
+                clearEndDate: true,
+                clearSeason: true,
               );
-              if (picked != null) {
-                _updateFilter(_filter.copyWith(endDate: picked));
-              }
-            },
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                border: Border.all(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .outline
-                        .withValues(alpha: 0.3)),
-                borderRadius: BorderRadius.circular(8),
+              print('All Time - new filter dates: ${newFilter.startDate}, ${newFilter.endDate}');
+              _updateFilter(newFilter);
+            } else {
+              // When unchecking, set to default date range (last 180 days)
+              setState(() {
+                _isAllTimeSelected = false;
+                selectedSeason = null;
+                selectedYear = null;
+                selectedMonth = null;
+              });
+              _limitController.text = '1000';
+              _updateFilter(_filter.copyWith(
+                startDate: DateTime.now().subtract(const Duration(days: 180)),
+                endDate: DateTime.now(),
+                season: null,
+                limit: 1000, // Set back to default limit
+              ));
+            }
+          },
+          child: Row(
+            children: [
+              Checkbox(
+                value: isAllTime,
+                onChanged: (value) {
+                  print('Checkbox onChanged called with value: $value');
+                  print('Current isAllTime: $isAllTime');
+
+                  if (value == true) {
+                    // When checking, clear dates and season for all time
+                    setState(() {
+                      _isAllTimeSelected = true;
+                      selectedSeason = null;
+                      selectedYear = null;
+                      selectedMonth = null;
+                    });
+                    _limitController.text = '';
+                    _updateFilter(_filter.copyWith(
+                      startDate: null,
+                      endDate: null,
+                      season: null,
+                      limit: 10000, // Set to "All" when All Time is selected
+                      clearStartDate: true,
+                      clearEndDate: true,
+                      clearSeason: true,
+                    ));
+                  } else if (value == false) {
+                    // When unchecking, set to default date range (last 180 days)
+                    setState(() {
+                      _isAllTimeSelected = false;
+                      selectedSeason = null;
+                      selectedYear = null;
+                      selectedMonth = null;
+                    });
+                    _limitController.text = '1000';
+                    _updateFilter(_filter.copyWith(
+                      startDate:
+                          DateTime.now().subtract(const Duration(days: 180)),
+                      endDate: DateTime.now(),
+                      season: null,
+                      limit: 1000, // Set back to default limit
+                    ));
+                  }
+                },
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.event,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 16,
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  AppLocalizations.of(context)?.generalAllTime ?? 'All Time',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        AppLocalizations.of(context)?.filtersEndDate ??
-                            'End Date',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.8),
-                            ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _filter.endDate?.toString().split(' ')[0] ??
-                        (AppLocalizations.of(context)?.filtersNotSet ??
-                            'Not set'),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+                  softWrap: true,
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ],
@@ -1022,34 +1314,60 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     return Row(
       children: [
         Expanded(
-          child: TextField(
-            controller: _minMapPositionController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)?.filtersMinPosition ??
-                  'Min Position',
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              prefixIcon: const Icon(Icons.keyboard_arrow_up, size: 20),
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Min',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.7),
+                    ),
+              ),
+              const SizedBox(height: 4),
+              TextField(
+                controller: _minMapPositionController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
-          child: TextField(
-            controller: _maxMapPositionController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)?.filtersMaxPosition ??
-                  'Max Position',
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              prefixIcon: const Icon(Icons.keyboard_arrow_down, size: 20),
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Max',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.7),
+                    ),
+              ),
+              const SizedBox(height: 4),
+              TextField(
+                controller: _maxMapPositionController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -1058,10 +1376,13 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
   Widget _buildSeasonSelector() {
     final months = _generateMonths();
+    final bool isDisabled = _isAllTimeSelected;
 
     // Get display text for the current selection
     String displayText;
-    if (selectedYear != null && selectedMonth != null) {
+    if (isDisabled) {
+      displayText = AppLocalizations.of(context)!.generalAll;
+    } else if (selectedYear != null && selectedMonth != null) {
       final monthName = months[selectedMonth!] ?? selectedMonth.toString();
       displayText = '$monthName $selectedYear';
     } else if (selectedYear != null) {
@@ -1074,20 +1395,21 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     }
 
     return InkWell(
-      onTap: () => _showSeasonPicker(),
+      onTap: isDisabled ? null : () => _showSeasonPicker(),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           border: Border.all(
-              color:
-                  Theme.of(context).colorScheme.outline.withValues(alpha: 0.3)),
+              color: Theme.of(context).colorScheme.outline.withValues(alpha: isDisabled ? 0.1 : 0.3)),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
           children: [
             Icon(
               Icons.calendar_today,
-              color: Theme.of(context).colorScheme.primary,
+              color: isDisabled 
+                  ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)
+                  : Theme.of(context).colorScheme.primary,
               size: 20,
             ),
             const SizedBox(width: 8),
@@ -1101,7 +1423,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                           color: Theme.of(context)
                               .colorScheme
                               .onSurface
-                              .withValues(alpha: 0.8),
+                              .withValues(alpha: isDisabled ? 0.4 : 0.8),
                         ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -1110,6 +1432,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                     displayText,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w500,
+                          color: isDisabled 
+                              ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6)
+                              : null,
                         ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -1121,7 +1446,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               color: Theme.of(context)
                   .colorScheme
                   .onSurface
-                  .withValues(alpha: 0.7),
+                  .withValues(alpha: isDisabled ? 0.3 : 0.7),
             ),
           ],
         ),
@@ -1136,137 +1461,164 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.6,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  AppLocalizations.of(context)?.filtersSelectYear ??
-                      'Select Season',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              Expanded(
-                child: Row(
-                  children: [
-                    // Year Selection
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Text(
-                              AppLocalizations.of(context)?.filtersYear ??
-                                  'Year',
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                          ),
-                          Expanded(
-                            child: ListView(
-                              children: [
-                                ListTile(
-                                  title: Text(
-                                      AppLocalizations.of(context)!.generalAll),
-                                  selected: selectedYear == null,
-                                  onTap: () {
-                                    setState(() {
-                                      selectedYear = null;
-                                      _updateSeasonString();
-                                    });
-                                  },
+      builder: (BuildContext modalContext) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      AppLocalizations.of(context)?.filtersSelectYear ??
+                          'Select Season',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        // Year Selection
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                  AppLocalizations.of(context)?.filtersYear ??
+                                      'Year',
+                                  style: Theme.of(context).textTheme.titleSmall,
                                 ),
-                                ...years.map((year) => ListTile(
-                                      title: Text(year.toString()),
-                                      selected: selectedYear == year,
+                              ),
+                              Expanded(
+                                child: ListView(
+                                  children: [
+                                    ListTile(
+                                      title: Text(AppLocalizations.of(context)!
+                                          .generalAll),
+                                      selected: selectedYear == null,
                                       onTap: () {
                                         setState(() {
-                                          selectedYear = year;
+                                          _isAllTimeSelected = false;
+                                          selectedYear = null;
                                           _updateSeasonString();
+                                          // Clear date range when selecting season
+                                          _updateFilter(_filter.copyWith(
+                                              startDate: null, endDate: null));
                                         });
+                                        setModalState(() {});
                                       },
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: 1,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .outline
-                          .withValues(alpha: 0.3),
-                    ),
-                    // Month Selection
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Text(
-                              AppLocalizations.of(context)?.filtersMonth ??
-                                  'Month',
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                          ),
-                          Expanded(
-                            child: ListView(
-                              children: [
-                                ListTile(
-                                  title: Text(
-                                      AppLocalizations.of(context)!.generalAll),
-                                  selected: selectedMonth == null,
-                                  onTap: () {
-                                    setState(() {
-                                      selectedMonth = null;
-                                      _updateSeasonString();
-                                    });
-                                  },
+                                    ),
+                                    ...years.map((year) => ListTile(
+                                          title: Text(year.toString()),
+                                          selected: selectedYear == year,
+                                          onTap: () {
+                                            setState(() {
+                                              _isAllTimeSelected = false;
+                                              selectedYear = year;
+                                              _updateSeasonString();
+                                              // Clear date range when selecting season
+                                              _updateFilter(_filter.copyWith(
+                                                  startDate: null,
+                                                  endDate: null));
+                                            });
+                                            setModalState(() {});
+                                          },
+                                        )),
+                                  ],
                                 ),
-                                ...months.entries.map((entry) => ListTile(
-                                      title: Text(entry.value),
-                                      selected: selectedMonth == entry.key,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .outline
+                              .withValues(alpha: 0.3),
+                        ),
+                        // Month Selection
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                  AppLocalizations.of(context)?.filtersMonth ??
+                                      'Month',
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                              ),
+                              Expanded(
+                                child: ListView(
+                                  children: [
+                                    ListTile(
+                                      title: Text(AppLocalizations.of(context)!
+                                          .generalAll),
+                                      selected: selectedMonth == null,
                                       onTap: () {
                                         setState(() {
-                                          selectedMonth = entry.key;
+                                          _isAllTimeSelected = false;
+                                          selectedMonth = null;
                                           _updateSeasonString();
+                                          // Clear date range when selecting season
+                                          _updateFilter(_filter.copyWith(
+                                              startDate: null, endDate: null));
                                         });
+                                        setModalState(() {});
                                       },
-                                    )),
-                              ],
-                            ),
+                                    ),
+                                    ...months.entries.map((entry) => ListTile(
+                                          title: Text(entry.value),
+                                          selected: selectedMonth == entry.key,
+                                          onTap: () {
+                                            setState(() {
+                                              _isAllTimeSelected = false;
+                                              selectedMonth = entry.key;
+                                              _updateSeasonString();
+                                              // Clear date range when selecting season
+                                              _updateFilter(_filter.copyWith(
+                                                  startDate: null,
+                                                  endDate: null));
+                                            });
+                                            setModalState(() {});
+                                          },
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text(
+                              AppLocalizations.of(context)?.generalCancel ??
+                                  'Cancel'),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text(
+                              AppLocalizations.of(context)?.generalOk ?? 'OK'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(AppLocalizations.of(context)?.generalCancel ??
-                          'Cancel'),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
-                      child:
-                          Text(AppLocalizations.of(context)?.generalOk ?? 'OK'),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
@@ -1317,6 +1669,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       children: [
         // Fresh Attacks Only
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Checkbox(
               value: _filter.freshAttacksOnly ?? false,
@@ -1332,50 +1685,139 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
-                overflow: TextOverflow.ellipsis,
+                softWrap: true,
               ),
             ),
           ],
         ),
         const SizedBox(height: 12),
         // Result Limit
-        Row(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              AppLocalizations.of(context)?.filtersResultLimit ??
-                  'Result Limit',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
+            Row(
+              children: [
+                Text(
+                  AppLocalizations.of(context)?.filtersResultLimit ??
+                      'Result Limit',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(12),
                   ),
-              overflow: TextOverflow.ellipsis,
+                  child: Text(
+                    _filter.limit == null
+                        ? (AppLocalizations.of(context)?.generalAll ?? 'All')
+                        : '${_filter.limit}',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                '${_filter.limit}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontWeight: FontWeight.bold,
+            const SizedBox(height: 8),
+            // All results checkbox
+            InkWell(
+              onTap: () {
+                print('All Results clicked. Current limit: ${_filter.limit}');
+                if (_filter.limit == 10000) {
+                  // When unchecking, set to default
+                  _limitController.text = '1000';
+                  _updateFilter(_filter.copyWith(limit: 1000));
+                } else {
+                  // When checking, set to 10000 (All)
+                  _limitController.text = '';
+                  _updateFilter(_filter.copyWith(limit: 10000));
+                }
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    value: _filter.limit == 10000,
+                    onChanged: (value) {
+                      print('Checkbox onChanged. value: $value, current limit: ${_filter.limit}');
+                      if (value == true) {
+                        _limitController.text = '';
+                        _updateFilter(_filter.copyWith(limit: 10000));
+                      } else {
+                        _limitController.text = '1000';
+                        _updateFilter(_filter.copyWith(limit: 1000));
+                      }
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      AppLocalizations.of(context)?.generalAll ?? 'All Results',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                      softWrap: true,
                     ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Slider(
-                value: _filter.limit.toDouble(),
-                min: 10,
-                max: 200,
-                divisions: 19,
-                onChanged: (value) {
-                  _updateFilter(_filter.copyWith(limit: value.toInt()));
-                },
+            if (_filter.limit != 10000) ...[
+              const SizedBox(height: 8),
+              // Text input field for direct entry
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: TextField(
+                      controller: _limitController,
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)?.filtersResultLimit ?? 'Result Limit',
+                        hintText: '1000',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      ),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      onChanged: (value) {
+                        if (value.isNotEmpty) {
+                          final intValue = int.tryParse(value);
+                          if (intValue != null && intValue >= 1 && intValue <= 9999) {
+                            _updateFilter(_filter.copyWith(limit: intValue));
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    flex: 3,
+                    child: Slider(
+                      value: _filter.limit.toDouble().clamp(10, 9999),
+                      min: 10,
+                      max: 9999,
+                      divisions: 100,
+                      onChanged: (value) {
+                        final intValue = value.toInt();
+                        _limitController.text = intValue.toString();
+                        _updateFilter(_filter.copyWith(limit: intValue));
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ),
+            ],
           ],
         ),
       ],
@@ -1507,50 +1949,6 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                   .map((preset) => _buildSavedPresetChip(preset))
                   .toList(),
             ),
-        ],
-
-        // Performance Analysis Suggestions
-        if (_performanceSuggestions.isNotEmpty) ...[
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Icon(
-                Icons.analytics_outlined,
-                size: 16,
-                color: Theme.of(context).colorScheme.tertiary,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                AppLocalizations.of(context)!.performanceAnalysisSuggestions,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
-              ),
-              const SizedBox(width: 8),
-              Tooltip(
-                message:
-                    AppLocalizations.of(context)!.performanceAnalysisTooltip,
-                child: Icon(
-                  Icons.info_outline,
-                  size: 14,
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.6),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: _performanceSuggestions
-                .map(
-                    (suggestion) => _buildPerformanceSuggestionChip(suggestion))
-                .toList(),
-          ),
         ],
 
         const SizedBox(height: 20),
@@ -1714,7 +2112,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   Widget _buildPerformanceSuggestionChip(FilterPreset suggestion) {
     final metadata = suggestion.filter.metadata ?? {};
     final description = metadata['description'] as String? ?? '';
-    
+
     // Check if this performance suggestion is currently active
     final isActive = _isPresetActive(suggestion);
 
@@ -1734,13 +2132,15 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
           decoration: BoxDecoration(
             color: isActive
                 ? Theme.of(context).colorScheme.tertiary
-                : Theme.of(context)
-                    .colorScheme.surface,
+                : Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isActive
                   ? Theme.of(context).colorScheme.tertiary
-                  : Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.4),
+                  : Theme.of(context)
+                      .colorScheme
+                      .tertiary
+                      .withValues(alpha: 0.4),
               width: isActive ? 2 : 1,
             ),
           ),
@@ -1760,7 +2160,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 child: Text(
                   suggestion.name,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+                        fontWeight:
+                            isActive ? FontWeight.bold : FontWeight.w500,
                         color: isActive
                             ? Theme.of(context).colorScheme.onTertiary
                             : Theme.of(context).colorScheme.onTertiaryContainer,
@@ -2094,7 +2495,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                             title,
                             style: Theme.of(context)
                                 .textTheme
-                                .titleMedium
+                                .titleSmall
                                 ?.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -2207,8 +2608,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.w600,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(context)
                   .colorScheme
                   .onSurface
@@ -2351,11 +2751,20 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               '${AppLocalizations.of(context)?.warPositionMap ?? 'Position'} $min-$max'
         });
       }
-      if (_filter.limit != 50) {
+      if (_filter.limit != 50 && _filter.limit != null) {
+        final limitText = _filter.limit == null
+            ? (AppLocalizations.of(context)?.generalAll ?? 'All')
+            : '${_filter.limit}';
         filters.add({
           'type': 'limit',
           'text':
-              '${AppLocalizations.of(context)?.filtersResultLimit ?? 'Limit'}: ${_filter.limit}'
+              '${AppLocalizations.of(context)?.filtersResultLimit ?? 'Limit'}: $limitText'
+        });
+      } else if (_filter.limit == null) {
+        filters.add({
+          'type': 'limit',
+          'text':
+              '${AppLocalizations.of(context)?.filtersResultLimit ?? 'Limit'}: ${AppLocalizations.of(context)?.generalAll ?? 'All'}'
         });
       }
     }

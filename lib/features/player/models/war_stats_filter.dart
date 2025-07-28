@@ -39,7 +39,7 @@ class WarStatsFilter {
     this.maxDestruction,
     this.minMapPosition,
     this.maxMapPosition,
-    this.limit = 50,
+    this.limit = 1000,
     this.metadata,
   });
 
@@ -71,16 +71,17 @@ class WarStatsFilter {
       maxDestruction: json['max_destruction']?.toDouble(),
       minMapPosition: json['map_position_min'],
       maxMapPosition: json['map_position_max'],
-      limit: json['limit'] ?? 50,
+      limit: json['limit'] ?? 1000,
       metadata: json['metadata'] != null ? Map<String, dynamic>.from(json['metadata']) : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {
-      'limit': limit,
       'same_th': sameTownHall,
     };
+    
+    data['limit'] = limit;
     
     if (warTypes != null && warTypes!.isNotEmpty && !warTypes!.contains('all')) {
       data['type'] = warTypes;
@@ -160,11 +161,14 @@ class WarStatsFilter {
     int? maxMapPosition,
     int? limit,
     Map<String, dynamic>? metadata,
+    bool clearStartDate = false,
+    bool clearEndDate = false,
+    bool clearSeason = false,
   }) {
     return WarStatsFilter(
-      season: season ?? this.season,
-      startDate: startDate ?? this.startDate,
-      endDate: endDate ?? this.endDate,
+      season: clearSeason ? null : (season ?? this.season),
+      startDate: clearStartDate ? null : (startDate ?? this.startDate),
+      endDate: clearEndDate ? null : (endDate ?? this.endDate),
       ownTownHall: ownTownHall ?? this.ownTownHall,
       enemyTownHall: enemyTownHall ?? this.enemyTownHall,
       ownTownHalls: ownTownHalls ?? this.ownTownHalls,
@@ -191,7 +195,7 @@ class WarStatsFilter {
       startDate: DateTime.now().subtract(const Duration(days: 180)), // 6 months ago
       endDate: DateTime.now(),
       warType: "all",
-      limit: 50,
+      limit: 10000, // Default to "All" (high number represents no limit)
     );
   }
 

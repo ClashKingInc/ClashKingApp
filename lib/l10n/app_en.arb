@@ -53,6 +53,10 @@
   "@generalAll": {
     "description": "all items"
   },
+  "generalAllTime": "All Time",
+  "@generalAllTime": {
+    "description": "All time period"
+  },
   "generalOthers": "Others",
   "generalCompleted": "completed",
   "generalTotal": "Total",
