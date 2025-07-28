@@ -12,7 +12,6 @@
   "accountVerificationTitle": "Verify Account",
   "accountVerified": "Verified",
   "accountVerify": "Verify",
-  "accountVerifyButton": "Verify",
   "accountVerificationSuccess": "Account verified successfully!",
   "generalRetry": "Reîncearcă",
   "generalRetrying": "Retrying...",
@@ -52,6 +51,10 @@
   "generalAll": "Toate",
   "@generalAll": {
     "description": "all items"
+  },
+  "generalAllTime": "All Time",
+  "@generalAllTime": {
+    "description": "All time period"
   },
   "generalOthers": "Others",
   "generalCompleted": "completed",
@@ -256,7 +259,6 @@
   "authPasswordResetDescription": "Enter your email, the 6-digit code from the email, and your new password below.",
   "authPasswordNew": "New Password",
   "authPasswordConfirmHint": "Re-enter your new password",
-  "authPasswordResetConfirm": "Reset Password",
   "authPasswordResetSuccess": "Password reset successful! You can now log in.",
   "authPasswordResetContinue": "Continue to Reset Password",
   "authPasswordResetCode": "Reset Code",
@@ -292,7 +294,6 @@
   "authEmailVerificationSentTo": "We've sent a verification email to:",
   "authEmailVerificationResend": "Resend Verification Email",
   "authEmailVerificationResendSuccess": "Verification email resent successfully! Please check your email.",
-  "authEmailVerificationBackToLogin": "Back to Login",
   "authEmailVerificationExpired": "Verification expired. Please register again.",
   "authEmailVerificationAlreadyVerified": "This email is already verified. Please try logging in instead.",
   "authEmailVerificationNoToken": "No pending verification found. Please register first.",
@@ -483,7 +484,6 @@
   "clanNone": "No clan",
   "clanJoinToUnlock": "Join a clan to unlock new features.",
   "clanMembers": "Members",
-  "clanWarFrequency": "War frequency",
   "clanMinimumMembers": "Minimum members",
   "clanMaximumMembers": "Maximum members",
   "clanLocation": "Location",
@@ -496,10 +496,6 @@
   "clanOpened": "Opened",
   "@clanOpened": {
     "description": "Clan is opened"
-  },
-  "clanClosed": "Closed",
-  "@clanClosed": {
-    "description": "Clan is closed"
   },
   "clanRoleLeader": "Leader",
   "clanRoleCoLeader": "Co-Leader",
@@ -1419,7 +1415,6 @@
   "faqFeaturesCwlDescription": "Clan War League performance and member contributions",
   "faqSearchHint": "Search FAQ...",
   "faqSectionGettingStarted": "Getting Started & About",
-  "faqSectionTroubleshooting": "Troubleshooting",
   "faqSectionSupportAndContact": "Support & Contact",
   "faqTranslationIssue": "Translation is missing or incorrect?",
   "faqTranslationIssueAnswer": "Translations are done by app users like you! We (developers) only provide French and English translations. If you find missing or incorrect translations, you can help improve them. Do not hesitate to reach out to us on Discord or via email if want to help us. We have a specific Discord channel for translators where you can ask questions and get help.",
@@ -1537,10 +1532,6 @@
   "@filtersEndDate": {
     "description": "End date filter label"
   },
-  "filtersNotSet": "Nesetat",
-  "@filtersNotSet": {
-    "description": "Text shown when date is not set"
-  },
   "filtersYear": "Year",
   "@filtersYear": {
     "description": "Year selector label"
@@ -1568,14 +1559,6 @@
   "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
-  },
-  "chartsPoor": "Poor",
-  "@chartsPoor": {
-    "description": "Poor performance legend label"
-  },
-  "chartsAverage": "Medie",
-  "@chartsAverage": {
-    "description": "Average performance legend label"
   },
   "chartsGood": "Good",
   "@chartsGood": {
@@ -1609,10 +1592,6 @@
   "@exportSuccess": {
     "description": "Success message for completed export"
   },
-  "exportOpen": "Open",
-  "@exportOpen": {
-    "description": "Button label to open exported file"
-  },
   "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
   "@exportDialogDesc": {
     "description": "Description text for export dialog"
@@ -1637,17 +1616,9 @@
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
   },
-  "warAttacksDetailsWarType": "War Type",
-  "@warAttacksDetailsWarType": {
-    "description": "Label for war type in attack details"
-  },
   "warAttacksDetailsAttackOrder": "Attack Order",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
-  },
-  "warAttacksDetailsStars": "Stars",
-  "@warAttacksDetailsStars": {
-    "description": "Label for stars in attack details"
   },
   "warAttacksDetailsAttacker": "Attacker",
   "@warAttacksDetailsAttacker": {
@@ -1805,18 +1776,6 @@
   "@performanceAnalysisCleanupCrewDesc": {
     "description": "Description for cleanup attacks analysis"
   },
-  "performanceRatingExcellent": "Excellent",
-  "@performanceRatingExcellent": {
-    "description": "Excellent performance rating"
-  },
-  "performanceRatingGood": "Good",
-  "@performanceRatingGood": {
-    "description": "Good performance rating"
-  },
-  "performanceRatingAverage": "Average",
-  "@performanceRatingAverage": {
-    "description": "Average performance rating"
-  },
   "performanceRatingNeedsImprovement": "Needs Improvement",
   "@performanceRatingNeedsImprovement": {
     "description": "Needs improvement performance rating"
@@ -1840,10 +1799,6 @@
   "performanceImprovementOverallStarPerformance": "Overall Star Performance",
   "@performanceImprovementOverallStarPerformance": {
     "description": "Improvement area: overall star performance"
-  },
-  "performanceImprovementDestructionPercentage": "Destruction Percentage",
-  "@performanceImprovementDestructionPercentage": {
-    "description": "Improvement area: destruction percentage"
   },
   "presetSuggestionCwlOnly": "CWL Only",
   "@presetSuggestionCwlOnly": {
@@ -1902,5 +1857,16 @@
   "presetSuggestionRecentFilter": "Recent Filter",
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
-  }
+  },
+  "generalError": "Error",
+  "generalSuccess": "Success",
+  "generalFailed": "Failed",
+  "generalMinimum": "Minimum",
+  "generalMaximum": "Maximum",
+  "generalHigh": "High",
+  "generalLow": "Low",
+  "generalPoor": "Poor",
+  "generalOpen": "Open",
+  "generalClosed": "Closed",
+  "generalAvailable": "Available"
 }
