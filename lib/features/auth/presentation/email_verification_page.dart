@@ -345,7 +345,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                               .popUntil((route) => route.isFirst),
                           child: Text(
                             AppLocalizations.of(context)!
-                                .authEmailVerificationBackToLogin,
+                                .authBackToLogin,
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.w500,

@@ -106,7 +106,7 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
     if (!(_currentFilter.hasActiveFilters())) {
       return AppLocalizations.of(context)!.filtersNoneApplied;
     }
-    return _currentFilter.getFilterSummary();
+    return _currentFilter.getFilterSummary(context);
   }
 
   @override
@@ -460,25 +460,6 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
         _filteredWarStats = filteredStats;
         _isLoadingFiltered = false;
       });
-      
-      // Show success feedback
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                Icon(Icons.check_circle, color: Colors.white, size: 20),
-                const SizedBox(width: 12),
-                Text('Filters applied successfully'),
-              ],
-            ),
-            duration: const Duration(seconds: 2),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.green,
-            margin: const EdgeInsets.only(bottom: 80, left: 16, right: 16),
-          ),
-        );
-      }
     } catch (e) {
       setState(() {
         _isLoadingFiltered = false;
@@ -748,7 +729,7 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
           ],
         ),
         action: SnackBarAction(
-          label: AppLocalizations.of(context)?.exportOpen ?? 'Open',
+          label: AppLocalizations.of(context)?.generalOpen ?? 'Open',
           textColor: Theme.of(context).colorScheme.primary,
           onPressed: () => OpenFilex.open(filePath),
         ),

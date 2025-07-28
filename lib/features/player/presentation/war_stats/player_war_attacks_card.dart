@@ -321,10 +321,10 @@ class PlayerWarAttacksCard extends StatelessWidget {
                         title: AppLocalizations.of(context)!.warAttacksDetailsTitle,
                         icon: Icons.military_tech,
                         children: [
-                          _buildIconValueRow(context, Icons.star, AppLocalizations.of(context)!.warAttacksDetailsStars, attack.stars.toString()),
+                          _buildIconValueRow(context, Icons.star, AppLocalizations.of(context)!.warStarsTitle, attack.stars.toString()),
                           _buildIconValueRow(context, Icons.percent, AppLocalizations.of(context)!.warDestructionTitle, '${attack.destructionPercentage}%'),
                           _buildIconValueRow(context, Icons.format_list_numbered, AppLocalizations.of(context)!.warAttacksDetailsAttackOrder, attack.order.toString()),
-                          _buildIconValueRow(context, Icons.sports_esports, AppLocalizations.of(context)!.warAttacksDetailsWarType, war.warDetails.warType ?? AppLocalizations.of(context)!.generalUnknown),
+                          _buildIconValueRow(context, Icons.sports_esports, AppLocalizations.of(context)!.filtersWarType, war.warDetails.warType ?? AppLocalizations.of(context)!.generalUnknown),
                         ],
                       ),
                       const SizedBox(height: 16),
