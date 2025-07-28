@@ -1574,11 +1574,11 @@
   },
   "performanceAnalysisSuggestions": "Performance Insights",
   "@performanceAnalysisSuggestions": {
-    "description": "Section title for AI-generated performance analysis suggestions"
+    "description": "Section title for statistical performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Smart filter suggestions based on your war performance to help identify areas for improvement",
+  "performanceAnalysisTooltip": "Filter suggestions based on your star statistics to highlight performance patterns",
   "@performanceAnalysisTooltip": {
-    "description": "Tooltip explaining what performance analysis suggestions are"
+    "description": "Tooltip explaining that suggestions are based on statistical analysis"
   },
   "generalExport": "Export",
   "@generalExport": {
@@ -1688,9 +1688,9 @@
   "@performanceAnalysisMissedPerfectsDesc": {
     "description": "Description for missed perfect attacks analysis"
   },
-  "performanceAnalysisThAttackIssues": "TH{thLevel} Attack Issues",
+  "performanceAnalysisThAttackIssues": "Low Stars vs TH{thLevel}",
   "@performanceAnalysisThAttackIssues": {
-    "description": "Performance analysis preset for TH-specific attack issues",
+    "description": "Performance analysis preset for low-star attacks against specific TH levels",
     "placeholders": {
       "thLevel": {
         "type": "int",
@@ -1698,9 +1698,9 @@
       }
     }
   },
-  "performanceAnalysisThAttackIssuesDesc": "Shows poor performance against TH{thLevel}",
+  "performanceAnalysisThAttackIssuesDesc": "Shows attacks with low star count against TH{thLevel}",
   "@performanceAnalysisThAttackIssuesDesc": {
-    "description": "Description for TH-specific attack issues",
+    "description": "Description for low-star attacks against specific TH levels",
     "placeholders": {
       "thLevel": {
         "type": "int",
@@ -1708,9 +1708,9 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssues": "TH{thLevel} Defense Issues",
+  "performanceAnalysisThDefenseIssues": "Vulnerable to TH{thLevel}",
   "@performanceAnalysisThDefenseIssues": {
-    "description": "Performance analysis preset for TH-specific defense issues",
+    "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
     "placeholders": {
       "thLevel": {
         "type": "int",
@@ -1718,9 +1718,9 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssuesDesc": "Shows where you're vulnerable to TH{thLevel} attacks",
+  "performanceAnalysisThDefenseIssuesDesc": "Shows when TH{thLevel} attackers get high stars against you",
   "@performanceAnalysisThDefenseIssuesDesc": {
-    "description": "Description for TH-specific defense issues",
+    "description": "Description for defensive vulnerabilities to specific TH levels",
     "placeholders": {
       "thLevel": {
         "type": "int",
@@ -1728,21 +1728,21 @@
       }
     }
   },
-  "performanceAnalysisCwlIssues": "CWL Performance Issues",
+  "performanceAnalysisCwlIssues": "CWL Low Performance",
   "@performanceAnalysisCwlIssues": {
-    "description": "Performance analysis preset for CWL issues"
+    "description": "Performance analysis preset for low CWL performance"
   },
-  "performanceAnalysisCwlIssuesDesc": "Shows CWL attacks - lower success than regular wars",
+  "performanceAnalysisCwlIssuesDesc": "Shows CWL attacks with lower star average than regular wars",
   "@performanceAnalysisCwlIssuesDesc": {
-    "description": "Description for CWL performance issues"
+    "description": "Description for low CWL performance analysis"
   },
-  "performanceAnalysisRandomWarIssues": "Random War Issues",
+  "performanceAnalysisRandomWarIssues": "Random War Low Performance",
   "@performanceAnalysisRandomWarIssues": {
-    "description": "Performance analysis preset for random war issues"
+    "description": "Performance analysis preset for low random war performance"
   },
-  "performanceAnalysisRandomWarIssuesDesc": "Shows random war attacks - lower success than CWL",
+  "performanceAnalysisRandomWarIssuesDesc": "Shows random war attacks with lower star average than CWL",
   "@performanceAnalysisRandomWarIssuesDesc": {
-    "description": "Description for random war performance issues"
+    "description": "Description for low random war performance analysis"
   },
   "performanceAnalysisFreshOnly": "Fresh Attack Analysis",
   "@performanceAnalysisFreshOnly": {
