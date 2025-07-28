@@ -12,7 +12,6 @@
   "accountVerificationTitle": "Zweryfikuj konto",
   "accountVerified": "Zweryfikowany",
   "accountVerify": "Weryfikuj",
-  "accountVerifyButton": "Weryfikuj",
   "accountVerificationSuccess": "Konto zweryfikowane pomyślnie!",
   "generalRetry": "Spróbuj ponownie",
   "generalRetrying": "Próbuję ponownie...",
@@ -52,6 +51,10 @@
   "generalAll": "Wszystkie",
   "@generalAll": {
     "description": "all items"
+  },
+  "generalAllTime": "All Time",
+  "@generalAllTime": {
+    "description": "All time period"
   },
   "generalOthers": "Inne",
   "generalCompleted": "ukończono",
@@ -256,7 +259,6 @@
   "authPasswordResetDescription": "Wprowadź swój adres e-mail, 6-cyfrowy kod z adresu e-mail i nowe hasło poniżej.",
   "authPasswordNew": "Nowe Hasło",
   "authPasswordConfirmHint": "Wprowadź ponownie swoje nowe hasło",
-  "authPasswordResetConfirm": "Zresetuj hasło",
   "authPasswordResetSuccess": "Hasło zostało zresetowane! Teraz możesz się zalogować.",
   "authPasswordResetContinue": "Kontynuuj resetowanie hasła",
   "authPasswordResetCode": "Kod resetowania",
@@ -292,7 +294,6 @@
   "authEmailVerificationSentTo": "Wysłaliśmy e-mail weryfikacyjny na adres:",
   "authEmailVerificationResend": "Wyślij ponownie e-mail z potwierdzeniem",
   "authEmailVerificationResendSuccess": "E-mail weryfikacyjny został wysłany ponownie! Sprawdź swoją skrzynkę e-mail.",
-  "authEmailVerificationBackToLogin": "Wróć do logowania",
   "authEmailVerificationExpired": "Weryfikacja wygasła. Proszę zarejestrować się ponownie.",
   "authEmailVerificationAlreadyVerified": "Ten e-mail jest już zweryfikowany. Spróbuj zalogować się.",
   "authEmailVerificationNoToken": "Nie znaleziono oczekującej weryfikacji. Proszę najpierw się zarejestrować.",
@@ -483,7 +484,6 @@
   "clanNone": "Brak klanu",
   "clanJoinToUnlock": "Dołącz do klanu, aby odblokować nowe funkcje.",
   "clanMembers": "Członkowie",
-  "clanWarFrequency": "Częstotliwość wojny",
   "clanMinimumMembers": "Minimalna liczba członków",
   "clanMaximumMembers": "Maksymalna liczba członków",
   "clanLocation": "Lokalizacja",
@@ -496,10 +496,6 @@
   "clanOpened": "Otwarty",
   "@clanOpened": {
     "description": "Clan is opened"
-  },
-  "clanClosed": "Zamknięte",
-  "@clanClosed": {
-    "description": "Clan is closed"
   },
   "clanRoleLeader": "Lider",
   "clanRoleCoLeader": "Co-Lider",
@@ -1413,13 +1409,12 @@
   "faqFeaturesClanDescription": "Monitoruj członków klanu, darowizny i ogólne zdrowie klanów",
   "faqFeaturesWarTitle": "Śledzenie Wojenne",
   "faqFeaturesWarDescription": "Analizuj wyniki wojny, strategie ataku i wskaźniki zwycięstw",
-  "faqFeaturesLegendsTitle": "Nieprecyzyjne dane?",
+  "faqFeaturesLegendsTitle": "Inaccurate data?",
   "faqFeaturesLegendsDescription": "Codzienne śledzenie trofeów i statystyki na koniec sezonu",
   "faqFeaturesCwlTitle": "Analiza CWL",
   "faqFeaturesCwlDescription": "Wydajność Ligi Wojennych i wkład członków",
   "faqSearchHint": "Szukaj FAQ...",
   "faqSectionGettingStarted": "Pierwsze kroki i informacje",
-  "faqSectionTroubleshooting": "Rozwiązywanie problemów",
   "faqSectionSupportAndContact": "Wsparcie & Kontakt",
   "faqTranslationIssue": "Tłumaczenie jest brakujące lub niepoprawne?",
   "faqTranslationIssueAnswer": "Tłumaczenia są wykonywane przez takich użytkowników aplikacji! My (deweloperów) udostępniamy tylko tłumaczenie francuskie i angielskie. Jeśli znajdziesz brakujące lub niepoprawne tłumaczenia, możesz pomóc je poprawić. Nie wahaj się skontaktować z nami na Discordzie lub pocztą e-mail, jeśli chcesz nam pomóc. Mamy specjalny kanał Discorda dla tłumaczy, gdzie możesz zadawać pytania i uzyskać pomoc.",
@@ -1537,10 +1532,6 @@
   "@filtersEndDate": {
     "description": "End date filter label"
   },
-  "filtersNotSet": "Nie ustawione",
-  "@filtersNotSet": {
-    "description": "Text shown when date is not set"
-  },
   "filtersYear": "Rok",
   "@filtersYear": {
     "description": "Year selector label"
@@ -1568,14 +1559,6 @@
   "chartsRowsYourTh": "Wierszy: Twoje TH | Kolumny: TH przeciwnika",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
-  },
-  "chartsPoor": "Słaby",
-  "@chartsPoor": {
-    "description": "Poor performance legend label"
-  },
-  "chartsAverage": "Średnia",
-  "@chartsAverage": {
-    "description": "Average performance legend label"
   },
   "chartsGood": "Dobre",
   "@chartsGood": {
@@ -1609,10 +1592,6 @@
   "@exportSuccess": {
     "description": "Success message for completed export"
   },
-  "exportOpen": "Otwórz",
-  "@exportOpen": {
-    "description": "Button label to open exported file"
-  },
   "exportDialogDesc": "Spowoduje to pobranie statystyk wojny jako pliku Excel z wieloma arkuszami, w tym ogólnymi statystykami, szczegółowymi atakami i analizami TH.",
   "@exportDialogDesc": {
     "description": "Description text for export dialog"
@@ -1637,17 +1616,9 @@
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
   },
-  "warAttacksDetailsWarType": "War Type",
-  "@warAttacksDetailsWarType": {
-    "description": "Label for war type in attack details"
-  },
   "warAttacksDetailsAttackOrder": "Attack Order",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
-  },
-  "warAttacksDetailsStars": "Stars",
-  "@warAttacksDetailsStars": {
-    "description": "Label for stars in attack details"
   },
   "warAttacksDetailsAttacker": "Attacker",
   "@warAttacksDetailsAttacker": {
@@ -1805,18 +1776,6 @@
   "@performanceAnalysisCleanupCrewDesc": {
     "description": "Description for cleanup attacks analysis"
   },
-  "performanceRatingExcellent": "Excellent",
-  "@performanceRatingExcellent": {
-    "description": "Excellent performance rating"
-  },
-  "performanceRatingGood": "Good",
-  "@performanceRatingGood": {
-    "description": "Good performance rating"
-  },
-  "performanceRatingAverage": "Average",
-  "@performanceRatingAverage": {
-    "description": "Average performance rating"
-  },
   "performanceRatingNeedsImprovement": "Needs Improvement",
   "@performanceRatingNeedsImprovement": {
     "description": "Needs improvement performance rating"
@@ -1840,10 +1799,6 @@
   "performanceImprovementOverallStarPerformance": "Overall Star Performance",
   "@performanceImprovementOverallStarPerformance": {
     "description": "Improvement area: overall star performance"
-  },
-  "performanceImprovementDestructionPercentage": "Destruction Percentage",
-  "@performanceImprovementDestructionPercentage": {
-    "description": "Improvement area: destruction percentage"
   },
   "presetSuggestionCwlOnly": "CWL Only",
   "@presetSuggestionCwlOnly": {
@@ -1902,5 +1857,16 @@
   "presetSuggestionRecentFilter": "Recent Filter",
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
-  }
+  },
+  "generalError": "Error",
+  "generalSuccess": "Success",
+  "generalFailed": "Failed",
+  "generalMinimum": "Minimum",
+  "generalMaximum": "Maximum",
+  "generalHigh": "High",
+  "generalLow": "Low",
+  "generalPoor": "Poor",
+  "generalOpen": "Open",
+  "generalClosed": "Closed",
+  "generalAvailable": "Available"
 }
