@@ -195,7 +195,7 @@ class WarStatsFilter {
       startDate: DateTime.now().subtract(const Duration(days: 180)), // 6 months ago
       endDate: DateTime.now(),
       warType: "all",
-      limit: 10000, // Default to "All" (high number represents no limit)
+      limit: 50, // Default limit (not "All")
     );
   }
 

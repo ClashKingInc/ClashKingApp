@@ -365,7 +365,7 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
                                   )
                                 : Text(
                                     AppLocalizations.of(context)!
-                                        .authPasswordResetConfirm,
+                                        .authPasswordReset,
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,

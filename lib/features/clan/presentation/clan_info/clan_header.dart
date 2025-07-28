@@ -173,7 +173,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
               case 'open':
                 return loc.clanOpened;
               case 'closed':
-                return loc.clanClosed;
+                return loc.generalClosed;
               default:
                 return clanInfo.type;
             }

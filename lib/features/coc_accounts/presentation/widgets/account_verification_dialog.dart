@@ -208,7 +208,7 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
                   height: 16,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
-              : Text(AppLocalizations.of(context)!.accountVerifyButton),
+              : Text(AppLocalizations.of(context)!.accountVerify),
         ),
       ],
     );

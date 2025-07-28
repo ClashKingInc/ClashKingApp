@@ -729,7 +729,7 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
           ],
         ),
         action: SnackBarAction(
-          label: AppLocalizations.of(context)?.exportOpen ?? 'Open',
+          label: AppLocalizations.of(context)?.generalOpen ?? 'Open',
           textColor: Theme.of(context).colorScheme.primary,
           onPressed: () => OpenFilex.open(filePath),
         ),

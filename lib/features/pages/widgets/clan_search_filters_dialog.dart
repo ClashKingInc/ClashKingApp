@@ -154,7 +154,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 child: Column(
                   children: [
                     SizedBox(height: 8),
-                    Text(AppLocalizations.of(context)!.clanWarFrequency,
+                    Text(AppLocalizations.of(context)!.warFrequency,
                         style: Theme.of(context).textTheme.bodyMedium),
                     DropdownButton<String>(
                       value: warfrequency,

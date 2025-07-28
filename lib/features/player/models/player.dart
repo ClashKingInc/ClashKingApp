@@ -499,12 +499,6 @@ class Player {
     if (json['war_data'] != null && json['war_data']["currentWarInfo"] != null) {
       final originalWar = WarInfo.fromJson(json['war_data']["currentWarInfo"]);
       warData = originalWar.reorderForUser(tag);
-      // Debug: Check if reordering happened
-      print("🔄 REORDERING WAR DATA for $tag:");
-      print("  - Original clan: ${originalWar.clan?.tag}");
-      print("  - Original opponent: ${originalWar.opponent?.tag}"); 
-      print("  - Reordered clan: ${warData?.clan?.tag}");
-      print("  - Reordered opponent: ${warData?.opponent?.tag}");
     } else {
       warData = null;
     }

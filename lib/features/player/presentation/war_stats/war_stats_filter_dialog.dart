@@ -66,7 +66,10 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   @override
   void initState() {
     super.initState();
-    _filter = widget.initialFilter;
+    // Default the dialog to show "All" (10000) limit, even if initial filter uses 50
+    _filter = widget.initialFilter.copyWith(
+      limit: widget.initialFilter.limit == 50 ? 1000 : widget.initialFilter.limit,
+    );
     _minMapPositionController = TextEditingController(
       text: _filter.minMapPosition?.toString() ?? '',
     );
@@ -715,20 +718,6 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                             limit: _filter.limit,
                           );
 
-                          print('=== APPLY BUTTON DEBUG ===');
-                          print('_isAllTimeSelected: $_isAllTimeSelected');
-                          print('_filter.startDate (before): ${_filter.startDate}');
-                          print('_filter.endDate (before): ${_filter.endDate}');
-                          print('selectedSeason: $selectedSeason');
-                          print('finalStartDate: $finalStartDate');
-                          print('finalEndDate: $finalEndDate');
-                          print('finalSeason: $finalSeason');
-                          print('updatedFilter.startDate: ${updatedFilter.startDate}');
-                          print('updatedFilter.endDate: ${updatedFilter.endDate}');
-                          print('updatedFilter.season: ${updatedFilter.season}');
-                          print('updatedFilter.limit: ${updatedFilter.limit}');
-                          print('========================');
-                          
                           widget.onApply(updatedFilter);
                           Navigator.pop(context);
                         },
@@ -840,7 +829,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                                         ?.toString()
                                         .split(' ')[0] ??
                                     (AppLocalizations.of(context)
-                                            ?.filtersNotSet ??
+                                            ?.generalNotSet ??
                                         'Not set'))),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               fontWeight: FontWeight.w500,
@@ -938,7 +927,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                                     'Season Selected')
                                 : (_filter.endDate?.toString().split(' ')[0] ??
                                     (AppLocalizations.of(context)
-                                            ?.filtersNotSet ??
+                                            ?.generalNotSet ??
                                         'Not set'))),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               fontWeight: FontWeight.w500,
@@ -964,7 +953,6 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
           onTap: () {
             if (!isAllTime) {
               // When checking, clear dates and season for all time, and set limit to All
-              print('=== ALL TIME SELECTED ===');
               setState(() {
                 _isAllTimeSelected = true;
                 selectedSeason = null;
@@ -981,7 +969,6 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 clearEndDate: true,
                 clearSeason: true,
               );
-              print('All Time - new filter dates: ${newFilter.startDate}, ${newFilter.endDate}');
               _updateFilter(newFilter);
             } else {
               // When unchecking, set to default date range (last 180 days)
@@ -1005,8 +992,6 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               Checkbox(
                 value: isAllTime,
                 onChanged: (value) {
-                  print('Checkbox onChanged called with value: $value');
-                  print('Current isAllTime: $isAllTime');
 
                   if (value == true) {
                     // When checking, clear dates and season for all time
@@ -1714,9 +1699,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    _filter.limit == null
-                        ? (AppLocalizations.of(context)?.generalAll ?? 'All')
-                        : '${_filter.limit}',
+                    '${_filter.limit}',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary,
                           fontWeight: FontWeight.bold,
@@ -1729,7 +1712,6 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             // All results checkbox
             InkWell(
               onTap: () {
-                print('All Results clicked. Current limit: ${_filter.limit}');
                 if (_filter.limit == 10000) {
                   // When unchecking, set to default
                   _limitController.text = '1000';
@@ -1741,12 +1723,10 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 }
               },
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Checkbox(
                     value: _filter.limit == 10000,
                     onChanged: (value) {
-                      print('Checkbox onChanged. value: $value, current limit: ${_filter.limit}');
                       if (value == true) {
                         _limitController.text = '';
                         _updateFilter(_filter.copyWith(limit: 10000));
@@ -2749,22 +2729,6 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
           'type': 'mapPosition',
           'text':
               '${AppLocalizations.of(context)?.warPositionMap ?? 'Position'} $min-$max'
-        });
-      }
-      if (_filter.limit != 50 && _filter.limit != null) {
-        final limitText = _filter.limit == null
-            ? (AppLocalizations.of(context)?.generalAll ?? 'All')
-            : '${_filter.limit}';
-        filters.add({
-          'type': 'limit',
-          'text':
-              '${AppLocalizations.of(context)?.filtersResultLimit ?? 'Limit'}: $limitText'
-        });
-      } else if (_filter.limit == null) {
-        filters.add({
-          'type': 'limit',
-          'text':
-              '${AppLocalizations.of(context)?.filtersResultLimit ?? 'Limit'}: ${AppLocalizations.of(context)?.generalAll ?? 'All'}'
         });
       }
     }
