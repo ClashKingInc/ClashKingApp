@@ -12,7 +12,6 @@
   "accountVerificationTitle": "Vérification du compte",
   "accountVerified": "Vérifié",
   "accountVerify": "Vérifier",
-  "accountVerifyButton": "Vérifier",
   "accountVerificationSuccess": "Compte vérifié avec succès !",
   "generalRetry": "Réessayer",
   "generalRetrying": "Nouvelle tentative...",
@@ -52,6 +51,10 @@
   "generalAll": "Tous",
   "@generalAll": {
     "description": "all items"
+  },
+  "generalAllTime": "Depuis le début",
+  "@generalAllTime": {
+    "description": "All time period"
   },
   "generalOthers": "Autres",
   "generalCompleted": "terminé",
@@ -96,7 +99,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Attention",
-  "generalUnknown": "Unknown",
+  "generalUnknown": "Inconnu",
   "generalNoDataAvailable": "Aucune donnée disponible.",
   "generalNoFilteredResults": "Aucun résultat ne correspond à tes filtres",
   "@generalNoFilteredResults": {
@@ -256,7 +259,6 @@
   "authPasswordResetDescription": "Saisis ton e-mail, le code à 6 chiffres reçu par e-mail, et ton nouveau mot de passe ci-dessous.",
   "authPasswordNew": "Nouveau mot de passe",
   "authPasswordConfirmHint": "Confirmer le mot de passe",
-  "authPasswordResetConfirm": "Réinitialiser le mot de passe",
   "authPasswordResetSuccess": "Mot de passe réinitialisé avec succès ! Tu peux maintenant te connecter.",
   "authPasswordResetContinue": "Continuer à réinitialiser le mot de passe",
   "authPasswordResetCode": "Code de réinitialisation",
@@ -292,7 +294,6 @@
   "authEmailVerificationSentTo": "Nous avons envoyé un e-mail de vérification à :",
   "authEmailVerificationResend": "Renvoyer l'e-mail de vérification",
   "authEmailVerificationResendSuccess": "E-mail de vérification renvoyé avec succès ! Vérifie ta boite-mail.",
-  "authEmailVerificationBackToLogin": "Retour à la page de connexion",
   "authEmailVerificationExpired": "La vérification a expiré. Merci de t'inscrire de nouveau.",
   "authEmailVerificationAlreadyVerified": "Cet e-mail est déjà enregistré. Essaie plutôt de te connecter.",
   "authEmailVerificationNoToken": "Aucune vérification en attente trouvée. Merci de t'inscrire d'abord.",
@@ -483,7 +484,6 @@
   "clanNone": "Aucun clan",
   "clanJoinToUnlock": "Rejoignez un clan pour débloquer de nouvelles fonctionnalités.",
   "clanMembers": "Membres",
-  "clanWarFrequency": "Fréquence de guerre",
   "clanMinimumMembers": "Membres minimum",
   "clanMaximumMembers": "Membres maximum",
   "clanLocation": "Localisation",
@@ -496,10 +496,6 @@
   "clanOpened": "Ouvert",
   "@clanOpened": {
     "description": "Clan is opened"
-  },
-  "clanClosed": "Fermé",
-  "@clanClosed": {
-    "description": "Clan is closed"
   },
   "clanRoleLeader": "Chef",
   "clanRoleCoLeader": "Adjoint",
@@ -866,7 +862,7 @@
   "warAskForWar": "Contactez le chef ou un adjoint pour lancer une guerre.",
   "warAskForWarLogOpening": "Contactez un chef ou un adjoint pour ouvrir le journal de guerre.",
   "warEnded": "Terminée",
-  "warInWar": "In War",
+  "warInWar": "En guerre",
   "@warInWar": {
     "description": "War state: active"
   },
@@ -1413,13 +1409,12 @@
   "faqFeaturesClanDescription": "Surveille les membres de ton clan, leurs dons et la vie du clan",
   "faqFeaturesWarTitle": "Suivi de guerre",
   "faqFeaturesWarDescription": "Analyse les performances de guerre, les stratégies d'attaque et le taux de victoire",
-  "faqFeaturesLegendsTitle": "Ligue légende",
+  "faqFeaturesLegendsTitle": "Données erronnées ?",
   "faqFeaturesLegendsDescription": "Suivi quotidien des trophées et statistiques de fin de saison",
   "faqFeaturesCwlTitle": "Analyses de la LDC",
   "faqFeaturesCwlDescription": "Performance de la Ligue de Clans et contribution des membres",
   "faqSearchHint": "Rechercher dans la FAQ...",
   "faqSectionGettingStarted": "Bien démarrer & À propos",
-  "faqSectionTroubleshooting": "Dépannage",
   "faqSectionSupportAndContact": "Contact & Assistance",
   "faqTranslationIssue": "Traduction manquante ou incorrecte ?",
   "faqTranslationIssueAnswer": "Les traductions sont faites par des utilisateurs de l'application tout comme toi ! Nous (développeurs) fournissons uniquement des traductions en français et en anglais. Si tu trouves des traductions manquantes ou incorrectes (même en français parce que personne n'est parfait), tu peux proposer des améliorations. N'hésite pas à nous contacter sur Discord ou par e-mail si tu veux nous aider. Nous avons un canal Discord spécifique pour les traducteurs où tu peux poser tes questions et obtenir de l'aide.",
@@ -1537,10 +1532,6 @@
   "@filtersEndDate": {
     "description": "End date filter label"
   },
-  "filtersNotSet": "Non défini",
-  "@filtersNotSet": {
-    "description": "Text shown when date is not set"
-  },
   "filtersYear": "Année",
   "@filtersYear": {
     "description": "Year selector label"
@@ -1569,14 +1560,6 @@
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
   },
-  "chartsPoor": "Mauvais",
-  "@chartsPoor": {
-    "description": "Poor performance legend label"
-  },
-  "chartsAverage": "Moyenne",
-  "@chartsAverage": {
-    "description": "Average performance legend label"
-  },
   "chartsGood": "Bon",
   "@chartsGood": {
     "description": "Good performance legend label"
@@ -1591,11 +1574,11 @@
   },
   "performanceAnalysisSuggestions": "Analyses de performances",
   "@performanceAnalysisSuggestions": {
-    "description": "Section title for AI-generated performance analysis suggestions"
+    "description": "Section title for statistical performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Suggestions de filtres intelligents basées sur tes performances de guerre pour aider à identifier les domaines à améliorer",
+  "performanceAnalysisTooltip": "Filtrer les suggestions basées sur vos statistiques d'étoiles pour mettre en évidence les modèles de performance",
   "@performanceAnalysisTooltip": {
-    "description": "Tooltip explaining what performance analysis suggestions are"
+    "description": "Tooltip explaining that suggestions are based on statistical analysis"
   },
   "generalExport": "Exporter",
   "@generalExport": {
@@ -1608,10 +1591,6 @@
   "exportSuccess": "Exportation terminée !",
   "@exportSuccess": {
     "description": "Success message for completed export"
-  },
-  "exportOpen": "Ouvrir",
-  "@exportOpen": {
-    "description": "Button label to open exported file"
   },
   "exportDialogDesc": "Cela téléchargera tes statistiques de guerre en tant que fichier Excel avec plusieurs fiches, y compris des statistiques globales, des attaques détaillées et des analyses d'HDV.",
   "@exportDialogDesc": {
@@ -1637,17 +1616,9 @@
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
   },
-  "warAttacksDetailsWarType": "Type de guerre",
-  "@warAttacksDetailsWarType": {
-    "description": "Label for war type in attack details"
-  },
   "warAttacksDetailsAttackOrder": "Ordre d'attaque",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
-  },
-  "warAttacksDetailsStars": "Stars",
-  "@warAttacksDetailsStars": {
-    "description": "Label for stars in attack details"
   },
   "warAttacksDetailsAttacker": "Attaquant",
   "@warAttacksDetailsAttacker": {
@@ -1681,7 +1652,7 @@
   "@warDataClanLevel": {
     "description": "Label for clan level"
   },
-  "warDataTotalStars": "Total Stars",
+  "warDataTotalStars": "Étoiles totales",
   "@warDataTotalStars": {
     "description": "Label for total stars earned"
   },
@@ -1713,13 +1684,13 @@
   "@performanceAnalysisMissedPerfects": {
     "description": "Performance analysis preset for missed perfect attacks"
   },
-  "performanceAnalysisMissedPerfectsDesc": "Shows attacks that got 2 stars - potential perfect opportunities",
+  "performanceAnalysisMissedPerfectsDesc": "Affiche les attaques qui ont reçu 2 étoiles et moins : potentielles opportunités parfaites",
   "@performanceAnalysisMissedPerfectsDesc": {
     "description": "Description for missed perfect attacks analysis"
   },
-  "performanceAnalysisThAttackIssues": "TH{thLevel} Attack Issues",
+  "performanceAnalysisThAttackIssues": "Faibles performances vs HDV{thLevel}",
   "@performanceAnalysisThAttackIssues": {
-    "description": "Performance analysis preset for TH-specific attack issues",
+    "description": "Performance analysis preset for low-star attacks against specific TH levels",
     "placeholders": {
       "thLevel": {
         "type": "int",
@@ -1727,9 +1698,9 @@
       }
     }
   },
-  "performanceAnalysisThAttackIssuesDesc": "Montre les performances médiocres contre HDV{thLevel}",
+  "performanceAnalysisThAttackIssuesDesc": "Affiche les attaques avec peu d'étoiles contre les HDV{thLevel}",
   "@performanceAnalysisThAttackIssuesDesc": {
-    "description": "Description for TH-specific attack issues",
+    "description": "Description for low-star attacks against specific TH levels",
     "placeholders": {
       "thLevel": {
         "type": "int",
@@ -1737,9 +1708,9 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssues": "TH{thLevel} Defense Issues",
+  "performanceAnalysisThDefenseIssues": "Vulnérable aux HDV{thLevel}",
   "@performanceAnalysisThDefenseIssues": {
-    "description": "Performance analysis preset for TH-specific defense issues",
+    "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
     "placeholders": {
       "thLevel": {
         "type": "int",
@@ -1747,9 +1718,9 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssuesDesc": "Shows where you're vulnerable to TH{thLevel} attacks",
+  "performanceAnalysisThDefenseIssuesDesc": "Affiche quand les HDV{thLevel} obtiennent beaucoup d'étoiles contre toi",
   "@performanceAnalysisThDefenseIssuesDesc": {
-    "description": "Description for TH-specific defense issues",
+    "description": "Description for defensive vulnerabilities to specific TH levels",
     "placeholders": {
       "thLevel": {
         "type": "int",
@@ -1757,107 +1728,91 @@
       }
     }
   },
-  "performanceAnalysisCwlIssues": "CWL Performance Issues",
+  "performanceAnalysisCwlIssues": "Faible performance en LDC",
   "@performanceAnalysisCwlIssues": {
-    "description": "Performance analysis preset for CWL issues"
+    "description": "Performance analysis preset for low CWL performance"
   },
-  "performanceAnalysisCwlIssuesDesc": "Shows CWL attacks - lower success than regular wars",
+  "performanceAnalysisCwlIssuesDesc": "Affiche les attaques CWL avec une moyenne d'étoiles inférieure à la moyenne des guerres régulières",
   "@performanceAnalysisCwlIssuesDesc": {
-    "description": "Description for CWL performance issues"
+    "description": "Description for low CWL performance analysis"
   },
-  "performanceAnalysisRandomWarIssues": "Random War Issues",
+  "performanceAnalysisRandomWarIssues": "Faible performance en guerre classique",
   "@performanceAnalysisRandomWarIssues": {
-    "description": "Performance analysis preset for random war issues"
+    "description": "Performance analysis preset for low random war performance"
   },
-  "performanceAnalysisRandomWarIssuesDesc": "Shows random war attacks - lower success than CWL",
+  "performanceAnalysisRandomWarIssuesDesc": "Affiche des attaques de guerre aléatoires avec une moyenne inférieure aux attaques de LDC",
   "@performanceAnalysisRandomWarIssuesDesc": {
-    "description": "Description for random war performance issues"
+    "description": "Description for low random war performance analysis"
   },
-  "performanceAnalysisFreshOnly": "Fresh Attack Analysis",
+  "performanceAnalysisFreshOnly": "Analyse des attaques d'ouverture",
   "@performanceAnalysisFreshOnly": {
     "description": "Performance analysis preset for fresh attacks only"
   },
-  "performanceAnalysisFreshOnlyDesc": "Analyzes performance on fresh bases only",
+  "performanceAnalysisFreshOnlyDesc": "Analyser les performances sur les bases à ouvrir uniquement",
   "@performanceAnalysisFreshOnlyDesc": {
     "description": "Description for fresh attack analysis"
   },
-  "performanceAnalysisRecentPerformance": "Recent Performance (30 Days)",
+  "performanceAnalysisRecentPerformance": "Performances récentes (30 jours)",
   "@performanceAnalysisRecentPerformance": {
     "description": "Performance analysis preset for recent performance"
   },
-  "performanceAnalysisRecentPerformanceDesc": "Shows recent performance to identify current trends",
+  "performanceAnalysisRecentPerformanceDesc": "Affiche les performances récentes pour identifier les tendances actuelles",
   "@performanceAnalysisRecentPerformanceDesc": {
     "description": "Description for recent performance analysis"
   },
-  "performanceAnalysisHighStakes": "High-Stakes Attacks",
+  "performanceAnalysisHighStakes": "Attaques cruciales",
   "@performanceAnalysisHighStakes": {
     "description": "Performance analysis preset for high-stakes attacks"
   },
-  "performanceAnalysisHighStakesDesc": "Shows attacks from top 5 war positions",
+  "performanceAnalysisHighStakesDesc": "Affiche les attaques où le joueur était top 5 sur la carte de guerre",
   "@performanceAnalysisHighStakesDesc": {
     "description": "Description for high-stakes attacks analysis"
   },
-  "performanceAnalysisCleanupCrew": "Cleanup Attacks",
+  "performanceAnalysisCleanupCrew": "Attaques de nettoyage",
   "@performanceAnalysisCleanupCrew": {
     "description": "Performance analysis preset for cleanup attacks"
   },
-  "performanceAnalysisCleanupCrewDesc": "Shows attacks from lower war positions",
+  "performanceAnalysisCleanupCrewDesc": "Affiche les attaques où le joueur était en bas de la carte de guerre",
   "@performanceAnalysisCleanupCrewDesc": {
     "description": "Description for cleanup attacks analysis"
   },
-  "performanceRatingExcellent": "Excellent",
-  "@performanceRatingExcellent": {
-    "description": "Excellent performance rating"
-  },
-  "performanceRatingGood": "Good",
-  "@performanceRatingGood": {
-    "description": "Good performance rating"
-  },
-  "performanceRatingAverage": "Average",
-  "@performanceRatingAverage": {
-    "description": "Average performance rating"
-  },
-  "performanceRatingNeedsImprovement": "Needs Improvement",
+  "performanceRatingNeedsImprovement": "À améliorer",
   "@performanceRatingNeedsImprovement": {
     "description": "Needs improvement performance rating"
   },
-  "performanceStrengthHighThreeStarRate": "High Three-Star Rate",
+  "performanceStrengthHighThreeStarRate": "Taux élevé de trois étoiles",
   "@performanceStrengthHighThreeStarRate": {
     "description": "Strength area: high three-star rate"
   },
-  "performanceStrengthHighDestruction": "High Destruction",
+  "performanceStrengthHighDestruction": "Destruction élevée",
   "@performanceStrengthHighDestruction": {
     "description": "Strength area: high destruction percentage"
   },
-  "performanceStrengthConsistentPerformance": "Consistent Performance",
+  "performanceStrengthConsistentPerformance": "Performance uniforme",
   "@performanceStrengthConsistentPerformance": {
     "description": "Strength area: consistent performance"
   },
-  "performanceImprovementThreeStarConsistency": "Three-Star Consistency",
+  "performanceImprovementThreeStarConsistency": "Régularité des 3 étoiles",
   "@performanceImprovementThreeStarConsistency": {
     "description": "Improvement area: three-star consistency"
   },
-  "performanceImprovementOverallStarPerformance": "Overall Star Performance",
+  "performanceImprovementOverallStarPerformance": "Performance générale",
   "@performanceImprovementOverallStarPerformance": {
     "description": "Improvement area: overall star performance"
   },
-  "performanceImprovementDestructionPercentage": "Destruction Percentage",
-  "@performanceImprovementDestructionPercentage": {
-    "description": "Improvement area: destruction percentage"
-  },
-  "presetSuggestionCwlOnly": "CWL Only",
+  "presetSuggestionCwlOnly": "LDC uniquement",
   "@presetSuggestionCwlOnly": {
     "description": "Preset suggestion for CWL wars only"
   },
-  "presetSuggestionRandomWars": "Random Wars",
+  "presetSuggestionRandomWars": "Guerres classiques",
   "@presetSuggestionRandomWars": {
     "description": "Preset suggestion for random wars"
   },
-  "presetSuggestionFriendlyWars": "Friendly Wars",
+  "presetSuggestionFriendlyWars": "Guerres amicales",
   "@presetSuggestionFriendlyWars": {
     "description": "Preset suggestion for friendly wars"
   },
-  "presetSuggestionStarOnly": "{count} Star Only",
+  "presetSuggestionStarOnly": "{count} étoile(s) uniquement",
   "@presetSuggestionStarOnly": {
     "description": "Preset suggestion for specific star count",
     "placeholders": {
@@ -1866,15 +1821,15 @@
       }
     }
   },
-  "presetSuggestionPerfectAttacks": "Perfect Attacks",
+  "presetSuggestionPerfectAttacks": "Attaques parfaites",
   "@presetSuggestionPerfectAttacks": {
     "description": "Preset suggestion for perfect attacks"
   },
-  "presetSuggestionFailedAttacks": "Failed Attacks",
+  "presetSuggestionFailedAttacks": "Attaques ratées",
   "@presetSuggestionFailedAttacks": {
     "description": "Preset suggestion for failed attacks"
   },
-  "presetSuggestionThOnly": "TH{level} Only",
+  "presetSuggestionThOnly": "HDV{level} uniquement",
   "@presetSuggestionThOnly": {
     "description": "Preset suggestion for specific town hall level",
     "placeholders": {
@@ -1883,11 +1838,11 @@
       }
     }
   },
-  "presetSuggestionLastWeek": "Last Week",
+  "presetSuggestionLastWeek": "Semaine dernière",
   "@presetSuggestionLastWeek": {
     "description": "Preset suggestion for last week timeframe"
   },
-  "presetSuggestionLastMonth": "Last Month",
+  "presetSuggestionLastMonth": "Mois dernier",
   "@presetSuggestionLastMonth": {
     "description": "Preset suggestion for last month timeframe"
   },
@@ -1902,5 +1857,16 @@
   "presetSuggestionRecentFilter": "Filtre récent",
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
-  }
+  },
+  "generalError": "Erreur",
+  "generalSuccess": "Succès",
+  "generalFailed": "Échec",
+  "generalMinimum": "Minimum",
+  "generalMaximum": "Maximum",
+  "generalHigh": "Élevée",
+  "generalLow": "Faible",
+  "generalPoor": "Mauvais",
+  "generalOpen": "Ouvrir",
+  "generalClosed": "Fermé",
+  "generalAvailable": "Disponible"
 }
