@@ -84,31 +84,23 @@ def main():
         print(f"  📝 {key}")
     
     # Confirm removal
-    response = input("\nDo you want to remove these unused keys from all ARB files? (y/N): ")
+    response = input("\nDo you want to remove these unused keys from app_en.arb? (y/N): ")
     if response.lower() != 'y':
         print("❌ Operation cancelled.")
         return
     
-    # Find all ARB files in the directory
-    arb_files = glob.glob(os.path.join(script_dir, 'app_*.arb'))
+    print(f"\n🔄 Removing unused keys from app_en.arb only...")
     
-    print(f"\n🔄 Removing unused keys from {len(arb_files)} ARB files...")
+    # Remove unused keys only from the English ARB file
+    removed_keys = remove_keys_from_arb(en_arb_path, unused_keys)
     
-    total_removed = 0
-    
-    # Remove unused keys from each ARB file
-    for arb_file in arb_files:
-        file_name = os.path.basename(arb_file)
-        removed_keys = remove_keys_from_arb(arb_file, unused_keys)
-        
-        if removed_keys:
-            print(f"  ✅ {file_name}: Removed {len(removed_keys)} keys")
-            total_removed += len(removed_keys)
-        else:
-            print(f"  ✨ {file_name}: No keys to remove")
-    
-    print(f"\n🎉 Completed! Removed {total_removed} total key entries across all files.")
-    print("📋 Note: This includes both the main keys and their associated @ description keys.")
+    if removed_keys:
+        print(f"  ✅ app_en.arb: Removed {len(removed_keys)} keys")
+        print(f"\n🎉 Completed! Removed {len(removed_keys)} key entries from app_en.arb.")
+        print("📋 Note: This includes both the main keys and their associated @ description keys.")
+        print("⚠️ Note: Only app_en.arb was modified. Other language files remain unchanged.")
+    else:
+        print(f"  ✨ app_en.arb: No keys to remove")
 
 if __name__ == "__main__":
     main()

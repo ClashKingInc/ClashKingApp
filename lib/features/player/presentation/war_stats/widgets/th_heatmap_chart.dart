@@ -173,9 +173,9 @@ class THHeatmapChart extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildLegendItem(context, AppLocalizations.of(context)!.chartsPoor, Colors.red[600]!),
+        _buildLegendItem(context, AppLocalizations.of(context)!.generalPoor, Colors.red[600]!),
         const SizedBox(width: 16),
-        _buildLegendItem(context, AppLocalizations.of(context)!.chartsAverage, Colors.orange[600]!),
+        _buildLegendItem(context, AppLocalizations.of(context)!.generalAverage, Colors.orange[600]!),
         const SizedBox(width: 16),
         _buildLegendItem(context, AppLocalizations.of(context)!.chartsGood, Colors.amber[600]!),
         const SizedBox(width: 16),

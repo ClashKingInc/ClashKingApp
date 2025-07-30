@@ -203,7 +203,7 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
                               return AppLocalizations.of(context)!
                                   .authEmailRequired;
                             }
-                            if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                            if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
                                 .hasMatch(value)) {
                               return AppLocalizations.of(context)!
                                   .authEmailInvalid;
@@ -365,7 +365,7 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
                                   )
                                 : Text(
                                     AppLocalizations.of(context)!
-                                        .authPasswordResetConfirm,
+                                        .authPasswordReset,
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,

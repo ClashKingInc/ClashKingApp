@@ -174,37 +174,33 @@ class EnhancedStatCard extends StatelessWidget {
               ],
             ),
 
-            // Missed attacks/defenses if applicable
-            if (missed != null && missed! > 0) ...[
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  border:
-                      Border.all(color: Theme.of(context).colorScheme.primary),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    MobileWebImage(
-                        imageUrl: ImageAssets.brokenSword,
-                        width: 16,
-                        height: 16),
-                    const SizedBox(width: 4),
-                    Text(
-                      AppLocalizations.of(context)!.warStatusMissedInfo(
-                        missed ?? 0,
-                      ),
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ],
-                ),
+            // Missed attacks/defenses
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                border:
+                    Border.all(color: Theme.of(context).colorScheme.primary),
+                borderRadius: BorderRadius.circular(12),
               ),
-            ],
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MobileWebImage(
+                      imageUrl: ImageAssets.brokenSword, width: 16, height: 16),
+                  const SizedBox(width: 4),
+                  Text(
+                    AppLocalizations.of(context)!.warStatusMissedInfo(
+                      missed ?? 0,
+                    ),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -213,6 +209,10 @@ class EnhancedStatCard extends StatelessWidget {
 
   Widget _buildStarBreakdownItem(
       BuildContext context, String starCount, int count) {
+    // Calculate percentage
+    final totalAttacks = this.count; // Total attacks/defenses
+    final percentage = totalAttacks > 0 ? (count / totalAttacks * 100) : 0.0;
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -224,17 +224,17 @@ class EnhancedStatCard extends StatelessWidget {
             child: buildStarsIcon(int.parse(starCount)),
           ),
         ),
-        // Fixed width for count - ensures consistent alignment
+        // Count and percentage
         SizedBox(
-          width: 30,
+          width: 70,
           child: Center(
             child: Text(
-              count.toString(),
+              '$count (${percentage.toStringAsFixed(0)}%)',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: _getStarCountColor(starCount),
-                fontSize: 11,
-              ),
+                    fontWeight: FontWeight.bold,
+                    color: _getStarCountColor(starCount),
+                    fontSize: 11,
+                  ),
             ),
           ),
         ),

@@ -12,7 +12,6 @@
   "accountVerificationTitle": "Account verifiëren",
   "accountVerified": "Geverifiëerd",
   "accountVerify": "Verifiëren",
-  "accountVerifyButton": "Verifiëren",
   "accountVerificationSuccess": "Account succesvol geverifieerd!",
   "generalRetry": "Opnieuw proberen",
   "generalRetrying": "Opnieuw proberen...",
@@ -53,8 +52,12 @@
   "@generalAll": {
     "description": "all items"
   },
-  "generalOthers": "Others",
-  "generalCompleted": "completed",
+  "generalAllTime": "Altijd",
+  "@generalAllTime": {
+    "description": "All time period"
+  },
+  "generalOthers": "Andere",
+  "generalCompleted": "voltooid",
   "generalTotal": "Totaal",
   "generalBest": "Beste",
   "@generalBest": {
@@ -96,6 +99,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Waarschuwing",
+  "generalUnknown": "Onbekend",
   "generalNoDataAvailable": "Geen gegevens beschikbaar.",
   "generalNoFilteredResults": "Geen resultaten gevonden voor je filters",
   "@generalNoFilteredResults": {
@@ -121,31 +125,31 @@
   "@presetsSaveTitle": {
     "description": "Title for save preset dialog"
   },
-  "presetsName": "Preset Name",
+  "presetsName": "Naam voorinstelling",
   "@presetsName": {
     "description": "Label for preset name input"
   },
-  "presetsNameHint": "Enter a name for this preset",
+  "presetsNameHint": "Voer een naam in voor deze voorinstelling",
   "@presetsNameHint": {
     "description": "Hint text for preset name input"
   },
-  "presetsSuggestions": "Suggestions:",
+  "presetsSuggestions": "Suggesties:",
   "@presetsSuggestions": {
     "description": "Label for name suggestions section"
   },
-  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "presetsApplyFirst": "Pas eerst filters toe voordat je deze als voorinstelling opslaat",
   "@presetsApplyFirst": {
     "description": "Message when trying to save without active filters"
   },
-  "presetsNameRequired": "Please enter a name",
+  "presetsNameRequired": "Voer een naam in",
   "@presetsNameRequired": {
     "description": "Error when preset name is empty"
   },
-  "presetsNameExists": "A preset with this name already exists",
+  "presetsNameExists": "Een voorinstelling met deze naam bestaat al",
   "@presetsNameExists": {
     "description": "Error when preset name is duplicate"
   },
-  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "presetsSaveSuccess": "Voorkeursinstelling \"{name}\" succesvol opgeslagen",
   "@presetsSaveSuccess": {
     "description": "Success message when preset is saved",
     "placeholders": {
@@ -155,25 +159,15 @@
       }
     }
   },
-  "presetsSaveError": "Failed to save preset",
+  "presetsSaveError": "Voorkeursinstelling opslaan mislukt",
   "@presetsSaveError": {
     "description": "Error message when preset save fails"
   },
-  "presetsApplied": "Applied preset \"{name}\"",
-  "@presetsApplied": {
-    "description": "Message when preset is applied",
-    "placeholders": {
-      "name": {
-        "type": "String",
-        "description": "Name of the applied preset"
-      }
-    }
-  },
-  "presetsApply": "Apply Preset",
+  "presetsApply": "Voorkeursinstelling toepassen",
   "@presetsApply": {
     "description": "Context menu option to apply preset"
   },
-  "presetsRename": "Rename",
+  "presetsRename": "Hernoemen",
   "@presetsRename": {
     "description": "Context menu option to rename preset"
   },
@@ -181,11 +175,11 @@
   "@presetsDelete": {
     "description": "Context menu option to delete preset"
   },
-  "presetsRenameTitle": "Rename Preset",
+  "presetsRenameTitle": "Hernoem de voorinstelling",
   "@presetsRenameTitle": {
     "description": "Title for rename preset dialog"
   },
-  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "presetsRenameSuccess": "Naam voorinstelling gewijzigd naar \"{name}\"",
   "@presetsRenameSuccess": {
     "description": "Success message when preset is renamed",
     "placeholders": {
@@ -195,15 +189,15 @@
       }
     }
   },
-  "presetsRenameError": "Failed to rename preset",
+  "presetsRenameError": "Voorinstelling hernoemen mislukt",
   "@presetsRenameError": {
     "description": "Error message when preset rename fails"
   },
-  "presetsDeleteTitle": "Delete Preset",
+  "presetsDeleteTitle": "Voorinstelling verwijderen",
   "@presetsDeleteTitle": {
     "description": "Title for delete preset dialog"
   },
-  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "presetsDeleteConfirm": "Weet je zeker dat je \"{name}\" wilt verwijderen?",
   "@presetsDeleteConfirm": {
     "description": "Confirmation message for preset deletion",
     "placeholders": {
@@ -213,7 +207,7 @@
       }
     }
   },
-  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "presetsDeleteSuccess": "Voorkeursinstelling \"{name}\" verwijderd",
   "@presetsDeleteSuccess": {
     "description": "Success message when preset is deleted",
     "placeholders": {
@@ -223,11 +217,11 @@
       }
     }
   },
-  "presetsDeleteError": "Failed to delete preset",
+  "presetsDeleteError": "Voorinstelling verwijderen mislukt",
   "@presetsDeleteError": {
     "description": "Error message when preset deletion fails"
   },
-  "generalCharts": "Charts",
+  "generalCharts": "Grafieken",
   "authSignUp": "Registreren",
   "authLogin": "Inloggen",
   "authLogout": "Uitloggen",
@@ -265,7 +259,6 @@
   "authPasswordResetDescription": "Vul hieronder je e-mailadres, de 6-cijferige code uit de e-mail en je nieuwe wachtwoord in.",
   "authPasswordNew": "Nieuw wachtwoord",
   "authPasswordConfirmHint": "Voer je nieuwe wachtwoord opnieuw in",
-  "authPasswordResetConfirm": "Wachtwoord resetten",
   "authPasswordResetSuccess": "Wachtwoord succesvol opnieuw ingesteld! Je kunt nu inloggen.",
   "authPasswordResetContinue": "Doorgaan naar wachtwoord opnieuw instellen",
   "authPasswordResetCode": "Resetcode",
@@ -301,7 +294,6 @@
   "authEmailVerificationSentTo": "We hebben een verificatie e-mail gestuurd naar:",
   "authEmailVerificationResend": "Verificatiemail opnieuw verzenden",
   "authEmailVerificationResendSuccess": "Verificatiemail succesvol opnieuw verzonden! Controleer je e-mail.",
-  "authEmailVerificationBackToLogin": "Terug naar inloggen",
   "authEmailVerificationExpired": "Verificatie verlopen. Gelieve opnieuw te registreren.",
   "authEmailVerificationAlreadyVerified": "Dit e-mailadres is al geverifieerd. Probeer in plaats daarvan in te loggen.",
   "authEmailVerificationNoToken": "Geen lopende verificatie gevonden. Registreer eerst.",
@@ -324,6 +316,7 @@
   "accountsEnterApiToken": "Voer de API-token van je account in om te bevestigen dat het van jou is. Je kunt deze vinden in Clash of Clans:",
   "accountsApiTokenLocation": "Instellingen > meer instellingen > API Token",
   "accountsOpenMoreSettings": "Open meer instellingen",
+  "accountsCouldNotOpenClash": "Kon Clash of Clans niet openen. Open het handmatig.",
   "accountsFillAllFields": "Vul alle velden in.",
   "accountsErrorTagNotExists": "Het ingevoerde speler-ID bestaat niet.",
   "accountsErrorAlreadyLinked": "De spelertag is al gekoppeld aan iemand anders.",
@@ -491,7 +484,6 @@
   "clanNone": "Geen clan",
   "clanJoinToUnlock": "Sluit je aan bij een clan om nieuwe functies te ontgrendelen.",
   "clanMembers": "Leden",
-  "clanWarFrequency": "Oorlogfrequentie",
   "clanMinimumMembers": "Minimum aantal leden",
   "clanMaximumMembers": "Maximum aantal leden",
   "clanLocation": "Locatie",
@@ -505,17 +497,12 @@
   "@clanOpened": {
     "description": "Clan is opened"
   },
-  "clanClosed": "Gesloten",
-  "@clanClosed": {
-    "description": "Clan is closed"
-  },
   "clanRoleLeader": "Leider",
   "clanRoleCoLeader": "Co-leider",
   "clanRoleElder": "Oudste",
   "clanRoleMember": "Lid",
   "clanWarFrequencyAlways": "Altijd",
   "clanWarFrequencyNever": "Nooit",
-  "clanWarFrequencyUnknown": "Onbekend",
   "clanWarFrequencyOncePerWeek": "1/week",
   "clanWarFrequencyMoreThanOncePerWeek": "Meer dan 1/week",
   "clanWarFrequencyRarely": "Zelden",
@@ -862,7 +849,7 @@
       }
     }
   },
-  "warStats": "Oorlog Stats",
+  "warStats": "Oorlog stats",
   "warOngoing": "Lopende oorlog",
   "warIsNotInWar": "{clan} is niet in oorlog.",
   "@warIsNotInWar": {
@@ -875,6 +862,10 @@
   "warAskForWar": "Neem contact op met de leider of een co-leider om een oorlog te starten.",
   "warAskForWarLogOpening": "Neem contact op met de leider of een co-leider om het oorlogs logsboek te openen.",
   "warEnded": "Oorlog afgelopen",
+  "warInWar": "In oorlog",
+  "@warInWar": {
+    "description": "War state: active"
+  },
   "warPreparation": "Voorbereiding",
   "warPerfectWar": "Perfecte oorlog",
   "warVictory": "Overwinning",
@@ -1145,7 +1136,7 @@
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warStatusMissedInfo": "Missed: {number}",
+  "warStatusMissedInfo": "Gemist: {number}",
   "@warStatusMissedInfo": {
     "description": "Number of missed attacks",
     "placeholders": {
@@ -1418,13 +1409,12 @@
   "faqFeaturesClanDescription": "Houd clankleden, donaties en de algehele clanstatus in de gaten",
   "faqFeaturesWarTitle": "Oorlog volgen",
   "faqFeaturesWarDescription": "Analyseer oorlogsprestaties, aanvalstrategieën en winstpercentages",
-  "faqFeaturesLegendsTitle": "Legendarische Divisie",
+  "faqFeaturesLegendsTitle": "Onjuiste gegevens?",
   "faqFeaturesLegendsDescription": "Dagelijkse trofeeëntracking en seizoensstatistieken",
   "faqFeaturesCwlTitle": "CWL analyses",
   "faqFeaturesCwlDescription": "Clan War League prestaties en bijdragen van leden",
   "faqSearchHint": "Zoek in de FAQ...",
   "faqSectionGettingStarted": "Aan de slag & Over ons",
-  "faqSectionTroubleshooting": "Problemen oplossen",
   "faqSectionSupportAndContact": "Ondersteuning & contact",
   "faqTranslationIssue": "Ontbreekt er een vertaling of is deze onjuist?",
   "faqTranslationIssueAnswer": "Vertalingen worden gedaan door appgebruikers zoals jij! Wij (de ontwikkelaars) verzorgen alleen de Franse en Engelse vertalingen. Als je ontbrekende of onjuiste vertalingen vindt, kun je helpen om deze te verbeteren. Aarzel niet om contact met ons op te nemen via Discord of e-mail als je wilt meehelpen. We hebben een speciaal Discord-kanaal voor vertalers waar je vragen kunt stellen en hulp kunt krijgen.",
@@ -1436,19 +1426,19 @@
   "translationHelpTranslateContent": "Je kunt ons helpen de app op Crowdin te vertalen. Als je taal niet beschikbaar is op Crowdin, kan je deze aanvragen in onze Discord Server. Heel erg bedankt voor je hulp!",
   "translationHelpTranslateButton": "Help met vertalen op Crowdin",
   "translationCurrentTranslators": "Huidige vertalers",
-  "filtersTimeFilters": "Time Filters",
+  "filtersTimeFilters": "Tijd filters",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
   },
-  "filtersWarSettings": "War Settings",
+  "filtersWarSettings": "Oorlog instellingen",
   "@filtersWarSettings": {
     "description": "War settings filters section title"
   },
-  "filtersPerformance": "Performance",
+  "filtersPerformance": "Prestatie",
   "@filtersPerformance": {
     "description": "Performance filters section title"
   },
-  "filtersAdvanced": "Advanced",
+  "filtersAdvanced": "Geavanceerd",
   "@filtersAdvanced": {
     "description": "Advanced filters section title"
   },
@@ -1478,11 +1468,7 @@
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersCwlWars": "CWL oorlogen",
-  "@filtersCwlWars": {
-    "description": "Preset filter for CWL wars only"
-  },
-  "filtersFreshAttacks": "Fresh Attacks",
+  "filtersFreshAttacks": "Alleen nieuwe aanvallen",
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
   },
@@ -1490,115 +1476,91 @@
   "@filtersSeason": {
     "description": "Season filter subsection title"
   },
-  "filtersDateRange": "Date Range",
+  "filtersDateRange": "Datumbereik",
   "@filtersDateRange": {
     "description": "Date range filter subsection title"
   },
-  "filtersWarType": "War Type",
+  "filtersWarType": "Oorlogstype",
   "@filtersWarType": {
     "description": "War type filter subsection title"
   },
-  "filtersTownHall": "Town Hall",
+  "filtersTownHall": "Stadhuis",
   "@filtersTownHall": {
     "description": "Town hall filter subsection title"
   },
-  "filtersAttackerTh": "Attacker TH",
+  "filtersAttackerTh": "Aanvaller SH",
   "@filtersAttackerTh": {
     "description": "Attacker town hall filter label"
   },
-  "filtersDefenderTh": "Defender TH",
+  "filtersDefenderTh": "Verdediger SH",
   "@filtersDefenderTh": {
     "description": "Defender town hall filter label"
   },
-  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "filtersSameTownHallOnly": "Alleen hetzelfde stadhuis",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
-  "filtersStars": "Sterren",
-  "@filtersStars": {
-    "description": "Stars filter subsection title"
-  },
-  "filtersDestructionPercentage": "Destruction Percentage",
+  "filtersDestructionPercentage": "Vernietiging Percentage",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
-  },
-  "filtersMapPosition": "Kaartpositie",
-  "@filtersMapPosition": {
-    "description": "Map position filter subsection title"
   },
   "filtersOptions": "Opties",
   "@filtersOptions": {
     "description": "Options filter subsection title"
   },
-  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "filtersFreshAttacksOnly": "Alleen nieuwe aanvallen",
   "@filtersFreshAttacksOnly": {
     "description": "Fresh attacks only filter option"
   },
-  "filtersResultLimit": "Result Limit",
+  "filtersResultLimit": "Resultaat limiet",
   "@filtersResultLimit": {
     "description": "Result limit filter label"
   },
-  "filtersMinPosition": "Min Position",
+  "filtersMinPosition": "Min positie",
   "@filtersMinPosition": {
     "description": "Minimum map position filter label"
   },
-  "filtersMaxPosition": "Max Position",
+  "filtersMaxPosition": "Max positie",
   "@filtersMaxPosition": {
     "description": "Maximum map position filter label"
   },
-  "filtersStartDate": "Start Date",
+  "filtersStartDate": "Startdatum",
   "@filtersStartDate": {
     "description": "Start date filter label"
   },
-  "filtersEndDate": "End Date",
+  "filtersEndDate": "Einddatum",
   "@filtersEndDate": {
     "description": "End date filter label"
   },
-  "filtersNotSet": "Niet ingesteld",
-  "@filtersNotSet": {
-    "description": "Text shown when date is not set"
-  },
-  "filtersYear": "Year",
+  "filtersYear": "Jaar",
   "@filtersYear": {
     "description": "Year selector label"
   },
-  "filtersMonth": "Month",
+  "filtersMonth": "Maand",
   "@filtersMonth": {
     "description": "Month selector label"
   },
-  "filtersSelectYear": "Select Year",
+  "filtersSelectYear": "Selecteer Jaar",
   "@filtersSelectYear": {
     "description": "Year picker dialog title"
   },
-  "filtersAllWars": "All Wars",
+  "filtersAllWars": "Alle oorlogen",
   "@filtersAllWars": {
     "description": "All wars filter option"
   },
-  "filtersFriendlyWars": "Friendly Wars",
-  "@filtersFriendlyWars": {
-    "description": "Friendly wars filter option"
-  },
-  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "chartsAttackPerformance": "Aanvalsprestaties per stadhuis level",
   "@chartsAttackPerformance": {
     "description": "Attack performance chart title"
   },
-  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "chartsDefensePerformance": "Verdedigingsprestaties per stadhuis level",
   "@chartsDefensePerformance": {
     "description": "Defense performance chart title"
   },
-  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "chartsRowsYourTh": "Rijen: je SH level | Kolommen: tegenstander SH level",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
   },
-  "chartsPoor": "Poor",
-  "@chartsPoor": {
-    "description": "Poor performance legend label"
-  },
-  "chartsAverage": "Gemiddelde",
-  "@chartsAverage": {
-    "description": "Average performance legend label"
-  },
-  "chartsGood": "Good",
+  "chartsGood": "Goed",
   "@chartsGood": {
     "description": "Good performance legend label"
   },
@@ -1612,11 +1574,11 @@
   },
   "performanceAnalysisSuggestions": "Prestatie Inzichten",
   "@performanceAnalysisSuggestions": {
-    "description": "Section title for AI-generated performance analysis suggestions"
+    "description": "Section title for statistical performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Slimme filtervoorstellen op basis van je oorlogsprestaties om verbeterpunten te ontdekken",
+  "performanceAnalysisTooltip": "Filter suggesties op basis van je sterrenstatistieken om prestatiepatronen te benadrukken",
   "@performanceAnalysisTooltip": {
-    "description": "Tooltip explaining what performance analysis suggestions are"
+    "description": "Tooltip explaining that suggestions are based on statistical analysis"
   },
   "generalExport": "Exporteer",
   "@generalExport": {
@@ -1629,10 +1591,6 @@
   "exportSuccess": "Exporteren geslaagd!",
   "@exportSuccess": {
     "description": "Success message for completed export"
-  },
-  "exportOpen": "Open",
-  "@exportOpen": {
-    "description": "Button label to open exported file"
   },
   "exportDialogDesc": "Dit downloadt je oorlogstatistieken als een Excel-bestand met meerdere tabbladen, waaronder algemene statistieken, gedetailleerde aanvallen en stadhuis analyse.",
   "@exportDialogDesc": {
@@ -1649,5 +1607,428 @@
   "filtersNoneApplied": "Geen filters toegepast",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
+  },
+  "warAttacksFailedToLoadPlayer": "Laden van spelergegevens mislukt",
+  "@warAttacksFailedToLoadPlayer": {
+    "description": "Error message when player profile fails to load"
+  },
+  "warAttacksDetailsTitle": "Aanvaldetails",
+  "@warAttacksDetailsTitle": {
+    "description": "Title for attack details modal"
+  },
+  "warAttacksDetailsAttackOrder": "Aanval volgorde",
+  "@warAttacksDetailsAttackOrder": {
+    "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsAttacker": "Aanvaller",
+  "@warAttacksDetailsAttacker": {
+    "description": "Label for attacker section in attack details"
+  },
+  "warAttacksDetailsDefender": "Verdediger",
+  "@warAttacksDetailsDefender": {
+    "description": "Label for defender section in attack details"
+  },
+  "warAttacksDetailsName": "Naam",
+  "@warAttacksDetailsName": {
+    "description": "Label for player name in attack details"
+  },
+  "warDataState": "Status",
+  "@warDataState": {
+    "description": "Label for war state"
+  },
+  "warDataAttacksPerMember": "Aanvallen per lid",
+  "@warDataAttacksPerMember": {
+    "description": "Label for attacks per member"
+  },
+  "warDataStartTime": "Oorlog start",
+  "@warDataStartTime": {
+    "description": "Label for war start time"
+  },
+  "warDataEndTime": "Oorlog Einde",
+  "@warDataEndTime": {
+    "description": "Label for war end time"
+  },
+  "warDataClanLevel": "Clan niveau",
+  "@warDataClanLevel": {
+    "description": "Label for clan level"
+  },
+  "warDataTotalStars": "Totaal aantal sterren",
+  "@warDataTotalStars": {
+    "description": "Label for total stars earned"
+  },
+  "warDataDestructionPercentage": "Vernietiging %",
+  "@warDataDestructionPercentage": {
+    "description": "Label for destruction percentage"
+  },
+  "warInformationTitle": "Oorlog Informatie",
+  "@warInformationTitle": {
+    "description": "Title for war information section in attack details"
+  },
+  "warResultsTitle": "Oorlog resultaten",
+  "@warResultsTitle": {
+    "description": "Title for war results section showing clan vs opponent"
+  },
+  "warPlayersTitle": "Spelers",
+  "@warPlayersTitle": {
+    "description": "Title for players section showing attacker and defender info"
+  },
+  "performanceAnalysisFailedAttacks": "Mislukte aanvallen (0-1 sterren)",
+  "@performanceAnalysisFailedAttacks": {
+    "description": "Performance analysis preset for failed attacks"
+  },
+  "performanceAnalysisFailedAttacksDesc": "Toont aanvallen die mislukt zijn om 2+ sterren te krijgen",
+  "@performanceAnalysisFailedAttacksDesc": {
+    "description": "Description for failed attacks analysis"
+  },
+  "performanceAnalysisMissedPerfects": "Gemiste perfecte aanvallen",
+  "@performanceAnalysisMissedPerfects": {
+    "description": "Performance analysis preset for missed perfect attacks"
+  },
+  "performanceAnalysisMissedPerfectsDesc": "Toont aanvallen met 2 sterren - potentiële perfecte kansen",
+  "@performanceAnalysisMissedPerfectsDesc": {
+    "description": "Description for missed perfect attacks analysis"
+  },
+  "performanceAnalysisThAttackIssues": "Lage sterren vs SH{thLevel}",
+  "@performanceAnalysisThAttackIssues": {
+    "description": "Performance analysis preset for low-star attacks against specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThAttackIssuesDesc": "Toont aanvallen met een laag aantal sterren tegen SH{thLevel}",
+  "@performanceAnalysisThAttackIssuesDesc": {
+    "description": "Description for low-star attacks against specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssues": "Kwetsbaar voor SH{thLevel}",
+  "@performanceAnalysisThDefenseIssues": {
+    "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssuesDesc": "Laat zien wanneer SH{thLevel} aanvallers hoge sterren tegen jou krijgen",
+  "@performanceAnalysisThDefenseIssuesDesc": {
+    "description": "Description for defensive vulnerabilities to specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisCwlIssues": "CWL lage prestaties",
+  "@performanceAnalysisCwlIssues": {
+    "description": "Performance analysis preset for low CWL performance"
+  },
+  "performanceAnalysisCwlIssuesDesc": "Toont CWL aanvallen met lagere sterren gemiddeld dan reguliere oorlogen",
+  "@performanceAnalysisCwlIssuesDesc": {
+    "description": "Description for low CWL performance analysis"
+  },
+  "performanceAnalysisRandomWarIssues": "Willekeurige oorlog lage prestaties",
+  "@performanceAnalysisRandomWarIssues": {
+    "description": "Performance analysis preset for low random war performance"
+  },
+  "performanceAnalysisRandomWarIssuesDesc": "Toont willekeurige oorlogsaanvallen met een lager sterrengemiddelde dan CWL",
+  "@performanceAnalysisRandomWarIssuesDesc": {
+    "description": "Description for low random war performance analysis"
+  },
+  "performanceAnalysisFreshOnly": "Analyse van eerste aanvallen",
+  "@performanceAnalysisFreshOnly": {
+    "description": "Performance analysis preset for fresh attacks only"
+  },
+  "performanceAnalysisFreshOnlyDesc": "Analyseert prestaties uitsluitend op nieuwe basissen",
+  "@performanceAnalysisFreshOnlyDesc": {
+    "description": "Description for fresh attack analysis"
+  },
+  "performanceAnalysisRecentPerformance": "Recente prestaties (30 dagen)",
+  "@performanceAnalysisRecentPerformance": {
+    "description": "Performance analysis preset for recent performance"
+  },
+  "performanceAnalysisRecentPerformanceDesc": "Toont recente prestaties om huidige trends te herkennen",
+  "@performanceAnalysisRecentPerformanceDesc": {
+    "description": "Description for recent performance analysis"
+  },
+  "performanceAnalysisHighStakes": "Hoog-risico aanvallen",
+  "@performanceAnalysisHighStakes": {
+    "description": "Performance analysis preset for high-stakes attacks"
+  },
+  "performanceAnalysisHighStakesDesc": "Toont aanvallen van de top 5 oorlogsposities",
+  "@performanceAnalysisHighStakesDesc": {
+    "description": "Description for high-stakes attacks analysis"
+  },
+  "performanceAnalysisCleanupCrew": "Schoonmaak aanvallen",
+  "@performanceAnalysisCleanupCrew": {
+    "description": "Performance analysis preset for cleanup attacks"
+  },
+  "performanceAnalysisCleanupCrewDesc": "Toont aanvallen van lagere oorlogsposities",
+  "@performanceAnalysisCleanupCrewDesc": {
+    "description": "Description for cleanup attacks analysis"
+  },
+  "performanceRatingNeedsImprovement": "Verbetering nodig",
+  "@performanceRatingNeedsImprovement": {
+    "description": "Needs improvement performance rating"
+  },
+  "performanceStrengthHighThreeStarRate": "Hoog drie-sterren percentage",
+  "@performanceStrengthHighThreeStarRate": {
+    "description": "Strength area: high three-star rate"
+  },
+  "performanceStrengthHighDestruction": "Hoge vernietiging",
+  "@performanceStrengthHighDestruction": {
+    "description": "Strength area: high destruction percentage"
+  },
+  "performanceStrengthConsistentPerformance": "Consistente prestaties",
+  "@performanceStrengthConsistentPerformance": {
+    "description": "Strength area: consistent performance"
+  },
+  "performanceImprovementThreeStarConsistency": "Drie-sterren consistentie",
+  "@performanceImprovementThreeStarConsistency": {
+    "description": "Improvement area: three-star consistency"
+  },
+  "performanceImprovementOverallStarPerformance": "Algemene sterrenprestatie",
+  "@performanceImprovementOverallStarPerformance": {
+    "description": "Improvement area: overall star performance"
+  },
+  "presetSuggestionCwlOnly": "Alleen CWL",
+  "@presetSuggestionCwlOnly": {
+    "description": "Preset suggestion for CWL wars only"
+  },
+  "presetSuggestionRandomWars": "Willekeurige oorlogen",
+  "@presetSuggestionRandomWars": {
+    "description": "Preset suggestion for random wars"
+  },
+  "presetSuggestionFriendlyWars": "Vriendschappelijke oorlogen",
+  "@presetSuggestionFriendlyWars": {
+    "description": "Preset suggestion for friendly wars"
+  },
+  "presetSuggestionStarOnly": "Alleen {count} ster(ren)",
+  "@presetSuggestionStarOnly": {
+    "description": "Preset suggestion for specific star count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionPerfectAttacks": "Perfecte aanvallen",
+  "@presetSuggestionPerfectAttacks": {
+    "description": "Preset suggestion for perfect attacks"
+  },
+  "presetSuggestionFailedAttacks": "Mislukte aanvallen",
+  "@presetSuggestionFailedAttacks": {
+    "description": "Preset suggestion for failed attacks"
+  },
+  "presetSuggestionThOnly": "Alleen SH{level}",
+  "@presetSuggestionThOnly": {
+    "description": "Preset suggestion for specific town hall level",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionLastWeek": "Afgelopen week",
+  "@presetSuggestionLastWeek": {
+    "description": "Preset suggestion for last week timeframe"
+  },
+  "presetSuggestionLastMonth": "Afgelopen maand",
+  "@presetSuggestionLastMonth": {
+    "description": "Preset suggestion for last month timeframe"
+  },
+  "presetSuggestionMyPreset": "Mijn voorkeursinstellingen",
+  "@presetSuggestionMyPreset": {
+    "description": "Default preset suggestion"
+  },
+  "presetSuggestionCustomFilter": "Aangepast filter",
+  "@presetSuggestionCustomFilter": {
+    "description": "Default custom filter suggestion"
+  },
+  "presetSuggestionRecentFilter": "Recent filter",
+  "@presetSuggestionRecentFilter": {
+    "description": "Default recent filter suggestion"
+  },
+  "generalError": "Fout",
+  "generalSuccess": "Succes",
+  "generalFailed": "Mislukt",
+  "generalMinimum": "Minimum",
+  "generalMaximum": "Maximum",
+  "generalHigh": "Hoog",
+  "generalLow": "Laag",
+  "generalPoor": "Slecht",
+  "generalOpen": "Open",
+  "generalClosed": "Gesloten",
+  "generalAvailable": "Beschikbaar",
+  "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
+  "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
+  "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
+  "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
+  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
+  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
+  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
+  "apiErrorInvalidJsonResponse": "Something went wrong. Please try again.",
+  "@apiErrorInvalidJsonResponse": {
+    "description": "Error when API returns invalid JSON",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint that returned invalid JSON"
+      }
+    }
+  },
+  "apiErrorBadRequest": "Something went wrong. Please check your input.",
+  "@apiErrorBadRequest": {
+    "description": "API bad request error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorUnauthorized": "You are not authorized. Please log in again.",
+  "@apiErrorUnauthorized": {
+    "description": "API unauthorized error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorForbidden": "You don't have permission to perform this action.",
+  "@apiErrorForbidden": {
+    "description": "API forbidden error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorNotFound": "We couldn't find what you were looking for.",
+  "@apiErrorNotFound": {
+    "description": "API not found error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorRateLimit": "Too many requests. Please try again later.",
+  "@apiErrorRateLimit": {
+    "description": "API rate limit error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorServer": "The server is temporarily unavailable. Please try again shortly.",
+  "@apiErrorServer": {
+    "description": "API server error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorGeneric": "An unexpected error occurred. Please try again.",
+  "@apiErrorGeneric": {
+    "description": "Generic API error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
+  "apiErrorTimeout": "Request timed out. Please try again.",
+  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
+  "apiErrorOperationFailed": "We couldn't complete your request. Please try again.",
+  "@apiErrorOperationFailed": {
+    "description": "Generic operation failed error",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorNetworkOperation": "You seems to be offline. Please check your connection and try again.",
+  "@apiErrorNetworkOperation": {
+    "description": "Network error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorTimeoutOperation": "The request took too long. Please try again.",
+  "@apiErrorTimeoutOperation": {
+    "description": "Timeout error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorDataFormatOperation": "Something went wrong while processing the data. Please try again.",
+  "@apiErrorDataFormatOperation": {
+    "description": "Data format error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorConfigLoadFailed": "We couldn’t load the app settings (error {statusCode}). Please try again.",
+  "@apiErrorConfigLoadFailed": {
+    "description": "Error loading app config",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      }
+    }
+  },
+  "apiErrorConfigException": "Error when loading configuration from the server",
+  "@apiErrorConfigException": {
+    "description": "Exception while loading config",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
   }
 }

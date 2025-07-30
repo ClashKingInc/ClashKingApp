@@ -90,11 +90,9 @@ class DashboardPage extends StatelessWidget {
         },
         child: Consumer<PlayerService>(
           builder: (context, playerService, child) {
-            final selectedProfile = playerService.profiles.firstWhere(
-              (profile) => profile.tag == cocService.selectedTag,
-            );
+            final selectedProfile = playerService.getSelectedProfile(cocService);
 
-            if (selectedProfile.tag.isEmpty) {
+            if (selectedProfile == null || selectedProfile.tag.isEmpty) {
               return Center(
                 child: Text(
                   AppLocalizations.of(context)?.authErrorConnectionRelaunch ??

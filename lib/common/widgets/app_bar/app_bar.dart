@@ -18,6 +18,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final playerService = context.watch<PlayerService>();
     final authService = context.watch<AuthService>();
 
+    // Fix selectedTag if it doesn't have corresponding player data
+    if (cocService.selectedTag != null && 
+        !playerService.profiles.any((p) => p.tag == cocService.selectedTag) &&
+        playerService.profiles.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        cocService.setSelectedTag(playerService.profiles.first.tag);
+      });
+    }
+
     return AppBar(
       automaticallyImplyLeading: false,
       title: DropdownButton<String>(

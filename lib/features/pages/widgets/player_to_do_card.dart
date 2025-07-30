@@ -149,6 +149,28 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
     );
   }
 
+  /// Check if the regular war and CWL war are the same war
+  bool _isSameWarAsCwl(Player player) {
+    // If no regular war data or no CWL war data, they can't be the same
+    if (player.warData == null || 
+        player.clan?.warCwl?.warInfo == null) {
+      return false;
+    }
+    
+    final regularWar = player.warData!;
+    final cwlWar = player.clan!.warCwl!.warInfo;
+    
+    // Check if both wars involve the same clans (as clan or opponent)
+    final regularClan = regularWar.clan?.tag;
+    final regularOpponent = regularWar.opponent?.tag;
+    final cwlClan = cwlWar.clan?.tag;
+    final cwlOpponent = cwlWar.opponent?.tag;
+    
+    // Same war if the clan and opponent match (in any order)
+    return (regularClan == cwlClan && regularOpponent == cwlOpponent) ||
+           (regularClan == cwlOpponent && regularOpponent == cwlClan);
+  }
+
   Widget iconToDo(Player player, WarMemberPresence memberCwl) {
     final lastOnlineDate = player.lastOnline.toLocal();
     final isLegend = player.league == "Legend League";
@@ -187,33 +209,30 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                         spacing: 7.0,
                         runSpacing: -7.0,
                         children: <Widget>[
-                          if (player.league == 'Legend League' ||
+                          if (player.league == 'Legend League' &&
                               currentDay != null)
                             ImageChip(
                               imageUrl: ImageAssets.legendBlazonNoPadding,
                               labelPadding: 2.0,
-                              label: "${currentDay?.totalAttacks ?? 0}/8",
-                              description: (8 -
-                                          player.currentLegendSeason!
-                                              .currentDay!.totalAttacks) >
-                                      0
+                              label: "${currentDay.totalAttacks}/8",
+                              description: (8 - currentDay.totalAttacks) > 0
                                   ? AppLocalizations.of(context)!
                                       .todoAttacksLeftDescription(
-                                          (8 -
-                                              player.currentLegendSeason!
-                                                  .currentDay!.totalAttacks),
+                                          (8 - (currentDay.totalAttacks)),
                                           AppLocalizations.of(context)!
                                               .legendsTitle)
                                   : AppLocalizations.of(context)!
                                       .todoNoAttacksLeftDescription(
                                           AppLocalizations.of(context)!
                                               .legendsTitle),
-                              edgeColor: currentDay?.totalAttacks == 8
+                              edgeColor: currentDay.totalAttacks == 8
                                   ? Colors.green
                                   : Colors.red,
                             ),
                           if (player.warData != null &&
-                              player.warData!.state == 'inWar')
+                              player.warData!.state == 'inWar' &&
+                              // Only show if it's not the same war as CWL
+                              !_isSameWarAsCwl(player))
                             ImageChip(
                               imageUrl: ImageAssets.war,
                               labelPadding: 2.0,

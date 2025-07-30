@@ -4,7 +4,6 @@ import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_stats.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_stats_filter.dart';
-import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/clan_war_log.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_players.dart';
@@ -13,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_header.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
-import 'package:provider/provider.dart';
 
 class ClanWarStatsScreen extends StatefulWidget {
   final Clan clan;

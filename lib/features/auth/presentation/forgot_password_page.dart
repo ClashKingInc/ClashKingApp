@@ -139,7 +139,7 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 return AppLocalizations.of(context)!
                                     .authEmailRequired;
                               }
-                              if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                              if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
                                   .hasMatch(value)) {
                                 return AppLocalizations.of(context)!
                                     .authEmailInvalid;

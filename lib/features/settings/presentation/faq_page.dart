@@ -516,7 +516,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
 
       // Troubleshooting Section
       _buildSectionHeader(
-          AppLocalizations.of(context)!.faqSectionTroubleshooting),
+          AppLocalizations.of(context)!.faqTroubleshooting),
       _buildFAQItem(
         question: AppLocalizations.of(context)!.faqWhyNotAccurate,
         icon: Icons.warning,

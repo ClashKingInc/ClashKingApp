@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class AuthService extends ChangeNotifier {
   final ApiService _apiService = ApiService();
@@ -73,7 +74,7 @@ class AuthService extends ChangeNotifier {
       DebugUtils.debugInfo("🔄 Starting Discord login process...");
       final result = await DiscordAuthHelper.getDiscordAuthCode();
       DebugUtils.debugInfo("🔄 Discord auth result: $result");
-      if (result == null) throw Exception("User cancelled Discord login.");
+      if (result == null) throw Exception(AppLocalizations.of(globalNavigatorKey.currentContext!)!.authErrorUserCancelledDiscordLogin);
 
       final deviceId = await _tokenService.getDeviceId();
       DebugUtils.debugInfo("🔄 Device ID: $deviceId");
@@ -98,7 +99,7 @@ class AuthService extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       DebugUtils.debugError(" Discord login error: $e");
-      throw Exception("Discord login failed. Please try again.");
+      throw Exception(AppLocalizations.of(globalNavigatorKey.currentContext!)!.authErrorDiscordLoginFailed);
     }
   }
 
@@ -127,7 +128,7 @@ class AuthService extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       DebugUtils.debugError(" Email login error: $e");
-      throw Exception("Email login failed. Please check your credentials.");
+      throw Exception(AppLocalizations.of(globalNavigatorKey.currentContext!)!.authErrorEmailLoginFailed);
     }
   }
 
@@ -182,7 +183,7 @@ class AuthService extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       DebugUtils.debugError(" Email verification error: $e");
-      throw Exception("Email verification failed. The token may be invalid or expired.");
+      throw Exception(AppLocalizations.of(globalNavigatorKey.currentContext!)!.authErrorEmailVerificationFailed);
     }
   }
 
@@ -296,7 +297,7 @@ class AuthService extends ChangeNotifier {
       await initializeAuth();
     } catch (e) {
       DebugUtils.debugError(" Discord linking error: $e");
-      throw Exception("Failed to link Discord account. It may already be linked to another account.");
+      throw Exception(AppLocalizations.of(globalNavigatorKey.currentContext!)!.authErrorDiscordLinkFailed);
     }
   }
 
@@ -319,7 +320,7 @@ class AuthService extends ChangeNotifier {
       await initializeAuth();
     } catch (e) {
       DebugUtils.debugError(" Email linking error: $e");
-      throw Exception("Failed to link email account. Email may already be in use.");
+      throw Exception(AppLocalizations.of(globalNavigatorKey.currentContext!)!.authErrorEmailLinkFailed);
     }
   }
 
@@ -340,8 +341,7 @@ class AuthService extends ChangeNotifier {
     final token = await _tokenService.getAccessToken();
 
     if (token == null) {
-      throw Exception(
-          "Utilisateur non authentifié. Veuillez vous reconnecter.");
+      throw Exception(AppLocalizations.of(globalNavigatorKey.currentContext!)!.authErrorUserNotAuthenticated);
     }
 
     final response = await http.get(
@@ -360,8 +360,7 @@ class AuthService extends ChangeNotifier {
     final token = await _tokenService.getAccessToken();
 
     if (token == null) {
-      throw Exception(
-          "Utilisateur non authentifié. Veuillez vous reconnecter.");
+      throw Exception(AppLocalizations.of(globalNavigatorKey.currentContext!)!.authErrorUserNotAuthenticated);
     }
 
     final response = await http.post(

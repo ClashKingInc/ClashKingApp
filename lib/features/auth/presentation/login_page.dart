@@ -432,7 +432,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       if (value == null || value.trim().isEmpty) {
                         return AppLocalizations.of(context)!.authEmailRequired;
                       }
-                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                      if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
                           .hasMatch(value)) {
                         return AppLocalizations.of(context)!.authEmailInvalid;
                       }

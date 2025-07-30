@@ -5,7 +5,6 @@ import 'package:clashkingapp/features/pages/widgets/war_access_denied_card.dart'
 import 'package:clashkingapp/features/pages/widgets/war_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_history_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_not_in_war_card.dart';
-import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
@@ -52,16 +51,13 @@ class WarCwlPage extends StatelessWidget {
     final warCwl = warCwlService.getWarCwlByTag(clan?.tag ?? "");
     final hasClan = clan != null && clan.tag.isNotEmpty;
     final isPlayerInWarElsewhere = player?.warData != null;
-    WarInfo? reorderWar;
-    if (isPlayerInWarElsewhere) {
-      reorderWar = player!.warData!.reorderForUser(player.tag);
-    }
     
-    // Check if player war is the same as clan's active CWL war
-    final activeWarByTag = warCwl?.getActiveWarByTag(clan?.tag ?? "");
+    // Check if player war is the same as clan's war
+    warCwl?.getActiveWarByTag(clan?.tag ?? "");
     final isPlayerWarSameAsClanWar = isPlayerInWarElsewhere && 
-        activeWarByTag != null && 
-        player?.warData?.tag == activeWarByTag.tag;
+        warCwl != null &&
+        player?.warData?.clan?.tag == warCwl.warInfo.clan?.tag &&
+        player?.warData?.opponent?.tag == warCwl.warInfo.opponent?.tag;
     final cwlClan = warCwl?.leagueInfo?.clans
         .firstWhere((element) => element.tag == clan!.tag);
 
@@ -196,14 +192,14 @@ class WarCwlPage extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => WarScreen(war: reorderWar!),
+                    builder: (context) => WarScreen(war: player.warData!),
                   ),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: WarCard(
-                    currentWarInfo: reorderWar!,
-                    clanTag: player!.clanTag,
+                    currentWarInfo: player!.warData!,
+                    clanTag: player.clanTag,
                   ),
                 ),
               ),

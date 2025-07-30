@@ -12,7 +12,6 @@
   "accountVerificationTitle": "Verify Account",
   "accountVerified": "Verified",
   "accountVerify": "Verify",
-  "accountVerifyButton": "Verify",
   "accountVerificationSuccess": "Account verified successfully!",
   "generalRetry": "Prøv igjen",
   "generalRetrying": "Retrying...",
@@ -52,6 +51,10 @@
   "generalAll": "Alle",
   "@generalAll": {
     "description": "all items"
+  },
+  "generalAllTime": "All Time",
+  "@generalAllTime": {
+    "description": "All time period"
   },
   "generalOthers": "Others",
   "generalCompleted": "completed",
@@ -96,6 +99,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Advarsel",
+  "generalUnknown": "Unknown",
   "generalNoDataAvailable": "Ingen data tilgjengelig.",
   "generalNoFilteredResults": "No results match your filters",
   "@generalNoFilteredResults": {
@@ -158,16 +162,6 @@
   "presetsSaveError": "Failed to save preset",
   "@presetsSaveError": {
     "description": "Error message when preset save fails"
-  },
-  "presetsApplied": "Applied preset \"{name}\"",
-  "@presetsApplied": {
-    "description": "Message when preset is applied",
-    "placeholders": {
-      "name": {
-        "type": "String",
-        "description": "Name of the applied preset"
-      }
-    }
   },
   "presetsApply": "Apply Preset",
   "@presetsApply": {
@@ -265,7 +259,6 @@
   "authPasswordResetDescription": "Enter your email, the 6-digit code from the email, and your new password below.",
   "authPasswordNew": "New Password",
   "authPasswordConfirmHint": "Re-enter your new password",
-  "authPasswordResetConfirm": "Reset Password",
   "authPasswordResetSuccess": "Password reset successful! You can now log in.",
   "authPasswordResetContinue": "Continue to Reset Password",
   "authPasswordResetCode": "Reset Code",
@@ -301,7 +294,6 @@
   "authEmailVerificationSentTo": "We've sent a verification email to:",
   "authEmailVerificationResend": "Resend Verification Email",
   "authEmailVerificationResendSuccess": "Verification email resent successfully! Please check your email.",
-  "authEmailVerificationBackToLogin": "Back to Login",
   "authEmailVerificationExpired": "Verification expired. Please register again.",
   "authEmailVerificationAlreadyVerified": "This email is already verified. Please try logging in instead.",
   "authEmailVerificationNoToken": "No pending verification found. Please register first.",
@@ -324,6 +316,7 @@
   "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans:",
   "accountsApiTokenLocation": "Settings > More Settings > API Token",
   "accountsOpenMoreSettings": "Open More Settings",
+  "accountsCouldNotOpenClash": "Could not open Clash of Clans. Please open it manually.",
   "accountsFillAllFields": "Please fill all fields.",
   "accountsErrorTagNotExists": "The player tag entered does not exist.",
   "accountsErrorAlreadyLinked": "The player tag is already linked to someone.",
@@ -491,7 +484,6 @@
   "clanNone": "No clan",
   "clanJoinToUnlock": "Join a clan to unlock new features.",
   "clanMembers": "Members",
-  "clanWarFrequency": "War frequency",
   "clanMinimumMembers": "Minimum members",
   "clanMaximumMembers": "Maximum members",
   "clanLocation": "Location",
@@ -505,17 +497,12 @@
   "@clanOpened": {
     "description": "Clan is opened"
   },
-  "clanClosed": "Closed",
-  "@clanClosed": {
-    "description": "Clan is closed"
-  },
   "clanRoleLeader": "Leader",
   "clanRoleCoLeader": "Co-Leader",
   "clanRoleElder": "Elder",
   "clanRoleMember": "Member",
   "clanWarFrequencyAlways": "Always",
   "clanWarFrequencyNever": "Never",
-  "clanWarFrequencyUnknown": "Unknown",
   "clanWarFrequencyOncePerWeek": "1/week",
   "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
   "clanWarFrequencyRarely": "Rarely",
@@ -875,6 +862,10 @@
   "warAskForWar": "Contact the leader or a co-leader to start a war.",
   "warAskForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
   "warEnded": "War ended",
+  "warInWar": "In War",
+  "@warInWar": {
+    "description": "War state: active"
+  },
   "warPreparation": "Preparation",
   "warPerfectWar": "Perfect war",
   "warVictory": "Victory",
@@ -1424,7 +1415,6 @@
   "faqFeaturesCwlDescription": "Clan War League performance and member contributions",
   "faqSearchHint": "Search FAQ...",
   "faqSectionGettingStarted": "Getting Started & About",
-  "faqSectionTroubleshooting": "Troubleshooting",
   "faqSectionSupportAndContact": "Support & Contact",
   "faqTranslationIssue": "Translation is missing or incorrect?",
   "faqTranslationIssueAnswer": "Translations are done by app users like you! We (developers) only provide French and English translations. If you find missing or incorrect translations, you can help improve them. Do not hesitate to reach out to us on Discord or via email if want to help us. We have a specific Discord channel for translators where you can ask questions and get help.",
@@ -1478,10 +1468,6 @@
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersCwlWars": "CWL Wars",
-  "@filtersCwlWars": {
-    "description": "Preset filter for CWL wars only"
-  },
   "filtersFreshAttacks": "Fresh Attacks",
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
@@ -1514,17 +1500,9 @@
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
-  "filtersStars": "Stars",
-  "@filtersStars": {
-    "description": "Stars filter subsection title"
-  },
   "filtersDestructionPercentage": "Destruction Percentage",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
-  },
-  "filtersMapPosition": "Map Position",
-  "@filtersMapPosition": {
-    "description": "Map position filter subsection title"
   },
   "filtersOptions": "Options",
   "@filtersOptions": {
@@ -1554,10 +1532,6 @@
   "@filtersEndDate": {
     "description": "End date filter label"
   },
-  "filtersNotSet": "Ikke satt",
-  "@filtersNotSet": {
-    "description": "Text shown when date is not set"
-  },
   "filtersYear": "Year",
   "@filtersYear": {
     "description": "Year selector label"
@@ -1574,10 +1548,6 @@
   "@filtersAllWars": {
     "description": "All wars filter option"
   },
-  "filtersFriendlyWars": "Friendly Wars",
-  "@filtersFriendlyWars": {
-    "description": "Friendly wars filter option"
-  },
   "chartsAttackPerformance": "Attack Performance by TH Level",
   "@chartsAttackPerformance": {
     "description": "Attack performance chart title"
@@ -1589,14 +1559,6 @@
   "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
-  },
-  "chartsPoor": "Poor",
-  "@chartsPoor": {
-    "description": "Poor performance legend label"
-  },
-  "chartsAverage": "Gjennomsnitt",
-  "@chartsAverage": {
-    "description": "Average performance legend label"
   },
   "chartsGood": "Good",
   "@chartsGood": {
@@ -1612,11 +1574,11 @@
   },
   "performanceAnalysisSuggestions": "Performance Insights",
   "@performanceAnalysisSuggestions": {
-    "description": "Section title for AI-generated performance analysis suggestions"
+    "description": "Section title for statistical performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Smart filter suggestions based on your war performance to help identify areas for improvement",
+  "performanceAnalysisTooltip": "Filter suggestions based on your star statistics to highlight performance patterns",
   "@performanceAnalysisTooltip": {
-    "description": "Tooltip explaining what performance analysis suggestions are"
+    "description": "Tooltip explaining that suggestions are based on statistical analysis"
   },
   "generalExport": "Export",
   "@generalExport": {
@@ -1629,10 +1591,6 @@
   "exportSuccess": "Export successful!",
   "@exportSuccess": {
     "description": "Success message for completed export"
-  },
-  "exportOpen": "Open",
-  "@exportOpen": {
-    "description": "Button label to open exported file"
   },
   "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
   "@exportDialogDesc": {
@@ -1649,5 +1607,428 @@
   "filtersNoneApplied": "No filters applied",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
+  },
+  "warAttacksFailedToLoadPlayer": "Failed to load player data",
+  "@warAttacksFailedToLoadPlayer": {
+    "description": "Error message when player profile fails to load"
+  },
+  "warAttacksDetailsTitle": "Attack Details",
+  "@warAttacksDetailsTitle": {
+    "description": "Title for attack details modal"
+  },
+  "warAttacksDetailsAttackOrder": "Attack Order",
+  "@warAttacksDetailsAttackOrder": {
+    "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsAttacker": "Attacker",
+  "@warAttacksDetailsAttacker": {
+    "description": "Label for attacker section in attack details"
+  },
+  "warAttacksDetailsDefender": "Defender",
+  "@warAttacksDetailsDefender": {
+    "description": "Label for defender section in attack details"
+  },
+  "warAttacksDetailsName": "Name",
+  "@warAttacksDetailsName": {
+    "description": "Label for player name in attack details"
+  },
+  "warDataState": "State",
+  "@warDataState": {
+    "description": "Label for war state"
+  },
+  "warDataAttacksPerMember": "Attacks Per Member",
+  "@warDataAttacksPerMember": {
+    "description": "Label for attacks per member"
+  },
+  "warDataStartTime": "War Start",
+  "@warDataStartTime": {
+    "description": "Label for war start time"
+  },
+  "warDataEndTime": "War End",
+  "@warDataEndTime": {
+    "description": "Label for war end time"
+  },
+  "warDataClanLevel": "Clan Level",
+  "@warDataClanLevel": {
+    "description": "Label for clan level"
+  },
+  "warDataTotalStars": "Total Stars",
+  "@warDataTotalStars": {
+    "description": "Label for total stars earned"
+  },
+  "warDataDestructionPercentage": "Destruction %",
+  "@warDataDestructionPercentage": {
+    "description": "Label for destruction percentage"
+  },
+  "warInformationTitle": "War Information",
+  "@warInformationTitle": {
+    "description": "Title for war information section in attack details"
+  },
+  "warResultsTitle": "War Results",
+  "@warResultsTitle": {
+    "description": "Title for war results section showing clan vs opponent"
+  },
+  "warPlayersTitle": "Players",
+  "@warPlayersTitle": {
+    "description": "Title for players section showing attacker and defender info"
+  },
+  "performanceAnalysisFailedAttacks": "Failed Attacks (0-1 Stars)",
+  "@performanceAnalysisFailedAttacks": {
+    "description": "Performance analysis preset for failed attacks"
+  },
+  "performanceAnalysisFailedAttacksDesc": "Shows attacks that failed to get 2+ stars",
+  "@performanceAnalysisFailedAttacksDesc": {
+    "description": "Description for failed attacks analysis"
+  },
+  "performanceAnalysisMissedPerfects": "Missed Perfect Attacks",
+  "@performanceAnalysisMissedPerfects": {
+    "description": "Performance analysis preset for missed perfect attacks"
+  },
+  "performanceAnalysisMissedPerfectsDesc": "Shows attacks that got 2 stars - potential perfect opportunities",
+  "@performanceAnalysisMissedPerfectsDesc": {
+    "description": "Description for missed perfect attacks analysis"
+  },
+  "performanceAnalysisThAttackIssues": "Low Stars vs TH{thLevel}",
+  "@performanceAnalysisThAttackIssues": {
+    "description": "Performance analysis preset for low-star attacks against specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThAttackIssuesDesc": "Shows attacks with low star count against TH{thLevel}",
+  "@performanceAnalysisThAttackIssuesDesc": {
+    "description": "Description for low-star attacks against specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssues": "Vulnerable to TH{thLevel}",
+  "@performanceAnalysisThDefenseIssues": {
+    "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssuesDesc": "Shows when TH{thLevel} attackers get high stars against you",
+  "@performanceAnalysisThDefenseIssuesDesc": {
+    "description": "Description for defensive vulnerabilities to specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisCwlIssues": "CWL Low Performance",
+  "@performanceAnalysisCwlIssues": {
+    "description": "Performance analysis preset for low CWL performance"
+  },
+  "performanceAnalysisCwlIssuesDesc": "Shows CWL attacks with lower star average than regular wars",
+  "@performanceAnalysisCwlIssuesDesc": {
+    "description": "Description for low CWL performance analysis"
+  },
+  "performanceAnalysisRandomWarIssues": "Random War Low Performance",
+  "@performanceAnalysisRandomWarIssues": {
+    "description": "Performance analysis preset for low random war performance"
+  },
+  "performanceAnalysisRandomWarIssuesDesc": "Shows random war attacks with lower star average than CWL",
+  "@performanceAnalysisRandomWarIssuesDesc": {
+    "description": "Description for low random war performance analysis"
+  },
+  "performanceAnalysisFreshOnly": "Fresh Attack Analysis",
+  "@performanceAnalysisFreshOnly": {
+    "description": "Performance analysis preset for fresh attacks only"
+  },
+  "performanceAnalysisFreshOnlyDesc": "Analyzes performance on fresh bases only",
+  "@performanceAnalysisFreshOnlyDesc": {
+    "description": "Description for fresh attack analysis"
+  },
+  "performanceAnalysisRecentPerformance": "Recent Performance (30 Days)",
+  "@performanceAnalysisRecentPerformance": {
+    "description": "Performance analysis preset for recent performance"
+  },
+  "performanceAnalysisRecentPerformanceDesc": "Shows recent performance to identify current trends",
+  "@performanceAnalysisRecentPerformanceDesc": {
+    "description": "Description for recent performance analysis"
+  },
+  "performanceAnalysisHighStakes": "High-Stakes Attacks",
+  "@performanceAnalysisHighStakes": {
+    "description": "Performance analysis preset for high-stakes attacks"
+  },
+  "performanceAnalysisHighStakesDesc": "Shows attacks from top 5 war positions",
+  "@performanceAnalysisHighStakesDesc": {
+    "description": "Description for high-stakes attacks analysis"
+  },
+  "performanceAnalysisCleanupCrew": "Cleanup Attacks",
+  "@performanceAnalysisCleanupCrew": {
+    "description": "Performance analysis preset for cleanup attacks"
+  },
+  "performanceAnalysisCleanupCrewDesc": "Shows attacks from lower war positions",
+  "@performanceAnalysisCleanupCrewDesc": {
+    "description": "Description for cleanup attacks analysis"
+  },
+  "performanceRatingNeedsImprovement": "Needs Improvement",
+  "@performanceRatingNeedsImprovement": {
+    "description": "Needs improvement performance rating"
+  },
+  "performanceStrengthHighThreeStarRate": "High Three-Star Rate",
+  "@performanceStrengthHighThreeStarRate": {
+    "description": "Strength area: high three-star rate"
+  },
+  "performanceStrengthHighDestruction": "High Destruction",
+  "@performanceStrengthHighDestruction": {
+    "description": "Strength area: high destruction percentage"
+  },
+  "performanceStrengthConsistentPerformance": "Consistent Performance",
+  "@performanceStrengthConsistentPerformance": {
+    "description": "Strength area: consistent performance"
+  },
+  "performanceImprovementThreeStarConsistency": "Three-Star Consistency",
+  "@performanceImprovementThreeStarConsistency": {
+    "description": "Improvement area: three-star consistency"
+  },
+  "performanceImprovementOverallStarPerformance": "Overall Star Performance",
+  "@performanceImprovementOverallStarPerformance": {
+    "description": "Improvement area: overall star performance"
+  },
+  "presetSuggestionCwlOnly": "CWL Only",
+  "@presetSuggestionCwlOnly": {
+    "description": "Preset suggestion for CWL wars only"
+  },
+  "presetSuggestionRandomWars": "Random Wars",
+  "@presetSuggestionRandomWars": {
+    "description": "Preset suggestion for random wars"
+  },
+  "presetSuggestionFriendlyWars": "Friendly Wars",
+  "@presetSuggestionFriendlyWars": {
+    "description": "Preset suggestion for friendly wars"
+  },
+  "presetSuggestionStarOnly": "{count} Star Only",
+  "@presetSuggestionStarOnly": {
+    "description": "Preset suggestion for specific star count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionPerfectAttacks": "Perfect Attacks",
+  "@presetSuggestionPerfectAttacks": {
+    "description": "Preset suggestion for perfect attacks"
+  },
+  "presetSuggestionFailedAttacks": "Failed Attacks",
+  "@presetSuggestionFailedAttacks": {
+    "description": "Preset suggestion for failed attacks"
+  },
+  "presetSuggestionThOnly": "TH{level} Only",
+  "@presetSuggestionThOnly": {
+    "description": "Preset suggestion for specific town hall level",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionLastWeek": "Last Week",
+  "@presetSuggestionLastWeek": {
+    "description": "Preset suggestion for last week timeframe"
+  },
+  "presetSuggestionLastMonth": "Last Month",
+  "@presetSuggestionLastMonth": {
+    "description": "Preset suggestion for last month timeframe"
+  },
+  "presetSuggestionMyPreset": "My Preset",
+  "@presetSuggestionMyPreset": {
+    "description": "Default preset suggestion"
+  },
+  "presetSuggestionCustomFilter": "Custom Filter",
+  "@presetSuggestionCustomFilter": {
+    "description": "Default custom filter suggestion"
+  },
+  "presetSuggestionRecentFilter": "Recent Filter",
+  "@presetSuggestionRecentFilter": {
+    "description": "Default recent filter suggestion"
+  },
+  "generalError": "Error",
+  "generalSuccess": "Success",
+  "generalFailed": "Failed",
+  "generalMinimum": "Minimum",
+  "generalMaximum": "Maximum",
+  "generalHigh": "High",
+  "generalLow": "Low",
+  "generalPoor": "Poor",
+  "generalOpen": "Open",
+  "generalClosed": "Closed",
+  "generalAvailable": "Available",
+  "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
+  "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
+  "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
+  "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
+  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
+  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
+  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
+  "apiErrorInvalidJsonResponse": "Something went wrong. Please try again.",
+  "@apiErrorInvalidJsonResponse": {
+    "description": "Error when API returns invalid JSON",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint that returned invalid JSON"
+      }
+    }
+  },
+  "apiErrorBadRequest": "Something went wrong. Please check your input.",
+  "@apiErrorBadRequest": {
+    "description": "API bad request error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorUnauthorized": "You are not authorized. Please log in again.",
+  "@apiErrorUnauthorized": {
+    "description": "API unauthorized error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorForbidden": "You don't have permission to perform this action.",
+  "@apiErrorForbidden": {
+    "description": "API forbidden error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorNotFound": "We couldn't find what you were looking for.",
+  "@apiErrorNotFound": {
+    "description": "API not found error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorRateLimit": "Too many requests. Please try again later.",
+  "@apiErrorRateLimit": {
+    "description": "API rate limit error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorServer": "The server is temporarily unavailable. Please try again shortly.",
+  "@apiErrorServer": {
+    "description": "API server error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorGeneric": "An unexpected error occurred. Please try again.",
+  "@apiErrorGeneric": {
+    "description": "Generic API error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
+  "apiErrorTimeout": "Request timed out. Please try again.",
+  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
+  "apiErrorOperationFailed": "We couldn't complete your request. Please try again.",
+  "@apiErrorOperationFailed": {
+    "description": "Generic operation failed error",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorNetworkOperation": "You seems to be offline. Please check your connection and try again.",
+  "@apiErrorNetworkOperation": {
+    "description": "Network error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorTimeoutOperation": "The request took too long. Please try again.",
+  "@apiErrorTimeoutOperation": {
+    "description": "Timeout error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorDataFormatOperation": "Something went wrong while processing the data. Please try again.",
+  "@apiErrorDataFormatOperation": {
+    "description": "Data format error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorConfigLoadFailed": "We couldn’t load the app settings (error {statusCode}). Please try again.",
+  "@apiErrorConfigLoadFailed": {
+    "description": "Error loading app config",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      }
+    }
+  },
+  "apiErrorConfigException": "Error when loading configuration from the server",
+  "@apiErrorConfigException": {
+    "description": "Exception while loading config",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
   }
 }

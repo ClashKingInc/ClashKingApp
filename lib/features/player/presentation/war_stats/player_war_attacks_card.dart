@@ -3,6 +3,7 @@ import 'package:clashkingapp/common/widgets/icons/build_stars.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_attack.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
@@ -169,7 +170,7 @@ class PlayerWarAttacksCard extends StatelessWidget {
                       children: [
                         // Player name and position
                         Text(
-                          "${targetPlayer?.mapPosition}. ${targetPlayer?.name ?? 'Unknown'}",
+                          "${targetPlayer?.mapPosition}. ${targetPlayer?.name ?? AppLocalizations.of(context)!.generalUnknown}",
                           style:
                               Theme.of(context).textTheme.titleSmall?.copyWith(
                                     fontWeight: FontWeight.bold,
@@ -263,7 +264,7 @@ class PlayerWarAttacksCard extends StatelessWidget {
       navigator.pop();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load player data')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.warAttacksFailedToLoadPlayer)),
         );
       }
     }
@@ -302,56 +303,57 @@ class PlayerWarAttacksCard extends StatelessWidget {
 
               // Title
               Text(
-                'Attack Details',
+                AppLocalizations.of(context)!.warAttacksDetailsTitle,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 16),
 
-              // Attack info
+              // Attack info with user-friendly cards
               Expanded(
                 child: SingleChildScrollView(
                   controller: scrollController,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildDetailRow(
-                          'War Type', war.warDetails.warType ?? 'Unknown'),
-                      _buildDetailRow('Attack Order', attack.order.toString()),
-                      _buildDetailRow('Stars', attack.stars.toString()),
-                      _buildDetailRow(
-                          'Destruction', '${attack.destructionPercentage}%'),
+                      // Attack Performance Card
+                      _buildInfoCard(
+                        context,
+                        title: AppLocalizations.of(context)!.warAttacksDetailsTitle,
+                        icon: Icons.military_tech,
+                        children: [
+                          _buildIconValueRow(context, Icons.star, AppLocalizations.of(context)!.warStarsTitle, attack.stars.toString()),
+                          _buildIconValueRow(context, Icons.percent, AppLocalizations.of(context)!.warDestructionTitle, '${attack.destructionPercentage}%'),
+                          _buildIconValueRow(context, Icons.format_list_numbered, AppLocalizations.of(context)!.warAttacksDetailsAttackOrder, attack.order.toString()),
+                          _buildIconValueRow(context, Icons.sports_esports, AppLocalizations.of(context)!.filtersWarType, war.warDetails.warType ?? AppLocalizations.of(context)!.generalUnknown),
+                        ],
+                      ),
                       const SizedBox(height: 16),
 
-                      // Attacker info
-                      Text(
-                        'Attacker',
-                        style: Theme.of(context).textTheme.titleMedium,
+                      // War Information Card
+                      _buildInfoCard(
+                        context,
+                        title: AppLocalizations.of(context)!.warInformationTitle,
+                        icon: Icons.info,
+                        children: [
+                          _buildIconValueRow(context, _getWarStateIcon(war.warDetails.state), AppLocalizations.of(context)!.warDataState, _getWarStateDisplay(context, war.warDetails.state)),
+                          _buildIconValueRow(context, Icons.group, AppLocalizations.of(context)!.warTeamSize, war.warDetails.teamSize?.toString() ?? AppLocalizations.of(context)!.generalUnknown),
+                          _buildIconValueRow(context, Icons.local_fire_department, AppLocalizations.of(context)!.warDataAttacksPerMember, war.warDetails.attacksPerMember?.toString() ?? AppLocalizations.of(context)!.generalUnknown),
+                          if (war.warDetails.startTime != null)
+                            _buildIconValueRow(context, Icons.schedule, AppLocalizations.of(context)!.warDataStartTime, DateFormat.yMd(Localizations.localeOf(context).toString()).add_Hm().format(war.warDetails.startTime!)),
+                          if (war.warDetails.endTime != null)
+                            _buildIconValueRow(context, Icons.flag, AppLocalizations.of(context)!.warDataEndTime, DateFormat.yMd(Localizations.localeOf(context).toString()).add_Hm().format(war.warDetails.endTime!)),
+                        ],
                       ),
-                      const SizedBox(height: 8),
-                      _buildDetailRow(
-                          'Name', attack.attacker?.name ?? 'Unknown'),
-                      _buildDetailRow(
-                          'TH Level',
-                          attack.attacker?.townhallLevel.toString() ??
-                              'Unknown'),
-                      _buildDetailRow('Map Position',
-                          attack.attacker?.mapPosition.toString() ?? 'Unknown'),
                       const SizedBox(height: 16),
 
-                      // Defender info
-                      Text(
-                        'Defender',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 8),
-                      _buildDetailRow(
-                          'Name', attack.defender?.name ?? 'Unknown'),
-                      _buildDetailRow(
-                          'TH Level',
-                          attack.defender?.townhallLevel.toString() ??
-                              'Unknown'),
-                      _buildDetailRow('Map Position',
-                          attack.defender?.mapPosition.toString() ?? 'Unknown'),
+                      // Clan vs Opponent Section
+                      if (war.warDetails.clan != null && war.warDetails.opponent != null) ...[
+                        _buildClanVsOpponentCard(context, war.warDetails.clan!, war.warDetails.opponent!),
+                        const SizedBox(height: 16),
+                      ],
+
+                      // Players Card
+                      _buildPlayersCard(context, attack),
                     ],
                   ),
                 ),
@@ -359,27 +361,6 @@ class PlayerWarAttacksCard extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 120,
-            child: Text(
-              label,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          Expanded(
-            child: Text(value),
-          ),
-        ],
       ),
     );
   }
@@ -398,6 +379,427 @@ class PlayerWarAttacksCard extends StatelessWidget {
             height: 150,
             width: 120,
           )
+        ],
+      ),
+    );
+  }
+
+  // Helper method to get appropriate icon for war state
+  IconData _getWarStateIcon(String state) {
+    switch (state.toLowerCase()) {
+      case 'warended':
+        return Icons.check_circle;
+      case 'inwar':
+        return Icons.local_fire_department;
+      case 'preparation':
+        return Icons.hourglass_top;
+      default:
+        return Icons.help_outline;
+    }
+  }
+
+  String _getWarStateDisplay(BuildContext context, String state) {
+    switch (state.toLowerCase()) {
+      case 'warended':
+        return AppLocalizations.of(context)!.warEnded;
+      case 'inwar':
+        return AppLocalizations.of(context)!.warInWar;
+      case 'preparation':
+        return AppLocalizations.of(context)!.warPreparation;
+      default:
+        return state;
+    }
+  }
+
+  // New user-friendly card builder
+  Widget _buildInfoCard(BuildContext context, {
+    required String title,
+    required IconData icon,
+    required List<Widget> children,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.7),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Card header
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Card content
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: children,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Icon-value row builder
+  Widget _buildIconValueRow(BuildContext context, IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            size: 18,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Enhanced clan vs opponent card
+  Widget _buildClanVsOpponentCard(BuildContext context, WarClan clan, WarClan opponent) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.7),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Header
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.sports,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  AppLocalizations.of(context)!.warResultsTitle,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Content
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                // Clan names
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        clan.name,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'VS',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        opponent.name,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                
+                // Stats comparison
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          _buildClanStatItem(context, Icons.emoji_events, AppLocalizations.of(context)!.warDataClanLevel, clan.clanLevel.toString()),
+                          _buildClanStatItem(context, Icons.star, AppLocalizations.of(context)!.warDataTotalStars, clan.stars.toString()),
+                          _buildClanStatItem(context, Icons.local_fire_department, AppLocalizations.of(context)!.warAttacksTitle, clan.attacks.toString()),
+                          _buildClanStatItem(context, Icons.percent, AppLocalizations.of(context)!.warDataDestructionPercentage, '${clan.destructionPercentage.toStringAsFixed(1)}%'),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: 2,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+                            Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+                            Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(1),
+                      ),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          _buildClanStatItem(context, Icons.emoji_events, AppLocalizations.of(context)!.warDataClanLevel, opponent.clanLevel.toString()),
+                          _buildClanStatItem(context, Icons.star, AppLocalizations.of(context)!.warDataTotalStars, opponent.stars.toString()),
+                          _buildClanStatItem(context, Icons.local_fire_department, AppLocalizations.of(context)!.warAttacksTitle, opponent.attacks.toString()),
+                          _buildClanStatItem(context, Icons.percent, AppLocalizations.of(context)!.warDataDestructionPercentage, '${opponent.destructionPercentage.toStringAsFixed(1)}%'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildClanStatItem(BuildContext context, IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 16,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                label,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Players card combining attacker and defender
+  Widget _buildPlayersCard(BuildContext context, WarAttack attack) {
+    return _buildInfoCard(
+      context,
+      title: AppLocalizations.of(context)!.warPlayersTitle,
+      icon: Icons.people,
+      children: [
+        // Attacker section
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.blue.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: Colors.blue.withValues(alpha: 0.2),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.person,
+                    size: 18,
+                    color: Colors.blue[700],
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    AppLocalizations.of(context)!.warAttacksDetailsAttacker,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue[700],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              _buildPlayerInfo(context, attack.attacker),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        // Defender section
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.red.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: Colors.red.withValues(alpha: 0.2),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.shield,
+                    size: 18,
+                    color: Colors.red[700],
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    AppLocalizations.of(context)!.warAttacksDetailsDefender,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red[700],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              _buildPlayerInfo(context, attack.defender),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlayerInfo(BuildContext context, dynamic player) {
+    return Column(
+      children: [
+        _buildPlayerInfoRow(context, Icons.person, AppLocalizations.of(context)!.warAttacksDetailsName, player?.name ?? AppLocalizations.of(context)!.generalUnknown),
+        _buildPlayerInfoRow(context, Icons.home, AppLocalizations.of(context)!.gameTownHallLevel, player?.townhallLevel?.toString() ?? AppLocalizations.of(context)!.generalUnknown),
+        _buildPlayerInfoRow(context, Icons.location_on, AppLocalizations.of(context)!.warPositionMap, player?.mapPosition?.toString() ?? AppLocalizations.of(context)!.generalUnknown),
+      ],
+    );
+  }
+
+  Widget _buildPlayerInfoRow(BuildContext context, IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            size: 14,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ],
       ),
     );
