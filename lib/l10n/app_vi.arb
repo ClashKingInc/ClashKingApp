@@ -1868,5 +1868,167 @@
   "generalPoor": "Poor",
   "generalOpen": "Open",
   "generalClosed": "Closed",
-  "generalAvailable": "Available"
+  "generalAvailable": "Available",
+  "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
+  "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
+  "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
+  "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
+  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
+  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
+  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
+  "apiErrorInvalidJsonResponse": "Invalid JSON response from {endpoint}",
+  "@apiErrorInvalidJsonResponse": {
+    "description": "Error when API returns invalid JSON",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint that returned invalid JSON"
+      }
+    }
+  },
+  "apiErrorBadRequest": "Bad request to {endpoint}: {details}",
+  "@apiErrorBadRequest": {
+    "description": "API bad request error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorUnauthorized": "Unauthorized request to {endpoint}",
+  "@apiErrorUnauthorized": {
+    "description": "API unauthorized error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorForbidden": "Forbidden request to {endpoint}",
+  "@apiErrorForbidden": {
+    "description": "API forbidden error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorNotFound": "Resource not found: {endpoint}",
+  "@apiErrorNotFound": {
+    "description": "API not found error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorRateLimit": "Rate limit exceeded for {endpoint}",
+  "@apiErrorRateLimit": {
+    "description": "API rate limit error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorServer": "Server error {statusCode} for {endpoint}",
+  "@apiErrorServer": {
+    "description": "API server error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorGeneric": "HTTP {statusCode}: {details}",
+  "@apiErrorGeneric": {
+    "description": "Generic API error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
+  "apiErrorTimeout": "Request timed out. Please try again.",
+  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
+  "apiErrorOperationFailed": "API operation failed: {operation}",
+  "@apiErrorOperationFailed": {
+    "description": "Generic operation failed error",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorNetworkOperation": "Network error during {operation}: No internet connection",
+  "@apiErrorNetworkOperation": {
+    "description": "Network error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorTimeoutOperation": "Timeout error during {operation}",
+  "@apiErrorTimeoutOperation": {
+    "description": "Timeout error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorDataFormatOperation": "Data format error during {operation}",
+  "@apiErrorDataFormatOperation": {
+    "description": "Data format error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorConfigLoadFailed": "Failed to load config: {statusCode}",
+  "@apiErrorConfigLoadFailed": {
+    "description": "Error loading app config",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      }
+    }
+  },
+  "apiErrorConfigException": "Error loading config: {error}",
+  "@apiErrorConfigException": {
+    "description": "Exception while loading config",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  }
 }
