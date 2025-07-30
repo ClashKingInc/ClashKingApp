@@ -52,7 +52,7 @@
   "@generalAll": {
     "description": "all items"
   },
-  "generalAllTime": "All Time",
+  "generalAllTime": "Altijd",
   "@generalAllTime": {
     "description": "All time period"
   },
@@ -99,7 +99,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Waarschuwing",
-  "generalUnknown": "Unknown",
+  "generalUnknown": "Onbekend",
   "generalNoDataAvailable": "Geen gegevens beschikbaar.",
   "generalNoFilteredResults": "Geen resultaten gevonden voor je filters",
   "@generalNoFilteredResults": {
@@ -316,7 +316,7 @@
   "accountsEnterApiToken": "Voer de API-token van je account in om te bevestigen dat het van jou is. Je kunt deze vinden in Clash of Clans:",
   "accountsApiTokenLocation": "Instellingen > meer instellingen > API Token",
   "accountsOpenMoreSettings": "Open meer instellingen",
-  "accountsCouldNotOpenClash": "Could not open Clash of Clans. Please open it manually.",
+  "accountsCouldNotOpenClash": "Kon Clash of Clans niet openen. Open het handmatig.",
   "accountsFillAllFields": "Vul alle velden in.",
   "accountsErrorTagNotExists": "Het ingevoerde speler-ID bestaat niet.",
   "accountsErrorAlreadyLinked": "De spelertag is al gekoppeld aan iemand anders.",
@@ -849,7 +849,7 @@
       }
     }
   },
-  "warStats": "Oorlog Stats",
+  "warStats": "Oorlog stats",
   "warOngoing": "Lopende oorlog",
   "warIsNotInWar": "{clan} is niet in oorlog.",
   "@warIsNotInWar": {
@@ -862,7 +862,7 @@
   "warAskForWar": "Neem contact op met de leider of een co-leider om een oorlog te starten.",
   "warAskForWarLogOpening": "Neem contact op met de leider of een co-leider om het oorlogs logsboek te openen.",
   "warEnded": "Oorlog afgelopen",
-  "warInWar": "In War",
+  "warInWar": "In oorlog",
   "@warInWar": {
     "description": "War state: active"
   },
@@ -1409,7 +1409,7 @@
   "faqFeaturesClanDescription": "Houd clankleden, donaties en de algehele clanstatus in de gaten",
   "faqFeaturesWarTitle": "Oorlog volgen",
   "faqFeaturesWarDescription": "Analyseer oorlogsprestaties, aanvalstrategieën en winstpercentages",
-  "faqFeaturesLegendsTitle": "Inaccurate data?",
+  "faqFeaturesLegendsTitle": "Onjuiste gegevens?",
   "faqFeaturesLegendsDescription": "Dagelijkse trofeeëntracking en seizoensstatistieken",
   "faqFeaturesCwlTitle": "CWL analyses",
   "faqFeaturesCwlDescription": "Clan War League prestaties en bijdragen van leden",
@@ -1576,7 +1576,7 @@
   "@performanceAnalysisSuggestions": {
     "description": "Section title for statistical performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Filter suggestions based on your star statistics to highlight performance patterns",
+  "performanceAnalysisTooltip": "Filter suggesties op basis van je sterrenstatistieken om prestatiepatronen te benadrukken",
   "@performanceAnalysisTooltip": {
     "description": "Tooltip explaining that suggestions are based on statistical analysis"
   },
@@ -1608,87 +1608,87 @@
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   },
-  "warAttacksFailedToLoadPlayer": "Failed to load player data",
+  "warAttacksFailedToLoadPlayer": "Laden van spelergegevens mislukt",
   "@warAttacksFailedToLoadPlayer": {
     "description": "Error message when player profile fails to load"
   },
-  "warAttacksDetailsTitle": "Attack Details",
+  "warAttacksDetailsTitle": "Aanvaldetails",
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
   },
-  "warAttacksDetailsAttackOrder": "Attack Order",
+  "warAttacksDetailsAttackOrder": "Aanval volgorde",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
   },
-  "warAttacksDetailsAttacker": "Attacker",
+  "warAttacksDetailsAttacker": "Aanvaller",
   "@warAttacksDetailsAttacker": {
     "description": "Label for attacker section in attack details"
   },
-  "warAttacksDetailsDefender": "Defender",
+  "warAttacksDetailsDefender": "Verdediger",
   "@warAttacksDetailsDefender": {
     "description": "Label for defender section in attack details"
   },
-  "warAttacksDetailsName": "Name",
+  "warAttacksDetailsName": "Naam",
   "@warAttacksDetailsName": {
     "description": "Label for player name in attack details"
   },
-  "warDataState": "State",
+  "warDataState": "Status",
   "@warDataState": {
     "description": "Label for war state"
   },
-  "warDataAttacksPerMember": "Attacks Per Member",
+  "warDataAttacksPerMember": "Aanvallen per lid",
   "@warDataAttacksPerMember": {
     "description": "Label for attacks per member"
   },
-  "warDataStartTime": "War Start",
+  "warDataStartTime": "Oorlog start",
   "@warDataStartTime": {
     "description": "Label for war start time"
   },
-  "warDataEndTime": "War End",
+  "warDataEndTime": "Oorlog Einde",
   "@warDataEndTime": {
     "description": "Label for war end time"
   },
-  "warDataClanLevel": "Clan Level",
+  "warDataClanLevel": "Clan niveau",
   "@warDataClanLevel": {
     "description": "Label for clan level"
   },
-  "warDataTotalStars": "Total Stars",
+  "warDataTotalStars": "Totaal aantal sterren",
   "@warDataTotalStars": {
     "description": "Label for total stars earned"
   },
-  "warDataDestructionPercentage": "Destruction %",
+  "warDataDestructionPercentage": "Vernietiging %",
   "@warDataDestructionPercentage": {
     "description": "Label for destruction percentage"
   },
-  "warInformationTitle": "War Information",
+  "warInformationTitle": "Oorlog Informatie",
   "@warInformationTitle": {
     "description": "Title for war information section in attack details"
   },
-  "warResultsTitle": "War Results",
+  "warResultsTitle": "Oorlog resultaten",
   "@warResultsTitle": {
     "description": "Title for war results section showing clan vs opponent"
   },
-  "warPlayersTitle": "Players",
+  "warPlayersTitle": "Spelers",
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "performanceAnalysisFailedAttacks": "Failed Attacks (0-1 Stars)",
+  "performanceAnalysisFailedAttacks": "Mislukte aanvallen (0-1 sterren)",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
   },
-  "performanceAnalysisFailedAttacksDesc": "Shows attacks that failed to get 2+ stars",
+  "performanceAnalysisFailedAttacksDesc": "Toont aanvallen die mislukt zijn om 2+ sterren te krijgen",
   "@performanceAnalysisFailedAttacksDesc": {
     "description": "Description for failed attacks analysis"
   },
-  "performanceAnalysisMissedPerfects": "Missed Perfect Attacks",
+  "performanceAnalysisMissedPerfects": "Gemiste perfecte aanvallen",
   "@performanceAnalysisMissedPerfects": {
     "description": "Performance analysis preset for missed perfect attacks"
   },
-  "performanceAnalysisMissedPerfectsDesc": "Shows attacks that got 2 stars - potential perfect opportunities",
+  "performanceAnalysisMissedPerfectsDesc": "Toont aanvallen met 2 sterren - potentiële perfecte kansen",
   "@performanceAnalysisMissedPerfectsDesc": {
     "description": "Description for missed perfect attacks analysis"
   },
-  "performanceAnalysisThAttackIssues": "Low Stars vs TH{thLevel}",
+  "performanceAnalysisThAttackIssues": "Lage sterren vs TH{thLevel}",
   "@performanceAnalysisThAttackIssues": {
     "description": "Performance analysis preset for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1744,7 +1744,7 @@
   "@performanceAnalysisRandomWarIssuesDesc": {
     "description": "Description for low random war performance analysis"
   },
-  "performanceAnalysisFreshOnly": "Fresh Attack Analysis",
+  "performanceAnalysisFreshOnly": "Analyse van eerste aanvallen",
   "@performanceAnalysisFreshOnly": {
     "description": "Performance analysis preset for fresh attacks only"
   },
@@ -1768,7 +1768,7 @@
   "@performanceAnalysisHighStakesDesc": {
     "description": "Description for high-stakes attacks analysis"
   },
-  "performanceAnalysisCleanupCrew": "Cleanup Attacks",
+  "performanceAnalysisCleanupCrew": "Schoonmaak aanvallen",
   "@performanceAnalysisCleanupCrew": {
     "description": "Performance analysis preset for cleanup attacks"
   },
@@ -1800,11 +1800,11 @@
   "@performanceImprovementOverallStarPerformance": {
     "description": "Improvement area: overall star performance"
   },
-  "presetSuggestionCwlOnly": "CWL Only",
+  "presetSuggestionCwlOnly": "Alleen CWL",
   "@presetSuggestionCwlOnly": {
     "description": "Preset suggestion for CWL wars only"
   },
-  "presetSuggestionRandomWars": "Random Wars",
+  "presetSuggestionRandomWars": "Willekeurige oorlogen",
   "@presetSuggestionRandomWars": {
     "description": "Preset suggestion for random wars"
   },
@@ -1838,35 +1838,35 @@
       }
     }
   },
-  "presetSuggestionLastWeek": "Last Week",
+  "presetSuggestionLastWeek": "Afgelopen week",
   "@presetSuggestionLastWeek": {
     "description": "Preset suggestion for last week timeframe"
   },
-  "presetSuggestionLastMonth": "Last Month",
+  "presetSuggestionLastMonth": "Afgelopen maand",
   "@presetSuggestionLastMonth": {
     "description": "Preset suggestion for last month timeframe"
   },
-  "presetSuggestionMyPreset": "My Preset",
+  "presetSuggestionMyPreset": "Mijn voorkeursinstellingen",
   "@presetSuggestionMyPreset": {
     "description": "Default preset suggestion"
   },
-  "presetSuggestionCustomFilter": "Custom Filter",
+  "presetSuggestionCustomFilter": "Aangepast filter",
   "@presetSuggestionCustomFilter": {
     "description": "Default custom filter suggestion"
   },
-  "presetSuggestionRecentFilter": "Recent Filter",
+  "presetSuggestionRecentFilter": "Recent filter",
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
   },
-  "generalError": "Error",
-  "generalSuccess": "Success",
-  "generalFailed": "Failed",
+  "generalError": "Fout",
+  "generalSuccess": "Succes",
+  "generalFailed": "Mislukt",
   "generalMinimum": "Minimum",
   "generalMaximum": "Maximum",
-  "generalHigh": "High",
-  "generalLow": "Low",
-  "generalPoor": "Poor",
+  "generalHigh": "Hoog",
+  "generalLow": "Laag",
+  "generalPoor": "Slecht",
   "generalOpen": "Open",
-  "generalClosed": "Closed",
-  "generalAvailable": "Available"
+  "generalClosed": "Gesloten",
+  "generalAvailable": "Beschikbaar"
 }
