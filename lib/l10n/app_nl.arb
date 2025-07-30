@@ -1869,14 +1869,14 @@
   "generalOpen": "Open",
   "generalClosed": "Gesloten",
   "generalAvailable": "Beschikbaar",
-  "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
-  "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
-  "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
-  "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
-  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
-  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
-  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
-  "apiErrorInvalidJsonResponse": "Something went wrong. Please try again.",
+  "authErrorUserCancelledDiscordLogin": "Gebruiker heeft Discord login geannuleerd.",
+  "authErrorDiscordLoginFailed": "Inloggen met Discord mislukt. Probeer het opnieuw.",
+  "authErrorEmailLoginFailed": "Inloggen met e-mail mislukt. Controleer uw inloggegevens.",
+  "authErrorEmailVerificationFailed": "E-mailverificatie mislukt. De token is mogelijk ongeldig of verlopen.",
+  "authErrorDiscordLinkFailed": "Kan Discord account niet koppelen. Het is mogelijk al gekoppeld aan een ander account.",
+  "authErrorEmailLinkFailed": "E-mailaccount koppelen mislukt. E-mail wordt mogelijk al gebruikt.",
+  "authErrorUserNotAuthenticated": "Gebruiker niet geverifieerd. Log opnieuw in.",
+  "apiErrorInvalidJsonResponse": "Er is iets misgegaan. Probeer het opnieuw.",
   "@apiErrorInvalidJsonResponse": {
     "description": "Error when API returns invalid JSON",
     "placeholders": {
@@ -1886,7 +1886,7 @@
       }
     }
   },
-  "apiErrorBadRequest": "Something went wrong. Please check your input.",
+  "apiErrorBadRequest": "Er is iets fout gegaan. Controleer je invoer.",
   "@apiErrorBadRequest": {
     "description": "API bad request error",
     "placeholders": {
@@ -1900,7 +1900,7 @@
       }
     }
   },
-  "apiErrorUnauthorized": "You are not authorized. Please log in again.",
+  "apiErrorUnauthorized": "Je bent niet geautoriseerd. Log opnieuw in.",
   "@apiErrorUnauthorized": {
     "description": "API unauthorized error",
     "placeholders": {
@@ -1910,7 +1910,7 @@
       }
     }
   },
-  "apiErrorForbidden": "You don't have permission to perform this action.",
+  "apiErrorForbidden": "Je bent niet gemachtigd om deze actie uit te voeren.",
   "@apiErrorForbidden": {
     "description": "API forbidden error",
     "placeholders": {
@@ -1920,7 +1920,7 @@
       }
     }
   },
-  "apiErrorNotFound": "We couldn't find what you were looking for.",
+  "apiErrorNotFound": "We konden niet vinden waar je naar zocht.",
   "@apiErrorNotFound": {
     "description": "API not found error",
     "placeholders": {
@@ -1930,7 +1930,7 @@
       }
     }
   },
-  "apiErrorRateLimit": "Too many requests. Please try again later.",
+  "apiErrorRateLimit": "Te veel verzoeken. Probeer het later opnieuw.",
   "@apiErrorRateLimit": {
     "description": "API rate limit error",
     "placeholders": {
@@ -1940,7 +1940,7 @@
       }
     }
   },
-  "apiErrorServer": "The server is temporarily unavailable. Please try again shortly.",
+  "apiErrorServer": "De server is tijdelijk niet beschikbaar. Probeer het binnenkort opnieuw.",
   "@apiErrorServer": {
     "description": "API server error",
     "placeholders": {
@@ -1954,7 +1954,7 @@
       }
     }
   },
-  "apiErrorGeneric": "An unexpected error occurred. Please try again.",
+  "apiErrorGeneric": "Er is een onverwachte fout opgetreden. Probeer het opnieuw.",
   "@apiErrorGeneric": {
     "description": "Generic API error",
     "placeholders": {
@@ -1968,10 +1968,10 @@
       }
     }
   },
-  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
-  "apiErrorTimeout": "Request timed out. Please try again.",
-  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
-  "apiErrorOperationFailed": "We couldn't complete your request. Please try again.",
+  "apiErrorNetworkConnection": "Geen internetverbinding. Controleer je netwerk en probeer het opnieuw.",
+  "apiErrorTimeout": "Verzoek verlopen. Probeer opnieuw.",
+  "apiErrorInvalidFormat": "Ongeldig antwoordformaat. Probeer het nog eens.",
+  "apiErrorOperationFailed": "We kunnen je verzoek niet voltooien. Probeer het opnieuw.",
   "@apiErrorOperationFailed": {
     "description": "Generic operation failed error",
     "placeholders": {
@@ -1981,7 +1981,7 @@
       }
     }
   },
-  "apiErrorNetworkOperation": "You seems to be offline. Please check your connection and try again.",
+  "apiErrorNetworkOperation": "Je lijkt offline te zijn. Controleer je verbinding en probeer het opnieuw.",
   "@apiErrorNetworkOperation": {
     "description": "Network error during specific operation",
     "placeholders": {
@@ -1991,7 +1991,7 @@
       }
     }
   },
-  "apiErrorTimeoutOperation": "The request took too long. Please try again.",
+  "apiErrorTimeoutOperation": "Het verzoek duurde te lang. Probeer het opnieuw.",
   "@apiErrorTimeoutOperation": {
     "description": "Timeout error during specific operation",
     "placeholders": {
@@ -2001,7 +2001,7 @@
       }
     }
   },
-  "apiErrorDataFormatOperation": "Something went wrong while processing the data. Please try again.",
+  "apiErrorDataFormatOperation": "Er ging iets mis tijdens het verwerken van de gegevens. Probeer het opnieuw.",
   "@apiErrorDataFormatOperation": {
     "description": "Data format error during specific operation",
     "placeholders": {
@@ -2011,7 +2011,7 @@
       }
     }
   },
-  "apiErrorConfigLoadFailed": "We couldn’t load the app settings (error {statusCode}). Please try again.",
+  "apiErrorConfigLoadFailed": "We konden de app instellingen niet laden (fout {statusCode}). Probeer het opnieuw.",
   "@apiErrorConfigLoadFailed": {
     "description": "Error loading app config",
     "placeholders": {
@@ -2021,7 +2021,7 @@
       }
     }
   },
-  "apiErrorConfigException": "Error when loading configuration from the server",
+  "apiErrorConfigException": "Fout bij het laden van de configuratie van de server",
   "@apiErrorConfigException": {
     "description": "Exception while loading config",
     "placeholders": {
