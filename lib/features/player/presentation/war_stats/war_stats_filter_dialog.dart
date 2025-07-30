@@ -3184,7 +3184,7 @@ class _RenamePresetDialogState extends State<_RenamePresetDialog> {
     }
 
     if (await FilterPresetService.instance.presetNameExists(newName, excludeId: widget.preset.id) &&
-        context.mounted) {
+        mounted) {
       _showInlineError(AppLocalizations.of(context)!.presetsNameExists);
       return;
     }
@@ -3192,7 +3192,7 @@ class _RenamePresetDialogState extends State<_RenamePresetDialog> {
     final updatedPreset = widget.preset.copyWith(name: newName);
     final success = await FilterPresetService.instance.updatePreset(updatedPreset);
 
-    if (context.mounted) {
+    if (mounted) {
       if (success) {
         Navigator.pop(context, newName); // Return the new preset name
       } else {
