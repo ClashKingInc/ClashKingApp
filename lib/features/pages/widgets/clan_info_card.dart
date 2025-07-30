@@ -18,6 +18,21 @@ class ClanInfoCard extends StatelessWidget {
     final player = playerService.getSelectedProfile(cocService);
     final clanInfo = player?.clan;
 
+    // Return empty card if no clan info
+    if (clanInfo == null) {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: Text(
+              'No clan information available',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
+        ),
+      );
+    }
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -31,7 +46,7 @@ class ClanInfoCard extends StatelessWidget {
                       height: 70,
                       width: 70,
                       child:
-                          MobileWebImage(imageUrl: clanInfo!.badgeUrls.large),
+                          MobileWebImage(imageUrl: clanInfo.badgeUrls.large),
                     ),
                     SizedBox(
                       width: 100,
@@ -49,13 +64,14 @@ class ClanInfoCard extends StatelessWidget {
                   children: <Widget>[
                     Row(
                       children: [
-                        if (clanInfo.location != null &&
-                            clanInfo.location!.countryCode != "No countryCode")
+                        if (clanInfo.location?.countryCode != null &&
+                            clanInfo.location?.countryCode != "No countryCode") ...[
                           MobileWebImage(
                             imageUrl: ImageAssets.flag(
-                                clanInfo.location!.countryCode!.toLowerCase()),
+                                clanInfo.location?.countryCode?.toLowerCase() ?? ""),
                             height: 10,
                           ),
+                        ],
                         SizedBox(width: 8),
                         Text(
                           clanInfo.name,
@@ -96,12 +112,12 @@ class ClanInfoCard extends StatelessWidget {
                           width: 20,
                           child: MobileWebImage(
                               imageUrl: ImageAssets
-                                      .leagues[clanInfo.warLeague!.name] ??
+                                      .leagues[clanInfo.warLeague?.name] ??
                                   ImageAssets.leagues["Unranked"]!),
                         ),
                         SizedBox(width: 8),
                         Text(
-                          clanInfo.warLeague!.name.toString(),
+                          clanInfo.warLeague?.name ?? "Unranked",
                           style: Theme.of(context).textTheme.labelLarge,
                         )
                       ],
