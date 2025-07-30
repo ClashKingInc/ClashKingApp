@@ -6,7 +6,7 @@
   "loadingVillages": "Chargement des villages...",
   "loadingClanData": "Récupération des données de clan...",
   "loadingWarStats": "Analyse des statistiques de guerre...",
-  "loadingLegendsData": "Préparation des données des légendes...",
+  "loadingLegendsData": "Préparation des données de la légende...",
   "loadingCapitalRaids": "Chargement des raids de capitale...",
   "loadingAlmostReady": "Presque prêt...",
   "accountVerificationTitle": "Vérification du compte",
@@ -1868,5 +1868,167 @@
   "generalPoor": "Mauvais",
   "generalOpen": "Ouvrir",
   "generalClosed": "Fermé",
-  "generalAvailable": "Disponible"
+  "generalAvailable": "Disponible",
+  "authErrorUserCancelledDiscordLogin": "L'utilisateur a annulé la connexion Discord.",
+  "authErrorDiscordLoginFailed": "Échec de la connexion à Discord. Merci de réessayer.",
+  "authErrorEmailLoginFailed": "Échec de la connexion par email. Vérifie tes identifiants stp.",
+  "authErrorEmailVerificationFailed": "La vérification de l'e-mail a échoué. Le jeton est peut-être invalide ou a expiré.",
+  "authErrorDiscordLinkFailed": "Impossible de lier le compte Discord. Il est peut-être déjà lié à un autre compte.",
+  "authErrorEmailLinkFailed": "Impossible de lier ton adresse e-mail. Il est peut-être déjà utilisé.",
+  "authErrorUserNotAuthenticated": "Utilisateur non authentifié. Merci de te reconnecter.",
+  "apiErrorInvalidJsonResponse": "Oups... une erreur s'est produite. Merci de réessayer.",
+  "@apiErrorInvalidJsonResponse": {
+    "description": "Error when API returns invalid JSON",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint that returned invalid JSON"
+      }
+    }
+  },
+  "apiErrorBadRequest": "Oups... une erreur s'est produite. Merci de vérifier ce que tu as saisie.",
+  "@apiErrorBadRequest": {
+    "description": "API bad request error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorUnauthorized": "Tu n'as pas les autorisations pour faire ça. Merci de te reconnecter.",
+  "@apiErrorUnauthorized": {
+    "description": "API unauthorized error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorForbidden": "Tu n'as pas les autorisations pour effectuer cette action.",
+  "@apiErrorForbidden": {
+    "description": "API forbidden error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorNotFound": "Nous n'avons pas trouvé ce que tu cherches.",
+  "@apiErrorNotFound": {
+    "description": "API not found error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorRateLimit": "Trop de requêtes. Merci de réessayer ultérieurement.",
+  "@apiErrorRateLimit": {
+    "description": "API rate limit error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorServer": "Le serveur est temporairement indisponible. Merci de réessayer plus tard.",
+  "@apiErrorServer": {
+    "description": "API server error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorGeneric": "Une erreur inattendue s'est produite. Merci de réessayer.",
+  "@apiErrorGeneric": {
+    "description": "Generic API error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorNetworkConnection": "Aucune connexion internet. Merci de vérifier ton réseau et réessayer.",
+  "apiErrorTimeout": "La demande a expiré. Merci de réessayer.",
+  "apiErrorInvalidFormat": "Format de réponse invalide. Merci de réessayer.",
+  "apiErrorOperationFailed": "Nous n'avons pas pu répondre à ta demande. Merci de réessayer.",
+  "@apiErrorOperationFailed": {
+    "description": "Generic operation failed error",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorNetworkOperation": "Tu sembles hors ligne. Merci de vérifier ta connexion et de réessayer.",
+  "@apiErrorNetworkOperation": {
+    "description": "Network error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorTimeoutOperation": "La demande a pris trop de temps. Merci de réessayer.",
+  "@apiErrorTimeoutOperation": {
+    "description": "Timeout error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorDataFormatOperation": "Une erreur s'est produite lors du traitement des données. Merci de réessayer.",
+  "@apiErrorDataFormatOperation": {
+    "description": "Data format error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorConfigLoadFailed": "Nous n'avons pas pu charger les paramètres de l'application (erreur {statusCode}). Merci de réessayer.",
+  "@apiErrorConfigLoadFailed": {
+    "description": "Error loading app config",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      }
+    }
+  },
+  "apiErrorConfigException": "Erreur lors du chargement de la configuration de l'application depuis le serveur",
+  "@apiErrorConfigException": {
+    "description": "Exception while loading config",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  }
 }
