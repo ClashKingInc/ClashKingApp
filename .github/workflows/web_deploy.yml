@@ -10,25 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout code
       - name: Checkout
         uses: actions/checkout@v3
 
-      # 2. Install Flutter
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.6'
+          channel: 'stable'
 
-      # 3. Get dependencies
       - name: Flutter Pub Get
         run: flutter pub get
 
-      # 4. Build web
       - name: Build Web
         run: flutter build web --release
 
-      # 5. Deploy to Cloudflare Pages
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
