@@ -1873,10 +1873,10 @@
   "authErrorDiscordLoginFailed": "Échec de la connexion à Discord. Merci de réessayer.",
   "authErrorEmailLoginFailed": "Échec de la connexion par email. Vérifie tes identifiants stp.",
   "authErrorEmailVerificationFailed": "La vérification de l'e-mail a échoué. Le jeton est peut-être invalide ou a expiré.",
-  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
-  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
-  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
-  "apiErrorInvalidJsonResponse": "Something went wrong. Please try again.",
+  "authErrorDiscordLinkFailed": "Impossible de lier le compte Discord. Il est peut-être déjà lié à un autre compte.",
+  "authErrorEmailLinkFailed": "Impossible de lier ton adresse e-mail. Il est peut-être déjà utilisé.",
+  "authErrorUserNotAuthenticated": "Utilisateur non authentifié. Merci de te reconnecter.",
+  "apiErrorInvalidJsonResponse": "Oups... une erreur s'est produite. Merci de réessayer.",
   "@apiErrorInvalidJsonResponse": {
     "description": "Error when API returns invalid JSON",
     "placeholders": {
@@ -1886,7 +1886,7 @@
       }
     }
   },
-  "apiErrorBadRequest": "Something went wrong. Please check your input.",
+  "apiErrorBadRequest": "Oups... une erreur s'est produite. Merci de vérifier ce que tu as saisie.",
   "@apiErrorBadRequest": {
     "description": "API bad request error",
     "placeholders": {
@@ -1900,7 +1900,7 @@
       }
     }
   },
-  "apiErrorUnauthorized": "You are not authorized. Please log in again.",
+  "apiErrorUnauthorized": "Tu n'as pas les autorisations pour faire ça. Merci de te reconnecter.",
   "@apiErrorUnauthorized": {
     "description": "API unauthorized error",
     "placeholders": {
@@ -1910,7 +1910,7 @@
       }
     }
   },
-  "apiErrorForbidden": "You don't have permission to perform this action.",
+  "apiErrorForbidden": "Tu n'as pas les autorisations pour effectuer cette action.",
   "@apiErrorForbidden": {
     "description": "API forbidden error",
     "placeholders": {
@@ -1920,7 +1920,7 @@
       }
     }
   },
-  "apiErrorNotFound": "We couldn't find what you were looking for.",
+  "apiErrorNotFound": "Nous n'avons pas trouvé ce que tu cherches.",
   "@apiErrorNotFound": {
     "description": "API not found error",
     "placeholders": {
@@ -1930,7 +1930,7 @@
       }
     }
   },
-  "apiErrorRateLimit": "Too many requests. Please try again later.",
+  "apiErrorRateLimit": "Trop de requêtes. Merci de réessayer ultérieurement.",
   "@apiErrorRateLimit": {
     "description": "API rate limit error",
     "placeholders": {
@@ -1940,7 +1940,7 @@
       }
     }
   },
-  "apiErrorServer": "The server is temporarily unavailable. Please try again shortly.",
+  "apiErrorServer": "Le serveur est temporairement indisponible. Merci de réessayer plus tard.",
   "@apiErrorServer": {
     "description": "API server error",
     "placeholders": {
@@ -1954,7 +1954,7 @@
       }
     }
   },
-  "apiErrorGeneric": "An unexpected error occurred. Please try again.",
+  "apiErrorGeneric": "Une erreur inattendue s'est produite. Merci de réessayer.",
   "@apiErrorGeneric": {
     "description": "Generic API error",
     "placeholders": {
@@ -1968,10 +1968,10 @@
       }
     }
   },
-  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
-  "apiErrorTimeout": "Request timed out. Please try again.",
-  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
-  "apiErrorOperationFailed": "We couldn't complete your request. Please try again.",
+  "apiErrorNetworkConnection": "Aucune connexion internet. Merci de vérifier ton réseau et réessayer.",
+  "apiErrorTimeout": "La demande a expiré. Merci de réessayer.",
+  "apiErrorInvalidFormat": "Format de réponse invalide. Merci de réessayer.",
+  "apiErrorOperationFailed": "Nous n'avons pas pu répondre à ta demande. Merci de réessayer.",
   "@apiErrorOperationFailed": {
     "description": "Generic operation failed error",
     "placeholders": {
@@ -1981,7 +1981,7 @@
       }
     }
   },
-  "apiErrorNetworkOperation": "You seems to be offline. Please check your connection and try again.",
+  "apiErrorNetworkOperation": "Tu sembles hors ligne. Merci de vérifier ta connexion et de réessayer.",
   "@apiErrorNetworkOperation": {
     "description": "Network error during specific operation",
     "placeholders": {
@@ -1991,7 +1991,7 @@
       }
     }
   },
-  "apiErrorTimeoutOperation": "The request took too long. Please try again.",
+  "apiErrorTimeoutOperation": "La demande a pris trop de temps. Merci de réessayer.",
   "@apiErrorTimeoutOperation": {
     "description": "Timeout error during specific operation",
     "placeholders": {
@@ -2001,7 +2001,7 @@
       }
     }
   },
-  "apiErrorDataFormatOperation": "Something went wrong while processing the data. Please try again.",
+  "apiErrorDataFormatOperation": "Une erreur s'est produite lors du traitement des données. Merci de réessayer.",
   "@apiErrorDataFormatOperation": {
     "description": "Data format error during specific operation",
     "placeholders": {
@@ -2011,7 +2011,7 @@
       }
     }
   },
-  "apiErrorConfigLoadFailed": "We couldn’t load the app settings (error {statusCode}). Please try again.",
+  "apiErrorConfigLoadFailed": "Nous n'avons pas pu charger les paramètres de l'application (erreur {statusCode}). Merci de réessayer.",
   "@apiErrorConfigLoadFailed": {
     "description": "Error loading app config",
     "placeholders": {
@@ -2021,7 +2021,7 @@
       }
     }
   },
-  "apiErrorConfigException": "Error when loading configuration from the server",
+  "apiErrorConfigException": "Erreur lors du chargement de la configuration de l'application depuis le serveur",
   "@apiErrorConfigException": {
     "description": "Exception while loading config",
     "placeholders": {
