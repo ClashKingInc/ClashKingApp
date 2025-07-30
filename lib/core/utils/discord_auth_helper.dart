@@ -73,7 +73,7 @@ class DiscordAuthHelper {
   static String getRedirectUri() {
     if (kIsWeb) {
       return kReleaseMode
-          ? "https://clashk.ing/auth/discord_callback.html"
+          ? "https://app.clashk.ing/auth/discord_callback.html"
           : "http://localhost:28850/auth/discord_callback.html";
     } else {
       return "clashking://com.clashking.clashkingapp/oauth";
