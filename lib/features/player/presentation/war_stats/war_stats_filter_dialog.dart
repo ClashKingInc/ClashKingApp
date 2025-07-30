@@ -223,7 +223,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     );
     
     // Only show success message and reload if preset was actually saved
-    if (result != null && context.mounted) {
+    if (result != null && mounted) {
       _showInlineSuccess(AppLocalizations.of(context)!.presetsSaveSuccess(result));
       await _loadSavedPresets();
     }
@@ -3011,7 +3011,7 @@ class _SavePresetDialogState extends State<_SavePresetDialog> {
       return;
     }
     
-    if (await FilterPresetService.instance.presetNameExists(name)) {
+    if (await FilterPresetService.instance.presetNameExists(name) && mounted) {
       if (!context.mounted) return;
       _showError(AppLocalizations.of(context)!.presetsNameExists);
       return;
@@ -3021,12 +3021,11 @@ class _SavePresetDialogState extends State<_SavePresetDialog> {
       name: name,
       filter: widget.filter,
     );
-
-    if (!context.mounted) return;
     
-    if (success) {
+    if (success && mounted) {
       Navigator.pop(context, name); // Return the preset name
     } else {
+      if (!mounted) return;
       _showError(AppLocalizations.of(context)!.presetsSaveError);
     }
   }

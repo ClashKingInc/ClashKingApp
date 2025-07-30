@@ -153,7 +153,9 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
   bool _isSameWarAsCwl(Player player) {
     // If no regular war data or no CWL war data, they can't be the same
     if (player.warData == null || 
-        player.clan?.warCwl?.warInfo == null) return false;
+        player.clan?.warCwl?.warInfo == null) {
+      return false;
+    }
     
     final regularWar = player.warData!;
     final cwlWar = player.clan!.warCwl!.warInfo;
