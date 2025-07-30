@@ -54,7 +54,7 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
     });
 
     final cocService = context.read<CocAccountService>();
-    final success = await cocService.verifyAccount(
+    final success = await cocService.addAccountWithToken(
       widget.playerTag,
       _apiTokenController.text.trim(),
       _updateErrorMessage,
@@ -81,13 +81,16 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.accountVerificationTitle),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      content: SizedBox(
+        width: double.maxFinite,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
           // Player info display - simplified
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color:
                   Theme.of(context).colorScheme.surface.withValues(alpha: 0.3),
@@ -131,18 +134,18 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
             ),
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           // API Token instructions
           Text(
             AppLocalizations.of(context)!.accountsEnterApiToken,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           Text(
             AppLocalizations.of(context)!.accountsApiTokenLocation,
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
 
           // API Token input field - simplified
           TextField(
@@ -155,7 +158,7 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
             enabled: !_isVerifying,
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
 
           // Direct link to get API token
           SizedBox(
@@ -192,7 +195,9 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
               label: Text(AppLocalizations.of(context)!.accountsOpenMoreSettings),
             ),
           ),
-        ],
+            ],
+          ),
+        ),
       ),
       actions: [
         TextButton(

@@ -86,6 +86,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     final cocService = context.watch<CocAccountService>();
@@ -98,9 +99,24 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         ? ImageAssets.darkModeTextLogo
         : ImageAssets.lightModeTextLogo);
 
-    return Scaffold(
-      appBar: CocAccountsAppBar(),
-      resizeToAvoidBottomInset: false,
+    return PopScope(
+      canPop: _isFirstConnection,
+      onPopInvoked: (didPop) async {
+        if (!didPop && !_isFirstConnection) {
+          // Act like confirm button when not on welcome screen
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+          await _loadAllAccountData();
+        }
+      },
+      child: Scaffold(
+        appBar: CocAccountsAppBar(),
+        resizeToAvoidBottomInset: false,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -464,6 +480,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
             ),
         ],
       ),
+    ),
     );
   }
 

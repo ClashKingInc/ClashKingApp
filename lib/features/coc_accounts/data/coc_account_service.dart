@@ -58,6 +58,7 @@ class CocAccountService extends ChangeNotifier {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         _cocAccounts = List<Map<String, dynamic>>.from(data["coc_accounts"]);
+        DebugUtils.debugInfo("🔍 Fetched accounts data: $_cocAccounts");
         // Verification status is now included in the API response
       } else {
         Sentry.captureMessage(
@@ -490,6 +491,69 @@ class CocAccountService extends ChangeNotifier {
     }
   }
 
+  /// Adds an account with token verification (used when account is already linked to another user)
+  Future<bool> addAccountWithToken(String playerTag, String apiToken, Function(String) updateErrorMessage) async {
+    try {
+      final token = await TokenService().getAccessToken();
+      if (token == null) {
+        updateErrorMessage("User not authenticated");
+        return false;
+      }
+
+      final response = await http.post(
+        Uri.parse("${ApiService.apiUrlV2}/users/add-coc-account-with-token"),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({
+          "player_tag": playerTag,
+          "player_token": apiToken,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        DebugUtils.debugSuccess("✅ Account added with token successfully: $playerTag");
+        DebugUtils.debugInfo("🔍 Token response data: $data");
+        
+        // Extract player data from the token response
+        final Map<String, dynamic>? accountData = data["account"];
+        final String? playerName = accountData?["name"];
+        final int? townHallLevel = accountData?["townHallLevel"];
+        
+        DebugUtils.debugInfo("🔍 Extracted player data - Name: $playerName, TH: $townHallLevel");
+        
+        // Refresh account list after successful addition
+        await fetchCocAccounts();
+        
+        // Update the specific account with player data from token response
+        if (accountData != null && playerName != null && townHallLevel != null) {
+          final accountIndex = _cocAccounts.indexWhere((account) => account["player_tag"] == playerTag);
+          if (accountIndex != -1) {
+            _cocAccounts[accountIndex]["name"] = playerName;
+            _cocAccounts[accountIndex]["townHallLevel"] = townHallLevel;
+            DebugUtils.debugSuccess("✅ Updated account display data for $playerTag: $playerName (TH$townHallLevel)");
+            notifyListeners();
+          }
+        }
+        
+        return true;
+      } else if (response.statusCode == 403) {
+        updateErrorMessage("Invalid API token for this account");
+      } else if (response.statusCode == 404) {
+        updateErrorMessage("Account not found");
+      } else {
+        updateErrorMessage("Failed to add account. Please try again.");
+      }
+      
+      return false;
+    } catch (e) {
+      updateErrorMessage("Failed to add account: $e");
+      return false;
+    }
+  }
+
   /// Verifies an existing account using API token
   Future<bool> verifyAccount(String playerTag, String apiToken, Function(String) updateErrorMessage) async {
     try {
@@ -541,6 +605,7 @@ class CocAccountService extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
   /// Gets the verification status for an account
   bool getAccountVerificationStatus(String playerTag) {

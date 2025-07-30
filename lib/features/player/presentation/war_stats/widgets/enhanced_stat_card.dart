@@ -209,6 +209,10 @@ class EnhancedStatCard extends StatelessWidget {
 
   Widget _buildStarBreakdownItem(
       BuildContext context, String starCount, int count) {
+    // Calculate percentage
+    final totalAttacks = this.count; // Total attacks/defenses
+    final percentage = totalAttacks > 0 ? (count / totalAttacks * 100) : 0.0;
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -220,12 +224,12 @@ class EnhancedStatCard extends StatelessWidget {
             child: buildStarsIcon(int.parse(starCount)),
           ),
         ),
-        // Fixed width for count - ensures consistent alignment
+        // Count and percentage
         SizedBox(
-          width: 30,
+          width: 70,
           child: Center(
             child: Text(
-              count.toString(),
+              '$count (${percentage.toStringAsFixed(0)}%)',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: _getStarCountColor(starCount),

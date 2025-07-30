@@ -118,16 +118,25 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     // Load saved presets
     _loadSavedPresets();
 
-    // Generate performance analysis suggestions
-    if (widget.warStats != null) {
-      _performanceSuggestions =
-          PerformanceAnalysisService.analyzePerformance(widget.warStats!);
-    }
+    // Performance suggestions will be generated in didChangeDependencies
 
     // Initialize All Time state based on current filter
     _isAllTimeSelected = _filter.startDate == null &&
         _filter.endDate == null &&
         _filter.season == null;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    
+    // Generate performance analysis suggestions
+    if (widget.warStats != null && _performanceSuggestions.isEmpty) {
+      _performanceSuggestions = PerformanceAnalysisService.analyzePerformance(
+        widget.warStats!,
+        localizations: AppLocalizations.of(context),
+      );
+    }
   }
 
   @override
@@ -2074,17 +2083,20 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                   : Theme.of(context).colorScheme.secondary,
             ),
             const SizedBox(width: 6),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 120),
-              child: Text(
-                preset.name,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
-                      color: isActive
-                          ? Theme.of(context).colorScheme.onSecondary
-                          : Theme.of(context).colorScheme.onSecondaryContainer,
-                    ),
-                overflow: TextOverflow.ellipsis,
+            Flexible(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 200),
+                child: Text(
+                  preset.name,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+                        color: isActive
+                            ? Theme.of(context).colorScheme.onSecondary
+                            : Theme.of(context).colorScheme.onSecondaryContainer,
+                      ),
+                  maxLines: null,
+                  softWrap: true,
+                ),
               ),
             ),
           ],
@@ -2139,18 +2151,21 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                     : Theme.of(context).colorScheme.tertiary,
               ),
               const SizedBox(width: 6),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 140),
-                child: Text(
-                  suggestion.name,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontWeight:
-                            isActive ? FontWeight.bold : FontWeight.w500,
-                        color: isActive
-                            ? Theme.of(context).colorScheme.onTertiary
-                            : Theme.of(context).colorScheme.onTertiaryContainer,
-                      ),
-                  overflow: TextOverflow.ellipsis,
+              Flexible(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 200),
+                  child: Text(
+                    suggestion.name,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontWeight:
+                              isActive ? FontWeight.bold : FontWeight.w500,
+                          color: isActive
+                              ? Theme.of(context).colorScheme.onTertiary
+                              : Theme.of(context).colorScheme.onTertiaryContainer,
+                        ),
+                    maxLines: null,
+                    softWrap: true,
+                  ),
                 ),
               ),
             ],

@@ -5,6 +5,8 @@ import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'dart:io';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/core/constants/global_keys.dart';
 
 class ApiService {
   static const String apiUrlV1 = "https://dev.api.clashk.ing";
@@ -58,37 +60,37 @@ class ApiService {
         try {
           return json.decode(response.body);
         } catch (e) {
-          throw FormatException('Invalid JSON response from $endpoint');
+          throw FormatException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorInvalidJsonResponse(endpoint));
         }
       case 400:
-        throw BadRequestException('Bad request to $endpoint: ${response.body}');
+        throw BadRequestException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorBadRequest(endpoint, response.body));
       case 401:
-        throw UnauthorizedException('Unauthorized request to $endpoint');
+        throw UnauthorizedException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorUnauthorized(endpoint));
       case 403:
-        throw ForbiddenException('Forbidden request to $endpoint');
+        throw ForbiddenException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorForbidden(endpoint));
       case 404:
-        throw NotFoundException('Resource not found: $endpoint');
+        throw NotFoundException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorNotFound(endpoint));
       case 429:
-        throw RateLimitException('Rate limit exceeded for $endpoint');
+        throw RateLimitException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorRateLimit(endpoint));
       case 500:
       case 502:
       case 503:
       case 504:
-        throw ServerException('Server error ${response.statusCode} for $endpoint');
+        throw ServerException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorServer(response.statusCode, endpoint));
       default:
-        throw ApiException('HTTP ${response.statusCode}: ${response.body}');
+        throw ApiException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorGeneric(response.statusCode, response.body));
     }
   }
 
   void _handleError(dynamic error, StackTrace stackTrace, String operation) {
-    String errorMessage = 'API operation failed: $operation';
+    String errorMessage = AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorOperationFailed(operation);
     
     if (error is SocketException) {
-      errorMessage = 'Network error during $operation: No internet connection';
+      errorMessage = AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorNetworkOperation(operation);
     } else if (error is TimeoutException) {
-      errorMessage = 'Timeout error during $operation';
+      errorMessage = AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorTimeoutOperation(operation);
     } else if (error is FormatException) {
-      errorMessage = 'Data format error during $operation';
+      errorMessage = AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorDataFormatOperation(operation);
     }
     
     Sentry.captureException(error, stackTrace: stackTrace);
@@ -116,10 +118,10 @@ class ApiService {
         final config = json.decode(response.body);
         _sentryDsn = config['sentry_dsn'];
       } else {
-        DebugUtils.debugError(' Failed to load config: ${response.statusCode}');
+        DebugUtils.debugError(' ${AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorConfigLoadFailed(response.statusCode)}');
       }
     } catch (e) {
-      DebugUtils.debugError(' Error loading config: $e');
+      DebugUtils.debugError(' ${AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorConfigException(e.toString())}');
     }
   }
 
@@ -139,11 +141,11 @@ class ApiService {
     } else if (error is ApiException) {
       return error.message;
     } else if (error is SocketException) {
-      return 'No internet connection. Please check your network and try again.';
+      return AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorNetworkConnection;
     } else if (error is TimeoutException) {
-      return 'Request timed out. Please try again.';
+      return AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorTimeout;
     } else if (error is FormatException) {
-      return 'Invalid response format. Please try again.';
+      return AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorInvalidFormat;
     } else {
       return error.toString().replaceFirst('Exception: ', '');
     }
