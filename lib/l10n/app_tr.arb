@@ -52,7 +52,7 @@
   "@generalAll": {
     "description": "all items"
   },
-  "generalAllTime": "All Time",
+  "generalAllTime": "Tüm Zamanlar",
   "@generalAllTime": {
     "description": "All time period"
   },
@@ -99,7 +99,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Uyarı",
-  "generalUnknown": "Unknown",
+  "generalUnknown": "Bilinmeyen",
   "generalNoDataAvailable": "Veri bulunamadı.",
   "generalNoFilteredResults": "Filtrelerinize uyan hiçbir sonuç yok",
   "@generalNoFilteredResults": {
@@ -316,7 +316,7 @@
   "accountsEnterApiToken": "Hesabınızın size ait olduğunu onaylamak için lütfen hesap API jetonunu girin. Bunu Clash of Clans'ta bulabilirsiniz:",
   "accountsApiTokenLocation": "Ayarlar > Diğer Ayarlar > API Simgesi",
   "accountsOpenMoreSettings": "Daha Fazla Ayarı Aç",
-  "accountsCouldNotOpenClash": "Could not open Clash of Clans. Please open it manually.",
+  "accountsCouldNotOpenClash": "Clash of Clans açılamadı. Lütfen manuel olarak açın.",
   "accountsFillAllFields": "Lütfen tüm alanları doldur.",
   "accountsErrorTagNotExists": "Girilen oyuncu etiketi mevcut değil.",
   "accountsErrorAlreadyLinked": "Oyuncu etiketi zaten birine bağlı.",
@@ -862,7 +862,7 @@
   "warAskForWar": "Savaş başlatmak için lidere veya yardımcı lidere başvurun.",
   "warAskForWarLogOpening": "Savaş günlüğünü açmak için bir lidere veya yardımcı lidere başvurun.",
   "warEnded": "Savaş sonu",
-  "warInWar": "In War",
+  "warInWar": "Savaşta",
   "@warInWar": {
     "description": "War state: active"
   },
@@ -1409,7 +1409,7 @@
   "faqFeaturesClanDescription": "Klan üyelerini, bağışları ve genel klan sağlığını izleyin",
   "faqFeaturesWarTitle": "Savaş Takibi",
   "faqFeaturesWarDescription": "Savaş performansını, saldırı stratejilerini ve kazanma oranlarını analiz edin",
-  "faqFeaturesLegendsTitle": "Inaccurate data?",
+  "faqFeaturesLegendsTitle": "Veri yanlış mı?",
   "faqFeaturesLegendsDescription": "Günlük kupa takibi ve sezon sonu istatistikleri",
   "faqFeaturesCwlTitle": "KSL Analitiği",
   "faqFeaturesCwlDescription": "Klan Savaş Ligi performansı ve üye katkıları",
@@ -1576,7 +1576,7 @@
   "@performanceAnalysisSuggestions": {
     "description": "Section title for statistical performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Filter suggestions based on your star statistics to highlight performance patterns",
+  "performanceAnalysisTooltip": "Performans modellerini vurgulamak için yıldız istatistiklerinize göre filtre önerileri",
   "@performanceAnalysisTooltip": {
     "description": "Tooltip explaining that suggestions are based on statistical analysis"
   },
@@ -1608,87 +1608,87 @@
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   },
-  "warAttacksFailedToLoadPlayer": "Failed to load player data",
+  "warAttacksFailedToLoadPlayer": "Oyuncu verileri yüklenemedi",
   "@warAttacksFailedToLoadPlayer": {
     "description": "Error message when player profile fails to load"
   },
-  "warAttacksDetailsTitle": "Attack Details",
+  "warAttacksDetailsTitle": "Saldırı Detayları",
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
   },
-  "warAttacksDetailsAttackOrder": "Attack Order",
+  "warAttacksDetailsAttackOrder": "Saldırı Sırası",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
   },
-  "warAttacksDetailsAttacker": "Attacker",
+  "warAttacksDetailsAttacker": "Saldıran",
   "@warAttacksDetailsAttacker": {
     "description": "Label for attacker section in attack details"
   },
-  "warAttacksDetailsDefender": "Defender",
+  "warAttacksDetailsDefender": "Savunan",
   "@warAttacksDetailsDefender": {
     "description": "Label for defender section in attack details"
   },
-  "warAttacksDetailsName": "Name",
+  "warAttacksDetailsName": "Ad",
   "@warAttacksDetailsName": {
     "description": "Label for player name in attack details"
   },
-  "warDataState": "State",
+  "warDataState": "Durum",
   "@warDataState": {
     "description": "Label for war state"
   },
-  "warDataAttacksPerMember": "Attacks Per Member",
+  "warDataAttacksPerMember": "Üye Başına Saldırılar",
   "@warDataAttacksPerMember": {
     "description": "Label for attacks per member"
   },
-  "warDataStartTime": "War Start",
+  "warDataStartTime": "Savaş Başlangıcı",
   "@warDataStartTime": {
     "description": "Label for war start time"
   },
-  "warDataEndTime": "War End",
+  "warDataEndTime": "Savaş Sonu",
   "@warDataEndTime": {
     "description": "Label for war end time"
   },
-  "warDataClanLevel": "Clan Level",
+  "warDataClanLevel": "Klan Seviyesi",
   "@warDataClanLevel": {
     "description": "Label for clan level"
   },
-  "warDataTotalStars": "Total Stars",
+  "warDataTotalStars": "Toplam Yıldız",
   "@warDataTotalStars": {
     "description": "Label for total stars earned"
   },
-  "warDataDestructionPercentage": "Destruction %",
+  "warDataDestructionPercentage": "Yıkım oranı",
   "@warDataDestructionPercentage": {
     "description": "Label for destruction percentage"
   },
-  "warInformationTitle": "War Information",
+  "warInformationTitle": "Savaş Bilgileri",
   "@warInformationTitle": {
     "description": "Title for war information section in attack details"
   },
-  "warResultsTitle": "War Results",
+  "warResultsTitle": "Savaş Sonuçları",
   "@warResultsTitle": {
     "description": "Title for war results section showing clan vs opponent"
   },
-  "warPlayersTitle": "Players",
+  "warPlayersTitle": "Oyuncular",
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "performanceAnalysisFailedAttacks": "Failed Attacks (0-1 Stars)",
+  "performanceAnalysisFailedAttacks": "Başarısız Saldırılar (0-1 Yıldız)",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
   },
-  "performanceAnalysisFailedAttacksDesc": "Shows attacks that failed to get 2+ stars",
+  "performanceAnalysisFailedAttacksDesc": "2+ yıldız alamayan saldırıları gösterir",
   "@performanceAnalysisFailedAttacksDesc": {
     "description": "Description for failed attacks analysis"
   },
-  "performanceAnalysisMissedPerfects": "Missed Perfect Attacks",
+  "performanceAnalysisMissedPerfects": "Kaçırılan Mükemmel Saldırılar",
   "@performanceAnalysisMissedPerfects": {
     "description": "Performance analysis preset for missed perfect attacks"
   },
-  "performanceAnalysisMissedPerfectsDesc": "Shows attacks that got 2 stars - potential perfect opportunities",
+  "performanceAnalysisMissedPerfectsDesc": "2 yıldız alan saldırıları gösterir - potansiyel mükemmel fırsatlar",
   "@performanceAnalysisMissedPerfectsDesc": {
     "description": "Description for missed perfect attacks analysis"
   },
-  "performanceAnalysisThAttackIssues": "Low Stars vs TH{thLevel}",
+  "performanceAnalysisThAttackIssues": "Düşük Yıldızlar vs BB{thLevel}",
   "@performanceAnalysisThAttackIssues": {
     "description": "Performance analysis preset for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1698,7 +1698,7 @@
       }
     }
   },
-  "performanceAnalysisThAttackIssuesDesc": "Shows attacks with low star count against TH{thLevel}",
+  "performanceAnalysisThAttackIssuesDesc": "BB{thLevel}'e karşı düşük yıldız sayısına sahip saldırıları gösterir",
   "@performanceAnalysisThAttackIssuesDesc": {
     "description": "Description for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1708,7 +1708,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssues": "Vulnerable to TH{thLevel}",
+  "performanceAnalysisThDefenseIssues": "BB{thLevel}'e karşı savunmasız",
   "@performanceAnalysisThDefenseIssues": {
     "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1718,7 +1718,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssuesDesc": "Shows when TH{thLevel} attackers get high stars against you",
+  "performanceAnalysisThDefenseIssuesDesc": "BB{thLevel} saldırganları size karşı yüksek yıldızlar aldığında gösterir",
   "@performanceAnalysisThDefenseIssuesDesc": {
     "description": "Description for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1728,91 +1728,91 @@
       }
     }
   },
-  "performanceAnalysisCwlIssues": "CWL Low Performance",
+  "performanceAnalysisCwlIssues": "KSL Düşük Performans",
   "@performanceAnalysisCwlIssues": {
     "description": "Performance analysis preset for low CWL performance"
   },
-  "performanceAnalysisCwlIssuesDesc": "Shows CWL attacks with lower star average than regular wars",
+  "performanceAnalysisCwlIssuesDesc": "KSL saldırılarının normal savaşlara göre daha düşük yıldız ortalamasıyla gerçekleştiğini gösterir",
   "@performanceAnalysisCwlIssuesDesc": {
     "description": "Description for low CWL performance analysis"
   },
-  "performanceAnalysisRandomWarIssues": "Random War Low Performance",
+  "performanceAnalysisRandomWarIssues": "Rastgele Savaş Düşük Performansı",
   "@performanceAnalysisRandomWarIssues": {
     "description": "Performance analysis preset for low random war performance"
   },
-  "performanceAnalysisRandomWarIssuesDesc": "Shows random war attacks with lower star average than CWL",
+  "performanceAnalysisRandomWarIssuesDesc": "KSL'den daha düşük yıldız ortalamasına sahip rastgele savaş saldırılarını gösterir",
   "@performanceAnalysisRandomWarIssuesDesc": {
     "description": "Description for low random war performance analysis"
   },
-  "performanceAnalysisFreshOnly": "Fresh Attack Analysis",
+  "performanceAnalysisFreshOnly": "Taze Saldırı Analizi",
   "@performanceAnalysisFreshOnly": {
     "description": "Performance analysis preset for fresh attacks only"
   },
-  "performanceAnalysisFreshOnlyDesc": "Analyzes performance on fresh bases only",
+  "performanceAnalysisFreshOnlyDesc": "Performansı yalnızca yeni düzenlerde analiz eder",
   "@performanceAnalysisFreshOnlyDesc": {
     "description": "Description for fresh attack analysis"
   },
-  "performanceAnalysisRecentPerformance": "Recent Performance (30 Days)",
+  "performanceAnalysisRecentPerformance": "Son Performans (30 Gün)",
   "@performanceAnalysisRecentPerformance": {
     "description": "Performance analysis preset for recent performance"
   },
-  "performanceAnalysisRecentPerformanceDesc": "Shows recent performance to identify current trends",
+  "performanceAnalysisRecentPerformanceDesc": "Güncel eğilimleri belirlemek için son performansı gösterir",
   "@performanceAnalysisRecentPerformanceDesc": {
     "description": "Description for recent performance analysis"
   },
-  "performanceAnalysisHighStakes": "High-Stakes Attacks",
+  "performanceAnalysisHighStakes": "Yüksek Riskli Saldırılar",
   "@performanceAnalysisHighStakes": {
     "description": "Performance analysis preset for high-stakes attacks"
   },
-  "performanceAnalysisHighStakesDesc": "Shows attacks from top 5 war positions",
+  "performanceAnalysisHighStakesDesc": "En iyi 5 savaş pozisyonundan gelen saldırıları gösterir",
   "@performanceAnalysisHighStakesDesc": {
     "description": "Description for high-stakes attacks analysis"
   },
-  "performanceAnalysisCleanupCrew": "Cleanup Attacks",
+  "performanceAnalysisCleanupCrew": "Temizleme Saldırıları",
   "@performanceAnalysisCleanupCrew": {
     "description": "Performance analysis preset for cleanup attacks"
   },
-  "performanceAnalysisCleanupCrewDesc": "Shows attacks from lower war positions",
+  "performanceAnalysisCleanupCrewDesc": "Alt savaş pozisyonlarından gelen saldırıları gösterir",
   "@performanceAnalysisCleanupCrewDesc": {
     "description": "Description for cleanup attacks analysis"
   },
-  "performanceRatingNeedsImprovement": "Needs Improvement",
+  "performanceRatingNeedsImprovement": "Geliştirilmesi gerekiyor",
   "@performanceRatingNeedsImprovement": {
     "description": "Needs improvement performance rating"
   },
-  "performanceStrengthHighThreeStarRate": "High Three-Star Rate",
+  "performanceStrengthHighThreeStarRate": "Yüksek Üç Yıldız Oranı",
   "@performanceStrengthHighThreeStarRate": {
     "description": "Strength area: high three-star rate"
   },
-  "performanceStrengthHighDestruction": "High Destruction",
+  "performanceStrengthHighDestruction": "Yüksek Yıkım",
   "@performanceStrengthHighDestruction": {
     "description": "Strength area: high destruction percentage"
   },
-  "performanceStrengthConsistentPerformance": "Consistent Performance",
+  "performanceStrengthConsistentPerformance": "Tutarlı Performans",
   "@performanceStrengthConsistentPerformance": {
     "description": "Strength area: consistent performance"
   },
-  "performanceImprovementThreeStarConsistency": "Three-Star Consistency",
+  "performanceImprovementThreeStarConsistency": "Üç Yıldız Tutarlılığı",
   "@performanceImprovementThreeStarConsistency": {
     "description": "Improvement area: three-star consistency"
   },
-  "performanceImprovementOverallStarPerformance": "Overall Star Performance",
+  "performanceImprovementOverallStarPerformance": "Genel Yıldız Performansı",
   "@performanceImprovementOverallStarPerformance": {
     "description": "Improvement area: overall star performance"
   },
-  "presetSuggestionCwlOnly": "CWL Only",
+  "presetSuggestionCwlOnly": "Sadece KSL",
   "@presetSuggestionCwlOnly": {
     "description": "Preset suggestion for CWL wars only"
   },
-  "presetSuggestionRandomWars": "Random Wars",
+  "presetSuggestionRandomWars": "Rastgele Savaşlar",
   "@presetSuggestionRandomWars": {
     "description": "Preset suggestion for random wars"
   },
-  "presetSuggestionFriendlyWars": "Friendly Wars",
+  "presetSuggestionFriendlyWars": "Dostluk Savaşları",
   "@presetSuggestionFriendlyWars": {
     "description": "Preset suggestion for friendly wars"
   },
-  "presetSuggestionStarOnly": "{count} Star Only",
+  "presetSuggestionStarOnly": " Yalnızca {count} Yıldız",
   "@presetSuggestionStarOnly": {
     "description": "Preset suggestion for specific star count",
     "placeholders": {
@@ -1821,15 +1821,15 @@
       }
     }
   },
-  "presetSuggestionPerfectAttacks": "Perfect Attacks",
+  "presetSuggestionPerfectAttacks": "Mükemmel Saldırılar",
   "@presetSuggestionPerfectAttacks": {
     "description": "Preset suggestion for perfect attacks"
   },
-  "presetSuggestionFailedAttacks": "Failed Attacks",
+  "presetSuggestionFailedAttacks": "Başarısız Saldırılar",
   "@presetSuggestionFailedAttacks": {
     "description": "Preset suggestion for failed attacks"
   },
-  "presetSuggestionThOnly": "TH{level} Only",
+  "presetSuggestionThOnly": "Yalnızca BB{level}",
   "@presetSuggestionThOnly": {
     "description": "Preset suggestion for specific town hall level",
     "placeholders": {
@@ -1838,45 +1838,45 @@
       }
     }
   },
-  "presetSuggestionLastWeek": "Last Week",
+  "presetSuggestionLastWeek": "Geçen Hafta",
   "@presetSuggestionLastWeek": {
     "description": "Preset suggestion for last week timeframe"
   },
-  "presetSuggestionLastMonth": "Last Month",
+  "presetSuggestionLastMonth": "Geçen Ay",
   "@presetSuggestionLastMonth": {
     "description": "Preset suggestion for last month timeframe"
   },
-  "presetSuggestionMyPreset": "My Preset",
+  "presetSuggestionMyPreset": "Ön Ayarım",
   "@presetSuggestionMyPreset": {
     "description": "Default preset suggestion"
   },
-  "presetSuggestionCustomFilter": "Custom Filter",
+  "presetSuggestionCustomFilter": "Özel Filtre",
   "@presetSuggestionCustomFilter": {
     "description": "Default custom filter suggestion"
   },
-  "presetSuggestionRecentFilter": "Recent Filter",
+  "presetSuggestionRecentFilter": "Son Filtre",
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
   },
-  "generalError": "Error",
-  "generalSuccess": "Success",
-  "generalFailed": "Failed",
-  "generalMinimum": "Minimum",
-  "generalMaximum": "Maximum",
-  "generalHigh": "High",
-  "generalLow": "Low",
-  "generalPoor": "Poor",
-  "generalOpen": "Open",
-  "generalClosed": "Closed",
-  "generalAvailable": "Available",
-  "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
-  "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
-  "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
-  "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
-  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
-  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
-  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
-  "apiErrorInvalidJsonResponse": "Something went wrong. Please try again.",
+  "generalError": "Hata",
+  "generalSuccess": "Başarılı",
+  "generalFailed": "Başarısız",
+  "generalMinimum": "En az",
+  "generalMaximum": "En Fazla",
+  "generalHigh": "Yüksek",
+  "generalLow": "Düşük",
+  "generalPoor": "Zayıf",
+  "generalOpen": "Açık",
+  "generalClosed": "Kapalı",
+  "generalAvailable": "Uygun",
+  "authErrorUserCancelledDiscordLogin": "Kullanıcı Discord girişini iptal etti.",
+  "authErrorDiscordLoginFailed": "Discord'a giriş başarısız oldu. Lütfen tekrar deneyin.",
+  "authErrorEmailLoginFailed": "E-posta girişi başarısız oldu. Lütfen kimlik bilgilerinizi kontrol edin.",
+  "authErrorEmailVerificationFailed": "E-posta doğrulaması başarısız oldu. Jeton geçersiz veya süresi dolmuş olabilir.",
+  "authErrorDiscordLinkFailed": "Discord hesabı bağlanamadı. Başka bir hesaba bağlı olabilir.",
+  "authErrorEmailLinkFailed": "E-posta hesabı bağlanamadı. E-posta zaten kullanımda olabilir.",
+  "authErrorUserNotAuthenticated": "Kullanıcı kimliği doğrulanmadı. Lütfen tekrar oturum açın.",
+  "apiErrorInvalidJsonResponse": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
   "@apiErrorInvalidJsonResponse": {
     "description": "Error when API returns invalid JSON",
     "placeholders": {
@@ -1886,7 +1886,7 @@
       }
     }
   },
-  "apiErrorBadRequest": "Something went wrong. Please check your input.",
+  "apiErrorBadRequest": "Bir şeyler ters gitti, lütfen girişinizi kontrol edin.",
   "@apiErrorBadRequest": {
     "description": "API bad request error",
     "placeholders": {
@@ -1900,7 +1900,7 @@
       }
     }
   },
-  "apiErrorUnauthorized": "You are not authorized. Please log in again.",
+  "apiErrorUnauthorized": "Yetkiniz yok. Lütfen tekrar giriş yapın.",
   "@apiErrorUnauthorized": {
     "description": "API unauthorized error",
     "placeholders": {
@@ -1910,7 +1910,7 @@
       }
     }
   },
-  "apiErrorForbidden": "You don't have permission to perform this action.",
+  "apiErrorForbidden": "Bu eylemi gerçekleştirmek için izinlere sahip değilsiniz.",
   "@apiErrorForbidden": {
     "description": "API forbidden error",
     "placeholders": {
@@ -1920,7 +1920,7 @@
       }
     }
   },
-  "apiErrorNotFound": "We couldn't find what you were looking for.",
+  "apiErrorNotFound": "Aradığınız şeyi bulamadık.",
   "@apiErrorNotFound": {
     "description": "API not found error",
     "placeholders": {
@@ -1930,7 +1930,7 @@
       }
     }
   },
-  "apiErrorRateLimit": "Too many requests. Please try again later.",
+  "apiErrorRateLimit": "Çok fazla istek. Lütfen daha sonra tekrar deneyin.",
   "@apiErrorRateLimit": {
     "description": "API rate limit error",
     "placeholders": {
@@ -1940,7 +1940,7 @@
       }
     }
   },
-  "apiErrorServer": "The server is temporarily unavailable. Please try again shortly.",
+  "apiErrorServer": "Sunucu geçici olarak kullanılamıyor. Lütfen kısa süre sonra tekrar deneyin.",
   "@apiErrorServer": {
     "description": "API server error",
     "placeholders": {
@@ -1954,7 +1954,7 @@
       }
     }
   },
-  "apiErrorGeneric": "An unexpected error occurred. Please try again.",
+  "apiErrorGeneric": "Beklenmedik bir hata oluştu. Lütfen tekrar deneyin.",
   "@apiErrorGeneric": {
     "description": "Generic API error",
     "placeholders": {
@@ -1968,10 +1968,10 @@
       }
     }
   },
-  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
-  "apiErrorTimeout": "Request timed out. Please try again.",
-  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
-  "apiErrorOperationFailed": "We couldn't complete your request. Please try again.",
+  "apiErrorNetworkConnection": "İnternet bağlantısı yok. Lütfen ağınızı kontrol edip tekrar deneyin.",
+  "apiErrorTimeout": "İstek zaman aşımına uğradı. Lütfen tekrar deneyin.",
+  "apiErrorInvalidFormat": "Geçersiz yanıt biçimi. Lütfen tekrar deneyin.",
+  "apiErrorOperationFailed": "İsteğinizi yerine getiremedik. Lütfen tekrar deneyin.",
   "@apiErrorOperationFailed": {
     "description": "Generic operation failed error",
     "placeholders": {
@@ -1981,7 +1981,7 @@
       }
     }
   },
-  "apiErrorNetworkOperation": "You seems to be offline. Please check your connection and try again.",
+  "apiErrorNetworkOperation": "Çevrimdışı görünüyorsunuz. Lütfen bağlantınızı kontrol edip tekrar deneyin.",
   "@apiErrorNetworkOperation": {
     "description": "Network error during specific operation",
     "placeholders": {
@@ -1991,7 +1991,7 @@
       }
     }
   },
-  "apiErrorTimeoutOperation": "The request took too long. Please try again.",
+  "apiErrorTimeoutOperation": "İstek çok uzun sürdü. Lütfen tekrar deneyin.",
   "@apiErrorTimeoutOperation": {
     "description": "Timeout error during specific operation",
     "placeholders": {
@@ -2001,7 +2001,7 @@
       }
     }
   },
-  "apiErrorDataFormatOperation": "Something went wrong while processing the data. Please try again.",
+  "apiErrorDataFormatOperation": "Veriler işlenirken bir sorun oluştu. Lütfen tekrar deneyin.",
   "@apiErrorDataFormatOperation": {
     "description": "Data format error during specific operation",
     "placeholders": {
@@ -2011,7 +2011,7 @@
       }
     }
   },
-  "apiErrorConfigLoadFailed": "We couldn’t load the app settings (error {statusCode}). Please try again.",
+  "apiErrorConfigLoadFailed": "Uygulama ayarlarını yükleyemedik (hata {statusCode}). Lütfen tekrar deneyin.",
   "@apiErrorConfigLoadFailed": {
     "description": "Error loading app config",
     "placeholders": {
@@ -2021,7 +2021,7 @@
       }
     }
   },
-  "apiErrorConfigException": "Error when loading configuration from the server",
+  "apiErrorConfigException": "Sunucudan yapılandırma yüklenirken hata oluştu",
   "@apiErrorConfigException": {
     "description": "Exception while loading config",
     "placeholders": {
