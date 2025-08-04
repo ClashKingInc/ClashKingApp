@@ -45,7 +45,7 @@ dependencies:
   custom_sliding_segmented_control: ^1.8.5
   dropdown_button2: ^2.3.9
   home_widget : ^0.8.0
-  workmanager: ^0.8.0
+  workmanager: ^0.9.0
   cached_network_image: ^3.4.1
   shimmer: ^3.0.0
   sentry_flutter: 9.4.1
