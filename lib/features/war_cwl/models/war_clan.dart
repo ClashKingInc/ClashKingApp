@@ -75,6 +75,27 @@ class WarClan {
     );
   }
 
+  /// Calculate average attack duration in seconds for all clan attacks
+  /// Returns null if no attack duration data is available
+  double? getAverageAttackTime() {
+    int totalDuration = 0;
+    int attackCount = 0;
+    
+    for (final member in members) {
+      if (member.attacks != null) {
+        for (final attack in member.attacks!) {
+          if (attack.duration != null) {
+            totalDuration += attack.duration!;
+            attackCount++;
+          }
+        }
+      }
+    }
+    
+    // Return average duration in seconds, or null if no duration data available
+    return attackCount > 0 ? totalDuration / attackCount : null;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'tag': tag,

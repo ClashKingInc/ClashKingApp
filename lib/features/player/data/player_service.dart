@@ -204,6 +204,15 @@ class PlayerService extends ChangeNotifier {
               orElse: () => throw Exception("Player not found in response"),
             );
             
+            // Load war stats if available in bulk response
+            if (data["war_stats"] != null) {
+              processBulkWarStats(data["war_stats"]);
+            } else {
+              // Load war stats separately if not in bulk response
+              DebugUtils.debugInfo("🔄 Loading war stats separately for player: $playerTag");
+              await loadPlayerWarStats([playerTag]);
+            }
+            
             DebugUtils.debugSuccess("Successfully loaded player via bulk: ${requestedPlayer.name} (${requestedPlayer.tag})");
             return requestedPlayer;
           } else {
@@ -270,6 +279,18 @@ class PlayerService extends ChangeNotifier {
             player.enrichWithFullStats(extendedPlayerJson);
           }
         }
+
+        // Add the player to _profiles temporarily so loadPlayerWarStats can find it
+        final existingIndex = _profiles.indexWhere((p) => p.tag == playerTag);
+        if (existingIndex != -1) {
+          _profiles[existingIndex] = player;
+        } else {
+          _profiles.add(player);
+        }
+        
+        // Load war stats for the individual player
+        DebugUtils.debugInfo("🔄 Loading war stats for individual player: $playerTag");
+        await loadPlayerWarStats([playerTag]);
 
         DebugUtils.debugSuccess("Successfully loaded player via fallback: ${player.name} (${player.tag})");
         return player;

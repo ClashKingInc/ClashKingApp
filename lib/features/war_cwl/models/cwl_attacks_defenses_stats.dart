@@ -49,25 +49,25 @@ class CwlAttackStats {
     try {
       DebugUtils.debugInfo("🔍 Parsing CwlAttackStats JSON: $json");
       
-      // Calculate total stars from individual star counts
-      final starsCount = Map<String, int>.from(json['starsCount'] ?? {});
-      final totalStars = (starsCount['3'] ?? 0) * 3 + 
-                        (starsCount['2'] ?? 0) * 2 + 
-                        (starsCount['1'] ?? 0) * 1;
+      // API returns: {"stars": 6, "3_stars": {"13": 1, "14": 1}, "2_stars": {"15": 1}, ...}
+      final threeStarsMap = Map<String, int>.from(json['3_stars'] ?? {});
+      final twoStarsMap = Map<String, int>.from(json['2_stars'] ?? {});
+      final oneStarMap = Map<String, int>.from(json['1_star'] ?? {});
+      final zeroStarMap = Map<String, int>.from(json['0_star'] ?? {});
       
-      DebugUtils.debugInfo("🔍 StarsCount: $starsCount, TotalStars: $totalStars");
+      DebugUtils.debugInfo("🔍 Attack Stats - 3★: $threeStarsMap, 2★: $twoStarsMap, 1★: $oneStarMap, 0★: $zeroStarMap");
       
       return CwlAttackStats(
-        stars: totalStars,
-        threeStars: {'3': starsCount['3'] ?? 0},
-        twoStars: {'2': starsCount['2'] ?? 0},
-        oneStar: {'1': starsCount['1'] ?? 0},
-        zeroStar: {'0': starsCount['0'] ?? 0},
-        totalDestruction: 0.0, // Not directly available in this format
-        attackCount: json['totalAttacks'] ?? 0,
-        missedAttacks: json['missedAttacks'] ?? 0,
-        warsParticipated: json['warsCounts'],
-        attacksPerWar: null, // Could be calculated if needed
+        stars: json['stars'] ?? 0,
+        threeStars: threeStarsMap,
+        twoStars: twoStarsMap,
+        oneStar: oneStarMap,
+        zeroStar: zeroStarMap,
+        totalDestruction: (json['total_destruction'] ?? 0.0).toDouble(),
+        attackCount: json['attack_count'] ?? 0,
+        missedAttacks: json['missed_attacks'] ?? 0,
+        warsParticipated: null, // Not provided in this format
+        attacksPerWar: null, // Not provided in this format
       );
     } catch (e) {
       DebugUtils.debugError(" Error parsing CwlAttackStats: $e");
@@ -134,23 +134,23 @@ class CwlDefenseStats {
     try {
       DebugUtils.debugInfo("🔍 Parsing CwlDefenseStats JSON: $json");
       
-      // Calculate total stars from individual star counts (defense perspective)
-      final starsCountDef = Map<String, int>.from(json['starsCountDef'] ?? {});
-      final totalStars = (starsCountDef['3'] ?? 0) * 3 + 
-                        (starsCountDef['2'] ?? 0) * 2 + 
-                        (starsCountDef['1'] ?? 0) * 1;
+      // API returns: {"stars": 4, "3_stars": {"14": 1}, "2_stars": {}, "1_star": {"15": 1}, ...}
+      final threeStarsMap = Map<String, int>.from(json['3_stars'] ?? {});
+      final twoStarsMap = Map<String, int>.from(json['2_stars'] ?? {});
+      final oneStarMap = Map<String, int>.from(json['1_star'] ?? {});
+      final zeroStarMap = Map<String, int>.from(json['0_star'] ?? {});
       
-      DebugUtils.debugInfo("🔍 StarsCountDef: $starsCountDef, TotalStars: $totalStars");
+      DebugUtils.debugInfo("🔍 Defense Stats - 3★: $threeStarsMap, 2★: $twoStarsMap, 1★: $oneStarMap, 0★: $zeroStarMap");
       
       return CwlDefenseStats(
-        stars: totalStars,
-        threeStars: {'3': starsCountDef['3'] ?? 0},
-        twoStars: {'2': starsCountDef['2'] ?? 0},
-        oneStar: {'1': starsCountDef['1'] ?? 0},
-        zeroStar: {'0': starsCountDef['0'] ?? 0},
-        totalDestruction: 0.0, // Not directly available in this format
-        defenseCount: json['totalDefenses'] ?? 0,
-        missedDefenses: json['missedDefenses'] ?? 0,
+        stars: json['stars'] ?? 0,
+        threeStars: threeStarsMap,
+        twoStars: twoStarsMap,
+        oneStar: oneStarMap,
+        zeroStar: zeroStarMap,
+        totalDestruction: (json['total_destruction'] ?? 0.0).toDouble(),
+        defenseCount: json['defense_count'] ?? 0,
+        missedDefenses: json['missed_defenses'] ?? 0,
       );
     } catch (e) {
       DebugUtils.debugError(" Error parsing CwlDefenseStats: $e");

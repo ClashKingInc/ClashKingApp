@@ -4,6 +4,7 @@ class WarAttack {
   final int stars;
   final int destructionPercentage;
   final int order;
+  final int? duration; // Attack duration in seconds
   final MiniMember? defender;
   final MiniMember? attacker;
 
@@ -13,6 +14,7 @@ class WarAttack {
     required this.stars,
     required this.destructionPercentage,
     required this.order,
+    this.duration,
     this.defender,
     this.attacker,
   });
@@ -24,6 +26,7 @@ class WarAttack {
       stars: json['stars'],
       destructionPercentage: json['destructionPercentage'],
       order: json['order'],
+      duration: json['duration'], // Attack duration from API
       defender: json['defender'] != null
           ? MiniMember.fromJson(json['defender'])
           : null,
@@ -40,6 +43,7 @@ class WarAttack {
       'stars': stars,
       'destructionPercentage': destructionPercentage,
       'order': order,
+      'duration': duration,
     };
   }
 }
