@@ -1672,6 +1672,50 @@
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
+  "warOpponentPerfectWar": "Opponent has a perfect war - victory impossible.",
+  "@warOpponentPerfectWar": {
+    "description": "Message when opponent has a perfect war and victory is impossible"
+  },
+  "warClanPerfectWar": "Perfect war achieved - victory secured!",
+  "@warClanPerfectWar": {
+    "description": "Message when clan has achieved a perfect war"
+  },
+  "warCannotWinNotEnoughStars": "Cannot win - not enough stars remaining.",
+  "@warCannotWinNotEnoughStars": {
+    "description": "Message when victory is impossible due to insufficient stars"
+  },
+  "warVictorySecured": "Victory secured - opponent cannot catch up!",
+  "@warVictorySecured": {
+    "description": "Message when victory is secured and opponent cannot catch up"
+  },
+  "warCannotWinNotEnoughDestruction": "Cannot win - not enough destruction possible.",
+  "@warCannotWinNotEnoughDestruction": {
+    "description": "Message when victory is impossible due to insufficient destruction percentage"
+  },
+  "warStarsNeeded": "Stars needed",
+  "@warStarsNeeded": {
+    "description": "Label for stars needed in war calculator"
+  },
+  "warDestructionNeeded": "Destruction needed",
+  "@warDestructionNeeded": {
+    "description": "Label for destruction percentage needed in war calculator"
+  },
+  "warYouAreWinning": "You are winning!",
+  "@warYouAreWinning": {
+    "description": "Message when clan is currently winning the war"
+  },
+  "warTieAttackTimeWin": "Perfect tie! Winning by faster attack time.",
+  "@warTieAttackTimeWin": {
+    "description": "Message when war is tied on stars and destruction but clan wins by faster average attack time"
+  },
+  "warTieAttackTimeLoss": "Perfect tie! Losing by slower attack time.",
+  "@warTieAttackTimeLoss": {
+    "description": "Message when war is tied on stars and destruction but clan loses by slower average attack time"
+  },
+  "warPerfectTie": "Perfect tie in all aspects!",
+  "@warPerfectTie": {
+    "description": "Message when war is completely tied including attack times"
+  },
   "performanceAnalysisFailedAttacks": "Attaques ratées (0-1 Etoiles)",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
