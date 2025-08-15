@@ -1,3 +1,1 @@
-We've made the Town Hall level dynamic! No more updates needed when a new Town Hall is released.
-Everything has been updated to fully support the exciting features of Town Hall 17
-
+Fixed critical issues causing app crashes after login. Improved error handling for network problems and API changes. War statistics now load properly.
