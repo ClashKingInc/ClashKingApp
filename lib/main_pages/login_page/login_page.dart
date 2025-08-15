@@ -8,7 +8,7 @@ import 'dart:convert'; // Pour ascii
 import 'package:crypto/crypto.dart'; // Pour sha256
 import 'package:clashkingapp/core/functions.dart';
 import 'package:clashkingapp/global_keys.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/main_pages/login_page/guest_login_page.dart';
 import 'package:url_launcher/url_launcher.dart';

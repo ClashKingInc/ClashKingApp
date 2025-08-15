@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:clashkingapp/global_keys.dart';
 import 'package:clashkingapp/core/startup_widget.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:clashkingapp/core/my_app_state.dart';
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
                 yearForegroundColor: WidgetStateProperty.all(Colors.white),
                 todayForegroundColor: WidgetStateProperty.all(Colors.white),
               ),
-              cardTheme: CardTheme(
+              cardTheme: CardThemeData(
                 surfaceTintColor: Colors.transparent,
                 color: Color.fromARGB(255, 31, 31, 31)
                     .withOpacity(1.0), // 1.0 means 100% opacity
@@ -174,7 +174,7 @@ class MyApp extends StatelessWidget {
                 yearForegroundColor: WidgetStateProperty.all(Colors.black),
                 todayForegroundColor: WidgetStateProperty.all(Colors.black),
               ),
-              cardTheme: CardTheme(
+              cardTheme: CardThemeData(
                 surfaceTintColor: Colors.transparent,
                 color: Color(0xFFFFFFFF)
                     .withOpacity(1.0), // 1.0 means 100% opacity

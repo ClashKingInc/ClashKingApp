@@ -89,21 +89,58 @@ class Clan {
 
   factory Clan.fromJson(Map<String, dynamic> json) {
     try {
+      var badgeUrls = json['badgeUrls'] != null && json['badgeUrls'] is Map<String, dynamic>
+          ? BadgeUrls.fromJson(json['badgeUrls'])
+          : BadgeUrls.fromJson({});
+      
+      var capitalLeague = json['capitalLeague'] != null && 
+          json['capitalLeague'] is Map<String, dynamic> &&
+          json['capitalLeague'].isNotEmpty
+              ? CapitalLeague.fromJson(json['capitalLeague'])
+              : null;
+      
+      var warLeague = json['warLeague'] != null && 
+          json['warLeague'] is Map<String, dynamic> &&
+          json['warLeague'].isNotEmpty
+              ? WarLeague.fromJson(json['warLeague'])
+              : null;
+      
+      var location = json['location'] != null &&
+          json['location'] is Map<String, dynamic> &&
+          (json['location'] as Map<String, dynamic>).isNotEmpty
+              ? Location.fromJson(json['location'])
+              : null;
+      
+      var memberList = json['memberList'] != null &&
+          json['memberList'] is List &&
+          (json['memberList'] as List<dynamic>).isNotEmpty
+              ? (json['memberList'] as List<dynamic>)
+                  .map((e) => Member.fromJson(e))
+                  .toList()
+              : null;
+      
+      var labels = json['labels'] != null && json['labels'] is List
+          ? json['labels'] as List<dynamic>
+          : [];
+      
+      var clanCapital = json['clanCapital'] != null && 
+          json['clanCapital'] is Map<String, dynamic> &&
+          json['clanCapital'].isNotEmpty
+              ? ClanCapital.fromJson(json['clanCapital'])
+              : null;
+      
       return Clan(
         tag: json['tag'] ?? 'No tag',
         name: json['name'] ?? 'No name',
         type: json['type'] ?? 'No type',
         description: json['description'] ?? 'No description',
         isFamilyFriendly: json['isFamilyFriendly'] ?? false,
-        badgeUrls: BadgeUrls.fromJson(json['badgeUrls']),
+        badgeUrls: badgeUrls,
         clanLevel: json['clanLevel'] ?? 0,
         clanPoints: json['clanPoints'] ?? 0,
         clanBuilderBasePoints: json['clanBuilderBasePoints'] ?? 0,
         clanCapitalPoints: json['clanCapitalPoints'] ?? 0,
-        capitalLeague:
-            json['capitalLeague'] != null && json['capitalLeague'].isNotEmpty
-                ? CapitalLeague.fromJson(json['capitalLeague'])
-                : null,
+        capitalLeague: capitalLeague,
         requiredTrophies: json['requiredTrophies'] ?? 0,
         warFrequency: json['warFrequency'] ?? 'No frequency',
         warWinStreak: json['warWinStreak'] ?? 0,
@@ -111,27 +148,14 @@ class Clan {
         warTies: json['warTies'] ?? 0,
         warLosses: json['warLosses'] ?? 0,
         isWarLogPublic: json['isWarLogPublic'] ?? false,
-        warLeague: json['warLeague'] != null && json['warLeague'].isNotEmpty
-            ? WarLeague.fromJson(json['warLeague'])
-            : null,
+        warLeague: warLeague,
         members: json['members'] ?? 0,
-        location: json['location'] != null &&
-                (json['location'] as Map<String, dynamic>).isNotEmpty
-            ? Location.fromJson(json['location'])
-            : null,
-        memberList: json['memberList'] != null &&
-                (json['memberList'] as List<dynamic>).isNotEmpty
-            ? (json['memberList'] as List<dynamic>)
-                .map((e) => Member.fromJson(e))
-                .toList()
-            : null,
-        labels: json['labels'] ?? [],
+        location: location,
+        memberList: memberList,
+        labels: labels,
         requiredBuilderBaseTrophies: json['requiredBuilderBaseTrophies'] ?? 0,
         requiredTownhallLevel: json['requiredTownhallLevel'] ?? 0,
-        clanCapital:
-            json['clanCapital'] != null && json['clanCapital'].isNotEmpty
-                ? ClanCapital.fromJson(json['clanCapital'])
-                : null,
+        clanCapital: clanCapital,
       );
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
@@ -213,26 +237,22 @@ class ClanService {
               CapitalHistoryService.fetchCapitalData(clanTag, 10);
 
           // Wait for all futures to complete
-          final responses = await Future.wait([
-            clanInfoFuture,
-            warStateFuture,
-            warLogFuture,
-            joinLeaveLogFuture,
-            capitaleFuture,
-          ]);
-
-          // Extract responses
-          final clanInfoResponse = responses[0] as http.Response;
-          final warStateInfo = responses[1] as WarStateInfo;
-          final warLog = responses[2] as WarLog;
-          final joinLeaveLog = responses[3] as JoinLeaveClan;
-          final capital = responses[4] as CapitalHistoryItems;
+          final clanInfoResponse = await clanInfoFuture;
+          final warStateInfo = await warStateFuture;
+          final warLog = await warLogFuture;
+          final joinLeaveLog = await joinLeaveLogFuture;
+          final capital = await capitaleFuture;
 
           if (clanInfoResponse.statusCode == 200) {
             String responseBody = utf8.decode(clanInfoResponse.bodyBytes);
             Clan clanInfo = Clan.fromJson(jsonDecode(responseBody));
-            clanInfo.membersWarStats =
-                await MembersWarStatsService().fetchWarLogsAndAnalyzeStats(tag);
+            try {
+              clanInfo.membersWarStats =
+                  await MembersWarStatsService().fetchWarLogsAndAnalyzeStats(tag);
+            } catch (e) {
+              clanInfo.membersWarStats = null;
+              Sentry.captureException(e);
+            }
 
             if (clanInfo.warLeague != null) {
               clanInfo.warLeague!.imageUrl =

@@ -259,8 +259,17 @@ class MembersWarStatsService {
     final response = await http.get(Uri.parse('$baseUrl/$clanTag/previous'));
 
     if (response.statusCode == 200) {
-      List<dynamic> warLogs = jsonDecode(utf8.decode(response.bodyBytes));
-      return _analyzeMemberStats(clanTag, warLogs);
+      final responseData = jsonDecode(utf8.decode(response.bodyBytes));
+      
+      // API returns structure: {"items": [...]}
+      if (responseData is Map<String, dynamic> && 
+          responseData.containsKey('items') && 
+          responseData['items'] is List) {
+        List<dynamic> warLogs = responseData['items'];
+        return _analyzeMemberStats(clanTag, warLogs);
+      } else {
+        throw Exception('Unexpected API response format: expected {"items": [...]}');
+      }
     } else {
       throw Exception('Failed to load war logs');
     }

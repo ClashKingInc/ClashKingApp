@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_search/clan_search_filters_dialog.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_cards/clan_search/clan_search_results_tiles.dart';
 

@@ -22,8 +22,9 @@ class Accounts {
   // Method to find the account with the selected tag
   Account? findAccountBySelectedTag() {
     try {
-      return accounts
+      var foundAccount = accounts
           .firstWhere((acc) => acc.profileInfo.tag == selectedTag.value);
+      return foundAccount;
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
       Sentry.captureMessage('No account found with the selected tag, selectedTag: ${selectedTag.value}, accounts: ${accounts.map((acc) => acc.profileInfo.tag).toList()}');
@@ -59,6 +60,7 @@ class AccountsService {
   }
 
   Future<Accounts> fetchAccounts(User user) async {
+    
     final transaction = Sentry.startTransaction(
       'fetchAccounts',
       'task',
@@ -81,6 +83,7 @@ class AccountsService {
             await ProfileInfoService().fetchProfileInfo(tag);
         profileSpan.finish(status: SpanStatus.ok());
 
+        
         if (profileInfo != null) {
           // Create an Account object
           Account account = Account(
@@ -99,9 +102,14 @@ class AccountsService {
               account.clan = clanCache[clanTag];
             } else {
               // If not cached, fetch the clan info and store it in the cache
-              Clan clanInfo = await fetchClanWarInfoInBackground(
-                  clanTag, account, transaction);
-              clanCache[clanTag] = clanInfo;
+              try {
+                Clan clanInfo = await fetchClanWarInfoInBackground(
+                    clanTag, account, transaction);
+                clanCache[clanTag] = clanInfo;
+              } catch (e) {
+                account.clan = null;
+                account.hasClan = false;
+              }
             }
           } else {
             account.hasClan = false;
@@ -113,6 +121,7 @@ class AccountsService {
       final fetchSpan = transaction.startChild('Future.wait');
       await Future.wait(fetchTasks);
       fetchSpan.finish(status: SpanStatus.ok());
+      
 
       // Fetch selectedTag from SharedPreferences
       String? selectedTag = await getPrefs('selectedTag');
@@ -143,8 +152,12 @@ class AccountsService {
       ToDoService.fetchBulkPlayerToDoData(tags, accounts);
       todoSpan.finish(status: SpanStatus.ok());
 
-      accounts.selectedTag =
-          ValueNotifier<String?>(accounts.accounts.first.profileInfo.tag);
+      if (accounts.accounts.isNotEmpty) {
+        accounts.selectedTag =
+            ValueNotifier<String?>(accounts.accounts.first.profileInfo.tag);
+      } else {
+        accounts.selectedTag = ValueNotifier<String?>(null);
+      }
 
       // Step 7: Finish the transaction and return the Accounts object
       transaction.finish(status: SpanStatus.ok());

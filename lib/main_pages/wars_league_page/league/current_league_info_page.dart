@@ -4,7 +4,7 @@ import 'package:clashkingapp/classes/clan/war_league/current_league_info.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
 import 'dart:ui';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/league/component/round_clans_card.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/league/component/teams_card.dart';

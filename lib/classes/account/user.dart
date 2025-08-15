@@ -66,26 +66,33 @@ Future<User?> fetchDiscordUser(String accessToken) async {
 }
 
 Future<User> fetchDiscordUserTags(User user) async {
-  final response = await http.post(
-    Uri.parse('https://api.clashking.xyz/discord_links'),
-    headers: {"Content-Type": "application/json"},
-    body: jsonEncode([user.id]),
-  );
+  try {
+    final response = await http.post(
+      Uri.parse('https://api.clashking.xyz/discord_links'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode([user.id]),
+    );
 
-  if (response.statusCode == 200) {
-    String responseBody = utf8.decode(response.bodyBytes);
-    Map<String, dynamic> responseBodyJson = jsonDecode(responseBody);
-    responseBodyJson.removeWhere(
-        (key, value) => value == null); // Remove entries with null value
-    if (responseBodyJson.keys.isNotEmpty) {
-      user.tags = responseBodyJson.keys.toList(); // Update 'tags' in 'user'
+    if (response.statusCode == 200) {
+      String responseBody = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> responseBodyJson = jsonDecode(responseBody);
+      responseBodyJson.removeWhere(
+          (key, value) => value == null); // Remove entries with null value
+      if (responseBodyJson.keys.isNotEmpty) {
+        user.tags = responseBodyJson.keys.toList(); // Update 'tags' in 'user'
+      }
+
+      return user;
+    } else {
+      Sentry.captureMessage(
+          'Failed to load user tags for user ${user.id}: ${response.statusCode}, ${response.body}');
+      // Instead of throwing, return user with empty tags to allow login to continue
+      return user;
     }
-
+  } catch (e) {
+    Sentry.captureException(e);
+    // Return user with empty tags on network error to allow login to continue
     return user;
-  } else {
-    Sentry.captureMessage(
-        'Failed to load user tags for user ${user.id}: ${response.statusCode}, ${response.body}');
-    throw Exception('Failed to load user tags for user ${user.id}');
   }
 }
 

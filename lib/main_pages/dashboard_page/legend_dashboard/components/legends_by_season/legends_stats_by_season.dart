@@ -1,7 +1,7 @@
 import 'package:clashkingapp/main_pages/wars_league_page/war/war_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/profile/legend/legend_data.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/classes/profile/legend/legends_season_trophies.dart';
 import 'package:intl/intl.dart';

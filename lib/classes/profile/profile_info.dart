@@ -157,6 +157,7 @@ class ProfileInfo {
 // Service
 class ProfileInfoService {
   Future<ProfileInfo?> fetchProfileInfo(String tag) async {
+    
     final transaction = Sentry.startTransaction(
       'fetchProfileInfo',
       'task',

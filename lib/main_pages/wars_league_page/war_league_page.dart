@@ -11,7 +11,7 @@ import 'package:clashkingapp/main_pages/clan_page/clan_cards/no_clan_card.dart';
 import 'package:clashkingapp/classes/account/accounts.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/classes/clan/clan_info.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
 
 class CurrentWarInfoPage extends StatefulWidget {

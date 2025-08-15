@@ -51,6 +51,7 @@ Future<void> main() async {
     (options) {
       options.dsn = dotenv.env['SENTRY_DSN'];
       options.tracesSampleRate = 1.0;
+      options.debug = false;
     },
     appRunner: () => runApp(
       MultiProvider(

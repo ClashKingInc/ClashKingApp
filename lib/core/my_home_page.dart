@@ -5,9 +5,10 @@ import 'package:clashkingapp/main_pages/dashboard_page/dashboard_page.dart';
 import 'package:clashkingapp/main_pages/clan_page/clan_page.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war_league_page.dart';
 import 'package:clashkingapp/main_pages/tools_page/tools_page.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/components/app_bar/app_bar.dart';
+import 'package:clashkingapp/classes/account/accounts.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -34,7 +35,18 @@ class MyHomePageState extends State<MyHomePage> {
 
   Future<void> _initializeAccounts() async {
     final appState = Provider.of<MyAppState>(context, listen: false);
-    await appState.initializeData();
+    try {
+      bool success = await appState.initializeData();
+      if (!success) {
+        // If initialization fails, try to initialize with empty data to allow app to continue
+        appState.accounts = Accounts(accounts: [], tags: []);
+        appState.account = null;
+      }
+    } catch (e) {
+      // Handle any uncaught exceptions and allow app to continue with empty state
+      appState.accounts = Accounts(accounts: [], tags: []);
+      appState.account = null;
+    }
   }
 
   void _onPageChanged(int index) {
@@ -94,50 +106,77 @@ class MyHomePageState extends State<MyHomePage> {
                     : Center(child: CircularProgressIndicator()),
                 ToolsPage(),
               ];
-              return appState.account != null
-                  ? Scaffold(
-                      appBar: CustomAppBar(
-                        user: appState.user!,
-                        accounts: appState.accounts!,
-                      ),
-                      body: PageView(
-                        controller: _pageController,
-                        onPageChanged: _onPageChanged,
-                        children: widgetOptions,
-                      ),
-                      bottomNavigationBar: BottomNavigationBar(
-                        type: BottomNavigationBarType.fixed,
-                        backgroundColor: Theme.of(context).colorScheme.surface,
-                        selectedItemColor:
-                            Theme.of(context).colorScheme.primary,
-                        unselectedItemColor:
-                            Theme.of(context).colorScheme.tertiary,
-                        items: <BottomNavigationBarItem>[
-                          BottomNavigationBarItem(
-                            icon: Icon(Icons.dashboard),
-                            label: AppLocalizations.of(context)?.dashboard ??
-                                'Dashboard',
+              
+              return appState.accounts != null
+                  ? (appState.account != null
+                      ? Scaffold(
+                          appBar: CustomAppBar(
+                            user: appState.user!,
+                            accounts: appState.accounts!,
                           ),
-                          BottomNavigationBarItem(
-                            icon: Icon(Icons.shield),
-                            label: AppLocalizations.of(context)?.clan ?? 'Clan',
+                          body: PageView(
+                            controller: _pageController,
+                            onPageChanged: _onPageChanged,
+                            children: widgetOptions,
                           ),
-                          BottomNavigationBarItem(
-                            icon: Icon(CustomIcons.swordCross),
-                            label: AppLocalizations.of(context)?.warLeague ??
-                                'War/League',
+                          bottomNavigationBar: BottomNavigationBar(
+                            type: BottomNavigationBarType.fixed,
+                            backgroundColor: Theme.of(context).colorScheme.surface,
+                            selectedItemColor:
+                                Theme.of(context).colorScheme.primary,
+                            unselectedItemColor:
+                                Theme.of(context).colorScheme.tertiary,
+                            items: <BottomNavigationBarItem>[
+                              BottomNavigationBarItem(
+                                icon: Icon(Icons.dashboard),
+                                label: AppLocalizations.of(context)?.dashboard ??
+                                    'Dashboard',
+                              ),
+                              BottomNavigationBarItem(
+                                icon: Icon(Icons.shield),
+                                label: AppLocalizations.of(context)?.clan ?? 'Clan',
+                              ),
+                              BottomNavigationBarItem(
+                                icon: Icon(CustomIcons.swordCross),
+                                label: AppLocalizations.of(context)?.warLeague ??
+                                    'War/League',
+                              ),
+                              BottomNavigationBarItem(
+                                icon: Icon(Icons.settings),
+                                label:
+                                    AppLocalizations.of(context)?.tools ?? 'Tools',
+                              ),
+                            ],
+                            currentIndex: _selectedIndex,
+                            showUnselectedLabels: true,
+                            onTap: _onItemTapped,
                           ),
-                          BottomNavigationBarItem(
-                            icon: Icon(Icons.settings),
-                            label:
-                                AppLocalizations.of(context)?.tools ?? 'Tools',
+                        )
+                      : Scaffold(
+                          appBar: CustomAppBar(
+                            user: appState.user!,
+                            accounts: appState.accounts!,
                           ),
-                        ],
-                        currentIndex: _selectedIndex,
-                        showUnselectedLabels: true,
-                        onTap: _onItemTapped,
-                      ),
-                    )
+                          body: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.account_circle, size: 64, color: Colors.grey),
+                                SizedBox(height: 16),
+                                Text(
+                                  'No accounts found',
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Please add a Clash of Clans account to continue',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ))
                   : Scaffold(
                       body: Center(
                           child: Text(AppLocalizations.of(context)!

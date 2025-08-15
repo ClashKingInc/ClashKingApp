@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/my_app_state.dart';
 import 'package:clashkingapp/main_pages/settings_page/settings_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:clashkingapp/components/app_bar/add_player_card.dart';
 import 'package:clashkingapp/components/app_bar/delete_player_card.dart';

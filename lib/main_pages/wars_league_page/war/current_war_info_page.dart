@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/classes/clan/war_league/current_war_info.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:scrollable_tab_view/scrollable_tab_view.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/component/war_header.dart';
 import 'package:clashkingapp/main_pages/wars_league_page/war/component/war_statistics_card.dart';

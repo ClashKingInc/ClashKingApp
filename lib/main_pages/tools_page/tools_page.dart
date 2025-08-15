@@ -1,5 +1,5 @@
 //import 'package:clashkingapp/main_pages/tools_page/tools_cards/community_card.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ToolsPage extends StatefulWidget {

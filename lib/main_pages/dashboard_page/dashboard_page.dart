@@ -8,7 +8,7 @@ import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_in
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_legend_card.dart';
 import 'package:clashkingapp/main_pages/dashboard_page/dashboard_cards/player_search_card.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/classes/profile/todo/to_do_service.dart';
 
 class DashboardPage extends StatefulWidget {
