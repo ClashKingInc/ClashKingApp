@@ -94,6 +94,21 @@ jobs:
       - name: Decode Android Service Account
         run: echo "${{ secrets.GOOGLE_PLAY_JSON_KEY }}" | base64 --decode > ${{ env.SERVICE_ACCOUNT_PATH }}
 
+      - name: Create .env file
+        run: |
+          cat > .env << EOF
+          DISCORD_CLIENT_ID=${{ secrets.DISCORD_CLIENT_ID }}
+          DISCORD_CLIENT_SECRET=${{ secrets.DISCORD_CLIENT_SECRET }}
+          DISCORD_REDIRECT_URI=${{ secrets.DISCORD_REDIRECT_URI }}
+          DISCORD_CALLBACK_URL_SCHEME=${{ secrets.DISCORD_CALLBACK_URL_SCHEME }}
+          DISCORDCOC_LOGIN=${{ secrets.DISCORDCOC_LOGIN }}
+          DISCORDCOC_PASSWORD=${{ secrets.DISCORDCOC_PASSWORD }}
+          SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+          ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}
+          HMAC_KEY=${{ secrets.HMAC_KEY }}
+          EOF
+          echo ".env file created successfully"
+
       - name: Cache pub dependencies
         uses: actions/cache@v4
         with:

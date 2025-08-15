@@ -1,2 +1,8 @@
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
 #include "Generated.xcconfig"
+
+// Force release mode settings
+FLUTTER_BUILD_MODE=release
+TRACK_WIDGET_CREATION=false
+DART_OBFUSCATION=true
+TREE_SHAKE_ICONS=true
