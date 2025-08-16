@@ -1672,47 +1672,47 @@
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "warOpponentPerfectWar": "Opponent has a perfect war - victory impossible.",
+  "warOpponentPerfectWar": "Rakibin mükemmel bir savaşı var - zafer imkansız.",
   "@warOpponentPerfectWar": {
     "description": "Message when opponent has a perfect war and victory is impossible"
   },
-  "warClanPerfectWar": "Perfect war achieved - victory secured!",
+  "warClanPerfectWar": "Mükemmel savaş başarıldı - zafer sağlandı!",
   "@warClanPerfectWar": {
     "description": "Message when clan has achieved a perfect war"
   },
-  "warCannotWinNotEnoughStars": "Cannot win - not enough stars remaining.",
+  "warCannotWinNotEnoughStars": "Kazanılamaz - yeterli yıldız kalmadı.",
   "@warCannotWinNotEnoughStars": {
     "description": "Message when victory is impossible due to insufficient stars"
   },
-  "warVictorySecured": "Victory secured - opponent cannot catch up!",
+  "warVictorySecured": "Zafer garantilendi - rakip yetişemez!",
   "@warVictorySecured": {
     "description": "Message when victory is secured and opponent cannot catch up"
   },
-  "warCannotWinNotEnoughDestruction": "Cannot win - not enough destruction possible.",
+  "warCannotWinNotEnoughDestruction": "Kazanılamaz - yeterince yıkım mümkün değil.",
   "@warCannotWinNotEnoughDestruction": {
     "description": "Message when victory is impossible due to insufficient destruction percentage"
   },
-  "warStarsNeeded": "Stars needed",
+  "warStarsNeeded": "Yıldıza ihtiyaç var",
   "@warStarsNeeded": {
     "description": "Label for stars needed in war calculator"
   },
-  "warDestructionNeeded": "Destruction needed",
+  "warDestructionNeeded": "Yıkıma ihtiyaç var",
   "@warDestructionNeeded": {
     "description": "Label for destruction percentage needed in war calculator"
   },
-  "warYouAreWinning": "You are winning!",
+  "warYouAreWinning": "Kazanıyorsun!",
   "@warYouAreWinning": {
     "description": "Message when clan is currently winning the war"
   },
-  "warTieAttackTimeWin": "Perfect tie! Winning by faster attack time.",
+  "warTieAttackTimeWin": "Mükemmel beraberlik! Daha hızlı hücum süresiyle kazanıyor.",
   "@warTieAttackTimeWin": {
     "description": "Message when war is tied on stars and destruction but clan wins by faster average attack time"
   },
-  "warTieAttackTimeLoss": "Perfect tie! Losing by slower attack time.",
+  "warTieAttackTimeLoss": "Mükemmel beraberlik! Daha yavaş hücum süresiyle kaybediyor.",
   "@warTieAttackTimeLoss": {
     "description": "Message when war is tied on stars and destruction but clan loses by slower average attack time"
   },
-  "warPerfectTie": "Perfect tie in all aspects!",
+  "warPerfectTie": "Her açıdan mükemmel bir beraberlik!",
   "@warPerfectTie": {
     "description": "Message when war is completely tied including attack times"
   },
