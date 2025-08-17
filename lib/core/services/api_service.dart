@@ -46,6 +46,8 @@ class ApiService {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(body),
       ).timeout(const Duration(seconds: 15));
+      DebugUtils.debugInfo("Response status: ${response.statusCode}");
+      DebugUtils.debugInfo("Response body: ${response.body}");
       return _handleResponse(response, endpoint);
     } catch (e, stackTrace) {
       _handleError(e, stackTrace, 'POST $endpoint');
@@ -54,6 +56,7 @@ class ApiService {
   }
 
   Map<String, dynamic> _handleResponse(http.Response response, String endpoint) {
+    DebugUtils.debugInfo("Handling response status: ${response.statusCode}");
     switch (response.statusCode) {
       case 200:
       case 201:
@@ -63,13 +66,18 @@ class ApiService {
           throw FormatException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorInvalidJsonResponse(endpoint));
         }
       case 400:
-        throw BadRequestException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorBadRequest(endpoint, response.body));
+        String? specificMessage = _extractApiErrorMessage(response.body);
+        throw BadRequestException(specificMessage ?? AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorBadRequest(endpoint, response.body));
       case 401:
         throw UnauthorizedException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorUnauthorized(endpoint));
       case 403:
         throw ForbiddenException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorForbidden(endpoint));
       case 404:
         throw NotFoundException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorNotFound(endpoint));
+      case 409:
+        // Use 409 for email verification required (conflict state)
+        DebugUtils.debugInfo("Creating EmailVerificationRequiredException");
+        throw EmailVerificationRequiredException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.authEmailVerificationExpired);
       case 429:
         throw RateLimitException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorRateLimit(endpoint));
       case 500:
@@ -79,6 +87,15 @@ class ApiService {
         throw ServerException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorServer(response.statusCode, endpoint));
       default:
         throw ApiException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorGeneric(response.statusCode, response.body));
+    }
+  }
+
+  String? _extractApiErrorMessage(String responseBody) {
+    try {
+      final Map<String, dynamic> errorData = json.decode(responseBody);
+      return errorData['detail'] as String?;
+    } catch (e) {
+      return null;
     }
   }
 
@@ -134,6 +151,8 @@ class ApiService {
       return error.message;
     } else if (error is NotFoundException) {
       return error.message;
+    } else if (error is EmailVerificationRequiredException) {
+      return error.message;
     } else if (error is RateLimitException) {
       return error.message;
     } else if (error is ServerException) {
@@ -181,4 +200,8 @@ class RateLimitException extends ApiException {
 
 class ServerException extends ApiException {
   ServerException(super.message);
+}
+
+class EmailVerificationRequiredException extends ApiException {
+  EmailVerificationRequiredException(super.message);
 }

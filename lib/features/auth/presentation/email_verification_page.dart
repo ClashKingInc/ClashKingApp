@@ -3,6 +3,7 @@ import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/auth/presentation/startup_widget.dart';
+import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -89,9 +90,33 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
             MaterialPageRoute(builder: (context) => MaintenanceScreen()),
           );
         } else {
+          String errorString = e.toString().toLowerCase();
+          String displayMessage = e.toString().replaceAll('Exception: ', '');
+          
+          // Check if email is already verified - redirect to login
+          if (errorString.contains('already verified') || 
+              errorString.contains('try logging in instead')) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => LoginPage(
+                  prefillEmail: widget.email,
+                ),
+              ),
+            );
+            return;
+          }
+          
+          // Check for verification errors (401 - invalid or expired code)
+          if (errorString.contains('unauthorized') || errorString.contains('autorisations') ||
+              errorString.contains('expired') || errorString.contains('expiré') ||
+              errorString.contains('invalid')) {
+            // Invalid or expired code - unified message
+            displayMessage = AppLocalizations.of(context)!.authEmailVerificationCodeInvalid;
+          }
+          
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(e.toString().replaceAll('Exception: ', '')),
+              content: Text(displayMessage),
               backgroundColor: Colors.red,
             ),
           );
@@ -124,18 +149,29 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
       }
     } catch (e) {
       if (mounted) {
-        String errorMessage = e.toString().replaceAll('Exception: ', '');
+        String errorMessage = e.toString()
+            .replaceAll('Exception: ', '')
+            .replaceAll('ApiException: ', '')
+            .replaceAll('NotFoundException: ', '');
 
         // Handle specific error cases
         if (errorMessage.contains("already verified")) {
-          errorMessage = AppLocalizations.of(context)!
-              .authEmailVerificationAlreadyVerified;
+          // Redirect to login page if email is already verified
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => LoginPage(
+                prefillEmail: widget.email,
+              ),
+            ),
+          );
+          return;
         } else if (errorMessage.contains("expired")) {
           errorMessage =
               AppLocalizations.of(context)!.authEmailVerificationExpired;
-        } else if (errorMessage.contains("No pending verification")) {
+        } else if (errorMessage.contains("No pending verification") || 
+                   errorMessage.contains("nous n'avons pas trouvé")) {
           errorMessage =
-              AppLocalizations.of(context)!.authEmailVerificationNoToken;
+              AppLocalizations.of(context)!.authEmailVerificationExpiredResend;
         }
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -341,8 +377,13 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                       // Back to login
                       Center(
                         child: TextButton(
-                          onPressed: () => Navigator.of(context)
-                              .popUntil((route) => route.isFirst),
+                          onPressed: () {
+                            // Navigate back to login page specifically
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (context) => LoginPage()),
+                              (route) => false,
+                            );
+                          },
                           child: Text(
                             AppLocalizations.of(context)!
                                 .authBackToLogin,
