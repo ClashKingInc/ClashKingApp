@@ -127,7 +127,7 @@ class ApiService {
   static Future<void> loadConfig() async {
     try {
       final response = await http.get(
-        Uri.parse('$apiUrlV2/app/public-config'),
+        Uri.parse('https://dev.api.clashk.ing/v2/app/public-config'),
         headers: {'Content-Type': 'application/json'},
       ).timeout(const Duration(seconds: 10));
       
