@@ -39,11 +39,11 @@ class WarStatisticsTab extends StatelessWidget {
         if (clan.stars > opponent.stars) {
           return AppLocalizations.of(context)?.warWonByStars(clan.name) ?? '${clan.name} won the war!';
         } else if (opponent.stars > clan.stars) {
-          return AppLocalizations.of(context)?.warLostByStars(opponent.name) ?? '${opponent.name} won the war';
+          return AppLocalizations.of(context)?.warLostByStars(clan.name) ?? '${clan.name} lost the war';
         } else if (clan.destructionPercentage > opponent.destructionPercentage) {
           return AppLocalizations.of(context)?.warWonByDestruction(clan.name) ?? '${clan.name} won by destruction!';
         } else if (opponent.destructionPercentage > clan.destructionPercentage) {
-          return AppLocalizations.of(context)?.warLostByDestruction(opponent.name) ?? '${opponent.name} won by destruction';
+          return AppLocalizations.of(context)?.warLostByDestruction(clan.name) ?? '${clan.name} lost by destruction';
         } else {
           return AppLocalizations.of(context)?.warPerfectDraw ?? 'Perfect draw!';
         }
