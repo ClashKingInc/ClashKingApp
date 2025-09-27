@@ -6,9 +6,14 @@ on:
       - 'v*'
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version to deploy (e.g., 0.2.0-alpha)'
+      ref:
+        description: 'Branch or tag to deploy (e.g., main, v1.0.0)'
         required: true
+        default: 'main'
+        type: string
+      version:
+        description: 'Version to deploy (e.g., 0.2.0-alpha) - only needed if not deploying a tag'
+        required: false
         type: string
       track:
         description: 'Play Store track'
@@ -36,12 +41,25 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
 
       - name: Extract version from tag and generate build number
         id: extract_version
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            VERSION_NAME="${{ github.event.inputs.version }}"
+            # Check if ref is a tag (starts with v) and no version provided
+            if [[ "${{ github.event.inputs.ref }}" =~ ^v[0-9] ]] && [ -z "${{ github.event.inputs.version }}" ]; then
+              # Extract version from tag name
+              VERSION_NAME="${{ github.event.inputs.ref }}"
+              VERSION_NAME=${VERSION_NAME#v}     # Remove "v" prefix
+            elif [ -n "${{ github.event.inputs.version }}" ]; then
+              # Use provided version
+              VERSION_NAME="${{ github.event.inputs.version }}"
+            else
+              echo "Error: Version is required when not deploying a tag"
+              exit 1
+            fi
           else
             TAG=${GITHUB_REF#refs/tags/}          # Extrait "v1.0.0-alpha"
             VERSION_NAME=${TAG#v}                # Retire "v" pour obtenir "1.0.0-alpha"

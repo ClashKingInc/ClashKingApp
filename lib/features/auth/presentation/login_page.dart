@@ -7,6 +7,7 @@ import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/auth/presentation/register_page.dart';
 import 'package:clashkingapp/features/auth/presentation/forgot_password_page.dart';
+import 'package:clashkingapp/features/auth/presentation/email_verification_page.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -18,6 +19,10 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
+  final String? prefillEmail;
+  
+  const LoginPage({super.key, this.prefillEmail});
+  
   @override
   LoginPageState createState() => LoginPageState();
 }
@@ -36,6 +41,23 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    
+    // Pre-fill email if provided
+    if (widget.prefillEmail != null) {
+      _emailController.text = widget.prefillEmail!;
+      // Show a brief message to let user know why they're here
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.authErrorEmailAlreadyRegistered),
+              backgroundColor: Colors.orange,
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      });
+    }
   }
 
   @override
@@ -85,8 +107,20 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       await _navigateAfterAuth();
       // Don't set loading to false here - navigation will handle it
     } catch (e) {
-      if (context.mounted) {
-        _handleAuthError(e);
+      if (mounted) {
+        // Check if the error is due to email not being verified
+        if (e.runtimeType.toString() == 'EmailVerificationRequiredException') {
+          // Navigate to email verification page instead of showing error
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => EmailVerificationPage(
+                email: _emailController.text.trim(),
+              ),
+            ),
+          );
+        } else {
+          _handleAuthError(e);
+        }
         setState(() => _isLoading = false);
       }
     }

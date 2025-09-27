@@ -15,7 +15,7 @@ if (localPropertiesFile.exists()) {
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '1'
 def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '1.0'
 def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion')?.toInteger() ?: 21
-def flutterTargetSdkVersion = localProperties.getProperty('flutter.targetSdkVersion')?.toInteger() ?: 35
+def flutterTargetSdkVersion = localProperties.getProperty('flutter.targetSdkVersion')?.toInteger() ?: 36
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
@@ -44,7 +44,7 @@ android {
     defaultConfig {
         applicationId "com.clashking.clashkingapp"
         minSdkVersion flutterMinSdkVersion
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -68,6 +68,7 @@ android {
 tasks.withType(JavaCompile).configureEach {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+    options.compilerArgs += ['-Xlint:-options']
 }
 
 

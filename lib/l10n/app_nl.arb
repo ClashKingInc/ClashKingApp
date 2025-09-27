@@ -249,7 +249,7 @@
   "authPasswordConfirmRequired": "Bevestig je wachtwoord",
   "authPasswordMismatch": "Wachtwoorden komen niet overeen",
   "authPasswordTooShort": "Wachtwoord moet minimaal 8 tekens lang zijn",
-  "authPasswordRequirements": "Wachtwoord moet bevatten: hoofdletter, kleine letter, cijfer en speciaal teken",
+  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
   "authPasswordForgot": "Wachtwoord vergeten?",
   "authPasswordForgotDescription": "Vul je e-mailadres in en we sturen je een 6-cijferige code om je wachtwoord te resetten.",
   "authPasswordResetSend": "Verstuur resetcode",
@@ -269,6 +269,7 @@
   "authUsernameLabel": "Gebruikersnaam",
   "authUsernameRequired": "Voer een gebruikersnaam in",
   "authUsernameTooShort": "Gebruikersnaam moet minimaal 3 tekens lang zijn",
+  "authUsernameTooLong": "Username must be no more than 30 characters",
   "authErrorConnection": "Er is een fout opgetreden. Controleer je internetverbinding en probeer het opnieuw.",
   "authErrorConnectionRelaunch": "Er is een fout opgetreden. Controleer je internetverbinding en start de app opnieuw op.",
   "authErrorEmailAlreadyRegistered": "Dit e-mailadres is al geregistreerd. Probeer in plaats daarvan in te loggen.",
@@ -297,9 +298,11 @@
   "authEmailVerificationExpired": "Verificatie verlopen. Gelieve opnieuw te registreren.",
   "authEmailVerificationAlreadyVerified": "Dit e-mailadres is al geverifieerd. Probeer in plaats daarvan in te loggen.",
   "authEmailVerificationNoToken": "Geen lopende verificatie gevonden. Registreer eerst.",
+  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
   "authEmailVerificationVerifying": "Je e-mailadres verifiëren...",
   "authEmailVerificationCodeInstructions": "Voer de 6-cijferige code in die naar je e-mailadres gestuurd is:",
   "authEmailVerificationCodeRequired": "Voer de 6-cijferige verificatiecode in",
+  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
   "authEmailVerificationVerify": "Code verifiëren",
   "helpTitle": "Hulp nodig?",
   "helpJoinDiscord": "Doe mee op Discord",
@@ -906,6 +909,63 @@
         "type": "String"
       }
     }
+  },
+  "warNotStarted": "War hasn't started yet",
+  "warWonByStars": "{clanName} won the war!",
+  "@warWonByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByStars": "{clanName} lost the war",
+  "@warLostByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warWonByDestruction": "{clanName} won by destruction!",
+  "@warWonByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByDestruction": "{clanName} lost by destruction",
+  "@warLostByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warPerfectDraw": "Perfect draw",
+  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "@warCanTieNeedsStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "@warCannotCatchUp": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorHintPercent": "50.00",
+  "@warCalculatorHintPercent": {
+    "description": "Hint text for percentage input in war calculator"
   },
   "warNoDataAvailableForThisWar": "Geen gegevens beschikbaar voor deze oorlog",
   "warCalculatorFast": "Snelle rekenmachine",
@@ -1869,14 +1929,15 @@
   "generalOpen": "Open",
   "generalClosed": "Gesloten",
   "generalAvailable": "Beschikbaar",
-  "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
-  "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
-  "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
-  "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
-  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
-  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
-  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
-  "apiErrorInvalidJsonResponse": "Something went wrong. Please try again.",
+  "authErrorUserCancelledDiscordLogin": "Gebruiker heeft Discord login geannuleerd.",
+  "authErrorDiscordLoginFailed": "Inloggen met Discord mislukt. Probeer het opnieuw.",
+  "authErrorEmailLoginFailed": "Inloggen met e-mail mislukt. Controleer uw inloggegevens.",
+  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
+  "authErrorEmailVerificationFailed": "E-mailverificatie mislukt. De token is mogelijk ongeldig of verlopen.",
+  "authErrorDiscordLinkFailed": "Kan Discord account niet koppelen. Het is mogelijk al gekoppeld aan een ander account.",
+  "authErrorEmailLinkFailed": "E-mailaccount koppelen mislukt. E-mail wordt mogelijk al gebruikt.",
+  "authErrorUserNotAuthenticated": "Gebruiker niet geverifieerd. Log opnieuw in.",
+  "apiErrorInvalidJsonResponse": "Er is iets misgegaan. Probeer het opnieuw.",
   "@apiErrorInvalidJsonResponse": {
     "description": "Error when API returns invalid JSON",
     "placeholders": {
@@ -1886,7 +1947,7 @@
       }
     }
   },
-  "apiErrorBadRequest": "Something went wrong. Please check your input.",
+  "apiErrorBadRequest": "Er is iets fout gegaan. Controleer je invoer.",
   "@apiErrorBadRequest": {
     "description": "API bad request error",
     "placeholders": {
@@ -1900,7 +1961,7 @@
       }
     }
   },
-  "apiErrorUnauthorized": "You are not authorized. Please log in again.",
+  "apiErrorUnauthorized": "Je bent niet geautoriseerd. Log opnieuw in.",
   "@apiErrorUnauthorized": {
     "description": "API unauthorized error",
     "placeholders": {
@@ -1910,7 +1971,7 @@
       }
     }
   },
-  "apiErrorForbidden": "You don't have permission to perform this action.",
+  "apiErrorForbidden": "Je bent niet gemachtigd om deze actie uit te voeren.",
   "@apiErrorForbidden": {
     "description": "API forbidden error",
     "placeholders": {
@@ -1920,7 +1981,7 @@
       }
     }
   },
-  "apiErrorNotFound": "We couldn't find what you were looking for.",
+  "apiErrorNotFound": "We konden niet vinden waar je naar zocht.",
   "@apiErrorNotFound": {
     "description": "API not found error",
     "placeholders": {
@@ -1930,7 +1991,7 @@
       }
     }
   },
-  "apiErrorRateLimit": "Too many requests. Please try again later.",
+  "apiErrorRateLimit": "Te veel verzoeken. Probeer het later opnieuw.",
   "@apiErrorRateLimit": {
     "description": "API rate limit error",
     "placeholders": {
@@ -1940,7 +2001,7 @@
       }
     }
   },
-  "apiErrorServer": "The server is temporarily unavailable. Please try again shortly.",
+  "apiErrorServer": "De server is tijdelijk niet beschikbaar. Probeer het binnenkort opnieuw.",
   "@apiErrorServer": {
     "description": "API server error",
     "placeholders": {
@@ -1954,7 +2015,7 @@
       }
     }
   },
-  "apiErrorGeneric": "An unexpected error occurred. Please try again.",
+  "apiErrorGeneric": "Er is een onverwachte fout opgetreden. Probeer het opnieuw.",
   "@apiErrorGeneric": {
     "description": "Generic API error",
     "placeholders": {
@@ -1968,10 +2029,10 @@
       }
     }
   },
-  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
-  "apiErrorTimeout": "Request timed out. Please try again.",
-  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
-  "apiErrorOperationFailed": "We couldn't complete your request. Please try again.",
+  "apiErrorNetworkConnection": "Geen internetverbinding. Controleer je netwerk en probeer het opnieuw.",
+  "apiErrorTimeout": "Verzoek verlopen. Probeer opnieuw.",
+  "apiErrorInvalidFormat": "Ongeldig antwoordformaat. Probeer het nog eens.",
+  "apiErrorOperationFailed": "We kunnen je verzoek niet voltooien. Probeer het opnieuw.",
   "@apiErrorOperationFailed": {
     "description": "Generic operation failed error",
     "placeholders": {
@@ -1981,7 +2042,7 @@
       }
     }
   },
-  "apiErrorNetworkOperation": "You seems to be offline. Please check your connection and try again.",
+  "apiErrorNetworkOperation": "Je lijkt offline te zijn. Controleer je verbinding en probeer het opnieuw.",
   "@apiErrorNetworkOperation": {
     "description": "Network error during specific operation",
     "placeholders": {
@@ -1991,7 +2052,7 @@
       }
     }
   },
-  "apiErrorTimeoutOperation": "The request took too long. Please try again.",
+  "apiErrorTimeoutOperation": "Het verzoek duurde te lang. Probeer het opnieuw.",
   "@apiErrorTimeoutOperation": {
     "description": "Timeout error during specific operation",
     "placeholders": {
@@ -2001,7 +2062,7 @@
       }
     }
   },
-  "apiErrorDataFormatOperation": "Something went wrong while processing the data. Please try again.",
+  "apiErrorDataFormatOperation": "Er ging iets mis tijdens het verwerken van de gegevens. Probeer het opnieuw.",
   "@apiErrorDataFormatOperation": {
     "description": "Data format error during specific operation",
     "placeholders": {
@@ -2011,7 +2072,7 @@
       }
     }
   },
-  "apiErrorConfigLoadFailed": "We couldn’t load the app settings (error {statusCode}). Please try again.",
+  "apiErrorConfigLoadFailed": "We konden de app instellingen niet laden (fout {statusCode}). Probeer het opnieuw.",
   "@apiErrorConfigLoadFailed": {
     "description": "Error loading app config",
     "placeholders": {
@@ -2021,7 +2082,7 @@
       }
     }
   },
-  "apiErrorConfigException": "Error when loading configuration from the server",
+  "apiErrorConfigException": "Fout bij het laden van de configuratie van de server",
   "@apiErrorConfigException": {
     "description": "Exception while loading config",
     "placeholders": {

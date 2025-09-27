@@ -249,7 +249,7 @@
   "authPasswordConfirmRequired": "Confirme ton mot de passe",
   "authPasswordMismatch": "Les mots de passe ne correspondent pas",
   "authPasswordTooShort": "Le mot de passe doit comporter au moins 8 caractères",
-  "authPasswordRequirements": "Le mot de passe doit contenir : majuscule, minuscule, chiffre et caractère spécial",
+  "authPasswordRequirements": "Le mot de passe doit contenir :\n• Lettre majuscule\n• Lettre minuscule\n• Nombre\n• Caractère spécial",
   "authPasswordForgot": "Mot de passe oublié ?",
   "authPasswordForgotDescription": "Saisis ton adresse e-mail et nous t'enverrons un code à 6 chiffres pour réinitialiser ton mot de passe.",
   "authPasswordResetSend": "Envoyer le code de réinitialisation",
@@ -269,6 +269,7 @@
   "authUsernameLabel": "Nom d'utilisateur",
   "authUsernameRequired": "Saisis un nom d'utilisateur",
   "authUsernameTooShort": "Le nom d'utilisateur doit contenir au moins 3 caractères",
+  "authUsernameTooLong": "Le nom d'utilisateur doit contenir au moins 30 caractères",
   "authErrorConnection": "Une erreur est survenue. Vérifie ta connexion internet et réessaye.",
   "authErrorConnectionRelaunch": "Une erreur s'est produite, vérifie ta connexion internet et relance l'application.",
   "authErrorEmailAlreadyRegistered": "Cet e-mail est déjà enregistré. Essaie plutôt de te connecter.",
@@ -297,9 +298,11 @@
   "authEmailVerificationExpired": "La vérification a expiré. Merci de t'inscrire de nouveau.",
   "authEmailVerificationAlreadyVerified": "Cet e-mail est déjà enregistré. Essaie plutôt de te connecter.",
   "authEmailVerificationNoToken": "Aucune vérification en attente trouvée. Merci de t'inscrire d'abord.",
+  "authEmailVerificationExpiredResend": "La vérification a expiré. Merci de t'inscrire de nouveau.",
   "authEmailVerificationVerifying": "On vérifie ton email...",
   "authEmailVerificationCodeInstructions": "Saisis le code à 6 chiffres reçu par e-mail :",
   "authEmailVerificationCodeRequired": "Merci d'entrer le code de vérification à 6 chiffres",
+  "authEmailVerificationCodeInvalid": "Code invalide ou expiré. Vérifie ton code ou renvoie l’e-mail de vérification.",
   "authEmailVerificationVerify": "Vérifier le code",
   "helpTitle": "Besoin d'aide ?",
   "helpJoinDiscord": "Rejoindre Discord",
@@ -906,6 +909,63 @@
         "type": "String"
       }
     }
+  },
+  "warNotStarted": "La guerre n'a pas encore commencé",
+  "warWonByStars": "{clanName} a gagné la guerre!",
+  "@warWonByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByStars": "{clanName} a perdu la guerre",
+  "@warLostByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warWonByDestruction": "{clanName} a gagné par pourcentage de destruction!",
+  "@warWonByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByDestruction": "{clanName} a perdu par pourcentage de destruction",
+  "@warLostByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warPerfectDraw": "Egalité parfaite",
+  "warCanTieNeedsStars": "{clanName} peut égaliser mais a besoin de {stars} étoiles",
+  "@warCanTieNeedsStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warCannotCatchUp": "{clanName} ne peut pas rattraper son retard d'étoiles",
+  "@warCannotCatchUp": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorHintPercent": "50,00",
+  "@warCalculatorHintPercent": {
+    "description": "Hint text for percentage input in war calculator"
   },
   "warNoDataAvailableForThisWar": "Aucune donnée disponible pour cette guerre",
   "warCalculatorFast": "Calculatrice rapide",
@@ -1872,6 +1932,7 @@
   "authErrorUserCancelledDiscordLogin": "L'utilisateur a annulé la connexion Discord.",
   "authErrorDiscordLoginFailed": "Échec de la connexion à Discord. Merci de réessayer.",
   "authErrorEmailLoginFailed": "Échec de la connexion par email. Vérifie tes identifiants stp.",
+  "authErrorEmailNotVerified": "Ton adresse e-mail n’est pas vérifiée. Vérifie ta boîte mail et saisis le code de vérification.",
   "authErrorEmailVerificationFailed": "La vérification de l'e-mail a échoué. Le jeton est peut-être invalide ou a expiré.",
   "authErrorDiscordLinkFailed": "Impossible de lier le compte Discord. Il est peut-être déjà lié à un autre compte.",
   "authErrorEmailLinkFailed": "Impossible de lier ton adresse e-mail. Il est peut-être déjà utilisé.",

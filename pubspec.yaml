@@ -45,16 +45,16 @@ dependencies:
   custom_sliding_segmented_control: ^1.8.5
   dropdown_button2: ^2.3.9
   home_widget : ^0.8.0
-  workmanager: ^0.8.0
+  workmanager: ^0.9.0+3
   cached_network_image: ^3.4.1
   shimmer: ^3.0.0
-  sentry_flutter: 9.4.1
+  sentry_flutter: 9.6.0
   retry: ^3.1.2
   flutter_secure_storage: ^9.2.4
   collection: ^1.19.1
   flutter_gif: ^0.0.4
-  package_info_plus: ^9.0.0
   device_info_plus: ^11.5.0
+  device_info_plus: ^12.1.0
   mailto: ^2.0.0
   timeago: ^3.7.1
   dio: ^5.8.0

@@ -249,7 +249,7 @@
   "authPasswordConfirmRequired": "Bekræft venligst din adgangskode",
   "authPasswordMismatch": "Adgangskoder stemmer ikke overens",
   "authPasswordTooShort": "Adgangskoden skal være på mindst 8 tegn",
-  "authPasswordRequirements": "Adgangskoden skal indeholde: store bogstaver, små bogstaver, tal og specialtegn",
+  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
   "authPasswordForgot": "Glemt adgangskode?",
   "authPasswordForgotDescription": "Enter your email address and we'll send you a 6-digit code to reset your password.",
   "authPasswordResetSend": "Send Reset Code",
@@ -269,6 +269,7 @@
   "authUsernameLabel": "Brugernavn",
   "authUsernameRequired": "Indtast venligst et brugernavn",
   "authUsernameTooShort": "Brugernavn skal være på mindst 3 tegn",
+  "authUsernameTooLong": "Username must be no more than 30 characters",
   "authErrorConnection": "Der opstod en fejl. Kontroller din internetforbindelse og prøv igen.",
   "authErrorConnectionRelaunch": "Der opstod en fejl. Kontroller din internetforbindelse og genstart appen.",
   "authErrorEmailAlreadyRegistered": "This email is already registered. Please try logging in instead.",
@@ -297,9 +298,11 @@
   "authEmailVerificationExpired": "Verification expired. Please register again.",
   "authEmailVerificationAlreadyVerified": "This email is already verified. Please try logging in instead.",
   "authEmailVerificationNoToken": "No pending verification found. Please register first.",
+  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
   "authEmailVerificationVerifying": "Verifying your email...",
   "authEmailVerificationCodeInstructions": "Enter the 6-digit code sent to your email:",
   "authEmailVerificationCodeRequired": "Please enter the 6-digit verification code",
+  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
   "authEmailVerificationVerify": "Verify Code",
   "helpTitle": "Brug for hjælp?",
   "helpJoinDiscord": "Deltag I Discord",
@@ -906,6 +909,63 @@
         "type": "String"
       }
     }
+  },
+  "warNotStarted": "War hasn't started yet",
+  "warWonByStars": "{clanName} won the war!",
+  "@warWonByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByStars": "{clanName} lost the war",
+  "@warLostByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warWonByDestruction": "{clanName} won by destruction!",
+  "@warWonByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByDestruction": "{clanName} lost by destruction",
+  "@warLostByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warPerfectDraw": "Perfect draw",
+  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "@warCanTieNeedsStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "@warCannotCatchUp": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorHintPercent": "50.00",
+  "@warCalculatorHintPercent": {
+    "description": "Hint text for percentage input in war calculator"
   },
   "warNoDataAvailableForThisWar": "Ingen tilgængelige data for denne krig",
   "warCalculatorFast": "Hurtig lommeregner",
@@ -1872,6 +1932,7 @@
   "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
   "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
   "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
+  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
   "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
   "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
   "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
