@@ -249,7 +249,7 @@
   "authPasswordConfirmRequired": "Lütfen şifreni onayla",
   "authPasswordMismatch": "Şifreler eşleşmiyor",
   "authPasswordTooShort": "Şifre en az 8 karakter olmalı",
-  "authPasswordRequirements": "Şifre şunları içermeli: büyük harf, küçük harf, rakam ve özel karakter",
+  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
   "authPasswordForgot": "Şifreni mi unuttun?",
   "authPasswordForgotDescription": "E-posta adresinizi girin, size şifrenizi sıfırlamak için 6 haneli bir kod gönderelim.",
   "authPasswordResetSend": "Sıfırlama Kodunu Gönder",
@@ -269,6 +269,7 @@
   "authUsernameLabel": "Kullanıcı Adı",
   "authUsernameRequired": "Lütfen bir kullanıcı adı girin",
   "authUsernameTooShort": "Kullanıcı adı en az 3 karakter olmalı",
+  "authUsernameTooLong": "Username must be no more than 30 characters",
   "authErrorConnection": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.",
   "authErrorConnectionRelaunch": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve uygulamayı yeniden başlatın.",
   "authErrorEmailAlreadyRegistered": "Bu e-posta zaten kayıtlı. Lütfen giriş yapmayı deneyin.",
@@ -297,9 +298,11 @@
   "authEmailVerificationExpired": "Doğrulama süresi doldu. Lütfen tekrar kayıt olun.",
   "authEmailVerificationAlreadyVerified": "Bu e-posta zaten doğrulandı. Lütfen bunun yerine giriş yapmayı deneyin.",
   "authEmailVerificationNoToken": "Bekleyen doğrulama bulunamadı. Lütfen önce kayıt olun.",
+  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
   "authEmailVerificationVerifying": "E-postanız doğrulanıyor...",
   "authEmailVerificationCodeInstructions": "E-postanıza gönderilen 6 haneli kodu girin:",
   "authEmailVerificationCodeRequired": "Lütfen 6 haneli doğrulama kodunu girin",
+  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
   "authEmailVerificationVerify": "Doğrulama Kodu",
   "helpTitle": "Yardıma mı ihtiyacın var?",
   "helpJoinDiscord": "Discord'a Katıl",
@@ -906,6 +909,63 @@
         "type": "String"
       }
     }
+  },
+  "warNotStarted": "War hasn't started yet",
+  "warWonByStars": "{clanName} won the war!",
+  "@warWonByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByStars": "{opponentName} won the war",
+  "@warLostByStars": {
+    "placeholders": {
+      "opponentName": {
+        "type": "String"
+      }
+    }
+  },
+  "warWonByDestruction": "{clanName} won by destruction!",
+  "@warWonByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByDestruction": "{opponentName} won by destruction",
+  "@warLostByDestruction": {
+    "placeholders": {
+      "opponentName": {
+        "type": "String"
+      }
+    }
+  },
+  "warPerfectDraw": "Perfect draw!",
+  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "@warCanTieNeedsStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "@warCannotCatchUp": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorHintPercent": "50.00",
+  "@warCalculatorHintPercent": {
+    "description": "Hint text for percentage input in war calculator"
   },
   "warNoDataAvailableForThisWar": "Bu savaş için veri mevcut değil",
   "warCalculatorFast": "Hızlı hesaplayıcı",
@@ -1672,50 +1732,6 @@
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "warOpponentPerfectWar": "Rakibin mükemmel bir savaşı var - zafer imkansız.",
-  "@warOpponentPerfectWar": {
-    "description": "Message when opponent has a perfect war and victory is impossible"
-  },
-  "warClanPerfectWar": "Mükemmel savaş başarıldı - zafer sağlandı!",
-  "@warClanPerfectWar": {
-    "description": "Message when clan has achieved a perfect war"
-  },
-  "warCannotWinNotEnoughStars": "Kazanılamaz - yeterli yıldız kalmadı.",
-  "@warCannotWinNotEnoughStars": {
-    "description": "Message when victory is impossible due to insufficient stars"
-  },
-  "warVictorySecured": "Zafer garantilendi - rakip yetişemez!",
-  "@warVictorySecured": {
-    "description": "Message when victory is secured and opponent cannot catch up"
-  },
-  "warCannotWinNotEnoughDestruction": "Kazanılamaz - yeterince yıkım mümkün değil.",
-  "@warCannotWinNotEnoughDestruction": {
-    "description": "Message when victory is impossible due to insufficient destruction percentage"
-  },
-  "warStarsNeeded": "Yıldıza ihtiyaç var",
-  "@warStarsNeeded": {
-    "description": "Label for stars needed in war calculator"
-  },
-  "warDestructionNeeded": "Yıkıma ihtiyaç var",
-  "@warDestructionNeeded": {
-    "description": "Label for destruction percentage needed in war calculator"
-  },
-  "warYouAreWinning": "Kazanıyorsun!",
-  "@warYouAreWinning": {
-    "description": "Message when clan is currently winning the war"
-  },
-  "warTieAttackTimeWin": "Mükemmel beraberlik! Daha hızlı hücum süresiyle kazanıyor.",
-  "@warTieAttackTimeWin": {
-    "description": "Message when war is tied on stars and destruction but clan wins by faster average attack time"
-  },
-  "warTieAttackTimeLoss": "Mükemmel beraberlik! Daha yavaş hücum süresiyle kaybediyor.",
-  "@warTieAttackTimeLoss": {
-    "description": "Message when war is tied on stars and destruction but clan loses by slower average attack time"
-  },
-  "warPerfectTie": "Her açıdan mükemmel bir beraberlik!",
-  "@warPerfectTie": {
-    "description": "Message when war is completely tied including attack times"
-  },
   "performanceAnalysisFailedAttacks": "Başarısız Saldırılar (0-1 Yıldız)",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
@@ -1916,6 +1932,7 @@
   "authErrorUserCancelledDiscordLogin": "Kullanıcı Discord girişini iptal etti.",
   "authErrorDiscordLoginFailed": "Discord'a giriş başarısız oldu. Lütfen tekrar deneyin.",
   "authErrorEmailLoginFailed": "E-posta girişi başarısız oldu. Lütfen kimlik bilgilerinizi kontrol edin.",
+  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
   "authErrorEmailVerificationFailed": "E-posta doğrulaması başarısız oldu. Jeton geçersiz veya süresi dolmuş olabilir.",
   "authErrorDiscordLinkFailed": "Discord hesabı bağlanamadı. Başka bir hesaba bağlı olabilir.",
   "authErrorEmailLinkFailed": "E-posta hesabı bağlanamadı. E-posta zaten kullanımda olabilir.",
