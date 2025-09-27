@@ -249,7 +249,7 @@
   "authPasswordConfirmRequired": "Bevestig je wachtwoord",
   "authPasswordMismatch": "Wachtwoorden komen niet overeen",
   "authPasswordTooShort": "Wachtwoord moet minimaal 8 tekens lang zijn",
-  "authPasswordRequirements": "Wachtwoord moet bevatten: hoofdletter, kleine letter, cijfer en speciaal teken",
+  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
   "authPasswordForgot": "Wachtwoord vergeten?",
   "authPasswordForgotDescription": "Vul je e-mailadres in en we sturen je een 6-cijferige code om je wachtwoord te resetten.",
   "authPasswordResetSend": "Verstuur resetcode",
@@ -269,6 +269,7 @@
   "authUsernameLabel": "Gebruikersnaam",
   "authUsernameRequired": "Voer een gebruikersnaam in",
   "authUsernameTooShort": "Gebruikersnaam moet minimaal 3 tekens lang zijn",
+  "authUsernameTooLong": "Username must be no more than 30 characters",
   "authErrorConnection": "Er is een fout opgetreden. Controleer je internetverbinding en probeer het opnieuw.",
   "authErrorConnectionRelaunch": "Er is een fout opgetreden. Controleer je internetverbinding en start de app opnieuw op.",
   "authErrorEmailAlreadyRegistered": "Dit e-mailadres is al geregistreerd. Probeer in plaats daarvan in te loggen.",
@@ -297,9 +298,11 @@
   "authEmailVerificationExpired": "Verificatie verlopen. Gelieve opnieuw te registreren.",
   "authEmailVerificationAlreadyVerified": "Dit e-mailadres is al geverifieerd. Probeer in plaats daarvan in te loggen.",
   "authEmailVerificationNoToken": "Geen lopende verificatie gevonden. Registreer eerst.",
+  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
   "authEmailVerificationVerifying": "Je e-mailadres verifiëren...",
   "authEmailVerificationCodeInstructions": "Voer de 6-cijferige code in die naar je e-mailadres gestuurd is:",
   "authEmailVerificationCodeRequired": "Voer de 6-cijferige verificatiecode in",
+  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
   "authEmailVerificationVerify": "Code verifiëren",
   "helpTitle": "Hulp nodig?",
   "helpJoinDiscord": "Doe mee op Discord",
@@ -906,6 +909,63 @@
         "type": "String"
       }
     }
+  },
+  "warNotStarted": "War hasn't started yet",
+  "warWonByStars": "{clanName} won the war!",
+  "@warWonByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByStars": "{opponentName} won the war",
+  "@warLostByStars": {
+    "placeholders": {
+      "opponentName": {
+        "type": "String"
+      }
+    }
+  },
+  "warWonByDestruction": "{clanName} won by destruction!",
+  "@warWonByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByDestruction": "{opponentName} won by destruction",
+  "@warLostByDestruction": {
+    "placeholders": {
+      "opponentName": {
+        "type": "String"
+      }
+    }
+  },
+  "warPerfectDraw": "Perfect draw!",
+  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "@warCanTieNeedsStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "@warCannotCatchUp": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorHintPercent": "50.00",
+  "@warCalculatorHintPercent": {
+    "description": "Hint text for percentage input in war calculator"
   },
   "warNoDataAvailableForThisWar": "Geen gegevens beschikbaar voor deze oorlog",
   "warCalculatorFast": "Snelle rekenmachine",
@@ -1672,50 +1732,6 @@
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "warOpponentPerfectWar": "Opponent has a perfect war - victory impossible.",
-  "@warOpponentPerfectWar": {
-    "description": "Message when opponent has a perfect war and victory is impossible"
-  },
-  "warClanPerfectWar": "Perfect war achieved - victory secured!",
-  "@warClanPerfectWar": {
-    "description": "Message when clan has achieved a perfect war"
-  },
-  "warCannotWinNotEnoughStars": "Cannot win - not enough stars remaining.",
-  "@warCannotWinNotEnoughStars": {
-    "description": "Message when victory is impossible due to insufficient stars"
-  },
-  "warVictorySecured": "Victory secured - opponent cannot catch up!",
-  "@warVictorySecured": {
-    "description": "Message when victory is secured and opponent cannot catch up"
-  },
-  "warCannotWinNotEnoughDestruction": "Cannot win - not enough destruction possible.",
-  "@warCannotWinNotEnoughDestruction": {
-    "description": "Message when victory is impossible due to insufficient destruction percentage"
-  },
-  "warStarsNeeded": "Stars needed",
-  "@warStarsNeeded": {
-    "description": "Label for stars needed in war calculator"
-  },
-  "warDestructionNeeded": "Destruction needed",
-  "@warDestructionNeeded": {
-    "description": "Label for destruction percentage needed in war calculator"
-  },
-  "warYouAreWinning": "You are winning!",
-  "@warYouAreWinning": {
-    "description": "Message when clan is currently winning the war"
-  },
-  "warTieAttackTimeWin": "Perfect tie! Winning by faster attack time.",
-  "@warTieAttackTimeWin": {
-    "description": "Message when war is tied on stars and destruction but clan wins by faster average attack time"
-  },
-  "warTieAttackTimeLoss": "Perfect tie! Losing by slower attack time.",
-  "@warTieAttackTimeLoss": {
-    "description": "Message when war is tied on stars and destruction but clan loses by slower average attack time"
-  },
-  "warPerfectTie": "Perfect tie in all aspects!",
-  "@warPerfectTie": {
-    "description": "Message when war is completely tied including attack times"
-  },
   "performanceAnalysisFailedAttacks": "Mislukte aanvallen (0-1 sterren)",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
@@ -1916,6 +1932,7 @@
   "authErrorUserCancelledDiscordLogin": "Gebruiker heeft Discord login geannuleerd.",
   "authErrorDiscordLoginFailed": "Inloggen met Discord mislukt. Probeer het opnieuw.",
   "authErrorEmailLoginFailed": "Inloggen met e-mail mislukt. Controleer uw inloggegevens.",
+  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
   "authErrorEmailVerificationFailed": "E-mailverificatie mislukt. De token is mogelijk ongeldig of verlopen.",
   "authErrorDiscordLinkFailed": "Kan Discord account niet koppelen. Het is mogelijk al gekoppeld aan een ander account.",
   "authErrorEmailLinkFailed": "E-mailaccount koppelen mislukt. E-mail wordt mogelijk al gebruikt.",
