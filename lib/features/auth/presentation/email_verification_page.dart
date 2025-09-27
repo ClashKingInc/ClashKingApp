@@ -168,11 +168,15 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
         } else if (errorMessage.contains("expired")) {
           errorMessage =
               AppLocalizations.of(context)!.authEmailVerificationExpired;
-        } else if (errorMessage.contains("No pending verification") || 
-                   errorMessage.contains("nous n'avons pas trouvé")) {
+        } else if (errorMessage.contains("No pending verification")) {
           errorMessage =
               AppLocalizations.of(context)!.authEmailVerificationExpiredResend;
         }
+        else if (errorMessage.contains("This email is already verified")) {
+          errorMessage =
+              AppLocalizations.of(context)!.authEmailVerificationAlreadyVerified;
+        }
+
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
