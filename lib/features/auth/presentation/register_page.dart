@@ -2,6 +2,7 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/auth/presentation/email_verification_page.dart';
+import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -61,12 +62,45 @@ class RegisterPageState extends State<RegisterPage> {
             MaterialPageRoute(builder: (context) => MaintenanceScreen()),
           );
         } else {
+          String errorString = e.toString().toLowerCase();
+          
+          // Check if email is already registered - redirect to login
+          if (errorString.contains('already registered') || 
+              errorString.contains('please try logging in')) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => LoginPage(
+                  prefillEmail: _emailController.text.trim(),
+                ),
+              ),
+            );
+            return;
+          }
+          
+          // Check if verification email already sent - redirect to verification
+          if (errorString.contains('verification email was already sent') ||
+              errorString.contains('already sent to this address')) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => EmailVerificationPage(
+                  email: _emailController.text.trim(),
+                ),
+              ),
+            );
+            return;
+          }
+          
+          // Show normal error message for other errors
           String errorMessage = _getLocalizedErrorMessage(e.toString());
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(errorMessage),
+              content: Text(
+                errorMessage,
+                maxLines: null, // Allow unlimited lines
+                overflow: TextOverflow.visible, // Show all text
+              ),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 4),
+              duration: Duration(seconds: 6), // Longer duration for longer text
               action: SnackBarAction(
                 label: AppLocalizations.of(context)!.generalOk,
                 textColor: Colors.white,
@@ -108,8 +142,12 @@ class RegisterPageState extends State<RegisterPage> {
       return AppLocalizations.of(context)!.authErrorPasswordWeak;
     } else if (detail.contains("password must be at least")) {
       return AppLocalizations.of(context)!.authPasswordTooShort;
+    } else if (detail.contains("username is required")) {
+      return AppLocalizations.of(context)!.authUsernameRequired;
     } else if (detail.contains("username must be at least")) {
       return AppLocalizations.of(context)!.authUsernameTooShort;
+    } else if (detail.contains("username must be no more than")) {
+      return AppLocalizations.of(context)!.authUsernameTooLong;
     } else if (detail.contains("username can only contain")) {
       return AppLocalizations.of(context)!.authErrorUsernameInvalid;
     } else if (detail.contains("rate limit") || detail.contains("too many")) {
