@@ -919,7 +919,7 @@
       }
     }
   },
-  "warLostByStars": "{clanName} lost the war",
+  "warLostByStars": "{clanName} a perdu la guerre",
   "@warLostByStars": {
     "placeholders": {
       "clanName": {
@@ -927,7 +927,7 @@
       }
     }
   },
-  "warWonByDestruction": "{clanName} a gagné par destruction!",
+  "warWonByDestruction": "{clanName} a gagné par pourcentage de destruction!",
   "@warWonByDestruction": {
     "placeholders": {
       "clanName": {
@@ -935,7 +935,7 @@
       }
     }
   },
-  "warLostByDestruction": "{clanName} lost by destruction",
+  "warLostByDestruction": "{clanName} a perdu par pourcentage de destruction",
   "@warLostByDestruction": {
     "placeholders": {
       "clanName": {
@@ -943,7 +943,7 @@
       }
     }
   },
-  "warPerfectDraw": "Perfect draw",
+  "warPerfectDraw": "Egalité parfaite",
   "warCanTieNeedsStars": "{clanName} peut égaliser mais a besoin de {stars} étoiles",
   "@warCanTieNeedsStars": {
     "placeholders": {
