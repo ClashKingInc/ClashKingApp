@@ -249,7 +249,7 @@
   "authPasswordConfirmRequired": "Por favor, confirme a sua palavra-passe",
   "authPasswordMismatch": "As palavras-passe não coincidem",
   "authPasswordTooShort": "A palavra-passe deve ter pelo menos 8 caracteres",
-  "authPasswordRequirements": "A palavra-passe deve conter: maiúscula, minúscula, dígito e carácter especial",
+  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
   "authPasswordForgot": "Esqueceu-se da palavra-passe?",
   "authPasswordForgotDescription": "Enter your email address and we'll send you a 6-digit code to reset your password.",
   "authPasswordResetSend": "Send Reset Code",
@@ -269,6 +269,7 @@
   "authUsernameLabel": "Nome de utilizador",
   "authUsernameRequired": "Por favor, insira um nome de utilizador",
   "authUsernameTooShort": "O nome de utilizador deve ter pelo menos 3 caracteres",
+  "authUsernameTooLong": "Username must be no more than 30 characters",
   "authErrorConnection": "Ocorreu um erro. Por favor, verifique a sua conexão de internet e tente novamente.",
   "authErrorConnectionRelaunch": "Ocorreu um erro. Por favor, verifique a sua conexão de internet e reinicie a aplicação.",
   "authErrorEmailAlreadyRegistered": "This email is already registered. Please try logging in instead.",
@@ -297,9 +298,11 @@
   "authEmailVerificationExpired": "Verification expired. Please register again.",
   "authEmailVerificationAlreadyVerified": "This email is already verified. Please try logging in instead.",
   "authEmailVerificationNoToken": "No pending verification found. Please register first.",
+  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
   "authEmailVerificationVerifying": "Verifying your email...",
   "authEmailVerificationCodeInstructions": "Enter the 6-digit code sent to your email:",
   "authEmailVerificationCodeRequired": "Please enter the 6-digit verification code",
+  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
   "authEmailVerificationVerify": "Verify Code",
   "helpTitle": "Precisa de ajuda?",
   "helpJoinDiscord": "Juntar-se ao Discord",
@@ -906,6 +909,63 @@
         "type": "String"
       }
     }
+  },
+  "warNotStarted": "War hasn't started yet",
+  "warWonByStars": "{clanName} won the war!",
+  "@warWonByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByStars": "{clanName} lost the war",
+  "@warLostByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warWonByDestruction": "{clanName} won by destruction!",
+  "@warWonByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByDestruction": "{clanName} lost by destruction",
+  "@warLostByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warPerfectDraw": "Perfect draw",
+  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "@warCanTieNeedsStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "@warCannotCatchUp": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorHintPercent": "50.00",
+  "@warCalculatorHintPercent": {
+    "description": "Hint text for percentage input in war calculator"
   },
   "warNoDataAvailableForThisWar": "Não há dados disponíveis para esta guerra",
   "warCalculatorFast": "Calculadora rápida",
@@ -1872,6 +1932,7 @@
   "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
   "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
   "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
+  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
   "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
   "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
   "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
