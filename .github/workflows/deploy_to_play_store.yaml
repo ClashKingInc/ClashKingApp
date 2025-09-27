@@ -1,9 +1,8 @@
 name: Deploy to Play Store
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [published]
   workflow_dispatch:
     inputs:
       ref:
@@ -44,7 +43,7 @@ jobs:
         with:
           ref: ${{ github.event.inputs.ref || github.ref }}
 
-      - name: Extract version from tag and generate build number
+      - name: Extract version from release and generate build number
         id: extract_version
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
@@ -61,14 +60,15 @@ jobs:
               exit 1
             fi
           else
-            TAG=${GITHUB_REF#refs/tags/}          # Extrait "v1.0.0-alpha"
-            VERSION_NAME=${TAG#v}                # Retire "v" pour obtenir "1.0.0-alpha"
+            # Extract version from release tag
+            RELEASE_TAG="${{ github.event.release.tag_name }}"
+            VERSION_NAME=${RELEASE_TAG#v}                # Remove "v" prefix if present
           fi
-          
+
           # Remove alpha/beta suffixes for Play Store (required by Google)
           VERSION_NAME=$(echo "$VERSION_NAME" | sed 's/-alpha.*$//' | sed 's/-beta.*$//')
           echo "Cleaned version for Play Store: $VERSION_NAME"
-          BUILD_NUMBER=$(date +%s)             # Génère un numéro de build basé sur le timestamp
+          BUILD_NUMBER=$(date +%s)             # Generate build number based on timestamp
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
           echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
           
@@ -154,16 +154,18 @@ jobs:
           name: aab-stores
           path: build/app/outputs/bundle/release/app-release.aab
 
-      - name: Determine track based on tag
+      - name: Determine track based on release type
         id: determine_track
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             TRACK="${{ github.event.inputs.track }}"
           else
-            TAG=${GITHUB_REF#refs/tags/}
-            if [[ "$TAG" == *"alpha"* ]]; then
+            # Determine track based on release tag
+            RELEASE_TAG="${{ github.event.release.tag_name }}"
+
+            if [[ "$RELEASE_TAG" == *"alpha"* ]]; then
               TRACK="alpha"
-            elif [[ "$TAG" == *"beta"* ]]; then
+            elif [[ "$RELEASE_TAG" == *"beta"* ]]; then
               TRACK="beta"
             else
               TRACK="production"
@@ -171,6 +173,7 @@ jobs:
           fi
           echo "TRACK=$TRACK" >> $GITHUB_ENV
           echo "Selected track: $TRACK"
+          echo "Release tag: ${{ github.event.release.tag_name }}"
 
       - name: Deploy to Play Store
         uses: r0adkll/upload-google-play@v1
