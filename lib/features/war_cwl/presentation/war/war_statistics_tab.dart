@@ -23,21 +23,78 @@ class WarStatisticsTab extends StatelessWidget {
     Map<int, int> clanStarCounts = countStars(clan.members);
     Map<int, int> opponentStarCounts = countStars(opponent.members);
 
+    final int attacksPerPlayer = warInfo.attacksPerMember ?? 2;
+    final int teamSize = warInfo.teamSize ?? 15;
+    final int numberOfAttacks = attacksPerPlayer * teamSize;
+
     String getWarStatus() {
+      // Check if war hasn't started
+      if (clan.stars == 0 && opponent.stars == 0 &&
+          clan.destructionPercentage == 0.0 && opponent.destructionPercentage == 0.0) {
+        return AppLocalizations.of(context)?.warNotStarted ?? 'War hasn\'t started yet';
+      }
+
+      // Check if war is finished
+      if (warInfo.state == 'warEnded') {
+        if (clan.stars > opponent.stars) {
+          return AppLocalizations.of(context)?.warWonByStars(clan.name) ?? '${clan.name} won the war!';
+        } else if (opponent.stars > clan.stars) {
+          return AppLocalizations.of(context)?.warLostByStars(opponent.name) ?? '${opponent.name} won the war';
+        } else if (clan.destructionPercentage > opponent.destructionPercentage) {
+          return AppLocalizations.of(context)?.warWonByDestruction(clan.name) ?? '${clan.name} won by destruction!';
+        } else if (opponent.destructionPercentage > clan.destructionPercentage) {
+          return AppLocalizations.of(context)?.warLostByDestruction(opponent.name) ?? '${opponent.name} won by destruction';
+        } else {
+          return AppLocalizations.of(context)?.warPerfectDraw ?? 'Perfect draw!';
+        }
+      }
+
+      // Calculate remaining attacks potential
+      final clanRemainingAttacks = numberOfAttacks - clan.attacks;
+      final opponentRemainingAttacks = numberOfAttacks - opponent.attacks;
+      final clanMaxPossibleStars = clan.stars + (clanRemainingAttacks * 3);
+      final opponentMaxPossibleStars = opponent.stars + (opponentRemainingAttacks * 3);
+
       if (clan.stars < opponent.stars) {
+        final starsNeeded = opponent.stars - clan.stars + 1;
+        final starsToTie = opponent.stars - clan.stars;
+
+        if (starsNeeded > (clanMaxPossibleStars - clan.stars)) {
+          // Can't win, check if can tie
+          if (starsToTie <= (clanMaxPossibleStars - clan.stars)) {
+            return AppLocalizations.of(context)?.warCanTieNeedsStars(clan.name, starsToTie) ?? '${clan.name} can tie but needs $starsToTie stars';
+          } else {
+            return AppLocalizations.of(context)?.warCannotCatchUp(clan.name) ?? '${clan.name} cannot catch up on stars';
+          }
+        }
+
         return AppLocalizations.of(context)?.warStarsNeededToTakeTheLead(
               clan.name,
-              opponent.stars - clan.stars + 1,
-              opponent.stars - clan.stars,
+              starsNeeded,
+              starsToTie,
               (opponent.destructionPercentage - clan.destructionPercentage + 0.01).toStringAsFixed(2)
             ) ?? '';
+
       } else if (clan.stars > opponent.stars) {
+        final starsNeeded = clan.stars - opponent.stars + 1;
+        final starsToTie = clan.stars - opponent.stars;
+
+        if (starsNeeded > (opponentMaxPossibleStars - opponent.stars)) {
+          // Opponent can't win, check if can tie
+          if (starsToTie <= (opponentMaxPossibleStars - opponent.stars)) {
+            return AppLocalizations.of(context)?.warCanTieNeedsStars(opponent.name, starsToTie) ?? '${opponent.name} can tie but needs $starsToTie stars';
+          } else {
+            return AppLocalizations.of(context)?.warCannotCatchUp(opponent.name) ?? '${opponent.name} cannot catch up on stars';
+          }
+        }
+
         return AppLocalizations.of(context)?.warStarsNeededToTakeTheLead(
               opponent.name,
-              clan.stars - opponent.stars + 1,
-              clan.stars - opponent.stars,
+              starsNeeded,
+              starsToTie,
               (clan.destructionPercentage - opponent.destructionPercentage + 0.01).toStringAsFixed(2)
             ) ?? '';
+
       } else if (clan.destructionPercentage > opponent.destructionPercentage) {
         return AppLocalizations.of(context)?.warStarsAndPercentNeededToTakeTheLead(
               clan.name,
@@ -49,13 +106,9 @@ class WarStatisticsTab extends StatelessWidget {
               (opponent.destructionPercentage - clan.destructionPercentage + 0.01).toStringAsFixed(2),
             ) ?? '';
       } else {
-        return '${AppLocalizations.of(context)?.warClanDraw ?? 'The two clans are tied'}.';
+        return AppLocalizations.of(context)?.warClanDraw ?? 'The two clans are tied';
       }
     }
-
-    final int attacksPerPlayer = warInfo.attacksPerMember ?? 2;
-    final int teamSize = warInfo.teamSize ?? 15;
-    final int numberOfAttacks = attacksPerPlayer * teamSize;
 
     final double clanStarsPercentage = clan.stars / (teamSize * 3);
     final double opponentStarsPercentage = opponent.stars / (teamSize * 3);

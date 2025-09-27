@@ -910,6 +910,63 @@
       }
     }
   },
+  "warNotStarted": "War hasn't started yet",
+  "warWonByStars": "{clanName} won the war!",
+  "@warWonByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByStars": "{opponentName} won the war",
+  "@warLostByStars": {
+    "placeholders": {
+      "opponentName": {
+        "type": "String"
+      }
+    }
+  },
+  "warWonByDestruction": "{clanName} won by destruction!",
+  "@warWonByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByDestruction": "{opponentName} won by destruction",
+  "@warLostByDestruction": {
+    "placeholders": {
+      "opponentName": {
+        "type": "String"
+      }
+    }
+  },
+  "warPerfectDraw": "Perfect draw!",
+  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "@warCanTieNeedsStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "@warCannotCatchUp": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorHintPercent": "50.00",
+  "@warCalculatorHintPercent": {
+    "description": "Hint text for percentage input in war calculator"
+  },
   "warNoDataAvailableForThisWar": "No data available for this war",
   "warCalculatorFast": "Fast calculator",
   "warCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",

@@ -104,7 +104,9 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
                             '% Needed overall',
                         labelStyle: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface),
-                        hintText: '50.00',
+                        hintText: AppLocalizations.of(context)
+                                ?.warCalculatorHintPercent ??
+                            '50.00',
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                               color: Theme.of(context).colorScheme.onSurface),
