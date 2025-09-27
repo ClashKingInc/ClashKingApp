@@ -53,7 +53,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   collection: ^1.19.1
   flutter_gif: ^0.0.4
-  package_info_plus: ^8.3.0
+  device_info_plus: ^11.5.0
   device_info_plus: ^12.1.0
   mailto: ^2.0.0
   timeago: ^3.7.1
