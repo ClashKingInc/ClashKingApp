@@ -31,16 +31,16 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  provider: ^6.1.5
+  provider: ^6.1.5+1
   flutter_web_auth_2: ^4.1.0
   app_links: ^6.3.2
   shared_preferences: ^2.5.3 
-  http: ^1.4.0
+  http: ^1.5.0
   crypto: ^3.0.6
   clipboard: ^2.0.2
   lucide_icons: ^0.257.0
   scrollable_tab_view: ^1.0.14
-  fl_chart: ^1.0.0
+  fl_chart: ^1.1.1
   tuple: ^2.0.2
   custom_sliding_segmented_control: ^1.8.5
   dropdown_button2: ^2.3.9
@@ -53,6 +53,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   collection: ^1.19.1
   flutter_gif: ^0.0.4
+  package_info_plus: ^9.0.0
   device_info_plus: ^12.1.0
   mailto: ^2.0.0
   timeago: ^3.7.1
@@ -61,8 +62,8 @@ dependencies:
   open_filex: ^4.7.0
   cupertino_icons: ^1.0.8
   intl: ^0.20.2
-  url_launcher: ^6.3.1
-  mockito: ^5.4.6
+  url_launcher: ^6.3.2
+  mockito: ^5.5.1
   webview_flutter: ^4.13.0
   flutter_native_splash: ^2.4.6
   path_provider: ^2.1.5

@@ -145,14 +145,28 @@ jobs:
             --build-number=${{ env.BUILD_NUMBER }} \
             --build-name=${{ env.VERSION_NAME }}
 
+      - name: Build APK for release assets
+        run: |
+          flutter build apk --release \
+            --build-number=${{ env.BUILD_NUMBER }} \
+            --build-name=${{ env.VERSION_NAME }}
+
       - name: List output files for debugging
-        run: ls -R build/app/outputs/bundle/release/
+        run: |
+          ls -R build/app/outputs/bundle/release/
+          ls -R build/app/outputs/apk/release/
 
       - name: Upload generated aab to the artifacts
         uses: actions/upload-artifact@v4
         with:
           name: aab-stores
           path: build/app/outputs/bundle/release/app-release.aab
+
+      - name: Upload APK to release assets (only on release trigger)
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/app/outputs/apk/release/app-release.apk
+          tag_name: ${{ github.event.release.tag_name }}
 
       - name: Determine track based on release type
         id: determine_track
