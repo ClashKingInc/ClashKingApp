@@ -128,6 +128,14 @@ class AuthService extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       DebugUtils.debugError(" Email login error: $e");
+      DebugUtils.debugInfo("Exception type: ${e.runtimeType}");
+      DebugUtils.debugInfo("Exception string: ${e.toString()}");
+      // Let EmailVerificationRequiredException pass through for proper handling
+      if (e.runtimeType.toString() == 'EmailVerificationRequiredException') {
+        DebugUtils.debugInfo("✅ Detected EmailVerificationRequiredException - rethrowing");
+        rethrow;
+      }
+      DebugUtils.debugInfo("❌ Not EmailVerificationRequiredException - throwing generic error");
       throw Exception(AppLocalizations.of(globalNavigatorKey.currentContext!)!.authErrorEmailLoginFailed);
     }
   }
