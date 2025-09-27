@@ -40,7 +40,7 @@ Future<Clan> fetchClanInfo(String tag) async {
   tag = tag.replaceAll('#', '!');
 
   final response = await http.get(
-    Uri.parse('https://api.clashking.xyz/v1/clans/$tag'),
+    Uri.parse('https://api.clashk.ing/v1/clans/$tag'),
   );
 
   if (response.statusCode == 200) {
@@ -60,7 +60,7 @@ Future<String> fetchLeagueName(String tag) async {
   tag = tag.replaceAll('#', '!');
 
   final response = await http.get(
-    Uri.parse('https://api.clashking.xyz/player/$tag/stats'),
+    Uri.parse('https://api.clashk.ing/player/$tag/stats'),
   );
 
   if (response.statusCode == 200) {

@@ -85,7 +85,7 @@ class EventHistoryClanService {
   static Future<EventHistoryClan> fetcheventHistoryData(String clanTag) async {
     try{
     clanTag = clanTag.replaceAll('#', '!');
-    final response = await http.get(Uri.parse('https://api.clashking.xyz/clan/$clanTag/historical'));
+    final response = await http.get(Uri.parse('https://api.clashk.ing/clan/$clanTag/historical'));
     
     if (response.statusCode == 200) {
       EventHistoryClan eventHistoryClan = EventHistoryClan.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));

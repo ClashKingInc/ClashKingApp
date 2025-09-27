@@ -16,7 +16,7 @@ class PlayerStatsService {
   });
   Future<WarStats> fetchPlayerWarHits() async {
     final url =
-        'https://api.clashking.xyz/player/${playerTag.replaceFirst("#", "%23")}/warhits?timestamp_start=$timestampStart&timestamp_end=$timestampEnd&limit=$limit';
+        'https://api.clashk.ing/player/${playerTag.replaceFirst("#", "%23")}/warhits?timestamp_start=$timestampStart&timestamp_end=$timestampEnd&limit=$limit';
 
     final response = await http.get(Uri.parse(url));
 

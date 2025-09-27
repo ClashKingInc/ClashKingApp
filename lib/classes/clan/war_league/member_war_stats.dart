@@ -252,7 +252,7 @@ class Attacker {
 }
 
 class MembersWarStatsService {
-  final String baseUrl = "https://api.clashking.xyz/war";
+  final String baseUrl = "https://api.clashk.ing/war";
 
   Future<MembersWarStats> fetchWarLogsAndAnalyzeStats(String clanTag) async {
     clanTag = clanTag.replaceFirst("#", "!");

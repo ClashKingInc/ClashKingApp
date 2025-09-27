@@ -35,7 +35,7 @@ class WarBasicData {
 class WarBasicService {
   static Future<List<dynamic>> fetchWarBasicData(String tag) async {
     final response = await http.get(Uri.parse(
-        'https://api.clashking.xyz/war/${tag.substring(1)}/basic'));
+        'https://api.clashk.ing/war/${tag.substring(1)}/basic'));
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       return json.decode(body);

@@ -34,7 +34,7 @@ class PlayerNameInfo {
   }
 
   static Future<List<PlayerNameInfo>> fetchPlayerNameInfo(String name) async {
-    final response = await http.get(Uri.parse('https://api.clashking.xyz/player/search/$name'));
+    final response = await http.get(Uri.parse('https://api.clashk.ing/player/search/$name'));
     if (response.statusCode == 200) {
       List<PlayerNameInfo> players = [];
       Map<String, dynamic> data = convert.jsonDecode(convert.utf8.decode(response.bodyBytes));

@@ -12,7 +12,7 @@ class PlayerLegendService {
   Future<PlayerLegendData?> fetchLegendData(String tag) async {
     try {
       final response = await http.get(Uri.parse(
-          'https://api.clashking.xyz/player/${tag.substring(1)}/legends'));
+          'https://api.clashk.ing/player/${tag.substring(1)}/legends'));
 
       if (response.statusCode == 200) {
         String responseBody = utf8.decode(response.bodyBytes);

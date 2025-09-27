@@ -249,7 +249,7 @@ class ClanLeagueRounds {
       // Attempt the request up to 3 times
       try {
         final response = await http.get(
-          Uri.parse('https://api.clashking.xyz/v1/clanwarleagues/wars/$warTag'),
+          Uri.parse('https://api.clashk.ing/v1/clanwarleagues/wars/$warTag'),
         );
 
         if (response.statusCode == 200) {
@@ -286,7 +286,7 @@ class CurrentLeagueService {
     tag = tag.replaceAll('#', '%23'); // URL encode the '#' character
     final response = await http.get(
       Uri.parse(
-          'https://api.clashking.xyz/v1/clans/$tag/currentwar/leaguegroup'),
+          'https://api.clashk.ing/v1/clans/$tag/currentwar/leaguegroup'),
     );
 
     if (response.statusCode == 200) {

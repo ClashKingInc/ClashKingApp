@@ -75,7 +75,7 @@ Future<bool> checkApiToken(String apiToken, String playerTag, Function updateErr
   }
 
   final url =
-      Uri.parse('https://api.clashking.xyz/v1/players/$playerTag/verifytoken');
+      Uri.parse('https://api.clashk.ing/v1/players/$playerTag/verifytoken');
   final response = await http.post(
     url,
     body: jsonEncode(<String, dynamic>{
@@ -170,7 +170,7 @@ Future<String> checkIfPlayerTagExists(
     String playerTag, String authToken) async {
   playerTag = playerTag.replaceAll('#', '!');
   final response = await http.get(
-    Uri.parse('https://api.clashking.xyz/v1/players/$playerTag'),
+    Uri.parse('https://api.clashk.ing/v1/players/$playerTag'),
   );
 
   if (response.statusCode == 200) {

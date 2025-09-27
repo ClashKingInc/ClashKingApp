@@ -13,7 +13,7 @@ class ToDoService {
       return '${entry.key == 0 ? '' : '&'}player_tags=$encodedTag';
     }).join('');
     final response = await http.get(
-        Uri.parse('https://api.clashking.xyz/player/to-do?$tagsParameter'));
+        Uri.parse('https://api.clashk.ing/player/to-do?$tagsParameter'));
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
@@ -28,7 +28,7 @@ class ToDoService {
   static Future<void> fetchPlayerToDoData(ProfileInfo profileInfo) async {
     String tag = profileInfo.tag.replaceAll('#', '%23');
     final response = await http.get(
-        Uri.parse('https://api.clashking.xyz/player/to-do?player_tags=$tag'));
+        Uri.parse('https://api.clashk.ing/player/to-do?player_tags=$tag'));
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);

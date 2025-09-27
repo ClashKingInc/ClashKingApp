@@ -36,7 +36,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
 
   Future<void> _fetchCountries() async {
     final response =
-        await http.get(Uri.parse('https://api.clashking.xyz/v1/locations'));
+        await http.get(Uri.parse('https://api.clashk.ing/v1/locations'));
     if (response.statusCode == 200) {
       final List items = json.decode(utf8.decode(response.bodyBytes))['items'];
       final countries = items.where((item) => item["name"] != "").toList();

@@ -122,7 +122,7 @@ class BadgeUrls {
 
 Future<List<LegendSeason>> fetchSeasonsData(String tag) async {
   final response = await http.get(Uri.parse(
-      'https://api.clashking.xyz/player/${tag.substring(1)}/legend_rankings'));
+      'https://api.clashk.ing/player/${tag.substring(1)}/legend_rankings'));
 
   if (response.statusCode == 200) {
     String body = utf8.decode(response.bodyBytes);
