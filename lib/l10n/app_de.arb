@@ -919,10 +919,10 @@
       }
     }
   },
-  "warLostByStars": "{opponentName} won the war",
+  "warLostByStars": "{clanName} lost the war",
   "@warLostByStars": {
     "placeholders": {
-      "opponentName": {
+      "clanName": {
         "type": "String"
       }
     }
@@ -935,15 +935,15 @@
       }
     }
   },
-  "warLostByDestruction": "{opponentName} won by destruction",
+  "warLostByDestruction": "{clanName} lost by destruction",
   "@warLostByDestruction": {
     "placeholders": {
-      "opponentName": {
+      "clanName": {
         "type": "String"
       }
     }
   },
-  "warPerfectDraw": "Perfect draw!",
+  "warPerfectDraw": "Perfect draw",
   "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
   "@warCanTieNeedsStars": {
     "placeholders": {
