@@ -249,7 +249,7 @@
   "authPasswordConfirmRequired": "Bevestig asseblief jou wagwoord",
   "authPasswordMismatch": "Wagwoorde stem nie ooreen nie",
   "authPasswordTooShort": "Wagwoord moet minstens 8 karakters wees",
-  "authPasswordRequirements": "Wagwoord moet bevat: hoofletter, kleinletter, syfer, en spesiale karakter",
+  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
   "authPasswordForgot": "Wagwoord vergeet?",
   "authPasswordForgotDescription": "Enter your email address and we'll send you a 6-digit code to reset your password.",
   "authPasswordResetSend": "Send Reset Code",
@@ -269,6 +269,7 @@
   "authUsernameLabel": "Gebruikersnaam",
   "authUsernameRequired": "Voer asseblief 'n gebruikersnaam in",
   "authUsernameTooShort": "Gebruikersnaam moet minstens 3 karakters wees",
+  "authUsernameTooLong": "Username must be no more than 30 characters",
   "authErrorConnection": "'n Fout het voorgekom. Gaan jou internetverbinding na en probeer weer.",
   "authErrorConnectionRelaunch": "'n Fout het voorgekom. Gaan jou internetverbinding na en herlaai die app.",
   "authErrorEmailAlreadyRegistered": "This email is already registered. Please try logging in instead.",
@@ -297,9 +298,11 @@
   "authEmailVerificationExpired": "Verification expired. Please register again.",
   "authEmailVerificationAlreadyVerified": "This email is already verified. Please try logging in instead.",
   "authEmailVerificationNoToken": "No pending verification found. Please register first.",
+  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
   "authEmailVerificationVerifying": "Verifying your email...",
   "authEmailVerificationCodeInstructions": "Enter the 6-digit code sent to your email:",
   "authEmailVerificationCodeRequired": "Please enter the 6-digit verification code",
+  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
   "authEmailVerificationVerify": "Verify Code",
   "helpTitle": "Benodig hulp?",
   "helpJoinDiscord": "Sluit aan by Discord",
@@ -906,6 +909,63 @@
         "type": "String"
       }
     }
+  },
+  "warNotStarted": "War hasn't started yet",
+  "warWonByStars": "{clanName} won the war!",
+  "@warWonByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByStars": "{opponentName} won the war",
+  "@warLostByStars": {
+    "placeholders": {
+      "opponentName": {
+        "type": "String"
+      }
+    }
+  },
+  "warWonByDestruction": "{clanName} won by destruction!",
+  "@warWonByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByDestruction": "{opponentName} won by destruction",
+  "@warLostByDestruction": {
+    "placeholders": {
+      "opponentName": {
+        "type": "String"
+      }
+    }
+  },
+  "warPerfectDraw": "Perfect draw!",
+  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "@warCanTieNeedsStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "@warCannotCatchUp": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorHintPercent": "50.00",
+  "@warCalculatorHintPercent": {
+    "description": "Hint text for percentage input in war calculator"
   },
   "warNoDataAvailableForThisWar": "No data available for this war",
   "warCalculatorFast": "Fast calculator",
@@ -1672,50 +1732,6 @@
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "warOpponentPerfectWar": "Opponent has a perfect war - victory impossible.",
-  "@warOpponentPerfectWar": {
-    "description": "Message when opponent has a perfect war and victory is impossible"
-  },
-  "warClanPerfectWar": "Perfect war achieved - victory secured!",
-  "@warClanPerfectWar": {
-    "description": "Message when clan has achieved a perfect war"
-  },
-  "warCannotWinNotEnoughStars": "Cannot win - not enough stars remaining.",
-  "@warCannotWinNotEnoughStars": {
-    "description": "Message when victory is impossible due to insufficient stars"
-  },
-  "warVictorySecured": "Victory secured - opponent cannot catch up!",
-  "@warVictorySecured": {
-    "description": "Message when victory is secured and opponent cannot catch up"
-  },
-  "warCannotWinNotEnoughDestruction": "Cannot win - not enough destruction possible.",
-  "@warCannotWinNotEnoughDestruction": {
-    "description": "Message when victory is impossible due to insufficient destruction percentage"
-  },
-  "warStarsNeeded": "Stars needed",
-  "@warStarsNeeded": {
-    "description": "Label for stars needed in war calculator"
-  },
-  "warDestructionNeeded": "Destruction needed",
-  "@warDestructionNeeded": {
-    "description": "Label for destruction percentage needed in war calculator"
-  },
-  "warYouAreWinning": "You are winning!",
-  "@warYouAreWinning": {
-    "description": "Message when clan is currently winning the war"
-  },
-  "warTieAttackTimeWin": "Perfect tie! Winning by faster attack time.",
-  "@warTieAttackTimeWin": {
-    "description": "Message when war is tied on stars and destruction but clan wins by faster average attack time"
-  },
-  "warTieAttackTimeLoss": "Perfect tie! Losing by slower attack time.",
-  "@warTieAttackTimeLoss": {
-    "description": "Message when war is tied on stars and destruction but clan loses by slower average attack time"
-  },
-  "warPerfectTie": "Perfect tie in all aspects!",
-  "@warPerfectTie": {
-    "description": "Message when war is completely tied including attack times"
-  },
   "performanceAnalysisFailedAttacks": "Failed Attacks (0-1 Stars)",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
@@ -1916,6 +1932,7 @@
   "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
   "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
   "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
+  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
   "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
   "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
   "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
