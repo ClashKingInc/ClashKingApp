@@ -249,7 +249,7 @@
   "authPasswordConfirmRequired": "Lütfen şifreni onayla",
   "authPasswordMismatch": "Şifreler eşleşmiyor",
   "authPasswordTooShort": "Şifre en az 8 karakter olmalı",
-  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
+  "authPasswordRequirements": "Şifre şunları içermelidir:\n• Büyük harf\n• Küçük harf\n• Sayı\n• Özel karakter",
   "authPasswordForgot": "Şifreni mi unuttun?",
   "authPasswordForgotDescription": "E-posta adresinizi girin, size şifrenizi sıfırlamak için 6 haneli bir kod gönderelim.",
   "authPasswordResetSend": "Sıfırlama Kodunu Gönder",
@@ -269,7 +269,7 @@
   "authUsernameLabel": "Kullanıcı Adı",
   "authUsernameRequired": "Lütfen bir kullanıcı adı girin",
   "authUsernameTooShort": "Kullanıcı adı en az 3 karakter olmalı",
-  "authUsernameTooLong": "Username must be no more than 30 characters",
+  "authUsernameTooLong": "Kullanıcı adı en fazla 30 karakter olmalıdır",
   "authErrorConnection": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.",
   "authErrorConnectionRelaunch": "Bir hata oluştu. Lütfen internet bağlantınızı kontrol edin ve uygulamayı yeniden başlatın.",
   "authErrorEmailAlreadyRegistered": "Bu e-posta zaten kayıtlı. Lütfen giriş yapmayı deneyin.",
@@ -298,11 +298,11 @@
   "authEmailVerificationExpired": "Doğrulama süresi doldu. Lütfen tekrar kayıt olun.",
   "authEmailVerificationAlreadyVerified": "Bu e-posta zaten doğrulandı. Lütfen bunun yerine giriş yapmayı deneyin.",
   "authEmailVerificationNoToken": "Bekleyen doğrulama bulunamadı. Lütfen önce kayıt olun.",
-  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
+  "authEmailVerificationExpiredResend": "Doğrulama süresi doldu. Lütfen tekrar kaydolmak için geri dönün.",
   "authEmailVerificationVerifying": "E-postanız doğrulanıyor...",
   "authEmailVerificationCodeInstructions": "E-postanıza gönderilen 6 haneli kodu girin:",
   "authEmailVerificationCodeRequired": "Lütfen 6 haneli doğrulama kodunu girin",
-  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
+  "authEmailVerificationCodeInvalid": "Kod geçersiz veya süresi dolmuş. Lütfen kodunuzu kontrol edin veya doğrulama e-postasını yeniden gönderin.",
   "authEmailVerificationVerify": "Doğrulama Kodu",
   "helpTitle": "Yardıma mı ihtiyacın var?",
   "helpJoinDiscord": "Discord'a Katıl",
@@ -910,8 +910,8 @@
       }
     }
   },
-  "warNotStarted": "War hasn't started yet",
-  "warWonByStars": "{clanName} won the war!",
+  "warNotStarted": "Savaş henüz başlamadı",
+  "warWonByStars": "{clanName} savaşı kazandı!",
   "@warWonByStars": {
     "placeholders": {
       "clanName": {
@@ -919,7 +919,7 @@
       }
     }
   },
-  "warLostByStars": "{clanName} lost the war",
+  "warLostByStars": "{clanName} savaşı kaybetti.",
   "@warLostByStars": {
     "placeholders": {
       "clanName": {
@@ -927,7 +927,7 @@
       }
     }
   },
-  "warWonByDestruction": "{clanName} won by destruction!",
+  "warWonByDestruction": "{clanName} yıkımla kazandı!",
   "@warWonByDestruction": {
     "placeholders": {
       "clanName": {
@@ -935,7 +935,7 @@
       }
     }
   },
-  "warLostByDestruction": "{clanName} lost by destruction",
+  "warLostByDestruction": "{clanName} yıkımla kaybetti.",
   "@warLostByDestruction": {
     "placeholders": {
       "clanName": {
@@ -943,8 +943,8 @@
       }
     }
   },
-  "warPerfectDraw": "Perfect draw",
-  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "warPerfectDraw": "Mükemmel beraberlik",
+  "warCanTieNeedsStars": "{clanName} berabere kalabilir ancak {stars} yıldıza ihtiyacı var",
   "@warCanTieNeedsStars": {
     "placeholders": {
       "clanName": {
@@ -955,7 +955,7 @@
       }
     }
   },
-  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "warCannotCatchUp": "{clanName} yıldızda yetişemiyor",
   "@warCannotCatchUp": {
     "placeholders": {
       "clanName": {
@@ -1932,7 +1932,7 @@
   "authErrorUserCancelledDiscordLogin": "Kullanıcı Discord girişini iptal etti.",
   "authErrorDiscordLoginFailed": "Discord'a giriş başarısız oldu. Lütfen tekrar deneyin.",
   "authErrorEmailLoginFailed": "E-posta girişi başarısız oldu. Lütfen kimlik bilgilerinizi kontrol edin.",
-  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
+  "authErrorEmailNotVerified": "E-posta adresiniz doğrulanmadı. Lütfen e-postanızı kontrol edin ve doğrulama kodunu girin.",
   "authErrorEmailVerificationFailed": "E-posta doğrulaması başarısız oldu. Jeton geçersiz veya süresi dolmuş olabilir.",
   "authErrorDiscordLinkFailed": "Discord hesabı bağlanamadı. Başka bir hesaba bağlı olabilir.",
   "authErrorEmailLinkFailed": "E-posta hesabı bağlanamadı. E-posta zaten kullanımda olabilir.",
