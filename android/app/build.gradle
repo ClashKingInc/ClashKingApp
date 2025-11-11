@@ -14,7 +14,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '1'
 def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '1.0'
-def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion')?.toInteger() ?: 23
+def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion')?.toInteger() ?: 24
 def flutterTargetSdkVersion = localProperties.getProperty('flutter.targetSdkVersion')?.toInteger() ?: 36
 
 def keystoreProperties = new Properties()
