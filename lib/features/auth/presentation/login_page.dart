@@ -198,7 +198,9 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   SizedBox(height: 24),
 
                   // Auth Tabs
-                  Container(
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 700),
+                    child: Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(20),
@@ -271,8 +273,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       ],
                     ),
                   ),
-
-                  SizedBox(height: 8),
+                ),
 
                   SizedBox(height: 16),
 

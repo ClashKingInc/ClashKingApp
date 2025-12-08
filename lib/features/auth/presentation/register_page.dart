@@ -253,12 +253,15 @@ class RegisterPageState extends State<RegisterPage> {
               SizedBox(height: 32),
 
               // Registration form card
-              Card(
-                elevation: 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
+              Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 700),
+                  child: Card(
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
                       SizedBox(height: 8),
                       // Username Field
                       TextFormField(
@@ -493,7 +496,9 @@ class RegisterPageState extends State<RegisterPage> {
                         child: Text(AppLocalizations.of(context)!
                             .authAlreadyHaveAccount),
                       ),
-                    ],
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
