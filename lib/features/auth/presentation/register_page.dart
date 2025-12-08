@@ -260,8 +260,6 @@ class RegisterPageState extends State<RegisterPage> {
                   child: Column(
                     children: [
                       SizedBox(height: 8),
-
-                      SizedBox(height: 8),
                       // Username Field
                       TextFormField(
                         controller: _usernameController,
