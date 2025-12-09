@@ -10,11 +10,11 @@
   "loadingCapitalRaids": "Clanstadt-Überfälle werden geladen...",
   "loadingAlmostReady": "Fast fertig...",
   "accountVerificationTitle": "Konto verifizieren",
-  "accountVerified": "Verified",
+  "accountVerified": "Verifiziert",
   "accountVerify": "Verifizieren",
   "accountVerificationSuccess": "Konto erfolgreich verifiziert!",
   "generalRetry": "Wiederholen",
-  "generalRetrying": "Retrying...",
+  "generalRetrying": "Versuche erneut...",
   "generalTryAgain": "Versuche es später nochmal",
   "generalReset": "Zurücksetzen",
   "generalCancel": "Abbrechen",
@@ -52,12 +52,12 @@
   "@generalAll": {
     "description": "all items"
   },
-  "generalAllTime": "All Time",
+  "generalAllTime": "Gesamter Zeitraum",
   "@generalAllTime": {
     "description": "All time period"
   },
-  "generalOthers": "Others",
-  "generalCompleted": "completed",
+  "generalOthers": "Andere",
+  "generalCompleted": "abgeschlossen",
   "generalTotal": "Insgesamt",
   "generalBest": "Beste",
   "@generalBest": {
@@ -99,17 +99,17 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Warnung",
-  "generalUnknown": "Unknown",
+  "generalUnknown": "Unbekannt",
   "generalNoDataAvailable": "Keine Daten verfügbar.",
-  "generalNoFilteredResults": "No results match your filters",
+  "generalNoFilteredResults": "Keine Ergebnisse entsprechen deinen Filtern",
   "@generalNoFilteredResults": {
     "description": "Message when applied filters return no results"
   },
-  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "generalAdjustFilters": "Versuche, deine Filterkriterien anzupassen, oder lösche deine Filter, um alle Daten zu sehen.",
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
-  "generalClearFilters": "Clear Filters",
+  "generalClearFilters": "Filter entfernen",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
   },
