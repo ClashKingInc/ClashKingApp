@@ -205,7 +205,7 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
 
   Widget _buildWarTypeDropdown() {
     return DropdownButtonFormField<String>(
-      value: _filter.warType,
+      initialValue: _filter.warType,
       items: const [
         DropdownMenuItem(value: 'all', child: Text('All Wars')),
         DropdownMenuItem(value: 'random', child: Text('Random Wars')),
@@ -231,7 +231,7 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
           children: [
             Expanded(
               child: DropdownButtonFormField<int?>(
-                value: _filter.ownTownHall,
+                initialValue: _filter.ownTownHall,
                 items: [
                   const DropdownMenuItem(value: null, child: Text('Any TH')),
                   ...List.generate(16, (i) => i + 1).map(
@@ -249,7 +249,7 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
             const SizedBox(width: 16),
             Expanded(
               child: DropdownButtonFormField<int?>(
-                value: _filter.enemyTownHall,
+                initialValue: _filter.enemyTownHall,
                 items: [
                   const DropdownMenuItem(value: null, child: Text('Any TH')),
                   ...List.generate(16, (i) => i + 1).map(
@@ -288,7 +288,7 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
           children: [
             Expanded(
               child: DropdownButtonFormField<int?>(
-                value: _filter.minStars,
+                initialValue: _filter.minStars,
                 items: [
                   const DropdownMenuItem(value: null, child: Text('Any')),
                   ...List.generate(4, (i) => i).map((stars) =>
@@ -306,7 +306,7 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
             const SizedBox(width: 16),
             Expanded(
               child: DropdownButtonFormField<int?>(
-                value: _filter.maxStars,
+                initialValue: _filter.maxStars,
                 items: [
                   const DropdownMenuItem(value: null, child: Text('Any')),
                   ...List.generate(4, (i) => i).map((stars) =>
