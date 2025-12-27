@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -10,12 +11,13 @@ class TranslationScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.translationHelpUsTranslate),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+      body: ResponsiveLayoutWrapper(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               Text(
                 AppLocalizations.of(context)!.translationThankYou,
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(
@@ -132,6 +134,7 @@ class TranslationScreen extends StatelessWidget {
               ),
             ],
           ),
+        ),
         ),
       ),
     );

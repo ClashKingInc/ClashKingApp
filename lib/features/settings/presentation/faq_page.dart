@@ -2,6 +2,7 @@ import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -41,7 +42,8 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.faqTitle),
       ),
-      body: Column(
+      body: ResponsiveLayoutWrapper(
+        child: Column(
         children: [
           // Search bar
           Container(
@@ -107,6 +109,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
             ),
           ),
         ],
+      ),
       ),
     );
   }
