@@ -1937,7 +1937,7 @@
   "generalAvailable": "Available",
   "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
   "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
-  "authErrorEmailLoginFailed": ".",
+  "authErrorEmailLoginFailed": "Error al iniciar sesión en el correo. Por favor, comprueba tus credenciales.",
   "authErrorEmailNotVerified": "Tu dirección de correo electrónico no ha sido verificada. Por favor, comprueba tu correo electrónico e introduce el código de verificación.",
   "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
   "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
