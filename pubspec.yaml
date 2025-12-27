@@ -40,7 +40,7 @@ dependencies:
   clipboard: ^2.0.2
   lucide_icons: ^0.257.0
   scrollable_tab_view: ^1.0.14
-  fl_chart: ^0.68.0
+  fl_chart: ^1.1.1
   tuple: ^2.0.2
   custom_sliding_segmented_control: ^1.8.5
   dropdown_button2: ^2.3.9
