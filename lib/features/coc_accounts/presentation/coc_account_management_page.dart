@@ -591,8 +591,18 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       _isAddingLoading = false;
       _errorMessage = "";
       context.read<CocAccountService>().addLocalAccount(newAccount);
-      _syncTempAccountsWithPlayerService();
     });
+
+    // Fetch the new player's data to populate PlayerService
+    final playerService = context.read<PlayerService>();
+    try {
+      await playerService.initPlayerData([newAccount["player_tag"]]);
+    } catch (e) {
+      DebugUtils.debugWarning(
+          "⚠️ Failed to fetch new player data immediately, will load on next sync");
+    }
+
+    _syncTempAccountsWithPlayerService();
 
     _playerTagController.clear();
   }
