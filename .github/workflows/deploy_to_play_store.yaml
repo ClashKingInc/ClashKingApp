@@ -69,13 +69,15 @@ jobs:
           VERSION_NAME=$(echo "$VERSION_NAME" | sed 's/-alpha.*$//' | sed 's/-beta.*$//')
           echo "Cleaned version for Play Store: $VERSION_NAME"
           BUILD_NUMBER=$(date +%s)             # Generate build number based on timestamp
+          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_OUTPUT
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
           echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
           
       - name: Update version in pubspec.yaml
         run: |
-          sed -i "s/^version: .*/version: ${{ env.VERSION_NAME }}+${{ env.BUILD_NUMBER }}/" pubspec.yaml
-          echo "Updated pubspec.yaml with version ${{ env.VERSION_NAME }}+${{ env.BUILD_NUMBER }}"
+          sed -i "s/^version: .*/version: ${{ steps.extract_version.outputs.VERSION_NAME }}+${{ steps.extract_version.outputs.BUILD_NUMBER }}/" pubspec.yaml
+          echo "Updated pubspec.yaml with version ${{ steps.extract_version.outputs.VERSION_NAME }}+${{ steps.extract_version.outputs.BUILD_NUMBER }}"
       
       - name: Verify updated pubspec.yaml
         run: cat pubspec.yaml
@@ -142,14 +144,14 @@ jobs:
       - name: Build aab & Sign the release
         run: |
           flutter build appbundle --release \
-            --build-number=${{ env.BUILD_NUMBER }} \
-            --build-name=${{ env.VERSION_NAME }}
+            --build-number=${{ steps.extract_version.outputs.BUILD_NUMBER }} \
+            --build-name=${{ steps.extract_version.outputs.VERSION_NAME }}
 
       - name: Build APK for release assets
         run: |
           flutter build apk --release \
-            --build-number=${{ env.BUILD_NUMBER }} \
-            --build-name=${{ env.VERSION_NAME }}
+            --build-number=${{ steps.extract_version.outputs.BUILD_NUMBER }} \
+            --build-name=${{ steps.extract_version.outputs.VERSION_NAME }}
 
       - name: List output files for debugging
         run: |
@@ -185,6 +187,7 @@ jobs:
               TRACK="production"
             fi
           fi
+          echo "TRACK=$TRACK" >> $GITHUB_OUTPUT
           echo "TRACK=$TRACK" >> $GITHUB_ENV
           echo "Selected track: $TRACK"
           echo "Release tag: ${{ github.event.release.tag_name }}"
@@ -195,7 +198,7 @@ jobs:
           serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
           packageName: ${{ secrets.PACKAGE_NAME }}
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: ${{ env.TRACK }}
+          track: ${{ steps.determine_track.outputs.TRACK }}
           status: completed
           inAppUpdatePriority: 4
           whatsNewDirectory: update-news
