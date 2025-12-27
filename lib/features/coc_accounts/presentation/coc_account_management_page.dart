@@ -251,6 +251,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                     ),
                                   )
                                 : ReorderableListView(
+                                    buildDefaultDragHandles: false,
                                     onReorder: (oldIndex, newIndex) {
                                       if (oldIndex < newIndex) {
                                         newIndex--;
@@ -397,16 +398,22 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                   ),
                                                 ),
                                               const SizedBox(width: 8),
-                                              // Drag handle with better visual design
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.all(8),
-                                                child: Icon(
-                                                  Icons.drag_indicator,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSurfaceVariant,
-                                                  size: 20,
+                                              // Drag handle - clickable to drag/reorder
+                                              ReorderableDragStartListener(
+                                                index: index,
+                                                child: MouseRegion(
+                                                  cursor: SystemMouseCursors.grab,
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
+                                                    child: Icon(
+                                                      Icons.drag_indicator,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurfaceVariant,
+                                                      size: 20,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                               // Delete button with confirmation
