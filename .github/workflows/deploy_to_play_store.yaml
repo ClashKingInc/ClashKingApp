@@ -1,9 +1,8 @@
 name: Deploy to Play Store
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [published]
   workflow_dispatch:
     inputs:
       ref:
@@ -31,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       JAVA_VERSION: 21
-      FLUTTER_VERSION: 3.32.4
+      FLUTTER_VERSION: 3.38.5
       AAB_PATH: build/app/outputs/bundle/release/app-release.aab
       KEYSTORE_PATH: android/ck_key.jks
       KEY_PROPS_PATH: android/key.properties
@@ -44,7 +43,7 @@ jobs:
         with:
           ref: ${{ github.event.inputs.ref || github.ref }}
 
-      - name: Extract version from tag and generate build number
+      - name: Extract version from release and generate build number
         id: extract_version
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
@@ -61,14 +60,15 @@ jobs:
               exit 1
             fi
           else
-            TAG=${GITHUB_REF#refs/tags/}          # Extrait "v1.0.0-alpha"
-            VERSION_NAME=${TAG#v}                # Retire "v" pour obtenir "1.0.0-alpha"
+            # Extract version from release tag
+            RELEASE_TAG="${{ github.event.release.tag_name }}"
+            VERSION_NAME=${RELEASE_TAG#v}                # Remove "v" prefix if present
           fi
-          
+
           # Remove alpha/beta suffixes for Play Store (required by Google)
           VERSION_NAME=$(echo "$VERSION_NAME" | sed 's/-alpha.*$//' | sed 's/-beta.*$//')
           echo "Cleaned version for Play Store: $VERSION_NAME"
-          BUILD_NUMBER=$(date +%s)             # Génère un numéro de build basé sur le timestamp
+          BUILD_NUMBER=$(date +%s)             # Generate build number based on timestamp
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
           echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
           
@@ -145,8 +145,16 @@ jobs:
             --build-number=${{ env.BUILD_NUMBER }} \
             --build-name=${{ env.VERSION_NAME }}
 
+      - name: Build APK for release assets
+        run: |
+          flutter build apk --release \
+            --build-number=${{ env.BUILD_NUMBER }} \
+            --build-name=${{ env.VERSION_NAME }}
+
       - name: List output files for debugging
-        run: ls -R build/app/outputs/bundle/release/
+        run: |
+          ls -R build/app/outputs/bundle/release/
+          ls -R build/app/outputs/apk/release/
 
       - name: Upload generated aab to the artifacts
         uses: actions/upload-artifact@v4
@@ -154,16 +162,24 @@ jobs:
           name: aab-stores
           path: build/app/outputs/bundle/release/app-release.aab
 
-      - name: Determine track based on tag
+      - name: Upload APK to release assets (only on release trigger)
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/app/outputs/apk/release/app-release.apk
+          tag_name: ${{ github.event.release.tag_name }}
+
+      - name: Determine track based on release type
         id: determine_track
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             TRACK="${{ github.event.inputs.track }}"
           else
-            TAG=${GITHUB_REF#refs/tags/}
-            if [[ "$TAG" == *"alpha"* ]]; then
+            # Determine track based on release tag
+            RELEASE_TAG="${{ github.event.release.tag_name }}"
+
+            if [[ "$RELEASE_TAG" == *"alpha"* ]]; then
               TRACK="alpha"
-            elif [[ "$TAG" == *"beta"* ]]; then
+            elif [[ "$RELEASE_TAG" == *"beta"* ]]; then
               TRACK="beta"
             else
               TRACK="production"
@@ -171,6 +187,7 @@ jobs:
           fi
           echo "TRACK=$TRACK" >> $GITHUB_ENV
           echo "Selected track: $TRACK"
+          echo "Release tag: ${{ github.event.release.tag_name }}"
 
       - name: Deploy to Play Store
         uses: r0adkll/upload-google-play@v1

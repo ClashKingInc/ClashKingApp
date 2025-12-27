@@ -35,7 +35,11 @@ class SpotData {
     }
 
     final spots = rankings.map((ranking) {
-      final seasonDate = DateTime.parse('${ranking.season}-01');
+      final seasonDate = DateTime.parse(
+        ranking.season.split('-').length == 2
+          ? '${ranking.season}-01'
+          : ranking.season
+      );
       return FlSpot(seasonDate.millisecondsSinceEpoch.toDouble(),
           ranking.trophies.toDouble());
     }).toList()

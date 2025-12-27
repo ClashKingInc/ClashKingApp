@@ -22,6 +22,12 @@ class RegisterPageState extends State<RegisterPage> {
   bool _isLoading = false;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  // Dynamic password criteria
+  bool _pwHasMinLength = false;
+  bool _pwHasUppercase = false;
+  bool _pwHasLowercase = false;
+  bool _pwHasNumber = false;
+  bool _pwHasSpecial = false;
 
   @override
   void dispose() {
@@ -29,7 +35,37 @@ class RegisterPageState extends State<RegisterPage> {
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     _usernameController.dispose();
+    _passwordController.removeListener(_updatePasswordCriteria);
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _passwordController.addListener(_updatePasswordCriteria);
+  }
+
+  void _updatePasswordCriteria() {
+    final value = _passwordController.text;
+    final hasMinLength = value.length >= 8;
+    final hasUpper = RegExp(r'[A-Z]').hasMatch(value);
+    final hasLower = RegExp(r'[a-z]').hasMatch(value);
+    final hasNumber = RegExp(r'\d').hasMatch(value);
+    final hasSpecial = RegExp(r'[!@#\$%\^&\*(),.?":{}|<>]').hasMatch(value);
+
+    if (hasMinLength != _pwHasMinLength ||
+        hasUpper != _pwHasUppercase ||
+        hasLower != _pwHasLowercase ||
+        hasNumber != _pwHasNumber ||
+        hasSpecial != _pwHasSpecial) {
+      setState(() {
+        _pwHasMinLength = hasMinLength;
+        _pwHasUppercase = hasUpper;
+        _pwHasLowercase = hasLower;
+        _pwHasNumber = hasNumber;
+        _pwHasSpecial = hasSpecial;
+      });
+    }
   }
 
   Future<void> _register() async {
@@ -217,12 +253,15 @@ class RegisterPageState extends State<RegisterPage> {
               SizedBox(height: 32),
 
               // Registration form card
-              Card(
-                elevation: 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
+              Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 700),
+                  child: Card(
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
                       SizedBox(height: 8),
                       // Username Field
                       TextFormField(
@@ -308,20 +347,71 @@ class RegisterPageState extends State<RegisterPage> {
                             return AppLocalizations.of(context)!
                                 .authPasswordRequired;
                           }
-                          if (value.length < 8) {
-                            return AppLocalizations.of(context)!
-                                .authPasswordTooShort;
-                          }
                           // Check for uppercase, lowercase, digit, and special character
                           if (!RegExp(
                                   r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])')
                               .hasMatch(value)) {
                             return AppLocalizations.of(context)!
-                                .authPasswordRequirements;
+                              .authPasswordInvalid;
                           }
                           return null;
                         },
                       ),
+
+                      // Dynamic password requirements checklist (placed below password field)
+                      SizedBox(height: 8),
+                      Builder(builder: (context) {
+                        final header = AppLocalizations.of(context)!.authPasswordHeader;
+                        final labelUpper = AppLocalizations.of(context)!.authPasswordUppercase;
+                        final labelLower = AppLocalizations.of(context)!.authPasswordLowercase;
+                        final labelNumber = AppLocalizations.of(context)!.authPasswordNumber;
+                        final labelSpecial = AppLocalizations.of(context)!.authPasswordSpecial;
+                        final labelLength = AppLocalizations.of(context)!.authPasswordTooShort;
+
+                        Widget criteriaRow(bool met, String label) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 6.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  met ? Icons.check_circle : Icons.radio_button_unchecked,
+                                  size: 16,
+                                  color: met ? Colors.green : Theme.of(context).hintColor,
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    label,
+                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Header: plain label (no checkmark)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6.0),
+                              child: Text(
+                                header,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(color: Theme.of(context).hintColor, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            criteriaRow(_pwHasMinLength, labelLength),
+                            criteriaRow(_pwHasUppercase, labelUpper),
+                            criteriaRow(_pwHasLowercase, labelLower),
+                            criteriaRow(_pwHasNumber, labelNumber),
+                            criteriaRow(_pwHasSpecial, labelSpecial),
+                          ],
+                        );
+                      }),
 
                       SizedBox(height: 20),
 
@@ -406,7 +496,9 @@ class RegisterPageState extends State<RegisterPage> {
                         child: Text(AppLocalizations.of(context)!
                             .authAlreadyHaveAccount),
                       ),
-                    ],
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
