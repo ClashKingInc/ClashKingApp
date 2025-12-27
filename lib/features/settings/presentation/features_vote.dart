@@ -46,7 +46,7 @@ class FeatureRequests extends StatelessWidget {
       ..loadRequest(Uri.parse(url));
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.featureRequestsTitle)),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.translationSuggestFeatures)),
       body: WebViewWidget(controller: controller),
     );
   }
