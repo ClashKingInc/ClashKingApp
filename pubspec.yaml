@@ -34,9 +34,9 @@ dependencies:
   provider: ^6.1.5+1
   flutter_web_auth_2: ^4.1.0
   app_links: ^7.0.0
-  shared_preferences: ^2.5.3 
-  http: ^1.5.0
-  crypto: ^3.0.6
+  shared_preferences: ^2.5.4
+  http: ^1.6.0
+  crypto: ^3.0.7
   clipboard: ^3.0.8
   lucide_icons: ^0.257.0
   scrollable_tab_view: ^1.0.14
@@ -54,18 +54,18 @@ dependencies:
   collection: ^1.19.1
   flutter_gif: ^0.0.4
   package_info_plus: ^9.0.0
-  device_info_plus: ^12.1.0
+  device_info_plus: ^12.3.0
   mailto: ^2.0.0
   timeago: ^3.7.1
   dio: ^5.8.0
-  universal_html: ^2.2.4 
+  universal_html: ^2.3.0 
   open_filex: ^4.7.0
   cupertino_icons: ^1.0.8
   intl: ^0.20.2
   url_launcher: ^6.3.2
-  mockito: ^5.5.1
+  mockito: ^5.6.1
   webview_flutter: ^4.13.0
-  flutter_native_splash: ^2.4.6
+  flutter_native_splash: ^2.4.7
   path_provider: ^2.1.5
 
 dev_dependencies:
