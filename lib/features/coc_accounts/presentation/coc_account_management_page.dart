@@ -8,6 +8,7 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/widgets/account_verification_dialog.dart';
+import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -117,9 +118,10 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       child: Scaffold(
         appBar: CocAccountsAppBar(),
         resizeToAvoidBottomInset: false,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      body: ResponsiveLayoutWrapper(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
           Expanded(
             child: Column(
               children: [
@@ -480,6 +482,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
             ),
         ],
       ),
+    ),
     ),
     );
   }

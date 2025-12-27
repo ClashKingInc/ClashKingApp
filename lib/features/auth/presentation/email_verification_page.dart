@@ -4,6 +4,7 @@ import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/auth/presentation/startup_widget.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
+import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -200,9 +201,10 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
+      body: ResponsiveLayoutWrapper(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(height: 20),
@@ -406,6 +408,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
           ],
         ),
       ),
+    ),
     );
   }
 }
