@@ -14,6 +14,8 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/core/constants/layout_constants.dart';
+import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -151,12 +153,13 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         : ImageAssets.lightModeTextLogo);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-          child: ConstrainedBox(
-            constraints:
-                BoxConstraints(minHeight: MediaQuery.of(context).size.height),
-            child: Padding(
+      body: ResponsiveLayoutWrapper(
+        child: SingleChildScrollView(
+          child: Center(
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+              child: Padding(
               padding: EdgeInsets.all(24),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -199,7 +202,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
                   // Auth Tabs
                   ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 700),
+                    constraints: const BoxConstraints(maxWidth: kMaxContentWidth),
                     child: Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
@@ -350,6 +353,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           ),
         ),
       ),
+    ),
     );
   }
 
