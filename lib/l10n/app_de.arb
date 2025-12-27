@@ -10,11 +10,11 @@
   "loadingCapitalRaids": "Clanstadt-Überfälle werden geladen...",
   "loadingAlmostReady": "Fast fertig...",
   "accountVerificationTitle": "Konto verifizieren",
-  "accountVerified": "Verified",
+  "accountVerified": "Verifiziert",
   "accountVerify": "Verifizieren",
   "accountVerificationSuccess": "Konto erfolgreich verifiziert!",
   "generalRetry": "Wiederholen",
-  "generalRetrying": "Retrying...",
+  "generalRetrying": "Versuche erneut...",
   "generalTryAgain": "Versuche es später nochmal",
   "generalReset": "Zurücksetzen",
   "generalCancel": "Abbrechen",
@@ -52,12 +52,12 @@
   "@generalAll": {
     "description": "all items"
   },
-  "generalAllTime": "All Time",
+  "generalAllTime": "Gesamter Zeitraum",
   "@generalAllTime": {
     "description": "All time period"
   },
-  "generalOthers": "Others",
-  "generalCompleted": "completed",
+  "generalOthers": "Andere",
+  "generalCompleted": "abgeschlossen",
   "generalTotal": "Insgesamt",
   "generalBest": "Beste",
   "@generalBest": {
@@ -99,57 +99,57 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Warnung",
-  "generalUnknown": "Unknown",
+  "generalUnknown": "Unbekannt",
   "generalNoDataAvailable": "Keine Daten verfügbar.",
-  "generalNoFilteredResults": "No results match your filters",
+  "generalNoFilteredResults": "Keine Ergebnisse entsprechen deinen Filtern",
   "@generalNoFilteredResults": {
     "description": "Message when applied filters return no results"
   },
-  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "generalAdjustFilters": "Versuche, deine Filterkriterien anzupassen, oder lösche deine Filter, um alle Daten zu sehen.",
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
-  "generalClearFilters": "Clear Filters",
+  "generalClearFilters": "Filter entfernen",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
   },
-  "presetsSaved": "Saved Presets",
+  "presetsSaved": "Gespeicherte Voreinstellungen",
   "@presetsSaved": {
     "description": "Header for saved filter presets section"
   },
-  "presetsSave": "Save",
+  "presetsSave": "Speichern",
   "@presetsSave": {
     "description": "Button to save current filter as preset"
   },
-  "presetsSaveTitle": "Save Filter Preset",
+  "presetsSaveTitle": "Filtervoreinstellungen speichern",
   "@presetsSaveTitle": {
     "description": "Title for save preset dialog"
   },
-  "presetsName": "Preset Name",
+  "presetsName": "Voreinstellungsname",
   "@presetsName": {
     "description": "Label for preset name input"
   },
-  "presetsNameHint": "Enter a name for this preset",
+  "presetsNameHint": "Name für diese Voreinstellung eingeben",
   "@presetsNameHint": {
     "description": "Hint text for preset name input"
   },
-  "presetsSuggestions": "Suggestions:",
+  "presetsSuggestions": "Vorschläge:",
   "@presetsSuggestions": {
     "description": "Label for name suggestions section"
   },
-  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "presetsApplyFirst": "Wende einige Filter an vor dem Speichern als Voreinstellung",
   "@presetsApplyFirst": {
     "description": "Message when trying to save without active filters"
   },
-  "presetsNameRequired": "Please enter a name",
+  "presetsNameRequired": "Bitte gib einen Namen ein",
   "@presetsNameRequired": {
     "description": "Error when preset name is empty"
   },
-  "presetsNameExists": "A preset with this name already exists",
+  "presetsNameExists": "Eine Voreinstellung mit diesem Namen existiert bereits",
   "@presetsNameExists": {
     "description": "Error when preset name is duplicate"
   },
-  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "presetsSaveSuccess": "Voreinstellung {name} erfolgreich gespeichert",
   "@presetsSaveSuccess": {
     "description": "Success message when preset is saved",
     "placeholders": {
@@ -159,27 +159,27 @@
       }
     }
   },
-  "presetsSaveError": "Failed to save preset",
+  "presetsSaveError": "Speichern der Voreinstellung fehlgeschlagen",
   "@presetsSaveError": {
     "description": "Error message when preset save fails"
   },
-  "presetsApply": "Apply Preset",
+  "presetsApply": "Voreinstellung anwenden",
   "@presetsApply": {
     "description": "Context menu option to apply preset"
   },
-  "presetsRename": "Rename",
+  "presetsRename": "Umbenennen",
   "@presetsRename": {
     "description": "Context menu option to rename preset"
   },
-  "presetsDelete": "Delete",
+  "presetsDelete": "Löschen",
   "@presetsDelete": {
     "description": "Context menu option to delete preset"
   },
-  "presetsRenameTitle": "Rename Preset",
+  "presetsRenameTitle": "Voreinstellung umbenennen",
   "@presetsRenameTitle": {
     "description": "Title for rename preset dialog"
   },
-  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "presetsRenameSuccess": "Voreinstellung umbenannt in {name}",
   "@presetsRenameSuccess": {
     "description": "Success message when preset is renamed",
     "placeholders": {
@@ -189,15 +189,15 @@
       }
     }
   },
-  "presetsRenameError": "Failed to rename preset",
+  "presetsRenameError": "Umbenennen der Voreinstellung fehlgeschlagen",
   "@presetsRenameError": {
     "description": "Error message when preset rename fails"
   },
-  "presetsDeleteTitle": "Delete Preset",
+  "presetsDeleteTitle": "Voreinstellung löschen",
   "@presetsDeleteTitle": {
     "description": "Title for delete preset dialog"
   },
-  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "presetsDeleteConfirm": "Möchtest du \"{name}\" wirklich löschen?",
   "@presetsDeleteConfirm": {
     "description": "Confirmation message for preset deletion",
     "placeholders": {
@@ -207,7 +207,7 @@
       }
     }
   },
-  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "presetsDeleteSuccess": "Voreinstellung \"{name}\" gelöscht",
   "@presetsDeleteSuccess": {
     "description": "Success message when preset is deleted",
     "placeholders": {
@@ -217,11 +217,11 @@
       }
     }
   },
-  "presetsDeleteError": "Failed to delete preset",
+  "presetsDeleteError": "Löschen der Voreinstellung fehlgeschlagen",
   "@presetsDeleteError": {
     "description": "Error message when preset deletion fails"
   },
-  "generalCharts": "Charts",
+  "generalCharts": "Diagramme",
   "authSignUp": "Registrieren",
   "authLogin": "Anmelden",
   "authLogout": "Abmelden",
@@ -249,7 +249,13 @@
   "authPasswordConfirmRequired": "Bitte bestätige dein Passwort",
   "authPasswordMismatch": "Passwörter stimmen nicht überein",
   "authPasswordTooShort": "Passwort muss mindestens 8 Zeichen lang sein",
-  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
+  "authPasswordRequirements": "Passwort muss enthalten:\n• Großbuchstaben\n• Kleinbuchstaben\n• Nummer\n• Sonderzeichen",
+  "authPasswordHeader": "Password must contain:",
+  "authPasswordUppercase": "Uppercase letter",
+  "authPasswordLowercase": "Lowercase letter",
+  "authPasswordNumber": "Number",
+  "authPasswordSpecial": "Special character",
+  "authPasswordInvalid": "Password does not meet requirements",
   "authPasswordForgot": "Passwort vergessen?",
   "authPasswordForgotDescription": "Gib deine E-Mail-Adresse ein und wir senden dir einen 6-stelligen Code zum Zurücksetzen deines Passworts.",
   "authPasswordResetSend": "Code zum Zurücksetzen senden",
@@ -269,7 +275,7 @@
   "authUsernameLabel": "Benutzername",
   "authUsernameRequired": "Bitte gib einen Benutzernamen ein",
   "authUsernameTooShort": "Benutzername muss mindestens 3 Zeichen lang sein",
-  "authUsernameTooLong": "Username must be no more than 30 characters",
+  "authUsernameTooLong": "Benutzername darf nicht mehr als 30 Zeichen lang sein",
   "authErrorConnection": "Es ist ein Fehler aufgetreten. Bitte überprüfe deine Internetverbindung und versuche es erneut.",
   "authErrorConnectionRelaunch": "Es ist ein Fehler aufgetreten. Bitte überprüfe deine Internetverbindung und starte die App erneut.",
   "authErrorEmailAlreadyRegistered": "Diese E-Mail-Adresse ist bereits registriert. Bitte versuche dich stattdessen anzumelden.",
@@ -281,7 +287,7 @@
   "authErrorEmailSendFailed": "Fehler beim Senden der Bestätigungs-E-Mail. Bitte versuche es später erneut.",
   "authErrorRateLimited": "Zu viele Versuche. Bitte warte einen Moment und versuche es erneut.",
   "authErrorServerUnavailable": "Der Dienst ist vorübergehend nicht verfügbar. Bitte versuche es später erneut.",
-  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts here. Verify your accounts with a token to access all features.",
+  "authAccountManagement": "Füge hier deine Clash of Clans - Accounts hinzu, entferne und sortiere sie neu. Verifiziere deine Accounts mit einem Token, um auf alle Funktionen zuzugreifen.",
   "authAccountConnected": "Verbundene Konten",
   "authAccountConnectedStatus": "Verbunden",
   "authAccountNotConnected": "Nicht verbunden",
@@ -298,11 +304,11 @@
   "authEmailVerificationExpired": "Überprüfung ist abgelaufen. Bitte registriere dich erneut.",
   "authEmailVerificationAlreadyVerified": "Diese E-Mail-Adresse ist bereits bestätigt. Bitte versuche dich stattdessen anzumelden.",
   "authEmailVerificationNoToken": "Keine ausstehende Überprüfung gefunden. Bitte registriere dich zuerst.",
-  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
+  "authEmailVerificationExpiredResend": "Überprüfung ist abgelaufen. Bitte gehe zurück zur Registrierung.",
   "authEmailVerificationVerifying": "Deine E-Mail-Adresse wird überprüft...",
   "authEmailVerificationCodeInstructions": "Gib den 6-stelligen Code aus deiner E-Mail ein:",
   "authEmailVerificationCodeRequired": "Bitte gib einen 6-stelligen Bestätigungscode ein",
-  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
+  "authEmailVerificationCodeInvalid": "Ungültiger oder abgelaufener Code. Bitte überprüfe deinen Code oder lass dir eine neue Bestätigungs-Mail senden.",
   "authEmailVerificationVerify": "Code überprüfen",
   "helpTitle": "Brauchst du Hilfe?",
   "helpJoinDiscord": "Discord beitreten",
@@ -314,12 +320,12 @@
   "accountsPlayerTag": "Spielerkürzel (#ABC123)",
   "accountsEnterPlayerTag": "Spielerkürzel eingeben",
   "accountsAdd": "Konto hinzufügen",
-  "accountsAddInstruction": "Tap the + button to add your account",
+  "accountsAddInstruction": "Tippe auf die Schaltfläche +, um deinen Account hinzuzufügen",
   "accountsApiToken": "Konto API-Token",
-  "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans:",
-  "accountsApiTokenLocation": "Settings > More Settings > API Token",
-  "accountsOpenMoreSettings": "Open More Settings",
-  "accountsCouldNotOpenClash": "Could not open Clash of Clans. Please open it manually.",
+  "accountsEnterApiToken": "Bitte gib ein API-Token ein, um zu bestätigen, dass das Konto dir gehört. Du findest es in Clash of Clans:",
+  "accountsApiTokenLocation": "Einstellungen > Mehr Einstellungen > API Token",
+  "accountsOpenMoreSettings": "Öffne Mehr Einstellungen",
+  "accountsCouldNotOpenClash": "Clash of Clans konnte nicht geöffnet werden. Bitte öffne es manuell.",
   "accountsFillAllFields": "Bitte fülle alle Felder aus.",
   "accountsErrorTagNotExists": "Das eingegebene Spielerkürzel existiert nicht.",
   "accountsErrorAlreadyLinked": "Dieses Spielerkürzel ist bereits mit jemand anderem verknüpft.",
@@ -329,8 +335,8 @@
   "accountsErrorFailedToUpdateOrder": "Reihenfolge der Konten konnte nicht aktualisiert werden.",
   "errorTitle": "Ups! Unsere Server haben vielleicht einen Feuerball ins Gesicht bekommen! Wir sprechen einen Heilzauber... Versuche es in einem Moment erneut.",
   "errorSubtitle": "Wenn das Problem weiterhin besteht, schaue auf unserem Discord-Server nach, ob wir davon wissen.",
-  "errorNetworkTitle": "Connection Problem",
-  "errorNetworkMessage": "We're having trouble connecting to our servers. This could be due to your internet connection or an issue on our end. Please check your connection and try again.",
+  "errorNetworkTitle": "Verbindungsprobleme",
+  "errorNetworkMessage": "Wir haben Probleme mit der Verbindung zu unseren Servern. Dies könnte auf deine Internetverbindung oder ein Problem auf unserer Seite zurückzuführen sein. Bitte überprüfe deine Verbindung und versuche es erneut.",
   "errorLoadingVersion": "Fehler beim Laden der Version",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
@@ -400,7 +406,7 @@
       }
     }
   },
-  "playerTrophiesUnrankedDescription": "You have {trophies} trophies. You are not ranked in any league.",
+  "playerTrophiesUnrankedDescription": "Du hast {trophies} Trophäen. Du bist derzeit in keiner Liga.",
   "@playerTrophiesUnrankedDescription": {
     "placeholders": {
       "trophies": {
@@ -477,7 +483,7 @@
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
   "gameCreatorCode": "Creator-Code: ClashKing",
-  "gameCreatorCodeDescription": "Support us for free!",
+  "gameCreatorCodeDescription": "Unterstütze uns kostenlos!",
   "gameCreatorCodeDialogTitle": "ClashKing unterstützen",
   "gameCreatorCodeDialogDescription": "Die Verwendung unseres Creator-Codes hilft bei der Finanzierung der Entwicklung, hält die App & Bot für alle kostenlos und ermöglicht es uns, neue Features hinzuzufügen.\n\nWir erhalten 5% von dem, was du im Spiel ausgibst, aber es kostet dich nichts extra - verwende einfach \"ClashKing\" als Creator-Code im Clash of Clans Shop!",
   "gameCreatorCodeDialogButton": "Creator-Code verwenden",
@@ -865,7 +871,7 @@
   "warAskForWar": "Kontaktiere den Anführer oder einen Vize-Anführer, um einen Krieg zu starten.",
   "warAskForWarLogOpening": "Kontaktiere den Anführer oder einen Vize-Anführer, um den Kriegslog öffentlich zu machen.",
   "warEnded": "Krieg beendet",
-  "warInWar": "In War",
+  "warInWar": "Im Krieg",
   "@warInWar": {
     "description": "War state: active"
   },
@@ -910,8 +916,8 @@
       }
     }
   },
-  "warNotStarted": "War hasn't started yet",
-  "warWonByStars": "{clanName} won the war!",
+  "warNotStarted": "Krieg hat noch nicht begonnen",
+  "warWonByStars": "{clanName} hat den Krieg gewonnen!",
   "@warWonByStars": {
     "placeholders": {
       "clanName": {
@@ -919,7 +925,7 @@
       }
     }
   },
-  "warLostByStars": "{clanName} lost the war",
+  "warLostByStars": "{clanName} hat den Krieg verloren",
   "@warLostByStars": {
     "placeholders": {
       "clanName": {
@@ -927,7 +933,7 @@
       }
     }
   },
-  "warWonByDestruction": "{clanName} won by destruction!",
+  "warWonByDestruction": "{clanName} hat durch Zerstörung gewonnen!",
   "@warWonByDestruction": {
     "placeholders": {
       "clanName": {
@@ -935,7 +941,7 @@
       }
     }
   },
-  "warLostByDestruction": "{clanName} lost by destruction",
+  "warLostByDestruction": "{clanName} hat durch Zerstörung verloren",
   "@warLostByDestruction": {
     "placeholders": {
       "clanName": {
@@ -943,8 +949,8 @@
       }
     }
   },
-  "warPerfectDraw": "Perfect draw",
-  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "warPerfectDraw": "Perfektes Unentschieden",
+  "warCanTieNeedsStars": "{clanName} kann den Ausgleich schaffen, aber benötigt {stars} Sterne",
   "@warCanTieNeedsStars": {
     "placeholders": {
       "clanName": {
@@ -955,7 +961,7 @@
       }
     }
   },
-  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "warCannotCatchUp": "{clanName} kann die Sterne nicht aufholen",
   "@warCannotCatchUp": {
     "placeholders": {
       "clanName": {
@@ -963,7 +969,7 @@
       }
     }
   },
-  "warCalculatorHintPercent": "50.00",
+  "warCalculatorHintPercent": "50,00",
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
   },
@@ -1196,7 +1202,7 @@
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warStatusMissedInfo": "Missed: {number}",
+  "warStatusMissedInfo": "Verpasst: {number}",
   "@warStatusMissedInfo": {
     "description": "Number of missed attacks",
     "placeholders": {
@@ -1423,62 +1429,62 @@
   "faqUseCodeClashKing": "Creator-Code \"ClashKing\" verwenden",
   "faqSupportUsOnPatreon": "Unterstütze uns auf Patreon",
   "faqRateTheApp": "Bewerte die App im Store",
-  "faqWhatCanBotDo": "What can the ClashKing Discord bot do?",
-  "faqWhatCanBotDoAnswer": "The ClashKing Discord bot helps you manage your clan directly from Discord with comprehensive tracking tools, automated notifications, and seamless integration with this app. It's designed for clan leaders and members who want to stay connected and organized:",
-  "faqInviteBotToServer": "Invite Bot to Server",
-  "faqBotFeatureTracking": "Player & Clan Tracking",
-  "faqBotFeatureTrackingDesc": "Add and monitor multiple clans and players with real-time updates",
-  "faqBotFeatureWars": "War Management",
-  "faqBotFeatureWarsDesc": "Track war performance, analyze attacks, and get war notifications",
-  "faqBotFeatureNotifications": "Smart Notifications",
-  "faqBotFeatureNotificationsDesc": "Get alerts for donations, war attacks, and important clan events",
-  "faqBotFeatureCommands": "Powerful Commands",
-  "faqBotFeatureCommandsDesc": "Use slash commands to quickly access player stats, war info, and more",
+  "faqWhatCanBotDo": "Was kann der ClashKing Discord Bot tun?",
+  "faqWhatCanBotDoAnswer": "Der ClashKing Discord Bot hilft dir, deinen Clan direkt von Discord aus mit umfassenden Tracking-Tools, automatisierten Benachrichtigungen und nahtloser Integration mit dieser App zu verwalten. Er ist für Anführer und Mitglieder gedacht, die miteinander verbunden und organisiert bleiben möchten:",
+  "faqInviteBotToServer": "Bot zum Server einladen",
+  "faqBotFeatureTracking": "Spieler- & Clan-Tracking",
+  "faqBotFeatureTrackingDesc": "Mehrere Clans und Spieler hinzufügen und mit Echtzeit-Updates beobachten",
+  "faqBotFeatureWars": "Kriegsverwaltung",
+  "faqBotFeatureWarsDesc": "Verfolge die Kriegsleistung, analysiere Angriffe und erhalte Benachrichtigungen zu Clan Kriegen",
+  "faqBotFeatureNotifications": "Intelligente Benachrichtigungen",
+  "faqBotFeatureNotificationsDesc": "Erhalte Benachrichtigungen für Spenden, Kriegsangriffe und wichtige Clan Ereignisse",
+  "faqBotFeatureCommands": "Mächtige Befehle",
+  "faqBotFeatureCommandsDesc": "Benutze Schrägstrich Befehle um schnell auf Spielerstatistiken, Kriegsinformationen und mehr zuzugreifen",
   "faqNeedHelp": "Ich brauche Hilfe oder möchte einen Vorschlag machen. Wie kann ich euch erreichen?",
   "faqNeedHelpAnswer": "Du kannst unserem Discord-Server beitreten und dort um Hilfe bitten, oder Feedback geben oder uns eine E-Mail an devs@clashk.ing senden. Bitte schreib uns, wenn möglich, nur auf Englisch oder Französisch.",
   "faqSendEmail": "Sende eine E-Mail",
   "faqJoinDiscord": "Unserem Discord-Server beitreten",
   "faqCannotOpenMailClient": "Aus irgendeinem Grund können wir deinen E-Mail-Client nicht öffnen. Wir haben die E-Mail-Adresse für dich kopiert. Du kannst eine E-Mail schreiben und die Adresse im Empfängerfeld einfügen.",
-  "faqTroubleshooting": "Troubleshooting",
-  "faqTroubleshootingDataTitle": "Why is my data not syncing?",
-  "faqTroubleshootingDataDescription": "Player or clan data appears outdated",
-  "faqTroubleshootingDataSolution1": "Pull down to refresh the page",
-  "faqTroubleshootingDataSolution2": "Check if your clan is tracked (see above)",
-  "faqTroubleshootingDataSolution3": "Wait a few minutes and try again : the API can take some time to update",
-  "faqTroubleshootingCrashTitle": "Why does the app crash?",
-  "faqTroubleshootingCrashDescription": "App closes unexpectedly or freezes",
-  "faqTroubleshootingCrashSolution1": "Close the app and restart it",
-  "faqTroubleshootingCrashSolution2": "Update the app to the latest version",
-  "faqTroubleshootingCrashSolution3": "Clear app cache and data (Android) or reinstall the app",
-  "faqTroubleshootingCrashSolution4": "Free up device storage space",
-  "faqContactSupport": "Contact support if problem persists (see last section)",
-  "faqTroubleshootingAccountTitle": "Why can't I verify my account?",
-  "faqTroubleshootingAccountDescription": "Problems linking your Clash of Clans account",
-  "faqTroubleshootingAccountSolution1": "Make sure you're using the correct player tag starting with #",
-  "faqTroubleshootingAccountSolution2": "If the account seems to be already linked, use the API token from Clash of Clans settings",
-  "faqTroubleshootingSolutions": "Solutions:",
-  "faqWhatIsClashKingProject": "What is the ClashKing project?",
-  "faqWhatIsClashKingProjectAnswer": "ClashKing is an open-source Clash of Clans statistics and clan management project created by passionate players for the community. We develop this as a side project alongside our full-time jobs, driven by our love for the game. We offer a mobile app, Discord bot, and free API that work together to provide the ultimate Clash of Clans experience. The project is funded entirely through user donations and Supercell Creator code usage - no ads, no premium features!",
-  "faqViewOnGitHub": "View on GitHub",
-  "faqFeaturesGuide": "What can ClashKing app do?",
-  "faqFeaturesGuideDescription": "Take your Clash of Clans experience to the next level! ClashKing app delivers beautiful, fast access to all your stats and clan data - perfect for players who do not have Discordand those who prefer a sleek mobile experience:",
-  "faqAppDevelopmentNotice": "We're actively developing new features to make the app even better. Your feedback helps us improve!",
-  "faqFeaturesPlayerTitle": "Player Statistics",
-  "faqFeaturesPlayerDescription": "Track your progress, achievements, and legend league performance",
-  "faqFeaturesClanTitle": "Clan Management",
-  "faqFeaturesClanDescription": "Monitor clan members, donations, and overall clan health",
-  "faqFeaturesWarTitle": "War Tracking",
-  "faqFeaturesWarDescription": "Analyze war performance, attack strategies, and win rates",
-  "faqFeaturesLegendsTitle": "Inaccurate data?",
-  "faqFeaturesLegendsDescription": "Daily trophy tracking and end-of-season statistics",
-  "faqFeaturesCwlTitle": "CWL Analytics",
-  "faqFeaturesCwlDescription": "Clan War League performance and member contributions",
-  "faqSearchHint": "Search FAQ...",
-  "faqSectionGettingStarted": "Getting Started & About",
-  "faqSectionSupportAndContact": "Support & Contact",
-  "faqTranslationIssue": "Translation is missing or incorrect?",
-  "faqTranslationIssueAnswer": "Translations are done by app users like you! We (developers) only provide French and English translations. If you find missing or incorrect translations, you can help improve them. Do not hesitate to reach out to us on Discord or via email if want to help us. We have a specific Discord channel for translators where you can ask questions and get help.",
-  "faqWaysToSupport": "Ways to support us:",
+  "faqTroubleshooting": "Hilfe",
+  "faqTroubleshootingDataTitle": "Warum werden meine Daten nicht synchronisiert?",
+  "faqTroubleshootingDataDescription": "Spieler- oder Clan-Daten erscheinen veraltet",
+  "faqTroubleshootingDataSolution1": "Herunterziehen um die Seite zu aktualisieren",
+  "faqTroubleshootingDataSolution2": "Überprüfen Sie, ob Ihr Clan verfolgt wird (siehe oben)",
+  "faqTroubleshootingDataSolution3": "Warten Sie ein paar Minuten und versuchen Sie es erneut: Die API kann einige Zeit in Anspruch nehmen um zu aktualisieren",
+  "faqTroubleshootingCrashTitle": "Warum stürzt die App ab?",
+  "faqTroubleshootingCrashDescription": "App schließt unerwartet oder friert ein",
+  "faqTroubleshootingCrashSolution1": "App schließen und neu starten",
+  "faqTroubleshootingCrashSolution2": "Die App auf die neueste Version aktualisieren",
+  "faqTroubleshootingCrashSolution3": "App-Cache und -Daten (Android) löschen oder die App neu installieren",
+  "faqTroubleshootingCrashSolution4": "Gerätespeicher freigeben",
+  "faqContactSupport": "Kontaktieren Sie den Support, wenn das Problem weiterhin besteht (siehe letzter Abschnitt)",
+  "faqTroubleshootingAccountTitle": "Warum kann ich mein Konto nicht bestätigen?",
+  "faqTroubleshootingAccountDescription": "Probleme beim Verknüpfen Ihres Clash of Clans Accounts",
+  "faqTroubleshootingAccountSolution1": "Stelle sicher, dass du das richtige Spieler-Tag verwendest, das mit # beginnt",
+  "faqTroubleshootingAccountSolution2": "Wenn das Konto bereits verknüpft zu sein scheint, verwenden Sie das API Token aus den Clash of Clans Einstellungen",
+  "faqTroubleshootingSolutions": "Lösungen:",
+  "faqWhatIsClashKingProject": "Was ist das ClashKing-Projekt?",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing ist ein Open-Source Clash of Clans Statistiken und Clans Management Projekt, das von leidenschaftlichen Spielern für die Community erstellt wurde. Wir entwickeln dies als Nebenprojekt neben unseren Vollzeit-Jobs, angetrieben von unserer Liebe zum Spiel. Wir bieten eine mobile App, Discord Bot und kostenlose API, die zusammenarbeiten, um das ultimative Clash of Clans Erlebnis zu bieten. Das Projekt wird komplett durch Benutzerspenden und die Verwendung von Supercell Creator Code finanziert - keine Werbung, keine Premium-Funktionen!",
+  "faqViewOnGitHub": "Auf GitHub anzeigen",
+  "faqFeaturesGuide": "Was kann die ClashKing-App tun?",
+  "faqFeaturesGuideDescription": "Bringe dein Clash-of-Clans-Erlebnis auf das nächste Level! Die ClashKing-App bietet dir schnellen, übersichtlichen Zugriff auf all deine Statistiken und Clan-Daten – perfekt für Spieler, die kein Discord nutzen oder eine schlanke, moderne Mobile-Erfahrung bevorzugen.",
+  "faqAppDevelopmentNotice": "Wir entwickeln aktiv neue Funktionen, um die App noch besser zu machen. Dein Feedback hilft uns zu verbessern!",
+  "faqFeaturesPlayerTitle": "Spielerstatistiken",
+  "faqFeaturesPlayerDescription": "Verfolgen Sie Ihren Fortschritt, Erfolge und Legendenliga Leistung",
+  "faqFeaturesClanTitle": "Clan-Verwaltung",
+  "faqFeaturesClanDescription": "Clan-Mitglieder, Spenden und Gesundheit im Clan überwachen",
+  "faqFeaturesWarTitle": "Kriegsverfolgung",
+  "faqFeaturesWarDescription": "Analyse der Kriegsleistung, Angriffsstrategien und Gewinnraten",
+  "faqFeaturesLegendsTitle": "Ungenaue Daten?",
+  "faqFeaturesLegendsDescription": "Tägliche Trophäenverfolgung und Statistiken zum Ende der Saison",
+  "faqFeaturesCwlTitle": "CWL-Analytik",
+  "faqFeaturesCwlDescription": "Clan War League Leistung und Mitgliedsbeiträge",
+  "faqSearchHint": "FAQ durchsuchen...",
+  "faqSectionGettingStarted": "Erste Schritte & Infos",
+  "faqSectionSupportAndContact": "Support & Kontakt",
+  "faqTranslationIssue": "Übersetzung fehlt oder ist falsch?",
+  "faqTranslationIssueAnswer": "Übersetzungen werden von Anwendern wie Ihnen erledigt! Wir (Entwickler) liefern nur französische und englische Übersetzungen. Wenn Sie fehlende oder falsche Übersetzungen finden, können Sie dazu beitragen, diese zu verbessern. Zögern Sie nicht, uns auf Discord oder per E-Mail zu kontaktieren, wenn Sie uns helfen möchten. Wir haben einen speziellen Discord Kanal für Übersetzer, wo du Fragen stellen und Hilfe bekommen kannst.",
+  "faqWaysToSupport": "Wege zu unterstützen:",
   "translationHelpUsTranslate": "Hilf uns bei der Übersetzung",
   "translationSuggestFeatures": "Funktion vorschlagen",
   "translationThankYou": "Vielen Dank!",
@@ -1486,27 +1492,27 @@
   "translationHelpTranslateContent": "Du kannst uns helfen, die App auf Crowdin zu übersetzen. Wenn deine Sprache auf Crowdin nicht verfügbar ist, kannst du diese gerne auf unserem Discord-Server anfordern. Vielen Dank für deine Hilfe!",
   "translationHelpTranslateButton": "Hilf bei der Übersetzung auf Crowdin",
   "translationCurrentTranslators": "Aktuelle Übersetzer",
-  "filtersTimeFilters": "Time Filters",
+  "filtersTimeFilters": "Zeitfilter",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
   },
-  "filtersWarSettings": "War Settings",
+  "filtersWarSettings": "Kriegseinstellungen",
   "@filtersWarSettings": {
     "description": "War settings filters section title"
   },
-  "filtersPerformance": "Performance",
+  "filtersPerformance": "Leistung",
   "@filtersPerformance": {
     "description": "Performance filters section title"
   },
-  "filtersAdvanced": "Advanced",
+  "filtersAdvanced": "Fortgeschritten",
   "@filtersAdvanced": {
     "description": "Advanced filters section title"
   },
-  "filtersNoFiltersActive": "No filters active",
+  "filtersNoFiltersActive": "Keine Filter aktiv",
   "@filtersNoFiltersActive": {
     "description": "Text shown when no filters are applied in a section"
   },
-  "filtersShowingDefaultData": "Showing last {count} wars (default)",
+  "filtersShowingDefaultData": "Zeige die letzten {count} Kriege (Standard)",
   "@filtersShowingDefaultData": {
     "description": "Text shown in filter bandeau when no filters are applied",
     "placeholders": {
@@ -1516,175 +1522,175 @@
       }
     }
   },
-  "filtersQuickFilters": "Quick Filters",
+  "filtersQuickFilters": "Schnellfilter",
   "@filtersQuickFilters": {
     "description": "Quick preset filters section title"
   },
-  "filtersLast30Days": "Last 30 Days",
+  "filtersLast30Days": "Die Letzten 30 Tage",
   "@filtersLast30Days": {
     "description": "Preset filter for last 30 days"
   },
-  "filters3StarOnly": "3-Star Only",
+  "filters3StarOnly": "Nur 3 Sterne",
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersFreshAttacks": "Fresh Attacks",
+  "filtersFreshAttacks": "Frische Angriffe",
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
   },
-  "filtersSeason": "Season",
+  "filtersSeason": "Saison",
   "@filtersSeason": {
     "description": "Season filter subsection title"
   },
-  "filtersDateRange": "Date Range",
+  "filtersDateRange": "Zeitraum",
   "@filtersDateRange": {
     "description": "Date range filter subsection title"
   },
-  "filtersWarType": "War Type",
+  "filtersWarType": "Kriegstyp",
   "@filtersWarType": {
     "description": "War type filter subsection title"
   },
-  "filtersTownHall": "Town Hall",
+  "filtersTownHall": "Rathaus",
   "@filtersTownHall": {
     "description": "Town hall filter subsection title"
   },
-  "filtersAttackerTh": "Attacker TH",
+  "filtersAttackerTh": "Angreifer TH",
   "@filtersAttackerTh": {
     "description": "Attacker town hall filter label"
   },
-  "filtersDefenderTh": "Defender TH",
+  "filtersDefenderTh": "Verteidiger TH",
   "@filtersDefenderTh": {
     "description": "Defender town hall filter label"
   },
-  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "filtersSameTownHallOnly": "Nur dasselbe Rathaus",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
-  "filtersDestructionPercentage": "Destruction Percentage",
+  "filtersDestructionPercentage": "Zerstörungs-Prozentsatz",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
   },
-  "filtersOptions": "Options",
+  "filtersOptions": "Optionen",
   "@filtersOptions": {
     "description": "Options filter subsection title"
   },
-  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "filtersFreshAttacksOnly": "Frische Angriffe",
   "@filtersFreshAttacksOnly": {
     "description": "Fresh attacks only filter option"
   },
-  "filtersResultLimit": "Result Limit",
+  "filtersResultLimit": "Ergebnislimit",
   "@filtersResultLimit": {
     "description": "Result limit filter label"
   },
-  "filtersMinPosition": "Min Position",
+  "filtersMinPosition": "Min. Position",
   "@filtersMinPosition": {
     "description": "Minimum map position filter label"
   },
-  "filtersMaxPosition": "Max Position",
+  "filtersMaxPosition": "Max. Position",
   "@filtersMaxPosition": {
     "description": "Maximum map position filter label"
   },
-  "filtersStartDate": "Start Date",
+  "filtersStartDate": "Start Datum",
   "@filtersStartDate": {
     "description": "Start date filter label"
   },
-  "filtersEndDate": "End Date",
+  "filtersEndDate": "Enddatum",
   "@filtersEndDate": {
     "description": "End date filter label"
   },
-  "filtersYear": "Year",
+  "filtersYear": "Jahr",
   "@filtersYear": {
     "description": "Year selector label"
   },
-  "filtersMonth": "Month",
+  "filtersMonth": "Monat",
   "@filtersMonth": {
     "description": "Month selector label"
   },
-  "filtersSelectYear": "Select Year",
+  "filtersSelectYear": "Jahr auswählen",
   "@filtersSelectYear": {
     "description": "Year picker dialog title"
   },
-  "filtersAllWars": "All Wars",
+  "filtersAllWars": "Alle Kriege",
   "@filtersAllWars": {
     "description": "All wars filter option"
   },
-  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "chartsAttackPerformance": "Angriffsleistung nach TH Level",
   "@chartsAttackPerformance": {
     "description": "Attack performance chart title"
   },
-  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "chartsDefensePerformance": "Verteidigungsleistung nach TH Level",
   "@chartsDefensePerformance": {
     "description": "Defense performance chart title"
   },
-  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "chartsRowsYourTh": "Zeilen: Dein TH | Spalten: Gegner TH",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
   },
-  "chartsGood": "Good",
+  "chartsGood": "Gut",
   "@chartsGood": {
     "description": "Good performance legend label"
   },
-  "chartsExcellent": "Excellent",
+  "chartsExcellent": "Sehr gut",
   "@chartsExcellent": {
     "description": "Excellent performance legend label"
   },
-  "chartsNoData": "N/A",
+  "chartsNoData": "Keine Angaben",
   "@chartsNoData": {
     "description": "No data available indicator"
   },
-  "performanceAnalysisSuggestions": "Performance Insights",
+  "performanceAnalysisSuggestions": "Performance-Einblicke",
   "@performanceAnalysisSuggestions": {
     "description": "Section title for statistical performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Filter suggestions based on your star statistics to highlight performance patterns",
+  "performanceAnalysisTooltip": "Vorschläge nach Ihren Sternstatistiken filtern, um Leistungsmuster hervorzuheben",
   "@performanceAnalysisTooltip": {
     "description": "Tooltip explaining that suggestions are based on statistical analysis"
   },
-  "generalExport": "Export",
+  "generalExport": "Exportieren",
   "@generalExport": {
     "description": "Export button label"
   },
-  "exportTitle": "Export War Statistics",
+  "exportTitle": "Kriegsstatistik exportieren",
   "@exportTitle": {
     "description": "Title for export bottom sheet dialog"
   },
-  "exportSuccess": "Export successful!",
+  "exportSuccess": "Export erfolgreich!",
   "@exportSuccess": {
     "description": "Success message for completed export"
   },
-  "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
+  "exportDialogDesc": "Dies wird Ihre Kriegsstatistik als Excel-Datei mit mehreren Blättern herunterladen, inklusive Gesamtstatistiken, detaillierten Attacken und TH-Analyse.",
   "@exportDialogDesc": {
     "description": "Description text for export dialog"
   },
-  "exportGenerating": "Generating export...",
+  "exportGenerating": "Export wird erstellt...",
   "@exportGenerating": {
     "description": "Loading message while generating export"
   },
-  "exportClanWarStatsComingSoon": "Export feature coming soon for clan war stats",
+  "exportClanWarStatsComingSoon": "Export-Funktion bald für Clan-Kriegsstatistiken",
   "@exportClanWarStatsComingSoon": {
     "description": "Message shown when clan war stats export is not yet available"
   },
-  "filtersNoneApplied": "No filters applied",
+  "filtersNoneApplied": "Keine Filter angewendet",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   },
-  "warAttacksFailedToLoadPlayer": "Failed to load player data",
+  "warAttacksFailedToLoadPlayer": "Fehler beim Laden der Spielerdaten",
   "@warAttacksFailedToLoadPlayer": {
     "description": "Error message when player profile fails to load"
   },
-  "warAttacksDetailsTitle": "Attack Details",
+  "warAttacksDetailsTitle": "Angriffsdetails",
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
   },
-  "warAttacksDetailsAttackOrder": "Attack Order",
+  "warAttacksDetailsAttackOrder": "Angriffsbefehl",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
   },
-  "warAttacksDetailsAttacker": "Attacker",
+  "warAttacksDetailsAttacker": "Angreifer",
   "@warAttacksDetailsAttacker": {
     "description": "Label for attacker section in attack details"
   },
-  "warAttacksDetailsDefender": "Defender",
+  "warAttacksDetailsDefender": "Verteidiger",
   "@warAttacksDetailsDefender": {
     "description": "Label for defender section in attack details"
   },
@@ -1692,19 +1698,19 @@
   "@warAttacksDetailsName": {
     "description": "Label for player name in attack details"
   },
-  "warDataState": "State",
+  "warDataState": "Land",
   "@warDataState": {
     "description": "Label for war state"
   },
-  "warDataAttacksPerMember": "Attacks Per Member",
+  "warDataAttacksPerMember": "Angriffe pro Mitglied",
   "@warDataAttacksPerMember": {
     "description": "Label for attacks per member"
   },
-  "warDataStartTime": "War Start",
+  "warDataStartTime": "Kriegsbeginn",
   "@warDataStartTime": {
     "description": "Label for war start time"
   },
-  "warDataEndTime": "War End",
+  "warDataEndTime": "Kriegsende",
   "@warDataEndTime": {
     "description": "Label for war end time"
   },
@@ -1712,43 +1718,43 @@
   "@warDataClanLevel": {
     "description": "Label for clan level"
   },
-  "warDataTotalStars": "Total Stars",
+  "warDataTotalStars": "Gesamte Sterne",
   "@warDataTotalStars": {
     "description": "Label for total stars earned"
   },
-  "warDataDestructionPercentage": "Destruction %",
+  "warDataDestructionPercentage": "Zerstörung %",
   "@warDataDestructionPercentage": {
     "description": "Label for destruction percentage"
   },
-  "warInformationTitle": "War Information",
+  "warInformationTitle": "Kriegsinformationen",
   "@warInformationTitle": {
     "description": "Title for war information section in attack details"
   },
-  "warResultsTitle": "War Results",
+  "warResultsTitle": "Kriegsergebnisse",
   "@warResultsTitle": {
     "description": "Title for war results section showing clan vs opponent"
   },
-  "warPlayersTitle": "Players",
+  "warPlayersTitle": "Spieler",
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "performanceAnalysisFailedAttacks": "Failed Attacks (0-1 Stars)",
+  "performanceAnalysisFailedAttacks": "Fehlgeschlagene Angriffe (0-1 Sterne)",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
   },
-  "performanceAnalysisFailedAttacksDesc": "Shows attacks that failed to get 2+ stars",
+  "performanceAnalysisFailedAttacksDesc": "Zeigt Attacken, die keine 2+ Sterne erhalten haben",
   "@performanceAnalysisFailedAttacksDesc": {
     "description": "Description for failed attacks analysis"
   },
-  "performanceAnalysisMissedPerfects": "Missed Perfect Attacks",
+  "performanceAnalysisMissedPerfects": "Verpasste perfekte Angriffe",
   "@performanceAnalysisMissedPerfects": {
     "description": "Performance analysis preset for missed perfect attacks"
   },
-  "performanceAnalysisMissedPerfectsDesc": "Shows attacks that got 2 stars - potential perfect opportunities",
+  "performanceAnalysisMissedPerfectsDesc": "Zeigt Angriffe mit 2 Sternen - potentiell perfekte Chancen",
   "@performanceAnalysisMissedPerfectsDesc": {
     "description": "Description for missed perfect attacks analysis"
   },
-  "performanceAnalysisThAttackIssues": "Low Stars vs TH{thLevel}",
+  "performanceAnalysisThAttackIssues": "Niedrige Sterne vs TH{thLevel}",
   "@performanceAnalysisThAttackIssues": {
     "description": "Performance analysis preset for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1758,7 +1764,7 @@
       }
     }
   },
-  "performanceAnalysisThAttackIssuesDesc": "Shows attacks with low star count against TH{thLevel}",
+  "performanceAnalysisThAttackIssuesDesc": "Zeigt Angriffe mit niedriger Sternanzahl gegen TH{thLevel}",
   "@performanceAnalysisThAttackIssuesDesc": {
     "description": "Description for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1768,7 +1774,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssues": "Vulnerable to TH{thLevel}",
+  "performanceAnalysisThDefenseIssues": "Anfällig für TH{thLevel}",
   "@performanceAnalysisThDefenseIssues": {
     "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1778,7 +1784,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssuesDesc": "Shows when TH{thLevel} attackers get high stars against you",
+  "performanceAnalysisThDefenseIssuesDesc": "Zeigt an, wenn Angreifer von TH{thLevel} hohe Sterne gegen dich erhalten",
   "@performanceAnalysisThDefenseIssuesDesc": {
     "description": "Description for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1788,91 +1794,91 @@
       }
     }
   },
-  "performanceAnalysisCwlIssues": "CWL Low Performance",
+  "performanceAnalysisCwlIssues": "CWL schlechte Performance",
   "@performanceAnalysisCwlIssues": {
     "description": "Performance analysis preset for low CWL performance"
   },
-  "performanceAnalysisCwlIssuesDesc": "Shows CWL attacks with lower star average than regular wars",
+  "performanceAnalysisCwlIssuesDesc": "Zeigt CWL-Angriffe mit niedrigerem Sterndurchschnitt als normale Kriege",
   "@performanceAnalysisCwlIssuesDesc": {
     "description": "Description for low CWL performance analysis"
   },
-  "performanceAnalysisRandomWarIssues": "Random War Low Performance",
+  "performanceAnalysisRandomWarIssues": "Niedrige Leistung des zufälligen Krieges",
   "@performanceAnalysisRandomWarIssues": {
     "description": "Performance analysis preset for low random war performance"
   },
-  "performanceAnalysisRandomWarIssuesDesc": "Shows random war attacks with lower star average than CWL",
+  "performanceAnalysisRandomWarIssuesDesc": "Zeigt zufällige Kriegsangriffe mit einem niedrigeren Durchschnitt als CWL",
   "@performanceAnalysisRandomWarIssuesDesc": {
     "description": "Description for low random war performance analysis"
   },
-  "performanceAnalysisFreshOnly": "Fresh Attack Analysis",
+  "performanceAnalysisFreshOnly": "Neue Angriffsanalyse",
   "@performanceAnalysisFreshOnly": {
     "description": "Performance analysis preset for fresh attacks only"
   },
-  "performanceAnalysisFreshOnlyDesc": "Analyzes performance on fresh bases only",
+  "performanceAnalysisFreshOnlyDesc": "Analysiert die Leistung nur auf frischen Basen",
   "@performanceAnalysisFreshOnlyDesc": {
     "description": "Description for fresh attack analysis"
   },
-  "performanceAnalysisRecentPerformance": "Recent Performance (30 Days)",
+  "performanceAnalysisRecentPerformance": "Aktuelle Leistung (30 Tage)",
   "@performanceAnalysisRecentPerformance": {
     "description": "Performance analysis preset for recent performance"
   },
-  "performanceAnalysisRecentPerformanceDesc": "Shows recent performance to identify current trends",
+  "performanceAnalysisRecentPerformanceDesc": "Zeigt die aktuelle Leistung an, um aktuelle Trends zu erkennen",
   "@performanceAnalysisRecentPerformanceDesc": {
     "description": "Description for recent performance analysis"
   },
-  "performanceAnalysisHighStakes": "High-Stakes Attacks",
+  "performanceAnalysisHighStakes": "Angriffe mit hohem Einsatz",
   "@performanceAnalysisHighStakes": {
     "description": "Performance analysis preset for high-stakes attacks"
   },
-  "performanceAnalysisHighStakesDesc": "Shows attacks from top 5 war positions",
+  "performanceAnalysisHighStakesDesc": "Zeigt Angriffe von Top 5 Kriegspositionen an",
   "@performanceAnalysisHighStakesDesc": {
     "description": "Description for high-stakes attacks analysis"
   },
-  "performanceAnalysisCleanupCrew": "Cleanup Attacks",
+  "performanceAnalysisCleanupCrew": "Säuberungsangriffe",
   "@performanceAnalysisCleanupCrew": {
     "description": "Performance analysis preset for cleanup attacks"
   },
-  "performanceAnalysisCleanupCrewDesc": "Shows attacks from lower war positions",
+  "performanceAnalysisCleanupCrewDesc": "Zeigt Angriffe von unteren Kriegspositionen an",
   "@performanceAnalysisCleanupCrewDesc": {
     "description": "Description for cleanup attacks analysis"
   },
-  "performanceRatingNeedsImprovement": "Needs Improvement",
+  "performanceRatingNeedsImprovement": "Verbesserungsbedarf",
   "@performanceRatingNeedsImprovement": {
     "description": "Needs improvement performance rating"
   },
-  "performanceStrengthHighThreeStarRate": "High Three-Star Rate",
+  "performanceStrengthHighThreeStarRate": "Hohe 3-Sterne-Rate",
   "@performanceStrengthHighThreeStarRate": {
     "description": "Strength area: high three-star rate"
   },
-  "performanceStrengthHighDestruction": "High Destruction",
+  "performanceStrengthHighDestruction": "Hohe Zerstörung",
   "@performanceStrengthHighDestruction": {
     "description": "Strength area: high destruction percentage"
   },
-  "performanceStrengthConsistentPerformance": "Consistent Performance",
+  "performanceStrengthConsistentPerformance": "Konsistente Leistung",
   "@performanceStrengthConsistentPerformance": {
     "description": "Strength area: consistent performance"
   },
-  "performanceImprovementThreeStarConsistency": "Three-Star Consistency",
+  "performanceImprovementThreeStarConsistency": "Drei Sterne Konsistenz",
   "@performanceImprovementThreeStarConsistency": {
     "description": "Improvement area: three-star consistency"
   },
-  "performanceImprovementOverallStarPerformance": "Overall Star Performance",
+  "performanceImprovementOverallStarPerformance": "Gesamte Sternleistung",
   "@performanceImprovementOverallStarPerformance": {
     "description": "Improvement area: overall star performance"
   },
-  "presetSuggestionCwlOnly": "CWL Only",
+  "presetSuggestionCwlOnly": "Nur CWL",
   "@presetSuggestionCwlOnly": {
     "description": "Preset suggestion for CWL wars only"
   },
-  "presetSuggestionRandomWars": "Random Wars",
+  "presetSuggestionRandomWars": "Zufällige Kriege",
   "@presetSuggestionRandomWars": {
     "description": "Preset suggestion for random wars"
   },
-  "presetSuggestionFriendlyWars": "Friendly Wars",
+  "presetSuggestionFriendlyWars": "Freundschaftskriege",
   "@presetSuggestionFriendlyWars": {
     "description": "Preset suggestion for friendly wars"
   },
-  "presetSuggestionStarOnly": "{count} Star Only",
+  "presetSuggestionStarOnly": "Sterne",
   "@presetSuggestionStarOnly": {
     "description": "Preset suggestion for specific star count",
     "placeholders": {
@@ -1881,15 +1887,15 @@
       }
     }
   },
-  "presetSuggestionPerfectAttacks": "Perfect Attacks",
+  "presetSuggestionPerfectAttacks": "Perfekte Angriffe",
   "@presetSuggestionPerfectAttacks": {
     "description": "Preset suggestion for perfect attacks"
   },
-  "presetSuggestionFailedAttacks": "Failed Attacks",
+  "presetSuggestionFailedAttacks": "Fehlgeschlagene Angriffe",
   "@presetSuggestionFailedAttacks": {
     "description": "Preset suggestion for failed attacks"
   },
-  "presetSuggestionThOnly": "TH{level} Only",
+  "presetSuggestionThOnly": "Nur TH{level}",
   "@presetSuggestionThOnly": {
     "description": "Preset suggestion for specific town hall level",
     "placeholders": {
@@ -1898,46 +1904,46 @@
       }
     }
   },
-  "presetSuggestionLastWeek": "Last Week",
+  "presetSuggestionLastWeek": "Letzte Woche",
   "@presetSuggestionLastWeek": {
     "description": "Preset suggestion for last week timeframe"
   },
-  "presetSuggestionLastMonth": "Last Month",
+  "presetSuggestionLastMonth": "Letzter Monat",
   "@presetSuggestionLastMonth": {
     "description": "Preset suggestion for last month timeframe"
   },
-  "presetSuggestionMyPreset": "My Preset",
+  "presetSuggestionMyPreset": "Mein Preset",
   "@presetSuggestionMyPreset": {
     "description": "Default preset suggestion"
   },
-  "presetSuggestionCustomFilter": "Custom Filter",
+  "presetSuggestionCustomFilter": "Eigener Filter",
   "@presetSuggestionCustomFilter": {
     "description": "Default custom filter suggestion"
   },
-  "presetSuggestionRecentFilter": "Recent Filter",
+  "presetSuggestionRecentFilter": "Letzte Filter",
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
   },
-  "generalError": "Error",
-  "generalSuccess": "Success",
-  "generalFailed": "Failed",
+  "generalError": "Fehler",
+  "generalSuccess": "Erfolgreich",
+  "generalFailed": "Fehlgeschlagen",
   "generalMinimum": "Minimum",
   "generalMaximum": "Maximum",
-  "generalHigh": "High",
-  "generalLow": "Low",
-  "generalPoor": "Poor",
-  "generalOpen": "Open",
-  "generalClosed": "Closed",
-  "generalAvailable": "Available",
-  "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
-  "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
-  "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
-  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
-  "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
-  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
-  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
-  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
-  "apiErrorInvalidJsonResponse": "Something went wrong. Please try again.",
+  "generalHigh": "Hoch",
+  "generalLow": "Niedrig",
+  "generalPoor": "Gering",
+  "generalOpen": "Öffnen",
+  "generalClosed": "Geschlossen",
+  "generalAvailable": "Verfügbar",
+  "authErrorUserCancelledDiscordLogin": "Benutzer hat den Discord Login abgebrochen.",
+  "authErrorDiscordLoginFailed": "Discord-Anmeldung fehlgeschlagen. Bitte versuche es erneut.",
+  "authErrorEmailLoginFailed": "E-Mail-Anmeldung fehlgeschlagen. Bitte überprüfe deine Anmeldedaten.",
+  "authErrorEmailNotVerified": "Deine E-Mail-Adresse ist nicht verifiziert. Bitte überprüfe deine E-Mail und gib den Bestätigungscode ein.",
+  "authErrorEmailVerificationFailed": "E-Mail-Verifizierung fehlgeschlagen. Das Token ist möglicherweise ungültig oder abgelaufen.",
+  "authErrorDiscordLinkFailed": "Discord Account konnte nicht verknüpft werden. Möglicherweise ist es bereits mit einem anderen Konto verbunden.",
+  "authErrorEmailLinkFailed": "E-Mail-Konto konnte nicht verknüpft werden. E-Mail wird möglicherweise bereits verwendet.",
+  "authErrorUserNotAuthenticated": "Benutzer nicht authentifiziert. Bitte melden Sie sich erneut an.",
+  "apiErrorInvalidJsonResponse": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
   "@apiErrorInvalidJsonResponse": {
     "description": "Error when API returns invalid JSON",
     "placeholders": {
@@ -1947,7 +1953,7 @@
       }
     }
   },
-  "apiErrorBadRequest": "Something went wrong. Please check your input.",
+  "apiErrorBadRequest": "Ein Fehler ist aufgetreten, bitte überprüfen Sie Ihre Eingabe.",
   "@apiErrorBadRequest": {
     "description": "API bad request error",
     "placeholders": {
@@ -1961,7 +1967,7 @@
       }
     }
   },
-  "apiErrorUnauthorized": "You are not authorized. Please log in again.",
+  "apiErrorUnauthorized": "Sie sind nicht autorisiert. Bitte melden Sie sich erneut an.",
   "@apiErrorUnauthorized": {
     "description": "API unauthorized error",
     "placeholders": {
@@ -1971,7 +1977,7 @@
       }
     }
   },
-  "apiErrorForbidden": "You don't have permission to perform this action.",
+  "apiErrorForbidden": "Sie haben nicht die Berechtigung um diese Aktion durchzuführen.",
   "@apiErrorForbidden": {
     "description": "API forbidden error",
     "placeholders": {
@@ -1981,7 +1987,7 @@
       }
     }
   },
-  "apiErrorNotFound": "We couldn't find what you were looking for.",
+  "apiErrorNotFound": "Wir konnten nicht finden, wonach Sie gesucht haben.",
   "@apiErrorNotFound": {
     "description": "API not found error",
     "placeholders": {
@@ -1991,7 +1997,7 @@
       }
     }
   },
-  "apiErrorRateLimit": "Too many requests. Please try again later.",
+  "apiErrorRateLimit": "Zu viele Anfragen. Bitte versuche es später nochmals.",
   "@apiErrorRateLimit": {
     "description": "API rate limit error",
     "placeholders": {
@@ -2001,7 +2007,7 @@
       }
     }
   },
-  "apiErrorServer": "The server is temporarily unavailable. Please try again shortly.",
+  "apiErrorServer": "Der Server ist vorübergehend nicht verfügbar. Bitte versuchen Sie es später noch einmal.",
   "@apiErrorServer": {
     "description": "API server error",
     "placeholders": {
@@ -2015,7 +2021,7 @@
       }
     }
   },
-  "apiErrorGeneric": "An unexpected error occurred. Please try again.",
+  "apiErrorGeneric": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
   "@apiErrorGeneric": {
     "description": "Generic API error",
     "placeholders": {
@@ -2029,10 +2035,10 @@
       }
     }
   },
-  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
-  "apiErrorTimeout": "Request timed out. Please try again.",
-  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
-  "apiErrorOperationFailed": "We couldn't complete your request. Please try again.",
+  "apiErrorNetworkConnection": "Keine Internetverbindung. Bitte überprüfe dein Netzwerk, bevor du es erneut versuchst.",
+  "apiErrorTimeout": "Anfrage hat das Zeitlimit überschritten. Bitte versuche es erneut.",
+  "apiErrorInvalidFormat": "Ungültiges Antwortformat. Bitte versuchen Sie es erneut.",
+  "apiErrorOperationFailed": "Wir konnten deine Anfrage nicht bearbeiten. Bitte versuche es erneut.",
   "@apiErrorOperationFailed": {
     "description": "Generic operation failed error",
     "placeholders": {
@@ -2042,7 +2048,7 @@
       }
     }
   },
-  "apiErrorNetworkOperation": "You seems to be offline. Please check your connection and try again.",
+  "apiErrorNetworkOperation": "Sie scheinen offline zu sein. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
   "@apiErrorNetworkOperation": {
     "description": "Network error during specific operation",
     "placeholders": {
@@ -2052,7 +2058,7 @@
       }
     }
   },
-  "apiErrorTimeoutOperation": "The request took too long. Please try again.",
+  "apiErrorTimeoutOperation": "Die Anfrage hat zu lange gedauert. Bitte versuchen Sie es erneut.",
   "@apiErrorTimeoutOperation": {
     "description": "Timeout error during specific operation",
     "placeholders": {
@@ -2062,7 +2068,7 @@
       }
     }
   },
-  "apiErrorDataFormatOperation": "Something went wrong while processing the data. Please try again.",
+  "apiErrorDataFormatOperation": "Beim Verarbeiten der Daten ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
   "@apiErrorDataFormatOperation": {
     "description": "Data format error during specific operation",
     "placeholders": {
@@ -2072,7 +2078,7 @@
       }
     }
   },
-  "apiErrorConfigLoadFailed": "We couldn’t load the app settings (error {statusCode}). Please try again.",
+  "apiErrorConfigLoadFailed": "Wir konnten die App-Einstellungen nicht laden (Fehler {statusCode}). Bitte versuchen Sie es erneut.",
   "@apiErrorConfigLoadFailed": {
     "description": "Error loading app config",
     "placeholders": {
@@ -2082,7 +2088,7 @@
       }
     }
   },
-  "apiErrorConfigException": "Error when loading configuration from the server",
+  "apiErrorConfigException": "Fehler beim Laden der Konfiguration vom Server",
   "@apiErrorConfigException": {
     "description": "Exception while loading config",
     "placeholders": {
