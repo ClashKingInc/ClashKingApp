@@ -51,7 +51,7 @@ class PlayerLegendHistoryEosChart extends StatelessWidget {
                         bottomTitles: AxisTitles(
                           sideTitles: SideTitles(
                             showTitles: true,
-                            interval: chartData.rangeX * 2,
+                            interval: chartData.rangeX * 4,
                             reservedSize: 50,
                             getTitlesWidget: (value, meta) {
                               final date = DateTime.fromMillisecondsSinceEpoch(
@@ -59,7 +59,7 @@ class PlayerLegendHistoryEosChart extends StatelessWidget {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
                                 child: Transform.rotate(
-                                  angle: -0.5,
+                                  angle: -0.8,
                                   child: Text(
                                     DateFormat('MM/yy').format(date),
                                     style:

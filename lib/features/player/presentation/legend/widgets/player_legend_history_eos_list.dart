@@ -42,7 +42,7 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                               children: <Widget>[
                                 Center(
                                   child: CachedNetworkImage(
-  
+
   errorWidget: (context, url, error) => Icon(Icons.error),
                                     imageUrl: ImageAssets.legendBlazonBordersNoPadding,
                                     height: 80,
@@ -55,7 +55,11 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                                       DateFormat(
                                               'MMMM\nyyyy',
                                               Localizations.localeOf(context).languageCode)
-                                          .format(DateTime.parse("${legendSeason.season}-01")),
+                                          .format(DateTime.parse(
+                                            legendSeason.season.split('-').length == 2
+                                              ? "${legendSeason.season}-01"
+                                              : legendSeason.season
+                                          )),
                                     ),
                                     style: Theme.of(context)
                                         .textTheme
