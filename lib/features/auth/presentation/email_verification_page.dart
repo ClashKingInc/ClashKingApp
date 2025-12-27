@@ -5,6 +5,7 @@ import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/auth/presentation/startup_widget.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -25,36 +26,18 @@ class EmailVerificationPage extends StatefulWidget {
 
 class EmailVerificationPageState extends State<EmailVerificationPage> {
   bool _isLoading = false;
-  final List<TextEditingController> _codeControllers =
-      List.generate(6, (index) => TextEditingController());
-  final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
+  final TextEditingController _codeController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void dispose() {
-    for (var controller in _codeControllers) {
-      controller.dispose();
-    }
-    for (var node in _focusNodes) {
-      node.dispose();
-    }
+    _codeController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
   String get _verificationCode {
-    return _codeControllers.map((controller) => controller.text).join();
-  }
-
-  void _onCodeChanged(String value, int index) {
-    if (value.length == 1 && index < 5) {
-      _focusNodes[index + 1].requestFocus();
-    } else if (value.isEmpty && index > 0) {
-      _focusNodes[index - 1].requestFocus();
-    }
-
-    // Auto-verify when all 6 digits are entered
-    if (_verificationCode.length == 6) {
-      _verifyEmailWithCode();
-    }
+    return _codeController.text;
   }
 
   Future<void> _verifyEmailWithCode() async {
@@ -92,7 +75,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
           );
         } else {
           String errorString = e.toString().toLowerCase();
-          String displayMessage = e.toString().replaceAll('Exception: ', '');
+          String displayMessage = ApiService.getErrorMessage(e);
           
           // Check if email is already verified - redirect to login
           if (errorString.contains('already verified') || 
@@ -108,7 +91,8 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
           }
           
           // Check for verification errors (401 - invalid or expired code)
-          if (errorString.contains('unauthorized') || errorString.contains('autorisations') ||
+          if (e is UnauthorizedException || 
+              errorString.contains('unauthorized') || errorString.contains('autoris') ||
               errorString.contains('expired') || errorString.contains('expiré') ||
               errorString.contains('invalid')) {
             // Invalid or expired code - unified message
@@ -122,10 +106,8 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
             ),
           );
           // Clear the code on error
-          for (var controller in _codeControllers) {
-            controller.clear();
-          }
-          _focusNodes[0].requestFocus();
+          _codeController.clear();
+          _focusNode.requestFocus();
         }
       }
     }
@@ -150,13 +132,11 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
       }
     } catch (e) {
       if (mounted) {
-        String errorMessage = e.toString()
-            .replaceAll('Exception: ', '')
-            .replaceAll('ApiException: ', '')
-            .replaceAll('NotFoundException: ', '');
+        String errorMessage = ApiService.getErrorMessage(e);
+        String errorString = e.toString().toLowerCase();
 
         // Handle specific error cases
-        if (errorMessage.contains("already verified")) {
+        if (errorString.contains("already verified")) {
           // Redirect to login page if email is already verified
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
@@ -166,14 +146,14 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
             ),
           );
           return;
-        } else if (errorMessage.contains("expired")) {
+        } else if (errorString.contains("expired")) {
           errorMessage =
               AppLocalizations.of(context)!.authEmailVerificationExpired;
-        } else if (errorMessage.contains("No pending verification")) {
+        } else if (errorString.contains("no pending verification")) {
           errorMessage =
               AppLocalizations.of(context)!.authEmailVerificationExpiredResend;
         }
-        else if (errorMessage.contains("This email is already verified")) {
+        else if (errorString.contains("this email is already verified")) {
           errorMessage =
               AppLocalizations.of(context)!.authEmailVerificationAlreadyVerified;
         }
@@ -272,38 +252,37 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                     SizedBox(height: 32),
 
                     // 6-digit code input
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(6, (index) {
-                        return SizedBox(
-                          width: 45,
-                          height: 56,
-                          child: TextFormField(
-                            controller: _codeControllers[index],
-                            focusNode: _focusNodes[index],
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                            enabled: !_isLoading,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              LengthLimitingTextInputFormatter(1),
-                            ],
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              counterText: '',
-                            ),
-                            onChanged: (value) => _onCodeChanged(value, index),
+                    TextFormField(
+                      controller: _codeController,
+                      focusNode: _focusNode,
+                      autofocus: true,
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      enabled: !_isLoading,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(6),
+                      ],
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 8,
                           ),
-                        );
-                      }),
+                      decoration: InputDecoration(
+                        hintText: '000000',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        counterText: '',
+                      ),
+                      onChanged: (value) {
+                        setState(() {});
+                        if (value.length == 6) {
+                          _verifyEmailWithCode();
+                        }
+                      },
                     ),
 
                     SizedBox(height: 32),

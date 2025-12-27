@@ -9,6 +9,7 @@ import 'package:clashkingapp/features/auth/presentation/register_page.dart';
 import 'package:clashkingapp/features/auth/presentation/forgot_password_page.dart';
 import 'package:clashkingapp/features/auth/presentation/email_verification_page.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
@@ -136,7 +137,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(e.toString().replaceAll('Exception: ', '')),
+          content: Text(ApiService.getErrorMessage(e)),
           backgroundColor: Colors.red,
         ),
       );

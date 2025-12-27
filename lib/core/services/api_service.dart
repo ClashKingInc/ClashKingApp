@@ -73,7 +73,8 @@ class ApiService {
       case 403:
         throw ForbiddenException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorForbidden(endpoint));
       case 404:
-        throw NotFoundException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorNotFound(endpoint));
+        String? specificMessage = _extractApiErrorMessage(response.body);
+        throw NotFoundException(specificMessage ?? AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorNotFound(endpoint));
       case 409:
         // Use 409 for email verification required (conflict state)
         DebugUtils.debugInfo("Creating EmailVerificationRequiredException");
@@ -175,7 +176,7 @@ class ApiException implements Exception {
   final String message;
   ApiException(this.message);
   @override
-  String toString() => 'ApiException: $message';
+  String toString() => '$runtimeType: $message';
 }
 
 class BadRequestException extends ApiException {
