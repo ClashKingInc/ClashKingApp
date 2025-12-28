@@ -4,6 +4,7 @@ import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clipboard/clipboard.dart';
+import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -39,8 +40,9 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
         title: Text(AppLocalizations.of(context)!.generalSettings),
         actions: [],
       ),
-      body: ListView(
-        children: <Widget>[
+      body: ResponsiveLayoutWrapper(
+        child: ListView(
+          children: <Widget>[
           _buildListTile(
             context,
             title: AppLocalizations.of(context)!.settingsLanguage,
@@ -167,6 +169,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           _buildVersionInfoTile(context),
         ],
       ),
+    ),
     );
   }
 

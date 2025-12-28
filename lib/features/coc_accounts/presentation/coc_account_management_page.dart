@@ -8,6 +8,7 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/widgets/account_verification_dialog.dart';
+import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -117,9 +118,10 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       child: Scaffold(
         appBar: CocAccountsAppBar(),
         resizeToAvoidBottomInset: false,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      body: ResponsiveLayoutWrapper(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
           Expanded(
             child: Column(
               children: [
@@ -249,6 +251,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                     ),
                                   )
                                 : ReorderableListView(
+                                    buildDefaultDragHandles: false, // Disable default drag handles to use custom drag indicator in each item (via ReorderableDragStartListener).
                                     onReorder: (oldIndex, newIndex) {
                                       if (oldIndex < newIndex) {
                                         newIndex--;
@@ -395,16 +398,22 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                   ),
                                                 ),
                                               const SizedBox(width: 8),
-                                              // Drag handle with better visual design
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.all(8),
-                                                child: Icon(
-                                                  Icons.drag_indicator,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSurfaceVariant,
-                                                  size: 20,
+                                              // Drag handle - clickable to drag/reorder
+                                              ReorderableDragStartListener(
+                                                index: index,
+                                                child: MouseRegion(
+                                                  cursor: SystemMouseCursors.grab,
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
+                                                    child: Icon(
+                                                      Icons.drag_indicator,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurfaceVariant,
+                                                      size: 20,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                               // Delete button with confirmation
@@ -480,6 +489,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
             ),
         ],
       ),
+    ),
     ),
     );
   }
@@ -581,8 +591,18 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       _isAddingLoading = false;
       _errorMessage = "";
       context.read<CocAccountService>().addLocalAccount(newAccount);
-      _syncTempAccountsWithPlayerService();
     });
+
+    // Fetch the new player's data to populate PlayerService
+    final playerService = context.read<PlayerService>();
+    try {
+      await playerService.initPlayerData([newAccount["player_tag"]]);
+    } catch (e) {
+      DebugUtils.debugWarning(
+          "⚠️ Failed to fetch new player data immediately, will load on next sync");
+    }
+
+    _syncTempAccountsWithPlayerService();
 
     _playerTagController.clear();
   }

@@ -10,6 +10,7 @@ import 'package:clashkingapp/features/player/presentation/legend/player_legend_p
     show PlayerLegendScreen;
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
+import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
@@ -44,7 +45,8 @@ class DashboardPage extends StatelessWidget {
     final player = playerService.getSelectedProfile(cocService);
 
     return Scaffold(
-      body: RefreshIndicator(
+      body: ResponsiveLayoutWrapper(
+        child: RefreshIndicator(
         backgroundColor: Theme.of(context).colorScheme.surface,
         onRefresh: () async {
           try {
@@ -159,6 +161,7 @@ class DashboardPage extends StatelessWidget {
           },
         ),
       ),
+    ),
     );
   }
 }
