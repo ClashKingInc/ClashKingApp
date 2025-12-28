@@ -251,7 +251,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                     ),
                                   )
                                 : ReorderableListView(
-                                    buildDefaultDragHandles: false,
+                                    buildDefaultDragHandles: false, // Disable default drag handles to use custom drag indicator in each item (via ReorderableDragStartListener).
                                     onReorder: (oldIndex, newIndex) {
                                       if (oldIndex < newIndex) {
                                         newIndex--;
