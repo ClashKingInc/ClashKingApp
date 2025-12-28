@@ -133,7 +133,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
     } catch (e) {
       if (mounted) {
         String errorMessage = ApiService.getErrorMessage(e);
-        String errorString = e.toString().toLowerCase();
+        String errorString = errorMessage.toLowerCase();
 
         // Handle specific error cases
         if (errorString.contains("already verified")) {
