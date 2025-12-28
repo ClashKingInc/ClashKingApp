@@ -10,7 +10,7 @@
     "prefer_related_applications": false,
     "icons": [
         {
-            "src": "icons/icon-play-store.pSng",
+            "src": "icons/icon-play-store.png",
             "sizes": "512x512",
             "type": "image/png"
         }
