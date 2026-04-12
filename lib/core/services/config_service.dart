@@ -17,7 +17,7 @@ class ConfigService {
       
       if (response.statusCode == 200) {
         final config = json.decode(response.body);
-        _sentryDsn = config['sentry_dsn'];
+        _sentryDsn = config['sentry_dsn_mobile'];
       } else {
         DebugUtils.debugError(' Failed to load config: ${response.statusCode}');
       }
