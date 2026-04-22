@@ -11,10 +11,13 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 class WarCwlService extends ChangeNotifier {
   final Map<String, WarCwl> summaries = {};
 
-  Future<void> loadAllWarData(List<String> clanTags) async {
+  Future<void> loadAllWarData(List<String> clanTags,
+      {bool notify = true}) async {
     if (clanTags.isEmpty) return;
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
 
     try {
       DebugUtils.debugInfo("🏰 Loading war data for tags: $clanTags");
@@ -36,9 +39,12 @@ class WarCwlService extends ChangeNotifier {
         for (final summary in data) {
           final warSummary = WarCwl.fromJson(summary, null);
           summaries[warSummary.tag] = warSummary;
-          DebugUtils.debugSuccess("Loaded war data for clan: ${warSummary.tag}");
+          DebugUtils.debugSuccess(
+              "Loaded war data for clan: ${warSummary.tag}");
         }
-        notifyListeners();
+        if (notify) {
+          notifyListeners();
+        }
       }
     } catch (e) {
       Sentry.captureException(e);
@@ -52,22 +58,30 @@ class WarCwlService extends ChangeNotifier {
   }
 
   /// Process bulk war data from the optimized API endpoint
-  void processBulkWarData(List<dynamic> warData) {
+  void processBulkWarData(List<dynamic> warData, {bool notify = true}) {
     DebugUtils.debugInfo("🔄 Processing ${warData.length} bulk war data items");
-    
+
     for (final warItem in warData) {
       try {
         if (warItem is Map<String, dynamic>) {
           final warSummary = WarCwl.fromJson(warItem, null);
           summaries[warSummary.tag] = warSummary;
-          DebugUtils.debugSuccess("Processed bulk war data for clan: ${warSummary.tag}");
+          DebugUtils.debugSuccess(
+              "Processed bulk war data for clan: ${warSummary.tag}");
         }
       } catch (e) {
         DebugUtils.debugError(" Error processing bulk war data item: $e");
       }
     }
-    
-    DebugUtils.debugSuccess("Processed all bulk war data, total summaries: ${summaries.length}");
+
+    DebugUtils.debugSuccess(
+        "Processed all bulk war data, total summaries: ${summaries.length}");
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  void notifyDataChanged() {
     notifyListeners();
   }
 
