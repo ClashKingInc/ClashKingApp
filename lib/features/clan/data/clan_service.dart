@@ -53,10 +53,16 @@ class ClanService extends ChangeNotifier {
         final responseBody = utf8.decode(response.bodyBytes);
         final data = jsonDecode(responseBody);
         if (data.containsKey("items") && data["items"] is List) {
-          fetchedClans = (data["items"] as List)
-              .whereType<Map<String, dynamic>>()
-              .map((clan) => Clan.fromJson(clan))
-              .toList();
+          fetchedClans = [];
+          for (final clan in (data["items"] as List).whereType<Map<String, dynamic>>()) {
+            try {
+              fetchedClans.add(Clan.fromJson(clan));
+            } catch (e) {
+              DebugUtils.debugError(
+                "Error parsing clan ${clan["tag"] ?? "unknown"}: $e",
+              );
+            }
+          }
         } else {
           Sentry.captureMessage("Error loading clan data: $data",
               level: SentryLevel.error);

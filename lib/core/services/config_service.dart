@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/utils/debug_utils.dart';  
-
+import 'package:clashkingapp/core/services/api_service.dart';
 class ConfigService {
-  static const String _baseUrl = "https://dev.api.clashk.ing/v2/app";
+  static const String _baseUrl = ApiService.apiUrlV2;
   static String? _sentryDsn;
   
   static String? get sentryDsn => _sentryDsn;

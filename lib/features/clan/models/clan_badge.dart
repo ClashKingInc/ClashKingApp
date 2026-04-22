@@ -10,9 +10,9 @@ class ClanBadgeUrls {
 
   factory ClanBadgeUrls.fromJson(Map<String, dynamic> json) {
     return ClanBadgeUrls(
-      small: ApiService.cocAssetsProxyUrl(json["small"]),
-      medium: ApiService.cocAssetsProxyUrl(json["medium"]),
-      large: ApiService.cocAssetsProxyUrl(json["large"]),
+      small: ApiService.cocAssetsProxyUrl(json["small"]?.toString() ?? ""),
+      medium: ApiService.cocAssetsProxyUrl(json["medium"]?.toString() ?? ""),
+      large: ApiService.cocAssetsProxyUrl(json["large"]?.toString() ?? ""),
     );
   }
 

@@ -174,9 +174,9 @@ class PlayerService extends ChangeNotifier {
 
       // Try bulk endpoint first
       DebugUtils.debugApi("🔄 Calling bulk initialization API for tag: $playerTag");
-      try {
-        final response = await http.post(
-          Uri.parse("${ApiService.apiUrlV2}/app/initialization"),
+        try {
+          final response = await http.post(
+          Uri.parse("${ApiService.apiUrlV2}/initialization"),
           headers: {
             "Authorization": "Bearer $token",
             "Content-Type": "application/json",

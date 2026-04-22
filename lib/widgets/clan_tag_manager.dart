@@ -50,18 +50,23 @@ class ClanTagManager {
         return null;
       }
 
-      final cleanTag = playerTag.replaceAll('#', '');
-      final response = await http.get(
-        Uri.parse("${ApiService.apiUrlV2}/player/$cleanTag/basic"),
+      final response = await http.post(
+        Uri.parse("${ApiService.apiUrlV2}/players"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
         },
+        body: jsonEncode({"player_tags": [playerTag]}),
       ).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final clanTag = data['clan_tag'];
+        final items = data['items'] as List<dynamic>? ?? [];
+        if (items.isEmpty) {
+          return null;
+        }
+        final playerData = items.first as Map<String, dynamic>;
+        final clanTag = (playerData['clan'] as Map<String, dynamic>?)?['tag'] as String?;
         return clanTag;
       } else {
         DebugUtils.debugWarning("⚠️ Failed to get player data: ${response.statusCode}");

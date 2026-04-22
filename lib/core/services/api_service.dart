@@ -9,8 +9,8 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 
 class ApiService {
-  static const String apiUrlV1 = "https://dev.api.clashk.ing";
-  static const String apiUrlV2 = "https://dev.api.clashk.ing/v2";
+  static const String apiUrlV1 = "https://api.clashk.ing";
+  static const String apiUrlV2 = "https://go.api.clashk.ing/v2";
   static const String assetUrl = "https://assets.clashk.ing";
   static const String proxyUrl = "https://proxy.clashk.ing/v1";
   static const String cocAssetsUrl = "https://coc-assets.clashk.ing";
@@ -127,7 +127,7 @@ class ApiService {
   static Future<void> loadConfig() async {
     try {
       final response = await http.get(
-        Uri.parse('https://dev.api.clashk.ing/v2/app/public-config'),
+        Uri.parse('$apiUrlV2/public-config'),
         headers: {'Content-Type': 'application/json'},
       ).timeout(const Duration(seconds: 10));
       
@@ -135,10 +135,10 @@ class ApiService {
         final config = json.decode(response.body);
         _sentryDsn = config['sentry_dsn'];
       } else {
-        DebugUtils.debugError(' ${AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorConfigLoadFailed(response.statusCode)}');
+        DebugUtils.debugError('Failed to load config: ${response.statusCode}');
       }
     } catch (e) {
-      DebugUtils.debugError(' ${AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorConfigException(e.toString())}');
+      DebugUtils.debugError('Error loading config: $e');
     }
   }
 

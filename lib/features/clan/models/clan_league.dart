@@ -15,11 +15,11 @@ class ClanLeague {
 
   factory ClanLeague.fromJson(Map<String, dynamic> json) {
     return ClanLeague(
-      id: json["id"],
-      name: json["name"],
-      smallIconUrl: json["iconUrls"]?["small"],
-      mediumIconUrl: json["iconUrls"]?["medium"],
-      tinyIconUrl: json["iconUrls"]?["tiny"],
+      id: (json["id"] as num?)?.toInt() ?? 0,
+      name: json["name"]?.toString() ?? "",
+      smallIconUrl: json["iconUrls"]?["small"]?.toString(),
+      mediumIconUrl: json["iconUrls"]?["medium"]?.toString(),
+      tinyIconUrl: json["iconUrls"]?["tiny"]?.toString(),
     );
   }
 

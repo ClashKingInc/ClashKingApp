@@ -11,9 +11,9 @@ class ClanDistrict {
 
   factory ClanDistrict.fromJson(Map<String, dynamic> json) {
     return ClanDistrict(
-      id: json["id"],
-      name: json["name"],
-      districtHallLevel: json["districtHallLevel"],
+      id: (json["id"] as num?)?.toInt() ?? 0,
+      name: json["name"]?.toString() ?? "",
+      districtHallLevel: (json["districtHallLevel"] as num?)?.toInt() ?? 0,
     );
   }
 }

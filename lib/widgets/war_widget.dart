@@ -178,21 +178,20 @@ class WarWidgetService {
         return null;
       }
       
-      final cleanTag = playerTag.replaceAll('#', '');
       final response = await http.post(
         Uri.parse("${ApiService.apiUrlV2}/players"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
         },
-        body: jsonEncode({"player_tags": [cleanTag]}),
+        body: jsonEncode({"player_tags": [playerTag]}),
       ).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['items'] != null && (data['items'] as List).isNotEmpty) {
           final playerData = data['items'][0];
-          final clanTag = playerData['clan_tag'] ?? '';
+          final clanTag = playerData['clan']?['tag'] ?? '';
           if (clanTag.isNotEmpty) {
             // Cache the clan tag for future use
             await storePrefs('player_${playerTag}_clan_tag', clanTag);

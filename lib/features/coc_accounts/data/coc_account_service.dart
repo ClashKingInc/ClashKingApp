@@ -84,7 +84,7 @@ class CocAccountService extends ChangeNotifier {
 
     try {
       final response = await http.post(
-        Uri.parse("${ApiService.apiUrlV2}/users/add-coc-account"),
+        Uri.parse("${ApiService.apiUrlV2}/users/coc-accounts"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
@@ -96,7 +96,9 @@ class CocAccountService extends ChangeNotifier {
 
       return {
         "code": response.statusCode,
-        "message": data["detail"] is Map ? data["detail"]["message"] : data["detail"] ?? "Unknown error",
+        "message": data["message"] ??
+            (data["detail"] is Map ? data["detail"]["message"] : data["detail"]) ??
+            "Unknown error",
         "account": response.statusCode == 200 
             ? data["account"] 
             : (data["detail"] is Map && data["detail"]["account"] != null 
@@ -123,7 +125,7 @@ class CocAccountService extends ChangeNotifier {
       }
 
       final response = await http.post(
-        Uri.parse("${ApiService.apiUrlV2}/users/add-coc-account-with-token"),
+        Uri.parse("${ApiService.apiUrlV2}/users/coc-accounts/verified"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
@@ -136,7 +138,7 @@ class CocAccountService extends ChangeNotifier {
 
       return {
         "code": response.statusCode,
-        "message": data["detail"] ?? "Uknown error",
+        "message": data["message"] ?? data["detail"] ?? "Uknown error",
         "account": response.statusCode == 200 ? data["account"] : null
       };
     } catch (e) {
@@ -149,14 +151,14 @@ class CocAccountService extends ChangeNotifier {
     try {
       final token = await TokenService().getAccessToken();
       if (token == null) throw Exception("User not authenticated");
+      final encodedPlayerTag = Uri.encodeComponent(playerTag);
 
       final response = await http.delete(
-        Uri.parse("${ApiService.apiUrlV2}/users/remove-coc-account"),
+        Uri.parse("${ApiService.apiUrlV2}/users/coc-accounts/$encodedPlayerTag"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
         },
-        body: jsonEncode({"player_tag": playerTag}),
       );
 
       if (response.statusCode == 200) {
@@ -178,7 +180,7 @@ class CocAccountService extends ChangeNotifier {
     if (token == null) throw Exception("User not authenticated");
 
     final response = await http.put(
-      Uri.parse("${ApiService.apiUrlV2}/users/reorder-coc-accounts"),
+      Uri.parse("${ApiService.apiUrlV2}/users/coc-accounts/order"),
       headers: {
         "Authorization": "Bearer $token",
         "Content-Type": "application/json",
@@ -340,7 +342,7 @@ class CocAccountService extends ChangeNotifier {
 
     try {
       final response = await http.post(
-        Uri.parse("${ApiService.apiUrlV2}/app/initialization"),
+        Uri.parse("${ApiService.apiUrlV2}/initialization"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
@@ -501,7 +503,7 @@ class CocAccountService extends ChangeNotifier {
       }
 
       final response = await http.post(
-        Uri.parse("${ApiService.apiUrlV2}/users/add-coc-account-with-token"),
+        Uri.parse("${ApiService.apiUrlV2}/users/coc-accounts/verified"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
@@ -563,14 +565,14 @@ class CocAccountService extends ChangeNotifier {
         return false;
       }
 
+      final encodedPlayerTag = Uri.encodeComponent(playerTag);
       final response = await http.post(
-        Uri.parse("${ApiService.apiUrlV2}/users/verify-coc-account"),
+        Uri.parse("${ApiService.apiUrlV2}/users/coc-accounts/$encodedPlayerTag/verify"),
         headers: {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
         },
         body: jsonEncode({
-          "player_tag": playerTag,
           "player_token": apiToken,
         }),
       );
