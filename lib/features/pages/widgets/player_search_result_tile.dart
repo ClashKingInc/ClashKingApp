@@ -116,10 +116,9 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                             ImageChip(
                               context: context,
                               imageUrl: getLeagueIcon(widget.player) ??
-                                  ImageAssets.leagues[
+                                  ImageAssets.getLeagueImage(
                                       getLeagueName(widget.player) ??
-                                          "Unranked"] ??
-                                  ImageAssets.defaultImage,
+                                          "Unranked"),
                               label: widget.player['trophies'].toString(),
                             ),
                             ImageChip(

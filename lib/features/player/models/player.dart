@@ -299,8 +299,9 @@ class Player {
           townHallPic: ImageAssets.townHall(json["townHallLevel"] ?? 0),
           builderHallPic:
               ImageAssets.builderHall(json["builderHallLevel"] ?? 0),
-          leagueUrl: ApiService.cocAssetsProxyUrl(
-              json['league']?['iconUrls']?['medium'] ?? ImageAssets.leagues["Unranked"]),
+          leagueUrl: ApiService.cocAssetsProxyUrl(json['league']?['iconUrls']
+                  ?['medium'] ??
+              ImageAssets.getLeagueImage("Unranked")),
           clanGamesPoint: [],
           seasonPass: [],
           lastOnline: DateTime.utc(1970, 1, 1),
@@ -403,7 +404,7 @@ class Player {
             gameData: GameDataService.gearsData['gears'] ?? {},
             factory: PlayerEquipment.fromRaw,
           ),
-          achievements: json['achievements'] != null 
+          achievements: json['achievements'] != null
               ? List<PlayerAchievement>.from(json['achievements']
                   .map((x) => PlayerAchievement.fromJson(x ?? {})))
               : <PlayerAchievement>[],
@@ -496,7 +497,8 @@ class Player {
         ? PlayerRaids.fromJson(json['raid_data'])
         : PlayerRaids.empty();
 
-    if (json['war_data'] != null && json['war_data']["currentWarInfo"] != null) {
+    if (json['war_data'] != null &&
+        json['war_data']["currentWarInfo"] != null) {
       final originalWar = WarInfo.fromJson(json['war_data']["currentWarInfo"]);
       warData = originalWar.reorderForUser(tag);
     } else {

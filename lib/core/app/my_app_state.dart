@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -8,6 +7,7 @@ import 'package:clashkingapp/widgets/widgets_functions.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:home_widget/home_widget.dart';
 import 'dart:async';
+import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/l10n/locale.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -90,6 +90,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       _locale = _getLocaleFallback(systemLocale);
     }
 
+    await GameDataService.loadTranslationsForLocale(_locale);
     notifyListeners();
   }
 
@@ -103,6 +104,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     if (locale.scriptCode != null) {
       await storePrefs('scriptCode', locale.scriptCode!);
     }
+    await GameDataService.loadTranslationsForLocale(_locale);
     notifyListeners();
   }
 
@@ -116,22 +118,21 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   // Update the war widget
   Future<void> updateWarWidget() async {
     try {
-      
       // Get clan tag from the currently selected player
       clanTag = await getCurrentPlayerClanTag();
-      
+
       // Fetch war data using the new API
       final warInfo = await fetchWarSummary(clanTag);
-      
+
       // Save the war info to SharedPreferences for the widget
       await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
-      
+
       // Update the widget
       await HomeWidget.updateWidget(
         name: 'WarAppWidgetProvider',
         androidName: 'WarAppWidgetProvider',
       );
-      
+
       DebugUtils.debugSuccess("War widget updated successfully");
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
@@ -151,5 +152,4 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       await updateWarWidget();
     }
   }
-
 }

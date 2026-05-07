@@ -45,8 +45,7 @@ class ClanInfoCard extends StatelessWidget {
                     SizedBox(
                       height: 70,
                       width: 70,
-                      child:
-                          MobileWebImage(imageUrl: clanInfo.badgeUrls.large),
+                      child: MobileWebImage(imageUrl: clanInfo.badgeUrls.large),
                     ),
                     SizedBox(
                       width: 100,
@@ -65,10 +64,12 @@ class ClanInfoCard extends StatelessWidget {
                     Row(
                       children: [
                         if (clanInfo.location?.countryCode != null &&
-                            clanInfo.location?.countryCode != "No countryCode") ...[
+                            clanInfo.location?.countryCode !=
+                                "No countryCode") ...[
                           MobileWebImage(
                             imageUrl: ImageAssets.flag(
-                                clanInfo.location?.countryCode?.toLowerCase() ?? ""),
+                                clanInfo.location?.countryCode?.toLowerCase() ??
+                                    ""),
                             height: 10,
                           ),
                         ],
@@ -111,9 +112,8 @@ class ClanInfoCard extends StatelessWidget {
                           height: 20,
                           width: 20,
                           child: MobileWebImage(
-                              imageUrl: ImageAssets
-                                      .leagues[clanInfo.warLeague?.name] ??
-                                  ImageAssets.leagues["Unranked"]!),
+                              imageUrl: ImageAssets.getLeagueImage(
+                                  clanInfo.warLeague?.name ?? "Unranked")),
                         ),
                         SizedBox(width: 8),
                         Text(

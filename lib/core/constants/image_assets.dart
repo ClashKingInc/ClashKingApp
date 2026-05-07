@@ -22,66 +22,19 @@ class ImageAssets {
       "$baseUrl/builder-base/builder-hall-pics/Building_BB_Builder_Hall_level_$level.png";
 
   // 🏆 League Icons
-  static const Map<String, String> leagues = {
-    "Bronze League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Bronze_2.png",
-    "Bronze League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Bronze_2.png",
-    "Bronze League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Bronze_2.png",
-    "Silver League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Silver_2.png",
-    "Silver League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Silver_2.png",
-    "Silver League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Silver_2.png",
-    "Gold League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Gold_2.png",
-    "Gold League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Gold_2.png",
-    "Gold League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Gold_2.png",
-    "Crystal League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Crystal_2.png",
-    "Crystal League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Crystal_2.png",
-    "Crystal League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Crystal_2.png",
-    "Master League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Master_2.png",
-    "Master League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Master_2.png",
-    "Master League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Master_2.png",
-    "Champion League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Champion.png",
-    "Champion League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Champion.png",
-    "Champion League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Champion.png",
-    "Titan League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Titan_1.png",
-    "Titan League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Titan_1.png",
-    "Titan League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Titan_1.png",
-    "Bronze League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Bronze_2.png",
-    "Silver League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Silver_2.png",
-    "Gold League": "$baseUrl/home-base/league-icons/Icon_HV_League_Gold_2.png",
-    "Crystal League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Crystal_2.png",
-    "Master League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Master_2.png",
-    "Champion League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Champion.png",
-    "Titan League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Titan_1.png",
-    "Legend League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Legend_4.png",
-    "Unranked": "$baseUrl/home-base/league-icons/Icon_HV_CWL_Unranked.png",
-  };
+  static String getLeagueImage(String leagueName) {
+    final rawLeagues = GameDataService.leagueData["leagues"];
+    if (rawLeagues is Map) {
+      final league = rawLeagues[leagueName];
+      if (league is Map && league["url"] is String) {
+        return league["url"] as String;
+      }
+      if (league is String) {
+        return league;
+      }
+    }
+    return defaultImage;
+  }
 
   // 🏆 Wars & CWL & Trophies
   static const String warPreferenceIn = "$baseUrl/icons/Icon_HV_In.png";
@@ -130,10 +83,8 @@ class ImageAssets {
       "$baseUrl/icons/Icon_HV_Clan_Games_Medal.png";
 
   // Icons
-  static const String iconTick =
-      "$baseUrl/icons/Icon_DC_Tick.png";
-  static const String iconCross =
-      "$baseUrl/icons/Icon_DC_Cross.png";
+  static const String iconTick = "$baseUrl/icons/Icon_DC_Tick.png";
+  static const String iconCross = "$baseUrl/icons/Icon_DC_Cross.png";
   static const String iconClock = "$baseUrl/bot/icons/clock.png";
   static const String iconBuilderPotion =
       "$baseUrl/icons/Magic_Item_Builder_Potion.png";
@@ -177,7 +128,6 @@ class ImageAssets {
   static const String playerAchievementPageBackground =
       "$baseUrl/landscape/achievement-landscape.png";
 
-
   // 🎭 Heroes & Troops & Others
   static String getHeroImage(String heroName) {
     return GameDataService.heroesData["heroes"]?[heroName]?['url'] ??
@@ -214,11 +164,9 @@ class ImageAssets {
         defaultImage;
   }
 
-
   // Stickers
   static const String villager = "$baseUrl/stickers/Villager_HV_Villager_7.png";
   static const String goblin = "$baseUrl/stickers/Troop_HV_Goblin.png";
   static const String sleepingApprenticeBuilder =
       "$baseUrl/stickers/Apprentice_Builder_Sleeping.png";
-
 }
