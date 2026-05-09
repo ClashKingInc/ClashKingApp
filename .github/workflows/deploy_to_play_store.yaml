@@ -134,12 +134,12 @@ jobs:
 
       - name: Run flutter pub get
         run: flutter pub get
-
-      # - name: Analyze to check for bad Dart/Flutter practices
-      #   run: flutter analyze
-
-      # - name: Run all app tests
-      #   run: flutter test
+ 
+      - name: Analyze to check for bad Dart/Flutter practices
+        run: flutter analyze
+ 
+      - name: Run all app tests
+        run: flutter test
 
       - name: Build aab & Sign the release
         run: |
