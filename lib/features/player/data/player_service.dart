@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
-import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/player/models/war_stats_filter.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -15,6 +13,10 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class PlayerService extends ChangeNotifier {
+  PlayerService({ApiService? apiService})
+      : _apiService = apiService ?? ApiService();
+
+  final ApiService _apiService;
   bool _isLoading = false;
   List<Player> _profiles = [];
   List<Map<String, dynamic>> _clans = [];
@@ -48,17 +50,11 @@ class PlayerService extends ChangeNotifier {
       notifyListeners();
     }
 
-    final token = await TokenService().getAccessToken();
-    if (token == null) throw Exception("User not authenticated");
-
     DebugUtils.debugApi("🔄 Calling players API with tags: $playerTags");
-    final response = await http.post(
-      Uri.parse("${ApiService.apiUrlV2}/players"),
-      headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json",
-      },
-      body: jsonEncode({"player_tags": playerTags}),
+    final response = await _apiService.postResponse(
+      '/players',
+      body: {"player_tags": playerTags},
+      requiresAuth: true,
     );
 
     DebugUtils.debugApi(
@@ -68,15 +64,13 @@ class PlayerService extends ChangeNotifier {
 
     try {
       if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes);
-        DebugUtils.debugApi("🔄 Players API response body: $responseBody");
+        final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
 
         if (data.containsKey("items") && data["items"] is List) {
           _profiles = (data["items"] as List)
               .whereType<Map<String, dynamic>>()
               .map((account) {
-            DebugUtils.debugInfo("🔄 Processing player JSON: $account");
             final player = Player.fromJson(account);
             DebugUtils.debugInfo(
                 "🔄 Created player: ${player.name} (${player.tag})");
@@ -90,14 +84,14 @@ class PlayerService extends ChangeNotifier {
           }).toList();
           DebugUtils.debugSuccess(
               "✅ Initialized profiles: ${profiles.map((p) => p.tag).toList()}");
-        } else if (response.statusCode == 503) {
-          throw HttpException("503", uri: response.request!.url);
-        } else if (response.statusCode == 500) {
-          throw HttpException("500", uri: response.request!.url);
         } else {
           Sentry.captureMessage("Error initializing player data: $data",
               level: SentryLevel.error);
         }
+      } else if (response.statusCode == 503) {
+        throw HttpException("503", uri: response.request!.url);
+      } else if (response.statusCode == 500) {
+        throw HttpException("500", uri: response.request!.url);
       } else {
         Sentry.captureMessage("Error initializing accounts data",
             level: SentryLevel.error);
@@ -124,24 +118,18 @@ class PlayerService extends ChangeNotifier {
       notifyListeners();
     }
 
-    final token = await TokenService().getAccessToken();
-    if (token == null) throw Exception("User not authenticated");
-
-    final response = await http.post(
-      Uri.parse("${ApiService.apiUrlV2}/players/extended"),
-      headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json",
-      },
-      body: jsonEncode({
+    final response = await _apiService.postResponse(
+      '/players/extended',
+      body: {
         "player_tags": playerTags,
         "clan_tags": clanTagsByPlayer,
-      }),
+      },
+      requiresAuth: true,
     );
 
     try {
       if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes);
+        final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
 
         if (data.containsKey("items") && data["items"] is List) {
@@ -187,29 +175,23 @@ class PlayerService extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final token = await TokenService().getAccessToken();
-      if (token == null) throw Exception("User not authenticated");
-
       // Try bulk endpoint first
       DebugUtils.debugApi(
           "🔄 Calling bulk initialization API for tag: $playerTag");
       try {
-        final response = await http.post(
-          Uri.parse("${ApiService.apiUrlV2}/initialization"),
-          headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
-          },
-          body: jsonEncode({
+        final response = await _apiService.postResponse(
+          '/initialization',
+          body: {
             "player_tags": [playerTag]
-          }),
+          },
+          requiresAuth: true,
         );
 
         DebugUtils.debugApi(
             "🔄 Bulk API response status: ${response.statusCode}");
 
         if (response.statusCode == 200) {
-          final responseBody = utf8.decode(response.bodyBytes);
+          final responseBody = ApiService.decodeResponseBody(response);
           final data = jsonDecode(responseBody);
 
           DebugUtils.debugApi(
@@ -260,15 +242,12 @@ class PlayerService extends ChangeNotifier {
             "🔄 Using fallback individual API calls for player: $playerTag");
 
         // Call basic player endpoint
-        final basicResponse = await http.post(
-          Uri.parse("${ApiService.apiUrlV2}/players"),
-          headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
-          },
-          body: jsonEncode({
+        final basicResponse = await _apiService.postResponse(
+          '/players',
+          body: {
             "player_tags": [playerTag]
-          }),
+          },
+          requiresAuth: true,
         );
 
         if (basicResponse.statusCode != 200) {
@@ -276,7 +255,7 @@ class PlayerService extends ChangeNotifier {
               "Failed to fetch basic player data: ${basicResponse.statusCode}");
         }
 
-        final basicResponseBody = utf8.decode(basicResponse.bodyBytes);
+        final basicResponseBody = ApiService.decodeResponseBody(basicResponse);
         final basicData = jsonDecode(basicResponseBody);
 
         if (!basicData.containsKey("items") ||
@@ -293,20 +272,18 @@ class PlayerService extends ChangeNotifier {
         final clanTagsByPlayer = {playerTag: clanTag};
 
         // Call extended player endpoint
-        final extendedResponse = await http.post(
-          Uri.parse("${ApiService.apiUrlV2}/players/extended"),
-          headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
-          },
-          body: jsonEncode({
+        final extendedResponse = await _apiService.postResponse(
+          '/players/extended',
+          body: {
             "player_tags": [playerTag],
             "clan_tags": clanTagsByPlayer,
-          }),
+          },
+          requiresAuth: true,
         );
 
         if (extendedResponse.statusCode == 200) {
-          final extendedResponseBody = utf8.decode(extendedResponse.bodyBytes);
+          final extendedResponseBody =
+              ApiService.decodeResponseBody(extendedResponse);
           final extendedData = jsonDecode(extendedResponseBody);
 
           if (extendedData.containsKey("items") &&
@@ -359,22 +336,17 @@ class PlayerService extends ChangeNotifier {
 
   Future<void> loadPlayerWarStats(List<String> playerTags,
       {bool notify = true}) async {
-    final token = await TokenService().getAccessToken();
-    if (token == null) throw Exception("User not authenticated");
     DebugUtils.debugApi("🏰 Loading player data for tags: $playerTags");
 
-    final response = await http.post(
-      Uri.parse("${ApiService.apiUrlV2}/war/players/warhits"),
-      headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json",
-      },
-      body: jsonEncode({"player_tags": playerTags, "limit": 50}),
+    final response = await _apiService.postResponse(
+      '/war/players/warhits',
+      body: {"player_tags": playerTags, "limit": 50},
+      requiresAuth: true,
     );
 
     try {
       if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes);
+        final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
 
         if (data.containsKey("items") && data["items"] is List) {
@@ -421,9 +393,6 @@ class PlayerService extends ChangeNotifier {
     String playerTag,
     WarStatsFilter filter,
   ) async {
-    final token = await TokenService().getAccessToken();
-    if (token == null) throw Exception("User not authenticated");
-
     DebugUtils.debugApi("🎯 Loading filtered war stats for: $playerTag");
     DebugUtils.debugInfo("🔍 Filter: ${filter.getFilterSummary()}");
 
@@ -436,13 +405,10 @@ class PlayerService extends ChangeNotifier {
     DebugUtils.debugInfo(
         "🔍 War Stats Request Body: ${jsonEncode(requestBody)}");
 
-    final response = await http.post(
-      Uri.parse("${ApiService.apiUrlV2}/war/players/warhits"),
-      headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json",
-      },
-      body: jsonEncode(requestBody),
+    final response = await _apiService.postResponse(
+      '/war/players/warhits',
+      body: requestBody,
+      requiresAuth: true,
     );
 
     // Debug logging for response
@@ -451,7 +417,7 @@ class PlayerService extends ChangeNotifier {
 
     try {
       if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes);
+        final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
 
         if (data.containsKey("items") && data["items"] is List) {
@@ -475,7 +441,7 @@ class PlayerService extends ChangeNotifier {
         DebugUtils.debugError(
             "❌ Failed to load filtered war stats: ${response.statusCode}");
         if (response.statusCode == 422) {
-          final errorBody = utf8.decode(response.bodyBytes);
+          final errorBody = ApiService.decodeResponseBody(response);
           DebugUtils.debugError("❌ Validation Error Details: $errorBody");
         }
         Sentry.captureMessage(

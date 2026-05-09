@@ -5,8 +5,6 @@ import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
-import 'package:http/http.dart' as http;
-import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
@@ -14,6 +12,10 @@ import 'package:flutter/foundation.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class CocAccountService extends ChangeNotifier {
+  CocAccountService({ApiService? apiService})
+      : _apiService = apiService ?? ApiService();
+
+  final ApiService _apiService;
   List<Map<String, dynamic>> _cocAccounts = [];
   bool _isLoading = false;
   String? _selectedTag;
@@ -44,19 +46,13 @@ class CocAccountService extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final token = await TokenService().getAccessToken();
-      if (token == null) throw Exception("User not authenticated");
-
-      final response = await http.get(
-        Uri.parse("${ApiService.apiUrlV2}/users/coc-accounts"),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json",
-        },
+      final response = await _apiService.getResponse(
+        '/users/coc-accounts',
+        requiresAuth: true,
       );
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+        final data = json.decode(ApiService.decodeResponseBody(response));
         _cocAccounts = List<Map<String, dynamic>>.from(data["coc_accounts"]);
         DebugUtils.debugInfo("🔍 Fetched accounts data: $_cocAccounts");
         // Verification status is now included in the API response
@@ -75,38 +71,28 @@ class CocAccountService extends ChangeNotifier {
 
   /// Adds a Clash of Clans account (without verification).
   Future<Map<String, dynamic>> addCocAccount(String playerTag) async {
-    final token = await TokenService().getAccessToken();
-    if (token == null) {
-      return {"code": 401, "message": "User not authenticated"};
-    }
-
     DebugUtils.debugInfo("🔄 Adding CoC account with tag: $playerTag");
 
     try {
-      final response = await http.post(
-        Uri.parse("${ApiService.apiUrlV2}/users/coc-accounts"),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode({"player_tag": playerTag}),
+      final response = await _apiService.postResponse(
+        '/users/coc-accounts',
+        body: {"player_tag": playerTag},
+        requiresAuth: true,
       );
 
-      final data = jsonDecode(response.body);
+      final data = jsonDecode(ApiService.decodeResponseBody(response));
 
       return {
         "code": response.statusCode,
-        "message": data["message"] ??
-            (data["detail"] is Map
-                ? data["detail"]["message"]
-                : data["detail"]) ??
-            "Unknown error",
+        "message": _extractErrorMessage(data),
         "account": response.statusCode == 200
             ? data["account"]
             : (data["detail"] is Map && data["detail"]["account"] != null
                 ? data["detail"]["account"]
                 : null)
       };
+    } on UnauthorizedException {
+      return {"code": 401, "message": "User not authenticated"};
     } catch (e) {
       return {"code": 500, "message": "Internal server error"};
     }
@@ -121,28 +107,21 @@ class CocAccountService extends ChangeNotifier {
   Future<Map<String, dynamic>> addCocAccountWithVerification(
       String playerTag, String playerToken) async {
     try {
-      final token = await TokenService().getAccessToken();
-      if (token == null) {
-        return {"code": 401, "message": "User not authenticated"};
-      }
-
-      final response = await http.post(
-        Uri.parse("${ApiService.apiUrlV2}/users/coc-accounts/verified"),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json",
-        },
-        body:
-            jsonEncode({"player_tag": playerTag, "player_token": playerToken}),
+      final response = await _apiService.postResponse(
+        '/users/coc-accounts/verified',
+        body: {"player_tag": playerTag, "player_token": playerToken},
+        requiresAuth: true,
       );
 
-      final data = jsonDecode(response.body);
+      final data = jsonDecode(ApiService.decodeResponseBody(response));
 
       return {
         "code": response.statusCode,
-        "message": data["message"] ?? data["detail"] ?? "Uknown error",
+        "message": _extractErrorMessage(data),
         "account": response.statusCode == 200 ? data["account"] : null
       };
+    } on UnauthorizedException {
+      return {"code": 401, "message": "User not authenticated"};
     } catch (e) {
       return {"code": 500, "message": "Internal server error"};
     }
@@ -151,17 +130,11 @@ class CocAccountService extends ChangeNotifier {
   /// Removes a Clash of Clans account from the user's linked accounts.
   Future<void> removeCocAccount(String playerTag) async {
     try {
-      final token = await TokenService().getAccessToken();
-      if (token == null) throw Exception("User not authenticated");
       final encodedPlayerTag = Uri.encodeComponent(playerTag);
 
-      final response = await http.delete(
-        Uri.parse(
-            "${ApiService.apiUrlV2}/users/coc-accounts/$encodedPlayerTag"),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json",
-        },
+      final response = await _apiService.deleteResponse(
+        '/users/coc-accounts/$encodedPlayerTag',
+        requiresAuth: true,
       );
 
       if (response.statusCode == 200) {
@@ -180,16 +153,10 @@ class CocAccountService extends ChangeNotifier {
 
   /// Reorder accounts and send the updated order to the API
   Future<void> updateAccountOrder(List<String> playerTags) async {
-    final token = await TokenService().getAccessToken();
-    if (token == null) throw Exception("User not authenticated");
-
-    final response = await http.put(
-      Uri.parse("${ApiService.apiUrlV2}/users/coc-accounts/order"),
-      headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json",
-      },
-      body: jsonEncode({"ordered_tags": playerTags}),
+    final response = await _apiService.putResponse(
+      '/users/coc-accounts/order',
+      body: {"ordered_tags": playerTags},
+      requiresAuth: true,
     );
 
     if (response.statusCode != 200) {
@@ -344,29 +311,24 @@ class CocAccountService extends ChangeNotifier {
     ClanService clanService,
     WarCwlService warCwlService,
   ) async {
-    final token = await TokenService().getAccessToken();
-    if (token == null) throw Exception("User not authenticated");
-
     DebugUtils.debugInfo(
         "🚀 Using optimized bulk endpoint for ${playerTags.length} players");
 
     var timer = Stopwatch()..start();
 
     try {
-      final response = await http.post(
-        Uri.parse("${ApiService.apiUrlV2}/initialization"),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode({"player_tags": playerTags}),
+      final response = await _apiService.postResponse(
+        '/initialization',
+        body: {"player_tags": playerTags},
+        requiresAuth: true,
       );
 
       if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes);
+        final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
 
-        DebugUtils.debugSuccess("Bulk data loaded successfully in ${timer.elapsedMilliseconds} ms");
+        DebugUtils.debugSuccess(
+            "Bulk data loaded successfully in ${timer.elapsedMilliseconds} ms");
 
         // Process player data
         if (data["players"] != null) {
@@ -541,29 +503,19 @@ class CocAccountService extends ChangeNotifier {
   Future<bool> addAccountWithToken(String playerTag, String apiToken,
       Function(String) updateErrorMessage) async {
     try {
-      final token = await TokenService().getAccessToken();
-      if (token == null) {
-        updateErrorMessage("User not authenticated");
-        return false;
-      }
-
-      final response = await http.post(
-        Uri.parse("${ApiService.apiUrlV2}/users/coc-accounts/verified"),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode({
+      final response = await _apiService.postResponse(
+        '/users/coc-accounts/verified',
+        body: {
           "player_tag": playerTag,
           "player_token": apiToken,
-        }),
+        },
+        requiresAuth: true,
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = jsonDecode(ApiService.decodeResponseBody(response));
         DebugUtils.debugSuccess(
             "✅ Account added with token successfully: $playerTag");
-        DebugUtils.debugInfo("🔍 Token response data: $data");
 
         // Extract player data from the token response
         final Map<String, dynamic>? accountData = data["account"];
@@ -601,6 +553,9 @@ class CocAccountService extends ChangeNotifier {
       }
 
       return false;
+    } on UnauthorizedException {
+      updateErrorMessage("User not authenticated");
+      return false;
     } catch (e) {
       updateErrorMessage("Failed to add account: $e");
       return false;
@@ -611,27 +566,17 @@ class CocAccountService extends ChangeNotifier {
   Future<bool> verifyAccount(String playerTag, String apiToken,
       Function(String) updateErrorMessage) async {
     try {
-      final token = await TokenService().getAccessToken();
-      if (token == null) {
-        updateErrorMessage("User not authenticated");
-        return false;
-      }
-
       final encodedPlayerTag = Uri.encodeComponent(playerTag);
-      final response = await http.post(
-        Uri.parse(
-            "${ApiService.apiUrlV2}/users/coc-accounts/$encodedPlayerTag/verify"),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode({
+      final response = await _apiService.postResponse(
+        '/users/coc-accounts/$encodedPlayerTag/verify',
+        body: {
           "player_token": apiToken,
-        }),
+        },
+        requiresAuth: true,
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = jsonDecode(ApiService.decodeResponseBody(response));
         if (data["verified"] == true) {
           // Update local verification status
           updateAccountVerificationStatus(playerTag, true);
@@ -645,6 +590,9 @@ class CocAccountService extends ChangeNotifier {
         updateErrorMessage("Verification failed. Please try again.");
       }
 
+      return false;
+    } on UnauthorizedException {
+      updateErrorMessage("User not authenticated");
       return false;
     } catch (e) {
       updateErrorMessage("Verification failed: $e");
@@ -678,5 +626,22 @@ class CocAccountService extends ChangeNotifier {
     selectedTagNotifier.value = null;
     profiles.clear();
     notifyListeners();
+  }
+
+  String _extractErrorMessage(Map<String, dynamic> data) {
+    final detail = data["detail"];
+    if (data["message"] is String && (data["message"] as String).isNotEmpty) {
+      return data["message"] as String;
+    }
+    if (detail is Map<String, dynamic>) {
+      final nestedMessage = detail["message"];
+      if (nestedMessage is String && nestedMessage.isNotEmpty) {
+        return nestedMessage;
+      }
+    }
+    if (detail is String && detail.isNotEmpty) {
+      return detail;
+    }
+    return "Unknown error";
   }
 }

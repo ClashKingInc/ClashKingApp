@@ -9,6 +9,8 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 
 class ApiService {
+  ApiService({http.Client? client}) : _client = client ?? http.Client();
+
   static const String apiUrlV1 = "https://api.clashk.ing";
   static const String apiUrlV2 = "https://go.api.clashk.ing/v2";
   static const String assetUrl = "https://assets.clashk.ing";
@@ -16,10 +18,12 @@ class ApiService {
   static const String cocAssetsUrl = "https://coc-assets.clashk.ing";
   static const String bunnyUrl = "https://cdn.clashk.ing";
   static const String discordUrl = "https://discord.gg/clashking";
+  static const Duration _defaultTimeout = Duration(seconds: 15);
 
   // Config storage
   static String? _sentryDsn;
   static String? get sentryDsn => _sentryDsn;
+  final http.Client _client;
 
   static AppLocalizations? _currentL10n() {
     final context = globalNavigatorKey.currentContext;
@@ -40,49 +44,125 @@ class ApiService {
     return builder(l10n);
   }
 
-  Future<Map<String, dynamic>> get(String endpoint) async {
-    try {
-      final token = await TokenService().getAccessToken();
-      final response = await http.get(
-        Uri.parse('$apiUrlV2$endpoint'),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-      ).timeout(const Duration(seconds: 15));
-      return _handleResponse(response, endpoint);
-    } catch (e, stackTrace) {
-      _handleError(e, stackTrace, 'GET $endpoint');
-      rethrow;
-    }
+  static String decodeResponseBody(http.Response response) {
+    return utf8.decode(response.bodyBytes, allowMalformed: true);
+  }
+
+  Future<Map<String, dynamic>> get(
+    String endpoint, {
+    bool requiresAuth = true,
+  }) async {
+    final response = await getResponse(
+      endpoint,
+      requiresAuth: requiresAuth,
+    );
+    return _expectMapResponse(response, endpoint);
   }
 
   Future<Map<String, dynamic>> post(
-      String endpoint, Map<String, String> body) async {
-    try {
-      final response = await http
-          .post(
-            Uri.parse('$apiUrlV2$endpoint'),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode(body),
-          )
-          .timeout(const Duration(seconds: 15));
-      DebugUtils.debugInfo("Response status: ${response.statusCode}");
-      return _handleResponse(response, endpoint);
-    } catch (e, stackTrace) {
-      _handleError(e, stackTrace, 'POST $endpoint');
-      rethrow;
-    }
+    String endpoint,
+    Map<String, String> body, {
+    bool requiresAuth = false,
+  }) async {
+    final response = await postResponse(
+      endpoint,
+      body: body,
+      requiresAuth: requiresAuth,
+    );
+    return _expectMapResponse(response, endpoint);
   }
 
-  Map<String, dynamic> _handleResponse(
-      http.Response response, String endpoint) {
+  Future<http.Response> getResponse(
+    String endpoint, {
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = _defaultTimeout,
+  }) async {
+    return _requestResponse(
+      'GET',
+      endpoint: endpoint,
+      url: url,
+      requiresAuth: requiresAuth,
+      timeout: timeout,
+    );
+  }
+
+  Future<http.Response> postResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = _defaultTimeout,
+  }) async {
+    return _requestResponse(
+      'POST',
+      endpoint: endpoint,
+      url: url,
+      body: body,
+      requiresAuth: requiresAuth,
+      timeout: timeout,
+    );
+  }
+
+  Future<http.Response> putResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = _defaultTimeout,
+  }) async {
+    return _requestResponse(
+      'PUT',
+      endpoint: endpoint,
+      url: url,
+      body: body,
+      requiresAuth: requiresAuth,
+      timeout: timeout,
+    );
+  }
+
+  Future<http.Response> deleteResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = _defaultTimeout,
+  }) async {
+    return _requestResponse(
+      'DELETE',
+      endpoint: endpoint,
+      url: url,
+      body: body,
+      requiresAuth: requiresAuth,
+      timeout: timeout,
+    );
+  }
+
+  Map<String, dynamic> _expectMapResponse(
+    http.Response response,
+    String endpoint,
+  ) {
+    final data = _handleResponse(response, endpoint);
+    if (data is Map<String, dynamic>) {
+      return data;
+    }
+
+    throw FormatException(
+      _localized(
+        'Invalid response type for $endpoint.',
+        (l10n) => l10n.apiErrorInvalidJsonResponse(endpoint),
+      ),
+    );
+  }
+
+  dynamic _handleResponse(http.Response response, String endpoint) {
     DebugUtils.debugInfo("Handling response status: ${response.statusCode}");
+    final responseBody = decodeResponseBody(response);
     switch (response.statusCode) {
       case 200:
       case 201:
         try {
-          return json.decode(response.body);
+          return json.decode(responseBody);
         } catch (e) {
           throw FormatException(
             _localized(
@@ -92,12 +172,12 @@ class ApiService {
           );
         }
       case 400:
-        String? specificMessage = _extractApiErrorMessage(response.body);
+        String? specificMessage = _extractApiErrorMessage(responseBody);
         throw BadRequestException(
           specificMessage ??
               _localized(
                 'Bad request for $endpoint.',
-                (l10n) => l10n.apiErrorBadRequest(endpoint, response.body),
+                (l10n) => l10n.apiErrorBadRequest(endpoint, responseBody),
               ),
         );
       case 401:
@@ -149,10 +229,81 @@ class ApiService {
         throw ApiException(
           _localized(
             'API error ${response.statusCode}.',
-            (l10n) => l10n.apiErrorGeneric(response.statusCode, response.body),
+            (l10n) => l10n.apiErrorGeneric(response.statusCode, responseBody),
           ),
         );
     }
+  }
+
+  Future<http.Response> _requestResponse(
+    String method, {
+    required String endpoint,
+    String? url,
+    Object? body,
+    required bool requiresAuth,
+    required Duration timeout,
+  }) async {
+    final operationTarget = url ?? endpoint;
+
+    try {
+      final resolvedUri = Uri.parse(url ?? '$apiUrlV2$endpoint');
+      final headers = await _buildHeaders(requiresAuth: requiresAuth);
+      final requestBody = _encodeBody(body);
+
+      switch (method) {
+        case 'GET':
+          return await _client.get(resolvedUri, headers: headers).timeout(
+                timeout,
+              );
+        case 'POST':
+          return await _client
+              .post(resolvedUri, headers: headers, body: requestBody)
+              .timeout(timeout);
+        case 'PUT':
+          return await _client
+              .put(resolvedUri, headers: headers, body: requestBody)
+              .timeout(timeout);
+        case 'DELETE':
+          return await _client
+              .delete(resolvedUri, headers: headers, body: requestBody)
+              .timeout(timeout);
+        default:
+          throw UnsupportedError('Unsupported HTTP method: $method');
+      }
+    } catch (e, stackTrace) {
+      _handleError(e, stackTrace, '$method $operationTarget');
+      rethrow;
+    }
+  }
+
+  Future<Map<String, String>> _buildHeaders({
+    required bool requiresAuth,
+  }) async {
+    final headers = <String, String>{
+      'Content-Type': 'application/json',
+    };
+
+    if (requiresAuth) {
+      final token = await TokenService().getAccessToken();
+      if (token == null) {
+        throw UnauthorizedException(
+          _localized(
+            'User is not authenticated.',
+            (l10n) => l10n.apiErrorUnauthorized('/auth'),
+          ),
+        );
+      }
+      headers['Authorization'] = 'Bearer $token';
+    }
+
+    return headers;
+  }
+
+  Object? _encodeBody(Object? body) {
+    if (body == null || body is String) {
+      return body;
+    }
+    return jsonEncode(body);
   }
 
   String? _extractApiErrorMessage(String responseBody) {

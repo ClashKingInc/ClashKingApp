@@ -6,14 +6,16 @@ import 'package:clashkingapp/features/clan/models/clan_war_stats_filter.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_log.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/api_service.dart';
-import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class ClanService extends ChangeNotifier {
+  ClanService({ApiService? apiService})
+      : _apiService = apiService ?? ApiService();
+
+  final ApiService _apiService;
   final Map<String, Clan> _clans = {};
   List<Clan> fetchedClans = [];
   bool _isLoading = false;
@@ -40,20 +42,14 @@ class ClanService extends ChangeNotifier {
 
     try {
       DebugUtils.debugApi("Loading clan data for tags: $clanTags");
-      final token = await TokenService().getAccessToken();
-      if (token == null) throw Exception("User not authenticated");
-
-      final response = await http.post(
-        Uri.parse("${ApiService.apiUrlV2}/clans/details"),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode({"clan_tags": clanTags}),
+      final response = await _apiService.postResponse(
+        '/clans/details',
+        body: {"clan_tags": clanTags},
+        requiresAuth: true,
       );
 
       if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes);
+        final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
         if (data.containsKey("items") && data["items"] is List) {
           fetchedClans = [];
@@ -103,19 +99,13 @@ class ClanService extends ChangeNotifier {
     try {
       DebugUtils.debugApi("Loading clan data for tag: $clanTag");
       clanTag = clanTag.replaceAll("#", "%23");
-      final token = await TokenService().getAccessToken();
-      if (token == null) throw Exception("User not authenticated");
-
-      final response = await http.get(
-        Uri.parse("${ApiService.apiUrlV2}/clan/$clanTag/details"),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json",
-        },
+      final response = await _apiService.getResponse(
+        '/clan/$clanTag/details',
+        requiresAuth: true,
       );
 
       if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes);
+        final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
         final clan = Clan.fromJson(data);
 
@@ -182,21 +172,14 @@ class ClanService extends ChangeNotifier {
 
     try {
       DebugUtils.debugApi("Loading clan join/leave data for tags: $clanTags");
-      final token = await TokenService().getAccessToken();
-      if (token == null) throw Exception("User not authenticated");
-
-      final response = await http.post(
-        Uri.parse(
-            "${ApiService.apiUrlV2}/clans/join-leave?current_season=true"),
-        headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode({"clan_tags": clanTags}),
+      final response = await _apiService.postResponse(
+        '/clans/join-leave?current_season=true',
+        body: {"clan_tags": clanTags},
+        requiresAuth: true,
       );
 
       if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes);
+        final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
         if (data.containsKey("items") && data["items"] is List) {
           joinLeaveList = (data["items"] as List)
@@ -251,17 +234,15 @@ class ClanService extends ChangeNotifier {
 
     try {
       DebugUtils.debugApi("Loading capital data for tags: $clanTags");
-      final token = await TokenService().getAccessToken();
-      if (token == null) throw Exception("User not authenticated");
-
       final historyResults = await Future.wait(clanTags.map((tag) async {
-        final response = await http.get(
-          Uri.parse(
-              'https://proxy.clashk.ing/v1/clans/${tag.replaceAll('#', '%23')}/capitalraidseasons?limit=$limit'),
+        final response = await _apiService.getResponse(
+          '',
+          url:
+              'https://proxy.clashk.ing/v1/clans/${tag.replaceAll('#', '%23')}/capitalraidseasons?limit=$limit',
         );
 
         if (response.statusCode == 200) {
-          final responseBody = utf8.decode(response.bodyBytes);
+          final responseBody = ApiService.decodeResponseBody(response);
           final data = jsonDecode(responseBody);
           if (data.containsKey("items") && data["items"] is List) {
             final historyData = {"history": data["items"]};
@@ -312,11 +293,14 @@ class ClanService extends ChangeNotifier {
     if (clanTags.isEmpty) return [];
 
     final warLogs = await Future.wait(clanTags.map((tag) async {
-      final response = await http.get(Uri.parse(
-          '${ApiService.proxyUrl}/clans/${tag.replaceAll('#', '%23')}/warlog'));
+      final response = await _apiService.getResponse(
+        '',
+        url:
+            '${ApiService.proxyUrl}/clans/${tag.replaceAll('#', '%23')}/warlog',
+      );
 
       if (response.statusCode == 200) {
-        String body = utf8.decode(response.bodyBytes);
+        String body = ApiService.decodeResponseBody(response);
         Map<String, dynamic> jsonBody = json.decode(body);
         ClanWarLog warLog = ClanWarLog.fromJson(jsonBody, tag);
         warLog.warLogStats =
@@ -348,20 +332,14 @@ class ClanService extends ChangeNotifier {
   Future<List<ClanWarStats>> loadClanWarStatsData(List<String> clanTags) async {
     if (clanTags.isEmpty) return [];
 
-    final token = await TokenService().getAccessToken();
-    if (token == null) throw Exception("User not authenticated");
-
-    final response = await http.post(
-      Uri.parse("${ApiService.apiUrlV2}/war/clans/warhits"),
-      headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json",
-      },
-      body: jsonEncode({"clan_tags": clanTags, "limit": 50}),
+    final response = await _apiService.postResponse(
+      '/war/clans/warhits',
+      body: {"clan_tags": clanTags, "limit": 50},
+      requiresAuth: true,
     );
 
     if (response.statusCode == 200) {
-      final responseBody = utf8.decode(response.bodyBytes);
+      final responseBody = ApiService.decodeResponseBody(response);
       final data = jsonDecode(responseBody);
       if (data.containsKey("items") && data["items"] is List) {
         warStatsList = (data["items"] as List)
@@ -386,9 +364,6 @@ class ClanService extends ChangeNotifier {
     String clanTag,
     ClanWarStatsFilter filter,
   ) async {
-    final token = await TokenService().getAccessToken();
-    if (token == null) throw Exception("User not authenticated");
-
     DebugUtils.debugApi("🎯 Loading filtered clan war stats for: $clanTag");
     DebugUtils.debugInfo("🔍 Filter: ${filter.getFilterSummary()}");
 
@@ -397,18 +372,15 @@ class ClanService extends ChangeNotifier {
       ...filter.toJson(),
     };
 
-    final response = await http.post(
-      Uri.parse("${ApiService.apiUrlV2}/war/clans/warhits"),
-      headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json",
-      },
-      body: jsonEncode(requestBody),
+    final response = await _apiService.postResponse(
+      '/war/clans/warhits',
+      body: requestBody,
+      requiresAuth: true,
     );
 
     try {
       if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes);
+        final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
 
         if (data.containsKey("items") && data["items"] is List) {
