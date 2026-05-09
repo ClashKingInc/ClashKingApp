@@ -7,16 +7,15 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:clashkingapp/core/app/my_app_state.dart';
+import 'package:clashkingapp/core/services/war_widget_sync_service.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
 import 'package:flutter/foundation.dart';
 
 @pragma("vm:entry-point")
 FutureOr<void> backgroundCallback(Uri? data) async {
-  // Assuming MyAppState is available and correctly managing state
   WidgetsFlutterBinding.ensureInitialized();
-  final myAppState = MyAppState();
   if (data != null) {
-    await myAppState.initializeFromBackground(data);
+    await const WarWidgetSyncService().initializeFromBackground(data);
   }
 }
 
@@ -61,7 +60,7 @@ class MyApp extends StatelessWidget {
               cardTheme: CardThemeData(
                 surfaceTintColor: Colors.transparent,
                 color: Color.fromARGB(255, 31, 31, 31)
-                    .withValues(alpha : 1.0), // 1.0 means 100% opacity
+                    .withValues(alpha: 1.0), // 1.0 means 100% opacity
                 elevation: 2.0,
               ),
               snackBarTheme: SnackBarThemeData(
@@ -186,8 +185,8 @@ class MyApp extends StatelessWidget {
               ),
               cardTheme: CardThemeData(
                 surfaceTintColor: Colors.transparent,
-                color: Color(0xFFFFFFFF)
-                    .withAlpha(255), // 255 means 100% opacity
+                color:
+                    Color(0xFFFFFFFF).withAlpha(255), // 255 means 100% opacity
                 elevation: 2.0,
               ),
               snackBarTheme: SnackBarThemeData(
@@ -235,7 +234,7 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Color(0xFFFFFFFF), // primary color as the seed
                 primary: Color(0xFFBF0000),
-                secondary:Color.fromARGB(255, 3, 82, 147),
+                secondary: Color.fromARGB(255, 3, 82, 147),
                 tertiary: Colors.grey[600],
                 surface: Color(0xFFFFFFFF),
                 error: Color(0xFFB00020),
