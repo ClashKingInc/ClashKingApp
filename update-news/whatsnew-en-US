@@ -1,5 +1,5 @@
 What’s new
 - Updated Turkish translations
 - Some minor library updates
-- Fixed mobile startup and bulk loading issues
-- Improved clan data parsing for incomplete API payloads
+- Fixed bulk account loading timeouts during startup
+- Improved war and clan parsing for incomplete API payloads

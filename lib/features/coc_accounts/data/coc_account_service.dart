@@ -12,6 +12,8 @@ import 'package:flutter/foundation.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class CocAccountService extends ChangeNotifier {
+  static const Duration _initializationTimeout = Duration(seconds: 30);
+
   CocAccountService({ApiService? apiService})
       : _apiService = apiService ?? ApiService();
 
@@ -321,6 +323,7 @@ class CocAccountService extends ChangeNotifier {
         '/initialization',
         body: {"player_tags": playerTags},
         requiresAuth: true,
+        timeout: _initializationTimeout,
       );
 
       if (response.statusCode == 200) {
