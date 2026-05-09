@@ -16,27 +16,10 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
-import 'dart:io';
+import 'package:clashkingapp/core/utils/network_error_utils.dart';
 
 class WarCwlPage extends StatelessWidget {
   const WarCwlPage({super.key});
-
-  // Helper function to determine if an error is network-related
-  bool _isNetworkError(dynamic error) {
-    if (error is SocketException) {
-      return true;
-    }
-    if (error is Exception) {
-      String errorString = error.toString().toLowerCase();
-      return errorString.contains('network') ||
-             errorString.contains('connection') ||
-             errorString.contains('hostname') ||
-             errorString.contains('socket') ||
-             errorString.contains('timeout') ||
-             errorString.contains('no address');
-    }
-    return false;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +34,10 @@ class WarCwlPage extends StatelessWidget {
     final warCwl = warCwlService.getWarCwlByTag(clan?.tag ?? "");
     final hasClan = clan != null && clan.tag.isNotEmpty;
     final isPlayerInWarElsewhere = player?.warData != null;
-    
+
     // Check if player war is the same as clan's war
     warCwl?.getActiveWarByTag(clan?.tag ?? "");
-    final isPlayerWarSameAsClanWar = isPlayerInWarElsewhere && 
+    final isPlayerWarSameAsClanWar = isPlayerInWarElsewhere &&
         warCwl != null &&
         player?.warData?.clan?.tag == warCwl.warInfo.clan?.tag &&
         player?.warData?.opponent?.tag == warCwl.warInfo.opponent?.tag;
@@ -74,7 +57,7 @@ class WarCwlPage extends StatelessWidget {
             }
           } catch (e) {
             if (context.mounted) {
-              if (_isNetworkError(e)) {
+              if (isNetworkError(e)) {
                 // Navigate to error page for network errors
                 Navigator.of(context).push(
                   MaterialPageRoute(

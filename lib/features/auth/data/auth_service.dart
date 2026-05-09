@@ -4,9 +4,9 @@ import 'package:clashkingapp/core/utils/discord_auth_helper.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
+import 'package:clashkingapp/core/utils/network_error_utils.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
@@ -22,23 +22,6 @@ class AuthService extends ChangeNotifier {
   bool get isAuthenticated => _isAuthenticated;
   User? get currentUser => _currentUser;
   List<dynamic>? get cocAccounts => _cocAccounts;
-
-  // Helper function to determine if an error is network-related
-  bool _isNetworkError(dynamic error) {
-    if (error is SocketException) {
-      return true;
-    }
-    if (error is Exception) {
-      String errorString = error.toString().toLowerCase();
-      return errorString.contains('network') ||
-          errorString.contains('connection') ||
-          errorString.contains('hostname') ||
-          errorString.contains('socket') ||
-          errorString.contains('timeout') ||
-          errorString.contains('no address');
-    }
-    return false;
-  }
 
   String _localized(
     String fallback,
@@ -65,7 +48,7 @@ class AuthService extends ChangeNotifier {
         _currentUser = User.fromJson(response);
         _isAuthenticated = true;
       } catch (e) {
-        if (_isNetworkError(e)) {
+        if (isNetworkError(e)) {
           // For network errors, keep the authentication state
           // We'll assume the user is still authenticated but can't connect
           _isAuthenticated = true;

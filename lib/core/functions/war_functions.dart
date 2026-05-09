@@ -1,4 +1,6 @@
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_log.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
@@ -42,6 +44,101 @@ List<Widget> generateStars(int numberOfStars, double size) {
   });
 }
 
+List<Widget> generateStarsWithIconBefore(
+    int numberOfStars, double size, String iconUrl) {
+  return [
+    CachedNetworkImage(
+      imageUrl: iconUrl,
+      width: size,
+      height: size,
+      errorWidget: (context, url, error) => const Icon(Icons.error),
+    ),
+    const SizedBox(width: 4),
+    ...List.generate(
+        3,
+        (index) => CachedNetworkImage(
+              imageUrl: index < numberOfStars
+                  ? "https://assets.clashk.ing/icons/Icon_BB_Star.png"
+                  : "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png",
+              width: size,
+              height: size,
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            )),
+  ];
+}
+
+List<Widget> generateDoubleIcons(
+    double size, String iconUrl1, String iconUrl2) {
+  return [
+    MobileWebImage(
+      imageUrl: iconUrl1,
+      width: size,
+      height: size,
+    ),
+    const SizedBox(width: 4),
+    MobileWebImage(
+      imageUrl: iconUrl2,
+      width: size,
+      height: size,
+    ),
+  ];
+}
+
+List<Widget> generateDoubleImageIconsWithText(
+    double size, String iconUrl1, String iconUrl2, String text) {
+  return [
+    MobileWebImage(
+      imageUrl: iconUrl1,
+      width: size,
+      height: size,
+    ),
+    const SizedBox(width: 4),
+    MobileWebImage(
+      imageUrl: iconUrl2,
+      width: size,
+      height: size,
+    ),
+    const SizedBox(width: 4),
+    Text(text),
+  ];
+}
+
+List<Widget> generateImageIconWithText(
+    double size, String iconUrl, String text) {
+  return [
+    MobileWebImage(
+      imageUrl: iconUrl,
+      width: size,
+      height: size,
+    ),
+    const SizedBox(width: 4),
+    Text(text),
+  ];
+}
+
+List<Widget> generateDoubleIconsWithText(
+    double size, String iconUrl, IconData icon2, String text) {
+  return [
+    MobileWebImage(
+      imageUrl: iconUrl,
+      width: size,
+      height: size,
+    ),
+    const SizedBox(width: 4),
+    Icon(icon2),
+    const SizedBox(width: 4),
+    Text(text),
+  ];
+}
+
+List<Widget> generateIconWithText(double size, IconData icon, String text) {
+  return [
+    Icon(icon),
+    const SizedBox(width: 4),
+    Text(text),
+  ];
+}
+
 Widget timeLeft(
     WarInfo currentWarInfo, BuildContext context, TextStyle? style) {
   String hourIndicator = AppLocalizations.of(context)?.timeHourIndicator ?? ":";
@@ -53,13 +150,13 @@ Widget timeLeft(
   String time = '';
 
   if (currentWarInfo.state == 'preparation') {
-    difference = currentWarInfo.startTime!.difference(now);
+    difference = currentWarInfo.startTime?.difference(now) ?? Duration.zero;
     hours = difference.inHours.toString().padLeft(2, '0');
     minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
     time = hours + hourIndicator + minutes;
     state = AppLocalizations.of(context)?.timeStartsIn(time) ?? 'Starting in';
   } else if (currentWarInfo.state == 'inWar') {
-    difference = currentWarInfo.endTime!.difference(now);
+    difference = currentWarInfo.endTime?.difference(now) ?? Duration.zero;
     hours = difference.inHours.toString().padLeft(2, '0');
     minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
     time = hours + hourIndicator + minutes;
@@ -240,6 +337,14 @@ Future<String?> fetchWarOpponentTag(String clanTag) async {
   } else {
     Sentry.captureMessage(
         'Failed to load $clanTag war opponent tag with status code: ${response.statusCode}');
+    return null;
+  }
+}
+
+WarMember? getMemberByTag(String tag, WarClan clan) {
+  try {
+    return clan.members.firstWhere((m) => m.tag == tag);
+  } catch (e) {
     return null;
   }
 }

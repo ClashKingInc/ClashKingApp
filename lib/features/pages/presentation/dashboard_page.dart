@@ -15,26 +15,9 @@ import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
-import 'dart:io';
+import 'package:clashkingapp/core/utils/network_error_utils.dart';
 
 class DashboardPage extends StatelessWidget {
-  // Helper function to determine if an error is network-related
-  bool _isNetworkError(dynamic error) {
-    if (error is SocketException) {
-      return true;
-    }
-    if (error is Exception) {
-      String errorString = error.toString().toLowerCase();
-      return errorString.contains('network') ||
-             errorString.contains('connection') ||
-             errorString.contains('hostname') ||
-             errorString.contains('socket') ||
-             errorString.contains('timeout') ||
-             errorString.contains('no address');
-    }
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     final playerService = context.watch<PlayerService>();
@@ -52,11 +35,11 @@ class DashboardPage extends StatelessWidget {
             final playerTags = cocService.getAccountTags();
             if (playerTags.isNotEmpty) {
               await cocService.refreshPageData(
-                playerTags, playerService, clanService, warCwlService);
+                  playerTags, playerService, clanService, warCwlService);
             }
           } catch (e) {
             if (context.mounted) {
-              if (_isNetworkError(e)) {
+              if (isNetworkError(e)) {
                 // Navigate to error page for network errors
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -90,7 +73,8 @@ class DashboardPage extends StatelessWidget {
         },
         child: Consumer<PlayerService>(
           builder: (context, playerService, child) {
-            final selectedProfile = playerService.getSelectedProfile(cocService);
+            final selectedProfile =
+                playerService.getSelectedProfile(cocService);
 
             if (selectedProfile == null || selectedProfile.tag.isEmpty) {
               return Center(

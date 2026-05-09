@@ -9,9 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
+import 'package:clashkingapp/core/utils/network_error_utils.dart';
 import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
-import 'dart:io';
 
 class StartupWidget extends StatefulWidget {
   @override
@@ -27,31 +27,14 @@ class StartupWidgetState extends State<StartupWidget> {
     _initAuth();
   }
 
-  // Helper function to determine if an error is network-related
-  bool _isNetworkError(dynamic error) {
-    if (error is SocketException) {
-      return true;
-    }
-    if (error is Exception) {
-      String errorString = error.toString().toLowerCase();
-      return errorString.contains('network') ||
-             errorString.contains('connection') ||
-             errorString.contains('hostname') ||
-             errorString.contains('socket') ||
-             errorString.contains('timeout') ||
-             errorString.contains('no address');
-    }
-    return false;
-  }
-
   Future<void> _initAuth() async {
     final authService = context.read<AuthService>();
-    
+
     try {
       await authService.initializeAuth();
     } catch (e) {
       // Handle network errors during authentication
-      if (mounted && _isNetworkError(e)) {
+      if (mounted && isNetworkError(e)) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => ErrorPage(
@@ -87,7 +70,7 @@ class StartupWidgetState extends State<StartupWidget> {
               MaterialPageRoute(builder: (context) => MaintenanceScreen()),
             );
             return;
-          } else if (_isNetworkError(e)) {
+          } else if (isNetworkError(e)) {
             // Show network error page for data loading failures
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
@@ -156,8 +139,6 @@ class StartupWidgetState extends State<StartupWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _isInitializing
-        ? const AppLoadingScreen()
-        : const SizedBox.shrink();
+    return _isInitializing ? const AppLoadingScreen() : const SizedBox.shrink();
   }
 }
