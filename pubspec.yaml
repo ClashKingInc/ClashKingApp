@@ -63,7 +63,6 @@ dependencies:
   cupertino_icons: ^1.0.8
   intl: ^0.20.2
   url_launcher: ^6.3.2
-  mockito: ^5.6.1
   webview_flutter: ^4.13.0
   flutter_native_splash: ^2.4.7
   path_provider: ^2.1.5
@@ -75,6 +74,7 @@ dev_dependencies:
     sdk: flutter
 
   flutter_launcher_icons: ^0.14.4
+  mockito: ^5.6.1
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
