@@ -21,6 +21,25 @@ class ApiService {
   static String? _sentryDsn;
   static String? get sentryDsn => _sentryDsn;
 
+  static AppLocalizations? _currentL10n() {
+    final context = globalNavigatorKey.currentContext;
+    if (context == null) {
+      return null;
+    }
+    return AppLocalizations.of(context);
+  }
+
+  static String _localized(
+    String fallback,
+    String Function(AppLocalizations l10n) builder,
+  ) {
+    final l10n = _currentL10n();
+    if (l10n == null) {
+      return fallback;
+    }
+    return builder(l10n);
+  }
+
   Future<Map<String, dynamic>> get(String endpoint) async {
     try {
       final token = await TokenService().getAccessToken();
@@ -41,13 +60,14 @@ class ApiService {
   Future<Map<String, dynamic>> post(
       String endpoint, Map<String, String> body) async {
     try {
-      final response = await http.post(
-        Uri.parse('$apiUrlV2$endpoint'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      ).timeout(const Duration(seconds: 15));
+      final response = await http
+          .post(
+            Uri.parse('$apiUrlV2$endpoint'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(body),
+          )
+          .timeout(const Duration(seconds: 15));
       DebugUtils.debugInfo("Response status: ${response.statusCode}");
-      DebugUtils.debugInfo("Response body: ${response.body}");
       return _handleResponse(response, endpoint);
     } catch (e, stackTrace) {
       _handleError(e, stackTrace, 'POST $endpoint');
@@ -55,7 +75,8 @@ class ApiService {
     }
   }
 
-  Map<String, dynamic> _handleResponse(http.Response response, String endpoint) {
+  Map<String, dynamic> _handleResponse(
+      http.Response response, String endpoint) {
     DebugUtils.debugInfo("Handling response status: ${response.statusCode}");
     switch (response.statusCode) {
       case 200:
@@ -63,30 +84,74 @@ class ApiService {
         try {
           return json.decode(response.body);
         } catch (e) {
-          throw FormatException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorInvalidJsonResponse(endpoint));
+          throw FormatException(
+            _localized(
+              'Invalid JSON response for $endpoint.',
+              (l10n) => l10n.apiErrorInvalidJsonResponse(endpoint),
+            ),
+          );
         }
       case 400:
         String? specificMessage = _extractApiErrorMessage(response.body);
-        throw BadRequestException(specificMessage ?? AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorBadRequest(endpoint, response.body));
+        throw BadRequestException(
+          specificMessage ??
+              _localized(
+                'Bad request for $endpoint.',
+                (l10n) => l10n.apiErrorBadRequest(endpoint, response.body),
+              ),
+        );
       case 401:
-        throw UnauthorizedException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorUnauthorized(endpoint));
+        throw UnauthorizedException(
+          _localized(
+            'Unauthorized request for $endpoint.',
+            (l10n) => l10n.apiErrorUnauthorized(endpoint),
+          ),
+        );
       case 403:
-        throw ForbiddenException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorForbidden(endpoint));
+        throw ForbiddenException(
+          _localized(
+            'Forbidden request for $endpoint.',
+            (l10n) => l10n.apiErrorForbidden(endpoint),
+          ),
+        );
       case 404:
-        throw NotFoundException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorNotFound(endpoint));
+        throw NotFoundException(
+          _localized(
+            'Resource not found for $endpoint.',
+            (l10n) => l10n.apiErrorNotFound(endpoint),
+          ),
+        );
       case 409:
-        // Use 409 for email verification required (conflict state)
-        DebugUtils.debugInfo("Creating EmailVerificationRequiredException");
-        throw EmailVerificationRequiredException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.authEmailVerificationExpired);
+        throw EmailVerificationRequiredException(
+          _localized(
+            'Email verification is required.',
+            (l10n) => l10n.authEmailVerificationExpired,
+          ),
+        );
       case 429:
-        throw RateLimitException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorRateLimit(endpoint));
+        throw RateLimitException(
+          _localized(
+            'Rate limit exceeded for $endpoint.',
+            (l10n) => l10n.apiErrorRateLimit(endpoint),
+          ),
+        );
       case 500:
       case 502:
       case 503:
       case 504:
-        throw ServerException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorServer(response.statusCode, endpoint));
+        throw ServerException(
+          _localized(
+            'Server error ${response.statusCode} for $endpoint.',
+            (l10n) => l10n.apiErrorServer(response.statusCode, endpoint),
+          ),
+        );
       default:
-        throw ApiException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorGeneric(response.statusCode, response.body));
+        throw ApiException(
+          _localized(
+            'API error ${response.statusCode}.',
+            (l10n) => l10n.apiErrorGeneric(response.statusCode, response.body),
+          ),
+        );
     }
   }
 
@@ -100,16 +165,28 @@ class ApiService {
   }
 
   void _handleError(dynamic error, StackTrace stackTrace, String operation) {
-    String errorMessage = AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorOperationFailed(operation);
-    
+    String errorMessage = _localized(
+      'API operation failed: $operation.',
+      (l10n) => l10n.apiErrorOperationFailed(operation),
+    );
+
     if (error is SocketException) {
-      errorMessage = AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorNetworkOperation(operation);
+      errorMessage = _localized(
+        'Network error during $operation.',
+        (l10n) => l10n.apiErrorNetworkOperation(operation),
+      );
     } else if (error is TimeoutException) {
-      errorMessage = AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorTimeoutOperation(operation);
+      errorMessage = _localized(
+        'Timeout during $operation.',
+        (l10n) => l10n.apiErrorTimeoutOperation(operation),
+      );
     } else if (error is FormatException) {
-      errorMessage = AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorDataFormatOperation(operation);
+      errorMessage = _localized(
+        'Data format error during $operation.',
+        (l10n) => l10n.apiErrorDataFormatOperation(operation),
+      );
     }
-    
+
     Sentry.captureException(error, stackTrace: stackTrace);
     Sentry.captureMessage(errorMessage);
   }
@@ -130,7 +207,7 @@ class ApiService {
         Uri.parse('$apiUrlV2/public-config'),
         headers: {'Content-Type': 'application/json'},
       ).timeout(const Duration(seconds: 10));
-      
+
       if (response.statusCode == 200) {
         final config = json.decode(response.body);
         _sentryDsn = config['sentry_dsn'];
@@ -160,11 +237,20 @@ class ApiService {
     } else if (error is ApiException) {
       return error.message;
     } else if (error is SocketException) {
-      return AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorNetworkConnection;
+      return _localized(
+        'Network connection error.',
+        (l10n) => l10n.apiErrorNetworkConnection,
+      );
     } else if (error is TimeoutException) {
-      return AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorTimeout;
+      return _localized(
+        'Request timeout.',
+        (l10n) => l10n.apiErrorTimeout,
+      );
     } else if (error is FormatException) {
-      return AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorInvalidFormat;
+      return _localized(
+        'Invalid response format.',
+        (l10n) => l10n.apiErrorInvalidFormat,
+      );
     } else {
       return error.toString().replaceFirst('Exception: ', '');
     }
