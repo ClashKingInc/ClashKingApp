@@ -29,9 +29,8 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
     return player['league'] ?? 'Unranked';
   }
 
-  String? getLeagueIcon(dynamic player) {
-    if (player['league'] is Map) return player['league']?['iconUrls']?['small'];
-    return null;
+  String getLeagueIcon(dynamic player) {
+    return ImageAssets.getLeagueImage(getLeagueName(player) ?? 'Unranked');
   }
 
   String getClanName(dynamic player) {
@@ -115,11 +114,8 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                           children: <Widget>[
                             ImageChip(
                               context: context,
-                              imageUrl: getLeagueIcon(widget.player) ??
-                                  ImageAssets.getLeagueImage(
-                                      getLeagueName(widget.player) ??
-                                          "Unranked"),
-                              label: widget.player['trophies'].toString(),
+                              imageUrl: getLeagueIcon(widget.player),
+                              label: getLeagueName(widget.player) ?? "Unranked",
                             ),
                             ImageChip(
                               context: context,

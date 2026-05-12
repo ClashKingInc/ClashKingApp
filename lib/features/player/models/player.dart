@@ -1,6 +1,5 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
-import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/player/data/player_item_utils.dart';
@@ -299,9 +298,8 @@ class Player {
           townHallPic: ImageAssets.townHall(json["townHallLevel"] ?? 0),
           builderHallPic:
               ImageAssets.builderHall(json["builderHallLevel"] ?? 0),
-          leagueUrl: ApiService.cocAssetsProxyUrl(json['league']?['iconUrls']
-                  ?['medium'] ??
-              ImageAssets.getLeagueImage("Unranked")),
+          leagueUrl:
+              ImageAssets.getLeagueImage(json["league"]?['name'] ?? "Unranked"),
           clanGamesPoint: [],
           seasonPass: [],
           lastOnline: DateTime.utc(1970, 1, 1),

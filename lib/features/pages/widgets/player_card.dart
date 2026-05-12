@@ -88,7 +88,7 @@ class PlayerCard extends StatelessWidget {
                             children: <Widget>[
                               if (player.clan != null)
                                 ImageChip(
-                            context: context,
+                                  context: context,
                                   imageUrl: player.clan!.badgeUrls.small,
                                   labelPadding: 2,
                                   label: player.clan!.name,
@@ -108,7 +108,7 @@ class PlayerCard extends StatelessWidget {
                                           player.donationsReceived
                                               .toStringAsFixed(0))),
                               ImageChip(
-                            context: context,
+                                context: context,
                                 imageUrl: player.warPreferenceImage,
                                 label: warPreference,
                                 description: AppLocalizations.of(context)!
@@ -116,7 +116,7 @@ class PlayerCard extends StatelessWidget {
                                         warPreference),
                               ),
                               ImageChip(
-                            context: context,
+                                  context: context,
                                   imageUrl: ImageAssets.attackStar,
                                   label: NumberFormat(
                                           '#,###',
@@ -128,21 +128,16 @@ class PlayerCard extends StatelessWidget {
                                       .playerWarStarsDescription(
                                           player.warStars)),
                               ImageChip(
-                            context: context,
+                                  context: context,
                                   imageUrl: player.townHallPic,
                                   label: player.townHallLevel.toString(),
                                   description: AppLocalizations.of(context)!
                                       .playerTownHallLevelDescription(
                                           player.townHallLevel)),
                               ImageChip(
-                            context: context,
+                                  context: context,
                                   imageUrl: player.leagueUrl,
-                                  label: NumberFormat(
-                                          '#,###',
-                                          Localizations.localeOf(context)
-                                              .toString())
-                                      .format(int.parse(
-                                          player.trophies.toString())),
+                                  label: player.league,
                                   description: player.league == "Unranked"
                                       ? AppLocalizations.of(context)!
                                           .playerTrophiesUnrankedDescription(
@@ -151,7 +146,7 @@ class PlayerCard extends StatelessWidget {
                                           .playerTrophiesDescription(
                                               player.trophies, player.league)),
                               ImageChip(
-                            context: context,
+                                  context: context,
                                   imageUrl: player.builderHallPic,
                                   label: player.builderHallLevel.toString(),
                                   description: AppLocalizations.of(context)!
