@@ -261,7 +261,7 @@ Map<String, String> analyzeWarLogs(List<WarLogDetails> warLogs) {
   Future<String> fetchWarDetails(String tag, bool bypass) async {
     final responseWar = await http.get(
       Uri.parse(
-          'https://proxy.clashk.ing/v1/clans/${tag.replaceAll('#', '%23')}/currentwar'),
+          '${ApiService.proxyUrl}/clans/${tag.replaceAll('#', '%23')}/currentwar'),
     );
 
     if (responseWar.statusCode == 200) {
@@ -276,7 +276,7 @@ Map<String, String> analyzeWarLogs(List<WarLogDetails> warLogs) {
         if (now.day >= 1 && now.day <= 12) {
           final responseCwl = await http.get(
             Uri.parse(
-                'https://proxy.clashk.ing/v1/clans/${tag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
+                '${ApiService.proxyUrl}/clans/${tag.replaceAll('#', '%23')}/currentwar/leaguegroup'),
           );
           if (responseCwl.statusCode == 200) {
             var decodedResponseCwl =

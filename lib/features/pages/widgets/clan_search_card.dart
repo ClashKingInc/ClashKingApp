@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_search_filters_dialog.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_search_result_tiles.dart';
 import 'package:flutter/material.dart';
@@ -70,14 +71,15 @@ class ClanSearchCardState extends State<ClanSearchCard> {
       return [];
     }
     final response = await http.get(Uri.parse(
-        'https://proxy.clashk.ing/v1/clans?$query&limit=20&memberList=false'));
+        '${ApiService.proxyUrl}/clans?$query&limit=20&memberList=false'));
 
     if (response.statusCode == 200) {
       final body = utf8.decode(response.bodyBytes);
       final data = jsonDecode(body);
       return data['items'];
     } else {
-      throw Exception('Failed to load clans with status code: ${response.statusCode}');
+      throw Exception(
+          'Failed to load clans with status code: ${response.statusCode}');
     }
   }
 
@@ -120,7 +122,8 @@ class ClanSearchCardState extends State<ClanSearchCard> {
                                       query =
                                           "name=${_controller.text.replaceFirst("#", "%23")}$filters";
                                     } else {
-                                      query = "name=${_controller.text}$filters";
+                                      query =
+                                          "name=${_controller.text}$filters";
                                     }
                                   } else {
                                     query = filters.replaceFirst('&', '');
@@ -186,7 +189,9 @@ class ClanSearchCardState extends State<ClanSearchCard> {
               } else {
                 if (_controller.text.length >= 2) {
                   return Column(children: [
-                    Center(child: Text(AppLocalizations.of(context)!.searchNoResult)),
+                    Center(
+                        child:
+                            Text(AppLocalizations.of(context)!.searchNoResult)),
                     const SizedBox(height: 8)
                   ]);
                 } else {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -36,7 +37,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
 
   Future<void> _fetchCountries() async {
     final response =
-        await http.get(Uri.parse('https://proxy.clashk.ing/v1/locations'));
+        await http.get(Uri.parse('${ApiService.proxyUrl}/locations'));
     if (response.statusCode == 200) {
       final List items = json.decode(utf8.decode(response.bodyBytes))['items'];
       final countries = items.where((item) => item["name"] != "").toList();
@@ -47,7 +48,8 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
         }
       });
     } else {
-      throw Exception('Failed to load countries with status code: ${response.statusCode}');
+      throw Exception(
+          'Failed to load countries with status code: ${response.statusCode}');
     }
   }
 
@@ -127,11 +129,13 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
       DropdownMenuItem(
           value: 'oncePerWeek',
           alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!.clanWarFrequencyOncePerWeek)),
+          child:
+              Text(AppLocalizations.of(context)!.clanWarFrequencyOncePerWeek)),
       DropdownMenuItem(
           value: 'moreThanOncePerWeek',
           alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!.clanWarFrequencyMoreThanOncePerWeek)),
+          child: Text(AppLocalizations.of(context)!
+              .clanWarFrequencyMoreThanOncePerWeek)),
       DropdownMenuItem(
           value: 'lessThanOncePerWeek',
           alignment: Alignment.center,
@@ -201,8 +205,8 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                               DropdownMenuItem<String>(
                                 value: '0',
                                 alignment: Alignment.center,
-                                child: Text(
-                                    AppLocalizations.of(context)!.generalNotSet),
+                                child: Text(AppLocalizations.of(context)!
+                                    .generalNotSet),
                               ),
                               ..._countries.map<DropdownMenuItem<String>>(
                                 (item) {
@@ -282,8 +286,8 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             controller: _controllerMin,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              hintText:
-                                  AppLocalizations.of(context)!.clanMinimumMembers,
+                              hintText: AppLocalizations.of(context)!
+                                  .clanMinimumMembers,
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -323,8 +327,8 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             controller: _controllerMax,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              hintText:
-                                  AppLocalizations.of(context)!.clanMaximumMembers,
+                              hintText: AppLocalizations.of(context)!
+                                  .clanMaximumMembers,
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -384,8 +388,8 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             controller: _controllerPoints,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              hintText:
-                                  AppLocalizations.of(context)!.clanMinimumMembers,
+                              hintText: AppLocalizations.of(context)!
+                                  .clanMinimumMembers,
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -446,8 +450,8 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             controller: _controllerLevel,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              hintText:
-                                  AppLocalizations.of(context)!.clanMinimumMembers,
+                              hintText: AppLocalizations.of(context)!
+                                  .clanMinimumMembers,
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {

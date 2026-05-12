@@ -257,7 +257,7 @@ class ClanService extends ChangeNotifier {
         final response = await _apiService.getResponse(
           '',
           url:
-              'https://proxy.clashk.ing/v1/clans/${tag.replaceAll('#', '%23')}/capitalraidseasons?limit=$limit',
+              '${ApiService.proxyUrl}/clans/${tag.replaceAll('#', '%23')}/capitalraidseasons?limit=$limit',
         );
 
         if (response.statusCode == 200) {

@@ -44,7 +44,23 @@ Map<String, dynamic> filterGameData(
   bool Function(String key, Map<String, dynamic> value) predicate,
 ) {
   if (data == null) return {};
-  return Map.fromEntries(
-    data.entries.where((e) => predicate(e.key, e.value)),
-  );
+
+  final filteredEntries = <MapEntry<String, dynamic>>[];
+  for (final entry in data.entries) {
+    final value = entry.value;
+    if (value is! Map) {
+      continue;
+    }
+
+    final typedValue = Map<String, dynamic>.from(value);
+    if (typedValue['is_seasonal'] == true) {
+      continue;
+    }
+
+    if (predicate(entry.key, typedValue)) {
+      filteredEntries.add(MapEntry(entry.key, typedValue));
+    }
+  }
+
+  return Map.fromEntries(filteredEntries);
 }
