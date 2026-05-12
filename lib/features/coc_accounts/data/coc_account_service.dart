@@ -55,20 +55,26 @@ class CocAccountService extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final data = json.decode(ApiService.decodeResponseBody(response));
-        _cocAccounts = List<Map<String, dynamic>>.from(data["coc_accounts"]);
+        final cocAccounts = data["coc_accounts"];
+        if (cocAccounts is! List) {
+          throw const FormatException("Invalid CoC accounts payload");
+        }
+        _cocAccounts = List<Map<String, dynamic>>.from(cocAccounts);
         DebugUtils.debugInfo("🔍 Fetched accounts data: $_cocAccounts");
         // Verification status is now included in the API response
       } else {
-        Sentry.captureMessage(
-            "Error fetching CoC accounts, status code: ${response.statusCode}, body: ${response.body}",
-            level: SentryLevel.error);
+        throw HttpException(
+          "Failed to fetch CoC accounts (${response.statusCode})",
+          uri: response.request?.url,
+        );
       }
-    } catch (exception) {
-      Sentry.captureException(exception);
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-
-    _isLoading = false;
-    notifyListeners();
   }
 
   /// Adds a Clash of Clans account (without verification).
@@ -427,19 +433,52 @@ class CocAccountService extends ChangeNotifier {
         .toSet();
 
     await Future.wait([
-      playerService.loadPlayerData(playerTags, clanTagsByPlayer, notify: false),
-      playerService.loadPlayerWarStats(playerTags, notify: false),
+      playerService.loadPlayerData(
+        playerTags,
+        clanTagsByPlayer,
+        notify: false,
+        throwOnError: true,
+      ),
+      playerService.loadPlayerWarStats(
+        playerTags,
+        notify: false,
+        throwOnError: true,
+      ),
       if (clanTags.isNotEmpty)
-        clanService.loadAllClanData(clanTags.toList(), notify: false),
+        clanService.loadAllClanData(
+          clanTags.toList(),
+          notify: false,
+          throwOnError: true,
+        ),
       if (clanTags.isNotEmpty)
-        clanService.loadClanJoinLeaveData(clanTags.toList(), notify: false),
+        clanService.loadClanJoinLeaveData(
+          clanTags.toList(),
+          notify: false,
+          throwOnError: true,
+        ),
       if (clanTags.isNotEmpty)
-        warCwlService.loadAllWarData(clanTags.toList(), notify: false),
+        warCwlService.loadAllWarData(
+          clanTags.toList(),
+          notify: false,
+          throwOnError: true,
+        ),
       if (clanTags.isNotEmpty)
-        clanService.loadCapitalData(clanTags.toList(), 10, notify: false),
-      if (clanTags.isNotEmpty) clanService.loadWarLogData(clanTags.toList()),
+        clanService.loadCapitalData(
+          clanTags.toList(),
+          10,
+          notify: false,
+          throwOnError: true,
+        ),
       if (clanTags.isNotEmpty)
-        clanService.loadClanWarStatsData(clanTags.toList()),
+        clanService.loadWarLogData(
+          clanTags.toList(),
+          throwOnError: true,
+        ),
+      if (clanTags.isNotEmpty)
+        clanService.loadClanWarStatsData(
+          clanTags.toList(),
+          throwOnError: true,
+        ),
     ]);
 
     // Link relationships (same as before)

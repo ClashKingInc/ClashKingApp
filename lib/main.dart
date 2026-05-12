@@ -22,7 +22,6 @@ import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:app_links/app_links.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
-import 'package:clashkingapp/core/constants/global_keys.dart';
 
 // CallbackDispatcher for background execution (Android only)
 @pragma('vm:entry-point')
@@ -61,7 +60,8 @@ void _initializeDeepLinks() {
   // Handle deep links when app is already running
   appLinks.uriLinkStream.listen((uri) {
     DebugUtils.debugInfo("🔗 Deep link received (running): $uri");
-    _handleDeepLink(uri);
+    DeepLinkHandler.queueDeepLink(uri);
+    unawaited(DeepLinkHandler.tryHandlePendingDeepLink());
   }, onError: (err) {
     DebugUtils.debugError(" Deep link error: $err");
   });
@@ -70,34 +70,12 @@ void _initializeDeepLinks() {
   appLinks.getInitialLink().then((uri) {
     if (uri != null) {
       DebugUtils.debugInfo("🔗 Initial deep link: $uri");
-      // Delay handling to ensure app is fully initialized
-      Future.delayed(Duration(milliseconds: 500), () {
-        _handleDeepLink(uri);
-      });
+      DeepLinkHandler.queueDeepLink(uri);
+      unawaited(DeepLinkHandler.tryHandlePendingDeepLink());
     }
   }).catchError((err) {
     DebugUtils.debugError(" Initial deep link error: $err");
   });
-}
-
-/// Handle deep link with proper context checking
-void _handleDeepLink(Uri uri) {
-  // Ensure we have a valid navigation context
-  final context = globalNavigatorKey.currentContext;
-  if (context != null) {
-    DeepLinkHandler.handleDeepLink(context, uri);
-  } else {
-    // If no context yet, retry after a short delay
-    Future.delayed(Duration(milliseconds: 200), () {
-      final retryContext = globalNavigatorKey.currentContext;
-      if (retryContext != null && retryContext.mounted) {
-        DeepLinkHandler.handleDeepLink(retryContext, uri);
-      } else {
-        DebugUtils.debugError(
-            " No navigation context available for deep link: $uri");
-      }
-    });
-  }
 }
 
 Future<void> main() async {

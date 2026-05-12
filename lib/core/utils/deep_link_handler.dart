@@ -1,128 +1,216 @@
-import 'package:flutter/material.dart';
+import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/features/auth/data/auth_service.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DeepLinkHandler {
-  static void handleDeepLink(BuildContext context, Uri uri) {
-    DebugUtils.debugInfo("🔗 Deep link received: $uri");
-    DebugUtils.debugInfo("🔗 Path: ${uri.path}, Query: ${uri.queryParameters}");
-    
-    // Handle different deep link paths
-    switch (uri.path) {
-      case '/oauth': // Existing Discord OAuth
-      case 'oauth':
-        // Discord OAuth is already handled by discord_auth_helper
-        DebugUtils.debugInfo("🔗 OAuth deep link handled by flutter_web_auth_2");
-        break;
-      
-      case '/player':
-      case 'player':
-        _handlePlayerPage(context, uri);
-        break;
-      
-      case '/clan':
-      case 'clan':
-        _handleClanPage(context, uri);
-        break;
-      
-      case '/war':
-      case 'war':
-        _handleWarPage(context, uri);
-        break;
-      
-      default:
-        DebugUtils.debugInfo("🔗 Unknown deep link path: ${uri.path}");
-        _showUnknownLinkMessage(context, uri);
-        break;
+  static Uri? _pendingUri;
+  static bool _isHandling = false;
+
+  static void queueDeepLink(Uri uri) {
+    _pendingUri = uri;
+    DebugUtils.debugInfo("🔗 Queued deep link: $uri");
+  }
+
+  static Future<void> tryHandlePendingDeepLink(
+      [BuildContext? explicitContext]) async {
+    if (_pendingUri == null || _isHandling) {
+      return;
+    }
+
+    final context = explicitContext ?? globalNavigatorKey.currentContext;
+    final uri = _pendingUri;
+    if (context == null || uri == null || !context.mounted) {
+      return;
+    }
+
+    _isHandling = true;
+    try {
+      final handled = await _dispatchDeepLink(context, uri);
+      if (handled && _pendingUri == uri) {
+        _pendingUri = null;
+      }
+    } finally {
+      _isHandling = false;
     }
   }
 
-  static void _handlePlayerPage(BuildContext context, Uri uri) {
-    final playerTag = uri.queryParameters['tag'];
-    
-    if (playerTag == null || playerTag.trim().isEmpty) {
+  static Future<bool> _dispatchDeepLink(BuildContext context, Uri uri) async {
+    DebugUtils.debugInfo(
+        "🔗 Deep link received: $uri (host=${uri.host}, path=${uri.path})");
+
+    final route = _extractRoute(uri);
+    if (route == 'oauth') {
+      DebugUtils.debugInfo("🔗 OAuth deep link handled by flutter_web_auth_2");
+      return true;
+    }
+
+    final authService = context.read<AuthService>();
+    if (!authService.isAuthenticated) {
+      DebugUtils.debugInfo(
+          "🔗 Deferring deep link until authentication completes: $uri");
+      return false;
+    }
+
+    switch (route) {
+      case 'player':
+        await _openPlayer(context, uri);
+        return true;
+      case 'clan':
+        await _openClan(context, uri);
+        return true;
+      case 'war':
+        _showSnackBar(
+          context,
+          AppLocalizations.of(context)?.generalComingSoon ?? 'Coming soon!',
+        );
+        return true;
+      default:
+        _showSnackBar(
+          context,
+          AppLocalizations.of(context)?.deepLinkUnknown ?? 'Unknown deep link.',
+        );
+        return true;
+    }
+  }
+
+  static String _extractRoute(Uri uri) {
+    final pathSegments =
+        uri.pathSegments.where((segment) => segment.isNotEmpty).toList();
+    if (pathSegments.isNotEmpty) {
+      return pathSegments.first.toLowerCase();
+    }
+
+    return uri.host.toLowerCase();
+  }
+
+  static String? _extractNormalizedTag(Uri uri) {
+    final rawTag = uri.queryParameters['tag'] ??
+        uri.queryParameters['player_tag'] ??
+        uri.queryParameters['clan_tag'];
+    if (rawTag == null) {
+      return null;
+    }
+
+    final trimmed = rawTag.trim().replaceAll(' ', '').replaceFirst('!', '#');
+    if (trimmed.isEmpty) {
+      return null;
+    }
+
+    final tag = trimmed.startsWith('#') ? trimmed : '#$trimmed';
+    return tag.toUpperCase();
+  }
+
+  static Future<void> _openPlayer(BuildContext context, Uri uri) async {
+    final playerTag = _extractNormalizedTag(uri);
+    final l10n = AppLocalizations.of(context);
+
+    if (playerTag == null) {
       DebugUtils.debugError(" Player tag missing from deep link");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Invalid player link - no tag found"),
-          backgroundColor: Colors.red,
-        ),
+      _showSnackBar(
+        context,
+        l10n?.deepLinkInvalidPlayer ?? 'Invalid player link.',
       );
       return;
     }
-    
-    DebugUtils.debugInfo("🔗 Navigating to player page: $playerTag");
-    
-    // TODO: Navigate to player page
-    // Example: Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlayerPage(tag: playerTag)));
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Player page navigation: $playerTag (Coming soon!)"),
-        backgroundColor: Colors.blue,
-      ),
+
+    final rootNavigator = Navigator.of(context, rootNavigator: true);
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      useRootNavigator: true,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
     );
+
+    try {
+      final player =
+          await context.read<PlayerService>().getPlayerAndClanData(playerTag);
+      if (rootNavigator.canPop()) {
+        rootNavigator.pop();
+      }
+      if (!context.mounted) {
+        return;
+      }
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => PlayerScreen(selectedPlayer: player),
+        ),
+      );
+    } catch (error) {
+      if (rootNavigator.canPop()) {
+        rootNavigator.pop();
+      }
+      DebugUtils.debugError(" Error opening player deep link: $error");
+      if (context.mounted) {
+        _showSnackBar(
+          context,
+          l10n?.deepLinkFailedToOpenPlayer ?? 'Failed to open player.',
+        );
+      }
+    }
   }
-  
-  static void _handleClanPage(BuildContext context, Uri uri) {
-    final clanTag = uri.queryParameters['tag'];
-    
-    if (clanTag == null || clanTag.trim().isEmpty) {
+
+  static Future<void> _openClan(BuildContext context, Uri uri) async {
+    final clanTag = _extractNormalizedTag(uri);
+    final l10n = AppLocalizations.of(context);
+
+    if (clanTag == null) {
       DebugUtils.debugError(" Clan tag missing from deep link");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Invalid clan link - no tag found"),
-          backgroundColor: Colors.red,
-        ),
+      _showSnackBar(
+        context,
+        l10n?.deepLinkInvalidClan ?? 'Invalid clan link.',
       );
       return;
     }
-    
-    DebugUtils.debugInfo("🔗 Navigating to clan page: $clanTag");
-    
-    // TODO: Navigate to clan page
-    // Example: Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClanPage(tag: clanTag)));
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Clan page navigation: $clanTag (Coming soon!)"),
-        backgroundColor: Colors.blue,
-      ),
+
+    final rootNavigator = Navigator.of(context, rootNavigator: true);
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      useRootNavigator: true,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
     );
-  }
-  
-  static void _handleWarPage(BuildContext context, Uri uri) {
-    final warId = uri.queryParameters['id'];
-    
-    if (warId == null || warId.trim().isEmpty) {
-      DebugUtils.debugError(" War ID missing from deep link");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Invalid war link - no ID found"),
-          backgroundColor: Colors.red,
+
+    try {
+      final clan = await context.read<ClanService>().getClanAndWarData(clanTag);
+      if (rootNavigator.canPop()) {
+        rootNavigator.pop();
+      }
+      if (!context.mounted) {
+        return;
+      }
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => ClanInfoScreen(clanInfo: clan),
         ),
       );
+    } catch (error) {
+      if (rootNavigator.canPop()) {
+        rootNavigator.pop();
+      }
+      DebugUtils.debugError(" Error opening clan deep link: $error");
+      if (context.mounted) {
+        _showSnackBar(
+          context,
+          l10n?.deepLinkFailedToOpenClan ?? 'Failed to open clan.',
+        );
+      }
+    }
+  }
+
+  static void _showSnackBar(BuildContext context, String message) {
+    if (!context.mounted) {
       return;
     }
-    
-    DebugUtils.debugInfo("🔗 Navigating to war page: $warId");
-    
-    // TODO: Navigate to war page
-    // Example: Navigator.of(context).push(MaterialPageRoute(builder: (context) => WarPage(id: warId)));
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("War page navigation: $warId (Coming soon!)"),
-        backgroundColor: Colors.blue,
-      ),
-    );
-  }
-  
-  static void _showUnknownLinkMessage(BuildContext context, Uri uri) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Unknown deep link: ${uri.path}"),
-        backgroundColor: Colors.orange,
-      ),
+      SnackBar(content: Text(message)),
     );
   }
 }

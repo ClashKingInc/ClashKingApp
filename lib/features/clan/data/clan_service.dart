@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:clashkingapp/features/clan/models/clan_capital_history.dart';
 import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_stats.dart';
@@ -32,7 +33,7 @@ class ClanService extends ChangeNotifier {
   }
 
   Future<void> loadAllClanData(List<String> clanTags,
-      {bool notify = true}) async {
+      {bool notify = true, bool throwOnError = false}) async {
     if (clanTags.isEmpty) return;
 
     _isLoading = true;
@@ -76,10 +77,19 @@ class ClanService extends ChangeNotifier {
       } else {
         Sentry.captureMessage("Error loading clan data",
             level: SentryLevel.error);
+        if (throwOnError) {
+          throw HttpException(
+            "Failed to load clan data (${response.statusCode})",
+            uri: response.request?.url,
+          );
+        }
       }
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError("Error loading clan data: $e");
+      if (throwOnError) {
+        rethrow;
+      }
     } finally {
       _isLoading = false;
       if (notify) {
@@ -162,7 +172,7 @@ class ClanService extends ChangeNotifier {
   }
 
   Future<List<ClanJoinLeave>> loadClanJoinLeaveData(List<String> clanTags,
-      {bool notify = true}) async {
+      {bool notify = true, bool throwOnError = false}) async {
     if (clanTags.isEmpty) return List<ClanJoinLeave>.empty();
 
     _isLoading = true;
@@ -195,10 +205,19 @@ class ClanService extends ChangeNotifier {
       } else {
         Sentry.captureMessage("Error loading clan data",
             level: SentryLevel.error);
+        if (throwOnError) {
+          throw HttpException(
+            "Failed to load clan join/leave data (${response.statusCode})",
+            uri: response.request?.url,
+          );
+        }
       }
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError("Error loading clan data: $e");
+      if (throwOnError) {
+        rethrow;
+      }
     } finally {
       _isLoading = false;
       if (notify) {
@@ -223,7 +242,7 @@ class ClanService extends ChangeNotifier {
 
   Future<List<CapitalHistoryItems>> loadCapitalData(
       List<String> clanTags, int limit,
-      {bool notify = true}) async {
+      {bool notify = true, bool throwOnError = false}) async {
     if (clanTags.isEmpty) return List<CapitalHistoryItems>.empty();
 
     List<CapitalHistoryItems> history = [];
@@ -255,6 +274,12 @@ class ClanService extends ChangeNotifier {
 
         Sentry.captureMessage("Error loading clan data",
             level: SentryLevel.error);
+        if (throwOnError) {
+          throw HttpException(
+            "Failed to load capital data (${response.statusCode})",
+            uri: response.request?.url,
+          );
+        }
         return null;
       }));
 
@@ -266,6 +291,9 @@ class ClanService extends ChangeNotifier {
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError("Error loading capital data: $e");
+      if (throwOnError) {
+        rethrow;
+      }
       return List<CapitalHistoryItems>.empty();
     } finally {
       _isLoading = false;
@@ -289,31 +317,44 @@ class ClanService extends ChangeNotifier {
     }
   }
 
-  Future<List<ClanWarLog>> loadWarLogData(List<String> clanTags) async {
+  Future<List<ClanWarLog>> loadWarLogData(List<String> clanTags,
+      {bool throwOnError = false}) async {
     if (clanTags.isEmpty) return [];
 
-    final warLogs = await Future.wait(clanTags.map((tag) async {
-      final response = await _apiService.getResponse(
-        '',
-        url:
-            '${ApiService.proxyUrl}/clans/${tag.replaceAll('#', '%23')}/warlog',
-      );
+    try {
+      final warLogs = await Future.wait(clanTags.map((tag) async {
+        final response = await _apiService.getResponse(
+          '',
+          url:
+              '${ApiService.proxyUrl}/clans/${tag.replaceAll('#', '%23')}/warlog',
+        );
 
-      if (response.statusCode == 200) {
-        String body = ApiService.decodeResponseBody(response);
-        Map<String, dynamic> jsonBody = json.decode(body);
-        ClanWarLog warLog = ClanWarLog.fromJson(jsonBody, tag);
-        warLog.warLogStats =
-            await WarLogStatsService.analyzeWarLogs(warLog.items);
-        return warLog;
-      } else if (response.statusCode == 403) {
-        return ClanWarLog(items: [], clanTag: tag);
-      } else {
-        throw Exception('Failed to load war history data');
+        if (response.statusCode == 200) {
+          String body = ApiService.decodeResponseBody(response);
+          Map<String, dynamic> jsonBody = json.decode(body);
+          ClanWarLog warLog = ClanWarLog.fromJson(jsonBody, tag);
+          warLog.warLogStats =
+              await WarLogStatsService.analyzeWarLogs(warLog.items);
+          return warLog;
+        } else if (response.statusCode == 403) {
+          return ClanWarLog(items: [], clanTag: tag);
+        } else {
+          throw HttpException(
+            'Failed to load war history data (${response.statusCode})',
+            uri: response.request?.url,
+          );
+        }
+      }));
+      warLogList = warLogs;
+      return warLogList;
+    } catch (e) {
+      Sentry.captureException(e);
+      DebugUtils.debugError("Error loading war log data: $e");
+      if (throwOnError) {
+        rethrow;
       }
-    }));
-    warLogList = warLogs;
-    return warLogList;
+      return [];
+    }
   }
 
   void linkWarLogToClans() {
@@ -329,7 +370,8 @@ class ClanService extends ChangeNotifier {
     }
   }
 
-  Future<List<ClanWarStats>> loadClanWarStatsData(List<String> clanTags) async {
+  Future<List<ClanWarStats>> loadClanWarStatsData(List<String> clanTags,
+      {bool throwOnError = false}) async {
     if (clanTags.isEmpty) return [];
 
     final response = await _apiService.postResponse(
@@ -355,6 +397,12 @@ class ClanService extends ChangeNotifier {
           "Error loading clan war stats data: ${response.statusCode}");
       Sentry.captureMessage("Error loading clan data",
           level: SentryLevel.error);
+      if (throwOnError) {
+        throw HttpException(
+          "Failed to load clan war stats data (${response.statusCode})",
+          uri: response.request?.url,
+        );
+      }
       return List<ClanWarStats>.empty();
     }
   }

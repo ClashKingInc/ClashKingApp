@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/core/utils/deep_link_handler.dart';
 
 class AddCocAccountPage extends StatefulWidget {
   @override
@@ -32,6 +33,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
   void initState() {
     super.initState();
     final CocAccountService cocService = context.read<CocAccountService>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      DeepLinkHandler.tryHandlePendingDeepLink(context);
+    });
     if (cocService.cocAccounts.isEmpty) {
       setState(() {
         _isFirstConnection = true;
@@ -73,7 +77,18 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     if (playerTags.isEmpty) return;
 
     // Load all account stats
-    await cocService.loadApiData(playerService, clanService, warCwlService);
+    try {
+      await cocService.loadApiData(playerService, clanService, warCwlService);
+    } catch (error) {
+      if (mounted) {
+        Navigator.of(context).pop();
+        setState(() {
+          _errorMessage = AppLocalizations.of(context)!.generalRefreshFailed(
+              error.toString().replaceAll('Exception: ', ''));
+        });
+      }
+      return;
+    }
 
     // Navigate to the home page
     if (mounted) {

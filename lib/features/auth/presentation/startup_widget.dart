@@ -33,23 +33,10 @@ class StartupWidgetState extends State<StartupWidget> {
     try {
       await authService.initializeAuth();
     } catch (e) {
-      // Handle network errors during authentication
-      if (mounted && isNetworkError(e)) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => ErrorPage(
-              isNetworkError: true,
-              onRetry: () async {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => StartupWidget()),
-                );
-              },
-            ),
-          ),
-        );
-        return;
+      if (mounted) {
+        _showInitializationFailure(e);
       }
-      // For non-network errors, continue with normal flow
+      return;
     }
 
     if (!mounted) return;
@@ -65,45 +52,9 @@ class StartupWidgetState extends State<StartupWidget> {
         await cocService.loadApiData(playerService, clanService, warService);
       } catch (e) {
         if (mounted) {
-          if (e.toString().contains("503") || e.toString().contains("500")) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => MaintenanceScreen()),
-            );
-            return;
-          } else if (isNetworkError(e)) {
-            // Show network error page for data loading failures
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => ErrorPage(
-                  isNetworkError: true,
-                  onRetry: () async {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => StartupWidget()),
-                    );
-                  },
-                ),
-              ),
-            );
-            return;
-          } else {
-            // Handle other errors (e.g., network issues)
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: Text("Error"),
-                content: Text("An error occurred: $e"),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text("OK"),
-                  ),
-                ],
-              ),
-            );
-          }
+          _showInitializationFailure(e);
         }
+        return;
       }
     }
 
@@ -112,6 +63,30 @@ class StartupWidgetState extends State<StartupWidget> {
     });
 
     _navigateToNextScreen(authService);
+  }
+
+  void _showInitializationFailure(dynamic error) {
+    if (!mounted) return;
+
+    if (isMaintenanceError(error)) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => MaintenanceScreen()),
+      );
+      return;
+    }
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => ErrorPage(
+          isNetworkError: isNetworkError(error),
+          onRetry: () async {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => StartupWidget()),
+            );
+          },
+        ),
+      ),
+    );
   }
 
   void _navigateToNextScreen(AuthService authService) {

@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/widgets/icons/custom_icons_icons.dart';
+import 'package:clashkingapp/core/utils/deep_link_handler.dart';
 import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
 import 'package:clashkingapp/features/pages/presentation/war_cwl_page.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ import 'package:clashkingapp/common/widgets/app_bar/app_bar.dart';
 import '../../features/pages/presentation/clan_page.dart';
 
 class MyHomePage extends StatefulWidget {
+  MyHomePage({super.key});
+
   @override
   MyHomePageState createState() => MyHomePageState();
 }
@@ -20,6 +23,9 @@ class MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _selectedIndex);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      DeepLinkHandler.tryHandlePendingDeepLink(context);
+    });
   }
 
   @override

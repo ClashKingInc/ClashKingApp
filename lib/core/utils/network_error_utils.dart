@@ -14,3 +14,8 @@ bool isNetworkError(dynamic error) {
       errorString.contains('timeout') ||
       errorString.contains('no address');
 }
+
+bool isMaintenanceError(dynamic error) {
+  final errorString = error.toString();
+  return errorString.contains('503') || errorString.contains('500');
+}

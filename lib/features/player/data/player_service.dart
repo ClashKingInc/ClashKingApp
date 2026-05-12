@@ -44,7 +44,7 @@ class PlayerService extends ChangeNotifier {
 
   /// Init basic stats for the saved accounts.
   Future<Map<String, String>> initPlayerData(List<String> playerTags,
-      {bool notify = true}) async {
+      {bool notify = true, bool throwOnError = false}) async {
     _isLoading = true;
     if (notify) {
       notifyListeners();
@@ -100,6 +100,9 @@ class PlayerService extends ChangeNotifier {
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError(" Error initializing accounts data: $e");
+      if (throwOnError) {
+        rethrow;
+      }
     }
 
     _isLoading = false;
@@ -112,7 +115,7 @@ class PlayerService extends ChangeNotifier {
   /// Loads all stats for the saved accounts.
   Future<void> loadPlayerData(
       List<String> playerTags, Map<String, String> clanTagsByPlayer,
-      {bool notify = true}) async {
+      {bool notify = true, bool throwOnError = false}) async {
     _isLoading = true;
     if (notify) {
       notifyListeners();
@@ -162,6 +165,9 @@ class PlayerService extends ChangeNotifier {
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError(" Error loading accounts data: $e");
+      if (throwOnError) {
+        rethrow;
+      }
     }
 
     _isLoading = false;
@@ -335,7 +341,7 @@ class PlayerService extends ChangeNotifier {
   }
 
   Future<void> loadPlayerWarStats(List<String> playerTags,
-      {bool notify = true}) async {
+      {bool notify = true, bool throwOnError = false}) async {
     DebugUtils.debugApi("🏰 Loading player data for tags: $playerTags");
 
     final response = await _apiService.postResponse(
@@ -381,6 +387,9 @@ class PlayerService extends ChangeNotifier {
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError(" Error loading war stats: $e");
+      if (throwOnError) {
+        rethrow;
+      }
     } finally {
       if (notify) {
         notifyListeners();

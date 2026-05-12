@@ -14,7 +14,7 @@ class WarCwlService extends ChangeNotifier {
   final Map<String, WarCwl> summaries = {};
 
   Future<void> loadAllWarData(List<String> clanTags,
-      {bool notify = true}) async {
+      {bool notify = true, bool throwOnError = false}) async {
     if (clanTags.isEmpty) return;
 
     if (notify) {
@@ -41,10 +41,15 @@ class WarCwlService extends ChangeNotifier {
         if (notify) {
           notifyListeners();
         }
+      } else if (throwOnError) {
+        throw Exception("Failed to load war data (${response.statusCode})");
       }
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError(" Error loading war data: $e");
+      if (throwOnError) {
+        rethrow;
+      }
     }
   }
 
