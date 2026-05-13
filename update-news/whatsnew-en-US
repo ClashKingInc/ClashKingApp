@@ -1,7 +1,7 @@
 What’s new
 - Player league chips now show the league name instead of raw trophy counts
 - Player item icons now resolve directly from ClashKing assets instead of app-data image URLs
-- Seasonal event troops and spells no longer appear in player progression lists
+- Seasonal event troops and spells are now hidden consistently in player progression lists
 - Fixed missing player profile images for heroes, troops, spells, pets, and equipment
 - Fixed startup loading so app setup errors no longer drop you into a partial session
 - Fixed ClashKing deep links so player and clan links now open reliably

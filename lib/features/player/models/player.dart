@@ -394,7 +394,9 @@ class Player {
           ),
           spells: generateCompleteItemList<PlayerSpell>(
             jsonList: json['spells'] as List?,
-            gameData: GameDataService.spellsData['spells'] ?? {},
+            gameData: filterSpellGameData(
+              GameDataService.spellsData['spells'],
+            ),
             factory: PlayerSpell.fromRaw,
           ),
           equipments: generateCompleteItemList<PlayerEquipment>(

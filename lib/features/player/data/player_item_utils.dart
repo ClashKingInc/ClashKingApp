@@ -64,3 +64,7 @@ Map<String, dynamic> filterGameData(
 
   return Map.fromEntries(filteredEntries);
 }
+
+Map<String, dynamic> filterSpellGameData(Map<String, dynamic>? data) {
+  return filterGameData(data, (_, __) => true);
+}
