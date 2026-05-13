@@ -41,8 +41,8 @@ class WarCwlPage extends StatelessWidget {
         warCwl != null &&
         player?.warData?.clan?.tag == warCwl.warInfo.clan?.tag &&
         player?.warData?.opponent?.tag == warCwl.warInfo.opponent?.tag;
-    final cwlClan = warCwl?.leagueInfo?.clans
-        .firstWhere((element) => element.tag == clan!.tag);
+    final cwlClan =
+        clan == null ? null : warCwl?.leagueInfo?.getClanDetails(clan.tag);
 
     return Scaffold(
       body: RefreshIndicator(
@@ -112,7 +112,9 @@ class WarCwlPage extends StatelessWidget {
                       currentWarInfo: warCwl.warInfo, clanTag: clan.tag),
                 ),
               )
-            else if (warCwl != null && warCwl.isInCwl == true)
+            else if (warCwl != null &&
+                warCwl.isInCwl == true &&
+                cwlClan != null)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Card(
@@ -132,7 +134,7 @@ class WarCwlPage extends StatelessWidget {
                               builder: (context) => CwlScreen(
                                 clanTag: clan.tag,
                                 warCwl: warCwl,
-                                clanInfo: cwlClan!,
+                                clanInfo: cwlClan,
                               ),
                             ),
                           ),

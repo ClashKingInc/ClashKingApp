@@ -31,8 +31,7 @@ class CwlCardState extends State<CwlCard> {
 
     final clanWarLeague = clanService.getClanByTag(clanTag)?.warLeague?.name;
     final warCwl = warCwlService.getWarCwlByTag(clanTag);
-    final clan = warCwl?.leagueInfo?.clans
-        .firstWhere((element) => element.tag == clanTag);
+    final clan = warCwl?.leagueInfo?.getClanDetails(clanTag);
 
     if (clanWarLeague == null || clan == null) {
       return SizedBox.shrink();
