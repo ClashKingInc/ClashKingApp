@@ -23,8 +23,8 @@ class MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _selectedIndex);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      DeepLinkHandler.tryHandlePendingDeepLink(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await DeepLinkHandler.tryHandlePendingDeepLink(context);
     });
   }
 
@@ -51,7 +51,7 @@ class MyHomePageState extends State<MyHomePage> {
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,
-        children: [
+        children: const [
           DashboardPage(),
           ClanPage(),
           WarCwlPage(),

@@ -34,8 +34,6 @@ class WarCwlPage extends StatelessWidget {
     final hasClan = clan != null && clan.tag.isNotEmpty;
     final isPlayerInWarElsewhere = player?.warData != null;
 
-    // Check if player war is the same as clan's war
-    warCwl?.getActiveWarByTag(clan?.tag ?? "");
     final isPlayerWarSameAsClanWar = isPlayerInWarElsewhere &&
         warCwl != null &&
         player?.warData?.clan?.tag == warCwl.warInfo.clan?.tag &&

@@ -11,8 +11,12 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class AuthService extends ChangeNotifier {
-  final ApiService _apiService = ApiService();
-  final TokenService _tokenService = TokenService();
+  AuthService({ApiService? apiService, TokenService? tokenService})
+      : _apiService = apiService ?? ApiService(),
+        _tokenService = tokenService ?? TokenService();
+
+  final ApiService _apiService;
+  final TokenService _tokenService;
   String? _accessToken;
   bool _isAuthenticated = false;
   User? _currentUser;
@@ -346,7 +350,7 @@ class AuthService extends ChangeNotifier {
 
   Future<void> logout() async {
     await _tokenService.clearTokens();
-    clearPrefs();
+    try { await clearPrefs(); } catch (_) {}
     _isAuthenticated = false;
     _currentUser = null;
     _cocAccounts = null;
@@ -359,7 +363,7 @@ class AuthService extends ChangeNotifier {
 
   Future<void> signOut() async {
     await _tokenService.clearTokens();
-    clearPrefs();
+    try { await clearPrefs(); } catch (_) {}
     _isAuthenticated = false;
     _currentUser = null;
     _cocAccounts = null;
@@ -371,7 +375,7 @@ class AuthService extends ChangeNotifier {
   /// Call this method and then separately call clearAccountData() on CocAccountService
   Future<void> logoutAndClearAllData() async {
     await _tokenService.clearTokens();
-    clearPrefs();
+    try { await clearPrefs(); } catch (_) {}
     _isAuthenticated = false;
     _currentUser = null;
     _cocAccounts = null;
