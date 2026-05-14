@@ -73,77 +73,68 @@ class DashboardPage extends StatelessWidget {
             }
           }
         },
-        child: Consumer<PlayerService>(
-          builder: (context, playerService, child) {
-            final selectedProfile =
-                playerService.getSelectedProfile(cocService);
-
-            if (selectedProfile == null || selectedProfile.tag.isEmpty) {
-              return Center(
+        child: player == null || player.tag.isEmpty
+            ? Center(
                 child: Text(
                   AppLocalizations.of(context)?.authErrorConnectionRelaunch ??
                       "Error, please restart",
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
-              );
-            }
-
-            return ListView(
-              children: <Widget>[
-                LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CreatorCodeCard(),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      if (player?.legendsBySeason != null &&
-                          player!.legendsBySeason!.allSeasons.isNotEmpty) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                PlayerLegendScreen(player: player),
-                          ),
-                        );
-                      }
-                    },
-                    child: PlayerSearchCard(),
+              )
+            : ListView(
+                children: <Widget>[
+                  LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CreatorCodeCard(),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: PlayerCard(),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PlayerLegendScreen(
-                        player: player!,
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (player.legendsBySeason != null &&
+                            player.legendsBySeason!.allSeasons.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PlayerLegendScreen(player: player),
+                            ),
+                          );
+                        }
+                      },
+                      child: PlayerSearchCard(),
                     ),
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: PlayerLegendCard(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: PlayerCard(),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: PlayerToDoCard(),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: PlayerWarStatsCard(),
-                ),
-                const SizedBox(height: 16),
-              ],
-            );
-          },
-        ),
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PlayerLegendScreen(
+                          player: player,
+                        ),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: PlayerLegendCard(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: PlayerToDoCard(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: PlayerWarStatsCard(),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
       ),
     );
   }
