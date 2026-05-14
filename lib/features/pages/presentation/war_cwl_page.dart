@@ -29,8 +29,7 @@ class WarCwlPage extends StatelessWidget {
     final warCwlService = context.watch<WarCwlService>();
     final player = playerService.getSelectedProfile(cocService);
 
-    final clan = clanService.getClanByTag(
-        playerService.getSelectedProfile(cocService)?.clanTag ?? "");
+    final clan = clanService.getClanByTag(player?.clanTag ?? "");
     final warCwl = warCwlService.getWarCwlByTag(clan?.tag ?? "");
     final hasClan = clan != null && clan.tag.isNotEmpty;
     final isPlayerInWarElsewhere = player?.warData != null;

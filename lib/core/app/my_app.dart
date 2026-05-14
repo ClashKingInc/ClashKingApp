@@ -4,12 +4,10 @@ import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/features/auth/presentation/startup_widget.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/services/war_widget_sync_service.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
-import 'package:flutter/foundation.dart';
 
 @pragma("vm:entry-point")
 FutureOr<void> backgroundCallback(Uri? data) async {
@@ -24,10 +22,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Register the background callback for the Home Widget
-    if (!kIsWeb) {
-      HomeWidget.registerInteractivityCallback(backgroundCallback);
-    }
     return Consumer<MyAppState>(
       builder: (context, appState, child) {
         return MaterialApp(

@@ -50,19 +50,19 @@ class PlayerService extends ChangeNotifier {
       notifyListeners();
     }
 
-    DebugUtils.debugApi("🔄 Calling players API with tags: $playerTags");
-    final response = await _apiService.postResponse(
-      '/players',
-      body: {"player_tags": playerTags},
-      requiresAuth: true,
-    );
-
-    DebugUtils.debugApi(
-        "🔄 Players API response status: ${response.statusCode}");
-
     final Map<String, String> clanTagsByPlayer = {};
 
     try {
+      DebugUtils.debugApi("🔄 Calling players API with tags: $playerTags");
+      final response = await _apiService.postResponse(
+        '/players',
+        body: {"player_tags": playerTags},
+        requiresAuth: true,
+      );
+
+      DebugUtils.debugApi(
+          "🔄 Players API response status: ${response.statusCode}");
+
       if (response.statusCode == 200) {
         final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
@@ -76,7 +76,6 @@ class PlayerService extends ChangeNotifier {
                 "🔄 Created player: ${player.name} (${player.tag})");
             if (player.clanOverview.tag.isNotEmpty) {
               clanTagsByPlayer[player.tag] = player.clanOverview.tag;
-              // Cache clan tag for widget use
               storePrefs(
                   'player_${player.tag}_clan_tag', player.clanOverview.tag);
             }
@@ -103,11 +102,11 @@ class PlayerService extends ChangeNotifier {
       if (throwOnError) {
         rethrow;
       }
-    }
-
-    _isLoading = false;
-    if (notify) {
-      notifyListeners();
+    } finally {
+      _isLoading = false;
+      if (notify) {
+        notifyListeners();
+      }
     }
     return clanTagsByPlayer;
   }
@@ -121,16 +120,16 @@ class PlayerService extends ChangeNotifier {
       notifyListeners();
     }
 
-    final response = await _apiService.postResponse(
-      '/players/extended',
-      body: {
-        "player_tags": playerTags,
-        "clan_tags": clanTagsByPlayer,
-      },
-      requiresAuth: true,
-    );
-
     try {
+      final response = await _apiService.postResponse(
+        '/players/extended',
+        body: {
+          "player_tags": playerTags,
+          "clan_tags": clanTagsByPlayer,
+        },
+        requiresAuth: true,
+      );
+
       if (response.statusCode == 200) {
         final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
@@ -168,11 +167,11 @@ class PlayerService extends ChangeNotifier {
       if (throwOnError) {
         rethrow;
       }
-    }
-
-    _isLoading = false;
-    if (notify) {
-      notifyListeners();
+    } finally {
+      _isLoading = false;
+      if (notify) {
+        notifyListeners();
+      }
     }
   }
 

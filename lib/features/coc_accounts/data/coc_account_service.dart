@@ -174,7 +174,7 @@ class CocAccountService extends ChangeNotifier {
     }
   }
 
-  void setSelectedTag(String? tag) async {
+  Future<void> setSelectedTag(String? tag) async {
     final previousTag = _selectedTag;
     _selectedTag = tag;
     selectedTagNotifier.value = tag;
@@ -685,5 +685,11 @@ class CocAccountService extends ChangeNotifier {
       return detail;
     }
     return "Unknown error";
+  }
+
+  @override
+  void dispose() {
+    selectedTagNotifier.dispose();
+    super.dispose();
   }
 }

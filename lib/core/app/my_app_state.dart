@@ -50,7 +50,7 @@ class MyAppState extends ChangeNotifier {
   }
 
 // Load the language from the shared preferences or set to the system locale
-  void _loadLanguage() async {
+  Future<void> _loadLanguage() async {
     String? languageCode = await getPrefs('languageCode');
 
     if (languageCode != null) {
@@ -67,7 +67,7 @@ class MyAppState extends ChangeNotifier {
   }
 
   // Change the language of the app
-  void changeLanguage(Locale locale) async {
+  Future<void> changeLanguage(Locale locale) async {
     _locale = locale;
     await storePrefs('languageCode', locale.languageCode);
     if (locale.countryCode != null) {
@@ -93,7 +93,7 @@ class MyAppState extends ChangeNotifier {
   }
 
   // Update the widgets
-  void updateWidgets() async {
+  Future<void> updateWidgets() async {
     await _warWidgetSyncService.updateWidgets();
   }
 }

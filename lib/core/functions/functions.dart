@@ -14,7 +14,7 @@ Future<void> storePrefs(String name, String token) async {
     await storage.write(key: name, value: token);
   } catch (exception, stackTrace) {
     final hint = Hint.withMap(
-        {'message': 'Error storing prefs', 'name': name, 'token': token});
+        {'message': 'Error storing prefs', 'name': name});
     Sentry.captureException(exception, stackTrace: stackTrace,
         withScope: (scope) {
       scope.setContexts('Storage Context', hint);

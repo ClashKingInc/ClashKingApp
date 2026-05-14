@@ -11,6 +11,7 @@ import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/core/services/war_widget_sync_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/app/my_app.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
@@ -61,7 +62,10 @@ void _initializeDeepLinks() {
   appLinks.uriLinkStream.listen((uri) {
     DebugUtils.debugInfo("🔗 Deep link received (running): $uri");
     DeepLinkHandler.queueDeepLink(uri);
-    unawaited(DeepLinkHandler.tryHandlePendingDeepLink());
+    DeepLinkHandler.tryHandlePendingDeepLink().catchError((err) {
+      DebugUtils.debugError(" Deep link handling error: $err");
+      Sentry.captureException(err);
+    });
   }, onError: (err) {
     DebugUtils.debugError(" Deep link error: $err");
   });
@@ -71,7 +75,10 @@ void _initializeDeepLinks() {
     if (uri != null) {
       DebugUtils.debugInfo("🔗 Initial deep link: $uri");
       DeepLinkHandler.queueDeepLink(uri);
-      unawaited(DeepLinkHandler.tryHandlePendingDeepLink());
+      DeepLinkHandler.tryHandlePendingDeepLink().catchError((err) {
+        DebugUtils.debugError(" Deep link handling error: $err");
+        Sentry.captureException(err);
+      });
     }
   }).catchError((err) {
     DebugUtils.debugError(" Initial deep link error: $err");
@@ -98,6 +105,8 @@ Future<void> main() async {
         Workmanager().initialize(callbackDispatcher);
         // Initialize war widget service for background callbacks
         WarWidgetService.initialize();
+        // Override with the app-level callback (handles widget taps → WarWidgetSyncService)
+        HomeWidget.registerInteractivityCallback(backgroundCallback);
       }
 
       await Future.wait([
