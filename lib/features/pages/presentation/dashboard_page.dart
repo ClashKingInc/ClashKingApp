@@ -18,10 +18,12 @@ import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
 
 class DashboardPage extends StatelessWidget {
+  const DashboardPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final playerService = context.watch<PlayerService>();
-    final clanService = context.watch<ClanService>();
+    final clanService = context.read<ClanService>();
     final warCwlService = context.read<WarCwlService>();
     final cocService = context.watch<CocAccountService>();
     final player = playerService.getSelectedProfile(cocService);

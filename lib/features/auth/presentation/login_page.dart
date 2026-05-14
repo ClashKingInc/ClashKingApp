@@ -18,6 +18,7 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -87,10 +88,12 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     try {
       await authService.signInWithDiscord();
       await _navigateAfterAuth();
-      // Don't set loading to false here - navigation will handle it
     } catch (e) {
-      if (context.mounted) {
+      if (mounted) {
         _handleAuthError(e);
+      }
+    } finally {
+      if (mounted) {
         setState(() => _isLoading = false);
       }
     }
@@ -108,12 +111,9 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         _passwordController.text,
       );
       await _navigateAfterAuth();
-      // Don't set loading to false here - navigation will handle it
     } catch (e) {
       if (mounted) {
-        // Check if the error is due to email not being verified
-        if (e.runtimeType.toString() == 'EmailVerificationRequiredException') {
-          // Navigate to email verification page instead of showing error
+        if (e is EmailVerificationRequiredException) {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => EmailVerificationPage(
@@ -124,6 +124,9 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         } else {
           _handleAuthError(e);
         }
+      }
+    } finally {
+      if (mounted) {
         setState(() => _isLoading = false);
       }
     }
