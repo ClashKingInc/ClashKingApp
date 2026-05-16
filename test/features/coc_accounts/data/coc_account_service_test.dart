@@ -1,7 +1,16 @@
+import 'dart:convert';
+
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+
+import '../../../helpers/fake_services.dart';
 
 void main() {
+  setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+  });
   group('CocAccountService — initial state', () {
     test('starts with empty accounts', () {
       final service = CocAccountService();
@@ -133,6 +142,263 @@ void main() {
       service.setSelectedTag(null);
       expect(service.selectedTag, isNull);
       expect(service.selectedTagNotifier.value, isNull);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // fetchCocAccounts (using FakeApiService)
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — fetchCocAccounts', () {
+    test('populates cocAccounts on 200 response', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
+        jsonEncode({
+          'coc_accounts': [
+            {'player_tag': '#ABC123', 'name': 'TestPlayer'},
+            {'player_tag': '#DEF456', 'name': 'Other'},
+          ]
+        }),
+        200,
+      );
+      final service = CocAccountService(apiService: fakeApi);
+      await service.fetchCocAccounts();
+      expect(service.cocAccounts, hasLength(2));
+      expect(service.cocAccounts.first['player_tag'], '#ABC123');
+    });
+
+    test('sets isLoading to false after success', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
+        jsonEncode({'coc_accounts': []}),
+        200,
+      );
+      final service = CocAccountService(apiService: fakeApi);
+      await service.fetchCocAccounts();
+      expect(service.isLoading, isFalse);
+    });
+
+    test('throws on non-200 and sets isLoading to false', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/users/coc-accounts'] =
+          http.Response('error', 401);
+      final service = CocAccountService(apiService: fakeApi);
+      await expectLater(
+        () => service.fetchCocAccounts(),
+        throwsA(anything),
+      );
+      expect(service.isLoading, isFalse);
+    });
+
+    test('throws FormatException on invalid payload', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
+        jsonEncode({'coc_accounts': 'not-a-list'}),
+        200,
+      );
+      final service = CocAccountService(apiService: fakeApi);
+      await expectLater(
+        () => service.fetchCocAccounts(),
+        throwsA(anything),
+      );
+    });
+
+    test('notifies listeners on success', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
+        jsonEncode({'coc_accounts': []}),
+        200,
+      );
+      final service = CocAccountService(apiService: fakeApi);
+      var notifyCount = 0;
+      service.addListener(() => notifyCount++);
+      await service.fetchCocAccounts();
+      expect(notifyCount, greaterThanOrEqualTo(2)); // loading=true + loading=false
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // addCocAccount (using FakeApiService)
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — addCocAccount', () {
+    test('returns code 200 and account on success', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/users/coc-accounts'] = http.Response(
+        jsonEncode({'account': {'player_tag': '#ABC', 'name': 'Test'}}),
+        200,
+      );
+      final service = CocAccountService(apiService: fakeApi);
+      final result = await service.addCocAccount('#ABC');
+      expect(result['code'], 200);
+      expect(result['account'], isNotNull);
+    });
+
+    test('returns code 401 on UnauthorizedException', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.throwOnPost['/users/coc-accounts'] =
+          UnauthorizedException('not auth');
+      final service = CocAccountService(apiService: fakeApi);
+      final result = await service.addCocAccount('#ABC');
+      expect(result['code'], 401);
+    });
+
+    test('returns code 500 on other errors', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.throwOnPost['/users/coc-accounts'] =
+          Exception('server error');
+      final service = CocAccountService(apiService: fakeApi);
+      final result = await service.addCocAccount('#ABC');
+      expect(result['code'], 500);
+    });
+
+    test('returns code from response for non-200 status', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/users/coc-accounts'] = http.Response(
+        jsonEncode({'detail': 'player not found'}),
+        404,
+      );
+      final service = CocAccountService(apiService: fakeApi);
+      final result = await service.addCocAccount('#NOTFOUND');
+      expect(result['code'], 404);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // addCocAccountWithVerification (using FakeApiService)
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — addCocAccountWithVerification', () {
+    test('returns code 200 on success', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/users/coc-accounts/verified'] = http.Response(
+        jsonEncode({'account': {'player_tag': '#ABC'}}),
+        200,
+      );
+      final service = CocAccountService(apiService: fakeApi);
+      final result =
+          await service.addCocAccountWithVerification('#ABC', 'tok');
+      expect(result['code'], 200);
+    });
+
+    test('returns code 401 on UnauthorizedException', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.throwOnPost['/users/coc-accounts/verified'] =
+          UnauthorizedException('not auth');
+      final service = CocAccountService(apiService: fakeApi);
+      final result =
+          await service.addCocAccountWithVerification('#ABC', 'tok');
+      expect(result['code'], 401);
+    });
+
+    test('returns code 500 on generic error', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.throwOnPost['/users/coc-accounts/verified'] =
+          Exception('oops');
+      final service = CocAccountService(apiService: fakeApi);
+      final result =
+          await service.addCocAccountWithVerification('#ABC', 'tok');
+      expect(result['code'], 500);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // removeCocAccount (using FakeApiService)
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — removeCocAccount', () {
+    test('removes account from list on 200', () async {
+      final fakeApi = FakeApiService();
+      final encodedTag = Uri.encodeComponent('#ABC123');
+      fakeApi.deleteStubs['/users/coc-accounts/$encodedTag'] =
+          http.Response('{}', 200);
+      final service = CocAccountService(apiService: fakeApi);
+      service.addLocalAccount({'player_tag': '#ABC123'});
+      await service.removeCocAccount('#ABC123');
+      expect(service.cocAccounts, isEmpty);
+    });
+
+    test('does not remove account on non-200 response', () async {
+      final fakeApi = FakeApiService();
+      final encodedTag = Uri.encodeComponent('#ABC123');
+      fakeApi.deleteStubs['/users/coc-accounts/$encodedTag'] =
+          http.Response('error', 500);
+      final service = CocAccountService(apiService: fakeApi);
+      service.addLocalAccount({'player_tag': '#ABC123'});
+      await service.removeCocAccount('#ABC123');
+      expect(service.cocAccounts, hasLength(1));
+    });
+
+    test('does not throw on network error', () async {
+      final service =
+          CocAccountService(apiService: NetworkErrorApiService());
+      service.addLocalAccount({'player_tag': '#ERR'});
+      await expectLater(
+        () => service.removeCocAccount('#ERR'),
+        returnsNormally,
+      );
+    });
+
+    test('notifies listeners on successful removal', () async {
+      final fakeApi = FakeApiService();
+      final encodedTag = Uri.encodeComponent('#X');
+      fakeApi.deleteStubs['/users/coc-accounts/$encodedTag'] =
+          http.Response('{}', 200);
+      final service = CocAccountService(apiService: fakeApi);
+      service.addLocalAccount({'player_tag': '#X'});
+      var notified = false;
+      service.addListener(() => notified = true);
+      await service.removeCocAccount('#X');
+      expect(notified, isTrue);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // updateAccountOrder (using FakeApiService)
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — updateAccountOrder', () {
+    test('completes without throwing on 200', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.putStubs['/users/coc-accounts/order'] =
+          http.Response('{}', 200);
+      final service = CocAccountService(apiService: fakeApi);
+      await expectLater(
+        () => service.updateAccountOrder(['#A', '#B']),
+        returnsNormally,
+      );
+    });
+
+    test('completes without throwing on non-200', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.putStubs['/users/coc-accounts/order'] =
+          http.Response('error', 500);
+      final service = CocAccountService(apiService: fakeApi);
+      await expectLater(
+        () => service.updateAccountOrder(['#A']),
+        returnsNormally,
+      );
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // updateRefreshTime
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — updateRefreshTime', () {
+    test('sets lastRefresh to a non-null value', () {
+      final service = CocAccountService();
+      expect(service.lastRefresh, isNull);
+      service.updateRefreshTime();
+      expect(service.lastRefresh, isNotNull);
+    });
+
+    test('notifies listeners', () {
+      final service = CocAccountService();
+      var notified = false;
+      service.addListener(() => notified = true);
+      service.updateRefreshTime();
+      expect(notified, isTrue);
     });
   });
 }

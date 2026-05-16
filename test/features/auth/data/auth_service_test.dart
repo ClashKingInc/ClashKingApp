@@ -1,33 +1,31 @@
-import 'package:clashkingapp/core/services/token_service.dart';
+import 'dart:convert';
+
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 
-// Fake that overrides every platform-channel method so tests run without
-// FlutterSecureStorage / SharedPreferences being available.
-class _FakeTokenService extends TokenService {
-  final String? fakeToken;
-  _FakeTokenService({this.fakeToken});
-
-  @override
-  Future<String?> getAccessToken() async => fakeToken;
-
-  @override
-  Future<void> clearTokens() async {}
-
-  @override
-  Future<void> saveTokens(String accessToken, String refreshToken) async {}
-
-  @override
-  Future<String> getDeviceId() async => 'test-device-id';
-
-  @override
-  Future<String> getDeviceName() async => 'test-device';
-}
+import '../../../helpers/fake_services.dart';
 
 void main() {
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
   });
+
+  // ---------------------------------------------------------------------------
+  // Helper factories
+  // ---------------------------------------------------------------------------
+
+  Map<String, dynamic> userJson({String id = 'u1', String name = 'TestUser'}) =>
+      <String, dynamic>{
+        'user_id': id,
+        'discord_username': name,
+        'avatar_url': '',
+        'auth_methods': <String>['discord'],
+      };
+
+  // ---------------------------------------------------------------------------
+  // initial state
+  // ---------------------------------------------------------------------------
 
   group('AuthService — initial state', () {
     test('starts not authenticated', () {
@@ -51,24 +49,28 @@ void main() {
     });
   });
 
-  group('AuthService — initializeAuth', () {
+  // ---------------------------------------------------------------------------
+  // initializeAuth
+  // ---------------------------------------------------------------------------
+
+  group('AuthService — initializeAuth (no token)', () {
     test('stays not authenticated when no token stored', () async {
       final service =
-          AuthService(tokenService: _FakeTokenService(fakeToken: null));
+          AuthService(tokenService: FakeTokenService(fakeToken: null));
       await service.initializeAuth();
       expect(service.isAuthenticated, isFalse);
     });
 
     test('accessToken remains null when no token stored', () async {
       final service =
-          AuthService(tokenService: _FakeTokenService(fakeToken: null));
+          AuthService(tokenService: FakeTokenService(fakeToken: null));
       await service.initializeAuth();
       expect(service.accessToken, isNull);
     });
 
     test('notifies listeners even when no token stored', () async {
       final service =
-          AuthService(tokenService: _FakeTokenService(fakeToken: null));
+          AuthService(tokenService: FakeTokenService(fakeToken: null));
       var notified = false;
       service.addListener(() => notified = true);
       await service.initializeAuth();
@@ -76,71 +78,331 @@ void main() {
     });
   });
 
+  group('AuthService — initializeAuth (valid token, API success)', () {
+    late FakeApiService fakeApi;
+    late FakeTokenService fakeToken;
+
+    setUp(() {
+      fakeApi = FakeApiService();
+      fakeApi.getStubs['/auth/me'] = http.Response(
+        jsonEncode(userJson()),
+        200,
+      );
+      fakeToken = FakeTokenService(fakeToken: 'header.payload.sig');
+    });
+
+    test('sets isAuthenticated = true', () async {
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await service.initializeAuth();
+      expect(service.isAuthenticated, isTrue);
+    });
+
+    test('populates currentUser.username', () async {
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await service.initializeAuth();
+      expect(service.currentUser?.username, 'TestUser');
+    });
+
+    test('populates accessToken', () async {
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await service.initializeAuth();
+      expect(service.accessToken, isNotNull);
+    });
+
+    test('notifies listeners', () async {
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      var notified = false;
+      service.addListener(() => notified = true);
+      await service.initializeAuth();
+      expect(notified, isTrue);
+    });
+  });
+
+  group('AuthService — initializeAuth (valid token, auth error)', () {
+    test('sets isAuthenticated = false on 401', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/auth/me'] = http.Response('Unauthorized', 401);
+      final fakeToken = FakeTokenService(fakeToken: 'header.payload.sig');
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await expectLater(
+        () => service.initializeAuth(),
+        throwsA(anything),
+      );
+      expect(service.isAuthenticated, isFalse);
+    });
+
+    test('calls clearTokens on auth error', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/auth/me'] = http.Response('Unauthorized', 401);
+      final fakeToken = FakeTokenService(fakeToken: 'header.payload.sig');
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await expectLater(() => service.initializeAuth(), throwsA(anything));
+      expect(fakeToken.clearCalled, isTrue);
+    });
+  });
+
+  group('AuthService — initializeAuth (network error)', () {
+    test('keeps isAuthenticated = true on SocketException', () async {
+      final fakeApi = NetworkErrorApiService();
+      final fakeToken = FakeTokenService(fakeToken: 'header.payload.sig');
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await expectLater(
+        () => service.initializeAuth(),
+        throwsA(anything),
+      );
+      expect(service.isAuthenticated, isTrue);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // signInWithEmail
+  // ---------------------------------------------------------------------------
+
+  group('AuthService — signInWithEmail (success)', () {
+    late FakeApiService fakeApi;
+    late FakeTokenService fakeToken;
+
+    setUp(() {
+      fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/email'] = http.Response(
+        jsonEncode({
+          'access_token': 'acc123',
+          'refresh_token': 'ref123',
+          'user': userJson(),
+        }),
+        200,
+      );
+      fakeToken = FakeTokenService(fakeToken: null);
+    });
+
+    test('sets isAuthenticated = true', () async {
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await service.signInWithEmail('a@b.com', 'pass');
+      expect(service.isAuthenticated, isTrue);
+    });
+
+    test('sets accessToken', () async {
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await service.signInWithEmail('a@b.com', 'pass');
+      expect(service.accessToken, 'acc123');
+    });
+
+    test('populates currentUser', () async {
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await service.signInWithEmail('a@b.com', 'pass');
+      expect(service.currentUser?.username, 'TestUser');
+    });
+
+    test('calls saveTokens', () async {
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await service.signInWithEmail('a@b.com', 'pass');
+      expect(fakeToken.saveTokensCalled, isTrue);
+    });
+
+    test('notifies listeners', () async {
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      var notified = false;
+      service.addListener(() => notified = true);
+      await service.signInWithEmail('a@b.com', 'pass');
+      expect(notified, isTrue);
+    });
+  });
+
+  group('AuthService — signInWithEmail (failure)', () {
+    test('throws Exception on API error', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/email'] =
+          http.Response('Unauthorized', 401);
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      await expectLater(
+        () => service.signInWithEmail('a@b.com', 'wrong'),
+        throwsA(isA<Exception>()),
+      );
+    });
+
+    test('isAuthenticated stays false on failure', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/email'] =
+          http.Response('Unauthorized', 401);
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      try {
+        await service.signInWithEmail('a@b.com', 'wrong');
+      } catch (_) {}
+      expect(service.isAuthenticated, isFalse);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // verifyEmail
+  // ---------------------------------------------------------------------------
+
+  group('AuthService — verifyEmail (success)', () {
+    test('sets isAuthenticated = true', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/verify-email'] = http.Response(
+        jsonEncode({
+          'access_token': 'acc',
+          'refresh_token': 'ref',
+          'user': userJson(),
+        }),
+        200,
+      );
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      await service.verifyEmail('TOKEN123');
+      expect(service.isAuthenticated, isTrue);
+    });
+
+    test('throws on error', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/verify-email'] =
+          http.Response('bad token', 400);
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      await expectLater(
+        () => service.verifyEmail('BAD'),
+        throwsA(isA<Exception>()),
+      );
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // registerWithEmail
+  // ---------------------------------------------------------------------------
+
+  group('AuthService — registerWithEmail', () {
+    test('does not set isAuthenticated', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/register'] = http.Response(
+        jsonEncode({'verification_sent': true}),
+        200,
+      );
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      await service.registerWithEmail('a@b.com', 'pass', 'user');
+      expect(service.isAuthenticated, isFalse);
+    });
+
+    test('returns response map', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/register'] = http.Response(
+        jsonEncode({'verification_sent': true}),
+        200,
+      );
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      final result = await service.registerWithEmail('a@b.com', 'pass', 'u');
+      expect(result['verification_sent'], isTrue);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // signOut
+  // ---------------------------------------------------------------------------
+
   group('AuthService — signOut', () {
     test('isAuthenticated is false after signOut', () async {
-      final service = AuthService(tokenService: _FakeTokenService());
+      final service = AuthService(tokenService: FakeTokenService());
       await service.signOut();
       expect(service.isAuthenticated, isFalse);
     });
 
     test('accessToken is null after signOut', () async {
-      final service = AuthService(tokenService: _FakeTokenService());
+      final service = AuthService(tokenService: FakeTokenService());
       await service.signOut();
       expect(service.accessToken, isNull);
     });
 
     test('currentUser is null after signOut', () async {
-      final service = AuthService(tokenService: _FakeTokenService());
+      final service = AuthService(tokenService: FakeTokenService());
       await service.signOut();
       expect(service.currentUser, isNull);
     });
 
     test('cocAccounts is null after signOut', () async {
-      final service = AuthService(tokenService: _FakeTokenService());
+      final service = AuthService(tokenService: FakeTokenService());
       await service.signOut();
       expect(service.cocAccounts, isNull);
     });
 
     test('notifies listeners on signOut', () async {
-      final service = AuthService(tokenService: _FakeTokenService());
+      final service = AuthService(tokenService: FakeTokenService());
       var notified = false;
       service.addListener(() => notified = true);
       await service.signOut();
       expect(notified, isTrue);
     });
+
+    test('calls clearTokens on signOut', () async {
+      final fakeToken = FakeTokenService();
+      final service = AuthService(tokenService: fakeToken);
+      await service.signOut();
+      expect(fakeToken.clearCalled, isTrue);
+    });
   });
+
+  // ---------------------------------------------------------------------------
+  // logoutAndClearAllData
+  // ---------------------------------------------------------------------------
 
   group('AuthService — logoutAndClearAllData', () {
     test('resets isAuthenticated', () async {
-      final service = AuthService(tokenService: _FakeTokenService());
+      final service = AuthService(tokenService: FakeTokenService());
       await service.logoutAndClearAllData();
       expect(service.isAuthenticated, isFalse);
     });
 
     test('resets accessToken', () async {
-      final service = AuthService(tokenService: _FakeTokenService());
+      final service = AuthService(tokenService: FakeTokenService());
       await service.logoutAndClearAllData();
       expect(service.accessToken, isNull);
     });
 
     test('resets currentUser', () async {
-      final service = AuthService(tokenService: _FakeTokenService());
+      final service = AuthService(tokenService: FakeTokenService());
       await service.logoutAndClearAllData();
       expect(service.currentUser, isNull);
     });
 
     test('resets cocAccounts', () async {
-      final service = AuthService(tokenService: _FakeTokenService());
+      final service = AuthService(tokenService: FakeTokenService());
       await service.logoutAndClearAllData();
       expect(service.cocAccounts, isNull);
     });
 
     test('notifies listeners', () async {
-      final service = AuthService(tokenService: _FakeTokenService());
+      final service = AuthService(tokenService: FakeTokenService());
       var notified = false;
       service.addListener(() => notified = true);
       await service.logoutAndClearAllData();
       expect(notified, isTrue);
+    });
+
+    test('calls clearTokens', () async {
+      final fakeToken = FakeTokenService();
+      final service = AuthService(tokenService: fakeToken);
+      await service.logoutAndClearAllData();
+      expect(fakeToken.clearCalled, isTrue);
     });
   });
 }
