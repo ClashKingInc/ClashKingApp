@@ -33,10 +33,13 @@ class StartupWidgetState extends State<StartupWidget> {
     try {
       await authService.initializeAuth();
     } catch (e) {
-      if (mounted) {
-        _showInitializationFailure(e);
+      if (isNetworkError(e) || isMaintenanceError(e)) {
+        if (mounted) _showInitializationFailure(e);
+        return;
       }
-      return;
+      // Auth failure (expired/revoked session): initializeAuth() already cleared
+      // tokens and set isAuthenticated=false — fall through so _navigateToNextScreen
+      // redirects to LoginPage instead of looping on ErrorPage.
     }
 
     if (!mounted) return;
