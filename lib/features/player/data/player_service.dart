@@ -202,23 +202,46 @@ class PlayerService extends ChangeNotifier {
           DebugUtils.debugApi(
               "🔄 Bulk response data keys: ${data.keys.toList()}");
 
-          // Process player data using the same method as loadApiData
+          // Process player data — merge into _profiles without replacing it.
+          // Calling processBulkPlayerData would reassign _profiles entirely,
+          // losing all other linked accounts. We parse the single player here
+          // and merge it in the same way the fallback path does.
           if (data["players"] != null && data["players_basic"] != null) {
-            // Process the player data using the bulk method
-            processBulkPlayerData(data["players"], data["players_basic"],
-                notify: false);
+            final basicEntry = (data["players_basic"] as List)
+                .whereType<Map<String, dynamic>>()
+                .firstWhere(
+                  (m) => m["tag"] == playerTag,
+                  orElse: () =>
+                      throw Exception("Player not found in bulk response"),
+                );
 
-            // Find the specific player we requested
-            final requestedPlayer = _profiles.firstWhere(
-              (p) => p.tag == playerTag,
-              orElse: () => throw Exception("Player not found in response"),
-            );
+            final requestedPlayer = Player.fromJson(basicEntry);
+            if (requestedPlayer.clanOverview.tag.isNotEmpty) {
+              storePrefs('player_${requestedPlayer.tag}_clan_tag',
+                  requestedPlayer.clanOverview.tag);
+            }
+
+            // Enrich with extended data if present
+            final extendedEntry = (data["players"] as List)
+                .whereType<Map<String, dynamic>>()
+                .firstWhere((m) => m["tag"] == playerTag, orElse: () => {});
+            if (extendedEntry.isNotEmpty) {
+              requestedPlayer.enrichWithFullStats(extendedEntry);
+            }
+
+            // Merge into _profiles — update existing slot or append
+            final existingIndex =
+                _profiles.indexWhere((p) => p.tag == playerTag);
+            if (existingIndex != -1) {
+              _profiles[existingIndex] = requestedPlayer;
+            } else {
+              _profiles.add(requestedPlayer);
+            }
 
             // Load war stats if available in bulk response
             if (data["war_stats"] != null) {
               processBulkWarStats(data["war_stats"], notify: false);
             } else {
-              // Load war stats separately if not in bulk response
               DebugUtils.debugInfo(
                   "🔄 Loading war stats separately for player: $playerTag");
               await loadPlayerWarStats([playerTag], notify: false);
