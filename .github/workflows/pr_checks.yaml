@@ -33,13 +33,14 @@ jobs:
         run: flutter test --coverage
 
       - name: SonarQube scan
-        uses: SonarSource/sonarqube-scan-action@v5
+        uses: SonarSource/sonarqube-scan-action@v7
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
           args: >
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+            -Dsonar.dart.lcov.reportPaths=coverage/lcov.info
 
   android_build:
     runs-on: ubuntu-latest
