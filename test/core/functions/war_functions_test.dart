@@ -1,8 +1,10 @@
 import 'package:clashkingapp/core/functions/war_functions.dart';
 import 'package:clashkingapp/features/clan/models/clan_badge.dart';
+import 'package:clashkingapp/features/clan/models/clan_war_log.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_attack.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 WarMember _memberWithStars(List<int> stars) {
@@ -38,6 +40,36 @@ WarClan _clanWithMembers(List<WarMember> members) {
     members: members,
   );
 }
+
+ClanDetails _clanDetails({int stars = 10, double dest = 80.0}) => ClanDetails(
+      tag: '#CLAN',
+      name: 'Test Clan',
+      badgeUrls: ClanBadgeUrls(small: '', medium: '', large: ''),
+      clanLevel: 10,
+      attacks: 0,
+      stars: stars,
+      destructionPercentage: dest,
+      expEarned: 0,
+    );
+
+WarLogDetails _logDetails({
+  String result = 'win',
+  int teamSize = 15,
+  int attacksPerMember = 2,
+  int clanStars = 10,
+  double clanDest = 80.0,
+  int oppStars = 5,
+  double oppDest = 60.0,
+}) =>
+    WarLogDetails(
+      result: result,
+      clanTag: '#CLAN',
+      endTime: DateTime(2024, 1, 1),
+      teamSize: teamSize,
+      attacksPerMember: attacksPerMember,
+      clan: _clanDetails(stars: clanStars, dest: clanDest),
+      opponent: _clanDetails(stars: oppStars, dest: oppDest),
+    );
 
 void main() {
   setUpAll(() {
@@ -131,6 +163,101 @@ void main() {
       final clan = _clanWithMembers(members);
       expect(getMemberByTag('#P2', clan)!.name, 'Bob');
       expect(getMemberByTag('#P3', clan)!.name, 'Carol');
+    });
+  });
+
+  group('getPlayerNameByTag', () {
+    test('returns name when player is found', () {
+      final players = [PlayerTab('#P1', 'Alice', 14, 1)];
+      expect(getPlayerNameByTag('#P1', players), 'Alice');
+    });
+
+    test("returns 'Inconnu' when player is not found", () {
+      final players = [PlayerTab('#P1', 'Alice', 14, 1)];
+      expect(getPlayerNameByTag('#NOBODY', players), 'Inconnu');
+    });
+
+    test('returns first match when multiple players share a tag', () {
+      final players = [
+        PlayerTab('#P1', 'Alice', 14, 1),
+        PlayerTab('#P2', 'Bob', 13, 2),
+      ];
+      expect(getPlayerNameByTag('#P2', players), 'Bob');
+    });
+  });
+
+  group('getPlayerTownhallByTag', () {
+    test('returns townhall level as string when player is found', () {
+      final players = [PlayerTab('#P1', 'Alice', 15, 1)];
+      expect(getPlayerTownhallByTag('#P1', players), '15');
+    });
+
+    test("returns '0' when player is not found", () {
+      final players = <PlayerTab>[];
+      expect(getPlayerTownhallByTag('#NOBODY', players), '0');
+    });
+  });
+
+  group('getPlayerMapPositionByTag', () {
+    test('returns map position as string when player is found', () {
+      final players = [PlayerTab('#P1', 'Alice', 14, 5)];
+      expect(getPlayerMapPositionByTag('#P1', players), '5');
+    });
+
+    test("returns '0' when player is not found", () {
+      final players = <PlayerTab>[];
+      expect(getPlayerMapPositionByTag('#NOBODY', players), '0');
+    });
+  });
+
+  group('analyzeWarLogs', () {
+    test('returns zeroes for empty list', () {
+      final result = analyzeWarLogs([]);
+      expect(result['totalWins'], '0');
+      expect(result['totalLosses'], '0');
+      expect(result['totalTies'], '0');
+      expect(result['averageMembers'], '0');
+    });
+
+    test('only counts entries with attacksPerMember == 2', () {
+      final logs = [
+        _logDetails(result: 'win', attacksPerMember: 1),
+        _logDetails(result: 'win', attacksPerMember: 2),
+      ];
+      final result = analyzeWarLogs(logs);
+      expect(result['totalWins'], '1');
+    });
+
+    test('counts wins, losses and ties separately', () {
+      final logs = [
+        _logDetails(result: 'win'),
+        _logDetails(result: 'win'),
+        _logDetails(result: 'lose'),
+        _logDetails(result: 'tie'),
+      ];
+      final result = analyzeWarLogs(logs);
+      expect(result['totalWins'], '2');
+      expect(result['totalLosses'], '1');
+      expect(result['totalTies'], '1');
+    });
+
+    test('computes average destruction correctly', () {
+      final logs = [
+        _logDetails(clanDest: 80.0),
+        _logDetails(clanDest: 60.0),
+      ];
+      final result = analyzeWarLogs(logs);
+      expect(result['averageClanDestruction'], '70');
+    });
+
+    test('computes clan stars per member correctly', () {
+      final logs = [
+        _logDetails(clanStars: 30, teamSize: 15),
+        _logDetails(clanStars: 30, teamSize: 15),
+      ];
+      final result = analyzeWarLogs(logs);
+      // 60 stars / 30 members = 2.0
+      expect(result['averageClanStarsPerMember'], '2.0');
     });
   });
 }
