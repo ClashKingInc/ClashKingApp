@@ -51,28 +51,32 @@ class PlayerItemSection extends StatelessWidget {
                     TextSpan(text: title),
                     if (items[0] is! PlayerSuperTroop) ...[
                       const TextSpan(text: ' | '),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: CachedNetworkImage(
+                          imageUrl: ImageAssets.townHall(townHallLevel),
+                          width: 16,
+                          height: 16,
+                        ),
+                      ),
                       TextSpan(
-                        text: '${_formatPercentage(completionPercentage)}%',
+                        text: ' ${_formatPercentage(thPercentage)}%',
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                      if (townHallLevel > 0) ...[
-                        TextSpan(
-                          text: ' (',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                      const TextSpan(text: ' | '),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: CachedNetworkImage(
+                          imageUrl: ImageAssets.townHall(
+                              GameDataService.getMaxTownHallLevel()),
+                          width: 16,
+                          height: 16,
                         ),
-                        WidgetSpan(
-                          alignment: PlaceholderAlignment.middle,
-                          child: CachedNetworkImage(
-                            imageUrl: ImageAssets.townHall(townHallLevel),
-                            width: 16,
-                            height: 16,
-                          ),
-                        ),
-                        TextSpan(
-                          text: ' ${_formatPercentage(thPercentage)}%)',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ],
+                      ),
+                      TextSpan(
+                        text: ' ${_formatPercentage(completionPercentage)}%',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
                     ]
                   ],
                 ),
