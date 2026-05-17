@@ -26,7 +26,7 @@ class WarWidgetSyncService {
   }
 
   Future<void> updateWidgets() async {
-    if (!kIsWeb && Platform.isAndroid) {
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       await updateWarWidget();
     }
   }
