@@ -664,6 +664,21 @@ void main() {
       expect(service.getAccountVerificationStatus('#ABC'), isTrue);
     });
 
+    test('returns false when response is 200 but verified = false', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/users/coc-accounts/%23ABC/verify'] = http.Response(
+        jsonEncode({'verified': false}),
+        200,
+      );
+      final service = CocAccountService(apiService: fakeApi);
+      String? errorMsg;
+      final result = await service.verifyAccount(
+        '#ABC', 'token', (msg) => errorMsg = msg,
+      );
+      expect(result, isFalse);
+      expect(errorMsg, isNull);
+    });
+
     test('returns false and sets error message on 403', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/users/coc-accounts/%23ABC/verify'] =
@@ -677,6 +692,32 @@ void main() {
       expect(errorMsg, contains('Invalid API token'));
     });
 
+    test('returns false and sets error message on 404', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/users/coc-accounts/%23ABC/verify'] =
+          http.Response('Not Found', 404);
+      final service = CocAccountService(apiService: fakeApi);
+      String? errorMsg;
+      final result = await service.verifyAccount(
+        '#ABC', 'token', (msg) => errorMsg = msg,
+      );
+      expect(result, isFalse);
+      expect(errorMsg, contains('not found'));
+    });
+
+    test('returns false and sets error message on generic error', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/users/coc-accounts/%23ABC/verify'] =
+          http.Response('Server Error', 500);
+      final service = CocAccountService(apiService: fakeApi);
+      String? errorMsg;
+      final result = await service.verifyAccount(
+        '#ABC', 'token', (msg) => errorMsg = msg,
+      );
+      expect(result, isFalse);
+      expect(errorMsg, isNotNull);
+    });
+
     test('returns false on UnauthorizedException', () async {
       final fakeApi = FakeApiService();
       fakeApi.throwOnPost['/users/coc-accounts/%23ABC/verify'] =
@@ -688,6 +729,191 @@ void main() {
       );
       expect(result, isFalse);
       expect(errorMsg, isNotNull);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // addAccountWithToken — 200 with full account data
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — addAccountWithToken account data update', () {
+    test('updates account name and TH when account data is present', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/users/coc-accounts/verified'] = http.Response(
+        jsonEncode({
+          'account': {'name': 'Hero', 'townHallLevel': 14},
+        }),
+        200,
+      );
+      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
+        jsonEncode({
+          'coc_accounts': [
+            {'player_tag': '#ABC', 'name': 'Old Name', 'townHallLevel': 10}
+          ]
+        }),
+        200,
+      );
+      final service = CocAccountService(apiService: fakeApi);
+      String? errorMsg;
+      final result = await service.addAccountWithToken(
+        '#ABC', 'token', (msg) => errorMsg = msg,
+      );
+      expect(result, isTrue);
+      expect(errorMsg, isNull);
+      expect(service.cocAccounts.first['name'], 'Hero');
+      expect(service.cocAccounts.first['townHallLevel'], 14);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // _extractErrorMessage branches (via addCocAccount)
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — _extractErrorMessage', () {
+    test('returns message field when present', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/users/coc-accounts'] = http.Response(
+        jsonEncode({'message': 'Custom error message'}),
+        400,
+      );
+      final service = CocAccountService(apiService: fakeApi);
+      final result = await service.addCocAccount('#TAG');
+      expect(result['message'], 'Custom error message');
+    });
+
+    test('returns nested detail.message when present', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/users/coc-accounts'] = http.Response(
+        jsonEncode({'detail': {'message': 'Nested error'}}),
+        400,
+      );
+      final service = CocAccountService(apiService: fakeApi);
+      final result = await service.addCocAccount('#TAG');
+      expect(result['message'], 'Nested error');
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // loadApiData
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — loadApiData', () {
+    PlayerService makePlayer() => PlayerService(apiService: FakeApiService());
+    ClanService makeClan() => ClanService(apiService: FakeApiService());
+    WarCwlService makeWar() => WarCwlService(apiService: FakeApiService());
+
+    test('returns early and does not set lastRefresh when cocAccounts is empty',
+        () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/users/coc-accounts'] =
+          http.Response(jsonEncode({'coc_accounts': []}), 200);
+      final service = CocAccountService(apiService: fakeApi);
+      await service.loadApiData(makePlayer(), makeClan(), makeWar());
+      expect(service.lastRefresh, isNull);
+    });
+
+    test('sets lastRefresh after successful bulk load', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
+        jsonEncode({
+          'coc_accounts': [
+            {'player_tag': '#P1'}
+          ]
+        }),
+        200,
+      );
+      fakeApi.postStubs['/initialization'] =
+          http.Response(jsonEncode({}), 200);
+      final service = CocAccountService(apiService: fakeApi);
+      await service.loadApiData(makePlayer(), makeClan(), makeWar());
+      expect(service.lastRefresh, isNotNull);
+    });
+
+    test('throws when fetchCocAccounts returns 503', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/users/coc-accounts'] = http.Response('error', 503);
+      final service = CocAccountService(apiService: fakeApi);
+      await expectLater(
+        () => service.loadApiData(makePlayer(), makeClan(), makeWar()),
+        throwsA(anything),
+      );
+    });
+
+    test('throws when fetchCocAccounts returns 500', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/users/coc-accounts'] = http.Response('error', 500);
+      final service = CocAccountService(apiService: fakeApi);
+      await expectLater(
+        () => service.loadApiData(makePlayer(), makeClan(), makeWar()),
+        throwsA(anything),
+      );
+    });
+
+    test('rethrows non-503/500 HttpException from fetchCocAccounts', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/users/coc-accounts'] = http.Response('error', 401);
+      final service = CocAccountService(apiService: fakeApi);
+      await expectLater(
+        () => service.loadApiData(makePlayer(), makeClan(), makeWar()),
+        throwsA(anything),
+      );
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // _loadDataWithFallback with non-empty clan tags
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — fallback with clan tags', () {
+    test('executes clan loading path when player has a clan tag', () async {
+      final playerJson = <String, dynamic>{
+        'tag': '#P1',
+        'name': 'Test',
+        'trophies': 1000,
+        'townHallLevel': 14,
+        'clan': {
+          'tag': '#CLAN1',
+          'name': 'Test Clan',
+          'clanLevel': 5,
+          'badgeUrls': {'small': '', 'medium': '', 'large': ''},
+        },
+      };
+      final playerFakeApi = FakeApiService();
+      playerFakeApi.postStubs['/players'] =
+          http.Response(jsonEncode({'items': [playerJson]}), 200);
+      playerFakeApi.postStubs['/war/players/warhits'] =
+          http.Response(jsonEncode({'items': []}), 200);
+
+      final warCwlFakeApi = FakeApiService();
+      warCwlFakeApi.postStubs['/war/war-summary'] =
+          http.Response(jsonEncode({'items': []}), 200);
+
+      // 503 → NullPointerException on response.request!.url → caught → fallback
+      final bulkFakeApi = FakeApiService();
+      bulkFakeApi.postStubs['/initialization'] =
+          http.Response('error', 503);
+
+      final service = CocAccountService(apiService: bulkFakeApi);
+      final playerService = PlayerService(apiService: playerFakeApi);
+      final clanService = ClanService(apiService: FakeApiService());
+      final warCwlService = WarCwlService(apiService: warCwlFakeApi);
+
+      await service.refreshPageData(
+        ['#P1'], playerService, clanService, warCwlService,
+      );
+      expect(service.lastRefresh, isNotNull);
+      expect(playerService.profiles, isNotEmpty);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // dispose
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — dispose', () {
+    test('dispose releases selectedTagNotifier without throwing', () {
+      final service = CocAccountService();
+      expect(() => service.dispose(), returnsNormally);
     });
   });
 }
