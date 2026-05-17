@@ -476,5 +476,218 @@ void main() {
       );
       expect(service.lastRefresh, isNotNull);
     });
+
+    test('links clan data when clan_tags is populated', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/initialization'] = http.Response(
+        jsonEncode({
+          'players': [{'tag': '#P1', 'name': 'Test', 'townHallLevel': 15}],
+          'players_basic': [],
+          'clans': {
+            'clan_details': {
+              '#CLAN1': {'tag': '#CLAN1', 'name': 'Alpha'}
+            }
+          },
+          'clan_tags': ['#CLAN1'],
+          'war_stats': null,
+        }),
+        200,
+      );
+      final playerService = PlayerService(apiService: FakeApiService());
+      final clanService = ClanService(apiService: FakeApiService());
+      final service = CocAccountService(apiService: fakeApi);
+      await service.refreshPageData(
+        ['#P1'], playerService, clanService, makeWar(),
+      );
+      expect(clanService.clans.containsKey('#CLAN1'), isTrue);
+      expect(service.lastRefresh, isNotNull);
+    });
+
+    test('fallback path still sets lastRefresh on 503', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/initialization'] =
+          http.Response('error', 503);
+      // Fallback endpoints default to 200 {} in FakeApiService
+      final service = CocAccountService(apiService: fakeApi);
+      await service.refreshPageData(
+        ['#P1'], makePlayer(), makeClan(), makeWar(),
+      );
+      expect(service.lastRefresh, isNotNull);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // updateAccountVerificationStatus
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — updateAccountVerificationStatus', () {
+    test('sets is_verified to true on matching account', () {
+      final service = CocAccountService();
+      service.addLocalAccount({'player_tag': '#ABC', 'is_verified': false});
+      service.updateAccountVerificationStatus('#ABC', true);
+      expect(service.cocAccounts.first['is_verified'], isTrue);
+    });
+
+    test('does nothing for unknown tag', () {
+      final service = CocAccountService();
+      service.addLocalAccount({'player_tag': '#ABC', 'is_verified': false});
+      expect(
+        () => service.updateAccountVerificationStatus('#UNKNOWN', true),
+        returnsNormally,
+      );
+      expect(service.cocAccounts.first['is_verified'], isFalse);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // getAccountVerificationStatus
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — getAccountVerificationStatus', () {
+    test('returns true after setting verification status', () {
+      final service = CocAccountService();
+      service.addLocalAccount({'player_tag': '#ABC', 'is_verified': false});
+      service.updateAccountVerificationStatus('#ABC', true);
+      expect(service.getAccountVerificationStatus('#ABC'), isTrue);
+    });
+
+    test('returns false when tag is not present', () {
+      final service = CocAccountService();
+      expect(service.getAccountVerificationStatus('#GHOST'), isFalse);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // clearAccounts
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — clearAccounts', () {
+    test('clears all accounts and resets state', () {
+      final service = CocAccountService();
+      service.addLocalAccount({'player_tag': '#X'});
+      service.clearAccounts();
+      expect(service.cocAccounts, isEmpty);
+      expect(service.selectedTag, isNull);
+      expect(service.isLoading, isFalse);
+    });
+
+    test('notifies listeners', () {
+      final service = CocAccountService();
+      var notified = false;
+      service.addListener(() => notified = true);
+      service.clearAccounts();
+      expect(notified, isTrue);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // addAccountWithToken
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — addAccountWithToken', () {
+    test('returns true on 200 response', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/users/coc-accounts/verified'] = http.Response(
+        jsonEncode({'account': null}),
+        200,
+      );
+      fakeApi.getStubs['/users/coc-accounts'] =
+          http.Response(jsonEncode({'coc_accounts': []}), 200);
+      final service = CocAccountService(apiService: fakeApi);
+      String? errorMsg;
+      final result = await service.addAccountWithToken(
+        '#ABC', 'token123', (msg) => errorMsg = msg,
+      );
+      expect(result, isTrue);
+      expect(errorMsg, isNull);
+    });
+
+    test('returns false and sets error message on 403', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/users/coc-accounts/verified'] =
+          http.Response('Forbidden', 403);
+      final service = CocAccountService(apiService: fakeApi);
+      String? errorMsg;
+      final result = await service.addAccountWithToken(
+        '#ABC', 'bad_token', (msg) => errorMsg = msg,
+      );
+      expect(result, isFalse);
+      expect(errorMsg, contains('Invalid API token'));
+    });
+
+    test('returns false on UnauthorizedException', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.throwOnPost['/users/coc-accounts/verified'] =
+          UnauthorizedException('unauthorized');
+      final service = CocAccountService(apiService: fakeApi);
+      String? errorMsg;
+      final result = await service.addAccountWithToken(
+        '#ABC', 'token', (msg) => errorMsg = msg,
+      );
+      expect(result, isFalse);
+      expect(errorMsg, isNotNull);
+    });
+
+    test('returns false on generic exception', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.throwOnPost['/users/coc-accounts/verified'] =
+          Exception('boom');
+      final service = CocAccountService(apiService: fakeApi);
+      String? errorMsg;
+      final result = await service.addAccountWithToken(
+        '#ABC', 'token', (msg) => errorMsg = msg,
+      );
+      expect(result, isFalse);
+      expect(errorMsg, contains('Failed to add account'));
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // verifyAccount
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — verifyAccount', () {
+    test('returns true when response is 200 and verified = true', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/users/coc-accounts/%23ABC/verify'] = http.Response(
+        jsonEncode({'verified': true}),
+        200,
+      );
+      final service = CocAccountService(apiService: fakeApi);
+      service.addLocalAccount({'player_tag': '#ABC'});
+      String? errorMsg;
+      final result = await service.verifyAccount(
+        '#ABC', 'token', (msg) => errorMsg = msg,
+      );
+      expect(result, isTrue);
+      expect(errorMsg, isNull);
+      expect(service.getAccountVerificationStatus('#ABC'), isTrue);
+    });
+
+    test('returns false and sets error message on 403', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/users/coc-accounts/%23ABC/verify'] =
+          http.Response('Forbidden', 403);
+      final service = CocAccountService(apiService: fakeApi);
+      String? errorMsg;
+      final result = await service.verifyAccount(
+        '#ABC', 'bad_token', (msg) => errorMsg = msg,
+      );
+      expect(result, isFalse);
+      expect(errorMsg, contains('Invalid API token'));
+    });
+
+    test('returns false on UnauthorizedException', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.throwOnPost['/users/coc-accounts/%23ABC/verify'] =
+          UnauthorizedException('unauthorized');
+      final service = CocAccountService(apiService: fakeApi);
+      String? errorMsg;
+      final result = await service.verifyAccount(
+        '#ABC', 'token', (msg) => errorMsg = msg,
+      );
+      expect(result, isFalse);
+      expect(errorMsg, isNotNull);
+    });
   });
 }
