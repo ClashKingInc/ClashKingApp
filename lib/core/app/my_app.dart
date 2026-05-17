@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/services/war_widget_sync_service.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 @pragma("vm:entry-point")
 FutureOr<void> backgroundCallback(Uri? data) async {
@@ -217,6 +218,7 @@ class MyApp extends StatelessWidget {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           navigatorKey: globalNavigatorKey,
+          navigatorObservers: [SentryNavigatorObserver()],
           title: 'ClashKing',
           darkTheme: darkTheme,
           theme: lightTheme,
