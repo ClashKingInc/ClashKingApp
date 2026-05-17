@@ -2117,5 +2117,12 @@
         "description": "Error details"
       }
     }
-  }
+  },
+  "gameItemHousingSpace": "Housing Space",
+  "gameItemAttackSpeed": "Attack Speed",
+  "gameItemAttackRange": "Attack Range",
+  "gameItemMovementSpeed": "Movement Speed",
+  "gameItemUpgradeResource": "Upgrade Resource",
+  "gameItemRarity": "Rarity",
+  "gameItemHero": "Hero"
 }

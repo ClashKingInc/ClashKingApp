@@ -1,4 +1,5 @@
-What’s new
+﻿What’s new
+- Tapping a troop, spell, hero, equipment or pet now shows a detailed popup with description and stats (housing space, attack speed, range, movement speed, upgrade resource, hero and rarity for equipment)
 - Player league chips now show the league name instead of raw trophy counts
 - Player item icons now resolve directly from ClashKing assets instead of app-data image URLs
 - Seasonal event troops and spells are now hidden consistently in player progression lists

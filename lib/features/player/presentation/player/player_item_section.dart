@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/features/player/models/player_item.dart';
 import 'package:clashkingapp/features/player/models/player_super_troop.dart';
 import 'package:clashkingapp/features/player/models/player_equipment.dart';
+import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -176,6 +177,15 @@ class PlayerItemSection extends StatelessWidget {
 
   void _showItemDialog(BuildContext context, PlayerItem item) {
     final isSuperTroop = item is PlayerSuperTroop;
+    final isEquipment = item is PlayerEquipment;
+    final l10n = AppLocalizations.of(context)!;
+    final meta = item.meta;
+    final description = meta != null
+        ? GameDataService.localizedInfoForItem(meta)
+        : null;
+    final localizedName = meta != null
+        ? GameDataService.localizedNameForItem(meta)
+        : item.name;
 
     showDialog(
       context: context,
@@ -184,38 +194,191 @@ class PlayerItemSection extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: item.imageUrl,
-                  width: 80,
-                  height: 80,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.75,
+            ),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CachedNetworkImage(
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                      imageUrl: item.imageUrl,
+                      width: 80,
+                      height: 80,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      localizedName,
+                      style: Theme.of(context).textTheme.titleLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      isSuperTroop
+                          ? (item.superTroopIsActive
+                              ? l10n.generalActive
+                              : l10n.generalInactive)
+                          : l10n.gameLevel(item.level, item.maxLevel),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    if (description != null && description.isNotEmpty) ...[
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Divider(height: 1),
+                      ),
+                      Text(
+                        description,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withAlpha(200),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                    if (meta != null && !isSuperTroop) ...[
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Divider(height: 1),
+                      ),
+                      if (isEquipment) ...[
+                        if (meta['hero'] != null)
+                          _buildStatRow(
+                            context,
+                            icon: Icons.person,
+                            label: l10n.gameItemHero,
+                            value: meta['hero'].toString(),
+                          ),
+                        if (meta['rarity_label'] != null)
+                          _buildRarityRow(context, l10n, meta),
+                      ] else ...[
+                        if (meta['housing_space'] != null)
+                          _buildStatRow(
+                            context,
+                            icon: Icons.home_outlined,
+                            label: l10n.gameItemHousingSpace,
+                            value: meta['housing_space'].toString(),
+                          ),
+                        if (meta['attack_speed'] != null)
+                          _buildStatRow(
+                            context,
+                            icon: Icons.speed_outlined,
+                            label: l10n.gameItemAttackSpeed,
+                            value:
+                                '${((meta['attack_speed'] as num) / 1000).toStringAsFixed(1)}s',
+                          ),
+                        if (meta['attack_range'] != null)
+                          _buildStatRow(
+                            context,
+                            icon: Icons.my_location_outlined,
+                            label: l10n.gameItemAttackRange,
+                            value: meta['attack_range'].toString(),
+                          ),
+                        if (meta['movement_speed'] != null)
+                          _buildStatRow(
+                            context,
+                            icon: Icons.directions_run_outlined,
+                            label: l10n.gameItemMovementSpeed,
+                            value: meta['movement_speed'].toString(),
+                          ),
+                        if (meta['upgrade_resource'] != null)
+                          _buildStatRow(
+                            context,
+                            icon: Icons.water_drop_outlined,
+                            label: l10n.gameItemUpgradeResource,
+                            value: meta['upgrade_resource'].toString(),
+                          ),
+                      ],
+                    ],
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(l10n.generalOk),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  item.name,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  isSuperTroop
-                      ? (item.superTroopIsActive
-                          ? AppLocalizations.of(context)!.generalActive
-                          : AppLocalizations.of(context)!.generalInactive)
-                      : AppLocalizations.of(context)
-                              ?.gameLevel(item.level, item.maxLevel) ??
-                          "Level: ${item.level}/${item.maxLevel}",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
+              ),
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildStatRow(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(
+        children: [
+          Icon(icon, size: 16, color: Theme.of(context).colorScheme.primary),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRarityRow(
+    BuildContext context,
+    AppLocalizations l10n,
+    Map<String, dynamic> meta,
+  ) {
+    final rarityLabel = meta['rarity_label']?.toString() ?? '';
+    final isEpic = meta['rarity']?.toString() == '2';
+    final color = isEpic ? Colors.purple : Colors.blue;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(
+        children: [
+          Icon(Icons.diamond_outlined,
+              size: 16, color: Theme.of(context).colorScheme.primary),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              l10n.gameItemRarity,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            decoration: BoxDecoration(
+              color: color.withAlpha(40),
+              border: Border.all(color: color, width: 1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              rarityLabel,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: color,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

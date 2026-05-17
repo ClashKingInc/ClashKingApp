@@ -13,6 +13,7 @@ class PlayerHero extends PlayerItem {
     required this.village,
     required this.equipment,
     required super.isUnlocked,
+    super.meta,
   }) : super(
           type: 'hero',
           imageUrl: ImageAssets.getHeroImage(name),
@@ -44,6 +45,7 @@ class PlayerHero extends PlayerItem {
       level: level,
       maxLevel: maxLevel,
       isUnlocked: isUnlocked,
+      meta: meta,
       equipment: rawJson?['equipment'] != null
           ? List<PlayerEquipedEquipment>.from(rawJson!['equipment']
               .map((x) => PlayerEquipedEquipment.fromJson(x)))

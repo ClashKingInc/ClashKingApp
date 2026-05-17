@@ -8,7 +8,8 @@ class PlayerPet extends PlayerItem {
       {required super.name,
       required super.level,
       required super.maxLevel,
-      required this.village})
+      required this.village,
+      super.meta})
       : super(
           isUnlocked: true,
           type: 'pet',
@@ -36,6 +37,7 @@ class PlayerPet extends PlayerItem {
       level: level,
       maxLevel: maxLevel,
       village: meta?['village'] ?? 'home',
+      meta: meta,
     );
   }
 }
