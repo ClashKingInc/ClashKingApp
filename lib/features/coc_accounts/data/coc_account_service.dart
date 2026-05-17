@@ -13,6 +13,7 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class CocAccountService extends ChangeNotifier {
   static const Duration _initializationTimeout = Duration(seconds: 30);
+  static const String _msgNotAuthenticated = 'User not authenticated';
 
   CocAccountService({ApiService? apiService})
       : _apiService = apiService ?? ApiService();
@@ -100,7 +101,7 @@ class CocAccountService extends ChangeNotifier {
                 : null)
       };
     } on UnauthorizedException {
-      return {"code": 401, "message": "User not authenticated"};
+      return {"code": 401, "message": _msgNotAuthenticated};
     } catch (e) {
       return {"code": 500, "message": "Internal server error"};
     }
@@ -129,7 +130,7 @@ class CocAccountService extends ChangeNotifier {
         "account": response.statusCode == 200 ? data["account"] : null
       };
     } on UnauthorizedException {
-      return {"code": 401, "message": "User not authenticated"};
+      return {"code": 401, "message": _msgNotAuthenticated};
     } catch (e) {
       return {"code": 500, "message": "Internal server error"};
     }
@@ -596,7 +597,7 @@ class CocAccountService extends ChangeNotifier {
 
       return false;
     } on UnauthorizedException {
-      updateErrorMessage("User not authenticated");
+      updateErrorMessage(_msgNotAuthenticated);
       return false;
     } catch (e) {
       updateErrorMessage("Failed to add account: $e");
@@ -634,7 +635,7 @@ class CocAccountService extends ChangeNotifier {
 
       return false;
     } on UnauthorizedException {
-      updateErrorMessage("User not authenticated");
+      updateErrorMessage(_msgNotAuthenticated);
       return false;
     } catch (e) {
       updateErrorMessage("Verification failed: $e");
@@ -693,3 +694,4 @@ class CocAccountService extends ChangeNotifier {
     super.dispose();
   }
 }
+

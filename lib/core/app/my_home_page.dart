@@ -9,7 +9,7 @@ import 'package:clashkingapp/common/widgets/app_bar/app_bar.dart';
 import '../../features/pages/presentation/clan_page.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({super.key});
+  const MyHomePage({super.key});
 
   @override
   MyHomePageState createState() => MyHomePageState();

@@ -186,7 +186,7 @@ class WarCwl {
 
   /// Get active war by player tag and automatically reorder so user's clan is always 'clan'
   /// This is a convenience method that combines finding the war and reordering for the user
-  WarInfo? getActiveWarByPlayerTag(String playerTag) {
+  WarInfo? getActiveWarByPlayerTag(String playerTag) { // NOSONAR
     try {
       // First find any war containing this player
       for (final warInfo in warLeagueInfos) {

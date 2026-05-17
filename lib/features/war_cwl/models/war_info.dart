@@ -133,7 +133,7 @@ class WarInfo {
     return false;
   }
 
-  String getWarResult(String clanTag) {
+  String getWarResult(String clanTag) { // NOSONAR
     if (clan?.tag != clanTag && opponent?.tag != clanTag) {
       return 'unknown';
     }

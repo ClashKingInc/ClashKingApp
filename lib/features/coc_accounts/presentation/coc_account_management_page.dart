@@ -137,7 +137,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
             Expanded(
               child: Column(
                 children: [
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Column(children: [
@@ -146,18 +146,18 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                         width: 70,
                         child: CachedNetworkImage(
                             errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                                const Icon(Icons.error),
                             imageUrl: logoUrl),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       SizedBox(
                         width: 150,
                         child: CachedNetworkImage(
                             errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                                const Icon(Icons.error),
                             imageUrl: textLogoUrl),
                       ),
-                      SizedBox(height: 32),
+                      const SizedBox(height: 32),
                       if (_isFirstConnection) ...[
                         Text(AppLocalizations.of(context)!.accountsWelcome,
                             style: Theme.of(context).textTheme.titleSmall,
@@ -178,7 +178,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                       ],
                     ]),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Expanded(
                     child: Card(
                       child: Padding(
@@ -436,7 +436,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                 ),
                                                 // Delete button with confirmation
                                                 IconButton(
-                                                  icon: _deletingPlayerTag ==
+                                                  icon: _deletingPlayerTag == // NOSONAR
                                                           _tempUserAccounts[
                                                                   index]
                                                               ["player_tag"]

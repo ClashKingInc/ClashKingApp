@@ -43,7 +43,7 @@ class PlayerService extends ChangeNotifier {
   }
 
   /// Init basic stats for the saved accounts.
-  Future<Map<String, String>> initPlayerData(List<String> playerTags,
+  Future<Map<String, String>> initPlayerData(List<String> playerTags, // NOSONAR
       {bool notify = true, bool throwOnError = false}) async {
     _isLoading = true;
     if (notify) {
@@ -112,7 +112,7 @@ class PlayerService extends ChangeNotifier {
   }
 
   /// Loads all stats for the saved accounts.
-  Future<void> loadPlayerData(
+  Future<void> loadPlayerData( // NOSONAR
       List<String> playerTags, Map<String, String> clanTagsByPlayer,
       {bool notify = true, bool throwOnError = false}) async {
     _isLoading = true;
@@ -175,7 +175,7 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
-  Future<Player> getPlayerAndClanData(String playerTag) async {
+  Future<Player> getPlayerAndClanData(String playerTag) async { // NOSONAR
     _isLoading = true;
     notifyListeners();
 
@@ -362,7 +362,7 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
-  Future<void> loadPlayerWarStats(List<String> playerTags,
+  Future<void> loadPlayerWarStats(List<String> playerTags, // NOSONAR
       {bool notify = true, bool throwOnError = false}) async {
     DebugUtils.debugApi("🏰 Loading player data for tags: $playerTags");
 

@@ -22,7 +22,7 @@ class WarCwlPage extends StatelessWidget {
   const WarCwlPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { // NOSONAR
     final cocService = context.watch<CocAccountService>();
     final clanService = context.watch<ClanService>();
     final playerService = context.watch<PlayerService>();

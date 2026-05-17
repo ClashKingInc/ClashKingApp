@@ -70,7 +70,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                         width: 50,
                         child: CachedNetworkImage(
                             errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                                const Icon(Icons.error),
                             imageUrl: widget.clan['badgeUrls']['medium']),
                       ),
                     ),
@@ -94,7 +94,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                                       .containsKey('countryCode'))
                               ? CachedNetworkImage(
                                   errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
+                                      const Icon(Icons.error),
                                   imageUrl: ImageAssets.flag(widget
                                       .clan['location']['countryCode']
                                       .toLowerCase()),
@@ -103,7 +103,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                           SizedBox(width: 8),
                           CachedNetworkImage(
                             errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                                const Icon(Icons.error),
                             width: 20,
                             imageUrl: ImageAssets.getLeagueImage(
                                 widget.clan['warLeague']['name'] ?? 'Unranked'),
@@ -140,7 +140,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                                   backgroundColor: Colors.transparent,
                                   child: CachedNetworkImage(
                                       errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
+                                          const Icon(Icons.error),
                                       imageUrl: ImageAssets.trophies),
                                 ),
                                 label: Text(
@@ -163,3 +163,4 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
     );
   }
 }
+

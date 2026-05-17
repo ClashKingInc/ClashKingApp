@@ -3,6 +3,9 @@ import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class WarClan {
+  static const String _noTag = 'No tag';
+  static const String _noName = 'No name';
+
   final String tag;
   final String name;
   final ClanBadgeUrls badgeUrls;
@@ -28,8 +31,8 @@ class WarClan {
       final data = json ?? const <String, dynamic>{};
 
       return WarClan(
-        tag: data['tag']?.toString() ?? 'No tag',
-        name: data['name']?.toString() ?? 'No name',
+        tag: data['tag']?.toString() ?? _noTag,
+        name: data['name']?.toString() ?? _noName,
         badgeUrls: ClanBadgeUrls.fromJson(_asMap(data['badgeUrls'])),
         clanLevel: (data['clanLevel'] as num?)?.toInt() ?? 0,
         attacks: (data['attacks'] as num?)?.toInt() ?? 0,
@@ -45,8 +48,8 @@ class WarClan {
     } catch (e) {
       DebugUtils.debugError(" Error parsing WarClan: $e");
       return WarClan(
-        tag: 'No tag',
-        name: 'No name',
+        tag: _noTag,
+        name: _noName,
         badgeUrls: ClanBadgeUrls(
           small: 'No small',
           medium: 'No medium',
@@ -63,8 +66,8 @@ class WarClan {
 
   factory WarClan.empty() {
     return WarClan(
-      tag: 'No tag',
-      name: 'No name',
+      tag: _noTag,
+      name: _noName,
       badgeUrls: ClanBadgeUrls(
         small: 'No small',
         medium: 'No medium',
@@ -121,3 +124,4 @@ Map<String, dynamic>? _asMap(dynamic value) {
   }
   return null;
 }
+

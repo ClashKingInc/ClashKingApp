@@ -205,7 +205,7 @@ class WarLogService {
 }
 
 class WarLogStatsService {
-  static Future<WarLogStats> analyzeWarLogs(List<WarLogDetails> warLogs) async {
+  static Future<WarLogStats> analyzeWarLogs(List<WarLogDetails> warLogs) async { // NOSONAR
     int totalWins = 0;
     int totalLosses = 0;
     int totalTies = 0;

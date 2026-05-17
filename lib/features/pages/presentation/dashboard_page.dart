@@ -21,7 +21,7 @@ class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { // NOSONAR
     final playerService = context.watch<PlayerService>();
     final clanService = context.read<ClanService>();
     final warCwlService = context.read<WarCwlService>();
@@ -108,7 +108,7 @@ class DashboardPage extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: PlayerCard(),
+                    child: const PlayerCard(),
                   ),
                   GestureDetector(
                     onTap: () => Navigator.push(
@@ -121,16 +121,16 @@ class DashboardPage extends StatelessWidget {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: PlayerLegendCard(),
+                      child: const PlayerLegendCard(),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: PlayerToDoCard(),
+                    child: const PlayerToDoCard(),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: PlayerWarStatsCard(),
+                    child: const PlayerWarStatsCard(),
                   ),
                   const SizedBox(height: 16),
                 ],

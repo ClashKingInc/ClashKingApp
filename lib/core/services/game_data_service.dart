@@ -18,8 +18,8 @@ class GameDataService {
   static Map<String, dynamic> _leagueData = {};
   static Map<String, dynamic> _playerLeagueData = {};
   static Map<String, dynamic> _gameData = {};
-  static Map<String, dynamic> _bundleData = {};
-  static Map<String, String> _translationsData = {};
+  static final Map<String, dynamic> _bundleData = {};
+  static final Map<String, String> _translationsData = {};
   static String _translationLocale = 'EN';
 
   static Future<void> loadGameData({Locale? locale}) async {

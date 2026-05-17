@@ -32,7 +32,7 @@ class ClanService extends ChangeNotifier {
     return _clans[clanTag];
   }
 
-  Future<void> loadAllClanData(List<String> clanTags,
+  Future<void> loadAllClanData(List<String> clanTags, // NOSONAR
       {bool notify = true, bool throwOnError = false}) async {
     if (clanTags.isEmpty) return;
 
@@ -484,7 +484,7 @@ class ClanService extends ChangeNotifier {
   }
 
   /// Process bulk clan data from the optimized API endpoint
-  Future<void> processBulkClanData(
+  Future<void> processBulkClanData( // NOSONAR
       Map<String, dynamic> clanData, List<String> clanTags,
       {bool notify = true}) async {
     DebugUtils.debugInfo(

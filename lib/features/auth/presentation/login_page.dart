@@ -218,7 +218,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 20,
-                            offset: Offset(0, 8),
+                            offset: const Offset(0, 8),
                             spreadRadius: -4,
                           ),
                         ],
@@ -267,7 +267,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           // Tab Content
                           Container(
                             height: 320,
-                            padding: EdgeInsets.fromLTRB(20, 8, 20, 16),
+                            padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
                             child: TabBarView(
                               controller: _tabController,
                               children: [

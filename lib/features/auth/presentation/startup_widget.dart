@@ -73,7 +73,7 @@ class StartupWidgetState extends State<StartupWidget> {
 
     if (isMaintenanceError(error)) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => MaintenanceScreen()),
+        MaterialPageRoute(builder: (context) => const MaintenanceScreen()),
       );
       return;
     }
