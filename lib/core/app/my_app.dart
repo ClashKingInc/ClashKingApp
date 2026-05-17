@@ -21,22 +21,22 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   static final ThemeData darkTheme = ThemeData(
-    scaffoldBackgroundColor: Color.fromARGB(255, 61, 60, 60),
+    scaffoldBackgroundColor: const Color.fromARGB(255, 61, 60, 60),
     datePickerTheme: DatePickerThemeData(
-      backgroundColor: Color.fromARGB(255, 61, 60, 60),
+      backgroundColor: const Color.fromARGB(255, 61, 60, 60),
       surfaceTintColor: Colors.transparent,
       headerForegroundColor: Colors.white,
-      headerBackgroundColor: Color(0xFFD90709),
+      headerBackgroundColor: const Color(0xFFD90709),
       dayForegroundColor: WidgetStateProperty.all(Colors.white),
       yearForegroundColor: WidgetStateProperty.all(Colors.white),
       todayForegroundColor: WidgetStateProperty.all(Colors.white),
     ),
     cardTheme: CardThemeData(
       surfaceTintColor: Colors.transparent,
-      color: Color.fromARGB(255, 31, 31, 31).withValues(alpha: 1.0),
+      color: const Color.fromARGB(255, 31, 31, 31).withValues(alpha: 1.0),
       elevation: 2.0,
     ),
-    snackBarTheme: SnackBarThemeData(
+    snackBarTheme: const SnackBarThemeData(
       backgroundColor: Color.fromARGB(255, 31, 31, 31),
       contentTextStyle: TextStyle(
         color: Colors.white,
@@ -46,12 +46,12 @@ class MyApp extends StatelessWidget {
     canvasColor: Colors.transparent,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFFD90709),
+        backgroundColor: const Color(0xFFD90709),
         foregroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         elevation: 5,
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           color: Colors.white,
           fontSize: 16,
           fontFamily: 'Roboto',
@@ -65,18 +65,18 @@ class MyApp extends StatelessWidget {
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
+        borderSide: const BorderSide(
           color: Color.fromARGB(255, 2, 108, 194),
           width: 2,
         ),
       ),
-      contentPadding: EdgeInsets.all(8),
-      labelStyle: TextStyle(
+      contentPadding: const EdgeInsets.all(8),
+      labelStyle: const TextStyle(
         fontSize: 16,
         color: Color(0xFFFFFFFF),
         decorationColor: Color(0xFFD90709),
       ),
-      hintStyle: TextStyle(
+      hintStyle: const TextStyle(
         backgroundColor: Colors.transparent,
         fontSize: 16,
         color: Colors.grey,
@@ -84,20 +84,20 @@ class MyApp extends StatelessWidget {
       ),
     ),
     colorScheme: ColorScheme.fromSeed(
-      seedColor: Color.fromARGB(255, 31, 31, 31),
-      primary: Color(0xFFD90709),
-      secondary: Color.fromARGB(255, 2, 108, 194),
+      seedColor: const Color.fromARGB(255, 31, 31, 31),
+      primary: const Color(0xFFD90709),
+      secondary: const Color.fromARGB(255, 2, 108, 194),
       tertiary: Colors.grey,
-      surface: Color.fromARGB(255, 31, 31, 31),
-      error: Color.fromARGB(255, 255, 0, 0),
-      onPrimary: Color(0xFFFFFFFF),
-      onSecondary: Color(0xFFFFFFFF),
-      onSurface: Color(0xFFFFFFFF),
-      onError: Color(0xFFFFFFFF),
+      surface: const Color.fromARGB(255, 31, 31, 31),
+      error: const Color.fromARGB(255, 255, 0, 0),
+      onPrimary: const Color(0xFFFFFFFF),
+      onSecondary: const Color(0xFFFFFFFF),
+      onSurface: const Color(0xFFFFFFFF),
+      onError: const Color(0xFFFFFFFF),
       brightness: Brightness.dark,
     ),
     brightness: Brightness.dark,
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
       bodyMedium: TextStyle(color: Colors.white, fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
       bodySmall: TextStyle(color: Colors.white, fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
@@ -112,22 +112,22 @@ class MyApp extends StatelessWidget {
 
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    scaffoldBackgroundColor: Color.fromARGB(255, 244, 244, 244),
+    scaffoldBackgroundColor: const Color.fromARGB(255, 244, 244, 244),
     datePickerTheme: DatePickerThemeData(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.transparent,
       headerForegroundColor: Colors.white,
-      headerBackgroundColor: Color(0xFFBF0000),
+      headerBackgroundColor: const Color(0xFFBF0000),
       dayForegroundColor: WidgetStateProperty.all(Colors.black),
       yearForegroundColor: WidgetStateProperty.all(Colors.black),
       todayForegroundColor: WidgetStateProperty.all(Colors.black),
     ),
     cardTheme: CardThemeData(
       surfaceTintColor: Colors.transparent,
-      color: Color(0xFFFFFFFF).withAlpha(255),
+      color: const Color(0xFFFFFFFF).withAlpha(255),
       elevation: 2.0,
     ),
-    snackBarTheme: SnackBarThemeData(
+    snackBarTheme: const SnackBarThemeData(
       backgroundColor: Colors.white,
       contentTextStyle: TextStyle(
         color: Colors.black,
@@ -136,12 +136,12 @@ class MyApp extends StatelessWidget {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFFBF0000),
-        foregroundColor: Color(0xFFFFFFFF),
+        backgroundColor: const Color(0xFFBF0000),
+        foregroundColor: const Color(0xFFFFFFFF),
         surfaceTintColor: Colors.transparent,
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         elevation: 5,
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           color: Colors.black,
           fontSize: 16,
           fontFamily: 'Roboto',
@@ -155,18 +155,18 @@ class MyApp extends StatelessWidget {
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
+        borderSide: const BorderSide(
           color: Color.fromARGB(255, 3, 82, 147),
           width: 2,
         ),
       ),
-      contentPadding: EdgeInsets.all(8),
-      labelStyle: TextStyle(
+      contentPadding: const EdgeInsets.all(8),
+      labelStyle: const TextStyle(
         fontSize: 16,
         color: Color(0xFF000000),
         decorationColor: Color.fromARGB(255, 3, 82, 147),
       ),
-      hintStyle: TextStyle(
+      hintStyle: const TextStyle(
         backgroundColor: Colors.transparent,
         fontSize: 16,
         color: Color(0xFF757575),
@@ -176,19 +176,19 @@ class MyApp extends StatelessWidget {
     canvasColor: Colors.transparent,
     brightness: Brightness.light,
     colorScheme: ColorScheme.fromSeed(
-      seedColor: Color(0xFFFFFFFF),
-      primary: Color(0xFFBF0000),
-      secondary: Color.fromARGB(255, 3, 82, 147),
-      tertiary: Color(0xFF757575),
-      surface: Color(0xFFFFFFFF),
-      error: Color(0xFFB00020),
-      onPrimary: Color(0xFFFFFFFF),
-      onSecondary: Color(0xFFFFFFFF),
-      onSurface: Color(0xFF000000),
-      onError: Color(0xFFFFFFFF),
+      seedColor: const Color(0xFFFFFFFF),
+      primary: const Color(0xFFBF0000),
+      secondary: const Color.fromARGB(255, 3, 82, 147),
+      tertiary: const Color(0xFF757575),
+      surface: const Color(0xFFFFFFFF),
+      error: const Color(0xFFB00020),
+      onPrimary: const Color(0xFFFFFFFF),
+      onSecondary: const Color(0xFFFFFFFF),
+      onSurface: const Color(0xFF000000),
+      onError: const Color(0xFFFFFFFF),
       brightness: Brightness.light,
     ),
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Colors.black, fontSize: 16, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
       bodyMedium: TextStyle(color: Colors.black, fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
       bodySmall: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
