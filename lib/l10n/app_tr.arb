@@ -1678,6 +1678,26 @@
   "@warAttacksFailedToLoadPlayer": {
     "description": "Error message when player profile fails to load"
   },
+  "deepLinkInvalidPlayer": "Invalid player link.",
+  "@deepLinkInvalidPlayer": {
+    "description": "Shown when a player deep link does not include a valid tag"
+  },
+  "deepLinkInvalidClan": "Invalid clan link.",
+  "@deepLinkInvalidClan": {
+    "description": "Shown when a clan deep link does not include a valid tag"
+  },
+  "deepLinkFailedToOpenPlayer": "Failed to open player.",
+  "@deepLinkFailedToOpenPlayer": {
+    "description": "Shown when a player deep link target could not be loaded"
+  },
+  "deepLinkFailedToOpenClan": "Failed to open clan.",
+  "@deepLinkFailedToOpenClan": {
+    "description": "Shown when a clan deep link target could not be loaded"
+  },
+  "deepLinkUnknown": "Unknown deep link.",
+  "@deepLinkUnknown": {
+    "description": "Shown when the app receives a deep link it does not understand"
+  },
   "warAttacksDetailsTitle": "Saldırı Detayları",
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
