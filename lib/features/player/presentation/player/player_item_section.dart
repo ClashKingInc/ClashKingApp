@@ -247,6 +247,17 @@ class PlayerItemSection extends StatelessWidget {
         ? GameDataService.localizedNameForItem(meta)
         : item.name;
 
+    // Level-based stats
+    final effectiveLevel = item.level > 0 ? item.level : 1;
+    final currentLevelStats = _findLevelStats(meta, effectiveLevel);
+    final nextLevelStats = (item.level > 0 && item.level < item.maxLevel)
+        ? _findLevelStats(meta, item.level + 1)
+        : null;
+    final currentDps = (currentLevelStats?['dps'] as num?)?.toInt() ?? 0;
+    final currentHp = (currentLevelStats?['hitpoints'] as num?)?.toInt() ?? 0;
+    final currentHeal =
+        (currentLevelStats?['heal_on_activation'] as num?)?.toInt() ?? 0;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -355,6 +366,49 @@ class PlayerItemSection extends StatelessWidget {
                             value: meta['upgrade_resource'].toString(),
                           ),
                       ],
+                      // Level-based stats
+                      if (currentDps > 0)
+                        _buildStatRow(
+                          context,
+                          icon: Icons.bolt_outlined,
+                          label: l10n.gameItemDps,
+                          value: currentDps.toString(),
+                        ),
+                      if (!isEquipment && currentHp > 0)
+                        _buildStatRow(
+                          context,
+                          icon: Icons.favorite_border,
+                          label: l10n.gameItemHitpoints,
+                          value: currentHp.toString(),
+                        ),
+                      if (isEquipment && currentHeal > 0)
+                        _buildStatRow(
+                          context,
+                          icon: Icons.healing,
+                          label: l10n.gameItemHealOnActivation,
+                          value: currentHeal.toString(),
+                        ),
+                      // Targeting (non-equipment only)
+                      if (!isEquipment &&
+                          (meta['is_air_targeting'] != null ||
+                              meta['is_ground_targeting'] != null))
+                        _buildTargetingRow(context, meta, l10n),
+                    ],
+                    if (nextLevelStats != null) ...[
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Divider(height: 1),
+                      ),
+                      _buildUpgradeCostRow(
+                          context, meta!, isEquipment, nextLevelStats, l10n),
+                      if ((nextLevelStats['upgrade_time'] as num? ?? 0) > 0)
+                        _buildStatRow(
+                          context,
+                          icon: Icons.timer_outlined,
+                          label: l10n.gameItemUpgradeTime,
+                          value: _formatUpgradeTime(
+                              (nextLevelStats['upgrade_time'] as num).toInt()),
+                        ),
                     ],
                     const SizedBox(height: 12),
                     TextButton(
@@ -440,5 +494,142 @@ class PlayerItemSection extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildTargetingRow(
+    BuildContext context,
+    Map<String, dynamic> meta,
+    AppLocalizations l10n,
+  ) {
+    final isGround = meta['is_ground_targeting'] == true;
+    final isAir = meta['is_air_targeting'] == true;
+    final isFlying = meta['is_flying'] == true;
+
+    if (!isGround && !isAir && !isFlying) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(
+        children: [
+          Icon(Icons.gps_fixed_outlined,
+              size: 16, color: Theme.of(context).colorScheme.primary),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              l10n.gameItemTargets,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+          Wrap(
+            spacing: 4,
+            children: [
+              if (isGround)
+                _buildTargetChip(context, l10n.gameItemTargetsGround,
+                    Colors.green),
+              if (isAir)
+                _buildTargetChip(
+                    context, l10n.gameItemTargetsAir, Colors.blue),
+              if (isFlying)
+                _buildTargetChip(
+                    context, l10n.gameItemFlying, Colors.lightBlue),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTargetChip(
+      BuildContext context, String label, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: color.withAlpha(40),
+        border: Border.all(color: color, width: 1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        label,
+        style: Theme.of(context)
+            .textTheme
+            .labelSmall
+            ?.copyWith(color: color, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+
+  Widget _buildUpgradeCostRow(
+    BuildContext context,
+    Map<String, dynamic> meta,
+    bool isEquipment,
+    Map<String, dynamic> nextLevelStats,
+    AppLocalizations l10n,
+  ) {
+    final String costText;
+    if (isEquipment) {
+      final cost = nextLevelStats['upgrade_cost'];
+      if (cost is Map) {
+        final parts = <String>[];
+        final shiny = (cost['shiny_ore'] as num? ?? 0).toInt();
+        final glowy = (cost['glowy_ore'] as num? ?? 0).toInt();
+        final starry = (cost['starry_ore'] as num? ?? 0).toInt();
+        if (shiny > 0) parts.add('$shiny Shiny');
+        if (glowy > 0) parts.add('$glowy Glowy');
+        if (starry > 0) parts.add('$starry Starry');
+        costText = parts.join(' · ');
+      } else {
+        costText = '';
+      }
+    } else {
+      final cost = (nextLevelStats['upgrade_cost'] as num? ?? 0);
+      if (cost <= 0) return const SizedBox.shrink();
+      final resource = meta['upgrade_resource']?.toString() ?? '';
+      costText = '${_formatLargeNumber(cost)} $resource'.trim();
+    }
+
+    if (costText.isEmpty) return const SizedBox.shrink();
+    return _buildStatRow(
+      context,
+      icon: Icons.upgrade_outlined,
+      label: l10n.gameItemUpgradeCost,
+      value: costText,
+    );
+  }
+
+  static Map<String, dynamic>? _findLevelStats(
+      Map<String, dynamic>? meta, int level) {
+    if (meta == null) return null;
+    final levels = meta['levels'];
+    if (levels is! List) return null;
+    for (final entry in levels) {
+      if (entry is Map && entry['level'] == level) {
+        return Map<String, dynamic>.from(entry);
+      }
+    }
+    return null;
+  }
+
+  static String _formatUpgradeTime(int seconds) {
+    if (seconds <= 0) return '';
+    final d = seconds ~/ 86400;
+    final h = (seconds % 86400) ~/ 3600;
+    final m = (seconds % 3600) ~/ 60;
+    if (d > 0) return h > 0 ? '${d}d ${h}h' : '${d}d';
+    if (h > 0) return m > 0 ? '${h}h ${m}m' : '${h}h';
+    final s = seconds % 60;
+    if (m > 0) return s > 0 ? '${m}m ${s}s' : '${m}m';
+    return '${s}s';
+  }
+
+  static String _formatLargeNumber(num value) {
+    if (value >= 1000000) {
+      final formatted = (value / 1000000).toStringAsFixed(1);
+      return '${formatted.endsWith('.0') ? formatted.replaceAll('.0', '') : formatted}M';
+    }
+    if (value >= 1000) {
+      final formatted = (value / 1000).toStringAsFixed(1);
+      return '${formatted.endsWith('.0') ? formatted.replaceAll('.0', '') : formatted}K';
+    }
+    return value.toInt().toString();
   }
 }

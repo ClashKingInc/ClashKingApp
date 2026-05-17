@@ -1,5 +1,8 @@
-﻿What’s new
+What’s new
 - Tapping a troop, spell, hero, equipment or pet now shows a detailed popup with description and stats (housing space, attack speed, range, movement speed, upgrade resource, hero and rarity for equipment)
+- Item popup now shows DPS, HP/Heal at current level, targeting type (Ground/Air/Flying), and next-level upgrade cost & time
+- Player item sections now show two progress percentages: current TH max-level completion and overall max-level completion
+- Town-hall-maxed items now have a bronze border indicator
 - Player league chips now show the league name instead of raw trophy counts
 - Player item icons now resolve directly from ClashKing assets instead of app-data image URLs
 - Seasonal event troops and spells are now hidden consistently in player progression lists

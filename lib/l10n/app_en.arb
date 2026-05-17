@@ -2124,5 +2124,14 @@
   "gameItemMovementSpeed": "Movement Speed",
   "gameItemUpgradeResource": "Upgrade Resource",
   "gameItemRarity": "Rarity",
-  "gameItemHero": "Hero"
+  "gameItemHero": "Hero",
+  "gameItemDps": "DPS",
+  "gameItemHitpoints": "HP",
+  "gameItemHealOnActivation": "Heal",
+  "gameItemTargets": "Targets",
+  "gameItemTargetsGround": "Ground",
+  "gameItemTargetsAir": "Air",
+  "gameItemFlying": "Flying",
+  "gameItemUpgradeCost": "Upgrade cost",
+  "gameItemUpgradeTime": "Upgrade time"
 }
