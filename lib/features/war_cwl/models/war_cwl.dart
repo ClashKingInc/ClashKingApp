@@ -76,12 +76,16 @@ class WarCwl {
       final normalizedTag = normalizeClanTag(tag);
       DebugUtils.debugInfo("🔍 Looking for CWL war for clan: $normalizedTag");
 
+      bool matchesTag(WarInfo warInfo, String tag) =>
+          (warInfo.clan != null &&
+              normalizeClanTag(warInfo.clan!.tag) == tag) ||
+          (warInfo.opponent != null &&
+              normalizeClanTag(warInfo.opponent!.tag) == tag);
+
       // First try to find active war (inWar)
       final activeWar = warLeagueInfos.firstWhere(
         (warInfo) =>
-            warInfo.state == 'inWar' &&
-            (normalizeClanTag(warInfo.clan!.tag) == normalizedTag ||
-                normalizeClanTag(warInfo.opponent!.tag) == normalizedTag),
+            warInfo.state == 'inWar' && matchesTag(warInfo, normalizedTag),
         orElse: () => WarInfo(state: 'notFound'),
       );
 
@@ -94,8 +98,7 @@ class WarCwl {
       final prepWar = warLeagueInfos.firstWhere(
         (warInfo) =>
             warInfo.state == 'preparation' &&
-            (normalizeClanTag(warInfo.clan!.tag) == normalizedTag ||
-                normalizeClanTag(warInfo.opponent!.tag) == normalizedTag),
+            matchesTag(warInfo, normalizedTag),
         orElse: () => WarInfo(state: 'notFound'),
       );
 
@@ -110,8 +113,7 @@ class WarCwl {
           .where(
             (warInfo) =>
                 warInfo.state == 'warEnded' &&
-                (normalizeClanTag(warInfo.clan!.tag) == normalizedTag ||
-                    normalizeClanTag(warInfo.opponent!.tag) == normalizedTag),
+                matchesTag(warInfo, normalizedTag),
           )
           .toList();
 
