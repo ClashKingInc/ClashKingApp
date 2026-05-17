@@ -1,8 +1,10 @@
-import 'package:clashkingapp/core/services/api_service.dart';
+import 'dart:convert';
+
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/testing.dart';
+
+import '../../../helpers/fake_services.dart';
 
 Map<String, dynamic> _minimalWarCwl(String tag) => {
       'clan_tag': tag,
@@ -93,14 +95,33 @@ void main() {
       expect(service.summaries, isEmpty);
     });
 
-    // Note: a "populates summaries on 200 response" test cannot be written here
-    // because ApiService reads FlutterSecureStorage for the bearer token before
-    // making the HTTP call, which throws MissingPluginException in the test VM.
-    // Data population is already covered by the processBulkWarData group above.
+    test('populates summaries on 200 response', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/war/war-summary'] = http.Response(
+        jsonEncode({'items': [_minimalWarCwl('#CLAN1')]}),
+        200,
+      );
+      final service = WarCwlService(apiService: fakeApi);
+      await service.loadAllWarData(['#CLAN1'], notify: false);
+      expect(service.summaries['#CLAN1'], isNotNull);
+      expect(service.summaries['#CLAN1']!.tag, '#CLAN1');
+    });
+
+    test('populates multiple clans on 200 response', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/war/war-summary'] = http.Response(
+        jsonEncode({'items': [_minimalWarCwl('#C1'), _minimalWarCwl('#C2')]}),
+        200,
+      );
+      final service = WarCwlService(apiService: fakeApi);
+      await service.loadAllWarData(['#C1', '#C2'], notify: false);
+      expect(service.summaries, hasLength(2));
+    });
 
     test('does not throw on server error by default', () async {
-      final fakeClient = MockClient((_) async => http.Response('error', 500));
-      final service = WarCwlService(apiService: ApiService(client: fakeClient));
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/war/war-summary'] = http.Response('error', 500);
+      final service = WarCwlService(apiService: fakeApi);
       await expectLater(
         service.loadAllWarData(['#CLAN1'], notify: false),
         completes,
@@ -108,20 +129,34 @@ void main() {
     });
 
     test('throws when throwOnError is true on server error', () async {
-      final fakeClient = MockClient((_) async => http.Response('error', 503));
-      final service = WarCwlService(apiService: ApiService(client: fakeClient));
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/war/war-summary'] = http.Response('error', 503);
+      final service = WarCwlService(apiService: fakeApi);
       await expectLater(
-        () => service.loadAllWarData(['#CLAN1'], notify: false, throwOnError: true),
+        () => service.loadAllWarData(['#CLAN1'],
+            notify: false, throwOnError: true),
         throwsA(isA<Exception>()),
       );
     });
 
     test('does not throw on network exception by default', () async {
-      final fakeClient = MockClient((_) async => throw Exception('no network'));
-      final service = WarCwlService(apiService: ApiService(client: fakeClient));
+      final fakeApi = FakeApiService();
+      fakeApi.throwOnPost['/war/war-summary'] = Exception('no network');
+      final service = WarCwlService(apiService: fakeApi);
       await expectLater(
         service.loadAllWarData(['#CLAN1'], notify: false),
         completes,
+      );
+    });
+
+    test('throws on network exception when throwOnError is true', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.throwOnPost['/war/war-summary'] = Exception('no network');
+      final service = WarCwlService(apiService: fakeApi);
+      await expectLater(
+        () => service.loadAllWarData(['#CLAN1'],
+            notify: false, throwOnError: true),
+        throwsA(isA<Exception>()),
       );
     });
   });

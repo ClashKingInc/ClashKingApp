@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
@@ -399,6 +402,79 @@ void main() {
       service.addListener(() => notified = true);
       service.updateRefreshTime();
       expect(notified, isTrue);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // refreshPageData
+  // ---------------------------------------------------------------------------
+
+  group('CocAccountService — refreshPageData', () {
+    PlayerService makePlayer() => PlayerService(apiService: FakeApiService());
+    ClanService makeClan() => ClanService(apiService: FakeApiService());
+    WarCwlService makeWar() => WarCwlService(apiService: FakeApiService());
+
+    test('returns immediately when playerTags is empty', () async {
+      final service = CocAccountService(apiService: FakeApiService());
+      await service.refreshPageData([], makePlayer(), makeClan(), makeWar());
+      expect(service.lastRefresh, isNull);
+    });
+
+    test('sets lastRefresh on 200 bulk response', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/initialization'] =
+          http.Response(jsonEncode({}), 200);
+      final service = CocAccountService(apiService: fakeApi);
+      await service.refreshPageData(
+        ['#P1'], makePlayer(), makeClan(), makeWar(),
+      );
+      expect(service.lastRefresh, isNotNull);
+    });
+
+    test('notifies listeners on success', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/initialization'] =
+          http.Response(jsonEncode({}), 200);
+      final service = CocAccountService(apiService: fakeApi);
+      var notified = false;
+      service.addListener(() => notified = true);
+      await service.refreshPageData(
+        ['#P1'], makePlayer(), makeClan(), makeWar(),
+      );
+      expect(notified, isTrue);
+    });
+
+    test('falls back silently on non-200 bulk response', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/initialization'] =
+          http.Response('error', 503);
+      final service = CocAccountService(apiService: fakeApi);
+      await expectLater(
+        () => service.refreshPageData(
+          ['#P1'], makePlayer(), makeClan(), makeWar(),
+        ),
+        returnsNormally,
+      );
+    });
+
+    test('processes players data from bulk response', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/initialization'] = http.Response(
+        jsonEncode({
+          'players': [{'tag': '#P1', 'name': 'Test', 'townHallLevel': 15}],
+          'players_basic': [],
+          'clans': null,
+          'clan_tags': null,
+          'war_stats': null,
+        }),
+        200,
+      );
+      final playerService = PlayerService(apiService: FakeApiService());
+      final service = CocAccountService(apiService: fakeApi);
+      await service.refreshPageData(
+        ['#P1'], playerService, makeClan(), makeWar(),
+      );
+      expect(service.lastRefresh, isNotNull);
     });
   });
 }

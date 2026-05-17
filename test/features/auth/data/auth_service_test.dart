@@ -405,4 +405,241 @@ void main() {
       expect(fakeToken.clearCalled, isTrue);
     });
   });
+
+  // ---------------------------------------------------------------------------
+  // verifyEmailWithCode
+  // ---------------------------------------------------------------------------
+
+  group('AuthService — verifyEmailWithCode (success)', () {
+    test('sets isAuthenticated = true', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/verify-email-code'] = http.Response(
+        jsonEncode({
+          'access_token': 'acc',
+          'refresh_token': 'ref',
+          'user': userJson(),
+        }),
+        200,
+      );
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      await service.verifyEmailWithCode('a@b.com', '123456');
+      expect(service.isAuthenticated, isTrue);
+    });
+
+    test('sets accessToken', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/verify-email-code'] = http.Response(
+        jsonEncode({
+          'access_token': 'acc99',
+          'refresh_token': 'ref99',
+          'user': userJson(),
+        }),
+        200,
+      );
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      await service.verifyEmailWithCode('a@b.com', '123456');
+      expect(service.accessToken, 'acc99');
+    });
+
+    test('rethrows on API error', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/verify-email-code'] =
+          http.Response('invalid code', 400);
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      await expectLater(
+        () => service.verifyEmailWithCode('a@b.com', 'bad'),
+        throwsA(anything),
+      );
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // resendVerificationEmail
+  // ---------------------------------------------------------------------------
+
+  group('AuthService — resendVerificationEmail', () {
+    test('returns response on success', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/resend-verification'] = http.Response(
+        jsonEncode({'sent': true}),
+        200,
+      );
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      final result = await service.resendVerificationEmail('a@b.com');
+      expect(result['sent'], isTrue);
+    });
+
+    test('rethrows on API error', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/resend-verification'] =
+          http.Response('error', 429);
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      await expectLater(
+        () => service.resendVerificationEmail('a@b.com'),
+        throwsA(anything),
+      );
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // forgotPassword
+  // ---------------------------------------------------------------------------
+
+  group('AuthService — forgotPassword', () {
+    test('returns response on success', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/forgot-password'] = http.Response(
+        jsonEncode({'reset_sent': true}),
+        200,
+      );
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      final result = await service.forgotPassword('a@b.com');
+      expect(result['reset_sent'], isTrue);
+    });
+
+    test('rethrows on API error', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/forgot-password'] =
+          http.Response('not found', 404);
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      await expectLater(
+        () => service.forgotPassword('nobody@b.com'),
+        throwsA(anything),
+      );
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // resetPassword
+  // ---------------------------------------------------------------------------
+
+  group('AuthService — resetPassword (success)', () {
+    test('sets isAuthenticated = true', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/reset-password'] = http.Response(
+        jsonEncode({
+          'access_token': 'acc_reset',
+          'refresh_token': 'ref_reset',
+          'user': userJson(),
+        }),
+        200,
+      );
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      await service.resetPassword('a@b.com', 'CODE123', 'newpass');
+      expect(service.isAuthenticated, isTrue);
+    });
+
+    test('sets accessToken', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/reset-password'] = http.Response(
+        jsonEncode({
+          'access_token': 'acc_reset',
+          'refresh_token': 'ref_reset',
+          'user': userJson(),
+        }),
+        200,
+      );
+      final fakeToken = FakeTokenService(fakeToken: null);
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await service.resetPassword('a@b.com', 'CODE123', 'newpass');
+      expect(service.accessToken, 'acc_reset');
+      expect(fakeToken.saveTokensCalled, isTrue);
+    });
+
+    test('rethrows on error', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/reset-password'] =
+          http.Response('bad code', 400);
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      await expectLater(
+        () => service.resetPassword('a@b.com', 'BADCODE', 'newpass'),
+        throwsA(anything),
+      );
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // linkEmailAccount
+  // ---------------------------------------------------------------------------
+
+  group('AuthService — linkEmailAccount', () {
+    test('calls initializeAuth after linking — sets isAuthenticated', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/link-email'] = http.Response('{}', 200);
+      fakeApi.getStubs['/auth/me'] = http.Response(
+        jsonEncode(userJson()),
+        200,
+      );
+      final fakeToken = FakeTokenService(fakeToken: 'token123');
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await service.linkEmailAccount('a@b.com', 'pass', 'user');
+      expect(service.isAuthenticated, isTrue);
+    });
+
+    test('throws localized Exception on API error', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/link-email'] =
+          http.Response('conflict', 409);
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      await expectLater(
+        () => service.linkEmailAccount('a@b.com', 'pass', 'user'),
+        throwsA(isA<Exception>()),
+      );
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // linkDiscordAccount
+  // ---------------------------------------------------------------------------
+
+  group('AuthService — linkDiscordAccount', () {
+    test('calls initializeAuth after linking — sets isAuthenticated', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/link-discord'] = http.Response('{}', 200);
+      fakeApi.getStubs['/auth/me'] = http.Response(
+        jsonEncode(userJson()),
+        200,
+      );
+      final fakeToken = FakeTokenService(fakeToken: 'token123');
+      final service =
+          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await service.linkDiscordAccount('discord_token', 'refresh', 3600);
+      expect(service.isAuthenticated, isTrue);
+    });
+
+    test('throws localized Exception on API error', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/link-discord'] =
+          http.Response('forbidden', 403);
+      final service = AuthService(
+          apiService: fakeApi,
+          tokenService: FakeTokenService(fakeToken: null));
+      await expectLater(
+        () => service.linkDiscordAccount('bad_token', null, null),
+        throwsA(isA<Exception>()),
+      );
+    });
+  });
 }
