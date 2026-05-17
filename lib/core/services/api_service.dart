@@ -9,85 +9,301 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 
 class ApiService {
-  static const String apiUrlV1 = "https://dev.api.clashk.ing";
-  static const String apiUrlV2 = "https://dev.api.clashk.ing/v2";
+  ApiService({http.Client? client}) : _client = client ?? http.Client();
+
+  static const String apiUrlV1 = "https://api.clashk.ing";
+  static const String apiUrlV2 = "https://go.api.clashk.ing/v2";
   static const String assetUrl = "https://assets.clashk.ing";
   static const String proxyUrl = "https://proxy.clashk.ing/v1";
   static const String cocAssetsUrl = "https://coc-assets.clashk.ing";
   static const String bunnyUrl = "https://cdn.clashk.ing";
   static const String discordUrl = "https://discord.gg/clashking";
+  static const Duration _defaultTimeout = Duration(seconds: 15);
 
   // Config storage
   static String? _sentryDsn;
   static String? get sentryDsn => _sentryDsn;
+  final http.Client _client;
 
-  Future<Map<String, dynamic>> get(String endpoint) async {
-    try {
-      final token = await TokenService().getAccessToken();
-      final response = await http.get(
-        Uri.parse('$apiUrlV2$endpoint'),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-      ).timeout(const Duration(seconds: 15));
-      return _handleResponse(response, endpoint);
-    } catch (e, stackTrace) {
-      _handleError(e, stackTrace, 'GET $endpoint');
-      rethrow;
+  static AppLocalizations? _currentL10n() {
+    final context = globalNavigatorKey.currentContext;
+    if (context == null) {
+      return null;
     }
+    return AppLocalizations.of(context);
+  }
+
+  static String _localized(
+    String fallback,
+    String Function(AppLocalizations l10n) builder,
+  ) {
+    final l10n = _currentL10n();
+    if (l10n == null) {
+      return fallback;
+    }
+    return builder(l10n);
+  }
+
+  static String decodeResponseBody(http.Response response) {
+    return utf8.decode(response.bodyBytes, allowMalformed: true);
+  }
+
+  Future<Map<String, dynamic>> get(
+    String endpoint, {
+    bool requiresAuth = true,
+  }) async {
+    final response = await getResponse(
+      endpoint,
+      requiresAuth: requiresAuth,
+    );
+    return _expectMapResponse(response, endpoint);
   }
 
   Future<Map<String, dynamic>> post(
-      String endpoint, Map<String, String> body) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$apiUrlV2$endpoint'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      ).timeout(const Duration(seconds: 15));
-      DebugUtils.debugInfo("Response status: ${response.statusCode}");
-      DebugUtils.debugInfo("Response body: ${response.body}");
-      return _handleResponse(response, endpoint);
-    } catch (e, stackTrace) {
-      _handleError(e, stackTrace, 'POST $endpoint');
-      rethrow;
-    }
+    String endpoint,
+    Map<String, String> body, {
+    bool requiresAuth = false,
+  }) async {
+    final response = await postResponse(
+      endpoint,
+      body: body,
+      requiresAuth: requiresAuth,
+    );
+    return _expectMapResponse(response, endpoint);
   }
 
-  Map<String, dynamic> _handleResponse(http.Response response, String endpoint) {
+  Future<http.Response> getResponse(
+    String endpoint, {
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = _defaultTimeout,
+  }) async {
+    return _requestResponse(
+      'GET',
+      endpoint: endpoint,
+      url: url,
+      requiresAuth: requiresAuth,
+      timeout: timeout,
+    );
+  }
+
+  Future<http.Response> postResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = _defaultTimeout,
+  }) async {
+    return _requestResponse(
+      'POST',
+      endpoint: endpoint,
+      url: url,
+      body: body,
+      requiresAuth: requiresAuth,
+      timeout: timeout,
+    );
+  }
+
+  Future<http.Response> putResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = _defaultTimeout,
+  }) async {
+    return _requestResponse(
+      'PUT',
+      endpoint: endpoint,
+      url: url,
+      body: body,
+      requiresAuth: requiresAuth,
+      timeout: timeout,
+    );
+  }
+
+  Future<http.Response> deleteResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = _defaultTimeout,
+  }) async {
+    return _requestResponse(
+      'DELETE',
+      endpoint: endpoint,
+      url: url,
+      body: body,
+      requiresAuth: requiresAuth,
+      timeout: timeout,
+    );
+  }
+
+  Map<String, dynamic> _expectMapResponse(
+    http.Response response,
+    String endpoint,
+  ) {
+    final data = _handleResponse(response, endpoint);
+    if (data is Map<String, dynamic>) {
+      return data;
+    }
+
+    throw FormatException(
+      _localized(
+        'Invalid response type for $endpoint.',
+        (l10n) => l10n.apiErrorInvalidJsonResponse(endpoint),
+      ),
+    );
+  }
+
+  dynamic _handleResponse(http.Response response, String endpoint) {
     DebugUtils.debugInfo("Handling response status: ${response.statusCode}");
+    final responseBody = decodeResponseBody(response);
     switch (response.statusCode) {
       case 200:
       case 201:
         try {
-          return json.decode(response.body);
+          return json.decode(responseBody);
         } catch (e) {
-          throw FormatException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorInvalidJsonResponse(endpoint));
+          throw FormatException(
+            _localized(
+              'Invalid JSON response for $endpoint.',
+              (l10n) => l10n.apiErrorInvalidJsonResponse(endpoint),
+            ),
+          );
         }
       case 400:
-        String? specificMessage = _extractApiErrorMessage(response.body);
-        throw BadRequestException(specificMessage ?? AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorBadRequest(endpoint, response.body));
+        String? specificMessage = _extractApiErrorMessage(responseBody);
+        throw BadRequestException(
+          specificMessage ??
+              _localized(
+                'Bad request for $endpoint.',
+                (l10n) => l10n.apiErrorBadRequest(endpoint, responseBody),
+              ),
+        );
       case 401:
-        throw UnauthorizedException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorUnauthorized(endpoint));
+        throw UnauthorizedException(
+          _localized(
+            'Unauthorized request for $endpoint.',
+            (l10n) => l10n.apiErrorUnauthorized(endpoint),
+          ),
+        );
       case 403:
-        throw ForbiddenException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorForbidden(endpoint));
+        throw ForbiddenException(
+          _localized(
+            'Forbidden request for $endpoint.',
+            (l10n) => l10n.apiErrorForbidden(endpoint),
+          ),
+        );
       case 404:
-        throw NotFoundException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorNotFound(endpoint));
+        throw NotFoundException(
+          _localized(
+            'Resource not found for $endpoint.',
+            (l10n) => l10n.apiErrorNotFound(endpoint),
+          ),
+        );
       case 409:
-        // Use 409 for email verification required (conflict state)
-        DebugUtils.debugInfo("Creating EmailVerificationRequiredException");
-        throw EmailVerificationRequiredException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.authEmailVerificationExpired);
+        throw EmailVerificationRequiredException(
+          _localized(
+            'Email verification is required.',
+            (l10n) => l10n.authEmailVerificationExpired,
+          ),
+        );
       case 429:
-        throw RateLimitException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorRateLimit(endpoint));
+        throw RateLimitException(
+          _localized(
+            'Rate limit exceeded for $endpoint.',
+            (l10n) => l10n.apiErrorRateLimit(endpoint),
+          ),
+        );
       case 500:
       case 502:
       case 503:
       case 504:
-        throw ServerException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorServer(response.statusCode, endpoint));
+        throw ServerException(
+          _localized(
+            'Server error ${response.statusCode} for $endpoint.',
+            (l10n) => l10n.apiErrorServer(response.statusCode, endpoint),
+          ),
+        );
       default:
-        throw ApiException(AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorGeneric(response.statusCode, response.body));
+        throw ApiException(
+          _localized(
+            'API error ${response.statusCode}.',
+            (l10n) => l10n.apiErrorGeneric(response.statusCode, responseBody),
+          ),
+        );
     }
+  }
+
+  Future<http.Response> _requestResponse(
+    String method, {
+    required String endpoint,
+    String? url,
+    Object? body,
+    required bool requiresAuth,
+    required Duration timeout,
+  }) async {
+    final operationTarget = url ?? endpoint;
+
+    try {
+      final resolvedUri = Uri.parse(url ?? '$apiUrlV2$endpoint');
+      final headers = await _buildHeaders(requiresAuth: requiresAuth);
+      final requestBody = _encodeBody(body);
+
+      switch (method) {
+        case 'GET':
+          return await _client.get(resolvedUri, headers: headers).timeout(
+                timeout,
+              );
+        case 'POST':
+          return await _client
+              .post(resolvedUri, headers: headers, body: requestBody)
+              .timeout(timeout);
+        case 'PUT':
+          return await _client
+              .put(resolvedUri, headers: headers, body: requestBody)
+              .timeout(timeout);
+        case 'DELETE':
+          return await _client
+              .delete(resolvedUri, headers: headers, body: requestBody)
+              .timeout(timeout);
+        default:
+          throw UnsupportedError('Unsupported HTTP method: $method');
+      }
+    } catch (e, stackTrace) {
+      _handleError(e, stackTrace, '$method $operationTarget');
+      rethrow;
+    }
+  }
+
+  Future<Map<String, String>> _buildHeaders({
+    required bool requiresAuth,
+  }) async {
+    final headers = <String, String>{
+      'Content-Type': 'application/json',
+    };
+
+    if (requiresAuth) {
+      final token = await TokenService().getAccessToken();
+      if (token == null) {
+        throw UnauthorizedException(
+          _localized(
+            'User is not authenticated.',
+            (l10n) => l10n.apiErrorUnauthorized('/auth'),
+          ),
+        );
+      }
+      headers['Authorization'] = 'Bearer $token';
+    }
+
+    return headers;
+  }
+
+  Object? _encodeBody(Object? body) {
+    if (body == null || body is String) {
+      return body;
+    }
+    return jsonEncode(body);
   }
 
   String? _extractApiErrorMessage(String responseBody) {
@@ -100,16 +316,28 @@ class ApiService {
   }
 
   void _handleError(dynamic error, StackTrace stackTrace, String operation) {
-    String errorMessage = AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorOperationFailed(operation);
-    
+    String errorMessage = _localized(
+      'API operation failed: $operation.',
+      (l10n) => l10n.apiErrorOperationFailed(operation),
+    );
+
     if (error is SocketException) {
-      errorMessage = AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorNetworkOperation(operation);
+      errorMessage = _localized(
+        'Network error during $operation.',
+        (l10n) => l10n.apiErrorNetworkOperation(operation),
+      );
     } else if (error is TimeoutException) {
-      errorMessage = AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorTimeoutOperation(operation);
+      errorMessage = _localized(
+        'Timeout during $operation.',
+        (l10n) => l10n.apiErrorTimeoutOperation(operation),
+      );
     } else if (error is FormatException) {
-      errorMessage = AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorDataFormatOperation(operation);
+      errorMessage = _localized(
+        'Data format error during $operation.',
+        (l10n) => l10n.apiErrorDataFormatOperation(operation),
+      );
     }
-    
+
     Sentry.captureException(error, stackTrace: stackTrace);
     Sentry.captureMessage(errorMessage);
   }
@@ -127,18 +355,18 @@ class ApiService {
   static Future<void> loadConfig() async {
     try {
       final response = await http.get(
-        Uri.parse('https://dev.api.clashk.ing/v2/app/public-config'),
+        Uri.parse('$apiUrlV2/public-config'),
         headers: {'Content-Type': 'application/json'},
       ).timeout(const Duration(seconds: 10));
-      
+
       if (response.statusCode == 200) {
         final config = json.decode(response.body);
         _sentryDsn = config['sentry_dsn'];
       } else {
-        DebugUtils.debugError(' ${AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorConfigLoadFailed(response.statusCode)}');
+        DebugUtils.debugError('Failed to load config: ${response.statusCode}');
       }
     } catch (e) {
-      DebugUtils.debugError(' ${AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorConfigException(e.toString())}');
+      DebugUtils.debugError('Error loading config: $e');
     }
   }
 
@@ -160,11 +388,20 @@ class ApiService {
     } else if (error is ApiException) {
       return error.message;
     } else if (error is SocketException) {
-      return AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorNetworkConnection;
+      return _localized(
+        'Network connection error.',
+        (l10n) => l10n.apiErrorNetworkConnection,
+      );
     } else if (error is TimeoutException) {
-      return AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorTimeout;
+      return _localized(
+        'Request timeout.',
+        (l10n) => l10n.apiErrorTimeout,
+      );
     } else if (error is FormatException) {
-      return AppLocalizations.of(globalNavigatorKey.currentContext!)!.apiErrorInvalidFormat;
+      return _localized(
+        'Invalid response format.',
+        (l10n) => l10n.apiErrorInvalidFormat,
+      );
     } else {
       return error.toString().replaceFirst('Exception: ', '');
     }

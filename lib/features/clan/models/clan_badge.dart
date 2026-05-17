@@ -8,11 +8,13 @@ class ClanBadgeUrls {
   ClanBadgeUrls(
       {required this.small, required this.medium, required this.large});
 
-  factory ClanBadgeUrls.fromJson(Map<String, dynamic> json) {
+  factory ClanBadgeUrls.fromJson(Map<String, dynamic>? json) {
+    final data = json ?? const <String, dynamic>{};
+
     return ClanBadgeUrls(
-      small: ApiService.cocAssetsProxyUrl(json["small"]),
-      medium: ApiService.cocAssetsProxyUrl(json["medium"]),
-      large: ApiService.cocAssetsProxyUrl(json["large"]),
+      small: ApiService.cocAssetsProxyUrl(data["small"]?.toString() ?? ""),
+      medium: ApiService.cocAssetsProxyUrl(data["medium"]?.toString() ?? ""),
+      large: ApiService.cocAssetsProxyUrl(data["large"]?.toString() ?? ""),
     );
   }
 

@@ -8,8 +8,10 @@ import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/auth/data/user_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
+import 'package:clashkingapp/core/services/war_widget_sync_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/app/my_app.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
@@ -21,7 +23,6 @@ import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:app_links/app_links.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
-import 'package:clashkingapp/core/constants/global_keys.dart';
 
 // CallbackDispatcher for background execution (Android only)
 @pragma('vm:entry-point')
@@ -30,17 +31,16 @@ void callbackDispatcher() {
     try {
       WidgetsFlutterBinding.ensureInitialized();
       await ApiService.loadConfig();
-      
+
       // Handle different background tasks
       if (task == 'simplePeriodicTask') {
         // Regular periodic widget update
-        final myAppState = MyAppState();
-        await myAppState.updateWarWidget();
+        await const WarWidgetSyncService().updateWarWidget();
       } else if (task == 'refreshWarWidget') {
         // Manual refresh from widget button
         await WarWidgetService.handleWidgetRefresh();
       }
-      
+
       return Future.value(true);
     } catch (e) {
       DebugUtils.debugError(" Background task error: $e");
@@ -55,48 +55,34 @@ void _initializeDeepLinks() {
     // Web doesn't support deep links in the same way
     return;
   }
-  
+
   final appLinks = AppLinks();
-  
+
   // Handle deep links when app is already running
   appLinks.uriLinkStream.listen((uri) {
     DebugUtils.debugInfo("🔗 Deep link received (running): $uri");
-    _handleDeepLink(uri);
+    DeepLinkHandler.queueDeepLink(uri);
+    DeepLinkHandler.tryHandlePendingDeepLink().catchError((err) {
+      DebugUtils.debugError(" Deep link handling error: $err");
+      Sentry.captureException(err);
+    });
   }, onError: (err) {
     DebugUtils.debugError(" Deep link error: $err");
   });
-  
+
   // Handle initial deep link when app starts from a deep link
   appLinks.getInitialLink().then((uri) {
     if (uri != null) {
       DebugUtils.debugInfo("🔗 Initial deep link: $uri");
-      // Delay handling to ensure app is fully initialized
-      Future.delayed(Duration(milliseconds: 500), () {
-        _handleDeepLink(uri);
+      DeepLinkHandler.queueDeepLink(uri);
+      DeepLinkHandler.tryHandlePendingDeepLink().catchError((err) {
+        DebugUtils.debugError(" Deep link handling error: $err");
+        Sentry.captureException(err);
       });
     }
   }).catchError((err) {
     DebugUtils.debugError(" Initial deep link error: $err");
   });
-}
-
-/// Handle deep link with proper context checking
-void _handleDeepLink(Uri uri) {
-  // Ensure we have a valid navigation context
-  final context = globalNavigatorKey.currentContext;
-  if (context != null) {
-    DeepLinkHandler.handleDeepLink(context, uri);
-  } else {
-    // If no context yet, retry after a short delay
-    Future.delayed(Duration(milliseconds: 200), () {
-      final retryContext = globalNavigatorKey.currentContext;
-      if (retryContext != null && retryContext.mounted) {
-        DeepLinkHandler.handleDeepLink(retryContext, uri);
-      } else {
-        DebugUtils.debugError(" No navigation context available for deep link: $uri");
-      }
-    });
-  }
 }
 
 Future<void> main() async {
@@ -115,22 +101,24 @@ Future<void> main() async {
       options.replay.onErrorSampleRate = 1.0;
     },
     appRunner: () async {
-
       if (!kIsWeb) {
         Workmanager().initialize(callbackDispatcher);
         // Initialize war widget service for background callbacks
         WarWidgetService.initialize();
+        // Override with the app-level callback (handles widget taps → WarWidgetSyncService)
+        HomeWidget.registerInteractivityCallback(backgroundCallback);
       }
 
       await Future.wait([
-        GameDataService.loadGameData().then((_) => DebugUtils.debugSuccess("GameDataService OK")),
+        GameDataService.loadGameData()
+            .then((_) => DebugUtils.debugSuccess("GameDataService OK")),
       ]);
 
       FlutterNativeSplash.remove();
-      
+
       // Initialize deep link listening
       _initializeDeepLinks();
-      
+
       runApp(
         MultiProvider(
           providers: [
@@ -151,4 +139,3 @@ Future<void> main() async {
     },
   );
 }
-

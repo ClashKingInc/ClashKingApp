@@ -76,41 +76,48 @@ class Clan {
   });
 
   factory Clan.fromJson(Map<String, dynamic> json) {
+    final memberList = (json["memberList"] as List<dynamic>? ?? const []);
+    final labels = (json["labels"] as List<dynamic>? ?? const []);
+
     return Clan(
-      tag: json["tag"],
-      name: json["name"],
-      type: json["type"],
+      tag: json["tag"]?.toString() ?? "",
+      name: json["name"]?.toString() ?? "",
+      type: json["type"]?.toString() ?? "",
       description: json["description"] ?? "",
       location: json["location"] != null
           ? ClanLocation.fromJson(json["location"])
           : null,
       isFamilyFriendly: json["isFamilyFriendly"] ?? false,
-      badgeUrls: ClanBadgeUrls.fromJson(json["badgeUrls"]),
-      clanLevel: json["clanLevel"] ?? 0,
-      clanPoints: json["clanPoints"] ?? 0,
-      clanBuilderBasePoints: json["clanBuilderBasePoints"] ?? 0,
-      clanCapitalPoints: json["clanCapitalPoints"] ?? 0,
+      badgeUrls: ClanBadgeUrls.fromJson(
+        (json["badgeUrls"] as Map<String, dynamic>?) ?? const {},
+      ),
+      clanLevel: (json["clanLevel"] as num?)?.toInt() ?? 0,
+      clanPoints: (json["clanPoints"] as num?)?.toInt() ?? 0,
+      clanBuilderBasePoints:
+          (json["clanBuilderBasePoints"] as num?)?.toInt() ?? 0,
+      clanCapitalPoints: (json["clanCapitalPoints"] as num?)?.toInt() ?? 0,
       capitalLeague: json["capitalLeague"] != null
           ? ClanLeague.fromJson(json["capitalLeague"])
           : null,
-      requiredTrophies: json["requiredTrophies"] ?? 0,
+      requiredTrophies: (json["requiredTrophies"] as num?)?.toInt() ?? 0,
       warFrequency: json["warFrequency"] ?? "unknown",
-      warWinStreak: json["warWinStreak"] ?? 0,
-      warWins: json["warWins"] ?? 0,
-      warTies: json["warTies"] ?? 0,
-      warLosses: json["warLosses"] ?? 0,
+      warWinStreak: (json["warWinStreak"] as num?)?.toInt() ?? 0,
+      warWins: (json["warWins"] as num?)?.toInt() ?? 0,
+      warTies: (json["warTies"] as num?)?.toInt() ?? 0,
+      warLosses: (json["warLosses"] as num?)?.toInt() ?? 0,
       isWarLogPublic: json["isWarLogPublic"] ?? true,
       warLeague: json["warLeague"] != null
           ? ClanLeague.fromJson(json["warLeague"])
           : null,
-      members: json["members"],
-      memberList: (json["memberList"] as List)
+      members: (json["members"] as num?)?.toInt() ?? 0,
+      memberList: memberList
           .map((m) => ClanMember.fromJson(m))
           .toList(),
-      labels:
-          (json["labels"] as List).map((l) => ClanLeague.fromJson(l)).toList(),
-      requiredBuilderBaseTrophies: json["requiredBuilderBaseTrophies"],
-      requiredTownhallLevel: json["requiredTownhallLevel"],
+      labels: labels.map((l) => ClanLeague.fromJson(l)).toList(),
+      requiredBuilderBaseTrophies:
+          (json["requiredBuilderBaseTrophies"] as num?)?.toInt() ?? 0,
+      requiredTownhallLevel:
+          (json["requiredTownhallLevel"] as num?)?.toInt() ?? 0,
       clanCapital: json["clanCapital"] != null
           ? ClanCapital.fromJson(json["clanCapital"])
           : null,

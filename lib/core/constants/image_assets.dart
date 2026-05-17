@@ -22,66 +22,28 @@ class ImageAssets {
       "$baseUrl/builder-base/builder-hall-pics/Building_BB_Builder_Hall_level_$level.png";
 
   // 🏆 League Icons
-  static const Map<String, String> leagues = {
-    "Bronze League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Bronze_2.png",
-    "Bronze League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Bronze_2.png",
-    "Bronze League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Bronze_2.png",
-    "Silver League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Silver_2.png",
-    "Silver League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Silver_2.png",
-    "Silver League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Silver_2.png",
-    "Gold League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Gold_2.png",
-    "Gold League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Gold_2.png",
-    "Gold League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Gold_2.png",
-    "Crystal League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Crystal_2.png",
-    "Crystal League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Crystal_2.png",
-    "Crystal League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Crystal_2.png",
-    "Master League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Master_2.png",
-    "Master League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Master_2.png",
-    "Master League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Master_2.png",
-    "Champion League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Champion.png",
-    "Champion League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Champion.png",
-    "Champion League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Champion.png",
-    "Titan League I":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Titan_1.png",
-    "Titan League II":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Titan_1.png",
-    "Titan League III":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Titan_1.png",
-    "Bronze League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Bronze_2.png",
-    "Silver League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Silver_2.png",
-    "Gold League": "$baseUrl/home-base/league-icons/Icon_HV_League_Gold_2.png",
-    "Crystal League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Crystal_2.png",
-    "Master League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Master_2.png",
-    "Champion League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Champion.png",
-    "Titan League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Titan_1.png",
-    "Legend League":
-        "$baseUrl/home-base/league-icons/Icon_HV_League_Legend_4.png",
-    "Unranked": "$baseUrl/home-base/league-icons/Icon_HV_CWL_Unranked.png",
-  };
+  static String getLeagueImage(String leagueName) {
+    final rawPlayerLeagues = GameDataService.playerLeagueData["leagues"];
+    if (rawPlayerLeagues is Map && rawPlayerLeagues.containsKey(leagueName)) {
+      return _buildAssetUrl([
+        'home-base',
+        'league-tier-icons',
+        '${_titleUnderscoreName(leagueName)}.png',
+      ]);
+    }
+
+    final rawLeagues = GameDataService.leagueData["leagues"];
+    if (rawLeagues is Map) {
+      final league = rawLeagues[leagueName];
+      if (league is Map && league["url"] is String) {
+        return league["url"] as String;
+      }
+      if (league is String) {
+        return league;
+      }
+    }
+    return defaultImage;
+  }
 
   // 🏆 Wars & CWL & Trophies
   static const String warPreferenceIn = "$baseUrl/icons/Icon_HV_In.png";
@@ -130,10 +92,8 @@ class ImageAssets {
       "$baseUrl/icons/Icon_HV_Clan_Games_Medal.png";
 
   // Icons
-  static const String iconTick =
-      "$baseUrl/icons/Icon_DC_Tick.png";
-  static const String iconCross =
-      "$baseUrl/icons/Icon_DC_Cross.png";
+  static const String iconTick = "$baseUrl/icons/Icon_DC_Tick.png";
+  static const String iconCross = "$baseUrl/icons/Icon_DC_Cross.png";
   static const String iconClock = "$baseUrl/bot/icons/clock.png";
   static const String iconBuilderPotion =
       "$baseUrl/icons/Magic_Item_Builder_Potion.png";
@@ -177,19 +137,39 @@ class ImageAssets {
   static const String playerAchievementPageBackground =
       "$baseUrl/landscape/achievement-landscape.png";
 
+  static const Map<String, String> _assetSlugOverrides = {
+    'Baby Dragon 2': 'baby_dragon',
+  };
 
   // 🎭 Heroes & Troops & Others
   static String getHeroImage(String heroName) {
-    return GameDataService.heroesData["heroes"]?[heroName]?['url'] ??
-        defaultImage;
+    if (heroName.isEmpty) {
+      return defaultImage;
+    }
+    return _buildAssetUrl([
+      'home-base',
+      'hero-pics',
+      'Icon_HV_Hero_${_titleUnderscoreName(heroName)}.png',
+    ]);
   }
 
-  static String getBuilderBaseHeroImage(String heroName) =>
-      getHeroImage(heroName);
+  static String getBuilderBaseHeroImage(String heroName) {
+    if (heroName.isEmpty) {
+      return defaultImage;
+    }
+    return _buildAssetUrl([
+      'builder-base',
+      'hero-pics',
+      'Icon_BB_Hero_${_titleUnderscoreName(heroName)}.png',
+    ]);
+  }
 
   static String getTroopImage(String troopName) {
-    return GameDataService.troopsData["troops"]?[troopName]?['url'] ??
-        defaultImage;
+    final slug = _assetSlug(troopName);
+    if (slug.isEmpty) {
+      return defaultImage;
+    }
+    return _buildAssetUrl(['troops', slug, 'icon.webp']);
   }
 
   static String getSuperTroopImage(String superTroopName) =>
@@ -201,24 +181,93 @@ class ImageAssets {
       getTroopImage(siegeMachineName);
 
   static String getSpellImage(String spellName) {
-    return GameDataService.spellsData["spells"]?[spellName]?['url'] ??
-        defaultImage;
+    final slug = _assetSlug(spellName);
+    if (slug.isEmpty) {
+      return defaultImage;
+    }
+    return _buildAssetUrl(['spells', '$slug.webp']);
   }
 
   static String getPetImage(String petName) {
-    return GameDataService.petsData["pets"]?[petName]?['url'] ?? defaultImage;
+    final slug = _assetSlug(petName);
+    if (slug.isEmpty) {
+      return defaultImage;
+    }
+    return _buildAssetUrl(['pets', slug, 'icon.webp']);
   }
 
   static String getGearImage(String gearName) {
-    return GameDataService.gearsData["gears"]?[gearName]?['url'] ??
-        defaultImage;
+    final slug = _assetSlug(gearName);
+    if (slug.isEmpty) {
+      return defaultImage;
+    }
+    return _buildAssetUrl(['equipment', '$slug.webp']);
   }
 
+  static String _assetSlug(String name) {
+    final override = _assetSlugOverrides[name];
+    if (override != null) {
+      return override;
+    }
+
+    final lower = name.trim().toLowerCase();
+    if (lower.isEmpty) {
+      return '';
+    }
+
+    final buffer = StringBuffer();
+    var previousWasSeparator = false;
+
+    for (final rune in lower.runes) {
+      final char = String.fromCharCode(rune);
+      final isAlphaNumeric =
+          (rune >= 48 && rune <= 57) || (rune >= 97 && rune <= 122);
+
+      if (isAlphaNumeric || char == '\'') {
+        buffer.write(char);
+        previousWasSeparator = false;
+        continue;
+      }
+
+      if (char == '.' || char == ',') {
+        continue;
+      }
+
+      if (!previousWasSeparator) {
+        buffer.write('_');
+        previousWasSeparator = true;
+      }
+    }
+
+    final slug = buffer.toString().replaceAll(RegExp(r'_+'), '_');
+    return slug.replaceAll(RegExp(r'^_+|_+$'), '');
+  }
+
+  static String _titleUnderscoreName(String name) {
+    final parts = name
+        .trim()
+        .replaceAll('.', '')
+        .split(RegExp(r'[\s_-]+'))
+        .where((part) => part.isNotEmpty)
+        .toList();
+
+    return parts.map((part) {
+      if (part.length == 1) {
+        return part.toUpperCase();
+      }
+      return '${part[0].toUpperCase()}${part.substring(1)}';
+    }).join('_');
+  }
+
+  static String _buildAssetUrl(List<String> segments) {
+    final encodedSegments =
+        segments.map(Uri.encodeComponent).join('/').replaceAll('%2F', '/');
+    return '$baseUrl/$encodedSegments';
+  }
 
   // Stickers
   static const String villager = "$baseUrl/stickers/Villager_HV_Villager_7.png";
   static const String goblin = "$baseUrl/stickers/Troop_HV_Goblin.png";
   static const String sleepingApprenticeBuilder =
       "$baseUrl/stickers/Apprentice_Builder_Sleeping.png";
-
 }

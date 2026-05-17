@@ -1,6 +1,5 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
-import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/player/data/player_item_utils.dart';
@@ -299,8 +298,8 @@ class Player {
           townHallPic: ImageAssets.townHall(json["townHallLevel"] ?? 0),
           builderHallPic:
               ImageAssets.builderHall(json["builderHallLevel"] ?? 0),
-          leagueUrl: ApiService.cocAssetsProxyUrl(
-              json['league']?['iconUrls']?['medium'] ?? ImageAssets.leagues["Unranked"]),
+          leagueUrl:
+              ImageAssets.getLeagueImage(json["league"]?['name'] ?? "Unranked"),
           clanGamesPoint: [],
           seasonPass: [],
           lastOnline: DateTime.utc(1970, 1, 1),
@@ -395,7 +394,9 @@ class Player {
           ),
           spells: generateCompleteItemList<PlayerSpell>(
             jsonList: json['spells'] as List?,
-            gameData: GameDataService.spellsData['spells'] ?? {},
+            gameData: filterSpellGameData(
+              GameDataService.spellsData['spells'],
+            ),
             factory: PlayerSpell.fromRaw,
           ),
           equipments: generateCompleteItemList<PlayerEquipment>(
@@ -403,7 +404,7 @@ class Player {
             gameData: GameDataService.gearsData['gears'] ?? {},
             factory: PlayerEquipment.fromRaw,
           ),
-          achievements: json['achievements'] != null 
+          achievements: json['achievements'] != null
               ? List<PlayerAchievement>.from(json['achievements']
                   .map((x) => PlayerAchievement.fromJson(x ?? {})))
               : <PlayerAchievement>[],
@@ -496,7 +497,8 @@ class Player {
         ? PlayerRaids.fromJson(json['raid_data'])
         : PlayerRaids.empty();
 
-    if (json['war_data'] != null && json['war_data']["currentWarInfo"] != null) {
+    if (json['war_data'] != null &&
+        json['war_data']["currentWarInfo"] != null) {
       final originalWar = WarInfo.fromJson(json['war_data']["currentWarInfo"]);
       warData = originalWar.reorderForUser(tag);
     } else {

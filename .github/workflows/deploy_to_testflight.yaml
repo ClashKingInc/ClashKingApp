@@ -63,6 +63,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Analyze project
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
       - name: Determine TestFlight track based on tag
         id: determine_track
         run: |

@@ -37,18 +37,21 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
               );
             },
           );
-          
+
           try {
-            final clanInfo = await ClanService().getClanAndWarData(widget.clan['tag']);
+            final clanInfo =
+                await ClanService().getClanAndWarData(widget.clan['tag']);
             navigator.pop();
             navigator.push(
-              MaterialPageRoute(builder: (context) => ClanInfoScreen(clanInfo: clanInfo)),
+              MaterialPageRoute(
+                  builder: (context) => ClanInfoScreen(clanInfo: clanInfo)),
             );
           } catch (e) {
             navigator.pop();
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Failed to load clan data: ${e.toString()}')),
+                SnackBar(
+                    content: Text('Failed to load clan data: ${e.toString()}')),
               );
             }
           }
@@ -66,8 +69,8 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                       child: SizedBox(
                         width: 50,
                         child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                             imageUrl: widget.clan['badgeUrls']['medium']),
                       ),
                     ),
@@ -90,8 +93,8 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                                   widget.clan['location']!
                                       .containsKey('countryCode'))
                               ? CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
                                   imageUrl: ImageAssets.flag(widget
                                       .clan['location']['countryCode']
                                       .toLowerCase()),
@@ -99,12 +102,11 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                               : SizedBox.shrink(),
                           SizedBox(width: 8),
                           CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                             width: 20,
-                            imageUrl: ImageAssets.leagues[
-                                    widget.clan['warLeague']['name']] ??
-                                ImageAssets.leagues['Unranked']!,
+                            imageUrl: ImageAssets.getLeagueImage(
+                                widget.clan['warLeague']['name'] ?? 'Unranked'),
                           ),
                         ],
                       ),
@@ -137,8 +139,8 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors.transparent,
                                   child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
                                       imageUrl: ImageAssets.trophies),
                                 ),
                                 label: Text(
@@ -161,3 +163,4 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
     );
   }
 }
+
