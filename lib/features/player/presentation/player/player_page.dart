@@ -78,19 +78,29 @@ class PlayerScreenState extends State<PlayerScreen>
         SizedBox(height: 10),
         PlayerSuperTroopSection(superTroops: player.superTroops),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.gameHeroes, items: player.heroes),
+            title: AppLocalizations.of(context)!.gameHeroes,
+            items: player.heroes,
+            townHallLevel: player.townHallLevel),
         PlayerItemSection(
             title: AppLocalizations.of(context)!.gameEquipment,
-            items: player.equipments),
+            items: player.equipments,
+            townHallLevel: player.townHallLevel),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.gameTroops, items: player.troops),
+            title: AppLocalizations.of(context)!.gameTroops,
+            items: player.troops,
+            townHallLevel: player.townHallLevel),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.gameSpells, items: player.spells),
+            title: AppLocalizations.of(context)!.gameSpells,
+            items: player.spells,
+            townHallLevel: player.townHallLevel),
         PlayerItemSection(
             title: AppLocalizations.of(context)!.gameSiegeMachines,
-            items: player.siegeMachines),
+            items: player.siegeMachines,
+            townHallLevel: player.townHallLevel),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.gamePets, items: player.pets),
+            title: AppLocalizations.of(context)!.gamePets,
+            items: player.pets,
+            townHallLevel: player.townHallLevel),
         SizedBox(height: 10),
       ],
     );
@@ -102,10 +112,12 @@ class PlayerScreenState extends State<PlayerScreen>
         SizedBox(height: 10),
         PlayerItemSection(
             title: AppLocalizations.of(context)!.gameHeroes,
-            items: player.bbHeroes),
+            items: player.bbHeroes,
+            townHallLevel: player.builderHallLevel),
         PlayerItemSection(
             title: AppLocalizations.of(context)!.gameTroops,
-            items: player.bbTroops),
+            items: player.bbTroops,
+            townHallLevel: player.builderHallLevel),
         SizedBox(height: 10),
       ],
     );

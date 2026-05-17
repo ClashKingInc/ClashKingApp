@@ -5,17 +5,21 @@ import 'package:clashkingapp/features/player/models/player_item.dart';
 import 'package:clashkingapp/features/player/models/player_super_troop.dart';
 import 'package:clashkingapp/features/player/models/player_equipment.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/features/player/data/player_item_utils.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:shimmer/shimmer.dart';
 
 class PlayerItemSection extends StatelessWidget {
   final String title;
   final List<PlayerItem> items;
+  final int townHallLevel;
 
   const PlayerItemSection({
     super.key,
     required this.title,
     required this.items,
+    required this.townHallLevel,
   });
 
   @override
@@ -23,6 +27,7 @@ class PlayerItemSection extends StatelessWidget {
     if (items.isEmpty) return const SizedBox.shrink();
 
     final completionPercentage = _calculateCompletionPercentage();
+    final thPercentage = _calculateTHCompletionPercentage();
 
     final sortedItems = [...items]..sort((a, b) {
         if (a.isUnlocked == b.isUnlocked) return 0;
@@ -47,11 +52,27 @@ class PlayerItemSection extends StatelessWidget {
                     if (items[0] is! PlayerSuperTroop) ...[
                       const TextSpan(text: ' | '),
                       TextSpan(
-                        text: completionPercentage % 1 == 0
-                            ? '${completionPercentage.toInt()}%'
-                            : '${completionPercentage.toStringAsFixed(2)}%',
+                        text: '${_formatPercentage(completionPercentage)}%',
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
+                      if (townHallLevel > 0) ...[
+                        TextSpan(
+                          text: ' (',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: CachedNetworkImage(
+                            imageUrl: ImageAssets.townHall(townHallLevel),
+                            width: 16,
+                            height: 16,
+                          ),
+                        ),
+                        TextSpan(
+                          text: ' ${_formatPercentage(thPercentage)}%)',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ],
                     ]
                   ],
                 ),
@@ -79,16 +100,39 @@ class PlayerItemSection extends StatelessWidget {
     return (totalAchieved / totalPossible) * 100;
   }
 
+  double _calculateTHCompletionPercentage() {
+    int totalPossible = 0;
+    int totalAchieved = 0;
+    for (final item in items) {
+      final thMax = maxLevelForTH(item.meta, townHallLevel);
+      if (thMax <= 0) continue;
+      totalPossible += thMax;
+      totalAchieved += item.level > thMax ? thMax : item.level;
+    }
+    if (totalPossible == 0) return 0;
+    return (totalAchieved / totalPossible) * 100;
+  }
+
+  String _formatPercentage(double pct) {
+    return pct % 1 == 0
+        ? pct.toInt().toString()
+        : pct.toStringAsFixed(2);
+  }
+
   Widget _buildItemTile(BuildContext context, PlayerItem item) {
     final isMax = item.level == item.maxLevel;
     final isLocked = !item.isUnlocked;
+    final thMaxLevel = maxLevelForTH(item.meta, townHallLevel);
+    final isTHMax = thMaxLevel > 0 && item.level >= thMaxLevel && !isMax;
 
     // Determine border color
     final borderColor = isLocked || item.level == 0
         ? Colors.grey
         : isMax
-            ? const Color(0xFFD4AF37) // Gold if max
-            : Theme.of(context).colorScheme.onSurface;
+            ? const Color(0xFFD4AF37) // Gold if overall max
+            : isTHMax
+                ? const Color(0xFFCD7F32) // Bronze if TH max
+                : Theme.of(context).colorScheme.onSurface;
 
     // Background color for unlocked PlayerEquipment
     Color? backgroundColor;
@@ -137,12 +181,12 @@ class PlayerItemSection extends StatelessWidget {
                   height: 16,
                   width: 20,
                   decoration: BoxDecoration(
-                    color: isMax ? Colors.transparent : Colors.black,
+                    color: (isMax || isTHMax) ? Colors.transparent : Colors.black,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Stack(
                     children: [
-                      if (isMax && (!isLocked || item.level > 0))
+                      if (isMax)
                         Shimmer.fromColors(
                           baseColor: const Color(0xFFD4AF37),
                           highlightColor:
@@ -150,6 +194,18 @@ class PlayerItemSection extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                               color: const Color(0xFFD4AF37),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                        )
+                      else if (isTHMax)
+                        Shimmer.fromColors(
+                          baseColor: const Color(0xFFCD7F32),
+                          highlightColor:
+                              const Color(0xFFCD7F32).withAlpha(180),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFCD7F32),
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
