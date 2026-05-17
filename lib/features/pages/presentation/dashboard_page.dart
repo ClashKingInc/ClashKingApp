@@ -106,9 +106,9 @@ class DashboardPage extends StatelessWidget {
                       child: PlayerSearchCard(),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const PlayerCard(),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: PlayerCard(),
                   ),
                   GestureDetector(
                     onTap: () => Navigator.push(
@@ -119,18 +119,18 @@ class DashboardPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: const PlayerLegendCard(),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: PlayerLegendCard(),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const PlayerToDoCard(),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: PlayerToDoCard(),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: const PlayerWarStatsCard(),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: PlayerWarStatsCard(),
                   ),
                   const SizedBox(height: 16),
                 ],

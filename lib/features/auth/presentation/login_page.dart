@@ -238,7 +238,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                   .withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            indicatorPadding: EdgeInsets.symmetric(
+                            indicatorPadding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 8),
                             dividerColor: Colors.transparent,
                             labelStyle: TextStyle(
@@ -655,7 +655,7 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
 
     if (isMaintenanceError(error)) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => MaintenanceScreen()),
+        MaterialPageRoute(builder: (context) => const MaintenanceScreen()),
       );
       return;
     }

@@ -196,12 +196,11 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                       borderRadius: BorderRadius.circular(16.0),
                                     ),
                                     suffixIcon: _isAddingLoading
-                                        ? SizedBox(
+                                        ? const SizedBox(
                                             height: 24,
                                             width: 24,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
+                                              padding: EdgeInsets.all(8.0),
                                               child:
                                                   CircularProgressIndicator(),
                                             ),
@@ -408,7 +407,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                             AppLocalizations.of(
                                                                     context)!
                                                                 .accountVerify,
-                                                            style: TextStyle(
+                                                            style: const TextStyle(
                                                               color:
                                                                   Colors.orange,
                                                               fontSize: 12,

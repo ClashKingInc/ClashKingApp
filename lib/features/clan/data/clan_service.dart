@@ -25,7 +25,9 @@ class ClanService extends ChangeNotifier {
   List<ClanWarLog> warLogList = [];
   List<ClanWarStats> warStatsList = [];
 
-  bool get isLoading => _isLoading;
+  static const String _errLoadingClanData = 'Error loading clan data';
+
+  bool get isLoading=> _isLoading;
   Map<String, Clan> get clans => _clans;
 
   Clan? getClanByTag(String clanTag) {
@@ -65,7 +67,7 @@ class ClanService extends ChangeNotifier {
             }
           }
         } else {
-          Sentry.captureMessage("Error loading clan data: $data",
+          Sentry.captureMessage("$_errLoadingClanData: $data",
               level: SentryLevel.error);
         }
 
@@ -75,7 +77,7 @@ class ClanService extends ChangeNotifier {
 
         DebugUtils.debugSuccess("Loaded clans: ${_clans.keys.toList()}");
       } else {
-        Sentry.captureMessage("Error loading clan data",
+        Sentry.captureMessage(_errLoadingClanData,
             level: SentryLevel.error);
         if (throwOnError) {
           throw HttpException(
@@ -86,7 +88,7 @@ class ClanService extends ChangeNotifier {
       }
     } catch (e) {
       Sentry.captureException(e);
-      DebugUtils.debugError("Error loading clan data: $e");
+      DebugUtils.debugError("$_errLoadingClanData: $e");
       if (throwOnError) {
         rethrow;
       }
@@ -123,13 +125,13 @@ class ClanService extends ChangeNotifier {
         DebugUtils.debugSuccess("Loaded clan: ${clan.tag}");
         return clan;
       } else {
-        Sentry.captureMessage("Error loading clan data",
+        Sentry.captureMessage(_errLoadingClanData,
             level: SentryLevel.error);
         throw Exception("Failed to load clan data");
       }
     } catch (e) {
       Sentry.captureException(e);
-      DebugUtils.debugError("Error loading clan data: $e");
+      DebugUtils.debugError("$_errLoadingClanData: $e");
       rethrow;
     } finally {
       _isLoading = false;
@@ -197,13 +199,13 @@ class ClanService extends ChangeNotifier {
               .map((clan) => ClanJoinLeave.fromJson(clan))
               .toList();
         } else {
-          Sentry.captureMessage("Error loading clan data: $data",
+          Sentry.captureMessage("$_errLoadingClanData: $data",
               level: SentryLevel.error);
         }
 
         return joinLeaveList;
       } else {
-        Sentry.captureMessage("Error loading clan data",
+        Sentry.captureMessage(_errLoadingClanData,
             level: SentryLevel.error);
         if (throwOnError) {
           throw HttpException(
@@ -214,7 +216,7 @@ class ClanService extends ChangeNotifier {
       }
     } catch (e) {
       Sentry.captureException(e);
-      DebugUtils.debugError("Error loading clan data: $e");
+      DebugUtils.debugError("$_errLoadingClanData: $e");
       if (throwOnError) {
         rethrow;
       }
@@ -267,12 +269,12 @@ class ClanService extends ChangeNotifier {
             final historyData = {"history": data["items"]};
             return CapitalHistoryItems.fromJson(historyData, tag);
           }
-          Sentry.captureMessage("Error loading clan data: $data",
+          Sentry.captureMessage("$_errLoadingClanData: $data",
               level: SentryLevel.error);
           return null;
         }
 
-        Sentry.captureMessage("Error loading clan data",
+        Sentry.captureMessage(_errLoadingClanData,
             level: SentryLevel.error);
         if (throwOnError) {
           throw HttpException(
@@ -397,7 +399,7 @@ class ClanService extends ChangeNotifier {
       } else {
         DebugUtils.debugError(
             "Error loading clan war stats data: ${response.statusCode}");
-        Sentry.captureMessage("Error loading clan data",
+        Sentry.captureMessage(_errLoadingClanData,
             level: SentryLevel.error);
         if (throwOnError) {
           throw HttpException(
