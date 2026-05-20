@@ -130,13 +130,16 @@ class PlayerItemSection extends StatelessWidget {
     final isTHMax = thMaxLevel > 0 && item.level >= thMaxLevel && !isMax;
 
     // Determine border color
-    final borderColor = isLocked || item.level == 0
-        ? Colors.grey
-        : isMax
-            ? const Color(0xFFD4AF37) // Gold if overall max
-            : isTHMax
-                ? const Color(0xFFCD7F32) // Bronze if TH max
-                : Theme.of(context).colorScheme.onSurface;
+    final Color borderColor;
+    if (isLocked || item.level == 0) {
+      borderColor = Colors.grey;
+    } else if (isMax) {
+      borderColor = const Color(0xFFD4AF37); // Gold if overall max
+    } else if (isTHMax) {
+      borderColor = const Color(0xFFCD7F32); // Bronze if TH max
+    } else {
+      borderColor = Theme.of(context).colorScheme.onSurface;
+    }
 
     // Background color for unlocked PlayerEquipment
     Color? backgroundColor;
