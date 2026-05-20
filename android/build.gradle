@@ -15,6 +15,14 @@ allprojects {
         google()
         mavenCentral()
     }
+    // Pin glance-appwidget to a version that doesn't require compileSdk 37.
+    // glance-appwidget 1.3+ requires API 37 which AGP 9.1.0 can't handle.
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.glance:glance:1.1.1'
+            force 'androidx.glance:glance-appwidget:1.1.1'
+        }
+    }
 }
 
 rootProject.buildDir = '../build'
@@ -26,11 +34,11 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
-// Force compileSdk 37 on all plugin subprojects AFTER each project is fully configured,
-// so this overrides any compileSdk set inside plugin build.gradle files.
+// Force compileSdk 36 on all plugin subprojects AFTER each project is fully configured,
+// so outdated plugins (e.g. scrollable_tab_view at 31) satisfy dependency requirements.
 gradle.afterProject { project ->
     if (project != rootProject && project.hasProperty('android')) {
-        project.android.compileSdkVersion(37)
+        project.android.compileSdkVersion(36)
     }
 }
 
