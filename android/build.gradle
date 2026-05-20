@@ -1,11 +1,11 @@
 buildscript {
-    ext.kotlin_version = '2.2.20'
+    ext.kotlin_version = '2.3.20'
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.12.1'
+        classpath 'com.android.tools.build:gradle:9.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -24,6 +24,14 @@ subprojects {
 
 subprojects {
     project.evaluationDependsOn(':app')
+}
+
+// Force compileSdk 37 on all plugin subprojects AFTER each project is fully configured,
+// so this overrides any compileSdk set inside plugin build.gradle files.
+gradle.afterProject { project ->
+    if (project != rootProject && project.hasProperty('android')) {
+        project.android.compileSdkVersion(37)
+    }
 }
 
 tasks.register("clean", Delete) {

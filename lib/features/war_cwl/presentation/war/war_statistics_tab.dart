@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class WarStatisticsTab extends StatelessWidget {

@@ -4,7 +4,7 @@ import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 
 class WarHistoryCard extends StatelessWidget {
