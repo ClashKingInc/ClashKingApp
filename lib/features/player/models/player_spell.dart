@@ -9,7 +9,8 @@ class PlayerSpell extends PlayerItem {
       required super.level,
       required super.maxLevel,
       required this.village,
-      required super.isUnlocked})
+      required super.isUnlocked,
+      super.meta})
       : super(
           type: 'spell',
           imageUrl: ImageAssets.getSpellImage(name),
@@ -38,6 +39,7 @@ class PlayerSpell extends PlayerItem {
       maxLevel: maxLevel,
       isUnlocked: isUnlocked,
       village: meta?['village'] ?? 'home',
+      meta: meta,
     );
   }
 }

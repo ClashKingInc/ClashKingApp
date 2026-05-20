@@ -2,7 +2,7 @@ import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -135,7 +135,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                     _buildActionButton(
                       context: context,
                       label: AppLocalizations.of(context)!.faqViewOnGitHub,
-                      icon: LucideIcons.github,
+                      icon: LucideIcons.externalLink,
                       color: Theme.of(context).colorScheme.onSurface,
                       onPressed: () async {
                         launchUrl(Uri.parse('https://github.com/ClashKingInc'));

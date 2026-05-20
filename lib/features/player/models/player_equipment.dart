@@ -12,7 +12,8 @@ class PlayerEquipment extends PlayerItem {
       required super.maxLevel,
       required this.rarity,
       required this.village,
-      required super.isUnlocked})
+      required super.isUnlocked,
+      super.meta})
       : super(
           type: 'gear',
           imageUrl: ImageAssets.getGearImage(name),
@@ -43,7 +44,8 @@ class PlayerEquipment extends PlayerItem {
       maxLevel: maxLevel,
       isUnlocked: isUnlocked,
       village: meta?['village'] ?? 'home',
-      rarity: meta?['rarity'] ?? '1',
+      rarity: meta?['rarity']?.toString() ?? '1',
+      meta: meta,
     );
   }
 }
