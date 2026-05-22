@@ -25,7 +25,7 @@ class MobileWebImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
-        errorBuilder: (_, __, ___) => Image.network(
+        errorBuilder: (_, _, _) => Image.network(
           ImageAssets.defaultImage,
           width: width,
           height: height,
@@ -38,8 +38,8 @@ class MobileWebImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
-        placeholder: (_, __) => const SizedBox.shrink(),
-        errorWidget: (_, __, ___) => Image.network(
+        placeholder: (_, _) => const SizedBox.shrink(),
+        errorWidget: (_, _, _) => Image.network(
           ImageAssets.defaultImage,
           width: width,
           height: height,

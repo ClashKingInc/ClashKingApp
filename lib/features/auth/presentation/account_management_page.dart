@@ -125,7 +125,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                 CircleAvatar(
                   radius: 30,
                   backgroundImage: NetworkImage(user.avatarUrl),
-                  onBackgroundImageError: (_, __) {},
+                  onBackgroundImageError: (_, _) {},
                   child: user.avatarUrl.isEmpty
                       ? Icon(Icons.person, size: 30)
                       : null,

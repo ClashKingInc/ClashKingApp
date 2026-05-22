@@ -249,13 +249,13 @@
   "authPasswordConfirmRequired": "Bevestig je wachtwoord",
   "authPasswordMismatch": "Wachtwoorden komen niet overeen",
   "authPasswordTooShort": "Wachtwoord moet minimaal 8 tekens lang zijn",
-  "authPasswordRequirements": "Wachtwoord moet bevatten:\n• Een hoofdletter\n• Een kleine letter\n• Een cijfer\n• Een speciaal teken",
+  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
   "authPasswordHeader": "Wachtwoord moet bevatten:",
-  "authPasswordUppercase": "Een hoofdletter",
-  "authPasswordLowercase": "Een kleine letter",
-  "authPasswordNumber": "Een cijfer",
-  "authPasswordSpecial": "Een speciaal teken",
-  "authPasswordInvalid": "Wachtwoord voldoet niet aan de vereisten",
+  "authPasswordUppercase": "Hoofdletter",
+  "authPasswordLowercase": "Kleine letter",
+  "authPasswordNumber": "Nummer",
+  "authPasswordSpecial": "Speciaal karakter",
+  "authPasswordInvalid": "Wachtwoord voldoet niet aan de eisen",
   "authPasswordForgot": "Wachtwoord vergeten?",
   "authPasswordForgotDescription": "Vul je e-mailadres in en we sturen je een 6-cijferige code om je wachtwoord te resetten.",
   "authPasswordResetSend": "Verstuur resetcode",
@@ -275,7 +275,7 @@
   "authUsernameLabel": "Gebruikersnaam",
   "authUsernameRequired": "Voer een gebruikersnaam in",
   "authUsernameTooShort": "Gebruikersnaam moet minimaal 3 tekens lang zijn",
-  "authUsernameTooLong": "Username must be no more than 30 characters",
+  "authUsernameTooLong": "Gebruikersnaam mag niet langer zijn dan 30 tekens",
   "authErrorConnection": "Er is een fout opgetreden. Controleer je internetverbinding en probeer het opnieuw.",
   "authErrorConnectionRelaunch": "Er is een fout opgetreden. Controleer je internetverbinding en start de app opnieuw op.",
   "authErrorEmailAlreadyRegistered": "Dit e-mailadres is al geregistreerd. Probeer in plaats daarvan in te loggen.",
@@ -1679,6 +1679,26 @@
   "@warAttacksFailedToLoadPlayer": {
     "description": "Error message when player profile fails to load"
   },
+  "deepLinkInvalidPlayer": "Invalid player link.",
+  "@deepLinkInvalidPlayer": {
+    "description": "Shown when a player deep link does not include a valid tag"
+  },
+  "deepLinkInvalidClan": "Invalid clan link.",
+  "@deepLinkInvalidClan": {
+    "description": "Shown when a clan deep link does not include a valid tag"
+  },
+  "deepLinkFailedToOpenPlayer": "Failed to open player.",
+  "@deepLinkFailedToOpenPlayer": {
+    "description": "Shown when a player deep link target could not be loaded"
+  },
+  "deepLinkFailedToOpenClan": "Failed to open clan.",
+  "@deepLinkFailedToOpenClan": {
+    "description": "Shown when a clan deep link target could not be loaded"
+  },
+  "deepLinkUnknown": "Unknown deep link.",
+  "@deepLinkUnknown": {
+    "description": "Shown when the app receives a deep link it does not understand"
+  },
   "warAttacksDetailsTitle": "Aanvaldetails",
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
@@ -2098,5 +2118,21 @@
         "description": "Error details"
       }
     }
-  }
+  },
+  "gameItemHousingSpace": "Housing Space",
+  "gameItemAttackSpeed": "Attack Speed",
+  "gameItemAttackRange": "Attack Range",
+  "gameItemMovementSpeed": "Movement Speed",
+  "gameItemUpgradeResource": "Upgrade Resource",
+  "gameItemRarity": "Rarity",
+  "gameItemHero": "Hero",
+  "gameItemDps": "DPS",
+  "gameItemHitpoints": "HP",
+  "gameItemHealOnActivation": "Heal",
+  "gameItemTargets": "Targets",
+  "gameItemTargetsGround": "Ground",
+  "gameItemTargetsAir": "Air",
+  "gameItemFlying": "Flying",
+  "gameItemUpgradeCost": "Upgrade cost",
+  "gameItemUpgradeTime": "Upgrade time"
 }
