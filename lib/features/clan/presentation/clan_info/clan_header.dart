@@ -130,8 +130,8 @@ class ClanInfoHeaderCard extends StatelessWidget {
         if (clanInfo.warLeague != null)
           ImageChip(
             context: context,
-            imageUrl:
-                ImageAssets.leagues[clanInfo.warLeague?.name ?? "Unranked"]!,
+            imageUrl: ImageAssets.getLeagueImage(
+                clanInfo.warLeague?.name ?? "Unranked"),
             label: clanInfo.warLeague!.name,
           ),
         if (clanInfo.location?.name != null &&

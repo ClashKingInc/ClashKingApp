@@ -8,6 +8,7 @@ import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/auth/presentation/register_page.dart';
 import 'package:clashkingapp/features/auth/presentation/forgot_password_page.dart';
 import 'package:clashkingapp/features/auth/presentation/email_verification_page.dart';
+import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -17,12 +18,14 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/utils/network_error_utils.dart';
 
 class LoginPage extends StatefulWidget {
   final String? prefillEmail;
-  
+
   const LoginPage({super.key, this.prefillEmail});
-  
+
   @override
   LoginPageState createState() => LoginPageState();
 }
@@ -41,7 +44,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    
+
     // Pre-fill email if provided
     if (widget.prefillEmail != null) {
       _emailController.text = widget.prefillEmail!;
@@ -50,7 +53,8 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(AppLocalizations.of(context)!.authErrorEmailAlreadyRegistered),
+              content: Text(AppLocalizations.of(context)!
+                  .authErrorEmailAlreadyRegistered),
               backgroundColor: Colors.orange,
               duration: Duration(seconds: 3),
             ),
@@ -84,10 +88,12 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     try {
       await authService.signInWithDiscord();
       await _navigateAfterAuth();
-      // Don't set loading to false here - navigation will handle it
     } catch (e) {
-      if (context.mounted) {
+      if (mounted) {
         _handleAuthError(e);
+      }
+    } finally {
+      if (mounted) {
         setState(() => _isLoading = false);
       }
     }
@@ -105,12 +111,9 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         _passwordController.text,
       );
       await _navigateAfterAuth();
-      // Don't set loading to false here - navigation will handle it
     } catch (e) {
       if (mounted) {
-        // Check if the error is due to email not being verified
-        if (e.runtimeType.toString() == 'EmailVerificationRequiredException') {
-          // Navigate to email verification page instead of showing error
+        if (e is EmailVerificationRequiredException) {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => EmailVerificationPage(
@@ -121,13 +124,20 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         } else {
           _handleAuthError(e);
         }
+      }
+    } finally {
+      if (mounted) {
         setState(() => _isLoading = false);
       }
     }
   }
 
   void _handleAuthError(dynamic e) {
-    if (e.toString().contains("503") || e.toString().contains("500")) {
+    if (!mounted) {
+      return;
+    }
+
+    if (isMaintenanceError(e)) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => MaintenanceScreen()),
       );
@@ -201,79 +211,78 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: 700),
                     child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.08),
-                          blurRadius: 20,
-                          offset: Offset(0, 8),
-                          spreadRadius: -4,
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        // Tab Bar
-                        TabBar(
-                          controller: _tabController,
-                          labelColor: Theme.of(context).colorScheme.primary,
-                          unselectedLabelColor:
-                              Theme.of(context).colorScheme.onSurface,
-                          indicator: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.08),
+                            blurRadius: 20,
+                            offset: const Offset(0, 8),
+                            spreadRadius: -4,
                           ),
-                          indicatorPadding:
-                              EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                          dividerColor: Colors.transparent,
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                          unselectedLabelStyle: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                          ),
-                          tabs: [
-                            Tab(
-                              icon: Icon(Icons.discord, size: 20),
-                              text: AppLocalizations.of(context)!
-                                  .authDiscordTitle,
-                              height: 50,
-                            ),
-                            Tab(
-                              icon: Icon(Icons.email_outlined, size: 20),
-                              text:
-                                  AppLocalizations.of(context)!.authEmail,
-                              height: 50,
-                            ),
-                          ],
-                        ),
-
-                        // Tab Content
-                        Container(
-                          height: 320,
-                          padding: EdgeInsets.fromLTRB(20, 8, 20, 16),
-                          child: TabBarView(
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          // Tab Bar
+                          TabBar(
                             controller: _tabController,
-                            children: [
-                              // Discord Tab
-                              _buildDiscordTab(),
-
-                              // Email Tab
-                              _buildEmailTab(),
+                            labelColor: Theme.of(context).colorScheme.primary,
+                            unselectedLabelColor:
+                                Theme.of(context).colorScheme.onSurface,
+                            indicator: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            indicatorPadding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            dividerColor: Colors.transparent,
+                            labelStyle: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                            unselectedLabelStyle: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                            tabs: [
+                              Tab(
+                                icon: Icon(Icons.discord, size: 20),
+                                text: AppLocalizations.of(context)!
+                                    .authDiscordTitle,
+                                height: 50,
+                              ),
+                              Tab(
+                                icon: Icon(Icons.email_outlined, size: 20),
+                                text: AppLocalizations.of(context)!.authEmail,
+                                height: 50,
+                              ),
                             ],
                           ),
-                        ),
-                      ],
+
+                          // Tab Content
+                          Container(
+                            height: 320,
+                            padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+                            child: TabBarView(
+                              controller: _tabController,
+                              children: [
+                                // Discord Tab
+                                _buildDiscordTab(),
+
+                                // Email Tab
+                                _buildEmailTab(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
 
                   SizedBox(height: 16),
 
@@ -467,7 +476,8 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       if (value == null || value.trim().isEmpty) {
                         return AppLocalizations.of(context)!.authEmailRequired;
                       }
-                      if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                      if (!RegExp(
+                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
                           .hasMatch(value)) {
                         return AppLocalizations.of(context)!.authEmailInvalid;
                       }
@@ -627,13 +637,9 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
         await cocService.loadApiData(playerService, clanService, warCwlService);
       } catch (e) {
         if (mounted) {
-          if (e.toString().contains("503") || e.toString().contains("500")) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => MaintenanceScreen()),
-            );
-            return;
-          }
+          _showPostAuthFailure(e);
         }
+        return;
       }
     }
 
@@ -642,6 +648,32 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
     });
 
     _navigateToNextScreen();
+  }
+
+  void _showPostAuthFailure(dynamic error) {
+    if (!mounted) return;
+
+    if (isMaintenanceError(error)) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const MaintenanceScreen()),
+      );
+      return;
+    }
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => ErrorPage(
+          isNetworkError: isNetworkError(error),
+          onRetry: () async {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => _PostAuthLoadingScreen(),
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 
   void _navigateToNextScreen() {

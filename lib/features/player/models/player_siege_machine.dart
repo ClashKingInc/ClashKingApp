@@ -9,7 +9,8 @@ class PlayerSiegeMachine extends PlayerItem {
       required super.level,
       required super.maxLevel,
       required this.village,
-      required super.isUnlocked})
+      required super.isUnlocked,
+      super.meta})
       : super(
           type: 'pet',
           imageUrl: ImageAssets.getSiegeMachineImage(name),
@@ -39,6 +40,7 @@ class PlayerSiegeMachine extends PlayerItem {
       maxLevel: maxLevel,
       isUnlocked: isUnlocked,
       village: meta?['village'] ?? 'home',
+      meta: meta,
     );
   }
 }

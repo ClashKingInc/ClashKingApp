@@ -11,9 +11,9 @@ class ClanChatLanguage {
 
   factory ClanChatLanguage.fromJson(Map<String, dynamic> json) {
     return ClanChatLanguage(
-      id: json["id"],
-      name: json["name"],
-      languageCode: json["languageCode"],
+      id: (json["id"] as num?)?.toInt() ?? 0,
+      name: json["name"]?.toString() ?? "",
+      languageCode: json["languageCode"]?.toString() ?? "",
     );
   }
 }

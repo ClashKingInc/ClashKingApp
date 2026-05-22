@@ -1,49 +1,21 @@
-
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
-import 'package:clashkingapp/widgets/widgets_functions.dart';
-import 'package:clashkingapp/widgets/war_widget.dart';
-import 'package:home_widget/home_widget.dart';
-import 'dart:async';
-import 'package:workmanager/workmanager.dart';
+import 'package:clashkingapp/core/services/game_data_service.dart';
+import 'package:clashkingapp/core/services/war_widget_sync_service.dart';
 import 'package:clashkingapp/l10n/locale.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:clashkingapp/core/utils/debug_utils.dart';
 
-class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
-  Future<void>? initializeUserFuture;
-  String? clanTag;
-  ValueNotifier<String?> selectedTagNotifier = ValueNotifier<String?>(null);
+class MyAppState extends ChangeNotifier {
+  MyAppState({WarWidgetSyncService? warWidgetSyncService})
+      : _warWidgetSyncService =
+            warWidgetSyncService ?? const WarWidgetSyncService() {
+    _loadLanguage();
+    _warWidgetSyncService.registerPeriodicRefresh();
+  }
 
+  final WarWidgetSyncService _warWidgetSyncService;
   Locale _locale = Locale('en'); // Default language is English
   Locale get locale => _locale; // Getter for the locale
   bool isLoading = false; // Loading state of the app
-
-  MyAppState() {
-    // Initialize the default page to first tag
-    WidgetsBinding.instance.addObserver(this);
-
-    _loadLanguage(); // Load the language from the shared preferences
-    if (!kIsWeb && Platform.isAndroid) {
-      // Initialize the refresh of the war widget every 15 minutes
-      Workmanager().registerPeriodicTask(
-        '1',
-        'simplePeriodicTask',
-        frequency: Duration(minutes: 15),
-      );
-    }
-  }
-
-  // This method is called when the app is resumed
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this); // Remove the observer
-    selectedTagNotifier.dispose(); // Dispose the ValueNotifier
-    super.dispose();
-  }
 
   /* Language management */
 
@@ -78,7 +50,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
 // Load the language from the shared preferences or set to the system locale
-  void _loadLanguage() async {
+  Future<void> _loadLanguage() async {
     String? languageCode = await getPrefs('languageCode');
 
     if (languageCode != null) {
@@ -90,11 +62,12 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
       _locale = _getLocaleFallback(systemLocale);
     }
 
+    await GameDataService.loadTranslationsForLocale(_locale);
     notifyListeners();
   }
 
   // Change the language of the app
-  void changeLanguage(Locale locale) async {
+  Future<void> changeLanguage(Locale locale) async {
     _locale = locale;
     await storePrefs('languageCode', locale.languageCode);
     if (locale.countryCode != null) {
@@ -103,6 +76,7 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
     if (locale.scriptCode != null) {
       await storePrefs('scriptCode', locale.scriptCode!);
     }
+    await GameDataService.loadTranslationsForLocale(_locale);
     notifyListeners();
   }
 
@@ -110,46 +84,16 @@ class MyAppState extends ChangeNotifier with WidgetsBindingObserver {
 
   // Initialize the app from the background
   Future<void> initializeFromBackground(Uri data) async {
-    updateWidgets();
+    await _warWidgetSyncService.initializeFromBackground(data);
   }
 
   // Update the war widget
   Future<void> updateWarWidget() async {
-    try {
-      
-      // Get clan tag from the currently selected player
-      clanTag = await getCurrentPlayerClanTag();
-      
-      // Fetch war data using the new API
-      final warInfo = await fetchWarSummary(clanTag);
-      
-      // Save the war info to SharedPreferences for the widget
-      await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
-      
-      // Update the widget
-      await HomeWidget.updateWidget(
-        name: 'WarAppWidgetProvider',
-        androidName: 'WarAppWidgetProvider',
-      );
-      
-      DebugUtils.debugSuccess("War widget updated successfully");
-    } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
-      DebugUtils.debugError(" Error updating war widget: $exception");
-    }
-  }
-
-  // Get the clan tag from the currently selected player
-  Future<String?> getCurrentPlayerClanTag() async {
-    // Use the implementation from WarWidgetService
-    return await WarWidgetService.getCurrentPlayerClanTag();
+    await _warWidgetSyncService.updateWarWidget();
   }
 
   // Update the widgets
-  void updateWidgets() async {
-    if (!kIsWeb && Platform.isAndroid) {
-      await updateWarWidget();
-    }
+  Future<void> updateWidgets() async {
+    await _warWidgetSyncService.updateWidgets();
   }
-
 }

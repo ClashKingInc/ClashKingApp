@@ -19,18 +19,21 @@ class WarMember {
     this.bestOpponentAttack,
   });
 
-  factory WarMember.fromJson(Map<String, dynamic> json) {
+  factory WarMember.fromJson(Map<String, dynamic>? json) {
+    final data = json ?? const <String, dynamic>{};
+
     return WarMember(
-      tag: json['tag'],
-      name: json['name'],
-      townhallLevel: json['townhallLevel'],
-      mapPosition: json['mapPosition'],
-      opponentAttacks: json['opponentAttacks'] ?? 0,
-      attacks: (json['attacks'] as List<dynamic>?)
-          ?.map((e) => WarAttack.fromJson(e))
+      tag: data['tag']?.toString() ?? '',
+      name: data['name']?.toString() ?? '',
+      townhallLevel: (data['townhallLevel'] as num?)?.toInt() ?? 0,
+      mapPosition: (data['mapPosition'] as num?)?.toInt() ?? 0,
+      opponentAttacks: (data['opponentAttacks'] as num?)?.toInt() ?? 0,
+      attacks: (data['attacks'] as List<dynamic>?)
+          ?.whereType<Map>()
+          .map((e) => WarAttack.fromJson(Map<String, dynamic>.from(e)))
           .toList(),
-      bestOpponentAttack: json['bestOpponentAttack'] != null
-          ? WarAttack.fromJson(json['bestOpponentAttack'])
+      bestOpponentAttack: _asMap(data['bestOpponentAttack']) != null
+          ? WarAttack.fromJson(_asMap(data['bestOpponentAttack'])!)
           : null,
     );
   }
@@ -58,4 +61,14 @@ class WarMember {
       'bestOpponentAttack': bestOpponentAttack?.toJson(),
     };
   }
+}
+
+Map<String, dynamic>? _asMap(dynamic value) {
+  if (value is Map<String, dynamic>) {
+    return value;
+  }
+  if (value is Map) {
+    return Map<String, dynamic>.from(value);
+  }
+  return null;
 }

@@ -10,9 +10,11 @@ class ClanCapital {
   });
 
   factory ClanCapital.fromJson(Map<String, dynamic> json) {
+    final districts = (json["districts"] as List<dynamic>? ?? const []);
+
     return ClanCapital(
-      capitalHallLevel: json["capitalHallLevel"],
-      districts: (json["districts"] as List)
+      capitalHallLevel: (json["capitalHallLevel"] as num?)?.toInt() ?? 0,
+      districts: districts
           .map((district) => ClanDistrict.fromJson(district))
           .toList(),
     );

@@ -182,26 +182,29 @@ class CwlClan {
     required this.townHallLevels,
   });
 
-  factory CwlClan.fromJson(Map<String, dynamic> json) {
+  factory CwlClan.fromJson(Map<String, dynamic>? json) {
     try {
+      final data = json ?? const <String, dynamic>{};
+
       return CwlClan(
-        tag: json['tag'],
-        name: json['name'],
-        badgeUrls: ClanBadgeUrls.fromJson(json['badgeUrls']),
-        clanLevel: json['clanLevel'],
-        attackCount: json['attack_count'] ?? 0,
-        stars: json['total_stars'] ?? 0,
+        tag: data['tag']?.toString() ?? 'No tag',
+        name: data['name']?.toString() ?? 'No name',
+        badgeUrls: ClanBadgeUrls.fromJson(_asMap(data['badgeUrls'])),
+        clanLevel: (data['clanLevel'] as num?)?.toInt() ?? 0,
+        attackCount: (data['attack_count'] as num?)?.toInt() ?? 0,
+        stars: (data['total_stars'] as num?)?.toInt() ?? 0,
         destructionPercentage:
-            (json['total_destruction'] as num?)?.toDouble() ?? 0.0,
+            (data['total_destruction'] as num?)?.toDouble() ?? 0.0,
         destructionPercentageInflicted:
-            (json['total_destruction_inflicted'] as num?)?.toDouble() ?? 0.0,
-        rank: json['rank'] ?? 0,
-        warsPlayed: json['wars_played'] ?? 0,
-        members: (json['members'] as List<dynamic>?)
-                ?.map((e) => CwlMember.fromJson(e))
+            (data['total_destruction_inflicted'] as num?)?.toDouble() ?? 0.0,
+        rank: (data['rank'] as num?)?.toInt() ?? 0,
+        warsPlayed: (data['wars_played'] as num?)?.toInt() ?? 0,
+        members: (data['members'] as List<dynamic>?)
+                ?.whereType<Map>()
+                .map((e) => CwlMember.fromJson(Map<String, dynamic>.from(e)))
                 .toList() ??
             [],
-        townHallLevels: Map<String, int>.from(json['town_hall_levels'] ?? {}),
+        townHallLevels: Map<String, int>.from(data['town_hall_levels'] ?? {}),
       );
     } catch (e) {
       DebugUtils.debugError(" Error parsing CwlClan: $e");
@@ -252,4 +255,14 @@ class CwlClan {
         warsPlayed: 0,
         townHallLevels: {},
       );
+}
+
+Map<String, dynamic>? _asMap(dynamic value) {
+  if (value is Map<String, dynamic>) {
+    return value;
+  }
+  if (value is Map) {
+    return Map<String, dynamic>.from(value);
+  }
+  return null;
 }

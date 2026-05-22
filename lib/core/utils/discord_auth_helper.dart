@@ -7,7 +7,7 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 import 'discord_auth_helper_web.dart'
     if (dart.library.io) 'discord_auth_helper_mobile.dart';
- 
+
 class DiscordAuthHelper {
   static const String discordClientId = "824653933347209227";
   static const String callbackUrlScheme = "clashking";
@@ -33,7 +33,6 @@ class DiscordAuthHelper {
     try {
       if (kIsWeb) {
         final code = await getDiscordAuthCodeWeb(url);
-        DebugUtils.debugInfo("🔄 Discord auth code (Web): $code");
         return code != null
             ? {'code': code, 'code_verifier': codeVerifier}
             : null;
@@ -42,9 +41,7 @@ class DiscordAuthHelper {
           url: url.toString(),
           callbackUrlScheme: callbackUrlScheme,
         );
-        DebugUtils.debugInfo("🔄 Discord auth result (Mobile): $result");
         final code = Uri.parse(result).queryParameters['code'];
-        DebugUtils.debugInfo("🔄 Discord auth code (Mobile): $code");
         return code != null
             ? {'code': code, 'code_verifier': codeVerifier}
             : null;

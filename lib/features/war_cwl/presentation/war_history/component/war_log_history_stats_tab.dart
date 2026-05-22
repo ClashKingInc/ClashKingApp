@@ -3,7 +3,7 @@ import 'package:clashkingapp/common/widgets/labels/beta_label.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class WarLogHistoryStats extends StatefulWidget {

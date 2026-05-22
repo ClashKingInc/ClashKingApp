@@ -15,30 +15,15 @@ import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
-import 'dart:io';
+import 'package:clashkingapp/core/utils/network_error_utils.dart';
 
 class DashboardPage extends StatelessWidget {
-  // Helper function to determine if an error is network-related
-  bool _isNetworkError(dynamic error) {
-    if (error is SocketException) {
-      return true;
-    }
-    if (error is Exception) {
-      String errorString = error.toString().toLowerCase();
-      return errorString.contains('network') ||
-             errorString.contains('connection') ||
-             errorString.contains('hostname') ||
-             errorString.contains('socket') ||
-             errorString.contains('timeout') ||
-             errorString.contains('no address');
-    }
-    return false;
-  }
+  const DashboardPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { // NOSONAR
     final playerService = context.watch<PlayerService>();
-    final clanService = context.watch<ClanService>();
+    final clanService = context.read<ClanService>();
     final warCwlService = context.read<WarCwlService>();
     final cocService = context.watch<CocAccountService>();
     final player = playerService.getSelectedProfile(cocService);
@@ -52,11 +37,11 @@ class DashboardPage extends StatelessWidget {
             final playerTags = cocService.getAccountTags();
             if (playerTags.isNotEmpty) {
               await cocService.refreshPageData(
-                playerTags, playerService, clanService, warCwlService);
+                  playerTags, playerService, clanService, warCwlService);
             }
           } catch (e) {
             if (context.mounted) {
-              if (_isNetworkError(e)) {
+              if (isNetworkError(e)) {
                 // Navigate to error page for network errors
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -88,76 +73,68 @@ class DashboardPage extends StatelessWidget {
             }
           }
         },
-        child: Consumer<PlayerService>(
-          builder: (context, playerService, child) {
-            final selectedProfile = playerService.getSelectedProfile(cocService);
-
-            if (selectedProfile == null || selectedProfile.tag.isEmpty) {
-              return Center(
+        child: player == null || player.tag.isEmpty
+            ? Center(
                 child: Text(
                   AppLocalizations.of(context)?.authErrorConnectionRelaunch ??
                       "Error, please restart",
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
-              );
-            }
-
-            return ListView(
-              children: <Widget>[
-                LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CreatorCodeCard(),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      if (player?.legendsBySeason != null &&
-                          player!.legendsBySeason!.allSeasons.isNotEmpty) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                PlayerLegendScreen(player: player),
-                          ),
-                        );
-                      }
-                    },
-                    child: PlayerSearchCard(),
+              )
+            : ListView(
+                children: <Widget>[
+                  LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CreatorCodeCard(),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: PlayerCard(),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PlayerLegendScreen(
-                        player: player!,
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (player.legendsBySeason != null &&
+                            player.legendsBySeason!.allSeasons.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PlayerLegendScreen(player: player),
+                            ),
+                          );
+                        }
+                      },
+                      child: PlayerSearchCard(),
                     ),
                   ),
-                  child: Padding(
+                  const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: PlayerLegendCard(),
+                    child: PlayerCard(),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: PlayerToDoCard(),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: PlayerWarStatsCard(),
-                ),
-                const SizedBox(height: 16),
-              ],
-            );
-          },
-        ),
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PlayerLegendScreen(
+                          player: player,
+                        ),
+                      ),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: PlayerLegendCard(),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: PlayerToDoCard(),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: PlayerWarStatsCard(),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
       ),
     );
   }

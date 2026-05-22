@@ -7,6 +7,7 @@ class PlayerItem {
   final bool isMaxLevel;
   final bool? isActive;
   final bool isUnlocked;
+  final Map<String, dynamic>? meta;
 
   PlayerItem({
     required this.name,
@@ -16,5 +17,6 @@ class PlayerItem {
     required this.imageUrl,
     required this.isUnlocked,
     this.isActive,
+    this.meta,
   }) : isMaxLevel = level == maxLevel;
 }

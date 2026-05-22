@@ -44,7 +44,46 @@ Map<String, dynamic> filterGameData(
   bool Function(String key, Map<String, dynamic> value) predicate,
 ) {
   if (data == null) return {};
-  return Map.fromEntries(
-    data.entries.where((e) => predicate(e.key, e.value)),
-  );
+
+  final filteredEntries = <MapEntry<String, dynamic>>[];
+  for (final entry in data.entries) {
+    final value = entry.value;
+    if (value is! Map) {
+      continue;
+    }
+
+    final typedValue = Map<String, dynamic>.from(value);
+    if (typedValue['is_seasonal'] == true) {
+      continue;
+    }
+
+    if (predicate(entry.key, typedValue)) {
+      filteredEntries.add(MapEntry(entry.key, typedValue));
+    }
+  }
+
+  return Map.fromEntries(filteredEntries);
+}
+
+Map<String, dynamic> filterSpellGameData(Map<String, dynamic>? data) {
+  return filterGameData(data, (_, __) => true);
+}
+
+/// Returns the highest item level unlockable at [thLevel] based on bundle metadata.
+/// Returns 0 if the item has no levels or is not available at that TH level.
+int maxLevelForTH(Map<String, dynamic>? meta, int thLevel) {
+  if (meta == null || thLevel <= 0) return 0;
+  final levels = meta['levels'];
+  if (levels is! List || levels.isEmpty) return 0;
+  int maxLevel = 0;
+  for (final entry in levels) {
+    if (entry is Map) {
+      final requiredTH = entry['required_townhall'];
+      final level = entry['level'];
+      if (requiredTH is num && level is num && requiredTH <= thLevel) {
+        if (level > maxLevel) maxLevel = level.toInt();
+      }
+    }
+  }
+  return maxLevel;
 }

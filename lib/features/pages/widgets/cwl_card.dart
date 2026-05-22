@@ -31,8 +31,7 @@ class CwlCardState extends State<CwlCard> {
 
     final clanWarLeague = clanService.getClanByTag(clanTag)?.warLeague?.name;
     final warCwl = warCwlService.getWarCwlByTag(clanTag);
-    final clan = warCwl?.leagueInfo?.clans
-        .firstWhere((element) => element.tag == clanTag);
+    final clan = warCwl?.leagueInfo?.getClanDetails(clanTag);
 
     if (clanWarLeague == null || clan == null) {
       return SizedBox.shrink();
@@ -49,7 +48,7 @@ class CwlCardState extends State<CwlCard> {
               width: 70,
               child: CachedNetworkImage(
                 errorWidget: (context, url, error) => Icon(Icons.error),
-                imageUrl: ImageAssets.leagues[clanWarLeague]!,
+                imageUrl: ImageAssets.getLeagueImage(clanWarLeague),
               ),
             ),
             SizedBox(width: 24),
@@ -64,7 +63,7 @@ class CwlCardState extends State<CwlCard> {
                     runSpacing: -7.0,
                     children: [
                       ImageChip(
-                            context: context,
+                        context: context,
                         imageUrl:
                             "https://assets.clashk.ing/icons/Icon_HV_Podium.png",
                         labelPadding: 4,
@@ -73,7 +72,7 @@ class CwlCardState extends State<CwlCard> {
                             AppLocalizations.of(context)!.cwlRank(clan.rank),
                       ),
                       ImageChip(
-                            context: context,
+                        context: context,
                         imageUrl: ImageAssets.war,
                         labelPadding: 2,
                         label: " Round ${clan.warsPlayed.toString()}",
@@ -81,7 +80,7 @@ class CwlCardState extends State<CwlCard> {
                             .cwlCurrentRound(clan.warsPlayed),
                       ),
                       ImageChip(
-                            context: context,
+                        context: context,
                         imageUrl: ImageAssets.builderBaseStar,
                         labelPadding: 2,
                         label: clan.stars.toString(),
@@ -89,7 +88,7 @@ class CwlCardState extends State<CwlCard> {
                             AppLocalizations.of(context)!.cwlStars(clan.stars),
                       ),
                       ImageChip(
-                            context: context,
+                        context: context,
                         imageUrl: ImageAssets.hitrate,
                         labelPadding: 2,
                         label: clan.destructionPercentageInflicted
@@ -101,7 +100,7 @@ class CwlCardState extends State<CwlCard> {
                         ),
                       ),
                       ImageChip(
-                            context: context,
+                        context: context,
                         imageUrl: ImageAssets.sword,
                         labelPadding: 2,
                         label:
