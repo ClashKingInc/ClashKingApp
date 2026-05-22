@@ -10,6 +10,7 @@ import 'package:clashkingapp/features/pages/widgets/clan_search_card.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
+import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,8 @@ class ClanPage extends StatelessWidget {
     final hasClan = clanInfo != null && clanInfo.tag.isNotEmpty;
 
     return Scaffold(
-      body: RefreshIndicator(
+      body: ResponsiveLayoutWrapper(
+        child: RefreshIndicator(
         backgroundColor: Theme.of(context).colorScheme.surface,
         onRefresh: () async {
           try {
@@ -135,6 +137,7 @@ class ClanPage extends StatelessWidget {
           const SizedBox(height: 16),
         ]),
       ),
+    ),
     );
   }
 }
