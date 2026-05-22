@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/clan/models/clan_badge.dart';
 import 'package:http/http.dart' as http;
 
@@ -6,15 +7,15 @@ class ClanWarLog {
   final List<WarLogDetails> items;
   final String clanTag;
   WarLogStats? _warLogStats;
-  
+
   // Getter with fallback to avoid LateInitializationError
   WarLogStats get warLogStats => _warLogStats ?? _createEmptyStats();
-  
+
   // Setter
   set warLogStats(WarLogStats stats) => _warLogStats = stats;
 
   ClanWarLog({required this.items, required this.clanTag});
-  
+
   // Create empty stats as fallback
   WarLogStats _createEmptyStats() {
     return WarLogStats(
@@ -46,21 +47,20 @@ class ClanWarLog {
               // Keep items where the endTime is in 2022 or later
               return endTime.year >= 2022;
             })
-            .map((itemJson) =>
-                WarLogDetails.fromJson(itemJson as Map<String, dynamic>, clanTag))
+            .map((itemJson) => WarLogDetails.fromJson(
+                itemJson as Map<String, dynamic>, clanTag))
             .toList()
         : [];
     return ClanWarLog(items: itemList.cast<WarLogDetails>(), clanTag: clanTag);
   }
 }
 
-
 class WarLogStats {
   final int totalWins;
   final int totalLosses;
   final int totalTies;
   final int totalWars;
-  final int averageMembers; 
+  final int averageMembers;
   final double averageClanDestruction;
   final double averageClanStarsPerMember;
   final double averageOpponentDestruction;
@@ -114,7 +114,6 @@ class WarLogStats {
         'averageOpponentStarsPercentage: $averageOpponentStarsPercentage'
         '}';
   }
-
 }
 
 class WarLogDetails {
@@ -188,7 +187,7 @@ class ClanDetails {
 class WarLogService {
   static Future<ClanWarLog> fetchWarLogData(String tag) async {
     final response = await http.get(Uri.parse(
-        'https://proxy.clashk.ing/v1/clans/${tag.replaceAll('#', '%23')}/warlog'));
+        '${ApiService.proxyUrl}/clans/${tag.replaceAll('#', '%23')}/warlog'));
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
@@ -206,7 +205,7 @@ class WarLogService {
 }
 
 class WarLogStatsService {
-  static Future<WarLogStats> analyzeWarLogs(List<WarLogDetails> warLogs) async {
+  static Future<WarLogStats> analyzeWarLogs(List<WarLogDetails> warLogs) async { // NOSONAR
     int totalWins = 0;
     int totalLosses = 0;
     int totalTies = 0;
@@ -255,8 +254,9 @@ class WarLogStatsService {
         totalMembers > 0 ? opponentTotalStars / totalMembers : 0;
     double averageClanStarsPercentage =
         maxPossibleStars > 0 ? (clanTotalStars / maxPossibleStars) * 100 : 0;
-    double averageOpponentStarsPercentage =
-        maxPossibleStars > 0 ? (opponentTotalStars / maxPossibleStars) * 100 : 0;
+    double averageOpponentStarsPercentage = maxPossibleStars > 0
+        ? (opponentTotalStars / maxPossibleStars) * 100
+        : 0;
     double averageAttacksPerMember =
         totalMembers > 0 ? totalAttacks / totalMembers : 0;
     double winPercentage = totalWars > 0 ? (totalWins / totalWars) * 100 : 0;

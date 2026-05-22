@@ -15,15 +15,21 @@ class CwlLeague {
     required this.rounds,
   });
 
-  factory CwlLeague.fromJson(Map<String, dynamic> json) {
+  factory CwlLeague.fromJson(Map<String, dynamic>? json) {
     try {
+      final data = json ?? const <String, dynamic>{};
+
       return CwlLeague(
-        state: json['state'],
-        season: json['season'],
-        clans: (json['clans'] as List)
-            .map((clan) => CwlClan.fromJson(clan))
+        state: data['state']?.toString() ?? 'unknown',
+        season: data['season']?.toString() ?? 'unknown',
+        clans: (data['clans'] as List<dynamic>? ?? [])
+            .whereType<Map>()
+            .map((clan) => CwlClan.fromJson(Map<String, dynamic>.from(clan)))
             .toList(),
-        rounds: (json['rounds'] as List)
+        rounds: (data['rounds'] as List<dynamic>? ?? [])
+            .whereType<Map>()
+            .map((round) => Map<String, dynamic>.from(round))
+            .toList()
             .asMap()
             .entries
             .where((entry) {

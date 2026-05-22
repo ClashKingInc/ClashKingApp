@@ -3,16 +3,21 @@ import 'dart:io';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class TokenService {
+  static const String _accessTokenKey = 'access_token';
+  static const String _refreshTokenKey = 'refresh_token';
+  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+
   Future<String?> getAccessToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final accessToken = prefs.getString('access_token');
-    final refreshToken = prefs.getString('refresh_token');
+    final tokens = await _readTokens();
+    final accessToken = tokens.$1;
+    final refreshToken = tokens.$2;
     final deviceId = await getDeviceId();
 
     if (accessToken == null || refreshToken == null) {
@@ -26,7 +31,8 @@ class TokenService {
       if (newAccessToken != null) {
         return newAccessToken;
       } else {
-        DebugUtils.debugError(" Failed to refresh token, user must re-authenticate");
+        DebugUtils.debugError(
+            " Failed to refresh token, user must re-authenticate");
         await clearTokens();
         return null;
       }
@@ -38,28 +44,36 @@ class TokenService {
   Future<String?> refreshAccessToken(
       String refreshToken, String deviceId) async {
     try {
-      final response = await http.post(
-        Uri.parse('${ApiService.apiUrlV2}/auth/refresh'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({"refresh_token": refreshToken, "device_id": deviceId}),
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .post(
+            Uri.parse('${ApiService.apiUrlV2}/auth/refresh'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(
+                {"refresh_token": refreshToken, "device_id": deviceId}),
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final newAccessToken = data['access_token'];
 
         if (newAccessToken == null || newAccessToken.isEmpty) {
-          Sentry.captureMessage("Token refresh API returned empty access token");
+          Sentry.captureMessage(
+              "Token refresh API returned empty access token");
           return null;
         }
 
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('access_token', newAccessToken);
+        await _secureStorage.write(
+          key: _accessTokenKey,
+          value: newAccessToken,
+        );
 
         DebugUtils.debugSuccess("Token refreshed successfully");
         return newAccessToken;
       } else {
-        Sentry.captureMessage("Token refresh failed with status ${response.statusCode}: ${response.body}");
+        Sentry.captureMessage(
+          "Token refresh failed with status ${response.statusCode}",
+        );
         return null;
       }
     } catch (e, stackTrace) {
@@ -71,15 +85,21 @@ class TokenService {
   }
 
   Future<void> saveTokens(String accessToken, String refreshToken) async {
+    await _secureStorage.write(key: _accessTokenKey, value: accessToken);
+    await _secureStorage.write(key: _refreshTokenKey, value: refreshToken);
+
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('access_token', accessToken);
-    await prefs.setString('refresh_token', refreshToken);
+    await prefs.remove(_accessTokenKey);
+    await prefs.remove(_refreshTokenKey);
   }
 
   Future<void> clearTokens() async {
+    await _secureStorage.delete(key: _accessTokenKey);
+    await _secureStorage.delete(key: _refreshTokenKey);
+
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('access_token');
-    await prefs.remove('refresh_token');
+    await prefs.remove(_accessTokenKey);
+    await prefs.remove(_refreshTokenKey);
   }
 
   bool isTokenExpired(String token) {
@@ -87,25 +107,26 @@ class TokenService {
       if (token.isEmpty) {
         return true;
       }
-      
+
       final parts = token.split('.');
       if (parts.length != 3) {
-        DebugUtils.debugWarning("⚠️ Invalid JWT token format: expected 3 parts, got ${parts.length}");
+        DebugUtils.debugWarning(
+            "⚠️ Invalid JWT token format: expected 3 parts, got ${parts.length}");
         return true;
       }
-      
+
       final payload = json
           .decode(utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))));
-      
+
       final exp = payload['exp'];
       if (exp == null) {
         DebugUtils.debugWarning("⚠️ JWT token missing expiration claim");
         return true;
       }
-      
+
       final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       const bufferTime = 30; // Add 30 second buffer before expiration
-      
+
       return now >= (exp - bufferTime);
     } catch (e, stackTrace) {
       Sentry.captureException(e, stackTrace: stackTrace);
@@ -156,5 +177,38 @@ class TokenService {
       DebugUtils.debugError(" Erreur getDeviceName: $e");
       return "unknown-device";
     }
+  }
+
+  Future<(String?, String?)> _readTokens() async {
+    String? accessToken = await _secureStorage.read(key: _accessTokenKey);
+    String? refreshToken = await _secureStorage.read(key: _refreshTokenKey);
+
+    if (accessToken != null && refreshToken != null) {
+      return (accessToken, refreshToken);
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    final legacyAccessToken = prefs.getString(_accessTokenKey);
+    final legacyRefreshToken = prefs.getString(_refreshTokenKey);
+
+    if (legacyAccessToken != null) {
+      await _secureStorage.write(
+        key: _accessTokenKey,
+        value: legacyAccessToken,
+      );
+      await prefs.remove(_accessTokenKey);
+      accessToken = legacyAccessToken;
+    }
+
+    if (legacyRefreshToken != null) {
+      await _secureStorage.write(
+        key: _refreshTokenKey,
+        value: legacyRefreshToken,
+      );
+      await prefs.remove(_refreshTokenKey);
+      refreshToken = legacyRefreshToken;
+    }
+
+    return (accessToken, refreshToken);
   }
 }

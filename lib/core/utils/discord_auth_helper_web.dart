@@ -1,6 +1,5 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
 import 'dart:async';
+import 'package:universal_html/html.dart' as html;
 
 Future<String?> getDiscordAuthCodeWeb(Uri url) async {
   final completer = Completer<String?>();

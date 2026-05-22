@@ -13,10 +13,10 @@ class ClanLocation {
 
   factory ClanLocation.fromJson(Map<String, dynamic> json) {
     return ClanLocation(
-      id: json["id"],
-      name: json["name"],
-      isCountry: json["isCountry"],
-      countryCode: json["countryCode"],
+      id: (json["id"] as num?)?.toInt() ?? 0,
+      name: json["name"]?.toString() ?? "",
+      isCountry: json["isCountry"] ?? false,
+      countryCode: json["countryCode"]?.toString(),
     );
   }
 }

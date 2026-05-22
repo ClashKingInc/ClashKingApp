@@ -21,28 +21,41 @@ class WarCwl {
     required this.warLeagueInfos,
   });
 
-  int get teamSize => warLeagueInfos[0].teamSize ?? 0;
+  int get teamSize => warLeagueInfos.isNotEmpty
+      ? warLeagueInfos[0].teamSize ?? 0
+      : warInfo.teamSize ?? 0;
 
   factory WarCwl.fromJson(Map<String, dynamic> json, String? tag) {
     try {
+      final warInfoData = _asMap(json['war_info']);
+      final warState = warInfoData?['state']?.toString() ?? 'notInWar';
+      final leagueInfoData = _asMap(json['league_info']);
+      final warLeagueInfosData =
+          (json['war_league_infos'] as List<dynamic>? ?? [])
+              .map(_asMap)
+              .whereType<Map<String, dynamic>>()
+              .map(WarInfo.fromJson)
+              .where((warInfo) =>
+                  warInfo.state != 'unknown' ||
+                  warInfo.clan != null ||
+                  warInfo.opponent != null)
+              .toList();
+
       return WarCwl(
-        tag: json['clan_tag'] ?? tag,
-        isInWar: json['isInWar'],
-        isInCwl: json['isInCwl'],
-        warInfo: json['war_info']['state'] != "notInWar"
-            ? WarInfo.fromJson(json['war_info']["currentWarInfo"])
+        tag: json['clan_tag']?.toString() ?? tag ?? '',
+        isInWar: json['isInWar'] == true,
+        isInCwl: json['isInCwl'] == true,
+        warInfo: warState != 'notInWar'
+            ? WarInfo.fromJson(_asMap(warInfoData?['currentWarInfo']))
             : WarInfo(state: 'notInWar'),
-        leagueInfo: json['league_info'] != null
-            ? CwlLeague.fromJson(json['league_info'])
-            : null,
-        warLeagueInfos: (json['war_league_infos'] as List)
-            .map((e) => WarInfo.fromJson(e))
-            .toList(),
+        leagueInfo:
+            leagueInfoData != null ? CwlLeague.fromJson(leagueInfoData) : null,
+        warLeagueInfos: warLeagueInfosData,
       );
     } catch (e) {
       DebugUtils.debugError(" Error parsing WarCwl: $e");
       return WarCwl(
-        tag: json['clan_tag'],
+        tag: json['clan_tag']?.toString() ?? tag ?? '',
         isInWar: false,
         isInCwl: false,
         warInfo: WarInfo(state: 'unknown'),
@@ -59,60 +72,68 @@ class WarCwl {
         if (!clanTag.startsWith('#')) return '#$clanTag';
         return clanTag;
       }
-      
+
       final normalizedTag = normalizeClanTag(tag);
       DebugUtils.debugInfo("🔍 Looking for CWL war for clan: $normalizedTag");
-      
+
+      bool matchesTag(WarInfo warInfo, String tag) =>
+          (warInfo.clan != null &&
+              normalizeClanTag(warInfo.clan!.tag) == tag) ||
+          (warInfo.opponent != null &&
+              normalizeClanTag(warInfo.opponent!.tag) == tag);
+
       // First try to find active war (inWar)
       final activeWar = warLeagueInfos.firstWhere(
         (warInfo) =>
-            warInfo.state == 'inWar' &&
-            (normalizeClanTag(warInfo.clan!.tag) == normalizedTag || 
-             normalizeClanTag(warInfo.opponent!.tag) == normalizedTag),
+            warInfo.state == 'inWar' && matchesTag(warInfo, normalizedTag),
         orElse: () => WarInfo(state: 'notFound'),
       );
-      
+
       if (activeWar.state != 'notFound') {
         DebugUtils.debugSuccess("Found active CWL war for clan $tag");
         return activeWar.reorderForClan(normalizedTag);
       }
-      
+
       // If no active war, try preparation war
       final prepWar = warLeagueInfos.firstWhere(
         (warInfo) =>
             warInfo.state == 'preparation' &&
-            (normalizeClanTag(warInfo.clan!.tag) == normalizedTag || 
-             normalizeClanTag(warInfo.opponent!.tag) == normalizedTag),
+            matchesTag(warInfo, normalizedTag),
         orElse: () => WarInfo(state: 'notFound'),
       );
-      
+
       if (prepWar.state != 'notFound') {
-        DebugUtils.debugSuccess("Found preparation CWL war for clan $normalizedTag");
+        DebugUtils.debugSuccess(
+            "Found preparation CWL war for clan $normalizedTag");
         return prepWar.reorderForClan(normalizedTag);
       }
-      
+
       // If no active or prep war, try most recent ended war
-      final endedWars = warLeagueInfos.where(
-        (warInfo) =>
-            warInfo.state == 'warEnded' &&
-            (normalizeClanTag(warInfo.clan!.tag) == normalizedTag || 
-             normalizeClanTag(warInfo.opponent!.tag) == normalizedTag),
-      ).toList();
-      
+      final endedWars = warLeagueInfos
+          .where(
+            (warInfo) =>
+                warInfo.state == 'warEnded' &&
+                matchesTag(warInfo, normalizedTag),
+          )
+          .toList();
+
       if (endedWars.isNotEmpty) {
         // Sort by end time to get most recent
-        endedWars.sort((a, b) => (b.endTime ?? '').toString().compareTo((a.endTime ?? '').toString()));
-        DebugUtils.debugSuccess("Found recent ended CWL war for clan $normalizedTag");
+        endedWars.sort((a, b) => (b.endTime ?? '')
+            .toString()
+            .compareTo((a.endTime ?? '').toString()));
+        DebugUtils.debugSuccess(
+            "Found recent ended CWL war for clan $normalizedTag");
         return endedWars.first.reorderForClan(normalizedTag);
       }
-      
+
       DebugUtils.debugError("No CWL wars found for clan $normalizedTag");
       DebugUtils.debugInfo("🔍 Available wars in warLeagueInfos:");
       for (final war in warLeagueInfos) {
-        DebugUtils.debugInfo("   War: ${war.state}, Clan: ${war.clan?.tag}, Opponent: ${war.opponent?.tag}");
+        DebugUtils.debugInfo(
+            "   War: ${war.state}, Clan: ${war.clan?.tag}, Opponent: ${war.opponent?.tag}");
       }
       return null;
-      
     } catch (e) {
       DebugUtils.debugError("Error finding CWL war for clan $tag: $e");
       return null;
@@ -120,7 +141,12 @@ class WarCwl {
   }
 
   CwlLeagueRound? getRoundForWarTag(String? warTag) {
-    return leagueInfo!.rounds.firstWhere(
+    final league = leagueInfo;
+    if (league == null) {
+      return CwlLeagueRound(roundNumber: -1, warTags: []);
+    }
+
+    return league.rounds.firstWhere(
       (round) => round.containsWar(warTag),
       orElse: () => CwlLeagueRound(roundNumber: -1, warTags: []),
     );
@@ -160,55 +186,82 @@ class WarCwl {
 
   /// Get active war by player tag and automatically reorder so user's clan is always 'clan'
   /// This is a convenience method that combines finding the war and reordering for the user
-  WarInfo? getActiveWarByPlayerTag(String playerTag) {
+  WarInfo? getActiveWarByPlayerTag(String playerTag) { // NOSONAR
     try {
       // First find any war containing this player
       for (final warInfo in warLeagueInfos) {
-        final playerInClan = warInfo.clan?.members.any((member) => member.tag == playerTag) ?? false;
-        final playerInOpponent = warInfo.opponent?.members.any((member) => member.tag == playerTag) ?? false;
-        
+        final playerInClan =
+            warInfo.clan?.members.any((member) => member.tag == playerTag) ??
+                false;
+        final playerInOpponent = warInfo.opponent?.members
+                .any((member) => member.tag == playerTag) ??
+            false;
+
         if (playerInClan || playerInOpponent) {
           // Found a war with this player, prioritize by state
           if (warInfo.state == 'inWar') {
-            DebugUtils.debugSuccess("Found active CWL war for player $playerTag");
+            DebugUtils.debugSuccess(
+                "Found active CWL war for player $playerTag");
             return warInfo.reorderForUser(playerTag);
           }
         }
       }
-      
+
       // If no active war, try preparation
       for (final warInfo in warLeagueInfos) {
-        final playerInClan = warInfo.clan?.members.any((member) => member.tag == playerTag) ?? false;
-        final playerInOpponent = warInfo.opponent?.members.any((member) => member.tag == playerTag) ?? false;
-        
+        final playerInClan =
+            warInfo.clan?.members.any((member) => member.tag == playerTag) ??
+                false;
+        final playerInOpponent = warInfo.opponent?.members
+                .any((member) => member.tag == playerTag) ??
+            false;
+
         if (playerInClan || playerInOpponent) {
           if (warInfo.state == 'preparation') {
-            DebugUtils.debugSuccess("Found preparation CWL war for player $playerTag");
+            DebugUtils.debugSuccess(
+                "Found preparation CWL war for player $playerTag");
             return warInfo.reorderForUser(playerTag);
           }
         }
       }
-      
+
       // If no active or prep war, try most recent ended war
       final playerWars = warLeagueInfos.where((warInfo) {
-        final playerInClan = warInfo.clan?.members.any((member) => member.tag == playerTag) ?? false;
-        final playerInOpponent = warInfo.opponent?.members.any((member) => member.tag == playerTag) ?? false;
-        return (playerInClan || playerInOpponent) && warInfo.state == 'warEnded';
+        final playerInClan =
+            warInfo.clan?.members.any((member) => member.tag == playerTag) ??
+                false;
+        final playerInOpponent = warInfo.opponent?.members
+                .any((member) => member.tag == playerTag) ??
+            false;
+        return (playerInClan || playerInOpponent) &&
+            warInfo.state == 'warEnded';
       }).toList();
-      
+
       if (playerWars.isNotEmpty) {
         // Sort by end time to get most recent
-        playerWars.sort((a, b) => (b.endTime ?? '').toString().compareTo((a.endTime ?? '').toString()));
-        DebugUtils.debugSuccess("Found recent ended CWL war for player $playerTag");
+        playerWars.sort((a, b) => (b.endTime ?? '')
+            .toString()
+            .compareTo((a.endTime ?? '').toString()));
+        DebugUtils.debugSuccess(
+            "Found recent ended CWL war for player $playerTag");
         return playerWars.first.reorderForUser(playerTag);
       }
-      
+
       DebugUtils.debugWarning("No CWL wars found for player $playerTag");
       return null;
-      
     } catch (e) {
       DebugUtils.debugError("Error finding CWL war for player $playerTag: $e");
       return null;
     }
   }
+}
+
+Map<String, dynamic>? _asMap(dynamic value) {
+  if (value is Map<String, dynamic>) {
+    return value;
+  }
+  if (value is Map) {
+    return Map<String, dynamic>.from(value);
+  }
+  return null;
 }

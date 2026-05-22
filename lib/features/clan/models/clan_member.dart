@@ -27,15 +27,16 @@ class ClanMember {
 
   factory ClanMember.fromJson(Map<String, dynamic> json) {
     return ClanMember(
-        tag: json["tag"],
-        name: json["name"],
-        role: json["role"],
-        townHallLevel: json["townHallLevel"],
-        expLevel: json["expLevel"],
-        trophies: json["trophies"],
-        donations: json["donations"],
-        donationsReceived: json["donationsReceived"],
-        builderBaseTrophies: json["builderBaseTrophies"],
+        tag: json["tag"]?.toString() ?? "",
+        name: json["name"]?.toString() ?? "",
+        role: json["role"]?.toString() ?? "",
+        townHallLevel: (json["townHallLevel"] as num?)?.toInt() ?? 0,
+        expLevel: (json["expLevel"] as num?)?.toInt() ?? 0,
+        trophies: (json["trophies"] as num?)?.toInt() ?? 0,
+        donations: (json["donations"] as num?)?.toInt() ?? 0,
+        donationsReceived: (json["donationsReceived"] as num?)?.toInt() ?? 0,
+        builderBaseTrophies:
+            (json["builderBaseTrophies"] as num?)?.toInt() ?? 0,
         league: json["league"] != null
             ? ClanLeague.fromJson(json["league"] as Map<String, dynamic>)
             : ClanLeague.unranked());

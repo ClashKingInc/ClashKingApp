@@ -4,7 +4,7 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 import 'package:provider/provider.dart';
@@ -38,48 +38,48 @@ class PlayerInfosCard extends StatelessWidget {
         : AppLocalizations.of(context)?.warStatusUnready ?? 'Unready';
 
     return DefaultTextStyle(
-        style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Column(
+      style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: MobileWebImage(
+                            imageUrl: selectedProfile.townHallPic),
+                      ),
+                      Text(
+                        selectedProfile.name,
+                        style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(fontWeight: FontWeight.bold) ??
+                            TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        selectedProfile.tag,
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        SizedBox(
-                          height: 100,
-                          width: 100,
-                          child: MobileWebImage(
-                              imageUrl: selectedProfile.townHallPic),
-                        ),
-                        Text(
-                          selectedProfile.name,
-                          style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold) ??
-                              TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          selectedProfile.tag,
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Wrap(
-                            alignment: WrapAlignment.start,
-                            spacing: 7.0,
-                            runSpacing: -7.0,
-                            children: <Widget>[
-                              /*if (selectedProfile.clan != null)
+                        Wrap(
+                          alignment: WrapAlignment.start,
+                          spacing: 7.0,
+                          runSpacing: -7.0,
+                          children: <Widget>[
+                            /*if (selectedProfile.clan != null)
                                 ImageChip(
                             context: context,
                                   imageUrl: selectedProfile.clan!.badgeUrls.small,
@@ -90,79 +90,73 @@ class PlayerInfosCard extends StatelessWidget {
                                           selectedProfile.clan!.name,
                                           selectedProfile.clan!.tag),
                                 ),*/
-                              IconChip(
-                                  icon: LucideIcons.chevronsUpDown,
-                                  label: ratioDonation.toStringAsFixed(2),
-                                  color: Color.fromARGB(255, 0, 136, 255),
-                                  size: 20,
-                                  description: AppLocalizations.of(context)!
-                                      .playerRatioDescription(
-                                          ratioDonation.toStringAsFixed(2),
-                                          selectedProfile.donations
-                                              .toStringAsFixed(0),
-                                          selectedProfile.donationsReceived
-                                              .toStringAsFixed(0))),
-                              ImageChip(
-                            context: context,
-                                imageUrl: imageOptInOut,
-                                label: warPreference,
+                            IconChip(
+                                icon: LucideIcons.chevronsUpDown,
+                                label: ratioDonation.toStringAsFixed(2),
+                                color: Color.fromARGB(255, 0, 136, 255),
+                                size: 20,
                                 description: AppLocalizations.of(context)!
-                                    .playerWarPreferenceDescription(
-                                        warPreference),
-                              ),
-                              ImageChip(
-                            context: context,
-                                  imageUrl: ImageAssets.attackStar,
-                                  label: NumberFormat(
-                                          '#,###',
-                                          Localizations.localeOf(context)
-                                              .toString())
-                                      .format(int.parse(
-                                          selectedProfile.warStars.toString())),
-                                  description: AppLocalizations.of(context)!
-                                      .playerWarStarsDescription(
-                                          selectedProfile.warStars)),
-                              ImageChip(
-                            context: context,
-                                  imageUrl: selectedProfile.townHallPic,
-                                  label:
-                                      selectedProfile.townHallLevel.toString(),
-                                  description: AppLocalizations.of(context)!
-                                      .playerTownHallLevelDescription(
-                                          selectedProfile.townHallLevel)),
-                              ImageChip(
-                            context: context,
-                                  imageUrl: selectedProfile.leagueUrl,
-                                  label: NumberFormat(
-                                          '#,###',
-                                          Localizations.localeOf(context)
-                                              .toString())
-                                      .format(int.parse(
-                                          selectedProfile.trophies.toString())),
-                                  description: AppLocalizations.of(context)!
-                                      .playerTrophiesDescription(
-                                          selectedProfile.trophies,
-                                          selectedProfile.league)),
-                              ImageChip(
-                            context: context,
-                                  imageUrl: selectedProfile.builderHallPic,
-                                  label: selectedProfile.builderHallLevel
-                                      .toString(),
-                                  description: AppLocalizations.of(context)!
-                                      .playerBuilderBaseDescription(
-                                          selectedProfile.builderHallLevel,
-                                          selectedProfile.builderBaseTrophies)),
-                            ],
-                          ),
-                        ],
-                      ),
+                                    .playerRatioDescription(
+                                        ratioDonation.toStringAsFixed(2),
+                                        selectedProfile.donations
+                                            .toStringAsFixed(0),
+                                        selectedProfile.donationsReceived
+                                            .toStringAsFixed(0))),
+                            ImageChip(
+                              context: context,
+                              imageUrl: imageOptInOut,
+                              label: warPreference,
+                              description: AppLocalizations.of(context)!
+                                  .playerWarPreferenceDescription(
+                                      warPreference),
+                            ),
+                            ImageChip(
+                                context: context,
+                                imageUrl: ImageAssets.attackStar,
+                                label: NumberFormat(
+                                        '#,###',
+                                        Localizations.localeOf(context)
+                                            .toString())
+                                    .format(int.parse(
+                                        selectedProfile.warStars.toString())),
+                                description: AppLocalizations.of(context)!
+                                    .playerWarStarsDescription(
+                                        selectedProfile.warStars)),
+                            ImageChip(
+                                context: context,
+                                imageUrl: selectedProfile.townHallPic,
+                                label: selectedProfile.townHallLevel.toString(),
+                                description: AppLocalizations.of(context)!
+                                    .playerTownHallLevelDescription(
+                                        selectedProfile.townHallLevel)),
+                            ImageChip(
+                                context: context,
+                                imageUrl: selectedProfile.leagueUrl,
+                                label: selectedProfile.league,
+                                description: AppLocalizations.of(context)!
+                                    .playerTrophiesDescription(
+                                        selectedProfile.trophies,
+                                        selectedProfile.league)),
+                            ImageChip(
+                                context: context,
+                                imageUrl: selectedProfile.builderHallPic,
+                                label:
+                                    selectedProfile.builderHallLevel.toString(),
+                                description: AppLocalizations.of(context)!
+                                    .playerBuilderBaseDescription(
+                                        selectedProfile.builderHallLevel,
+                                        selectedProfile.builderBaseTrophies)),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
+      ),
     );
   }
 }

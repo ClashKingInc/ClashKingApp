@@ -24,11 +24,10 @@ Future<String> fetchWarSummary(String? clanTag) async {
       throw Exception("User not authenticated");
     }
 
-    // Clean the clan tag for the URL
-    final cleanTag = clanTag.replaceAll('#', '!');
+    final encodedTag = Uri.encodeComponent(clanTag);
     
     final response = await http.get(
-      Uri.parse("${ApiService.apiUrlV2}/war/$cleanTag/war-summary"),
+      Uri.parse("${ApiService.apiUrlV2}/war/$encodedTag/war-summary"),
       headers: {
         "Authorization": "Bearer $token",
         "Content-Type": "application/json",

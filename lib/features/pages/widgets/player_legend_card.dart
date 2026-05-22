@@ -6,7 +6,7 @@ import 'package:clashkingapp/features/player/models/player_legend_day.dart';
 import 'package:clashkingapp/features/player/models/player_legend_season.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 import 'package:provider/provider.dart';
