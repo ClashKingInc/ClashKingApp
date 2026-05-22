@@ -38,7 +38,7 @@ dependencies:
   http: ^1.6.0
   crypto: ^3.0.7
   clipboard: ^3.0.8
-  lucide_icons: ^0.257.0
+  lucide_icons_flutter: ^3.1.14+1
   scrollable_tab_view: ^1.0.14
   fl_chart: ^1.1.1
   tuple: ^2.0.2

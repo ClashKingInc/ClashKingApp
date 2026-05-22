@@ -268,11 +268,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                       ),
                                     )
                                   : ReorderableListView(
-                                      onReorder: (oldIndex, newIndex) {
-                                        if (oldIndex < newIndex) {
-                                          newIndex--;
-                                        }
-
+                                      onReorderItem: (oldIndex, newIndex) {
                                         setState(() {
                                           final item = _tempUserAccounts
                                               .removeAt(oldIndex);

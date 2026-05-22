@@ -30,13 +30,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       JAVA_VERSION: 21
-      FLUTTER_VERSION: 3.38.5
       AAB_PATH: build/app/outputs/bundle/release/app-release.aab
       KEYSTORE_PATH: android/ck_key.jks
       KEY_PROPS_PATH: android/key.properties
       SERVICE_ACCOUNT_PATH: android/app/store_credentials.json
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
-      FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.32.1-x64
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
@@ -91,7 +89,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          flutter-version-file: .flutter-version
 
       - name: Create minimal local.properties
         run: |

@@ -9,7 +9,8 @@ class PlayerBuilderBaseHero extends PlayerItem {
       required super.level,
       required super.maxLevel,
       required this.village,
-      required super.isUnlocked})
+      required super.isUnlocked,
+      super.meta})
       : super(
           type: 'hero',
           imageUrl: ImageAssets.getBuilderBaseHeroImage(name),
@@ -38,6 +39,7 @@ class PlayerBuilderBaseHero extends PlayerItem {
       maxLevel: maxLevel,
       isUnlocked: isUnlocked,
       village: meta?['village'] ?? 'builderBase',
+      meta: meta,
     );
   }
 }

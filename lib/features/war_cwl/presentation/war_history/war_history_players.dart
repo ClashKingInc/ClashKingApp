@@ -9,7 +9,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_member_stats.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_history/component/war_history_players_header.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class PlayersWarHistoryScreen extends StatefulWidget {
   final Clan clan;

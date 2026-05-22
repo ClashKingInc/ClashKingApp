@@ -11,7 +11,8 @@ class PlayerBuilderBaseTroop extends PlayerItem {
       required super.maxLevel,
       required this.superTroopIsActive,
       required this.village,
-      required super.isUnlocked})
+      required super.isUnlocked,
+      super.meta})
       : super(
           type: 'builderBase',
           imageUrl: ImageAssets.getBuilderBaseTroopImage(name),
@@ -43,6 +44,7 @@ class PlayerBuilderBaseTroop extends PlayerItem {
       isUnlocked: isUnlocked,
       superTroopIsActive: superTroopIsActive ?? false,
       village: meta?['village'] ?? 'home',
+      meta: meta,
     );
   }
 }
