@@ -113,7 +113,7 @@ class CwlScreenState extends State<CwlScreen> {
                       Wrap(
                         alignment: WrapAlignment.center,
                         spacing: 7.0,
-                        runSpacing: -7.0,
+                        runSpacing: 4.0,
                         children: <Widget>[
                           ImageChip(
                             context: context,
