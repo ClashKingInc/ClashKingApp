@@ -86,10 +86,7 @@ void _initializeDeepLinks() {
 }
 
 Future<void> main() async {
-  // Initialize Flutter binding BEFORE Sentry
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Load config from backend first
+  // Load config from backend first (http only, no binding needed)
   await ApiService.loadConfig();
 
   await SentryFlutter.init(
@@ -101,6 +98,10 @@ Future<void> main() async {
       options.replay.onErrorSampleRate = 1.0;
     },
     appRunner: () async {
+      // Initialize Flutter binding inside Sentry's zone so ensureInitialized()
+      // and runApp() share the same zone (required by Flutter Web's loader).
+      WidgetsFlutterBinding.ensureInitialized();
+
       if (!kIsWeb) {
         Workmanager().initialize(callbackDispatcher);
         // Initialize war widget service for background callbacks
