@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # of the product and file versions while build-number is used as the build suffix.
 version: 0.3.5+25
 environment:
-  sdk: '>=3.3.2 <4.0.0'
+  sdk: '>=3.10.0 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -39,7 +39,8 @@ dependencies:
   crypto: ^3.0.7
   clipboard: ^3.0.8
   lucide_icons_flutter: ^3.1.14+1
-  scrollable_tab_view: ^1.0.14
+  scrollable_tab_view:
+    path: ../tools/scrollable_tab_view
   fl_chart: ^1.1.1
   tuple: ^2.0.2
   custom_sliding_segmented_control: ^1.8.5

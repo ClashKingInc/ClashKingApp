@@ -66,7 +66,7 @@ Map<String, dynamic> filterGameData(
 }
 
 Map<String, dynamic> filterSpellGameData(Map<String, dynamic>? data) {
-  return filterGameData(data, (_, __) => true);
+  return filterGameData(data, (_, _) => true);
 }
 
 /// Returns the highest item level unlockable at [thLevel] based on bundle metadata.

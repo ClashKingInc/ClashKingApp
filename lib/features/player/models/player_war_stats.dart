@@ -146,9 +146,7 @@ class PlayerWarStats {
         totalDefenses += stats.count;
 
         for (var k in starsCountDef.keys) {
-          final defStars =
-              // ignore: unnecessary_null_comparison
-              stats.starsCountDef != null ? stats.starsCountDef[k] ?? 0 : 0;
+          final defStars = stats.starsCountDef[k] ?? 0;
           starsCountDef[k] = (starsCountDef[k] ?? 0) + (defStars);
         }
 

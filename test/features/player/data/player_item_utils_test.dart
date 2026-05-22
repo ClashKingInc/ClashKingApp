@@ -189,14 +189,14 @@ void main() {
     });
 
     test('returns empty map for null data', () {
-      expect(filterGameData(null, (_, __) => true), isEmpty);
+      expect(filterGameData(null, (_, _) => true), isEmpty);
     });
 
     test('skips non-Map values', () {
       final result = filterGameData({
         'valid': {'type': 'troop'},
         'invalid': 'not a map',
-      }, (_, __) => true);
+      }, (_, _) => true);
 
       expect(result.keys, ['valid']);
     });
