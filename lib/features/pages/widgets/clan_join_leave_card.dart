@@ -53,7 +53,7 @@ class ClanJoinLeaveCard extends StatelessWidget {
                       ),
                       Wrap(
                         spacing: 7.0,
-                        runSpacing: -7.0,
+                        runSpacing: 4.0,
                         children: <Widget>[
                           IconChip(
                             icon: LucideIcons.logIn,

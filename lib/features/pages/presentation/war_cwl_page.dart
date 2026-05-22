@@ -15,6 +15,7 @@ import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
+import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
 
@@ -42,7 +43,8 @@ class WarCwlPage extends StatelessWidget {
         clan == null ? null : warCwl?.leagueInfo?.getClanDetails(clan.tag);
 
     return Scaffold(
-      body: RefreshIndicator(
+      body: ResponsiveLayoutWrapper(
+        child: RefreshIndicator(
         backgroundColor: Theme.of(context).colorScheme.surface,
         onRefresh: () async {
           try {
@@ -204,6 +206,7 @@ class WarCwlPage extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }

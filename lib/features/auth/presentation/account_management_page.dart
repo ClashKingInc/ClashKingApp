@@ -1,5 +1,6 @@
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/core/models/user.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -54,7 +55,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(e.toString().replaceAll('Exception: ', '')),
+            content: Text(ApiService.getErrorMessage(e)),
             backgroundColor: Colors.red,
           ),
         );

@@ -5,6 +5,8 @@ import 'package:clashkingapp/features/auth/presentation/email_verification_page.
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/core/constants/layout_constants.dart';
+import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 
@@ -210,9 +212,10 @@ class RegisterPageState extends State<RegisterPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Form(
+      body: ResponsiveLayoutWrapper(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16),
+          child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -255,7 +258,7 @@ class RegisterPageState extends State<RegisterPage> {
               // Registration form card
               Center(
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 700),
+                  constraints: const BoxConstraints(maxWidth: kMaxContentWidth),
                   child: Card(
                     elevation: 2,
                     child: Padding(
@@ -506,6 +509,7 @@ class RegisterPageState extends State<RegisterPage> {
           ),
         ),
       ),
+    ),
     );
   }
 }

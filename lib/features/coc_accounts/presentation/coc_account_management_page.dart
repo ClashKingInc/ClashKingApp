@@ -8,12 +8,12 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/widgets/account_verification_dialog.dart';
+import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
-import 'package:clashkingapp/core/utils/deep_link_handler.dart';
 
 class AddCocAccountPage extends StatefulWidget {
   @override
@@ -33,9 +33,6 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
   void initState() {
     super.initState();
     final CocAccountService cocService = context.read<CocAccountService>();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      DeepLinkHandler.tryHandlePendingDeepLink(context);
-    });
     if (cocService.cocAccounts.isEmpty) {
       setState(() {
         _isFirstConnection = true;
@@ -61,8 +58,10 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         await cocService.updateAccountOrder(playerTags);
       } catch (error) {
         setState(() {
-          _errorMessage =
-              AppLocalizations.of(context)!.accountsErrorFailedToUpdateOrder;
+          _errorMessage = AppLocalizations.of(
+            context,
+          )!
+              .accountsErrorFailedToUpdateOrder;
         });
       }
       _isOrderChanged = false;
@@ -77,27 +76,14 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     if (playerTags.isEmpty) return;
 
     // Load all account stats
-    try {
-      await cocService.loadApiData(playerService, clanService, warCwlService);
-    } catch (error) {
-      if (mounted) {
-        Navigator.of(context).pop();
-        setState(() {
-          _errorMessage = AppLocalizations.of(context)!.generalRefreshFailed(
-              error.toString().replaceAll('Exception: ', ''));
-        });
-      }
-      return;
-    }
+    await cocService.loadApiData(playerService, clanService, warCwlService);
 
     // Navigate to the home page
     if (mounted) {
       Navigator.of(context).pop();
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => MyHomePage(),
-        ),
-      );
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (context) => MyHomePage()));
     }
   }
 
@@ -121,9 +107,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) => const Center(
-              child: CircularProgressIndicator(),
-            ),
+            builder: (_) => const Center(child: CircularProgressIndicator()),
           );
           await _loadAllAccountData();
         }
@@ -131,281 +115,273 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       child: Scaffold(
         appBar: CocAccountsAppBar(),
         resizeToAvoidBottomInset: false,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Column(children: [
-                      SizedBox(
-                        height: 70,
-                        width: 70,
-                        child: CachedNetworkImage(
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                            imageUrl: logoUrl),
-                      ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        width: 150,
-                        child: CachedNetworkImage(
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                            imageUrl: textLogoUrl),
-                      ),
-                      const SizedBox(height: 32),
-                      if (_isFirstConnection) ...[
-                        Text(AppLocalizations.of(context)!.accountsWelcome,
-                            style: Theme.of(context).textTheme.titleSmall,
-                            textAlign: TextAlign.center),
-                        Text(
-                            AppLocalizations.of(context)!
-                                .accountsWelcomeMessage,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.center),
-                      ] else ...[
-                        Text(AppLocalizations.of(context)!.accountsManageTitle,
-                            style: Theme.of(context).textTheme.titleSmall,
-                            textAlign: TextAlign.center),
-                        Text(
-                            AppLocalizations.of(context)!.authAccountManagement,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.center),
-                      ],
-                    ]),
-                  ),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            Column(
-                              children: [
-                                TextField(
-                                  controller: _playerTagController,
-                                  decoration: InputDecoration(
-                                    labelText: AppLocalizations.of(context)!
-                                        .accountsPlayerTag,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16.0),
-                                    ),
-                                    suffixIcon: _isAddingLoading
-                                        ? const SizedBox(
-                                            height: 24,
-                                            width: 24,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            ),
-                                          )
-                                        : IconButton(
-                                            icon: Icon(Icons.add_circle,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary),
-                                            tooltip:
-                                                AppLocalizations.of(context)!
-                                                    .accountsAdd,
-                                            onPressed: _addAccount,
-                                          ),
-                                  ),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'[a-zA-Z0-9#]')),
-                                  ],
-                                ),
-                                if (_errorMessage.isNotEmpty) ...[
-                                  SizedBox(height: 8),
-                                  Text(
-                                    _errorMessage,
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ],
-                                SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    Icon(Icons.info_outline,
-                                        size: 16,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
-                                    SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        AppLocalizations.of(context)!
-                                            .accountsAddInstruction,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall
-                                            ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface,
-                                            ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 8),
-                              ],
+        body: ResponsiveLayoutWrapper(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 70,
+                            width: 70,
+                            child: CachedNetworkImage(
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                              imageUrl: logoUrl,
                             ),
-                            Expanded(
-                              child: userAccounts.isEmpty
-                                  ? Center(
-                                      child: Text(
-                                        AppLocalizations.of(context)!
-                                            .accountsNoneFound,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
+                          ),
+                          SizedBox(height: 16),
+                          SizedBox(
+                            width: 150,
+                            child: CachedNetworkImage(
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                              imageUrl: textLogoUrl,
+                            ),
+                          ),
+                          SizedBox(height: 32),
+                          if (_isFirstConnection) ...[
+                            Text(
+                              AppLocalizations.of(context)!.accountsWelcome,
+                              style: Theme.of(context).textTheme.titleSmall,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              AppLocalizations.of(
+                                context,
+                              )!
+                                  .accountsWelcomeMessage,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              textAlign: TextAlign.center,
+                            ),
+                          ] else ...[
+                            Text(
+                              AppLocalizations.of(context)!.accountsManageTitle,
+                              style: Theme.of(context).textTheme.titleSmall,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              AppLocalizations.of(
+                                context,
+                              )!
+                                  .authAccountManagement,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Expanded(
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            children: [
+                              Column(
+                                children: [
+                                  TextField(
+                                    controller: _playerTagController,
+                                    decoration: InputDecoration(
+                                      labelText: AppLocalizations.of(
+                                        context,
+                                      )!
+                                          .accountsPlayerTag,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          16.0,
+                                        ),
                                       ),
-                                    )
-                                  : ReorderableListView(
-                                      onReorderItem: (oldIndex, newIndex) {
-                                        setState(() {
-                                          final item = _tempUserAccounts
-                                              .removeAt(oldIndex);
-                                          _tempUserAccounts.insert(
-                                              newIndex, item);
-                                          _isOrderChanged = true;
-                                        });
-                                      },
-                                      children: [
-                                        for (int index = 0;
-                                            index < _tempUserAccounts.length;
-                                            index++)
-                                          ListTile(
-                                            key: ValueKey(
+                                      suffixIcon: _isAddingLoading
+                                          ? SizedBox(
+                                              height: 24,
+                                              width: 24,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(
+                                                  8.0,
+                                                ),
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            )
+                                          : IconButton(
+                                              icon: Icon(
+                                                Icons.add_circle,
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.primary,
+                                              ),
+                                              tooltip: AppLocalizations.of(
+                                                context,
+                                              )!
+                                                  .accountsAdd,
+                                              onPressed: _addAccount,
+                                            ),
+                                    ),
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                        RegExp(r'[a-zA-Z0-9#]'),
+                                      ),
+                                    ],
+                                  ),
+                                  if (_errorMessage.isNotEmpty) ...[
+                                    SizedBox(height: 8),
+                                    Text(
+                                      _errorMessage,
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ],
+                                  SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.info_outline,
+                                        size: 16,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      ),
+                                      SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          AppLocalizations.of(
+                                            context,
+                                          )!
+                                              .accountsAddInstruction,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.onSurface,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 8),
+                                ],
+                              ),
+                              Expanded(
+                                child: userAccounts.isEmpty
+                                    ? Center(
+                                        child: Text(
+                                          AppLocalizations.of(
+                                            context,
+                                          )!
+                                              .accountsNoneFound,
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium,
+                                        ),
+                                      )
+                                    : ReorderableListView(
+                                        buildDefaultDragHandles:
+                                            false, // Disable default drag handles to use custom drag indicator in each item (via ReorderableDragStartListener).
+                                        onReorderItem: (oldIndex, newIndex) {
+                                          setState(() {
+                                            final item = _tempUserAccounts
+                                                .removeAt(oldIndex);
+                                            _tempUserAccounts.insert(
+                                              newIndex,
+                                              item,
+                                            );
+                                            _isOrderChanged = true;
+                                          });
+                                        },
+                                        children: [
+                                          for (int index = 0;
+                                              index < _tempUserAccounts.length;
+                                              index++)
+                                            ListTile(
+                                              key: ValueKey(
                                                 _tempUserAccounts[index]
-                                                    ["player_tag"]),
-                                            contentPadding: EdgeInsets.zero,
-                                            leading: CircleAvatar(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              child: CachedNetworkImage(
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Icon(Icons.error),
-                                                imageUrl: ImageAssets.townHall(
+                                                    ["player_tag"],
+                                              ),
+                                              contentPadding: EdgeInsets.zero,
+                                              leading: CircleAvatar(
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                child: CachedNetworkImage(
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(Icons.error),
+                                                  imageUrl:
+                                                      ImageAssets.townHall(
                                                     _tempUserAccounts[index]
                                                             ["townHallLevel"] ??
-                                                        1),
+                                                        1,
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                            title: Text(_tempUserAccounts[index]
-                                                    ["name"] ??
-                                                ""),
-                                            subtitle: Text(
+                                              title: Text(
+                                                _tempUserAccounts[index]
+                                                        ["name"] ??
+                                                    "",
+                                              ),
+                                              subtitle: Text(
                                                 _tempUserAccounts[index]
                                                         ["player_tag"] ??
-                                                    ""),
-                                            trailing: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                // Verification status with better UX
-                                                if (_tempUserAccounts[index]
-                                                        ["isVerified"] ==
-                                                    true)
-                                                  Container(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 8,
-                                                        vertical: 4),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.green
-                                                          .withValues(
-                                                              alpha: 0.1),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                      border: Border.all(
-                                                          color: Colors.green
-                                                              .withValues(
-                                                                  alpha: 0.3)),
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        Icon(Icons.verified,
-                                                            color: Colors.green,
-                                                            size: 16),
-                                                        const SizedBox(
-                                                            width: 4),
-                                                        Text(
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .accountVerified,
-                                                          style: TextStyle(
-                                                            color: Colors.green,
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                else
-                                                  InkWell(
-                                                    onTap: () =>
-                                                        _showVerificationDialog(
-                                                      _tempUserAccounts[index]
-                                                          ["player_tag"],
-                                                      _tempUserAccounts[index]
-                                                              ["name"] ??
-                                                          "Unknown Player",
-                                                      _tempUserAccounts[index][
-                                                              "townHallLevel"] ??
-                                                          1,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    child: Container(
+                                                    "",
+                                              ),
+                                              trailing: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  // Verification status with better UX
+                                                  if (_tempUserAccounts[index]
+                                                          ["isVerified"] ==
+                                                      true)
+                                                    Container(
                                                       padding: const EdgeInsets
                                                           .symmetric(
-                                                          horizontal: 8,
-                                                          vertical: 4),
+                                                        horizontal: 8,
+                                                        vertical: 4,
+                                                      ),
                                                       decoration: BoxDecoration(
-                                                        color: Colors.orange
+                                                        color: Colors.green
                                                             .withValues(
-                                                                alpha: 0.1),
+                                                          alpha: 0.1,
+                                                        ),
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(12),
+                                                                .circular(
+                                                          12,
+                                                        ),
                                                         border: Border.all(
-                                                            color: Colors.orange
-                                                                .withValues(
-                                                                    alpha:
-                                                                        0.3)),
+                                                          color: Colors.green
+                                                              .withValues(
+                                                            alpha: 0.3,
+                                                          ),
+                                                        ),
                                                       ),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.min,
                                                         children: [
                                                           Icon(
-                                                              Icons
-                                                                  .warning_outlined,
-                                                              color:
-                                                                  Colors.orange,
-                                                              size: 16),
+                                                            Icons.verified,
+                                                            color: Colors.green,
+                                                            size: 16,
+                                                          ),
                                                           const SizedBox(
-                                                              width: 4),
+                                                            width: 4,
+                                                          ),
                                                           Text(
                                                             AppLocalizations.of(
-                                                                    context)!
-                                                                .accountVerify,
-                                                            style: const TextStyle(
+                                                              context,
+                                                            )!
+                                                                .accountVerified,
+                                                            style: TextStyle(
                                                               color:
-                                                                  Colors.orange,
+                                                                  Colors.green,
                                                               fontSize: 12,
                                                               fontWeight:
                                                                   FontWeight
@@ -414,97 +390,192 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                           ),
                                                         ],
                                                       ),
+                                                    )
+                                                  else
+                                                    InkWell(
+                                                      onTap: () =>
+                                                          _showVerificationDialog(
+                                                        _tempUserAccounts[index]
+                                                            ["player_tag"],
+                                                        _tempUserAccounts[index]
+                                                                ["name"] ??
+                                                            "Unknown Player",
+                                                        _tempUserAccounts[index]
+                                                                [
+                                                                "townHallLevel"] ??
+                                                            1,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                        12,
+                                                      ),
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 8,
+                                                          vertical: 4,
+                                                        ),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.orange
+                                                              .withValues(
+                                                            alpha: 0.1,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                            12,
+                                                          ),
+                                                          border: Border.all(
+                                                            color: Colors.orange
+                                                                .withValues(
+                                                              alpha: 0.3,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            Icon(
+                                                              Icons
+                                                                  .warning_outlined,
+                                                              color:
+                                                                  Colors.orange,
+                                                              size: 16,
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 4,
+                                                            ),
+                                                            Text(
+                                                              AppLocalizations
+                                                                      .of(
+                                                                context,
+                                                              )!
+                                                                  .accountVerify,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .orange,
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  const SizedBox(width: 8),
+                                                  // Drag handle - clickable to drag/reorder
+                                                  ReorderableDragStartListener(
+                                                    index: index,
+                                                    child: MouseRegion(
+                                                      cursor: SystemMouseCursors
+                                                          .grab,
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(
+                                                          8,
+                                                        ),
+                                                        child: Icon(
+                                                          Icons.drag_indicator,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .colorScheme
+                                                              .onSurfaceVariant,
+                                                          size: 20,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
-                                                const SizedBox(width: 8),
-                                                // Drag handle with better visual design
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
-                                                  child: Icon(
-                                                    Icons.drag_indicator,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onSurfaceVariant,
-                                                    size: 20,
-                                                  ),
-                                                ),
-                                                // Delete button with confirmation
-                                                IconButton(
-                                                  icon: _deletingPlayerTag == // NOSONAR
-                                                          _tempUserAccounts[
-                                                                  index]
-                                                              ["player_tag"]
-                                                      ? SizedBox(
-                                                          height: 24,
-                                                          width: 24,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child:
-                                                                CircularProgressIndicator(),
+                                                  // Delete button with confirmation
+                                                  IconButton(
+                                                    icon: _deletingPlayerTag ==
+                                                            _tempUserAccounts[
+                                                                    index]
+                                                                ["player_tag"]
+                                                        ? SizedBox(
+                                                            height: 24,
+                                                            width: 24,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(
+                                                                8.0,
+                                                              ),
+                                                              child:
+                                                                  CircularProgressIndicator(),
+                                                            ),
+                                                          )
+                                                        : Icon(
+                                                            Icons.delete,
+                                                            color: Theme.of(
+                                                              context,
+                                                            )
+                                                                .colorScheme
+                                                                .primary,
                                                           ),
-                                                        )
-                                                      : Icon(Icons.delete,
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .primary),
-                                                  onPressed: () =>
-                                                      _removeAccount(
-                                                          _tempUserAccounts[
-                                                                  index]
-                                                              ["player_tag"]),
-                                                ),
-                                              ],
+                                                    onPressed: () =>
+                                                        _removeAccount(
+                                                      _tempUserAccounts[index]
+                                                          ["player_tag"],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                      ],
-                                    ),
-                            ),
-                          ],
+                                        ],
+                                      ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0, left: 16, right: 16),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: userAccounts.isEmpty
-                      ? null
-                      : () async {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (_) => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-
-                          await _loadAllAccountData();
-                        },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: userAccounts.isEmpty
-                        ? Theme.of(context).colorScheme.surface
-                        : null,
-                    foregroundColor: userAccounts.isEmpty
-                        ? Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withValues(alpha: 0.4)
-                        : null,
-                  ),
-                  child: Text(AppLocalizations.of(context)!.generalConfirm),
+                  ],
                 ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(
+                  bottom: 16.0,
+                  left: 16,
+                  right: 16,
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: userAccounts.isEmpty
+                        ? null
+                        : () async {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (_) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+
+                            await _loadAllAccountData();
+                          },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: userAccounts.isEmpty
+                          ? Theme.of(context).colorScheme.surface
+                          : null,
+                      foregroundColor: userAccounts.isEmpty
+                          ? Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withValues(alpha: 0.4)
+                          : null,
+                    ),
+                    child: Text(AppLocalizations.of(context)!.generalConfirm),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -535,14 +606,16 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     final cocService = context.read<CocAccountService>();
 
     // Check if the player tag is already in the list
-    if (cocService.cocAccounts
-        .any((account) => account["player_tag"] == playerTag)) {
+    if (cocService.cocAccounts.any(
+      (account) => account["player_tag"] == playerTag,
+    )) {
       _setError(AppLocalizations.of(context)!.accountsErrorAlreadyLinkedToYou);
       return;
     }
 
-    final Map<String, dynamic> response =
-        await cocService.addCocAccount(playerTag);
+    final Map<String, dynamic> response = await cocService.addCocAccount(
+      playerTag,
+    );
 
     if (response["code"] != 200 && mounted) {
       final errorCode = response["code"];
@@ -592,6 +665,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     }
 
     if (response["account"] == null) return;
+    if (!mounted) return;
 
     // Get the new account data
     final newAccount = {
@@ -599,7 +673,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       "name": response["account"]["name"],
       "townHallLevel": response["account"]["townHallLevel"] ?? 1,
       "is_verified": response["account"]["is_verified"] ??
-          false // Default false for security
+          false, // Default false for security
     };
 
     // Add the account to the local list
@@ -607,8 +681,19 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       _isAddingLoading = false;
       _errorMessage = "";
       context.read<CocAccountService>().addLocalAccount(newAccount);
-      _syncTempAccountsWithPlayerService();
     });
+
+    // Fetch the new player's data to populate PlayerService
+    final playerService = context.read<PlayerService>();
+    try {
+      await playerService.initPlayerData([newAccount["player_tag"]]);
+    } catch (e) {
+      DebugUtils.debugWarning(
+        "⚠️ Failed to fetch new player data immediately, will load on next sync",
+      );
+    }
+
+    _syncTempAccountsWithPlayerService();
 
     _playerTagController.clear();
   }
@@ -623,14 +708,18 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     await cocService.removeCocAccount(playerTag);
 
     setState(() {
-      _tempUserAccounts
-          .removeWhere((account) => account["player_tag"] == playerTag);
+      _tempUserAccounts.removeWhere(
+        (account) => account["player_tag"] == playerTag,
+      );
       _deletingPlayerTag = null;
     });
   }
 
   Future<void> _showVerificationDialog(
-      String playerTag, String playerName, int playerTownHall) async {
+    String playerTag,
+    String playerName,
+    int playerTownHall,
+  ) async {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AccountVerificationDialog(
@@ -667,7 +756,8 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         } catch (e) {
           // Fallback to account data if player not found in PlayerService
           DebugUtils.debugWarning(
-              "⚠️ Player not found in PlayerService for tag: $playerTag, using fallback");
+            "⚠️ Player not found in PlayerService for tag: $playerTag, using fallback",
+          );
           return {
             "player_tag": playerTag,
             "name": account["name"] ?? "Unknown Player",

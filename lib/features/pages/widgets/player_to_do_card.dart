@@ -207,7 +207,7 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                       Wrap(
                         alignment: WrapAlignment.start,
                         spacing: 7.0,
-                        runSpacing: -7.0,
+                        runSpacing: 4.0,
                         children: <Widget>[
                           if (player.league == 'Legend League' &&
                               currentDay != null)

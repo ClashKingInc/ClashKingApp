@@ -76,7 +76,7 @@ class WarHistoryHeader extends StatelessWidget {
             Wrap(
               alignment: WrapAlignment.start,
               spacing: 7.0,
-              runSpacing: -7.0,
+              runSpacing: 4.0,
               children: <Widget>[
                 ImageChip(
                     context: context,

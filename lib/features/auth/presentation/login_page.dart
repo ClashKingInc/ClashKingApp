@@ -10,15 +10,17 @@ import 'package:clashkingapp/features/auth/presentation/forgot_password_page.dar
 import 'package:clashkingapp/features/auth/presentation/email_verification_page.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/core/constants/layout_constants.dart';
+import 'package:clashkingapp/common/widgets/responsive_layout_wrapper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -144,7 +146,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(e.toString().replaceAll('Exception: ', '')),
+          content: Text(ApiService.getErrorMessage(e)),
           backgroundColor: Colors.red,
         ),
       );
@@ -161,199 +163,206 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         : ImageAssets.lightModeTextLogo);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-          child: ConstrainedBox(
-            constraints:
-                BoxConstraints(minHeight: MediaQuery.of(context).size.height),
-            child: Padding(
-              padding: EdgeInsets.all(24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Logo Section
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: 80,
-                        width: 80,
-                        child: CachedNetworkImage(
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                          imageUrl: logoUrl,
-                        ),
-                      ),
-                      SizedBox(height: 12),
-                      SizedBox(
-                        width: 160,
-                        child: CachedNetworkImage(
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                          imageUrl: textLogoUrl,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 16),
-
-                  // ClashKing Description
-                  Text(
-                    AppLocalizations.of(context)!.appDescription,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface),
-                    textAlign: TextAlign.center,
-                  ),
-
-                  SizedBox(height: 24),
-
-                  // Auth Tabs
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 700),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.08),
-                            blurRadius: 20,
-                            offset: const Offset(0, 8),
-                            spreadRadius: -4,
+      body: ResponsiveLayoutWrapper(
+        child: SingleChildScrollView(
+          child: Center(
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+              child: Padding(
+                padding: EdgeInsets.all(24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Logo Section
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 80,
+                          width: 80,
+                          child: CachedNetworkImage(
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            imageUrl: logoUrl,
                           ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          // Tab Bar
-                          TabBar(
-                            controller: _tabController,
-                            labelColor: Theme.of(context).colorScheme.primary,
-                            unselectedLabelColor:
-                                Theme.of(context).colorScheme.onSurface,
-                            indicator: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            indicatorPadding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 8),
-                            dividerColor: Colors.transparent,
-                            labelStyle: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                            unselectedLabelStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
-                            ),
-                            tabs: [
-                              Tab(
-                                icon: Icon(Icons.discord, size: 20),
-                                text: AppLocalizations.of(context)!
-                                    .authDiscordTitle,
-                                height: 50,
-                              ),
-                              Tab(
-                                icon: Icon(Icons.email_outlined, size: 20),
-                                text: AppLocalizations.of(context)!.authEmail,
-                                height: 50,
-                              ),
-                            ],
+                        ),
+                        SizedBox(height: 12),
+                        SizedBox(
+                          width: 160,
+                          child: CachedNetworkImage(
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            imageUrl: textLogoUrl,
                           ),
+                        ),
+                      ],
+                    ),
 
-                          // Tab Content
-                          Container(
-                            height: 320,
-                            padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
-                            child: TabBarView(
+                    SizedBox(height: 16),
+
+                    // ClashKing Description
+                    Text(
+                      AppLocalizations.of(context)!.appDescription,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface),
+                      textAlign: TextAlign.center,
+                    ),
+
+                    SizedBox(height: 24),
+
+                    // Auth Tabs
+                    ConstrainedBox(
+                      constraints:
+                          const BoxConstraints(maxWidth: kMaxContentWidth),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.08),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                              spreadRadius: -4,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            // Tab Bar
+                            TabBar(
                               controller: _tabController,
-                              children: [
-                                // Discord Tab
-                                _buildDiscordTab(),
-
-                                // Email Tab
-                                _buildEmailTab(),
+                              labelColor: Theme.of(context).colorScheme.primary,
+                              unselectedLabelColor:
+                                  Theme.of(context).colorScheme.onSurface,
+                              indicator: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              indicatorPadding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              dividerColor: Colors.transparent,
+                              labelStyle: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                              unselectedLabelStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                              ),
+                              tabs: [
+                                Tab(
+                                  icon: Icon(Icons.discord, size: 20),
+                                  text: AppLocalizations.of(context)!
+                                      .authDiscordTitle,
+                                  height: 50,
+                                ),
+                                Tab(
+                                  icon: Icon(Icons.email_outlined, size: 20),
+                                  text: AppLocalizations.of(context)!.authEmail,
+                                  height: 50,
+                                ),
                               ],
                             ),
-                          ),
-                        ],
+
+                            // Tab Content
+                            Container(
+                              height: 320,
+                              padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+                              child: TabBarView(
+                                controller: _tabController,
+                                children: [
+                                  // Discord Tab
+                                  _buildDiscordTab(),
+
+                                  // Email Tab
+                                  _buildEmailTab(),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
-                  SizedBox(height: 16),
+                    SizedBox(height: 16),
 
-                  // Help Section
-                  Column(
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.helpTitle,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface),
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton.icon(
-                            onPressed: () async => launchUrl(
-                                Uri.parse('https://discord.gg/clashking')),
-                            icon: Icon(
-                              Icons.discord,
-                              size: 16,
-                              color: Theme.of(context).colorScheme.primary,
+                    // Help Section
+                    Column(
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.helpTitle,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton.icon(
+                              onPressed: () async => launchUrl(
+                                  Uri.parse('https://discord.gg/clashking')),
+                              icon: Icon(
+                                Icons.discord,
+                                size: 16,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              label: Text(
+                                AppLocalizations.of(context)!.helpJoinDiscord,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                              ),
                             ),
-                            label: Text(
-                              AppLocalizations.of(context)!.helpJoinDiscord,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                            SizedBox(width: 8),
+                            TextButton.icon(
+                              onPressed: () async => launchUrl(
+                                Uri.parse(
+                                    'mailto:devs@clashk.ing?subject=ClashKing App Support'),
+                              ),
+                              icon: Icon(
+                                Icons.email_outlined,
+                                size: 16,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              label: Text(
+                                AppLocalizations.of(context)!.helpEmailUs,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                              ),
                             ),
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                            ),
-                          ),
-                          SizedBox(width: 8),
-                          TextButton.icon(
-                            onPressed: () async => launchUrl(
-                              Uri.parse(
-                                  'mailto:devs@clashk.ing?subject=ClashKing App Support'),
-                            ),
-                            icon: Icon(
-                              Icons.email_outlined,
-                              size: 16,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            label: Text(
-                              AppLocalizations.of(context)!.helpEmailUs,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            ),
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

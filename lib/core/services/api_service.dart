@@ -52,10 +52,7 @@ class ApiService {
     String endpoint, {
     bool requiresAuth = true,
   }) async {
-    final response = await getResponse(
-      endpoint,
-      requiresAuth: requiresAuth,
-    );
+    final response = await getResponse(endpoint, requiresAuth: requiresAuth);
     return _expectMapResponse(response, endpoint);
   }
 
@@ -195,11 +192,13 @@ class ApiService {
           ),
         );
       case 404:
+        final specificMessage = _extractApiErrorMessage(responseBody);
         throw NotFoundException(
-          _localized(
-            'Resource not found for $endpoint.',
-            (l10n) => l10n.apiErrorNotFound(endpoint),
-          ),
+          specificMessage ??
+              _localized(
+                'Resource not found for $endpoint.',
+                (l10n) => l10n.apiErrorNotFound(endpoint),
+              ),
         );
       case 409:
         throw EmailVerificationRequiredException(
@@ -252,9 +251,9 @@ class ApiService {
 
       switch (method) {
         case 'GET':
-          return await _client.get(resolvedUri, headers: headers).timeout(
-                timeout,
-              );
+          return await _client
+              .get(resolvedUri, headers: headers)
+              .timeout(timeout);
         case 'POST':
           return await _client
               .post(resolvedUri, headers: headers, body: requestBody)
@@ -279,9 +278,7 @@ class ApiService {
   Future<Map<String, String>> _buildHeaders({
     required bool requiresAuth,
   }) async {
-    final headers = <String, String>{
-      'Content-Type': 'application/json',
-    };
+    final headers = <String, String>{'Content-Type': 'application/json'};
 
     if (requiresAuth) {
       final token = await TokenService().getAccessToken();
@@ -354,10 +351,12 @@ class ApiService {
 
   static Future<void> loadConfig() async {
     try {
-      final response = await http.get(
-        Uri.parse('$apiUrlV2/public-config'),
-        headers: {'Content-Type': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .get(
+            Uri.parse('$apiUrlV2/public-config'),
+            headers: {'Content-Type': 'application/json'},
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final config = json.decode(response.body);
@@ -393,10 +392,7 @@ class ApiService {
         (l10n) => l10n.apiErrorNetworkConnection,
       );
     } else if (error is TimeoutException) {
-      return _localized(
-        'Request timeout.',
-        (l10n) => l10n.apiErrorTimeout,
-      );
+      return _localized('Request timeout.', (l10n) => l10n.apiErrorTimeout);
     } else if (error is FormatException) {
       return _localized(
         'Invalid response format.',
@@ -412,7 +408,7 @@ class ApiException implements Exception {
   final String message;
   ApiException(this.message);
   @override
-  String toString() => 'ApiException: $message';
+  String toString() => '$runtimeType: $message';
 }
 
 class BadRequestException extends ApiException {
