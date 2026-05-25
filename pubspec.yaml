@@ -75,6 +75,8 @@ dev_dependencies:
 
   flutter_launcher_icons: ^0.14.4
   mockito: ^5.6.1
+  device_info_plus_platform_interface: ^8.1.0
+  plugin_platform_interface: ^2.1.8
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your

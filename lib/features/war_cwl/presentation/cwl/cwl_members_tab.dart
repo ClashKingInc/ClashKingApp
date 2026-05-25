@@ -58,7 +58,7 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
     
     final clanDetails = widget.warCwl.leagueInfo?.getClanDetails(widget.clanTag);
     final warsPlayed = clanDetails?.warsPlayed ?? 0;
-    final attacksPerWar = 1; // Standard CWL attacks per war
+    const attacksPerWar = 1; // Standard CWL attacks per war
 
     return Column(
       children: [

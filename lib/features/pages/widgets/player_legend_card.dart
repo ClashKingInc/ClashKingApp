@@ -4,6 +4,7 @@ import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player_legend_day.dart';
 import 'package:clashkingapp/features/player/models/player_legend_season.dart';
+import 'package:clashkingapp/features/player/models/player_rankings.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -12,6 +13,80 @@ import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 import 'package:provider/provider.dart';
 
 const String _numberFormat = '#,###';
+
+Widget? _buildLocalRankChip(BuildContext context, PlayerRankings? rankings, int trophies) {
+  if (rankings?.countryCode == null || rankings?.countryCode == '') return null;
+
+  final localizations = AppLocalizations.of(context)!;
+  final locale = Localizations.localeOf(context).toString();
+  final localRank = rankings?.localRank ?? 0;
+  final countryName = rankings?.countryName ?? '';
+  late final String label;
+  late final String description;
+
+  if (localRank != 0) {
+    label = NumberFormat(_numberFormat, locale).format(localRank);
+    description = localizations.legendsRankLocalDescription(
+      localRank,
+      countryName,
+      trophies,
+    );
+  } else {
+    label = localizations.legendsNoRank;
+    description = localizations.legendsNoRankLocalDescription(
+      countryName,
+      trophies,
+    );
+  }
+
+  return ImageChip(
+    context: context,
+    imageUrl: ImageAssets.flag(rankings?.countryCode ?? ''),
+    label: label,
+    description: description,
+  );
+}
+
+Widget? _buildGlobalRankChip(BuildContext context, PlayerRankings? rankings, int trophies) {
+  if (rankings?.countryCode == null ||
+      rankings?.countryCode == '' ||
+      rankings?.globalRank == null ||
+      rankings?.globalRank == 0) {
+    return null;
+  }
+
+  final locale = Localizations.localeOf(context).toString();
+  final globalRank = rankings?.globalRank ?? 0;
+
+  return ImageChip(
+    context: context,
+    imageUrl: ImageAssets.planet,
+    label: NumberFormat(_numberFormat, locale).format(globalRank),
+    description: AppLocalizations.of(context)!.legendsGlobalRankDescription(
+      globalRank,
+      trophies,
+    ),
+  );
+}
+
+Widget _buildTrophiesTotalChip(BuildContext context, int trophiesTotal) {
+  final localizations = AppLocalizations.of(context)!;
+  final isGain = trophiesTotal >= 0;
+  final icon = isGain ? LucideIcons.chevronUp : LucideIcons.chevronDown;
+  final color = isGain ? Colors.green : Colors.red;
+  final labelPrefix = isGain ? '+' : '';
+  final description = isGain
+      ? localizations.legendsGainDescription(trophiesTotal)
+      : localizations.legendsLossDescription(-trophiesTotal);
+
+  return IconChip(
+    icon: icon,
+    color: color,
+    size: 16,
+    label: '$labelPrefix$trophiesTotal',
+    description: description,
+  );
+}
 
 class PlayerLegendCard extends StatelessWidget {
   const PlayerLegendCard({super.key});
@@ -29,6 +104,17 @@ class PlayerLegendCard extends StatelessWidget {
       currentSeason = player.currentLegendSeason;
       currentDay = currentSeason?.currentDay;
     }
+
+    final localRankChip = _buildLocalRankChip(
+      context,
+      player.rankings,
+      player.trophies,
+    );
+    final globalRankChip = _buildGlobalRankChip(
+      context,
+      player.rankings,
+      player.trophies,
+    );
 
     return Column(
       children: [
@@ -92,98 +178,10 @@ class PlayerLegendCard extends StatelessWidget {
                                         runSpacing: -6,
                                         runAlignment: WrapAlignment.center,
                                         children: [
-                                          if (player.rankings?.countryCode !=
-                                                  null &&
-                                              player.rankings?.countryCode !=
-                                                  "")
-                                            ImageChip(
-                                              context: context,
-                                              imageUrl: ImageAssets.flag(
-                                                player.rankings?.countryCode ??
-                                                    "",
-                                              ),
-                                              label:
-                                                  player.rankings?.localRank !=
-                                                      0
-                                                  ? NumberFormat(
-                                                      _numberFormat,
-                                                      Localizations.localeOf(
-                                                        context,
-                                                      ).toString(),
-                                                    ).format(
-                                                      player
-                                                          .rankings
-                                                          ?.localRank,
-                                                    )
-                                                  : AppLocalizations.of(
-                                                      context,
-                                                    )!.legendsNoRank,
-                                              description:
-                                                  player.rankings?.localRank !=
-                                                      0
-                                                  ? AppLocalizations.of(
-                                                      context,
-                                                    )!.legendsRankLocalDescription(
-                                                      player
-                                                              .rankings
-                                                              ?.localRank ??
-                                                          0,
-                                                      player
-                                                              .rankings!
-                                                              .countryName ??
-                                                          "",
-                                                      player.trophies,
-                                                    )
-                                                  : AppLocalizations.of(
-                                                      context,
-                                                    )!.legendsNoRankLocalDescription(
-                                                      player
-                                                              .rankings!
-                                                              .countryName ??
-                                                          "",
-                                                      player.trophies,
-                                                    ),
-                                            ),
-                                          if (player.rankings?.countryCode !=
-                                                  null &&
-                                              player.rankings?.countryCode !=
-                                                  "" &&
-                                              player.rankings?.globalRank != 0)
-                                            ImageChip(
-                                              context: context,
-                                              imageUrl: ImageAssets.planet,
-                                              label:
-                                                  player.rankings?.globalRank !=
-                                                      null
-                                                  ? NumberFormat(
-                                                      _numberFormat,
-                                                      Localizations.localeOf(
-                                                        context,
-                                                      ).toString(),
-                                                    ).format(
-                                                      player
-                                                          .rankings
-                                                          ?.globalRank,
-                                                    )
-                                                  : "N/A",
-                                              description:
-                                                  player.rankings?.globalRank !=
-                                                      null
-                                                  ? AppLocalizations.of(
-                                                      context,
-                                                    )!.legendsGlobalRankDescription(
-                                                      player
-                                                              .rankings
-                                                              ?.globalRank ??
-                                                          0,
-                                                      player.trophies,
-                                                    )
-                                                  : AppLocalizations.of(
-                                                      context,
-                                                    )!.legendsNoGlobalRankDescription(
-                                                      player.trophies,
-                                                    ),
-                                            ),
+                                          if (localRankChip != null)
+                                            localRankChip,
+                                          if (globalRankChip != null)
+                                            globalRankChip,
                                           ImageChip(
                                             context: context,
                                             imageUrl:
@@ -286,28 +284,9 @@ class PlayerLegendCard extends StatelessWidget {
                                                   )!.legendsTitle,
                                                 ),
                                           ),
-                                          IconChip(
-                                            icon: currentDay.trophiesTotal >= 0
-                                                ? LucideIcons.chevronUp
-                                                : LucideIcons.chevronDown,
-                                            color: currentDay.trophiesTotal >= 0
-                                                ? Colors.green
-                                                : Colors.red,
-                                            size: 16,
-                                            label:
-                                                "${currentDay.trophiesTotal >= 0 ? '+' : ''}${currentDay.trophiesTotal}",
-                                            description:
-                                                currentDay.trophiesTotal >= 0
-                                                ? AppLocalizations.of(
-                                                    context,
-                                                  )!.legendsGainDescription(
-                                                    currentDay.trophiesTotal,
-                                                  )
-                                                : AppLocalizations.of(
-                                                    context,
-                                                  )!.legendsLossDescription(
-                                                    -currentDay.trophiesTotal,
-                                                  ),
+                                          _buildTrophiesTotalChip(
+                                            context,
+                                            currentDay.trophiesTotal,
                                           ),
                                         ],
                                       ),
@@ -322,98 +301,10 @@ class PlayerLegendCard extends StatelessWidget {
                                         runSpacing: -6,
                                         runAlignment: WrapAlignment.center,
                                         children: [
-                                          if (player.rankings?.countryCode !=
-                                                  null &&
-                                              player.rankings?.countryCode !=
-                                                  "")
-                                            ImageChip(
-                                              context: context,
-                                              imageUrl: ImageAssets.flag(
-                                                player.rankings?.countryCode ??
-                                                    "",
-                                              ),
-                                              label:
-                                                  player.rankings?.localRank !=
-                                                      0
-                                                  ? NumberFormat(
-                                                      _numberFormat,
-                                                      Localizations.localeOf(
-                                                        context,
-                                                      ).toString(),
-                                                    ).format(
-                                                      player
-                                                          .rankings
-                                                          ?.localRank,
-                                                    )
-                                                  : AppLocalizations.of(
-                                                      context,
-                                                    )!.legendsNoRank,
-                                              description:
-                                                  player.rankings?.localRank !=
-                                                      0
-                                                  ? AppLocalizations.of(
-                                                      context,
-                                                    )!.legendsRankLocalDescription(
-                                                      player
-                                                              .rankings
-                                                              ?.localRank ??
-                                                          0,
-                                                      player
-                                                              .rankings!
-                                                              .countryName ??
-                                                          "",
-                                                      player.trophies,
-                                                    )
-                                                  : AppLocalizations.of(
-                                                      context,
-                                                    )!.legendsNoRankLocalDescription(
-                                                      player
-                                                              .rankings!
-                                                              .countryName ??
-                                                          "",
-                                                      player.trophies,
-                                                    ),
-                                            ),
-                                          if (player.rankings?.countryCode !=
-                                                  null &&
-                                              player.rankings?.countryCode !=
-                                                  "" &&
-                                              player.rankings?.globalRank != 0)
-                                            ImageChip(
-                                              context: context,
-                                              imageUrl: ImageAssets.planet,
-                                              label:
-                                                  player.rankings?.globalRank !=
-                                                      null
-                                                  ? NumberFormat(
-                                                      _numberFormat,
-                                                      Localizations.localeOf(
-                                                        context,
-                                                      ).toString(),
-                                                    ).format(
-                                                      player
-                                                          .rankings
-                                                          ?.globalRank,
-                                                    )
-                                                  : "N/A",
-                                              description:
-                                                  player.rankings?.globalRank !=
-                                                      null
-                                                  ? AppLocalizations.of(
-                                                      context,
-                                                    )!.legendsGlobalRankDescription(
-                                                      player
-                                                              .rankings
-                                                              ?.globalRank ??
-                                                          0,
-                                                      player.trophies,
-                                                    )
-                                                  : AppLocalizations.of(
-                                                      context,
-                                                    )!.legendsNoGlobalRankDescription(
-                                                      player.trophies,
-                                                    ),
-                                            ),
+                                          if (localRankChip != null)
+                                            localRankChip,
+                                          if (globalRankChip != null)
+                                            globalRankChip,
                                           ImageChip(
                                             context: context,
                                             imageUrl:
